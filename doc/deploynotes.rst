@@ -1,0 +1,5 @@
+===========
+DEPLOYNOTES
+===========
+
+.. include:: ../DEPLOYNOTES
