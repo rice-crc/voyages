@@ -1,7 +1,7 @@
 :mod:`voyages` Code Documentation
-===================================
+=================================
 About
---------
+-----
 
 Models
 ^^^^^^
@@ -17,7 +17,7 @@ Views
 
 
 Assessment
---------
+----------
 
 Models
 ^^^^^^
@@ -33,7 +33,7 @@ Views
 
 
 Common
---------
+------
 
 Models
 ^^^^^^
@@ -49,7 +49,7 @@ Views
 
 
 Contribute
---------
+----------
 
 Models
 ^^^^^^
@@ -65,7 +65,7 @@ Views
 
 
 Education
---------
+---------
 
 Models
 ^^^^^^
@@ -81,7 +81,7 @@ Views
 
 
 Resources
---------
+---------
 
 Models
 ^^^^^^
@@ -97,7 +97,7 @@ Views
 
 
 Voyage
---------
+------
 
 Models
 ^^^^^^
