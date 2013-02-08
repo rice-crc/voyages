@@ -105,6 +105,9 @@ INSTALLED_APPS = (
 )
 
 
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_DIR = 'test-results'
+
 # disable south tests and migrations when running tests
 # - without these settings, test fail on loading initial fixtured data
 SKIP_SOUTH_TESTS = True

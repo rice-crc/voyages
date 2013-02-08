@@ -1,2 +1,4 @@
 *.pyc
 build/
+test-results/
+localsettings.py
