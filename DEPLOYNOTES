@@ -1,1 +1,17 @@
-placeholder for DEPLOYNOTES
+# These are REALLY REALLY rough notes pleae make them good later.
+
+Copy localsetting.py.dist to localsettings.py
+configure Database
+
+sudo easy_install virtualenv
+
+Change into the project directory and run the command:
+
+virtualenv --no-site-packages ./voyagesEnv
+
+. voyagesEnv/bin/activate
+install requirments pip instll -r requirments/dev.txt
+
+
+python ./manage.py syncdb
+python ./manage.py migrate
