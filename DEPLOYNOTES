@@ -10,7 +10,7 @@ Change into the project directory and run the command:
 virtualenv --no-site-packages ./voyagesEnv
 
 . voyagesEnv/bin/activate
-install requirments pip instll -r requirments/dev.txt
+pip install -r requirments/dev.txt
 
 
 python ./manage.py syncdb
