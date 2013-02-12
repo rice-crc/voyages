@@ -15,3 +15,5 @@ pip install -r requirments/dev.txt
 
 python ./manage.py syncdb
 python ./manage.py migrate
+
+dfs
