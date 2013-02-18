@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/home/hoang/Projects/voyagesEnv/bin python2
+
 import os
 import sys
 
