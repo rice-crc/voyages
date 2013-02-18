@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
+
+	{% block csslist %}{% endblock %}
+	
+	<script src="{{ STATIC_URL }}scripts/jquery-1.9.1.min.js" language="javascript" type="text/javascript"></script>
+	<script src="{{ STATIC_URL }}scripts/hover.js" language="javascript" type="text/javascript"></script>
+	{% block jslist %}{% endblock %}
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{% block title %}Title of the page{% endblock %}</title>
+
+</head>
+
+<body>
+	<div id="main_logo">
+		<a href="{% url home %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/>	</a>	
+	</div>
+	
+    <div id="main_nav">
+        {% include "topbar.html" %}
+    </div>
+
+	<div id="secondarybar">
+		{% include "secondarybar.html" %}
+	</div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+	{% include "footer.html" %}
+</body>
+</html>
+
+
