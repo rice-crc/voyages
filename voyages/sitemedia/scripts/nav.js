@@ -1,12 +1,18 @@
 $(document).ready(function() {
-var listNav = {
+	
+	/* $("#mycontent").load("defhome.html"); */
+	$("#" + key).click(function(){
+		$("#mycontent").load("tmpPage.html");
+	});
+
+	var listNav = {
 			"item01" : "database/index.html",
 			"item01a" : "database/guide.html",
 			"item01b" : "database/search.html",
 			"item01c" : "database/download.html",
 			"item01d" : "database/submission-login.html",
 			
-			"item02a" : "assessment/index.html",
+			"item02" : "assessment/index.html",
 			"item02a" : "assessment/essays-intro.html",
 			"item02b" : "assessment/estimates.html",
 			"item02c" : "assessment/intro-maps.html",
@@ -28,13 +34,27 @@ var listNav = {
 			"item05f" : "about/contacts.html",
 
 		}
+		
 	
-	$("#mycontent).load("defhome.html");
+	/*
+	
 	$.each(listNav, function(key, value) {
+		alert("key is " + key + "and value = " + value);
 		// load about page on click
 		$("#" + key).click(function(){
-			$("#mycontent).load(value);
+			
+			$("#mycontent").load(value);
 		});
 	}); 
+	*/
 	
+	/*
+	<script type="text/javascript">
+		$("#item2").click(function(){
+			$("#mycontent").load("tmpPage.html");
+			alert("Done with loading");
+		});
+		
+	</script>
+	*/
 });

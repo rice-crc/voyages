@@ -1,5 +1,7 @@
 body {
-	background-color: #E6F2F1; }
+	background-color: #E6F2F1;
+	margin: 0;
+ }
 	
 div.main-content {
 	background-image: url(../images/index/top-band.png); 

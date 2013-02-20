@@ -1,12 +1,24 @@
+.top-bar {
+	border: none;
+	border-collapse: collapse;
+	background: #008CA8 url("../images/menu/menu-bg.png") repeat-y;
+	width: 100%;
+}
+
+.top-bar td, .top-bar tr {
+	border-collapse: collapse;
+	padding: 0px;
+	margin: 0px;
+}
+
 /**Horizontal navigation bar**/
 #main_nav {
-	position: absolute;
-	top: 0px;
-	left: 240px;
-	width: 100%;	
-	background: #008CA8 url("{{ STATIC URL }}images/menu/menu-bg.png") repeat-y;
+	float: left;
+	/* width: 700px;	 */
+	background: #008CA8 url("../images/menu/menu-bg.png") repeat-y; 
 	height:60px;
-	padding: 4px 0 0 0;
+	padding: 0;
+	margin: 0;
 }
 
 html>body #main_nav {
@@ -21,7 +33,7 @@ html>body #main_nav {
 }
 
 html>body #main_nav ul {
-	margin: -4px 0 0 0px;
+	margin: 0px 0 0 0px;
 }
 
 
@@ -123,7 +135,7 @@ html>body #main_nav ul {
 	position:absolute;
 	left:-999em;
 	z-index:100;	
-	opacity:0.92;
+	opacity: 1;
 	filter:alpha(opacity=90);
 	color:#fff;
 	border-bottom:1px solid #aaa;
