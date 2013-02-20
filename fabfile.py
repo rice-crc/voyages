@@ -17,10 +17,10 @@ import voyages
 
 def all_deps():
     '''Locally install all dependencies.'''
-    local('pip install -r requirments.dev.txt')
+    local('pip install -r requirments/dev.txt')
 
-    if os.path.exists('pip-local-req.txt'):
-        local('pip install -r pip-local-req.txt')
+    if os.path.exists('requirments/local.txt'):
+        local('pip install -r requirments/local.txt')
 
 
 def test():
@@ -148,8 +148,8 @@ def setup_virtualenv():
             if env.remote_proxy:
                 pip_cmd += ' --proxy=%(remote_proxy)s' % env
             sudo(pip_cmd, user=env.remote_acct)
-            if files.exists('../pip-local-req.txt'):
-                pip_cmd = 'pip install -r ../pip-local-req.txt'
+            if files.exists('requirments/local.txt'):
+                pip_cmd = 'pip install -r requirments/local.txt'
                 if env.remote_proxy:
                     pip_cmd += ' --proxy=%(remote_proxy)s' % env
                 sudo(pip_cmd, user=env.remote_acct)
