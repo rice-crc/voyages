@@ -8,6 +8,9 @@
 	{% block csslist %}{% endblock %}
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="{{ STATIC_URL }}scripts/nav.js" language="javascript" type="text/javascript"></script>	
+	<script src="{{ STATIC_URL }}scripts/hover.js" language="javascript" type="text/javascript"></script>
+	
 	
 	{% block jslist %}{% endblock %}
 
@@ -29,7 +32,7 @@
 		{% include "secondarybar.html" %}
 	</div>
 	
-	<div id="mycontent">
+	<div id="mycontent" style="width: 860px;">
  
     </div>
 	
@@ -42,8 +45,7 @@
 	
 	{% include "googlecode.html" %}
 	
-	<script src="{{ STATIC_URL }}scripts/nav.js" language="javascript" type="text/javascript"></script>	
-	<script src="{{ STATIC_URL }}scripts/hover.js" language="javascript" type="text/javascript"></script>
+	
 </body>
 </html>
 
