@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./css/base.css" />
+	{% block csslist %}{% endblock %}
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{% block title %}Title of the page{% endblock %}</title>
+
+</head>
+
+<body>
+    <div id="navbar">
+        {% block navbar %}
+        <ul>
+            <li><a href="/">Navigation items</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+	<div id="footer">
+        {% block footer %}{% endblock %}
+    </div>
+</body>
+</html>
+
+
