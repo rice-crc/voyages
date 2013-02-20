@@ -40,7 +40,6 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/home/hoang/Projects/voyages/voyages/mystatic",
      os.path.join(BASE_DIR, 'sitemedia'),
 )
 
@@ -130,6 +129,8 @@ INSTALLED_APPS = (
     'voyages.apps.education',
     'voyages.apps.about',
     'voyages.apps.contribute',
+    'voyages.apps.help',
+    'voyages.apps.database',
 )
 
 

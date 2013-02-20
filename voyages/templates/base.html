@@ -7,8 +7,8 @@
 
 	{% block csslist %}{% endblock %}
 	
-	<script src="{{ STATIC_URL }}scripts/jquery-1.9.1.min.js" language="javascript" type="text/javascript"></script>
-	<script src="{{ STATIC_URL }}scripts/hover.js" language="javascript" type="text/javascript"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
 	{% block jslist %}{% endblock %}
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -18,7 +18,7 @@
 
 <body>
 	<div id="main_logo">
-		<a href="{% url home %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/>	</a>	
+		<a href="{% url myhome %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/>	</a>	
 	</div>
 	
     <div id="main_nav">
@@ -28,12 +28,22 @@
 	<div id="secondarybar">
 		{% include "secondarybar.html" %}
 	</div>
-
+	
+	<div id="mycontent">
+ 
+    </div>
+	
     <div id="content">
+    	
         {% block content %}{% endblock %}
     </div>
 
-	{% include "footer.html" %}
+	{% block footer %}{% endblock %}
+	
+	{% include "googlecode.html" %}
+	
+	<script src="{{ STATIC_URL }}scripts/nav.js" language="javascript" type="text/javascript"></script>	
+	<script src="{{ STATIC_URL }}scripts/hover.js" language="javascript" type="text/javascript"></script>
 </body>
 </html>
 
