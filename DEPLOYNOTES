@@ -13,7 +13,6 @@ virtualenv --no-site-packages ./voyagesEnv
 pip install -r requirments/dev.txt
 
 
+run 
 python ./manage.py syncdb
 python ./manage.py migrate
-
-dfs
