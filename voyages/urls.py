@@ -15,6 +15,9 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'voyages.views.myhome', name='myhome'),
     url(r'^index.html$', 'voyages.views.myhome', name='myhome'),
+    url(r'^defhome.html$', 'voyages.views.defhome', name='defhome'),
+    
+    url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyages.apps.voyage')),
     # url(r'^voyages/', include('voyages.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -23,7 +26,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     
-    #url(r'^help/', include('voyages.apps.database', namespace='database')),
 
     #url(r'^help/', include('voyages.apps.database', namespace='database')),
     

@@ -7,5 +7,5 @@
 		$("#toplinks >li").removeClass('hover');
 	});
 	
-	$("#mycontent").load("defhome.html");
+	
 });

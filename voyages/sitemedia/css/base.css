@@ -13,7 +13,6 @@
 
 
 /* secondary bar */
-
 div.secondary-bar {
 	clear: both;
 	background-color: #05768A;
@@ -48,15 +47,18 @@ td.breadcrumb-separator {
 	padding-left: 5px;
 	padding-right: 5px; }
 
+
+
 /* Footer */
-.footer, .license-index {
+.footer, .license-index, .licence {
 	font-size: 10px;
 }
 
-#mycontent {
-	position: absolute;
-	top: 120px;
-	left: 0px;
+.footer {
+	position: relative;
+}
+
+#main-content {
 	clear: both;
 	min-height: 100px;
 	width: 700px;
@@ -65,11 +67,7 @@ td.breadcrumb-separator {
 	display: block;
 }
 
-#content {
-	position: relative;
-	clear: both;
-	min-height: 50px;
-	width: 700px;
-	color: black;
-	font-size: 12px;
+div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar{
+	padding: 2px;
+	margin: 0px;
 }

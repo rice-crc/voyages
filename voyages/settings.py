@@ -70,6 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
+
     # version
     "voyages.version_context"
     )
@@ -108,6 +109,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
+
     'voyages.apps.common',
     'voyages.apps.voyage',
     'voyages.apps.assessment',
