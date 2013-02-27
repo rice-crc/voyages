@@ -61,7 +61,7 @@ html > body #main_nav ul {
 	position: relative;
 	text-align: center;
 	text-decoration: none;
-	font-size: 10pt;
+	font-size: 9pt;
 }
 
 /* Paddings of items in the dropdown menu */
@@ -130,4 +130,3 @@ html > body #main_nav ul {
 #block03 a {
 	width: 100px;
 }
-

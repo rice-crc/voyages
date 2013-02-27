@@ -1,5 +1,3 @@
-/* Manage links in the documents here - also change text in template topbar.html when changes need to be made */
-
 $(document).ready(function() {
 	
 	/* $("#mycontent").load("defhome.html"); */
@@ -10,7 +8,7 @@ $(document).ready(function() {
 			"item01b" : "/database/search.html",
 			"item01c" : "/database/download.html",
 			"item01d" : "/database/submission-login.html",
-			
+			/*
 			"item02" : "/assessment/index.html",
 			"item02a" : "/assessment/essays-intro.html",
 			"item02b" : "/assessment/estimates.html",
@@ -30,7 +28,7 @@ $(document).ready(function() {
 			"item05c" : "/about/data.html",
 			"item05d" : "/about/acknowledgements.html",
 			"item05e" : "/about/origins.html",
-			"item05f" : "/about/contacts.html",
+			"item05f" : "/about/contacts.html", */
 
 		}
 	/*
@@ -63,6 +61,8 @@ $(document).ready(function() {
 			window.location = value;
 		});
 	}); 
+	
+	jQuery("#breadCrumb").jBreadCrumb();
 });
 
 

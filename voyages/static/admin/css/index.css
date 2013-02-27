@@ -1,8 +1,5 @@
 body {
-	background-color: #E6F2F1;
-	margin: 0;
-	font-family: Arial,Helvetica,Bitstream Vera Sans,Sans,sans-serif;
- }
+	background-color: #E6F2F1; }
 	
 div.main-content {
 	background-image: url(../images/index/top-band.png); 
@@ -114,6 +111,8 @@ a.footer-link:hover {
 	color: #333333; }
 
 div.footer-section {
+	/* border-bottom: 1px dotted #CCCCCC; 
+	padding-bottom: 5px; */
 	margin-bottom: 5px; } 
 
 
