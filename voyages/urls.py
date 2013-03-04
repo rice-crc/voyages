@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^defhome.html$', 'voyages.views.defhome', name='defhome'),
     
     # database = voyage
-    url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyages.apps.voyage')),
+#    url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyages.apps.voyage')),
     url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='voyages.apps.assessment')),
     url(r'^about/', include('voyages.apps.about.urls', namespace='voyages.apps.about')),
     url(r'^education/', include('voyages.apps.education.urls', namespace='voyages.apps.education')),
@@ -34,10 +34,7 @@ urlpatterns = patterns('',
     
 
     #url(r'^help/', include('voyages.apps.database', namespace='database')),
-    
-    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': '/path/to/media'}),
-    
+        
     #url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root': 'static'}  ),
     #url(r'^static/(.*)$','django.views.static.serve',{'document_root': 'static'}  ),
 
