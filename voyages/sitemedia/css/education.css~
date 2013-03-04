@@ -1,0 +1,10 @@
+body {
+	background-position: 0px 60px;
+	background-image: url(../images/lessons-bg.png);
+	background-repeat: repeat-x; }
+
+a {
+	color: #09367C; }
+	
+div.licence {
+	border-color: #7996BF; }

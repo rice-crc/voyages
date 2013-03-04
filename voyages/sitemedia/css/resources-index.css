@@ -1,0 +1,21 @@
+div#index-intro-band {
+	background-color: #669988; }
+
+div#section-titles {
+	background-color: #669988; }
+
+div#section-titles a {
+	color: #FFFFFF; }
+
+div#section-titles a:hover {
+	color: #CAE6DB; }
+	
+td.section-title {
+	border-left: 1px solid #FFFFFF; }
+
+td.section-desc {
+	border-left: 1px solid #669988; }
+
+td.section-title,
+td.section-desc {
+	width: 250px; }

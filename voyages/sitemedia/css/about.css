@@ -1,0 +1,10 @@
+body {
+	background-position: 0px 60px;
+	background-image: url(/static/images/about/about-bg.png);
+	background-repeat: repeat-x; }
+	
+a {
+	color: #77AADD; }
+	
+div.licence {
+	border-color: #98A1A9; }

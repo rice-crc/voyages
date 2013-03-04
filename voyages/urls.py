@@ -17,7 +17,13 @@ urlpatterns = patterns('',
     url(r'^index.html$', 'voyages.views.myhome', name='myhome'),
     url(r'^defhome.html$', 'voyages.views.defhome', name='defhome'),
     
+    # database = voyage
     url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyages.apps.voyage')),
+    url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='voyages.apps.assessment')),
+    url(r'^about/', include('voyages.apps.about.urls', namespace='voyages.apps.about')),
+    url(r'^education/', include('voyages.apps.education.urls', namespace='voyages.apps.education')),
+    url(r'^resources/', include('voyages.apps.resources.urls', namespace='voyages.apps.resources')),
+    
     # url(r'^voyages/', include('voyages.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

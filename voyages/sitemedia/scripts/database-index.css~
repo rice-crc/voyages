@@ -1,0 +1,26 @@
+body {
+	background-position: 0px 60px;
+	background-image: url('/static/images/voyage/database-bg.png');
+	background-repeat: repeat-x; }
+
+div#index-intro-band {
+	background-color: #AA8833; }
+
+div#section-titles {
+	background-color: #AA8833; }
+
+div#section-titles a {
+	color: White; }
+
+div#section-titles a:hover {
+	color: #F4E1AF; }
+	
+td.section-title {
+	border-left: 1px solid White; }
+
+td.section-desc {
+	border-left: 1px solid #AA8833; }
+
+td.section-title,
+td.section-desc {
+	width: 200px; }

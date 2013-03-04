@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Assessing the Slave Trade {% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about-index.css">
+{% endblock %}
+
+{% block content %}
+<div id="index-intro-band">
+
+	<div id="index-intro-title">
+		About the Project
+	</div>
+
+	<div id="index-intro-text">
+		The Trans-Atlantic Slave Trade
+		Database is the culmination of several decades of independent and
+		collaborative research by scholars drawing upon data in libraries and
+		archives around the Atlantic world. The Voyages website itself is the
+		product of two years of development by a multi-disciplinary team of
+		historians, librarians, curriculum specialists, cartographers,
+		computer programmers, and web designers, in consultation with scholars
+		of the slave trade from universities in Europe, Africa, South America,
+		and North America. The National Endowment for the Humanities is the
+		principal sponsor of the project, and it is an Emory University
+		Digital Library Research Initiative.
+	</div>
+
+</div>
+
+<div id="section-titles">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-title"><a href="/about/history.html">History</a></td>
+			<td class="section-title"><a href="/about/team.html">Project Team</a></td>
+			<td class="section-title"><a href="/about/data.html">Contributors of data</a></td>
+			<td class="section-title"><a href="/about/acknowledgements.html">Acknowledge-
+			<br>
+			ments</a></td>
+			<td class="section-title"><a href="/about/origins.html">African Origins Project</a></td>
+			<td class="section-title"><a href="/about/contact.html">Contact us</a></td>
+		</tr>
+	</table>
+</div>
+
+<div id="section-descs">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+
+			<td class="section-desc">A brief account of the origins of a
+			single multi-source dataset of the trans-Atlantic slave trade and
+			its realization first as a CD-ROM published by Cambridge University
+			Press in 1999 and now, in an expanded version, on the Voyages
+			website.</td>
+
+			<td class="section-desc">Names of the principal investigators,
+			of members of the project development team, and of individuals
+			serving on the steering committee and advisory board.</td>
+
+			<td class="section-desc">Names of scholars and researchers
+			whose findings on the trans-Atlantic slave trade have been
+			incorporated into the Voyages Database.</td>
+
+			<td class="section-desc">Major sponsors and institutional
+			partners of the Voyages website, as well as other organizations and
+			individuals who have assisted the work of the project team.</td>
+
+			<td class="section-desc">A scholar-public collaborative project
+			using audio recordings of names in African Names Database to trace
+			the geographic origins of Africans transported in the transatlantic
+			slave trade.</td>
+
+			<td class="section-desc">Members of the Voyages editorial board
+			and the email address for contacting the website.</td>
+
+		</tr>
+	</table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

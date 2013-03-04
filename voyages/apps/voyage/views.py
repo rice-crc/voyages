@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.utils.http import base36_to_int, is_safe_url
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import render
 
@@ -15,4 +14,4 @@ def voyagehome(request):
     #page_title = "Trans-Atlantic Slave Trade";
     #context = {'page_title', page_title}
     context = {}
-    return render(request, 'voyage/home.html', context)
+    return render(request, 'voyage/index.html', context)

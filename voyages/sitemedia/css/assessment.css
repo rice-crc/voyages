@@ -1,0 +1,10 @@
+body {
+	background-position: 0px 60px;
+	background-image: url('/static/images/assessment/assessment-bg.png');
+	background-repeat: repeat-x; }
+
+a {
+	color: #05768A; }
+	
+div.licence {
+	border-color: #73C5E9; }	
