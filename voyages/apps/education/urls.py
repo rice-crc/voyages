@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 
-from voyages.apps.education import views
+from voyages.apps.education.views import *
 
-urlpatterns = patterns('',
-    url(r'^$', 'voyages.apps.education.views.educationhome', name='educationhome1'),
-    url(r'^index.html$', 'voyages.apps.education.views.educationhome', name='educationhome2'),
+urlpatterns = patterns('',    
+    url(r'^$', education_index, name='education_index'),
+    url(r'^index.html$', education_index),
     
     #handle all cases for now
-    url(r'^[\w\.\-]+\.html$', 'voyages.apps.education.views.educationhome', name='educationhome3'),
+    url(r'^[\w\.\-]+\.html$', education_index),
 )
 

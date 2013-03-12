@@ -20,9 +20,9 @@ $(document).ready(function() {
 			"item03a" : "/resources/images.html",
 			"item03b" : "/resources/origins.html",
 			
-			"item04" : "/assessment/index.html",
-			"item04a" : "/assessment/lessons-plans.html",
-			"item04b" : "/assessment/others.html",
+			"item04" : "/education/index.html",
+			"item04a" : "/education/lessons-plans.html",
+			"item04b" : "/education/others.html",
 			
 			"item05" : "/about/index.html",
 			"item05a" : "/about/history.html",
