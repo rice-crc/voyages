@@ -54,6 +54,15 @@ td.breadcrumb-separator {
 	padding-left: 5px;
 	padding-right: 5px; }
 
+td.secondary-bar-language {
+	padding-left: 10px; 
+}
+
+td.secondary-bar-language-active a {
+	color: #FACA46;
+	padding-left: 10px; 
+	font-size: 11pt;
+}
 
 
 /* Footer */

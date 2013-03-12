@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 
-from voyages.apps.assessment.views import *
+# To be used later
+# from voyages.apps.assessment.views import *
 
-urlpatterns = patterns('',
-    url(r'^$', assessment_index, name='assessment_index'),
-    url(r'^index.html$', assessment_index),
+urlpatterns = patterns('django.views.generic.simple',
+    url(r'^$', 'direct_to_template', {'template': 'assessment/index.html'}),
+    url(r'^index.html$', 'direct_to_template', {'template': 'assessment/index.html'}),
     
     #handle all cases for now
-    url(r'^[\w\.\-]+\.html$', assessment_index),
+    url(r'^[\w\.\-]+\.html$', 'direct_to_template', {'template': 'assessment/index.html'}),
 )

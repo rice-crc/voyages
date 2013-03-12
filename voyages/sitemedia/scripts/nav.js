@@ -5,11 +5,11 @@ $(document).ready(function() {
 	/* $("#mycontent").load("defhome.html"); */
 
 	var listNav = {
-			"item01" : "/database/index.html",
-			"item01a" : "/database/guide.html",
-			"item01b" : "/database/search.html",
-			"item01c" : "/database/download.html",
-			"item01d" : "/database/submission-login.html",
+			"item01" : "/voyage/index.html",
+			"item01a" : "/voyage/guide.html",
+			"item01b" : "/voyage/search.html",
+			"item01c" : "/voyage/download.html",
+			"item01d" : "/voyage/submission-login.html",
 			
 			"item02" : "/assessment/index.html",
 			"item02a" : "/assessment/essays-intro.html",
