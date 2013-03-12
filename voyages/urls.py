@@ -20,11 +20,11 @@ urlpatterns = patterns('',
     url(r'^defhome.html$', index),
     
     #Each section handler 
-    url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyages.apps.voyage')),
-    url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='voyages.apps.assessment')),
-    url(r'^about/', include('voyages.apps.about.urls', namespace='voyages.apps.about')),
-    url(r'^education/', include('voyages.apps.education.urls', namespace='voyages.apps.education')),
-    url(r'^resources/', include('voyages.apps.resources.urls', namespace='voyages.apps.resources')),
+    url(r'^database/', include('voyages.apps.voyage.urls', namespace='voyage')),
+    url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='assessment')),
+    url(r'^about/', include('voyages.apps.about.urls', namespace='about')),
+    url(r'^education/', include('voyages.apps.education.urls', namespace='education')),
+    url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
     
     #url(r'^help/', include('voyages.apps.database', namespace='database')),
     
