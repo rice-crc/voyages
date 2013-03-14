@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-12 11:06-0400\n"
+"POT-Creation-Date: 2013-03-13 13:53-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,17 +18,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+#: settings.py:131
+msgid "German"
+msgstr ""
+
+#: settings.py:132
+msgid "English"
+msgstr ""
+
+#: settings.py:133
+msgid "French"
+msgstr ""
+
+#: settings.py:134
+msgid "Spanish"
+msgstr ""
+
 #: templates/404.html:4 templates/404.html.py:8
 msgid "Page not found"
-msgstr ""
+msgstr "Seite nicht gefunden"
 
 #: templates/404.html:10
 msgid "We're sorry, but the requested page could not be found."
+msgstr "Leider, aber die angeforderte Seite konnte nicht gefunden werden."
+
+#: templates/index.html:138
+msgid ""
+" that forcibly embarked over 10 million Africans for transport to the\n"
+"\t\t\t\t<br/>Americas between the sixteenth and nineteenth centuries. It "
+"offers \n"
+"\t\t\t\t<br/>researchers, students and the general public a chance to "
+"rediscover the \n"
+"\t\t\t\t<br/>reality of one of the largest forced movements of peoples in "
+"world history."
 msgstr ""
 
 #: templates/topbar.html:8
 msgid "Voyages Database"
-msgstr ""
+msgstr "Reisen Datenbank"
 
 #: templates/topbar.html:12
 msgid "Understanding the Database"
@@ -48,7 +75,7 @@ msgstr ""
 
 #: templates/topbar.html:29
 msgid "Assessing the Slave Trade"
-msgstr ""
+msgstr "Beurteilung der Sklavenhandel."
 
 #: templates/topbar.html:33
 msgid "Essays"
@@ -64,19 +91,19 @@ msgstr ""
 
 #: templates/topbar.html:47
 msgid "Resources"
-msgstr ""
+msgstr "Ressourcen"
 
 #: templates/topbar.html:51
 msgid "Images"
 msgstr ""
 
 #: templates/topbar.html:54
-msgid "Name Database"
+msgid "African Names Database"
 msgstr ""
 
 #: templates/topbar.html:61
 msgid "Educational Materials"
-msgstr ""
+msgstr "Lehrmaterialien"
 
 #: templates/topbar.html:65
 msgid "Lessons Plans"
@@ -88,7 +115,7 @@ msgstr ""
 
 #: templates/topbar.html:76
 msgid "About the Project"
-msgstr ""
+msgstr "Über das Projekt"
 
 #: templates/topbar.html:80
 msgid "History"

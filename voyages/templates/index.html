@@ -1,4 +1,6 @@
+
 {% extends "base.html" %}
+{% load i18n %} 
 
 {% block title %}Trans-Atlantic Slave Trade {% endblock %}
 
@@ -132,10 +134,11 @@
 			<h1>The Trans-Atlantic Slave Trade Database has
 				<br /> information on more than 35,000 slaving voyages
 			</h1>
-			<p>that forcibly embarked over 10 million Africans for transport to the
-				<br />Americas between the sixteenth and nineteenth centuries. It offers
+			<p>
+				{% blocktrans %} that forcibly embarked over 10 million Africans for transport to the
+				<br/>Americas between the sixteenth and nineteenth centuries. It offers 
 				<br/>researchers, students and the general public a chance to rediscover the 
-				<br />reality of one of the largest forced movements of peoples in world history.</p>
+				<br/>reality of one of the largest forced movements of peoples in world history.{% endblocktrans %}</p>
 		</div>
 		<table border="0" cellspacing="0" cellpadding="0" id="featured-sections">
 			<tr>

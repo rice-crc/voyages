@@ -98,6 +98,10 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,6 +125,14 @@ INSTALLED_APPS = (
     'voyages.apps.help',
 )
 
+gettext = lambda s: s
+
+LANGUAGES = (
+    ('de', gettext('German')),
+    ('en', gettext('English')),
+    ('fr', gettext('French')),
+    ('es', gettext('Spanish')),
+)
 
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'

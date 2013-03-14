@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^about/', include('voyages.apps.about.urls', namespace='about')),
     url(r'^education/', include('voyages.apps.education.urls', namespace='education')),
     url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     
     # Sitemap/Help section
     #url(r'^help/', include('voyages.apps.database', namespace='database')),

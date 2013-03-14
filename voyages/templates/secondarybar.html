@@ -1,3 +1,6 @@
+{% load i18n %}
+{% get_language_info for LANGUAGE_CODE as lang %}
+
 <div class="secondary-bar">
 	<table border="0" cellspacing="0" cellpadding="0" class="secondary-bar">
 		<tr>
@@ -18,12 +21,30 @@
 					<td class="secondary-bar-help-link-first"><a href="">Sitemap</a></td>
 					<td class="secondary-bar-help-link"><a href="">FAQs</a></td>
 					<td class="secondary-bar-help-link"><a href="">Demos</a></td>
-					<td class="secondary-bar-help-link"><a href="">Glossary</a></td>
-					<td class="secondary-bar-help-link">Language: </td>
-					<td class="secondary-bar-language-active"><a href="">en </a></td>
-					<td class="secondary-bar-language"><a href="">de</a></td>
-					<td class="secondary-bar-language"><a href="">esp</a></td>
-					<td class="secondary-bar-language"><a href="">fr</a></td>
+					<td class="secondary-bar-help-link"><a href="">Glossary </a></td>
+					<td class="secondary-bar-help-link"><a href="">Legal </a></td>
+					
+					<!-- Language feature 
+					<td class="secondary-bar-help-link"><a>Current Language:</a> </td>
+					<td class="secondary-bar-language-active">
+						<form action="/i18n/setlang/" method="post">
+						{% csrf_token %}
+						<input name="next" type="hidden" value="{{ redirect_to }}" />
+						<select name="language" onchange="$(this).parent('form').submit();">
+						{% get_language_info_list for LANGUAGES as languages %}
+						{% for language in languages %}
+						{% if language.code == lang.code %}
+						    <option value="{{ language.code }}" selected="selected">  {{ language.name_local }} ({{ language.code }})</option>
+						{% else %}
+						    <option value="{{ language.code }}">  {{ language.name_local }} ({{ language.code }})</option>
+						{% endif %}
+						{% endfor %}
+						</select>
+						</form>
+					
+				
+					</td>
+					-->
 				</tr>
 			</table></td>
 		</tr>

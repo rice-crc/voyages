@@ -25,7 +25,9 @@ div.secondary-bar {
 	background-color: #05768A;
 	color: white;
 	width: 100%;
-	padding: 4px 0px 4px 10px; }
+	padding: 4px 0px 4px 10px;
+	
+}
 	
 div.secondary-bar a {
 	text-decoration: none;
@@ -58,13 +60,15 @@ td.secondary-bar-language {
 	padding-left: 10px; 
 }
 
-td.secondary-bar-language-active a {
+td.secondary-bar-language-active {
 	color: #FACA46;
 	padding-left: 10px; 
 	font-size: 11pt;
 }
 
-
+.language_change_bar {
+	float: right;
+}
 /* Footer */
 .footer, .license-index, .licence {
 	font-size: 8pt;
