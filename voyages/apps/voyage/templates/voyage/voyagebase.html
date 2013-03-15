@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage-info.css">
+{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/navMethodologySection.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+<div id="left-menu" class="left-menu-box">
+{% block left-menu %}
+{% include "voyage/left-menu.html" %}
+{% endblock %}
+</div>
+
+<div id="center-content">
+{% block center-content %}
+{% endblock %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

@@ -5,7 +5,7 @@ var elem = href.split("/");
 var maxIdx = elem.length - 1;
 
 /* Parse the link to the home page */
-path = "&nbsp;&nbsp;<a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + "Home"  + "</a>";
+path = "<div class='breadcrumb'><a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + "Home"  + "</a>";
 
 /* For landing pages of each section */
 if (maxIdx == 3 && elem[3] != "") {
@@ -28,5 +28,6 @@ if (maxIdx >= 4 && elem[3] != "") {
 		/* The title of the index page to each section is never included more than once */
 		path += seperatorst + document.title;
 }
+path += "</div>";
 /* Output the bread crumb */
 document.writeln(path);

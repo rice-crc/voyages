@@ -70,7 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-
+    "django.core.context_processors.request",
     # version
     "voyages.version_context"
     )
@@ -133,6 +133,7 @@ LANGUAGES = (
     ('fr', gettext('French')),
     ('es', gettext('Spanish')),
 )
+DEFAULT_LANGUAGE = 0
 
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'

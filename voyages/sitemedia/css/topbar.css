@@ -35,7 +35,7 @@ html > body #main_nav ul {
 
 #groups ul li {
 	display: inline;
-	font-size: 12px;
+	font-size: 10pt;
 }
 
 
@@ -54,8 +54,8 @@ html > body #main_nav ul {
 	padding: 5px 0 10px 0;
 	color: #fff;
 	display: block;
-	height: 38px;
-	line-height: 18px;
+	height: 28px;
+	line-height: 20px;
 	margin: 0;
 	overflow: hidden;
 	position: relative;
@@ -66,23 +66,23 @@ html > body #main_nav ul {
 
 /* Paddings of items in the dropdown menu */
 #toplinks .linkbox ul {
-	width: 178px;
+	width: 100%;
 	float: left;
 	margin: 0 0 0 10px;
 }
 
 /* Settings for each item in the nav list */
 #main_nav ul li .linkbox ul li a {
-	padding: 0 0 0 0;
-	width: 170px;
+	padding: 0 10px 0 0;
+	width: 100%;
 	text-align: left;
 	height: auto;
 }
 
 #main_nav ul li .linkbox ul li {
 	display: block;
-	width: 170px;
-	padding: 3px 0 10px 0;
+	width: 100%;
+	padding: 3px 0 5px 0;
 }
 
 
@@ -95,9 +95,10 @@ html > body #main_nav ul {
 /* Style for the drop-down menu */
 .linkbox {
 	clear: both;
-	width: 200px;
+	width: 14%;
 	position: absolute;
 	left: -999em;
+	top: 50px;
 	
 	/* Transparency settings (1 = opaque )*/
 	z-index: 100;
@@ -111,6 +112,8 @@ html > body #main_nav ul {
 	/* Dropdown menu background color */
 	background: #005B6F;
 	margin-left: 0px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
 }
 
 /* Auto adjustment for menu to appear when hovering above the menu */
@@ -118,8 +121,15 @@ html > body #main_nav ul {
 	left: auto;
 }
 
+#block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
+	margin-top: 5px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
 /* Width of each navigation block */
 #block01 a, #block04 a, #block05 a {
+	
 	width: 120px;
 }
 
