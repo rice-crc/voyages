@@ -6,7 +6,7 @@
 }
 
 .top-bar {
-	background: #008CA8 url("../images/menu/menu-bg.png") repeat-y;
+	background: #008CA8 url("/static/images/menu/menu-bg.png") repeat-y;
 	width: 100%;
 }
 
