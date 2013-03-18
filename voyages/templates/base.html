@@ -3,17 +3,17 @@
 <html lang="en">
 <head>
     
+    <!-- Basic common css styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
 
 	{% block csslist %}
 	{% endblock %}
-	
+	<!-- Basic common javascripts -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}scripts/jquery.ba-resize.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/nav.js" type="text/javascript"></script>
-	
 	{% block jslist %}
 	{% endblock %}
 
@@ -25,10 +25,9 @@
 <body>
 	<table class="top-bar" cellspacing="0" cellpadding="0" border="0">
 		<tr>
-			<td style="width: 240px;">
-			<div id="main_logo">
+			<td id="main_logo">
 				<a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/> </a>
-			</div></td>
+			</td>
 			<td>
 			<div id="main_nav">
 				{% include "topbar.html" %}
