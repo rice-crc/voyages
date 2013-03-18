@@ -2,11 +2,21 @@
 
 {% block title %}Methodology{% endblock %}
 
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/toc_voyage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/embedLeftMenu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/next_prev_navi.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block center-content %}
 
+<!-- The actual content is loaded by the template renderer in subpagenum -->
 {% include subpagenum %}
 
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/nextprevNavMethodology.js"></script>
-	
+<!-- Previous/Next navigation menu -->
+<script type="text/javascript">
+	/* Function located in next_prev_navi.js */
+	document.writeln(getprevnext(methodology_toc, "method"));
+</script>
 
 {% endblock %}

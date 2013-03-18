@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('',
-     url(r'^methodology-(?P<pagenum>\d{2}).html$','voyages.apps.voyage.views.getmethodology'),                
+     url(r'^method-(?P<pagenum>\d{2}).html$','voyages.apps.voyage.views.getmethodology'),                
 )
 
 urlpatterns += patterns('django.views.generic.simple',

@@ -1,5 +1,5 @@
 /* Manage links  for the navigation left menu in the Methodology section of the Voyage section */
-var listNavVoyageSection = {
+var methodology_toc = {
 	"01": "Introduction", 
 	"02": "Coverage of the Slave Trade", 
 	"03": "Nature of Sources", 

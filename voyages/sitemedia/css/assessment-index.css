@@ -1,7 +1,8 @@
 body {
 	background-position: 0px 60px;
-	background-image: url(/static/images/assessment/assessment-bg.png);
-	background-repeat: repeat-x; }
+	background-image: url('/static/images/assessment/assessment-bg.png');
+	background-repeat: repeat-x;
+	}
 
 div#index-intro-band {
 	background-color: #4AA9BA; }

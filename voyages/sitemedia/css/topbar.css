@@ -10,6 +10,8 @@
 	width: 100%;
 }
 
+
+
 /* Horizontal navigation bar - settings for different browsers */
 #main_nav {
 	float: left;
@@ -62,6 +64,10 @@ html > body #main_nav ul {
 	text-align: center;
 	text-decoration: none;
 	font-size: 10pt;
+}
+
+.highlighted {
+	background-color: #005B6F;
 }
 
 /* Paddings of items in the dropdown menu */

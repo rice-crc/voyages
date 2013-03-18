@@ -7,7 +7,7 @@ var listNav = {
 	"item01d" : "/voyage/submission-login.html",
 
 	"item02" : "/assessment/index.html",
-	"item02a" : "/assessment/essays-intro.html",
+	"item02a" : "/assessment/essay-01.html",
 	"item02b" : "/assessment/estimates.html",
 	"item02c" : "/assessment/intro-maps.html",
 
@@ -59,6 +59,4 @@ $(document).ready(function() {
 		});
 	}); 
 });
-
-
 
