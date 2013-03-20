@@ -33,6 +33,7 @@ body {
 p {
 	line-height: 160%;
 }
+
 div.left-menu-title h3 {
 	text-align: center;
 	margin: 3px;
@@ -50,14 +51,16 @@ div.left-menu-box a:hover {
 	background-color: #E0F5F5;
 }
 
+/*
 div.secondary-menu-item-0 {
 	font-weight: bold;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	border-bottom: 1px dotted #B8E7E8;
 }
+*/
 
-div.secondary-menu-item-1 a, div.secondary-menu-item-1-selected a {
+div.secondary-menu-item-0 a, div.secondary-menu-item-0-selected a {
 	background-image: url('/static/images/voyage/secondary-menu-symbol-0.png');
 	background-repeat: no-repeat;
 	background-position: 2px 4px;
@@ -67,7 +70,7 @@ div.secondary-menu-item-1 a, div.secondary-menu-item-1-selected a {
 	border-bottom: 1px dotted #B8E7E8;
 }
 
-div.secondary-menu-item-2 a, div.secondary-menu-item-2-selected a {
+div.secondary-menu-item-1 a, div.secondary-menu-item-1-selected a {
 	color: #05768A;
 	background-image: url('/static/images/voyage/secondary-menu-symbol-1.png');
 	background-repeat: no-repeat;
@@ -78,7 +81,7 @@ div.secondary-menu-item-2 a, div.secondary-menu-item-2-selected a {
 	border-bottom: 1px dotted #B8E7E8;
 }
 
-div.secondary-menu-item-1-selected a, div.secondary-menu-item-2-selected a {
+div.secondary-menu-item-0-selected a, div.secondary-menu-item-1-selected a {
 	background-color: #F0FAFA;
 }
 
@@ -97,7 +100,6 @@ div.essay-info span.essay-date {
 }
 
 /* essays landing page */
-
 ul.essays-list {
 	padding: 0px 0px 0px 20px;
 	margin: 10px 0px 0px 0px;

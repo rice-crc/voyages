@@ -3,7 +3,8 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('',
-     url(r'^essay-(?P<pagenum>\d{2}).html$','voyages.apps.assessment.views.getessay'),                
+     url(r'^essays-intro-(?P<pagenum>\d{2}).html$','voyages.apps.assessment.views.getintro'),
+     url(r'^essays-seasonality-(?P<pagenum>\d{2}).html$','voyages.apps.assessment.views.getseasonality'),           
 )
 
 urlpatterns += patterns('django.views.generic.simple',

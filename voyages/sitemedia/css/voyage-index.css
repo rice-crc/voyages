@@ -1,28 +1,31 @@
 body {
 	background-position: 0px 60px;
 	background-image: url('/static/images/voyage/voyage-bg.png');
-	background-repeat: repeat-x; }
+	background-repeat: repeat-x;
+}
 
-div#index-intro-band {
-	background-color: #AA8833; }
+div#index-intro-band, div#section-titles {
+	background-color: #AA8833;
+}
 
-div#section-titles {
-	background-color: #AA8833; }
 
 div#section-titles a {
-	color: #FFFFF; }
+	color: #FFFFFF;
+}
 
 div#section-titles a:hover {
-	color: #F4E1AF; }
-	
+	color: #F4E1AF;
+}
+
 td.section-title {
-	border-left: 1px solid #FFFFFF; }
+	border-left: 1px solid #FFFFFF;
+}
 
 td.section-desc {
 	border-left: 1px solid #AA8833;
 	padding-bottom: 20px;
 }
 
-td.section-title,
-td.section-desc {
-	width: 200px; }
+td.section-title, td.section-desc {
+	width: 15%;
+}

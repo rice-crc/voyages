@@ -8,3 +8,8 @@ a {
 	
 div.licence {
 	border-color: #73C5E9; }	
+
+#essays-left-menu h4 {
+	margin: 0px;
+	padding: 10px 5px 5px 5px;
+}

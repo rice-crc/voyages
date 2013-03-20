@@ -11,8 +11,12 @@
 </div>
 
 <div class="secondary-menu-subitems-0">
+	{% for item in menu_items %}
+	    <div class="secondary-menu-item-1"><a href="{{subsectionPrefix}}{{item.orderNum}}.html">{{ item.text }}</a></div>
+	{% endfor %}
+	
 	<script type="text/javascript">
-		document.writeln(getleftmenu(methodology_toc, "voyage","method"));
+	//	document.writeln(getleftmenu(methodology_toc, "voyage","method"));
 	</script>
 	
 	<!-- For no-script envs -->

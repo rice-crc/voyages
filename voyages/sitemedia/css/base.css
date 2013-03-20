@@ -86,6 +86,7 @@ td.breadcrumb-separator {
 	padding-right: 5px;
 }
 
+/* Sitemap and miscellaneous links */
 table.secondary-bar-help-links {
 	margin-left: auto;
 	margin-right: 0px;
@@ -119,7 +120,7 @@ div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar {
 	clear: both;
 	min-height: 100px;
 	width: 70%;
-	color: black;
+	color: #000000;
 	font-size: 10pt;
 	display: block;
 }
@@ -128,5 +129,5 @@ div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar {
 .footer, .license-index, .licence {
 	clear: both;
 	font-size: 8pt;
-	padding: 5px;
+	padding: 15px 5px 5px 5px;
 }

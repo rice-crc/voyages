@@ -6,8 +6,14 @@ from django.shortcuts import render_to_response
 from django.conf.urls.defaults import *
 
     
-def getessay(request, pagenum):
+def getintro(request, pagenum):
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
-    essayPageNum = "assessment/essay_page_" + pagenum + ".html"
-    return render_to_response('assessment/essay.html', {'subpagenum': essayPageNum,}, 
+    essayPageNum = "assessment/intro_page_" + pagenum + ".html"
+    return render_to_response('assessment/essays-intro.html', {'subpagenum': essayPageNum,}, 
+                              context_instance=RequestContext(request));
+
+def getseasonality(request, pagenum):
+    # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
+    essayPageNum = "assessment/seasonality_page_" + pagenum + ".html"
+    return render_to_response('assessment/essays-seasonality.html', {'subpagenum': essayPageNum,}, 
                               context_instance=RequestContext(request));

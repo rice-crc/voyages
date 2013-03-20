@@ -1,0 +1,21 @@
+{% extends "assessment/assessmentbase.html" %}
+
+{% block title %}Essays{% endblock %}
+
+{% block csslist %}
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/assessment-essays.css" />
+{% endblock %}
+
+{% block center-content %}
+
+<!-- The actual content is loaded by the template renderer in subpagenum -->
+{% include subpagenum %}
+
+<!-- Previous/Next navigation menu -->
+<script type="text/javascript">
+	/* Function located in next_prev_navi.js */
+	document.writeln(getprevnext(essay_intro_toc, "essays-intro", "essay"));
+</script>
+
+{% endblock %}

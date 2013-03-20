@@ -6,6 +6,4 @@
 	}, function() {
 		$("#toplinks >li").removeClass('hover');
 	});
-	
-	
 });
