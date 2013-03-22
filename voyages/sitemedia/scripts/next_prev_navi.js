@@ -5,7 +5,7 @@ function getprevnext(toc_dictionary, hrefprefix, styleprefix) {
 	var hreflength = filename.length;
 	
 	/* The filename is in the format: hrefprefix-##.html*/
-	var pageNum = parseInt(filename.substring(hreflength - 7, hreflength - 5));
+	var pageNum = parseInt(filename.substring(hreflength - 7, hreflength - 5), 10);
 
 	var prevnextlinks = "<table class=\"" + styleprefix + "-prev-next\"><tr>";
 	/* Set previous link */

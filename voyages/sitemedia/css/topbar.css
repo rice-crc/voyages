@@ -10,8 +10,6 @@
 	width: 100%;
 }
 
-
-
 /* Horizontal navigation bar - settings for different browsers */
 #main_nav {
 	float: left;
@@ -37,7 +35,6 @@ html > body #main_nav ul {
 
 #groups ul li {
 	display: inline;
-	font-size: 10pt;
 }
 
 
@@ -63,7 +60,6 @@ html > body #main_nav ul {
 	position: relative;
 	text-align: center;
 	text-decoration: none;
-	font-size: 10pt;
 }
 
 .highlighted {
@@ -128,22 +124,32 @@ html > body #main_nav ul {
 }
 
 #block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
+	font-size: 11pt;
+	font-family: "Times New Roman",Times,FreeSerif,serif;
 	margin-top: 5px;
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 }
 
 /* Width of each navigation block */
-#block01 a, #block04 a, #block05 a {
+#block01 a, #block05 a {
 	
 	width: 120px;
 }
 
 #block02 a {
-	width: 180px;
+	width: 165px;
 }
 
 #block03 a {
-	width: 100px;
+	width: 90px;
 }
 
+#block04 a {
+	width: 150px;
+}
+
+#block01 ul li a, #block02 ul li a, #block03 ul li a, #block04 ul li a, #block05 ul li a {
+	font-family: Arial, Helvetica, Bitstream Vera Sans, Sans, sans-serif;
+	font-size: 10pt;
+}

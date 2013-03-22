@@ -3,11 +3,17 @@
 {% block title %}Essays{% endblock %}
 
 {% block csslist %}
-	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment.css">
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/assessment-essays.css" />
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/assessment-essays.css" />
 {% endblock %}
 
 {% block center-content %}
+<h1>Seasonality in the Trans-Atlantic Slave Trade</h1>
+
+<div class="essay-info">
+	<span class="essay-author">Stephen D. Behrendt</span>
+	<span class="essay-location">(Victoria University of Wellington)</span>, <span class="essay-date">2008</span>
+</div>
 
 <!-- The actual content is loaded by the template renderer in subpagenum -->
 {% include subpagenum %}
@@ -15,7 +21,7 @@
 <!-- Previous/Next navigation menu -->
 <script type="text/javascript">
 	/* Function located in next_prev_navi.js */
-	document.writeln(getprevnext(essay_intro_toc, "essays-intro", "essay"));
+	document.writeln(getprevnext(essay_intro_toc, "essays-intro", "essay")); 
 </script>
 
 {% endblock %}

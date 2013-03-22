@@ -15,5 +15,12 @@ var essay_intro_toc = {
 
 var essay_seasonality_toc = {
 	"01" : "Introduction",
-	
+	"02" : "Agriculture in the era of the trans-Atlantic slave trade",
+	"03" : "Seasonal rainfall in the Atlantic slaving world",
+	"04" : "Rainfall, crop type and agricultural calendars",
+	"05" : "Agricultural calendars and labor requirements",
+	"06" : "Provisioning-slaving seasons",
+	"07" : "Slave-trading seasonality: case studies",
+	"07" : "Trans-Atlantic pathways and harvest cycles",
+	"09" : "Conclusion",
 }

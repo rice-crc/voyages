@@ -1,141 +1,51 @@
-<h1> Construction of the Trans-Atlantic Slave Trade Database: Sources and Methods</h1>
 
-<div class="method-info">
-	<span class="method-author"><b>David Eltis</b></span>
-	<span class="method-location">(Emory University)</span>, <span class="method-date">2010</span>
-</div>
-
-<h2>Imputing Numbers of Slaves</h2>
+<h2>Inferring Places of Trade</h2>
 
 <p>
-	A second set of inferences is suggested by the data on numbers of slaves leaving Africa and arriving in the New (and
-	in some cases, the Old) World. Although 26,216 voyages in the data set arrived with slaves, and a further 7,192 could
-	have done so, the sources provide the actual number on board at arrival for only 18,269 voyages. On the African side,
-	the data are much weaker, with only 8,272 yielding information on the number of slaves leaving Africa, out of 29,095
-	voyages that left with slaves, and a further 3,335 that could have done so. Because most of those studying the slave
-	trade are interested in the captives rather than the ships, some inference would seem appropriate for those ships
-	that traded without leaving anything in the historical record about the slaves they carried. The first step in making
-	reasonable inferences is to draw on the number of captives who might have been reported for the same voyage at an
-	earlier or later stage of its itinerary.
+	Establishing the outcome of the voyage is an important prerequisite to inferring information about both places of trade
+	and numbers of people purchased. We have a good basis for imputing locations of slave trading as well as estimating the
+	numbers of slaves embarked and disembarked. We turn first to the geography of the traffic. For some voyages we know the
+	intended ports of trade on the African coast and in the Americas. Private correspondence, newspaper reports, and official
+	records of clearances from ports in Europe and the Americas frequently provide such information. Of the 34,948 voyages in
+	the data set, at least 1,262 did not embark slaves, usually on account of capture or natural hazard. Of those that did,
+	several hundred failed to complete the Middle Passage. The data set provides some information on African place of trade
+	for 21,291 voyages or about half of those that are likely to have obtained slaves. While this information surpasses
+	current knowledge of the geography of the slave trade, it is possible to glean yet more. For 4,722 voyages that left
+	Africa with slaves, or could have done so in the sense that the ship was not wrecked or captured prior to trade beginning,
+	we may not know the African place of embarkation, but we do know where the captain intended to buy slaves. If we assume
+	that he did in fact do what was intended, then after eliminating those locations that are not easy to group into regions
+	(for example the French designation Côte d’Or, which ranged from the Windward Coast to the Bight of Biafra), we are left
+	with 25,010 voyages that contain useful information on place of African trade—or about 60 percent of those vessels in
+	our sample that actually did or could have left Africa with slaves. Switching to the other side of the Atlantic, the
+	data set yields some information on ports of arrival for 24,916 voyages. Once more we have additional information on
+	where 5,444 voyages intended to trade their slaves even though we cannot be certain that they actually did so. If we
+	assume that captains completed the voyage according to plan, then the sample for places of disembarkation increases
+	from 24,916 to 30,295 voyages, or close to 75 percent of all those ventures disembarking captives.
 </p>
 
 <p>
-	Only 5,803 voyages in the revised database contain numbers of both captives embarked and captives disembarked,
-	but for a further 2,404 we have the figure for departures alone and for 12,279 numbers arrived alone. Imputed totals
-	for the missing information may be made from the large subset of voyages that provide information on deaths during
-	the passage. The Voyages Database contains 6,438 voyages for which a ratio of deaths to slaves embarked may be
-	calculated. Deaths as a proportion of those embarked differed markedly by African region of embarkation. Table 2
-	shows breakdowns of shipboard mortality as a percentage of those slaves taken on board.
-</p>
+	How valid are these assumptions on imputing places of trade from information on intended place of trade? Most slave
+	ships traded in the regions where owners declared they would trade. After eliminating captured ships that rarely
+	completed their voyages as intended, as well as those ships with very broadly defined destinations ("Americas" or
+	"British North America"), a Pearson product moment correlation run on ports of arrival in the Americas generated a
+	coefficient of 0.83 (n=9,541). A similar procedure for region of trade in Africa and intended region of trade produced
+	a Pearson product moment correlation of 0.714 (n=13,951). Ii should also be kept in mind that merchandise always had to
+	be loaded in Europe and the Americas for a specific African region and was often impossible to sell in another region.
+	It was unusual to find a specific manufactured good selling in more than one region.<span class="superscript">(10)</span>
 
-<div align="center">
-
-	<p style="font-weight:bold">
-		Table 2. Slaves died on board ships reaching the Americas as a percentage of those embarked, by African region
-		of embarkation, 1527-1866
-	</p>
-
-	<table border="1" cellpadding="2" class="methodborder">
-		<tr>
-			<td>&nbsp;</td>
-			<td class="number">Deaths/Embarked(%)</td>
-			<td class="number">Standard Deviation</td>
-			<td class="number">Number of Voyages</td>
-
-		</tr>
-		<tr>
-			<td>Senegambia</td>
-			<td class="number">10.9%</td>
-			<td class="number">13.7%</td>
-			<td class="number">421</td>
-		</tr>
-
-		<tr>
-			<td>Sierra Leone</td>
-			<td class="number">9.8%</td>
-			<td class="number">16.5%</td>
-			<td class="number">231</td>
-		</tr>
-		<tr>
-
-			<td>Windward Coast</td>
-			<td class="number">9.6%</td>
-			<td class="number">11.9%</td>
-			<td class="number">111</td>
-		</tr>
-		<tr>
-			<td>Gold Coast</td>
-
-			<td class="number">12.0%</td>
-			<td class="number">13.5%</td>
-			<td class="number">654</td>
-		</tr>
-		<tr>
-			<td>Bight of Benin</td>
-			<td class="number">11.7%</td>
-			<td class="number">14.3%</td>
-			<td class="number">1,197</td>
-		</tr>
-		<tr>
-			<td>Bight of Biafra</td>
-			<td class="number">19.1%</td>
-			<td class="number">18.8%</td>
-			<td class="number">646</td>
-		</tr>
-		<tr>
-			<td>West-central Africa</td>
-			<td class="number">9.1%</td>
-			<td class="number">11.7%</td>
-			<td class="number">2,464</td>
-		</tr>
-		<tr>
-			<td>South-east Africa</td>
-			<td class="number">19.3%</td>
-			<td class="number">16.5%</td>
-			<td class="number">356</td>
-		</tr>
-		<tr>
-			<td>Region cannot be identified</td>
-			<td class="number">17.4%</td>
-			<td class="number">17.7%</td>
-			<td class="number">358</td>
-		</tr>
-		<tr>
-			<td>All Africa</td>
-			<td class="number">11.9%</td>
-			<td class="number">14.2%</td>
-			<td class="number">6,438</td>
-		</tr>
-	</table>
-</div>
-
-<p>
-	The breakdown of mortality ratios by African region is used here as the basis for imputing numbers arrived
-	in the Americas where totals leaving Africa exist, and for numbers leaving Africa where the numbers on board
-	at arrival in the Americas are known.
+	Taken together, this evidence
+	appears sufficiently strong to allow some modest inferences for those voyages that we know purchased slaves in Africa,
+	or subsequently disembarked slaves in other parts of the Atlantic world, and for which the intended but not the actual
+	region of trade is known.
 </p>
 
 <p>
-	There remain 12,819 voyages with no information about the numbers of slaves on board ship. Indeed, we do
-	not even know if some of these ships carried slaves. The CD-ROM database divided such unknowns into just two
-	groups, one sailing from North American ports and the other departing from all other ports in the Atlantic.
-	Behind such categorization was the recognition that the slave vessels from North America were substantially
-	smaller than the average. Separate means were calculated for the two groups, adjusted in the case of the
-	larger group for region of embarkation in Africa where this information was available. In the Voyages
-	Database a more refined strategy is adopted. A more complete data set now allows us to focus on the type
-	of vessel as well as the route the voyage followed in forming estimates of captives transported where such
-	information is missing. The number of captives on board was very much a function of the type of ship as well
-	as place of trade in Africa, and to a lesser extent in the Americas. Moreover, the size of the type of vessel
-	as reflected in its rig changed over time. The Appendix table attempts to take into account these factors by
-	showing average number of captives both embarked and disembarked for 155 separate combinations of first, rig
-	of vessel and time period; and second, where these were not available, place of trade in Africa; and third,
-	a separate grouping of 18 types of vessels – smaller than those from the rest of the Atlantic World before
-	1800 - built in North America. A small group of vessels have no information on either rig or place of trade
-	and estimates of captives for these are classed as “No rig” in the Appendix table. The means for these 155
-	categories were added to voyage records, as appropriate, whenever data on slaves could not be extracted from
-	the sources. Users should note that in all cases these averages might be termed “running” in the sense that
-	that as we added data to the database we recalculated the statistics reported in the Appendix table. And as
-	augmentation of the dataset is set to continue then the imputed values will vary as data are added in the
-	future. Users should thus not expect to find that the imputed values assigned to any given ship
-	type are always the same or, indeed, will remain the same.
+	In addition to these inferential issues, there are also known biases in the geographic data. The British signed
+	three treaties with the Portuguese between 1811 and 1817 that contained clauses limiting Portuguese slave traders to
+	regions of Africa south of the equator, and the last two of the treaties allowed British cruisers to capture Portuguese
+	ships that did not adhere to these provisions. Brazil assumed these treaties when the country became independent in 1822.
+	From 1815, slave ships arriving in Bahia, which had strong trading relations with the Bight of Benin or Slave Coast (north
+	of the equator), usually reported their African port of departure as Cabinda or Malemba, ports just north of the Congo.
+	British officials in Bahia, as well as naval officers patrolling the African coast, were convinced that all Bahian ships
+	nevertheless continued to trade on the Slave Coast.<span class="superscript">(11)</span>
 </p>

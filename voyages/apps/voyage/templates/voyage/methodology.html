@@ -1,5 +1,7 @@
 {% extends "voyage/voyagebase.html" %}
 
+{% load i18n %}
+
 {% block title %}Methodology{% endblock %}
 
 {% block jslist %}
@@ -10,13 +12,37 @@
 
 {% block center-content %}
 
+<h1>{% trans 'Construction of the Trans-Atlantic Slave Trade Database: Sources and Methods' %}</h1>
+
+<div class="method-info">
+	<span class="method-author"><b>David Eltis</b></span>
+	<span class="method-location">(Emory University)</span>, <span class="method-date">2010</span>
+</div>
+
+
 <!-- The actual content is loaded by the template renderer in subpagenum -->
 {% include subpagenum %}
 
 <!-- Previous/Next navigation menu -->
-<script type="text/javascript">
-	/* Function located in next_prev_navi.js */
-	document.writeln(getprevnext(methodology_toc, "method", "method"));
-</script>
+
+<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
+	
+	<tr>
+		<td class="method-prev">
+			{% if prev_page_link %}
+				{{ prev_page_link|safe }}
+			{% else %}
+				&nbsp;
+			{% endif %}	
+		</td>
+		<td class="method-next">
+			{% if next_page_link %}
+				{{ next_page_link|safe }}
+			{% else %}
+				&nbsp;
+			{% endif %}	
+		</td>
+	</tr>
+</table>
 
 {% endblock %}

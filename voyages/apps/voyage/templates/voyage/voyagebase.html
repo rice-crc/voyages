@@ -13,14 +13,20 @@
 
 {% block content %}
 <div id="left-menu" class="left-menu-box">
-{% block left-menu %}
-{% include "voyage/left-menu.html" %}
-{% endblock %}
+	<div class="left-menu-title">
+		<h3>Understanding the Database </h3>
+	</div>
+	
+	<!-- Left menu goes here -->
+	{% load menu_tags %}
+	<ul>
+	   	{{ menu_items|unordered_href_list }}
+	</ul>
 </div>
 
 <div id="center-content">
-{% block center-content %}
-{% endblock %}
+	{% block center-content %}
+	{% endblock %}
 </div>
 
 {% endblock %}
