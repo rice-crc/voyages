@@ -81,7 +81,7 @@ div.secondary-menu-item-1 a, div.secondary-menu-item-1-selected a {
 	border-bottom: 1px dotted #B8E7E8;
 }
 
-div.secondary-menu-item-0-selected a, div.secondary-menu-item-1-selected a {
+.assessment_selected {
 	background-color: #F0FAFA;
 }
 

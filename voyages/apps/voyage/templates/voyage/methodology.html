@@ -5,13 +5,13 @@
 {% block title %}Methodology{% endblock %}
 
 {% block jslist %}
-<script src="{{ STATIC_URL }}scripts/toc_voyage.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/embedLeftMenu.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/next_prev_navi.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/embed_left_menu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block center-content %}
 
+<div id="inner-content-header">
 <h1>{% trans 'Construction of the Trans-Atlantic Slave Trade Database: Sources and Methods' %}</h1>
 
 <div class="method-info">
@@ -19,30 +19,20 @@
 	<span class="method-location">(Emory University)</span>, <span class="method-date">2010</span>
 </div>
 
+</div>
 
-<!-- The actual content is loaded by the template renderer in subpagenum -->
-{% include subpagenum %}
-
-<!-- Previous/Next navigation menu -->
+<div id="center-content-inner">
+	&nbsp;
+</div>
 
 <table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
-	
 	<tr>
-		<td class="method-prev">
-			{% if prev_page_link %}
-				{{ prev_page_link|safe }}
-			{% else %}
-				&nbsp;
-			{% endif %}	
-		</td>
-		<td class="method-next">
-			{% if next_page_link %}
-				{{ next_page_link|safe }}
-			{% else %}
-				&nbsp;
-			{% endif %}	
-		</td>
+		<td class="method-prev"><a id="prev-page" href="#">&nbsp;</a></td>
+		<td class="method-next"><a id="next-page" href="#">&nbsp;</a></td>
 	</tr>
 </table>
+
+
+<!-- Previous/Next navigation menu -->
 
 {% endblock %}

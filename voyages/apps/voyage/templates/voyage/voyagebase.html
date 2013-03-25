@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block jslist %}
-<script src="{{ STATIC_URL }}scripts/toc_voyage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/next_prev_navi.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/embedLeftMenu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/embed_left_menu.js" type="text/javascript"></script>
 
 {% endblock %}
 
@@ -17,11 +17,7 @@
 		<h3>Understanding the Database </h3>
 	</div>
 	
-	<!-- Left menu goes here -->
-	{% load menu_tags %}
-	<ul>
-	   	{{ menu_items|unordered_href_list }}
-	</ul>
+	
 </div>
 
 <div id="center-content">

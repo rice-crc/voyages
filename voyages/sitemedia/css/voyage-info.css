@@ -108,7 +108,7 @@ div.secondary-menu-item-2 a, div.secondary-menu-item-2-selected a {
 	border-bottom: 1px dotted #E4D6B1;
 }
 
-div.secondary-menu-item-1-selected a, div.secondary-menu-item-2-selected a {
+div.voyage_selected a {
 	background-color: #FFF5C2;
 }
 

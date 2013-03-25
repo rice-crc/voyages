@@ -1,0 +1,41 @@
+{% extends "assessment/assessmentbase.html" %}
+
+{% block title %}Essays{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/assessment-essays.css" />
+{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/embed_left_menu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/navigation_assessment.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block left-menu %}
+<div id="essays-left-menu" class="left-menu-box">
+	<div class="left-menu-title">
+	<h3>Essays </h3>
+	</div>
+	<h4 class="bold">Interpretation</h4>
+</div>
+{% endblock %}
+
+{% block center-content %}
+<div id="center-content-inner">
+
+</div>
+<table border="0" cellspacing="0" cellpadding="0" class="essay-prev-next">
+	<tr>
+		<td class="essay-prev"><a id="prev-page" href="#">&nbsp;</a></td>
+		<td class="essay-next"><a id="next-page" href="#">&nbsp;</a></td>
+	</tr>
+</table>
+
+<!-- Previous/Next navigation menu -->
+<script type="text/javascript">
+	/* Function located in next_prev_navi.js */
+	//document.writeln(getprevnext(essay_intro_toc, "essays-intro", "essay"));
+</script>
+
+{% endblock %}
