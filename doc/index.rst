@@ -15,6 +15,7 @@ Contents:
    changelog
    deploynotes
    apidocs
+   devnotes
 
 
 
