@@ -8,16 +8,13 @@
 {% endblock %}
 
 {% block jslist %}
-<script src="{{ STATIC_URL }}scripts/embed_left_menu.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/navigation_assessment.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/embed_left_menu.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block left-menu %}
 <div id="essays-left-menu" class="left-menu-box">
-	<div class="left-menu-title">
-	<h3>Essays </h3>
-	</div>
-	<h4 class="bold">Interpretation</h4>
+ {%include "assessment/left-menu.html" %}
 </div>
 {% endblock %}
 

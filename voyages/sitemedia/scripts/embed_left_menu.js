@@ -1,42 +1,80 @@
-function getleftmenu(dictionaryname, sectionprefix, prefix) {
-	var htmlcode = "";
-	$.each(dictionaryname, function(key, value) {
-		// load about page on click
-		htmlcode += "<div class=\"secondary-menu-item-1\"><a id=#" + sectionprefix + key + "\" href=\"/" + sectionprefix + "/" + prefix + "-" + key + ".html\">" + value + "</a></div>";
+
+
+/* Update the text on previous and next link */
+function updatelinktext(currentpagenum, maxNum, toc_dictionary) {
+	$("#inner-content-header").show();
+	$("#center-content-inner").resize();
+				
+	var prevp = getpreviousnum(currentpagenum);
+	var nextp = getnextnum(currentpagenum, maxNum);
+	if (prevp == -1) {
+		$("#prev-page").hide();
+		
+	} else {
+		$("#prev-page").show();
+		$("#prev-page").text(toc_dictionary[prevp]);
+	}
+
+	if (nextp == -1) {
+		$("#next-page").hide();
+	} else {
+		$("#next-page").show();
+		$("#next-page").text(toc_dictionary[nextp]);
+	}
+}
+
+$(document).ready(function() {
+	
+
+	$("#" + wrappername + " div").each(function(key, value) {
+		/* load the page on click */
+
+		$("#" + this.id).click(function() {
+			$("#inner-content-header").show();
+			currentpagenumber = key;
+			currentid = this.id;
+
+			$("#center-content-inner").load(this.id + ".html", updatelinktext(currentid));
+		});
 	});
-	return htmlcode;
-}
 
-function get_html_left_link(linknum, linkcontent, prefix) {
-	return "<div class=\"secondary-menu-item-1\"><a id=\"" + prefix + linknum + "\" href=\"#\">" + linkcontent + "</a></div>";
-}
+	/* This only triggers if there is a valid previous page */
+	$("#prev-page").click(function() {
+		currentid = $("#" + currentid).prev().attr("id");
 
-function get_html_left_mainlink(linkurl, linkcontent, elemid) {
-	return "<div class=\"secondary-menu-item-0\"><a id=\"" + elemid + "\" href=\"" + linkurl + "\">" + linkcontent + "</a></div>";
-}
+		$("#center-content-inner").load(currentid + ".html", function() {
+			updatelinktext(currentid);
+		});
+	});
 
+	/* This only triggers if there is a valid next page */
+	$("#next-page").click(function() {
+		currentid = $("#" + currentid).next().attr("id");
 
-/* Return a number DD where DD = currentNum - 1*/
-function getpreviousnum(currentNum) {
-	var pageNum = parseInt(currentNum, 10);
-	if (pageNum == 1) {
-		return -1;
-	} else if (pageNum <= 10) {
-		return "0" + (pageNum - 1);
+		$("#center-content-inner").load(currentid + ".html", function() {
+			updatelinktext(currentid);
+		});
+	});
+
+});
+
+function updatelinktext(currentid) {
+	$("#center-content-inner").resize();
+	$("#" + wrappername + " div").removeClass(selectedClass);
+	$("#" + currentid).addClass(selectedClass);
+
+	if ($("#" + currentid).prev().length != 0) {
+		$("#prev-page").show();
+		$("#prev-page").text($("#" + currentid).prev().text());
 	} else {
-		return pageNum - 1;
+		$("#prev-page").hide();
+	}
+
+
+	if ($("#" + currentid).next().length != 0) {
+		$("#next-page").show();
+		$("#next-page").text($("#" + currentid).next().text());
+	} else {
+		$("#next-page").hide();
 	}
 }
-
-/* Return a number DD where DD = currentNum + 1*/
-function getnextnum(currentNum, max) {
-	var pageNum = parseInt(currentNum, 10);
-	if (pageNum == max) {
-		return -1;
-	} else if (pageNum <= 8) {
-		return "0" + (pageNum + 1);
-	} else {
-		return pageNum + 1;
-	}
-}
-

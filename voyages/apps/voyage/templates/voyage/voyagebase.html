@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %} 
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage-info.css">
@@ -13,11 +14,7 @@
 
 {% block content %}
 <div id="left-menu" class="left-menu-box">
-	<div class="left-menu-title">
-		<h3>Understanding the Database </h3>
-	</div>
-	
-	
+{% include "voyage/left-menu.html" %}
 </div>
 
 <div id="center-content">
