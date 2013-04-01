@@ -1,13 +1,14 @@
-/* Append some other headers */
+/* Initialize variables*/
 var section_prefix = "voyage";
 var templateprefix = "method-";
-var currentid = "method-01";
+var currentid = "voyage-guide-intro";
+var current_section_name = "Guide";
 var wrappername = "methodology00";
 var selectedClass = "voyage_selected";
 var enableCollapse = false; 
 
 var sectionToc = [
-	{"mainid" : "voyage-guide", "hasSubsection" : false,},
+	{"mainid" : "voyage-guide-intro", "hasSubsection" : false,},
 	{"mainid" : "voyage-methodology", "hasSubsection" : true, "wrappername": "methodology00", },
 ]
 

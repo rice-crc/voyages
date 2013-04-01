@@ -6,6 +6,7 @@ function setupleftmenu ()	{
 		}
 	});
 	
+	/* Set up event handlers */
 	$.each(sectionToc, function(i, value) {
 		if (value["hasSubsection"] == true) {
 			$("#" + value["mainid"]).click(function() {
@@ -16,6 +17,9 @@ function setupleftmenu ()	{
 				$("#prev-page").hide();
 				$("#next-page").show();
 				$("#center-content-inner").load(currentid + ".html");
+				
+				updatebreadcrumb($("#" + value["mainid"]).first().text());
+				
 				if (enableCollapse) {
 					/* Hide other submenus */
 					$(".secondary-menu-subitems-0").addClass("hidden");
@@ -24,13 +28,17 @@ function setupleftmenu ()	{
 			});
 		} else {
 			$("#" + value["mainid"]).click(function() {
-				
 				if (enableCollapse) {
 					/* Hide other submenus */
 					$(".secondary-menu-subitems-0").addClass("hidden");
-					$("#prev-page").hide();
-					$("#next-page").hide();
+					
 				}
+				
+				updatebreadcrumb($("#" + value["mainid"]).first().text());
+				
+				currentid = value["mainid"];
+				$("#prev-page").hide();
+				$("#next-page").hide();
 				$("#center-content-inner").load(value["mainid"] + ".html");
 			});
 		}
@@ -43,6 +51,9 @@ function ajaxsetupload(wrappername2) {
 		/* load the page on click */
 		$("#" + this.id).click(function() {
 			currentid = this.id;
+			updatebreadcrumb($(this).parent().prev().text());
+			
+			$("#breadcrumb-lastelem").text(current_section_name);
 			$("#center-content-inner").load(this.id + ".html", updatelinktext(currentid));
 		});
 	});
@@ -86,4 +97,10 @@ function updatelinktext(currentid) {
 	} else {
 		$("#next-page").hide();
 	}
+}
+
+function updatebreadcrumb(newpagename) {
+	current_section_name = newpagename;
+	document.title = current_section_name;
+	$("#breadcrumb-lastelem").text(current_section_name);
 }
