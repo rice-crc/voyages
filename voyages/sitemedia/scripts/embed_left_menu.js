@@ -33,7 +33,6 @@ function setupleftmenu ()	{
 					$(".secondary-menu-subitems-0").addClass("hidden");
 					
 				}
-				
 				updatebreadcrumb($("#" + value["mainid"]).first().text());
 				
 				currentid = value["mainid"];

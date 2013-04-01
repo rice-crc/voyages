@@ -19,27 +19,27 @@
 		<td valign="top">
 		<div id="welcome-map">
 			<img style="position: absolute; top: 0px; left: 0px;"
-			id="welcome-image" src="/static/images/index/map.png"
+			id="welcome-image" src="{{ STATIC_URL}}images/index/map.png"
 			width="430" height="340" border="0" />
 
 			<img style="position: absolute; top: 50px; left: 50px;"
-			id="map_north_america_label" src="/static/images/index/map-north-america.png"
+			id="map_north_america_label" src="{{ STATIC_URL}}images/index/map-north-america.png"
 			width="120" height="80" border="0"  />
 
 			<img style="position: absolute; top: 200px; left: 100px;"
-			id="map_brazil_label" src="/static/images/index/map-brazil.png"
+			id="map_brazil_label" src="{{ STATIC_URL}}images/index/map-brazil.png"
 			width="100" height="60" border="0"  />
 
 			<img style="position: absolute; top: 125px; left: 95px;"
-			id="map_caribbean_label" src="/static/images/index/map-caribbean.png"
+			id="map_caribbean_label" src="{{ STATIC_URL}}images/index/map-caribbean.png"
 			width="120" height="60" border="0"  />
 
 			<img style="position: absolute; top: 50px; left: 260px;"
-			id="map_europe_label" src="/static/images/index/map-europe.png"
+			id="map_europe_label" src="{{ STATIC_URL}}images/index/map-europe.png"
 			width="100" height="60" border="0"  />
 
 			<img style="position: absolute; top: 130px; left: 270px;"
-			id="map_africa_label" src="/static/images/index/map-africa.png"
+			id="map_africa_label" src="{{ STATIC_URL}}images/index/map-africa.png"
 			width="100" height="60" border="0"  />
 		</div>
 		<div id="welcome-map-region-placeholder">
@@ -132,13 +132,13 @@
 		<td valign="top">
 		<div id="welcome-text">
 			<h1>{% blocktrans %}The Trans-Atlantic Slave Trade Database has
-				<br />information on more than 35,000 slaving voyages{% endblocktrans %}
+				information on more than 35,000 slaving voyages{% endblocktrans %}
 			</h1>
 			<p>
 				{% blocktrans %}that forcibly embarked over 10 million Africans for transport to the
-				<br/>Americas between the sixteenth and nineteenth centuries. It offers 
-				<br/>researchers, students and the general public a chance to rediscover the 
-				<br/>reality of one of the largest forced movements of peoples in world history.{% endblocktrans %}</p>
+				 Americas between the sixteenth and nineteenth centuries. It offers 
+				researchers, students and the general public a chance to rediscover the 
+				reality of one of the largest forced movements of peoples in world history.{% endblocktrans %}</p>
 		</div>
 		<div id="other-links">
 			<table border="0" cellspacing="0" cellpadding="0">
@@ -149,9 +149,9 @@
 							{% trans 'Special features' %}
 						</div>
 					</td>
-					<td style="padding-left: 20px;"><img src="/static/images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
+					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
 					<td style="padding-left: 5px;"><a href="/assessment/intro-maps.html">{% trans 'Introductory Maps' %}</a></td>
-					<td style="padding-left: 20px;"><img src="/static/images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
+					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
 					<td style="padding-left: 5px;"><a href="/assessment/estimates.html">{% trans 'Timeline and Chronology' %}</a></td>
 				</tr>
 			</table>
@@ -159,10 +159,10 @@
 		<div class="divider">&nbsp;</div>
 		<table border="0" cellspacing="0" cellpadding="0" id="featured-sections">
 			<tr>
-				<td class="featured-section-image"><a href="/database/search.html"> <img src="/static/images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="/voyage/search.html"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/database/search.html">{% trans 'Search the Voyages Database' %} <img src="/static/images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="/database/search.html">{% trans 'Search the Voyages Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}Look for particular voyages in this database of documented slaving
@@ -171,10 +171,10 @@
 				</div></td>
 			</tr>
 			<tr>
-				<td class="featured-section-image"><a href="/assessment/estimates.html"> <img src="/static/images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="/assessment/estimates.html"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/assessment/estimates.html">{% trans 'Examine Estimates of the Slave Trade' %} <img src="/static/images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="/assessment/estimates.html">{% trans 'Examine Estimates of the Slave Trade' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}Slaves on documented voyages represent four-fifths of the number
@@ -183,10 +183,10 @@
 				</div></td>
 			</tr>
 			<tr>
-				<td class="featured-section-image"><a href="/about/origins.html"> <img src="/static/images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="/about/origins.html"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/about/origins.html">{% trans 'Explore the African Names Database' %} <img src="/static/images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="/about/origins.html">{% trans 'Explore the African Names Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}This database identifies 91,491 Africans taken from captured

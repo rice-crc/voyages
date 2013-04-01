@@ -5,6 +5,10 @@ var elem = href.split("/");
 var maxIdx = elem.length - 1;
 
 function writebreadcrumb() {
+	if (maxIdx == 3 && elem[maxIdx] == "") {
+		return "<div class='breadcrumb'>Home</div>";
+	}
+	
 	/* Parse the link to the home page */
 	path = "<div class='breadcrumb'><a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + "Home"  + "</a>";
 
@@ -18,9 +22,9 @@ function writebreadcrumb() {
 				+ "/\">" + majorSectionName[elem[3]] + "</a>";
 				
 		
-		if (elem[3] == "voyage" || elem[4] == "guide.html") {
+		if (elem[3] == "voyage" && (elem[4] == "guide.html" || elem[4] == "guide.html#")) {
 			path += seperatorst + "Understanding the Database";
-		} else if (elem[3] == "assessment" || elem[4] == "essays.html") {
+		} else if (elem[3] == "assessment" && (elem[4] == "essays.html" || elem[4] == "essays.html#")) {
 			path += seperatorst + "Essays";
 		}else {
 			/* Add successive elements and seperators */

@@ -3,7 +3,7 @@ var selectedClass = "assessment_selected";
 
 var wrappername = "essays-intro00";
 var templateprefix = "essays-intro";
-var enableCollapse = false; 
+var enableCollapse = true; 
 
 /* The first page to be loaded */
 var currentid = "essays-intro-01";

@@ -11,13 +11,20 @@ div#welcome-text {
 	font-family: "Times New Roman", Times, serif;
 }
 
+div#welcome-text h1, div#welcome-text p {
+	text-align: justify;
+	width: 450px;
+}
+
 div#welcome-text h1 {
-	font-size: 18pt;
+	font-size: 16pt;
+	font-weight: 600;
 }
 
 div#welcome-text p {
 	font-size: 12pt;
 	line-height: 130%;
+	margin: 5px 0px 5px 0px;
 }
 
 /* feature sections */
