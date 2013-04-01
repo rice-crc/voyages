@@ -1,101 +1,91 @@
 body {
-	background-color: #E2F2F5; }
+	background-color: #E2F2F5;
+	margin: 0;
+}
 
 a {
-	color: #008CA5; }
+	color: #FFFFFF;
+}
 
 table.top-bar {
 	border-collapse: collapse;
-	width: 100%; }
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
 
-td.top-bar-logo {
+.top-bar-logo {
+	padding: 0px;
+	margin: 0;
+	background-color: #008CA5;
+}
+
+.top-bar-menu {
+	margin-top: 25px;
+	display: block;
+	width: 45%;
+	float: right;
+}
+
+.top-bar-menu {
 	padding: 0px;
 	background-color: #008CA5;
-	height: 50px; }
+	vertical-align: bottom;
+}
 
-td.top-bar-menu {
-	padding: 0px;
-	background-color: #008CA5;
-	height: 50px;
-	vertical-align: bottom; }
-
-div.top-bar-menu {
-	color: White; }
-
-div.top-bar-menu table {
-	margin-left: auto; }
-
-div.top-bar-menu td.tabs-tab-first-filler {
-	width: 0px;
-	overflow: hidden; }
+.top-bar-menu td {
+	width: 80px;
+	vertical-align: bottom;
+	text-align: center;
 	
-div.top-bar-menu td.tabs-tab-filler {
-	width: 5px;
-	overflow: hidden; }
+}
+.top-bar-menu td a {
+	padding: 6px;
+	margin: 6px 6px 0px 6px;
+	color: #FFFFFF;
+	text-decoration: none;
+	width: 120%;
+	background-color: #40A9BE;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
 
-div.top-bar-menu td.tabs-tab-last-filler {
-	width: 15px;
-	overflow: hidden; }
+.top-bar-menu-selected td {
+	background-color: #B5DEE6;
+}
 
-div.top-bar-menu td.tabs-tab-left {
-	width: 5px;
-	overflow: hidden;
-	background-image: url(../images/help-tab-left.png);
-	background-repeat: no-repeat; }
-
-div.top-bar-menu td.tabs-tab-middle {
-	cursor: pointer;
-	padding: 3px 5px 3px 5px;
-	background-image: url(../images/help-tab-middle.png);
-	background-repeat: repeat-x; }
-	
-div.top-bar-menu td.tabs-tab-right {
-	width: 5px;
-	overflow: hidden;
-	background-image: url(../images/help-tab-right.png);
-	background-repeat: no-repeat; }
-	
-div.top-bar-menu td.tabs-tab-left-selected {
-	width: 5px;
-	overflow: hidden;
-	background-image: url(../images/help-tab-left-selected.png);
-	background-repeat: no-repeat; }
-
-div.top-bar-menu td.tabs-tab-middle-selected {
-	cursor: pointer;
-	padding: 3px 5px 3px 5px;
-	background-image: url(../images/help-tab-middle-selected.png);
-	background-repeat: repeat-x;
-	color: #008CA5; }
-	
-div.top-bar-menu td.tabs-tab-right-selected {
-	width: 5px;
-	overflow: hidden;
-	background-image: url(../images/help-tab-right-selected.png);
-	background-repeat: no-repeat; }
-	
 div#help-section-title {
-	background-color: #B5DEE6; }
-	
+	background-color: #B5DEE6;
+	min-height: 50px;
+	color: #FFFFFF;
+	margin: 0px;
+	padding: 10px;
+	font-weight:500;
+	font-size: 24pt;
+}
+
 td.demo-links {
 	color: White;
-	padding-left: 20px; }
+	padding-left: 20px;
+}
 
 td.demo-links a {
 	display: inline-block;
 	text-decoration: none;
 	padding: 2px 5px;
-	color: #008CA5; }
-	
+	color: #008CA5;
+}
+
 td.demo-links a:hover {
 	background-color: #40A9BE;
 	color: White;
 	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px; }
+	-webkit-border-radius: 2px;
+}
 
 td.demo-links a.demo-link-active {
 	background-color: #008CA5;
 	color: White;
 	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px; }
-	
+	-webkit-border-radius: 2px;
+}

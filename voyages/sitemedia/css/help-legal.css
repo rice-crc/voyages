@@ -1,0 +1,32 @@
+div.content {
+	padding: 0px 20px; }
+
+table.persmissions {
+	border-collapse: collapse; }
+
+table.persmissions th, table.persmissions td {
+	vertical-align: top;
+	padding: 0.5em 0.75em;
+	border: 1px solid #40A9BE;
+	background-color: #F1F9FA; }
+
+table.persmissions th {
+	background-color: #B5DEE6;
+	text-align: left; }
+	
+table.persmissions div.asset {
+	font-weight: bold; }
+
+table.persmissions td.citations div.format {
+	}
+	
+table.persmissions td.citations div.format span.format {
+	font-weight: bold; }
+
+table.persmissions td.citations div.example {
+	border-top: 1px dotted #40A9BE;
+	margin-top: 0.5em;
+	padding-top: 0.5em; }
+
+table.persmissions td.citations div.example span.example {
+	font-weight: bold; }
