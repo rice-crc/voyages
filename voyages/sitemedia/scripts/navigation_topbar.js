@@ -38,6 +38,14 @@ var majorSectionName = {
 }
 
 $(document).ready(function() {
+	$("#" + elem[3]).addClass("main_nav-selected");
+	
+	$(".secondary-bar-breadcrumb").html(writebreadcrumb());
+	
+	/* Secondary menu */
+	$(".secondary-bar-help-link > a").click(function(){
+		openPopup("/help/" + this.id + ".html")
+	});
 	/*
 	$.each(listNav, function(key, value) {
 				// load about page on click
@@ -51,12 +59,23 @@ $(document).ready(function() {
 		});
 	}); 
 	*/
-	
+	/*
 	$.each(listNav, function(key, value) {
 				// load about page on click
 		$("#" + key).click(function(){
 			window.location = value;
 		});
-	}); 
+	});
+	*/ 
 });
 
+function openPopup(pageUrl) {
+window.open( pageUrl,
+	"tastPopupHelp",
+	"resizable=yes, " +
+	"location=no, " +
+	"status=no, " +
+	"scrollbars=yes, " +
+	"width=680, " +
+	"height=680").focus();
+} 

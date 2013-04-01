@@ -1,4 +1,4 @@
-/* Legay function for the map */
+/* Legacy function for the map */
 
 var IE = navigator.userAgent.indexOf("MSIE 7.0") != -1 || navigator.userAgent.indexOf("MSIE 6.0") != -1 || navigator.userAgent.indexOf("MSIE 5.5") != -1;
 var GK = navigator.userAgent.indexOf("Gecko") != -1;

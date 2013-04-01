@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}About the Project{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about.css">
+
+{% block pagecsslist %}
+{% endblock %}
+
+{% endblock %}
+
+{% block content %}
+
+{% block left-menu %}
+<div id="left-menu" class="left-menu-box">
+	{% include "about/left-menu.html" %}
+</div>
+
+{% endblock %}
+
+<div id="center-content">
+
+	<div id="center-content-inner">
+		{% block center-content %}
+
+		{% endblock %}
+	</div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
+

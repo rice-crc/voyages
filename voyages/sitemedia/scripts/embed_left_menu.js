@@ -1,47 +1,57 @@
+function setupleftmenu ()	{
+	/* Initialization for section with subsections/pages */
+	$.each(sectionToc, function(i, value) {
+		if (value["hasSubsection"] == true) {
+				ajaxsetupload(value["wrappername"]);
+		}
+	});
+	
+	$.each(sectionToc, function(i, value) {
+		if (value["hasSubsection"] == true) {
+			$("#" + value["mainid"]).click(function() {
+				wrappername = value["wrappername"];
+				templateprefix = value["templateprefix"];
+				currentid = $("#" + wrappername + " div").first().attr("id");;
 
-
-/* Update the text on previous and next link */
-function updatelinktext(currentpagenum, maxNum, toc_dictionary) {
-	$("#inner-content-header").show();
-	$("#center-content-inner").resize();
+				$("#prev-page").hide();
+				$("#next-page").show();
+				$("#center-content-inner").load(currentid + ".html");
+				if (enableCollapse) {
+					/* Hide other submenus */
+					$(".secondary-menu-subitems-0").addClass("hidden");
+					$("#" + value["wrappername"]).removeClass("hidden");
+				}
+			});
+		} else {
+			$("#" + value["mainid"]).click(function() {
 				
-	var prevp = getpreviousnum(currentpagenum);
-	var nextp = getnextnum(currentpagenum, maxNum);
-	if (prevp == -1) {
-		$("#prev-page").hide();
-		
-	} else {
-		$("#prev-page").show();
-		$("#prev-page").text(toc_dictionary[prevp]);
-	}
-
-	if (nextp == -1) {
-		$("#next-page").hide();
-	} else {
-		$("#next-page").show();
-		$("#next-page").text(toc_dictionary[nextp]);
-	}
+				if (enableCollapse) {
+					/* Hide other submenus */
+					$(".secondary-menu-subitems-0").addClass("hidden");
+					$("#prev-page").hide();
+					$("#next-page").hide();
+				}
+				$("#center-content-inner").load(value["mainid"] + ".html");
+			});
+		}
+	});
+	setupnextprev();
 }
 
-$(document).ready(function() {
-	
-
-	$("#" + wrappername + " div").each(function(key, value) {
+function ajaxsetupload(wrappername2) {
+	$("#" + wrappername2 + " div").each(function() {
 		/* load the page on click */
-
 		$("#" + this.id).click(function() {
-			$("#inner-content-header").show();
-			currentpagenumber = key;
 			currentid = this.id;
-
 			$("#center-content-inner").load(this.id + ".html", updatelinktext(currentid));
 		});
 	});
+}
 
+function setupnextprev() {
 	/* This only triggers if there is a valid previous page */
 	$("#prev-page").click(function() {
 		currentid = $("#" + currentid).prev().attr("id");
-
 		$("#center-content-inner").load(currentid + ".html", function() {
 			updatelinktext(currentid);
 		});
@@ -55,11 +65,11 @@ $(document).ready(function() {
 			updatelinktext(currentid);
 		});
 	});
-
-});
+}
 
 function updatelinktext(currentid) {
 	$("#center-content-inner").resize();
+	
 	$("#" + wrappername + " div").removeClass(selectedClass);
 	$("#" + currentid).addClass(selectedClass);
 
@@ -69,7 +79,6 @@ function updatelinktext(currentid) {
 	} else {
 		$("#prev-page").hide();
 	}
-
 
 	if ($("#" + currentid).next().length != 0) {
 		$("#next-page").show();

@@ -14,14 +14,14 @@ div#index-intro-title {
 div#index-intro-text {
 	font-size: 10pt;
 	line-height: 130%;
-	width: 55%;
+	width: 800px;
 	padding-top: 5px;
 	color: #FFFFFF;
 }
 
 /* Columns corresponding to subsection */
 div#section-titles table, div#section-descs table {
-	width: 55%;
+	width: 800px;
 }
 
 div#section-titles {

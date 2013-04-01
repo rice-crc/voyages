@@ -13,8 +13,10 @@
 {% endblock %}
 
 {% block left-menu %}
-<div id="essays-left-menu" class="left-menu-box">
- {%include "assessment/left-menu.html" %}
+<div id="left-menu" class="left-menu-box">
+	
+{%include "assessment/essays-left-menu.html" %}
+ 
 </div>
 {% endblock %}
 
@@ -28,11 +30,5 @@
 		<td class="essay-next"><a id="next-page" href="#">&nbsp;</a></td>
 	</tr>
 </table>
-
-<!-- Previous/Next navigation menu -->
-<script type="text/javascript">
-	/* Function located in next_prev_navi.js */
-	//document.writeln(getprevnext(essay_intro_toc, "essays-intro", "essay"));
-</script>
 
 {% endblock %}

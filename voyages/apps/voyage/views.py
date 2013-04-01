@@ -9,6 +9,6 @@ from django.conf.urls.defaults import *
 def get_methodology(request, pagenum):
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "voyage/page_" + pagenum + ".html"
-    return render_to_response(pagepath, {}, 
+    return render_to_response("voyage/methodology-generic.html", {"pagepath" : pagepath}, 
                               context_instance=RequestContext(request));
                               

@@ -1,0 +1,54 @@
+h2 {
+	clear: both;
+	font-weight: normal;
+	background-color: #DFE1E2;
+	padding: 2px 5px; }
+
+ul.sponsors {
+	padding: 0px;
+	margin: 0px; }
+	
+ul.sponsors li {
+	clear: both;
+	padding: 0px 0px 0px 0px;
+	margin: 0px;
+	list-style-type: none; }
+
+img.sponsor-logo {
+	float: left;
+	margin-bottom: 15px; }
+
+div.sponsor-text {
+	margin-left: 10px;
+	margin-bottom: 15px;
+	padding-left: 10px;
+	border-left: 1px solid #98A1A9;
+	width: 470px;
+	float: left; }
+
+div.sponsor-name {
+	font-size: 11pt; } 
+	
+div.sponsor-name a {
+	text-decoration: none; } 
+		
+div.sponsor-name a:hover {
+	text-decoration: underline; } 
+
+div.sponsor-desc {
+	padding-top: 3px;
+	line-height: 140%; } 
+
+ul.special-thanks {
+	}
+
+ul.special-thanks li {
+	line-height: 140%;
+	color: #737E88; }
+	
+ul.special-thanks span.institution {
+	color: Black;
+	font-weight: bold; }
+
+ul.special-thanks span.people {
+	color: Black; }

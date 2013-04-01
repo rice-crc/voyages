@@ -16,6 +16,7 @@
 	height: 60px;
 	padding: 0;
 	margin: 0;
+	width: 100%;
 }
 
 html > body #main_nav {
@@ -25,7 +26,7 @@ html > body #main_nav {
 #main_nav ul {
 	padding: 5px 0 0 0;
 	list-style-type: none;
-	margin: -5px 0 0 0;
+	margin: 0 0 0 0;
 	float: left;
 }
 
@@ -37,6 +38,9 @@ html > body #main_nav ul {
 	display: inline;
 }
 
+#toplinks {
+	width: 660px;
+}
 
 /* Set the lists in horizontal order  */
 #toplinks li {
@@ -48,12 +52,24 @@ html > body #main_nav ul {
 	background: #005B6F;
 }
 
+.hovered a{
+	background: #005B6F;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
+.main_nav-selected {
+	background: #00738B;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
 /* Link settings for main link */
 #toplinks a {
-	padding: 5px 0 10px 0;
+	padding: 3px 0 3px 0;
 	color: #fff;
 	display: block;
-	height: 28px;
+	height: 26px;
 	line-height: 20px;
 	margin: 0;
 	overflow: hidden;
@@ -62,29 +78,23 @@ html > body #main_nav ul {
 	text-decoration: none;
 }
 
-.highlighted {
-	background-color: #005B6F;
-}
-
 /* Paddings of items in the dropdown menu */
 #toplinks .linkbox ul {
 	width: 100%;
 	float: left;
-	margin: 0 0 0 10px;
+	margin: 0 0 0 0;
 }
 
 /* Settings for each item in the nav list */
 #main_nav ul li .linkbox ul li a {
-	padding: 0 10px 0 0;
-	width: 100%;
+	padding: 0 0 0 10px;
 	text-align: left;
 	height: auto;
 }
 
 #main_nav ul li .linkbox ul li {
 	display: block;
-	width: 100%;
-	padding: 3px 0 5px 0;
+	padding: 3px 0 3px 0;
 }
 
 
@@ -95,27 +105,29 @@ html > body #main_nav ul {
 }
 
 /* Style for the drop-down menu */
-.linkbox {
+#main_nav ul li .linkbox {
 	clear: both;
-	width: 14%;
+	width: 200px ;
 	position: absolute;
 	left: -999em;
-	top: 50px;
+	top: 42px;
+	padding-bottom: 5px;
 	
-	/* Transparency settings (1 = opaque )*/
-	z-index: 100;
-	opacity: 1;
-	filter: alpha(opacity=100);
-	color: #fff;
 	border-bottom: 1px solid #aaa;
 	text-transform: none;
 	text-align: left;
+	z-index: 100;
 	
 	/* Dropdown menu background color */
 	background: #005B6F;
 	margin-left: 0px;
+	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
+}
+
+#main_nav ul li .linkbox ul li {
+	width: 90%;
 }
 
 /* Auto adjustment for menu to appear when hovering above the menu */
@@ -124,32 +136,31 @@ html > body #main_nav ul {
 }
 
 #block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
-	font-size: 11pt;
+	font-size: 10pt;
 	font-family: "Times New Roman",Times,FreeSerif,serif;
 	margin-top: 5px;
-	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 /* Width of each navigation block */
-#block01 a, #block05 a {
+#block01, #block05 {
 	
-	width: 120px;
+	width: 18%;
 }
 
-#block02 a {
-	width: 165px;
+#block02 {
+	width: 25%;
 }
 
-#block03 a {
-	width: 90px;
+#block03 {
+	width: 12%;
 }
 
-#block04 a {
-	width: 150px;
+#block04 {
+	width: 22%;
 }
 
 #block01 ul li a, #block02 ul li a, #block03 ul li a, #block04 ul li a, #block05 ul li a {
-	font-family: Arial, Helvetica, Bitstream Vera Sans, Sans, sans-serif;
-	font-size: 10pt;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 8pt;
+	width: 100%;
 }

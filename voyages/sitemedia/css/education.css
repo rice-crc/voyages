@@ -1,10 +1,15 @@
 body {
 	background-position: 0px 60px;
-	background-image: url(/static/images/education/education-bg.png);
-	background-repeat: repeat-x; }
+	background-image: url("/static/images/education/education-bg.png");
+	background-repeat: repeat-x; 
+}
 
 a {
-	color: #09367C; }
+	color: #09367C; 
+}
 	
 div.licence {
-	border-color: #7996BF; }
+	border-color: #7996BF; 
+}
+
+
