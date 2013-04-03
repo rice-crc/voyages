@@ -12,11 +12,6 @@
 }
 
 /* left menu */
-div.left-menu-title {
-	border-bottom: 1px solid #000000;
-	padding-bottom: 4px;
-}
-
 div.left-menu-box a {
 	display: block;
 	color: #000000;

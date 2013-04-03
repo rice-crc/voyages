@@ -39,6 +39,10 @@ h2 {
 	font-style: bold;
 }
 
+.nomargin {
+	margin: 0px;
+}
+
 .hidden {
 	display: none;
 }
@@ -62,6 +66,7 @@ div.secondary-bar {
 	height: 12pt;
 	color: white;
 	width: 100%;
+	margin: 0;
 	padding: 5px 0px 4px 10px;
 }
 
@@ -76,7 +81,15 @@ div.secondary-bar a:hover {
 }
 
 table.secondary-bar {
-	width: 850px;
+	width: 900px;
+}
+
+.secondary-bar-breadcrumb {
+	width: 650px;
+}
+
+.secondary-bar-help-links {
+	width: 250px;
 }
 
 /* Breadcrumb section */
@@ -123,15 +136,43 @@ div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar {
 #main-content {
 	clear: both;
 	min-height: 100px;
-	width: 800px;
+	width: 100%;
 	color: #000000;
-	font-size: 10pt;
 	display: block;
+	padding-bottom: 20px;
 }
 
 /* Footer */
 .footer, .license-index, .licence {
 	clear: both;
 	font-size: 8pt;
-	padding: 15px 5px 5px 5px;
+	border-top-style: dotted;
+    border-top-width: 1px; 
+	padding: 5px 5px 5px 5px;
+}
+
+#center-content-inner {
+	text-align: justify;
+	text-justify: auto;
+}
+
+div.left-menu-title h3 {
+	margin: 3px;
+	padding-bottom: 5px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 8pt;
+	font-weight: 400;
+	border-bottom: 1px solid #000000;
+}
+
+div.left-menu-subtitle {
+	font-weight: bold;
+	margin: 8px 0px 3px 0px;
+}
+
+#main-content-container {
+	width: 950px;
+	margin: 0;
+	padding:0;	
 }

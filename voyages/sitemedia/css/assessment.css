@@ -10,18 +10,13 @@ a {
 div.licence {
 	border-color: #73C5E9; }	
 
-#left-menu h3 {
-	margin: 0px;
-	padding: 5px 5px 3px 5px;
-}
-
 #left-menu, #center-content {
 	display: block;
 	float: left;
-	margin: 12px 3px 6px 6px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	border: #C09C42 1px solid;
+	margin: 8px 0px 15px 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: #73C5E9 1px solid;
 	background-color: #FFFFFF;
 	padding: 10px;
 }

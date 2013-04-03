@@ -14,11 +14,11 @@ div.licence {
 #left-menu, #center-content {
 	display: block;
 	float: left;
-	margin: 6px;
+	margin: 5px 0px 15px 10px;
 	padding: 10px;
-	-moz-border-radius: 20px;
-	border-radius: 15px;
-	border: #C09C42 1px solid;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px #97A0A8 solid;
 	background-color: #FFFFFF;
 }
 
@@ -29,18 +29,11 @@ div.licence {
 
 /* Set the width of the main content */
 #center-content {
-	width: 680px;
+	width: 650px;
 }
 
 p {
 	line-height: 160%;
-}
-
-div.left-menu-title h3 {
-	text-align: center;
-	margin: 3px;
-	border-bottom: 1px solid Black;
-	padding-bottom: 3px;
 }
 
 div.left-menu-box a {

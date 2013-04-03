@@ -13,12 +13,7 @@ p {
 	line-height: 160%;
 }
 
-div.left-menu-title h3 {
-	text-align: center;
-	margin: 3px;
-	border-bottom: 1px solid Black;
-	padding-bottom: 3px;
-}
+
 
 div.left-menu-box a {
 	display: block;

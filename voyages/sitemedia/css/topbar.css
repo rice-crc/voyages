@@ -8,6 +8,7 @@
 .top-bar {
 	background: #008CA8 url("/static/images/menu/menu-bg.png") repeat-y;
 	width: 100%;
+	height: 60px;
 }
 
 /* Horizontal navigation bar - settings for different browsers */
@@ -21,13 +22,13 @@
 
 html > body #main_nav {
 	margin: 0 0 0 0;
+	padding: 0 0 0 0;
 }
 
 #main_nav ul {
 	padding: 5px 0 0 0;
 	list-style-type: none;
-	margin: 0 0 0 0;
-	float: left;
+	margin: 0;
 }
 
 html > body #main_nav ul {
@@ -39,7 +40,7 @@ html > body #main_nav ul {
 }
 
 #toplinks {
-	width: 660px;
+	width: 700px;
 }
 
 /* Set the lists in horizontal order  */
@@ -69,8 +70,7 @@ html > body #main_nav ul {
 	padding: 3px 0 3px 0;
 	color: #fff;
 	display: block;
-	height: 26px;
-	line-height: 20px;
+	
 	margin: 0;
 	overflow: hidden;
 	position: relative;
@@ -104,13 +104,19 @@ html > body #main_nav ul {
 	text-decoration: underline;
 }
 
+#block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
+	font-size: 11pt;
+	font-family: "Times New Roman",Times,FreeSerif,serif;
+	margin-top: 12px;
+}
+
 /* Style for the drop-down menu */
 #main_nav ul li .linkbox {
 	clear: both;
 	width: 200px ;
 	position: absolute;
 	left: -999em;
-	top: 42px;
+	top: 40px;
 	padding-bottom: 5px;
 	
 	border-bottom: 1px solid #aaa;
@@ -135,12 +141,6 @@ html > body #main_nav ul {
 	left: auto;
 }
 
-#block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
-	font-size: 11pt;
-	font-family: "Times New Roman",Times,FreeSerif,serif;
-	margin-top: 5px;
-}
-
 /* Width of each navigation block */
 #block01, #block05 {
 	
@@ -163,4 +163,5 @@ html > body #main_nav ul {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 8pt;
 	width: 100%;
+	margin: 5px 0px 0px 0px;
 }

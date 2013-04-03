@@ -23,7 +23,10 @@ $(document).ready(function() {
 	/* Load the first page */
 	$("#center-content-inner").load(currentid + ".html");
 	$("#prev-page").hide();
-	$("#next-page").hide();
+	
+	/* The first page has a link to the next page */
+	updatelinktext(currentid);
+	$("#next-page").show();
 	$(".secondary-menu-subitems-0").addClass("hidden");
 	$("#" + wrappername).removeClass("hidden");
 });

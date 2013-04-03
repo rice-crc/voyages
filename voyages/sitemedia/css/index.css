@@ -1,4 +1,4 @@
-div.main-content {
+#main-content {
 	background-image: url('/static/images/index/top-band.png');
 	background-repeat: repeat-x;
 }
@@ -43,7 +43,7 @@ td.featured-section-text {
 }
 
 td.featured-section-image {
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 }
 
 div.featured-section-caption {
@@ -63,20 +63,16 @@ div.featured-section-caption a:hover {
 
 div.featured-section-description {
 	width: 300px;
-	margin-left: 10px;
-	margin-bottom: 20px;
-	margin-top: 5px;
-	margin-right: 20px;
+	margin: 5px 15px 20px 10px;
 }
 
-div.divider {
-	background-image: url('/static/images/index/divider.png');
-	background-repeat: no-repeat;
-}
 
 div#other-links {
 	padding: 10px 10px 10px 5px;
 	margin-left: 30px;
+	background-image: url('/static/images/index/divider.png');
+	background-repeat: no-repeat;
+	padding-top: 10px;
 }
 
 div#other-links a {
@@ -90,7 +86,7 @@ div#other-links a:hover {
 }
 
 div.special-features-title {
-	font-size: 11pt;
+	font-size: 10pt;
 	font-weight: bold;
 }
 
@@ -141,10 +137,7 @@ div.welcome-map-region-desc {
 div.footer {
 	border-top: 1px solid #D2E2E1;
 	padding-top: 5px;
-	margin-top: 30px;
-	margin-bottom: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
+	margin: 5px 20px 10px 20px;
 }
 
 div.footer td {
