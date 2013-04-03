@@ -81,15 +81,15 @@ div.secondary-bar a:hover {
 }
 
 table.secondary-bar {
-	width: 900px;
+	width: 890px;
 }
 
 .secondary-bar-breadcrumb {
-	width: 650px;
+	width: 680px;
 }
 
 .secondary-bar-help-links {
-	width: 250px;
+	width: 200px;
 }
 
 /* Breadcrumb section */
@@ -110,7 +110,7 @@ table.secondary-bar-help-links {
 }
 
 td.secondary-bar-help-link {
-	padding-left: 10px;
+	padding-left: 5px;
 }
 
 td.secondary-bar-language {

@@ -2,13 +2,13 @@
 /* Set the width of the left-menu */
 #left-menu {
 	padding: 10px;
-	width: 15%;
+	width: 230px;
 }
 
 /* Set the width of the main content */
 #center-content {
 	padding: 5px 10px 5px 10px;
-	width: 38%;
+	width: 610px;
 }
 
 /* left menu */
