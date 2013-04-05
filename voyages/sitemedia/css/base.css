@@ -47,16 +47,17 @@ h2 {
 	display: none;
 }
 
+
 #main_logo {
-	margin: 0;
-	padding: 0;
+	display: block;
 	width: 240px;
 	height: 60px;
 }
 
-#main_logo a, img {
-	margin: 0;
-	padding: 0;
+
+#main_logo img, #main_logo a{
+	margin: 0px;
+	padding: 0px;
 }
 
 /* Secondary bar */

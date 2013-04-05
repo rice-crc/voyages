@@ -11,6 +11,7 @@ var currentid = "essays-intro-01";
 var sectionToc = [
 	{"mainid" : "essays-introduction", "hasSubsection" : true, "wrappername": "essays-intro00",},
 	{"mainid" : "essays-seasonality", "hasSubsection" : true, "wrappername": "essays-seasonality00", },
+	{"mainid" : "essays-grandio", "hasSubsection" : false,},
 	{"mainid" : "essays-solomon", "hasSubsection" : false,},
 	{"mainid" : "essays-mulgrave", "hasSubsection" : false,},
 	{"mainid" : "essays-applied-history", "hasSubsection" : false,},

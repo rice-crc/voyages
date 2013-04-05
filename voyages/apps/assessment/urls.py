@@ -12,6 +12,7 @@ urlpatterns += patterns('django.views.generic.simple',
     url(r'^index.html$', 'direct_to_template', {'template': 'assessment/index.html'}),
     url(r'^essays.html$', 'direct_to_template', {'template': 'assessment/essaybase.html'}),
     
+    url(r'^essays-grandio.html$', 'direct_to_template', {'template': 'assessment/essays-grandio.html'}),
     url(r'^essays-solomon.html$', 'direct_to_template', {'template': 'assessment/essays-solomon.html'}),
     url(r'^essays-mulgrave.html$', 'direct_to_template', {'template': 'assessment/essays-mulgrave.html'}),
     url(r'^essays-applied-history.html$', 'direct_to_template', {'template': 'assessment/essays-applied-history.html'}),

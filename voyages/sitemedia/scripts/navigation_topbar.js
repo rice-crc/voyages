@@ -43,8 +43,9 @@ $(document).ready(function() {
 	$(".secondary-bar-breadcrumb").html(writebreadcrumb());
 	
 	/* Secondary menu */
-	$(".secondary-bar-help-link > a").click(function(){
-		openPopup("/help/" + this.id + ".html")
+	$(".secondary-bar-help-link > a").click(function(ev){
+		ev.preventDefault();
+		openPopup("/help/help.html?section=" + this.id);
 	});
 	/*
 	$.each(listNav, function(key, value) {

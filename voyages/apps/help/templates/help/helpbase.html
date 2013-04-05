@@ -4,7 +4,6 @@
 	<head>
 
 		<!-- Basic common css styles -->
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help-main.css" />
 
 		{% block csslist %}
@@ -23,28 +22,25 @@
 	<body>
 		<table class="top-bar" cellspacing="0" cellpadding="0" border="0">
 			<tr>
-				<td class="top-bar-logo"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/> </a></td>
-				<td>
-				<div class="top-bar-menu">
-					<table>
-						<tr>
-							<td><a href="sitemap.html" id="sitemap">{% trans "Sitemap" %}</a></td>
-							<td><a href="demos.html" id="demos" >{% trans "Demos" %}</a></td>
-							<td><a href="faqs.html" id="faqs" >{% trans "FAQs" %}</a></td>
-							<td><a href="glossary.html" id="glossary">{% trans "Glossary" %}</a></td>
-							<td><a href="legal.html" id="legal">{% trans "Legal" %}</a></td>
-						</tr>
-					</table>
-				</div></td>
+				<td class="top-bar-logo"><img src="{{ STATIC_URL}}images/menu/logo.png"/></td>
+				<td class="top-bar-menu-wrapper">
+					<div class="top-bar-menu">
+						<ul>
+							<li><a href="" id="sitemap" class="top-bar-menu-item">{% trans "Sitemap" %}</a></li>
+							<li><a href="" id="demos" class="top-bar-menu-item">{% trans "Demos" %}</a></li>
+							<li><a href="" id="faqs" class="top-bar-menu-item">{% trans "FAQs" %}</a></li>
+							<li><a href="" id="glossary" class="top-bar-menu-item">{% trans "Glossary" %}</a></li>
+							<li><a href="" id="legal" class="top-bar-menu-item">{% trans "Legal" %}</a></li>
+						</ul>
+					</div>
+				</td>
 			</tr>
 		</table>
 
 		<div id="help-section-title">Page title</div>
 
-		<div class="main-content">
-			{% block content %}
-
-			{% endblock %}
+		<div id="main-content">
+			&nbsp;
 		</div>
 		{% block footer %}{% endblock %}
 
