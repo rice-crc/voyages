@@ -1,4 +1,12 @@
 
+<script type="text/javascript">
+	function popitup(url) {
+	newwindow=window.open(url,'name','height=502,width=500,resizable, scrollbars, location=0');
+	if (window.focus) {newwindow.focus()}
+	return false;
+	}
+</script>
+
 <h2>Slave-trading seasonality: case studies</h2>
 
 <p>
@@ -9,7 +17,7 @@
 	Africans from the Bight of Biafra; in 1650-1700 one-third of all
 	Africans shipped from the region passed through the village,
 	located on the
-	<a href="../resources/images-detail.html?image=new-calabar-and-bonny">New Calabar River</a>.
+	<a href="{% url resources:images-detail %}?image=new-calabar-and-bonny">New Calabar River</a>.
 	In the 1630s and 1640s, the Dutch were the first Europeans to
 	challenge Portuguese dominance in New Calabar; by the late 1670s,
 	the London-based Royal African Company (RAC) outfitted the majority
@@ -21,7 +29,7 @@
 
 <p>
 	Between 1654 and 1851, the <a
-	href="../voyage/search.html">Voyages Database</a> documents 315
+	href="{% url voyage:search %}">Voyages Database</a> documents 315
 	slaving trips that departed New Calabar for the Americas. Of these,
 	one can estimate months of departure for 257 voyages, and plot
 	departure months against the estimated number of slaves embarked.
@@ -32,7 +40,7 @@
 	then decreased by February-March, a period that coincides with
 	declining yam stocks (Figure 1). In 1677-78, Arthur Doegood captained
 	one of the RAC slaving voyages to New Calabar <a
-	href="../voyage/voyage.html?voyageId=9990">VoyageID 9990</a>
+	href="{% url voyage:voyage %}?voyageId=9990">VoyageID 9990</a>
 	and his <a
 	href="http://www.nationalarchives.gov.uk/slavery/pdf/Arthur_Translation.pdf">logbook</a>
 	survives in the National Archives in London. Doegood anchored at
@@ -45,8 +53,9 @@
 </p>
 
 <span class="center">
-	<a href="essays-seasonality-fig-1.png" onclick="return popitup('essays-seasonality-fig-1.png')"> <img src="essays-seasonality-fig-1.png" width="500"/></a>
-</span>
+	<a href="{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-1.png"
+	 onclick="return popitup('{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-1.png')" > 
+	 <img src="{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-1.png" width="500"/></a> </span>
 
 <p>
 	Two months after departing New Calabar, Doegood arrived in

@@ -16,7 +16,7 @@ sitemaps = {
 
 urlpatterns = patterns('',
     # Homepage:
-    url(r'^$', index, name='index'),
+    url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}, name='index'),
     
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),

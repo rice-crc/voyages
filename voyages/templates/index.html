@@ -143,10 +143,10 @@
 	
 		<table border="0" cellspacing="0" cellpadding="0" id="featured-sections">
 			<tr>
-				<td class="featured-section-image"><a href="/voyage/search.html"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="{% url voyage:search %}"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/database/search.html">{% trans 'Search the Voyages Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url voyage:search %}">{% trans 'Search the Voyages Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}Look for particular voyages in this database of documented slaving
@@ -155,10 +155,10 @@
 				</div></td>
 			</tr>
 			<tr>
-				<td class="featured-section-image"><a href="/assessment/estimates.html"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="{% url assessment:estimates %}"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/assessment/estimates.html">{% trans 'Examine Estimates of the Slave Trade' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url assessment:estimates %}">{% trans 'Examine Estimates of the Slave Trade' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}Slaves on documented voyages represent four-fifths of the number
@@ -167,10 +167,10 @@
 				</div></td>
 			</tr>
 			<tr>
-				<td class="featured-section-image"><a href="/about/origins.html"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
+				<td class="featured-section-image"><a href="{% url about:origins %}"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="/about/origins.html">{% trans 'Explore the African Names Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url about:origins %}">{% trans 'Explore the African Names Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
 					{% blocktrans %}This database identifies 91,491 Africans taken from captured
@@ -191,9 +191,9 @@
 						</div>
 					</td>
 					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
-					<td style="padding-left: 5px;"><a href="/assessment/intro-maps.html">{% trans 'Introductory Maps' %}</a></td>
+					<td style="padding-left: 5px;"><a href="{% url assessment:intro-maps %}">{% trans 'Introductory Maps' %}</a></td>
 					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
-					<td style="padding-left: 5px;"><a href="/assessment/estimates.html">{% trans 'Timeline and Chronology' %}</a></td>
+					<td style="padding-left: 5px;"><a href="{% url assessment:estimates %}">{% trans 'Timeline and Chronology' %}</a></td>
 				</tr>
 			</table>
 		</div>

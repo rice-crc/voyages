@@ -2,11 +2,12 @@
 
 <div class="essay-info">
 	<span class="essay-author">Daniel Domingues da Silva</span>
-	<span class="essay-location">(Emory University)</span>, <span class="essay-date">August 2007</span>
+	<span class="essay-location">(Emory University)</span>,
+	<span class="essay-date">August 2007</span>
 </div>
 
 <div class="essay-image-left">
-	<a href="../resources/images-detail.html?image=mulgrave"><img src="{{ STATIC_URL}}images/assessment/essays-images/mulgrave.jpg" width="200" height="180" border="0" alt="Catherine Zimmermann-Mulgrave (1873)"/></a>
+	<a href="{% url resources:images-detail %}?image=mulgrave"><img src="{{ STATIC_URL}}images/assessment/essays-images/mulgrave.jpg" width="200" height="180" border="0" alt="Catherine Zimmermann-Mulgrave (1873)"/></a>
 	<div style="width: 200px;">
 		<div class="caption">
 			Catherine Zimmermann-Mulgrave (1873)
@@ -22,7 +23,7 @@
 	1833. The vessel had embarked 303 slaves on the coast of Angola, and
 	was intended for Cuba. Contemporary records indicate that only four
 	slaves had drowned in the wreck, but many more had died the transatlantic
-	crossing. (For additional details, see <a href="../voyage/voyage.html?voyageId=41890">VoyageID
+	crossing. (For additional details, see <a href="{% url voyage:voyage %}?voyageId=41890">VoyageID
 	41890</a>).
 </p>
 
@@ -64,7 +65,7 @@
 	fear of being kidnapped and carried to a strange land. In the Americas,
 	she married for the first time in 1843 to Georg Peter Thompson, by whom
 	she had two children, Rosie and Georg. In 1849, she divorced Thompson,
-	and two years later, in 1851, married Zimmermann. <a href="../resources/images-detail.html?image=mulgrave">The image</a> available
+	and two years later, in 1851, married Zimmermann. <a href="{% url resources:images-detail %}?image=mulgrave">The image</a> available
 	in our gallery of images is a photograph of the new family showing her
 	husband standing behind her chair. Catherine became a teacher and returned
 	to Africa with her husband to engage in missionary work in Ghana.

@@ -16,6 +16,7 @@ function setupleftmenu ()	{
 
 				$("#prev-page").hide();
 				$("#next-page").show();
+				
 				$("#center-content-inner").load(currentid + ".html");
 				
 				updatebreadcrumb($("#" + value["mainid"]).first().text());

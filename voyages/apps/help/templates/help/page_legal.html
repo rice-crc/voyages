@@ -149,7 +149,7 @@
 			Estimates Database.
 			2009.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
-			<a href="http://slavevoyages.org/tast/assessment/estimates.faces?yearFrom=1501&amp;yearTo=1866&amp;flag=2" target="_blank">http://www.slavevoyages.org/tast/assessment/estimates.faces?yearFrom=1501&amp;yearTo=1866&amp;flag=2</a>
+			<a href="{% url assessment:estimates %}?yearFrom=1501&amp;yearTo=1866&amp;flag=2" target="_blank">http://www.slavevoyages.org/assessment/estimates.html?yearFrom=1501&amp;yearTo=1866&amp;flag=2</a>
 			(accessed January 1, 2010).
 		</div></td>
 
@@ -174,7 +174,7 @@
 			West and West-Central Africa, c. 1660.
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
-			<a href="http://www.slavevoyages.org/tast/resources/images.faces" target="_blank">http://www.slavevoyages.org/tast/resources/images.faces</a>
+			<a href="{% url resources:images %}" target="_blank">http://www.slavevoyages.org/resources/images.html</a>
 			(accessed January 1, 2010).
 		</div></td>
 		<td class="notes" rowspan="2">Contact <a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;">the <em>Voyages</em> website administrator</a> with questions or requests
@@ -200,7 +200,7 @@
 			Map 4: Wind and ocean currents of the Atlantic basins.
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
-			<a href="http://www.slavevoyages.org/tast/assessment/intro-maps.faces" target="_blank">http://www.slavevoyages.org/tast/assessment/intro-maps.faces</a>
+			<a href="{% url assessment:intro-maps %}" target="_blank">http://www.slavevoyages.org/tast/assessment/intro-maps.faces</a>
 			(accessed January 1, 2010).
 		</div></td>
 	</tr>
@@ -226,7 +226,7 @@
 			2008.
 			Seasonality in the trans-Atlantic slave trade.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
-			<a href="http://www.slavevoyages.org/tast/assessment/essays-seasonality-01.faces" target="_blank">http://www.slavevoyages.org/tast/assessment/essays-seasonality-01.faces</a>
+			<a href="{% url assessment:essays %}" target="_blank">http://www.slavevoyages.org/tast/assessment/essays.html</a>
 			(accessed January 1, 2010).
 		</div>
 		<div class="example">
@@ -235,7 +235,7 @@
 			2009.
 			Estimates of the size and direction of the trans-Atlantic slave trade.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
-			<a href="http://www.slavevoyages.org/downloads/estimates-method.pdf" target="_blank">hhttp://www.slavevoyages.org/downloads/estimates-method.pdf</a>
+			<a href="{{ STATIC_URL }}/download/estimates-method.pdf" target="_blank">hhttp://www.slavevoyages.org/static/download/estimates-method.pdf</a>
 			(accessed January 1, 2010).
 		</div></td>
 		<td rowspan="3">As with any information or object reused or republished
@@ -286,7 +286,7 @@
 			<a href="http://www.slavevoyages.org" target="_blank">http://www.slavevoyages.org</a>
 			(accessed January, 1, 2010).
 		</div></td>
-		<td></td>
+		<td>&nbsp;</td>
 	</tr>
 	<tr>
 		<td class="content">[Link to Website]</td>
