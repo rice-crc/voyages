@@ -6,10 +6,10 @@ var templateprefix = "essays-intro";
 var enableCollapse = true; 
 
 /* The first page to be loaded */
-var currentid = "essays-intro-01";
+var currentid = "chapter01_section01_page01";
 
 var sectionToc = [
-	{"mainid" : "essays-introduction", "hasSubsection" : true, "wrappername": "essays-intro00",},
+	{"mainid" : "section01", "hasSubsection" : true, "wrappername": "essays-intro00",},
 	{"mainid" : "essays-seasonality", "hasSubsection" : true, "wrappername": "essays-seasonality00", },
 	{"mainid" : "essays-grandio", "hasSubsection" : false,},
 	{"mainid" : "essays-solomon", "hasSubsection" : false,},
