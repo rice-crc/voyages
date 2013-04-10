@@ -5,12 +5,11 @@ from django.conf.urls.defaults import patterns, include, url
 # from voyages.apps.resources.views import *
 
 urlpatterns = patterns('django.views.generic.simple',
-    url(r'^$', 'direct_to_template', {'template': 'resources/index.html'}),
-    url(r'^index.html$', 'direct_to_template', {'template': 'resources/index.html'}, name='index'),
+    url(r'^$', 'direct_to_template', {'template': 'resources/index.html'}, name='index'),
     #handle all cases for now
-    url(r'^images.html$', 'direct_to_template', {'template': 'under_constr.html'}, name='images'),
-    url(r'^origins.html$', 'direct_to_template', {'template': 'under_constr.html'}, name='origins'),
+    url(r'^images$', 'direct_to_template', {'template': 'under_constr.html'}, name='images'),
+    url(r'^origins$', 'direct_to_template', {'template': 'under_constr.html'}, name='origins'),
     
-    url(r'^images-detail.html$', 'direct_to_template', {'template': 'under_constr.html'}, name='images-detail'),
-    url(r'^[\w\.\-]+\.html$', 'direct_to_template', {'template': 'under_constr.html'}),
+    url(r'^images-detail$', 'direct_to_template', {'template': 'under_constr.html'}, name='images-detail'),
+    url(r'^[\w\.\-]+\$', 'direct_to_template', {'template': 'under_constr.html'}),
 )

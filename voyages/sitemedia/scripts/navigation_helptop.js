@@ -1,4 +1,4 @@
-
+var top_selected_class = "top-bar-menu-selected";
 
 $(document).ready(function() {
 	var href = document.location.href;
@@ -21,11 +21,11 @@ $(document).ready(function() {
 	updatepage();
 
 	function updatepage() {
-		$("#main-content").load("page_" + currentid + ".html", function() {
+		$("#main-content").load("page_" + currentid, function() {
 			document.title = $("#" + currentid).text();
 			$("#help-section-title").text(document.title);
-			$(".top-bar-menu > ul > li > a").removeClass("top-bar-menu-selected");
-			$("#" + currentid).addClass("top-bar-menu-selected");
+			$(".top-bar-menu > ul > li > a").removeClass(top_selected_class);
+			$("#" + currentid).addClass(top_selected_class);
 			reloadhandlers(currentid);
 		});
 	}
@@ -35,14 +35,14 @@ $(document).ready(function() {
 			/* Navigation for demos */
 			$(".demo-links > ul > li > a").click(function(evt) {
 				evt.preventDefault();
-				$("#demos-inner-content").load("page_" + $(this).parent().attr("id") + ".html");
+				$("#demos-inner-content").load("page_" + $(this).parent().attr("id"));
 				$(".demo-links > ul > li > a").removeClass("demo-link-active");
 				$(this).addClass("demo-link-active");
 			});
 			
 			/* Default loading */
 			$(".demo-links > ul > li > a").first().addClass("demo-link-active");
-			$("#demos-inner-content").load("page_" + $(".demo-links > ul > li").first().attr("id") + ".html");
+			$("#demos-inner-content").load("page_" + $(".demo-links > ul > li").first().attr("id"));
 		} else {
 		}
 	}
