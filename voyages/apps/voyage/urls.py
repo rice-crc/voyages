@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('django.views.generic.simple',
     url(r'^$', 'direct_to_template', {'template': 'voyage/index.html'}, name='index'),
-    url(r'^guide$', 'direct_to_template', {'template': 'voyage/c01_base.html'}, name='guide'),
+    url(r'^understanding-db$', 'direct_to_template', {'template': 'voyage/c01_base.html'}, name='guide'),
     
     url(r'^c01_s01_cover$', 'direct_to_template', {'template': 'voyage/c01_s01_cover.html'}, name='voyage-guide-intro'),
     
@@ -17,7 +17,7 @@ urlpatterns += patterns('django.views.generic.simple',
     
     url(r'^search$', 'direct_to_template', {'template': 'under_constr.html'}, name='search'),
     url(r'^download$', 'direct_to_template', {'template': 'under_constr.html'}, name='download'),
-    url(r'^submission-login$', 'direct_to_template', {'template': 'under_constr.html'}, name='submission-login'),
+    url(r'^contribute$', 'direct_to_template', {'template': 'under_constr.html'}, name='submission-login'),
 
     url(r'^voyage$', 'direct_to_template', {'template': 'under_constr.html'}, name='voyage'),
 )

@@ -7,5 +7,5 @@ from django.conf.urls.defaults import patterns, include, url
 urlpatterns = patterns('django.views.generic.simple',
     url(r'^$', 'direct_to_template', {'template': 'education/index.html'}, name='index'),
     url(r'^lesson-plans$', 'direct_to_template', {'template': 'education/lesson-plans.html'}, name='lesson-plans'),
-    url(r'^others$', 'direct_to_template', {'template': 'education/others.html'}, name='others'),
+    url(r'^web-resources$', 'direct_to_template', {'template': 'education/others.html'}, name='others'),
 )
