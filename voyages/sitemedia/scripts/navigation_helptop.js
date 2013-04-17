@@ -11,16 +11,20 @@ $(document).ready(function() {
 		$("#" + this.id).click(function(ev) {
 			ev.preventDefault();
 			currentid = this.id;
-			updatepage();
+			updatetitlehighlight();
 		});
 	});
+	
+	/* Remove the pound sign if necessary */
 	if (currentid.charAt(currentid.length - 1) == "#") {
 		currentid = currentid.substring(0, currentid.length);
 	}
 	
-	updatepage();
+	/* Retrieve the initial title and highlight */
+	updatetitlehighlight();
 
-	function updatepage() {
+	/* Update the title of the page and highlighted section based on the current location */
+	function updatetitlehighlight() {
 		$("#main-content").load("page_" + currentid, function() {
 			document.title = $("#" + currentid).text();
 			$("#help-section-title").text(document.title);
@@ -30,6 +34,7 @@ $(document).ready(function() {
 		});
 	}
 
+	/* Load AJAX event handler for specific section */
 	function reloadhandlers(pagename) {
 		if (pagename == "demos") {
 			/* Navigation for demos */
@@ -43,7 +48,13 @@ $(document).ready(function() {
 			/* Default loading */
 			$(".demo-links > ul > li > a").first().addClass("demo-link-active");
 			$("#demos-inner-content").load("page_" + $(".demo-links > ul > li").first().attr("id"));
-		} else {
+		} else if (pagename="sitemap") {
+			$("#toplinks a").click(function(ev){
+				ev.preventDefault();
+				openPage($(this).attr("href"));
+			}); 
+		}else {
+		
 		}
 	}
 

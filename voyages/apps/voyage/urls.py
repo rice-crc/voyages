@@ -2,8 +2,9 @@ from django.conf import settings
 from django.conf.urls.defaults import *
 from voyages.apps.voyage.views import *
 
+
 urlpatterns = patterns('',
-    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$','voyages.apps.voyage.views.get_page'),
+    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$','voyages.apps.voyage.views.get_page', name='get-page'),
 )
 
 urlpatterns += patterns('django.views.generic.simple',

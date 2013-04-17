@@ -56,24 +56,31 @@ function setupleftmenu ()	{
 		$("#" + value[lm_section_referral] + lm_suffix_cover).click(function() {
 			lm_wrappername = value[lm_section_referral] + lm_suffix_wrapper;
 
-			if (lm_enableCollapse) {
-				/* Hide other submenus */
-				$(lm_sub_menu_cssclass).addClass(invi_cssclass);
-				$("#" + lm_wrappername).removeClass(invi_cssclass);
-			}
-			
+			/* Update the highlights */
+			$(lm_sub_menu_cssclass + " div").removeClass(selectedClass);
+
 			if ($("#" + value[lm_section_referral] + lm_suffix_wrapper + " div").length > 0) {
 				/* Has a submenu */
 				lm_wrappername = value[lm_section_referral] + lm_suffix_wrapper;
 				lm_currentid = $("#" + lm_wrappername + " div").first().attr("id");;
 				$(lm_prev_pg_select ).hide();
-				$(lm_next_pg_select ).show();		
+				$(lm_next_pg_select ).show();			
+				$("#" + lm_currentid).addClass(selectedClass);
 			} else {
 				/* Has no submenu -> load only the cover page */
 				lm_currentid = value[lm_section_referral] + lm_suffix_cover;
 				$(lm_prev_pg_select).hide();
 				$(lm_next_pg_select).hide();
 			}
+			
+			if (lm_enableCollapse) {
+				/* Hide other submenus */
+				$(lm_sub_menu_cssclass).addClass(invi_cssclass);
+				$("#" + lm_wrappername).removeClass(invi_cssclass);
+			}
+			
+	
+			
 			updatebreadcrumb($("#" + value[lm_section_referral] + lm_suffix_cover).first().text());
 			$(lm_load_to_target_seclect).load(lm_currentid);
 		});
@@ -116,6 +123,7 @@ function setupleftmenu ()	{
 	}
 }
 
+/* Update the text for next-previous link navigation */
 function updatelinktext() {
 	$(lm_load_to_target_seclect).resize();
 	

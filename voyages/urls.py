@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from voyages.views import *
+from voyages import sitemap
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -9,10 +10,7 @@ admin.autodiscover()
 
 # Sitemap
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
-sitemaps = {
-  'site': Sitemap,
-  'flatpages': FlatPageSitemap,
-}
+from sitemap import StaticSitemap, ViewSitemap
 
 urlpatterns = patterns('',
     # Homepage:
@@ -26,17 +24,19 @@ urlpatterns = patterns('',
     url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
     url(r'^help/', include('voyages.apps.help.urls', namespace='help')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    
-    # Sitemap/Help section
-    #url(r'^help/', include('voyages.apps.database', namespace='database')),
-    
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
+)
+
+sitemaps = {
+    'staticpages' : StaticSitemap(urlpatterns),
+}
+
+urlpatterns += patterns('',
+     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}, name='sitemap-xml'),
+     
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    
-
-    # url(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/'}),
-	 url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 )

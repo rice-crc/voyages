@@ -1,88 +1,9 @@
+{% load i18n %} 
+
+<div id>
+	<h3><a href="{% url sitemap-xml %}">Detailed Sitemap in XML (for Search Engine)</a></h3>
+</div>
+
 <div id="sitemap-content">
-<table border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td class="sitemap-col-1">
-		<ul>
-			<li>
-				<a href="javascript:openPage('/voyage/index.html')">Voyages Database</a>
-			</li>
-			<ul>
-				<li>
-					<a href="javascript:openPage('/voyage/guide.html')">Understanding the Database</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/voyage/search.html')">Search the Voyages Database</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/voyage/download.html')">Downloads</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/voyage/submission-login.html')">Contribute</a>
-				</li>
-			</ul>
-			<li>
-				<a href="javascript:openPage('/assessment/index.html')">Assessing the Slave Trade</a>
-			</li>
-			<ul>
-				<li>
-					<a href="javascript:openPage('/assessment/essays.html')">Essays</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/assessment/estimates.html')">Estimates</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/assessment/intro-maps.html')">Introductory Maps</a>
-				</li>
-			</ul>
-			<li>
-				<a href="javascript:openPage('/resources/index.html')">Resources</a>
-			</li>
-			<ul>
-				<li>
-					<a href="javascript:openPage('/resources/images.html')">Images</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/resources/slaves.html')">African Names Database</a>
-				</li>
-			</ul>
-		</ul></td>
-		<td class="sitemap-col-2">
-		<ul>
-			<li>
-				<a href="javascript:openPage('/education/index.html')">Educational Materials</a>
-			</li>
-			<ul>
-				<li>
-					<a href="javascript:openPage('/education/lesson-plans.html')">Lesson Plans</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/education/others.html')">Web Resources</a>
-				</li>
-			</ul>
-			<li>
-				<a href="javascript:openPage('/about/index.html')">About the Project</a>
-			</li>
-			<ul>
-				<li>
-					<a href="javascript:openPage('/about/history.html')">History</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/about/team.html')">Project Team</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/about/data.html')">Contributors of data</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/about/acknowledgements.html')">Acknowledgements</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/about/origins.html')">African Origins Project</a>
-				</li>
-				<li>
-					<a href="javascript:openPage('/about/contacts.html')">Contact Us</a>
-				</li>
-			</ul>
-		</ul></td>
-	</tr>
-</table>
+	{% include "topbar.html" %}
 </div>

@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
      # for both sections 1 and 2  
-     url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$','voyages.apps.assessment.views.get_page'), 
+     url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$','voyages.apps.assessment.views.get_page', name='get-page'), 
 )
 
 urlpatterns += patterns('django.views.generic.simple',

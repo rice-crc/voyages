@@ -168,6 +168,9 @@ table.persmissions td.citations div.example span.example {
 }
 
 /* Sitemap section */
+
+
+
 div#sitemap-content {
 	margin-top: 20px;
 }
@@ -191,7 +194,7 @@ div#sitemap-content ul li a:hover {
 
 div#sitemap-content ul li a {
 	text-decoration: none;
-	color: Black;
+	color: #000000;
 }
 
 div#sitemap-content ul ul {
@@ -202,7 +205,7 @@ div#sitemap-content ul ul {
 
 div#sitemap-content ul ul li {
 	line-height: 140%;
-	color: Black;
+	color: #000000;
 	font-size: 8pt;
 	font-weight: normal;
 	margin: 0px 0px 0px 40px;
@@ -214,10 +217,18 @@ div#sitemap-content ul ul li a {
 	color: #008CA5;
 }
 
-td.sitemap-col-1, td.sitemap-col-2, td.sitemap-col-3 {
-	vertical-align: top;
+#block01, #block02, #block03 {
+	
 }
 
-td.sitemap-col-2, td.sitemap-col-3 {
-	padding-left: 30px;
+#block04, #block05 {
+	position: absolute;
+	top: 160px;
+	left: 300px;
 }
+#block05 {
+	position: absolute;
+	top: 230px;
+	left: 300px;
+}
+
