@@ -8,6 +8,12 @@ from voyages import sitemap
 from django.contrib import admin
 admin.autodiscover()
 
+#hide the Site and Group features
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import Group
+admin.site.unregister(Site)
+admin.site.unregister(Group)
+
 # Sitemap
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
 from sitemap import StaticSitemap, ViewSitemap

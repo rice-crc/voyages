@@ -35,6 +35,9 @@ $(document).ready(function() {
 	}
 	/* The first page has a link to the next page */
 	updatelinktext(lm_currentid);
+	if (typeof(def_page) != 'undefined') {
+   		lm_currentid = def_page;
+	}
 	$(lm_load_to_target_seclect).load(lm_currentid);
 	updatelinktext();
 });

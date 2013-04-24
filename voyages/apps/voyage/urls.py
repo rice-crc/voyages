@@ -18,7 +18,14 @@ urlpatterns += patterns('django.views.generic.simple',
     
     url(r'^search$', 'direct_to_template', {'template': 'under_constr.html'}, name='search'),
     url(r'^download$', 'direct_to_template', {'template': 'under_constr.html'}, name='download'),
-    url(r'^contribute$', 'direct_to_template', {'template': 'under_constr.html'}, name='submission-login'),
+    
+    url(r'^newuser$', 'direct_to_template', {'template': 'under_constr.html'}, name='newuser'),
+    
+    url(r'^contribute$', 'direct_to_template', {'template': 'voyage/c04_base.html'}, name='submission-login'),
+    
+    url(r'^c04_s01_cover$', 'direct_to_template', {'template': 'voyage/c04_s01_cover.html'}, name='contrib-guidelines'),
+    url(r'^c04_s02_cover$',  'redirect_to', {'url':'/admin'}, name='sign-in'),
+   
 
     url(r'^voyage$', 'direct_to_template', {'template': 'under_constr.html'}, name='voyage'),
 )

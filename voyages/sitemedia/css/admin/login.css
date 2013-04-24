@@ -1,17 +1,12 @@
 /* LOGIN FORM */
 
-body.login {
-    background: #eee;
+/* Overwrite the common template style */
+#content {
+    margin: 0px 0px 0px 0px;
 }
 
 .login #container {
-    background: white;
-    border: 1px solid #ccc;
-    width: 28em;
-    min-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
+    
 }
 
 .login #content-main {
@@ -54,4 +49,16 @@ body.login {
 
 .login .password-reset-link {
     text-align: center;
+}
+
+#login-header {
+	/* border-radius: 5px 5px 0px 5px; */
+	padding: 10px 10px 15px 10px;
+	margin: 0px 0px 10px 0px; 
+	border-bottom: 1px solid #DDCA9D;
+}
+
+#login-site-warning {
+	color: red;
+	font-size: 10pt;
 }
