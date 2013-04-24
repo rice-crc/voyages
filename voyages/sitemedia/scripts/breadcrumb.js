@@ -22,9 +22,9 @@ function writebreadcrumb() {
 				+ "/\">" + majorSectionName[elem[3]] + "</a>";
 				
 		
-		if (elem[3] == "voyage" && (elem[4] == "guide.html" || elem[4] == "guide.html#")) {
+		if (elem[3] == "voyage" && (elem[4] == "understanding-db" || elem[4] == "understanding-db#")) {
 			path += seperatorst + "Understanding the Database";
-		} else if (elem[3] == "assessment" && (elem[4] == "essays.html" || elem[4] == "essays.html#")) {
+		} else if (elem[3] == "assessment" && (elem[4] == "essays" || elem[4] == "essays")) {
 			path += seperatorst + "Essays";
 		}else {
 			/* Add successive elements and seperators */
