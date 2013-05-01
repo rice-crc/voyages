@@ -18,6 +18,14 @@ var lm_templateprefix;
 var lm_currentid;
 
 $(document).ready(function() {
+	var pagehref = document.location.href;
+	var pageelem = href.split("=");
+	var pagecurrentid = null;
+	
+	if (pageelem.length == 2) {
+		pagecurrentid = pageelem[pageelem.length - 1];
+	}
+	
 	/* Set up handling for each subsection */
 	setupleftmenu();
 	/* Load the first page */
@@ -37,6 +45,8 @@ $(document).ready(function() {
 	updatelinktext(lm_currentid);
 	if (typeof(def_page) != 'undefined') {
    		lm_currentid = def_page;
+	} else if (pagecurrentid != null) {
+		lm_currentid = pagecurrentid;
 	}
 	$(lm_load_to_target_seclect).load(lm_currentid);
 	updatelinktext();

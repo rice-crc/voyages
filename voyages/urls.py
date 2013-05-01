@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
     url(r'^help/', include('voyages.apps.help.urls', namespace='help')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -41,7 +42,7 @@ sitemaps = {
 }
 
 urlpatterns += patterns('',
-     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}, name='sitemap-xml'),
+    url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}, name='sitemap-xml'),
      
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),

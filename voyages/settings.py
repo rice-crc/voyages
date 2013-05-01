@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'voyages.apps.about',
     'voyages.apps.contribute',
     'voyages.apps.help',
+    'voyages.apps.contribute',
 )
 
 gettext = lambda s: s
@@ -143,7 +144,8 @@ TEST_OUTPUT_DIR = 'test-results'
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
 
-
+LOGIN_URL = '/voyage/contribute'
+LOGIN_REDIRECT_URL = LOGIN_URL
 
 # import localsettings
 # This will override any previously set valaue

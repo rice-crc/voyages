@@ -1,3 +1,8 @@
+
+{% extends "contribute/login_base.html" %}
+{% load i18n %}
+
+{% block center-content %}
 <h1>Contribute </h1>
 
 <p>
@@ -21,7 +26,7 @@
 <p>
 	Step-by-step instructions on how to use the data entry forms are provided in the Voyages
 	Guide, a PDF file accessible in <a href="{% url voyage:guide %}">“Understanding the Database”</a>.
-	For advice on contributing new data, we ask you to read our <a href="guidelines.faces">“Guidelines for Contributors.”</a>
+	For advice on contributing new data, we ask you to read our <a href="{% url contribute:guidelines %}">“Guidelines for Contributors.”</a>
 </p>
 
 <p>
@@ -37,33 +42,29 @@
 	In order to access the Contribute section, please sign in.
 </p>
 
-<div style="padding: 5px; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
+<div style="padding: 5px 5px 5px 100px; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
+{% if form.errors %}
+<p style="color: red">Your username and password didn't match. Please try again.</p>
+{% endif %}
 
-	<table cellpadding="0" cellspacing="5" border="0" align="center">
-		<tr>
-			<td>User name</td>
-			<td>
-			<h:inputText style="width: 200px;" value="#{SubmissionUsersBean.userName}"/>
-			</td>
-		</tr>
-		<tr>
-			<td>Password</td>
-			<td>
-			<h:inputSecret style="width: 200px;" value="#{SubmissionUsersBean.password}"/>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>
-			<h:commandButton value="Sign in" action="#{SubmissionUsersBean.auth}"/>
-			&nbsp;&nbsp;
-			<h:outputText style="font-weight: bold;" value="#{SubmissionUsersBean.errorMessage}"/>
-			<!-- <h:commandButton value="Sign in" action="#"/>--></td>
-		</tr>
-	</table>
+<form method="post" action="{% url contribute:login %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
 
+<input type="submit" style="margin-left: 60px;" value="{% trans 'Sign in' %}" />
+<input type="hidden" name="next" value="{% url contribute:index %}" />
+</form>
 </div>
 
-<p>
-	If you don't have an account, <a href="new-user.faces">click here</a>.
-</p>
+<p>If you don't have an account, <a href="{% url contribute:newuser %}">click here</a>.</p>
+
+{% endblock %}

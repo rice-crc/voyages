@@ -1,0 +1,17 @@
+{% extends "contribute/contribute_base.html" %}
+{% load i18n %} 
+
+{% block content %}
+<h2>{% trans 'Welcome to the Contribute Section' %}</h2>
+
+ <ul>
+{% if user.is_staff %}
+    <li><h3><a href="{% url admin:index %}">Live Admin Section</a></h3></li>
+  
+{% endif %}
+<li>To be updated.</li>
+
+ </ul>
+{% endblock %}
+
+

@@ -1,0 +1,52 @@
+{% load i18n %} 
+{% load admin_static %}
+{% load url from future %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+	{% block csslist %}
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/contribute/base.css" />
+	{% endblock %}
+	
+	{% block jslist %}
+	{% endblock %}
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{% block title %}Title of the page{% endblock %}</title>
+
+</head>
+
+<body>
+	<div id="topbanner">
+			<a href="{% url 'index' %}"><img src="{{ STATIC_URL}}images/help/help-logo.png"/></a></div>
+	
+	 <div id="header">
+        <div id="branding">
+        {% block branding %}{% endblock %}
+        </div>
+        {% if user.is_active and user.is_staff %}
+        <div id="user-tools">
+            {% trans 'Welcome,' %}
+            <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+            {% block userlinks %}
+                <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% block nav-global %}{% endblock %}
+    </div>
+	
+	
+    <div id="main-content">
+    {% block content %}{% endblock %}
+	</div>
+	
+	{% block footer %}
+	{% endblock %}
+	{% include "googlecode.html" %}
+</body>
+</html>
+
+

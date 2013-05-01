@@ -6,6 +6,7 @@ var majorSectionName = {
 	"resources" : "Resources",
 	"education" : "Educational Materials",
 	"about" : "About the Project",
+	"contribute" : "Contribute",
 }
 
 $(document).ready(function() {
