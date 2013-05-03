@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^guidelines$', 'django.views.generic.simple.direct_to_template', 
                 {'template': 'contribute/guidelines.html'}, name='guidelines'),
     url(r'^newuser$', 'django.views.generic.simple.direct_to_template', {'template': 'under_constr.html'}, name='newuser'),
+ 
 )

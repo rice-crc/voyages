@@ -21,14 +21,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('education', ['LessonPlan'])
 
-        # Adding model 'Download'
-        db.create_table('education_download', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('downloadurl', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['education.LessonPlan'])),
-        ))
-        db.send_create_signal('education', ['Download'])
-
         # Adding model 'LessonStandard'
         db.create_table('education_lessonstandard', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -43,20 +35,11 @@ class Migration(SchemaMigration):
         # Deleting model 'LessonPlan'
         db.delete_table('education_lessonplan')
 
-        # Deleting model 'Download'
-        db.delete_table('education_download')
-
         # Deleting model 'LessonStandard'
         db.delete_table('education_lessonstandard')
 
 
     models = {
-        'education.download': {
-            'Meta': {'object_name': 'Download'},
-            'downloadurl': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['education.LessonPlan']"})
-        },
         'education.lessonplan': {
             'Meta': {'object_name': 'LessonPlan'},
             'abstract': ('django.db.models.fields.CharField', [], {'max_length': '500'}),

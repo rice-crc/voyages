@@ -4,6 +4,9 @@ from django.template import TemplateDoesNotExist, Context, loader, RequestContex
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import render_to_response
 from django.conf.urls.defaults import *
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
 
 def index(request):
     if request.user.is_authenticated():

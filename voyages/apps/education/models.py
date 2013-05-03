@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 # Left menu item
 class LessonPlan(models.Model):
     text = models.CharField(('Title'),max_length=100)
-    
     author = models.CharField(('Author'),max_length=50)
     grade_level = models.CharField(('Grade Level'),max_length=50)
     course = models.CharField(('Course'),max_length=50)
@@ -21,8 +20,4 @@ class LessonPlan(models.Model):
 class LessonStandard(models.Model):
     type = models.CharField(('Standard Type'),max_length=100)
     text = models.CharField(('Text'),max_length=100)
-    lesson = models.ForeignKey(LessonPlan)
-    
-class Download(models.Model):
-    downloadurl = models.CharField(('text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
