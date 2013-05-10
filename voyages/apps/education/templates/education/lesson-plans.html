@@ -30,7 +30,21 @@
 {% if lesson_plans %}
 {% for lesson_item in lesson_plans %}
 	<div class="lesson-plan-title">
-		{{ lesson_item.lesson.text }} <span class="download">(<a href="">Download</a>, PDF, 152KB)</span>
+		{{ lesson_item.lesson.text }} 
+		
+		{% if lesson_item.download %}
+		{% for download_item in lesson_item.download %}
+			<span class="download">
+				{% if "ppt" in download_item.file.name  %}
+				(<a href="{{ download_item.file.url }}">Download Presentation</a>, PPT, 
+				{% else %}
+				(<a href="{{ download_item.file.url }}">Download</a>, PDF, 
+				{% endif %}
+				
+				{{ download_item.file.size|filesizeformat }})
+			</span>
+		{% endfor %}
+		{% endif %}
 	</div>
 	
 	<div  class="lesson-plan-detail">

@@ -622,7 +622,7 @@
         "pk": 38, 
         "model": "education.lessonstandard", 
         "fields": {
-            "text": "U.S. History Era 1(Three Worlds Meet)\u2013Standard 1     World History Era 6 (First Global Age)\u2013Sta", 
+            "text": "U.S. History Era 1(Three Worlds Meet)\u2013Standard 1", 
             "lesson": 6, 
             "type": "NCHS History Standards"
         }
@@ -1237,6 +1237,42 @@
             "password": "pbkdf2_sha256$10000$ektyVzbGmRZM$Gkt1KZQOpcJVNgKuD9ux5YFWDN/WjPOq/ekMUxEOc4o=", 
             "email": "voviethoang@gmail.com", 
             "date_joined": "2013-05-03T15:15:15Z"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T19:23:14Z", 
+            "object_repr": "Researching the Transatlantic Slave Trade", 
+            "object_id": "6", 
+            "change_message": "Changed text for lesson standard \"LessonStandard object\".", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T19:22:12Z", 
+            "object_repr": "Researching the Transatlantic Slave Trade", 
+            "object_id": "6", 
+            "change_message": "No fields changed.", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
         }
     }, 
     {
