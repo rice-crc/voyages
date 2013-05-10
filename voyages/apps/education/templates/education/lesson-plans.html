@@ -1,15 +1,78 @@
 {% extends "education/educationbase.html" %}
+{% load i18n %}
 
 {% block title %}Web Resources{% endblock %}
 
 {% block pagecsslist %}
-
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" />
 {% endblock %}
-
 
 {% block center-content %}
 
-<h1>Page Under Construction</h1>
+<h1>{% trans 'Lesson plans' %}</h1>
+
+<p>
+	In order to present the trans-Atlantic slave trade database to a broader audience, particularly
+	a grade 6-12 audience, a dedicated team of teachers and curriculum developers from around the United
+	States developed lesson plans that explore the database.  Utilizing the various resources of the website,
+	these lessons plans allow students to engage the history and legacy of the Atlantic slave trade in diverse
+	and meaningful ways.  The lessons are all aligned with national standards in history (National Center for
+	History in the Schools), social studies (National Council for the Social Studies), and geography (National
+	Council for Geography Education) and range in both their grade levels and activities. The lessons also
+	suggest readings for more information about the Slave Trade.
+</p>
+
+<p>
+	These materials were created for purposes of curriculum and instruction and are not intended for commercial
+	republication. Please contact individual authors for additional permissions.
+</p>
+
+{% if lesson_plans %}
+{% for lesson_item in lesson_plans %}
+	<div class="lesson-plan-title">
+		{{ lesson_item.lesson.text }} <span class="download">(<a href="">Download</a>, PDF, 152KB)</span>
+	</div>
+	
+	<div  class="lesson-plan-detail">
+		<div class="lesson-plan-author">
+			Author: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author }}</span>
+		</div>
+		<div class="lesson-plan-grade-level">
+			Grade Level: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level }}</span>
+		</div>
+		<div class="lesson-plan-course">
+			Course: <span class="lesson-plan-course">{{ lesson_item.lesson.course }}</span>
+		</div>
+		<div class="lesson-plan-keywords">
+			Key Words:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words }}</span>
+		</div>
+		<div class="lesson-plan-standards-title">
+			Standards
+		</div>
+		
+		{% if lesson_item.standard %}
+		<ul class="lesson-plan-standards">
+			{% for standard_type in lesson_item.standard %}
+			<li>
+				<span class="lesson-plan-standards-name">{{ standard_type.type }}</span>
+				<ul class="lesson-plan-standards-listing">
+					{% for standard_item in standard_type.text %}
+						<li>{{ standard_item.text }}</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		<div class="lesson-plan-abstract-title">
+			Abstract
+		</div>
+		<div class="lesson-plan-abstract">
+			{{ lesson_item.lesson.abstract }}
+		</div>
+	</div>
+{% endfor %}
+{% endif %}
 
 {% endblock %}
 
