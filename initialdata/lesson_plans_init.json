@@ -1,0 +1,1440 @@
+[
+    {
+        "pk": 4, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "contenttype", 
+            "name": "content type", 
+            "app_label": "contenttypes"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "group", 
+            "name": "group", 
+            "app_label": "auth"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "lessonplan", 
+            "name": "lesson plan", 
+            "app_label": "education"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "lessonplanfile", 
+            "name": "lesson plan file", 
+            "app_label": "contribute"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "lessonstandard", 
+            "name": "lesson standard", 
+            "app_label": "education"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "logentry", 
+            "name": "log entry", 
+            "app_label": "admin"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "migrationhistory", 
+            "name": "migration history", 
+            "app_label": "south"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "otherfile", 
+            "name": "other file", 
+            "app_label": "contribute"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "permission", 
+            "name": "permission", 
+            "app_label": "auth"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "session", 
+            "name": "session", 
+            "app_label": "sessions"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "site", 
+            "name": "site", 
+            "app_label": "sites"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "user", 
+            "name": "user", 
+            "app_label": "auth"
+        }
+    }, 
+    {
+        "pk": "0706b9dcc60cac6998f1f07f348c3d42", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2013-05-17T17:12:09Z", 
+            "session_data": "YzFjNmZmYzJjMTQ2NGY0MWFlYzAwNmNjNTk0YjE4N2UyNDczNzhhNDqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZFUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxAlUN\nX2F1dGhfdXNlcl9pZIoBAXUu\n"
+        }
+    }, 
+    {
+        "pk": "1064d1bc5661475bf12ddc678e79e55b", 
+        "model": "sessions.session", 
+        "fields": {
+            "expire_date": "2013-05-24T15:34:57Z", 
+            "session_data": "NTcxOWYxOTIzMTJjMDFiMmRmNzViZWJlYjIzZGJhOGJkMTQ0YzJiNjqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "sites.site", 
+        "fields": {
+            "domain": "example.com", 
+            "name": "example.com"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:39:33Z", 
+            "app_name": "common", 
+            "migration": "0001_initial"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:39:33Z", 
+            "app_name": "voyage", 
+            "migration": "0001_initial"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:39:33Z", 
+            "app_name": "assessment", 
+            "migration": "0001_initial"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:39:33Z", 
+            "app_name": "resources", 
+            "migration": "0001_initial"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:41:27Z", 
+            "app_name": "education", 
+            "migration": "0001_lessonplan"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T15:42:04Z", 
+            "app_name": "contribute", 
+            "migration": "0001_lessonplanupload"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "south.migrationhistory", 
+        "fields": {
+            "applied": "2013-05-10T17:50:51Z", 
+            "app_name": "education", 
+            "migration": "0002__update_lesson_plan"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "10th \u2013 12th grade", 
+            "author": "Heather Dahl", 
+            "text": "The 1808 Slave Trade Abolition Deadline ", 
+            "abstract": "In this lesson, students will examine the data of the trans-Atlantic slave trade and primary sources related to the slave trade. The data will easily reveal to students a steep incline before 1808 and, in fact, a continuation of imported enslaved Africans after the slave trade was abolished in the United States and Great Britain. Students will also examine perspectives on slavery, as the deadline for ending the slave trade approached and passed. The lesson allows students to develop their own conclusions about both the intention and impact of the 1808 deadline on the overall history of slavery. ", 
+            "course": "US History, US Government", 
+            "key_words": "Abolition; Slave Trade; United States; Primary Sources; Graph skills", 
+            "order": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "6th \u2013 8th grade", 
+            "author": "Kristine Leach", 
+            "text": "One Country\u2019s Slave Trade", 
+            "abstract": "This lesson focuses students on one specific country that participated in the slave trade. Students will gather information from the database to document the slave trade for the country they have chosen and will then look at specific data, such as the numbers of enslaved people transported during different time periods and the areas of embarkation and disembarkation. This lesson offers students a more detailed example of the slave trade than would an overview of the slave trade. ", 
+            "course": "Social Studies", 
+            "key_words": "Slave Trade; Graph and Map skills", 
+            "order": 2
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "6th \u2013 8th grade", 
+            "author": "Michael Poreda", 
+            "text": "Slave Trade Memorial", 
+            "abstract": "This lesson asks students to demonstrate mastery of their knowledge about the Middle Passage by designing a memorial. The lesson contains several steps which teachers can use at their discretion to build an appreciation for what enslaved Africans were subjected to as they were forced to the New World, why this part of history should get a public memorial, and how that memorial should be expressed in words and image. The lesson uses mortality statistics from the database to help students gain an understanding of how many people died on a voyage, as well as reading comprehension questions and a PowerPoint Presentation of various monuments.", 
+            "course": "US History, World History", 
+            "key_words": "Slave Trade; Memorial; Middle Passage; Mortality Rates; Writing skills", 
+            "order": 4
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "11th \u2013 12th grade", 
+            "author": "Brian Hamilton", 
+            "text": "Finding Historical Evidence", 
+            "abstract": "This lesson puts equal emphasis on the history of the trans-Atlantic slave trade and on the craft of forming historical arguments. Students are asked to read a recent work from David Brion Davis, a leading historian of slavery, and to compare his arguments with evidence from the database. This forms the foundation for a discussion of what kinds of claims are harder to defend than others and why some types of evidence are more convincing than others. ", 
+            "course": "AP World History; African and African-American St", 
+            "key_words": "Slave Trade; Slavery; Historical arguments; Evaluating evidence", 
+            "order": 5
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "7th \u2013 12th grade", 
+            "author": "Brian Hamilton", 
+            "text": "Database Scavenger Hunt", 
+            "abstract": "This lesson is an introduction to the database that can also serve as an introduction to the trans-Atlantic slave trade. It exposes students to the vast amount and variability of material in the database, and helps to develop the necessary technical skills for using a database. Students will analyze the historical data as a means of learning to formulate compelling research questions. ", 
+            "course": "US and World History", 
+            "key_words": "Slave Trade; Slavery; Historical arguments; Evaluating evidence ", 
+            "order": 6
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "9th \u2013 12th grade", 
+            "author": "Christine Kadonsky; David Eltis", 
+            "text": "Researching the Transatlantic Slave Trade", 
+            "abstract": "In this lesson, students will learn how to search The Trans--Atlantic Slave Trade Database. They will discover the scope of the slave trade over four centuries. Students will search the database to learn more about five noteworthy voyages. Students will review the African Names Database to learn the name of Africans liberated from ships attempting to trade illegally. By completing this lesson, students will have a better understanding how historians use databases and statistics to conduct historical research.", 
+            "course": "World History; US History", 
+            "key_words": "Abolition; Slave Trade; United States; World History; Primary Sources; Graph skills ", 
+            "order": 7
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "education.lessonplan", 
+        "fields": {
+            "grade_level": "6th \u2013 8th grade", 
+            "author": "Kristine Leach", 
+            "text": "The Countries of the Slave Trade", 
+            "abstract": "This lesson is a comparative look at the number of enslaved people transported by each of the seven flag countries listed on the database and also an examination of the ordeal of the Middle Passage. Students will gain an understanding of the immensity of the international slave trade but will also focus on the human experience of the Middle Passage. ", 
+            "course": "Social Studies ", 
+            "key_words": "\tSlave Trade; Nations; Middle Passage; Graph skills", 
+            "order": 3
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 2 (Colonization and Settlement) Standard 3", 
+            "lesson": 1, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 4 (Expansion and Reform) Standards 2 and 4", 
+            "lesson": 1, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "II Time, Continuity, Change", 
+            "lesson": 1, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IV Individual Development and Identity", 
+            "lesson": 1, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World in Spatial Terms Standard 1", 
+            "lesson": 1, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Human Systems Standard 9", 
+            "lesson": 1, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 2 (Colonization and Settlement) Standard 3", 
+            "lesson": 2, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 4 (Expansion and Reform) Standards 2 and 4", 
+            "lesson": 2, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "II Time, Continuity, Change", 
+            "lesson": 2, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IV Individual Development and Identity", 
+            "lesson": 2, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World in Spatial Terms Standard 1", 
+            "lesson": 2, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Human Systems Standard 9", 
+            "lesson": 2, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 2 (Colonization and Settlement)", 
+            "lesson": 3, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World Era 6 (First Global Age)", 
+            "lesson": 3, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IX Global Connections", 
+            "lesson": 3, 
+            "type": "NCSS Social Studies Themes "
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "X Civic Ideals and Practices", 
+            "lesson": 3, 
+            "type": "NCSS Social Studies Themes "
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 1 (Three Worlds Meet) Standards 1 & 2", 
+            "lesson": 4, 
+            "type": "NCHS History Standards "
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World Era 6 (First Global Age) Standards 1A, 1B, 2A, 4A, 4B, 4C, & 6", 
+            "lesson": 4, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "I Culture", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "II Time, Continuity, Change", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "III People, Places, Environments", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "V Individual, Groups, Institutions", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "VI Power, Authority, Governance", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "VII Production, Distribution, Consumption", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IX Global Connections", 
+            "lesson": 4, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World in Spatial Terms Standards 1-3", 
+            "lesson": 4, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Places and Regions Standards 4-6", 
+            "lesson": 4, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Human Systems Standards 9-13", 
+            "lesson": 4, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Issues of Geography Standard 17", 
+            "lesson": 4, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World Era 6 (First Global Age) Standard 4B", 
+            "lesson": 5, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "II Time, Continuity, Change", 
+            "lesson": 5, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "VII Production, Distribution, Consumption", 
+            "lesson": 5, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IX Global Connections", 
+            "lesson": 5, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World in Spatial Terms Standards 1-3", 
+            "lesson": 5, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Places and Regions Standards 4-6", 
+            "lesson": 5, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Human Systems Standards 9-13", 
+            "lesson": 5, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Issues of Geography Standard 17", 
+            "lesson": 5, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "U.S. History Era 1(Three Worlds Meet)\u2013Standard 1     World History Era 6 (First Global Age)\u2013Sta", 
+            "lesson": 6, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World History Era 6 (First Global Age)\u2013Standard 4", 
+            "lesson": 6, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "II. Time, Continuity, Change", 
+            "lesson": 6, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "VII. Production, Distribution, Consumption", 
+            "lesson": 6, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "IX. Global Connections", 
+            "lesson": 6, 
+            "type": "NCSS Social Studies Themes"
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World in Spatial Terms Standards 1-3", 
+            "lesson": 6, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Places and Regions Standards 4-6", 
+            "lesson": 6, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Human Systems Standards 9-13", 
+            "lesson": 6, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "Issues of Geography Standard 17", 
+            "lesson": 6, 
+            "type": "Geography"
+        }
+    }, 
+    {
+        "pk": 47, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "US Era 2 (Colonization and Settlement) Standard 1A", 
+            "lesson": 7, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "education.lessonstandard", 
+        "fields": {
+            "text": "World Era 6 (First Global Age) Standard 4B", 
+            "lesson": 7, 
+            "type": "NCHS History Standards"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "The 1808 Slave Trade Abolition Deadline", 
+            "lesson": 1, 
+            "file": "lessonplan/slave-trade-abolition.pdf"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "One Country\u2019s Slave Trade", 
+            "lesson": 2, 
+            "file": "lessonplan/one-countrys-trade.pdf"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "Slave Trade Memorial Pdf", 
+            "lesson": 3, 
+            "file": "lessonplan/middle-passage-memorial.pdf"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "Slave Trade Memorial Presentation", 
+            "lesson": 3, 
+            "file": "lessonplan/slave-memorials.ppt"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "Historical Evidence Pdf", 
+            "lesson": 4, 
+            "file": "lessonplan/historical-evidence.pdf"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "Database Scavenger Hunt pdf", 
+            "lesson": 5, 
+            "file": "lessonplan/database-scavenger-hunt.pdf"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "Researching the Transatlantic Slave Trade Pdf", 
+            "lesson": 6, 
+            "file": "lessonplan/research-tast.pdf"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "contribute.lessonplanfile", 
+        "fields": {
+            "filetitle": "The Countries of the Slave Trade Pdf", 
+            "lesson": 7, 
+            "file": "lessonplan/countries-of-the-slave-trade.pdf"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_logentry", 
+            "name": "Can add log entry", 
+            "content_type": [
+                "admin", 
+                "logentry"
+            ]
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_logentry", 
+            "name": "Can change log entry", 
+            "content_type": [
+                "admin", 
+                "logentry"
+            ]
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_logentry", 
+            "name": "Can delete log entry", 
+            "content_type": [
+                "admin", 
+                "logentry"
+            ]
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_group", 
+            "name": "Can add group", 
+            "content_type": [
+                "auth", 
+                "group"
+            ]
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_group", 
+            "name": "Can change group", 
+            "content_type": [
+                "auth", 
+                "group"
+            ]
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_group", 
+            "name": "Can delete group", 
+            "content_type": [
+                "auth", 
+                "group"
+            ]
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_permission", 
+            "name": "Can add permission", 
+            "content_type": [
+                "auth", 
+                "permission"
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_permission", 
+            "name": "Can change permission", 
+            "content_type": [
+                "auth", 
+                "permission"
+            ]
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_permission", 
+            "name": "Can delete permission", 
+            "content_type": [
+                "auth", 
+                "permission"
+            ]
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_user", 
+            "name": "Can add user", 
+            "content_type": [
+                "auth", 
+                "user"
+            ]
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_user", 
+            "name": "Can change user", 
+            "content_type": [
+                "auth", 
+                "user"
+            ]
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_user", 
+            "name": "Can delete user", 
+            "content_type": [
+                "auth", 
+                "user"
+            ]
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_contenttype", 
+            "name": "Can add content type", 
+            "content_type": [
+                "contenttypes", 
+                "contenttype"
+            ]
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_contenttype", 
+            "name": "Can change content type", 
+            "content_type": [
+                "contenttypes", 
+                "contenttype"
+            ]
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_contenttype", 
+            "name": "Can delete content type", 
+            "content_type": [
+                "contenttypes", 
+                "contenttype"
+            ]
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_lessonplanfile", 
+            "name": "Can add lesson plan file", 
+            "content_type": [
+                "contribute", 
+                "lessonplanfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_lessonplanfile", 
+            "name": "Can change lesson plan file", 
+            "content_type": [
+                "contribute", 
+                "lessonplanfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_lessonplanfile", 
+            "name": "Can delete lesson plan file", 
+            "content_type": [
+                "contribute", 
+                "lessonplanfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_otherfile", 
+            "name": "Can add other file", 
+            "content_type": [
+                "contribute", 
+                "otherfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_otherfile", 
+            "name": "Can change other file", 
+            "content_type": [
+                "contribute", 
+                "otherfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_otherfile", 
+            "name": "Can delete other file", 
+            "content_type": [
+                "contribute", 
+                "otherfile"
+            ]
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_lessonplan", 
+            "name": "Can add lesson plan", 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_lessonplan", 
+            "name": "Can change lesson plan", 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_lessonplan", 
+            "name": "Can delete lesson plan", 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_lessonstandard", 
+            "name": "Can add lesson standard", 
+            "content_type": [
+                "education", 
+                "lessonstandard"
+            ]
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_lessonstandard", 
+            "name": "Can change lesson standard", 
+            "content_type": [
+                "education", 
+                "lessonstandard"
+            ]
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_lessonstandard", 
+            "name": "Can delete lesson standard", 
+            "content_type": [
+                "education", 
+                "lessonstandard"
+            ]
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_session", 
+            "name": "Can add session", 
+            "content_type": [
+                "sessions", 
+                "session"
+            ]
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_session", 
+            "name": "Can change session", 
+            "content_type": [
+                "sessions", 
+                "session"
+            ]
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_session", 
+            "name": "Can delete session", 
+            "content_type": [
+                "sessions", 
+                "session"
+            ]
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_site", 
+            "name": "Can add site", 
+            "content_type": [
+                "sites", 
+                "site"
+            ]
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_site", 
+            "name": "Can change site", 
+            "content_type": [
+                "sites", 
+                "site"
+            ]
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_site", 
+            "name": "Can delete site", 
+            "content_type": [
+                "sites", 
+                "site"
+            ]
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_migrationhistory", 
+            "name": "Can add migration history", 
+            "content_type": [
+                "south", 
+                "migrationhistory"
+            ]
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_migrationhistory", 
+            "name": "Can change migration history", 
+            "content_type": [
+                "south", 
+                "migrationhistory"
+            ]
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_migrationhistory", 
+            "name": "Can delete migration history", 
+            "content_type": [
+                "south", 
+                "migrationhistory"
+            ]
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "hoang", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2013-05-10T15:34:57Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$ektyVzbGmRZM$Gkt1KZQOpcJVNgKuD9ux5YFWDN/WjPOq/ekMUxEOc4o=", 
+            "email": "voviethoang@gmail.com", 
+            "date_joined": "2013-05-03T15:15:15Z"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T18:22:36Z", 
+            "object_repr": "The Countries of the Slave Trade", 
+            "object_id": "7", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T18:20:32Z", 
+            "object_repr": "Slave Trade Memorial", 
+            "object_id": "3", 
+            "change_message": "Changed order.", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T18:20:18Z", 
+            "object_repr": "Finding Historical Evidence", 
+            "object_id": "4", 
+            "change_message": "Changed order.", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T18:20:07Z", 
+            "object_repr": "Database Scavenger Hunt", 
+            "object_id": "5", 
+            "change_message": "Changed order.", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-10T18:19:56Z", 
+            "object_repr": "Researching the Transatlantic Slave Trade", 
+            "object_id": "6", 
+            "change_message": "Changed order.", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T18:18:46Z", 
+            "object_repr": "Researching the Transatlantic Slave Trade", 
+            "object_id": "6", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T18:15:27Z", 
+            "object_repr": "Database Scavenger Hunt", 
+            "object_id": "5", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T18:13:32Z", 
+            "object_repr": "Finding Historical Evidence", 
+            "object_id": "4", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T18:09:55Z", 
+            "object_repr": "Slave Trade Memorial", 
+            "object_id": "3", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T17:57:29Z", 
+            "object_repr": "One Country\u2019s Slave Trade", 
+            "object_id": "2", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-10T17:54:24Z", 
+            "object_repr": "The 1808 Slave Trade Abolition Deadline ", 
+            "object_id": "1", 
+            "change_message": "", 
+            "user": [
+                "hoang"
+            ], 
+            "content_type": [
+                "education", 
+                "lessonplan"
+            ]
+        }
+    }
+]
