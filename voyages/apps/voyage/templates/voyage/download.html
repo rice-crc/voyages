@@ -1,0 +1,145 @@
+{% extends "voyage/voyagebase.html" %}                                                                                                                                                                                                                                                                                        
+
+{% load i18n %}
+
+{% block title %}Downloads{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/setup_left_menu.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+<div class="left-menu-title">
+	<h3>{% trans 'Downloads' %}</h3>
+</div>
+
+<div class="secondary-menu-item-0">
+	<a href="#download1">The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</a>
+</div>
+
+<div class="secondary-menu-item-0">
+	<a href="#download2">The Trans-Atlantic Slave Trade Database (Voyages data set)</a>
+</div>
+
+<div class="secondary-menu-item-0">
+    <a href="#download3">Estimates spreadsheet</a>
+</div>
+
+<div class="secondary-menu-item-0">
+    <a href="#download4">African Names Database</a>
+</div>
+
+</div>
+
+<div id="center-content">
+
+	{% block center-content %}
+
+    <h1>DOWNLOADS</h1>
+
+    <a name="download1">&nbsp;</a>
+
+    <h2>The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</h2>
+
+    <p>
+        The 2010 version of the transatlantic slave trade database contains 34,948 voyages 
+        compared to 34,940 in 2008 (and 27,233 in the 1999 version of the database that appeared 
+    	on CD-ROM). However, since 2008, several hundred corrections have been made and additional 
+    	information added. Thus 86 of the 2008 voyages have been deleted either because we found 
+    	they had been entered twice, or because we discovered that a voyage was not involved in 
+    	the transatlantic slave trade. Voyage id 16772, the Pye, Captain Adam, turned out to have 
+    	carried slaves from Jamaica to the Chesapeake, but obtained its captives in Jamaica, not 
+    	Africa. Offsetting the deletions are 94 voyages added on the basis of new information. 
+    	Further many voyages that are common to both 2008 and 2010 versions of the database contain 
+    	information that was not available in 2008 (see table 1 of “Understanding the Database”). 
+    	The 2010 version has 276 variables, compared with 99 in the Voyages Database available 
+    	online. Users interested in working with this larger data set can download it in a file 
+    	formatted for use with SPSS software. A variable in this dataset (EVGREEN) identifies 
+    	voyages on the CD-ROM version published in 1999. Because some users may find it useful 
+    	to view data as it existed in 1999, the CD-ROM version can also be selected for download. 
+    	A codebook describing all variable names, variable labels, and values of the expanded 
+    	dataset can be downloaded as a separate PDF document. With only a few exceptions, it 
+    	retains variable names in the original 1999 CD-ROM version. The 2008 version of the database 
+        may also be downloaded.
+    </p>
+				
+	<h3>Downloads:</h3>
+	<ul>
+        <li>Expanded dataset (2010, SPSS format): <a href="{{ STATIC_URL}}download/tastdb-exp-2010.sav">tastdb-exp-2010.sav</a></li>
+        <li>Expanded dataset (2008, SPSS format): <a href="{{ STATIC_URL}}download/tastdb-exp-2018.sav">tastdb-exp-2008.sav</a></li>
+        <li>Original CD-ROM dataset (1999, SPSS format): <a href="{{ STATIC_URL}}download/tastdb-1999.sav">tastdb-1999.sav</a></li>
+        <li>Codebook: <a href="{{ STATIC_URL}}download/Codebook2010.pdf" target="blank">SPSS codebook</a></li>
+	</ul>		
+
+    <a name="download2">&nbsp;</a>
+
+	<h2>The Trans-Atlantic Slave Trade Database (Voyages data set)</h2>
+					
+    <p>
+        This data set of the Trans-Atlantic Slave Trade Database contains the 99 variables 
+		available through the Voyages Database on this website. It is made available in three 
+		formats: SPSS (.sav), comma delimited (.csv), and dBase (.dbf). Users interested in 
+		working with this data set with their preferred software may select an edition year 
+        and file format below. 
+    </p>
+        
+    <h3>Downloads:</h3>
+	<ul>
+        <li>2010, SPSS: <a href="{{ STATIC_URL}}download/tastdb-2010.sav">tastdb-2010.sav</a></li>
+        <li>2010, comma-delimited: <a href="{{ STATIC_URL}}download/tastdb-2010.csv">tastdb-2010.csv</a></li>
+        <li>2010, dBase: <a href="{{ STATIC_URL}}download/tastdb-2010.dbf">tastdb-2010.dbf</a></li>
+	</ul>
+						
+    <a name="download3">&nbsp;</a>
+
+    <h2>Estimates spreadsheet</h2>
+    
+    <p>
+        The Estimates section uses data from the expanded Trans-Atlantic Slave Trade Database dataset, 
+		aggregated by regions of embarkation and disembarkation, but also incorporates published series 
+		of embarkations and disembarkations for particular regions when these data provide more accurate 
+		estimates than the database itself. Users interested in exploring the complex methodology involved 
+		in generating the estimates, or in testing the extent to which alternative assumptions lower or 
+		augment estimates of the full volume of the slave trade (in its entirety or for a national carrier 
+		or period of time), can download below an Excel-formatted copy of the spreadsheet estimating the 
+		full volume of the slave trade by national carrier and year of arrival, the SPSS file applying 
+		estimates of volume in the spreadsheet to data on exports and imports aggregated by national carrier, 
+		year of arrival, and the route of the voyage from region of embarkation to region of disembarkation, 
+        and a PDF version of the essay detailing the methodology used.
+    </p>
+					
+	<h3>Download:</h3>
+	<ul>
+        <li>Estimates spreadsheet: <a href="{{ STATIC_URL}}download/2010-estimates-excel.xlsx">2010 estimates-excel.xlsx</a></li>
+        <li>Estimates SPSS file: <a href="{{ STATIC_URL}}download/2010-estimates-SPSS.sav">2010 estimates-SPSS.sav</a></li>
+        <li>Methodology essay: <a href="{{ STATIC_URL}}download/2010estimates-method.pdf">2010 estimates-method.pdf</a></li>
+	</ul>
+
+    <a name="download4">&nbsp;</a>
+					
+	<h2>African Names Database</h2>
+    
+    <p>
+        Between 2008 and May 2012 <i>Voyages</i> offered access to an African Names Database 
+	    that identified over 67,000 Africans removed from slave ships in the abolition era, 
+		including their names, age, gender, stature, and place of embarkation. While these 
+		data have been incorporated into the African-Origins site the latter does not include 
+        stature data. The African Names Database is thus made available here in csv format.
+    </p>
+					
+	<h3>Download:</h3>
+	<ul>
+        <li>African Names Database: <a href="{{ STATIC_URL}}download/AfricanNamesDatabase.csv">AfricanNamesDatabase.csv</a></li>
+	</ul>					
+		
+	Questions about downloading or using these datasets? Please contact 
+	<a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;">
+	    			&#118;&#111;&#121;&#97;&#103;&#101;s&#64;&#101;mo&#114;y&#46;&#101;&#100;&#117;</a>.
+
+	{% endblock %}
+</div>
+{% endblock %}
+

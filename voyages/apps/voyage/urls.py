@@ -16,7 +16,7 @@ urlpatterns += patterns('django.views.generic.simple',
     url(r'^c01_s04_cover$', 'direct_to_template', {'template': 'raw_under_constr.html'}, name='sources'), 
     
     url(r'^search$', 'direct_to_template', {'template': 'under_constr.html'}, name='search'),
-    url(r'^download$', 'direct_to_template', {'template': 'under_constr.html'}, name='download'),
+    url(r'^download$', 'direct_to_template', {'template': 'voyage/download.html'}, name='download'),
 
     url(r'^contribute$', 'redirect_to', {'url':'/contribute'}, name='submission-login'),
     
