@@ -1,0 +1,16 @@
+{% extends "voyage/voyagebase.html" %}                                                                                                                                                                                                                                                                                        
+
+{% load i18n %}
+
+{% block title %} {{ flatpage.title }} {% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/setup_left_menu.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+{{ flatpage.content }}
+
+{% endblock %}
