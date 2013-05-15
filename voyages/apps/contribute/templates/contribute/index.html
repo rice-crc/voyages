@@ -4,15 +4,20 @@
 {% block title %}{% trans "Contribute" %}{% endblock %}
 
 {% block content %}
+{% if request.user.is_authenticated %}
+
 <h2>{% trans 'Welcome to the Contribute Section' %}</h2>
 
  <ul>
-{% if user.is_staff %}
+{% if request.user.is_staff %}
     <li><h3><a href="{% url admin:index %}">Live Admin Section</a></h3></li>
 {% endif %}
 <li>To be updated.</li>
 
  </ul>
+ 
+{% endif %}
+ 
 {% endblock %}
 
 

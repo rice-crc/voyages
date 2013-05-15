@@ -13,5 +13,6 @@ class FileDownloadInline(admin.TabularInline):
 class LessonPlanAdmin(admin.ModelAdmin):
     fields = ['text', 'author', 'grade_level', 'course', 'key_words', 'order', 'abstract']
     inlines = [LessonStandardInline, FileDownloadInline,]
+    search_fields = ('text','author', 'grade_level', 'course', 'key_words',  'abstract')
     
 admin.site.register(LessonPlan, LessonPlanAdmin)

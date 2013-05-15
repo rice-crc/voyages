@@ -7,7 +7,7 @@ from django.contrib.auth.views import *
 
 urlpatterns = patterns('',
     url(r'^$', 'django.contrib.auth.views.login', {'template_name': 'contribute/voyagelogin.html'}, name='login'),
-    url(r'^index$', 'voyages.apps.contribute.views.index', name='index'),
+    url(r'^index$', 'django.views.generic.simple.direct_to_template', {'template': 'contribute/index.html'}, name='index'),
     url(r'^guidelines$', 'django.views.generic.simple.direct_to_template', 
                 {'template': 'contribute/guidelines.html'}, name='guidelines'),
     url(r'^newuser$', 'django.views.generic.simple.direct_to_template', {'template': 'under_constr.html'}, name='newuser'),
