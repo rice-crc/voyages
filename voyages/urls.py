@@ -45,9 +45,3 @@ urlpatterns += patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
-
-# if development, needs to serve media files
-if settings.DEBUG:
-    urlpatterns += patterns('django.views.static',
-        (r'documents/(?P<path>.*)', 'serve', {'document_root': settings.MEDIA_ROOT}),
-    )
