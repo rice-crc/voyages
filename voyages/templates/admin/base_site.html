@@ -3,11 +3,35 @@
 
 {% block title %}{{ title }} | {% trans 'Voyage Admin' %}{% endblock %}
 
-{% block branding %}
-<h1 id="site-name">{% trans 'Voyage Admin (Live)' %}&nbsp;&nbsp;&nbsp;&nbsp;<span id="site-warning">{% trans 'NOTE: Any changes will take effect immediately' %}</span>
-</h1>
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
 {% endblock %}
 
-{% block topbanner %}<div id="topbanner"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/help/help-logo.png"/></a></div>{% endblock %}
+{% block extrahead %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/jquery.ba-resize.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/navigation_topbar.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block topbanner %}
+<table class="top-bar" >
+		<tr>
+			<td style="width:240px;">
+			<div id="main_logo"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/></a></div>
+			</td>
+			<td>
+			<div id="main_nav" style="margin-top: 3px">
+				{% include "topbar.html" %}
+			</div>
+			</td>
+		</tr>
+</table>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Voyage Admin (Live)' %}&nbsp;&nbsp;&nbsp;<span id="site-warning">{% trans 'NOTE: Any changes will take effect immediately' %}</span>
+</h1>
+{% endblock %}
 
 {% block nav-global %}{% endblock %}

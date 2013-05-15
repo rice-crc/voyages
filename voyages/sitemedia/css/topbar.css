@@ -11,6 +11,11 @@
 	height: 60px;
 }
 
+.top-bar ul li {
+	list-style-type: none;
+}
+
+
 /* Horizontal navigation bar - settings for different browsers */
 #main_nav {
 	float: left;
@@ -37,6 +42,7 @@ html > body #main_nav ul {
 
 #groups ul li {
 	display: inline;
+	list-style-type: none;
 }
 
 #toplinks {
@@ -83,6 +89,7 @@ html > body #main_nav ul {
 	width: 100%;
 	float: left;
 	margin: 0 0 0 0;
+	list-style-type: none;
 }
 
 /* Settings for each item in the nav list */

@@ -24,6 +24,7 @@
 </head>
 
 <body>
+	{% block top_bar %}
 	<table class="top-bar">
 		<tr>
 			<td style="width:240px;">
@@ -36,10 +37,14 @@
 			</td>
 		</tr>
 	</table>
+	{% endblock %}
+	
+	{% block secondary_bar %}
 	<div id="secondarybar">
 		{% include "secondarybar.html" %} 
 	</div>
-    
+	{% endblock %}
+	
     <div id="main-content">
     <div id="main-content-container">
     {% block content %}{% endblock %}

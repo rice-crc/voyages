@@ -1,4 +1,4 @@
-{% extends "contribute/contribute_base.html" %}
+{% extends "admin/base_site.html" %}
 {% load i18n %} 
 
 {% block title %}{% trans "Contribute" %}{% endblock %}
@@ -6,6 +6,7 @@
 {% block content %}
 {% if request.user.is_authenticated %}
 
+<div class="white-board">
 <h2>{% trans 'Welcome to the Contribute Section' %}</h2>
 
  <ul>
@@ -13,9 +14,10 @@
     <li><h3><a href="{% url admin:index %}">Live Admin Section</a></h3></li>
 {% endif %}
 <li>To be updated.</li>
+</ul>
 
- </ul>
- 
+</div>
+
 {% endif %}
  
 {% endblock %}

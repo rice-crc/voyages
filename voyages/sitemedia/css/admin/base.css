@@ -93,7 +93,8 @@ h5 {
 
 ul li {
     list-style-type: square;
-    padding: 1px 0;
+    padding: 0;
+    margin: 0;
 }
 
 ul.plainlist {
@@ -253,7 +254,6 @@ table {
 td, th {
     font-size: 11px;
     line-height: 13px;
-    border-bottom: 1px solid #eee;
     vertical-align: top;
     padding: 5px;
     font-family: "Lucida Grande", Verdana, Arial, sans-serif;
@@ -853,4 +853,15 @@ table#change-history tbody th {
 #login-warning {
 	color: red;
 	font-size: 10pt;
+}
+
+.white-board {
+	background-color: #FFFFFF;
+    border: 1px solid #C09C42;
+    border-radius: 10px 10px 10px 10px;
+    display: block;
+    float: left;
+    margin: 3px;
+    padding: 5px 8px;
+    width: 800px;
 }
