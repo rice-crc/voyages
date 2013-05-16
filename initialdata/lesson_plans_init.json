@@ -9,6 +9,24 @@
         }
     }, 
     {
+        "pk": 14, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "downloadfile", 
+            "name": "download file", 
+            "app_label": "contribute"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "contenttypes.contenttype", 
+        "fields": {
+            "model": "flatpage", 
+            "name": "flat page", 
+            "app_label": "flatpages"
+        }
+    }, 
+    {
         "pk": 2, 
         "model": "contenttypes.contenttype", 
         "fields": {
@@ -27,7 +45,7 @@
         }
     }, 
     {
-        "pk": 13, 
+        "pk": 12, 
         "model": "contenttypes.contenttype", 
         "fields": {
             "model": "lessonplanfile", 
@@ -45,7 +63,7 @@
         }
     }, 
     {
-        "pk": 7, 
+        "pk": 8, 
         "model": "contenttypes.contenttype", 
         "fields": {
             "model": "logentry", 
@@ -54,7 +72,7 @@
         }
     }, 
     {
-        "pk": 8, 
+        "pk": 9, 
         "model": "contenttypes.contenttype", 
         "fields": {
             "model": "migrationhistory", 
@@ -63,7 +81,7 @@
         }
     }, 
     {
-        "pk": 14, 
+        "pk": 13, 
         "model": "contenttypes.contenttype", 
         "fields": {
             "model": "otherfile", 
@@ -108,18 +126,10 @@
         }
     }, 
     {
-        "pk": "0706b9dcc60cac6998f1f07f348c3d42", 
+        "pk": "546a58631c7360880faf0b230c1f4de7", 
         "model": "sessions.session", 
         "fields": {
-            "expire_date": "2013-05-17T17:12:09Z", 
-            "session_data": "YzFjNmZmYzJjMTQ2NGY0MWFlYzAwNmNjNTk0YjE4N2UyNDczNzhhNDqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZFUpZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmRxAlUN\nX2F1dGhfdXNlcl9pZIoBAXUu\n"
-        }
-    }, 
-    {
-        "pk": "1064d1bc5661475bf12ddc678e79e55b", 
-        "model": "sessions.session", 
-        "fields": {
-            "expire_date": "2013-05-24T15:34:57Z", 
+            "expire_date": "2013-05-29T17:32:39Z", 
             "session_data": "NTcxOWYxOTIzMTJjMDFiMmRmNzViZWJlYjIzZGJhOGJkMTQ0YzJiNjqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n"
         }
     }, 
@@ -132,697 +142,133 @@
         }
     }, 
     {
-        "pk": 1, 
-        "model": "south.migrationhistory", 
+        "pk": 4, 
+        "model": "flatpages.flatpage", 
         "fields": {
-            "applied": "2013-05-10T15:39:33Z", 
-            "app_name": "common", 
-            "migration": "0001_initial"
+            "registration_required": false, 
+            "title": "Downloads", 
+            "url": "/voyage/download/", 
+            "template_name": "flatpages/download.html", 
+            "sites": [
+                1
+            ], 
+            "content": "<div id=\"left-menu\" class=\"left-menu-box\">\r\n<div class=\"left-menu-title\">\r\n<h3>Downloads</h3>\r\n</div>\r\n<div class=\"secondary-menu-item-0\"><a href=\"#download1\">The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</a></div>\r\n<div class=\"secondary-menu-item-0\"><a href=\"#download2\">The Trans-Atlantic Slave Trade Database (Voyages data set)</a></div>\r\n<div class=\"secondary-menu-item-0\"><a href=\"#download3\">Estimates spreadsheet</a></div>\r\n<div class=\"secondary-menu-item-0\"><a href=\"#download4\">African Names Database</a></div>\r\n</div>\r\n<div id=\"center-content\">\r\n<h1>DOWNLOADS</h1>\r\n<a name=\"download1\"></a>&nbsp;\r\n<h2>The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</h2>\r\n<p>The 2010 version of the transatlantic slave trade database contains 34,948 voyages compared to 34,940 in 2008 (and 27,233 in the 1999 version of the database that appeared on CD-ROM). However, since 2008, several hundred corrections have been made and additional information added. Thus 86 of the 2008 voyages have been deleted either because we found they had been entered twice, or because we discovered that a voyage was not involved in the transatlantic slave trade. Voyage id 16772, the Pye, Captain Adam, turned out to have carried slaves from Jamaica to the Chesapeake, but obtained its captives in Jamaica, not Africa. Offsetting the deletions are 94 voyages added on the basis of new information. Further many voyages that are common to both 2008 and 2010 versions of the database contain information that was not available in 2008 (see table 1 of &ldquo;Understanding the Database&rdquo;). The 2010 version has 276 variables, compared with 99 in the Voyages Database available online. Users interested in working with this larger data set can download it in a file formatted for use with SPSS software. A variable in this dataset (EVGREEN) identifies voyages on the CD-ROM version published in 1999. Because some users may find it useful to view data as it existed in 1999, the CD-ROM version can also be selected for download. A codebook describing all variable names, variable labels, and values of the expanded dataset can be downloaded as a separate PDF document. With only a few exceptions, it retains variable names in the original 1999 CD-ROM version. The 2008 version of the database may also be downloaded.</p>\r\n<h3>Downloads:</h3>\r\n<ul>\r\n<li>Expanded dataset (2010, SPSS format): <a href=\"../../documents/download/tastdb-exp-2010.sav\">tastdb-exp-2010.sav</a></li>\r\n<li>Expanded dataset (2008, SPSS format): <a href=\"{{ MEDIA_URL }}download/tastdb-exp-2018.sav\">tastdb-exp-2008.sav</a></li>\r\n<li>Original CD-ROM dataset (1999, SPSS format): <a href=\"{{ MEDIA_URL }}download/tastdb-1999.sav\">tastdb-1999.sav</a></li>\r\n<li>Codebook: <a href=\"{{ MEDIA_URL }}download/Codebook2010.pdf\" target=\"blank\">SPSS codebook</a></li>\r\n</ul>\r\n<a name=\"download2\"></a>&nbsp;\r\n<h2>The Trans-Atlantic Slave Trade Database (Voyages data set)</h2>\r\n<p>This data set of the Trans-Atlantic Slave Trade Database contains the 99 variables available through the Voyages Database on this website. It is made available in three formats: SPSS (.sav), comma delimited (.csv), and dBase (.dbf). Users interested in working with this data set with their preferred software may select an edition year and file format below.</p>\r\n<h3>Downloads:</h3>\r\n<ul>\r\n<li>2010, SPSS: <a href=\"{{ MEDIA_URL }}download/tastdb-2010.sav\">tastdb-2010.sav</a></li>\r\n<li>2010, comma-delimited: <a href=\"{{ MEDIA_URL }}download/tastdb-2010.csv\">tastdb-2010.csv</a></li>\r\n<li>2010, dBase: <a href=\"{{ MEDIA_URL }}download/tastdb-2010.dbf\">tastdb-2010.dbf</a></li>\r\n</ul>\r\n<a name=\"download3\"></a>&nbsp;\r\n<h2>Estimates spreadsheet</h2>\r\n<p>The Estimates section uses data from the expanded Trans-Atlantic Slave Trade Database dataset, aggregated by regions of embarkation and disembarkation, but also incorporates published series of embarkations and disembarkations for particular regions when these data provide more accurate estimates than the database itself. Users interested in exploring the complex methodology involved in generating the estimates, or in testing the extent to which alternative assumptions lower or augment estimates of the full volume of the slave trade (in its entirety or for a national carrier or period of time), can download below an Excel-formatted copy of the spreadsheet estimating the full volume of the slave trade by national carrier and year of arrival, the SPSS file applying estimates of volume in the spreadsheet to data on exports and imports aggregated by national carrier, year of arrival, and the route of the voyage from region of embarkation to region of disembarkation, and a PDF version of the essay detailing the methodology used.</p>\r\n<h3>Download:</h3>\r\n<ul>\r\n<li>Estimates spreadsheet: <a href=\"{{ MEDIA_URL }}download/2010-estimates-excel.xlsx\">2010 estimates-excel.xlsx</a></li>\r\n<li>Estimates SPSS file: <a href=\"{{ MEDIA_URL }}download/2010-estimates-SPSS.sav\">2010 estimates-SPSS.sav</a></li>\r\n<li>Methodology essay: <a href=\"{{ MEDIA_URL }}download/2010estimates-method.pdf\">2010 estimates-method.pdf</a></li>\r\n</ul>\r\n<a name=\"download4\"></a>&nbsp;\r\n<h2>African Names Database</h2>\r\n<p>Between 2008 and May 2012 <em>Voyages</em> offered access to an African Names Database that identified over 67,000 Africans removed from slave ships in the abolition era, including their names, age, gender, stature, and place of embarkation. While these data have been incorporated into the African-Origins site the latter does not include stature data. The African Names Database is thus made available here in csv format.</p>\r\n<h3>Download:</h3>\r\n<ul>\r\n<li>African Names Database: <a href=\"{{ MEDIA_URL }}download/AfricanNamesDatabase.csv\">AfricanNamesDatabase.csv</a></li>\r\n</ul>\r\nQuestions about downloading or using these datasets? Please contact <a href=\"mailto:voyages@emory.edu\"> voyages@emory.edu</a>.</div>", 
+            "enable_comments": false
         }
     }, 
     {
         "pk": 2, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T15:39:33Z", 
-            "app_name": "voyage", 
-            "migration": "0001_initial"
+            "filetitle": "tastdb-exp-2010.sav", 
+            "file": "download/tastdb-exp-2010.sav"
         }
     }, 
     {
         "pk": 3, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T15:39:33Z", 
-            "app_name": "assessment", 
-            "migration": "0001_initial"
+            "filetitle": "tastdb-exp-2008.sav", 
+            "file": "download/tastdb-exp-2008.sav"
         }
     }, 
     {
         "pk": 4, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T15:39:33Z", 
-            "app_name": "resources", 
-            "migration": "0001_initial"
+            "filetitle": "tastdb-1999.sav", 
+            "file": "download/tastdb-1999.sav"
         }
     }, 
     {
         "pk": 5, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T15:41:27Z", 
-            "app_name": "education", 
-            "migration": "0001_lessonplan"
+            "filetitle": "SPSS codebook", 
+            "file": "download/Codebook2010.pdf"
         }
     }, 
     {
         "pk": 6, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T15:42:04Z", 
-            "app_name": "contribute", 
-            "migration": "0001_lessonplanupload"
+            "filetitle": "tastdb-2010.sav", 
+            "file": "download/tastdb-2010.sav"
         }
     }, 
     {
         "pk": 7, 
-        "model": "south.migrationhistory", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "applied": "2013-05-10T17:50:51Z", 
-            "app_name": "education", 
-            "migration": "0002__update_lesson_plan"
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "10th \u2013 12th grade", 
-            "author": "Heather Dahl", 
-            "text": "The 1808 Slave Trade Abolition Deadline ", 
-            "abstract": "In this lesson, students will examine the data of the trans-Atlantic slave trade and primary sources related to the slave trade. The data will easily reveal to students a steep incline before 1808 and, in fact, a continuation of imported enslaved Africans after the slave trade was abolished in the United States and Great Britain. Students will also examine perspectives on slavery, as the deadline for ending the slave trade approached and passed. The lesson allows students to develop their own conclusions about both the intention and impact of the 1808 deadline on the overall history of slavery. ", 
-            "course": "US History, US Government", 
-            "key_words": "Abolition; Slave Trade; United States; Primary Sources; Graph skills", 
-            "order": 1
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "6th \u2013 8th grade", 
-            "author": "Kristine Leach", 
-            "text": "One Country\u2019s Slave Trade", 
-            "abstract": "This lesson focuses students on one specific country that participated in the slave trade. Students will gather information from the database to document the slave trade for the country they have chosen and will then look at specific data, such as the numbers of enslaved people transported during different time periods and the areas of embarkation and disembarkation. This lesson offers students a more detailed example of the slave trade than would an overview of the slave trade. ", 
-            "course": "Social Studies", 
-            "key_words": "Slave Trade; Graph and Map skills", 
-            "order": 2
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "6th \u2013 8th grade", 
-            "author": "Michael Poreda", 
-            "text": "Slave Trade Memorial", 
-            "abstract": "This lesson asks students to demonstrate mastery of their knowledge about the Middle Passage by designing a memorial. The lesson contains several steps which teachers can use at their discretion to build an appreciation for what enslaved Africans were subjected to as they were forced to the New World, why this part of history should get a public memorial, and how that memorial should be expressed in words and image. The lesson uses mortality statistics from the database to help students gain an understanding of how many people died on a voyage, as well as reading comprehension questions and a PowerPoint Presentation of various monuments.", 
-            "course": "US History, World History", 
-            "key_words": "Slave Trade; Memorial; Middle Passage; Mortality Rates; Writing skills", 
-            "order": 4
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "11th \u2013 12th grade", 
-            "author": "Brian Hamilton", 
-            "text": "Finding Historical Evidence", 
-            "abstract": "This lesson puts equal emphasis on the history of the trans-Atlantic slave trade and on the craft of forming historical arguments. Students are asked to read a recent work from David Brion Davis, a leading historian of slavery, and to compare his arguments with evidence from the database. This forms the foundation for a discussion of what kinds of claims are harder to defend than others and why some types of evidence are more convincing than others. ", 
-            "course": "AP World History; African and African-American St", 
-            "key_words": "Slave Trade; Slavery; Historical arguments; Evaluating evidence", 
-            "order": 5
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "7th \u2013 12th grade", 
-            "author": "Brian Hamilton", 
-            "text": "Database Scavenger Hunt", 
-            "abstract": "This lesson is an introduction to the database that can also serve as an introduction to the trans-Atlantic slave trade. It exposes students to the vast amount and variability of material in the database, and helps to develop the necessary technical skills for using a database. Students will analyze the historical data as a means of learning to formulate compelling research questions. ", 
-            "course": "US and World History", 
-            "key_words": "Slave Trade; Slavery; Historical arguments; Evaluating evidence ", 
-            "order": 6
-        }
-    }, 
-    {
-        "pk": 6, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "9th \u2013 12th grade", 
-            "author": "Christine Kadonsky; David Eltis", 
-            "text": "Researching the Transatlantic Slave Trade", 
-            "abstract": "In this lesson, students will learn how to search The Trans--Atlantic Slave Trade Database. They will discover the scope of the slave trade over four centuries. Students will search the database to learn more about five noteworthy voyages. Students will review the African Names Database to learn the name of Africans liberated from ships attempting to trade illegally. By completing this lesson, students will have a better understanding how historians use databases and statistics to conduct historical research.", 
-            "course": "World History; US History", 
-            "key_words": "Abolition; Slave Trade; United States; World History; Primary Sources; Graph skills ", 
-            "order": 7
-        }
-    }, 
-    {
-        "pk": 7, 
-        "model": "education.lessonplan", 
-        "fields": {
-            "grade_level": "6th \u2013 8th grade", 
-            "author": "Kristine Leach", 
-            "text": "The Countries of the Slave Trade", 
-            "abstract": "This lesson is a comparative look at the number of enslaved people transported by each of the seven flag countries listed on the database and also an examination of the ordeal of the Middle Passage. Students will gain an understanding of the immensity of the international slave trade but will also focus on the human experience of the Middle Passage. ", 
-            "course": "Social Studies ", 
-            "key_words": "\tSlave Trade; Nations; Middle Passage; Graph skills", 
-            "order": 3
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 2 (Colonization and Settlement) Standard 3", 
-            "lesson": 1, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 4 (Expansion and Reform) Standards 2 and 4", 
-            "lesson": 1, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "II Time, Continuity, Change", 
-            "lesson": 1, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "IV Individual Development and Identity", 
-            "lesson": 1, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World in Spatial Terms Standard 1", 
-            "lesson": 1, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 6, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Human Systems Standard 9", 
-            "lesson": 1, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 7, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 2 (Colonization and Settlement) Standard 3", 
-            "lesson": 2, 
-            "type": "NCHS History Standards"
+            "filetitle": "tastdb-2010.csv", 
+            "file": "download/tastdb-2010.csv"
         }
     }, 
     {
         "pk": 8, 
-        "model": "education.lessonstandard", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "text": "US Era 4 (Expansion and Reform) Standards 2 and 4", 
-            "lesson": 2, 
-            "type": "NCHS History Standards"
+            "filetitle": "tastdb-2010.dbf", 
+            "file": "download/tastdb-2010.dbf"
         }
     }, 
     {
         "pk": 9, 
-        "model": "education.lessonstandard", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "text": "II Time, Continuity, Change", 
-            "lesson": 2, 
-            "type": "NCSS Social Studies Themes"
+            "filetitle": "2010 estimates-excel.xlsx", 
+            "file": "download/2010-estimates-excel.xlsx"
         }
     }, 
     {
         "pk": 10, 
-        "model": "education.lessonstandard", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "text": "IV Individual Development and Identity", 
-            "lesson": 2, 
-            "type": "NCSS Social Studies Themes"
+            "filetitle": "2010 estimates-SPSS.sav", 
+            "file": "download/2010-estimates-SPSS.sav"
         }
     }, 
     {
         "pk": 11, 
-        "model": "education.lessonstandard", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "text": "World in Spatial Terms Standard 1", 
-            "lesson": 2, 
-            "type": "Geography"
+            "filetitle": "2010 estimates-method.pdf", 
+            "file": "download/2010estimates-method.pdf"
         }
     }, 
     {
         "pk": 12, 
-        "model": "education.lessonstandard", 
+        "model": "contribute.downloadfile", 
         "fields": {
-            "text": "Human Systems Standard 9", 
-            "lesson": 2, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 13, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 2 (Colonization and Settlement)", 
-            "lesson": 3, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 14, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World Era 6 (First Global Age)", 
-            "lesson": 3, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 15, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "IX Global Connections", 
-            "lesson": 3, 
-            "type": "NCSS Social Studies Themes "
-        }
-    }, 
-    {
-        "pk": 16, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "X Civic Ideals and Practices", 
-            "lesson": 3, 
-            "type": "NCSS Social Studies Themes "
-        }
-    }, 
-    {
-        "pk": 17, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 1 (Three Worlds Meet) Standards 1 & 2", 
-            "lesson": 4, 
-            "type": "NCHS History Standards "
-        }
-    }, 
-    {
-        "pk": 18, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World Era 6 (First Global Age) Standards 1A, 1B, 2A, 4A, 4B, 4C, & 6", 
-            "lesson": 4, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 19, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "I Culture", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 20, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "II Time, Continuity, Change", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 21, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "III People, Places, Environments", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
+            "filetitle": "AfricanNamesDatabase.csv", 
+            "file": "download/AfricanNamesDatabase.csv"
         }
     }, 
     {
         "pk": 22, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "V Individual, Groups, Institutions", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 23, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "VI Power, Authority, Governance", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 24, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "VII Production, Distribution, Consumption", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 25, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "IX Global Connections", 
-            "lesson": 4, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 26, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World in Spatial Terms Standards 1-3", 
-            "lesson": 4, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 27, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Places and Regions Standards 4-6", 
-            "lesson": 4, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 28, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Human Systems Standards 9-13", 
-            "lesson": 4, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 29, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Issues of Geography Standard 17", 
-            "lesson": 4, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 30, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World Era 6 (First Global Age) Standard 4B", 
-            "lesson": 5, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 31, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "II Time, Continuity, Change", 
-            "lesson": 5, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 32, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "VII Production, Distribution, Consumption", 
-            "lesson": 5, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 33, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "IX Global Connections", 
-            "lesson": 5, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 34, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World in Spatial Terms Standards 1-3", 
-            "lesson": 5, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 35, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Places and Regions Standards 4-6", 
-            "lesson": 5, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 36, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Human Systems Standards 9-13", 
-            "lesson": 5, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 37, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Issues of Geography Standard 17", 
-            "lesson": 5, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 38, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "U.S. History Era 1(Three Worlds Meet)\u2013Standard 1", 
-            "lesson": 6, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 39, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World History Era 6 (First Global Age)\u2013Standard 4", 
-            "lesson": 6, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 40, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "II. Time, Continuity, Change", 
-            "lesson": 6, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 41, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "VII. Production, Distribution, Consumption", 
-            "lesson": 6, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 42, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "IX. Global Connections", 
-            "lesson": 6, 
-            "type": "NCSS Social Studies Themes"
-        }
-    }, 
-    {
-        "pk": 43, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World in Spatial Terms Standards 1-3", 
-            "lesson": 6, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 44, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Places and Regions Standards 4-6", 
-            "lesson": 6, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 45, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Human Systems Standards 9-13", 
-            "lesson": 6, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 46, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "Issues of Geography Standard 17", 
-            "lesson": 6, 
-            "type": "Geography"
-        }
-    }, 
-    {
-        "pk": 47, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "US Era 2 (Colonization and Settlement) Standard 1A", 
-            "lesson": 7, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 48, 
-        "model": "education.lessonstandard", 
-        "fields": {
-            "text": "World Era 6 (First Global Age) Standard 4B", 
-            "lesson": 7, 
-            "type": "NCHS History Standards"
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "The 1808 Slave Trade Abolition Deadline", 
-            "lesson": 1, 
-            "file": "lessonplan/slave-trade-abolition.pdf"
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "One Country\u2019s Slave Trade", 
-            "lesson": 2, 
-            "file": "lessonplan/one-countrys-trade.pdf"
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "Slave Trade Memorial Pdf", 
-            "lesson": 3, 
-            "file": "lessonplan/middle-passage-memorial.pdf"
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "Slave Trade Memorial Presentation", 
-            "lesson": 3, 
-            "file": "lessonplan/slave-memorials.ppt"
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "Historical Evidence Pdf", 
-            "lesson": 4, 
-            "file": "lessonplan/historical-evidence.pdf"
-        }
-    }, 
-    {
-        "pk": 6, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "Database Scavenger Hunt pdf", 
-            "lesson": 5, 
-            "file": "lessonplan/database-scavenger-hunt.pdf"
-        }
-    }, 
-    {
-        "pk": 7, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "Researching the Transatlantic Slave Trade Pdf", 
-            "lesson": 6, 
-            "file": "lessonplan/research-tast.pdf"
-        }
-    }, 
-    {
-        "pk": 8, 
-        "model": "contribute.lessonplanfile", 
-        "fields": {
-            "filetitle": "The Countries of the Slave Trade Pdf", 
-            "lesson": 7, 
-            "file": "lessonplan/countries-of-the-slave-trade.pdf"
-        }
-    }, 
-    {
-        "pk": 19, 
         "model": "auth.permission", 
         "fields": {
             "codename": "add_logentry", 
             "name": "Can add log entry", 
-            "content_type": [
-                "admin", 
-                "logentry"
-            ]
+            "content_type": 8
         }
     }, 
     {
-        "pk": 20, 
+        "pk": 23, 
         "model": "auth.permission", 
         "fields": {
             "codename": "change_logentry", 
             "name": "Can change log entry", 
-            "content_type": [
-                "admin", 
-                "logentry"
-            ]
+            "content_type": 8
         }
     }, 
     {
-        "pk": 21, 
+        "pk": 24, 
         "model": "auth.permission", 
         "fields": {
             "codename": "delete_logentry", 
             "name": "Can delete log entry", 
-            "content_type": [
-                "admin", 
-                "logentry"
-            ]
+            "content_type": 8
         }
     }, 
     {
@@ -831,10 +277,7 @@
         "fields": {
             "codename": "add_group", 
             "name": "Can add group", 
-            "content_type": [
-                "auth", 
-                "group"
-            ]
+            "content_type": 2
         }
     }, 
     {
@@ -843,10 +286,7 @@
         "fields": {
             "codename": "change_group", 
             "name": "Can change group", 
-            "content_type": [
-                "auth", 
-                "group"
-            ]
+            "content_type": 2
         }
     }, 
     {
@@ -855,10 +295,7 @@
         "fields": {
             "codename": "delete_group", 
             "name": "Can delete group", 
-            "content_type": [
-                "auth", 
-                "group"
-            ]
+            "content_type": 2
         }
     }, 
     {
@@ -867,10 +304,7 @@
         "fields": {
             "codename": "add_permission", 
             "name": "Can add permission", 
-            "content_type": [
-                "auth", 
-                "permission"
-            ]
+            "content_type": 1
         }
     }, 
     {
@@ -879,10 +313,7 @@
         "fields": {
             "codename": "change_permission", 
             "name": "Can change permission", 
-            "content_type": [
-                "auth", 
-                "permission"
-            ]
+            "content_type": 1
         }
     }, 
     {
@@ -891,10 +322,7 @@
         "fields": {
             "codename": "delete_permission", 
             "name": "Can delete permission", 
-            "content_type": [
-                "auth", 
-                "permission"
-            ]
+            "content_type": 1
         }
     }, 
     {
@@ -903,10 +331,7 @@
         "fields": {
             "codename": "add_user", 
             "name": "Can add user", 
-            "content_type": [
-                "auth", 
-                "user"
-            ]
+            "content_type": 3
         }
     }, 
     {
@@ -915,10 +340,7 @@
         "fields": {
             "codename": "change_user", 
             "name": "Can change user", 
-            "content_type": [
-                "auth", 
-                "user"
-            ]
+            "content_type": 3
         }
     }, 
     {
@@ -927,10 +349,7 @@
         "fields": {
             "codename": "delete_user", 
             "name": "Can delete user", 
-            "content_type": [
-                "auth", 
-                "user"
-            ]
+            "content_type": 3
         }
     }, 
     {
@@ -939,10 +358,7 @@
         "fields": {
             "codename": "add_contenttype", 
             "name": "Can add content type", 
-            "content_type": [
-                "contenttypes", 
-                "contenttype"
-            ]
+            "content_type": 4
         }
     }, 
     {
@@ -951,10 +367,7 @@
         "fields": {
             "codename": "change_contenttype", 
             "name": "Can change content type", 
-            "content_type": [
-                "contenttypes", 
-                "contenttype"
-            ]
+            "content_type": 4
         }
     }, 
     {
@@ -963,82 +376,88 @@
         "fields": {
             "codename": "delete_contenttype", 
             "name": "Can delete content type", 
-            "content_type": [
-                "contenttypes", 
-                "contenttype"
-            ]
-        }
-    }, 
-    {
-        "pk": 37, 
-        "model": "auth.permission", 
-        "fields": {
-            "codename": "add_lessonplanfile", 
-            "name": "Can add lesson plan file", 
-            "content_type": [
-                "contribute", 
-                "lessonplanfile"
-            ]
-        }
-    }, 
-    {
-        "pk": 38, 
-        "model": "auth.permission", 
-        "fields": {
-            "codename": "change_lessonplanfile", 
-            "name": "Can change lesson plan file", 
-            "content_type": [
-                "contribute", 
-                "lessonplanfile"
-            ]
-        }
-    }, 
-    {
-        "pk": 39, 
-        "model": "auth.permission", 
-        "fields": {
-            "codename": "delete_lessonplanfile", 
-            "name": "Can delete lesson plan file", 
-            "content_type": [
-                "contribute", 
-                "lessonplanfile"
-            ]
+            "content_type": 4
         }
     }, 
     {
         "pk": 40, 
         "model": "auth.permission", 
         "fields": {
-            "codename": "add_otherfile", 
-            "name": "Can add other file", 
-            "content_type": [
-                "contribute", 
-                "otherfile"
-            ]
+            "codename": "add_downloadfile", 
+            "name": "Can add download file", 
+            "content_type": 14
         }
     }, 
     {
         "pk": 41, 
         "model": "auth.permission", 
         "fields": {
-            "codename": "change_otherfile", 
-            "name": "Can change other file", 
-            "content_type": [
-                "contribute", 
-                "otherfile"
-            ]
+            "codename": "change_downloadfile", 
+            "name": "Can change download file", 
+            "content_type": 14
         }
     }, 
     {
         "pk": 42, 
         "model": "auth.permission", 
         "fields": {
+            "codename": "delete_downloadfile", 
+            "name": "Can delete download file", 
+            "content_type": 14
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_lessonplanfile", 
+            "name": "Can add lesson plan file", 
+            "content_type": 12
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_lessonplanfile", 
+            "name": "Can change lesson plan file", 
+            "content_type": 12
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_lessonplanfile", 
+            "name": "Can delete lesson plan file", 
+            "content_type": 12
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_otherfile", 
+            "name": "Can add other file", 
+            "content_type": 13
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_otherfile", 
+            "name": "Can change other file", 
+            "content_type": 13
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "auth.permission", 
+        "fields": {
             "codename": "delete_otherfile", 
             "name": "Can delete other file", 
-            "content_type": [
-                "contribute", 
-                "otherfile"
-            ]
+            "content_type": 13
         }
     }, 
     {
@@ -1047,10 +466,7 @@
         "fields": {
             "codename": "add_lessonplan", 
             "name": "Can add lesson plan", 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "content_type": 10
         }
     }, 
     {
@@ -1059,10 +475,7 @@
         "fields": {
             "codename": "change_lessonplan", 
             "name": "Can change lesson plan", 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "content_type": 10
         }
     }, 
     {
@@ -1071,10 +484,7 @@
         "fields": {
             "codename": "delete_lessonplan", 
             "name": "Can delete lesson plan", 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "content_type": 10
         }
     }, 
     {
@@ -1083,10 +493,7 @@
         "fields": {
             "codename": "add_lessonstandard", 
             "name": "Can add lesson standard", 
-            "content_type": [
-                "education", 
-                "lessonstandard"
-            ]
+            "content_type": 11
         }
     }, 
     {
@@ -1095,10 +502,7 @@
         "fields": {
             "codename": "change_lessonstandard", 
             "name": "Can change lesson standard", 
-            "content_type": [
-                "education", 
-                "lessonstandard"
-            ]
+            "content_type": 11
         }
     }, 
     {
@@ -1107,10 +511,34 @@
         "fields": {
             "codename": "delete_lessonstandard", 
             "name": "Can delete lesson standard", 
-            "content_type": [
-                "education", 
-                "lessonstandard"
-            ]
+            "content_type": 11
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "add_flatpage", 
+            "name": "Can add flat page", 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "change_flatpage", 
+            "name": "Can change flat page", 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "auth.permission", 
+        "fields": {
+            "codename": "delete_flatpage", 
+            "name": "Can delete flat page", 
+            "content_type": 7
         }
     }, 
     {
@@ -1119,10 +547,7 @@
         "fields": {
             "codename": "add_session", 
             "name": "Can add session", 
-            "content_type": [
-                "sessions", 
-                "session"
-            ]
+            "content_type": 5
         }
     }, 
     {
@@ -1131,10 +556,7 @@
         "fields": {
             "codename": "change_session", 
             "name": "Can change session", 
-            "content_type": [
-                "sessions", 
-                "session"
-            ]
+            "content_type": 5
         }
     }, 
     {
@@ -1143,10 +565,7 @@
         "fields": {
             "codename": "delete_session", 
             "name": "Can delete session", 
-            "content_type": [
-                "sessions", 
-                "session"
-            ]
+            "content_type": 5
         }
     }, 
     {
@@ -1155,10 +574,7 @@
         "fields": {
             "codename": "add_site", 
             "name": "Can add site", 
-            "content_type": [
-                "sites", 
-                "site"
-            ]
+            "content_type": 6
         }
     }, 
     {
@@ -1167,10 +583,7 @@
         "fields": {
             "codename": "change_site", 
             "name": "Can change site", 
-            "content_type": [
-                "sites", 
-                "site"
-            ]
+            "content_type": 6
         }
     }, 
     {
@@ -1179,100 +592,390 @@
         "fields": {
             "codename": "delete_site", 
             "name": "Can delete site", 
-            "content_type": [
-                "sites", 
-                "site"
-            ]
+            "content_type": 6
         }
     }, 
     {
-        "pk": 22, 
+        "pk": 25, 
         "model": "auth.permission", 
         "fields": {
             "codename": "add_migrationhistory", 
             "name": "Can add migration history", 
-            "content_type": [
-                "south", 
-                "migrationhistory"
-            ]
+            "content_type": 9
         }
     }, 
     {
-        "pk": 23, 
+        "pk": 26, 
         "model": "auth.permission", 
         "fields": {
             "codename": "change_migrationhistory", 
             "name": "Can change migration history", 
-            "content_type": [
-                "south", 
-                "migrationhistory"
-            ]
+            "content_type": 9
         }
     }, 
     {
-        "pk": 24, 
+        "pk": 27, 
         "model": "auth.permission", 
         "fields": {
             "codename": "delete_migrationhistory", 
             "name": "Can delete migration history", 
-            "content_type": [
-                "south", 
-                "migrationhistory"
-            ]
+            "content_type": 9
         }
     }, 
     {
         "pk": 1, 
         "model": "auth.user", 
         "fields": {
-            "username": "hoang", 
+            "username": "george", 
             "first_name": "", 
             "last_name": "", 
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-05-10T15:34:57Z", 
+            "last_login": "2013-05-15T17:32:39Z", 
             "groups": [], 
             "user_permissions": [], 
-            "password": "pbkdf2_sha256$10000$ektyVzbGmRZM$Gkt1KZQOpcJVNgKuD9ux5YFWDN/WjPOq/ekMUxEOc4o=", 
-            "email": "voviethoang@gmail.com", 
-            "date_joined": "2013-05-03T15:15:15Z"
+            "password": "pbkdf2_sha256$10000$wjgll1ynjOCV$Vg7SyFBVebMZTz0HtsZi7vleqSuxHhgxAAYMwdBB538=", 
+            "email": "tjurczy@emory.edu", 
+            "date_joined": "2013-05-15T17:31:50Z"
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 3, 
+            "action_time": "2013-05-16T15:18:00Z", 
+            "object_repr": "aaa", 
+            "object_id": "1", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 10
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T03:15:16Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T03:02:24Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T03:00:01Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T02:57:42Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-16T02:56:33Z", 
+            "object_repr": "aaa", 
+            "object_id": "1", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 10
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T02:54:29Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "No fields changed.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T01:04:05Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T00:58:24Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-16T00:56:36Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:22:23Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:20:45Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:20:10Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:18:13Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:13:19Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "4", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 3, 
+            "action_time": "2013-05-15T18:12:57Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "3", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:12:13Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "3", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:11:50Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "3", 
+            "change_message": "No fields changed.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:10:39Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "3", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 3, 
+            "action_time": "2013-05-15T18:09:07Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "2", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:08:16Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "2", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 3, 
+            "action_time": "2013-05-15T18:07:55Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "1", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 2, 
+            "action_time": "2013-05-15T18:06:20Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
+            "object_id": "1", 
+            "change_message": "Changed content.", 
+            "user": 1, 
+            "content_type": 7
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "admin.logentry", 
+        "fields": {
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:04:33Z", 
+            "object_repr": "AfricanNamesDatabase.csv", 
+            "object_id": "12", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 13, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T19:23:14Z", 
-            "object_repr": "Researching the Transatlantic Slave Trade", 
-            "object_id": "6", 
-            "change_message": "Changed text for lesson standard \"LessonStandard object\".", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:04:21Z", 
+            "object_repr": "2010 estimates-method.pdf", 
+            "object_id": "11", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 12, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T19:22:12Z", 
-            "object_repr": "Researching the Transatlantic Slave Trade", 
-            "object_id": "6", 
-            "change_message": "No fields changed.", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:04:12Z", 
+            "object_repr": "2010 estimates-SPSS.sav", 
+            "object_id": "10", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1280,89 +983,64 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T18:22:36Z", 
-            "object_repr": "The Countries of the Slave Trade", 
-            "object_id": "7", 
+            "action_time": "2013-05-15T18:04:02Z", 
+            "object_repr": "2010 estimates-excel.xlsx", 
+            "object_id": "9", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 10, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T18:20:32Z", 
-            "object_repr": "Slave Trade Memorial", 
-            "object_id": "3", 
-            "change_message": "Changed order.", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:03:50Z", 
+            "object_repr": "tastdb-2010.dbf", 
+            "object_id": "8", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 9, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T18:20:18Z", 
-            "object_repr": "Finding Historical Evidence", 
-            "object_id": "4", 
-            "change_message": "Changed order.", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:03:37Z", 
+            "object_repr": "tastdb-2010.csv", 
+            "object_id": "7", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 8, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T18:20:07Z", 
-            "object_repr": "Database Scavenger Hunt", 
-            "object_id": "5", 
-            "change_message": "Changed order.", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:03:25Z", 
+            "object_repr": "tastdb-2010.sav", 
+            "object_id": "6", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 7, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 2, 
-            "action_time": "2013-05-10T18:19:56Z", 
-            "object_repr": "Researching the Transatlantic Slave Trade", 
-            "object_id": "6", 
-            "change_message": "Changed order.", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "action_flag": 1, 
+            "action_time": "2013-05-15T18:03:12Z", 
+            "object_repr": "SPSS codebook", 
+            "object_id": "5", 
+            "change_message": "", 
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1370,17 +1048,12 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T18:18:46Z", 
-            "object_repr": "Researching the Transatlantic Slave Trade", 
-            "object_id": "6", 
+            "action_time": "2013-05-15T18:03:03Z", 
+            "object_repr": "tastdb-1999.sav", 
+            "object_id": "4", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1388,17 +1061,12 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T18:15:27Z", 
-            "object_repr": "Database Scavenger Hunt", 
-            "object_id": "5", 
+            "action_time": "2013-05-15T18:02:47Z", 
+            "object_repr": "tastdb-exp-2008.sav", 
+            "object_id": "3", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1406,35 +1074,25 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T18:13:32Z", 
-            "object_repr": "Finding Historical Evidence", 
-            "object_id": "4", 
+            "action_time": "2013-05-15T17:49:02Z", 
+            "object_repr": "tastdb-exp-2010.sav", 
+            "object_id": "2", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
         "pk": 3, 
         "model": "admin.logentry", 
         "fields": {
-            "action_flag": 1, 
-            "action_time": "2013-05-10T18:09:55Z", 
-            "object_repr": "Slave Trade Memorial", 
-            "object_id": "3", 
+            "action_flag": 3, 
+            "action_time": "2013-05-15T17:48:31Z", 
+            "object_repr": "tastdb-exp-2010.sav", 
+            "object_id": "1", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1442,17 +1100,12 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T17:57:29Z", 
-            "object_repr": "One Country\u2019s Slave Trade", 
-            "object_id": "2", 
+            "action_time": "2013-05-15T17:36:57Z", 
+            "object_repr": "tastdb-exp-2010.sav", 
+            "object_id": "1", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 14
         }
     }, 
     {
@@ -1460,17 +1113,12 @@
         "model": "admin.logentry", 
         "fields": {
             "action_flag": 1, 
-            "action_time": "2013-05-10T17:54:24Z", 
-            "object_repr": "The 1808 Slave Trade Abolition Deadline ", 
+            "action_time": "2013-05-15T17:36:19Z", 
+            "object_repr": "/voyage/download/ -- Downloads", 
             "object_id": "1", 
             "change_message": "", 
-            "user": [
-                "hoang"
-            ], 
-            "content_type": [
-                "education", 
-                "lessonplan"
-            ]
+            "user": 1, 
+            "content_type": 7
         }
     }
 ]

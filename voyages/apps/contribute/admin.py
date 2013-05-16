@@ -6,3 +6,8 @@ from voyages.apps.contribute.models import *
 #    search_fields = ('filetitle',)
 #
 #admin.site.register(LessonPlanFile, LessonPlanFileAdmin)
+
+class DownloadFileAdmin(admin.ModelAdmin):
+    fields = ['file', 'filetitle', ]
+
+admin.site.register(DownloadFile, DownloadFileAdmin)
