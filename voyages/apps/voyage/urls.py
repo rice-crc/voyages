@@ -24,3 +24,4 @@ urlpatterns += patterns('django.views.generic.simple',
 urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^download$', 'flatpage', {'url': '/voyage/download/'}, name='download'),
 )
+

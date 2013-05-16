@@ -1,6 +1,7 @@
 {% extends "voyage/voyagebase.html" %}                                                                                                                                                                                                                                                                                        
 
 {% load i18n %}
+{% load voyage_extras %}
 
 {% block title %}Downloads{% endblock %}
 
@@ -11,7 +12,7 @@
 
 {% block content %}
 
-{{ flatpage.content }}
+{{ flatpage.content|parse_blocks }}
 
 {% endblock %}
 
