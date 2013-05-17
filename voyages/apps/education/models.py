@@ -21,3 +21,4 @@ class LessonStandard(models.Model):
     type = models.CharField(('Standard Type'),max_length=100)
     text = models.CharField(('Text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
+
