@@ -10,7 +10,7 @@ class LessonPlan(models.Model):
     course = models.CharField(('Course'),max_length=50)
     key_words = models.CharField(('Key Words'),max_length=200)
     
-    abstract = models.TextField(('Abstract'),max_length=1000)
+    abstract = models.TextField(('Abstract'),max_length=2000)
     
     order = models.IntegerField()
     
