@@ -1,6 +1,5 @@
 from django.contrib import admin
-from voyages.apps.education.models import LessonStandard, LessonPlan
-from voyages.apps.contribute.models import LessonPlanFile
+from voyages.apps.education.models import *
 
 class LessonStandardInline(admin.TabularInline):
     model = LessonStandard
@@ -15,4 +14,12 @@ class LessonPlanAdmin(admin.ModelAdmin):
     inlines = [LessonStandardInline, FileDownloadInline,]
     search_fields = ('text','author', 'grade_level', 'course', 'key_words',  'abstract')
     
+class LessonStandardTypeAdmin(admin.ModelAdmin):
+    fields = ['type',]
+    search_fields = ('type',)
+
+class DownloadFileAdmin(admin.ModelAdmin):
+    fields = ['file', 'filetitle', ]
+
 admin.site.register(LessonPlan, LessonPlanAdmin)
+admin.site.register(LessonStandardType, LessonStandardTypeAdmin)

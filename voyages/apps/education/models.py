@@ -10,15 +10,28 @@ class LessonPlan(models.Model):
     course = models.CharField(('Course'),max_length=50)
     key_words = models.CharField(('Key Words'),max_length=200)
     
-    abstract = models.TextField(('Abstract'),max_length=2000)
+    abstract = models.TextField(('Abstract'),max_length=1000)
     
     order = models.IntegerField()
     
     def __unicode__(self):
        return self.text
-    
-class LessonStandard(models.Model):
+
+class LessonStandardType(models.Model):
     type = models.CharField(('Standard Type'),max_length=100)
+    def __unicode__(self):
+       return self.type
+
+class LessonStandard(models.Model):
+    type = models.ForeignKey(LessonStandardType)
     text = models.CharField(('Text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
+    def __unicode__(self):
+       return self.text + " " + self.lesson
 
+class LessonPlanFile(models.Model):
+    file = models.FileField(upload_to='lessonplan')
+    filetitle = models.CharField(('File name'),max_length=50)
+    lesson = models.ForeignKey(LessonPlan)
+    
+    
