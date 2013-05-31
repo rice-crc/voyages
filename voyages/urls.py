@@ -25,25 +25,28 @@ urlpatterns = patterns('',
     url(r'^help/', include('voyages.apps.help.urls', namespace='help')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
 )
 
+# XML generated sitemap
 sitemaps = {
     'staticpages' : StaticSitemap(urlpatterns),
 }
 
+# URLs not included in the sitemap
 urlpatterns += patterns('',
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}, name='sitemap-xml'),
+    
+    # Flatpages
     url(r'^pages/', include('django.contrib.flatpages.urls')),
-      
+    
+    # Admin documentation
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
       
-    # Uncomment the next line to enable the admin:
+    # Admin management  
     url(r'^admin/', include(admin.site.urls)),
 )
 
+#Serving static files including files uploaded by users
 if settings.DEBUG:
 # static files (images, css, javascript, etc.)
     urlpatterns += patterns('',

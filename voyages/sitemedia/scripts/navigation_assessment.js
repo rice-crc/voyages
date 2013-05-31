@@ -1,3 +1,5 @@
+/* Section-specific element for setup_left-Menu.js to use */
+
 var selectedClass = "assessment_selected";
 var lm_enableCollapse = true; 
 

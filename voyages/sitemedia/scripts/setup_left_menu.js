@@ -1,3 +1,7 @@
+/* Set up the navigation for left-column menu 
+ *  where loading is done by jquery/ajax 
+ *   and each section contains multiple pages */
+
 /* HTML DOM const-elements for navigation  */
 var lm_section_referral = "mainid";
 
@@ -17,6 +21,7 @@ var lm_wrappername;
 var lm_templateprefix;
 var lm_currentid;
 
+/* Initialize elements when all page elements have been loaded */
 $(document).ready(function() {
 	var pagehref = document.location.href;
 	var pageelem = href.split("=");
@@ -52,6 +57,7 @@ $(document).ready(function() {
 	updatelinktext();
 });
 
+/* Set up event handlers */
 function setupleftmenu ()	{
 	/* Set up event handlers for each section */
 	
@@ -116,6 +122,7 @@ function setupleftmenu ()	{
 		});
 	}
 	
+	/* Event handlers for previous and next link navigation */
 	function setupnextprev() {
 		/* This only triggers if there is a valid previous page */
 		$(lm_prev_pg_select).click(function() {

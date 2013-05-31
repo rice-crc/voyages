@@ -1,3 +1,5 @@
+/* Section-specific element for setup_left-Menu.js to use */
+
 /* Initialize variables*/
 var selectedClass = "voyage_selected";
 var lm_enableCollapse = false;

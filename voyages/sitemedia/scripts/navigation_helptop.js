@@ -6,6 +6,7 @@ $(document).ready(function() {
 	var maxIdx = elem.length - 1;
 	var currentid = elem[maxIdx];
 	
+	/* Event handler for loading pages on click from the top navigation */
 	$(".top-bar-menu > ul > li > a").each(function() {
 		/* load the page on click */
 		$("#" + this.id).click(function(ev) {
