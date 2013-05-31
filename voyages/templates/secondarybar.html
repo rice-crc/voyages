@@ -1,9 +1,12 @@
 {% load i18n %}
 {% get_language_info for LANGUAGE_CODE as lang %}
 
+<!-- Containing breadcrumb and help links -->
 <div class="secondary-bar">
 	<table border="0" cellspacing="0" cellpadding="0" class="secondary-bar">
 		<tr>
+			
+			<!-- Breadcrumb: handlers in breadcrumb.js will change the content depending on current page -->
 			<td class="secondary-bar-breadcrumb">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -11,8 +14,10 @@
           			  &nbsp;
 					</td>
 				</tr>
-			</table></td>
+			</table>
+			</td>
 			
+			<!-- Help links: handlers in navigation_topbar.js -->
 			<td class="secondary-bar-help-links">
 			<table border="0" cellspacing="0" cellpadding="0" class="secondary-bar-help-links">
 				<tr>
@@ -22,7 +27,7 @@
 					<td class="secondary-bar-help-link"><a href="" id="glossary">Glossary </a></td>
 					<td class="secondary-bar-help-link"><a href="" id="legal">Legal </a></td>
 					
-					<!-- Language feature 
+					<!-- Language feature currently disabled 
 					<td class="secondary-bar-help-link"><a>Current Language:</a> </td>
 					<td class="secondary-bar-language-active">
 						<form action="/i18n/setlang/" method="post">
@@ -39,12 +44,11 @@
 						{% endfor %}
 						</select>
 						</form>
-					
-				
 					</td>
 					-->
 				</tr>
-			</table></td>
+			</table>
+			</td>
 		</tr>
 	</table>
 </div>

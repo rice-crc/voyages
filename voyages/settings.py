@@ -117,7 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
      
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admindocs',
     'south',
     #'haystack',
 

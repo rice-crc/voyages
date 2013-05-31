@@ -1,7 +1,13 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 
+<!-- Base template for all pages in django admin -->
+
 {% block title %}{{ title }} | {% trans 'Voyage Admin' %}{% endblock %}
+
+{% block stylesheet %}
+{{ STATIC_URL }}css/admin/base.css
+{% endblock %}
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />

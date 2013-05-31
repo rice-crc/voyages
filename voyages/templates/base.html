@@ -2,18 +2,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <!-- Basic common css styles -->
+    	<!-- Top navigation menu styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
+    
+    	<!-- Basic tyles for the rest of the page -->
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
 
 	{% block csslist %}
 	{% endblock %}
-	<!-- Basic common javascripts -->
+	<!-- Basic common javascript source files -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
+	<!-- For resizing div bodies when loading content via AJAX -->
 	<script src="{{ STATIC_URL }}scripts/jquery.ba-resize.min.js" type="text/javascript"></script>
+	
+	<!-- Fly-out top navigation menu !-->
     <script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/navigation_topbar.js" type="text/javascript"></script>
+	
+	<!-- Breadcrumb - page-navigation -->
 	<script src="{{ STATIC_URL }}scripts/breadcrumb.js" type="text/javascript"></script>
 	{% block jslist %}
 	{% endblock %}
@@ -27,10 +35,12 @@
 	{% block top_bar %}
 	<table class="top-bar">
 		<tr>
+			<!--Voyage Website logo -->
 			<td style="width:240px;">
 			<div id="main_logo"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/></a></div>
 			</td>
 			<td>
+			<!-- Navigation menu -->
 			<div id="main_nav">
 				{% include "topbar.html" %}
 			</div>
@@ -39,20 +49,25 @@
 	</table>
 	{% endblock %}
 	
+	<!-- Secondary menu containing breadcrumb links and help links -->
 	{% block secondary_bar %}
 	<div id="secondarybar">
 		{% include "secondarybar.html" %} 
 	</div>
 	{% endblock %}
 	
+	<!-- Actual content of the page - two nested divs 
+		because of different background vs. text spanning -->
     <div id="main-content">
     <div id="main-content-container">
     {% block content %}{% endblock %}
     
     </div>
 	</div>
+	<!-- Page footer -->
 	{% block footer %}{% endblock %}
 	
+	<!-- Google Analytics code -->
 	{% include "googlecode.html" %}
 </body>
 </html>
