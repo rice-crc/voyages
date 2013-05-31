@@ -6,6 +6,9 @@ class Glossary(models.Model):
     term = models.CharField(('Term'),max_length=50)
     description = models.TextField(('Description'), max_length=1000)
 
+    class Meta:
+        ordering = ['term']
+
     def __unicode__(self):
         return self.term
 

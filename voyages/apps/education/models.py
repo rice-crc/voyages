@@ -14,6 +14,9 @@ class LessonPlan(models.Model):
     
     order = models.IntegerField()
     
+    class Meta:
+        ordering = ['order']
+    
     def __unicode__(self):
        return self.text
 
