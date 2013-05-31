@@ -27,7 +27,7 @@ class LessonStandard(models.Model):
     text = models.CharField(('Text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
     def __unicode__(self):
-       return self.text + " " + self.lesson
+       return self.text
 
 class LessonPlanFile(models.Model):
     file = models.FileField(upload_to='lessonplan')
