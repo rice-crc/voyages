@@ -1,10 +1,11 @@
+{% load i18n %}
 
-<h2>Conclusion</h2>
-
+<h2>{% trans "Conclusion" %}</h2>
+{% url voyage:search as voyage_search_url %}
 <p>
-	In many markets in the Atlantic world monthly cycles of
+	{% blocktrans %}In many markets in the Atlantic world monthly cycles of
 	slave exports and imports, documented in the <a
-	href="{% url voyage:search %}">Voyages Database</a>, link to dry
+	href="{{ voyage_search_url }}">Voyages Database</a>, link to dry
 	season crop harvests. African and European dealers on the African
 	coast purchased provisions and slaves. Some markets, such as those
 	along the Senegal and Gambia Rivers, had distinct
@@ -19,11 +20,11 @@
 	the Caribbean, or those between millet-rice Upper Guinea region and
 	North American rice and tobacco lands. In examining slave trading
 	routes, historians need to consider agricultural calendars on both
-	sides of the Atlantic.
+	sides of the Atlantic.{% endblocktrans %}
 </p>
 
 <p>
-	Though there were monthly cycles of slave exports and
+	{% blocktrans %}Though there were monthly cycles of slave exports and
 	imports, year-round shipments took place in all markets during the
 	350-year history of the trans-Atlantic slave trade. In the most
 	seasonal African slaving region—Senegambia—about fifteen percent of
@@ -39,11 +40,11 @@
 	Variability in the Middle Passage voyage time, due to contrary
 	winds, caused some captains to arrive out of season; one assumes
 	that there also was variability in the time taken to march captives
-	towards the African coast.
+	towards the African coast.{% endblocktrans %}
 </p>
 
 <p>
-	It is important to examine these unseasonal slave trades. In
+	{% blocktrans %}It is important to examine these unseasonal slave trades. In
 	Africa, they remind us that the slave trade was a predatory
 	activity. Warfare between African states often took place after the
 	principal grain harvest and during the dry season, but conflicts
@@ -62,5 +63,5 @@
 	Africans maintained the Colonial System. Trading during out of crop
 	seasons, on both sides of the Atlantic, increased the chances that
 	irregular, non-systematic migration patterns occurred—a true
-	diaspora or “scattering” of African peoples in the Americas.
+	diaspora or “scattering” of African peoples in the Americas.{% endblocktrans %}
 </p>

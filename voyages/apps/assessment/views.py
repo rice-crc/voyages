@@ -6,6 +6,20 @@ from django.shortcuts import render_to_response
 from django.conf.urls.defaults import *
                               
 def get_page(request, chapternum, sectionnum, pagenum):
+    """
+    Essay subsection of the Assessment part
+    
+    Display an html page corresponding to the chapter-section-page passed in
+    ** Context **
+    ``RequestContext``
+    
+    ** Basic templates that might be rendered**
+    :template:`assessment/c01_s01_generic.html`
+    :template:`assessment/c01_s02_generic.html`
+    
+    The further content is rendered using the pagepath parameter 
+    """
+    
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "assessment/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "assessment/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"

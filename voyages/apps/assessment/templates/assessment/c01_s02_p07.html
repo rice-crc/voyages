@@ -1,3 +1,4 @@
+{% load i18n %}
 
 <script type="text/javascript">
 	function popitup(url) {
@@ -7,29 +8,32 @@
 	}
 </script>
 
-<h2>Slave-trading seasonality: case studies</h2>
+<h2>{% trans "Slave-trading seasonality: case studies" %}</h2>
+{% url resources:images-detail as resources_images-detail %}
+{% url voyage:search as voyage_search_url %}
+{% url voyage:voyage as voyage_voyage_url %}
 
 <p>
-	To spotlight seasonality in the trans-Atlantic slave trade,
+	{% blocktrans %}To spotlight seasonality in the trans-Atlantic slave trade,
 	consider slaving voyages that departed from New Calabar, Bight of
 	Biafra (Elem Kalabari, Nigeria), and those that arrived in
 	Barbados. New Calabar was a major embarkation point for enslaved
 	Africans from the Bight of Biafra; in 1650-1700 one-third of all
 	Africans shipped from the region passed through the village,
 	located on the
-	<a href="{% url resources:images-detail %}?image=new-calabar-and-bonny">New Calabar River</a>.
+	<a href="{{ resources_images-detail }}?image=new-calabar-and-bonny">New Calabar River</a>.
 	In the 1630s and 1640s, the Dutch were the first Europeans to
 	challenge Portuguese dominance in New Calabar; by the late 1670s,
 	the London-based Royal African Company (RAC) outfitted the majority
 	of slaving ships to this African trading site. Regarding Barbados,
 	the RAC stationed agents in its main port, Bridgetown, and in the
 	late 1600s the island-colony produced more high-quality sugar per
-	acre than any region in the Atlantic world.
+	acre than any region in the Atlantic world.{% endblocktrans %}
 </p>
 
 <p>
-	Between 1654 and 1851, the <a
-	href="{% url voyage:search %}">Voyages Database</a> documents 315
+	{% blocktrans %}Between 1654 and 1851, the <a
+	href="{{ voyage_search_url }}">Voyages Database</a> documents 315
 	slaving trips that departed New Calabar for the Americas. Of these,
 	one can estimate months of departure for 257 voyages, and plot
 	departure months against the estimated number of slaves embarked.
@@ -40,7 +44,7 @@
 	then decreased by February-March, a period that coincides with
 	declining yam stocks (Figure 1). In 1677-78, Arthur Doegood captained
 	one of the RAC slaving voyages to New Calabar <a
-	href="{% url voyage:voyage %}?voyageId=9990">VoyageID 9990</a>
+	href="{{ voyage_voyage_url }}?voyageId=9990">VoyageID 9990</a>
 	and his <a
 	href="http://www.nationalarchives.gov.uk/slavery/pdf/Arthur_Translation.pdf">logbook</a>
 	survives in the National Archives in London. Doegood anchored at
@@ -49,7 +53,7 @@
 	Hingston, complained that he was not “free to deale in many
 	[slaves]” because we “have noe provitions for them,” “findeing
 	yames very scarse.” By April many of the yams he bought were
-	“rotten” and he was forced to buy unripe “green plantins.”
+	“rotten” and he was forced to buy unripe “green plantins.”{% endblocktrans %}
 </p>
 
 <span class="center">
@@ -58,7 +62,7 @@
 	 <img src="{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-1.png" width="500"/></a> </span>
 
 <p>
-	Two months after departing New Calabar, Doegood arrived in
+	{% blocktrans %}Two months after departing New Calabar, Doegood arrived in
 	Carlisle Bay, Barbados when slaves were producing the last barrels
 	of sugar. Agent Hingston’s journal entry on 30-31 May 1678
 	indicates that he had arrived at the beginning of the out-of-crop
@@ -67,9 +71,9 @@
 	drier weather and winter-spring grain and sugar harvests when
 	planters demanded greater numbers of newly enslaved African
 	workers. Information contained in the <a
-	href="../database/search.html">Voyages Database</a> indicates
+	href="{{ voyage_search_url }}">Voyages Database</a> indicates
 	that slave imports into Barbados began increasing towards the
 	beginning of the “in crop” provisions and sugar season, and then
 	began declining in March after provisions’ harvests and as less and
-	less sugar needed to be cut and processed (Figure 2).
+	less sugar needed to be cut and processed (Figure 2).{% endblocktrans %}
 </p>

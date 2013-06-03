@@ -1,6 +1,9 @@
 {% extends "assessment/assessmentbase.html" %}
+{% load i18n %}
 
-{% block title %}A Brief Overview of the Trans-Atlantic Slave Trade{% endblock %}
+<!-- The basic template for assessment essays -->
+
+{% block title %}{% trans "A Brief Overview of the Trans-Atlantic Slave Trade" %}{% endblock %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css">

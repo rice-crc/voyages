@@ -2,7 +2,7 @@
 
 {% load i18n %} 
 
-{% block title %}Introductory Maps{% endblock %}
+{% block title %}{% trans "Introductory Maps" %}{% endblock %}
 
 {% block csslist %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/assessment/assessment.css">
@@ -18,35 +18,35 @@
 
 <div id="left-menu" class="left-menu-box">
 	<div class="left-menu-title">
-		<h3>Introductory Maps </h3>
+		<h3>{% trans "Introductory Maps" %}</h3>
 	</div>
 
 	<div class="secondary-menu-item-0">
-		<a href="#map1">Map 1: Overview of the slave trade out of Africa, 1500-1900</a>
+		<a href="#map1">{% trans "Map 1: Overview of the slave trade out of Africa, 1500-1900" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map2">Map 2: Migration of sugar cultivation from Asia into the Atlantic</a>
+		<a href="#map2">{% trans "Map 2: Migration of sugar cultivation from Asia into the Atlantic" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map3">Map 3: Old World slave trade routes in the Atlantic before 1759</a>
+		<a href="#map3">{% trans "Map 3: Old World slave trade routes in the Atlantic before 1759" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map4">Map 4: Wind and ocean currents of the Atlantic basins</a>
+		<a href="#map4">{% trans "Map 4: Wind and ocean currents of the Atlantic basins" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map5">Map 5: Major regions and ports involved in the trans-Atlantic slave trade, all years</a>
+		<a href="#map5">{% trans "Map 5: Major regions and ports involved in the trans-Atlantic slave trade, all years" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map6">Map 6: Countries and regions in the Atlantic World where slave voyages were organized, by share of captives carried off from Africa</a>
+		<a href="#map6">{% trans "Map 6: Countries and regions in the Atlantic World where slave voyages were organized, by share of captives carried off from Africa" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map7">Map 7: Major coastal regions from which captives left Africa, all years</a>
+		<a href="#map7">{% trans "Map 7: Major coastal regions from which captives left Africa, all years" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map8">Map 8: Major regions where captives disembarked, all years</a>
+		<a href="#map8">{% trans "Map 8: Major regions where captives disembarked, all years" %}</a>
 	</div>
 	<div class="secondary-menu-item-0">
-		<a href="#map9">Map 9: Volume and direction of the trans-Atlantic slave trade from all African to all American regions</a>
+		<a href="#map9">{% trans "Map 9: Volume and direction of the trans-Atlantic slave trade from all African to all American regions" %}</a>
 	</div>
 
  
@@ -56,11 +56,12 @@
 {% block center-content %}
 <div id="center-content-inner">
 
-	<h1>Introductory Maps</h1>
+	<h1>{% trans "Introductory Maps" %}</h1>
 	<p>
-		Source: David Eltis and David Richardson, <span class="italic"><a href="http://yalepress.yale.edu/yupbooks/book.asp?isbn=9780300124606">Atlas of the Transatlantic Slave Trade</a></span>
+		{% blocktrans %}Source: David Eltis and David Richardson, 
+		<span class="italic"><a href="http://yalepress.yale.edu/yupbooks/book.asp?isbn=9780300124606">Atlas of the Transatlantic Slave Trade</a></span>
 		(New Haven, 2010), reproduced with the permission of Yale University Press.
-		For permission to reuse these images, contact Yale University Press.
+		For permission to reuse these images, contact Yale University Press.{% endblocktrans %}
 	</p>
 
 	<a name="map1">&nbsp;</a>
@@ -78,17 +79,17 @@
 
 		<div class="map-description">
 
-			<h2>Map 1: Overview of the slave trade out of Africa, 1500-1900</h2>
+			<h2>{% trans "Map 1: Overview of the slave trade out of Africa, 1500-1900" %}</h2>
 
 			<p>
-				Captive Africans followed many routes from their homelands
+				{% blocktrans %}Captive Africans followed many routes from their homelands
 				to other parts of the world. The map shows the trans-Atlantic
 				movement of these captives in comparative perspective for the
 				centuries since 1500 only. Estimates of the ocean-borne trade are
 				more robust than are those for the trans-Saharan, Red Sea and
 				Persian Gulf routes, but it is thought that for the period from the
 				end of the Roman Empire to 1900 about the same number of captives
-				crossed the Atlantic as left Africa by all other routes combined.
+				crossed the Atlantic as left Africa by all other routes combined.{% endblocktrans %}
 			</p>
 
 		</div>
@@ -111,14 +112,14 @@
 
 		<div class="map-description">
 
-			<h2>Map 2: Migration of sugar cultivation from Asia into the Atlantic</h2>
+			<h2>{% trans "Map 2: Migration of sugar cultivation from Asia into the Atlantic" %}</h2>
 
 			<p>
-				Sugar cultivation began in the Pacific in the pre-Christian
+				{% blocktrans %}Sugar cultivation began in the Pacific in the pre-Christian
 				era and gradually spread to the eastern Mediterranean, the Gulf of
 				Guinea, then to Brazil, before entering the Caribbean in the
 				mid-seventeenth century. Eighty percent of all captives carried
-				from Africa were taken to sugar-growing areas.
+				from Africa were taken to sugar-growing areas.{% endblocktrans %}
 			</p>
 
 		</div>
@@ -141,16 +142,16 @@
 
 		<div class="map-description">
 
-			<h2>Map 3: Old World slave trade routes in the Atlantic before 1759</h2>
+			<h2>{% trans "Map 3: Old World slave trade routes in the Atlantic before 1759" %}</h2>
 
 			<p>
-				Before the Atlantic slave trade began and for two centuries
+				{% blocktrans %}Before the Atlantic slave trade began and for two centuries
 				thereafter, some African captives were taken to Europe as well as
 				to the Atlantic islands and between African ports. It is hard to
 				get precise estimates of these flows, but they were certainly much
 				smaller than the trans-Atlantic traffic. Many of the captives
 				involved in this traffic were subsequently carried to sugar
-				plantations in the Old World.
+				plantations in the Old World.{% endblocktrans %}
 			</p>
 
 		</div>
@@ -173,14 +174,14 @@
 
 		<div class="map-description">
 
-			<h2>Map 4: Wind and ocean currents of the Atlantic basins</h2>
+			<h2>{% trans "Map 4: Wind and ocean currents of the Atlantic basins" %}</h2>
 
 			<p>
-				In the age of sail, winds and ocean currents shaped the
+				{% blocktrans %}In the age of sail, winds and ocean currents shaped the
 				direction of the trans-Atlantic slave trade, effectively creating
 				two separate slave-trading systems – one in the north with voyages
 				originating in Europe and North America, the other in the south
-				with voyages originating in Brazil.
+				with voyages originating in Brazil.{% endblocktrans %}
 			</p>
 
 		</div>
@@ -203,11 +204,11 @@
 
 		<div class="map-description">
 
-			<h2>Map 5: Major regions and ports involved in the trans-Atlantic slave trade, all years</h2>
+			<h2>{% trans "Map 5: Major regions and ports involved in the trans-Atlantic slave trade, all years" %}</h2>
 
 			<p>
-				Few commercial centers in the Atlantic world were untouched by the slave
-				trade, and all the major ports had strong connections with the traffic.
+				{% blocktrans %}Few commercial centers in the Atlantic world were untouched by the slave
+				trade, and all the major ports had strong connections with the traffic.{% endblocktrans %}
 			</p>
 
 		</div>
@@ -230,11 +231,11 @@
 
 		<div class="map-description">
 
-			<h2>Map 6: Countries and regions in the Atlantic World where slave
-			voyages were organized, by share of captives carried off from Africa</h2>
+			<h2>{% trans "Map 6: Countries and regions in the Atlantic World where slave
+			voyages were organized, by share of captives carried off from Africa" %}</h2>
 
 			<p>
-				Slave voyages were organized and left from all major
+				{% blocktrans %}Slave voyages were organized and left from all major
 				Atlantic ports at some point over the nearly four centuries of the
 				trans-Atlantic slave trade. Nevertheless, vessels from the largest
 				seven ports, Rio de Janeiro, Bahia, Liverpool, London, Nantes,
@@ -250,7 +251,7 @@
 			<p>
 				Total documented embarkations: <b>8,973,701 captives</b>
 				<br>
-				Percent of estimated embarkations: <b>72.1%</b>
+				Percent of estimated embarkations: <b>72.1%</b>{% endblocktrans %}
 			</p>
 
 		</div>
@@ -273,10 +274,10 @@
 
 		<div class="map-description">
 
-			<h2>Map 7: Major coastal regions from which captives left Africa, all years</h2>
+			<h2>{% trans "Map 7: Major coastal regions from which captives left Africa, all years" %}</h2>
 
 			<p>
-				The limits of the regions shown here are “Senegambia,”
+				{% blocktrans %}The limits of the regions shown here are “Senegambia,”
 				anywhere north of the Rio Nunez. Sierra Leone region comprises the
 				Rio Nunez to just short of Cape Mount. The Windward Coast is
 				defined as Cape Mount south-east to and including the Assini river.
@@ -297,7 +298,7 @@
 			<p>
 				Total documented embarkations: <b>7,878,500 captives</b>
 				<br>
-				Percent of estimated embarkations: <b>63.3%</b>
+				Percent of estimated embarkations: <b>63.3%</b>{% endblocktrans %}
 			</p>
 
 		</div>
@@ -320,10 +321,10 @@
 
 		<div class="map-description">
 
-			<h2>Map 8: Major regions where captives disembarked, all years</h2>
+			<h2>{% trans "Map 8: Major regions where captives disembarked, all years" %}</h2>
 
 			<p>
-				The Caribbean and South America received 95 percent of the
+				{% blocktrans %}The Caribbean and South America received 95 percent of the
 				slaves arriving in the Americas. Some captives disembarked in
 				Africa rather than the Americas because their trans-Atlantic voyage
 				was diverted as a result of a slave rebellion or, during the era of
@@ -335,7 +336,7 @@
 			<p>
 				Total documented embarkations: <b>9,371,001 captives</b>
 				<br>
-				Percent of estimated embarkations: <b>88.5%</b>
+				Percent of estimated embarkations: <b>88.5%</b>{% endblocktrans %}
 			</p>
 
 		</div>
@@ -358,10 +359,10 @@
 
 		<div class="map-description">
 
-			<h2>Map 9: Volume and direction of the trans-Atlantic slave trade from all African to all American regions</h2>
+			<h2>{% trans "Map 9: Volume and direction of the trans-Atlantic slave trade from all African to all American regions" %}</h2>
 
 			<p>
-				This map summarizes and combines the many different paths by
+				{% blocktrans %}This map summarizes and combines the many different paths by
 				which captives left Africa and reached the Americas. While there
 				were strong connections between particular embarkation and
 				disembarkation regions, it was also the case that captives from any
@@ -370,7 +371,7 @@
 				Africa, the region most remote from the Americas, could disembark
 				in mainland North America, as well as the Caribbean and South
 				America. The data in this map are based on estimates of the total
-				slave trade rather than documented departures and arrivals.
+				slave trade rather than documented departures and arrivals.{% endblocktrans %}
 			</p>
 
 		</div>

@@ -6,29 +6,32 @@ from voyages.apps.education.models import *
 from voyages.apps.contribute.models import *
 
 def lessonplan(request):
-    # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
-    lessons_all = LessonPlan.objects.order_by('order')
-    standards_all = LessonStandard.objects.all()
-    types_all = LessonStandardType.objects.all()
-    downloads_all = LessonPlanFile.objects.all()
+    """
+    Display the lesson plan page in the Education section
+    ** Context **
+    ``RequestContext``
+    ``mymodel``
+        An instance of :model:`education:LessonPlan`
+        requires :model:`education:LessonStandard`
+        requires :model:`education:LessonStandardType`
+        requires :model:`education:LessonPlanFile`
+    
+    ** Template **
+    :template:`education/lesson-plans.html`
+    """
     
     lesson_plan_list = []
-    
     # Iterate and retrieve all nested submenus
-    for lesson in lessons_all:
+    for lesson in LessonPlan.objects.order_by('order'):
         sub_lesson = []
         sub_download = []
-        
-        standard_list = standards_all.filter(lesson=lesson.id)
-        standard_type_list = standard_list.values_list('type', flat=True).distinct()
-        download_list = downloads_all.filter(lesson=lesson.id)
-        
-        for std_type in types_all:
-            text_list = standard_list.filter(type=std_type)
+      
+        for std_type in LessonStandardType.objects.all():
+            text_list = LessonStandard.objects.filter(lesson=lesson.id).filter(type=std_type)
             if len(text_list) != 0:
                 sub_lesson.append({'type' : std_type.type, 'text' : text_list})
         
-        lesson_plan_list.append({'lesson' : lesson, 'standard' : sub_lesson, 'download' : download_list})
+        lesson_plan_list.append({'lesson' : lesson, 'standard' : sub_lesson, 'download' : LessonPlanFile.objects.filter(lesson=lesson.id)})
     
     return render_to_response('education/lesson-plans.html', {"lesson_plans" : lesson_plan_list},
                               context_instance=RequestContext(request));

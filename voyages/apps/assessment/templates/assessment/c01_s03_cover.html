@@ -1,11 +1,13 @@
-<h1>Dobo: A Liberated African in Nineteenth-Century Havana</h1>
+{% load i18n %}
+<h1>{% trans "Dobo: A Liberated African in Nineteenth-Century Havana" %}</h1>
 
 <div class="essay-info">
 	<span class="essay-author">Oscar Grandio Moraguez</span>
-	<span class="essay-location">(York University)</span>
+	<span class="essay-location">({% trans "York University" %})</span>
 	<span class="essay-date">&nbsp;</span>
 </div>
 
+{% blocktrans %}
 <p>
 	In the sixty years after 1807, many former slave trading nations, in particular the
 	British, launched a major effort to suppress the slave trade. In this era, the Voyages
@@ -240,15 +242,17 @@
 	name, had his rights ignored, and was not remunerated for his work. Dobo, a free youth from Gola, became Gabino, a
 	de-facto slave in Cuba.
 </p>
+{% endblocktrans %}
 
 <br>
 
 <div class="essay-note">
 	<p style="text-align:center">
-		Notes
+		{% trans "Notes" %}
 	</p>
 </div>
 
+{% blocktrans %}
 <p class="note">
 	1 Leslie Bethell, “The Mixed Commissions for the Suppression of the Transatlantic Slave Trade in the Nineteenth Century,” <span class="italic">Journal of African History 7 </span>(1966): 79-93; David R. Murray, <span class="italic">Odious Commerce: Britain, Spain, and the abolition of the Cuban slave trade </span>
 	(Cambridge, UK: Cambridge University Press, 1972).
@@ -351,3 +355,4 @@
 <p class="note">
 	21 AHNM, Estado, Esclavitud, Legajo 8019/39/15-18.
 </p>
+{% endblocktrans %}

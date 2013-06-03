@@ -1,12 +1,15 @@
-<h1>Voyages and Applied history</h1>
+{% load i18n %}
+<h1>{% trans "Voyages and Applied history" %}</h1>
+
+{% url voyage:voyage as voyage_voyage_url %}
 
 <div class="essay-info">
 	<span class="essay-author">Jelmer Vos</span>
-	<span class="essay-location">(Emory University)</span>, <span class="essay-date">2007</span>
+	<span class="essay-location">({% trans "Emory University" %})</span>, <span class="essay-date">2007</span>
 </div>
 
 <p>
-	The Voyages Database has the potential to be of value to those
+	{% blocktrans %}The Voyages Database has the potential to be of value to those
 	interested in current affairs, as well as to scholars involved in
 	strictly academic research. One area where the database can be
 	useful is the debate over the payment of reparations, monetary
@@ -20,11 +23,11 @@
 	the slave trade. Employing some of the database’s basic variables,
 	we can see how the database can be used effectively in applied
 	history, a joint endeavor in which historians collaborate to
-	answer questions raised by other professionals.
+	answer questions raised by other professionals.{% endblocktrans %}
 </p>
 
 <p>
-	In 2005-2006, at the direction of LaSalle Bank Corporation,
+	{% blocktrans %}In 2005-2006, at the direction of LaSalle Bank Corporation,
 	at the time the U.S. subsidiary of ABN AMRO, History Associates
 	Incorporated conducted a study of the Dutch bank’s predecessors to
 	determine historical connections to African slavery in the United
@@ -32,16 +35,16 @@
 	research, the Voyages Database substantiated
 	evidence that some of the bank’s predecessors provided insurance
 	for slaving voyages, purchased interest in slaving voyages, or
-	supplied credit to clients participating in the slave trade.
+	supplied credit to clients participating in the slave trade.{% endblocktrans %}
 </p>
 
 <p>
-	Logbooks at the Rotterdam municipal archives indicate
+	{% blocktrans %}Logbooks at the Rotterdam municipal archives indicate
 	that the Rotterdam banking firm of Chabot brokered insurance on
 	cargo carried by the ship <span class="italic">Vrouw Maria Isabella</span>, commanded by
 	Carsten Edebool, in 1774. The database confirmed that this vessel
 	set out on a slaving voyage to Africa and Surinam (<a
-	href="{% url voyage:voyage %}?voyageId=10830">Voyage ID 10830</a>).
+	href="{{ voyage_voyage_url }}?voyageId=10830">Voyage ID 10830</a>).
 	Moreover, comparing entries from the account books of the Mallet
 	brothers with vessel names in the database, it was found that
 	this French firm held interests in several vessels connected
@@ -62,17 +65,17 @@
 	André negotiated a loan of FF 15,000 with Vasse-Mancel
 	from Le Havre, who five years later organized a
 	slaving voyage to Senegal
-	(<a	href="{% url voyage:voyage %}?voyageId=34411">Voyage ID 34411</a>),
+	(<a	href="{{ voyage_voyage_url }}?voyageId=34411">Voyage ID 34411</a>),
 	while in 1823 they arranged payments on behalf of Philippon and Company
 	from Le Havre for purchases in Liverpool for a slaving voyage to
-	Brazil (<a href="{% url voyage:voyage %}?voyageId=34376">Voyage
-	ID 34376</a>).
+	Brazil (<a href="{{ voyage_voyage_url }}?voyageId=34376">Voyage
+	ID 34376</a>).{% endblocktrans %}
 </p>
 
 <p>
-	The study by History Associates made use of only three basic variables
+	{% blocktrans %}The study by History Associates made use of only three basic variables
 	in the Voyages Database: vessel, captain, and owner names. Nevertheless,
 	the database confirmed that important connections existed between the
 	European world of high finance and the trans-Atlantic slave trade in
-	the eighteenth and early nineteenth centuries.
+	the eighteenth and early nineteenth centuries.{% endblocktrans %}
 </p>

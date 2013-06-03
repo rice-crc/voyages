@@ -1,31 +1,35 @@
+{% load i18n %}
 
-<h2>Introduction</h2>
+<h2>{% trans "Introduction" %}</h2>
+
+{% url voyage:search as voyage_search_url %}
+{% url resources:images-detail as resources_images-detail %}
 
 <p>
-	The trans-Atlantic slave trade brings to mind images of
+	{% blocktrans %}The trans-Atlantic slave trade brings to mind images of
 	haphazard, disorganized plunder that randomly scattered about
 	eleven million African people throughout the Americas. When one
 	examines information contained in the
-	<a href="{% url voyage:search %}">Voyages Database</a>, however, one
+	<a href="{{ voyage_search_url }}">Voyages Database</a>, however, one
 	detects patterns in this forced diaspora. Many vessels sailing
 	under Portuguese flag, for example, transported enslaved Africans
 	from West-Central Africa to Brazil; many Dutch ships sailed from
 	the Gold Coast to Surinam. Colonial power and mercantilism provide
 	one reason to explain these trans-Atlantic routes made by slaving
 	vessels. Portugal controlled coastal territories in Angola, such as
-	the ports <a href="{% url resources:images-detail %}?image=luanda">Luanda</a>
-	and <a href="{% url resources:images-detail %}?image=benguela">Benguela</a>,
+	the ports <a href="{{ resources_images-detail }}?image=luanda">Luanda</a>
+	and <a href="{{ resources_images-detail }}?image=benguela">Benguela</a>,
 	and shipped enslaved Africans from these sites across the South
 	Atlantic to their colonial cities in Brazil. The Dutch controlled
 	the Gold Coast fort
-	<a href="{% url resources:images-detail %}?image=elmina">Elmina</a>
+	<a href="{{ resources_images-detail }}?image=elmina">Elmina</a>
 	and ordered their captains to proceed with slaves to their South
 	American colony Surinam. Portuguese and Dutch laws restricted their
-	slave trades to national carriers.
+	slave trades to national carriers.{% endblocktrans %}
 </p>
 
 <p>
-	The <a href="{% url voyage:search %}">Voyages Database</a>
+	{% blocktrans %}The <a href="{{ voyage_search_url }}">Voyages Database</a>
 	also reveals that in all markets on the African coast, more slaves
 	were embarked on board ship during some months than others.
 	Similarly, in all markets in the Americas, more Africans, year after
@@ -40,11 +44,11 @@
 	seasonal demands for agriculturalists. The trans-Atlantic slave
 	trade reconciled supply and demand for agricultural labor when
 	captains transferred farmers from “in crop” seasons in Africa to
-	“in crop” seasons in the Americas.
+	“in crop” seasons in the Americas.{% endblocktrans %}
 </p>
 
 <p>
-	In shifting captives between Old and New World ecological
+	{% blocktrans %}In shifting captives between Old and New World ecological
 	zones, captains created systematic trans-Atlantic patterns when
 	African and American crop cycles differed by the time needed to
 	sail the Middle Passage. In Africa, the numbers of slaves embarked
@@ -60,5 +64,5 @@
 	whose cash crop harvests seasons took place 1-3 months after
 	harvest cycles in Africa. Those captains who linked Old and New
 	World food-production cycles sailed along regular trans-Atlantic
-	pathways and synchronized agricultural calendars.
+	pathways and synchronized agricultural calendars.{% endblocktrans %}
 </p>

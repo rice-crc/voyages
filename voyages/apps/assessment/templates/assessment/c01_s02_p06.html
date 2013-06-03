@@ -1,7 +1,11 @@
-<h2>Provisioning-slaving seasons</h2>
+{% load i18n %}
+
+<h2>{% trans "Provisioning-slaving seasons" %}</h2>
+{% url voyage:search as voyage_search_url %}
+{% url voyage:voyage as voyage_voyage_url %}
 
 <p>
-	Seasonality in Atlantic slaving markets linked closely to
+	{% blocktrans %}Seasonality in Atlantic slaving markets linked closely to
 	food supplies, since merchants, whether African, European, or
 	American, would not purchase large numbers of people they could not
 	keep alive. There were distinct provisioning-slaving seasons in
@@ -13,11 +17,11 @@
 	increased during and after dry season harvests. After crops were
 	harvested and stored, African merchants sold enslaved farmers and
 	provisions to coastal middlemen who, in turn, sold these captives
-	to ship captains.
+	to ship captains.{% endblocktrans %}
 </p>
 
 <p>
-	In Africa, Upper Guinea (from Senegal to the Ivory Coast)
+	{% blocktrans %}In Africa, Upper Guinea (from Senegal to the Ivory Coast)
 	and the Bight of Biafra had marked provisioning-slaving seasons. In
 	Senegal and Gambia, millet stocks increased in March-May before the
 	summer rains. May-July was correspondingly the greatest quarter in
@@ -26,7 +30,7 @@
 	the rice-slave season began in November and supplies of food and
 	people began to dwindle in late April. In spring 1751, south of
 	Sierra Leone, Liverpool captain John Newton <a
-	href="{% url voyage:voyage %}?voyageId=90350">VoyageID 90350</a>,
+	href="{{ voyage_voyage_url }}?voyageId=90350">VoyageID 90350</a>,
 	the author of “Amazing Grace,” purchased late-season rice and
 	slaves. He remarked on April 30th in his logbook, held today at the
 	National Maritime Museum (UK), “the season is so far advanced.”
@@ -42,11 +46,11 @@
 	seasons along the West-Central African coast. With few foodstuffs
 	available for export overseas, the link between harvest cycles and
 	slave supplies is weakest in the South Atlantic African slaving
-	markets.
+	markets.{% endblocktrans %}
 </p>
 
 <p>
-	The timing of dry season grain and cash crop harvests
+	{% blocktrans %}The timing of dry season grain and cash crop harvests
 	regulated the New World demand for enslaved African labor. The
 	sugar producing West Indies and Guianas imported more slaves during
 	the December-May corn and cane harvests. In Brazilian
@@ -64,5 +68,5 @@
 	provided food stocks to sustain workers forced to produce the
 	annual tobacco crop. In the rice-growing Carolina/Georgia
 	Lowcountry, Surinam, and Maranhão, planters purchased twice as many
-	workers during the four in-crop months.
+	workers during the four in-crop months.{% endblocktrans %}
 </p>
