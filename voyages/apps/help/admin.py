@@ -19,5 +19,5 @@ class FaqAdmin(admin.ModelAdmin):
     search_fields = ('question', 'answer',)
 
 admin.site.register(Glossary, GlossaryAdmin)
-admin.site.register(FaqCategory, FaqCategoryAdmin)
-admin.site.register(Faq, FaqAdmin)
+#admin.site.register(FaqCategory, FaqCategoryAdmin)
+#admin.site.register(Faq, FaqAdmin)
