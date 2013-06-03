@@ -1,15 +1,18 @@
 {% extends "about/aboutbase.html" %}
+{% load i18n %} 
 
-{% block title %}Contributors of data{% endblock %}
+<!-- Corresponds to the About: Contributors of data -->
+
+{% block title %}{% trans "Contributors of data" %}{% endblock %}
 
 {% block center-content %}
 
-<h1>Contributors of data</h1>
+<h1>{% trans "Contributors of data" %}</h1>
 
 <p>
-	The following have added data to the Voyages Database since the
+	{% blocktrans %}The following have added data to the Voyages Database since the
 	publication of the 1999 CD-ROM, <em>The Trans-Atlantic Slave Trade: A
-	Database on CD-ROM:</em>
+	Database on CD-ROM:</em>{% endblocktrans %}
 </p>
 
 <ul>
@@ -187,4 +190,3 @@
 </ul>
 
 {% endblock %}
-

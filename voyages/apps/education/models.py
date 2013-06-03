@@ -4,13 +4,13 @@ from django.utils.translation import ugettext as _
 
 # Left menu item
 class LessonPlan(models.Model):
-    text = models.CharField(('Title'),max_length=100)
-    author = models.CharField(('Author'),max_length=50)
-    grade_level = models.CharField(('Grade Level'),max_length=50)
-    course = models.CharField(('Course'),max_length=50)
-    key_words = models.CharField(('Key Words'),max_length=200)
+    text = models.CharField(_('Title'),max_length=100)
+    author = models.CharField(_('Author'),max_length=50)
+    grade_level = models.CharField(_('Grade Level'),max_length=50)
+    course = models.CharField(_('Course'),max_length=50)
+    key_words = models.CharField(_('Key Words'),max_length=200)
     
-    abstract = models.TextField(('Abstract'),max_length=1000)
+    abstract = models.TextField(_('Abstract'),max_length=1000)
     
     order = models.IntegerField()
     
@@ -21,13 +21,13 @@ class LessonPlan(models.Model):
        return self.text
 
 class LessonStandardType(models.Model):
-    type = models.CharField(('Standard Type'),max_length=100)
+    type = models.CharField(_('Standard Type'),max_length=100)
     def __unicode__(self):
        return self.type
 
 class LessonStandard(models.Model):
     type = models.ForeignKey(LessonStandardType)
-    text = models.CharField(('Text'),max_length=100)
+    text = models.CharField(_('Text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
     def __unicode__(self):
        return self.text

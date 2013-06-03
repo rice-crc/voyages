@@ -1,6 +1,9 @@
 {% extends "about/aboutbase.html" %}
+{% load i18n %} 
 
-{% block title %}Contact Us{% endblock %}
+<!-- About Page -->
+
+{% block title %}{% trans "Contact Us" %}{% endblock %}
 
 {% block pagecsslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-team.css">
@@ -9,13 +12,13 @@
 
 {% block center-content %}
 
-<h1>Contact Us</h1>
+<h1>{% trans "Contact Us" }</h1>
 
 <ul id="team">
 
 	<li>
 		<div class="group">
-			VOYAGES EDITORIAL BOARD
+			{% trans "VOYAGES EDITORIAL BOARD" %}
 		</div>
 		<ul>
 			<li>
@@ -69,12 +72,12 @@
 
 	<li>
 		<div class="group">
-			Questions or Comments
+			{% trans "Questions or Comments" %}
 		</div>
 		<p>
-			Please address all questions and comments regarding the content,
+			{% blocktrans %}Please address all questions and comments regarding the content,
 			appearance, and functioning of this website as well as questions about contributing new
-			data to <a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;"> &#118;&#111;&#121;&#97;&#103;&#101;s&#64;&#101;mo&#114;y&#46;&#101;&#100;&#117;</a>.
+			data to {% endblocktrans %}<a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;"> &#118;&#111;&#121;&#97;&#103;&#101;s&#64;&#101;mo&#114;y&#46;&#101;&#100;&#117;</a>.
 		</p>
 
 	</li>

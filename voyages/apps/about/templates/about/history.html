@@ -1,11 +1,15 @@
 {% extends "about/aboutbase.html" %}
+{% load i18n %} 
 
-{% block title %}History{% endblock %}
+<!-- Corresponds to the About: History page -->
+
+{% block title %}{% trans "History" %}{% endblock %}
 
 {% block center-content %}
 
-<h1>History of the Project</h1>
+<h1>{% trans "History of the Project" %}</h1>
 
+{% blocktrans %}
 <p>
 	A glance at the Sources section of “Understanding the Database” establishes Voyages as the product
 	of an international research endeavor that has ranged far beyond the labors of the current project team.
@@ -83,12 +87,14 @@
 	think of any international project of preserving and reconstructing history which has depended more on collaboration than Voyages
 	has. It is even harder to think of one that provides a better basis for such collaboration to continue into the future.
 </p>
+{% endblocktrans %}
+
 
 <div style="border-top: 1px solid #CCCCCC;">
 	<p>
-		1 Franz Binder, Ernst van den Boogart, Henk den Heijer and Johannes Postma, James Pritchard, Andrea Weindl,
+		{% blocktrans %}1 Franz Binder, Ernst van den Boogart, Henk den Heijer and Johannes Postma, James Pritchard, Andrea Weindl,
 		Antonio de Almeida Mendes, Manuel Barcia Paz, Alexandre Ribeiro, David Wheat and José Capela were among those
-		making major contributions from data collected for their own research.
+		making major contributions from data collected for their own research.{% endblocktrans %}
 	</p>
 </div>
 

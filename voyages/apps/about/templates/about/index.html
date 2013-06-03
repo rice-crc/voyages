@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load i18n %} 
 
-{% block title %}Assessing the Slave Trade {% endblock %}
+{% block title %}{% trans "Assessing the Slave Trade" %}{% endblock %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
@@ -12,11 +13,11 @@
 <div id="index-intro-band">
 
 	<div id="index-intro-title">
-		About the Project
+		{% trans "About the Project" %}
 	</div>
 
 	<div id="index-intro-text">
-		The Trans-Atlantic Slave Trade
+		{% blocktrans %}The Trans-Atlantic Slave Trade
 		Database is the culmination of several decades of independent and
 		collaborative research by scholars drawing upon data in libraries and
 		archives around the Atlantic world. The Voyages website itself is the
@@ -26,7 +27,7 @@
 		of the slave trade from universities in Europe, Africa, South America,
 		and North America. The National Endowment for the Humanities is the
 		principal sponsor of the project, and it is an Emory University
-		Digital Library Research Initiative.
+		Digital Library Research Initiative.{% endblocktrans %}
 	</div>
 
 </div>
@@ -34,14 +35,13 @@
 <div id="section-titles">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="section-title"><a href="{% url about:history %}">History</a></td>
-			<td class="section-title"><a href="{% url about:team %}">Project Team</a></td>
-			<td class="section-title"><a href="{% url about:data %}">Contributors of data</a></td>
-			<td class="section-title"><a href="{% url about:acknowledgements %}">Acknowledge-
-			<br>
-			ments</a></td>
-			<td class="section-title"><a href="{% url about:origins %}">African Origins Project</a></td>
-			<td class="section-title"><a href="{% url about:contacts %}">Contact us</a></td>
+			<td class="section-title"><a href="{% url about:history %}">{% trans "History" %}</a></td>
+			<td class="section-title"><a href="{% url about:team %}">{% trans "Project Team" %}</a></td>
+			<td class="section-title"><a href="{% url about:data %}">{% trans "Contributors of data" %}</a></td>
+			<td class="section-title"><a href="{% url about:acknowledgements %}">{% blocktrans %}Acknowledge-
+			ments{% endblocktrans %}</a></td>
+			<td class="section-title"><a href="{% url about:origins %}">{% trans "African Origins Project" %}</a></td>
+			<td class="section-title"><a href="{% url about:contacts %}">{% trans "Contact us" %}</a></td>
 		</tr>
 	</table>
 </div>
@@ -50,31 +50,31 @@
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 
-			<td class="section-desc">A brief account of the origins of a
+			<td class="section-desc">{% blocktrans %}A brief account of the origins of a
 			single multi-source dataset of the trans-Atlantic slave trade and
 			its realization first as a CD-ROM published by Cambridge University
 			Press in 1999 and now, in an expanded version, on the Voyages
-			website.</td>
+			website.{% endblocktrans %}</td>
 
-			<td class="section-desc">Names of the principal investigators,
+			<td class="section-desc">{% blocktrans %}Names of the principal investigators,
 			of members of the project development team, and of individuals
-			serving on the steering committee and advisory board.</td>
+			serving on the steering committee and advisory board.{% endblocktrans %}</td>
 
-			<td class="section-desc">Names of scholars and researchers
+			<td class="section-desc">{% blocktrans %}Names of scholars and researchers
 			whose findings on the trans-Atlantic slave trade have been
-			incorporated into the Voyages Database.</td>
+			incorporated into the Voyages Database.{% endblocktrans %}</td>
 
-			<td class="section-desc">Major sponsors and institutional
+			<td class="section-desc">{% blocktrans %}Major sponsors and institutional
 			partners of the Voyages website, as well as other organizations and
-			individuals who have assisted the work of the project team.</td>
+			individuals who have assisted the work of the project team.{% endblocktrans %}</td>
 
-			<td class="section-desc">A scholar-public collaborative project
+			<td class="section-desc">{% blocktrans %}A scholar-public collaborative project
 			using audio recordings of names in African Names Database to trace
 			the geographic origins of Africans transported in the transatlantic
-			slave trade.</td>
+			slave trade.{% endblocktrans %}</td>
 
-			<td class="section-desc">Members of the Voyages editorial board
-			and the email address for contacting the website.</td>
+			<td class="section-desc">{% blocktrans %}Members of the Voyages editorial board
+			and the email address for contacting the website.{% endblocktrans %}</td>
 
 		</tr>
 	</table>

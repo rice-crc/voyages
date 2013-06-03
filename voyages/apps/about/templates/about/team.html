@@ -1,26 +1,29 @@
 {% extends "about/aboutbase.html" %}
+{% load i18n %}
 
-{% block title %}Project Team{% endblock %}
+<!-- Corresponds to the About: Project Team page-->
+
+{% block title %}{% trans "Project Team" %}{% endblock %}
 
 {% block pagecsslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-team.css">
 {% endblock %}
 
 {% block center-content %}
-<h1>Project Team</h1>
+<h1>{% trans "Project Team" %}</h1>
 
 <p>
-	Many people contributed to the creation and implementation
+	{% blocktrans %}Many people contributed to the creation and implementation
 	of this site. They include the following (unless otherwise
 	indicated, Project Development Team members were affiliated with
-	Emory University):
+	Emory University):{% endblocktrans %}
 </p>
 
 <ul id="team">
 
 	<li>
 		<div class="group">
-			NEH GRANT PRINCIPAL INVESTIGATORS
+			{% trans "NEH GRANT PRINCIPAL INVESTIGATORS" %}
 		</div>
 		<ul>
 			<li>
@@ -36,7 +39,7 @@
 
 	<li>
 		<div class="group">
-			DEVELOPMENT TEAM
+			{% trans "DEVELOPMENT TEAM" %}
 		</div>
 		<ul>
 			<li>
@@ -157,7 +160,7 @@
 
 	<li>
 		<div class="group">
-			STEERING COMMITTEE
+			{% trans "STEERING COMMITTEE" %}
 		</div>
 		<ul>
 			<li>
@@ -177,7 +180,7 @@
 
 	<li>
 		<div class="group">
-			ADVISORY BOARD
+			{% trans "ADVISORY BOARD" %}
 		</div>
 		<ul>
 			<li>
