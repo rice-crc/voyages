@@ -1,5 +1,9 @@
+{% load i18n %}
+
+<!-- The legal section of the site -->
+
 <p>
-	Items on the <em>Voyages</em> website may be protected by the U.S.
+	{% blocktrans %}Items on the <em>Voyages</em> website may be protected by the U.S.
 	Copyright Law (Title 17, U.S.C.). Transmission or reproduction of
 	copyrighted items beyond that allowed by fair use requires the
 	written permission of the copyright owners. Some items may also be
@@ -12,13 +16,13 @@
 	assessment of fair use rights in light of intended use. Please
 	contact the <em>Voyages</em> website administrator with any questions about
 	the copyright status and any restrictions on the use of particular
-	images or texts.
+	images or texts.{% endblocktrans %}
 </p>
 
-<h2>Conditions of Use</h2>
+<h2>{% trans "Conditions of Use" %}</h2>
 
 <p>
-	The <em>Voyages</em> website is Open Access, which means the contents of
+	{% blocktrans %}The <em>Voyages</em> website is Open Access, which means the contents of
 	this website are made freely available for individual private
 	study, scholarship and research, and educational purposes. This also
 	means a signed license agreement is not
@@ -30,11 +34,11 @@
 	or implied endorsement of any good or service provided on the
 	external site and that the link is presented in a manner that
 	clearly indicates that the user is leaving one site and accessing
-	another.
+	another.{% endblocktrans %}
 </p>
 
 <p>
-	Emory University and the <em>Voyages</em> project team have posted
+	{% blocktrans %}Emory University and the <em>Voyages</em> project team have posted
 	the material on this website in an effort to make meaningful
 	information widely available, free of charge for personal or
 	research purposes, in a manner that they believe is consistent with
@@ -44,11 +48,11 @@
 	this material from any individual or group that may own rights
 	therein. Please contact the <em>Voyages</em> website administrator if you
 	have an interest in these materials and have any objection or
-	concern with respect to the posting of them.
+	concern with respect to the posting of them.{% endblocktrans %}
 </p>
 
 <p>
-	An <a href="http://creativecommons.org/licenses/by-nc/3.0/" target="_blank">Attribution-Non-Commercial
+	{% blocktrans %}An <a href="http://creativecommons.org/licenses/by-nc/3.0/" target="_blank">Attribution-Non-Commercial
 	Creative Commons license</a> provides for non-commercial use and
 	re-distribution of items and information on the <em>Voyages</em> website
 	that may be considered the intellectual property of Emory
@@ -56,13 +60,13 @@
 	written permission of Emory University as well as any owners of
 	rights in the materials, if applicable. Regarding such permission,
 	please contact the <em>Voyages</em> website administrator for additional
-	information.
+	information.{% endblocktrans %}
 </p>
 
-<h2>Permissions to Reproduce</h2>
+<h2>{% trans "Permissions to Reproduce" %}</h2>
 
 <p>
-	The materials on this site come from a variety of
+	{% blocktrans %}The materials on this site come from a variety of
 	repositories and private collections. The low-resolution images
 	available on the website are suitable for immediate printing or
 	downloading to provide good-quality reference copies for a wide
@@ -74,37 +78,37 @@
 	<a href="http://marbl.library.emory.edu/reproduction-options.html" target="_blank">Manuscripts, Archives, and Rare Book Library</a>.
 	In many cases, copies of images from external
 	repositories and collections are also available, but must be
-	obtained from those repositories and collections directly.
+	obtained from those repositories and collections directly.{% endblocktrans %}
 </p>
 
 <p>
-	The following chart offers a limited guide to the types of
+	{% blocktrans %}The following chart offers a limited guide to the types of
 	intellectual content found on this site and whose permission may
 	need to be sought in order to reuse or republish these items in
-	another context.
+	another context.{% endblocktrans %}
 </p>
 
 <table border="0" cellspacing="0" cellpadding="0" class="persmissions">
 	<tr>
-		<th>TYPE OF CONTENT</th>
-		<th>USE RESTRICTIONS</th>
-		<th>CITATION EXAMPLE</th>
-		<th>NOTES</th>
+		<th>{% trans "TYPE OF CONTENT" %}</th>
+		<th>{% trans "USE RESTRICTIONS" %}</th>
+		<th>{% trans "CITATION EXAMPLE" %}</th>
+		<th>{% trans "NOTES" %}</th>
 	</tr>
 	<tr>
 		<td class="content">CODE</td>
 		<td class="restrictions"><a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU General Public License, v. 3</a> or later</td>
 		<td class="citations">Not applicable.</td>
-		<td class="notes">Code for this site may be found at <a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>,
+		<td class="notes">{% blocktrans %}Code for this site may be found at <a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>,
 		and is made available to support open
 		source programming efforts. Visit the GNU website for more
-		information on the limits of this license.</td>
+		information on the limits of this license."{% endblocktrans %}</td>
 	</tr>
 	<tr>
 		<td class="content" rowspan="2">DATA</td>
 		<td class="restrictions">
 		<div class="asset">
-			Historical data
+			{% trans "Historical data" %}
 		</div> Public domain (use restrictions do not apply). </td>
 		<td class="citations">
 		<div class="format">
@@ -158,8 +162,8 @@
 		<td class="content" rowspan="2">IMAGES</td>
 		<td class="restrictions">
 		<div class="asset">
-			Digitized objects
-		</div> For permission questions or requests, contact the institution that provided the digital copy and/or holds the original. </td>
+			{% trans "Digitized objects" %}
+		</div> {% trans "For permission questions or requests, contact the institution that provided the digital copy and/or holds the original." %}</td>
 		<td class="citations">
 		<div class="format">
 			<span class="format">Format:</span>
@@ -300,7 +304,7 @@
 <h2>Licenses</h2>
 
 <p>
-	<em>Voyages: The Trans-Atlantic Slave Trade Database</em> by
+	{% blocktrans %}<em>Voyages: The Trans-Atlantic Slave Trade Database</em> by
 	Emory University is licensed under a
 	<a href="http://creativecommons.org/licenses/by-nc/3.0/us/" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>.
 	For permissions beyond the scope of this license, please contact
@@ -308,16 +312,16 @@
 	Please note that this license only applies to intellectual content
 	for which Voyages is the rights holder. See "Permissions to Reproduce" above or contact
 	<a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;">the Voyages website administrator</a>
-	for more information on the types of content on the Voyages site and permissions required for re-use.
+	for more information on the types of content on the Voyages site and permissions required for re-use.{% endblocktrans %}
 </p>
 
 <p>
-	<em>Voyages: The Trans-Atlantic Slave Trade Database</em>
+	{% blocktrans %}<em>Voyages: The Trans-Atlantic Slave Trade Database</em>
 	was constructed using open source software components. In honor of
 	the open source movement which helps make projects such as this
 	possible, and in obligation to its own commitments to its federal
 	sponsor, this site licenses its code through a
 	<a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU General Public License (GPL), version 3</a>
 	or any later version. Open source software components of the Voyages website are freely available through
-	<a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>.
+	<a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>.{% endblocktrans %}
 </p>

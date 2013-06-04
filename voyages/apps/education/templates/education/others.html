@@ -1,6 +1,9 @@
 {% extends "education/educationbase.html" %}
 
-{% block title %}Web Resources{% endblock %}
+<!-- Corresponds to Other Web Resources page -->
+
+{% load i18n %}
+{% block title %}{% trans "Web Resources" %}{% endblock %}
 
 {% block pagecsslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education-links.css">
@@ -8,26 +11,25 @@
 
 {% block center-content %}
 
-<h1>Web Resources</h1>
+<h1>{% trans "Web Resources" %}</h1>
 <p>
-	The websites listed here provide a variety of resources, including but not limited to lesson
-	plans, interactive maps, and narratives of enslaved Africans.
+	{% trans "The websites listed here provide a variety of resources, including but not limited to lesson plans, interactive maps, and narratives of enslaved Africans." %}
 </p>
 
 <a name="hitchcock">&nbsp;</a>
 
 <div class="link-title">
 	<div class="link-main-title">
-		The Atlantic Slave Trade and Slave Life in the Americas: A Visual Record
+		{% trans "The Atlantic Slave Trade and Slave Life in the Americas: A Visual Record" %}
 	</div>
 	<div class="link-sub-title">
-		The Virginia Foundation for the Humanities, the Digital Media Lab at the University of Virginia Library
+		{% trans "The Virginia Foundation for the Humanities, the Digital Media Lab at the University of Virginia Library" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info">Historical images, text</td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Historical images, text" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -39,16 +41,16 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		In Motion: African-American Migration Experience
+		{% trans "In Motion: African-American Migration Experience" %}
 	</div>
 	<div class="link-sub-title">
-		Schomburg Center, New York Public Library
+		{% trans "Schomburg Center, New York Public Library" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info">Narrative, text, images, maps, lesson plans</td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Narrative, text, images, maps, lesson plans" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -60,16 +62,16 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		YES: The Young Epidemiology Scholars Program
+		{% trans "YES: The Young Epidemiology Scholars Program" %}
 	</div>
 	<div class="link-sub-title">
-		College Board
+		{% trans "College Board" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info">Lesson plan on Mortality &amp; Slave Trade</td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Lesson plan on Mortality &amp; Slave Trade" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -81,16 +83,16 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		Thirteen: National Teachers Training Institute
+		{% trans "Thirteen: National Teachers Training Institute" %}
 	</div>
 	<div class="link-sub-title">
-		National Teacher Training Institute
+		{% trans "National Teacher Training Institute" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info">Lesson plan on Triangle Trade &amp; Middle Passage</td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Lesson plan on Triangle Trade &amp; Middle Passage" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -102,13 +104,13 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		National Center for History in the Schools
+		{% trans "National Center for History in the Schools" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info">Preview of unit (five lessons) on Atlantic Slave Trade</td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Preview of unit (five lessons) on Atlantic Slave Trade" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -122,13 +124,13 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		Understanding Slavery
+		{% trans "Understanding Slavery" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info"> Lesson and activities, visual materials, and background information </td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "Lesson and activities, visual materials, and background information" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -140,7 +142,7 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		Abolition of the Slave Trade
+		{% trans "Abolition of the Slave Trade" %}
 	</div>
 	<div class="link-sub-title">
 		BBC
@@ -148,8 +150,8 @@
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info"> Interactive materials, articles and videoclips </td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info"> {% trans "Interactive materials, articles and videoclips" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -161,16 +163,15 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		Comité de Liaison et d'Application des Sources Historiques
+		{% trans "Comité de Liaison et d'Application des Sources Historiques" %}
 		<br />
-		(Mémoire St Barth | Histoire de Saint-Barthélemy)
+		{% trans "(Mémoire St Barth | Histoire de Saint-Barthélemy)" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info"> Resources dedicated to the history of Saint-Barthelemy (FWI) :
-		slave trade, slavery, their abolition and impact on this island of the Lesser Antilles </td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info"> {% trans "Resources dedicated to the history of Saint-Barthelemy (FWI) : slave trade, slavery, their abolition and impact on this island of the Lesser Antilles" %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>
@@ -182,14 +183,13 @@
 
 <div class="link-title">
 	<div class="link-main-title">
-		Les Anneaux de la Mémoire: Alliance Internationale
+		{% trans "Les Anneaux de la Mémoire: Alliance Internationale" %}
 	</div>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" class="link-info">
 	<tr>
-		<td class="link-info-label">Content</td>
-		<td class="link-info"> A range of interactive resources and materials pertaining to the history of slavery
-		and the slave trade mainly in the francophone world. </td>
+		<td class="link-info-label">{% trans "Content" %}</td>
+		<td class="link-info">{% trans "A range of interactive resources and materials pertaining to the history of slavery and the slave trade mainly in the francophone world." %}</td>
 	</tr>
 	<tr>
 		<td class="link-info-label">WWW address</td>

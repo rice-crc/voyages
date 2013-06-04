@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Assessing the Slave Trade {% endblock %}
+<!-- The landing page of the Education section -->
+{% load i18n %}
+{% block title %}{% trans "Educational Materials" %}{% endblock %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
@@ -12,11 +14,11 @@
 <div id="index-intro-band">
 
 	<div id="index-intro-title">
-		Educational Materials
+		{% trans "Educational Materials" %}
 	</div>
 
 	<div id="index-intro-text">
-		One of the goals of the
+		{% blocktrans %}One of the goals of the
 		Trans-Atlantic Slave Trade Database has been to bring the work of
 		historians to a primary and secondary school audience, allowing
 		students to engage in the process of historical inquiry. To that end,
@@ -28,7 +30,7 @@
 		in the Schools), and Geography (National Council Geography Education).
 		Relevant lesson plans and educational resources located on other
 		websites have also been identified, to help educators build a broad
-		study of the trans-Atlantic slave trade into their curriculum.
+		study of the trans-Atlantic slave trade into their curriculum.{% endblocktrans %}
 	</div>
 
 </div>
@@ -36,8 +38,8 @@
 <div id="section-titles">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="section-title"><a href="{% url education:lesson-plans %}">Lesson Plans</a></td>
-			<td class="section-title"><a href="{% url education:others %}">Web Resources</a></td>
+			<td class="section-title"><a href="{% url education:lesson-plans %}">{% trans "Lesson Plans" %}</a></td>
+			<td class="section-title"><a href="{% url education:others %}">{% trans "Web Resources" %}</a></td>
 		</tr>
 	</table>
 </div>
@@ -46,7 +48,7 @@
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 
-			<td class="section-desc">In order to present the Trans-Atlantic
+			<td class="section-desc">{% blocktrans %}In order to present the Trans-Atlantic
 			Slave Trade Database to a broader audience, particularly a 6-12
 			grade audience, a dedicated team of teachers and curriculum
 			developers from around the United States developed lesson plans that
@@ -58,11 +60,11 @@
 			(National Council for the Social Studies), and geography (National
 			Council for Geography Education) and range in both their grade
 			levels and activities. The lessons also suggest readings for more
-			information about the Slave Trade.</td>
+			information about the Slave Trade.{% endblocktrans %}</td>
 
-			<td class="section-desc">The websites listed here provide a
+			<td class="section-desc">{% blocktrans %}The websites listed here provide a
 			variety of resources, including but not limited to lesson plans,
-			interactive maps, and narratives of enslaved Africans.</td>
+			interactive maps, and narratives of enslaved Africans.{% endblocktrans %}</td>
 
 		</tr>
 	</table>

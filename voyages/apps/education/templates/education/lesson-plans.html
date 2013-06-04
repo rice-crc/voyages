@@ -1,7 +1,9 @@
 {% extends "education/educationbase.html" %}
-{% load i18n %}
 
-{% block title %}Lesson Plans{% endblock %}
+<!-- Display lesson plan items from the database -->
+
+{% load i18n %}
+{% block title %}{% trans "Lesson Plans" %}{% endblock %}
 
 {% block pagecsslist %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" />
@@ -9,22 +11,22 @@
 
 {% block center-content %}
 
-<h1>{% trans 'Lesson plans' %}</h1>
+<h1>{% trans "Lesson Plans" %}</h1>
 
 <p>
-	In order to present the trans-Atlantic slave trade database to a broader audience, particularly
+	{% blocktrans %}In order to present the trans-Atlantic slave trade database to a broader audience, particularly
 	a grade 6-12 audience, a dedicated team of teachers and curriculum developers from around the United
 	States developed lesson plans that explore the database.  Utilizing the various resources of the website,
 	these lessons plans allow students to engage the history and legacy of the Atlantic slave trade in diverse
 	and meaningful ways.  The lessons are all aligned with national standards in history (National Center for
 	History in the Schools), social studies (National Council for the Social Studies), and geography (National
 	Council for Geography Education) and range in both their grade levels and activities. The lessons also
-	suggest readings for more information about the Slave Trade.
+	suggest readings for more information about the Slave Trade.{% endblocktrans %}
 </p>
 
 <p>
-	These materials were created for purposes of curriculum and instruction and are not intended for commercial
-	republication. Please contact individual authors for additional permissions.
+	{% blocktrans %}These materials were created for purposes of curriculum and instruction and are not intended for commercial
+	republication. Please contact individual authors for additional permissions.{% endblocktrans %}
 </p>
 
 {% if lesson_plans %}
@@ -36,9 +38,9 @@
 		{% for download_item in lesson_item.download %}
 			<span class="download">
 				{% if "ppt" in download_item.file.name  %}
-				(<a href="{{ download_item.file.url }}">Download Presentation</a>, PPT, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT, 
 				{% else %}
-				(<a href="{{ download_item.file.url }}">Download</a>, PDF, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF, 
 				{% endif %}
 				
 				{{ download_item.file.size|filesizeformat }})
@@ -49,19 +51,19 @@
 	
 	<div  class="lesson-plan-detail">
 		<div class="lesson-plan-author">
-			Author: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author }}</span>
+			{% trans "Author" %}: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author }}</span>
 		</div>
 		<div class="lesson-plan-grade-level">
-			Grade Level: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level }}</span>
+			{% trans "Grade Level" %}: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level }}</span>
 		</div>
 		<div class="lesson-plan-course">
-			Course: <span class="lesson-plan-course">{{ lesson_item.lesson.course }}</span>
+			{% trans "Course" %}: <span class="lesson-plan-course">{{ lesson_item.lesson.course }}</span>
 		</div>
 		<div class="lesson-plan-keywords">
-			Key Words:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words }}</span>
+			{% trans "Key Words" %}:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words }}</span>
 		</div>
 		<div class="lesson-plan-standards-title">
-			Standards
+			{% trans "Standards" %}
 		</div>
 		
 		{% if lesson_item.standard %}
@@ -79,7 +81,7 @@
 		</ul>
 		{% endif %}
 		<div class="lesson-plan-abstract-title">
-			Abstract
+			{% trans "Abstract" %}
 		</div>
 		<div class="lesson-plan-abstract">
 			{{ lesson_item.lesson.abstract }}
@@ -89,4 +91,3 @@
 {% endif %}
 
 {% endblock %}
-

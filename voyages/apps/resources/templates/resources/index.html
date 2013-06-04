@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Resources {% endblock %}
+<!-- Corresponds to the landing page of the Resources section -->
+{% load i18n %}
+
+{% block title %}{% trans "Resources" %}{% endblock %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
@@ -12,14 +15,14 @@
 <div id="index-intro-band">
 
 	<div id="index-intro-title">
-		Resources
+		{% trans "Resources" %}
 	</div>
 
 	<div id="index-intro-text">
-		This section of the Voyages website provides resources for putting
+		{% blocktrans %}This section of the Voyages website provides resources for putting
 		information in the databases into historical context.  The materials presently consist of a
 		database of images contemporary to the slave trade and a database of names of Africans rescued
-		from slave vessels in the nineteenth century, during the period of suppression.
+		from slave vessels in the nineteenth century, during the period of suppression.{% endblocktrans %}
 	</div>
 
 </div>
@@ -27,8 +30,8 @@
 <div id="section-titles">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="section-title"><a href="{% url resources:images %}">Images</a></td>
-			<td class="section-title"><a href="{% url resources:origins %}">African Names Database</a></td>
+			<td class="section-title"><a href="{% url resources:images %}">{% trans "Images" %}</a></td>
+			<td class="section-title"><a href="{% url resources:origins %}">{% trans "African Names Database" %}</a></td>
 		</tr>
 	</table>
 </div>
@@ -37,13 +40,13 @@
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 
-			<td class="section-desc">Representations of the trans-Atlantic slave trade,
+			<td class="section-desc">{% blocktrans %}Representations of the trans-Atlantic slave trade,
 			an activity that lasted for centuries, changed over time. With permission
 			from various archives and libraries, selected images enable one to picture
 			people, places, artifacts and vessels of the slave trade era.  Links are
-			provided to relevant voyages in the Voyages Database.</td>
+			provided to relevant voyages in the Voyages Database.{% endblocktrans %}</td>
 
-			<td class="section-desc">During the last 60 years of the
+			<td class="section-desc">{% blocktrans %}During the last 60 years of the
                 trans-Atlantic slave trade, courts around the Atlantic
                 basins condemned over two thousand vessels for engaging
                 in the traffic and recorded the details of captives found
@@ -57,7 +60,7 @@
                 Africans were rescued, as well as to the African
                 Origins site where users can hear the names
                 pronounced and help us identify the languages
-                in which they think the names are used.</td>
+                in which they think the names are used.{% endblocktrans %}</td>
 
 		</tr>
 	</table>
