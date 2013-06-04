@@ -1,7 +1,7 @@
-
-<h2>Cases and Variables</h2>
+{% load i18n %}
+<h2>{% trans "Cases and Variables" %}</h2>
 <p>
-	New material tends to raise the question of the appropriateness of the variables used. The selection offered here has changed
+	{% blocktrans %}New material tends to raise the question of the appropriateness of the variables used. The selection offered here has changed
 	several times in the last six years and will no doubt change again in the future as interests shift. Each entry in our data set
 	is a single voyage, assigned a unique identification number as the first of piece of information (VOYAGEID). The question of
 	what voyages to include is also to some extent arbitrary. The term "trans-Atlantic" is less straightforward than it appears.
@@ -22,16 +22,16 @@
 	variable and the day, month, year values are also combined into one variable for each of the ten dates entered. The names of captives,
 	names of Caribbean agents, names of crew other than captain, the details of shipboard insurrection, and much other information are not
 	included in the present data set, but may be added fairly easily or linked with it via the unique voyage identification number and
-	compares version 2008 of the database with version 2010..
+	compares version 2008 of the database with version 2010.{% endblocktrans %}
 </p>
 
 <p>
-	The database contains two broad types of variables: data variables and imputed variables. The largest group, 44 of those in the
+	{% blocktrans %}The database contains two broad types of variables: data variables and imputed variables. The largest group, 44 of those in the
 	search interface, are data variables. They incorporate information collected from the sources. Imputed variables, indicated by an
 	asterisk, are mainly imputed from knowledge of the relevant voyage or adjacent voyages, calculated directly from data encountered
 	in archival or published sources, or inferred from patterns observed in data variables when not documented directly in primary
 	sources.  An example of an imputed variable is the “Region of Slave Disembarkation Broadly Defined,” a variable that allows one to
 	group voyages to Jamaica or Cuba or St. Domingue into the broadly defined region “Caribbean.” In augmenting the number of voyages
 	on which analysis can be conducted, the imputed variables produce more statistically significant results in using the options in
-	the “Search the database” interface to create tables and custom graphs. They form the basis of the tables and graphs that users can build.
+	the “Search the database” interface to create tables and custom graphs. They form the basis of the tables and graphs that users can build.{% endblocktrans %}
 </p>

@@ -9,6 +9,18 @@ from os import listdir
 from .forms import UploadFileForm
 
 def get_page(request, chapternum, sectionnum, pagenum):
+    """
+    Voyage Understanding the Database part
+    
+    Display an html page corresponding to the chapter-section-page passed in
+    ** Context **
+    ``RequestContext``
+    
+    ** Basic template that will be rendered **
+    :template:`voyage/c01_s02_generic.html`
+    
+    Further content is rendered using the pagepath parameter 
+    """
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "voyage/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "voyage/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"
@@ -17,13 +29,13 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
 @staff_member_required
 def download_file(request):
-    '''
+    """
     This view serves uploading files, which will be in 
     the download section. It uses UploadFileForm to maintain
     information regarding uploaded files and call 
     handle_uploaded_file() to store files on the disk.
     This view is available only for admin users.
-    '''
+    """
     templatename = 'voyage/upload.html'
 
     if request.method == 'POST':
@@ -38,10 +50,10 @@ def download_file(request):
                 context_instance=RequestContext(request))
 
 def handle_uploaded_file(f):
-    '''
+    """
     Function handles uploaded files by saving them
     by chunks in the MEDIA_ROOT/download directory
-    '''
+    """
     with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'download', f.name), 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)

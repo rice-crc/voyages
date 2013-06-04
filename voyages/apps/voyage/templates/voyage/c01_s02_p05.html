@@ -1,24 +1,24 @@
-
-<h2>Data Variables</h2>
+{% load i18n %}
+<h2>{% trans "Data Variables" %}</h2>
 <p>
-	The variables include information that, for convenience, have been grouped into eight categories: (1) vessel characteristics
+	{% blocktrans %}The variables include information that, for convenience, have been grouped into eight categories: (1) vessel characteristics
 	(name, tonnage, rig, guns, place and year of construction, owners); (2) the outcome of the voyage (3) the itinerary of the voyage;
 	(4) the dates at which the vessel left or arrived; (5) the captain and crew of the vessel; (6) the numbers of captives; (7) the
 	characteristics of the captives and their experience of mortality; and (8) the sources for the record. The Variable List in the
 	“Understanding the Database” section presents a complete listing of the data variables as well as the imputed variables in the
 	data set. Imputed variables are always marked with an asterisk. No voyage, however, includes information for all data or imputed
-	variables. Table 1 provides a summary of the coverage for some of the more important data variables.
+	variables. Table 1 provides a summary of the coverage for some of the more important data variables.{% endblocktrans %}
 </p>
 
 <p>
-	Generally, we attempted to preserve the written documentary record in adding to the data variables. Numeric variables, such
+	{% blocktrans %}Generally, we attempted to preserve the written documentary record in adding to the data variables. Numeric variables, such
 	as vessel tonnage, numbers of crew, and numbers of slaves, demanded a ranking of sources, particularly for the well-documented
-	British trade. <span class="superscript">(5)</span>
+	British trade. <span class="superscript">(5)</span>{% endblocktrans %}
 </p>
 
 <div align="center">
 	<p style="font-weight: bold;">
-		Table 1. Select Summary of Information Contained in the Trans-Atlantic Slave Voyage Data Set: Version 2008 Compared to 2010
+		{% trans "Table 1. Select Summary of Information Contained in the Trans-Atlantic Slave Voyage Data Set: Version 2008 Compared to 2010" %}
 	</p>
 
 	<table border="1" cellspacing="0" cellpadding="3" class="methodborder">
@@ -28,87 +28,87 @@
 			<td>2010</td>
 		</tr>
 		<tr>
-			<td>Number of slave voyages in the data set</td>
+			<td>{% trans "Number of slave voyages in the data set" %}</td>
 			<td class="number">34,940</td>
 			<td class="number">34,948</td>
 		</tr>
 		<tr>
-			<td>Voyages with name of vessel</td>
+			<td>{% trans "Voyages with name of vessel" %}</td>
 			<td class="number">33,337</td>
 			<td class="number">33,353</td>
 		</tr>
 		<tr>
-			<td>Voyages with name of captain(s)</td>
+			<td>{% trans "Voyages with name of captain(s)" %}</td>
 			<td class="number">30,895</td>
 			<td class="number">30,894</td>
 		</tr>
 		<tr>
-			<td>Voyages with name of at least one ship owner</td>
+			<td>{% trans "Voyages with name of at least one ship owner" %}</td>
 			<td class="number">21,024</td>
 			<td class="number">21,064</td>
 		</tr>
 		<tr>
-			<td>Tonnage of ship available</td>
+			<td>{% trans "Tonnage of ship available" %}</td>
 			<td class="number">17,691</td>
 			<td class="number">17,608</td>
 		</tr>
 		<tr>
-			<td>Place of ship departure given</td>
+			<td>{% trans "Place of ship departure given" %}</td>
 			<td class="number">28,443</td>
 			<td class="number">28,449</td>
 		</tr>
 		<tr>
-			<td>Date of ship departure given</td>
+			<td>{% trans "Date of ship departure given" %}</td>
 			<td class="number">22,193</td>
 			<td class="number">22,231</td>
 		</tr>
 		<tr>
-			<td>Place(s) of embarkation on the African coast available</td>
+			<td>{% trans "Place(s) of embarkation on the African coast available" %}</td>
 			<td class="number">21,121</td>
 			<td class="number">21,291</td>
 		</tr>
 		<tr>
-			<td>Numbers of Africans embarked reported</td>
+			<td>{% trans "Numbers of Africans embarked reported" %}</td>
 			<td class="number">8,207</td>
 			<td class="number">8,272</td>
 		</tr>
 		<tr>
-			<td>Voyages with age or gender of Africans reported</td>
+			<td>{% trans "Voyages with age or gender of Africans reported" %}</td>
 			<td class="number">4,426</td>
 			<td class="number">4,498</td>
 		</tr>
 		<tr>
-			<td>Place(s) of disembarkation available</td>
+			<td>{% trans "Place(s) of disembarkation available" %}</td>
 			<td class="number">24,849</td>
 			<td class="number">24,916</td>
 		</tr>
 		<tr>
-			<td>Dates of arrival at place of disembarkation available</td>
+			<td>{% trans "Dates of arrival at place of disembarkation available" %}</td>
 			<td class="number">17,446</td>
 			<td class="number">17,533</td>
 		</tr>
 		<tr>
-			<td>Numbers of Africans disembarked reported</td>
+			<td>{% trans "Numbers of Africans disembarked reported" %}</td>
 			<td class="number">18,184</td>
 			<td class="number">18,269</td>
 		</tr>
 		<tr>
-			<td>Voyages reporting number of Africans died on board</td>
+			<td>{% trans "Voyages reporting number of Africans died on board" %}</td>
 			<td class="number">6,332</td>
 			<td class="number">6,438</td>
 		</tr>
 		<tr>
-			<td>Voyages with place of ship construction reported</td>
+			<td>{% trans "Voyages with place of ship construction reported" %}</td>
 			<td class="number">8,881</td>
 			<td class="number">8,888</td>
 		</tr>
 		<tr>
-			<td>Date of return to Europe or end of voyage given</td>
+			<td>{% trans "Date of return to Europe or end of voyage given" %}</td>
 			<td class="number">10,100</td>
 			<td class="number">10,414</td>
 		</tr>
 		<tr>
-			<td>Some indication of outcome of voyage indicated</td>
+			<td>{% trans "Some indication of outcome of voyage indicated" %}</td>
 			<td class="number">31,554</td>
 			<td class="number">31,612</td>
 		</tr>
@@ -116,7 +116,7 @@
 </div>
 
 <p>
-	Sources often report different numbers of slaves embarked on or "taken on board" the coast of Africa or landed in the
+	{% blocktrans %}Sources often report different numbers of slaves embarked on or "taken on board" the coast of Africa or landed in the
 	Americas. Furthermore, for some years there are inconsistencies in slave age or gender totals per voyage. Regarding
 	slave exports, we were careful to distinguish between the number of slaves purchased and the number who in fact were
 	shipped from the coast. We used slave departure totals, whether reported by slave traders, African merchants, or
@@ -125,5 +125,5 @@
 	500 slaves, and even though the totals occasionally were significantly less than the numbers of slaves who were disembarked
 	in the Americas. Users should keep these biases in mind, not least for any calculations of mortality they may wish to try.
 	For slave arrivals recorded in customs documents or shipping gazettes, we decided to use maximum totals where there was
-	conflicting information, under the assumption that these differences might indicate deaths of slaves before slaves disembarked.
+	conflicting information, under the assumption that these differences might indicate deaths of slaves before slaves disembarked.{% endblocktrans %}
 </p>

@@ -1,7 +1,8 @@
-<h2>Voyage Outcomes</h2>
+{% load i18n %}
+<h2>{% trans "Voyage Outcomes" %}</h2>
 
 <p>
-	Obviously, not all slave ships made it to the Americas, or even to Africa. Fortunately the data set is quite rich in
+	{% blocktrans %}Obviously, not all slave ships made it to the Americas, or even to Africa. Fortunately the data set is quite rich in
 	information on the outcome of voyages. The data set allows for 177 different voyage outcomes. As with the geographical
 	variables, some regrouping is required to make these more manageable. The first regrouping, “Outcome of voyage for slaves”
 	(FATE2), takes the standpoint of the Africans on board, and asks where the ship disembarked its slaves. The majority were
@@ -13,5 +14,5 @@
 	attacked ships, and one European power would often try to seize ships flying the flag of other powers, especially in wartime.
 	Finally, a third regrouping, “Outcome of voyage for owner” (FATE4), takes the standpoint of the owners, and groups voyages on
 	the basis of whether the ships reached the Americas, and if not, whether it was human agency or natural hazard that was
-	responsible.  As indicated, each of these three regroupings is represented by a different variable.
+	responsible.  As indicated, each of these three regroupings is represented by a different variable.{% endblocktrans %}
 </p>

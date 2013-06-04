@@ -1,7 +1,8 @@
-<h2>Nature of Sources</h2>
+{% load i18n %}
+<h2>{% trans "Nature of Sources" %}</h2>
 
 <p>
-	Much of what is new in this data set lies in the sources, which call for some discussion. The published data
+	{% blocktrans %}Much of what is new in this data set lies in the sources, which call for some discussion. The published data
 	draw on a wide range of published and archival information. Postma, Mettas, and Richardson used new material in
 	the preparation of their published catalogues of voyages. Our data set does not reproduce all the sources that
 	previous authors used and listed. Thus, voyages drawn from published sources are represented here by that single
@@ -22,11 +23,11 @@
 	documented in the archives of the captors, as well as in the records of the nations to which the ships belonged. Indeed,
 	the South Atlantic Portuguese trade  has fewer sources per voyage, precisely because this branch of the traffic operated
 	independently of the others. Winds and ocean currents kept the South Atlantic trade out of the non-Portuguese archives,
-	as well as keeping northern Europeans out of South Atlantic ports.
+	as well as keeping northern Europeans out of South Atlantic ports.{% endblocktrans %}
 </p>
-
+{% url voyage:sources as voyage_sources_url %}
 <p>
-	Of the 34,948 voyages in the data set, 12,320 have only one source listed. In fact, more than half of these apparently
+	{% blocktrans %}Of the 34,948 voyages in the data set, 12,320 have only one source listed. In fact, more than half of these apparently
 	single-source records are taken from already published material where, in nearly all cases, additional primary references
 	are to be found. Furthermore, other publications on which the present data set draws, such as Coughtry’s listing of Rhode
 	Island voyages, are based on a range of primary documents which are not listed by voyage in the publication itself. After
@@ -36,12 +37,12 @@
 	the sources for any particular voyage can be viewed in the results section of the database by clicking on “configure columns”
 	and transferring “sources” from left box to the right box in the resulting window. The full reference may be viewed by rolling
 	the cursor over the abbreviated source or by clicking on the row of a voyage to view voyage details. Alphabetic listings of
-	references and full descriptions of locations are to be found in <a href="{% url voyage:sources %}">Home> Voyages Database> Understanding
-	the database> Sources </a>.
+	references and full descriptions of locations are to be found in <a href="{{ voyage_sources_url }}">Home> Voyages Database> Understanding
+	the database> Sources </a>.{% endblocktrans %}
 </p>
 
 <p>
-	While the sources are relatively rich, diversity brings a new set of problems. We can hardly expect that reports on voyages
+	{% blocktrans %}While the sources are relatively rich, diversity brings a new set of problems. We can hardly expect that reports on voyages
 	made several thousand miles—as well as several months—apart, often in different languages and under different bureaucracies,
 	each with a separate set of official procedures to follow, to always generate perfectly consistent information. For example,
 	216 voyages in the data set apparently arrived in the Americas with more slaves on board than when they left Africa. Others
@@ -53,5 +54,5 @@
 	record that anyone who has visited the archives (or indeed examined published sources such as Mettas or Richardson) knows does
 	not exist. The editors always entered only one value per variable when faced with alternative information. In making such choices,
 	we followed certain rules that researchers can change after going back to the sources. If users elect to do this, however, they,
-	too, will have a set which is both not "clean" and not necessarily reflective of the historical records from which it is drawn.
+	too, will have a set which is both not "clean" and not necessarily reflective of the historical records from which it is drawn.{% endblocktrans %}
 </p>
