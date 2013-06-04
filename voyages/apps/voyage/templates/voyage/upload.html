@@ -8,10 +8,20 @@
                  <p><input type="submit" value="submit" /></p>
     </form>
 
-        Uploaded files:
-        <table>
+        <b>Uploaded files:</b>
+
+        <table border='1'>
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Last Modified</th>
+        </tr>
         {% for file in uploaded_files %}
-        <span class="uploaded-file-detail"> <tr><td> <li> {{ file }} </li> </td></tr></span>
+        <tr>
+            <td> {{ file.name }} </td>
+            <td> {{ file.size }} </td>
+            <td> {{ file.date_mod }} </td>
+        </tr>
         {% endfor %}
         </table>
 

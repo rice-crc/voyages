@@ -5,7 +5,10 @@ from django.shortcuts import render_to_response
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from os import listdir
+from os import listdir, stat
+from stat import ST_SIZE, ST_MTIME
+from hurry.filesize import size
+import time
 from .forms import UploadFileForm
 
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -46,7 +49,12 @@ def download_file(request):
     else:
         form = UploadFileForm()
     uploaded_files = listdir(settings.MEDIA_ROOT + '/download')
-    return render_to_response(templatename, {'form': form, 'uploaded_files': uploaded_files},
+    uploaded_files_info =[]
+    for f in uploaded_files:
+        st = stat(settings.MEDIA_ROOT + '/download/' + f)
+        uploaded_files_info.append({'name': f, 'size': size(st[ST_SIZE]), 'date_mod': time.asctime(time.localtime(st[ST_MTIME]))})
+
+    return render_to_response(templatename, {'form': form, 'uploaded_files': uploaded_files_info},
                 context_instance=RequestContext(request))
 
 def handle_uploaded_file(f):

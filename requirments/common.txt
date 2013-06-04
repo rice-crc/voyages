@@ -2,3 +2,4 @@ Django>=1.4,<1.5
 mysql-python 
 sunburnt
 south
+hurry.filesize
