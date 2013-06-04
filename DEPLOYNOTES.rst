@@ -95,6 +95,13 @@ tables and initial data using::
   $ python manage.py syncdb
   $ python manage.py migrate
 
+In addition, these sets of initial data need to be loaded::
+
+  $ python manage.py loaddata initialdata/lessonplan_data.json
+  $ python manage.py loaddata initialdata/glossary.json
+  $ python manage.py loaddata initialdata/downloads.json
+  $ python manage.py loaddata initialdata/users.json
+
 
 Cron jobs
 ~~~~~~~~~
