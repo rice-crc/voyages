@@ -8,7 +8,7 @@ class Glossary(models.Model):
 
     class Meta:
         ordering = ['term']
-        verbose_name_plural = "Glossaries"
+        verbose_name_plural = "Glossary Items"
 
     def __unicode__(self):
         return self.term
