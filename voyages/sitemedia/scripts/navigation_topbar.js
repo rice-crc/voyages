@@ -12,11 +12,16 @@ var majorSectionName = {
 /* Call breadcrumb handler in breadcrumb.js to update the breadcrumb section
  * and set up event handlers for help-links */
 $(document).ready(function() {
-	/* Highlight the menu section that is being currently selected */
-	$("#" + elem[3]).addClass("main_nav-selected");
-	
 	/* Update the breadcrumb text and link */
-	$(".secondary-bar-breadcrumb").html(writebreadcrumb());
+	if (typeof writebreadcrumb == 'function') { 
+  		$(".secondary-bar-breadcrumb").html(writebreadcrumb());
+	}
+	
+	/* Highlight the menu section that is being currently selected */
+	if (typeof maybeObject !='undefined') {	
+		$("#" + elem[3]).addClass("main_nav-selected");
+	}
+	
 	
 	/* Secondary menu event handler */
 	$(".secondary-bar-help-link > a").click(function(ev){

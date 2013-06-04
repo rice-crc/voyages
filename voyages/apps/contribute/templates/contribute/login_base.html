@@ -1,10 +1,36 @@
 {% extends "voyage/voyagebase.html" %}
 
+<!-- The basic template of the Contribute login section (guideline and login)-->
+
 {% load i18n %}
 
-{% block title %}Contribute{% endblock %}
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
+{% if request.user.is_authenticated %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/contribute/login_base.css">
+{% endif %}
+{% endblock %}
+
+{% block title %}{% trans "Contribute" %}{% endblock %}
 
 {% block content %}
+
+{% if request.user.is_authenticated %}
+
+	<div class="userlogtool">
+		<div>
+			{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+			{% block userlinks %}
+			{% url 'django-admindocs-docroot' as docsroot %}
+			{% if docsroot %}
+			<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+			{% endif %}
+			<a href="{% url contribute:password-change %}">{% trans 'Change My Password' %}</a> | 
+			<a href="{% url contribute:logout %}">{% trans 'Log out' %}</a>
+			{% endblock %}
+		</div>
+	</div>
+	{% endif %}
 
 <div id="left-menu" class="left-menu-box">
 	<div class="left-menu-title">
@@ -16,16 +42,19 @@
 	</div>
 
 	<div class="secondary-menu-item-0">
+		{% if request.user.is_authenticated %}
+		<a href="{% url contribute:logout %}">{% trans 'Log out' %}</a>
+		{% else %}
 		<a href="{% url contribute:login %}">{% trans 'Sign In' %}</a>
+
+		{% endif %}
 	</div>
 </div>
 
 <div id="center-content">
-	
+
 	<div id="center-content-inner">
 		{% block center-content %}
-		&nbsp;
-		
 		{% endblock %}
 	</div>
 </div>

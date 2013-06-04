@@ -1,0 +1,25 @@
+.userlogtool {
+    font-size: 9pt;
+    padding-right: 20px;
+    position: absolute;
+    right: 0;
+    top: 65px;
+    text-align: right;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+.userlogtool, .userlogtool a, .userlogtool a:hover {
+    color: #FFFFFF;
+}
+
+.userlogtool a {
+	text-decoration: none;
+}
+
+.userlogtool a:hover {
+	text-decoration: underline;
+}
+
+div.secondary-bar {
+	height: 25px;
+}

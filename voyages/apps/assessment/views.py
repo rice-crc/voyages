@@ -19,7 +19,6 @@ def get_page(request, chapternum, sectionnum, pagenum):
     
     The further content is rendered using the pagepath parameter 
     """
-    
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "assessment/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "assessment/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"

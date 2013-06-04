@@ -24,7 +24,7 @@ function writebreadcrumb() {
 		
 		if (elem[3] == "voyage" && (elem[4] == "understanding-db" || elem[4] == "understanding-db#")) {
 			path += seperatorst + "Understanding the Database";
-		} else if (elem[3] == "assessment" && (elem[4] == "essays" || elem[4] == "essays")) {
+		} else if (elem[3] == "assessment" && (elem[4] == "essays" || elem[4] == "essays#")) {
 			path += seperatorst + "Essays";
 		}else {
 			/* Add successive elements and seperators */

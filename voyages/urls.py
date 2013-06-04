@@ -41,7 +41,7 @@ urlpatterns += patterns('',
     
     # Admin documentation
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-      
+    
     # Admin management  
     url(r'^admin/', include(admin.site.urls)),
 )

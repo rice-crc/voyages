@@ -1,70 +1,79 @@
-
 {% extends "contribute/login_base.html" %}
 {% load i18n %}
 
+<!-- The contribute login page -->
+
 {% block center-content %}
-<h1>Contribute </h1>
+<h1>{% trans "Contribute" %}</h1>
+
+{% url voyage:guide as voyage_guide_url %}
+{% url contribute:guidelines as contribute_guidelines_url %}
+{% url contribute:newuser as contribute_newuser_url %}
 
 <p>
-	The Contribute section of the Voyages website contains data entry forms by which users
+	{% blocktrans %}The Contribute section of the Voyages website contains data entry forms by which users
 	of the website can supply revise existing information in the Voyages Database or supply
 	new data. A team of slave trade scholars will review each contribution, as part of the
 	peer-review process. Once confirmed, the new or revised information will be incorporated
 	in the next version of the Voyages Database. We anticipate releasing a new version every
-	three years.
+	three years.{% endblocktrans %}
 </p>
 
 <p>
-	The Contribution entry forms take advantage of possibilities offered by the internet
+	{% blocktrans %}The Contribution entry forms take advantage of possibilities offered by the internet
 	to continuously improve the store of knowledge, whether in the traditional form of written
 	documents or in the new form of collections of machine-readable data. The Voyages Database
 	is itself the product of extensive revisions since the publication of the CD-ROM version of
 	the dataset in 1999. The Contribute section will allow the database to evolve in a way that
-	respects the high standards of scholarship governing the construction of the original database.
+	respects the high standards of scholarship governing the construction of the original database.{% endblocktrans %}
 </p>
 
 <p>
-	Step-by-step instructions on how to use the data entry forms are provided in the Voyages
-	Guide, a PDF file accessible in <a href="{% url voyage:guide %}">“Understanding the Database”</a>.
-	For advice on contributing new data, we ask you to read our <a href="{% url contribute:guidelines %}">“Guidelines for Contributors.”</a>
+	{% blocktrans %}Step-by-step instructions on how to use the data entry forms are provided in the Voyages
+	Guide, a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
+	For advice on contributing new data, we ask you to read our <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
 </p>
 
 <p>
-	For purposes of managing contributions to the website, contributors are asked to register
+	{% blocktrans %}For purposes of managing contributions to the website, contributors are asked to register
 	for an account and provide an email address for communication. Once your registration is
 	confirmed, you will receive an email with your user name and password, which you can use
-	to access the Contribute section (below).
+	to access the Contribute section (below).{% endblocktrans %}
 </p>
 
-<h2>Sign in</h2>
+<h2>{% trans "Sign in" %}</h2>
 
 <p>
-	In order to access the Contribute section, please sign in.
+	{% trans "In order to access the Contribute section, please sign in." %}
 </p>
 
 <div style="padding: 5px 5px 5px 100px; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
-{% if form.errors %}
-<p style="color: red">Your username and password didn't match. Please try again.</p>
-{% endif %}
+	{% if form.errors %}
+	<p style="color: red">
+		{% trans "Your username and password didn't match. Please try again." %}
+	</p>
+	{% endif %}
 
-<form method="post" action="{% url contribute:login %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+	<form method="post" action="{% url contribute:login %}">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<td>{{ form.username.label_tag }}</td>
+				<td>{{ form.username }}</td>
+			</tr>
+			<tr>
+				<td>{{ form.password.label_tag }}</td>
+				<td>{{ form.password }}</td>
+			</tr>
+		</table>
 
-<input type="submit" style="margin-left: 60px;" value="{% trans 'Sign in' %}" />
-<input type="hidden" name="next" value="{% url contribute:index %}" />
-</form>
+		<input type="submit" style="margin-left: 60px;" value="{% trans 'Sign in' %}" />
+		<input type="hidden" name="next" value="{% url contribute:index %}" />
+	</form>
 </div>
 
-<p>If you don't have an account, <a href="{% url contribute:newuser %}">click here</a>.</p>
+<p>
+	{% blocktrans %}If you don't have an account, <a href="{{ contribute_newuser_url }}">click here</a>.{% endblocktrans %}
+</p>
 
 {% endblock %}
