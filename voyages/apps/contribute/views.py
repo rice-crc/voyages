@@ -5,6 +5,7 @@ from django.views.generic.simple import direct_to_template
 from django.conf.urls.defaults import *
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth import logout 
 
 def index(request):
     if request.user.is_authenticated():
@@ -12,7 +13,7 @@ def index(request):
     else:
         return HttpResponseRedirect(reverse('contribute:login'))
 
-from django.contrib.auth import logout
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('contribute:login'))
