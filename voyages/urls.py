@@ -39,6 +39,9 @@ urlpatterns += patterns('',
     # Flatpages
     url(r'^pages/', include('django.contrib.flatpages.urls')),
     
+    # Adding download files 
+    url(r'^admin/downloads', 'voyages.apps.voyage.views.download_file', name="downloads"),
+
     # Admin documentation
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
