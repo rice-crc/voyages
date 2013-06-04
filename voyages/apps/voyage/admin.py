@@ -17,7 +17,6 @@ class FlatPageAdmin(FlatPageAdminOld):
         js = ( 'scripts/tiny_mce/tinymce.min.js',
               'scripts/tiny_mce/textareas.js',
               )
-        app_name = "Downloads"
 
 # We have to unregister it, and then reregister
 admin.site.unregister(FlatPage)
