@@ -43,7 +43,7 @@ urlpatterns += patterns('',
     url(r'^admin/downloads', 'voyages.apps.voyage.views.download_file', name="downloads"),
 
     # Admin documentation
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
     # Admin management  
     url(r'^admin/', include(admin.site.urls)),
