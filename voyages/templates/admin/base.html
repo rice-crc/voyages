@@ -65,6 +65,9 @@
     <div id="content" class="{% block coltype %}colM{% endblock %}">
         {% block pretitle %}{% endblock %}
         {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+        {% if request.get_full_path == '/admin/' %}
+        <a href="{% url 'downloads' %}">Upload files</a>
+        {% endif %}
         {% block content %}
         {% block object-tools %}{% endblock %}
         {{ content }}
