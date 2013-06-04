@@ -745,7 +745,8 @@ table#change-history tbody th {
 
 #footer {
     clear: both;
-    padding: 10px;
+    padding-left:17px;
+    padding-top:0px;
 }
 
 /* COLUMN TYPES */
