@@ -1,7 +1,8 @@
-<h2>Imputing Numbers of Slaves</h2>
+{% load i18n %}
+<h2>{% trans "Imputing Numbers of Slaves</h2>
 
 <p>
-	A second set of inferences is suggested by the data on numbers of slaves leaving Africa and arriving in the New (and
+	{% blocktrans %}A second set of inferences is suggested by the data on numbers of slaves leaving Africa and arriving in the New (and
 	in some cases, the Old) World. Although 26,216 voyages in the data set arrived with slaves, and a further 7,192 could
 	have done so, the sources provide the actual number on board at arrival for only 18,269 voyages. On the African side,
 	the data are much weaker, with only 8,272 yielding information on the number of slaves leaving Africa, out of 29,095
@@ -9,16 +10,16 @@
 	trade are interested in the captives rather than the ships, some inference would seem appropriate for those ships
 	that traded without leaving anything in the historical record about the slaves they carried. The first step in making
 	reasonable inferences is to draw on the number of captives who might have been reported for the same voyage at an
-	earlier or later stage of its itinerary.
+	earlier or later stage of its itinerary.{% endblocktrans %}
 </p>
 
 <p>
-	Only 5,803 voyages in the revised database contain numbers of both captives embarked and captives disembarked,
+	{% blocktrans %}Only 5,803 voyages in the revised database contain numbers of both captives embarked and captives disembarked,
 	but for a further 2,404 we have the figure for departures alone and for 12,279 numbers arrived alone. Imputed totals
 	for the missing information may be made from the large subset of voyages that provide information on deaths during
 	the passage. The Voyages Database contains 6,438 voyages for which a ratio of deaths to slaves embarked may be
 	calculated. Deaths as a proportion of those embarked differed markedly by African region of embarkation. Table 2
-	shows breakdowns of shipboard mortality as a percentage of those slaves taken on board.
+	shows breakdowns of shipboard mortality as a percentage of those slaves taken on board.{% endblocktrans %}
 </p>
 
 <div align="center">
@@ -103,13 +104,13 @@
 </div>
 
 <p>
-	The breakdown of mortality ratios by African region is used here as the basis for imputing numbers arrived
+	{% blocktrans %}The breakdown of mortality ratios by African region is used here as the basis for imputing numbers arrived
 	in the Americas where totals leaving Africa exist, and for numbers leaving Africa where the numbers on board
 	at arrival in the Americas are known.
 </p>
 
 <p>
-	There remain 12,819 voyages with no information about the numbers of slaves on board ship. Indeed, we do
+	{% blocktrans %}There remain 12,819 voyages with no information about the numbers of slaves on board ship. Indeed, we do
 	not even know if some of these ships carried slaves. The CD-ROM database divided such unknowns into just two
 	groups, one sailing from North American ports and the other departing from all other ports in the Atlantic.
 	Behind such categorization was the recognition that the slave vessels from North America were substantially
@@ -130,5 +131,5 @@
 	that as we added data to the database we recalculated the statistics reported in the Appendix table. And as
 	augmentation of the dataset is set to continue then the imputed values will vary as data are added in the
 	future. Users should thus not expect to find that the imputed values assigned to any given ship
-	type are always the same or, indeed, will remain the same.
+	type are always the same or, indeed, will remain the same.{% endblocktrans %}
 </p>

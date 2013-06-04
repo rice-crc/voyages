@@ -1,7 +1,8 @@
-<h2>National Carriers</h2>
+{% load i18n %}
+<h2>{% trans "National Carriers</h2>
 
 <p>
-	We have also made some assumptions in order to project a fuller picture of national carriers in the trade.
+	{% blocktrans %}We have also made some assumptions in order to project a fuller picture of national carriers in the trade.
 	The set identifies the national affiliations of 26,055 or 75 percent of the voyages in the data set.
 	The variable that carries this information is “Flag” (NATIONAL). For a further 7,364 ventures, the context of the
 	voyage and the name of the ship owner or captain make inferences about place of registration possible, and thus we
@@ -22,5 +23,5 @@
 	nations, 11,426 are identified as Portuguese or Brazilian; 4,192 were French; 1,577 were Dutch; 1,579 were Spanish or
 	Uruguayan; and 404 flew the flags of various Baltic states (mainly Danish), including Brandenburg-Prussia. Many of
 	the voyages of unknown nationality were likely Portuguese, but even if they all were, Portuguese voyages are still
-	somewhat underrepresented in the Voyages Database.
+	somewhat underrepresented in the Voyages Database.{% endblocktrans %}
 </p>
