@@ -18,7 +18,7 @@
         </tr>
         {% for file in uploaded_files %}
         <tr>
-            <td> {{ file.name }} </td>
+            <td> <a href="{{MEDIA_URL}}download/{{ file.name }}">{{ file.name }} </a> </td>
             <td> {{ file.size }} </td>
             <td> {{ file.date_mod }} </td>
         </tr>
