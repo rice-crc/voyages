@@ -3,6 +3,8 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 class FlatPageAdmin(FlatPageAdminOld):
+    """Class serves flat pages module"""
+    
     list_display = ['title', 'url']
     readonly_fields= ['title', 'url']
 

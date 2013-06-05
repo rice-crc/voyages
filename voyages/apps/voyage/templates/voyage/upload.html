@@ -2,6 +2,7 @@
 
 {% block title %}Upload file{% endblock %}
 
+{# Contenct section of uploading files (form and list) #}
 {% block content %} 
     <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
                  {{ form.as_table }}
