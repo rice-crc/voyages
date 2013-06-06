@@ -50,7 +50,7 @@ class Faq(models.Model):
         return mark_safe(self.answer)
     
     class Meta:
-        ordering = ['question_order']
+        ordering = ['category', 'question_order']
         verbose_name = 'Frequently Asked Question (FAQ)'
         verbose_name_plural = 'FAQs'
         

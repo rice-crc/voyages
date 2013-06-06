@@ -20,11 +20,16 @@ function writebreadcrumb() {
 
 		path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[3]) + elem[3].length + 1) 
 				+ "/\">" + majorSectionName[elem[3]] + "</a>";
-				
 		
-		if (elem[3] == "voyage" && (elem[4] == "understanding-db" || elem[4] == "understanding-db#")) {
+		/* Remove the pound sign as necessary */
+		var pound_sign_pos = elem[4].indexOf("#");
+		if (pound_sign_pos >= 0) {
+			elem[4] = elem[4].substring(0, pound_sign_pos);
+		}		
+		
+		if (elem[3] == "voyage" && (elem[4] == "understanding-db")) {
 			path += seperatorst + "Understanding the Database";
-		} else if (elem[3] == "assessment" && (elem[4] == "essays" || elem[4] == "essays#")) {
+		} else if (elem[3] == "assessment" && (elem[4] == "essays")) {
 			path += seperatorst + "Essays";
 		}else {
 			/* Add successive elements and seperators */

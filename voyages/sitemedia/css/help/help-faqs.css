@@ -56,3 +56,9 @@ li.faq-category a {
 	
 li.faq-category a:hover {
 	text-decoration: underline; }
+	
+div#search_box_wrapper {
+	position: absolute;
+	right: 30px;
+	top: 70px;
+}
