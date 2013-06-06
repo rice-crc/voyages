@@ -20,13 +20,12 @@ DATABASES = {
     }
 }
 
-# Example of the haystack 
+# Used to index Django models, in our case using Solr 
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'https://dev11.library.emory.edu:9193/solr/voyages'
-        # ...or for multicore...
-        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+        'URL': 'https://host.library.emory.edu:port/solr/app'
+        
     },
 }
 
