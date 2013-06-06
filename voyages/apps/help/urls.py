@@ -16,6 +16,6 @@ urlpatterns = patterns('django.views.generic.simple',
 )
 
 urlpatterns += patterns('',
-    url(r'^page_glossary$', 'voyages.apps.help.views.glossaryPage', name='glossary'))
-    url(r'^page_faqs', 'voyages.apps.help.views.get_faqs', name='faqs')
+    url(r'^page_glossary$', 'voyages.apps.help.views.glossaryPage', name='glossary'),
+    url(r'^page_faqs', 'voyages.apps.help.views.get_faqs', name='faqs'),
 )
