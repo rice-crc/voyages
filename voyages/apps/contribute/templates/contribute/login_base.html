@@ -25,6 +25,7 @@
 			{% if docsroot %}
 			<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
 			{% endif %}
+			<a href="{% url contribute:user_index %}">{% trans 'Contribute Home' %}</a> |
 			<a href="{% url contribute:password-change %}">{% trans 'Change Password' %}</a> | 
 			<a href="{% url contribute:logout %}">{% trans 'Log out' %}</a>
 			{% endblock %}
@@ -41,6 +42,10 @@
 		<a href="{% url contribute:guidelines %}">{% trans 'Guidelines for Contributors' %}</a>
 	</div>
 
+	{% if request.user.is_authenticated %}
+	<div class="secondary-menu-item-0"><a href="{% url contribute:user_index %}">{% trans 'Contribute Home' %}</a></div>
+	{% endif %}
+	
 	<div class="secondary-menu-item-0">
 		{% if request.user.is_authenticated %}
 		<a href="{% url contribute:logout %}">{% trans 'Log out' %}</a>

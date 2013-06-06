@@ -1,1 +1,21 @@
-<h2>Page under construction</h2>
+{% if faq_list %}
+<div class="faq-list-cont">
+	<div class="faq-list">
+
+	</div>
+	<div class='faq-main'>
+		<div class="faq">
+			{% for faq_item in faq_list %}
+			<div class="faq-question">
+				{{ faq_item.question }}
+			</div>
+
+			<div class="faq-answer">
+				{{ faq_item.answer|safe }}
+			</div>
+			<br />
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}

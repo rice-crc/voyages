@@ -1,34 +1,56 @@
 from django.db import models
-
-# Glossary entry for
+from django.utils.translation import ugettext as _
 
 class Glossary(models.Model):
-    term = models.CharField(('Term'),max_length=50)
-    description = models.TextField(('Description'), max_length=1000)
+    """
+    A single glossary entry used to explain a particular term
+
+    """
+    term = models.CharField(_('Term'),max_length=50)
+    description = models.TextField(_('Description'), max_length=1000)
 
     class Meta:
         ordering = ['term']
+        verbose_name = 'Glossary Item'
         verbose_name_plural = "Glossary Items"
 
     def __unicode__(self):
         return self.term
 
 class FaqCategory(models.Model):
-    text = models.CharField(('Question Category'), max_length=100)
-    type_order = models.IntegerField()
+    """
+    A FAQ question category, may contain many faq questions
+    related to :model:`help.Faq`
+
+    """
+    text = models.CharField(_('Category'), max_length=100)
+    type_order = models.IntegerField(('Category Order'))
     
     class Meta:
         ordering = ['type_order']
-        verbose_name_plural = 'Faq categories'
+        verbose_name = 'FAQ category'
+        verbose_name_plural = 'FAQ categories'
     
     def __unicode__(self):
         return self.text
 
+from django.utils.safestring import mark_safe 
 class Faq(models.Model):
-    question = models.TextField(('Question'), max_length=300)
-    answer = models.TextField(('Answer'), max_length=2000)
+    """
+    A single FAQ question and answer to it
+    related to :model:`help.FaqCategory`
+
+    """
+    question = models.TextField(_('Question'), max_length=300)
+    answer = models.TextField(_('Answer'), max_length=2000)
     category = models.ForeignKey(FaqCategory)
     question_order = models.IntegerField()
     
+    def get_html_answer(self): 
+        return mark_safe(self.answer)
+    
     class Meta:
         ordering = ['question_order']
+        verbose_name = 'Frequently Asked Question (FAQ)'
+        verbose_name_plural = 'FAQs'
+        

@@ -27,6 +27,7 @@ class LessonPlan(models.Model):
 class LessonStandardType(models.Model):
     """
     A type of lesson standards (such as NCHS or NCSS standards)
+    related to :model:`education.LessonStandard`
 
     """
     type = models.CharField(_('Standard Type'),max_length=100)
@@ -38,7 +39,7 @@ class LessonStandard(models.Model):
     An actual standard or group of standards of a lesson plan
       belonging to the same lesson standard type
     related to :model:`education.LessonStandardType`
-    and also to :model:`education.LessonStandard`
+    related to :model:`education.LessonPlan`
     """
     type = models.ForeignKey(LessonStandardType)
     text = models.CharField(_('Text'),max_length=100)
