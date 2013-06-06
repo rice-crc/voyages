@@ -1,0 +1,45 @@
+
+/* Demos section */
+.demo-links {
+	position: absolute;
+	top: 70px;
+	left: 100px;
+	color: #FFFFFF;
+	padding-left: 20px;
+}
+
+.demo-links ul li {
+	display: inline;
+}
+
+.demo-links ul li a {
+	padding: 3px 5px 3px 5px;
+	text-decoration: none;
+	color: #008CA5;
+}
+
+.demo-links ul li a:hover {
+	background-color: #40A9BE;
+	color: #FFFFFF;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+.demo-links ul li a.demo-link-active {
+	background-color: #008CA5;
+	color: #FFFFFF;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
+.demo-description, .demo-video {
+	margin-left: auto;
+	margin-right: auto;
+	width: 640px;
+	margin-top: 10px;
+}
+
+.demo-video {
+	padding-top: 19px;
+	background-color: #000000;
+}

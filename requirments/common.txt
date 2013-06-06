@@ -3,3 +3,4 @@ mysql-python
 sunburnt
 south
 hurry.filesize
+django-haystack

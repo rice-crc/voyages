@@ -118,8 +118,9 @@ INSTALLED_APPS = (
      
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    
     'south',
-    #'haystack',
+    'haystack',
 
     'voyages.apps.common',
     'voyages.apps.voyage',
