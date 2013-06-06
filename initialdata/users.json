@@ -9,7 +9,7 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-06-04T13:40:29.397Z", 
+            "last_login": "2013-06-05T14:52:58Z", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$cZIu1OnDouyR$CrZseU9C/Btrl0tyXR0Z8DbVedUAcDE5+Ba2FJailRo=", 
@@ -87,6 +87,24 @@
             "password": "pbkdf2_sha256$10000$Nzbqu6gDIYhD$z/AuUvTcWB2WyJQc39H8FIdhuOeTa+EHJp4ilGvUnsw=", 
             "email": "tjurczy@emory.edu", 
             "date_joined": "2013-06-04T13:41:17Z"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "testuser", 
+            "first_name": "Test", 
+            "last_name": "User", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2013-06-05T14:53:28Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$ZhKQGpEqU9Hx$YD9P+OSBX0b0C5ZKK+gQIuUZGE26cJkF5Z8b5RASaMI=", 
+            "email": "test@user.com", 
+            "date_joined": "2013-06-05T14:53:28Z"
         }
     }
 ]
