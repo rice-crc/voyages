@@ -4,3 +4,4 @@ sunburnt
 south
 hurry.filesize
 django-haystack
+pysolr
