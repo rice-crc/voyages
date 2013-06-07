@@ -1,6 +1,6 @@
 import datetime
 from haystack import indexes
-from voyages.apps.help.models import *
+from voyages.apps.help.models import FaqCategory, Faq
 
 
 class FaqIndex(indexes.SearchIndex, indexes.Indexable):
