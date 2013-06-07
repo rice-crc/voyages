@@ -6,7 +6,7 @@ div.glossary-letters-and-search {
 table.glossary-letters-and-search {
 	width: 100%;
     height: 23pt; 
-    overflow: hidden; }
+    overflow: auto}
 
 td.glossary-letters-and-search {
     padding-left: 20px;
@@ -57,7 +57,7 @@ div.glossary-selector-letter-dimmed {
 
 div.glossary-terms {
 	position: fixed;
-	top: 115px;
+	top: 130px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
