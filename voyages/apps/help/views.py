@@ -1,8 +1,12 @@
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render_to_response
+<<<<<<< HEAD
 from .models import Glossary, Faq
 from .forms import GlossarySearchForm
+=======
+from .models import Glossary, Faq, FaqCategory
+>>>>>>> afc0a734aba4d4e2bcf08e8e8b19c270ab581b02
 
 def glossaryPage(request):
     letters = []
@@ -32,6 +36,12 @@ def get_faqs(request):
     Display the lesson entire glossary page
     containing faq entries from :model:`help.Faq`
     """
-    return render_to_response('help/page_faqs.html', {"faq_list" : Faq.objects.all(),},
+    faq_list = []
+    count = 0;
+    for faq_cat in FaqCategory.objects.all():
+        faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : Faq.objects.filter(category=faq_cat) })
+        count += 1
+    
+    return render_to_response('help/page_faqs.html', {"faq_list" : faq_list,},
                               context_instance=RequestContext(request));
                             

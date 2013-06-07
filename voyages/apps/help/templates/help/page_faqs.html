@@ -1,26 +1,38 @@
 {% if faq_list %}
 <div id="search_box_wrapper">
-<input id="search_field" name="form_textfield" type="text" value="images" class="glossary-search-box" />
-<input id="search_button" name="form_button" type="submit" value="Search" onclick="clear_form();" />
+	<input id="search_field" name="form_textfield" type="text" value="images" class="glossary-search-box" />
+	<input id="search_button" name="form_button" type="submit" value="Search" onclick="clear_form();" />
 </div>
 
 <div class="faq-list-cont">
 	<div class="faq-list">
-
+		<ul class="faq-toc">
+			{% for category_item in faq_list %}
+			<li>
+				<a href="#faq{{ category_item.qorder }}">{{ category_item.text }}</a>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 	<div class='faq-main'>
-		<div class="faq">
-			{% for faq_item in faq_list %}
-			<div class="faq-question">
-				{{ faq_item.question }}
-			</div>
-
-			<div class="faq-answer">
-				{{ faq_item.answer|safe }}
-			</div>
-			<br />
-			{% endfor %}
+		{% for category_item in faq_list %}
+		<a name="faq{{ category_item.qorder }}" id="faq{{ category_item.qorder }}"></a>
+		<div class="faq-category">
+			{{ category_item.text }}
 		</div>
+		<div class="faq">
+				{% for q_item in category_item.questions %}
+				<div class="faq-question">
+					{{ q_item.question }}
+				</div>
+	
+				<div class="faq-answer">
+					{{ q_item.answer|safe }}
+				</div>
+				<br />
+				{% endfor %}
+		</div>
+		{% endfor %}
 	</div>
 </div>
 {% endif %}

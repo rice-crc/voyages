@@ -6,6 +6,12 @@ $(document).ready(function() {
 	var maxIdx = elem.length - 1;
 	var currentid = elem[maxIdx];
 	
+	/* Remove the pound sign as necessary */
+	var pound_sign_pos = currentid.indexOf("#");
+	if (pound_sign_pos >= 0) {
+		currentid = currentid.substring(0, pound_sign_pos);
+	}
+	
 	/* Event handler for loading pages on click from the top navigation */
 	$(".top-bar-menu > ul > li > a").each(function() {
 		/* load the page on click */
@@ -15,11 +21,6 @@ $(document).ready(function() {
 			updatetitlehighlight();
 		});
 	});
-	
-	/* Remove the pound sign if necessary */
-	if (currentid.charAt(currentid.length - 1) == "#") {
-		currentid = currentid.substring(0, currentid.length);
-	}
 	
 	/* Retrieve the initial title and highlight */
 	updatetitlehighlight();
