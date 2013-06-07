@@ -12,12 +12,14 @@ def glossaryPage(request):
 
     for i in Glossary.objects.all():
         if i.term[0] not in letters:
-            glossary_content.append(glossary_dict);
+            if glossary_dict:
+                glossary_content.append(glossary_dict);
             letters.append(i.term[0]);
             glossary_dict = {};
             glossary_dict["letter"] = i.term[0];
             glossary_dict["terms"] = [];
         glossary_dict["terms"].append({"term": i.term, "description": i.description});
+    glossary_content.append(glossary_dict);
 
     letters.sort();
     form = GlossarySearchForm();
