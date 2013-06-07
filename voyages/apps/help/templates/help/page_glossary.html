@@ -3,31 +3,136 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
 </head>
 
-</body>
+<body>
 
 <div class="glossary-letters-and-search">
 
 <table border="0" cellspacing="0" cellpadding="0" class="glossary-letters-and-search">
     <tr>
-    <td>
-        Letters 
+        <td class="glossary-letters-and-search">
+        <table><tr>
+        {% for i in letters %}
+        <td class="glossary-selector-letter">
+            <div class="glossary-selector-letter">{{ i }}</div>
+        </td>
+        {% endfor %}
+        </tr></table>
     </td>
-    <td style="padding-top: 3px; padding-bottom: 3px;">
+    <td>
         <table border="0" cellspacing="0" cellpadding="0" style="margin-left: auto; margin-right: 10px;">
             <tr>
-                <td style="padding-right: 5px;">Form</td>
-                <td>Button</td>
+                <td><form action="" method="post" enctype="multipart/form-data">
+                        {{ form.search_field }}
+                    </td>
+                <td><input style="glossary-search-box" type="submit" value="Search"/>
+                </td>
+                </form>
             </tr>
         </table>
     </td>
     </tr>
 </table>
 
-</div>
+<div class="glossary-terms" id="form:glossary_frame">
+    <table cellspacing="0" cellpadding="0" border="0" class="glossary-terms">
+    <tbody>
+    <tr>
+    </tr>
+    <tr>
+        <td rowspan="2" class="glossary-letter" id="form_glossary_E">
+            <div class="glossary-letter">
+                E
+            </div>
+        </td>
+        <td class="glossary-term">
+            Embark/ embarkation
+        </td>
+        <td class="glossary-description">
+            Loading African captives into a slave ship. In West Africa slaves were embarked 
+            via canoe, as slaving vessels had to anchor off shore due to a lack of natural 
+            harbors. Slaves would often be kept below decks for weeks after embarkation, 
+            firstly whilst they waited for the slaving master to procure a full cargo, and 
+            then during the Middle Passage across the Atlantic.
+        </td>
+    </tr>
+    <tr>
+        <td class="glossary-term">
+            Exported (slaves)
+        </td>
+        <td class="glossary-description">
+            The number of enslaved Africans embarked on and departed from the coast of 
+            Africa.
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="4" class="glossary-letter" id="form_glossary_F">
+            <div class="glossary-letter">
+                F
+            </div>
+        </td>
+        <td class="glossary-term">
+            Fate
+        </td>
+        <td class="glossary-description">
+            The documented
+            outcome of a slaving voyage. Slavers hoped to 'complete' their voyage by 
+            returning to their homeport having purchased and sold slaves. Because of the 
+            risks of the sea, capture and rebellion, one in four slaving vessels failed to 
+            return to their homeport.
+        </td>
+    </tr>
+    <tr>
+        <td class="glossary-term">
+            Females
+        </td>
+        <td class="glossary-description">
+            The number
+            of female slaves. Slave traders did not prefer purchasing female slaves because 
+            buyers in the Americas sought stronger 'prime males'. Slavers kept female 
+            enslaved Africans separated from the males on board, and usually did not chain 
+            them above or below deck. Crewmen occasionally raped females on the Coast and 
+            Middle Passage.
+        </td>
+    </tr>
+    <tr>
+        <td class="glossary-term">
+            Flag/national flag
+        </td>
+        <td class="glossary-description">
+            The national registration papers carried on board ship. During the slave trade
+            suppression period, post-1810, slavers often sailed under a flag different from 
+            their own nationality. In Estimates, this box enables the user to limit the 
+            analysis to one or more of seven national carriers by checking boxes next to 
+            those for which results will be reported. The seven national carriers are the 
+            same as those found using Flag* in Search the Database, except that the latter 
+            includes a category for 12 voyages under other flags. The variable Flag, without 
+            an asterisk, in Search the Database contains all 16 national carriers before 
+            being regrouped into a smaller number of categories. [Note: Other has 60 cases 
+            here]
+        </td>
+    </tr>
+    <tr>
+        <td class="glossary-term">
+            Free trade era
+        </td>
+        <td class="glossary-description">
+            Through most years of the slave trade mercantilist laws restricted slave trades
+            to monopoly companies and national carriers. When companies lost monopolies in 
+            the 1700s, others could trade on the African coast and in the Americas. In 1789 
+            the Spanish Crown allowed ships of all nations to land slaves in American 
+            colonies, such as Cuba. From 1789 to 1867 slaving ships from throughout the 
+            Atlantic world docked at Havana, the most multi-national slaving port in the 
+            Americas.
+        </td>
+    </tr>
+    </tbody>
+    </table>
 
+</div>
+<!--
 {% for i in glossary %}
 {{ i.term }} {{ i.description }}
 <br>
 {% endfor %}
-
+--!>
 </body>

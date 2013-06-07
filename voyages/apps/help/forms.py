@@ -18,5 +18,9 @@ class FaqAdminForm(forms.ModelForm):
 class GlossarySearchForm(forms.ModelForm):
     """Form serves search in Glossary section
     """
-    search_field = forms.CharField("Enter phrase to search")
+    search_field = forms.CharField(label="")
+
+    class Meta:
+        model = Glossary
+        fields = ['search_field']
 

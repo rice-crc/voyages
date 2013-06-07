@@ -1,17 +1,24 @@
-
 /* top bar */
 
 div.glossary-letters-and-search {
 	background-color: White; }
-	
+
 table.glossary-letters-and-search {
-	width: 100%; }
+	width: 100%;
+    height: 23pt; 
+    overflow: hidden; }
+
+td.glossary-letters-and-search {
+    padding-left: 20px;
+}
 	
 table.glossary-letters {
 	width: 100%; }
 
 input.glossary-search-box {
-	width: 100px;
+	width: 50px;
+    padding: 0px;
+    margin: 0px;
 	background-color: White; }
 
 /* letters */
@@ -20,7 +27,11 @@ table.glossary-selector-letters {
 	height: 30px;
 	margin-left: 20px;
 	border-collapse: collapse; }
-	
+
+td.glossary-selector-letter {
+    padding-left: 0;
+    padding-right: 0; }
+
 div.glossary-selector-letter {
 	cursor: default;
 	padding-top: 2px;
