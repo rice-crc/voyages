@@ -8,14 +8,6 @@
         }
     }, 
     {
-        "pk": 9, 
-        "model": "help.faqcategory", 
-        "fields": {
-            "text": "TIMELINE", 
-            "type_order": 1
-        }
-    }, 
-    {
         "pk": 2, 
         "model": "help.faqcategory", 
         "fields": {
@@ -72,11 +64,19 @@
         }
     }, 
     {
+        "pk": 9, 
+        "model": "help.faqcategory", 
+        "fields": {
+            "text": "TIMELINE", 
+            "type_order": 9
+        }
+    }, 
+    {
         "pk": 10, 
         "model": "help.faqcategory", 
         "fields": {
             "text": "MAP", 
-            "type_order": 9
+            "type_order": 10
         }
     }, 
     {
@@ -84,7 +84,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "DOWNLOADS", 
-            "type_order": 10
+            "type_order": 11
         }
     }, 
     {
@@ -92,7 +92,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "CONTRIBUTE", 
-            "type_order": 11
+            "type_order": 12
         }
     }, 
     {
@@ -100,7 +100,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "ESSAYS", 
-            "type_order": 12
+            "type_order": 13
         }
     }, 
     {
@@ -108,7 +108,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "ESTIMATES", 
-            "type_order": 13
+            "type_order": 14
         }
     }, 
     {
@@ -116,7 +116,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "IMAGES", 
-            "type_order": 14
+            "type_order": 15
         }
     }, 
     {
@@ -124,7 +124,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "EDUCATIONAL MATERIALS", 
-            "type_order": 15
+            "type_order": 16
         }
     }, 
     {
@@ -132,7 +132,7 @@
         "model": "help.faqcategory", 
         "fields": {
             "text": "OTHER", 
-            "type_order": 16
+            "type_order": 17
         }
     }, 
     {
@@ -146,6 +146,46 @@
         }
     }, 
     {
+        "pk": 2, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The five main sections of the website are listed in the blue banner at the top of the screen: The Database; Assessing the Slave Trade; Resources; Educational Materials; and About the Project. Clicking on the name of one of these sections opens a page with general information about the section and its principal subsections. If you are visiting this site for the first time, you will find it useful to read this introduction. The sitemap, located on the right side of the orientation bar beneath the top banner, provides an at-a-glance list of the sections and subsections of the site.</p>", 
+            "category": 1, 
+            "question": "How do I find out what\u2019s available on this website?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>From any page of the website, you can move to another page by clicking on one of the five labels in the top navigation bar (or items in the drop-down menus associated with them). You can also use the sitemap among Help options, or click on part of the path in the orientation bar. Once in a section, you can quickly move to a subsection within it by means of links in the left frame.</p>", 
+            "category": 1, 
+            "question": "How do I move from one part of the website to another?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The performance of the Voyages website has been tested for compatibility with Mozilla Firefox 2, Microsoft Internet Explorer 7, and Safari 3. &nbsp;Interactive features like timelines and maps make extensive use of JavaScript and operate more smoothly on computers not older than three years. The website is designed for a screen resolution of not less than 1024x768 and 32-bit depth. For full display of pages, you may need to disable unnecessary toolbars or side panels in your browser.</p>", 
+            "category": 1, 
+            "question": "What are the optimal settings for viewing the website?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The <em>Voyages</em> website supports education and research by making its information available for free. Much of the information is protected by copyright. An Attribution-Non-Commerical Creative Commons license governs much of the content on the site, including historical and imputed data found in the three main databases on the site &ndash; the Voyages Database, the Estimates Database, and the African Names Database. This license allows for the non-commercial republication of certain content on the site and the creation of derivate works, provided the <em>Voyages</em> website is appropriately credited as the original source. Some materials on the <em>Voyages</em> website, however, appear by permission of the copyright owners and require their approval before being republished. For a guide to the various content on the site, permissions governing their use, and examples of how to cite the original source, see the \"Permissions to Reproduce\" section of the \"Legal\" page.</p>", 
+            "category": 1, 
+            "question": "Can I reuse or republish any information or materials I find on this website?", 
+            "question_order": 5
+        }
+    }, 
+    {
         "pk": 6, 
         "model": "help.faq", 
         "fields": {
@@ -153,6 +193,16 @@
             "category": 2, 
             "question": "How do I cite essays and texts found on the website?", 
             "question_order": 1
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p><em>The Chicago Manual of Style</em>&rsquo;s &ldquo;Quick Guide&rdquo; also provides an example of how to cite an item in an online database. For specific output or data selections, users should cite the URL generated by &ldquo;Create a link.&rdquo; Pasting the URL into the website will always generate the same results.</p>", 
+            "category": 2, 
+            "question": "How do I cite a database found on the website?", 
+            "question_order": 2
         }
     }, 
     {
@@ -166,6 +216,66 @@
         }
     }, 
     {
+        "pk": 9, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>There are two main options for querying the database: a <strong>basic</strong> search (&ldquo;Basic variables&rdquo;) uses a smaller set of variables, and a <strong>general</strong> search (&ldquo;General variables&rdquo;) uses an expanded set of variables. Basic variables are one-third of the total number of variables in the database, and general variables are a more extensive list of variables (though fewer than the over 200 variables available by downloading the full SPSS dataset).</p>", 
+            "category": 3, 
+            "question": "What is the difference between basic variables and general variables?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Variables with an asterisk are imputed. Imputed variables do not refer to information found in a source but to information inferred by historians from information that is found directly in sources. Data variables (variables in the database without asterisks) are documented directly from &nbsp;primary sources that provide evidence of a slaving voyage. For example, historical documents rarely indicate that a port where slaves disembarked was the principal place of landing, but when documentation exists on the number of slaves disembarked at several ports, the historian can determine where the largest number were disembarked, the principal place of disembarkation for the voyage. In some cases, how many slaves embarked is documented, but not how many disembarked. From the survival rate on voyages with the same characteristics, we impute the number who did so on the voyage with missing information. The essay, &ldquo;Construction &hellip;: Methods and Sources,&rdquo; explains the assumptions and basis of all imputed variables.</p>", 
+            "category": 3, 
+            "question": "Why is there an asterisk (*) next to some variables? ", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Look in the fourth, fifth, and six columns of the Variable List. The column &ldquo;Voyages&rdquo; shows the number of cases that have information coded for each variable in the main database.</p>", 
+            "category": 3, 
+            "question": "Where can I see at a glance variables available for analysis in different sections of the website?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>For categorical variables, put the variable into Current query. You will see it there with the notation [nothing selected]. Clicking on select will review the variable&rsquo;s values. For seeing how many cases, or slave voyages, are coded for the variable, put a mark in the check box and look at Results, at the bottom right of the query box. For numerical variables, one way to observe the range of values is to select the variable for display in the Results tab by using &ldquo;Configure columns&rdquo; (top right of main display area, opposite List of voyages) and then sort (clicking on the column heading) to see the top and bottom of its range.</p>", 
+            "category": 3, 
+            "question": "How can I observe the values of a variable?", 
+            "question_order": 5
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>&ldquo;Published secondary sources,&rdquo; the fourth part of Sources in Understanding the Database, a subsection of The Database, provides a comprehensive bibliography of scholarly studies of the Atlantic slave trade.</p>", 
+            "category": 3, 
+            "question": "Where do I find bibliographies of studies of the slave trade on the website?", 
+            "question_order": 6
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Your starting point should be the &ldquo;Sources&rdquo; for the voyage cited in the Trans-Atlantic Slave Trade database. These are listed in the last of the &ldquo;Voyage variables&rdquo; in Voyage detail, accessed by clicking on the row listing a voyage under the Results tab in Search the Database. Pop-up windows explain the short references; but full references are found in Sources in Understanding the Database, where the short references can be used to bring up the full description of the source.</p>", 
+            "category": 3, 
+            "question": "How do I find documentation for a particular voyage?", 
+            "question_order": 7
+        }
+    }, 
+    {
         "pk": 15, 
         "model": "help.faq", 
         "fields": {
@@ -173,6 +283,116 @@
             "category": 4, 
             "question": "How do I find information about a particular slaving voyage?", 
             "question_order": 1
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>&ldquo;Select time frame&rdquo; is the first query box at the top of the left frame in both the Voyages Database and Estimates. In Estimates, the default setting is 1501 to 1866 since evidence points to disembarkation of African slaves in Hispaniola from the beginning of the sixteenth century. For the Voyages Database, the time frame is set by default to the period from 1514, the first year in which a slave voyage can be documented, to 1866, the year of arrival of the last three documented slave voyages. For a single year, specify the same year in both &ldquo;From&rdquo; and &ldquo;To.&rdquo;</p>", 
+            "category": 4, 
+            "question": "How do I limit queries to specific sets of years?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>First, from the set of either basic or general variables, select a variable to limit the search by the criteria represented by its values. You do this by clicking on it in the roll-over menu that lists variables in one of eight categories (Ship, nation, owners; Outcome of voyage; etc.). This will move the variable into the box for &ldquo;Current query.&rdquo; Clicking on &ldquo;Select&rdquo; here opens a space for limiting the query to certain cases by using the variable. Make your selection and click on OK. You can then further limit the query by using another variable. Again, click on OK once you have made a selection. When you have finished entering criteria of selection, click on &ldquo;Search&rdquo; to activate the query. You will see to the right a list of voyages that match your selection criteria.</p>", 
+            "category": 4, 
+            "question": "How do I select voyages for examination and analysis?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Every choice of criteria limits the query to a smaller number of voyages. As you are making a selection, you can see how many voyages satisfy your criteria by viewing the number after &ldquo;Results&rdquo; at the bottom right of the &ldquo;Current query&rdquo; Box.</p>", 
+            "category": 4, 
+            "question": "Is there a way to know how many cases in the database have information relevant to a particular query?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The method of selection depends on the type of variable. If it is numerical, like &ldquo;Voyage identification number&rdquo; or &ldquo;Year arrived with slaves&rdquo; or &ldquo;Total slaves embarked,&rdquo; one is asked to enter a specific number or range of numbers. If it is a name, like that of a ship or its captain or the owner of the venture, one is asked to enter the name or part of it. If the variable consists of a set of categories, such as places or types of outcome of a slaving voyage, then the categories are listed with small check boxes in front of them and one is asked to check those that correspond to categories about which to find information. If there is an arrowhead in front of the checkbox, click on it to reveal further options.</p>", 
+            "category": 4, 
+            "question": "Why do methods of selection differ from variable to variable?", 
+            "question_order": 5
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<div class=\"faq-answer\">\r\n<p>Numerical variables ask the user to choose one of four options and enter a number or numbers after it:</p>\r\n<ul>\r\n<li>Between</li>\r\n<li>At most</li>\r\n<li>At least</li>\r\n<li>is equal to</li>\r\n</ul>\r\n<p>For percentages and rates, enter &ldquo;At least &lsquo;0&rsquo;&rdquo; to limit the query to voyages for which such measures can be computed.</p>\r\n</div>", 
+            "category": 4, 
+            "question": "How do I use selection options for numerical variables?", 
+            "question_order": 6
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>You can recall the selection criteria in a previous query in the current session by opening the &ldquo;Previous queries&rdquo; box and clicking on &ldquo;restore.&rdquo; If the box becomes cluttered with too many previous queries, you can remove any of them by clicking on &ldquo;delete.&rdquo; This option works only during a single session. When you close the browser window with the website, your previous queries disappear. For a permanent record of a query, use the option &ldquo;Create a link.&rdquo;</p>", 
+            "category": 4, 
+            "question": "How does \u201cPrevious queries\u201d work?", 
+            "question_order": 7
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>&ldquo;Create a link&rdquo; appears in the left frame of &ldquo;Search the Database&rdquo; after one has clicked on &ldquo;Search&rdquo; to execute a query. It creates a URL which users can save and later recreate the query by pasting in the site&rsquo;s address window.</p>", 
+            "category": 4, 
+            "question": "How does \u201cCreate a link\u201d work?", 
+            "question_order": 8
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Click on the variable in the set of Basic or General variables. It will open a space to enter the name or part of the name. The query program will list all records containing the sequence of letters you enter after click on &ldquo;Search&rdquo; to activate the program. Searching for a source is slightly more complicated because it requires one to enter its short reference rather than the full reference. To find voyages described in a particular source, begin by finding it in the bibliography of &ldquo;Sources&rdquo; in &ldquo;Understanding the Database.&rdquo; Note that the list of sources can be sorted by either short or long reference.</p>", 
+            "category": 4, 
+            "question": "How do I select variables of names (of the ship, captain, owners) and sources?", 
+            "question_order": 9
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>A control variable is one that does not change (or is held constant) during analysis of data in order to minimize its effect on results. The reason for doing this is to see more clearly the effects of other variables. Consider the following example. In the Voyages Database, a researcher wishes to examine differences in mortality on slave voyages organized in Great Britain and mainland North American colonies. She begins by setting three criteria in the query frame: a) time frame: 1700-1749; b) place where voyage began: Great Britain (clicking on Great Britain, England, Scotland, and Ireland); and c) outcome of voyage for owners: Delivered slaves for original owners. Time frame is selected because the researcher wants to see if any difference between British and American voyages persisted over time. She plans to obtain results first for the period 1700-49, and then for 1750-99. The second variable, where the voyage began, is the one whose effect on mortality the researcher is interested in. The third variable, outcome for owner, is the control variable. It will not change throughout the analysis. It affects the results, but the researcher is more interested in the effect of the place where the voyage was organized. By limiting the analysis only to voyages completed as the owner of the venture intended, the researcher is able to eliminate the effect on results of other possible outcomes, such as shipwreck or capture at see by an enemy ship.</p>", 
+            "category": 4, 
+            "question": "How do I control for certain variables in analyzing data in other variables in the main database and estimates?", 
+            "question_order": 10
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>This command resets the query interface to its initial setting, containing all 34,941 voyages in the database. Otherwise, previous specifications remain in effect. If you find less than all voyages or some specifications already set at the beginning of a session, the reason is probably information in your cache from previous sessions which prevents you from making a clean start.</p>", 
+            "category": 4, 
+            "question": "What does the command \u201cNew query\u201d do?", 
+            "question_order": 11
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>First, click on &ldquo;New query&rdquo; in the &ldquo;Current query&rdquo; box. Normally, it will return you to default settings and to the first page (Results) of Search the Database. If it does not do this, another more roundabout way to get to default settings is to close the browser window (not just a tab since the browser may retain the session state until it is completely exited &ndash; indeed, it may be necessary to definitively end a browser session by use of the Task Manager), reopen the browser, clear its cache, and then return to the Voyages website.</p>", 
+            "category": 4, 
+            "question": "When I begin a new session on the Voyages website, I find that it does not open with default settings, but instead some settings resulting from queries made in the preceding session remain in effect. How do I begin again from default?", 
+            "question_order": 12
         }
     }, 
     {
@@ -186,6 +406,16 @@
         }
     }, 
     {
+        "pk": 28, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>One simple way to print results is to use PrtSc (Print Screen). For a table or graph that you would like to print, hit the PrtSc key on your keyboard. This copies an image of the entire page into memory. Then paste the image into a blank screen of an image editing program like Microsoft Paint (one of the accessories) or Adobe Photoshop. From this image, you can then select a part of the image of an entire page, for example, the title and table of Summary Statistics, copy it and paste it into another page which you can print or save. Print screen will not supply a title for a table, graph, or map, nor will it include sources, notes or the details of the query that produced your results. It may be more efficient to download the data into a spreadsheet, construct a table or graph there with title, notes, sources, and desired formatting, and print this instead.</p>", 
+            "category": 5, 
+            "question": "How do I print results?", 
+            "question_order": 2
+        }
+    }, 
+    {
         "pk": 29, 
         "model": "help.faq", 
         "fields": {
@@ -193,6 +423,36 @@
             "category": 6, 
             "question": "How do I interpret information provided in \u201cSummary Statistics\u201d?", 
             "question_order": 1
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The default for &ldquo;Search the Database&rdquo; is the complete database. Thus, when no criteria of selection are specified in the query frame, the summary statistics describe the entirety of the slave trade. While in summary statistics, however, you can select voyages in the query frame at the left to see how they compare with the general average in the entire data set. For example, to answer the question, did the average number of slaves embarked on slave voyages decline or increase in the era of abolition after 1808, simply change the time frame on the left to 1808 to 1866 and click on &ldquo;Search.&rdquo;&nbsp; </p>", 
+            "category": 6, 
+            "question": "How can I use \u201cSummary Statistics\u201d in combination with the query frame to the left to compare voyages with different characteristics?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>An average is a value that is typical or representative of all values for the group of persons or things it describes. It is important to remember that the meaning of an average should be judged by the amount of deviation of particular cases around it. For four voyages landing 250, 280, 310, 360 slaves respectively, and for three voyages with 100 slaves and one voyage with 900, the average is the same: 300 slaves. The standard deviation is the clue to how much the average resembles particular cases in the group for which it is calculated. Divide the standard deviation by the average. The smaller the quotient, the closer particular cases are to the average. The larger the quotient, the more variation there is above and below the average.</p>", 
+            "category": 6, 
+            "question": "What do \u201caverages\u201d calculated in Summary Statistics, Tables, and the Timeline mean?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Compare statistics for the voyage, as shown in Voyage detail, to summary statistics for all voyages or voyages of the same type. All voyages are usually too large a reference group to be a meaningful unit of comparison. It is more revealing to determine if a voyage is typical of others under the same flag, or from the same period of time, or following the same route from a region in Africa to a region in the Americas.</p>", 
+            "category": 6, 
+            "question": "How do I determine if a slaving voyage is typical or exceptional?", 
+            "question_order": 4
         }
     }, 
     {
@@ -216,6 +476,56 @@
         }
     }, 
     {
+        "pk": 35, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>First, read over the answers to the FAQs about how to construct the three kinds of graphs. Each begins with a simple definition of the graph type. In general, bar charts are appropriate for comparing two to ten categories that can be measured numerically; pie charts are appropriate for comparing percentages of a whole; and XY charts show the relationship, or correlation, between two numerical variables.</p>", 
+            "category": 8, 
+            "question": "Custom graphs offer the possibility to construct three kinds of graphs: XY, pie, and bar charts. When should I use each type?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Remember that a limited number of categories of comparison is necessary for both bar and pie charts. Too many categories make a chart difficult to interpret. If you find this to be the case, use the left query frame to limit the number of categories or values to a manageable number. A bar chart is useful for comparing several categories on a numerical scale, for example, the number of voyages on British and Dutch vessels in the period 1641-1700, when development of sugar colonies in the Caribbean began, or number of slaves embarked in different regions of Africa, or the average size (in tons) of United States and British ships. Number of voyages, slaves embarked, and tonnage are all numerical variables. Flag or nationality and region are categorical variables. &nbsp;Use of the query frame to limit categories represented in a bar or pie chart is a key to making effective use of the feature.</p>", 
+            "category": 8, 
+            "question": "Is there a technique for making effective graphs?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>First, select bar chart as the &ldquo;Graph type.&rdquo; Second, choose a categorical variable for the X (horizontal) axis. Third, select for the Y (vertical) axis a variable that can be measured for each category and add it to &ldquo;Current series.&rdquo; Several series can be included in the graph if one wishes to do so, but they must be similar. Any series can be removed from &ldquo;Current series&rdquo; by checking the box next to it and clicking on &ldquo;Remove selected.&rdquo; Once all specifications are made, click on &ldquo;Show.&rdquo; If the resulting graph is not satisfactory, rethink your specifications.</p>", 
+            "category": 8, 
+            "question": "How do I construct a bar chart?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<div class=\"faq-answer\">\r\n<p>A pie chart is a circular graph having radii dividing the circle into sectors proportional in area to the relative magnitudes, frequencies or percentages represented. \"Voyages\" allows users to analyze data using a pie chart in the \"Custom graphs\" section. Pie charts effectively depict percentages.</p>\r\n<p>To make a pie chart in Custom Graphs, click on its button among graph types; enter under X axis the variable whose values will represent slices of the pie; and use the Y axis to choose a variable to determine how the size of each slice will be measured. Click on &ldquo;Add series&rdquo; to put it in the &ldquo;Current series&rdquo; box. If another variable is there, remove it. Then click on &ldquo;Show.&rdquo; Only categorical variables are suitable for a pie chart, and not every categorical variable at that. It is important to choose a variable with a small enough set of values for pieces of the pie to be more than thin slivers.&nbsp;Remember that you can limit the number of values in the query frame on the left.</p>\r\n</div>", 
+            "category": 8, 
+            "question": "How do I make a pie chart?", 
+            "question_order": 5
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>An X-Y chart consists of a line drawn between the co-ordinates of values of two numerical variables &ndash; one on the X (horizontal) axis, the other on the Y (vertical) axis.&nbsp;X-Y charts effectively display changes over time, with a year variable plotted on the x-axis. However, any two numeric variables that might be correlated can be plotted against each other on this type of chart, for example, Middle passage (days) and (Avg)Percentage of slaves embarked who died on voyage. Remember, too, that the query frame on the left can be used to further refine conditions for observing the correlation between two numeric variables.</p>", 
+            "category": 8, 
+            "question": "How do I draw an XY graph?", 
+            "question_order": 6
+        }
+    }, 
+    {
         "pk": 40, 
         "model": "help.faq", 
         "fields": {
@@ -236,146 +546,6 @@
         }
     }, 
     {
-        "pk": 57, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<div class=\"faq-answer\">\r\n<p>Yes, there are buttons on most pages for downloading information or results from the page in a csv (comma delimited file). Simply click on the button. It will transfer the data file to your computer where you can import it into a spreadsheet program of your choice.</p>\r\n</div>", 
-            "category": 11, 
-            "question": "Can I download results for further analysis using a spreadsheet?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 59, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Correct them using the automatic entry data entry form in Contribute, the fourth subsection under &ldquo;The Database&rdquo;. When you receive a user name and password authorizing you to enter this part of the site, you will see that you are first asked to choose between three types of submissions. The second is &ldquo;Edit an existing voyage.&rdquo; It has two columns, on the left data as presently entered, on the right the correct data that you propose instead. For variables that are already correct, you just need to click on &ldquo;copy.&rdquo; A space is also provided for any notes about your revision of each variable. It is particularly important to provide full information about the sources used to identify mistakes.</p>", 
-            "category": 12, 
-            "question": "What should I do if I find errors in how a variable or variables are coded for a particular voyage or set of voyages?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 63, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Presently, the essays subsection of Understanding the Database contains three types of contributions: interpretative essays, vignettes or biographical sketches about individuals transported on slave ships, and a research note. We will periodically change the contents of this section, adding longer and shorter essays, notes, reports on archives, projects about the slaves, and in general any kind of text for which the Trans-Atlantic Slave Trade Database is a major source. Users are invited to submit manuscripts to <a href=\"mailto:voyages@emory.edu\" shape=\"rect\">voyages@emory.edu</a>.</p>", 
-            "category": 13, 
-            "question": "What kinds of essays are published on the website?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 64, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Statistics in the Voyages Database are for slaving voyages for which documentary evidence has been found. Evidence of other voyages remains to be discovered. In some cases, it will never be discovered. An attempt has been made to systematically evaluate the completeness of the record of the slave trade for different national carriers in different periods of time. Statistics in Estimates take into account the incomplete nature of historical evidence and adjust figures derived from the Voyages Database upwards to provide an account of the actual volume of the slave trade.</p>", 
-            "category": 14, 
-            "question": "What is the difference the main database and the estimates database?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 68, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>In the Images section itself, the caption indicates when an image is relevant to a particular voyage. When one clicks on the image to obtain a larger view with information about it, below the commentary on the right is a link to related voyages. Clicking on it takes you directly to details about the voyage in the Voyages Database. In addition to links <em>from</em> Images to other sections of the website, there are links from other sections like Essays (in Assessing the Slave Trade) <em>to</em> the Images section. One of the three tabs in voyage detail (the page with information on a voyage opened when the row where it appears in the List of voyages is clicked) is to &ldquo;Related images.&rdquo; </p>", 
-            "category": 15, 
-            "question": "How are images linked to other sections of the Voyages website?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 71, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Several resources are available on the Voyages website itself: essays and introductory maps in Assessing the slave trade, the chronology of key events in the history of the slave trade below the Estimates timeline, images in Resources, and the glossary with key terms used by historians of the slave trade. In addition, the list of Sources and links on the website, without pretending to be exhaustive, point the user towards some of the most important places beyond the website to look for information.</p>", 
-            "category": 16, 
-            "question": "Where do I find information on the website to put voyages into historical context?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 72, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Please address unanswered questions to <a href=\"mailto:voyages@emory.edu\">voyages@emory.edu</a>, and we will attempt to provide this information for you.</p>", 
-            "category": 17, 
-            "question": "Can\u2019t find the information you are looking for?", 
-            "question_order": 1
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The five main sections of the website are listed in the blue banner at the top of the screen: The Database; Assessing the Slave Trade; Resources; Educational Materials; and About the Project. Clicking on the name of one of these sections opens a page with general information about the section and its principal subsections. If you are visiting this site for the first time, you will find it useful to read this introduction. The sitemap, located on the right side of the orientation bar beneath the top banner, provides an at-a-glance list of the sections and subsections of the site.</p>", 
-            "category": 1, 
-            "question": "How do I find out what\u2019s available on this website?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 7, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p><em>The Chicago Manual of Style</em>&rsquo;s &ldquo;Quick Guide&rdquo; also provides an example of how to cite an item in an online database. For specific output or data selections, users should cite the URL generated by &ldquo;Create a link.&rdquo; Pasting the URL into the website will always generate the same results.</p>", 
-            "category": 2, 
-            "question": "How do I cite a database found on the website?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 9, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>There are two main options for querying the database: a <strong>basic</strong> search (&ldquo;Basic variables&rdquo;) uses a smaller set of variables, and a <strong>general</strong> search (&ldquo;General variables&rdquo;) uses an expanded set of variables. Basic variables are one-third of the total number of variables in the database, and general variables are a more extensive list of variables (though fewer than the over 200 variables available by downloading the full SPSS dataset).</p>", 
-            "category": 3, 
-            "question": "What is the difference between basic variables and general variables?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 16, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>&ldquo;Select time frame&rdquo; is the first query box at the top of the left frame in both the Voyages Database and Estimates. In Estimates, the default setting is 1501 to 1866 since evidence points to disembarkation of African slaves in Hispaniola from the beginning of the sixteenth century. For the Voyages Database, the time frame is set by default to the period from 1514, the first year in which a slave voyage can be documented, to 1866, the year of arrival of the last three documented slave voyages. For a single year, specify the same year in both &ldquo;From&rdquo; and &ldquo;To.&rdquo;</p>", 
-            "category": 4, 
-            "question": "How do I limit queries to specific sets of years?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 28, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>One simple way to print results is to use PrtSc (Print Screen). For a table or graph that you would like to print, hit the PrtSc key on your keyboard. This copies an image of the entire page into memory. Then paste the image into a blank screen of an image editing program like Microsoft Paint (one of the accessories) or Adobe Photoshop. From this image, you can then select a part of the image of an entire page, for example, the title and table of Summary Statistics, copy it and paste it into another page which you can print or save. Print screen will not supply a title for a table, graph, or map, nor will it include sources, notes or the details of the query that produced your results. It may be more efficient to download the data into a spreadsheet, construct a table or graph there with title, notes, sources, and desired formatting, and print this instead.</p>", 
-            "category": 5, 
-            "question": "How do I print results?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 30, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The default for &ldquo;Search the Database&rdquo; is the complete database. Thus, when no criteria of selection are specified in the query frame, the summary statistics describe the entirety of the slave trade. While in summary statistics, however, you can select voyages in the query frame at the left to see how they compare with the general average in the entire data set. For example, to answer the question, did the average number of slaves embarked on slave voyages decline or increase in the era of abolition after 1808, simply change the time frame on the left to 1808 to 1866 and click on &ldquo;Search.&rdquo;&nbsp; </p>", 
-            "category": 6, 
-            "question": "How can I use \u201cSummary Statistics\u201d in combination with the query frame to the left to compare voyages with different characteristics?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 35, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>First, read over the answers to the FAQs about how to construct the three kinds of graphs. Each begins with a simple definition of the graph type. In general, bar charts are appropriate for comparing two to ten categories that can be measured numerically; pie charts are appropriate for comparing percentages of a whole; and XY charts show the relationship, or correlation, between two numerical variables.</p>", 
-            "category": 8, 
-            "question": "Custom graphs offer the possibility to construct three kinds of graphs: XY, pie, and bar charts. When should I use each type?", 
-            "question_order": 2
-        }
-    }, 
-    {
         "pk": 42, 
         "model": "help.faq", 
         "fields": {
@@ -383,96 +553,6 @@
             "category": 10, 
             "question": "Is there any difference between maps in the Voyages Database and in Estimates?", 
             "question_order": 2
-        }
-    }, 
-    {
-        "pk": 58, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>First, you can download any PDF file. Click on the link to open it. Acrobat reader provides an option allowing you to save the file to your hard disk. Secondly, data for most tables and graphs can be downloaded as a CSV file by clicking on buttons for this purpose under the display of results in the main area of the page. Thirdly, in the Downloads subsection of the Voyages Database, links are provided to enable you to download the full set of variables in the 2008 edition of the Trans-Atlantic Slave Trade SPSS Database, the version of this database used for the 1999 CD-ROM, the codebook for SPSS versions, the selection of variables for the website in several formats, and a spreadsheet containing the basic calculations used to derive the interactive set of estimates in Assessing the Slave Trade.</p>", 
-            "category": 11, 
-            "question": "What parts of the Voyages website can I download? How?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 60, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The &ldquo;Contribute&rdquo; subsection of the Voyages Database provides a data entry form designed to facilitate submission of new data. Guidelines are provided there on how to use it. In asking for a user name and password to enter this section, you will be put in contact with a specialist in the area and era of the slave trade in which you are interested who will help you with your contribution.</p>", 
-            "category": 12, 
-            "question": "How can I contribute new data on slave voyages to the website?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 65, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>In Estimates, each of the boxes for setting criteria of analysis has a &ldquo;Reset to default&rdquo; button. Initially, the time frame is set to 1501-1866, the entire period of the slave trade for which estimates are made; and flag (national carrier), embarkation regions, and disembarkation regions are all set to include all values for each. By clicking on &ldquo;Reset to default&rdquo; in a box, initial settings are restored for all specifications.</p>", 
-            "category": 14, 
-            "question": "What does the command \u201cReset to default\u201d do?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 69, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Thumbnails of images that match the search criteria (a key term, a period of time, or one of the categories into which the images are organized) will appear in the main part of the window. The user can click on any of them for a full size image and commentary.</p>", 
-            "category": 15, 
-            "question": "How does \u201cSearch for Images\u201d (the query box in \u201cImages\u201d) function?", 
-            "question_order": 2
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>From any page of the website, you can move to another page by clicking on one of the five labels in the top navigation bar (or items in the drop-down menus associated with them). You can also use the sitemap among Help options, or click on part of the path in the orientation bar. Once in a section, you can quickly move to a subsection within it by means of links in the left frame.</p>", 
-            "category": 1, 
-            "question": "How do I move from one part of the website to another?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 10, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Variables with an asterisk are imputed. Imputed variables do not refer to information found in a source but to information inferred by historians from information that is found directly in sources. Data variables (variables in the database without asterisks) are documented directly from &nbsp;primary sources that provide evidence of a slaving voyage. For example, historical documents rarely indicate that a port where slaves disembarked was the principal place of landing, but when documentation exists on the number of slaves disembarked at several ports, the historian can determine where the largest number were disembarked, the principal place of disembarkation for the voyage. In some cases, how many slaves embarked is documented, but not how many disembarked. From the survival rate on voyages with the same characteristics, we impute the number who did so on the voyage with missing information. The essay, &ldquo;Construction &hellip;: Methods and Sources,&rdquo; explains the assumptions and basis of all imputed variables.</p>", 
-            "category": 3, 
-            "question": "Why is there an asterisk (*) next to some variables? ", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 17, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>First, from the set of either basic or general variables, select a variable to limit the search by the criteria represented by its values. You do this by clicking on it in the roll-over menu that lists variables in one of eight categories (Ship, nation, owners; Outcome of voyage; etc.). This will move the variable into the box for &ldquo;Current query.&rdquo; Clicking on &ldquo;Select&rdquo; here opens a space for limiting the query to certain cases by using the variable. Make your selection and click on OK. You can then further limit the query by using another variable. Again, click on OK once you have made a selection. When you have finished entering criteria of selection, click on &ldquo;Search&rdquo; to activate the query. You will see to the right a list of voyages that match your selection criteria.</p>", 
-            "category": 4, 
-            "question": "How do I select voyages for examination and analysis?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 31, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>An average is a value that is typical or representative of all values for the group of persons or things it describes. It is important to remember that the meaning of an average should be judged by the amount of deviation of particular cases around it. For four voyages landing 250, 280, 310, 360 slaves respectively, and for three voyages with 100 slaves and one voyage with 900, the average is the same: 300 slaves. The standard deviation is the clue to how much the average resembles particular cases in the group for which it is calculated. Divide the standard deviation by the average. The smaller the quotient, the closer particular cases are to the average. The larger the quotient, the more variation there is above and below the average.</p>", 
-            "category": 6, 
-            "question": "What do \u201caverages\u201d calculated in Summary Statistics, Tables, and the Timeline mean?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 36, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Remember that a limited number of categories of comparison is necessary for both bar and pie charts. Too many categories make a chart difficult to interpret. If you find this to be the case, use the left query frame to limit the number of categories or values to a manageable number. A bar chart is useful for comparing several categories on a numerical scale, for example, the number of voyages on British and Dutch vessels in the period 1641-1700, when development of sugar colonies in the Caribbean began, or number of slaves embarked in different regions of Africa, or the average size (in tons) of United States and British ships. Number of voyages, slaves embarked, and tonnage are all numerical variables. Flag or nationality and region are categorical variables. &nbsp;Use of the query frame to limit categories represented in a bar or pie chart is a key to making effective use of the feature.</p>", 
-            "category": 8, 
-            "question": "Is there a technique for making effective graphs?", 
-            "question_order": 3
         }
     }, 
     {
@@ -486,86 +566,6 @@
         }
     }, 
     {
-        "pk": 61, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>In the automatic data entry form in Contribute, one type of submission is &ldquo;Merge existing voyages.&rdquo; It shows variables for two or three cases side-by-side for each case, allowing one to determine if they are duplicates. A word of caution: the same ship often made several voyages.</p>", 
-            "category": 12, 
-            "question": "What should I do if I find two cases describing the same voyage?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 66, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>No. Both sections make use of Philip Curtin&rsquo;s widely used distinction of eight regions of the Africa where slaves were embarked for transportation to the Americas. These regions are segments of the African Atlantic coastline in Africa from Senegambia in the North to West Central Africa in the South, with an eighth region in South-east Africa. In the website, off-shore islands are grouped with the region to which they are closest in proximity: the Cape Verde islands and Madeira with Senegambia, the Banana islands and Bance island with Sierra Leone, the Guinea islands with the Bight of Biafra, St. Helena with West Central Africa (although slaves were only disembarked there), and Indian ocean islands, the Mascarene islands, and Madagascar with Southeast Africa.</p>", 
-            "category": 14, 
-            "question": "Are embarkation regions in Estimates and the Voyages Database defined differently?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 70, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Each image includes a brief description of its historical relevance, the creator and location of the original work and its date of creation, and links to related voyages in The Database.</p>", 
-            "category": 15, 
-            "question": "What kinds of information are displayed when one clicks on the thumbnail of an image?", 
-            "question_order": 3
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The performance of the Voyages website has been tested for compatibility with Mozilla Firefox 2, Microsoft Internet Explorer 7, and Safari 3. &nbsp;Interactive features like timelines and maps make extensive use of JavaScript and operate more smoothly on computers not older than three years. The website is designed for a screen resolution of not less than 1024x768 and 32-bit depth. For full display of pages, you may need to disable unnecessary toolbars or side panels in your browser.</p>", 
-            "category": 1, 
-            "question": "What are the optimal settings for viewing the website?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 11, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Look in the fourth, fifth, and six columns of the Variable List. The column &ldquo;Voyages&rdquo; shows the number of cases that have information coded for each variable in the main database.</p>", 
-            "category": 3, 
-            "question": "Where can I see at a glance variables available for analysis in different sections of the website?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 18, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Every choice of criteria limits the query to a smaller number of voyages. As you are making a selection, you can see how many voyages satisfy your criteria by viewing the number after &ldquo;Results&rdquo; at the bottom right of the &ldquo;Current query&rdquo; Box.</p>", 
-            "category": 4, 
-            "question": "Is there a way to know how many cases in the database have information relevant to a particular query?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 32, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Compare statistics for the voyage, as shown in Voyage detail, to summary statistics for all voyages or voyages of the same type. All voyages are usually too large a reference group to be a meaningful unit of comparison. It is more revealing to determine if a voyage is typical of others under the same flag, or from the same period of time, or following the same route from a region in Africa to a region in the Americas.</p>", 
-            "category": 6, 
-            "question": "How do I determine if a slaving voyage is typical or exceptional?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 37, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>First, select bar chart as the &ldquo;Graph type.&rdquo; Second, choose a categorical variable for the X (horizontal) axis. Third, select for the Y (vertical) axis a variable that can be measured for each category and add it to &ldquo;Current series.&rdquo; Several series can be included in the graph if one wishes to do so, but they must be similar. Any series can be removed from &ldquo;Current series&rdquo; by checking the box next to it and clicking on &ldquo;Remove selected.&rdquo; Once all specifications are made, click on &ldquo;Show.&rdquo; If the resulting graph is not satisfactory, rethink your specifications.</p>", 
-            "category": 8, 
-            "question": "How do I construct a bar chart?", 
-            "question_order": 4
-        }
-    }, 
-    {
         "pk": 44, 
         "model": "help.faq", 
         "fields": {
@@ -573,66 +573,6 @@
             "category": 10, 
             "question": "What is the function of icons at the top of maps?", 
             "question_order": 4
-        }
-    }, 
-    {
-        "pk": 62, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Rather than using the data entry form, contact <a href=\"mailto:voyages@emory.edu\" shape=\"rect\">voyages@emory.edu</a>.</p>", 
-            "category": 12, 
-            "question": "How do I make contributions to features of the website other than the databases (essays, images, bibliographies, links, documents)?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 67, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Yes. In the Voyages Database, the Caribbean forms one broad region, and major colonies are specific regions within it, with ports at a third level of analysis of geographical variables. In Estimates, on the other hand, broad regions include five wholly or partly within the Caribbean, broadly distinguished by colonizer nations: the British and French Caribbean, the Danish West Indies, and the Dutch and Spanish Americas. The two last had mainland as well as island colonies. The other broad regions are the same as in Search the database: Europe, Africa, Brazil, and Mainland North America.</p>", 
-            "category": 14, 
-            "question": "Are disembarkation regions in Estimates and the Voyages Database defined differently?", 
-            "question_order": 4
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The <em>Voyages</em> website supports education and research by making its information available for free. Much of the information is protected by copyright. An Attribution-Non-Commerical Creative Commons license governs much of the content on the site, including historical and imputed data found in the three main databases on the site &ndash; the Voyages Database, the Estimates Database, and the African Names Database. This license allows for the non-commercial republication of certain content on the site and the creation of derivate works, provided the <em>Voyages</em> website is appropriately credited as the original source. Some materials on the <em>Voyages</em> website, however, appear by permission of the copyright owners and require their approval before being republished. For a guide to the various content on the site, permissions governing their use, and examples of how to cite the original source, see the \"Permissions to Reproduce\" section of the \"Legal\" page.</p>", 
-            "category": 1, 
-            "question": "Can I reuse or republish any information or materials I find on this website?", 
-            "question_order": 5
-        }
-    }, 
-    {
-        "pk": 12, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>For categorical variables, put the variable into Current query. You will see it there with the notation [nothing selected]. Clicking on select will review the variable&rsquo;s values. For seeing how many cases, or slave voyages, are coded for the variable, put a mark in the check box and look at Results, at the bottom right of the query box. For numerical variables, one way to observe the range of values is to select the variable for display in the Results tab by using &ldquo;Configure columns&rdquo; (top right of main display area, opposite List of voyages) and then sort (clicking on the column heading) to see the top and bottom of its range.</p>", 
-            "category": 3, 
-            "question": "How can I observe the values of a variable?", 
-            "question_order": 5
-        }
-    }, 
-    {
-        "pk": 19, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>The method of selection depends on the type of variable. If it is numerical, like &ldquo;Voyage identification number&rdquo; or &ldquo;Year arrived with slaves&rdquo; or &ldquo;Total slaves embarked,&rdquo; one is asked to enter a specific number or range of numbers. If it is a name, like that of a ship or its captain or the owner of the venture, one is asked to enter the name or part of it. If the variable consists of a set of categories, such as places or types of outcome of a slaving voyage, then the categories are listed with small check boxes in front of them and one is asked to check those that correspond to categories about which to find information. If there is an arrowhead in front of the checkbox, click on it to reveal further options.</p>", 
-            "category": 4, 
-            "question": "Why do methods of selection differ from variable to variable?", 
-            "question_order": 5
-        }
-    }, 
-    {
-        "pk": 38, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<div class=\"faq-answer\">\r\n<p>A pie chart is a circular graph having radii dividing the circle into sectors proportional in area to the relative magnitudes, frequencies or percentages represented. \"Voyages\" allows users to analyze data using a pie chart in the \"Custom graphs\" section. Pie charts effectively depict percentages.</p>\r\n<p>To make a pie chart in Custom Graphs, click on its button among graph types; enter under X axis the variable whose values will represent slices of the pie; and use the Y axis to choose a variable to determine how the size of each slice will be measured. Click on &ldquo;Add series&rdquo; to put it in the &ldquo;Current series&rdquo; box. If another variable is there, remove it. Then click on &ldquo;Show.&rdquo; Only categorical variables are suitable for a pie chart, and not every categorical variable at that. It is important to choose a variable with a small enough set of values for pieces of the pie to be more than thin slivers.&nbsp;Remember that you can limit the number of values in the query frame on the left.</p>\r\n</div>", 
-            "category": 8, 
-            "question": "How do I make a pie chart?", 
-            "question_order": 5
         }
     }, 
     {
@@ -646,36 +586,6 @@
         }
     }, 
     {
-        "pk": 13, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>&ldquo;Published secondary sources,&rdquo; the fourth part of Sources in Understanding the Database, a subsection of The Database, provides a comprehensive bibliography of scholarly studies of the Atlantic slave trade.</p>", 
-            "category": 3, 
-            "question": "Where do I find bibliographies of studies of the slave trade on the website?", 
-            "question_order": 6
-        }
-    }, 
-    {
-        "pk": 20, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<div class=\"faq-answer\">\r\n<p>Numerical variables ask the user to choose one of four options and enter a number or numbers after it:</p>\r\n<ul>\r\n<li>Between</li>\r\n<li>At most</li>\r\n<li>At least</li>\r\n<li>is equal to</li>\r\n</ul>\r\n<p>For percentages and rates, enter &ldquo;At least &lsquo;0&rsquo;&rdquo; to limit the query to voyages for which such measures can be computed.</p>\r\n</div>", 
-            "category": 4, 
-            "question": "How do I use selection options for numerical variables?", 
-            "question_order": 6
-        }
-    }, 
-    {
-        "pk": 39, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>An X-Y chart consists of a line drawn between the co-ordinates of values of two numerical variables &ndash; one on the X (horizontal) axis, the other on the Y (vertical) axis.&nbsp;X-Y charts effectively display changes over time, with a year variable plotted on the x-axis. However, any two numeric variables that might be correlated can be plotted against each other on this type of chart, for example, Middle passage (days) and (Avg)Percentage of slaves embarked who died on voyage. Remember, too, that the query frame on the left can be used to further refine conditions for observing the correlation between two numeric variables.</p>", 
-            "category": 8, 
-            "question": "How do I draw an XY graph?", 
-            "question_order": 6
-        }
-    }, 
-    {
         "pk": 46, 
         "model": "help.faq", 
         "fields": {
@@ -683,26 +593,6 @@
             "category": 10, 
             "question": "To the right of the map, \u201cSelect map\u201d allows the user to choose between broad regions, regions, and ports. What is the difference between these units?", 
             "question_order": 6
-        }
-    }, 
-    {
-        "pk": 14, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Your starting point should be the &ldquo;Sources&rdquo; for the voyage cited in the Trans-Atlantic Slave Trade database. These are listed in the last of the &ldquo;Voyage variables&rdquo; in Voyage detail, accessed by clicking on the row listing a voyage under the Results tab in Search the Database. Pop-up windows explain the short references; but full references are found in Sources in Understanding the Database, where the short references can be used to bring up the full description of the source.</p>", 
-            "category": 3, 
-            "question": "How do I find documentation for a particular voyage?", 
-            "question_order": 7
-        }
-    }, 
-    {
-        "pk": 21, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>You can recall the selection criteria in a previous query in the current session by opening the &ldquo;Previous queries&rdquo; box and clicking on &ldquo;restore.&rdquo; If the box becomes cluttered with too many previous queries, you can remove any of them by clicking on &ldquo;delete.&rdquo; This option works only during a single session. When you close the browser window with the website, your previous queries disappear. For a permanent record of a query, use the option &ldquo;Create a link.&rdquo;</p>", 
-            "category": 4, 
-            "question": "How does \u201cPrevious queries\u201d work?", 
-            "question_order": 7
         }
     }, 
     {
@@ -716,16 +606,6 @@
         }
     }, 
     {
-        "pk": 22, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>&ldquo;Create a link&rdquo; appears in the left frame of &ldquo;Search the Database&rdquo; after one has clicked on &ldquo;Search&rdquo; to execute a query. It creates a URL which users can save and later recreate the query by pasting in the site&rsquo;s address window.</p>", 
-            "category": 4, 
-            "question": "How does \u201cCreate a link\u201d work?", 
-            "question_order": 8
-        }
-    }, 
-    {
         "pk": 48, 
         "model": "help.faq", 
         "fields": {
@@ -733,16 +613,6 @@
             "category": 10, 
             "question": "\u201cSelect map\u201d also allows the user to choose the time period of the map. What is the nature of choices offered here?", 
             "question_order": 8
-        }
-    }, 
-    {
-        "pk": 23, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>Click on the variable in the set of Basic or General variables. It will open a space to enter the name or part of the name. The query program will list all records containing the sequence of letters you enter after click on &ldquo;Search&rdquo; to activate the program. Searching for a source is slightly more complicated because it requires one to enter its short reference rather than the full reference. To find voyages described in a particular source, begin by finding it in the bibliography of &ldquo;Sources&rdquo; in &ldquo;Understanding the Database.&rdquo; Note that the list of sources can be sorted by either short or long reference.</p>", 
-            "category": 4, 
-            "question": "How do I select variables of names (of the ship, captain, owners) and sources?", 
-            "question_order": 9
         }
     }, 
     {
@@ -756,16 +626,6 @@
         }
     }, 
     {
-        "pk": 24, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>A control variable is one that does not change (or is held constant) during analysis of data in order to minimize its effect on results. The reason for doing this is to see more clearly the effects of other variables. Consider the following example. In the Voyages Database, a researcher wishes to examine differences in mortality on slave voyages organized in Great Britain and mainland North American colonies. She begins by setting three criteria in the query frame: a) time frame: 1700-1749; b) place where voyage began: Great Britain (clicking on Great Britain, England, Scotland, and Ireland); and c) outcome of voyage for owners: Delivered slaves for original owners. Time frame is selected because the researcher wants to see if any difference between British and American voyages persisted over time. She plans to obtain results first for the period 1700-49, and then for 1750-99. The second variable, where the voyage began, is the one whose effect on mortality the researcher is interested in. The third variable, outcome for owner, is the control variable. It will not change throughout the analysis. It affects the results, but the researcher is more interested in the effect of the place where the voyage was organized. By limiting the analysis only to voyages completed as the owner of the venture intended, the researcher is able to eliminate the effect on results of other possible outcomes, such as shipwreck or capture at see by an enemy ship.</p>", 
-            "category": 4, 
-            "question": "How do I control for certain variables in analyzing data in other variables in the main database and estimates?", 
-            "question_order": 10
-        }
-    }, 
-    {
         "pk": 50, 
         "model": "help.faq", 
         "fields": {
@@ -776,16 +636,6 @@
         }
     }, 
     {
-        "pk": 25, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>This command resets the query interface to its initial setting, containing all 34,941 voyages in the database. Otherwise, previous specifications remain in effect. If you find less than all voyages or some specifications already set at the beginning of a session, the reason is probably information in your cache from previous sessions which prevents you from making a clean start.</p>", 
-            "category": 4, 
-            "question": "What does the command \u201cNew query\u201d do?", 
-            "question_order": 11
-        }
-    }, 
-    {
         "pk": 51, 
         "model": "help.faq", 
         "fields": {
@@ -793,16 +643,6 @@
             "category": 10, 
             "question": "How is the number of slaves embarked and/or disembarked corresponding with different circle sizes computed?", 
             "question_order": 11
-        }
-    }, 
-    {
-        "pk": 26, 
-        "model": "help.faq", 
-        "fields": {
-            "answer": "<p>First, click on &ldquo;New query&rdquo; in the &ldquo;Current query&rdquo; box. Normally, it will return you to default settings and to the first page (Results) of Search the Database. If it does not do this, another more roundabout way to get to default settings is to close the browser window (not just a tab since the browser may retain the session state until it is completely exited &ndash; indeed, it may be necessary to definitively end a browser session by use of the Task Manager), reopen the browser, clear its cache, and then return to the Voyages website.</p>", 
-            "category": 4, 
-            "question": "When I begin a new session on the Voyages website, I find that it does not open with default settings, but instead some settings resulting from queries made in the preceding session remain in effect. How do I begin again from default?", 
-            "question_order": 12
         }
     }, 
     {
@@ -853,6 +693,166 @@
             "category": 10, 
             "question": "What kinds of detail are displayed on the historical maps?", 
             "question_order": 16
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<div class=\"faq-answer\">\r\n<p>Yes, there are buttons on most pages for downloading information or results from the page in a csv (comma delimited file). Simply click on the button. It will transfer the data file to your computer where you can import it into a spreadsheet program of your choice.</p>\r\n</div>", 
+            "category": 11, 
+            "question": "Can I download results for further analysis using a spreadsheet?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>First, you can download any PDF file. Click on the link to open it. Acrobat reader provides an option allowing you to save the file to your hard disk. Secondly, data for most tables and graphs can be downloaded as a CSV file by clicking on buttons for this purpose under the display of results in the main area of the page. Thirdly, in the Downloads subsection of the Voyages Database, links are provided to enable you to download the full set of variables in the 2008 edition of the Trans-Atlantic Slave Trade SPSS Database, the version of this database used for the 1999 CD-ROM, the codebook for SPSS versions, the selection of variables for the website in several formats, and a spreadsheet containing the basic calculations used to derive the interactive set of estimates in Assessing the Slave Trade.</p>", 
+            "category": 11, 
+            "question": "What parts of the Voyages website can I download? How?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Correct them using the automatic entry data entry form in Contribute, the fourth subsection under &ldquo;The Database&rdquo;. When you receive a user name and password authorizing you to enter this part of the site, you will see that you are first asked to choose between three types of submissions. The second is &ldquo;Edit an existing voyage.&rdquo; It has two columns, on the left data as presently entered, on the right the correct data that you propose instead. For variables that are already correct, you just need to click on &ldquo;copy.&rdquo; A space is also provided for any notes about your revision of each variable. It is particularly important to provide full information about the sources used to identify mistakes.</p>", 
+            "category": 12, 
+            "question": "What should I do if I find errors in how a variable or variables are coded for a particular voyage or set of voyages?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>The &ldquo;Contribute&rdquo; subsection of the Voyages Database provides a data entry form designed to facilitate submission of new data. Guidelines are provided there on how to use it. In asking for a user name and password to enter this section, you will be put in contact with a specialist in the area and era of the slave trade in which you are interested who will help you with your contribution.</p>", 
+            "category": 12, 
+            "question": "How can I contribute new data on slave voyages to the website?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>In the automatic data entry form in Contribute, one type of submission is &ldquo;Merge existing voyages.&rdquo; It shows variables for two or three cases side-by-side for each case, allowing one to determine if they are duplicates. A word of caution: the same ship often made several voyages.</p>", 
+            "category": 12, 
+            "question": "What should I do if I find two cases describing the same voyage?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Rather than using the data entry form, contact <a href=\"mailto:voyages@emory.edu\" shape=\"rect\">voyages@emory.edu</a>.</p>", 
+            "category": 12, 
+            "question": "How do I make contributions to features of the website other than the databases (essays, images, bibliographies, links, documents)?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Presently, the essays subsection of Understanding the Database contains three types of contributions: interpretative essays, vignettes or biographical sketches about individuals transported on slave ships, and a research note. We will periodically change the contents of this section, adding longer and shorter essays, notes, reports on archives, projects about the slaves, and in general any kind of text for which the Trans-Atlantic Slave Trade Database is a major source. Users are invited to submit manuscripts to <a href=\"mailto:voyages@emory.edu\" shape=\"rect\">voyages@emory.edu</a>.</p>", 
+            "category": 13, 
+            "question": "What kinds of essays are published on the website?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Statistics in the Voyages Database are for slaving voyages for which documentary evidence has been found. Evidence of other voyages remains to be discovered. In some cases, it will never be discovered. An attempt has been made to systematically evaluate the completeness of the record of the slave trade for different national carriers in different periods of time. Statistics in Estimates take into account the incomplete nature of historical evidence and adjust figures derived from the Voyages Database upwards to provide an account of the actual volume of the slave trade.</p>", 
+            "category": 14, 
+            "question": "What is the difference the main database and the estimates database?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>In Estimates, each of the boxes for setting criteria of analysis has a &ldquo;Reset to default&rdquo; button. Initially, the time frame is set to 1501-1866, the entire period of the slave trade for which estimates are made; and flag (national carrier), embarkation regions, and disembarkation regions are all set to include all values for each. By clicking on &ldquo;Reset to default&rdquo; in a box, initial settings are restored for all specifications.</p>", 
+            "category": 14, 
+            "question": "What does the command \u201cReset to default\u201d do?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>No. Both sections make use of Philip Curtin&rsquo;s widely used distinction of eight regions of the Africa where slaves were embarked for transportation to the Americas. These regions are segments of the African Atlantic coastline in Africa from Senegambia in the North to West Central Africa in the South, with an eighth region in South-east Africa. In the website, off-shore islands are grouped with the region to which they are closest in proximity: the Cape Verde islands and Madeira with Senegambia, the Banana islands and Bance island with Sierra Leone, the Guinea islands with the Bight of Biafra, St. Helena with West Central Africa (although slaves were only disembarked there), and Indian ocean islands, the Mascarene islands, and Madagascar with Southeast Africa.</p>", 
+            "category": 14, 
+            "question": "Are embarkation regions in Estimates and the Voyages Database defined differently?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Yes. In the Voyages Database, the Caribbean forms one broad region, and major colonies are specific regions within it, with ports at a third level of analysis of geographical variables. In Estimates, on the other hand, broad regions include five wholly or partly within the Caribbean, broadly distinguished by colonizer nations: the British and French Caribbean, the Danish West Indies, and the Dutch and Spanish Americas. The two last had mainland as well as island colonies. The other broad regions are the same as in Search the database: Europe, Africa, Brazil, and Mainland North America.</p>", 
+            "category": 14, 
+            "question": "Are disembarkation regions in Estimates and the Voyages Database defined differently?", 
+            "question_order": 4
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>In the Images section itself, the caption indicates when an image is relevant to a particular voyage. When one clicks on the image to obtain a larger view with information about it, below the commentary on the right is a link to related voyages. Clicking on it takes you directly to details about the voyage in the Voyages Database. In addition to links <em>from</em> Images to other sections of the website, there are links from other sections like Essays (in Assessing the Slave Trade) <em>to</em> the Images section. One of the three tabs in voyage detail (the page with information on a voyage opened when the row where it appears in the List of voyages is clicked) is to &ldquo;Related images.&rdquo; </p>", 
+            "category": 15, 
+            "question": "How are images linked to other sections of the Voyages website?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Thumbnails of images that match the search criteria (a key term, a period of time, or one of the categories into which the images are organized) will appear in the main part of the window. The user can click on any of them for a full size image and commentary.</p>", 
+            "category": 15, 
+            "question": "How does \u201cSearch for Images\u201d (the query box in \u201cImages\u201d) function?", 
+            "question_order": 2
+        }
+    }, 
+    {
+        "pk": 70, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Each image includes a brief description of its historical relevance, the creator and location of the original work and its date of creation, and links to related voyages in The Database.</p>", 
+            "category": 15, 
+            "question": "What kinds of information are displayed when one clicks on the thumbnail of an image?", 
+            "question_order": 3
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Several resources are available on the Voyages website itself: essays and introductory maps in Assessing the slave trade, the chronology of key events in the history of the slave trade below the Estimates timeline, images in Resources, and the glossary with key terms used by historians of the slave trade. In addition, the list of Sources and links on the website, without pretending to be exhaustive, point the user towards some of the most important places beyond the website to look for information.</p>", 
+            "category": 16, 
+            "question": "Where do I find information on the website to put voyages into historical context?", 
+            "question_order": 1
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "help.faq", 
+        "fields": {
+            "answer": "<p>Please address unanswered questions to <a href=\"mailto:voyages@emory.edu\">voyages@emory.edu</a>, and we will attempt to provide this information for you.</p>", 
+            "category": 17, 
+            "question": "Can\u2019t find the information you are looking for?", 
+            "question_order": 1
         }
     }
 ]

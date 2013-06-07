@@ -50,13 +50,22 @@ $(document).ready(function() {
 			/* Default loading */
 			$(".demo-links > ul > li > a").first().addClass("demo-link-active");
 			$("#demos-inner-content").load("page_" + $(".demo-links > ul > li").first().attr("id"));
-		} else if (pagename="sitemap") {
+		} else if (pagename =="sitemap") {
+			/* Let the link on sitemap page opens a new page in the parent window */
 			$("#toplinks a").click(function(ev){
 				ev.preventDefault();
 				openPage($(this).attr("href"));
 			}); 
-		}else {
-		
+		} else if (pagename == "faqs") {
+			$(".faq-answer a").click(function(ev){
+				if ( this.href.indexOf("/help/help?section=") == -1
+					&& (this.href).indexOf(window.location.hostname) >= 0) {
+					/* Website internal links open page in the parent window
+					 * except for Help pages open in the same window */
+					ev.preventDefault();
+					openPage($(this).attr("href"));
+				}
+			});
 		}
 	}
 

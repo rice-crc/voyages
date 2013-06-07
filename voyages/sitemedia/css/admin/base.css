@@ -736,6 +736,48 @@ table#change-history tbody th {
     width: 100%;
 }
 
+
+/* Secondary bar (no breadcrumb)*/
+/* Secondary bar */
+div.secondary-bar {
+	clear: both;
+	background-color: #05768A;
+	height: 12pt;
+	color: white;
+	width: 100%;
+	margin: 0;
+	padding: 0px 0px 4px 4px;
+}
+
+div.secondary-bar a {
+	text-decoration: none;
+	color: white;
+	padding: 0;
+	margin: 0;
+}
+
+div.secondary-bar a:hover {
+	text-decoration: underline;
+	color: #C0E0EA;
+}
+
+table.secondary-bar {
+	width: 890px;
+}
+
+.secondary-bar-breadcrumb {
+	width: 680px;
+}
+
+.secondary-bar-help-links {
+	width: 220px;
+}
+
+div.secondary-bar td, div.secondary-bar th {
+	padding: 2px 5px 2px 5px;
+	margin: 0;
+}
+
 #content-related {
     float: right;
     width: 18em;
@@ -799,8 +841,9 @@ table#change-history tbody th {
     text-decoration: underline;
 }
 
+
 #branding h1 {
-    padding: 5px 10px;
+    padding: 0px 10px 5px 10px;
     margin: 0px;
     font-weight: normal;
     color: #FFFFFF;
