@@ -45,6 +45,12 @@ class Faq(models.Model):
     answer = models.TextField(_('Answer'), max_length=2000)
     category = models.ForeignKey(FaqCategory)
     question_order = models.IntegerField()
+
+    @property
+    def mid(selfself):
+        '''Model ID - unique id of database object'''
+
+        return 'faq-%s' % self.id
     
     def get_html_answer(self): 
         return mark_safe(self.answer)

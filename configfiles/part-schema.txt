@@ -152,8 +152,6 @@
 
     <field name="question" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="question_order" type="long" indexed="true" stored="true" multiValued="false" />
-
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->
@@ -165,4 +163,3 @@
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
   <solrQueryParser defaultOperator="AND"/>
 </schema>
-

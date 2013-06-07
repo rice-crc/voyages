@@ -4,10 +4,11 @@ from voyages.apps.help.models import FaqCategory, Faq
 
 
 class FaqIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
+    text = indexes.CharField(model_attr='mid', document=True, use_template=True)
     question = indexes.CharField(model_attr='question')
     answer = indexes.CharField(model_attr='answer')
-    question_order = indexes.IntegerField(model_attr='question_order')
+    
+
 
     def get_model(self):
         return Faq

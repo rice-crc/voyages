@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^help/', include('voyages.apps.help.urls', namespace='help')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
-    (r'^search/', include('haystack.urls')),
+    (r'^search/', include('haystack.urls', namespace='search')),
 )
 
 # XML generated sitemap
