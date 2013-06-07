@@ -13,7 +13,7 @@
         <table><tr>
         {% for i in letters %}
         <td class="glossary-selector-letter">
-            <div class="glossary-selector-letter">{{ i }}</div>
+            <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ i|slice:":1" }}">{{ i }}</a></div>
         </td>
         {% endfor %}
         </tr></table>
@@ -47,6 +47,7 @@
                         {% if t_key == "term" %}
                             <td rowspan="{{ value|length }}" class="glossary-letter" id="form_glossary_{{ t_value|slice:":1" }}">
                             <div class="glossary-letter">
+                                <a name="glossary-letter-{{ t_value|slice:":1" }}"></a>
                                 {{ t_value|slice:":1" }}
                             </div>
                             </td>
@@ -73,6 +74,7 @@
     {% endfor %}
     </tbody>
     </table>
+
 
 </div>
 </body>

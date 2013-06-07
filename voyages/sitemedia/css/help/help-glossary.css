@@ -11,7 +11,7 @@ table.glossary-letters-and-search {
 td.glossary-letters-and-search {
     padding-left: 20px;
 }
-	
+
 table.glossary-letters {
 	width: 100%; }
 
@@ -32,6 +32,25 @@ td.glossary-selector-letter {
     padding-left: 0;
     padding-right: 0; }
 
+td.glossary-selector-letter:hover a{
+    background-color: #008CA5;
+    color: White
+}
+
+td a:hover {
+    background-color: #008CA5;
+    color: White; }
+
+a.glossary-selector-letter {
+    text-decoration: none;
+}
+
+a.glossary-selector-letter:hover {
+    text-decoration: none;
+    background-color: #008CA5;
+    color: White
+}
+
 div.glossary-selector-letter {
 	cursor: default;
 	padding-top: 2px;
@@ -43,15 +62,6 @@ div.glossary-selector-letter {
 div.glossary-selector-letter:hover {
 	background-color: #008CA5;
 	color: White; }
-
-div.glossary-selector-letter-dimmed {
-	cursor: default;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 5px;
-	padding-right: 5px;
-	font-weight: bold;
-	color: #E2F2F5; }
 
 /* glossary */
 
