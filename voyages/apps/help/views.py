@@ -1,12 +1,9 @@
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render_to_response
-<<<<<<< HEAD
 from .models import Glossary, Faq
 from .forms import GlossarySearchForm
-=======
 from .models import Glossary, Faq, FaqCategory
->>>>>>> afc0a734aba4d4e2bcf08e8e8b19c270ab581b02
 
 def glossaryPage(request):
     letters = []
