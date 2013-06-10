@@ -7,7 +7,7 @@ class Glossary(models.Model):
 
     """
     term = models.CharField(_('Term'),max_length=50)
-    description = models.TextField(_('Description'), max_length=1000)
+    description = models.CharField(_('Description'), max_length=1000)
 
     class Meta:
         ordering = ['term']
