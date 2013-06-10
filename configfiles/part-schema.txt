@@ -152,6 +152,10 @@
 
     <field name="question" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="term" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="description" type="text_en" indexed="true" stored="true" multiValued="false" />
+
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->
