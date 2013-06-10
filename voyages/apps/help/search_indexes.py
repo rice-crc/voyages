@@ -20,10 +20,10 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
 class GlossaryIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     term = indexes.CharField(model_attr='term')
-    description = indexes.TextField(model_attr='description')
+    description = indexes.CharField(model_attr='description')
 
     def get_model(self):
-        return Glossary;
+        return Glossary
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
