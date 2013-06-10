@@ -1,11 +1,10 @@
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render_to_response
-from .models import Glossary, Faq
 from .forms import GlossarySearchForm
 from .models import Glossary, Faq, FaqCategory
 
-def glossaryPage(request):
+def glossary_page(request):
     letters = []
     glossary_content = [];
     glossary_dict = {};
@@ -26,8 +25,6 @@ def glossaryPage(request):
 
     return render_to_response('help/page_glossary.html', {'letters': letters, 'glossary': glossary_content, 'form': form},
                               context_instance=RequestContext(request));
-
-
 
 def get_faqs(request):
     """
