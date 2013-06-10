@@ -27,8 +27,7 @@ def glossaryPage(request):
     return render_to_response('help/page_glossary.html', {'letters': letters, 'glossary': glossary_content, 'form': form},
                               context_instance=RequestContext(request));
 
-    #return render_to_response('help/page_glossary.html', {'letters': letters, 'glossary': Glossary.objects.all()},
-    #                                      context_instance=RequestContext(request));
+
 
 def get_faqs(request):
     """
