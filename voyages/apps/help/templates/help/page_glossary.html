@@ -1,13 +1,14 @@
+{% extends "help/helpbase.html" %}
+{% load i18n %}
 {% load highlight %}
 
-<html lang="en">
-    <head>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
+{% block csslist %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
+{% endblock %}
 
-</head>
+{% block title %}{% trans 'Glossary' %}{% endblock %}
 
-<body>
-
+{% block main-content %}
 <div>
 {% if results %}
 	<h3>Results</h3>
@@ -99,5 +100,4 @@
 
 </div>
 
-</body>
-
+{% endblock %}

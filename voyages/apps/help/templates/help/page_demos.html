@@ -1,3 +1,13 @@
+{% extends "help/helpbase.html" %}
+{% load i18n %}
+
+{% block csslist %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-demos.css" />
+{% endblock %}
+
+{% block title %}{% trans 'Demos' %}{% endblock %}
+
+{% block main-content %}
 <!-- Page containing all videos --> 
 <div class="demo-links">
 <ul>
@@ -13,3 +23,4 @@
 <div id="demos-inner-content">
 	&nbsp;
 </div>
+{% endblock %}

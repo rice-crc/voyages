@@ -24,9 +24,9 @@ $(document).ready(function() {
 	
 	
 	/* Secondary menu event handler */
-	$(".secondary-bar-help-link > a").click(function(ev){
+	$(".secondary-bar-help-link a").click(function(ev){
 		ev.preventDefault(); /* Disable the default/nothing action */
-		openPopup("/help/help?section=" + this.id); /* Open the pop up window */
+		openPopup(this.href); /* Open the pop up window */
 	});
 });
 
@@ -38,6 +38,6 @@ window.open( pageUrl,
 	"location=no, " +
 	"status=no, " +
 	"scrollbars=yes, " +
-	"width=680, " +
+	"width=700, " +
 	"height=680").focus();
 } 

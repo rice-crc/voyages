@@ -20,11 +20,11 @@
 			<td class="secondary-bar-help-links">
 			<table border="0" cellspacing="0" cellpadding="0" class="secondary-bar-help-links">
 				<tr>
-					<td class="secondary-bar-help-link"><a href="" id="sitemap">Sitemap</a></td>
-					<td class="secondary-bar-help-link"><a href="" id="faqs">FAQs</a></td>
-					<td class="secondary-bar-help-link"><a href="" id="demos">Demos</a></td>
-					<td class="secondary-bar-help-link"><a href="" id="glossary">Glossary </a></td>
-					<td class="secondary-bar-help-link"><a href="" id="legal">Legal </a></td>
+					<td class="secondary-bar-help-link"><a href="{% url help:sitemap %}" id="sitemap">Sitemap</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url help:faqs %}" id="faqs">FAQs</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url help:demos %}" id="demos">Demos</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url help:glossary %}" id="glossary">Glossary </a></td>
+					<td class="secondary-bar-help-link"><a href="{% url help:legal %}" id="legal">Legal </a></td>
 					
 					<!-- Language feature currently disabled 
 					<td class="secondary-bar-help-link"><a>Current Language:</a> </td>

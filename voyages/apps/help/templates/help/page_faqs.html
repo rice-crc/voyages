@@ -1,6 +1,15 @@
-
-
+{% extends "help/helpbase.html" %}
+{% load i18n %}
 {% load highlight %}
+
+{% block csslist %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-faqs.css" />
+{% endblock %}
+
+{% block title %}{% trans 'FAQs' %}{% endblock %}
+
+{% block main-content %}
+
 {% if faq_list %}
 <div id="search_box_wrapper">
 <form action="/help/page_faqs" method="post">{% csrf_token %}
@@ -58,3 +67,5 @@
 </div>
 
 {% endif %}
+
+{% endblock %}

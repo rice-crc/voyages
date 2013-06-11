@@ -1,5 +1,13 @@
+{% extends "help/helpbase.html" %}
 {% load i18n %}
 
+{% block csslist %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-legal.css" />
+{% endblock %}
+
+{% block title %}{% trans 'Legal' %}{% endblock %}
+
+{% block main-content %}
 <!-- The legal section of the site -->
 
 <p>
@@ -325,3 +333,4 @@
 	or any later version. Open source software components of the Voyages website are freely available through
 	<a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>.{% endblocktrans %}
 </p>
+{% endblock %}
