@@ -16,31 +16,17 @@
 
 {% if faq_list %}
 <div id="search_box_wrapper">
-<form action="/help/page_faqs" method="post">{% csrf_token %}
-{% for field in form %}
-	{{ field }}
-{% endfor %}
+	<form action="/help/page_faqs" method="post">
+		{% csrf_token %}
+		{% for field in form %}
+		{{ field }}
+		{% endfor %}
 
-<input type="submit" value="Search">
-</form>
+		<input type="submit" value="Search">
+	</form>
 </div>
 <div id="resultsets">
-{% if result %}
-	<h3>Search Results</h3>
-	{% for s_r in result %}
-	<p>
-		{% highlight s_r.object.question with current_query  %}
-		
-	</p>
-	{% highlight s_r.object.answer with current_query %}
-
-<br />
-	{% empty %}
-	<p>
-		No results found.
-	</p>
-	{% endfor %}
-{% endif %}
+	
 </div>
 
 <div class="faq-list-cont">
@@ -60,13 +46,23 @@
 			{{ category_item.text }}
 		</div>
 		<div class="faq">
-				{% for q_item in category_item.questions %}
-				<div class="faq-question">
+			{% for q_item in category_item.questions %}
+			<div class="faq-question">
+				{% if current_query %}
+					{% highlight q_item.question with current_query  %}
+				{% else %}
 					{{ q_item.question }}
-				</div>
-				{{ q_item.answer|safe }}
+				{% endif %}
+			</div>
+			{% if current_query %}
+					{% highlight q_item.answer with current_query %}
+				{% else %}
+					{{ q_item.answer|safe }}
+				{% endif %}
+			
+			
 
-				{% endfor %}
+			{% endfor %}
 		</div>
 		{% endfor %}
 	</div>

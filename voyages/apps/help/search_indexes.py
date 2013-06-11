@@ -8,6 +8,7 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
     question = indexes.CharField(model_attr='question')
     answer = indexes.CharField(model_attr='answer')
     # define addition field
+    #category = CharField(model_attr='category', indexed=False)
 
     def get_model(self):
         return Faq
