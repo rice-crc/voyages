@@ -53,6 +53,7 @@ def get_faqs(request):
             # Perform the query
             current_query = form.cleaned_data['q']
             qresult = SearchQuerySet().filter(content=current_query).models(Faq)
+
             # Join the result set with the FaqCategory
             for faq_cat in FaqCategory.objects.all():
                 groupedList = []
