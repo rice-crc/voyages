@@ -24,9 +24,9 @@
 <input type="submit" value="Search">
 </form>
 </div>
-<div>
+<div id="resultsets">
 {% if result %}
-	<h3>Results</h3>
+	<h3>Search Results</h3>
 	{% for s_r in result %}
 	<p>
 		{% highlight s_r.object.question with current_query  %}

@@ -37,7 +37,6 @@ def glossary_page(request):
                             'results': results, 'query': query},
                               context_instance=RequestContext(request));
 
-
 def get_faqs(request):
     """
     Display the lesson entire glossary page
@@ -51,10 +50,12 @@ def get_faqs(request):
         if form.is_valid():
             # Perform the query
             current_query = form.cleaned_data['q']
-            myresult = SearchQuerySet().filter(content=current_query).highlight()
+            myresult = SearchQuerySet().filter(content=current_query).models(Faq)
     else:
         form = HighlightedSearchForm()
-        
+    
+    # Join the result set with the FaqCategory
+    
     faq_list = []
     count = 0;
     for faq_cat in FaqCategory.objects.all():

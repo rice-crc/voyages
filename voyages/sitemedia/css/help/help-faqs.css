@@ -4,11 +4,11 @@ div.faq-list a {
 	color: #008CA5 }
 
 div.faq-list-cont {
-	position: fixed;
+	/*position: fixed;
 	top: 110px;
 	left: 0px;
 	right: 0px;
-	bottom: 0px;
+	bottom: 0px;*/
 	overflow: auto; }
 
 span.search-keyword {
