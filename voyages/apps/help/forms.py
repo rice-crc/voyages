@@ -3,7 +3,7 @@ from django.db.models import get_model
 from django.contrib.auth.models import User
 from voyages.apps.help.models import *
 from voyages.extratools import AdvancedEditor
- 
+
 class FaqAdminForm(forms.ModelForm):
     """
     Form for editing HTML for FAQ answer
@@ -14,4 +14,3 @@ class FaqAdminForm(forms.ModelForm):
 
     class Meta:
         model = Faq
-

@@ -18,6 +18,17 @@ class AdvancedEditor(forms.Textarea):
        rendered = super(AdvancedEditor, self).render(name, value, attrs)
        return rendered 
 
+class FaqSearchForm(HighlightedSearchForm):
+    """
+    Use to search terms in FAQ section
+    """
+    #q = forms.CharField(required=True)
+    #search_field = forms.CharField(label="")
+    
+    def search(self):
+        sqs = super(HighlightedSearchForm)
+        return sqs
+
 class TextHighlighter(Highlighter):
     def highlight(self, text_block):
         self.text_block = text_block
@@ -27,3 +38,4 @@ class TextHighlighter(Highlighter):
         start_offset = 0
         end_offset = len(text_block)
         return self.render_html(highlight_locations, start_offset, end_offset)
+
