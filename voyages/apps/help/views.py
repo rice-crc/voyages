@@ -40,7 +40,6 @@ def glossary_page(request):
 
 from haystack.forms import HighlightedSearchForm, SearchForm
 from haystack.query import SearchQuerySet
-from .forms import FaqSearchForm
 
 def get_faqs(request):
     """
