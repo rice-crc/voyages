@@ -6,6 +6,10 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-faqs.css" />
 {% endblock %}
 
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/help/faqs.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block title %}{% trans 'FAQs' %}{% endblock %}
 
 {% block main-content %}
@@ -13,11 +17,13 @@
 {% if faq_list %}
 <div id="search_box_wrapper">
 <form action="/help/page_faqs" method="post">{% csrf_token %}
-{{ form.as_p }}
+{% for field in form %}
+	{{ field }}
+{% endfor %}
+
 <input type="submit" value="Search">
 </form>
 </div>
-
 <div>
 {% if result %}
 	<h3>Results</h3>
