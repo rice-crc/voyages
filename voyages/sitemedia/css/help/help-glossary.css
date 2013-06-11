@@ -80,6 +80,7 @@ div.glossary-selector-letter-dimmed {
 /* glossary */
 
 div.glossary-terms {
+	position: fixed;
 	top: 140px;
 	left: 0px;
 	right: 0px;
