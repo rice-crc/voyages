@@ -68,6 +68,15 @@ div.glossary-selector-letter:hover {
 	background-color: #008CA5;
 	color: White; }
 
+div.glossary-selector-letter-dimmed {
+    cursor: default;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: bold;
+    color: #E2F2F5; }
+
 /* glossary */
 
 div.glossary-terms {

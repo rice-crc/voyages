@@ -9,24 +9,6 @@
 {% block title %}{% trans 'Glossary' %}{% endblock %}
 
 {% block main-content %}
-{% if results %}
-<div>
-	<h3>Results</h3>
-	{% for i in results %}
-        {% if i.object.term %}
-	        <p>
-		        {% highlight i.object.term with query  %}
-	        </p>
-	        {% highlight i.object.description with query %}
-            <br />
-        {% endif %}
-	{% empty %}
-	<p>
-	    No results found.
-	</p>
-	{% endfor %}
-</div>
-{% endif %}
 
 <div class="glossary-letters-and-search">
 
@@ -34,11 +16,25 @@
     <tr>
         <td class="glossary-letters-and-search">
         <table><tr>
-        {% for i in letters %}
-        <td class="glossary-selector-letter">
-            <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ i|slice:":1" }}">{{ i }}</a></div>
-        </td>
-        {% endfor %}
+        {% if results %} 
+            {% for k, v in letters_found.items %}
+                {% if v == 0 %}
+                <td class="glossary-selector-letter-dimmed">
+                    <div class="glossary-selector-letter-dimmed">{{ k }}</div>
+                </td>
+                {% else %}
+                <td class="glossary-selector-letter">
+                    <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ k }}">{{ k }}</a></div>
+                </td>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for i in letters %}
+            <td class="glossary-selector-letter">
+                <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ i|slice:":1" }}">{{ i }}</a></div>
+            </td>
+            {% endfor %}
+        {% endif %}
         </tr></table>
     </td>
     <td>
@@ -82,12 +78,20 @@
                 {% for t_key, t_value in k.items %}
                     {% if t_key == "term" %}
                         <td class="glossary-term">
-                        {{ t_value }}
+                            {% if results %}
+                                {% highlight t_value with query %}
+                            {% else %}
+                                {{ t_value }}
+                            {% endif %}
                         </td>
                     {% endif %}
                     {% if t_key == "description" %}
                         <td class="glossary-description">
-                        {{ t_value }}
+                            {% if results %}
+                                {% highlight t_value with query %}
+                            {% else %}
+                                {{ t_value }}
+                            {% endif %}
                         </td>
                     {% endif %}
                 {% endfor %}
