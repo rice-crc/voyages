@@ -38,9 +38,6 @@ def glossary_page(request):
                               context_instance=RequestContext(request));
 
 
-from haystack.forms import HighlightedSearchForm, SearchForm
-from haystack.query import SearchQuerySet
-
 def get_faqs(request):
     """
     Display the lesson entire glossary page

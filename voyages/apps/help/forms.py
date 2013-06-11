@@ -14,3 +14,4 @@ class FaqAdminForm(forms.ModelForm):
 
     class Meta:
         model = Faq
+
