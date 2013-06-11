@@ -1,6 +1,6 @@
 <!-- Default search template -->
 
-<h2>Search</h2>
+<h2>Search Tool</h2>
 
 <form method="get" action=".">
 	<table>
@@ -18,7 +18,7 @@
 
 	{% for result in page.object_list %}
 	<p>
-		<a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+		<a href="{{ result.object.get_absolute_url }}">{{ result.object.question }}</a>
 	</p>
 	{% empty %}
 	<p>
@@ -34,6 +34,5 @@
 	</div>
 	{% endif %}
 	{% else %}
-	{# Show some example queries to run, maybe query syntax, something else? #}
 	{% endif %}
 </form>

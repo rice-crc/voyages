@@ -24,3 +24,15 @@ class GlossarySearchForm(forms.ModelForm):
         model = Glossary
         fields = ['search_field']
 
+from haystack.forms import HighlightedSearchForm
+
+class FaqSearchForm(HighlightedSearchForm):
+    """
+    Use to search terms in FAQ section
+    """
+    #q = forms.CharField(required=True)
+    #search_field = forms.CharField(label="")
+    
+    def search(self):
+        sqs = super(HighlightedSearchForm)
+        return sqs

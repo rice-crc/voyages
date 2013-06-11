@@ -81,22 +81,27 @@ div#help-section-title {clear; both;
 }
 
 /*#main-content {
-	padding: 3px 15px 10px 15px;
-}*/
-
+ padding: 3px 15px 10px 15px;
+ }*/
 
 /* top bar */
 
 div.faq-search {
-	padding: 3px 0px 3px 25px; 
-	background-color: White; }
-	
+	padding: 3px 0px 3px 25px;
+	background-color: White;
+}
+
 input.faq-search-box {
 	width: 100px;
-	background-color: White; }
-
+	background-color: White;
+}
 
 /* body */
 
 body, html {
-	overflow: hidden; }
+	overflow: hidden;
+}
+
+.highlighted {
+	background-color: yellow;
+}

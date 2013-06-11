@@ -6,6 +6,10 @@ $(document).ready(function() {
 	var maxIdx = elem.length - 1;
 	var currentid = elem[maxIdx];
 	
+	if (currentid == "page_faqs") {
+		return;
+	} else {
+	
 	/* Remove the pound sign as necessary */
 	var pound_sign_pos = currentid.indexOf("#");
 	if (pound_sign_pos >= 0) {
@@ -68,7 +72,7 @@ $(document).ready(function() {
 			});
 		}
 	}
-
+	}
 });
 
 /* Support function for sitemap */
