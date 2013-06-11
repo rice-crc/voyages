@@ -1,12 +1,12 @@
 #main-content {
-	padding: 0;
+    padding: 0;
 }
-
 
 /* top bar */
 
 div.glossary-letters-and-search {
-	background-color: White; }
+	background-color: White; 
+}
 
 table.glossary-letters-and-search {
 	width: 100%;
@@ -71,11 +71,11 @@ div.glossary-selector-letter:hover {
 /* glossary */
 
 div.glossary-terms {
-	position: fixed;
 	top: 140px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
+    position: fixed;
 	overflow: auto; }
 
 table.glossary-terms {
