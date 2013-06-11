@@ -1,9 +1,31 @@
+{% load highlight %}
+
 <html lang="en">
     <head>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
+
 </head>
 
 <body>
+
+<div>
+{% if results %}
+	<h3>Results</h3>
+	{% for i in results %}
+        {% if i.object.term %}
+	        <p>
+		        {% highlight i.object.term with query  %}
+	        </p>
+	        {% highlight i.object.description with query %}
+            <br />
+        {% endif %}
+	{% empty %}
+	<p>
+	    No results found.
+	</p>
+	{% endfor %}
+{% endif %}
+</div>
 
 <div class="glossary-letters-and-search">
 
@@ -21,8 +43,8 @@
     <td>
         <table border="0" cellspacing="0" cellpadding="0" style="margin-left: auto; margin-right: 10px;">
             <tr>
-                <td><form action="" method="post" enctype="multipart/form-data">
-                        {{ form.search_field }}
+                <td><form action="/help/page_glossary" method="post" enctype="multipart/form-data">{% csrf_token %}
+                        {{ form.as_p }}
                     </td>
                 <td><input style="glossary-search-box" type="submit" value="Search"/>
                 </td>
@@ -75,7 +97,7 @@
     </tbody>
     </table>
 
-
 </div>
+
 </body>
 

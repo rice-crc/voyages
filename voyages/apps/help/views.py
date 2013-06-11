@@ -1,13 +1,16 @@
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render_to_response
-from .forms import GlossarySearchForm
 from .models import Glossary, Faq, FaqCategory
+from haystack.query import SearchQuerySet
+from haystack.forms import HighlightedSearchForm
 
 def glossary_page(request):
     letters = []
     glossary_content = [];
     glossary_dict = {};
+    results = []
+    query = ""
 
     for i in Glossary.objects.all():
         if i.term[0] not in letters:
@@ -21,9 +24,17 @@ def glossary_page(request):
     glossary_content.append(glossary_dict);
 
     letters.sort();
-    form = GlossarySearchForm();
 
-    return render_to_response('help/page_glossary.html', {'letters': letters, 'glossary': glossary_content, 'form': form},
+    if request.method == 'POST':
+        form = HighlightedSearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['q']
+            results = SearchQuerySet().filter(content=query).highlight()
+    else:
+        form = HighlightedSearchForm()
+
+    return render_to_response('help/page_glossary.html', {'letters': letters, 'glossary': glossary_content, 'form': form, 
+                            'results': results, 'query': query},
                               context_instance=RequestContext(request));
 
 def get_faqs(request):
