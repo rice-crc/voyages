@@ -9,8 +9,8 @@
 {% block title %}{% trans 'Glossary' %}{% endblock %}
 
 {% block main-content %}
-<div>
 {% if results %}
+<div>
 	<h3>Results</h3>
 	{% for i in results %}
         {% if i.object.term %}
@@ -25,8 +25,8 @@
 	    No results found.
 	</p>
 	{% endfor %}
-{% endif %}
 </div>
+{% endif %}
 
 <div class="glossary-letters-and-search">
 
@@ -45,7 +45,9 @@
         <table border="0" cellspacing="0" cellpadding="0" style="margin-left: auto; margin-right: 10px;">
             <tr>
                 <td><form action="/help/page_glossary" method="post" enctype="multipart/form-data">{% csrf_token %}
-                        {{ form.as_p }}
+                        {% for field in form %}
+                            {{ field }}
+                        {% endfor %}
                     </td>
                 <td><input style="glossary-search-box" type="submit" value="Search"/>
                 </td>
@@ -99,5 +101,4 @@
     </table>
 
 </div>
-
 {% endblock %}
