@@ -1,7 +1,31 @@
+
+
+{% load highlight %}
 {% if faq_list %}
 <div id="search_box_wrapper">
-	<input id="search_field" name="form_textfield" type="text" value="images" class="glossary-search-box" />
-	<input id="search_button" name="form_button" type="submit" value="Search" onclick="clear_form();" />
+<form action="/help/page_faqs" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Search">
+</form>
+</div>
+
+<div>
+{% if result %}
+	<h3>Results</h3>
+	{% for s_r in result %}
+	<p>
+		{% highlight s_r.object.question with current_query  %}
+		
+	</p>
+	{% highlight s_r.object.answer with current_query %}
+
+<br />
+	{% empty %}
+	<p>
+		No results found.
+	</p>
+	{% endfor %}
+{% endif %}
 </div>
 
 <div class="faq-list-cont">
@@ -34,4 +58,5 @@
 		{% endfor %}
 	</div>
 </div>
+
 {% endif %}

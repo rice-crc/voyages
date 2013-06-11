@@ -20,3 +20,16 @@ urlpatterns += patterns('',
     url(r'^page_faqs', 'voyages.apps.help.views.get_faqs', name='faqs'),
 )
 
+from haystack.forms import HighlightedSearchForm
+from haystack.query import SearchQuerySet
+from haystack.views import SearchView
+
+sqs = SearchQuerySet().all()
+
+# Without threading...
+urlpatterns += patterns('haystack.views',
+    url(r'^page_faqs2/', SearchView(template='help/page_faqs2.html',
+        searchqueryset=sqs, form_class=HighlightedSearchForm
+    ), name='faqs2'),
+)
+

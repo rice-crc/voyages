@@ -150,6 +150,7 @@ SOUTH_TESTS_MIGRATE = False
 LOGIN_URL = '/voyage/contribute'
 LOGIN_REDIRECT_URL = LOGIN_URL
 
+# Use custom highlighter
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 
 # import localsettings
