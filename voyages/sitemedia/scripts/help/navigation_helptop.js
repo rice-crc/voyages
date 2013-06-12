@@ -1,26 +1,22 @@
-var top_selected_class = "top-bar-menu-selected";
-
 $(document).ready(function() {
-	var href = document.location.href;
-	var elem = href.split("=");
-	var maxIdx = elem.length - 1;
-	var currentid = elem[maxIdx];
-	
+	var top_selected_class = "top-bar-menu-selected";
+	var anchor_link_selector = ".top-bar-menu > ul > li > a";
+	var pagetitle_id = "help-section-title";
+
 	/* Update page title */
-	$("#help-section-title").text(document.title);
+	$("#" + pagetitle_id).text(document.title);
 	
-	/* Update highlighting for section name */
+	/* Update highlighting for the current page */
 	var str = location.href.toLowerCase();
-	
-	$(".top-bar-menu > ul > li > a").removeClass(top_selected_class);
-	$(".top-bar-menu > ul > li > a").each(function() {
+	$(anchor_link_selector).removeClass(top_selected_class);
+	$(anchor_link_selector).each(function() {
 		if (str.indexOf(this.href.toLowerCase()) > -1) {
 		 	$(this).addClass(top_selected_class);
 		}
 	 });
 });
 
-/* Support function for sitemap */
+/* Support function: open the given url in the parent window */
 function openPage(url) {
 	if (window.opener)
 		window.opener.location.href = url;
