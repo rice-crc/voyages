@@ -153,6 +153,7 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 # Use custom highlighter
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 
+# updates solr when object is saved
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # import localsettings
