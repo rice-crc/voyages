@@ -49,7 +49,7 @@ def glossary_page(request):
                     if j["letter"] == i.glossary_term[0]:
                         j["terms"].append({"term": i.glossary_term, "description": i.glossary_description});
 
-        return render_to_response('help/page_glossary.html', {'glossary': sorted(glossary_content, key=lambda k: k['letter']), 
+        return render_to_response('help/page_glossary.html', {'glossary': sort_dict(glossary_content),
             'letters': letters, 'form': form, 'letters_found': letters_found, 'results': results, 
                                     'query': query}, context_instance=RequestContext(request))
 
@@ -67,8 +67,9 @@ def glossary_page(request):
         glossary_content.append(glossary_dict);
 
         letters.sort();
+
         return render_to_response('help/page_glossary.html', {'letters': letters, 
-                                    'glossary': sorted(glossary_content, key=lambda k: k['letter']), 'form': form,},
+                                    'glossary': sort_dict(glossary_content), 'form': form,},
                                     context_instance=RequestContext(request));
 
 
@@ -122,7 +123,9 @@ def get_faqs(request):
             count += 1
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list,},
                               context_instance=RequestContext(request));
-   
-                            
 
-                            
+def sort_dict(dict):
+    try:
+        return sorted(dict, key=lambda k: k['letter'])
+    except:
+        return dict
