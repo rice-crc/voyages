@@ -9,8 +9,8 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
     faq_answer = indexes.CharField(model_attr='answer')
     # define addition field
     faq_category_desc = indexes.CharField(model_attr='question_order')
-    faq_category_order = indexes.CharField()
-    faq_question_order = indexes.CharField()
+    faq_category_order = indexes.IntegerField()
+    faq_question_order = indexes.IntegerField()
 
     def get_model(self):
         return Faq
