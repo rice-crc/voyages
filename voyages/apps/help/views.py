@@ -65,27 +65,42 @@ def get_faqs(request):
     Display the lesson entire glossary page
     containing faq entries from :model:`help.Faq`
     """
-    myresult = []
-    current_query = ""
-    faq_list = []
     count = 0;
+    faq_list = []
     
     if request.method == 'POST':
         form = HighlightedSearchForm(request.POST)
         if form.is_valid():
             # Perform the query
             current_query = form.cleaned_data['q']
-            qresult = SearchQuerySet().filter(content=current_query).models(Faq)
-            3/0
-            # Join the result set with the FaqCategory
-            for faq_cat in FaqCategory.objects.all():
+            qresult = SearchQuerySet().filter(content=current_query).models(Faq).order_by('faq_category_order', 'faq_question_order')
+            
+            current_item = None
+            if qresult:
+                # process results
+                prev_obj = None
                 groupedList = []
-                for indiv_obj in qresult:
-                    if Faq.objects.get(pk=indiv_obj.object.pk).category == faq_cat:
-                        groupedList.append(indiv_obj)
-                if groupedList:
-                    faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : groupedList })
-                    count += 1
+                
+                for current_item in qresult:
+                    tmp = qresult.faq_category
+                    5/0
+                    if prev_obj is None:
+                        prev_obj = current_item.object
+                        groupedList.append(current_item.object)
+                    else:
+                        if prev_obj.category == current_item.object.category:
+                            # Questions belong to the same category
+                            groupedList.append(current_item.object)
+                            prev_obj = current_item.object
+                        else:
+                             # Starts a new group of question (different category)
+                             faq_list.append({ 'qorder' : count, 'text' : prev_obj.category.text, 'questions' : groupedList })
+                             count += 1
+                             prev_obj = current_item.object
+                             groupedList = []
+                             groupedList.append(prev_obj)
+                    # Add the last result group
+                faq_list.append({ 'qorder' : count, 'text' : prev_obj.category.text, 'questions' : groupedList })
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list, 'current_query' : current_query},
                               context_instance=RequestContext(request));
     else:

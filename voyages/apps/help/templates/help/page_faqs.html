@@ -45,13 +45,13 @@
 			{% for q_item in category_item.questions %}
 			<div class="faq-question">
 				{% if current_query %}
-					{% highlight q_item.faq_question with current_query  %}
+					{% highlight q_item.question with current_query  %}
 				{% else %}
 					{{ q_item.question }}
 				{% endif %}
 			</div>
 			{% if current_query %}
-					{% highlight q_item.faq_answer with current_query %}
+					{% highlight q_item.answer with current_query %}
 				{% else %}
 					{{ q_item.answer|safe }}
 				{% endif %}
