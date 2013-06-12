@@ -61,14 +61,15 @@
     {% for i in glossary %}
     {% for key, value in i.items %}
         {% if key == "terms" %}
+            <a name="glossary-letter-{{ t_value|slice:":1" }}"></a>
             {% for k in value %}
                 <tr>
                 {% if forloop.first %}
                     {% for t_key, t_value in k.items %}
                         {% if t_key == "term" %}
                             <td rowspan="{{ value|length }}" class="glossary-letter" id="form_glossary_{{ t_value|slice:":1" }}">
-                            <div class="glossary-letter">
                                 <a name="glossary-letter-{{ t_value|slice:":1" }}"></a>
+                            <div class="glossary-letter">
                                 {{ t_value|slice:":1" }}
                             </div>
                             </td>
@@ -95,7 +96,6 @@
                         </td>
                     {% endif %}
                 {% endfor %}
-
             {% endfor %}
             </tr>
         {% endif %}
