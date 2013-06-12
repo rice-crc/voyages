@@ -146,9 +146,15 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
-    <field name="answer" type="text_en" indexed="true" stored="true" multiValued="false" />
-
     <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="text_desc" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="type_order" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="category" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="answer" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="question" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -167,3 +173,4 @@
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
   <solrQueryParser defaultOperator="AND"/>
 </schema>
+
