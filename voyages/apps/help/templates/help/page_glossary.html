@@ -16,7 +16,7 @@
     <tr>
         <td class="glossary-letters-and-search">
         <table><tr>
-        {% if results %} 
+        {% if query %}
             {% for k, v in letters_found.items %}
                 {% if v == 0 %}
                 <td class="glossary-selector-letter">
