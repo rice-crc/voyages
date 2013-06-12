@@ -1,0 +1,2 @@
+{{ object.type_order }}
+{{ object.text }}
