@@ -95,7 +95,6 @@ def get_faqs(request):
                 
                 for search_result_obj in qresult:
                     current_item = search_result_obj.get_stored_fields()
-                    
                     if prev_obj is None:
                         prev_obj = current_item
                         
@@ -118,7 +117,7 @@ def get_faqs(request):
                               context_instance=RequestContext(request));
     else:
         form = HighlightedSearchForm()
-        for faq_cat in FaqCategory.objects.all():
+        for faq_cat in FaqCategory.objects.order_by('type_order'):
             faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : Faq.objects.filter(category=faq_cat) })
             count += 1
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list,},

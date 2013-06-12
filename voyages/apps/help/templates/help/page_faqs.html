@@ -29,7 +29,7 @@
 	<div class="faq-list">
 		<ul class="faq-toc">
 			{% for category_item in faq_list %}
-			<li>
+			<li class="faq-category">
 				<a href="#faq{{ category_item.qorder }}">{{ category_item.text }}</a>
 			</li>
 			{% endfor %}

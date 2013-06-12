@@ -38,6 +38,6 @@ window.open( pageUrl,
 	"location=no, " +
 	"status=no, " +
 	"scrollbars=yes, " +
-	"width=700, " +
+	"width=680, " +
 	"height=680").focus();
 } 
