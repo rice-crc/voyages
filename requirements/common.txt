@@ -5,3 +5,4 @@ south
 hurry.filesize
 django-haystack
 pysolr
+unittest-xml-reporting
