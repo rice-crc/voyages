@@ -71,6 +71,7 @@ def glossary_page(request):
                                     'glossary': sorted(glossary_content, key=lambda k: k['letter']), 'form': form,},
                                     context_instance=RequestContext(request));
 
+
 def get_faqs(request):
     """
     Display the lesson entire glossary page
@@ -122,4 +123,6 @@ def get_faqs(request):
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list,},
                               context_instance=RequestContext(request));
    
+                            
+
                             
