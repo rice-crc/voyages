@@ -8,7 +8,6 @@ $(document).ready(function() {
 	
 	/* Update highlighting for the current page */
 	var str = location.href.toLowerCase();
-	
 	$(anchor_link_selector).removeClass(top_selected_class);
 	$(anchor_link_selector).each(function() {
 		if (str.indexOf(this.href.toLowerCase()) > -1) {

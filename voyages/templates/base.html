@@ -35,13 +35,13 @@
 	{% block top_bar %}
 	<table class="top-bar">
 		<tr>
-			{% comment %}Website logo {% endcomment %}
+			{% comment %} Website logo {% endcomment %}
 			<td style="width:240px;">
 			<div id="main_logo"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/></a></div>
 			</td>
 			<td>
 			
-			{% comment %}Navigation menu{% endcomment %}
+			{% comment %} Navigation menu {% endcomment %}
 			<div id="main_nav">
 				{% include "topbar.html" %}
 			</div>
@@ -50,26 +50,25 @@
 	</table>
 	{% endblock %}
 	
-	{% comment %}Secondary menu containing breadcrumb links and help links{% endcomment %}
-	<!-- Secondary menu containing breadcrumb links and help links -->
+	{% comment %} Secondary menu containing breadcrumb links and help links {% endcomment %}
 	{% block secondary_bar %}
 	<div id="secondarybar">
 		{% include "secondarybar.html" %} 
 	</div>
 	{% endblock %}
 	
-	<!-- Actual content of the page - two nested divs 
-		because of different background vs. text spanning -->
+	{% comment %} Actual content of the page - two nested divs 
+		because of different background vs. text spanning {% endcomment %}
     <div id="main-content">
     <div id="main-content-container">
     {% block content %}{% endblock %}
     
     </div>
 	</div>
-	<!-- Page footer -->
+	{% comment %} Page footer {% endcomment %}
 	{% block footer %}{% endblock %}
 	
-	<!-- Google Analytics code -->
+	{% comment %} Google Analytics code {% endcomment %}
 	{% include "googlecode.html" %}
 </body>
 </html>

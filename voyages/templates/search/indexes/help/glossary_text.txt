@@ -1,2 +1,2 @@
-{{ object.glossary_term }}
-{{ object.glossary_description }}
+{{ object.term }}
+{{ object.description }}
