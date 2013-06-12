@@ -2,27 +2,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{% comment %}<!-- Basic common css styles -->{% endcomment %}
-    {% comment %}	<!-- Top navigation menu styles -->{% endcomment %}
-    
+	{% comment %}Basic common css styles {% endcomment %}
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
     
-    	<!-- Basic tyles for the rest of the page -->
+    {% comment %}Top navigation menu styles{% endcomment %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
 
 	{% block csslist %}
 	{% endblock %}
-	<!-- Basic common javascript source files -->
+	
+	{% comment %}Basic common javascript source files {% endcomment %}
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	
-	<!-- For resizing div bodies when loading content via AJAX -->
+	{% comment %}For resizing div bodies when loading content via AJAX {% endcomment %}
 	<script src="{{ STATIC_URL }}scripts/jquery.ba-resize.min.js" type="text/javascript"></script>
 	
-	<!-- Fly-out top navigation menu !-->
+	{% comment %}Fly-out top navigation menu {% endcomment %}
     <script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/navigation_topbar.js" type="text/javascript"></script>
 	
-	<!-- Breadcrumb - page-navigation -->
+	{% comment %}Breadcrumb - page-navigation {% endcomment %}
 	<script src="{{ STATIC_URL }}scripts/breadcrumb.js" type="text/javascript"></script>
 	{% block jslist %}
 	{% endblock %}
@@ -36,12 +35,13 @@
 	{% block top_bar %}
 	<table class="top-bar">
 		<tr>
-			<!--Voyage Website logo -->
+			{% comment %}Website logo {% endcomment %}
 			<td style="width:240px;">
 			<div id="main_logo"><a href="{% url index %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/></a></div>
 			</td>
 			<td>
-			<!-- Navigation menu -->
+			
+			{% comment %}Navigation menu{% endcomment %}
 			<div id="main_nav">
 				{% include "topbar.html" %}
 			</div>
@@ -50,6 +50,7 @@
 	</table>
 	{% endblock %}
 	
+	{% comment %}Secondary menu containing breadcrumb links and help links{% endcomment %}
 	<!-- Secondary menu containing breadcrumb links and help links -->
 	{% block secondary_bar %}
 	<div id="secondarybar">
