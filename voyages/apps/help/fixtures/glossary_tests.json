@@ -1,0 +1,1082 @@
+[
+    {
+        "pk": 1, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Abolition", 
+            "description": "Government-led initiatives to end the legal trade in enslaved peoples. France abolished its slave trade in 1794, but re-instituted it legally in 1815. Denmark first abolished permanently its slave trade (1802). Britain spearheaded the international abolition movement, culminating in the termination of the British slave trade (1807) and slavery within the British Empire (1833). The Spanish government ended the slave trade to Cuba in 1867; slavery ended in Cuba in 1886 and then in Brazil in 1888."
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Adults", 
+            "description": "African men and women generally older than 13 or 14 years of age or taller than four feet four inches. Over the 350-year history of the trans-Atlantic slave trade, captains purchased more adults (80%) than children (20%). Specific age ratios differ by time and place."
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Africa", 
+            "description": "After the opening of the New World by the Spanish and Portuguese circa 1500, some 12 million Africans were shipped west between 1500 and 1867. Most enslaved Africans were embarked from modern-day Nigeria, Congo, Zaire and Angola. Europeans purchased enslaved Africans mostly along the Atlantic African coastline from the Senegal River to Benguela (Angola) and then in Madagascar and Mozambique in southeast Africa."
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Africans", 
+            "description": "Persons born or living in Africa. Europeans believed Africans to be ideal slaves due to their supposed docility, ability to work in tropical climates, and the Biblical \"Curse of Ham.\" Europeans also believed Africans to be legitimate slaves as the institution of slavery existed in Africa. Ideas of European racial superiority increased through the era of the slave trade."
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "American revolutionary war (1775-1783)", 
+            "description": "During the American revolutionary war, naval squadrons and privateers raided shipping, destroyed African trading posts, and captured Caribbean ports. Between 1777 and 1782 Atlantic warfare reduced the volume of the trans-Atlantic slave trade by two-thirds--the sharpest drop in its history. The Dutch, American, and French slave trades virtually ended. Other sharp drops in trade volume also occurred during European war years, such as 1689-1697 (King William's War), 1744-1745 (during the War of Austrian Succession), and 1793-1794 (the beginning of the Wars of the French Revolution). Between 1783 and 1807 slaving ships departing ports such as Newport, Rhode Island, flew U.S., not British, flags."
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Americas", 
+            "description": "The landmasses and islands of North America, Central America, and South America. The Americas constituted the destination for the vast majority of enslaved Africans transported overseas, and most were put to work in the plantations and mines of the European colonies."
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Amerindian", 
+            "description": "The pre-Columbian inhabitants of the New World. The Spanish and Portuguese destroyed many of the Amerindian societies they met, depopulating entire regions, such as the Bahamas, within a generation. Between 1492 and 1550 the Amerindian population of the West Indies had been reduced by ninety percent, due to massacres, the importation of Old World diseases, such as smallpox and measles, and the destruction of local agricultural bases. In response colonists, as early as 1510, demanded that the Spanish Crown authorize shipments of enslaved Africans to work in the New World."
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Anglo-Brazilian anti-slave trade treaty (1830)", 
+            "description": "In 1826 British officials signed an anti-slave trade treaty with Brazilian diplomats, a treaty that aimed to strengthen agreements the British made with Portugal before Brazilian independence in 1822. The 1826 Treaty (ratified in 1827) made March 13, 1830 the date for the abolition of the Brazilian slave trade, after which Brazilian nationals' participation in the slave trade equaled piracy. The height of the trans-Atlantic slave trade to Brazil occurred in 1828-1829, as merchants rushed to outfit slaving ships. A Brazilian enforcement law went into effect in 1831 but proved to be ineffective. The Brazilian slave trade continued until 1852, ending due to the efforts of a stronger Brazilian government and British pressure."
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Anti-slave trade treaties: Anglo-Portuguese Treaty", 
+            "description": "A treaty brokered by British diplomats to limit the Portuguese slave trade. The compromise measure banned Portuguese slave-trading north of the equator with the exception of the trade at Ouidah (Whydah). As a consequence, Ouidah developed into the major slave-trading outlet north of the equator. At the same time, however, the Portuguese trade to the Upper Guinea Coast (Cacheu, Bissau and the Bissagos Islands) declined."
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Arrivals", 
+            "description": "The number of slaves who arrived at the first port of sale. The number of arrivals is lower than the number of departures due to slave mortality during the Middle Passage."
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Asiento", 
+            "description": "A contract between the Spanish Crown and an individual or company for a semi-monopoly of the sale of licenses for the exportation of slaves to Spanish America. In 1518 King Charles V (Emperor Charles I) initiated the policy of selling slave-trading licenses to merchant-bankers to earn income for the Crown and supply enslaved labor to the Spanish Antilles. Historians estimate that 130,000-150,000 licenses to export slaves from 1518 to 1600. The asiento system continued until a policy of free trade was instituted in the Spanish colonial world in 1789."
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Atlantic Islands", 
+            "description": "Islands in the Atlantic Ocean, principally the Azores, Madeira, Canaries, Cape Verdes, Sao Tome, Principe and Fernando Po. In the early history of the Atlantic slave trade, the Canaries and Cape Verdes acted as important trading posts in the Iberian slave trading system. Together with Sao Tome, these islands also acted as prototypes of plantation economies. Later, the Caribbean Islands became one of the primary destinations for enslaved Africans, with the Canaries acting as an important victualing port."
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Barbary pirates", 
+            "description": "Pirates and privateers operating from the Barbary Coast in North Africa. Between the fourteenth and nineteenth centuries the Barbary pirates constituted a major impediment to Mediterranean and Atlantic trade, with thousands of merchant ships lost to their actions. The pirates also launched Razzias (raids) on the southern Mediterranean, enslaving thousands of Christians. Europeans purchased \"Mediterranean Passes\" to ensure safe passage through Barbary waters. The Barbary pirates declined after 1815 when the United States pacified the pirates through force, and France occupied the main pirate bases in Algiers."
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Bight of Benin", 
+            "description": "Slaving region defined as covering the coastline from the Volta River east to the River Nun, a coastline today in eastern Ghana, Togo, Benin and western Nigeria. Referred to by Europeans also as the \"Slave Coast.\""
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Bight of Biafra", 
+            "description": "Slaving region defined as covering the coastline from the River Nun to Cape Lopez, a coastline today in western Nigeria, Cameroon, Equatorial Guinea and northern Gabon. The region includes Bimbia Island, Cameroon and the Gulf of Guinea islands Principe and Sao Tome."
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Bocal slaves", 
+            "description": "Newly-arrived slaves who spoke languages different from the common language in the place of import. In the African context, bocals (Portuguese) or bozals (Spanish) were slaves imported from the interior to coastal trading sites. In the Americas context, bocals were slaves imported directly from Africa. In Portuguese and Spanish the term means \"simple\" or \"stupid\" or \"ignorant.\""
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Bourbon reforms", 
+            "description": "A series of measures taken by the Spanish Crown in the 18th Century to increase control over Spain and her colonies. The reforms ended the asiento system, opening up the slave trade to independent traders."
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Boys", 
+            "description": "Immature male slaves. Generally, slaving traders classified \"boys\" as shorter than four feet four inches or younger than 13-14 years of age. On most slaving vessels captains confined and, depending on their age, chained \"boys\" to specific below-deck compartments towards the center and stern of the vessel."
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Brazil", 
+            "description": "Brazil was the center of the trans-Atlantic slave trade for most years between 1570 and 1850, whether under the Portuguese flag or, after independence in 1822, under the Brazilian flag. Rio de Janiero and Bahia outfitted more slaving voyages than any other ports. Perhaps forty percent of all Africans forced into the slave trade ended their lives in Brazil. Rio de Janeiro also imported more enslaved Africans in the late 1820s than did any other port in the history of the trade."
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Brazil: suppression of slave trade (1850)", 
+            "description": "In 1850-51 the Brazilian government passed a decree that abolished the slave trade, ending three hundred years of slaving. British pressure, a yellow fever epidemic in 1849-50 and Brazilian statesmanship contributed to ending the trade. Small numbers of enslaved Africans continued to enter Brazil during the 1850s and early 1860s."
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Captain", 
+            "description": "The commander of the slaving vessel and legal authority on board. Slaving captains had a broad range of responsibilities, including navigating the ship, trading with African merchants for slaves, provisions and produce, and selling slaves in the Americas. Merchants paid captains commissions, bonuses, \"privilege slaves\" and other emoluments."
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Captive / captives", 
+            "description": "One who is forcibly confined, restrained, or subjugated, as a prisoner. Most enslaved Africans were taken captive by slaving raids on their villages, or captured as 'prisoners of war' during intertribal fighting."
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Captor", 
+            "description": "One who takes or keeps a person as a captive. Raiders acted as captors when taking slaves; traders acted as captors when purchasing slaves."
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Capture (of slave ship)", 
+            "description": "To be taken by an enemy government's navy or privateers, pirates, Africans (free or enslaved) or crewmen (mutiny). The trans-Atlantic slave trade declined during wartime due to the heightened risk of capture; it declined to its greatest extent during the American Revolutionary War years 1777-1781."
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Cargo", 
+            "description": "The freight carried by a slaving ship. Slaving vessels carried European and Asian manufactured goods as cargo to Africa. In Africa captains purchased \"human cargoes,\" provisions and produce. Once slaves were sold in the Americas, captains often loaded cargoes of agricultural goods for sale in Europe or the United States such as sugar, tobacco and coffee."
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Child ratio", 
+            "description": "The proportion of enslaved Africans, shipped into the trans-Atlantic slave trade, who were children relative to adult slaves. Approximately 26 per cent of all slaves carried to the Americas were classified as children, a ratio unmatched in any pre 20th century migration."
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Children", 
+            "description": "Immature slaves. Defined in British slave trade as being shorter than four feet four inches or younger than 13-14 years. Over the 350-year history of the trans-Atlantic slave trade, captains purchased more adults (80%) than children (20%). Specific age ratios differ by time and place."
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Clearance", 
+            "description": "Primary port where slaving voyages began. Vessels were cleared for departure once they had registered with the custom house and paid duties and taxes on their cargoes."
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Columbian Contact", 
+            "description": "Columbian contact marks the first meeting of Old and New World peoples in October-December 1492 when Columbus arrived in the Bahamas, northern Cuba and northwest Hispaniola. On Columbus's return voyage in 1493 the Spanish began formally their exploration and conquest of the New World. The meeting of Old and New World peoples also began the transfer of peoples, crops, animals and diseases known as the \"Columbian exchange,\" of which the trans-Atlantic slave trade forms a major part."
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Compagnie (Cie) du S\u201an\u201agal (Senegal Company)", 
+            "description": "French private company founded in 1672 to increase the French slave and gun trades. A decree in 1685 gave the Company a trading monopoly from the Senegal River to Sierra Leone. In 1718 the Company merged with another French slave-trading company, the Compagnie d'Occident (Company of the West). In the 1770s and 1780s a reorganized Senegal Company, based in Le Havre, concentrated its commercial activities to Senegal. It ended its trans-Atlantic slave trading ventures after 1792, during the French Revolution."
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Condemnation (of slave ship)", 
+            "description": "A decision by customs inspectors that a slaving vessel is no longer seaworthy. Many slavers were older vessels fitted out for the purpose of making only one or two voyages. As a result, slaving ships were condemned more often than ships in other trades. During wartime, many slave ships also were condemned due to damage caused by enemy action. Most condemnations occurred in the Americas."
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Construction", 
+            "description": "Place at which slaving vessel was originally constructed. Few vessels were built for the trade, particularly during the 1514-1700 period. Merchants usually purchased secondhand vessels and refitted them for the slave trade."
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Court of Mixed Commission", 
+            "description": "In 1817 a British-sponsored international treaty created a Court of Mixed Commission to hear cases concerning captured slaving ships. The Court included officials from a \"mix\" of countries to ensure impartiality. The first Court sat in Freeport, Sierra Leone (1819), and between 1819 and 1867 additional Courts were set up in Nassau (Bahamas), Havana, Paramaribo (Surinam), Luanda (Angola), New York City and Rio de Janeiro."
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Courts of Mixed Commission Registers", 
+            "description": "After abolition, liberated Africans freed by the Royal Navy were registered before their return to Africa. The registers contain a wealth of information such as an African's name, height, origin and sex. Digitized initial pages of some of these registers can be seen in the Resources section of the Voyages website, by going to the \"Images\" subsection then clicking on \"Manuscripts.\""
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Creole", 
+            "description": "A person of European or African descent born in the Americas. In the fifteenth century Portuguese-African traders popularized the term (crioulo/a). The term refers also to a new language that blends European and African languages, spoken by Europeans, Africans and African-Americans, the most common being French Creole in St. Domingue/Haiti."
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Crew", 
+            "description": "The number of personnel manning the slave ship at the beginning of the voyage. The need to guard, feed and clean African captives, coupled with the high mortality suffered by Europeans on a slaving voyage, meant that slaving vessels typically carried more crew than a similarly sized vessel in another trade. Slave ship crewmen suffered high rates of mortality due to a lack of natural resistance to tropical diseases such as malaria and yellow fever."
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Crew Action", 
+            "description": "Slaving crews sometimes mutinied against their officers, typically against poor conditions on board or a lack of pay. Some crews mutinied in order to capture the ship and \"turn pirate.\" An unsuccessful mutiny resulted in legal floggings and hangings. Some crewmen, officers in particular, raped African women."
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Custom House", 
+            "description": "The customs office at a port that cleared vessels and imposed duties upon goods imported and exported."
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Cut off", 
+            "description": "Africans on shore \"cut off\" slaving vessels anchored in harbors or rivers on the African coast. Enslaved Africans on board also \"cut off\" ships during insurrections, though the term occurs more frequently as shore-based attacks. Finally, slave ships were \"cut off\" by the rising and lowering of tides which trapped vessels in rivers and creeks."
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Departures", 
+            "description": "Departures refer to ports where voyages originated. Ships would clear customs \"for Africa\" and departed from Europe or the Americas. By 1820, almost all slaving voyages originated in Brazil, the West Indies or North America."
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Diaspora", 
+            "description": "A dispersion of an originally homogeneous people. The Atlantic slave trade dispersed 10-11 million people throughout the temperate and tropical Americas creating an 'African Diaspora'."
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Disembark/disembarkation", 
+            "description": "To force slaves from vessels in port. Slaves could be disembarked at several ports in the Americas, as slave ship captains often traveled to various ports searching for the best price for their cargo. Disembarked slaves faced a thorough preparation for sale whereby they were scrubbed with palm oil, fattened with additional provisions and shaved. Slaves then underwent inspection by customs officials to ascertain their value prior to taxation and their sale to plantation owners."
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Embark/ embarkation", 
+            "description": "Loading African captives into a slave ship. In West Africa slaves were embarked via canoe, as slaving vessels had to anchor off shore due to a lack of natural harbors. Slaves would often be kept below decks for weeks after embarkation, firstly whilst they waited for the slaving master to procure a full cargo, and then during the Middle Passage across the Atlantic."
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Exported (slaves)", 
+            "description": "The number of enslaved Africans embarked on and departed from the coast of Africa."
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Fate", 
+            "description": "The documented outcome of a slaving voyage. Slavers hoped to 'complete' their voyage by returning to their homeport having purchased and sold slaves. Because of the risks of the sea, capture and rebellion, one in four slaving vessels failed to return to their homeport."
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Females", 
+            "description": "The number of female slaves. Slave traders did not prefer purchasing female slaves because buyers in the Americas sought stronger 'prime males'. Slavers kept female enslaved Africans separated from the males on board, and usually did not chain them above or below deck. Crewmen occasionally raped females on the Coast and Middle Passage."
+        }
+    }, 
+    {
+        "pk": 47, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Flag/national flag", 
+            "description": "The national registration papers carried on board ship. During the slave trade suppression period, post-1810, slavers often sailed under a flag different from their own nationality. In Estimates, this box enables the user to limit the analysis to one or more of seven national carriers by checking boxes next to those for which results will be reported. The seven national carriers are the same as those found using Flag* in Search the Database, except that the latter includes a category for 12 voyages under other flags. The variable Flag, without an asterisk, in Search the Database contains all 16 national carriers before being regrouped into a smaller number of categories. [Note: Other has 60 cases here]"
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Free trade era", 
+            "description": "Through most years of the slave trade mercantilist laws restricted slave trades to monopoly companies and national carriers. When companies lost monopolies in the 1700s, others could trade on the African coast and in the Americas. In 1789 the Spanish Crown allowed ships of all nations to land slaves in American colonies, such as Cuba. From 1789 to 1867 slaving ships from throughout the Atlantic world docked at Havana, the most multi-national slaving port in the Americas."
+        }
+    }, 
+    {
+        "pk": 49, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Gender", 
+            "description": "Differences between men and women, which influenced how slave traders organized shipboard confinement of Africans. Perceiving that women were not a security threat, captains often did not shackle women and imprisoned them towards the stern of the vessel and hence near the weapons' chest. Insurrections often occurred when women gained access to firearms."
+        }
+    }, 
+    {
+        "pk": 50, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Geophysical map", 
+            "description": "A map which displays topographical features, such as rivers and mountains, or oceanographic features such as winds and currents. The clockwise North Atlantic and anti-clockwise South Atlantic wind and current systems helped to order the voyage pathways in the trans-Atlantic slave trade."
+        }
+    }, 
+    {
+        "pk": 51, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Girls", 
+            "description": "Immature female slaves. Generally, slaving traders classified \"girls\" as shorter than four feet four inches or younger than 13-14 years of age. On most slaving vessels captains confined \"girls\" to specific below-deck compartments towards the stern of the vessel."
+        }
+    }, 
+    {
+        "pk": 52, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Gold Coast", 
+            "description": "Slaving region defined as covering the African coastline east of the Assini River to and including the Volta River, a region today in Ghana. Europeans built most of their trading forts along this 400-mile coastline, several of which remain important historic sites."
+        }
+    }, 
+    {
+        "pk": 53, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Guns/guns mounted", 
+            "description": "The number of cannon or swivel guns fitted on a slaving vessel. Slavers mounted guns to protect against privateers, pirates and Africans during insurrections. In addition, slavers often sailed as privateers themselves during wartime."
+        }
+    }, 
+    {
+        "pk": 54, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "High Court of the Admiralty", 
+            "description": "A court for hearing prize cases in which vessels have been captured in war. The High Court assessed the value of the prize, and decided whether the prize was taken in accordance with maritime law. Armed slaving vessels issued with a letter of marque sometime took prizes during their voyage, a lucrative side business which offset somewhat the additional risk incurred in wartime."
+        }
+    }, 
+    {
+        "pk": 55, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Historical map", 
+            "description": "A map showing features as they were, rather than as they are now. [Check: Perhaps add some detail on the historical maps in the images section]"
+        }
+    }, 
+    {
+        "pk": 56, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Homeport", 
+            "description": "The vessels' port of registration and from where it cleared customs on its outward voyage."
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Homeward passage", 
+            "description": "The voyage leg returning a vessel to its home port. A typical homeward passage for a North Atlantic slaving vessel tracked northeast with the Gulf Stream, and then across the Atlantic to England and northwest Europe. The homeward passage north required 4- 8 weeks' sailing time."
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Human agency", 
+            "description": "The actions of individuals that impacted the outcome of a voyage. By resisting their shipboard confinement, Africans raised the costs of slaving voyages. Some gained control and scuttled ships; some escaped to shore; some committed suicide. A few sailors also mutinied. Captains' experience and abilities helped to determine coastal transactions and health care on board ship."
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Iberian Peninsula", 
+            "description": "The large stretch of land, including Spain and Portugal, in southwest Europe. The Iberian countries dominated the slave trade during its infancy (1450-1650), when Spain and Portugal monopolized slaving markets in Africa and the Americas. From the 1630s onwards, Dutch, British and French traders substantially reduced the Iberian share of the trans-Atlantic slave trade."
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Imported (slaves)", 
+            "description": "The number of enslaved Africans disembarked in the Western Hemisphere or, if captured by anti-slaving patrols, in Africa."
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Impress", 
+            "description": "The forcible recruitment of sailors into the Navy. The Royal Navy relied almost exclusively on impressment to man the fleet throughout the age of sail. Slaving vessels were particularly susceptible to impressment due to the large crews they carried who became redundant in the Americas."
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Indentured servants", 
+            "description": "Indentured servants were Europeans, mostly males between the ages of 18 and 25, who contracted themselves to an employer in the New World for between four and seven years, after which time they were free to work for themselves. Masters were obliged to provide servants with food and lodging during their service, in addition to a small sum of money, or land at the end of their indenture. The small number of servants relative to the demand for workers in the Americas was one of the key factors behind the importation of enslaved Africans."
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Insurrection", 
+            "description": "An open revolt by the slaves against the slaving crew, often with the aim of taking over the slave ship. Slaving crews did everything in their power to prevent slave insurrections by keeping the male slaves separated and chained, constructing barricades on deck and purchasing supposedly more tractable slaves from specific regions of Africa. Successful slave insurrections were rare, but bloody affairs, which typically resulted in the death of the crew. Insurrections broke out on one in ten voyages."
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Intended", 
+            "description": "Slaving vessels loaded trading goods to exchange for a certain \"intended\" number of slaves. Captains usually fell short of purchasing their \"intended\" number of enslaved Africans. Captains also sailed for \"intended\" ports of call in Africa, the Americas and Europe. Most captains traded at their intended ports of call. Along the African coast, there were regional market preferences for specific trading goods, and captains had difficulty trading profitability at markets other than those they sailed for."
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Interloper", 
+            "description": "Slave traders operating in violation of monopoly company privileges. During the Iberian dominance of the slave trade (1450-1650), the English, Dutch and French were seen as interlopers into a trade to which the Spanish and Portuguese had been granted a monopoly by the papacy. Individual traders also acted as interlopers when trading in Africa in defiance of monopoly companies. Frequently, interlopers and African merchants opened new trading outlets for enslaved Africans, thus preceding Company ships in many markets."
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Invoice date", 
+            "description": "The date on a bill of sale."
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Jamaica", 
+            "description": "Britain captured Jamaica from the Spanish in 1655. Under British control the island developed into the major plantation colony in the British West Indies, importing forty percent of all enslaved Africans on British vessels. Plantation agriculture first centered around Kingston in the southeast and then expanded steadily westward throughout the 1700s. Sugar remained the most important cash crop produced in Jamaica; coffee production began expanding in the 1780s. The Jamaican economy also had a significant livestock sector, which employed more Jamaicans of African descent after the Abolition of Slavery in 1833."
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Laid up", 
+            "description": "The situation of a ship when unrigged, during a winter, for want of employment or when unfit for service. Because the slave trade was seasonable, ships laid up in port."
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Leeward Islands", 
+            "description": "The group of islands lying in the northeast Caribbean and including Dominica, Guadeloupe, Montserrat, Antigua, Nevis, St. Kitts, Barbuda, St. Eustatius, St. Bartholomew, St. Martin, Anguilla and the Virgin Islands. The Leeward Islands were initially controlled by the Spanish who left them vacant thinking them 'useless'. Seeing that the islands were ideal for sugar and tobacco cultivation the British and French occupied the islands and developed them into lucrative plantation economies on which thousands of slaves worked."
+        }
+    }, 
+    {
+        "pk": 70, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Liberated slaves/liberated Africans", 
+            "description": "Following anti-slave trade treaties, the first in 1810, the British Royal Navy policed the African Atlantic coast to search for illegal slaving voyages. They escorted captured ships to Sierra Leone and there liberated the Africans. Voyages contains several pictures of liberated slaves in the Images section, in addition to pictures of Royal Navy ships approaching or capturing slaving vessels."
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Log book", 
+            "description": "A book in which a ship captain kept the daily navigational log and details of some occurrences on board. To plot their course, captains noted wind direction, hull speed, latitude and longitude. Log books are a valuable source as they provide detail of the daily running of a slaving vessel including crew deaths and acts of resistance by the slaves."
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Male ratio", 
+            "description": "The number of male slaves relative to the number of female slaves. The ratio was skewed towards males because plantation owners desired 'prime male slaves' above others and African societies wanted to retain female slaves. As a result, slaving ships embarked more male than female slaves."
+        }
+    }, 
+    {
+        "pk": 73, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Manuscript", 
+            "description": "Section within \"Images\" containing pictures of original documents from the slave trade. The slave registers within Manuscripts record the details of slaves emancipated by the Royal Navy when they policed the slave trade."
+        }
+    }, 
+    {
+        "pk": 74, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Men", 
+            "description": "Adult male Africans sold into the trans-Atlantic slave trade. Generally, slaving traders classified \"men\" as taller than four feet four inches or older than 13-14 years of age. On most slaving vessels captains confined and chained \"men\" to specific below-deck compartments towards the center and bow of the vessel."
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Middle Passage", 
+            "description": "The trans-Atlantic voyage between Africa and the Americas. The Middle Passage was notorious due to the cramped, unhygienic conditions suffered by the slaves below deck and became a symbol of the anti-slavery movement. It also represents both a bridge and a divider between the Old and New Worlds."
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Minas Gerais", 
+            "description": "In the 1690s, gold, diamonds and silver were discovered near Rio de Janeiro in Brazil. Minas Gerais, in Portuguese, \"general mines,\" was one of the largest gold finds in history and required thousands of workers to extract its riches. After exploiting Amerindian labour in the mines, the Portuguese turned to purchasing enslaved Africans, mostly from West-Central Africa and the Bight of Benin. Portuguese merchants sent slaving voyages directly from Rio de Janeiro to Africa, creating a slave trade between South America and Africa that bypassed Europe. Minas Gerais remained an important mining region through the mid-1700s."
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Mortality", 
+            "description": "The number of Africans or crewmen who died on board the ship, whether while anchored off the coast of Africa, on the Middle Passage or in American harbors. Crew mortality was highest along the African coast. Slaves died at greater rates than crewmen and mortality rose during excessively long voyages due to starvation and dietary related diseases."
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "National carrier", 
+            "description": "See: flag/national flag."
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Natural hazard", 
+            "description": "The risks associated with sailing the Atlantic and trading in the tropics. Many slaving vessels were lost on the African coast (sandbars being the greatest threat), in Atlantic storms or in the Americas (where reefs were the greatest threat). Sailors and slaves also faced the natural hazard of disease."
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Old World", 
+            "description": "The Old World refers to Africa and Europe. In the Old World slave trade (1445-1750), Portuguese vessels shipped enslaved Africans between African coastal locations, between the African coast and Atlantic islands such as Madeira, or between the African coast and Europe. After abolition, slaves were moved within the Old World when the Royal Navy repatriated emancipated slaves to Sierra Leone."
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Organization (of slave voyages)", 
+            "description": "Organizing slaving voyages required outfitters to purchase trading goods in demand in regional African markets. Captains also needed to hire requisite numbers of crewmen to work as sailors, craftsmen and guards. Over time slave prices rose and African merchants demanded greater and greater quantities of high-quality trading goods; only ports with sufficient infrastructures could organize large numbers of slaving ventures."
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Outset (voyage outset)", 
+            "description": "Merchants' account books itemized outset costs, which included the costs of trading cargo (mostly textiles, metal manufacturers, hardware, alcohol and weaponry), security devices such as shakles, port fees and the wage bill."
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Outward passage", 
+            "description": "The first leg of a slaving voyage, from the port of departure to Africa. Departure regions included Europe, North America, the Caribbean and Brazil, and voyages usually required 1-3 months' sailing time. Crewmen worked on the outward passage, preparing the vessel to receive human cargo by configuring below-deck prisons."
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Pirates", 
+            "description": "One who robs at sea or plunders the land from the sea without commission from a sovereign nation. Piracy was a major impediment to the slave trade throughout the seventeenth and early eighteenth centuries, when they roamed both the Caribbean and the West Coast of Africa. After the destruction of pirate bases in Nassau, Madagascar and Sierra Leone, the pirate threat diminished. Barbary pirates did, however, continue to threaten shipping into the mid-nineteenth century."
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Place (as used for estimates maps)", 
+            "description": "Places of trade can refer to ports, discrete landmasses (such as islands) or broadly-defined geographical units such as \"Caribbean\" or \"North America\"."
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Plantation", 
+            "description": "A large estate or farm on which cash crops and provisions are grown, usually by slave workers. Plantations constituted the destination of the majority of enslaved Africans. Plantation workers faced long hours planting, growing and harvesting crops such as sugar, tobacco and cotton. The poor conditions on plantations typically resulted in high mortality rates. In the Caribbean and Brazil, for example, plantation owners purchased slaves on the basis that they would live for four years."
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Port", 
+            "description": "A coastal town with a navigable harbor and infrastructure needed to load and unload cargoes."
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Ports of call", 
+            "description": "A port where ships docked to load or unload cargo, to obtain supplies, or to undergo repairs."
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Pounds (sterling)", 
+            "description": "The currency of the United Kingdom of Great Britain. Colonial currencies, such as Jamaican pounds, were valued 40% below that of the British pound sterling."
+        }
+    }, 
+    {
+        "pk": 90, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Price /standardized price", 
+            "description": "Price of slaves at a port of sale in the Americas, standardized in English pounds sterling. \"Slaves\" were not \"cheap\"; rather, buyers paid high prices for enslaved Africans on the African coast and in the Americas."
+        }
+    }, 
+    {
+        "pk": 91, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Prime slaves", 
+            "description": "Healthy slaves, men and women, between the ages of 18 and 30. Slave traders desired prime slaves above others and paid premiums for them."
+        }
+    }, 
+    {
+        "pk": 92, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Privateers", 
+            "description": "A ship privately owned and manned but authorized by a government during wartime to attack and capture enemy vessels. Armed slaving vessels often purchased a letter of marque during wartime in order to capture enemy shipping on their own account."
+        }
+    }, 
+    {
+        "pk": 93, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Prize", 
+            "description": "A vessel captured from the enemy and deemed a legal capture in a prize court."
+        }
+    }, 
+    {
+        "pk": 94, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Rebellion", 
+            "description": "See insurrection."
+        }
+    }, 
+    {
+        "pk": 95, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Registration", 
+            "description": "The port at which a slaving vessel is registered to by the owners, often the same as the port of departure. During the era of British-led suppression after 1810, captains carried registration papers from numerous nations to evade anti-slave trade treaties."
+        }
+    }, 
+    {
+        "pk": 96, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Resistance", 
+            "description": "Acts by slaves or crewmen to gain freedom or improve their shipboard conditions. Most Africans resisted their slave status and shipboard confinement; some sailors resisted the power of tyrannical officers."
+        }
+    }, 
+    {
+        "pk": 97, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Return passage", 
+            "description": "See homeward passage."
+        }
+    }, 
+    {
+        "pk": 98, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Rig", 
+            "description": "The manner in which a vessel's sails are configured. There are sixty rigs in the database, the most common being \"ship\" (a combination of different sails on three masts), brig and schooner."
+        }
+    }, 
+    {
+        "pk": 99, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Rio de la Plata", 
+            "description": "The \"Plate\" or \"Silver\" River flows through Argentina and Uruguay. It is the southernmost disembarkation point for enslaved Africans in the Atlantic world. Enslaved Africans sent to Rio de la Plata were often transported overland to the Andean colonies of Bolivia and Peru, where they worked in silver mines. The river feeds the highly productive pampas agricultural region, which became important in the eighteenth century."
+        }
+    }, 
+    {
+        "pk": 100, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Royal African Company", 
+            "description": "A London-based private company founded in 1672 with a monopoly on African trade and subsidized by tax payers. The Crown chartered the Company to advance British gold and slave trades along the West African Coast, centered on forts in the mouth of the Gambia River, in Sierra Leone, along the Gold Coast and at Ouidah (Whydah), in modern-day Benin. English interlopers, private merchants trading in contravention of the company's monopoly, reduced the Company's profits. The termination of the Company's monopoly privileges in 1698 and 1712 accelerated its decline, culminating in its dissolution in 1752."
+        }
+    }, 
+    {
+        "pk": 101, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Sailing orders", 
+            "description": "Merchants' orders to slaving captains, usually specifying the voyage pattern to Africa, the captains' monthly wages and commissions, and the chain of command should the captain and officers die on the voyage."
+        }
+    }, 
+    {
+        "pk": 102, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Seasoning", 
+            "description": "People \"seasoned\" to new climates, disease environments and work routines. Captains preferred to hire \"seasoned sailors,\" those men with experience in the slave trade and who had survived the \"seasoning period.\" Similarly, enslaved Africans who survived their first few years in the Americas were \"seasoned\" to the new disease environment and had learned work routines."
+        }
+    }, 
+    {
+        "pk": 103, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Senegambia", 
+            "description": "Slaving region defined as covering the African coastline and offshore islands north of Rio Nunez, a region today in Guinea, Guinea-Bissau, Gambia and Senegal."
+        }
+    }, 
+    {
+        "pk": 104, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Seven Years' War (1756-1763)", 
+            "description": "The Seven Years' War (1756-1763) was fought between all the major powers of Europe and transformed the colonial New World. The main victor, Britain, gained nearly all of France's possessions in both North America and the Caribbean. Britain held Spanish Havana temporarily, and transformed the island's history by shipping at least 5,000 enslaved Africans into the northern Cuba in 1762-63."
+        }
+    }, 
+    {
+        "pk": 105, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Sierra Leone (region)", 
+            "description": "Slaving region defined as covering the African coastline and offshore islands from Rio Nunez to just west of Cape Mount, a region today in Guinea, Sierra Leone and western Liberia. Europeans often included this stretch of coastline in their definition of the Windward Coast."
+        }
+    }, 
+    {
+        "pk": 106, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Slave purchase", 
+            "description": "Captains often purchased more slaves than they later transported from the African coast. In some cases, they transshipped slaves to auxiliary vessels; in other cases they re-landed slaves whom they believed would not survive the Middle Passage. Some captains advanced trading goods on credit to African merchants, receiving \"pawns\" (human collateral or \"commercial hostages\") in return. Captains redeemed pawns once slave deliveries were made. There was wide variability in length of time to complete a slave purchase--from several weeks to sometimes more than 18 months."
+        }
+    }, 
+    {
+        "pk": 107, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Slaver (under images)", 
+            "description": "An image of a person in the slave trade. [check images]"
+        }
+    }, 
+    {
+        "pk": 108, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Slave ship", 
+            "description": "A sailing ship refitted for the slave trade, known also as a Guineaman. Most slaving ships were second-hand vessels that frequented other trades. Owners sought to purchase fast-sailing vessels and/or ones which could be retooled below the main deck to maximize the number of Africans who would be imprisoned."
+        }
+    }, 
+    {
+        "pk": 109, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "South America", 
+            "description": "The landmass below the Isthmus of Panama, most lands falling below the equator. Brazil, the Guianas, Venezuela, Colombia and Rio de la Plata were major slave disembarkation regions."
+        }
+    }, 
+    {
+        "pk": 110, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Southeast Africa", 
+            "description": "Slaving region defined as the African coastline east of the Cape of Good Hope, including the island Madagascar and Zanzibar Island. Mozambique was the center of the southeast African slave trade."
+        }
+    }, 
+    {
+        "pk": 111, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Spanish Central America", 
+            "description": "After the conquest of the Aztec and Inca Empires in the sixteenth century, the Spanish consolidated their Central American rule from Mexico to Venezuela. The Spanish imported most enslaved Africans into Central America via Veracruz (Mexico) and Cartegena (Columbia). Many of these slaves were destined for the silver mines of central Mexico and to the region around Potosi, \"The Silver Mountain,\" located today in Bolivia."
+        }
+    }, 
+    {
+        "pk": 112, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "St. Domingue Revolution", 
+            "description": "In 1697, Spain ceded the western half of the island of Hispaniola to France in the Treaty of Ryswick. By the mid-1700s St. Domingue became the leading sugar, coffee and indigo producer in the Caribbean, due to the efforts of the colony's enslaved African workforce. A slave rebellion broke out in August 1791 and soon turned into a Revolution, leading to the freedom of 500,000 enslaved Africans and to the creation of the Republic of Haiti (1804). The St. Domingue Revolution prompted Africans elsewhere in the Americas to revolt against their enslavement, and the Revolution entrenched white planters' opposition to amelioration or abolition."
+        }
+    }, 
+    {
+        "pk": 113, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Sugar", 
+            "description": "During the era of the trans-Atlantic slave trade, cane sugar was the principle cash crop grown in the Plantation Americas. Sugar production techniques transferred from the Mediterranean to the Atlantic world, more specifically, in the mid-seventeenth century from the Portuguese island-colony Sao Tome to Portuguese Brazil. Four in five Africans shipped to the West Indies, between the 1620s-1860s, would have ended their lives on sugar plantations. Planting and growing sugar required large numbers of enslaved African workers working in the fields and in the sugar-production buildings. Africans forced to work in sugar production had lower life expectancies than those growing other crops."
+        }
+    }, 
+    {
+        "pk": 114, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Tonnage/Standardised tonnage", 
+            "description": "The amount of cargo a vessel is able to carry expressed in imperial tons. Slaving vessels were typically smaller in tonnage than their non-slaving counterparts, as they carried less cargo by weight."
+        }
+    }, 
+    {
+        "pk": 115, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Trafficking", 
+            "description": "The illegal or improper transport of slaves. Trafficking and smuggling of slaves existed throughout the legal and illegal periods of the slave trade."
+        }
+    }, 
+    {
+        "pk": 116, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Traite des noirs", 
+            "description": "Traite des noirs is the French term for their trans-Atlantic slave trade."
+        }
+    }, 
+    {
+        "pk": 117, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Trans-Atlantic", 
+            "description": "Trans-Atlantic refers to slaving voyages that sailed across the Atlantic Ocean from the Old World (Africa) to the New World (the Americas). The trans-Atlantic slave trade differs from the Old World slave trade, in which Portuguese vessels shipped enslaved Africans between African coastal locations, between the African coast and Atlantic islands such as Madeira, or between the African coast and Europe."
+        }
+    }, 
+    {
+        "pk": 118, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Trans-Atlantic slave trade", 
+            "description": "Term used to define the coerced migration of 12 million enslaved Africans from 1514 to 1866 across the Atlantic from the Old to New Worlds."
+        }
+    }, 
+    {
+        "pk": 119, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Treaty of Ryswick (1697)", 
+            "description": "The peace treaty ending the Nine Years' War (1688-1697) between France and the Grand Alliance (England, the Netherlands, Spain, Holy Roman Empire) signed in the Dutch town Ryswick. The treaty handed control of western Hispaniola (St. Domingue, later Haiti) to France. The colony would become the largest and most prosperous plantation colony in the Caribbean until the St. Domingue Revolution in 1791."
+        }
+    }, 
+    {
+        "pk": 120, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Venture", 
+            "description": "Slaving voyages are often described as \"ventures,\" because as in any business one ventured one's capital."
+        }
+    }, 
+    {
+        "pk": 121, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Vessel", 
+            "description": "The sailing craft used to transport enslaved Africans to markets. For \"ship\" see Rig."
+        }
+    }, 
+    {
+        "pk": 122, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Vice-Admiralty Court", 
+            "description": "The Vice-Admiralty Court heard piracy and prize cases in overseas British possessions. The courts often were set up after the capture of large numbers of enemy vessels. After the capture of Martinique by the British, for instance, a Vice Admiralty court was set up on the island to hear the numerous prize cases."
+        }
+    }, 
+    {
+        "pk": 123, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Voyage", 
+            "description": "The trans-Atlantic journey between two or more ports, depending on the vantagepoint of the free or coerced traveler."
+        }
+    }, 
+    {
+        "pk": 124, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Voyage dates", 
+            "description": "Dates when slaving vessels departed from and arrived at markets in the Atlantic world. Dates of departure are generally the days on which vessels cleared customs, unless a muster roll (ship's crew list) survives to document days of sailing."
+        }
+    }, 
+    {
+        "pk": 125, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Voyage itinerary", 
+            "description": "The ports visited as part of a slaving voyage. Slaving captains received an itinerary from the shipowners prior to the voyage instructing them which ports to visit."
+        }
+    }, 
+    {
+        "pk": 126, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Voyage length", 
+            "description": "The amount of time taken to complete a slaving voyage. Due to the distances traveled, and the need to spend large amounts of time waiting to load cargo in ports, North Atlantic slaving vessels typically took 12-18 months to complete a voyage. Brazilian voyages to Africa and back required less time."
+        }
+    }, 
+    {
+        "pk": 127, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Voyage outcome/outcome", 
+            "description": "The downloadable database distinguishes voyage outcomes from the standpoint of the enslaved African, the ship's owner(s) and the captor(s). These are imputed variables. For the documented outcome of the voyage, see Fate."
+        }
+    }, 
+    {
+        "pk": 128, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "West-Central Africa", 
+            "description": "Slaving region defined as covering the coastline from Cape Lopez to the tip of South Africa, though Benguela, Angola, was the southernmost slaving port in Atlantic Africa. This coastline today includes lands in Gabon, Congo, Zaire and Angola. Often referred to by Europeans as \"Angola.\""
+        }
+    }, 
+    {
+        "pk": 129, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "West Indies", 
+            "description": "Islands in the Caribbean Sea. The area is named the West Indies because early European explorers believed they had located a westward passage to India, rather than a new hemisphere."
+        }
+    }, 
+    {
+        "pk": 130, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Windward Coast", 
+            "description": "Slaving region defined as covering the African coastline from Cape Mount up to and including the Assini River, a region today in Liberia and the Ivory Coast. Europeans often referred to the African coastline west of the Gold Coast as the \"Windward Coast.\""
+        }
+    }, 
+    {
+        "pk": 131, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Windward Islands", 
+            "description": "The islands Martinique, St. Lucia, St. Vincent, the Grenadines and Grenada in the southeast Caribbean. The islands are so named because they receive trade winds first; they are located to windward of the Leeward Islands and the Greater Antilles (Cuba, Jamaica, St. Domingue). The British and French developed the Windward Islands into lucrative plantation colonies and important victualing ports. Barbados is sometimes included in the Windward Islands."
+        }
+    }, 
+    {
+        "pk": 132, 
+        "model": "help.glossary", 
+        "fields": {
+            "term": "Women", 
+            "description": "Adult female Africans sold into the trans-Atlantic slave trade. Generally, slaving traders classified \"women\" as taller than four feet four inches or older than 13-14 years of age. On most slaving vessels captains confined \"women\" to specific below-deck compartments towards the stern of the vessel. Women, often not shackled, occasionally broke into arms' chests, located in or near the captains' cabins and helped instigate insurrections."
+        }
+    },
+    {
+        "pk": 133,
+        "model": "help.glossary",
+        "fields": {
+            "term": "AGasdfawefsdfwefsdfds",
+            "description": "fhjdsvf sbdkf bskjdf sd. This is test item"
+        }
+    },
+    {
+        "pk": 134,
+        "model": "help.glossary",
+        "fields": {
+            "term": "DHFgsdffsdvbe",
+            "description": "SDFsdgvlkdsnsd nkjfsdn kjnfsd kjsdf. sdfjn sdkjf sdkjf bskdjbf ksdbf sd. This is test item"
+        }
+    },
+    {
+        "pk": 135,
+        "model": "help.glossary",
+        "fields": {
+            "term": "Hsfsdgbfverg",
+            "description": "SDf sdfs dfsd fsd . sdf sdjfn sjkdnf ksjdnf s. sdf sjkfwe. This is test item"
+        }
+    }
+]
