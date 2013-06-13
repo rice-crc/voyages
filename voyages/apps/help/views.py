@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.template import TemplateDoesNotExist, Context, loader, RequestContext
+from django.template import Context, RequestContext
 from django.shortcuts import render_to_response
 from django.utils.datastructures import SortedDict
 from .models import Glossary, Faq, FaqCategory
@@ -8,10 +7,18 @@ from haystack.forms import HighlightedSearchForm
 
 def glossary_page(request):
     """
-    Display the entire glossary page
-    containing glossary entries from :model:`help.Glossary`
+    Display the entire Glossary page if there is no user query and allows users to search for terms
+    The view will fetch the result from the search engine and display the results
+    
+    ** Context **
+    ``RequestContext``
+    ``mymodel``
+        An instance of 
+        :model:`voyages.apps.help.Glossary`
+    
+    ** Template **
+    :template:`help/page_glossary.html`
     """
-
     letters = []
     glossary_content = []
     glossary_dict = {}
@@ -75,16 +82,26 @@ def glossary_page(request):
 
 def get_faqs(request):
     """
-    Display the lesson entire glossary page
-    containing faq entries from :model:`help.Faq`
+    Display the FAQ page if there is no user query and allows users to search for terms
+    The view will fetch the result from the search engine and display the results
+    ** Context **
+    ``RequestContext``
+    ``mymodel``
+        An instance of 
+        :model:`voyages.apps.help.Faq`
+        requires :model:`voyages.apps.help.FaqCategory`
+    
+    ** Template **
+    :template:`help/page_faqs.html`
     """
     count = 0;
     faq_list = []
     
     if request.method == 'POST':
+        # Convert the posted data into Haystack search form
         form = HighlightedSearchForm(request.POST)
         if form.is_valid():
-            # Perform the query
+            # Perform the query by specifying the search term and sort orders (category and then questions)
             current_query = form.cleaned_data['q']
             qresult = SearchQuerySet().filter(content=current_query).models(Faq).order_by('faq_category_order', 'faq_question_order')
             
@@ -110,6 +127,7 @@ def get_faqs(request):
                              count += 1
                              prev_obj = current_item
                              groupedList = []
+                    # Add the question to the grouped list
                     groupedList.append({ 'question': current_item['faq_question'], 'answer' : current_item['faq_answer']})
                     # Add the last result group
                 faq_list.append({ 'qorder' : count, 'text' : prev_obj['faq_category_desc'], 'questions' : groupedList })
@@ -117,6 +135,7 @@ def get_faqs(request):
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list, 'current_query' : current_query},
                               context_instance=RequestContext(request));
     else:
+        # return the form if there is no form and display the entire faq (from the database)
         form = HighlightedSearchForm()
         for faq_cat in FaqCategory.objects.order_by('type_order'):
             faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : Faq.objects.filter(category=faq_cat) })
@@ -125,6 +144,9 @@ def get_faqs(request):
                               context_instance=RequestContext(request));
 
 def sort_dict(dict):
+    """
+    Sort the dictionary if the dictionary is not empty
+    """
     try:
         return sorted(dict, key=lambda k: k['letter'])
     except:

@@ -10,10 +10,11 @@ def lessonplan(request):
     ** Context **
     ``RequestContext``
     ``mymodel``
-        An instance of :model:`education:LessonPlan`
-        requires :model:`education:LessonStandard`
-        requires :model:`education:LessonStandardType`
-        requires :model:`education:LessonPlanFile`
+        An instance of 
+        :model:`voyages.apps.education.LessonPlan`
+        requires :model:`voyages.apps.education.LessonStandard`
+        requires :model:`voyages.apps.education.LessonStandardType`
+        requires :model:`voyages.apps.education.LessonPlanFile`
     
     ** Template **
     :template:`education/lesson-plans.html`

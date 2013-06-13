@@ -1,16 +1,21 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.core.urlresolvers import reverse
 
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
+@override_settings(LANGUAGE_CODE='en')
+class TestAuthentication(TestCase):
+    """
+    Test the basic login mechanism
+    """
+    def test_invalid_logininfo(self):
         """
-        Tests that 1 + 1 always equals 2.
+        Attempt to login using an invalid username/password
         """
-        self.assertEqual(1 + 1, 2)
+        # Should redirect
+        response = self.client.post(reverse('contribute:index'), {'id_username': 'admin', 'id_password': 'should_not_work'})
+        self.assertEqual(response.status_code, 302)
+        
+        # Should fail
+        loginres = self.client.login(username='admin', password="random_pass")
+        self.assertEqual(loginres, False)
+  

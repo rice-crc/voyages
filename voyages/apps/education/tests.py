@@ -3,9 +3,10 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from .models import *
+import random
 
 @override_settings(LANGUAGE_CODE='en')
-class SimpleTestEducation(TestCase):
+class TestAllData(TestCase):
     """
     Simple test of the Education: Lesson plan view
     """
@@ -19,12 +20,15 @@ class SimpleTestEducation(TestCase):
         
     def test_not_empty_lessonplan(self):
         """
-        Test for containment
+        Test that the loaded fixture is non-empty (for other test to work)
         """
         listAllObjects = LessonPlan.objects.all()
         self.assertEqual(len(listAllObjects) > 0, True)
         
     def test_word_contains(self):
+        """
+        Test whether words really appears on the page
+        """
         response = self.client.get(reverse('education:lesson-plans'))
         for lessonplan_item in LessonPlan.objects.all():
             self.assertContains(response, lessonplan_item.text)
@@ -38,7 +42,7 @@ class SimpleTestEducation(TestCase):
             self.assertContains(response, lessonstandard_item.text)
         
 @override_settings(LANGUAGE_CODE='en')    
-class TestContainment(TestCase):
+class TestSmallerSubset(TestCase):
     """
     Simple test on a subset of the lesson plan data
     """
@@ -51,6 +55,9 @@ class TestContainment(TestCase):
         self.assertEqual(response.status_code, 200)
     
     def test_word_contains(self):
+        """
+        Test whether words really appears on the page
+        """
         response = self.client.get(reverse('education:lesson-plans'))
         for lessonplan_item in LessonPlan.objects.all():
             self.assertContains(response, lessonplan_item.text)
@@ -60,14 +67,37 @@ class TestContainment(TestCase):
             self.assertContains(response, lessonplan_item.key_words)
     
     def test_adding_new_lesson_plan(self):
-        new_lessonplan_1 = LessonPlan.objects.create(text="12abc", author="AAAA Random author Test", grade_level="1000-2000",
-                course='History 999', key_words='nokey;wqwertyyu', order=10, abstract='BBBB Empty Abstract')
-        response = self.client.get(reverse('education:lesson-plans'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, new_lessonplan_1.text)
-        self.assertContains(response, new_lessonplan_1.author)
-        self.assertContains(response, new_lessonplan_1.grade_level)
-        self.assertContains(response, new_lessonplan_1.course)
-        self.assertContains(response, new_lessonplan_1.key_words)
-        
+        """
+        Test whether adding or deleting lesson plan will affect the page
+        """
+        for i in range(0, 10):
+            sample_text = "test_text_" + str(random.randint(0, 1000000))
+            sample_author = "test_author_" + str(random.randint(0, 1000000))
+            sample_grade_level = "test_grade_" + str(random.randint(0, 10000000))
+            sample_course = "test_course_" + str(random.randint(100000, 1000000))
+            sample_key_words = "test_keywords" + str(random.randint(100000, 1000000))
+            sample_order = str(random.randint(40, 100))
+            sample_abstract = "test_abstract_" + str(random.randint(0, 10000000))
+            
+            new_lessonplan = LessonPlan.objects.create(text=sample_text, author=sample_author, grade_level=sample_grade_level,
+                    course=sample_course, key_words=sample_key_words, order=sample_order, abstract=sample_abstract)
+            
+            # Check if the response contains the lesson plan
+            response = self.client.get(reverse('education:lesson-plans'))
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, new_lessonplan.text)
+            self.assertContains(response, new_lessonplan.author)
+            self.assertContains(response, new_lessonplan.grade_level)
+            self.assertContains(response, new_lessonplan.course)
+            self.assertContains(response, new_lessonplan.key_words)
+            
+            new_lessonplan.delete()
+            # Check if the response does not contain the lesson plan just deleted
+            response = self.client.get(reverse('education:lesson-plans'))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotContains(response, new_lessonplan.text)
+            self.assertNotContains(response, new_lessonplan.author)
+            self.assertNotContains(response, new_lessonplan.grade_level)
+            self.assertNotContains(response, new_lessonplan.course)
+            self.assertNotContains(response, new_lessonplan.key_words)
         

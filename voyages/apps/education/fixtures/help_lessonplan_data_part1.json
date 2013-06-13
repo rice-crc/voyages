@@ -167,7 +167,7 @@
         "pk": 19, 
         "model": "education.lessonstandard", 
         "fields": {
-            "text": "US Era 1 (Three Worlds Meet) Standards 1 & 2", 
+            "text": "US Era 1 (Three Worlds Meet) Standards 1 and 2", 
             "lesson": 5, 
             "type": 1
         }
@@ -176,7 +176,7 @@
         "pk": 20, 
         "model": "education.lessonstandard", 
         "fields": {
-            "text": "World Era 6 (First Global Age) Standards 1A, 1B, 2A, 4A, 4B, 4C, & 6", 
+            "text": "World Era 6 (First Global Age) Standards 1A, 1B, 2A, 4A, 4B, 4C, and 6", 
             "lesson": 5, 
             "type": 1
         }
@@ -284,7 +284,7 @@
         "pk": 40, 
         "model": "education.lessonstandard", 
         "fields": {
-            "text": "U.S. History Era 1(Three Worlds Meet)\u2013Standard 1", 
+            "text": "U.S. History Era 1(Three Worlds Meet) Standard 1", 
             "lesson": 7, 
             "type": 1
         }

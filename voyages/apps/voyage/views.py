@@ -38,6 +38,7 @@ def download_file(request):
     information regarding uploaded files and call 
     handle_uploaded_file() to store files on the disk.
     This view is available only for admin users.
+    :template:`voyage/upload.html`
     """
     templatename = 'voyage/upload.html'
 

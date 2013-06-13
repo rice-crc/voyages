@@ -27,7 +27,7 @@ class LessonPlan(models.Model):
 class LessonStandardType(models.Model):
     """
     A type of lesson standards (such as NCHS or NCSS standards)
-    related to :model:`education.LessonStandard`
+    related to :model:`voyages.apps.education.LessonStandard`
 
     """
     type = models.CharField(_('Standard Type'),max_length=100)
@@ -38,8 +38,8 @@ class LessonStandard(models.Model):
     """
     An actual standard or group of standards of a lesson plan
       belonging to the same lesson standard type
-    related to :model:`education.LessonStandardType`
-    related to :model:`education.LessonPlan`
+    related to :model:`voyages.apps.education.LessonStandardType`
+    related to :model:`voyages.apps.education.LessonPlan`
     """
     type = models.ForeignKey(LessonStandardType)
     text = models.CharField(_('Text'),max_length=100)
@@ -50,7 +50,7 @@ class LessonStandard(models.Model):
 class LessonPlanFile(models.Model):
     """
     An attached file (presentation or pdf) to a lesson plan
-    related to :model:`education.LessonStandard`
+    related to :model:`voyages.apps.education.LessonStandard`
     """
     file = models.FileField(upload_to='lessonplan')
     filetitle = models.CharField(('File name'),max_length=50)
