@@ -1,12 +1,11 @@
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
-from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 class FlatPageAdmin(admin.ModelAdmin):
+    """Class serves flat pages module"""
     fields = ('url', 'title', 'content')
     readonly_fields = ('url', 'title',)
-    """Class serves flat pages module"""
- 
+    
     list_display = ['title', 'url']
   
     # prevents deleting of flat page
