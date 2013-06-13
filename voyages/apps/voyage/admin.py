@@ -5,9 +5,12 @@ from django.contrib.flatpages.admin import FlatpageForm
 from django import forms
 
 class MyFlatAdminForm(FlatpageForm):
-    template2 = forms.CharField()
+    class Meta:
+        model = FlatPage
 
-class FlatPageAdmin(FlatPageAdminOld):
+class FlatPageAdmin(admin.ModelAdmin):
+    fields = ('url', 'title', 'content')
+    readonly_fields = ('url', 'title',)
     """Class serves flat pages module"""
  
     list_display = ['title', 'url']
