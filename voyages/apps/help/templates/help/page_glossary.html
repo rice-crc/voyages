@@ -82,7 +82,7 @@
                             {% if results %}
                                 {% highlight t_value with query %}
                             {% else %}
-                                {{ t_value }}
+                                {{ t_value|safe }}
                             {% endif %}
                         </td>
                     {% endif %}
@@ -91,7 +91,7 @@
                             {% if results %}
                                 {% highlight t_value with query %}
                             {% else %}
-                                {{ t_value }}
+                                {{ t_value|safe }}
                             {% endif %}
                         </td>
                     {% endif %}
