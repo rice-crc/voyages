@@ -13,11 +13,10 @@
 
 {% block title %}{% trans "Contribute" %}{% endblock %}
 
-{% block content %}
-
+{% block additional_sec_bar %}
 {% if request.user.is_authenticated %}
 
-	<div class="userlogtool">
+	<div class="userlogtool secondarybar">
 		<div>
 			{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
 			{% block userlinks %}
@@ -31,8 +30,10 @@
 			{% endblock %}
 		</div>
 	</div>
-	{% endif %}
+{% endif %}
+{% endblock %}
 
+{% block content %}
 <div id="left-menu" class="left-menu-box">
 	<div class="left-menu-title">
 		<h3>{% trans 'CONTRIBUTE' %}</h3>

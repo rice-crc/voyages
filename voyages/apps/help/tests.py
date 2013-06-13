@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.management import call_command
 from sys import stderr
-from .models import Glossary
+from .models import Glossary, Faq, FaqCategory
 
 @override_settings(LANGUAGE_CODE='en')
 class GlossaryEmptyTest(TestCase):

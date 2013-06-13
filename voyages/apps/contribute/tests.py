@@ -32,16 +32,18 @@ class TestAuthentication(TestCase):
         
         response = self.client.post(reverse('contribute:login'), {'id_username': 'admin', 'id_password': 'should_not_work'})
         self.assertEqual(response.status_code, 200)
+        # Should display the error message
+        self.assertContains(response, "Your username and password didn't match. Please try again")
         
         # Should fail
         loginres = self.client.login(username='admin', password="random_pass")
         self.assertEqual(loginres, False)
         
         # Should redirect, since we are not logged in
-        response = self.client.get(reverse('contribute:user_index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "Welcome to the Contribute Section")
-  
+        response = self.client.get(reverse('contribute:index'))
+        self.assertRedirects(response, reverse('contribute:login'), status_code=302, target_status_code=200)
+        
+        
     def test_valid_logininfo(self):
         """
         Attempt to login using a valid combination of user name and password
@@ -52,6 +54,6 @@ class TestAuthentication(TestCase):
         # Perform login then check if we can access the user_index page
         loginres = self.client.login(username=usr_name, password=usr_passwd)
         self.assertEqual(loginres, True)
-        response = self.client.get(reverse('contribute:user_index'))
+        response = self.client.get(reverse('contribute:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Welcome to the Contribute Section")
