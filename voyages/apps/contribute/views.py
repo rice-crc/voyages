@@ -1,9 +1,9 @@
 # Create your views here.
 from django.template import TemplateDoesNotExist, RequestContext
-from django.views.generic.simple import direct_to_template
+from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth import logout 
+from django.contrib.auth import logout
 
 def index(request):
     """
@@ -20,5 +20,12 @@ def index(request):
     """
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('contribute:user_index'))  
+    else:
+        return HttpResponseRedirect(reverse('contribute:login'))
+
+def user_index(request):
+    if request.user.is_authenticated():
+        return render_to_response("contribute/index.html", {},
+                              context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect(reverse('contribute:login'))

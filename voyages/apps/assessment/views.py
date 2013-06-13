@@ -22,6 +22,10 @@ def get_page(request, chapternum, sectionnum, pagenum):
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "assessment/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "assessment/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"
-    return render_to_response(templatename, {},
-                              context_instance=RequestContext(request, {"pagepath" : pagepath}));
-                              
+    try:
+        loader.get_template(pagepath)
+        loader.get_template(templatename)
+        return render_to_response(templatename, {},
+                              context_instance=RequestContext(request, {"pagepath" : pagepath}))
+    except TemplateDoesNotExist:
+        raise Http404                          
