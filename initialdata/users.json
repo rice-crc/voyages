@@ -9,7 +9,7 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-06-05T14:52:58Z", 
+            "last_login": "2013-06-13T19:58:33Z", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$cZIu1OnDouyR$CrZseU9C/Btrl0tyXR0Z8DbVedUAcDE5+Ba2FJailRo=", 
@@ -27,10 +27,10 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-06-04T13:35:33Z", 
+            "last_login": "2013-06-13T18:15:05Z", 
             "groups": [], 
             "user_permissions": [], 
-            "password": "pbkdf2_sha256$10000$Xjov9KyX9HUc$uvCSBGVsk8EYvu1qdWIzmkrJhPgUFkSMaqfMAKzQ2jU=", 
+            "password": "pbkdf2_sha256$10000$R9jbIRoszskM$4/YeJni6eURYE+JO9gMcEmxQiQJ8QhhEljnxM1Y3KGo=", 
             "email": "deltis@emory.edu", 
             "date_joined": "2013-06-04T13:35:33Z"
         }
@@ -45,7 +45,7 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-06-04T13:36:36Z", 
+            "last_login": "2013-06-10T15:14:34Z", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$J0a3xH1Gtvtm$T4n5jMfIzTzEVP1oqvWuYHOvwYkDOTYw0PvfCWAodm4=", 
@@ -63,10 +63,10 @@
             "is_active": true, 
             "is_superuser": true, 
             "is_staff": true, 
-            "last_login": "2013-06-04T13:38:30Z", 
+            "last_login": "2013-06-13T18:32:13Z", 
             "groups": [], 
             "user_permissions": [], 
-            "password": "pbkdf2_sha256$10000$1SKG3yUv1RPB$OhFQCtkHjA4irT09Fjkkq2BlYc5ND8VKfeJ3uUr4c/c=", 
+            "password": "pbkdf2_sha256$10000$4IPlLXDPVya1$jEjtbDbhxhiTmHdbZSSxO9kCA13ew0easGMuN32mfLg=", 
             "email": "voviethoang@gmail.com", 
             "date_joined": "2013-06-04T13:38:30Z"
         }
@@ -99,12 +99,48 @@
             "is_active": true, 
             "is_superuser": false, 
             "is_staff": false, 
-            "last_login": "2013-06-05T14:53:28Z", 
+            "last_login": "2013-06-13T00:53:31Z", 
             "groups": [], 
             "user_permissions": [], 
             "password": "pbkdf2_sha256$10000$ZhKQGpEqU9Hx$YD9P+OSBX0b0C5ZKK+gQIuUZGE26cJkF5Z8b5RASaMI=", 
             "email": "test@user.com", 
             "date_joined": "2013-06-05T14:53:28Z"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "dominguesd", 
+            "first_name": "Daniel", 
+            "last_name": "Domingues", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2013-06-13T20:00:38Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$69dfVYQNkaId$mp6vf2tTIdbgavwFoG1yJ+R6jz+KNE10ORhsK8MB/LM=", 
+            "email": "dominguesd@missouri.edu", 
+            "date_joined": "2013-06-13T20:00:38Z"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "nkhan04", 
+            "first_name": "Nafees", 
+            "last_name": "Khan", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2013-06-13T20:01:23Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$cL7qviKdCgcX$zywZgaq9B9wDJkE/PZn9LZQIs9owaH5O5yDE59E7bGA=", 
+            "email": "nkhan04@gmail.com", 
+            "date_joined": "2013-06-13T20:01:23Z"
         }
     }
 ]
