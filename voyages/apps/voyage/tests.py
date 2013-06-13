@@ -25,8 +25,8 @@ class SimpleGetPageTest(TestCase):
         Attempt to load invalid pages (whose number does not exist)
         """
         for i in range(-10, 0):
-            response = self.client.get("/voyage/c01_s02_p" + str(i))
+            response = self.client.get("/voyage/c01_s02_p0" + str(i))
             self.assertEqual(response.status_code, 404)
-        for i in range(23, 40):
+        for i in range(25, 40):
             response = self.client.get("/voyage/c01_s02_p" + str(i))
             self.assertEqual(response.status_code, 404)
