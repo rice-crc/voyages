@@ -19,13 +19,7 @@ def index(request):
     :template:`contribute/voyagelogin.html`
     """
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('contribute:user_index'))  
-    else:
-        return HttpResponseRedirect(reverse('contribute:login'))
-
-def user_index(request):
-    if request.user.is_authenticated():
         return render_to_response("contribute/index.html", {},
-                              context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))  
     else:
         return HttpResponseRedirect(reverse('contribute:login'))
