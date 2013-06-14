@@ -1,8 +1,6 @@
 from django.http import Http404, HttpResponseRedirect
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
-from django.views.generic.simple import direct_to_template
 from django.shortcuts import render_to_response
-from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat

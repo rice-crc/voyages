@@ -4,20 +4,20 @@
 <ul id="toplinks">
 	<li id="block01">
 		<!--Top is the main link  -->
-		<a href="{% url voyage:index %}" id="voyage">{% trans "Voyages Database" %}</a>
+		<a href="{% url 'voyage:index' %}" id="voyage">{% trans "Voyages Database" %}</a>
 		<div class="linkbox">
 			<ul>
 				<li>
-					<a href="{% url voyage:guide %}" id="item01a">{% trans "Understanding the Database" %}</a>
+					<a href="{% url 'voyage:guide' %}" id="item01a">{% trans "Understanding the Database" %}</a>
 				</li>
 				<li>
-					<a href="{% url voyage:search %}" id="item01b" >{% trans "Search the Voyages Database" %}</a>
+					<a href="{% url 'voyage:search' %}" id="item01b" >{% trans "Search the Voyages Database" %}</a>
 				</li>
 				<li>
-					<a href="{% url voyage:download %}" id="item01c">{% trans "Downloads" %}</a>
+					<a href="{% url 'voyage:download' %}" id="item01c">{% trans "Downloads" %}</a>
 				</li>
 				<li>
-					<a href="{% url contribute:index %}" id="item01d">{% trans "Contribute" %}</a>
+					<a href="{% url 'contribute:index' %}" id="item01d">{% trans "Contribute" %}</a>
 				</li>
 
 			</ul>
@@ -25,17 +25,17 @@
 	</li>
 
 	<li id="block02">
-		<a href="{% url assessment:index %}" id="assessment">{% trans "Assessing the Slave Trade" %}</a>
+		<a href="{% url 'assessment:index' %}" id="assessment">{% trans "Assessing the Slave Trade" %}</a>
 		<div class="linkbox">
 			<ul>
 				<li>
-					<a href="{% url assessment:essays %}" id="item02a">{% trans "Essays" %}</a>
+					<a href="{% url 'assessment:essays' %}" id="item02a">{% trans "Essays" %}</a>
 				</li>
 				<li>
-					<a href="{% url assessment:estimates %}" id="item02b">{% trans "Estimates" %}</a>
+					<a href="{% url 'assessment:estimates' %}" id="item02b">{% trans "Estimates" %}</a>
 				</li>
 				<li>
-					<a href="{% url assessment:intro-maps %}" id="item02c">{% trans "Introductory Maps" %}</a>
+					<a href="{% url 'assessment:intro-maps' %}" id="item02c">{% trans "Introductory Maps" %}</a>
 				</li>
 
 			</ul>
@@ -43,28 +43,28 @@
 	</li>
 
 	<li id="block03">
-		<a href="{% url resources:index %}" id="resources">{% trans "Resources" %}</a>
+		<a href="{% url 'resources:index' %}" id="resources">{% trans "Resources" %}</a>
 		<div class="linkbox">
 			<ul>
 				<li>
-					<a href="{% url resources:images %}" id="item03a">{% trans "Images" %}</a>
+					<a href="{% url 'resources:images' %}" id="item03a">{% trans "Images" %}</a>
 				</li>
 				<li>
-					<a href="{% url resources:origins %}" id="item03b">{% trans "African Names Database" %}</a>
+					<a href="{% url 'resources:origins' %}" id="item03b">{% trans "African Names Database" %}</a>
 				</li>
 			</ul>
 		</div>
 	</li>
 
 	<li id="block04">
-		<a href="{% url education:index %}" id="education">{% trans "Educational Materials" %}</a>
+		<a href="{% url 'education:index' %}" id="education">{% trans "Educational Materials" %}</a>
 		<div class="linkbox">
 			<ul>
 				<li>
-					<a href="{% url education:lesson-plans %}" id="item04a">{% trans "Lesson Plans" %}</a>
+					<a href="{% url 'education:lesson-plans' %}" id="item04a">{% trans "Lesson Plans" %}</a>
 				</li>
 				<li>
-					<a href="{% url education:others %}" id="item04b">{% trans "Web Resources" %}</a>
+					<a href="{% url 'education:others' %}" id="item04b">{% trans "Web Resources" %}</a>
 				</li>
 
 			</ul>
@@ -72,26 +72,26 @@
 	</li>
 
 	<li id="block05">
-		<a href="{% url about:index %}" id="about">{% trans "About the Project" %}</a>
+		<a href="{% url 'about:index' %}" id="about">{% trans "About the Project" %}</a>
 		<div class="linkbox">
 			<ul>
 				<li>
-					<a href="{% url about:history %}" id="item05a">{% trans "History" %}</a>
+					<a href="{% url 'about:history' %}" id="item05a">{% trans "History" %}</a>
 				</li>
 				<li>
-					<a href="{% url about:team %}" id="item05b">{% trans "Project Team" %}</a>
+					<a href="{% url 'about:team' %}" id="item05b">{% trans "Project Team" %}</a>
 				</li>
 				<li>
-					<a href="{% url about:data %}" id="item05c">{% trans "Contributors of data" %}</a>
+					<a href="{% url 'about:data' %}" id="item05c">{% trans "Contributors of data" %}</a>
 				</li>
 				<li>
-					<a href="{% url about:acknowledgements %}" id="item05d">{% trans "Acknowledgements" %}</a>
+					<a href="{% url 'about:acknowledgements' %}" id="item05d">{% trans "Acknowledgements" %}</a>
 				</li>
 				<li>
-					<a href="{% url about:origins %}" id="item05e">{% trans "African Origins Project" %}</a>
+					<a href="{% url 'about:origins' %}" id="item05e">{% trans "African Origins Project" %}</a>
 				</li>
 				<li>
-					<a href="{% url about:contacts %}" id="item05f">{% trans "Contact Us" %}</a>
+					<a href="{% url 'about:contacts' %}" id="item05f">{% trans "Contact Us" %}</a>
 				</li>
 			</ul>
 		</div>

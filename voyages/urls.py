@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 from voyages.views import *
 from voyages import sitemap
 
@@ -12,9 +12,12 @@ admin.autodiscover()
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
 from sitemap import StaticSitemap, ViewSitemap
 
-urlpatterns = patterns('',
+urlpatterns = patterns('', 
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'))
+
+urlpatterns += patterns('',
     # Homepage:
-    url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}, name='index'),
+    #url(r'^$', 'django.views.generic.TemplateView', TemplateView.as_view(template_name='index.html'), name='index'),
     
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),

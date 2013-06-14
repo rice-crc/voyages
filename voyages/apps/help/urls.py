@@ -1,14 +1,12 @@
-from django.conf import settings
-from django.conf.urls.defaults import patterns, include, url
-from voyages.apps.voyage.views import *
-from voyages.apps.help import views
+from django.conf.urls import *
+from django.views.generic import TemplateView
 
-urlpatterns = patterns('django.views.generic.simple',
-    url(r'^page_sitemap$', 'direct_to_template', {'template': 'help/page_sitemap.html'}, name='sitemap'),
-    url(r'^page_demos$', 'direct_to_template', {'template': 'help/page_demos.html'}, name='demos'),
-    url(r'^page_legal$', 'direct_to_template', {'template': 'help/page_legal.html'}, name='legal'),
-    url(r'^page_demo-overview$', 'direct_to_template', {'template': 'help/page_demo-overview.html'}, name='demo-overview'),
-    url(r'^page_demo-search$', 'direct_to_template', {'template': 'help/page_demo-search.html'}, name='demo-search'),
+urlpatterns = patterns('',
+    url(r'^page_sitemap$', TemplateView.as_view(template_name='help/page_sitemap.html'), name='sitemap'),
+    url(r'^page_demos$', TemplateView.as_view(template_name='help/page_demos.html'), name='demos'),
+    url(r'^page_legal$', TemplateView.as_view(template_name='help/page_legal.html'), name='legal'),
+    url(r'^page_demo-overview$', TemplateView.as_view(template_name='help/page_demo-overview.html'), name='demo-overview'),
+    url(r'^page_demo-search$', TemplateView.as_view(template_name='help/page_demo-search.html'), name='demo-search'),
 )
 
 urlpatterns += patterns('',

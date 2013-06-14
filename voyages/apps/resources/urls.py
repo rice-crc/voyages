@@ -1,15 +1,15 @@
-from django.conf import settings
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 
 # To be used later
 # from voyages.apps.resources.views import *
 
-urlpatterns = patterns('django.views.generic.simple',
-    url(r'^$', 'direct_to_template', {'template': 'resources/index.html'}, name='index'),
+urlpatterns = patterns('',
+    url(r'^$', TemplateView.as_view(template_name='resources/index.html'), name='index'),
     #handle all cases for now
-    url(r'^images$', 'direct_to_template', {'template': 'under_constr.html'}, name='images'),
-    url(r'^names-database', 'direct_to_template', {'template': 'under_constr.html'}, name='origins'),
+    url(r'^images$', TemplateView.as_view(template_name='under_constr.html'), name='images'),
+    url(r'^names-database', TemplateView.as_view(template_name='under_constr.html'), name='origins'),
     
-    url(r'^images-detail$', 'direct_to_template', {'template': 'under_constr.html'}, name='images-detail'),
-    url(r'^[\w\.\-]+\$', 'direct_to_template', {'template': 'under_constr.html'}),
+    url(r'^images-detail$', TemplateView.as_view(template_name='under_constr.html'), name='images-detail'),
+    url(r'^[\w\.\-]+\$', TemplateView.as_view(template_name='under_constr.html')),
 )
