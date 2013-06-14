@@ -6,7 +6,7 @@ urlpatterns = patterns('',
     
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name': 'contribute/voyagelogin.html'}, name='login'),
     
-    url(r'^guidelines$', TemplateView.as_view(template_name='guidelines.html'), name='guidelines'),
+    url(r'^guidelines$', TemplateView.as_view(template_name='contribute/guidelines.html'), name='guidelines'),
     url(r'^newuser$', TemplateView.as_view(template_name='under_constr.html'), name='newuser'),
     url(r'^logout', 'django.contrib.auth.views.logout_then_login', name='logout'),
 
