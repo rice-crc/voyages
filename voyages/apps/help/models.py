@@ -46,8 +46,8 @@ class Faq(models.Model):
     category = models.ForeignKey(FaqCategory)
     question_order = models.IntegerField()
     
-    def get_html_answer(self): 
-        return mark_safe(self.answer)
+    def __unicode__(self):
+        return "%s %s" % (self.category.text ,self.question)
     
     class Meta:
         ordering = ['category', 'question_order']

@@ -138,8 +138,11 @@ def get_faqs(request):
         # return the form if there is no form and display the entire faq (from the database)
         form = HighlightedSearchForm()
         for faq_cat in FaqCategory.objects.order_by('type_order'):
-            faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : Faq.objects.filter(category=faq_cat) })
-            count += 1
+            groupedList = Faq.objects.filter(category=faq_cat)
+            if groupedList:
+                # Hides category with no questions
+                faq_list.append({ 'qorder' : count, 'text' : faq_cat.text, 'questions' : groupedList})
+                count += 1
         return render_to_response('help/page_faqs.html', {'form' : form, "faq_list" : faq_list,},
                               context_instance=RequestContext(request));
 

@@ -60,7 +60,8 @@
 		{% endfor %}
 	</div>
 </div>
-
+{% else %}
+<h1>{% trans 'No Results' %}</h1>
 {% endif %}
 
 {% endblock %}
