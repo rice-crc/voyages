@@ -1,8 +1,8 @@
 {% load i18n %}
 <h1>{% trans "Catherine  Zimmermann-Mulgrave: A Slave Odyssey" %}</h1>
 
-{% url voyage:voyage as voyage_voyage_url %}
-{% url resources:images-detail as resources_images-detail %}
+{% url 'voyage:voyage' as voyage_voyage_url %}
+{% url 'resources:images-detail' as resources_images-detail %}
 
 <div class="essay-info">
 	<span class="essay-author">Daniel Domingues da Silva</span>
@@ -11,7 +11,7 @@
 </div>
 
 <div class="essay-image-left">
-	<a href="{% url resources:images-detail %}?image=mulgrave"><img src="{{ STATIC_URL}}images/assessment/essays-images/mulgrave.jpg" width="200" height="180" border="0" alt="Catherine Zimmermann-Mulgrave (1873)"/></a>
+	<a href="{% url 'resources:images-detail' %}?image=mulgrave"><img src="{{ STATIC_URL}}images/assessment/essays-images/mulgrave.jpg" width="200" height="180" border="0" alt="Catherine Zimmermann-Mulgrave (1873)"/></a>
 	<div style="width: 200px;">
 		<div class="caption">
 			{% trans "Catherine Zimmermann-Mulgrave (1873)" %}

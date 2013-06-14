@@ -1,8 +1,8 @@
 {% load i18n %}
 
 <h2>{% trans "Provisioning-slaving seasons" %}</h2>
-{% url voyage:search as voyage_search_url %}
-{% url voyage:voyage as voyage_voyage_url %}
+{% url 'voyage:search' as voyage_search_url %}
+{% url 'voyage:voyage' as voyage_voyage_url %}
 
 <p>
 	{% blocktrans %}Seasonality in Atlantic slaving markets linked closely to

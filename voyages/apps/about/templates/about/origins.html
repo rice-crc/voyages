@@ -9,7 +9,7 @@
 
 <h1 style="float:left; margin-right:10px;">{% trans "African Origins Project" %}"</h1>
 <a href="http://www.african-origins.org" target="_blank">Explore the site <img src="{{ STATIC_URL }}images/about/origins.png"> </a>
-{% url resources:images as resources_images %}
+{% url 'resources:images' as resources_images %}
 {% blocktrans %}
 <p>
 	In January 2009 the directors of the project to create <em>Voyages:

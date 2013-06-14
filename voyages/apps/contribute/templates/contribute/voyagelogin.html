@@ -6,9 +6,9 @@
 {% block center-content %}
 <h1>{% trans "Contribute" %}</h1>
 
-{% url voyage:guide as voyage_guide_url %}
-{% url contribute:guidelines as contribute_guidelines_url %}
-{% url contribute:newuser as contribute_newuser_url %}
+{% url 'voyage:guide' as voyage_guide_url %}
+{% url 'contribute:guidelines' as contribute_guidelines_url %}
+{% url 'contribute:newuser' as contribute_newuser_url %}
 
 <p>
 	{% blocktrans %}The Contribute section of the Voyages website contains data entry forms by which users
@@ -30,8 +30,8 @@
 
 <p>
 	{% blocktrans %}Step-by-step instructions on how to use the data entry forms are provided in the Voyages
-	Guide, a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
-	For advice on contributing new data, we ask you to read our <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
+	Guide, a PDF file accessible in <a href="{{ 'voyage_guide_url' }}">“Understanding the Database”</a>.
+	For advice on contributing new data, we ask you to read our <a href="{{ 'contribute_guidelines_url' }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
 </p>
 
 <p>
@@ -54,7 +54,7 @@
 	</p>
 	{% endif %}
 
-	<form method="post" action="{% url contribute:login %}">
+	<form method="post" action="{% url 'contribute:login' %}">
 		{% csrf_token %}
 		<table>
 			<tr>
@@ -68,12 +68,12 @@
 		</table>
 
 		<input type="submit" style="margin-left: 60px;" value="{% trans 'Sign in' %}" />
-		<input type="hidden" name="next" value="{% url contribute:index %}" />
+		<input type="hidden" name="next" value="{% url 'contribute:index' %}" />
 	</form>
 </div>
 
 <p>
-	{% blocktrans %}If you don't have an account, <a href="{{ contribute_newuser_url }}">click here</a>.{% endblocktrans %}
+	{% blocktrans %}If you don't have an account, <a href="{{ 'contribute_newuser_url' }}">click here</a>.{% endblocktrans %}
 </p>
 
 {% endblock %}

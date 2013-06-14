@@ -32,13 +32,13 @@
 <div id="section-titles">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="section-title"><a href="{% url assessment:essays %}">{% trans "Essays" %}</a></td>
-			<td class="section-title"><a href="{% url assessment:estimates %}">{% trans "Estimates" %}</a></td>
-			<td class="section-title"><a href="{% url assessment:intro-maps%}">{% trans "Introductory Maps" %}</a></td>
+			<td class="section-title"><a href="{% url 'assessment:essays' %}">{% trans "Essays" %}</a></td>
+			<td class="section-title"><a href="{% url 'assessment:estimates' %}">{% trans "Estimates" %}</a></td>
+			<td class="section-title"><a href="{% url 'assessment:intro-maps' %}">{% trans "Introductory Maps" %}</a></td>
 		</tr>
 	</table>
 </div>
-{% url about:contacts as about_contact_url %}
+{% url 'about:contacts' as about_contact_url %}
 <div id="section-descs">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>

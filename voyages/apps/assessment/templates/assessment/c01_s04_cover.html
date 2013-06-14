@@ -1,8 +1,8 @@
 {% load i18n %}
 <h1>{% trans "Ayuba Suleiman Diallo and Slavery in the Atlantic World" %}</h1>
 
-{% url voyage:voyage as voyage_voyage_url %}
-{% url resources:images-detail as resources_images-detail %}
+{% url 'voyage:voyage' as voyage_voyage_url %}
+{% url 'resources:images-detail' as resources_images-detail %}
 
 <div class="essay-info">
 	<span class="essay-author">Daniel Domingues da Silva</span>
@@ -10,7 +10,7 @@
 </div>
 
 <div class="essay-image-left">
-	<a href="{% url resources:images-detail %}?image=solomon">
+	<a href="{% url 'resources:images-detail' %}?image=solomon">
 		<img src="{{ STATIC_URL }}images/assessment/essays-images/solomon.jpg" width="150" height="170" border="0" alt="Job Ben Solomon in in the Gentleman’s Magazine (1750)" />
 	</a>
 	<div style="width: 150px;">

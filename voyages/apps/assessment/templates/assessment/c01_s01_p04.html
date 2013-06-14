@@ -1,6 +1,6 @@
 {% load i18n %}
 <h2>{% trans "Early Slaving Voyages" %}</h2>
-{% url voyage:voyage as voyage_voyage %}
+{% url 'voyage:voyage' as voyage_voyage %}
 <p>
 	{% blocktrans %}With the key forces shaping the traffic briefly described,
 	we can now turn to a short narrative of the slave trade. The first
@@ -28,7 +28,7 @@
 	Portuguese factory in West Africa - Sao Tome in the Bight of Biafra
 	– though the slaves almost certainly originated in the Congo.{% endblocktrans %}
 </p>
-{% url assessment:intro-maps as assessment_intro-maps %}
+{% url 'assessment:intro-maps' as assessment_intro-maps %}
 <p>
 	{% blocktrans %}The slave traffic to Brazil, eventually accounting for about
 	forty percent of the trade, got underway around 1560. Sugar drove

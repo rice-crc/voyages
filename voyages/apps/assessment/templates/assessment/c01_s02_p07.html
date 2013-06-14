@@ -9,9 +9,9 @@
 </script>
 
 <h2>{% trans "Slave-trading seasonality: case studies" %}</h2>
-{% url resources:images-detail as resources_images-detail %}
-{% url voyage:search as voyage_search_url %}
-{% url voyage:voyage as voyage_voyage_url %}
+{% url 'resources:images-detail' as resources_images-detail %}
+{% url 'voyage:search' as voyage_search_url %}
+{% url 'voyage:voyage' as voyage_voyage_url %}
 
 <p>
 	{% blocktrans %}To spotlight seasonality in the trans-Atlantic slave trade,
