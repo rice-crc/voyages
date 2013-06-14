@@ -44,6 +44,7 @@ class LessonStandard(models.Model):
     type = models.ForeignKey(LessonStandardType)
     text = models.CharField(_('Text'),max_length=100)
     lesson = models.ForeignKey(LessonPlan)
+    
     def __unicode__(self):
        return self.text
 
@@ -56,3 +57,5 @@ class LessonPlanFile(models.Model):
     filetitle = models.CharField(('File name'),max_length=50)
     lesson = models.ForeignKey(LessonPlan)
     
+    def __unicode__(self):
+       return self.filetitle
