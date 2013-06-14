@@ -56,6 +56,9 @@
 </div>
 
 <div class="glossary-terms" id="form:glossary_frame">
+{% if query and not results %}
+    <h1>{%  trans "No results" %}</h1>
+{% else %}
     <table cellspacing="0" cellpadding="0" border="0" class="glossary-terms">
     <tbody>
     {% for i in glossary %}
@@ -104,5 +107,6 @@
     </tbody>
     </table>
 
+{% endif %}
 </div>
 {% endblock %}
