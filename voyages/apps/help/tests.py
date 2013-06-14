@@ -5,7 +5,6 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 from .models import Glossary, Faq, FaqCategory
-import random
 
 @override_settings(LANGUAGE_CODE='en')
 class GlossaryEmptyTest(TestCase):
@@ -289,9 +288,7 @@ class TestFaqSearch(TestCase):
         response = self.client.post(reverse('help:faqs'), { 'q': 'panda',})
         self.assertContains(response, 'panda' , loop_count + 1)
 
-<<<<<<< HEAD
         # Check response code
         response = self.client.get('/help/page_glossary')
         self.assertEqual(response.status_code, 200)
-=======
->>>>>>> 5d249300c0a76c63757950f40f3e158dda213a1a
+1a
