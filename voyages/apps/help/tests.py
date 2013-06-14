@@ -291,4 +291,3 @@ class TestFaqSearch(TestCase):
         # Check response code
         response = self.client.get('/help/page_glossary')
         self.assertEqual(response.status_code, 200)
-1a
