@@ -48,17 +48,33 @@ div#sitemap-content ul ul li a {
 	color: #008CA5;
 }
 
+#block01, #block02, #block03, #block04, #block05 {
+	position: absolute;
+}
+
 #block01, #block02, #block03 {
-	
+	left: 5px;
 }
 
 #block04, #block05 {
-	position: absolute;
-	top: 160px;
-	left: 300px;
+	left: 250px;
+}
+
+#block01 {
+	top: 120px;
+}
+
+#block02 {
+	top: 210px;
+}
+
+#block03 {
+	top: 290px;
+}
+
+#block04{
+	top: 120px;
 }
 #block05 {
-	position: absolute;
-	top: 230px;
-	left: 300px;
+	top: 190px;
 }
