@@ -112,7 +112,7 @@ class GlossaryModifiedTest(TestCase):
 
     def test_deleting_items(self):
         """
-        Test deleting items (adding and response)
+        Test deleting items (deleting and response)
         """
 
         self.assertEqual(Glossary.objects.count(), self.initial_objects)
@@ -133,6 +133,34 @@ class GlossaryModifiedTest(TestCase):
 
 
         # Check other entries
+        for i in Glossary.objects.all():
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
+    def test_editing_items(self):
+        """
+        Test editing items (editing and response)
+        """
+
+        # Edit two random items
+        (rand1, rand2) = (random.randint(1, 135), random.randint(1, 135))
+        #self.rand1 = Glossary.objects.get(pk=rand1)
+        #self.rand2 = Glossary.objects.get(pk=rand2)
+
+        #self.rand1.term = "Trumnar"
+        #self.rand1.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        #self.rand2.term = "Buyrty"
+        #self.rand2.description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+
+        Glossary.objects.get(pk=rand1).term = "Trumnar"
+        Glossary.objects.get(pk=rand1).description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        Glossary.objects.get(pk=rand2).term = "Buyrty"
+        Glossary.objects.get(pk=rand2).description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+
+        # Check response
         for i in Glossary.objects.all():
             self.assertContains(response, i.term)
             self.assertContains(response, i.description)
