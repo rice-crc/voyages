@@ -47,13 +47,13 @@ are any errors, pip should announce them very loudly.
 
 To install python dependencies, cd into the repository checkout and::
 
-  $ pip install -r requirments.txt
+  $ pip install -r requirements.txt
 
 If you are a developer or are installing to a continuous ingration server
 where you plan to run unit tests, code coverage reports, or build sphinx
 documentation, you probably will also want to::
 
-  $ pip install -r requirments/dev.txt
+  $ pip install -r requirements/dev.txt
 
 After this step, your virtual environment should contain all of the
 needed dependencies.
