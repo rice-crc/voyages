@@ -2,9 +2,8 @@
 
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.core.management import call_command
 from django.core.urlresolvers import reverse
-from sys import stderr
+import random
 from .models import Glossary, Faq, FaqCategory
 
 
@@ -112,8 +111,33 @@ class GlossaryModifiedTest(TestCase):
         response = self.client.get('/help/page_glossary')
         self.assertEqual(response.status_code, 200)
 
-    def test_search(self):
-        pass
+    def test_deleting_items(self):
+        """
+        Test deleting items (adding and response)
+        """
+
+        self.assertEqual(Glossary.objects.count(), self.initial_objects)
+
+        # Delete two random items
+        (rand1, rand2) = (random.randint(1, 135), random.randint(1, 135))
+        self.rand1 = Glossary.objects.get(pk=rand1)
+        self.rand2 = Glossary.objects.get(pk=rand2)
+
+        Glossary.objects.get(pk=rand1).delete()
+        Glossary.objects.get(pk=rand2).delete()
+
+        # Check if they are not showing up on the glossary page
+        response = self.client.get('/help/page_glossary')
+        for i in (self.rand1, self.rand2):
+            self.assertNotContains(response, i.term)
+            self.assertNotContains(response, i.description)
+
+
+        # Check other entries
+        for i in Glossary.objects.all():
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
 #
 # Test for the FAQ model
 #
