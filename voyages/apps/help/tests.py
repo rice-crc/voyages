@@ -148,24 +148,22 @@ class TestFaqAllData(TestCase):
 
     def test_contain_words(self):
         """
-        Test if glossary website contains all initial data
+        Test if the page displays all FAQs
         """
-        response = self.client.get('/help/page_glossary')
-        for i in Glossary.objects.all():
-            self.assertEqual(response, i.term)
-            self.assertEqual(response, i.description)
-
+        response = self.client.get(reverse('help:page_faq'))
+        for item in Faq.objects.all():
+            self.assertContains(response, item.question)
+            self.assertContains(response, item.answer)
+        for category in FaqCategory.objects.all():
+            self.assertContains(response, category.question)
+            self.assertContains(response, category.answer)
 
 @override_settings(LANGUAGE_CODE='en')
-class GlossaryModifiedTest(TestCase):
+class TestFaqModification(TestCase):
     """
     Tests for modified data from glossary
     """
-    fixtures = ['glossary_tests.json']
-    initial_objects = 0
-
-    def setUp(self):
-        self.initial_objects = Glossary.objects.count()
+    fixtures = ['faq_data_all.json']
 
     def test_rendering_response_code(self):
         """
