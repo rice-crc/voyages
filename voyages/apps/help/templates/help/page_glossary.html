@@ -16,7 +16,7 @@
     <tr>
         <td class="glossary-letters-and-search">
         <table><tr>
-        {% if query %}
+ 
             {% for k, v in letters_found.items %}
                 {% if v == 0 %}
                 <td class="glossary-selector-letter">
@@ -28,13 +28,6 @@
                 </td>
                 {% endif %}
             {% endfor %}
-        {% else %}
-            {% for i in letters %}
-            <td class="glossary-selector-letter">
-                <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ i|slice:":1" }}">{{ i }}</a></div>
-            </td>
-            {% endfor %}
-        {% endif %}
         </tr></table>
     </td>
     <td>

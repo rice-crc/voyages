@@ -39,7 +39,7 @@ def glossary_page(request):
         current_item = None
         count = 0
         letters = []
-        letters_found = {}
+        letters_found = SortedDict()
         
         for i in string.ascii_uppercase:
             letters.append(i)
@@ -52,9 +52,7 @@ def glossary_page(request):
                     
             for search_result_obj in qresult:
                 current_item = search_result_obj.get_stored_fields()
-                
-                print "%s  %s" % (current_item['glossary_term'][0], current_item['glossary_term'],)
-                
+
                 if prev_letter is None:
                     # Update the first letter
                     prev_letter = current_item['glossary_term'][0]
@@ -89,17 +87,16 @@ def glossary_page(request):
         if form.is_valid():
             # Perform the query
             query = form.cleaned_data['q']
-            results = SearchQuerySet().filter(content=query).models(Glossary).order_by('glossary_term')
-            
-      
+            results = SearchQuerySet().filter(content=query).models(Glossary).order_by('glossary_term_exact')
+        else:
+            form = HighlightedSearchForm()
+            results = SearchQuerySet().models(Glossary).order_by('glossary_term_exact')
     else:
         form = HighlightedSearchForm()
-        results = SearchQuerySet().models(Glossary).order_by('glossary_term')
-        3/0
+        results = SearchQuerySet().models(Glossary).order_by('glossary_term_exact')
     
     letters, letters_found, glossary_content = getsortedresults(results)
-    sort_dict(glossary_content)
-    
+
     return render_to_response('help/page_glossary.html', {'glossary': sort_dict(glossary_content),
             'letters': letters, 'form': form, 'letters_found': letters_found, 'results': results, 
                                     'query': query}, context_instance=RequestContext(request))
@@ -164,7 +161,9 @@ def get_faqs(request):
             # Perform the query by specifying the search term and sort orders (category and then questions)
             current_query = form.cleaned_data['q']
             qresult = SearchQuerySet().filter(content=current_query).models(Faq).order_by('faq_category_order', 'faq_question_order')
-     
+        else:
+            form = HighlightedSearchForm()
+            qresult = SearchQuerySet().models(Faq).order_by('faq_category_order', 'faq_question_order')
     else:
         # return the form if there is no form and display the entire faq (from the database)
         form = HighlightedSearchForm()
