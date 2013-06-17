@@ -152,15 +152,17 @@
 
     <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="faq_category_desc" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="faq_category_desc" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="faq_question" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="faq_question" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="faq_answer" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="faq_answer" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="glossary_term" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="glossary_term" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="glossary_description" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="glossary_term_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 
