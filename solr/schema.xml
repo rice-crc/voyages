@@ -160,6 +160,8 @@
 
     <field name="glossary_term" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="glossary_term_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
   </fields>
