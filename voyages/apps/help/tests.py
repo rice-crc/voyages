@@ -7,6 +7,211 @@ import random
 import haystack
 from .models import Glossary, Faq, FaqCategory
 
+@override_settings(LANGUAGE_CODE='en')
+class TestGlossaryEmpty(TestCase):
+    """
+    Test for empty glossary
+    """
+
+    def test_rendering_response_code(self):
+        """
+        Test if initial website is rendering properly
+        """
+
+        # Check response code
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+
+
+@override_settings(LANGUAGE_CODE='en')
+class TestGlossaryInitial(TestCase):
+    """
+    Tests for initial data from glossary
+    """
+    fixtures = ['glossary.json']
+    initial_objects = 0
+
+    def setUp(self):
+        self.initial_objects = Glossary.objects.count()
+
+    def test_rendering_response_code(self):
+        """
+        Test if initial website is rendering properly
+        """
+
+        # Check response code
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+
+    def test_glossary_content(self):
+        """
+        Test if glossary website contains all initial data
+        """
+
+        response = self.client.get('/help/page_glossary')
+        for i in Glossary.objects.all():
+            self.assertEqual(response, i.term)
+            self.assertEqual(response, i.description)
+
+
+@override_settings(LANGUAGE_CODE='en')
+class TestGlossaryModified(TestCase):
+    """
+    Tests for modified data from glossary
+    """
+    fixtures = ['glossary_tests.json']
+    initial_objects = 0
+
+    def setUp(self):
+        self.initial_objects = Glossary.objects.count()
+
+    def test_rendering_response_code(self):
+        """
+        Test if initial website is rendering properly
+        """
+
+        # Check response code
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+        print
+
+    def test_glossary_content(self):
+        """
+        Test if glossary website contains all initial data
+        """
+
+        response = self.client.get('/help/page_glossary')
+        for i in Glossary.objects.all():
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
+    def test_adding_items(self):
+        """
+        Test adding glossary items (adding and response)
+        """
+        # Add two test items
+        Glossary.objects.create(term="Albariv", description="His explen prougg tring thience Barce, haffer).")
+        Glossary.objects.create(term="Wgsfew", description="Homarro palium was ques: R. Effic fros ru nonamba soccom men unater par?")
+
+        # Check number of objects
+        self.assertEqual(Glossary.objects.count(), self.initial_objects + 2)
+
+        # Check added items
+        self.assertEqual(Glossary.objects.get(pk=self.initial_objects+1).term, "Albariv")
+        self.assertEqual(Glossary.objects.get(pk=self.initial_objects+1).description, "His explen prougg tring thience Barce, haffer).")
+        self.assertEqual(Glossary.objects.get(pk=self.initial_objects+2).term, "Wgsfew")
+        self.assertEqual(Glossary.objects.get(pk=self.initial_objects+2).description, "Homarro palium was ques: R. Effic fros ru nonamba soccom men unater par?")
+
+        response = self.client.get('/help/page_glossary')
+        for i in [Glossary.objects.get(pk=self.initial_objects+1), Glossary.objects.get(pk=self.initial_objects+2)]:
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
+        # Check response code
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+
+    def test_deleting_items(self):
+        """
+        Test deleting items (deleting and response)
+        """
+
+        self.assertEqual(Glossary.objects.count(), self.initial_objects)
+
+        # Delete two random items
+        (rand1, rand2) = (random.randint(1, 135), random.randint(1, 135))
+        self.rand1 = Glossary.objects.get(pk=rand1)
+        self.rand2 = Glossary.objects.get(pk=rand2)
+
+        Glossary.objects.get(pk=rand1).delete()
+        Glossary.objects.get(pk=rand2).delete()
+
+        # Check if they are not showing up on the glossary page
+        response = self.client.get('/help/page_glossary')
+        for i in (self.rand1, self.rand2):
+            self.assertNotContains(response, i.term)
+            self.assertNotContains(response, i.description)
+
+
+        # Check other entries
+        for i in Glossary.objects.all():
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
+    def test_editing_items(self):
+        """
+        Test editing items (editing and response)
+        """
+
+        # Edit two random items
+        (rand1, rand2) = (random.randint(1, 135), random.randint(1, 135))
+        #self.rand1 = Glossary.objects.get(pk=rand1)
+        #self.rand2 = Glossary.objects.get(pk=rand2)
+
+        #self.rand1.term = "Trumnar"
+        #self.rand1.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        #self.rand2.term = "Buyrty"
+        #self.rand2.description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+
+        Glossary.objects.get(pk=rand1).term = "Trumnar"
+        Glossary.objects.get(pk=rand1).description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        Glossary.objects.get(pk=rand2).term = "Buyrty"
+        Glossary.objects.get(pk=rand2).description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+
+        response = self.client.get('/help/page_glossary')
+        self.assertEqual(response.status_code, 200)
+
+        # Check response
+        for i in Glossary.objects.all():
+            self.assertContains(response, i.term)
+            self.assertContains(response, i.description)
+
+
+@override_settings(LANGUAGE_CODE='en')
+class TestGlossarySearch(TestCase):
+    """
+    Post a query with a key word that would NOT generate a result
+    because Solr is not updated
+    """
+    fixtures = ['glossary.json']
+
+    def test_search_noresult(self):
+        """
+        Should not display any matching record
+        """
+        for i in range(1, 10):
+            no_res_query = 'abcdefgh-willnotappear' + str(random.randint(0,10000000))
+            response = self.client.post(reverse('help:glossary'), {'q' : no_res_query})
+            self.assertEqual(response.status_code, 200)
+            # The result should appear only once (in the search field)
+            self.assertContains(response, no_res_query, 1)
+
+
+    @override_settings(LANGUAGE_CODE='en')
+    def test_not_using_realtime(self):
+        """
+        Post a query with a key word that would NOT generate a result
+        because Solr is not updated
+        """
+        prefix_term = "Goofy term"
+        prefix_description = "This is a goofy description that describes Goofy term."
+        loop_count = 10
+
+        for i in range(1, loop_count):
+            glossary_item_term = prefix_term + str(random.randint(0, 10000))
+            glossary_item_description = prefix_description + str(random.randint(0, 1000000))
+            faq_item_question_order = random.randint(10,20)
+            faq_item_category = FaqCategory.objects.order_by('?')[0]
+
+            # Generate a FAQ
+            faq_item = Glossary.objects.create(term=glossary_item_term,
+                        description=glossary_item_description)
+
+        response = self.client.post(reverse('help:faqs'), { 'q': 'Goofy',})
+        # The only matching text is the text in the search box itself
+        self.assertContains(response, 'Goofy' , loop_count)
+
+
 #
 # Test for the FAQ model
 #
@@ -140,8 +345,6 @@ class TestFaqSearch(TestCase):
             # The result should appear only once (in the search field)
             self.assertContains(response, no_res_query, 1)
 
-
-    @override_settings(LANGUAGE_CODE='en')
     def test_not_using_realtime(self):
         """
         Post a query with a key word that would NOT generate a result
