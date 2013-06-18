@@ -5,6 +5,12 @@ class Voyage(models.Model):
     Information about voyages.
     """
 
+    class VoyageGroupings(models.Model):
+        """
+        Labels for groupings names.
+        """
+        grouping_name = models.CharField(max_length=30)
+
     class VoyageShip(models.Model):
         """
         Information about voyage ship.
@@ -15,12 +21,6 @@ class Voyage(models.Model):
             """
             number_of_owner = models.IntegerField(max_length=2)
             name_of_owner = models.CharField(max_length=40)
-
-        class VoyageGroupings(models.Model):
-            """
-            Labels for groupings names.
-            """
-            grouping_name = models.CharField(max_length=30)
 
         class NationalityOfShip(models.Model):
             """
@@ -107,3 +107,41 @@ class Voyage(models.Model):
                                             OwnerOutcome)
         resistance = models.ForeignKey("African resistance", Resistance)
 
+
+
+    class VoyageItinerary(models.Model):
+        """
+        Voyage Itinerary data.
+        """
+
+    class VoyageDates(models.Model):
+        """
+        Voyage dates.
+        """
+
+    class VoyageCaptainCrew(models.Model):
+        """
+        Voyage Captain and Crew.
+        """
+
+    class VoyageSlavesNumbers(models.Model):
+        """
+        Voyage slaves (numbers).
+        """
+
+    class VoyageSlavesCharacteristics(models.Model):
+        """
+        Voyage slaves (characteristics).
+        """
+
+    class VoyageSources(models.Model):
+        """
+        Voyage sources.
+        """
+
+    voyage_id = models.AutoField(primary_key=True)
+    voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1)
+    voyage_groupings = models.ForeignKey("Voyage groupings "
+                                         "for estimating imputed slaves",
+                                         VoyageGroupings)
+    voyage_outcome = models.ForeignKey(VoyageShip)
