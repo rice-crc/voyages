@@ -24,10 +24,23 @@ class VoyageInformation(models.Model):
     reg_region = models.IntegerField("Region where vessel registered", max_length=5)
     owner_of_venture = models.CharField("First owner of venture", max_length=60)
 
-
-    voyage_information = models.ForeignKey(Voyage)
+    voyage = models.ForeignKey(Voyage)
 
 class VoyageVentureOwner(models.Model):
-    voyage = models.ForeignKey(VoyageInformation)
+    voyage_information = models.ForeignKey(VoyageInformation)
     number_of_owner = models.IntegerField("Number of owner", max_length=2)
     name_of_owner = models.CharField("Name of the owner", max_length=40)
+
+class VoyageOutcome(models.Model):
+    particular_outcome = models.IntegerField("Particular outcome"
+                                             "of voyage", max_length=3)
+    outcome_slaves = models.IntegerField("Outcome of voyage for slaves",
+                                         max_length=1)
+    outcome_vessel_captures = models.IntegerField("Outcome of voyage"
+                                                  "if vessel captured",
+                                                  max_length=2)
+    outcome_owner = models.IntegerField("Outcome of voyage or owner",
+                                        max_length=2)
+    resistance = models.IntegerField("African resistance", max_length=1)
+
+    voyage = models.ForeignKey(Voyage)
