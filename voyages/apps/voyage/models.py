@@ -5,6 +5,27 @@ class Voyage(models.Model):
     Information about voyages.
     """
 
+    class BroadRegion(models.Model):
+        """
+        Broad Regions (continents).
+        """
+
+        broad_region = models.CharField("Broad region", max_length=35)
+
+    class SpecificRegion(models.Model):
+        """
+        Specific Regions (Countries or Colonies).
+        """
+
+        specific_region = models.CharField("Specific region (country or colony",
+                                           max_length=35)
+        broad = models.ForeignKey(Voyage.BroadRegion)
+
+    class Place(models.Model):
+        place_name = models.CharField(max_length=35)
+        broad_region = models.ForeignKey(Voyage.BroadRegion)
+        specific_region = models.ForeignKey(Voyage.SpecificRegion)
+
     class VoyageGroupings(models.Model):
         """
         Labels for groupings names.
@@ -42,12 +63,10 @@ class Voyage(models.Model):
 
 
         ship_name = models.CharField("Name of vessel", max_length=60)
-        national = models.ForeignKey("Country in which ship registered",
-                                     NationalityOfShip)
+        national = models.ForeignKey(NationalityOfShip)
         tonnage = models.IntegerField("Tonnage of vessel", max_length=4)
-        ton_type = models.ForeignKey("Definition of ton used in tonnage",
-                                     TonType)
-        rig_of_vessel = models.ForeignKey("Rig of vessel", RigOfVessel)
+        ton_type = models.ForeignKey(TonType)
+        rig_of_vessel = models.ForeignKey(RigOfVessel)
         guns_mounted = models.IntegerField("Guns mounted", max_length=2)
         year_of_constr = models.DateField("Year of vessel's construction")
         #vessel_constr_place =
@@ -96,16 +115,11 @@ class Voyage(models.Model):
             resistance_name = models.CharField("Resistance label", max_length=35)
 
 
-        particular_outcome = models.ForeignKey("Particular outcome"
-                                               "of voyage", ParticularOutcome)
-        outcome_slaves = models.ForeignKey("Outcome of voyage for slaves",
-                                             SlavesOutcome)
-        vessel_captures_outcome = models.ForeignKey("Outcome of voyage"
-                                                      "if vessel captured",
-                                                      VesselCapturesOutcome)
-        outcome_owner = models.ForeignKey("Outcome of voyage or owner",
-                                            OwnerOutcome)
-        resistance = models.ForeignKey("African resistance", Resistance)
+        particular_outcome = models.ForeignKey(ParticularOutcome)
+        outcome_slaves = models.ForeignKey(SlavesOutcome)
+        vessel_captures_outcome = models.ForeignKey(VesselCapturesOutcome)
+        outcome_owner = models.ForeignKey(OwnerOutcome)
+        resistance = models.ForeignKey(Resistance)
 
 
 
@@ -141,7 +155,5 @@ class Voyage(models.Model):
 
     voyage_id = models.AutoField(primary_key=True)
     voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1)
-    voyage_groupings = models.ForeignKey("Voyage groupings "
-                                         "for estimating imputed slaves",
-                                         VoyageGroupings)
+    voyage_groupings = models.ForeignKey(VoyageGroupings)
     voyage_outcome = models.ForeignKey(VoyageShip)
