@@ -143,7 +143,7 @@ def setup_virtualenv():
             % env, user=env.remote_acct)
         # activate the environment and install required packages
         with prefix('source env/bin/activate'):
-            pip_cmd = 'pip install -r requirments.txt'
+            pip_cmd = 'pip install -r requirements.txt'
             if env.remote_proxy:
                 pip_cmd += ' --proxy=%(remote_proxy)s' % env
             sudo(pip_cmd, user=env.remote_acct)
