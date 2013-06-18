@@ -103,6 +103,10 @@ In addition, these sets of initial data need to be loaded
 
     $ python manage.py loaddata initialdata/*
 
+To initalize the Solr data the following manage command should be run::
+
+  $ python manage.py rebuild_index
+
 
 
 Cron jobs
