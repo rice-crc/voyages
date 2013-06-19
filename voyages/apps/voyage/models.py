@@ -408,13 +408,35 @@ class Voyage(models.Model):
         third_captain = models.ManyToManyField(Captain)
 
         crew_voyage_outset = models.IntegerField("Crew at voyage outset",
-                                                 max_length=3)
+                                                 max_length=3, blank=True)
         crew_departure_last_port = models.IntegerField\
                 ("Crew at departure from last port of slave purchase",
-                 max_length=3)
+                 max_length=3, blank=True)
         crew_first_landing = models.IntegerField\
-                ("Crew at first landing of slaves", max_length=2)
-        
+                ("Crew at first landing of slaves", max_length=2, blank=True)
+        crew_return_begin = models.IntegerField\
+                ("Crew when return voyage begin", max_length=2, blank=True)
+        crew_end_voyage = models.IntegerField\
+                ("Crew at end of voyage", max_length=2, blank=True)
+        unspecified_crew = models.IntegerField\
+                ("Number of crew unspecified", max_length=3, blank=True)
+        crew_died_before_first_trade = models.IntegerField\
+                ("Crew died before first place of trade in Africa",
+                 max_length=2, blank=True)
+        crew_died_while_ship_african = models.IntegerField\
+                ("Crew died while ship was on African coast",
+                 max_length=2, blank=True)
+
+        crew_died_middle_passge = models.IntegerField\
+                ("Crew died during Middle Passage", max_length=2, blank=True)
+        crew_died_in_americas = models.IntegerField\
+                ("Crew died in the Americas", max_length=2, blank=True)
+        crew_died_on_return_voyage = models.IntegerField\
+                ("Crew died on return voyage", max_length=2, blank=True)
+        crew_died_complete_voyage = models.IntegerField\
+                ("Crew died during complete voyage", max_length=3, blank=True)
+        crew_deserted = models.IntegerField\
+                ("Total number of crew deserted", max_length=2, blank=True)
 
     class VoyageSlaveNumber(models.Model):
         """
