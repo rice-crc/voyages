@@ -20,11 +20,7 @@ class Voyage(models.Model):
 
         specific_region = models.CharField("Specific region (country or colony",
                                            max_length=35)
-<<<<<<< HEAD
-        broad = models.ForeignKey('Voyage.BroadRegion')
-=======
-        broad = models.ForeignKey(Voyage.BroadRegion)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
+        broad = models.ForeignKey('BroadRegion')
 
     class Place(models.Model):
         """
@@ -33,13 +29,8 @@ class Voyage(models.Model):
         related to: :model:`voyages.apps.voyages.Voyage.SpecificRegion`
         """
         place_name = models.CharField(max_length=35)
-<<<<<<< HEAD
-        broad_region = models.ForeignKey('Voyage.BroadRegion')
-        specific_region = models.ForeignKey('Voyage.SpecificRegion')
-=======
-        broad_region = models.ForeignKey(Voyage.BroadRegion)
-        specific_region = models.ForeignKey(Voyage.SpecificRegion)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
+        broad_region = models.ForeignKey('BroadRegion')
+        specific_region = models.ForeignKey('SpecificRegion')
 
     class VoyageGroupings(models.Model):
         """
@@ -89,7 +80,6 @@ class Voyage(models.Model):
 
         # Data variables
         ship_name = models.CharField("Name of vessel", max_length=60)
-<<<<<<< HEAD
         nationality = models.ForeignKey('NationalityOfShip')
         tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
                                        blank=True)
@@ -97,37 +87,22 @@ class Voyage(models.Model):
         rig_of_vessel = models.ForeignKey('RigOfVessel')
         guns_mounted = models.IntegerField("Guns mounted", max_length=2,
                                             blank=True)
-        year_of_construction = models.DateField("Year of vessel's construction")
-        vessel_construction_place = models.ForeignKey('Voyage.Place')
-        vessel_construction_region = models.ForeignKey('Voyage.SpecificRegion')
+        year_of_construction = models.DateField\
+                ("Year of vessel's construction")
+        vessel_construction_place = models.ForeignKey\
+                ('Place',related_name="vessel_construction_place")
+        vessel_construction_region = models.ForeignKey\
+                ('SpecificRegion', related_name="vessel_construction_region")
         registered_year = models.DateField("Year of vessel's registration")
-        registered_place = models.ForeignKey('Voyage.Place')
-        registered_region = models.ForeignKey('Voyage.SpecificRegion')
+        registered_place = models.ForeignKey\
+                ('Place', related_name="registered_place")
+        registered_region = models.ForeignKey\
+                ('SpecificRegion', related_name="registered_region")
         owner_of_venture = models.CharField("First owner of venture", max_length=60)
         owners = models.ForeignKey('VoyageVentureOwner')
 
         # Imputed variables
         imputed_nationality = models.ForeignKey('ImputedCountryShip')
-=======
-        nationality = models.ForeignKey(NationalityOfShip)
-        tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
-                                       blank=True)
-        ton_type = models.ForeignKey(TonType)
-        rig_of_vessel = models.ForeignKey(RigOfVessel)
-        guns_mounted = models.IntegerField("Guns mounted", max_length=2,
-                                            blank=True)
-        year_of_construction = models.DateField("Year of vessel's construction")
-        vessel_construction_place = models.ForeignKey(Voyage.Place)
-        vessel_construction_region = models.ForeignKey(Voyage.SpecificRegion)
-        registered_year = models.DateField("Year of vessel's registration")
-        registered_place = models.ForeignKey(Voyage.Place)
-        registered_region = models.ForeignKey(Voyage.SpecificRegion)
-        owner_of_venture = models.CharField("First owner of venture", max_length=60)
-        owners = models.ForeignKey(VoyageVentureOwner)
-
-        # Imputed variables
-        imputed_nationality = models.ForeignKey(ImputedCountryShip)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
         tonnage_mod = models.DecimalField("Tonnage standardized on British"
                                           "measured tons, 1773-1835",
                                           max_digits=8,
@@ -172,7 +147,6 @@ class Voyage(models.Model):
             resistance_name = models.CharField("Resistance label", max_length=35)
 
         # Data variables
-<<<<<<< HEAD
         particular_outcome = models.ForeignKey('ParticularOutcome')
         resistance = models.ForeignKey('Resistance')
 
@@ -180,15 +154,6 @@ class Voyage(models.Model):
         outcome_slaves = models.ForeignKey('SlavesOutcome')
         vessel_captured_outcome = models.ForeignKey('VesselCapturedOutcome')
         outcome_owner = models.ForeignKey('OwnerOutcome')
-=======
-        particular_outcome = models.ForeignKey(ParticularOutcome)
-        resistance = models.ForeignKey(Resistance)
-
-        # Imputed variables
-        outcome_slaves = models.ForeignKey(SlavesOutcome)
-        vessel_captured_outcome = models.ForeignKey(VesselCapturedOutcome)
-        outcome_owner = models.ForeignKey(OwnerOutcome)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
 
 
     class VoyageItinerary(models.Model):
@@ -200,113 +165,105 @@ class Voyage(models.Model):
         """
 
         # Data variables
-<<<<<<< HEAD
-        port_of_departure = models.ForeignKey('Voyage.Place')
+        port_of_departure = models.ForeignKey\
+                ('Place', related_name="port_of_departure")
         # Intended variables
-        int_first_port_emb = models.ForeignKey('Voyage.Place')
-        int_second_port_emb = models.ForeignKey('Voyage.Place')
-        int_first_region_purchase_slaves = models.ForeignKey('Voyage.SpecificRegion')
-        int_second_region_purchase_slaves = models.ForeignKey('Voyage.SpecificRegion')
-        int_first_port_dis = models.ForeignKey('Voyage.Place')
-        int_second_port_dis = models.ForeignKey('Voyage.Place')
-        int_first_region_slave_landing = models.ForeignKey('Voyage.SpecificRegion')
-        int_second_region_slave_landing = models.ForeignKey('Voyage.SpecificRegion')
-=======
-        port_of_departure = models.ForeignKey(Voyage.Place)
-        # Intended variables
-        int_first_port_emb = models.ForeignKey(Voyage.Place)
-        int_second_port_emb = models.ForeignKey(Voyage.Place)
-        int_first_region_purchase_slaves = models.ForeignKey(Voyage.SpecificRegion)
-        int_second_region_purchase_slaves = models.ForeignKey(Voyage.SpecificRegion)
-        int_first_port_dis = models.ForeignKey(Voyage.Place)
-        int_second_port_dis = models.ForeignKey(Voyage.Place)
-        int_first_region_slave_landing = models.ForeignKey(Voyage.SpecificRegion)
-        int_second_region_slave_landing = models.ForeignKey(Voyage.SpecificRegion)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
+        int_first_port_emb = models.ForeignKey\
+                ('Place', related_name="int_first_port_emb")
+        int_second_port_emb = models.ForeignKey\
+                ('Place', related_name="int_second_port_emb")
+        int_first_region_purchase_slaves = models.ForeignKey\
+                ('SpecificRegion',
+                 related_name="int_first_region_purchase_slaves")
+        int_second_region_purchase_slaves = models.ForeignKey\
+                ('SpecificRegion',
+                 related_name="int_second_region_purchase_slaves")
+        int_first_port_dis = models.ForeignKey('Place',
+                                               related_name=
+                                               "int_first_port_dis")
+        int_second_port_dis = models.ForeignKey('Place',
+                                                related_name=
+                                                "int_second_port_dis")
+        int_first_region_slave_landing = models.ForeignKey\
+                ('SpecificRegion', related_name="int_first_region_slave_landing")
+        int_second_region_slave_landing = models.ForeignKey\
+                ('SpecificRegion', related_name="int_second_region_slave_landing")
+
         # End of intended variables
         ports_called_buying_slaves = models.IntegerField("Number of ports "
                                                          "of call prior "
                                                          "to buying slaves",
                                                          max_length=3,
                                                         blank=True)
+        first_place_slave_purchase = models.ForeignKey\
+                ('Place', related_name="first_place_slave_purchase")
+        second_place_slave_purchase = models.ForeignKey\
+                ('Place', related_name="second_place_slave_purchase")
+        third_place_slave_purchase = models.ForeignKey\
+                ('Place', related_name="third_place_slave_purchase")
 
-<<<<<<< HEAD
-        first_place_slave_purchase = models.ForeignKey('Voyage.Place')
-        second_place_slave_purchase = models.ForeignKey('Voyage.Place')
-        third_place_slave_purchase = models.ForeignKey('Voyage.Place')
+        first_region_slave_emb = models.ForeignKey('SpecificRegion',
+                                                   related_name=
+                                                   "first_region_slave_emb")
+        second_region_slave_emb = models.ForeignKey('SpecificRegion',
+                                                    related_name=
+                                                    "second_region_slave_emb")
+        third_region_slave_emb = models.ForeignKey('SpecificRegion',
+                                                   related_name=
+                                                   "third_region_slave_emb")
 
-        first_region_slave_emb = models.ForeignKey('Voyage.SpecificRegion')
-        second_region_slave_emb = models.ForeignKey('Voyage.SpecificRegion')
-        third_region_slave_emb = models.ForeignKey('Voyage.SpecificRegion')
+        port_of_call_before_atl_crossing = models.ForeignKey\
+                ('Place', related_name="port_of_call_before_atl_crossing")
+        number_of_ports_of_call = models.ForeignKey\
+                ('Place', related_name="number_of_ports_of_call")
 
-        port_of_call_before_atlcrossing = models.ForeignKey('Voyage.Place')
-        number_of_ports_of_call = models.ForeignKey('Voyage.Place')
+        first_landing_place = models.ForeignKey\
+                ('Place', related_name="first_landing_place")
+        second_landing_place = models.ForeignKey\
+                ('Place', related_name="second_landing_place")
+        third_landing_place = models.ForeignKey\
+                ('Place', related_name="third_landing_place")
 
-        first_landing_place = models.ForeignKey('Voyage.Place')
-        second_landing_place = models.ForeignKey('Voyage.Place')
-        third_landing_place = models.ForeignKey('Voyage.Place')
+        first_landing_region = models.ForeignKey\
+                ('SpecificRegion', related_name="first_landing_region")
+        second_landing_region = models.ForeignKey\
+                ('SpecificRegion', related_name="second_landing_region")
+        third_landing_region = models.ForeignKey\
+                ('SpecificRegion', related_name="third_landing_region")
 
-        first_landing_region = models.ForeignKey('Voyage.SpecificRegion')
-        second_landing_region = models.ForeignKey('Voyage.SpecificRegion')
-        third_landing_region = models.ForeignKey('Voyage.SpecificRegion')
-
-        place_voyage_ended = models.ForeignKey('Voyage.Place')
-        region_of_return = models.ForeignKey('Voyage.SpecificRegion')
-        broad_region_of_return = models.ForeignKey('Voyage.BroadRegion')
-
-        # Imputed variables
-        imp_port_voyage_begin = models.ForeignKey('Voyage.Place')
-        imp_region_voyage_begin = models.ForeignKey('Voyage.SpecificRegion')
-        imp_broad_region_voyage_begin = models.ForeignKey('Voyage.BroadRegion')
-        principal_place_of_slave_purchase = models.ForeignKey('Voyage.Place')
-        imp_principal_place_of_slave_purchase = models.ForeignKey('Voyage.Place')
-        imp_principal_region_of_slave_purchase = \
-            models.ForeignKey('Voyage.SpecificRegion')
-        imp_broad_region_of_slave_purchase = \
-            models.ForeignKey('Voyage.BroadRegion')
-        principal_port_of_slave_dis = models.ForeignKey('Voyage.Place')
-        imp_principal_port_slave_dis = models.ForeignKey('Voyage.Place')
-        imp_principal_region_slave_dis = models.ForeignKey('Voyage.SpecificRegion')
-        imp_broad_region_slave_dis = models.ForeignKey('Voyage.BroadRegion')
-=======
-        first_place_slave_purchase = models.ForeignKey(Voyage.Place)
-        second_place_slave_purchase = models.ForeignKey(Voyage.Place)
-        third_place_slave_purchase = models.ForeignKey(Voyage.Place)
-
-        first_region_slave_emb = models.ForeignKey(Voyage.SpecificRegion)
-        second_region_slave_emb = models.ForeignKey(Voyage.SpecificRegion)
-        third_region_slave_emb = models.ForeignKey(Voyage.SpecificRegion)
-
-        port_of_call_before_atlcrossing = models.ForeignKey(Voyage.Place)
-        number_of_ports_of_call = models.ForeignKey(Voyage.Place)
-
-        first_landing_place = models.ForeignKey(Voyage.Place)
-        second_landing_place = models.ForeignKey(Voyage.Place)
-        third_landing_place = models.ForeignKey(Voyage.Place)
-
-        first_landing_region = models.ForeignKey(Voyage.SpecificRegion)
-        second_landing_region = models.ForeignKey(Voyage.SpecificRegion)
-        third_landing_region = models.ForeignKey(Voyage.SpecificRegion)
-
-        place_voyage_ended = models.ForeignKey(Voyage.Place)
-        region_of_return = models.ForeignKey(Voyage.SpecificRegion)
-        broad_region_of_return = models.ForeignKey(Voyage.BroadRegion)
+        place_voyage_ended = models.ForeignKey\
+                ('Place', related_name="place_voyage_ended")
+        region_of_return = models.ForeignKey\
+                ('SpecificRegion', related_name="region_of_return")
+        broad_region_of_return = models.ForeignKey\
+                ('BroadRegion', related_name="broad_region_of_return")
 
         # Imputed variables
-        imp_port_voyage_begin = models.ForeignKey(Voyage.Place)
-        imp_region_voyage_begin = models.ForeignKey(Voyage.SpecificRegion)
-        imp_broad_region_voyage_begin = models.ForeignKey(Voyage.BroadRegion)
-        principal_place_of_slave_purchase = models.ForeignKey(Voyage.Place)
-        imp_principal_place_of_slave_purchase = models.ForeignKey(Voyage.Place)
-        imp_principal_region_of_slave_purchase = \
-            models.ForeignKey(Voyage.SpecificRegion)
-        imp_broad_region_of_slave_purchase = \
-            models.ForeignKey(Voyage.BroadRegion)
-        principal_port_of_slave_dis = models.ForeignKey(Voyage.Place)
-        imp_principal_port_slave_dis = models.ForeignKey(Voyage.Place)
-        imp_principal_region_slave_dis = models.ForeignKey(Voyage.SpecificRegion)
-        imp_broad_region_slave_dis = models.ForeignKey(Voyage.BroadRegion)
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
+        imp_port_voyage_begin = models.ForeignKey\
+                ('Place', related_name="imp_port_voyage_begin")
+        imp_region_voyage_begin = models.ForeignKey\
+                ('SpecificRegion', related_name="imp_region_voyage_begin")
+        imp_broad_region_voyage_begin = models.ForeignKey\
+                ('BroadRegion', related_name="imp_broad_region_voyage_begin")
+        principal_place_of_slave_purchase = models.ForeignKey\
+                ('Place', related_name="principal_place_of_slave_purchase")
+        imp_principal_place_of_slave_purchase = models.ForeignKey\
+                ('Place', related_name="imp_principal_place_of_slave_purchase")
+        imp_principal_region_of_slave_purchase = models.ForeignKey\
+                ('SpecificRegion', related_name=
+                "imp_principal_region_of_slave_purchase")
+        imp_broad_region_of_slave_purchase = models.\
+            ForeignKey('BroadRegion', related_name=
+            "imp_broad_region_of_slave_purchase")
+        principal_port_of_slave_dis = models.ForeignKey\
+                ('Place', related_name="principal_port_of_slave_dis")
+        imp_principal_port_slave_dis = models.ForeignKey\
+                ('Place', related_name="imp_principal_port_slave_dis")
+        imp_principal_region_slave_dis = models.ForeignKey\
+                ('SpecificRegion', related_name=""
+                "imp_principal_region_slave_dis")
+        imp_broad_region_slave_dis = models.ForeignKey\
+                ('BroadRegion', related_name="imp_broad_region_slave_dis")
 
 
     class VoyageDates(models.Model):
@@ -314,8 +271,6 @@ class Voyage(models.Model):
         Voyage dates.
         """
 
-<<<<<<< HEAD
-=======
         # Integer variables
         day_voyage_began = models.IntegerField("Day that voyage began",
                                                max_length=2)
@@ -337,14 +292,13 @@ class Voyage(models.Model):
         )
         third_dis_of_slaves = models.DateField("Date of third disembarkation"
                                                " of slaves")
-        departure_last_place_of_landing = models.Model("Date of departure "
+        departure_last_place_of_landing = models.DateField("Date of departure "
                                                        "from last place "
                                                        "of landing")
         voyage_completed = models.DateField("Date on which slave voyage "
                                             "completed")
 
 
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
     class VoyageCaptainCrew(models.Model):
         """
         Voyage Captain and Crew.
@@ -368,11 +322,5 @@ class Voyage(models.Model):
     voyage_id = models.AutoField(primary_key=True)
     voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
                                            blank=True)
-<<<<<<< HEAD
     voyage_groupings = models.ForeignKey('VoyageGroupings')
     voyage_outcome = models.ForeignKey('VoyageShip')
-=======
-    voyage_groupings = models.ForeignKey(VoyageGroupings)
-    voyage_outcome = models.ForeignKey(VoyageShip)
-
->>>>>>> 6f25b7592a6f3d0348e240bf4d254b4c79ececee
