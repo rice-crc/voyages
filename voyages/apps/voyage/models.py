@@ -510,8 +510,8 @@ class Voyage(models.Model):
     voyage_id = models.AutoField(primary_key=True)
     voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
                                            blank=True)
-    voyage_groupings = models.ForeignKey('VoyageGroupings')
-    voyage_outcome = models.ForeignKey('VoyageShip')
+    voyage_groupings = models.OneToOneField('VoyageGroupings')
+    voyage_outcome = models.OneToOneField('VoyageShip')
 
     # One Voyage can contain multiple sources and 
     voyage_sources = models.ManyToManyField('Voyage.VoyageSources',\
