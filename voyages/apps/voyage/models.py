@@ -402,9 +402,19 @@ class Voyage(models.Model):
             """
             name = models.CharField("Captain's name", max_length=60)
 
+        # Data variables
         first_captain = models.ManyToManyField(Captain)
         second_captain = models.ManyToManyField(Captain)
         third_captain = models.ManyToManyField(Captain)
+
+        crew_voyage_outset = models.IntegerField("Crew at voyage outset",
+                                                 max_length=3)
+        crew_departure_last_port = models.IntegerField\
+                ("Crew at departure from last port of slave purchase",
+                 max_length=3)
+        crew_first_landing = models.IntegerField\
+                ("Crew at first landing of slaves", max_length=2)
+        
 
     class VoyageSlaveNumber(models.Model):
         """
