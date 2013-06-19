@@ -395,6 +395,17 @@ class Voyage(models.Model):
         Voyage Captain and Crew.
         """
 
+        class Captain(models.Model):
+            """
+            Captain information (name).
+            """
+            name = models.CharField("Captain's name", max_length=60)
+
+        first_captain = models.ManyToManyField(Captain)
+        second_captain = models.ManyToManyField(Captain)
+        third_captain = models.ManyToManyField(Captain)
+
+
     class VoyageSlavesNumbers(models.Model):
         """
         Voyage slaves (numbers).
