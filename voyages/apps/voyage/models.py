@@ -277,6 +277,7 @@ class Voyage(models.Model):
             """
             day = models.IntegerField()
 
+        # Data variables
         # Integer variables
         day_voyage_began = models.IntegerField\
                 ("Day that voyage began", max_length=2, blank=True)
@@ -361,6 +362,33 @@ class Voyage(models.Model):
                 ("Date of departure from last place of landing")
         voyage_completed = models.DateField\
                 ("Date on which slave voyage completed")
+
+        # Imputed variables
+        imp_voyage_began = models.IntegerField\
+                ("Year voyage began", max_length=4, blank=True)
+        imp_departed_africa = models.IntegerField\
+                ("Year departed Africa", max_length=4, blank=True)
+        imp_arrival_at_port_of_dis = models.IntegerField\
+                ("Year of arrival at port of disembarkation",
+                 max_length=4, blank=True)
+        five_year_period = models.IntegerField\
+                ("5-year period in which voyage occurred",
+                 max_length=3, blank=True)
+        decade_of_voyage = models.IntegerField\
+                ("Decade in which voyage occurred",
+                 max_length=3, blank=True)
+        quarter_century_of_voyage = models.IntegerField\
+                ("Quarter-century in which voyage occurred",
+                 max_length=3, blank=True)
+        century_of_voyage = models.IntegerField\
+                ("Century in which voyage occurred",
+                 max_length=4, blank=True)
+        voyage_length_home_to_dis = models.IntegerField\
+                ("Voyage length from home port to disembarkation (days)",
+                 max_length=5, blank=True)
+        voyage_length_africa_to_dis = models.IntegerField\
+                ("Voyage length from leaving Africa to disembarkation (days)",
+                 max_length=5, blank=True)
 
 
     class VoyageCaptainCrew(models.Model):
