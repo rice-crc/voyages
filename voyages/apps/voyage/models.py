@@ -221,6 +221,34 @@ class Voyage(models.Model):
         Voyage dates.
         """
 
+        # Integer variables
+        day_voyage_began = models.IntegerField("Day that voyage began",
+                                               max_length=2)
+        month_voyage_began = models.IntegerField("Month that voyage began",
+                                                 max_length=2)
+        year_voyage_began = models.IntegerField("Year that voyage began",
+                                                max_length=4)
+
+        # Date variables
+        voyage_began = models.DateField("Date that voyage began")
+        slave_purchase_began = models.DateField("Date that slave "
+                                                "purchase began")
+        vessel_left_port = models.DateField("Date that vessel left "
+                                            "last slaving port")
+        first_dis_of_slaves = models.DateField("Date of first disembarkation "
+                                               "of slaves")
+        arrival_at_second_place_landing = models.DateField(
+            "Date of arrival at second place of landing"
+        )
+        third_dis_of_slaves = models.DateField("Date of third disembarkation"
+                                               " of slaves")
+        departure_last_place_of_landing = models.Model("Date of departure "
+                                                       "from last place "
+                                                       "of landing")
+        voyage_completed = models.DateField("Date on which slave voyage "
+                                            "completed")
+
+
     class VoyageCaptainCrew(models.Model):
         """
         Voyage Captain and Crew.
