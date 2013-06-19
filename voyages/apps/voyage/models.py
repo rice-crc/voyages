@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext as _
 
 class Voyage(models.Model):
     """
@@ -367,23 +368,119 @@ class Voyage(models.Model):
         Voyage Captain and Crew.
         """
 
-    class VoyageSlavesNumbers(models.Model):
+    class VoyageSlaveNumber(models.Model):
         """
         Voyage slaves (numbers).
         """
+        num_slaves_intended_first_port = models.IntegerField\
+            ("Number of slaves intended from first port of purchase", null=True, blank=True)
+        num_slaves_intended_second_port = models.IntegerField\
+            ("Number of slaves intended from second port of purchase", null=True, blank=True)
+        
+        num_slaves_carried_first_port = models.IntegerField\
+            ("Number of slaves carried from first port of purchase", null=True, blank=True)
+        num_slaves_carried_second_port = models.IntegerField\
+            ("Number of slaves carried from second port of purchase", null=True, blank=True)
+        num_slaves_carried_third_port = models.IntegerField\
+            ("Number of slaves carried from third port of purchase", null=True, blank=True)
+        
+        total_num_slaves_purchased = models.IntegerField\
+            ("Total slaves purchased", null=True, blank=True)
+        total_num_slaves_dep_last_slaving_port = models.IntegerField\
+            ("Total slaves on board at departure from last slaving port", null=True, blank=True)
+        
+        total_num_slaves_arr_first_port_embark = models.IntegerField\
+            ("Total slaves arrived at first port of disembarkation", null=True, blank=True)
+        
+        num_slaves_disembark_first_place = models.IntegerField\
+            ("Number of slaves disembarked at first place", null=True, blank=True)
+        num_slaves_disembark_second_place = models.IntegerField\
+            ("Number of slaves disembarked at second place", null=True, blank=True)
+        num_slaves_disembark_third_place = models.IntegerField\
+            ("Number of slaves disembarked at third place", null=True, blank=True)
+        
 
     class VoyageSlavesCharacteristics(models.Model):
         """
         Voyage slaves (characteristics).
         """
+        
+        slave_deaths_before_africa = models.IntegerField\
+            ("Slaves death before leaving Africa")
+        slave_deaths_between_africa_america = models.IntegerField\
+            ("Slaves death between Africa and Americas")
+        slave_deaths_between_africa_america = models.IntegerField\
+            ("Slaves death before arrival and sale")
+        
+        embarked_first_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at first port of purchase")
+        embarked_second_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at second port of purchase")
+        embarked_third_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at third port of purchase")
+        died_on_middle_passage = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number died on Middle Passage")
+        disembarked_first_place = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number disembarked at first place of landing")
+        disembarked_second_place = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number disembarked at second place of landing")
+        
+        class GroupComposition(models.Model):
+            """
+            Basic composition of a group of slaves
+                used by 'Voyage.VoyageSlavesCharacteristics'
+            """
+            num_men = models.IntegerField\
+                ("Number of men", null=True, blank=True)
+            num_women = models.IntegerField\
+                ("Number of women", null=True, blank=True)
+            num_boy = models.IntegerField\
+                ("Number of boys", null=True, blank=True)
+            num_girl = models.IntegerField\
+                ("Number of girls", null=True, blank=True)
+            num_adult = models.IntegerField\
+                ("Number of adults (gender unspecified)", null=True, blank=True)
+            num_child = models.IntegerField\
+                ("Number of children (gender unspecified)", null=True, blank=True)
+            num_infant = models.IntegerField\
+                ("Number of infants", null=True, blank=True)
+            num_males = models.IntegerField\
+                ("Number of males (age unspecified)", null=True, blank=True)
+            num_females = models.IntegerField\
+                ("Number of females (age unspecified)", null=True, blank=True)
+           
 
     class VoyageSources(models.Model):
         """
         Voyage sources.
         """
+        source_unique_ref = models.CharField(_('Short reference'), max_length=40, unique=True)
+        # Might contain HTML text formatting
+        source_full_ref = models.CharField(_('Full reference'), max_length=500)
+        
+    class SourceVoyageConnection(models.Model):
+        source = models.ForeignKey('Voyage.VoyageSources')
+        group = models.ForeignKey('Voyage')
+        source_order = models.IntegerField(max_length=2)
 
     voyage_id = models.AutoField(primary_key=True)
     voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
                                            blank=True)
     voyage_groupings = models.ForeignKey('VoyageGroupings')
     voyage_outcome = models.ForeignKey('VoyageShip')
+
+    # One Voyage can contain multiple sources and 
+    voyage_sources = models.ManyToManyField('Voyage.VoyageSources',\
+                through='Voyage.SourceVoyageConnection')
+    
+    voyage_slave_number = models.OneToOneField\
+                ('Voyage.VoyageSlaveNumber',"Slaves (numbers) of the voyage")
+    voyage_slave_characteristics = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics',"Slaves (Characteristics) of the voyage")
+   
