@@ -442,33 +442,6 @@ class Voyage(models.Model):
         """
         Voyage slaves (characteristics).
         """
-        
-        slave_deaths_before_africa = models.IntegerField\
-            ("Slaves death before leaving Africa")
-        slave_deaths_between_africa_america = models.IntegerField\
-            ("Slaves death between Africa and Americas")
-        slave_deaths_between_africa_america = models.IntegerField\
-            ("Slaves death before arrival and sale")
-        
-        embarked_first_port_purchase = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
-                    "Number embarked at first port of purchase")
-        embarked_second_port_purchase = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
-                    "Number embarked at second port of purchase")
-        embarked_third_port_purchase = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
-                    "Number embarked at third port of purchase")
-        died_on_middle_passage = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
-                    "Number died on Middle Passage")
-        disembarked_first_place = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
-                    "Number disembarked at first place of landing")
-        disembarked_second_place = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
-                    "Number disembarked at second place of landing")
-        
         class GroupComposition(models.Model):
             """
             Basic composition of a group of slaves
@@ -492,6 +465,31 @@ class Voyage(models.Model):
                 ("Number of males (age unspecified)", null=True, blank=True)
             num_females = models.IntegerField\
                 ("Number of females (age unspecified)", null=True, blank=True)
+        
+        embarked_first_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at first port of purchase", related_name="embarked_first_port_purchase")
+        embarked_second_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at second port of purchase", related_name="embarked_second_port_purchase")
+        embarked_third_port_purchase = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition',\
+                    "Number embarked at third port of purchase", related_name="embarked_third_port_purchase")
+        died_on_middle_passage = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number died on Middle Passage", related_name="died_on_middle_passage")
+        disembarked_first_place = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number disembarked at first place of landing", related_name="disembarked_first_place")
+        disembarked_second_place = models.OneToOneField\
+                ('Voyage.VoyageSlavesCharacteristics.GroupComposition', \
+                    "Number disembarked at second place of landing", related_name="disembarked_second_place")
+        slave_deaths_before_africa = models.IntegerField\
+            ("Slaves death before leaving Africa")
+        slave_deaths_between_africa_america = models.IntegerField\
+            ("Slaves death between Africa and Americas")
+        slave_deaths_between_africa_america = models.IntegerField\
+            ("Slaves death before arrival and sale")
            
 
     class VoyageSources(models.Model):
@@ -503,8 +501,8 @@ class Voyage(models.Model):
         source_full_ref = models.CharField(_('Full reference'), max_length=500)
         
     class SourceVoyageConnection(models.Model):
-        source = models.ForeignKey('Voyage.VoyageSources')
-        group = models.ForeignKey('Voyage')
+        source = models.ForeignKey('Voyage.VoyageSources', related_name="source")
+        group = models.ForeignKey('Voyage', related_name="group")
         source_order = models.IntegerField(max_length=2)
 
     voyage_id = models.AutoField(primary_key=True)
@@ -515,10 +513,12 @@ class Voyage(models.Model):
 
     # One Voyage can contain multiple sources and 
     voyage_sources = models.ManyToManyField('Voyage.VoyageSources',\
-                through='Voyage.SourceVoyageConnection')
+                through='Voyage.SourceVoyageConnection', related_name='voyage_sources')
     
     voyage_slave_number = models.OneToOneField\
-                ('Voyage.VoyageSlaveNumber',"Slaves (numbers) of the voyage")
+                ('Voyage.VoyageSlaveNumber',"Slaves (numbers) of the voyage",\
+                     related_name='voyage_slave_number')
     voyage_slave_characteristics = models.OneToOneField\
-                ('Voyage.VoyageSlavesCharacteristics',"Slaves (Characteristics) of the voyage")
+                ('Voyage.VoyageSlavesCharacteristics',"Slaves (Characteristics) of the voyage",\
+                    related_name='voyage_slave_characteristics')
    
