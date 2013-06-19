@@ -43,7 +43,7 @@ class Faq(models.Model):
     """
     question = models.TextField(_('Question'), max_length=300)
     answer = models.TextField(_('Answer'), max_length=2000)
-    category = models.ForeignKey(FaqCategory)
+    category = models.ForeignKey('FaqCategory')
     question_order = models.IntegerField()
     
     def __unicode__(self):

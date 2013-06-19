@@ -30,19 +30,14 @@
             {% endfor %}
         </tr></table>
     </td>
-    <td>
-        <table border="0" cellspacing="0" cellpadding="0" style="margin-left: auto; margin-right: 10px;">
-            <tr>
-                <td><form action="/help/page_glossary" method="post" enctype="multipart/form-data">{% csrf_token %}
-                        {% for field in form %}
-                            {{ field }}
-                        {% endfor %}
-                    </td>
-                <td><input style="glossary-search-box" type="submit" value="Search"/>
-                </td>
-                </form>
-            </tr>
-        </table>
+    <td id="search-box-wrapper">
+    	<form action="{% url 'help:glossary' %}" method="post" enctype="multipart/form-data">
+    	{% csrf_token %}
+		{% for field in form %}
+		{{ field }}
+		{% endfor %}
+		<input type="submit" value="Search">
+    	</form>
     </td>
     </tr>
 </table>
