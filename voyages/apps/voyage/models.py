@@ -403,9 +403,12 @@ class Voyage(models.Model):
             name = models.CharField("Captain's name", max_length=60)
 
         # Data variables
-        first_captain = models.ManyToManyField(Captain)
-        second_captain = models.ManyToManyField(Captain)
-        third_captain = models.ManyToManyField(Captain)
+        first_captain = models.ManyToManyField\
+                (Captain, related_name="first_captain")
+        second_captain = models.ManyToManyField\
+                (Captain, related_name="second captain")
+        third_captain = models.ManyToManyField\
+                (Captain, related_name="third_captain")
 
         crew_voyage_outset = models.IntegerField("Crew at voyage outset",
                                                  max_length=3, blank=True)
