@@ -274,3 +274,4 @@ class Voyage(models.Model):
                                            blank=True)
     voyage_groupings = models.ForeignKey(VoyageGroupings)
     voyage_outcome = models.ForeignKey(VoyageShip)
+
