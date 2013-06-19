@@ -2,6 +2,7 @@
     padding: 0;
 }
 
+
 /* top bar */
 
 div.glossary-letters-and-search {
@@ -20,11 +21,6 @@ td.glossary-letters-and-search {
 table.glossary-letters {
 	width: 100%; }
 
-input.glossary-search-box {
-	width: 50px;
-    padding: 0px;
-    margin: 0px;
-	background-color: White; }
 
 /* letters */
 
@@ -40,6 +36,10 @@ td.glossary-selector-letter {
 td.glossary-selector-letter:hover a{
     background-color: #008CA5;
     color: White
+}
+
+td a {
+	color: #000000;
 }
 
 td a:hover {
@@ -136,4 +136,9 @@ input {
 
 #id_q {
 	width: 130px;
+}
+
+#search-box-wrapper {
+	text-align: right;
+	padding-right: 5px;
 }

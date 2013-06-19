@@ -2,8 +2,12 @@
 
 div#search_box_wrapper {
 	position: absolute;
-	right: 30px;
-	top: 70px;
+	right: 25px;
+	top: 80px;
+}
+
+input {
+	font-size: 9pt;
 }
 
 div.faq-list a {
