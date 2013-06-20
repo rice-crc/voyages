@@ -1,9 +1,7 @@
 Django==1.5.1
-mysql-python 
-sunburnt
+mysql-python
 south
 hurry.filesize
 django-haystack
 pysolr
-unittest-xml-reporting
 wsgiref
