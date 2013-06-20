@@ -547,19 +547,28 @@ class Voyage(models.Model):
         source_order = models.IntegerField(max_length=2)
 
     voyage_id = models.AutoField(primary_key=True)
-    voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
+    voyage_in_cd_rom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
                                            blank=True)
-    voyage_groupings = models.OneToOneField('VoyageGroupings')
-    voyage_outcome = models.OneToOneField('VoyageShip')
 
-    # One Voyage can contain multiple sources and 
-    voyage_sources = models.ManyToManyField('VoyageSources',\
-                through='SourceVoyageConnection', related_name='voyage_sources')
-    
+    # Technical variables
+    voyage_groupings = models.OneToOneField\
+            ('VoyageGroupings',
+             help_text="Voyage Groupings for estimating imputed slaves")
+
+    # Data and imputed variables
+    voyage_ship = models.OneToOneField('VoyageShip')
+    voyage_outcome = models.OneToOneField('VoyageOutcome')
+    voyage_itinerary = models.OneToOneField('VoyageItinerary')
+    voyage_dates = models.OneToOneField('VoyageDates')
+    voyage_captain_crew = models.OneToOneField("VoyageCaptainCrew")
     voyage_slave_number = models.OneToOneField\
-                ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage",\
-                     related_name='voyage_slave_number')
+                ('VoyageSlaveNumber',
+                 help_text="Slaves (numbers) of the voyage")
     voyage_slave_characteristics = models.OneToOneField\
-                ('VoyageSlavesCharacteristics', help_text="Slaves (Characteristics) of the voyage",\
-                    related_name='voyage_slave_characteristics')
+                ('VoyageSlavesCharacteristics',
+                 help_text="Slaves (Characteristics) of the voyage")
    
+    # One Voyage can contain multiple sources and
+    voyage_sources = models.ManyToManyField('VoyageSources',
+                through='SourceVoyageConnection',
+                related_name='voyage_sources')
