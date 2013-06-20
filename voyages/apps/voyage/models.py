@@ -445,6 +445,7 @@ class Voyage(models.Model):
     class VoyageSlaveNumber(models.Model):
         """
         Voyage slaves (numbers).
+        related to: :model:`voyages.apps.voyages.Voyage`
         """
         num_slaves_intended_first_port = models.IntegerField\
                 ("Number of slaves intended from first port of purchase (SLINTEND)", null=True, blank=True)
@@ -473,10 +474,10 @@ class Voyage(models.Model):
         num_slaves_disembark_third_place = models.IntegerField\
                 ("Number of slaves disembarked at third place (SLAS39)", null=True, blank=True)
 
-
     class VoyageSlavesCharacteristics(models.Model):
         """
         Voyage slaves (characteristics).
+        related to: :model:`voyages.apps.voyages.Voyage`
         """
 
         class GroupComposition(models.Model):
@@ -540,7 +541,7 @@ class Voyage(models.Model):
         # Group *6
         disembarked_second_place = models.OneToOneField\
                 ('GroupComposition',
-                 help_text="Number disembarked at second place of landing", related_name="disembarked_second_place")
+                 help_text="Number disembarked at second place of landing (Group *6)", related_name="disembarked_second_place")
 
         slave_deaths_before_africa = models.IntegerField\
                 ("Slaves death before leaving Africa (SLADAFRI)")
@@ -554,7 +555,7 @@ class Voyage(models.Model):
         Voyage sources.
         Representing the original variables SOURCEA, SOURCEB, SOURCEC and etc to SOURCER
         """
-        source_unique_ref = models.CharField(_('Short reference'), max_length=40, unique=True)
+        source_unique_ref = models.CharField(_('Short reference'), max_length=60, unique=True)
         # Might contain HTML text formatting
         source_full_ref = models.CharField(_('Full reference'), max_length=500)
 
