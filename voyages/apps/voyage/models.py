@@ -565,19 +565,23 @@ class Voyage(models.Model):
              help_text="Voyage Groupings for estimating imputed slaves")
 
     # Data and imputed variables
-    voyage_ship = models.OneToOneField('VoyageShip')
-    voyage_outcome = models.OneToOneField('VoyageOutcome')
-    voyage_itinerary = models.OneToOneField('VoyageItinerary')
-    voyage_dates = models.OneToOneField('VoyageDates')
-    voyage_captain_crew = models.OneToOneField("VoyageCaptainCrew")
+    voyage_ship = models.OneToOneField\
+            ('VoyageShip', help_text="Ship, Nation, Owners")
+    voyage_outcome = models.OneToOneField\
+            ('VoyageOutcome', help_text="Voyage Outcome")
+    voyage_itinerary = models.OneToOneField\
+            ('VoyageItinerary', help_text="Voyage Itinerary")
+    voyage_dates = models.OneToOneField\
+            ('VoyageDates', help_text="Voyage Dates")
+    voyage_captain_crew = models.OneToOneField\
+            ("VoyageCaptainCrew", help_text="Captain and Crew")
     voyage_slave_number = models.OneToOneField\
-                ('VoyageSlaveNumber',
-                 help_text="Slaves (numbers) of the voyage")
+            ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage")
     voyage_slave_characteristics = models.OneToOneField\
-                ('VoyageSlavesCharacteristics',
-                 help_text="Slaves (Characteristics) of the voyage")
+            ('VoyageSlavesCharacteristics',
+             help_text="Slaves (Characteristics) of the voyage")
    
     # One Voyage can contain multiple sources and
-    voyage_sources = models.ManyToManyField('VoyageSources',
-                through='SourceVoyageConnection',
-                related_name='voyage_sources')
+    voyage_sources = models.ManyToManyField\
+            ('VoyageSources', through='SourceVoyageConnection',
+             related_name='voyage_sources')
