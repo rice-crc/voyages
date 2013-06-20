@@ -572,18 +572,33 @@ class Voyage(models.Model):
         source_order = models.IntegerField(max_length=2)
 
     voyage_id = models.AutoField(primary_key=True)
-    voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
-                                          blank=True)
-    voyage_groupings = models.OneToOneField('VoyageGroupings')
-    voyage_outcome = models.OneToOneField('VoyageShip')
 
-    # One Voyage can contain multiple sources and 
-    voyage_sources = models.ManyToManyField('VoyageSources', \
-                                            through='SourceVoyageConnection', related_name='voyage_sources')
+    voyage_in_cd_rom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
+                                           blank=True)
 
-    voyage_slave_number = models.OneToOneField \
-            ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage", \
-             related_name='voyage_slave_number')
-    voyage_slave_characteristics = models.OneToOneField \
-            ('VoyageSlavesCharacteristics', help_text="Slaves (Characteristics) of the voyage", \
-             related_name='voyage_slave_characteristics')
+    # Technical variables
+    voyage_groupings = models.OneToOneField\
+            ('VoyageGroupings',
+             help_text="Voyage Groupings for estimating imputed slaves")
+
+    # Data and imputed variables
+    voyage_ship = models.OneToOneField\
+            ('VoyageShip', help_text="Ship, Nation, Owners")
+    voyage_outcome = models.OneToOneField\
+            ('VoyageOutcome', help_text="Voyage Outcome")
+    voyage_itinerary = models.OneToOneField\
+            ('VoyageItinerary', help_text="Voyage Itinerary")
+    voyage_dates = models.OneToOneField\
+            ('VoyageDates', help_text="Voyage Dates")
+    voyage_captain_crew = models.OneToOneField\
+            ("VoyageCaptainCrew", help_text="Captain and Crew")
+    voyage_slave_number = models.OneToOneField\
+            ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage")
+    voyage_slave_characteristics = models.OneToOneField\
+            ('VoyageSlavesCharacteristics',
+             help_text="Slaves (Characteristics) of the voyage")
+   
+    # One Voyage can contain multiple sources and
+    voyage_sources = models.ManyToManyField\
+            ('VoyageSources', through='SourceVoyageConnection',
+             related_name='voyage_sources')
