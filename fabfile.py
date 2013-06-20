@@ -17,10 +17,10 @@ import voyages
 
 def all_deps():
     '''Locally install all dependencies.'''
-    local('pip install -r requirments/dev.txt')
+    local('pip install -r requirements/dev.txt')
 
     if os.path.exists('requirments/local.txt'):
-        local('pip install -r requirments/local.txt')
+        local('pip install -r requirements/local.txt')
 
 
 def test():
