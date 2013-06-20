@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+
 class Voyage(models.Model):
     """
     Information about voyages.
@@ -46,6 +47,7 @@ class Voyage(models.Model):
         related to: :model:`voyages.apps.voyages.Voyage.Place`
 
         """
+
         class VoyageVentureOwner(models.Model):
             """
             Information about other owners.
@@ -83,15 +85,15 @@ class Voyage(models.Model):
         ship_name = models.CharField("Name of vessel", max_length=60)
         nationality = models.ForeignKey('NationalityOfShip')
         tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
-                                       blank=True)
+                                      blank=True)
         ton_type = models.ForeignKey('TonType')
         rig_of_vessel = models.ForeignKey('RigOfVessel')
         guns_mounted = models.IntegerField("Guns mounted", max_length=2,
-                                            blank=True)
+                                           blank=True)
         year_of_construction = models.DateField\
                 ("Year of vessel's construction")
         vessel_construction_place = models.ForeignKey\
-                ('Place',related_name="vessel_construction_place")
+                ('Place', related_name="vessel_construction_place")
         vessel_construction_region = models.ForeignKey\
                 ('SpecificRegion', related_name="vessel_construction_region")
         registered_year = models.DateField("Year of vessel's registration")
@@ -195,7 +197,7 @@ class Voyage(models.Model):
                                                          "of call prior "
                                                          "to buying slaves",
                                                          max_length=3,
-                                                        blank=True)
+                                                         blank=True)
         first_place_slave_purchase = models.ForeignKey\
                 ('Place', related_name="first_place_slave_purchase")
         second_place_slave_purchase = models.ForeignKey\
@@ -252,17 +254,17 @@ class Voyage(models.Model):
                 ('Place', related_name="imp_principal_place_of_slave_purchase")
         imp_principal_region_of_slave_purchase = models.ForeignKey\
                 ('SpecificRegion', related_name=
-                "imp_principal_region_of_slave_purchase")
+            "imp_principal_region_of_slave_purchase")
         imp_broad_region_of_slave_purchase = models.\
             ForeignKey('BroadRegion', related_name=
-            "imp_broad_region_of_slave_purchase")
+        "imp_broad_region_of_slave_purchase")
         principal_port_of_slave_dis = models.ForeignKey\
                 ('Place', related_name="principal_port_of_slave_dis")
         imp_principal_port_slave_dis = models.ForeignKey\
                 ('Place', related_name="imp_principal_port_slave_dis")
         imp_principal_region_slave_dis = models.ForeignKey\
                 ('SpecificRegion', related_name=""
-                "imp_principal_region_slave_dis")
+                                                "imp_principal_region_slave_dis")
         imp_broad_region_slave_dis = models.ForeignKey\
                 ('BroadRegion', related_name="imp_broad_region_slave_dis")
 
@@ -271,6 +273,7 @@ class Voyage(models.Model):
         """
         Voyage dates.
         """
+
         class IntegerDate(models.Model):
             """
             Date in integer numbers
@@ -390,12 +393,10 @@ class Voyage(models.Model):
                 ("Voyage length from leaving Africa to disembarkation (days)",
                  max_length=5, blank=True)
 
-
     class VoyageCaptainCrew(models.Model):
         """
         Voyage Captain and Crew.
         """
-
         class Captain(models.Model):
             """
             Captain information (name).
@@ -446,101 +447,109 @@ class Voyage(models.Model):
         Voyage slaves (numbers).
         """
         num_slaves_intended_first_port = models.IntegerField\
-            ("Number of slaves intended from first port of purchase", null=True, blank=True)
+                ("Number of slaves intended from first port of purchase", null=True, blank=True)
         num_slaves_intended_second_port = models.IntegerField\
-            ("Number of slaves intended from second port of purchase", null=True, blank=True)
-        
+                ("Number of slaves intended from second port of purchase", null=True, blank=True)
+
         num_slaves_carried_first_port = models.IntegerField\
-            ("Number of slaves carried from first port of purchase", null=True, blank=True)
+                ("Number of slaves carried from first port of purchase", null=True, blank=True)
         num_slaves_carried_second_port = models.IntegerField\
-            ("Number of slaves carried from second port of purchase", null=True, blank=True)
+                ("Number of slaves carried from second port of purchase", null=True, blank=True)
         num_slaves_carried_third_port = models.IntegerField\
-            ("Number of slaves carried from third port of purchase", null=True, blank=True)
-        
+                ("Number of slaves carried from third port of purchase", null=True, blank=True)
+
         total_num_slaves_purchased = models.IntegerField\
-            ("Total slaves purchased", null=True, blank=True)
+                ("Total slaves purchased", null=True, blank=True)
         total_num_slaves_dep_last_slaving_port = models.IntegerField\
-            ("Total slaves on board at departure from last slaving port", null=True, blank=True)
-        
+                ("Total slaves on board at departure from last slaving port", null=True, blank=True)
+
         total_num_slaves_arr_first_port_embark = models.IntegerField\
-            ("Total slaves arrived at first port of disembarkation", null=True, blank=True)
-        
+                ("Total slaves arrived at first port of disembarkation", null=True, blank=True)
+
         num_slaves_disembark_first_place = models.IntegerField\
-            ("Number of slaves disembarked at first place", null=True, blank=True)
+                ("Number of slaves disembarked at first place", null=True, blank=True)
         num_slaves_disembark_second_place = models.IntegerField\
-            ("Number of slaves disembarked at second place", null=True, blank=True)
+                ("Number of slaves disembarked at second place", null=True, blank=True)
         num_slaves_disembark_third_place = models.IntegerField\
-            ("Number of slaves disembarked at third place", null=True, blank=True)
-        
+                ("Number of slaves disembarked at third place", null=True, blank=True)
+
 
     class VoyageSlavesCharacteristics(models.Model):
         """
         Voyage slaves (characteristics).
         """
+
         class GroupComposition(models.Model):
             """
             Basic composition of a group of slaves
                 used by 'Voyage.VoyageSlavesCharacteristics'
             """
+            # Representing MEN* variables
             num_men = models.IntegerField\
-                ("Number of men", null=True, blank=True)
+                    ("Number of men (MEN*)", null=True, blank=True)
+            # Representing WOMEN* variables
             num_women = models.IntegerField\
-                ("Number of women", null=True, blank=True)
+                    ("Number of women", null=True, blank=True)
+            # Representing BOY* variables
             num_boy = models.IntegerField\
-                ("Number of boys", null=True, blank=True)
+                    ("Number of boys", null=True, blank=True)
+            # Representing GIRL* variables
             num_girl = models.IntegerField\
-                ("Number of girls", null=True, blank=True)
+                    ("Number of girls", null=True, blank=True)
+            # Representing ADULT* variables
             num_adult = models.IntegerField\
-                ("Number of adults (gender unspecified)", null=True, blank=True)
+                    ("Number of adults (gender unspecified)", null=True, blank=True)
+            # Representing CHILD* variables
             num_child = models.IntegerField\
-                ("Number of children (gender unspecified)", null=True, blank=True)
+                    ("Number of children (gender unspecified)", null=True, blank=True)
+            # Representing INFANT* variables
             num_infant = models.IntegerField\
-                ("Number of infants", null=True, blank=True)
+                    ("Number of infants", null=True, blank=True)
+            # Representing MALES* variables
             num_males = models.IntegerField\
-                ("Number of males (age unspecified)", null=True, blank=True)
+                    ("Number of males (age unspecified)", null=True, blank=True)
+            # Representing FEMALE* variables
             num_females = models.IntegerField\
-                ("Number of females (age unspecified)", null=True, blank=True)
-                
-                
+                    ("Number of females (age unspecified)", null=True, blank=True)
+
         embarked_first_port_purchase = models.OneToOneField\
                 ('GroupComposition',\
-                    help_text="Number embarked at first port of purchase", related_name="embarked_first_port_purchase")
+                 help_text="Number embarked at first port of purchase", related_name="embarked_first_port_purchase")
         embarked_second_port_purchase = models.OneToOneField\
                 ('GroupComposition',\
-                    help_text="Number embarked at second port of purchase", related_name="embarked_second_port_purchase")
+                 help_text="Number embarked at second port of purchase", related_name="embarked_second_port_purchase")
         embarked_third_port_purchase = models.OneToOneField\
                 ('GroupComposition',\
-                    help_text="Number embarked at third port of purchase", related_name="embarked_third_port_purchase")
+                 help_text="Number embarked at third port of purchase", related_name="embarked_third_port_purchase")
         died_on_middle_passage = models.OneToOneField\
-                ('GroupComposition', \
-                    help_text="Number died on Middle Passage", related_name="died_on_middle_passage")
+                ('GroupComposition',\
+                 help_text="Number died on Middle Passage", related_name="died_on_middle_passage")
         disembarked_first_place = models.OneToOneField\
-                ('GroupComposition', \
-                    help_text="Number disembarked at first place of landing", related_name="disembarked_first_place")
+                ('GroupComposition',\
+                 help_text="Number disembarked at first place of landing", related_name="disembarked_first_place")
         disembarked_second_place = models.OneToOneField\
-                ('GroupComposition', \
-                    help_text="Number disembarked at second place of landing", related_name="disembarked_second_place")
+                ('GroupComposition',\
+                 help_text="Number disembarked at second place of landing", related_name="disembarked_second_place")
         slave_deaths_before_africa = models.IntegerField\
-            ("Slaves death before leaving Africa")
+                ("Slaves death before leaving Africa")
         slave_deaths_between_africa_america = models.IntegerField\
-            ("Slaves death between Africa and Americas")
+                ("Slaves death between Africa and Americas")
         slave_deaths_between_africa_america = models.IntegerField\
-            ("Slaves death before arrival and sale")
-        
-       
-           
+                ("Slaves death before arrival and sale")
 
     class VoyageSources(models.Model):
         """
         Voyage sources.
+        Representing the original variables SOURCEA, SOURCEB, SOURCEC and etc to SOURCER
         """
         source_unique_ref = models.CharField(_('Short reference'), max_length=40, unique=True)
         # Might contain HTML text formatting
         source_full_ref = models.CharField(_('Full reference'), max_length=500)
-        
+
     class SourceVoyageConnection(models.Model):
         """
         Represents the relationship between Voyage and Voyage.VoyageSources
+        source_order determines the order sources appear for each voyage
         """
         source = models.ForeignKey('VoyageSources', related_name="source")
         group = models.ForeignKey('Voyage', related_name="group")
@@ -548,18 +557,17 @@ class Voyage(models.Model):
 
     voyage_id = models.AutoField(primary_key=True)
     voyage_in_cdrom = models.IntegerField("Voyage in 1999 CD-ROM", max_length=1,
-                                           blank=True)
+                                          blank=True)
     voyage_groupings = models.OneToOneField('VoyageGroupings')
     voyage_outcome = models.OneToOneField('VoyageShip')
 
     # One Voyage can contain multiple sources and 
     voyage_sources = models.ManyToManyField('VoyageSources',\
-                through='SourceVoyageConnection', related_name='voyage_sources')
-    
+                                            through='SourceVoyageConnection', related_name='voyage_sources')
+
     voyage_slave_number = models.OneToOneField\
-                ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage",\
-                     related_name='voyage_slave_number')
+            ('VoyageSlaveNumber', help_text="Slaves (numbers) of the voyage",\
+             related_name='voyage_slave_number')
     voyage_slave_characteristics = models.OneToOneField\
-                ('VoyageSlavesCharacteristics', help_text="Slaves (Characteristics) of the voyage",\
-                    related_name='voyage_slave_characteristics')
-   
+            ('VoyageSlavesCharacteristics', help_text="Slaves (Characteristics) of the voyage",\
+             related_name='voyage_slave_characteristics')

@@ -4,4 +4,4 @@ dist/
 test-results/
 localsettings.py
 *~
-
+.idea/*
