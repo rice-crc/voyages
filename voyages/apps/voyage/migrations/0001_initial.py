@@ -327,10 +327,10 @@ class Migration(SchemaMigration):
         db.create_table(u'voyage_voyageslavescharacteristics', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('embarked_first_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(related_name='embarked_first_port_purchase', unique=True, to=orm['voyage.GroupComposition'])),
-            ('embarked_second_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(related_name='embarked_second_port_purchase', unique=True, to=orm['voyage.GroupComposition'])),
-            ('embarked_third_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(related_name='embarked_third_port_purchase', unique=True, to=orm['voyage.GroupComposition'])),
             ('died_on_middle_passage', self.gf('django.db.models.fields.related.OneToOneField')(related_name='died_on_middle_passage', unique=True, to=orm['voyage.GroupComposition'])),
             ('disembarked_first_place', self.gf('django.db.models.fields.related.OneToOneField')(related_name='disembarked_first_place', unique=True, to=orm['voyage.GroupComposition'])),
+            ('embarked_second_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(related_name='embarked_second_port_purchase', unique=True, to=orm['voyage.GroupComposition'])),
+            ('embarked_third_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(related_name='embarked_third_port_purchase', unique=True, to=orm['voyage.GroupComposition'])),
             ('disembarked_second_place', self.gf('django.db.models.fields.related.OneToOneField')(related_name='disembarked_second_place', unique=True, to=orm['voyage.GroupComposition'])),
             ('slave_deaths_before_africa', self.gf('django.db.models.fields.IntegerField')()),
             ('slave_deaths_between_africa_america', self.gf('django.db.models.fields.IntegerField')()),
@@ -340,7 +340,7 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageSources'
         db.create_table(u'voyage_voyagesources', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('source_unique_ref', self.gf('django.db.models.fields.CharField')(unique=True, max_length=40)),
+            ('source_unique_ref', self.gf('django.db.models.fields.CharField')(unique=True, max_length=60)),
             ('source_full_ref', self.gf('django.db.models.fields.CharField')(max_length=500)),
         ))
         db.send_create_signal(u'voyage', ['VoyageSources'])
@@ -742,7 +742,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'VoyageSources'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'source_full_ref': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'source_unique_ref': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'})
+            'source_unique_ref': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'})
         },
         u'voyage.voyageventureowner': {
             'Meta': {'object_name': 'VoyageVentureOwner'},

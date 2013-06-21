@@ -40,6 +40,9 @@ class Voyage(models.Model):
         """
         grouping_name = models.CharField(max_length=30)
 
+        def __unicode__(self):
+            return self.grouping_name
+
     class VoyageShip(models.Model):
         """
         Information about voyage ship.
@@ -113,6 +116,8 @@ class Voyage(models.Model):
                                           decimal_places=2,
                                           blank=True)
 
+        def __unicode__(self):
+            return self.ship_name
 
     class VoyageOutcome(models.Model):
         """
@@ -161,6 +166,8 @@ class Voyage(models.Model):
         vessel_captured_outcome = models.ForeignKey('VesselCapturedOutcome')
         outcome_owner = models.ForeignKey('OwnerOutcome')
 
+        def __unicode__(self):
+            return self.particular_outcome
 
     class VoyageItinerary(models.Model):
         """
@@ -273,7 +280,6 @@ class Voyage(models.Model):
                  related_name="imp_principal_region_slave_dis")
         imp_broad_region_slave_dis = models.ForeignKey\
                 ('BroadRegion', related_name="imp_broad_region_slave_dis")
-
 
     class VoyageDates(models.Model):
         """
