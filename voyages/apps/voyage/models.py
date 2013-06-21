@@ -644,4 +644,3 @@ class Voyage(models.Model):
     voyage_sources = models.ManyToManyField \
             ('VoyageSources', through='SourceVoyageConnection',
              related_name='voyage_sources', blank=True, null=True)
-
