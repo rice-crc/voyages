@@ -224,16 +224,8 @@ class VoyageShip(models.Model):
         """
         Nationalities of ships.
         """
-        nationality = models.CharField(max_length=35)
+        nationality = models.CharField(max_length=70)
         code = models.IntegerField(max_length=2)
-
-    class ImputedCountryShip(models.Model):
-        """
-        Imputed country in which ship registered.
-        """
-        imputed_country = models.CharField("Imputed country "
-                                           "in which ship registered.",
-                                           max_length=35)
 
     class TonType(models.Model):
         """
@@ -251,7 +243,7 @@ class VoyageShip(models.Model):
 
     # Data variables
     ship_name = models.CharField("Name of vessel", max_length=60)
-    nationality = models.ForeignKey('Nationality')
+    nationality = models.ForeignKey('Nationality', related_name="nationality")
     tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
                                   blank=True)
     ton_type = models.ForeignKey('TonType')
@@ -274,7 +266,8 @@ class VoyageShip(models.Model):
     owners = models.ManyToManyField('Owner')
 
     # Imputed variables
-    imputed_nationality = models.ForeignKey('ImputedCountryShip')
+    imputed_nationality = models.ForeignKey\
+            ('Nationality', related_name="imputed_nationality")
     tonnage_mod = models.DecimalField("Tonnage standardized on British"
                                       "measured tons, 1773-1835",
                                       max_digits=8,
@@ -293,34 +286,36 @@ class VoyageOutcome(models.Model):
         """
         Particular outcome.
         """
-        particular_outcome = models.CharField("Outcome label",
-                                              max_length=70)
+        name = models.CharField("Outcome label", max_length=70)
+        code = models.IntegerField("Code of outcome", max_length=3)
 
     class SlavesOutcome(models.Model):
         """
         Outcome of voyage for slaves.
         """
-        slaves_outcome = models.CharField("Outcome label", max_length=70)
+        name = models.CharField("Outcome label", max_length=70)
+        code = models.IntegerField("Code of outcome", max_length=1)
 
     class VesselCapturedOutcome(models.Model):
         """
         Outcome of voyage if vessel captured.
         """
-        vessel_captured_outcome = models.CharField("Outcome label",
-                                                   max_length=35)
+        name = models.CharField("Outcome label", max_length=70)
+        code = models.IntegerField("Code of outcome", max_length=2)
 
     class OwnerOutcome(models.Model):
         """
         Outcome of voyage for owner.
         """
-        owner_outcome = models.CharField("Outcome label", max_length=35)
+        name = models.CharField("Outcome label", max_length=70)
+        code = models.IntegerField("Code of outcome", max_length=1)
 
     class Resistance(models.Model):
         """
         Resistance labels
         """
-        resistance_name = models.CharField("Resistance label",
-                                           max_length=35)
+        name = models.CharField("Resistance label", max_length=35)
+        code = models.IntegerField("Code of resistance", max_length=1)
 
     # Data variables
     particular_outcome = models.ForeignKey('ParticularOutcome')
