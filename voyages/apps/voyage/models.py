@@ -188,6 +188,12 @@ class Place(models.Model):
     name = models.CharField(max_length=35)
     region = models.ForeignKey('Region')
     code = models.IntegerField("Numeric code", max_length=5)
+    longtitude = models.DecimalField("Longtitude of point",
+                                     max_length=7, decimal_places=3,
+                                     blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_length=7, decimal_places=3,
+                                     blank=True)
 
 
 class VoyageGroupings(models.Model):
@@ -208,18 +214,18 @@ class VoyageShip(models.Model):
 
     """
 
-    class VoyageVentureOwner(models.Model):
+    class Owner(models.Model):
         """
         Information about other owners.
         """
-        number_of_owner = models.IntegerField(max_length=2, blank=True)
         name_of_owner = models.CharField(max_length=40)
 
-    class NationalityOfShip(models.Model):
+    class Nationality(models.Model):
         """
         Nationalities of ships.
         """
-        nationality_of_ship = models.CharField(max_length=35)
+        nationality = models.CharField(max_length=35)
+        code = models.IntegerField(max_length=2)
 
     class ImputedCountryShip(models.Model):
         """
@@ -234,16 +240,18 @@ class VoyageShip(models.Model):
         Types of tonnage.
         """
         ton_type = models.CharField(max_length=35)
+        code = models.IntegerField(max_length=2)
 
     class RigOfVessel(models.Model):
         """
         Rig of Vessel.
         """
         rig_of_vessel = models.CharField(max_length=25)
+        code = models.IntegerField(max_length=2)
 
     # Data variables
     ship_name = models.CharField("Name of vessel", max_length=60)
-    nationality = models.ForeignKey('NationalityOfShip')
+    nationality = models.ForeignKey('Nationality')
     tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
                                   blank=True)
     ton_type = models.ForeignKey('TonType')
@@ -261,9 +269,8 @@ class VoyageShip(models.Model):
             ('Place', related_name="registered_place")
     registered_region = models.ForeignKey \
             ('Region', related_name="registered_region")
-    owner_of_venture = models.CharField("First owner of venture",
-                                        max_length=60)
-    owners = models.ForeignKey('VoyageVentureOwner')
+    owner_of_venture = models.ForeignKey('Owner')
+    owners = models.ManyToManyField('Owner')
 
     # Imputed variables
     imputed_nationality = models.ForeignKey('ImputedCountryShip')
