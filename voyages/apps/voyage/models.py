@@ -258,13 +258,14 @@ class VoyageShip(models.Model):
     rig_of_vessel = models.ForeignKey('RigOfVessel')
     guns_mounted = models.IntegerField("Guns mounted", max_length=2,
                                        blank=True)
-    year_of_construction = models.DateField \
-            ("Year of vessel's construction")
+    year_of_construction = models.IntegerField\
+            ("Year of vessel's construction", max_length=4, blank=True)
     vessel_construction_place = models.ForeignKey \
             ('Place', related_name="vessel_construction_place")
     vessel_construction_region = models.ForeignKey \
             ('Region', related_name="vessel_construction_region")
-    registered_year = models.DateField("Year of vessel's registration")
+    registered_year = models.IntegerField\
+            ("Year of vessel's registration", max_length=4, blank=True)
     registered_place = models.ForeignKey \
             ('Place', related_name="registered_place")
     registered_region = models.ForeignKey \
