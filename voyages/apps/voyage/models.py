@@ -188,6 +188,12 @@ class Place(models.Model):
     name = models.CharField(max_length=35)
     region = models.ForeignKey('Region')
     code = models.IntegerField("Numeric code", max_length=5)
+    longtitude = models.DecimalField("Longtitude of point",
+                                     max_length=7, decimal_places=3,
+                                     blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_length=7, decimal_places=3,
+                                     blank=True)
 
 
 class VoyageGroupings(models.Model):
