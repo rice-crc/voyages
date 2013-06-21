@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
+from .models import *
 
 class FlatPageAdmin(admin.ModelAdmin):
-    """Class serves flat pages module"""
+    """
+    Support for flat page.
+    """
     fields = ('url', 'title', 'content')
     readonly_fields = ('url', 'title',)
     
@@ -23,4 +26,13 @@ class FlatPageAdmin(admin.ModelAdmin):
 # We have to unregister it, and then reregister
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
-
+admin.site.register(Voyage)
+admin.site.register(Voyage.VoyageGroupings)
+admin.site.register(Voyage.VoyageShip)
+admin.site.register(Voyage.VoyageOutcome)
+admin.site.register(Voyage.VoyageItinerary)
+admin.site.register(Voyage.VoyageDates)
+admin.site.register(Voyage.VoyageCaptainCrew)
+admin.site.register(Voyage.VoyageSlaveNumber)
+admin.site.register(Voyage.VoyageSlavesCharacteristics)
+admin.site.register(Voyage.VoyageSources)
