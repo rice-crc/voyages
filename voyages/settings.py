@@ -111,12 +111,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-     'django.contrib.admin',
+    'django.contrib.admin',
     #Flatpages apps
     'django.contrib.flatpages',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
+    'mock',
     # used to index django models
     'haystack',
     'voyages.apps.common',
@@ -149,7 +150,7 @@ TEST_OUTPUT_DIR = 'test-results'
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
 
-LOGIN_URL = '/voyage/contribute'
+LOGIN_URL = '/contribute/login/'
 LOGIN_REDIRECT_URL = LOGIN_URL
 
 # Use custom highlighter

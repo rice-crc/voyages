@@ -7,6 +7,7 @@ import random
 import haystack
 from .models import Glossary, Faq, FaqCategory
 
+
 @override_settings(LANGUAGE_CODE='en')
 class TestGlossaryEmpty(TestCase):
     """
@@ -212,6 +213,8 @@ class TestGlossarySearch(TestCase):
         self.assertContains(response, 'Goofy' , loop_count)
 
 
+import mock
+
 #
 # Test for the FAQ model
 #
@@ -224,8 +227,6 @@ class TestEmptyFaq(TestCase):
         """
         Test if initial website is rendering properly
         """
-
-        # Check response code
         response = self.client.get(reverse('help:faqs'))
         self.assertEqual(response.status_code, 200)
 
@@ -249,6 +250,10 @@ class TestFaqAllData(TestCase):
         """
         Test if the page displays all FAQs
         """
+        #with mock.patch('query_result', [{'hi'}]):
+        query_result = mock.MagicMock()
+
+
         response = self.client.get(reverse('help:faqs'))
         for item in Faq.objects.all():
             self.assertContains(response, item.question)
@@ -395,8 +400,6 @@ class TestFaqSearchRealTime(TestCase):
         
         # Use the real time processor
         objectList = []
-        settings.HAYSTACK_SIGNAL_PROCESSOR='haystack.signals.RealtimeSignalProcessor'
-        print "Settings: %s" % settings.HAYSTACK_SIGNAL_PROCESSOR
         
         for i in range(1, loop_count):
             faq_item_question = prefix_question + str(random.randint(0, 10000))
