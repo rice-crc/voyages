@@ -1,38 +1,53 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+class GeoLocation(models.Model):
+        """
+        GeoLocation class.
+        Format is 12345:
+            Broad is 10000
+            Region is 12300
+            Place is 12345
+        """
+        class BroadRegion(models.Model):
+            """
+            Broad Regions (continents).
+            """
+
+            name = models.CharField("Broad region", max_length=35)
+            code = models.IntegerField("Numeric code", max_length=5)
+
+        class Region(models.Model):
+            """
+            Specific Regions (countries or colonies).
+            related to: :model:
+            `voyages.apps.voyages.Voyage.GeoLocation.BroadRegion`
+            """
+
+            name = models.CharField("Specific region (country or colony",
+                                               max_length=35)
+            broad_region = models.ForeignKey('BroadRegion')
+            code = models.IntegerField("Numeric code", max_length=5)
+
+        class Place(models.Model):
+            """
+            Place (port or location).
+            related to: :model:
+            `voyages.apps.voyages.Voyage.GeoLocation.Region`
+            """
+
+            name = models.CharField(max_length=35)
+            region = models.ForeignKey('SpecificRegion')
+            code = models.IntegerField("Numeric code", max_length=5)
+
+        broad_region = models.ForeignKey(Voyage.GeoLocation.BroadRegion)
+        region = models.ForeignKey(Voyage.GeoLocation.Region)
+        place = models.ForeignKey(Voyage.GeoLocation.Place)
 
 class Voyage(models.Model):
     """
     Information about voyages.
     """
-
-    class BroadRegion(models.Model):
-        """
-        Broad Regions (continents).
-        """
-
-        broad_region = models.CharField("Broad region", max_length=35)
-
-    class SpecificRegion(models.Model):
-        """
-        Specific Regions (countries or colonies).
-        related to: :model:`voyages.apps.voyages.Voyage.BroadRegion`
-        """
-
-        specific_region = models.CharField("Specific region (country or colony",
-                                           max_length=35)
-        broad = models.ForeignKey('BroadRegion')
-
-    class Place(models.Model):
-        """
-        Place (port or location).
-        related to: :model:`voyages.apps.voyages.Voyage.BroadRegion`
-        related to: :model:`voyages.apps.voyages.Voyage.SpecificRegion`
-        """
-        place_name = models.CharField(max_length=35)
-        broad_region = models.ForeignKey('BroadRegion')
-        specific_region = models.ForeignKey('SpecificRegion')
 
     class VoyageGroupings(models.Model):
         """
@@ -636,3 +651,7 @@ class Voyage(models.Model):
     voyage_sources = models.ManyToManyField\
             ('VoyageSources', through='SourceVoyageConnection',
              related_name='voyage_sources')
+
+    def sources_lists(self):
+        return ', '.join([a.voyage_sources for a in self.voyage_sources()])
+    voyage_sources.short_description = "Voyage Sources"
