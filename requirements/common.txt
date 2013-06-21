@@ -5,3 +5,5 @@ hurry.filesize
 django-haystack
 pysolr
 wsgiref
+mock
+
