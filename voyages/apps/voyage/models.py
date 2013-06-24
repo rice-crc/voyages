@@ -492,26 +492,25 @@ class VoyageDates(models.Model):
             ("Year of arrival at port of disembarkation",
              max_length=4, default=None, blank=True, null=True)
 
+class Captain(models.Model):
+    name = models.CharField("Captain's name", max_length=60)
+
+
+class CaptainEntry(models.Model):
+    CHOICES = ((1, "First"), (2, "Second"), (3, "Third"))
+    name = models.ForeignKey('Captain', related_name='captain_name')
+    voyage_captain = models.ForeignKey('VoyageCaptain',
+                                       related_name='voyage_captain')
+    captain_order = models.CharField(max_length=7,
+                                     choices = CHOICES)
 
 class VoyageCaptain(models.Model):
     """
     Voyage Captain and Crew.
     """
 
-    class Captain(models.Model):
-        """
-        Captain information (name).
-        """
-        name = models.CharField("Captain's name", max_length=60)
-
-
-    # Data variables
-    #first_captain = models.ManyToManyField \
-    #        (Captain, related_name="first_captain")
-    #second_captain = models.ManyToManyField \
-    #        (Captain, related_name="second captain")
-    #third_captain = models.ManyToManyField \
-    #        (Captain, related_name="third_captain")
+    captain = models.ManyToManyField("CaptainEntry",
+                                     related_name='captain')
 
 
 class VoyageCrew(models.Model):
