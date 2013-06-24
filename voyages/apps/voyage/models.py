@@ -140,7 +140,7 @@ class VoyageSources(models.Model):
     Representing the original variables SOURCEA, SOURCEB, SOURCEC and etc to SOURCER
     """
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=100, unique=True)
+                                 max_length=100, null=True, blank=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=1000, null=True, blank=True)
