@@ -98,30 +98,30 @@ class VoyageSlavesCharacteristics(models.Model):
              null=True, blank=True)
     num_slaves_intended_first_port = models.IntegerField \
             ("Number of slaves intended from first port of purchase "
-             "(SLINTEND)", null=True, blank=True)
+             "(SLINTEND)", null=True, blank=True, max_length=4)
     num_slaves_intended_second_port = models.IntegerField \
             ("Number of slaves intended from second port of purchase "
-             "(SLINTEND2)", null=True, blank=True)
+             "(SLINTEND2)", null=True, blank=True, max_length=4)
 
     num_slaves_carried_first_port = models.IntegerField \
             ("Number of slaves carried from first port of purchase "
-             "(NCAR13)", null=True, blank=True)
+             "(NCAR13)", null=True, blank=True, max_length=4)
     num_slaves_carried_second_port = models.IntegerField \
             ("Number of slaves carried from second port of purchase "
-             "(NCAR15)", null=True, blank=True)
+             "(NCAR15)", null=True, blank=True, max_length=4)
     num_slaves_carried_third_port = models.IntegerField \
             ("Number of slaves carried from third port of purchase "
-             "(NCAR17)", null=True, blank=True)
+             "(NCAR17)", null=True, blank=True, max_length=4)
 
     total_num_slaves_purchased = models.IntegerField \
-            ("Total slaves purchased (TSLAVESP)", null=True, blank=True)
+            ("Total slaves purchased (TSLAVESP)", null=True, blank=True, max_length=4)
     total_num_slaves_dep_last_slaving_port = models.IntegerField \
             ("Total slaves on board at departure from last slaving port "
-             "(TSLAVESD)", null=True, blank=True)
+             "(TSLAVESD)", null=True, blank=True, max_length=4)
 
     total_num_slaves_arr_first_port_embark = models.IntegerField \
             ("Total slaves arrived at first port of disembarkation "
-             "(SLAARRIV)", null=True, blank=True)
+             "(SLAARRIV)", null=True, blank=True, max_length=4)
 
     num_slaves_disembark_first_place = models.IntegerField \
             ("Number of slaves disembarked at first place "
@@ -140,10 +140,10 @@ class VoyageSources(models.Model):
     Representing the original variables SOURCEA, SOURCEB, SOURCEC and etc to SOURCER
     """
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=60, unique=True)
+                                 max_length=100, unique=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
-                                max_length=500, null=True, blank=True)
+                                max_length=1000, null=True, blank=True)
 
 
 class SourceVoyageConnection(models.Model):
