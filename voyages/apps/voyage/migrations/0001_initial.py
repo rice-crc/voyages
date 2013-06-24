@@ -103,9 +103,18 @@ class Migration(SchemaMigration):
         # Adding model 'Owner'
         db.create_table(u'voyage_owner', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name_of_owner', self.gf('django.db.models.fields.CharField')(max_length=40)),
+            ('name_of_owner', self.gf('django.db.models.fields.CharField')(max_length=60)),
         ))
         db.send_create_signal(u'voyage', ['Owner'])
+
+        # Adding model 'OwnerConnection'
+        db.create_table(u'voyage_ownerconnection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='owner', to=orm['voyage.Owner'])),
+            ('ship', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_ship', to=orm['voyage.VoyageShip'])),
+            ('captain_order', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
+        ))
+        db.send_create_signal(u'voyage', ['OwnerConnection'])
 
         # Adding model 'Nationality'
         db.create_table(u'voyage_nationality', (
@@ -134,31 +143,22 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageShip'
         db.create_table(u'voyage_voyageship', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('ship_name', self.gf('django.db.models.fields.CharField')(max_length=60)),
-            ('nationality_ship', self.gf('django.db.models.fields.related.ForeignKey')(related_name='nationality_ship', to=orm['voyage.Nationality'])),
-            ('tonnage', self.gf('django.db.models.fields.IntegerField')(max_length=4, blank=True)),
-            ('ton_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.TonType'])),
-            ('rig_of_vessel', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.RigOfVessel'])),
-            ('guns_mounted', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('year_of_construction', self.gf('django.db.models.fields.IntegerField')(max_length=4, blank=True)),
-            ('vessel_construction_place', self.gf('django.db.models.fields.related.ForeignKey')(related_name='vessel_construction_place', to=orm['voyage.Place'])),
-            ('vessel_construction_region', self.gf('django.db.models.fields.related.ForeignKey')(related_name='vessel_construction_region', to=orm['voyage.Region'])),
-            ('registered_year', self.gf('django.db.models.fields.IntegerField')(max_length=4, blank=True)),
-            ('registered_place', self.gf('django.db.models.fields.related.ForeignKey')(related_name='registered_place', to=orm['voyage.Place'])),
-            ('registered_region', self.gf('django.db.models.fields.related.ForeignKey')(related_name='registered_region', to=orm['voyage.Region'])),
-            ('owner_of_venture', self.gf('django.db.models.fields.related.ForeignKey')(related_name='owner_of_venture', to=orm['voyage.Owner'])),
-            ('imputed_nationality', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imputed_nationality', to=orm['voyage.Nationality'])),
-            ('tonnage_mod', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2, blank=True)),
+            ('ship_name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
+            ('nationality_ship', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='nationality_ship', null=True, to=orm['voyage.Nationality'])),
+            ('tonnage', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('ton_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.TonType'], null=True, blank=True)),
+            ('rig_of_vessel', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.RigOfVessel'], null=True, blank=True)),
+            ('guns_mounted', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('year_of_construction', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('vessel_construction_place', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='vessel_construction_place', null=True, to=orm['voyage.Place'])),
+            ('vessel_construction_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='vessel_construction_region', null=True, to=orm['voyage.Region'])),
+            ('registered_year', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('registered_place', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='registered_place', null=True, to=orm['voyage.Place'])),
+            ('registered_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='registered_region', null=True, to=orm['voyage.Region'])),
+            ('imputed_nationality', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imputed_nationality', null=True, to=orm['voyage.Nationality'])),
+            ('tonnage_mod', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=2, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageShip'])
-
-        # Adding M2M table for field owners on 'VoyageShip'
-        db.create_table(u'voyage_voyageship_owners', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('voyageship', models.ForeignKey(orm[u'voyage.voyageship'], null=False)),
-            ('owner', models.ForeignKey(orm[u'voyage.owner'], null=False))
-        ))
-        db.create_unique(u'voyage_voyageship_owners', ['voyageship_id', 'owner_id'])
 
         # Adding model 'ParticularOutcome'
         db.create_table(u'voyage_particularoutcome', (
@@ -203,55 +203,55 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageOutcome'
         db.create_table(u'voyage_voyageoutcome', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('particular_outcome', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.ParticularOutcome'])),
-            ('resistance', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Resistance'])),
-            ('outcome_slaves', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.SlavesOutcome'])),
-            ('vessel_captured_outcome', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.VesselCapturedOutcome'])),
-            ('outcome_owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.OwnerOutcome'])),
+            ('particular_outcome', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.ParticularOutcome'], null=True, blank=True)),
+            ('resistance', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Resistance'], null=True, blank=True)),
+            ('outcome_slaves', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.SlavesOutcome'], null=True, blank=True)),
+            ('vessel_captured_outcome', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.VesselCapturedOutcome'], null=True, blank=True)),
+            ('outcome_owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.OwnerOutcome'], null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageOutcome'])
 
         # Adding model 'VoyageItinerary'
         db.create_table(u'voyage_voyageitinerary', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('port_of_departure', self.gf('django.db.models.fields.related.ForeignKey')(related_name='port_of_departure', to=orm['voyage.Place'])),
-            ('int_first_port_emb', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_first_port_emb', to=orm['voyage.Place'])),
-            ('int_second_port_emb', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_second_port_emb', to=orm['voyage.Place'])),
-            ('int_first_region_purchase_slaves', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_first_region_purchase_slaves', to=orm['voyage.Region'])),
-            ('int_second_region_purchase_slaves', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_second_region_purchase_slaves', to=orm['voyage.Region'])),
-            ('int_first_port_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_first_port_dis', to=orm['voyage.Place'])),
-            ('int_second_port_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_second_port_dis', to=orm['voyage.Place'])),
-            ('int_first_region_slave_landing', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_first_region_slave_landing', to=orm['voyage.Region'])),
-            ('int_second_region_slave_landing', self.gf('django.db.models.fields.related.ForeignKey')(related_name='int_second_region_slave_landing', to=orm['voyage.Region'])),
-            ('ports_called_buying_slaves', self.gf('django.db.models.fields.IntegerField')(max_length=3, blank=True)),
-            ('first_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='first_place_slave_purchase', to=orm['voyage.Place'])),
-            ('second_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='second_place_slave_purchase', to=orm['voyage.Place'])),
-            ('third_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='third_place_slave_purchase', to=orm['voyage.Place'])),
-            ('first_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(related_name='first_region_slave_emb', to=orm['voyage.Region'])),
-            ('second_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(related_name='second_region_slave_emb', to=orm['voyage.Region'])),
-            ('third_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(related_name='third_region_slave_emb', to=orm['voyage.Region'])),
-            ('port_of_call_before_atl_crossing', self.gf('django.db.models.fields.related.ForeignKey')(related_name='port_of_call_before_atl_crossing', to=orm['voyage.Place'])),
-            ('number_of_ports_of_call', self.gf('django.db.models.fields.related.ForeignKey')(related_name='number_of_ports_of_call', to=orm['voyage.Place'])),
-            ('first_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(related_name='first_landing_place', to=orm['voyage.Place'])),
-            ('second_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(related_name='second_landing_place', to=orm['voyage.Place'])),
-            ('third_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(related_name='third_landing_place', to=orm['voyage.Place'])),
-            ('first_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(related_name='first_landing_region', to=orm['voyage.Region'])),
-            ('second_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(related_name='second_landing_region', to=orm['voyage.Region'])),
-            ('third_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(related_name='third_landing_region', to=orm['voyage.Region'])),
-            ('place_voyage_ended', self.gf('django.db.models.fields.related.ForeignKey')(related_name='place_voyage_ended', to=orm['voyage.Place'])),
-            ('region_of_return', self.gf('django.db.models.fields.related.ForeignKey')(related_name='region_of_return', to=orm['voyage.Region'])),
-            ('broad_region_of_return', self.gf('django.db.models.fields.related.ForeignKey')(related_name='broad_region_of_return', to=orm['voyage.Region'])),
-            ('imp_port_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_port_voyage_begin', to=orm['voyage.Place'])),
-            ('imp_region_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_region_voyage_begin', to=orm['voyage.Region'])),
-            ('imp_broad_region_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_broad_region_voyage_begin', to=orm['voyage.BroadRegion'])),
-            ('principal_place_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='principal_place_of_slave_purchase', to=orm['voyage.Place'])),
-            ('imp_principal_place_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_principal_place_of_slave_purchase', to=orm['voyage.Place'])),
-            ('imp_principal_region_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_principal_region_of_slave_purchase', to=orm['voyage.Region'])),
-            ('imp_broad_region_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_broad_region_of_slave_purchase', to=orm['voyage.BroadRegion'])),
-            ('principal_port_of_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='principal_port_of_slave_dis', to=orm['voyage.Place'])),
-            ('imp_principal_port_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_principal_port_slave_dis', to=orm['voyage.Place'])),
-            ('imp_principal_region_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_principal_region_slave_dis', to=orm['voyage.Region'])),
-            ('imp_broad_region_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='imp_broad_region_slave_dis', to=orm['voyage.BroadRegion'])),
+            ('port_of_departure', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='port_of_departure', null=True, to=orm['voyage.Place'])),
+            ('int_first_port_emb', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_first_port_emb', null=True, to=orm['voyage.Place'])),
+            ('int_second_port_emb', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_second_port_emb', null=True, to=orm['voyage.Place'])),
+            ('int_first_region_purchase_slaves', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_first_region_purchase_slaves', null=True, to=orm['voyage.Region'])),
+            ('int_second_region_purchase_slaves', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_second_region_purchase_slaves', null=True, to=orm['voyage.Region'])),
+            ('int_first_port_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_first_port_dis', null=True, to=orm['voyage.Place'])),
+            ('int_second_port_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_second_port_dis', null=True, to=orm['voyage.Place'])),
+            ('int_first_region_slave_landing', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_first_region_slave_landing', null=True, to=orm['voyage.Region'])),
+            ('int_second_region_slave_landing', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='int_second_region_slave_landing', null=True, to=orm['voyage.Region'])),
+            ('ports_called_buying_slaves', self.gf('django.db.models.fields.IntegerField')(max_length=3, null=True, blank=True)),
+            ('first_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='first_place_slave_purchase', null=True, to=orm['voyage.Place'])),
+            ('second_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='second_place_slave_purchase', null=True, to=orm['voyage.Place'])),
+            ('third_place_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='third_place_slave_purchase', null=True, to=orm['voyage.Place'])),
+            ('first_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='first_region_slave_emb', null=True, to=orm['voyage.Region'])),
+            ('second_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='second_region_slave_emb', null=True, to=orm['voyage.Region'])),
+            ('third_region_slave_emb', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='third_region_slave_emb', null=True, to=orm['voyage.Region'])),
+            ('port_of_call_before_atl_crossing', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='port_of_call_before_atl_crossing', null=True, to=orm['voyage.Place'])),
+            ('number_of_ports_of_call', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='number_of_ports_of_call', null=True, to=orm['voyage.Place'])),
+            ('first_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='first_landing_place', null=True, to=orm['voyage.Place'])),
+            ('second_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='second_landing_place', null=True, to=orm['voyage.Place'])),
+            ('third_landing_place', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='third_landing_place', null=True, to=orm['voyage.Place'])),
+            ('first_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='first_landing_region', null=True, to=orm['voyage.Region'])),
+            ('second_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='second_landing_region', null=True, to=orm['voyage.Region'])),
+            ('third_landing_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='third_landing_region', null=True, to=orm['voyage.Region'])),
+            ('place_voyage_ended', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='place_voyage_ended', null=True, to=orm['voyage.Place'])),
+            ('region_of_return', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='region_of_return', null=True, to=orm['voyage.Region'])),
+            ('broad_region_of_return', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='broad_region_of_return', null=True, to=orm['voyage.Region'])),
+            ('imp_port_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_port_voyage_begin', null=True, to=orm['voyage.Place'])),
+            ('imp_region_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_region_voyage_begin', null=True, to=orm['voyage.Region'])),
+            ('imp_broad_region_voyage_begin', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_broad_region_voyage_begin', null=True, to=orm['voyage.BroadRegion'])),
+            ('principal_place_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='principal_place_of_slave_purchase', null=True, to=orm['voyage.Place'])),
+            ('imp_principal_place_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_principal_place_of_slave_purchase', null=True, to=orm['voyage.Place'])),
+            ('imp_principal_region_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_principal_region_of_slave_purchase', null=True, to=orm['voyage.Region'])),
+            ('imp_broad_region_of_slave_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_broad_region_of_slave_purchase', null=True, to=orm['voyage.BroadRegion'])),
+            ('principal_port_of_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='principal_port_of_slave_dis', null=True, to=orm['voyage.Place'])),
+            ('imp_principal_port_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_principal_port_slave_dis', null=True, to=orm['voyage.Place'])),
+            ('imp_principal_region_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_principal_region_slave_dis', null=True, to=orm['voyage.Region'])),
+            ('imp_broad_region_slave_dis', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imp_broad_region_slave_dis', null=True, to=orm['voyage.BroadRegion'])),
         ))
         db.send_create_signal(u'voyage', ['VoyageItinerary'])
 
@@ -265,17 +265,17 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageDates'
         db.create_table(u'voyage_voyagedates', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('slave_purchase_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('vessel_left_port', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('first_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('arrival_at_second_place_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('third_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('departure_last_place_of_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('voyage_completed', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('imp_voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
-            ('imp_departed_africa', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=4, null=True, blank=True)),
-            ('imp_arrival_at_port_of_dis', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=4, null=True, blank=True)),
+            ('voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('slave_purchase_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('vessel_left_port', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('first_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('arrival_at_second_place_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('third_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('departure_last_place_of_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('voyage_completed', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('imp_voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
+            ('imp_departed_africa', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('imp_arrival_at_port_of_dis', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=4, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageDates'])
 
@@ -286,35 +286,59 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'voyage', ['Captain'])
 
-        # Adding model 'VoyageCaptainCrew'
-        db.create_table(u'voyage_voyagecaptaincrew', (
+        # Adding model 'CaptainEntry'
+        db.create_table(u'voyage_captainentry', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('crew_voyage_outset', self.gf('django.db.models.fields.IntegerField')(max_length=3, blank=True)),
-            ('crew_departure_last_port', self.gf('django.db.models.fields.IntegerField')(max_length=3, blank=True)),
-            ('crew_first_landing', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_return_begin', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_end_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('unspecified_crew', self.gf('django.db.models.fields.IntegerField')(max_length=3, blank=True)),
-            ('crew_died_before_first_trade', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_died_while_ship_african', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_died_middle_passge', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_died_in_americas', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_died_on_return_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
-            ('crew_died_complete_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=3, blank=True)),
-            ('crew_deserted', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
+            ('name', self.gf('django.db.models.fields.related.ForeignKey')(related_name='captain_name', to=orm['voyage.Captain'])),
+            ('voyage_captain', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_captain', to=orm['voyage.VoyageCaptain'])),
+            ('captain_order', self.gf('django.db.models.fields.CharField')(max_length=7)),
         ))
-        db.send_create_signal(u'voyage', ['VoyageCaptainCrew'])
+        db.send_create_signal(u'voyage', ['CaptainEntry'])
+
+        # Adding model 'VoyageCaptain'
+        db.create_table(u'voyage_voyagecaptain', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal(u'voyage', ['VoyageCaptain'])
+
+        # Adding M2M table for field captain on 'VoyageCaptain'
+        db.create_table(u'voyage_voyagecaptain_captain', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('voyagecaptain', models.ForeignKey(orm[u'voyage.voyagecaptain'], null=False)),
+            ('captainentry', models.ForeignKey(orm[u'voyage.captainentry'], null=False))
+        ))
+        db.create_unique(u'voyage_voyagecaptain_captain', ['voyagecaptain_id', 'captainentry_id'])
+
+        # Adding model 'VoyageCrew'
+        db.create_table(u'voyage_voyagecrew', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('crew_voyage_outset', self.gf('django.db.models.fields.IntegerField')(max_length=3, null=True, blank=True)),
+            ('crew_departure_last_port', self.gf('django.db.models.fields.IntegerField')(max_length=3, null=True, blank=True)),
+            ('crew_first_landing', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_return_begin', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_end_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('unspecified_crew', self.gf('django.db.models.fields.IntegerField')(max_length=3, null=True, blank=True)),
+            ('crew_died_before_first_trade', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_died_while_ship_african', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_died_middle_passge', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_died_in_americas', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_died_on_return_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+            ('crew_died_complete_voyage', self.gf('django.db.models.fields.IntegerField')(max_length=3, null=True, blank=True)),
+            ('crew_deserted', self.gf('django.db.models.fields.IntegerField')(max_length=2, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'voyage', ['VoyageCrew'])
 
         # Adding model 'Voyage'
         db.create_table(u'voyage_voyage', (
             ('voyage_id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('voyage_in_cd_rom', self.gf('django.db.models.fields.IntegerField')(max_length=1, blank=True)),
-            ('voyage_groupings', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageGroupings'], unique=True)),
-            ('voyage_ship', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageShip'], unique=True)),
-            ('voyage_outcome', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageOutcome'], unique=True)),
-            ('voyage_itinerary', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageItinerary'], unique=True)),
-            ('voyage_dates', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageDates'], unique=True)),
-            ('voyage_captain_crew', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageCaptainCrew'], unique=True, null=True, blank=True)),
+            ('voyage_in_cd_rom', self.gf('django.db.models.fields.IntegerField')(max_length=1, null=True, blank=True)),
+            ('voyage_groupings', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageGroupings'], unique=True, null=True, blank=True)),
+            ('voyage_ship', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageShip'], unique=True, null=True, blank=True)),
+            ('voyage_outcome', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageOutcome'], unique=True, null=True, blank=True)),
+            ('voyage_itinerary', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageItinerary'], unique=True, null=True, blank=True)),
+            ('voyage_dates', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageDates'], unique=True, null=True, blank=True)),
+            ('voyage_captain', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageCaptain'], unique=True, null=True, blank=True)),
+            ('voyage_crew', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageCrew'], unique=True, null=True, blank=True)),
             ('voyage_slave_characteristics', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageSlavesCharacteristics'], unique=True, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['Voyage'])
@@ -348,6 +372,9 @@ class Migration(SchemaMigration):
         # Deleting model 'Owner'
         db.delete_table(u'voyage_owner')
 
+        # Deleting model 'OwnerConnection'
+        db.delete_table(u'voyage_ownerconnection')
+
         # Deleting model 'Nationality'
         db.delete_table(u'voyage_nationality')
 
@@ -359,9 +386,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'VoyageShip'
         db.delete_table(u'voyage_voyageship')
-
-        # Removing M2M table for field owners on 'VoyageShip'
-        db.delete_table('voyage_voyageship_owners')
 
         # Deleting model 'ParticularOutcome'
         db.delete_table(u'voyage_particularoutcome')
@@ -393,8 +417,17 @@ class Migration(SchemaMigration):
         # Deleting model 'Captain'
         db.delete_table(u'voyage_captain')
 
-        # Deleting model 'VoyageCaptainCrew'
-        db.delete_table(u'voyage_voyagecaptaincrew')
+        # Deleting model 'CaptainEntry'
+        db.delete_table(u'voyage_captainentry')
+
+        # Deleting model 'VoyageCaptain'
+        db.delete_table(u'voyage_voyagecaptain')
+
+        # Removing M2M table for field captain on 'VoyageCaptain'
+        db.delete_table('voyage_voyagecaptain_captain')
+
+        # Deleting model 'VoyageCrew'
+        db.delete_table(u'voyage_voyagecrew')
 
         # Deleting model 'Voyage'
         db.delete_table(u'voyage_voyage')
@@ -411,6 +444,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Captain'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '60'})
+        },
+        u'voyage.captainentry': {
+            'Meta': {'object_name': 'CaptainEntry'},
+            'captain_order': ('django.db.models.fields.CharField', [], {'max_length': '7'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'captain_name'", 'to': u"orm['voyage.Captain']"}),
+            'voyage_captain': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_captain'", 'to': u"orm['voyage.VoyageCaptain']"})
         },
         u'voyage.groupcomposition': {
             'Meta': {'object_name': 'GroupComposition'},
@@ -439,7 +479,14 @@ class Migration(SchemaMigration):
         u'voyage.owner': {
             'Meta': {'object_name': 'Owner'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name_of_owner': ('django.db.models.fields.CharField', [], {'max_length': '40'})
+            'name_of_owner': ('django.db.models.fields.CharField', [], {'max_length': '60'})
+        },
+        u'voyage.ownerconnection': {
+            'Meta': {'object_name': 'OwnerConnection'},
+            'captain_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'owner'", 'to': u"orm['voyage.Owner']"}),
+            'ship': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_ship'", 'to': u"orm['voyage.VoyageShip']"})
         },
         u'voyage.owneroutcome': {
             'Meta': {'object_name': 'OwnerOutcome'},
@@ -508,48 +555,54 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyage': {
             'Meta': {'object_name': 'Voyage'},
-            'voyage_captain_crew': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCaptainCrew']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'voyage_dates': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageDates']", 'unique': 'True'}),
-            'voyage_groupings': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageGroupings']", 'unique': 'True'}),
+            'voyage_captain': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCaptain']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_crew': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCrew']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_dates': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageDates']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_groupings': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageGroupings']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'voyage_in_cd_rom': ('django.db.models.fields.IntegerField', [], {'max_length': '1', 'blank': 'True'}),
-            'voyage_itinerary': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageItinerary']", 'unique': 'True'}),
-            'voyage_outcome': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageOutcome']", 'unique': 'True'}),
-            'voyage_ship': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageShip']", 'unique': 'True'}),
+            'voyage_in_cd_rom': ('django.db.models.fields.IntegerField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'voyage_itinerary': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageItinerary']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_outcome': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageOutcome']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_ship': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageShip']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_slave_characteristics': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageSlavesCharacteristics']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_sources': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'voyage_sources'", 'to': u"orm['voyage.VoyageSources']", 'through': u"orm['voyage.SourceVoyageConnection']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'})
         },
-        u'voyage.voyagecaptaincrew': {
-            'Meta': {'object_name': 'VoyageCaptainCrew'},
-            'crew_departure_last_port': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'}),
-            'crew_deserted': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_died_before_first_trade': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_died_complete_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'}),
-            'crew_died_in_americas': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_died_middle_passge': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_died_on_return_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_died_while_ship_african': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_end_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_first_landing': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_return_begin': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
-            'crew_voyage_outset': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'}),
+        u'voyage.voyagecaptain': {
+            'Meta': {'object_name': 'VoyageCaptain'},
+            'captain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'captain'", 'symmetrical': 'False', 'to': u"orm['voyage.CaptainEntry']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        u'voyage.voyagecrew': {
+            'Meta': {'object_name': 'VoyageCrew'},
+            'crew_departure_last_port': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
+            'crew_deserted': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_died_before_first_trade': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_died_complete_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
+            'crew_died_in_americas': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_died_middle_passge': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_died_on_return_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_died_while_ship_african': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_end_voyage': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_first_landing': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_return_begin': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'crew_voyage_outset': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'unspecified_crew': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'})
+            'unspecified_crew': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyagedates': {
             'Meta': {'object_name': 'VoyageDates'},
-            'arrival_at_second_place_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'departure_last_place_of_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'first_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'arrival_at_second_place_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'departure_last_place_of_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'first_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imp_arrival_at_port_of_dis': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'imp_departed_africa': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'imp_voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'slave_purchase_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'third_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'vessel_left_port': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'voyage_completed': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
+            'imp_arrival_at_port_of_dis': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'imp_departed_africa': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'imp_voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'slave_purchase_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'third_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'vessel_left_port': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'voyage_completed': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyagegroupings': {
             'Meta': {'object_name': 'VoyageGroupings'},
@@ -558,74 +611,73 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyageitinerary': {
             'Meta': {'object_name': 'VoyageItinerary'},
-            'broad_region_of_return': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'broad_region_of_return'", 'to': u"orm['voyage.Region']"}),
-            'first_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'first_landing_place'", 'to': u"orm['voyage.Place']"}),
-            'first_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'first_landing_region'", 'to': u"orm['voyage.Region']"}),
-            'first_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'first_place_slave_purchase'", 'to': u"orm['voyage.Place']"}),
-            'first_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'first_region_slave_emb'", 'to': u"orm['voyage.Region']"}),
+            'broad_region_of_return': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'broad_region_of_return'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'first_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'first_landing_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'first_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'first_landing_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'first_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'first_place_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'first_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'first_region_slave_emb'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imp_broad_region_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_broad_region_of_slave_purchase'", 'to': u"orm['voyage.BroadRegion']"}),
-            'imp_broad_region_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_broad_region_slave_dis'", 'to': u"orm['voyage.BroadRegion']"}),
-            'imp_broad_region_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_broad_region_voyage_begin'", 'to': u"orm['voyage.BroadRegion']"}),
-            'imp_port_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_port_voyage_begin'", 'to': u"orm['voyage.Place']"}),
-            'imp_principal_place_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_principal_place_of_slave_purchase'", 'to': u"orm['voyage.Place']"}),
-            'imp_principal_port_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_principal_port_slave_dis'", 'to': u"orm['voyage.Place']"}),
-            'imp_principal_region_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_principal_region_of_slave_purchase'", 'to': u"orm['voyage.Region']"}),
-            'imp_principal_region_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_principal_region_slave_dis'", 'to': u"orm['voyage.Region']"}),
-            'imp_region_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imp_region_voyage_begin'", 'to': u"orm['voyage.Region']"}),
-            'int_first_port_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_first_port_dis'", 'to': u"orm['voyage.Place']"}),
-            'int_first_port_emb': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_first_port_emb'", 'to': u"orm['voyage.Place']"}),
-            'int_first_region_purchase_slaves': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_first_region_purchase_slaves'", 'to': u"orm['voyage.Region']"}),
-            'int_first_region_slave_landing': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_first_region_slave_landing'", 'to': u"orm['voyage.Region']"}),
-            'int_second_port_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_second_port_dis'", 'to': u"orm['voyage.Place']"}),
-            'int_second_port_emb': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_second_port_emb'", 'to': u"orm['voyage.Place']"}),
-            'int_second_region_purchase_slaves': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_second_region_purchase_slaves'", 'to': u"orm['voyage.Region']"}),
-            'int_second_region_slave_landing': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'int_second_region_slave_landing'", 'to': u"orm['voyage.Region']"}),
-            'number_of_ports_of_call': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'number_of_ports_of_call'", 'to': u"orm['voyage.Place']"}),
-            'place_voyage_ended': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'place_voyage_ended'", 'to': u"orm['voyage.Place']"}),
-            'port_of_call_before_atl_crossing': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'port_of_call_before_atl_crossing'", 'to': u"orm['voyage.Place']"}),
-            'port_of_departure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'port_of_departure'", 'to': u"orm['voyage.Place']"}),
-            'ports_called_buying_slaves': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'}),
-            'principal_place_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'principal_place_of_slave_purchase'", 'to': u"orm['voyage.Place']"}),
-            'principal_port_of_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'principal_port_of_slave_dis'", 'to': u"orm['voyage.Place']"}),
-            'region_of_return': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'region_of_return'", 'to': u"orm['voyage.Region']"}),
-            'second_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'second_landing_place'", 'to': u"orm['voyage.Place']"}),
-            'second_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'second_landing_region'", 'to': u"orm['voyage.Region']"}),
-            'second_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'second_place_slave_purchase'", 'to': u"orm['voyage.Place']"}),
-            'second_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'second_region_slave_emb'", 'to': u"orm['voyage.Region']"}),
-            'third_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'third_landing_place'", 'to': u"orm['voyage.Place']"}),
-            'third_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'third_landing_region'", 'to': u"orm['voyage.Region']"}),
-            'third_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'third_place_slave_purchase'", 'to': u"orm['voyage.Place']"}),
-            'third_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'third_region_slave_emb'", 'to': u"orm['voyage.Region']"})
+            'imp_broad_region_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_broad_region_of_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.BroadRegion']"}),
+            'imp_broad_region_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_broad_region_slave_dis'", 'null': 'True', 'to': u"orm['voyage.BroadRegion']"}),
+            'imp_broad_region_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_broad_region_voyage_begin'", 'null': 'True', 'to': u"orm['voyage.BroadRegion']"}),
+            'imp_port_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_port_voyage_begin'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'imp_principal_place_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_principal_place_of_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'imp_principal_port_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_principal_port_slave_dis'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'imp_principal_region_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_principal_region_of_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'imp_principal_region_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_principal_region_slave_dis'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'imp_region_voyage_begin': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imp_region_voyage_begin'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'int_first_port_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_first_port_dis'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'int_first_port_emb': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_first_port_emb'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'int_first_region_purchase_slaves': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_first_region_purchase_slaves'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'int_first_region_slave_landing': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_first_region_slave_landing'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'int_second_port_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_second_port_dis'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'int_second_port_emb': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_second_port_emb'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'int_second_region_purchase_slaves': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_second_region_purchase_slaves'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'int_second_region_slave_landing': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'int_second_region_slave_landing'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'number_of_ports_of_call': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'number_of_ports_of_call'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'place_voyage_ended': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'place_voyage_ended'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'port_of_call_before_atl_crossing': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'port_of_call_before_atl_crossing'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'port_of_departure': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'port_of_departure'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'ports_called_buying_slaves': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
+            'principal_place_of_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'principal_place_of_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'principal_port_of_slave_dis': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'principal_port_of_slave_dis'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'region_of_return': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'region_of_return'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'second_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'second_landing_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'second_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'second_landing_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'second_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'second_place_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'second_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'second_region_slave_emb'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'third_landing_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'third_landing_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'third_landing_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'third_landing_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'third_place_slave_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'third_place_slave_purchase'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'third_region_slave_emb': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'third_region_slave_emb'", 'null': 'True', 'to': u"orm['voyage.Region']"})
         },
         u'voyage.voyageoutcome': {
             'Meta': {'object_name': 'VoyageOutcome'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'outcome_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.OwnerOutcome']"}),
-            'outcome_slaves': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.SlavesOutcome']"}),
-            'particular_outcome': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.ParticularOutcome']"}),
-            'resistance': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Resistance']"}),
-            'vessel_captured_outcome': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.VesselCapturedOutcome']"})
+            'outcome_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.OwnerOutcome']", 'null': 'True', 'blank': 'True'}),
+            'outcome_slaves': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.SlavesOutcome']", 'null': 'True', 'blank': 'True'}),
+            'particular_outcome': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.ParticularOutcome']", 'null': 'True', 'blank': 'True'}),
+            'resistance': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Resistance']", 'null': 'True', 'blank': 'True'}),
+            'vessel_captured_outcome': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.VesselCapturedOutcome']", 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyageship': {
             'Meta': {'object_name': 'VoyageShip'},
-            'guns_mounted': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
+            'guns_mounted': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imputed_nationality': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imputed_nationality'", 'to': u"orm['voyage.Nationality']"}),
-            'nationality_ship': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'nationality_ship'", 'to': u"orm['voyage.Nationality']"}),
-            'owner_of_venture': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'owner_of_venture'", 'to': u"orm['voyage.Owner']"}),
-            'owners': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'owners'", 'symmetrical': 'False', 'to': u"orm['voyage.Owner']"}),
-            'registered_place': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'registered_place'", 'to': u"orm['voyage.Place']"}),
-            'registered_region': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'registered_region'", 'to': u"orm['voyage.Region']"}),
-            'registered_year': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'blank': 'True'}),
-            'rig_of_vessel': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.RigOfVessel']"}),
-            'ship_name': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
-            'ton_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.TonType']"}),
-            'tonnage': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'blank': 'True'}),
-            'tonnage_mod': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
-            'vessel_construction_place': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'vessel_construction_place'", 'to': u"orm['voyage.Place']"}),
-            'vessel_construction_region': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'vessel_construction_region'", 'to': u"orm['voyage.Region']"}),
-            'year_of_construction': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'blank': 'True'})
+            'imputed_nationality': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'imputed_nationality'", 'null': 'True', 'to': u"orm['voyage.Nationality']"}),
+            'nationality_ship': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'nationality_ship'", 'null': 'True', 'to': u"orm['voyage.Nationality']"}),
+            'owners_of_venture': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'owners_of_venture'", 'to': u"orm['voyage.Owner']", 'through': u"orm['voyage.OwnerConnection']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'}),
+            'registered_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'registered_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'registered_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'registered_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'registered_year': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'rig_of_vessel': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.RigOfVessel']", 'null': 'True', 'blank': 'True'}),
+            'ship_name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'ton_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.TonType']", 'null': 'True', 'blank': 'True'}),
+            'tonnage': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'tonnage_mod': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
+            'vessel_construction_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'vessel_construction_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'vessel_construction_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'vessel_construction_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'year_of_construction': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyageslavescharacteristics': {
             'Meta': {'object_name': 'VoyageSlavesCharacteristics'},
