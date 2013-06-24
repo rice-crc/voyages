@@ -189,10 +189,10 @@ class Place(models.Model):
     region = models.ForeignKey('Region')
     code = models.IntegerField("Numeric code", max_length=5)
     longtitude = models.DecimalField("Longtitude of point",
-                                     max_length=7, decimal_places=3,
+                                     max_length=7, max_digits=3, decimal_places=3,
                                      blank=True)
     latitude = models.DecimalField("Latitude of point",
-                                     max_length=7, decimal_places=3,
+                                     max_length=7, max_digits=3, decimal_places=3,
                                      blank=True)
 
 
@@ -243,7 +243,7 @@ class VoyageShip(models.Model):
 
     # Data variables
     ship_name = models.CharField("Name of vessel", max_length=60)
-    nationality = models.ForeignKey('Nationality', related_name="nationality")
+    nationality_ship = models.ForeignKey('Nationality', related_name="nationality_ship")
     tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
                                   blank=True)
     ton_type = models.ForeignKey('TonType')
@@ -262,8 +262,8 @@ class VoyageShip(models.Model):
             ('Place', related_name="registered_place")
     registered_region = models.ForeignKey \
             ('Region', related_name="registered_region")
-    owner_of_venture = models.ForeignKey('Owner')
-    owners = models.ManyToManyField('Owner')
+    owner_of_venture = models.ForeignKey('Owner', related_name='owner_of_venture')
+    owners = models.ManyToManyField('Owner', related_name='owners')
 
     # Imputed variables
     imputed_nationality = models.ForeignKey\
@@ -455,117 +455,42 @@ class VoyageDates(models.Model):
         day = models.IntegerField()
 
     # Data variables
-    # Integer variables
-    day_voyage_began = models.IntegerField \
-            ("Day that voyage began", max_length=2, blank=True)
-    month_voyage_began = models.IntegerField \
-            ("Month that voyage began", max_length=2, blank=True)
-    year_voyage_began = models.IntegerField \
-            ("Year that voyage began", max_length=4, blank=True)
-    day_slave_purchase_began = models.IntegerField \
-            ("Day that slave purchase began", max_length=2, blank=True)
-    month_slave_purchase_began = models.IntegerField \
-            ("Month that slave purchase began", max_length=2, blank=True)
-    year_slave_purchase_began = models.IntegerField \
-            ("Year that slave purchase began", max_length=4, blank=True)
-    day_vessel_left_port = models.IntegerField \
-            ("Day that vessel left last slaving port", max_length=2,
-             blank=True)
-    month_vessel_left_port = models.IntegerField \
-            ("Month that vessel left last slaving port", max_length=2,
-             blank=True)
-    year_vessel_left_port = models.IntegerField \
-            ("Year that vessel left last slaving port", max_length=4,
-             blank=True)
-    day_first_dis_of_slaves = models.IntegerField \
-            ("Day of first disembarkation of slaves", max_length=2,
-             blank=True)
-    month_first_dis_of_slaves = models.IntegerField \
-            ("Month of first disembarkation of slaves", max_length=2,
-             blank=True)
-    year_first_dis_of_slaves = models.IntegerField \
-            ("Year of first disembarkation of slaves", max_length=4,
-             blank=True)
-    day_arrival_at_second_place_landing = models.IntegerField \
-            ("Day of arrival at second place of landing", max_length=2,
-             blank=True)
-    month_arrival_at_second_place_landing = models.IntegerField \
-            ("Month of arrival at second place of landing", max_length=2,
-             blank=True)
-    year_arrival_at_second_place_landing = models.IntegerField \
-            ("Year of arrival at second place of landing", max_length=4,
-             blank=True)
-    day_third_dis_of_slaves = models.IntegerField \
-            ("Day of third disembarkation of slaves", max_length=2,
-             blank=True)
-    month_third_dis_of_slaves = models.IntegerField \
-            ("Month of third disembarkation of slaves", max_length=2,
-             blank=True)
-    year_third_dis_of_slaves = models.IntegerField \
-            ("Year of third disembarkation of slaves", max_length=4,
-             blank=True)
-    day_departure_last_place_of_landing = models.IntegerField \
-            ("Day of departure from last place of landing", max_length=2,
-             blank=True)
-    month_departure_last_place_of_landing = models.IntegerField \
-            ("Month of departure from last place of landing", max_length=2,
-             blank=True)
-    year_departure_last_place_of_landing = models.IntegerField \
-            ("Year of departure from last place of landing", max_length=4,
-             blank=True)
-    day_voyage_completed = models.IntegerField \
-            ("Day on which slave voyage completed", max_length=2,
-             blank=True)
-    month_voyage_completed = models.IntegerField \
-            ("Month on which slave voyage completed", max_length=2,
-             blank=True)
-    year_voyage_completed = models.IntegerField \
-            ("Year on which slave voyage completed", max_length=4,
-             blank=True)
-
     # Date variables
-    voyage_began = models.DateField("Date that voyage began")
-    slave_purchase_began = models.DateField \
-            ("Date that slave purchase began")
-    vessel_left_port = models.DateField \
-            ("Date that vessel left last slaving port")
-    first_dis_of_slaves = models.DateField \
-            ("Date of first disembarkation of slaves")
-    arrival_at_second_place_landing = models.DateField \
-            ("Date of arrival at second place of landing")
-    third_dis_of_slaves = models.DateField \
-            ("Date of third disembarkation of slaves")
-    departure_last_place_of_landing = models.DateField \
-            ("Date of departure from last place of landing")
-    voyage_completed = models.DateField \
-            ("Date on which slave voyage completed")
+    voyage_began = models.CommaSeparatedIntegerField\
+            ("Date that voyage began", max_length=10,
+             default=None, blank=True, null=True)
+    slave_purchase_began = models.CommaSeparatedIntegerField\
+            ("Date that slave purchase began", max_length=10,
+             default=None, blank=True, null=True)
+    vessel_left_port = models.CommaSeparatedIntegerField\
+            ("Date that vessel left last slaving port", max_length=10,
+             default=None, blank=True, null=True)
+    first_dis_of_slaves = models.CommaSeparatedIntegerField\
+            ("Date of first disembarkation of slaves", max_length=10,
+             default=None, blank=True, null=True)
+    arrival_at_second_place_landing = models.CommaSeparatedIntegerField\
+            ("Date of arrival at second place of landing", max_length=10,
+             default=None, blank=True, null=True)
+    third_dis_of_slaves = models.CommaSeparatedIntegerField\
+            ("Date of third disembarkation of slaves", max_length=10,
+             default=None, blank=True, null=True)
+    departure_last_place_of_landing = models.CommaSeparatedIntegerField\
+            ("Date of departure from last place of landing", max_length=10,
+             default=None, blank=True, null=True)
+    voyage_completed = models.CommaSeparatedIntegerField\
+            ("Date on which slave voyage completed", max_length=10,
+             default=None, blank=True, null=True)
 
     # Imputed variables
-    imp_voyage_began = models.IntegerField \
-            ("Year voyage began", max_length=4, blank=True)
+    imp_voyage_began = models.CommaSeparatedIntegerField\
+            ("Year voyage began", max_length=10,
+             default=None, blank=True, null=True)
     imp_departed_africa = models.IntegerField \
-            ("Year departed Africa", max_length=4, blank=True)
-    imp_arrival_at_port_of_dis = models.IntegerField \
+            ("Year departed Africa", max_length=4,
+             default=None, blank=True, null=True)
+    imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
             ("Year of arrival at port of disembarkation",
-             max_length=4, blank=True)
-    five_year_period = models.IntegerField \
-            ("5-year period in which voyage occurred",
-             max_length=3, blank=True)
-    decade_of_voyage = models.IntegerField \
-            ("Decade in which voyage occurred",
-             max_length=3, blank=True)
-    quarter_century_of_voyage = models.IntegerField \
-            ("Quarter-century in which voyage occurred",
-             max_length=3, blank=True)
-    century_of_voyage = models.IntegerField \
-            ("Century in which voyage occurred",
-             max_length=4, blank=True)
-    voyage_length_home_to_dis = models.IntegerField \
-            ("Voyage length from home port to disembarkation (days)",
-             max_length=5, blank=True)
-    voyage_length_africa_to_dis = models.IntegerField \
-            ("Voyage length from leaving Africa to disembarkation (days)",
-             max_length=5, blank=True)
+             max_length=4, default=None, blank=True, null=True)
 
 
 class VoyageCaptainCrew(models.Model):
