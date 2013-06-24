@@ -1,6 +1,8 @@
 from voyages.apps.voyage.models import *
 from datetime import datetime
 
+
+# Load the voyage csv to the database
 input_file = open('voyage-database.csv', 'r')
 
 first_line = input_file.readline()
