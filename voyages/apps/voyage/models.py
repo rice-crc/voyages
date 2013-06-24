@@ -493,7 +493,7 @@ class VoyageDates(models.Model):
              max_length=4, default=None, blank=True, null=True)
 
 
-class VoyageCaptainCrew(models.Model):
+class VoyageCaptain(models.Model):
     """
     Voyage Captain and Crew.
     """
@@ -504,14 +504,17 @@ class VoyageCaptainCrew(models.Model):
         """
         name = models.CharField("Captain's name", max_length=60)
 
-    # Data variables
-    first_captain = models.ManyToManyField \
-            (Captain, related_name="first_captain")
-    second_captain = models.ManyToManyField \
-            (Captain, related_name="second captain")
-    third_captain = models.ManyToManyField \
-            (Captain, related_name="third_captain")
 
+    # Data variables
+    #first_captain = models.ManyToManyField \
+    #        (Captain, related_name="first_captain")
+    #second_captain = models.ManyToManyField \
+    #        (Captain, related_name="second captain")
+    #third_captain = models.ManyToManyField \
+    #        (Captain, related_name="third_captain")
+
+
+class VoyageCrew(models.Model):
     crew_voyage_outset = models.IntegerField("Crew at voyage outset",
                                              max_length=3, blank=True)
     crew_departure_last_port = models.IntegerField \
@@ -568,9 +571,12 @@ class Voyage(models.Model):
             ('VoyageItinerary', help_text="Voyage Itinerary")
     voyage_dates = models.OneToOneField \
             ('VoyageDates', help_text="Voyage Dates")
-    voyage_captain_crew = models.OneToOneField \
-            ("VoyageCaptainCrew", help_text="Captain and Crew",
-             blank=True, null=True,)
+    voyage_captain = models.OneToOneField \
+            ("VoyageCaptain", help_text="Voyage Captain",
+             blank=True, null=True)
+    voyage_crew = models.OneToOneField\
+            ("VoyageCrew", help_text="Voyage Crew",
+             blank=True, null=True)
 
     voyage_slave_characteristics = models.OneToOneField \
             ('VoyageSlavesCharacteristics',
