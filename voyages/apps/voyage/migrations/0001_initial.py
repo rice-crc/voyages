@@ -265,23 +265,17 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageDates'
         db.create_table(u'voyage_voyagedates', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('slave_purchase_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('vessel_left_port', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('first_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('arrival_at_second_place_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('third_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('departure_last_place_of_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('voyage_completed', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10)),
-            ('imp_voyage_began', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=4, null=True, blank=True)),
+            ('voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('slave_purchase_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('vessel_left_port', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('first_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('arrival_at_second_place_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('third_dis_of_slaves', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('departure_last_place_of_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('voyage_completed', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
+            ('imp_voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=10, null=True, blank=True)),
             ('imp_departed_africa', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=4, null=True, blank=True)),
-            ('imp_arrival_at_port_of_dis', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=4, null=True, blank=True)),
-            ('five_year_period', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=3, null=True, blank=True)),
-            ('decade_of_voyage', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=3, null=True, blank=True)),
-            ('quarter_century_of_voyage', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=3, null=True, blank=True)),
-            ('century_of_voyage', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=4, null=True, blank=True)),
-            ('voyage_length_home_to_dis', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=5, null=True, blank=True)),
-            ('voyage_length_africa_to_dis', self.gf('django.db.models.fields.IntegerField')(default=None, max_length=5, null=True, blank=True)),
+            ('imp_arrival_at_port_of_dis', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(default=None, max_length=4, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageDates'])
 
@@ -310,30 +304,6 @@ class Migration(SchemaMigration):
             ('crew_deserted', self.gf('django.db.models.fields.IntegerField')(max_length=2, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageCaptainCrew'])
-
-        # Adding M2M table for field first_captain on 'VoyageCaptainCrew'
-        db.create_table(u'voyage_voyagecaptaincrew_first_captain', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('voyagecaptaincrew', models.ForeignKey(orm[u'voyage.voyagecaptaincrew'], null=False)),
-            ('captain', models.ForeignKey(orm[u'voyage.captain'], null=False))
-        ))
-        db.create_unique(u'voyage_voyagecaptaincrew_first_captain', ['voyagecaptaincrew_id', 'captain_id'])
-
-        # Adding M2M table for field second_captain on 'VoyageCaptainCrew'
-        db.create_table(u'voyage_voyagecaptaincrew_second_captain', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('voyagecaptaincrew', models.ForeignKey(orm[u'voyage.voyagecaptaincrew'], null=False)),
-            ('captain', models.ForeignKey(orm[u'voyage.captain'], null=False))
-        ))
-        db.create_unique(u'voyage_voyagecaptaincrew_second_captain', ['voyagecaptaincrew_id', 'captain_id'])
-
-        # Adding M2M table for field third_captain on 'VoyageCaptainCrew'
-        db.create_table(u'voyage_voyagecaptaincrew_third_captain', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('voyagecaptaincrew', models.ForeignKey(orm[u'voyage.voyagecaptaincrew'], null=False)),
-            ('captain', models.ForeignKey(orm[u'voyage.captain'], null=False))
-        ))
-        db.create_unique(u'voyage_voyagecaptaincrew_third_captain', ['voyagecaptaincrew_id', 'captain_id'])
 
         # Adding model 'Voyage'
         db.create_table(u'voyage_voyage', (
@@ -425,15 +395,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'VoyageCaptainCrew'
         db.delete_table(u'voyage_voyagecaptaincrew')
-
-        # Removing M2M table for field first_captain on 'VoyageCaptainCrew'
-        db.delete_table('voyage_voyagecaptaincrew_first_captain')
-
-        # Removing M2M table for field second_captain on 'VoyageCaptainCrew'
-        db.delete_table('voyage_voyagecaptaincrew_second_captain')
-
-        # Removing M2M table for field third_captain on 'VoyageCaptainCrew'
-        db.delete_table('voyage_voyagecaptaincrew_third_captain')
 
         # Deleting model 'Voyage'
         db.delete_table(u'voyage_voyage')
@@ -572,32 +533,23 @@ class Migration(SchemaMigration):
             'crew_first_landing': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
             'crew_return_begin': ('django.db.models.fields.IntegerField', [], {'max_length': '2', 'blank': 'True'}),
             'crew_voyage_outset': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'}),
-            'first_captain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'first_captain'", 'symmetrical': 'False', 'to': u"orm['voyage.Captain']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'second_captain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'second captain'", 'symmetrical': 'False', 'to': u"orm['voyage.Captain']"}),
-            'third_captain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'third_captain'", 'symmetrical': 'False', 'to': u"orm['voyage.Captain']"}),
             'unspecified_crew': ('django.db.models.fields.IntegerField', [], {'max_length': '3', 'blank': 'True'})
         },
         u'voyage.voyagedates': {
             'Meta': {'object_name': 'VoyageDates'},
-            'arrival_at_second_place_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'century_of_voyage': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'decade_of_voyage': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '3', 'null': 'True', 'blank': 'True'}),
-            'departure_last_place_of_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'first_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'five_year_period': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '3', 'null': 'True', 'blank': 'True'}),
+            'arrival_at_second_place_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'departure_last_place_of_landing': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'first_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imp_arrival_at_port_of_dis': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'imp_arrival_at_port_of_dis': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'imp_departed_africa': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'imp_voyage_began': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'quarter_century_of_voyage': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '3', 'null': 'True', 'blank': 'True'}),
-            'slave_purchase_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'third_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'vessel_left_port': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'voyage_completed': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10'}),
-            'voyage_length_africa_to_dis': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '5', 'null': 'True', 'blank': 'True'}),
-            'voyage_length_home_to_dis': ('django.db.models.fields.IntegerField', [], {'default': 'None', 'max_length': '5', 'null': 'True', 'blank': 'True'})
+            'imp_voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'slave_purchase_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'third_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'vessel_left_port': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'voyage_completed': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyagegroupings': {
             'Meta': {'object_name': 'VoyageGroupings'},
