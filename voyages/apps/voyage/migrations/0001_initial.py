@@ -34,14 +34,14 @@ class Migration(SchemaMigration):
             ('disembarked_second_place', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='disembarked_second_place', unique=True, null=True, to=orm['voyage.GroupComposition'])),
             ('slave_deaths_before_africa', self.gf('django.db.models.fields.IntegerField')()),
             ('slave_deaths_between_africa_america', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_slaves_intended_first_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_slaves_intended_second_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_slaves_carried_first_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_slaves_carried_second_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_slaves_carried_third_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('total_num_slaves_purchased', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('total_num_slaves_dep_last_slaving_port', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('total_num_slaves_arr_first_port_embark', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_slaves_intended_first_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('num_slaves_intended_second_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('num_slaves_carried_first_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('num_slaves_carried_second_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('num_slaves_carried_third_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('total_num_slaves_purchased', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('total_num_slaves_dep_last_slaving_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('total_num_slaves_arr_first_port_embark', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('num_slaves_disembark_first_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('num_slaves_disembark_second_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('num_slaves_disembark_third_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
@@ -51,8 +51,8 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageSources'
         db.create_table(u'voyage_voyagesources', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('short_ref', self.gf('django.db.models.fields.CharField')(unique=True, max_length=60)),
-            ('full_ref', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('short_ref', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('full_ref', self.gf('django.db.models.fields.CharField')(max_length=1000, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['VoyageSources'])
 
@@ -688,25 +688,25 @@ class Migration(SchemaMigration):
             'embarked_second_port_purchase': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'embarked_second_port_purchase'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
             'embarked_third_port_purchase': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'embarked_third_port_purchase'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'num_slaves_carried_first_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_slaves_carried_second_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_slaves_carried_third_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_slaves_carried_first_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'num_slaves_carried_second_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'num_slaves_carried_third_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'num_slaves_disembark_first_place': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_slaves_disembark_second_place': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_slaves_disembark_third_place': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_slaves_intended_first_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_slaves_intended_second_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_slaves_intended_first_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'num_slaves_intended_second_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'slave_deaths_before_africa': ('django.db.models.fields.IntegerField', [], {}),
             'slave_deaths_between_africa_america': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'total_num_slaves_arr_first_port_embark': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'total_num_slaves_dep_last_slaving_port': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'total_num_slaves_purchased': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+            'total_num_slaves_arr_first_port_embark': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'total_num_slaves_dep_last_slaving_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'total_num_slaves_purchased': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyagesources': {
             'Meta': {'object_name': 'VoyageSources'},
-            'full_ref': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'full_ref': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'short_ref': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'})
+            'short_ref': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         }
     }
 
