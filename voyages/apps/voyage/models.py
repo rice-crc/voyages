@@ -137,6 +137,7 @@ class VoyageSlavesCharacteristics(models.Model):
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
 
+
 class VoyageSources(models.Model):
     """
     Voyage sources.
@@ -589,29 +590,25 @@ class VoyageDates(models.Model):
         verbose_name = 'Date'
         verbose_name_plural = "Dates"
 
-class Captain(models.Model):
-    name = models.CharField("Captain's name", max_length=60)
 
-
-class CaptainEntry(models.Model):
+class VoyageCaptainConnection(models.Model):
     CHOICES = ((1, "First"), (2, "Second"), (3, "Third"))
-    name = models.ForeignKey('Captain', related_name='captain_name')
-    voyage_captain = models.ForeignKey('VoyageCaptain',
-                                       related_name='voyage_captain')
+    captain = models.ForeignKey\
+            ('VoyageCaptain', related_name='captain_name')
+    voyage = models.ForeignKey\
+            ('Voyage', related_name='voyage')
     captain_order = models.CharField(max_length=7,
                                      choices = CHOICES)
+
 
 class VoyageCaptain(models.Model):
     """
     Voyage Captain and Crew.
     """
+    name = models.CharField("Captain's name", max_length=60)
 
-    captain = models.ManyToManyField("CaptainEntry",
-                                     related_name='captain')
-
-    class Meta:
-        verbose_name = 'Captain'
-        verbose_name_plural = "Captains"
+    def __unicode__(self):
+        return self.name
 
 
 class VoyageCrew(models.Model):
@@ -691,8 +688,9 @@ class Voyage(models.Model):
     voyage_dates = models.OneToOneField \
             ('VoyageDates', help_text="Voyage Dates",
              null=True, blank=True)
-    voyage_captain = models.OneToOneField \
-            ("VoyageCaptain", help_text="Voyage Captain",
+    voyage_captain = models.ManyToManyField \
+            ("VoyageCaptain", through=VoyageCaptainConnection,
+             help_text="Voyage Captain",
              blank=True, null=True)
     voyage_crew = models.OneToOneField\
             ("VoyageCrew", help_text="Voyage Crew",
