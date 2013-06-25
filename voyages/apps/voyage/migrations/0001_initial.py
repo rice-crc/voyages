@@ -279,35 +279,21 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'voyage', ['VoyageDates'])
 
-        # Adding model 'Captain'
-        db.create_table(u'voyage_captain', (
+        # Adding model 'VoyageCaptainConnection'
+        db.create_table(u'voyage_voyagecaptainconnection', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=60)),
-        ))
-        db.send_create_signal(u'voyage', ['Captain'])
-
-        # Adding model 'CaptainEntry'
-        db.create_table(u'voyage_captainentry', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.related.ForeignKey')(related_name='captain_name', to=orm['voyage.Captain'])),
-            ('voyage_captain', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_captain', to=orm['voyage.VoyageCaptain'])),
+            ('captain', self.gf('django.db.models.fields.related.ForeignKey')(related_name='captain_name', to=orm['voyage.VoyageCaptain'])),
+            ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage', to=orm['voyage.Voyage'])),
             ('captain_order', self.gf('django.db.models.fields.CharField')(max_length=7)),
         ))
-        db.send_create_signal(u'voyage', ['CaptainEntry'])
+        db.send_create_signal(u'voyage', ['VoyageCaptainConnection'])
 
         # Adding model 'VoyageCaptain'
         db.create_table(u'voyage_voyagecaptain', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=60)),
         ))
         db.send_create_signal(u'voyage', ['VoyageCaptain'])
-
-        # Adding M2M table for field captain on 'VoyageCaptain'
-        db.create_table(u'voyage_voyagecaptain_captain', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('voyagecaptain', models.ForeignKey(orm[u'voyage.voyagecaptain'], null=False)),
-            ('captainentry', models.ForeignKey(orm[u'voyage.captainentry'], null=False))
-        ))
-        db.create_unique(u'voyage_voyagecaptain_captain', ['voyagecaptain_id', 'captainentry_id'])
 
         # Adding model 'VoyageCrew'
         db.create_table(u'voyage_voyagecrew', (
@@ -337,7 +323,6 @@ class Migration(SchemaMigration):
             ('voyage_outcome', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageOutcome'], unique=True, null=True, blank=True)),
             ('voyage_itinerary', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageItinerary'], unique=True, null=True, blank=True)),
             ('voyage_dates', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageDates'], unique=True, null=True, blank=True)),
-            ('voyage_captain', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageCaptain'], unique=True, null=True, blank=True)),
             ('voyage_crew', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageCrew'], unique=True, null=True, blank=True)),
             ('voyage_slave_characteristics', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageSlavesCharacteristics'], unique=True, null=True, blank=True)),
         ))
@@ -414,17 +399,11 @@ class Migration(SchemaMigration):
         # Deleting model 'VoyageDates'
         db.delete_table(u'voyage_voyagedates')
 
-        # Deleting model 'Captain'
-        db.delete_table(u'voyage_captain')
-
-        # Deleting model 'CaptainEntry'
-        db.delete_table(u'voyage_captainentry')
+        # Deleting model 'VoyageCaptainConnection'
+        db.delete_table(u'voyage_voyagecaptainconnection')
 
         # Deleting model 'VoyageCaptain'
         db.delete_table(u'voyage_voyagecaptain')
-
-        # Removing M2M table for field captain on 'VoyageCaptain'
-        db.delete_table('voyage_voyagecaptain_captain')
 
         # Deleting model 'VoyageCrew'
         db.delete_table(u'voyage_voyagecrew')
@@ -439,18 +418,6 @@ class Migration(SchemaMigration):
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '35'})
-        },
-        u'voyage.captain': {
-            'Meta': {'object_name': 'Captain'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '60'})
-        },
-        u'voyage.captainentry': {
-            'Meta': {'object_name': 'CaptainEntry'},
-            'captain_order': ('django.db.models.fields.CharField', [], {'max_length': '7'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'captain_name'", 'to': u"orm['voyage.Captain']"}),
-            'voyage_captain': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_captain'", 'to': u"orm['voyage.VoyageCaptain']"})
         },
         u'voyage.groupcomposition': {
             'Meta': {'object_name': 'GroupComposition'},
@@ -555,7 +522,7 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyage': {
             'Meta': {'object_name': 'Voyage'},
-            'voyage_captain': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCaptain']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_captain': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['voyage.VoyageCaptain']", 'null': 'True', 'through': u"orm['voyage.VoyageCaptainConnection']", 'blank': 'True'}),
             'voyage_crew': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCrew']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_dates': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageDates']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_groupings': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageGroupings']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
@@ -569,8 +536,15 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyagecaptain': {
             'Meta': {'object_name': 'VoyageCaptain'},
-            'captain': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'captain'", 'symmetrical': 'False', 'to': u"orm['voyage.CaptainEntry']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '60'})
+        },
+        u'voyage.voyagecaptainconnection': {
+            'Meta': {'object_name': 'VoyageCaptainConnection'},
+            'captain': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'captain_name'", 'to': u"orm['voyage.VoyageCaptain']"}),
+            'captain_order': ('django.db.models.fields.CharField', [], {'max_length': '7'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage'", 'to': u"orm['voyage.Voyage']"})
         },
         u'voyage.voyagecrew': {
             'Meta': {'object_name': 'VoyageCrew'},
