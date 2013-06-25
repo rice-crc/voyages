@@ -133,6 +133,9 @@ class VoyageSlavesCharacteristics(models.Model):
             ("Number of slaves disembarked at third place "
              "(SLAS39)", null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Slaves Characteristic'
+        verbose_name_plural = "Slaves Characteristics"
 
 class VoyageSources(models.Model):
     """
@@ -145,6 +148,10 @@ class VoyageSources(models.Model):
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=1000, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Source'
+        verbose_name_plural = "Sources"
 
 
 class SourceVoyageConnection(models.Model):
@@ -165,6 +172,10 @@ class BroadRegion(models.Model):
     name = models.CharField("Broad region", max_length=35)
     code = models.IntegerField("Numeric code", max_length=5)
 
+    class Meta:
+        verbose_name = 'Broad Region'
+        verbose_name_plural = "Broad Regions"
+
 
 class Region(models.Model):
     """
@@ -177,6 +188,10 @@ class Region(models.Model):
                                                max_length=35)
     broad_region = models.ForeignKey('BroadRegion')
     code = models.IntegerField("Numeric code", max_length=5)
+
+    class Meta:
+        verbose_name = 'Region'
+        verbose_name_plural = "Regions"
 
 
 class Place(models.Model):
@@ -196,15 +211,23 @@ class Place(models.Model):
                                      max_length=7, max_digits=3, decimal_places=3,
                                      blank=True)
 
+    class Meta:
+        verbose_name = 'Place'
+        verbose_name_plural = "Places"
+
 
 class VoyageGroupings(models.Model):
-        """
-        Labels for groupings names.
-        """
-        grouping_name = models.CharField(max_length=30)
+    """
+    Labels for groupings names.
+    """
+    grouping_name = models.CharField(max_length=30)
 
-        def __unicode__(self):
-            return self.grouping_name
+    def __unicode__(self):
+        return self.grouping_name
+
+    class Meta:
+        verbose_name = "Grouping for estimating imputed slaves"
+        verbose_name_plural = "Groupings for estimating imputed slaves"
 
 
 class VoyageShip(models.Model):
@@ -301,6 +324,10 @@ class VoyageShip(models.Model):
     def __unicode__(self):
         return self.ship_name
 
+    class Meta:
+        verbose_name = 'Ship'
+        verbose_name_plural = "Ships"
+
 class VoyageOutcome(models.Model):
     """
     Information about Outcomes
@@ -357,6 +384,10 @@ class VoyageOutcome(models.Model):
 
     def __unicode__(self):
         return self.particular_outcome
+
+    class Meta:
+        verbose_name = "Outcome"
+        verbose_name_plural = "Outcomes"
 
 
 class VoyageItinerary(models.Model):
@@ -500,6 +531,10 @@ class VoyageItinerary(models.Model):
             ('BroadRegion', related_name="imp_broad_region_slave_dis",
              null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Itinerary"
+        verbose_name_plural = "Itineraries"
+
 
 class VoyageDates(models.Model):
     """
@@ -550,6 +585,10 @@ class VoyageDates(models.Model):
             ("Year of arrival at port of disembarkation",
              max_length=4, blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Date'
+        verbose_name_plural = "Dates"
+
 class Captain(models.Model):
     name = models.CharField("Captain's name", max_length=60)
 
@@ -569,6 +608,10 @@ class VoyageCaptain(models.Model):
 
     captain = models.ManyToManyField("CaptainEntry",
                                      related_name='captain')
+
+    class Meta:
+        verbose_name = 'Captain'
+        verbose_name_plural = "Captains"
 
 
 class VoyageCrew(models.Model):
@@ -613,6 +656,10 @@ class VoyageCrew(models.Model):
     crew_deserted = models.IntegerField \
             ("Total number of crew deserted", max_length=2,
              null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Crew'
+        verbose_name_plural = "Crews"
 
 
 class Voyage(models.Model):
@@ -661,3 +708,7 @@ class Voyage(models.Model):
     voyage_sources = models.ManyToManyField \
             ('VoyageSources', through='SourceVoyageConnection',
              related_name='voyage_sources', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Voyage'
+        verbose_name_plural = "Voyages"
