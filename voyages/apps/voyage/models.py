@@ -598,7 +598,8 @@ class VoyageCaptainConnection(models.Model):
     voyage = models.ForeignKey\
             ('Voyage', related_name='voyage')
     captain_order = models.CharField(max_length=7,
-                                     choices = CHOICES)
+                                     choices = CHOICES,
+                                     default=1)
 
 
 class VoyageCaptain(models.Model):
@@ -666,8 +667,7 @@ class Voyage(models.Model):
 
     voyage_id = models.AutoField(primary_key=True)
 
-    voyage_in_cd_rom = models.IntegerField\
-            ("Voyage in 1999 CD-ROM", max_length=1, null=True, blank=True)
+    voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM", max_length=1, blank=True)
 
     # Technical variables
     voyage_groupings = models.OneToOneField \

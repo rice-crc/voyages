@@ -168,8 +168,6 @@ def get_faqs(request):
 
     faq_list = getsortedresults(query_result)
 
-    3/0
-
     return render_to_response('help/page_faqs.html',
                               {'form': form, "faq_list": faq_list, 'current_query': current_query},
                               context_instance=RequestContext(request))
