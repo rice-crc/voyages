@@ -117,7 +117,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
-    'mock',
     # used to index django models
     'haystack',
     'voyages.apps.common',
