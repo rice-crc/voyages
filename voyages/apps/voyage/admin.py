@@ -29,14 +29,20 @@ class FlatPageAdmin(admin.ModelAdmin):
 
 class VoyageCaptainConnectionInline(admin.TabularInline):
     model = VoyageCaptainConnection
-    extra = 3
+    extra = 1
 
 
 class VoyageAdmin(admin.ModelAdmin):
     inlines = (VoyageCaptainConnectionInline,)
 
 
-# We have to unregister it, and then reregister
+# class VoyageShipNationalityAdmin(admin.ModelAdmin):
+#     def get_model_perms(self, request):
+#         """
+#         Return empty perms dict thus hiding the model from admin index.
+#         """
+#         return {}
+
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Voyage, VoyageAdmin)
