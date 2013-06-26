@@ -5,4 +5,4 @@ sphinx
 coverage
 unittest-xml-reporting
 unittest2
-#nose
+mock
