@@ -7,7 +7,7 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     faq_question = indexes.CharField(model_attr='question')
     faq_answer = indexes.CharField(model_attr='answer')
-    faq_question_order = indexes.IntegerField(model_attr='question_order')
+    faq_question_order = indexes.IntegerField()
     faq_category_order = indexes.IntegerField()
     faq_category_desc = indexes.CharField()
 
@@ -17,6 +17,9 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
+
+    def prepare_faq_question_order(self, obj):
+        return obj.question_order
     
     def prepare_faq_category_order(self, obj):
         return obj.category.type_order
