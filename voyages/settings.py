@@ -110,12 +110,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     #Flatpages apps
     'django.contrib.flatpages',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'autocomplete_light',
     'south',
     # used to index django models
     'haystack',
