@@ -223,12 +223,12 @@ class VoyageGroupings(models.Model):
     """
     grouping_name = models.CharField(max_length=30)
 
-    def __unicode__(self):
-        return self.grouping_name
-
     class Meta:
         verbose_name = "Grouping for estimating imputed slaves"
         verbose_name_plural = "Groupings for estimating imputed slaves"
+
+    def __unicode__(self):
+        return self.grouping_name
 
 
 class VoyageShip(models.Model):
@@ -670,10 +670,9 @@ class Voyage(models.Model):
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM", max_length=1, blank=True)
 
     # Technical variables
-    voyage_groupings = models.OneToOneField \
+    voyage_groupings = models.ForeignKey \
             ('VoyageGroupings',
-             help_text="Voyage Groupings for estimating imputed slaves",
-             null=True, blank=True)
+             help_text="Voyage Groupings for estimating imputed slaves")
 
     # Data and imputed variables
     voyage_ship = models.OneToOneField \

@@ -284,7 +284,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('captain', self.gf('django.db.models.fields.related.ForeignKey')(related_name='captain_name', to=orm['voyage.VoyageCaptain'])),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage', to=orm['voyage.Voyage'])),
-            ('captain_order', self.gf('django.db.models.fields.CharField')(max_length=7)),
+            ('captain_order', self.gf('django.db.models.fields.CharField')(default=1, max_length=7)),
         ))
         db.send_create_signal(u'voyage', ['VoyageCaptainConnection'])
 
@@ -317,8 +317,8 @@ class Migration(SchemaMigration):
         # Adding model 'Voyage'
         db.create_table(u'voyage_voyage', (
             ('voyage_id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('voyage_in_cd_rom', self.gf('django.db.models.fields.IntegerField')(max_length=1, null=True, blank=True)),
-            ('voyage_groupings', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageGroupings'], unique=True, null=True, blank=True)),
+            ('voyage_in_cd_rom', self.gf('django.db.models.fields.BooleanField')(default=False, max_length=1)),
+            ('voyage_groupings', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.VoyageGroupings'])),
             ('voyage_ship', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageShip'], unique=True, null=True, blank=True)),
             ('voyage_outcome', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageOutcome'], unique=True, null=True, blank=True)),
             ('voyage_itinerary', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageItinerary'], unique=True, null=True, blank=True)),
@@ -327,6 +327,22 @@ class Migration(SchemaMigration):
             ('voyage_slave_characteristics', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageSlavesCharacteristics'], unique=True, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['Voyage'])
+
+        # Adding model 'Author'
+        db.create_table(u'voyage_author', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal(u'voyage', ['Author'])
+
+        # Adding model 'Book'
+        db.create_table(u'voyage_book', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Author'])),
+        ))
+        db.send_create_signal(u'voyage', ['Book'])
 
 
     def backwards(self, orm):
@@ -411,8 +427,26 @@ class Migration(SchemaMigration):
         # Deleting model 'Voyage'
         db.delete_table(u'voyage_voyage')
 
+        # Deleting model 'Author'
+        db.delete_table(u'voyage_author')
+
+        # Deleting model 'Book'
+        db.delete_table(u'voyage_book')
+
 
     models = {
+        u'voyage.author': {
+            'Meta': {'object_name': 'Author'},
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'voyage.book': {
+            'Meta': {'object_name': 'Book'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Author']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         u'voyage.broadregion': {
             'Meta': {'object_name': 'BroadRegion'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
@@ -525,9 +559,9 @@ class Migration(SchemaMigration):
             'voyage_captain': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['voyage.VoyageCaptain']", 'null': 'True', 'through': u"orm['voyage.VoyageCaptainConnection']", 'blank': 'True'}),
             'voyage_crew': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageCrew']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_dates': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageDates']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'voyage_groupings': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageGroupings']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_groupings': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.VoyageGroupings']"}),
             'voyage_id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'voyage_in_cd_rom': ('django.db.models.fields.IntegerField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'voyage_in_cd_rom': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'max_length': '1'}),
             'voyage_itinerary': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageItinerary']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_outcome': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageOutcome']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_ship': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageShip']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
@@ -542,7 +576,7 @@ class Migration(SchemaMigration):
         u'voyage.voyagecaptainconnection': {
             'Meta': {'object_name': 'VoyageCaptainConnection'},
             'captain': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'captain_name'", 'to': u"orm['voyage.VoyageCaptain']"}),
-            'captain_order': ('django.db.models.fields.CharField', [], {'max_length': '7'}),
+            'captain_order': ('django.db.models.fields.CharField', [], {'default': '1', 'max_length': '7'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'voyage': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage'", 'to': u"orm['voyage.Voyage']"})
         },

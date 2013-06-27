@@ -6,4 +6,5 @@ django-haystack
 pysolr
 wsgiref
 mock
+django-autocomplete-light
 

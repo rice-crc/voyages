@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.contrib.admin.widgets import *
 from django.contrib.flatpages.models import FlatPage
-from django.forms import *
-from django.utils.translation import ugettext as _
+import autocomplete_light
+from .forms import *
 from .models import *
+
 
 class FlatPageAdmin(admin.ModelAdmin):
     """
@@ -28,13 +28,21 @@ class FlatPageAdmin(admin.ModelAdmin):
 
 
 class VoyageCaptainConnectionInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageCaptainConnectionForm
     model = VoyageCaptainConnection
-    extra = 1
+    extra = 3
 
 
 class VoyageAdmin(admin.ModelAdmin):
+    """
+    Admin panel for Voyage class.
+    It contains inlines elements and form for autocompleting as typing.
+    """
     inlines = (VoyageCaptainConnectionInline,)
-
+    form = autocomplete_light.modelform_factory(Voyage)
 
 # class VoyageShipNationalityAdmin(admin.ModelAdmin):
 #     def get_model_perms(self, request):
@@ -46,8 +54,8 @@ class VoyageAdmin(admin.ModelAdmin):
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Voyage, VoyageAdmin)
-admin.site.register(VoyageCaptain)
 admin.site.register(VoyageGroupings)
+admin.site.register(VoyageCaptain)
 admin.site.register(VoyageShip)
 admin.site.register(VoyageOutcome)
 admin.site.register(VoyageItinerary)

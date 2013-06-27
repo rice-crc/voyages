@@ -3,7 +3,10 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
+import autocomplete_light
+autocomplete_light.autodiscover()
 from django.contrib import admin
+
 admin.autodiscover()
 
 # Sitemap
@@ -24,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
     (r'^search/', include('haystack.urls', namespace='search')),
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
 )
 
 # XML generated sitemap
