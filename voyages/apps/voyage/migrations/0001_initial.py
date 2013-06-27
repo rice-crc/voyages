@@ -111,7 +111,7 @@ class Migration(SchemaMigration):
         db.create_table(u'voyage_ownerconnection', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='owner', to=orm['voyage.Owner'])),
-            ('ship', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_ship', to=orm['voyage.VoyageShip'])),
+            ('ship', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_ship_owner', to=orm['voyage.VoyageShip'])),
             ('captain_order', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
         ))
         db.send_create_signal(u'voyage', ['OwnerConnection'])
@@ -157,6 +157,7 @@ class Migration(SchemaMigration):
             ('registered_region', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='registered_region', null=True, to=orm['voyage.Region'])),
             ('imputed_nationality', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='imputed_nationality', null=True, to=orm['voyage.Nationality'])),
             ('tonnage_mod', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=8, decimal_places=2, blank=True)),
+            ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='voyage_name', null=True, to=orm['voyage.Voyage'])),
         ))
         db.send_create_signal(u'voyage', ['VoyageShip'])
 
@@ -319,7 +320,7 @@ class Migration(SchemaMigration):
             ('voyage_id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('voyage_in_cd_rom', self.gf('django.db.models.fields.BooleanField')(default=False, max_length=1)),
             ('voyage_groupings', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.VoyageGroupings'])),
-            ('voyage_ship', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageShip'], unique=True, null=True, blank=True)),
+            ('voyage_ship', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='voyage_ship', null=True, to=orm['voyage.VoyageShip'])),
             ('voyage_outcome', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageOutcome'], unique=True, null=True, blank=True)),
             ('voyage_itinerary', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageItinerary'], unique=True, null=True, blank=True)),
             ('voyage_dates', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageDates'], unique=True, null=True, blank=True)),
@@ -327,22 +328,6 @@ class Migration(SchemaMigration):
             ('voyage_slave_characteristics', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['voyage.VoyageSlavesCharacteristics'], unique=True, null=True, blank=True)),
         ))
         db.send_create_signal(u'voyage', ['Voyage'])
-
-        # Adding model 'Author'
-        db.create_table(u'voyage_author', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
-        db.send_create_signal(u'voyage', ['Author'])
-
-        # Adding model 'Book'
-        db.create_table(u'voyage_book', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Author'])),
-        ))
-        db.send_create_signal(u'voyage', ['Book'])
 
 
     def backwards(self, orm):
@@ -427,26 +412,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Voyage'
         db.delete_table(u'voyage_voyage')
 
-        # Deleting model 'Author'
-        db.delete_table(u'voyage_author')
-
-        # Deleting model 'Book'
-        db.delete_table(u'voyage_book')
-
 
     models = {
-        u'voyage.author': {
-            'Meta': {'object_name': 'Author'},
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'voyage.book': {
-            'Meta': {'object_name': 'Book'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Author']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
         u'voyage.broadregion': {
             'Meta': {'object_name': 'BroadRegion'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
@@ -487,7 +454,7 @@ class Migration(SchemaMigration):
             'captain_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'owner'", 'to': u"orm['voyage.Owner']"}),
-            'ship': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_ship'", 'to': u"orm['voyage.VoyageShip']"})
+            'ship': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_ship_owner'", 'to': u"orm['voyage.VoyageShip']"})
         },
         u'voyage.owneroutcome': {
             'Meta': {'object_name': 'OwnerOutcome'},
@@ -564,7 +531,7 @@ class Migration(SchemaMigration):
             'voyage_in_cd_rom': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'max_length': '1'}),
             'voyage_itinerary': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageItinerary']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_outcome': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageOutcome']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'voyage_ship': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageShip']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'voyage_ship': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_ship'", 'null': 'True', 'to': u"orm['voyage.VoyageShip']"}),
             'voyage_slave_characteristics': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['voyage.VoyageSlavesCharacteristics']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'voyage_sources': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'voyage_sources'", 'to': u"orm['voyage.VoyageSources']", 'through': u"orm['voyage.SourceVoyageConnection']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'})
         },
@@ -685,6 +652,7 @@ class Migration(SchemaMigration):
             'tonnage_mod': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '2', 'blank': 'True'}),
             'vessel_construction_place': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'vessel_construction_place'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
             'vessel_construction_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'vessel_construction_region'", 'null': 'True', 'to': u"orm['voyage.Region']"}),
+            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_name'", 'null': 'True', 'to': u"orm['voyage.Voyage']"}),
             'year_of_construction': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'})
         },
         u'voyage.voyageslavescharacteristics': {
