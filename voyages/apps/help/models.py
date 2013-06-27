@@ -53,4 +53,11 @@ class Faq(models.Model):
         ordering = ['category', 'question_order']
         verbose_name = 'Frequently Asked Question (FAQ)'
         verbose_name_plural = 'FAQs'
-        
+
+
+from .search_indexes import FaqIndex
+
+# We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
+def reindex_faqCategory(sender, **kwargs):
+    FaqIndex().update()
+models.signals.post_save.connect(reindex_faqCategory, sender=FaqCategory)
