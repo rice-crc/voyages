@@ -55,13 +55,17 @@ class Faq(models.Model):
         verbose_name_plural = 'FAQs'
 
 
-from .search_indexes import FaqIndex
+from .search_indexes import FaqIndex, GlossaryIndex
 
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
-def reindex_myfaqCategory(sender, **kwargs):
+def reindex_faqCategory(sender, **kwargs):
     FaqIndex().update()
-models.signals.post_save.connect(reindex_myfaqCategory, sender=FaqCategory)
+models.signals.post_save.connect(reindex_faqCategory, sender=FaqCategory)
 
-def reindex_myfaqSingleObject(sender, **kwargs):
+def reindex_faqSingleObject(sender, **kwargs):
     FaqIndex().update_object(kwargs['instance'])
-models.signals.post_save.connect(reindex_myfaqSingleObject, sender=Faq)
+models.signals.post_save.connect(reindex_faqSingleObject, sender=Faq)
+
+def reindex_glossarySingleObject(sender, **kwargs):
+    GlossaryIndex().update_object(kwargs['instance'])
+models.signals.post_save.connect(reindex_glossarySingleObject, sender=Glossary)
