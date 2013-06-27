@@ -53,4 +53,14 @@ class Faq(models.Model):
         ordering = ['category', 'question_order']
         verbose_name = 'Frequently Asked Question (FAQ)'
         verbose_name_plural = 'FAQs'
-        
+
+
+from .search_indexes import FaqIndex
+
+def reindex_myfaqCategory(sender, **kwargs):
+    FaqIndex().update()
+models.signals.post_save.connect(reindex_myfaqCategory, sender=FaqCategory)
+
+def reindex_myfaqSingleObject(sender, **kwargs):
+    FaqIndex().update_object(kwargs['instance'])
+models.signals.post_save.connect(reindex_myfaqSingleObject, sender=Faq)
