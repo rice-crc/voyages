@@ -27,12 +27,16 @@ class FlatPageAdmin(admin.ModelAdmin):
               )
 
 
+class VoyageOwnerConnectionInline(admin.TabularInline):
+    form = VoyageOwnerConnectionForm
+    model = VoyageShip.OwnerConnection
+
 class VoyageShipInline(admin.StackedInline):
     form = VoyageShipForm
     model = VoyageShip
     extra = 1
     max_num = 1
-
+    #inlines = (VoyageOwnerConnectionInline,)
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
@@ -64,6 +68,7 @@ class VoyageAdmin(admin.ModelAdmin):
     """
     inlines = (VoyageCaptainConnectionInline, VoyageShipInline)
     form = autocomplete_light.modelform_factory(Voyage)
+    ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
 
 admin.site.unregister(FlatPage)
@@ -82,3 +87,5 @@ admin.site.register(Region)
 admin.site.register(BroadRegion)
 admin.site.register(Place)
 admin.site.register(VoyageShip.Nationality)
+admin.site.register(VoyageShip.TonType)
+admin.site.register(VoyageShip.RigOfVessel)
