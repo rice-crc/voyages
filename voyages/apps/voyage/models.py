@@ -253,7 +253,7 @@ class VoyageShip(models.Model):
         captain_order represents order of each captain (1st, 2nd, ...)
         """
         owner = models.ForeignKey('Owner', related_name="owner")
-        ship = models.ForeignKey('VoyageShip', related_name="voyage_ship")
+        ship = models.ForeignKey('VoyageShip', related_name="voyage_ship_owner")
         captain_order = models.IntegerField(max_length=2)
 
     class Nationality(models.Model):
@@ -262,6 +262,9 @@ class VoyageShip(models.Model):
         """
         nationality = models.CharField(max_length=70)
         code = models.IntegerField(max_length=2)
+
+        def __unicode__(self):
+            return self.nationality
 
     class TonType(models.Model):
         """
@@ -321,6 +324,8 @@ class VoyageShip(models.Model):
                                       max_digits=8,
                                       decimal_places=2,
                                       null=True, blank=True)
+
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name")
 
     def __unicode__(self):
         return self.ship_name
@@ -675,9 +680,6 @@ class Voyage(models.Model):
              help_text="Voyage Groupings for estimating imputed slaves")
 
     # Data and imputed variables
-    voyage_ship = models.OneToOneField \
-            ('VoyageShip', help_text="Ship, Nation, Owners",
-             null=True, blank=True)
     voyage_outcome = models.OneToOneField \
             ('VoyageOutcome', help_text="Voyage Outcome",
              null=True, blank=True)
@@ -709,3 +711,6 @@ class Voyage(models.Model):
     class Meta:
         verbose_name = 'Voyage'
         verbose_name_plural = "Voyages"
+
+    def __unicode__(self):
+        return "Voyage " + str(self.voyage_id)

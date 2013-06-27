@@ -27,6 +27,19 @@ class FlatPageAdmin(admin.ModelAdmin):
               )
 
 
+class VoyageShipInline(admin.StackedInline):
+    form = VoyageShipForm
+    model = VoyageShip
+    extra = 1
+    max_num = 1
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 class VoyageCaptainConnectionInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
@@ -36,27 +49,29 @@ class VoyageCaptainConnectionInline(admin.TabularInline):
     extra = 3
 
 
+class VoyageCaptainAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 class VoyageAdmin(admin.ModelAdmin):
     """
     Admin panel for Voyage class.
     It contains inlines elements and form for autocompleting as typing.
     """
-    inlines = (VoyageCaptainConnectionInline,)
+    inlines = (VoyageCaptainConnectionInline, VoyageShipInline)
     form = autocomplete_light.modelform_factory(Voyage)
 
-# class VoyageShipNationalityAdmin(admin.ModelAdmin):
-#     def get_model_perms(self, request):
-#         """
-#         Return empty perms dict thus hiding the model from admin index.
-#         """
-#         return {}
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Voyage, VoyageAdmin)
 admin.site.register(VoyageGroupings)
-admin.site.register(VoyageCaptain)
-admin.site.register(VoyageShip)
+admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
+#admin.site.register(VoyageShip, VoyageShipAdmin)
 admin.site.register(VoyageOutcome)
 admin.site.register(VoyageItinerary)
 admin.site.register(VoyageDates)
@@ -66,3 +81,4 @@ admin.site.register(VoyageSources)
 admin.site.register(Region)
 admin.site.register(BroadRegion)
 admin.site.register(Place)
+admin.site.register(VoyageShip.Nationality)

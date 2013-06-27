@@ -10,3 +10,6 @@ autocomplete_light.register(VoyageGroupings, search_fields=('grouping_name',),
 
 autocomplete_light.register(VoyageCaptain, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Captain name...'})
+
+autocomplete_light.register(VoyageShip.Nationality, search_fields=('nationality',),
+    autocomplete_js_attributes={'placeholder': 'Nationality of ship...'})
