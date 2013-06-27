@@ -177,6 +177,9 @@ class BroadRegion(models.Model):
         verbose_name = 'Broad Region'
         verbose_name_plural = "Broad Regions"
 
+    def __unicode__(self):
+        return self.name
+
 
 class Region(models.Model):
     """
@@ -193,6 +196,9 @@ class Region(models.Model):
     class Meta:
         verbose_name = 'Region'
         verbose_name_plural = "Regions"
+
+    def __unicode__(self):
+        return self.name
 
 
 class Place(models.Model):
@@ -215,6 +221,9 @@ class Place(models.Model):
     class Meta:
         verbose_name = 'Place'
         verbose_name_plural = "Places"
+
+    def __unicode__(self):
+        return self.name
 
 
 class VoyageGroupings(models.Model):
