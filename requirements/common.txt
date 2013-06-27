@@ -1,9 +1,10 @@
 Django==1.5.1
+lxml
 mysql-python
 south
 hurry.filesize
 django-haystack
 pysolr
 wsgiref
-mock
+
 
