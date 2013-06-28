@@ -57,12 +57,6 @@ class VoyageDatesForm(forms.ModelForm):
         widgets = autocomplete_light.get_widgets_dict(VoyageDates)
 
 
-
-
-
-
-
-
 # Voyage Captain and Crew
 class VoyageCaptainConnectionForm(forms.ModelForm):
     """
@@ -73,8 +67,10 @@ class VoyageCaptainConnectionForm(forms.ModelForm):
         widgets = autocomplete_light.get_widgets_dict(VoyageCaptainConnection)
 
 
-
-
-
-
-
+class VoyageCrewForm(forms.ModelForm):
+    """
+    Form for Voyage Crew (this is inline).
+    """
+    class Meta:
+        model = VoyageCrew
+        widgets = autocomplete_light.get_widgets_dict(VoyageCrew)
