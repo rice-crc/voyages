@@ -28,6 +28,11 @@ class FlatPageAdmin(admin.ModelAdmin):
 
 
 # Voyage Admin
+# Regions, Places
+
+# Technical
+
+# Ship, Nation, Owners
 class VoyageShipInline(admin.StackedInline):
     form = VoyageShipForm
     model = VoyageShip
@@ -41,21 +46,28 @@ class VoyageShipInline(admin.StackedInline):
         return {}
 
 
-class VoyageCaptainConnectionInline(admin.TabularInline):
-    """
-    Inline model for Captain Connection.
-    """
-    form = VoyageCaptainConnectionForm
-    model = VoyageCaptainConnection
-    extra = 3
-
-
 class VoyageShipOwnerInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
     """
     form = VoyageShipOwnerConnectionForm
     model = VoyageShipOwnerConnection
+    extra = 3
+
+
+# Voyage Outcome
+
+# Voyage Itinerary
+
+# Voyage Dates
+
+# Voyage Captain and Crew
+class VoyageCaptainConnectionInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageCaptainConnectionForm
+    model = VoyageCaptainConnection
     extra = 3
 
 
@@ -66,7 +78,13 @@ class VoyageCaptainAdmin(admin.ModelAdmin):
         """
         return {}
 
+# Voyage Slaves (numbers)
 
+# Voyage Slaves (characteristics)
+
+# Voyage Sources
+
+# Voyage (main section)
 class VoyageAdmin(admin.ModelAdmin):
     """
     Admin panel for Voyage class.
@@ -78,24 +96,47 @@ class VoyageAdmin(admin.ModelAdmin):
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
 
+# Registers section
+# Flat Page
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 
-
-admin.site.register(VoyageGroupings)
-admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
-admin.site.register(VoyageShipOwner)
-#admin.site.register(VoyageShip, VoyageShipAdmin)
-admin.site.register(VoyageOutcome)
-admin.site.register(VoyageItinerary)
-admin.site.register(VoyageDates)
-admin.site.register(VoyageCrew)
-admin.site.register(VoyageSlavesCharacteristics)
-admin.site.register(VoyageSources)
+# Voyage
+# Regions, Places
 admin.site.register(Region)
 admin.site.register(BroadRegion)
 admin.site.register(Place)
+
+# Technical
+admin.site.register(VoyageGroupings)
+
+# Ship, Nation, Owners
+admin.site.register(VoyageShipOwner)
 admin.site.register(VoyageShip.Nationality)
 admin.site.register(VoyageShip.TonType)
 admin.site.register(VoyageShip.RigOfVessel)
+#admin.site.register(VoyageShip, VoyageShipAdmin)
+
+# Voyage Outcome
+admin.site.register(VoyageOutcome)
+
+# Voyage Itinerary
+admin.site.register(VoyageItinerary)
+
+# Voyage Dates
+admin.site.register(VoyageDates)
+
+# Voyage Captain and Crew
+admin.site.register(VoyageCrew)
+admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
+
+# Voyage Slaves (numbers)
+
+# Voyage Slaves (characteristics)
+admin.site.register(VoyageSlavesCharacteristics)
+
+# Voyage Sources
+admin.site.register(VoyageSources)
+
+# Voyage (main section)
 admin.site.register(Voyage, VoyageAdmin)
