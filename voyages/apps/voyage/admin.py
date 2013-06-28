@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 import autocomplete_light
 from .forms import *
-from .models import *
 
 
+# FlatPage Admin
 class FlatPageAdmin(admin.ModelAdmin):
     """
     Support for flat page.
@@ -27,10 +27,12 @@ class FlatPageAdmin(admin.ModelAdmin):
               )
 
 
-class VoyageOwnerConnectionInline(admin.TabularInline):
-    form = VoyageOwnerConnectionForm
-    model = VoyageShip.OwnerConnection
+# Voyage Admin
+# Regions, Places
 
+# Technical
+
+# Ship, Nation, Owners
 class VoyageShipInline(admin.StackedInline):
     form = VoyageShipForm
     model = VoyageShip
@@ -44,6 +46,22 @@ class VoyageShipInline(admin.StackedInline):
         return {}
 
 
+class VoyageShipOwnerInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageShipOwnerConnectionForm
+    model = VoyageShipOwnerConnection
+    extra = 3
+
+
+# Voyage Outcome
+
+# Voyage Itinerary
+
+# Voyage Dates
+
+# Voyage Captain and Crew
 class VoyageCaptainConnectionInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
@@ -60,32 +78,65 @@ class VoyageCaptainAdmin(admin.ModelAdmin):
         """
         return {}
 
+# Voyage Slaves (numbers)
 
+# Voyage Slaves (characteristics)
+
+# Voyage Sources
+
+# Voyage (main section)
 class VoyageAdmin(admin.ModelAdmin):
     """
     Admin panel for Voyage class.
     It contains inlines elements and form for autocompleting as typing.
     """
-    inlines = (VoyageCaptainConnectionInline, VoyageShipInline)
+    inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
+               VoyageShipOwnerInline)
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
 
+# Registers section
+# Flat Page
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
-admin.site.register(Voyage, VoyageAdmin)
-admin.site.register(VoyageGroupings)
-admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
-#admin.site.register(VoyageShip, VoyageShipAdmin)
-admin.site.register(VoyageOutcome)
-admin.site.register(VoyageItinerary)
-admin.site.register(VoyageDates)
-admin.site.register(VoyageCrew)
-admin.site.register(VoyageSlavesCharacteristics)
-admin.site.register(VoyageSources)
+
+# Voyage
+# Regions, Places
 admin.site.register(Region)
 admin.site.register(BroadRegion)
 admin.site.register(Place)
+
+# Technical
+admin.site.register(VoyageGroupings)
+
+# Ship, Nation, Owners
+admin.site.register(VoyageShipOwner)
 admin.site.register(VoyageShip.Nationality)
 admin.site.register(VoyageShip.TonType)
 admin.site.register(VoyageShip.RigOfVessel)
+#admin.site.register(VoyageShip, VoyageShipAdmin)
+
+# Voyage Outcome
+admin.site.register(VoyageOutcome)
+
+# Voyage Itinerary
+admin.site.register(VoyageItinerary)
+
+# Voyage Dates
+admin.site.register(VoyageDates)
+
+# Voyage Captain and Crew
+admin.site.register(VoyageCrew)
+admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
+
+# Voyage Slaves (numbers)
+
+# Voyage Slaves (characteristics)
+admin.site.register(VoyageSlavesCharacteristics)
+
+# Voyage Sources
+admin.site.register(VoyageSources)
+
+# Voyage (main section)
+admin.site.register(Voyage, VoyageAdmin)
