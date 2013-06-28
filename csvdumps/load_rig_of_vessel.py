@@ -5,7 +5,7 @@ from voyages.apps.voyage.models import *
 if len(sys.argv) > 0:
     input_file = open(sys.argv[0], 'r')
 else:
-    input_file = open('sources.csv', 'r')
+    input_file = open('rigofvessel.csv', 'r')
 
 NULL_VAL = "\N"
 DELIMITER = ','
@@ -17,14 +17,14 @@ for index, term in enumerate(data):
     varNameDict[term] = index
 
 
-def getFieldValue(fieldname):
-    return data[varNameDict[fieldname]]
+def getFieldValue(field_name):
+    return data[varNameDict[field_name]]
 
 for line in input_file:
     data = line.split(DELIMITER)
 
-    source = VoyageSources()
-    source.short_ref = getFieldValue('id')
-    source.long_ref = getFieldValue('name')
+    rov_obj = VoyageShip.RigOfVessel()
+    rov_obj.code = getFieldValue('id')
+    rov_obj.rig_of_vessel = getFieldValue('name')
 
-    source.save()
+    rov_obj.save()

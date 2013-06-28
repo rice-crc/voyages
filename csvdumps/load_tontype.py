@@ -5,7 +5,7 @@ from voyages.apps.voyage.models import *
 if len(sys.argv) > 0:
     input_file = open(sys.argv[0], 'r')
 else:
-    input_file = open('sources.csv', 'r')
+    input_file = open('tontype.csv', 'r')
 
 NULL_VAL = "\N"
 DELIMITER = ','
@@ -23,8 +23,8 @@ def getFieldValue(fieldname):
 for line in input_file:
     data = line.split(DELIMITER)
 
-    source = VoyageSources()
-    source.short_ref = getFieldValue('id')
-    source.long_ref = getFieldValue('name')
+    ton_type = VoyageShip.TonType()
+    ton_type.code = getFieldValue('id')
+    ton_type.ton_type = getFieldValue('name')
 
-    source.save()
+    ton_type.save()
