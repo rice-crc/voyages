@@ -55,3 +55,8 @@ autocomplete_light.register(VoyageOutcome.Resistance,
                             search_fields=('name',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Resistance...'})
+
+autocomplete_light.register(VoyageSources,
+                            search_fields=('short_ref',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Short reference...'})
