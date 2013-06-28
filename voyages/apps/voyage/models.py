@@ -548,94 +548,11 @@ class VoyageCrew(models.Model):
 
 
 # Voyage Slaves (numbers)
-
-
-# Voyage Slaves (characteristics)
-class VoyageSlavesCharacteristics(models.Model):
+class VoyageSlavesNumbers(models.Model):
     """
-    Voyage slaves (characteristics).
+    Voyage slaves (numbers).
     related to: :model:`voyages.apps.voyages.Voyage`
     """
-
-    class GroupComposition(models.Model):
-        """
-        Basic composition of a group of slaves
-            used by 'VoyageSlavesCharacteristics'
-        """
-        # Representing MEN* variables
-        num_men = models.IntegerField \
-                ("Number of men (MEN*)", null=True, blank=True)
-        # Representing WOMEN* variables
-        num_women = models.IntegerField \
-                ("Number of women (WOMEN*)", null=True, blank=True)
-        # Representing BOY* variables
-        num_boy = models.IntegerField \
-                ("Number of boys (BOY*)", null=True, blank=True)
-        # Representing GIRL* variables
-        num_girl = models.IntegerField \
-                ("Number of girls (GIRL*)", null=True, blank=True)
-        # Representing ADULT* variables
-        num_adult = models.IntegerField \
-                ("Number of adults (gender unspecified) (ADULT*)",
-                 null=True, blank=True)
-        # Representing CHILD* variables
-        num_child = models.IntegerField \
-                ("Number of children (gender unspecified) (CHILD*)",
-                 null=True, blank=True)
-        # Representing INFANT* variables
-        num_infant = models.IntegerField \
-                ("Number of infants (INFANT*)", null=True, blank=True)
-        # Representing MALE* variables
-        num_males = models.IntegerField \
-                ("Number of males (age unspecified) (MALE*)",
-                 null=True, blank=True)
-        # Representing FEMALE* variables
-        num_females = models.IntegerField \
-                ("Number of females (age unspecified) (FEMALE*)",
-                 null=True, blank=True)
-
-    # Group *1 (MEN1, WOMEN1, BOY1, ... FEMALE1)
-    embarked_first_port_purchase = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number embarked at first port of purchase "
-                       "(Group *1)",
-             related_name="embarked_first_port_purchase",
-             null=True, blank=True)
-    # Group *2
-    died_on_middle_passage = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number died on Middle Passage (Group *2)",
-             related_name="died_on_middle_passage",
-             null=True, blank=True)
-
-    # Group *3
-    disembarked_first_place = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number disembarked at first place of landing "
-                       "(Group *3)",
-             related_name="disembarked_first_place",
-             null=True, blank=True)
-    # Group *4
-    embarked_second_port_purchase = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number embarked at second port of purchase "
-                       "(Group *4)",
-             related_name="embarked_second_port_purchase",
-             null=True, blank=True)
-    # Group *5
-    embarked_third_port_purchase = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number embarked at third port of purchase "
-                       "(Group *5)",
-             related_name="embarked_third_port_purchase",
-             null=True, blank=True)
-    # Group *6
-    disembarked_second_place = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number disembarked at second place of landing "
-                       "(Group *6)",
-             related_name="disembarked_second_place",
-             null=True, blank=True)
 
     slave_deaths_before_africa = models.IntegerField \
             ("Slaves death before leaving Africa (SLADAFRI)")
@@ -688,6 +605,44 @@ class VoyageSlavesCharacteristics(models.Model):
     class Meta:
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
+
+
+class GroupComposition(models.Model):
+        """
+        Basic composition of a group of slaves
+            used by 'VoyageSlavesCharacteristics'
+        """
+        # Representing MEN* variables
+        num_men = models.IntegerField \
+                ("Number of men (MEN*)", null=True, blank=True)
+        # Representing WOMEN* variables
+        num_women = models.IntegerField \
+                ("Number of women (WOMEN*)", null=True, blank=True)
+        # Representing BOY* variables
+        num_boy = models.IntegerField \
+                ("Number of boys (BOY*)", null=True, blank=True)
+        # Representing GIRL* variables
+        num_girl = models.IntegerField \
+                ("Number of girls (GIRL*)", null=True, blank=True)
+        # Representing ADULT* variables
+        num_adult = models.IntegerField \
+                ("Number of adults (gender unspecified) (ADULT*)",
+                 null=True, blank=True)
+        # Representing CHILD* variables
+        num_child = models.IntegerField \
+                ("Number of children (gender unspecified) (CHILD*)",
+                 null=True, blank=True)
+        # Representing INFANT* variables
+        num_infant = models.IntegerField \
+                ("Number of infants (INFANT*)", null=True, blank=True)
+        # Representing MALE* variables
+        num_males = models.IntegerField \
+                ("Number of males (age unspecified) (MALE*)",
+                 null=True, blank=True)
+        # Representing FEMALE* variables
+        num_females = models.IntegerField \
+                ("Number of females (age unspecified) (FEMALE*)",
+                 null=True, blank=True)
 
 
 # Voyage Sources
@@ -743,6 +698,52 @@ class Voyage(models.Model):
         ("VoyageShipOwner", through=VoyageShipOwnerConnection,
          help_text="Voyage Ship Owner",
          blank=True, null=True)
+
+    # Voyage Characteristics (Slaves)
+    # Group *1 (MEN1, WOMEN1, BOY1, ... FEMALE1)
+    embarked_first_port_purchase = models.ForeignKey \
+            ('GroupComposition',
+             help_text="Number embarked at first port of purchase "
+                       "(Group *1)",
+             related_name="embarked_first_port_purchase",
+             null=True, blank=True)
+    # Group *2
+    died_on_middle_passage = models.OneToOneField \
+            ('GroupComposition',
+             help_text="Number died on Middle Passage (Group *2)",
+             related_name="died_on_middle_passage",
+             null=True, blank=True)
+
+    # Group *3
+    disembarked_first_place = models.OneToOneField \
+            ('GroupComposition',
+             help_text="Number disembarked at first place of landing "
+                       "(Group *3)",
+             related_name="disembarked_first_place",
+             null=True, blank=True)
+    # Group *4
+    embarked_second_port_purchase = models.OneToOneField \
+            ('GroupComposition',
+             help_text="Number embarked at second port of purchase "
+                       "(Group *4)",
+             related_name="embarked_second_port_purchase",
+             null=True, blank=True)
+    # Group *5
+    embarked_third_port_purchase = models.OneToOneField \
+            ('GroupComposition',
+             help_text="Number embarked at third port of purchase "
+                       "(Group *5)",
+             related_name="embarked_third_port_purchase",
+             null=True, blank=True)
+    # Group *6
+    disembarked_second_place = models.OneToOneField \
+            ('GroupComposition',
+             help_text="Number disembarked at second place of landing "
+                       "(Group *6)",
+             related_name="disembarked_second_place",
+             null=True, blank=True)
+
+
 
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
