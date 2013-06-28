@@ -1,64 +1,64 @@
-
+import sys
 from voyages.apps.voyage.models import *
 from datetime import datetime
 
+# Load the source csv to the database
+if len(sys.argv) > 0:
+    input_file = open(sys.argv[0], 'r')
+else:
+    input_file = open('voyage-database.csv', 'r')
 
 # Load the voyage csv to the database
-input_file = open('voyage-database.csv', 'r')
-
-first_line = input_file.readline()
-data = first_line.split(',')
-varNameDict = {}
+# Requires loading sources.csv first
 NULL_VAL = "\N"
+DELIMITER = ','
+first_line = input_file.readline()
+data = first_line.split(DELIMITER)
+varNameDict = {}
 
 listSources = VoyageSources.objects.all()
 
 for index, term in enumerate(data):
     varNameDict[term] = index
 
-def isNotBlank(fieldname):
-    return data[varNameDict[fieldname]] != NULL_VAL
 
-def getFieldValue(fieldname):
-    return data[varNameDict[fieldname]]
+def isNotBlank(field_name):
+    return data[varNameDict[field_name]] != NULL_VAL
 
-def getIntFieldValue(fieldname):
+
+def getFieldValue(field_name):
+    return data[varNameDict[field_name]]
+
+
+def getIntFieldValue(field_name):
     try:
-        if not isNotBlank(fieldname):
+        if not isNotBlank(field_name):
             return None
-        return int(getFieldValue(fieldname))
+        return int(getFieldValue(field_name))
     except ValueError:
         return None
 
-# Potentially has a bug!!!!!!!!
-def findBestMachingSource(matchstring):
-    # Base case if the string is too short
-    if len(matchstring) <= 2:
-        return None
-
-    for source in listSources:
-        if source.short_ref.find(matchstring) > -1:
-            return source
-
-    # Find the best matching/contains the substring
-    # : should be the last delimiter, then
-    tmpPos = max(matchstring.rfind(':'), matchstring.rfind(","))
-    if tmpPos > -1:
-        return findBestMachingSource(matchstring[: tmpPos])
-    else:
-        return None
-
-
 for line in input_file:
-    data = line.split(',')
-
-    # voyage
-    voyageObj = Voyage(voyage_id=data[varNameDict['voyageid']])
-    voyageObj.voyage_ship = VoyageShip()
-    voyageObj.voyage_ship.ship_name = data[varNameDict['shipname']]
+    data = line.split(DELIMITER)
 
     if getFieldValue('suggestion') != "t" or getFieldValue('revision') != 1:
         continue
+
+    voyageObj = Voyage(voyage_id=data[varNameDict['voyageid']])
+
+    # A: voyage ship, nation and owner
+    ship = VoyageShip.objects.create()
+    ship.ship_name = data[varNameDict['shipname']]
+    if isNotBlank('national'):
+        ship.nationality_ship = VoyageShip.Nationality.objects.filter(code=getIntFieldValue('national'))[0]
+    ship.tonnage = getIntFieldValue('tonnage')
+    ship.ton_type = VoyageShip.TonType.objects.filter(code=getIntFieldValue('tontype'))[0]
+    ship.rig_of_vessel = VoyageShip.RigOfVessel.objects.filter(code=getIntFieldValue('rig'))[0]
+    ship.guns_mounted = getIntFieldValue('guns')
+    ship.year_of_construction = getIntFieldValue('yrcons')
+    ship.vessel_construction_place = Place.objects.filter(code=)
+
+    voyageObj.voyage_ship = ship
 
     # Captain and Crew section
     crew = VoyageCrew.objects.create()
@@ -144,4 +144,38 @@ for line in input_file:
         voyage_dates.departure_last_place_of_landing = None
 
     voyageObj.voyage_dates = voyage_dates
+
+    # Voyage sources
+    # Potentially has a bug!!!!!!!!
+    def findBestMachingSource(matchstring):
+        # Base case if the string is too short
+        if len(matchstring) <= 2:
+            return None
+
+        for source in listSources:
+            if source.short_ref.find(matchstring) > -1:
+                return source
+
+        # Find the best matching/contains the substring
+        # : should be the last delimiter, then
+        tmpPos = max(matchstring.rfind(':'), matchstring.rfind(","))
+        if tmpPos > -1:
+            return findBestMachingSource(matchstring[: tmpPos])
+        else:
+            return None
+
+    def insertSource(fieldname, order):
+        if isNotBlank(fieldname):
+            src = findBestMachingSource(getFieldValue(fieldname))
+            if src is not None:
+                SourceVoyageConnection.objects.create(source=src, source_order=order,
+                                                      text_ref=getFieldValue(fieldname),
+                                                      group=voyageObj)
+            else :
+                print "Error finding matching source %s" % getFieldValue(fieldname)
+
+    # Alphabetical letters between a and r
+    letters = map(chr, range(97, 115))
+    for idx, letter in letters:
+        insertSource('source' + letter, (idx + 1))
 
