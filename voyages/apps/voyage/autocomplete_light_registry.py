@@ -25,3 +25,6 @@ autocomplete_light.register(Place, search_fields=('name',),
 
 autocomplete_light.register(Region, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Region...'})
+
+autocomplete_light.register(VoyageShipOwner, search_fields=('name',),
+    autocomplete_js_attributes={'placeholder': 'Owner name...'})
