@@ -163,6 +163,7 @@ class SourceVoyageConnection(models.Model):
     source = models.ForeignKey('VoyageSources', related_name="source")
     group = models.ForeignKey('Voyage', related_name="group")
     source_order = models.IntegerField(max_length=2)
+    text_ref = models.CharField(_('Text reference(citation)'), max_length=100, null=True, blank=True)
 
 
 class BroadRegion(models.Model):
