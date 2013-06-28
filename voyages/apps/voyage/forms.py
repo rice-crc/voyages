@@ -74,3 +74,13 @@ class VoyageCrewForm(forms.ModelForm):
     class Meta:
         model = VoyageCrew
         widgets = autocomplete_light.get_widgets_dict(VoyageCrew)
+
+
+# Voyage Slaves (numbers + characteristics)
+class VoyageSlavesNumbersForm(forms.ModelForm):
+    """
+    Form for Voyage Characteristics (this is inline).
+    """
+    class Meta:
+        model = VoyageSlavesNumbers
+        widgets = autocomplete_light.get_widgets_dict(VoyageSlavesNumbers)
