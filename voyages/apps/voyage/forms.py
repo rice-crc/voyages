@@ -25,10 +25,10 @@ class VoyageShipForm(forms.ModelForm):
         widgets = autocomplete_light.get_widgets_dict(VoyageShip)
 
 
-class VoyageOwnerConnectionForm(forms.ModelForm):
+class VoyageShipOwnerConnectionForm(forms.ModelForm):
     """
     Form for Captain Connection (this is inline).
     """
     class Meta:
-        model = VoyageShip.OwnerConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageShip.OwnerConnection)
+        model = VoyageShipOwnerConnection
+        widgets = autocomplete_light.get_widgets_dict(VoyageShipOwnerConnection)
