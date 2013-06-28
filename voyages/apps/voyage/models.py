@@ -861,7 +861,7 @@ class VoyageSources(models.Model):
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
 
-class SourceVoyageConnection(models.Model):
+class VoyageSourcesConnection(models.Model):
     """
     Represents the relationship between Voyage and VoyageSources
     source_order determines the order sources appear for each voyage
@@ -898,56 +898,10 @@ class Voyage(models.Model):
          help_text="Voyage Ship Owner",
          blank=True, null=True)
 
-    # Voyage Characteristics (Slaves)
-    # Group *1 (MEN1, WOMEN1, BOY1, ... FEMALE1)
-    embarked_first_port_purchase = models.ForeignKey \
-            ('GroupComposition',
-             help_text="Number embarked at first port of purchase "
-                       "(Group *1)",
-             related_name="embarked_first_port_purchase",
-             null=True, blank=True)
-    # Group *2
-    died_on_middle_passage = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number died on Middle Passage (Group *2)",
-             related_name="died_on_middle_passage",
-             null=True, blank=True)
-
-    # Group *3
-    disembarked_first_place = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number disembarked at first place of landing "
-                       "(Group *3)",
-             related_name="disembarked_first_place",
-             null=True, blank=True)
-    # Group *4
-    embarked_second_port_purchase = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number embarked at second port of purchase "
-                       "(Group *4)",
-             related_name="embarked_second_port_purchase",
-             null=True, blank=True)
-    # Group *5
-    embarked_third_port_purchase = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number embarked at third port of purchase "
-                       "(Group *5)",
-             related_name="embarked_third_port_purchase",
-             null=True, blank=True)
-    # Group *6
-    disembarked_second_place = models.OneToOneField \
-            ('GroupComposition',
-             help_text="Number disembarked at second place of landing "
-                       "(Group *6)",
-             related_name="disembarked_second_place",
-             null=True, blank=True)
-
-
-
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
     voyage_sources = models.ManyToManyField \
-            ('VoyageSources', through='SourceVoyageConnection',
+            ('VoyageSources', through='VoyageSourcesConnection',
              related_name='voyage_sources', blank=True, null=True)
 
     class Meta:

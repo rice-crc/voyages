@@ -278,6 +278,60 @@ class Migration(SchemaMigration):
             ('num_slaves_disembark_first_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('num_slaves_disembark_second_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('num_slaves_disembark_third_place', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_embark_first_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_died_middle_passage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_disembark_first_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_embark_second_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_embark_third_port_purchase', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_men_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_women_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_boy_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_girl_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_adult_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_child_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_infant_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_males_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('num_females_disembark_second_landing', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='voyage_name_slave_characteristics', null=True, to=orm['voyage.Voyage'])),
         ))
         db.send_create_signal(u'voyage', ['VoyageSlavesNumbers'])
@@ -305,27 +359,21 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'voyage', ['VoyageSources'])
 
-        # Adding model 'SourceVoyageConnection'
-        db.create_table(u'voyage_sourcevoyageconnection', (
+        # Adding model 'VoyageSourcesConnection'
+        db.create_table(u'voyage_voyagesourcesconnection', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('source', self.gf('django.db.models.fields.related.ForeignKey')(related_name='source', to=orm['voyage.VoyageSources'])),
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(related_name='group', to=orm['voyage.Voyage'])),
             ('source_order', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
             ('text_ref', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
         ))
-        db.send_create_signal(u'voyage', ['SourceVoyageConnection'])
+        db.send_create_signal(u'voyage', ['VoyageSourcesConnection'])
 
         # Adding model 'Voyage'
         db.create_table(u'voyage_voyage', (
             ('voyage_id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('voyage_in_cd_rom', self.gf('django.db.models.fields.BooleanField')(default=False, max_length=1)),
             ('voyage_groupings', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.VoyageGroupings'])),
-            ('embarked_first_port_purchase', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='embarked_first_port_purchase', null=True, to=orm['voyage.GroupComposition'])),
-            ('died_on_middle_passage', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='died_on_middle_passage', unique=True, null=True, to=orm['voyage.GroupComposition'])),
-            ('disembarked_first_place', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='disembarked_first_place', unique=True, null=True, to=orm['voyage.GroupComposition'])),
-            ('embarked_second_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='embarked_second_port_purchase', unique=True, null=True, to=orm['voyage.GroupComposition'])),
-            ('embarked_third_port_purchase', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='embarked_third_port_purchase', unique=True, null=True, to=orm['voyage.GroupComposition'])),
-            ('disembarked_second_place', self.gf('django.db.models.fields.related.OneToOneField')(blank=True, related_name='disembarked_second_place', unique=True, null=True, to=orm['voyage.GroupComposition'])),
         ))
         db.send_create_signal(u'voyage', ['Voyage'])
 
@@ -406,8 +454,8 @@ class Migration(SchemaMigration):
         # Deleting model 'VoyageSources'
         db.delete_table(u'voyage_voyagesources')
 
-        # Deleting model 'SourceVoyageConnection'
-        db.delete_table(u'voyage_sourcevoyageconnection')
+        # Deleting model 'VoyageSourcesConnection'
+        db.delete_table(u'voyage_voyagesourcesconnection')
 
         # Deleting model 'Voyage'
         db.delete_table(u'voyage_voyage')
@@ -490,14 +538,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '70'})
         },
-        u'voyage.sourcevoyageconnection': {
-            'Meta': {'object_name': 'SourceVoyageConnection'},
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'group'", 'to': u"orm['voyage.Voyage']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'source': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'source'", 'to': u"orm['voyage.VoyageSources']"}),
-            'source_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
-            'text_ref': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
-        },
         u'voyage.tontype': {
             'Meta': {'object_name': 'TonType'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
@@ -512,18 +552,12 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyage': {
             'Meta': {'object_name': 'Voyage'},
-            'died_on_middle_passage': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'died_on_middle_passage'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
-            'disembarked_first_place': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'disembarked_first_place'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
-            'disembarked_second_place': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'disembarked_second_place'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
-            'embarked_first_port_purchase': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'embarked_first_port_purchase'", 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
-            'embarked_second_port_purchase': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'embarked_second_port_purchase'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
-            'embarked_third_port_purchase': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'embarked_third_port_purchase'", 'unique': 'True', 'null': 'True', 'to': u"orm['voyage.GroupComposition']"}),
             'voyage_captain': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['voyage.VoyageCaptain']", 'null': 'True', 'through': u"orm['voyage.VoyageCaptainConnection']", 'blank': 'True'}),
             'voyage_groupings': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.VoyageGroupings']"}),
             'voyage_id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'voyage_in_cd_rom': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'max_length': '1'}),
             'voyage_ship_owner': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['voyage.VoyageShipOwner']", 'null': 'True', 'through': u"orm['voyage.VoyageShipOwnerConnection']", 'blank': 'True'}),
-            'voyage_sources': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'voyage_sources'", 'to': u"orm['voyage.VoyageSources']", 'through': u"orm['voyage.SourceVoyageConnection']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'})
+            'voyage_sources': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'voyage_sources'", 'to': u"orm['voyage.VoyageSources']", 'through': u"orm['voyage.VoyageSourcesConnection']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'})
         },
         u'voyage.voyagecaptain': {
             'Meta': {'object_name': 'VoyageCaptain'},
@@ -663,6 +697,54 @@ class Migration(SchemaMigration):
         u'voyage.voyageslavesnumbers': {
             'Meta': {'object_name': 'VoyageSlavesNumbers'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'num_adult_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_adult_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_adult_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_adult_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_adult_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_adult_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_boy_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_child_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_females_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_girl_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_infant_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_males_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_men_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_slaves_carried_first_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'num_slaves_carried_second_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'num_slaves_carried_third_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
@@ -671,6 +753,12 @@ class Migration(SchemaMigration):
             'num_slaves_disembark_third_place': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_slaves_intended_first_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'num_slaves_intended_second_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'num_women_died_middle_passage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_women_disembark_first_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_women_disembark_second_landing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_women_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_women_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_women_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'slave_deaths_before_africa': ('django.db.models.fields.IntegerField', [], {}),
             'slave_deaths_between_africa_america': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_num_slaves_arr_first_port_embark': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
@@ -683,6 +771,14 @@ class Migration(SchemaMigration):
             'full_ref': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'short_ref': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
+        },
+        u'voyage.voyagesourcesconnection': {
+            'Meta': {'object_name': 'VoyageSourcesConnection'},
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'group'", 'to': u"orm['voyage.Voyage']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'source': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'source'", 'to': u"orm['voyage.VoyageSources']"}),
+            'source_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
+            'text_ref': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         }
     }
 

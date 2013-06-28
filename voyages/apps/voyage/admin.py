@@ -130,7 +130,7 @@ class VoyageCrewInline(admin.TabularInline):
 
 
 # Voyage Slaves (numbers + characteristics)
-class VoyageSlavesNumbersInline(admin.TabularInline):
+class VoyageSlavesNumbersInline(admin.StackedInline):
     """
     Inline model for Slave Characteristics.
     """
@@ -148,6 +148,21 @@ class VoyageSlavesNumbersInline(admin.TabularInline):
 
 
 # Voyage Sources
+class VoyageSourcesConnectionAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+class VoyageSourcesConnectionInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageSourcesConnectionForm
+    model = VoyageSourcesConnection
+    extra = 15
 
 # Voyage (main section)
 class VoyageAdmin(admin.ModelAdmin):
@@ -158,7 +173,8 @@ class VoyageAdmin(admin.ModelAdmin):
     inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
                VoyageShipOwnerInline, VoyageOutcomeInline,
                VoyageItineraryInline, VoyageDatesInline,
-               VoyageCrewInline, VoyageSlavesNumbersInline)
+               VoyageCrewInline, VoyageSlavesNumbersInline,
+               VoyageSourcesConnectionInline)
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
