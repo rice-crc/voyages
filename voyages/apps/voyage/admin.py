@@ -60,6 +60,7 @@ class VoyageOutcomeInline(admin.TabularInline):
     model = VoyageOutcome
     extra = 1
     max_num = 1
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
@@ -73,6 +74,7 @@ class VoyageItineraryInline(admin.StackedInline):
     model = VoyageItinerary
     extra = 1
     max_num = 1
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
@@ -86,6 +88,7 @@ class VoyageDatesInline(admin.StackedInline):
     model = VoyageDates
     extra = 1
     max_num = 1
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
@@ -93,6 +96,14 @@ class VoyageDatesInline(admin.StackedInline):
         return {}
 
 # Voyage Captain and Crew
+class VoyageCaptainAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 class VoyageCaptainConnectionInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
@@ -102,16 +113,24 @@ class VoyageCaptainConnectionInline(admin.TabularInline):
     extra = 3
 
 
-class VoyageCaptainAdmin(admin.ModelAdmin):
+class VoyageCrewInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageCrewForm
+    model = VoyageCrew
+    extra = 1
+    max_num = 1
+
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
 
-# Voyage Slaves (numbers)
 
-# Voyage Slaves (characteristics)
+# Voyage Slaves (numbers + characteristics)
+
 
 # Voyage Sources
 
@@ -123,7 +142,8 @@ class VoyageAdmin(admin.ModelAdmin):
     """
     inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
                VoyageShipOwnerInline, VoyageOutcomeInline,
-               VoyageItineraryInline, VoyageDatesInline)
+               VoyageItineraryInline, VoyageDatesInline,
+               VoyageCrewInline)
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
