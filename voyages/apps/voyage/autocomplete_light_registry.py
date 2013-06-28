@@ -2,9 +2,8 @@ import autocomplete_light
 from .models import *
 
 
-"""
-Register autocomplete for 'autocomplete as you type'
-"""
+# Register autocomplete for 'autocomplete as you type'
+
 autocomplete_light.register(VoyageGroupings, search_fields=('grouping_name',),
     autocomplete_js_attributes={'placeholder': 'Grouping name...'})
 
@@ -26,5 +25,33 @@ autocomplete_light.register(Place, search_fields=('name',),
 autocomplete_light.register(Region, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Region...'})
 
+autocomplete_light.register(BroadRegion, search_fields=('name',),
+    autocomplete_js_attributes={'placeholder': 'Broad region...'})
+
 autocomplete_light.register(VoyageShipOwner, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Owner name...'})
+
+autocomplete_light.register(VoyageOutcome.ParticularOutcome,
+                            search_fields=('name',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Particular outcome...'})
+
+autocomplete_light.register(VoyageOutcome.SlavesOutcome,
+                            search_fields=('name',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Slave outcome...'})
+
+autocomplete_light.register(VoyageOutcome.VesselCapturedOutcome,
+                            search_fields=('name',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Vessel captured outcome...'})
+
+autocomplete_light.register(VoyageOutcome.OwnerOutcome,
+                            search_fields=('name',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Owner outcome...'})
+
+autocomplete_light.register(VoyageOutcome.Resistance,
+                            search_fields=('name',),
+                            autocomplete_js_attributes=
+                            {'placeholder': 'Resistance...'})

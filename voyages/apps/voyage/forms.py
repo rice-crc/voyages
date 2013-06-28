@@ -7,6 +7,63 @@ class UploadFileForm(forms.Form):
     downloadfile = forms.FileField(label='Select your file')
 
 
+# Voyage
+# Ship, Nation, Owners
+class VoyageShipForm(forms.ModelForm):
+    """
+    Form for Voyage Ship (this is inline).
+    """
+    class Meta:
+        model = VoyageShip
+        widgets = autocomplete_light.get_widgets_dict(VoyageShip)
+
+
+class VoyageShipOwnerConnectionForm(forms.ModelForm):
+    """
+    Form for Ship Owner Outcome (this is inline).
+    """
+    class Meta:
+        model = VoyageShipOwnerConnection
+        widgets = autocomplete_light.get_widgets_dict(VoyageShipOwnerConnection)
+
+
+# Voyage Outcome
+class VoyageOutcomeForm(forms.ModelForm):
+    """
+    Form for Voyage Outcome (this is inline).
+    """
+    class Meta:
+        model = VoyageOutcome
+        widgets = autocomplete_light.get_widgets_dict(VoyageOutcome)
+
+
+# Voyage Itinerary
+class VoyageItineraryForm(forms.ModelForm):
+    """
+    Form for Voyage Itinerary (this is inline).
+    """
+    class Meta:
+        model = VoyageItinerary
+        widgets = autocomplete_light.get_widgets_dict(VoyageItinerary)
+
+
+# Voyage Dates
+class VoyageDatesForm(forms.ModelForm):
+    """
+    Form for Voyage Dates (this is inline).
+    """
+    class Meta:
+        model = VoyageDates
+        widgets = autocomplete_light.get_widgets_dict(VoyageDates)
+
+
+
+
+
+
+
+
+# Voyage Captain and Crew
 class VoyageCaptainConnectionForm(forms.ModelForm):
     """
     Form for Captain Connection (this is inline).
@@ -16,19 +73,8 @@ class VoyageCaptainConnectionForm(forms.ModelForm):
         widgets = autocomplete_light.get_widgets_dict(VoyageCaptainConnection)
 
 
-class VoyageShipForm(forms.ModelForm):
-    """
-    Form for Captain Connection (this is inline).
-    """
-    class Meta:
-        model = VoyageShip
-        widgets = autocomplete_light.get_widgets_dict(VoyageShip)
 
 
-class VoyageShipOwnerConnectionForm(forms.ModelForm):
-    """
-    Form for Captain Connection (this is inline).
-    """
-    class Meta:
-        model = VoyageShipOwnerConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageShipOwnerConnection)
+
+
+

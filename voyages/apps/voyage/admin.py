@@ -33,12 +33,11 @@ class FlatPageAdmin(admin.ModelAdmin):
 # Technical
 
 # Ship, Nation, Owners
-class VoyageShipInline(admin.StackedInline):
+class VoyageShipInline(admin.TabularInline):
     form = VoyageShipForm
     model = VoyageShip
     extra = 1
     max_num = 1
-    #inlines = (VoyageOwnerConnectionInline,)
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
@@ -56,10 +55,42 @@ class VoyageShipOwnerInline(admin.TabularInline):
 
 
 # Voyage Outcome
+class VoyageOutcomeInline(admin.TabularInline):
+    form = VoyageOutcomeForm
+    model = VoyageOutcome
+    extra = 1
+    max_num = 1
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
 
 # Voyage Itinerary
+class VoyageItineraryInline(admin.StackedInline):
+    form = VoyageItineraryForm
+    model = VoyageItinerary
+    extra = 1
+    max_num = 1
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
 
 # Voyage Dates
+class VoyageDatesInline(admin.StackedInline):
+    form = VoyageDatesForm
+    model = VoyageDates
+    extra = 1
+    max_num = 1
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 # Voyage Captain and Crew
 class VoyageCaptainConnectionInline(admin.TabularInline):
@@ -91,7 +122,8 @@ class VoyageAdmin(admin.ModelAdmin):
     It contains inlines elements and form for autocompleting as typing.
     """
     inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
-               VoyageShipOwnerInline)
+               VoyageShipOwnerInline, VoyageOutcomeInline,
+               VoyageItineraryInline, VoyageDatesInline)
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
@@ -118,10 +150,10 @@ admin.site.register(VoyageShip.RigOfVessel)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 
 # Voyage Outcome
-admin.site.register(VoyageOutcome)
+# attached as inline in Voyage section
 
 # Voyage Itinerary
-admin.site.register(VoyageItinerary)
+# attached as inline in Voyage section
 
 # Voyage Dates
 admin.site.register(VoyageDates)

@@ -104,12 +104,18 @@ class VoyageShip(models.Model):
         ton_type = models.CharField(max_length=35)
         code = models.IntegerField(max_length=2)
 
+        def __unicode__(self):
+            return self.ton_type
+
     class RigOfVessel(models.Model):
         """
         Rig of Vessel.
         """
         rig_of_vessel = models.CharField(max_length=25)
         code = models.IntegerField(max_length=2)
+
+        def __unicode__(self):
+            return self.rig_of_vessel
 
     # Data variables
     ship_name = models.CharField("Name of vessel", max_length=60,
@@ -152,7 +158,7 @@ class VoyageShip(models.Model):
                                       decimal_places=2,
                                       null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_ship")
 
     def __unicode__(self):
         return self.ship_name
@@ -197,12 +203,18 @@ class VoyageOutcome(models.Model):
         name = models.CharField("Outcome label", max_length=70)
         code = models.IntegerField("Code of outcome", max_length=3)
 
+        def __unicode__(self):
+            return self.name
+
     class SlavesOutcome(models.Model):
         """
         Outcome of voyage for slaves.
         """
         name = models.CharField("Outcome label", max_length=70)
         code = models.IntegerField("Code of outcome", max_length=1)
+
+        def __unicode__(self):
+            return self.name
 
     class VesselCapturedOutcome(models.Model):
         """
@@ -211,6 +223,9 @@ class VoyageOutcome(models.Model):
         name = models.CharField("Outcome label", max_length=70)
         code = models.IntegerField("Code of outcome", max_length=2)
 
+        def __unicode__(self):
+            return self.name
+
     class OwnerOutcome(models.Model):
         """
         Outcome of voyage for owner.
@@ -218,12 +233,18 @@ class VoyageOutcome(models.Model):
         name = models.CharField("Outcome label", max_length=70)
         code = models.IntegerField("Code of outcome", max_length=1)
 
+        def __unicode__(self):
+            return self.name
+
     class Resistance(models.Model):
         """
         Resistance labels
         """
         name = models.CharField("Resistance label", max_length=35)
         code = models.IntegerField("Code of resistance", max_length=1)
+
+        def __unicode__(self):
+            return self.name
 
     # Data variables
     particular_outcome = models.ForeignKey('ParticularOutcome',
@@ -238,6 +259,8 @@ class VoyageOutcome(models.Model):
                                                 null=True, blank=True)
     outcome_owner = models.ForeignKey('OwnerOutcome',
                                       null=True, blank=True)
+
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_outcome")
 
     def __unicode__(self):
         return self.particular_outcome
@@ -389,6 +412,8 @@ class VoyageItinerary(models.Model):
             ('BroadRegion', related_name="imp_broad_region_slave_dis",
              null=True, blank=True)
 
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_itinerary")
+
     class Meta:
         verbose_name = "Itinerary"
         verbose_name_plural = "Itineraries"
@@ -443,6 +468,8 @@ class VoyageDates(models.Model):
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
             ("Year of arrival at port of disembarkation",
              max_length=4, blank=True, null=True)
+
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_dates")
 
     class Meta:
         verbose_name = 'Date'
@@ -513,6 +540,8 @@ class VoyageCrew(models.Model):
     crew_deserted = models.IntegerField \
             ("Total number of crew deserted", max_length=2,
              null=True, blank=True)
+
+    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_crew")
 
     class Meta:
         verbose_name = 'Crew'
@@ -654,6 +683,9 @@ class VoyageSlavesCharacteristics(models.Model):
             ("Number of slaves disembarked at third place "
              "(SLAS39)", null=True, blank=True)
 
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_slave_characteristics")
+
     class Meta:
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
@@ -703,15 +735,7 @@ class Voyage(models.Model):
              help_text="Voyage Groupings for estimating imputed slaves")
 
     # Data and imputed variables
-    voyage_outcome = models.OneToOneField \
-            ('VoyageOutcome', help_text="Voyage Outcome",
-             null=True, blank=True)
-    voyage_itinerary = models.OneToOneField \
-            ('VoyageItinerary', help_text="Voyage Itinerary",
-             null=True, blank=True)
-    voyage_dates = models.OneToOneField \
-            ('VoyageDates', help_text="Voyage Dates",
-             null=True, blank=True)
+
     voyage_captain = models.ManyToManyField \
             ("VoyageCaptain", through=VoyageCaptainConnection,
              help_text="Voyage Captain",
@@ -720,14 +744,6 @@ class Voyage(models.Model):
         ("VoyageShipOwner", through=VoyageShipOwnerConnection,
          help_text="Voyage Ship Owner",
          blank=True, null=True)
-    voyage_crew = models.OneToOneField\
-            ("VoyageCrew", help_text="Voyage Crew",
-             blank=True, null=True)
-
-    voyage_slave_characteristics = models.OneToOneField \
-            ('VoyageSlavesCharacteristics',
-             help_text="Slaves (Characteristics) of the voyage",
-             blank=True, null=True,)
 
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
