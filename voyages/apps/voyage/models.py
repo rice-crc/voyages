@@ -245,25 +245,7 @@ class VoyageShip(models.Model):
     Information about voyage ship.
     related to: :model:`voyages.apps.voyages.Voyage.SpecificRegion`
     related to: :model:`voyages.apps.voyages.Voyage.Place`
-
     """
-
-    class Owner(models.Model):
-        """
-        Owner name.
-        Represents first_owner, second_owner, ...
-        """
-        name_of_owner = models.CharField(max_length=60)
-
-    class OwnerConnection(models.Model):
-        """
-        Represents the relation between Voyage Ship owners and
-        Owner.
-        captain_order represents order of each captain (1st, 2nd, ...)
-        """
-        owner = models.ForeignKey('Owner', related_name="owner")
-        ship = models.ForeignKey('VoyageShip', related_name="voyage_ship_owner")
-        captain_order = models.IntegerField(max_length=2)
 
     class Nationality(models.Model):
         """
@@ -319,10 +301,6 @@ class VoyageShip(models.Model):
     registered_region = models.ForeignKey \
             ('Region', related_name="registered_region",
              null=True, blank=True)
-    owners_of_venture = models.ManyToManyField\
-            ('Owner', through=OwnerConnection,
-            related_name="owners_of_venture",
-            null=True, blank=True)
 
     # Imputed variables
     imputed_nationality = models.ForeignKey\
@@ -342,6 +320,29 @@ class VoyageShip(models.Model):
     class Meta:
         verbose_name = 'Ship'
         verbose_name_plural = "Ships"
+
+
+class VoyageShipOwner(models.Model):
+    """
+    Owner name.
+    Represents first_owner, second_owner, ...
+    """
+    name = models.CharField(max_length=60)
+
+    def __unicode__(self):
+        return self.name
+
+
+class VoyageShipOwnerConnection(models.Model):
+    """
+    Represents the relation between Voyage Ship owners and
+    Owner.
+    captain_order represents order of each captain (1st, 2nd, ...)
+    """
+    owner = models.ForeignKey('VoyageShipOwner', related_name="owner_name")
+    voyage = models.ForeignKey('Voyage', related_name="voyage_related")
+    captain_order = models.IntegerField(max_length=2)
+
 
 class VoyageOutcome(models.Model):
     """
@@ -702,6 +703,10 @@ class Voyage(models.Model):
             ("VoyageCaptain", through=VoyageCaptainConnection,
              help_text="Voyage Captain",
              blank=True, null=True)
+    voyage_ship_owner = models.ManyToManyField \
+        ("VoyageShipOwner", through=VoyageShipOwnerConnection,
+         help_text="Voyage Ship Owner",
+         blank=True, null=True)
     voyage_crew = models.OneToOneField\
             ("VoyageCrew", help_text="Voyage Crew",
              blank=True, null=True)

@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 import autocomplete_light
 from .forms import *
-from .models import *
 
 
+# FlatPage Admin
 class FlatPageAdmin(admin.ModelAdmin):
     """
     Support for flat page.
@@ -27,10 +27,7 @@ class FlatPageAdmin(admin.ModelAdmin):
               )
 
 
-class VoyageOwnerConnectionInline(admin.TabularInline):
-    form = VoyageOwnerConnectionForm
-    model = VoyageShip.OwnerConnection
-
+# Voyage Admin
 class VoyageShipInline(admin.StackedInline):
     form = VoyageShipForm
     model = VoyageShip
@@ -53,6 +50,15 @@ class VoyageCaptainConnectionInline(admin.TabularInline):
     extra = 3
 
 
+class VoyageShipOwnerInline(admin.TabularInline):
+    """
+    Inline model for Captain Connection.
+    """
+    form = VoyageShipOwnerConnectionForm
+    model = VoyageShipOwnerConnection
+    extra = 3
+
+
 class VoyageCaptainAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """
@@ -66,16 +72,19 @@ class VoyageAdmin(admin.ModelAdmin):
     Admin panel for Voyage class.
     It contains inlines elements and form for autocompleting as typing.
     """
-    inlines = (VoyageCaptainConnectionInline, VoyageShipInline)
+    inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
+               VoyageShipOwnerInline)
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings']
 
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
-admin.site.register(Voyage, VoyageAdmin)
+
+
 admin.site.register(VoyageGroupings)
 admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
+admin.site.register(VoyageShipOwner)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 admin.site.register(VoyageOutcome)
 admin.site.register(VoyageItinerary)
@@ -89,3 +98,4 @@ admin.site.register(Place)
 admin.site.register(VoyageShip.Nationality)
 admin.site.register(VoyageShip.TonType)
 admin.site.register(VoyageShip.RigOfVessel)
+admin.site.register(Voyage, VoyageAdmin)
