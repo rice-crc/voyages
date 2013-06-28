@@ -55,7 +55,7 @@ class Faq(models.Model):
         verbose_name_plural = 'FAQs'
 
 
-from .search_indexes import FaqIndex
+from .search_indexes import FaqIndex, GlossaryIndex
 
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_faqCategory(sender, **kwargs):

@@ -1,3 +1,4 @@
+
 from voyages.apps.voyage.models import *
 from datetime import datetime
 
@@ -10,6 +11,7 @@ data = first_line.split(',')
 varNameDict = {}
 NULL_VAL = "\N"
 
+listSources = VoyageSources.objects.all()
 
 for index, term in enumerate(data):
     varNameDict[term] = index
@@ -28,6 +30,25 @@ def getIntFieldValue(fieldname):
     except ValueError:
         return None
 
+# Potentially has a bug!!!!!!!!
+def findBestMachingSource(matchstring):
+    # Base case if the string is too short
+    if len(matchstring) <= 2:
+        return None
+
+    for source in listSources:
+        if source.short_ref.find(matchstring) > -1:
+            return source
+
+    # Find the best matching/contains the substring
+    # : should be the last delimiter, then
+    tmpPos = max(matchstring.rfind(':'), matchstring.rfind(","))
+    if tmpPos > -1:
+        return findBestMachingSource(matchstring[: tmpPos])
+    else:
+        return None
+
+
 for line in input_file:
     data = line.split(',')
 
@@ -36,15 +57,11 @@ for line in input_file:
     voyageObj.voyage_ship = VoyageShip()
     voyageObj.voyage_ship.ship_name = data[varNameDict['shipname']]
 
-    # crew section
-    crew = VoyageCaptainCrew()
-    if isNotBlank('captaina'):
-        crew.first_captain = VoyageCaptainCrew.Captain.objects.get_or_create(name=getFieldValue('captaina'))
-    if isNotBlank('captainb'):
-        crew.second_captain = VoyageCaptainCrew.Captain.objects.get_or_create(name=getFieldValue('captainb'))
-    if isNotBlank('captainc'):
-        crew.third_captain = VoyageCaptainCrew.Captain.objects.get_or_create(name=getFieldValue('captainc'))
+    if getFieldValue('suggestion') != "t" or getFieldValue('revision') != 1:
+        continue
 
+    # Captain and Crew section
+    crew = VoyageCrew.objects.create()
     crew.crew_voyage_outset = getIntFieldValue('crew1')
     crew.crew_departure_last_port = getIntFieldValue('crew2')
     crew.crew_first_landing = getIntFieldValue('crew3')
@@ -58,8 +75,27 @@ for line in input_file:
     crew.crew_died_on_return_voyage = getIntFieldValue('saild5')
     crew.crew_died_complete_voyage = getIntFieldValue('crewdied')
     crew.crew_deserted = getIntFieldValue('ndesert')
+    # crew.save()
 
     voyageObj.voyage_captain_crew = crew
+
+    if isNotBlank('captaina'):
+        first_captain = VoyageCaptain.Captain.objects.get_or_create(
+            name=getFieldValue('captaina'))
+        VoyageCaptainConnection.objects.create(
+            captain_order=1, captain=first_captain, voyage=voyageObj)
+
+    if isNotBlank('captainb'):
+        second_captain = VoyageCaptain.Captain.objects.get_or_create(
+            name=getFieldValue('captainb'))
+        VoyageCaptainConnection.objects.create(
+            captain_order=2, captain=second_captain, voyage=voyageObj)
+
+    if isNotBlank('captainc'):
+        third_captain = VoyageCaptain.Captain.objects.get_or_create(
+            name=getFieldValue('captainc'))
+        VoyageCaptainConnection.objects.create(
+            captain_order=3, captain=third_captain, voyage=voyageObj)
 
     # Voyage numbers and characteristics
     characteristics = VoyageSlavesCharacteristics()
@@ -109,4 +145,3 @@ for line in input_file:
 
     voyageObj.voyage_dates = voyage_dates
 
-    characteristics.voyageObj.save()

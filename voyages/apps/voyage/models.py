@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
-
 # Voyage Regions and Places
 class BroadRegion(models.Model):
     """
@@ -708,7 +707,6 @@ class VoyageSources(models.Model):
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
 
-
 class SourceVoyageConnection(models.Model):
     """
     Represents the relationship between Voyage and VoyageSources
@@ -717,6 +715,7 @@ class SourceVoyageConnection(models.Model):
     source = models.ForeignKey('VoyageSources', related_name="source")
     group = models.ForeignKey('Voyage', related_name="group")
     source_order = models.IntegerField(max_length=2)
+    text_ref = models.CharField(_('Text reference(citation)'), max_length=100, null=True, blank=True)
 
 
 # Voyage (main) model
