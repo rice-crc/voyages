@@ -29,6 +29,17 @@ class FlatPageAdmin(admin.ModelAdmin):
 
 # Voyage Admin
 # Regions, Places
+class BroadRegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+
+
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+
+
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+
 
 # Technical
 class VoyageGroupingsAdmin(admin.ModelAdmin):
@@ -253,9 +264,9 @@ admin.site.register(FlatPage, FlatPageAdmin)
 
 # Voyage
 # Regions, Places
-admin.site.register(Region)
-admin.site.register(BroadRegion)
-admin.site.register(Place)
+admin.site.register(Region, RegionAdmin)
+admin.site.register(BroadRegion, BroadRegionAdmin)
+admin.site.register(Place, PlaceAdmin)
 
 # Technical
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
