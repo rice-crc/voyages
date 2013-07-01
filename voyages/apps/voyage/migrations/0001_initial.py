@@ -265,7 +265,7 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageSlavesNumbers'
         db.create_table(u'voyage_voyageslavesnumbers', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slave_deaths_before_africa', self.gf('django.db.models.fields.IntegerField')()),
+            ('slave_deaths_before_africa', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('slave_deaths_between_africa_america', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('num_slaves_intended_first_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('num_slaves_intended_second_port', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
@@ -759,7 +759,7 @@ class Migration(SchemaMigration):
             'num_women_embark_first_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_women_embark_second_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'num_women_embark_third_port_purchase': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'slave_deaths_before_africa': ('django.db.models.fields.IntegerField', [], {}),
+            'slave_deaths_before_africa': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'slave_deaths_between_africa_america': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_num_slaves_arr_first_port_embark': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'total_num_slaves_dep_last_slaving_port': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
