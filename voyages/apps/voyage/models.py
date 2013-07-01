@@ -107,6 +107,10 @@ class VoyageShip(models.Model):
         ton_type = models.CharField(max_length=35)
         code = models.IntegerField(max_length=2)
 
+        class Meta:
+            verbose_name = "Type of tons"
+            verbose_name_plural = "Types of tons"
+
         def __unicode__(self):
             return self.ton_type
 
@@ -116,6 +120,10 @@ class VoyageShip(models.Model):
         """
         rig_of_vessel = models.CharField(max_length=25)
         code = models.IntegerField(max_length=2)
+
+        class Meta:
+            verbose_name = "Rig of vessel"
+            verbose_name_plural = "Rigs of vessel"
 
         def __unicode__(self):
             return self.rig_of_vessel

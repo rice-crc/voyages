@@ -41,6 +41,7 @@ class VoyageGroupingsAdmin(admin.ModelAdmin):
         """
         return {}
 
+
 # Ship, Nation, Owners
 class VoyageShipInline(admin.TabularInline):
     form = VoyageShipForm
@@ -66,6 +67,28 @@ class VoyageShipOwnerInline(admin.TabularInline):
 class VoyageNationalityAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.Nationality
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+class VoyageRigOfVesselAdmin(admin.ModelAdmin):
+    """
+    Admin for Voyage.RigOfVessel
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+class VoyageTonTypeAdmin(admin.ModelAdmin):
+    """
+    Admin for Voyage.TonType
     """
     def get_model_perms(self, request):
         """
@@ -177,6 +200,17 @@ class VoyageSourcesConnectionAdmin(admin.ModelAdmin):
         return {}
 
 
+class VoyageSources(admin.ModelAdmin):
+    """
+    Admin for VoyageSources.
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 class VoyageSourcesConnectionInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
@@ -217,8 +251,8 @@ admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 # Ship, Nation, Owners
 admin.site.register(VoyageShipOwner)
 admin.site.register(VoyageShip.Nationality, VoyageNationalityAdmin)
-admin.site.register(VoyageShip.TonType)
-admin.site.register(VoyageShip.RigOfVessel)
+admin.site.register(VoyageShip.TonType, VoyageTonTypeAdmin)
+admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 
 # Voyage Outcome
