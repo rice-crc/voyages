@@ -13,6 +13,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=35)),
             ('code', self.gf('django.db.models.fields.IntegerField')(max_length=5)),
+            ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal(u'voyage', ['BroadRegion'])
 
@@ -22,6 +23,8 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=35)),
             ('broad_region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.BroadRegion'])),
             ('code', self.gf('django.db.models.fields.IntegerField')(max_length=5)),
+            ('how_on_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('show_on_main_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal(u'voyage', ['Region'])
 
@@ -31,8 +34,10 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=35)),
             ('region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Region'])),
             ('code', self.gf('django.db.models.fields.IntegerField')(max_length=5)),
-            ('longtitude', self.gf('django.db.models.fields.DecimalField')(max_length=7, max_digits=3, decimal_places=3, blank=True)),
-            ('latitude', self.gf('django.db.models.fields.DecimalField')(max_length=7, max_digits=3, decimal_places=3, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=7, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=7, blank=True)),
+            ('show_on_main_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('show_on_voyage_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal(u'voyage', ['Place'])
 
@@ -336,21 +341,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'voyage', ['VoyageSlavesNumbers'])
 
-        # Adding model 'GroupComposition'
-        db.create_table(u'voyage_groupcomposition', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('num_men', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_women', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_boy', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_girl', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_adult', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_child', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_infant', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_males', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('num_females', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'voyage', ['GroupComposition'])
-
         # Adding model 'VoyageSources'
         db.create_table(u'voyage_voyagesources', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -448,9 +438,6 @@ class Migration(SchemaMigration):
         # Deleting model 'VoyageSlavesNumbers'
         db.delete_table(u'voyage_voyageslavesnumbers')
 
-        # Deleting model 'GroupComposition'
-        db.delete_table(u'voyage_groupcomposition')
-
         # Deleting model 'VoyageSources'
         db.delete_table(u'voyage_voyagesources')
 
@@ -466,20 +453,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'BroadRegion'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '35'})
-        },
-        u'voyage.groupcomposition': {
-            'Meta': {'object_name': 'GroupComposition'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'num_adult': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_boy': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_child': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_females': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_girl': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_infant': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_males': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_men': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'num_women': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '35'}),
+            'show_on_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
         u'voyage.integerdate': {
             'Meta': {'object_name': 'IntegerDate'},
@@ -508,17 +483,21 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Place'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latitude': ('django.db.models.fields.DecimalField', [], {'max_length': '7', 'max_digits': '3', 'decimal_places': '3', 'blank': 'True'}),
-            'longtitude': ('django.db.models.fields.DecimalField', [], {'max_length': '7', 'max_digits': '3', 'decimal_places': '3', 'blank': 'True'}),
+            'latitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '35'}),
-            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Region']"})
+            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Region']"}),
+            'show_on_main_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'show_on_voyage_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
         u'voyage.region': {
             'Meta': {'object_name': 'Region'},
             'broad_region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.BroadRegion']"}),
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
+            'how_on_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '35'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '35'}),
+            'show_on_main_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
         u'voyage.resistance': {
             'Meta': {'object_name': 'Resistance'},
