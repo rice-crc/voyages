@@ -9,6 +9,7 @@ class BroadRegion(models.Model):
 
     name = models.CharField("Broad region", max_length=35)
     code = models.IntegerField("Numeric code", max_length=5)
+    show_on_map = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Broad Region'
@@ -29,6 +30,8 @@ class Region(models.Model):
                                                max_length=35)
     broad_region = models.ForeignKey('BroadRegion')
     code = models.IntegerField("Numeric code", max_length=5)
+    show_on_map = models.BooleanField(default=True)
+    show_on_main_map = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Region'
@@ -48,12 +51,14 @@ class Place(models.Model):
     name = models.CharField(max_length=35)
     region = models.ForeignKey('Region')
     code = models.IntegerField("Numeric code", max_length=5)
-    longtitude = models.DecimalField("Longtitude of point",
-                                     max_length=7, max_digits=3, decimal_places=3,
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
                                      blank=True)
     latitude = models.DecimalField("Latitude of point",
-                                     max_length=7, max_digits=3, decimal_places=3,
+                                     max_digits=10, decimal_places=7,
                                      blank=True)
+    show_on_main_map = models.BooleanField(default=True)
+    show_on_voyage_map = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Place'
@@ -816,44 +821,6 @@ class VoyageSlavesNumbers(models.Model):
     class Meta:
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
-
-
-class GroupComposition(models.Model):
-        """
-        Basic composition of a group of slaves
-            used by 'VoyageSlavesCharacteristics'
-        """
-        # Representing MEN* variables
-        num_men = models.IntegerField \
-                ("Number of men (MEN*)", null=True, blank=True)
-        # Representing WOMEN* variables
-        num_women = models.IntegerField \
-                ("Number of women (WOMEN*)", null=True, blank=True)
-        # Representing BOY* variables
-        num_boy = models.IntegerField \
-                ("Number of boys (BOY*)", null=True, blank=True)
-        # Representing GIRL* variables
-        num_girl = models.IntegerField \
-                ("Number of girls (GIRL*)", null=True, blank=True)
-        # Representing ADULT* variables
-        num_adult = models.IntegerField \
-                ("Number of adults (gender unspecified) (ADULT*)",
-                 null=True, blank=True)
-        # Representing CHILD* variables
-        num_child = models.IntegerField \
-                ("Number of children (gender unspecified) (CHILD*)",
-                 null=True, blank=True)
-        # Representing INFANT* variables
-        num_infant = models.IntegerField \
-                ("Number of infants (INFANT*)", null=True, blank=True)
-        # Representing MALE* variables
-        num_males = models.IntegerField \
-                ("Number of males (age unspecified) (MALE*)",
-                 null=True, blank=True)
-        # Representing FEMALE* variables
-        num_females = models.IntegerField \
-                ("Number of females (age unspecified) (FEMALE*)",
-                 null=True, blank=True)
 
 
 # Voyage Sources

@@ -98,7 +98,7 @@ for line in input_file:
             captain_order=3, captain=third_captain, voyage=voyageObj)
 
     # Voyage numbers and characteristics
-    characteristics = VoyageSlavesCharacteristics()
+    characteristics = VoyageSlavesNumbers.objects.create()
 
     characteristics.num_slaves_intended_first_port = getIntFieldValue("slintend")
     characteristics.num_slaves_intended_second_port = getIntFieldValue("slintend2")
@@ -112,29 +112,67 @@ for line in input_file:
     characteristics.num_slaves_disembark_second_place = getIntFieldValue("slas36")
     characteristics.num_slaves_disembark_third_place = getIntFieldValue("slas39")
 
-    tempCharacteristics = []
-    for idx in range(1, 6):
-        tmpGroup = VoyageSlavesCharacteristics.GroupComposition()
-        tmpGroup.num_men = getIntFieldValue("men" + str(idx))
-        tmpGroup.num_women = getIntFieldValue("women" + str(idx))
-        tmpGroup.num_boy = getIntFieldValue("boy" + str(idx))
-        tmpGroup.num_girl = getIntFieldValue("girl" + str(idx))
-        tmpGroup.num_males = getIntFieldValue("male" + str(idx))
-        tmpGroup.num_females = getIntFieldValue("female" + str(idx))
-        tmpGroup.num_adult = getIntFieldValue("adult" + str(idx))
-        tmpGroup.num_child = getIntFieldValue("child" + str(idx))
-        tmpGroup.num_infant = getIntFieldValue("infant" + str(idx))
+    characteristics.num_men_embark_first_port_purchase = getIntFieldValue("men1")
+    characteristics.num_women_embark_first_port_purchase = getIntFieldValue("women1")
+    characteristics.num_boy_embark_first_port_purchase = getIntFieldValue("boy1")
+    characteristics.num_girl_embark_first_port_purchase = getIntFieldValue("girl1")
+    characteristics.num_adult_embark_first_port_purchase = getIntFieldValue("adult1")
+    characteristics.num_child_embark_first_port_purchase = getIntFieldValue("child1")
+    characteristics.num_infant_embark_first_port_purchase = getIntFieldValue("infant1")
+    characteristics.num_males_embark_first_port_purchase = getIntFieldValue("male1")
+    characteristics.num_females_embark_first_port_purchase = getIntFieldValue("female1")
 
-        tempCharacteristics.append(tmpGroup)
+    characteristics.num_men_died_middle_passage = getIntFieldValue("men2")
+    characteristics.num_women_died_middle_passage = getIntFieldValue("women2")
+    characteristics.num_boy_died_middle_passage = getIntFieldValue("boy2")
+    characteristics.num_girl_died_middle_passage = getIntFieldValue("girl2")
+    characteristics.num_adult_died_middle_passage = getIntFieldValue("adult2")
+    characteristics.num_child_died_middle_passage = getIntFieldValue("child2")
+    characteristics.num_infant_died_middle_passage = getIntFieldValue("infant2")
+    characteristics.num_males_died_middle_passage = getIntFieldValue("male2")
+    characteristics.num_females_died_middle_passage = getIntFieldValue("female2")
 
-    characteristics.embarked_first_port_purchase = tempCharacteristics[0]
-    characteristics.died_on_middle_passage = tempCharacteristics[1]
-    characteristics.disembarked_first_place = tempCharacteristics[2]
-    characteristics.embarked_second_port_purchase = tempCharacteristics[3]
-    characteristics.embarked_third_port_purchase = tempCharacteristics[4]
-    characteristics.disembarked_third_place = tempCharacteristics[5]
+    characteristics.num_men_disembark_first_landing = getIntFieldValue("men3")
+    characteristics.num_women_disembark_first_landing = getIntFieldValue("women3")
+    characteristics.num_boy_disembark_first_landing = getIntFieldValue("boy3")
+    characteristics.num_girl_disembark_first_landing = getIntFieldValue("girl3")
+    characteristics.num_adult_disembark_first_landing = getIntFieldValue("adult3")
+    characteristics.num_child_disembark_first_landing = getIntFieldValue("child3")
+    characteristics.num_infant_disembark_first_landing = getIntFieldValue("infant3")
+    characteristics.num_males_disembark_first_landing = getIntFieldValue("male3")
+    characteristics.num_females_disembark_first_landing = getIntFieldValue("female3")
 
-    voyageObj.voyage_slave_characteristics = characteristics
+    characteristics.num_men_embark_second_port_purchase = getIntFieldValue("men4")
+    characteristics.num_women_embark_second_port_purchase = getIntFieldValue("women4")
+    characteristics.num_boy_embark_second_port_purchase = getIntFieldValue("boy4")
+    characteristics.num_girl_embark_second_port_purchase = getIntFieldValue("girl4")
+    characteristics.num_adult_embark_second_port_purchase = getIntFieldValue("adult4")
+    characteristics.num_child_embark_second_port_purchase = getIntFieldValue("child4")
+    characteristics.num_infant_embark_second_port_purchase = getIntFieldValue("infant4")
+    characteristics.num_males_embark_second_port_purchase = getIntFieldValue("male4")
+    characteristics.num_females_embark_second_port_purchase = getIntFieldValue("female4")
+
+    characteristics.num_men_embark_third_port_purchase = getIntFieldValue("men5")
+    characteristics.num_women_embark_third_port_purchase = getIntFieldValue("women")
+    characteristics.num_boy_embark_third_port_purchase = getIntFieldValue("boy5")
+    characteristics.num_girl_embark_third_port_purchase = getIntFieldValue("girl5")
+    characteristics.num_adult_embark_third_port_purchase = getIntFieldValue("adult5")
+    characteristics.num_child_embark_third_port_purchase = getIntFieldValue("child5")
+    characteristics.num_infant_embark_third_port_purchase = getIntFieldValue("infant5")
+    characteristics.num_males_embark_third_port_purchase = getIntFieldValue("male5")
+    characteristics.num_females_embark_third_port_purchase = getIntFieldValue("female5")
+
+    characteristics.num_men_disembark_second_landing = getIntFieldValue("men6")
+    characteristics.num_women_embark_first_port_purchase = getIntFieldValue("women6")
+    characteristics.num_boy_embark_first_port_purchase = getIntFieldValue("boy6")
+    characteristics.num_girl_embark_first_port_purchase = getIntFieldValue("girl6")
+    characteristics.num_adult_embark_first_port_purchase = getIntFieldValue("adult6")
+    characteristics.num_child_embark_first_port_purchase = getIntFieldValue("child6")
+    characteristics.num_infant_embark_first_port_purchase = getIntFieldValue("infant6")
+    characteristics.num_males_embark_first_port_purchase = getIntFieldValue("male6")
+    characteristics.num_females_embark_first_port_purchase = getIntFieldValue("female6")
+
+    characteristics.voyage = voyageObj
 
     # In progress - might need to change
     voyage_dates = VoyageDates()
@@ -168,7 +206,7 @@ for line in input_file:
         if isNotBlank(fieldname):
             src = findBestMachingSource(getFieldValue(fieldname))
             if src is not None:
-                SourceVoyageConnection.objects.create(source=src, source_order=order,
+                VoyageSourcesConnection.objects.create(source=src, source_order=order,
                                                       text_ref=getFieldValue(fieldname),
                                                       group=voyageObj)
             else :
@@ -177,5 +215,6 @@ for line in input_file:
     # Alphabetical letters between a and r
     letters = map(chr, range(97, 115))
     for idx, letter in letters:
+        # Inserting sourcea, sourceb. .. sourcer
         insertSource('source' + letter, (idx + 1))
 
