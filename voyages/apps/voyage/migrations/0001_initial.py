@@ -34,8 +34,8 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=35)),
             ('region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Region'])),
             ('code', self.gf('django.db.models.fields.IntegerField')(max_length=5)),
-            ('longitude', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=7, blank=True)),
-            ('latitude', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=7, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=7, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=7, blank=True)),
             ('show_on_main_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('show_on_voyage_map', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
@@ -105,7 +105,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='owner_name', to=orm['voyage.VoyageShipOwner'])),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage_related', to=orm['voyage.Voyage'])),
-            ('captain_order', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
+            ('owner_order', self.gf('django.db.models.fields.IntegerField')(max_length=2)),
         ))
         db.send_create_signal(u'voyage', ['VoyageShipOwnerConnection'])
 
@@ -243,7 +243,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('captain', self.gf('django.db.models.fields.related.ForeignKey')(related_name='captain_name', to=orm['voyage.VoyageCaptain'])),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(related_name='voyage', to=orm['voyage.Voyage'])),
-            ('captain_order', self.gf('django.db.models.fields.CharField')(default=1, max_length=7)),
+            ('captain_order', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
         ))
         db.send_create_signal(u'voyage', ['VoyageCaptainConnection'])
 
@@ -483,8 +483,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Place'},
             'code': ('django.db.models.fields.IntegerField', [], {'max_length': '5'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
-            'longitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
+            'latitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '7', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '35'}),
             'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Region']"}),
             'show_on_main_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -546,7 +546,7 @@ class Migration(SchemaMigration):
         u'voyage.voyagecaptainconnection': {
             'Meta': {'object_name': 'VoyageCaptainConnection'},
             'captain': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'captain_name'", 'to': u"orm['voyage.VoyageCaptain']"}),
-            'captain_order': ('django.db.models.fields.CharField', [], {'default': '1', 'max_length': '7'}),
+            'captain_order': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'voyage': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage'", 'to': u"orm['voyage.Voyage']"})
         },
@@ -668,9 +668,9 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyageshipownerconnection': {
             'Meta': {'object_name': 'VoyageShipOwnerConnection'},
-            'captain_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'owner_name'", 'to': u"orm['voyage.VoyageShipOwner']"}),
+            'owner_order': ('django.db.models.fields.IntegerField', [], {'max_length': '2'}),
             'voyage': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'voyage_related'", 'to': u"orm['voyage.Voyage']"})
         },
         u'voyage.voyageslavesnumbers': {
