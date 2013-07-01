@@ -64,6 +64,17 @@ class VoyageShipOwnerInline(admin.TabularInline):
     extra = 3
 
 
+class VoyageShipOwnerAdmin(admin.ModelAdmin):
+    """
+    Admin for VoyageShipOwner.
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
 class VoyageNationalityAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.Nationality
@@ -200,7 +211,7 @@ class VoyageSourcesConnectionAdmin(admin.ModelAdmin):
         return {}
 
 
-class VoyageSources(admin.ModelAdmin):
+class VoyageSourcesAdmin(admin.ModelAdmin):
     """
     Admin for VoyageSources.
     """
@@ -249,7 +260,7 @@ admin.site.register(Place)
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
-admin.site.register(VoyageShipOwner)
+admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(VoyageShip.Nationality, VoyageNationalityAdmin)
 admin.site.register(VoyageShip.TonType, VoyageTonTypeAdmin)
 admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
@@ -275,7 +286,7 @@ admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
 # attached as inline in Voyage section
 
 # Voyage Sources
-admin.site.register(VoyageSources)
+admin.site.register(VoyageSources, VoyageSourcesAdmin)
 
 # Voyage (main section)
 admin.site.register(Voyage, VoyageAdmin)
