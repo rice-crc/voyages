@@ -7,7 +7,7 @@ class BroadRegion(models.Model):
     Broad Regions (continents).
     """
 
-    name = models.CharField("Broad region", max_length=35)
+    name = models.CharField("Broad region name", max_length=35)
     code = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
 
@@ -53,10 +53,10 @@ class Place(models.Model):
     code = models.IntegerField("Numeric code", max_length=5)
     longitude = models.DecimalField("Longitude of point",
                                      max_digits=10, decimal_places=7,
-                                     blank=True)
+                                     null=True, blank=True)
     latitude = models.DecimalField("Latitude of point",
                                      max_digits=10, decimal_places=7,
-                                     blank=True)
+                                     null=True, blank=True)
     show_on_main_map = models.BooleanField(default=True)
     show_on_voyage_map = models.BooleanField(default=True)
 
