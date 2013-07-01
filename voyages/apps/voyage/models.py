@@ -547,14 +547,11 @@ class VoyageCaptain(models.Model):
 
 
 class VoyageCaptainConnection(models.Model):
-    CHOICES = ((1, "First"), (2, "Second"), (3, "Third"))
     captain = models.ForeignKey\
             ('VoyageCaptain', related_name='captain_name')
     voyage = models.ForeignKey\
             ('Voyage', related_name='voyage')
-    captain_order = models.CharField(max_length=7,
-                                     choices = CHOICES,
-                                     default=1)
+    captain_order = models.IntegerField(max_length=1)
 
 
 class VoyageCrew(models.Model):
