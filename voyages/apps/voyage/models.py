@@ -297,35 +297,45 @@ class VoyageItinerary(models.Model):
 
     # Data variables
     port_of_departure = models.ForeignKey \
-            ('Place', related_name="port_of_departure", null=True, blank=True)
+            ('Place', related_name="port_of_departure",
+             verbose_name="Port of departure",
+             null=True, blank=True)
     # Intended variables
     int_first_port_emb = models.ForeignKey \
             ('Place', related_name="int_first_port_emb",
+             verbose_name="First intended port of embarkation",
              null=True, blank=True)
     int_second_port_emb = models.ForeignKey \
             ('Place', related_name="int_second_port_emb",
+             verbose_name="Second intended port of embarkation",
              null=True, blank=True)
     int_first_region_purchase_slaves = models.ForeignKey \
             ('Region',
              related_name="int_first_region_purchase_slaves",
+             verbose_name="First intended region of purchase of slaves",
              null=True, blank=True)
     int_second_region_purchase_slaves = models.ForeignKey \
             ('Region',
              related_name="int_second_region_purchase_slaves",
+             verbose_name="Second intended region of purchase of slaves",
              null=True, blank=True)
     int_first_port_dis = models.ForeignKey\
             ('Place', related_name="int_first_port_dis",
+             verbose_name="First intended port of disembarkation",
              null=True, blank=True)
     int_second_port_dis = models.ForeignKey\
             ('Place', related_name="int_second_port_dis",
+             verbose_name="Second intended port of disembarkation",
              null=True, blank=True)
     int_first_region_slave_landing = models.ForeignKey \
             ('Region',
              related_name="int_first_region_slave_landing",
+             verbose_name="First intended region of slave landing",
              null=True, blank=True)
     int_second_region_slave_landing = models.ForeignKey \
             ('Region',
              related_name="int_second_region_slave_landing",
+             verbose_name="Second intended region of slave landing",
              null=True, blank=True)
 
     # End of intended variables
@@ -334,98 +344,127 @@ class VoyageItinerary(models.Model):
              max_length=3, null=True, blank=True)
     first_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="first_place_slave_purchase",
+            verbose_name="First place of slave purchase",
              null=True, blank=True)
     second_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="second_place_slave_purchase",
+             verbose_name="Second place of slave purchase",
              null=True, blank=True)
     third_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="third_place_slave_purchase",
+             verbose_name="Third place of slave purchase",
              null=True, blank=True)
 
     first_region_slave_emb = models.ForeignKey\
             ('Region', related_name="first_region_slave_emb",
+             verbose_name="First region of embarkation of slaves",
              null=True, blank=True)
     second_region_slave_emb = models.ForeignKey\
             ('Region', related_name="second_region_slave_emb",
+             verbose_name="Second region of embarkation of slaves",
              null=True, blank=True)
     third_region_slave_emb = models.ForeignKey\
             ('Region', related_name="third_region_slave_emb",
+             verbose_name="Third region of embarkation of slaves",
              null=True, blank=True)
 
     port_of_call_before_atl_crossing = models.ForeignKey \
             ('Place', related_name="port_of_call_before_atl_crossing",
+             verbose_name="Port of call before Atlantic crossing",
              null=True, blank=True)
     number_of_ports_of_call = models.ForeignKey \
             ('Place', related_name="number_of_ports_of_call",
+             verbose_name="Number of ports of call in Americas "
+                          "prior to sale of slaves",
              null=True, blank=True)
 
     first_landing_place = models.ForeignKey \
             ('Place', related_name="first_landing_place",
+             verbose_name="First place of slave landing",
              null=True, blank=True)
     second_landing_place = models.ForeignKey \
             ('Place', related_name="second_landing_place",
+             verbose_name="Second place of slave landing",
              null=True, blank=True)
     third_landing_place = models.ForeignKey \
             ('Place', related_name="third_landing_place",
+             verbose_name="Third place of slave landing",
              null=True, blank=True)
 
     first_landing_region = models.ForeignKey \
             ('Region', related_name="first_landing_region",
+             verbose_name="First region of slave landing",
              null=True, blank=True)
     second_landing_region = models.ForeignKey \
             ('Region', related_name="second_landing_region",
+             verbose_name="Second region of slave landing",
              null=True, blank=True)
     third_landing_region = models.ForeignKey \
             ('Region', related_name="third_landing_region",
+             verbose_name="Third region of slave landing",
              null=True, blank=True)
 
     place_voyage_ended = models.ForeignKey \
             ('Place', related_name="place_voyage_ended",
+             verbose_name="Place at which voyage ended",
              null=True, blank=True)
     region_of_return = models.ForeignKey \
             ('Region', related_name="region_of_return",
+             verbose_name="Region of return",
              null=True, blank=True)
     broad_region_of_return = models.ForeignKey \
             ('Region', related_name="broad_region_of_return",
+             verbose_name="Broad region of return",
              null=True, blank=True)
 
     # Imputed variables
     imp_port_voyage_begin = models.ForeignKey \
             ('Place', related_name="imp_port_voyage_begin",
+             verbose_name="Imputed port where voyage began",
              null=True, blank=True)
     imp_region_voyage_begin = models.ForeignKey \
             ('Region', related_name="imp_region_voyage_begin",
+             verbose_name="Imputed region where voyage began",
              null=True, blank=True)
     imp_broad_region_voyage_begin = models.ForeignKey \
             ('BroadRegion', related_name="imp_broad_region_voyage_begin",
+             verbose_name="Imputed broad region where voyage began",
              null=True, blank=True)
     principal_place_of_slave_purchase = models.ForeignKey \
             ('Place', related_name="principal_place_of_slave_purchase",
+             verbose_name="Principal place of slave purchase",
              null=True, blank=True)
     imp_principal_place_of_slave_purchase = models.ForeignKey \
             ('Place',
              related_name="imp_principal_place_of_slave_purchase",
+             verbose_name="Imputed principal place of slave purchase",
              null=True, blank=True)
     imp_principal_region_of_slave_purchase = models.ForeignKey \
-            ('Region', related_name=
-            "imp_principal_region_of_slave_purchase",
+            ('Region',
+             related_name="imp_principal_region_of_slave_purchase",
+             verbose_name="Imputed principal region of slave purchase",
              null=True, blank=True)
     imp_broad_region_of_slave_purchase = models.ForeignKey\
             ('BroadRegion',
              related_name="imp_broad_region_of_slave_purchase",
+             verbose_name="Imputed principal broad region of slave purchase",
              null=True, blank=True)
     principal_port_of_slave_dis = models.ForeignKey \
             ('Place', related_name="principal_port_of_slave_dis",
+             verbose_name="Principal port of slave disembarkation",
              null=True, blank=True)
     imp_principal_port_slave_dis = models.ForeignKey \
             ('Place', related_name="imp_principal_port_slave_dis",
+             verbose_name="Imputed principal port of slave disembarkation",
              null=True, blank=True)
     imp_principal_region_slave_dis = models.ForeignKey \
             ('Region',
              related_name="imp_principal_region_slave_dis",
+             verbose_name="Imputed principal region of slave disembarkation",
              null=True, blank=True)
     imp_broad_region_slave_dis = models.ForeignKey \
             ('BroadRegion', related_name="imp_broad_region_slave_dis",
+             verbose_name="Imputed broad region of slave disembarkation",
              null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_itinerary")
@@ -572,7 +611,8 @@ class VoyageSlavesNumbers(models.Model):
     """
 
     slave_deaths_before_africa = models.IntegerField \
-            ("Slaves death before leaving Africa (SLADAFRI)")
+            ("Slaves death before leaving Africa (SLADAFRI)",
+             null=True, blank=True)
     slave_deaths_between_africa_america = models.IntegerField \
             ("Slaves death between Africa and Americas (SLADVOY)",
              null=True, blank=True)
@@ -859,12 +899,10 @@ class Voyage(models.Model):
 
     voyage_id = models.AutoField(primary_key=True)
 
-    voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM", max_length=1, blank=True)
+    voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?", max_length=1, blank=True)
 
     # Technical variables
-    voyage_groupings = models.ForeignKey \
-            ('VoyageGroupings',
-             help_text="Voyage Groupings for estimating imputed slaves")
+    voyage_groupings = models.ForeignKey('VoyageGroupings')
 
     # Data and imputed variables
 
