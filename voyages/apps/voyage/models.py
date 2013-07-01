@@ -553,6 +553,7 @@ class VoyageCaptainConnection(models.Model):
     related to: :model:`voyages.apps.voyages.VoyageCaptain`
     related to: :model:`voyages.apps.voyages.Voyage`
     """
+
     captain = models.ForeignKey\
             ('VoyageCaptain', related_name='captain_name')
     voyage = models.ForeignKey\
@@ -561,6 +562,11 @@ class VoyageCaptainConnection(models.Model):
 
 
 class VoyageCrew(models.Model):
+    """
+    Voyage Crew.
+    related to: :model:`voyages.apps.voyages.Voyage`
+    """
+
     crew_voyage_outset = models.IntegerField\
             ("Crew at voyage outset",
              max_length=3, null=True, blank=True)
@@ -929,6 +935,7 @@ class VoyageSources(models.Model):
     Representing the original variables SOURCEA, SOURCEB, SOURCEC
     and etc to SOURCER
     """
+
     short_ref = models.CharField(_('Short reference'),
                                  max_length=100, null=True, blank=True)
     # Might contain HTML text formatting
@@ -943,6 +950,8 @@ class VoyageSourcesConnection(models.Model):
     """
     Represents the relationship between Voyage and VoyageSources
     source_order determines the order sources appear for each voyage
+    related to: :model:`voyages.apps.voyages.VoyageSources`
+    related to: :model:`voyages.apps.voyages.Voyage`
     """
     source = models.ForeignKey('VoyageSources', related_name="source")
     group = models.ForeignKey('Voyage', related_name="group")
@@ -955,6 +964,10 @@ class VoyageSourcesConnection(models.Model):
 class Voyage(models.Model):
     """
     Information about voyages.
+    related to: :model:`voyages.apps.voyages.VoyageGroupings`
+    related to: :model:`voyages.apps.voyages.VoyageCaptain`
+    related to: :model:`voyages.apps.voyages.VoyageShipOwner`
+    related to: :model:`voyages.apps.voyages.VoyageSources`
     """
 
     voyage_id = models.AutoField(primary_key=True)
