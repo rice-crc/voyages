@@ -5,7 +5,7 @@ from voyages.apps.voyage.models import *
 if len(sys.argv) > 0:
     input_file = open(sys.argv[0], 'r')
 else:
-    input_file = open('places.csv', 'r')
+    input_file = open('region.csv', 'r')
 
 NULL_VAL = "\N"
 DELIMITER = ','
@@ -16,14 +16,11 @@ varNameDict = {}
 for index, term in enumerate(data):
     varNameDict[term] = index
 
-
 def isNotBlank(field_name):
     return data[varNameDict[field_name]] != NULL_VAL
 
-
 def getFieldValue(field_name):
     return data[varNameDict[field_name]]
-
 
 def getIntFieldValue(field_name):
     try:
@@ -32,7 +29,6 @@ def getIntFieldValue(field_name):
         return int(getFieldValue(field_name))
     except ValueError:
         return None
-
 
 def getDecimalFieldValue(field_name):
     try:
@@ -46,11 +42,14 @@ for line in input_file:
     data = line.split(DELIMITER)
 
     location = Place()
-    location.name = getFieldValue('name')
-    location.code = getFieldValue('id')
-    location.longitude = getDecimalFieldValue('longitude')
+    if isNotBlank('name'):
+        location.name = getFieldValue('name')
+
+    location.code = getIntFieldValue('id')
+    location.longtitude = getDecimalFieldValue('longtitude')
     location.latitude = getDecimalFieldValue('latitude')
+
     if isNotBlank('region_id'):
-        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))
+        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))[0]
 
     location.save()
