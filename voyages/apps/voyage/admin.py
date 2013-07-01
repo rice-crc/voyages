@@ -43,7 +43,7 @@ class VoyageGroupingsAdmin(admin.ModelAdmin):
 
 
 # Ship, Nation, Owners
-class VoyageShipInline(admin.TabularInline):
+class VoyageShipInline(admin.StackedInline):
     form = VoyageShipForm
     model = VoyageShip
     extra = 1
@@ -228,7 +228,8 @@ class VoyageSourcesConnectionInline(admin.TabularInline):
     """
     form = VoyageSourcesConnectionForm
     model = VoyageSourcesConnection
-    extra = 15
+    extra = 5
+    max_num = 18
 
 # Voyage (main section)
 class VoyageAdmin(admin.ModelAdmin):
