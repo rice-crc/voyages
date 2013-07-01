@@ -169,7 +169,8 @@ class VoyageShip(models.Model):
                                       decimal_places=2,
                                       null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_ship")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_ship")
 
     def __unicode__(self):
         return self.ship_name
@@ -271,7 +272,8 @@ class VoyageOutcome(models.Model):
     outcome_owner = models.ForeignKey('OwnerOutcome',
                                       null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_outcome")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_outcome")
 
     def __unicode__(self):
         return self.particular_outcome
@@ -462,7 +464,8 @@ class VoyageItinerary(models.Model):
              verbose_name="Imputed broad region of slave disembarkation",
              null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_itinerary")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_itinerary")
 
     class Meta:
         verbose_name = "Itinerary"
@@ -519,7 +522,8 @@ class VoyageDates(models.Model):
             ("Year of arrival at port of disembarkation",
              max_length=4, blank=True, null=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_dates")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_dates")
 
     class Meta:
         verbose_name = 'Date'
@@ -591,7 +595,8 @@ class VoyageCrew(models.Model):
             ("Total number of crew deserted", max_length=2,
              null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True, related_name="voyage_name_crew")
+    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+                               related_name="voyage_name_crew")
 
     class Meta:
         verbose_name = 'Crew'
@@ -632,7 +637,8 @@ class VoyageSlavesNumbers(models.Model):
              "(NCAR17)", null=True, blank=True, max_length=4)
 
     total_num_slaves_purchased = models.IntegerField \
-            ("Total slaves purchased (TSLAVESP)", null=True, blank=True, max_length=4)
+            ("Total slaves purchased (TSLAVESP)",
+             null=True, blank=True, max_length=4)
     total_num_slaves_dep_last_slaving_port = models.IntegerField \
             ("Total slaves on board at departure from last slaving port "
              "(TSLAVESD)", null=True, blank=True, max_length=4)
@@ -655,67 +661,85 @@ class VoyageSlavesNumbers(models.Model):
 
     # Representing MEN1 variables
     num_men_embark_first_port_purchase = models.IntegerField \
-            ("Number of men (MEN1) embarked at first port of purchase", null=True, blank=True)
+            ("Number of men (MEN1) embarked at first port of purchase",
+             null=True, blank=True)
     # Representing WOMEN1 variables
     num_women_embark_first_port_purchase = models.IntegerField \
-            ("Number of women (WOMEN1) embarked at first port of purchase", null=True, blank=True)
+            ("Number of women (WOMEN1) embarked at first port of purchase",
+             null=True, blank=True)
     # Representing BOY1 variables
     num_boy_embark_first_port_purchase = models.IntegerField \
-            ("Number of boys (BOY1) embarked at first port of purchase", null=True, blank=True)
+            ("Number of boys (BOY1) embarked at first port of purchase",
+             null=True, blank=True)
     # Representing GIRL1 variables
     num_girl_embark_first_port_purchase = models.IntegerField \
-            ("Number of girls (GIRL1) embarked at first port of purchase", null=True, blank=True)
+            ("Number of girls (GIRL1) embarked at first port of purchase",
+             null=True, blank=True)
     # Representing ADULT1 variables
     num_adult_embark_first_port_purchase = models.IntegerField \
-            ("Number of adults (gender unspecified) (ADULT1) embarked at first port of purchase",
+            ("Number of adults (gender unspecified) (ADULT1) "
+             "embarked at first port of purchase",
              null=True, blank=True)
     # Representing CHILD1 variables
     num_child_embark_first_port_purchase = models.IntegerField \
-            ("Number of children (gender unspecified) (CHILD1) embarked at first port of purchase",
+            ("Number of children (gender unspecified) (CHILD1) "
+             "embarked at first port of purchase",
              null=True, blank=True)
     # Representing INFANT1 variables
     num_infant_embark_first_port_purchase = models.IntegerField \
-            ("Number of infants (INFANT1) embarked at first port of purchase", null=True, blank=True)
+            ("Number of infants (INFANT1) embarked at first port of purchase",
+             null=True, blank=True)
     # Representing MALE1 variables
     num_males_embark_first_port_purchase = models.IntegerField \
-            ("Number of males (age unspecified) (MALE1) embarked at first port of purchase",
+            ("Number of males (age unspecified) (MALE1)"
+             " embarked at first port of purchase",
              null=True, blank=True)
     # Representing FEMALE1 variables
     num_females_embark_first_port_purchase = models.IntegerField \
-            ("Number of females (age unspecified) (FEMALE1) embarked at first port of purchase",
+            ("Number of females (age unspecified) (FEMALE1) "
+             "embarked at first port of purchase",
              null=True, blank=True)
 
 
     # Representing MEN2 variables
     num_men_died_middle_passage = models.IntegerField \
-            ("Number of men (MEN2) died on Middle Passage", null=True, blank=True)
+            ("Number of men (MEN2) died on Middle Passage",
+             null=True, blank=True)
     # Representing WOMEN2 variables
     num_women_died_middle_passage = models.IntegerField \
-            ("Number of women (WOMEN2) died on Middle Passage", null=True, blank=True)
+            ("Number of women (WOMEN2) died on Middle Passage",
+             null=True, blank=True)
     # Representing BOY2 variables
     num_boy_died_middle_passage = models.IntegerField \
-            ("Number of boys (BOY2) died on Middle Passage", null=True, blank=True)
+            ("Number of boys (BOY2) died on Middle Passage",
+             null=True, blank=True)
     # Representing GIRL2 variables
     num_girl_died_middle_passage = models.IntegerField \
-            ("Number of girls (GIRL2) died on Middle Passage", null=True, blank=True)
+            ("Number of girls (GIRL2) died on Middle Passage",
+             null=True, blank=True)
     # Representing ADULT2 variables
     num_adult_died_middle_passage = models.IntegerField \
-            ("Number of adults (gender unspecified) (ADULT2) died on Middle Passage",
+            ("Number of adults (gender unspecified) (ADULT2) "
+             "died on Middle Passage",
              null=True, blank=True)
     # Representing CHILD2 variables
     num_child_died_middle_passage = models.IntegerField \
-            ("Number of children (gender unspecified) (CHILD2) died on Middle Passage",
+            ("Number of children (gender unspecified) (CHILD2) "
+             "died on Middle Passage",
              null=True, blank=True)
     # Representing INFANT2 variables
     num_infant_died_middle_passage = models.IntegerField \
-            ("Number of infants (INFANT2) died on Middle Passage", null=True, blank=True)
+            ("Number of infants (INFANT2) died on Middle Passage",
+             null=True, blank=True)
     # Representing MALE2 variables
     num_males_died_middle_passage = models.IntegerField \
-            ("Number of males (age unspecified) (MALE2) died on Middle Passage",
+            ("Number of males (age unspecified) (MALE2) "
+             "died on Middle Passage",
              null=True, blank=True)
     # Representing FEMALE2 variables
     num_females_died_middle_passage = models.IntegerField \
-            ("Number of females (age unspecified) (FEMALE2) died on Middle Passage",
+            ("Number of females (age unspecified) (FEMALE2) "
+             "died on Middle Passage",
              null=True, blank=True)
 
 
