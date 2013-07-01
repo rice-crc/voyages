@@ -22,8 +22,7 @@ class BroadRegion(models.Model):
 class Region(models.Model):
     """
     Specific Regions (countries or colonies).
-    related to: :model:
-    `voyages.apps.voyages.Voyage.GeoLocation.BroadRegion`
+    related to: :model:`voyages.apps.voyages.BroadRegion`
     """
 
     name = models.CharField("Specific region (country or colony",
@@ -44,8 +43,7 @@ class Region(models.Model):
 class Place(models.Model):
     """
     Place (port or location).
-    related to: :model:
-    `voyages.apps.voyages.Voyage.GeoLocation.Region`
+    related to: :model:`voyages.apps.voyages.Region`
     """
 
     name = models.CharField(max_length=35)
@@ -87,13 +85,14 @@ class VoyageGroupings(models.Model):
 class VoyageShip(models.Model):
     """
     Information about voyage ship.
-    related to: :model:`voyages.apps.voyages.Voyage.SpecificRegion`
-    related to: :model:`voyages.apps.voyages.Voyage.Place`
+    related to: :model:`voyages.apps.voyages.Region`
+    related to: :model:`voyages.apps.voyages.Place`
+    related to: :model:`voyages.apps.voyages.Voyage`
     """
 
     class Nationality(models.Model):
         """
-        Nationalities of ships.
+        Nationality of ships.
         """
         nationality = models.CharField(max_length=70)
         code = models.IntegerField(max_length=2)
@@ -200,11 +199,11 @@ class VoyageShipOwnerConnection(models.Model):
     """
     Represents the relation between Voyage Ship owners and
     Owner.
-    captain_order represents order of each captain (1st, 2nd, ...)
+    owner_order represents order of each owner (1st, 2nd, ...)
     """
     owner = models.ForeignKey('VoyageShipOwner', related_name="owner_name")
     voyage = models.ForeignKey('Voyage', related_name="voyage_related")
-    captain_order = models.IntegerField(max_length=2)
+    owner_order = models.IntegerField(max_length=2)
 
 
 # Voyage Outcome
@@ -547,6 +546,13 @@ class VoyageCaptain(models.Model):
 
 
 class VoyageCaptainConnection(models.Model):
+    """
+    Represents the relation between Voyage Captain and
+    Voyage.
+    captain_order represents order of each captain (1st, 2nd, ...)
+    related to: :model:`voyages.apps.voyages.VoyageCaptain`
+    related to: :model:`voyages.apps.voyages.Voyage`
+    """
     captain = models.ForeignKey\
             ('VoyageCaptain', related_name='captain_name')
     voyage = models.ForeignKey\
