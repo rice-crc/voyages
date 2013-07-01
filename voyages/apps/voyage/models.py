@@ -93,6 +93,10 @@ class VoyageShip(models.Model):
         nationality = models.CharField(max_length=70)
         code = models.IntegerField(max_length=2)
 
+        class Meta:
+            verbose_name = "Nationality"
+            verbose_name_plural = "Nationalities"
+
         def __unicode__(self):
             return self.nationality
 

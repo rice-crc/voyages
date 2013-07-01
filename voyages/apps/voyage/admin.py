@@ -31,6 +31,15 @@ class FlatPageAdmin(admin.ModelAdmin):
 # Regions, Places
 
 # Technical
+class VoyageGroupingsAdmin(admin.ModelAdmin):
+    """
+    Admin for VoyageGroupings
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 # Ship, Nation, Owners
 class VoyageShipInline(admin.TabularInline):
@@ -52,6 +61,17 @@ class VoyageShipOwnerInline(admin.TabularInline):
     form = VoyageShipOwnerConnectionForm
     model = VoyageShipOwnerConnection
     extra = 3
+
+
+class VoyageNationalityAdmin(admin.ModelAdmin):
+    """
+    Admin for Voyage.Nationality
+    """
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 # Voyage Outcome
@@ -94,6 +114,7 @@ class VoyageDatesInline(admin.StackedInline):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
 
 # Voyage Captain and Crew
 class VoyageCaptainAdmin(admin.ModelAdmin):
@@ -191,11 +212,11 @@ admin.site.register(BroadRegion)
 admin.site.register(Place)
 
 # Technical
-admin.site.register(VoyageGroupings)
+admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
 admin.site.register(VoyageShipOwner)
-admin.site.register(VoyageShip.Nationality)
+admin.site.register(VoyageShip.Nationality, VoyageNationalityAdmin)
 admin.site.register(VoyageShip.TonType)
 admin.site.register(VoyageShip.RigOfVessel)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
