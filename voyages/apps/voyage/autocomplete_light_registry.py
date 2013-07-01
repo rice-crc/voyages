@@ -17,7 +17,7 @@ autocomplete_light.register(VoyageShip.TonType, search_fields=('ton_type',),
     autocomplete_js_attributes={'placeholder': 'Ton type...'})
 
 autocomplete_light.register(VoyageShip.RigOfVessel, search_fields=('rig_of_vessel',),
-    autocomplete_js_attributes={'placeholder': 'Rig_of_vessel...'})
+    autocomplete_js_attributes={'placeholder': 'Rig of vessel...'})
 
 autocomplete_light.register(Place, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Place...'})
