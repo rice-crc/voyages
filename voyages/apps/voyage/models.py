@@ -492,39 +492,50 @@ class VoyageDates(models.Model):
     # Date variables
     voyage_began = models.CommaSeparatedIntegerField\
             ("Date that voyage began", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     slave_purchase_began = models.CommaSeparatedIntegerField\
             ("Date that slave purchase began", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     vessel_left_port = models.CommaSeparatedIntegerField\
             ("Date that vessel left last slaving port", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     first_dis_of_slaves = models.CommaSeparatedIntegerField\
             ("Date of first disembarkation of slaves", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     arrival_at_second_place_landing = models.CommaSeparatedIntegerField\
             ("Date of arrival at second place of landing", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     third_dis_of_slaves = models.CommaSeparatedIntegerField\
             ("Date of third disembarkation of slaves", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     departure_last_place_of_landing = models.CommaSeparatedIntegerField\
             ("Date of departure from last place of landing", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     voyage_completed = models.CommaSeparatedIntegerField\
             ("Date on which slave voyage completed", max_length=10,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
 
     # Imputed variables
-    imp_voyage_began = models.CommaSeparatedIntegerField\
+    imp_voyage_began = models.CommaSeparatedIntegerField \
             ("Year voyage began", max_length=10,
-             blank=True, null=True)
-    imp_departed_africa = models.IntegerField \
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
+    imp_departed_africa = models.CommaSeparatedIntegerField \
             ("Year departed Africa", max_length=4,
-             blank=True, null=True)
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
             ("Year of arrival at port of disembarkation",
-             max_length=4, blank=True, null=True)
+             max_length=4, blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
