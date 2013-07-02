@@ -225,7 +225,7 @@ class Migration(SchemaMigration):
             ('departure_last_place_of_landing', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
             ('voyage_completed', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
             ('imp_voyage_began', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=10, null=True, blank=True)),
-            ('imp_departed_africa', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('imp_departed_africa', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=4, null=True, blank=True)),
             ('imp_arrival_at_port_of_dis', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=4, null=True, blank=True)),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='voyage_name_dates', null=True, to=orm['voyage.Voyage'])),
         ))
@@ -575,7 +575,7 @@ class Migration(SchemaMigration):
             'first_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'imp_arrival_at_port_of_dis': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'imp_departed_africa': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'imp_departed_africa': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'imp_voyage_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'slave_purchase_began': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'third_dis_of_slaves': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
