@@ -290,6 +290,7 @@ class VoyageOutcome(models.Model):
                                related_name="voyage_name_outcome")
 
     def __unicode__(self):
+        #TODO: We may want to change this.
         return self.particular_outcome
 
     class Meta:
