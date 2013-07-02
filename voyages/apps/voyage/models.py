@@ -269,6 +269,7 @@ class VoyageOutcome(models.Model):
 
     # Data variables
     particular_outcome = models.ForeignKey('ParticularOutcome',
+                                           verbose_name="Particular Outcome",
                                            null=True, blank=True)
     resistance = models.ForeignKey('Resistance',
                                    verbose_name="Resistance",
@@ -276,10 +277,13 @@ class VoyageOutcome(models.Model):
 
     # Imputed variables
     outcome_slaves = models.ForeignKey('SlavesOutcome',
+                                       verbose_name="Slaves Outcome",
                                        null=True, blank=True)
-    vessel_captured_outcome = models.ForeignKey('VesselCapturedOutcome',
-                                                null=True, blank=True)
+    vessel_captured_outcome = models.ForeignKey\
+            ('VesselCapturedOutcome', verbose_name="Vessel Captured Outcome",
+             null=True, blank=True)
     outcome_owner = models.ForeignKey('OwnerOutcome',
+                                      verbose_name="Owner Outcome",
                                       null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
