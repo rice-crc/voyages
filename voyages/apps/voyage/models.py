@@ -210,6 +210,9 @@ class VoyageShipOwnerConnection(models.Model):
     voyage = models.ForeignKey('Voyage', related_name="voyage_related")
     owner_order = models.IntegerField(max_length=2)
 
+    def __unicode__(self):
+        return "Ship owner:"
+
 
 # Voyage Outcome
 class VoyageOutcome(models.Model):
@@ -600,6 +603,9 @@ class VoyageCaptainConnection(models.Model):
     voyage = models.ForeignKey\
             ('Voyage', related_name='voyage')
     captain_order = models.IntegerField(max_length=1)
+
+    def __unicode__(self):
+        return "Captain:"
 
 
 class VoyageCrew(models.Model):
