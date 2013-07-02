@@ -1,26 +1,28 @@
-import sys
 from voyages.apps.voyage.models import *
 
-# Load the source csv to the database
-if len(sys.argv) > 0:
-    input_file = open(sys.argv[0], 'r')
-else:
-    input_file = open('region.csv', 'r')
+input_file = open('csvdumps/region.csv', 'r')
 
+##### Common section to all files #####
 NULL_VAL = "\N"
 DELIMITER = ','
-first_line = input_file.readline()
-data = first_line.split(DELIMITER)
-varNameDict = {}
 
+first_line = input_file.readline()
+data = first_line[0:-2].split(DELIMITER)
+print len(data)
+
+varNameDict = {}
 for index, term in enumerate(data):
-    varNameDict[term] = index
+    varNameDict[term[1:-1]] = index
+
 
 def isNotBlank(field_name):
-    return data[varNameDict[field_name]] != NULL_VAL
+    return data[varNameDict[field_name]][1:-1] != NULL_VAL
+
 
 def getFieldValue(field_name):
-    return data[varNameDict[field_name]]
+    print field_name
+    return data[varNameDict[field_name]][1:-1]
+
 
 def getIntFieldValue(field_name):
     try:
@@ -30,6 +32,7 @@ def getIntFieldValue(field_name):
     except ValueError:
         return None
 
+
 def getDecimalFieldValue(field_name):
     try:
         if not isNotBlank(field_name):
@@ -37,19 +40,26 @@ def getDecimalFieldValue(field_name):
         return float(getFieldValue(field_name))
     except ValueError:
         return None
+##### End of Common section to all files #####
 
 for line in input_file:
     data = line.split(DELIMITER)
 
-    location = Place()
-    if isNotBlank('name'):
-        location.name = getFieldValue('name')
+    region = Region()
+    region.name = getFieldValue('name')
+    region.code = getIntFieldValue('order_num')
 
-    location.code = getIntFieldValue('id')
-    location.longtitude = getDecimalFieldValue('longtitude')
-    location.latitude = getDecimalFieldValue('latitude')
+    if getFieldValue('show_on_map') == "t":
+        region.show_on_map = True
+    else:
+        region.show_on_map = False
 
-    if isNotBlank('region_id'):
-        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))[0]
+    if getFieldValue('show_on_main_map') == "t":
+        region.show_on_main_map = True
+    else:
+        region.show_on_main_map = False
 
-    location.save()
+    if isNotBlank('area_id'):
+        region.broad_region = BroadRegion.objects.filter(code=getIntFieldValue('area_id'))[0]
+
+    region.save()
