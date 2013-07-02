@@ -4,11 +4,11 @@ from voyages.apps.voyage.models import *
 
 input_file = open('csvdumps/broadregion.csv', 'r')
 
+##### Common section to all files #####
 NULL_VAL = "\N"
 DELIMITER = ','
 
 first_line = input_file.readline()
-
 data = first_line[0:-2].split(DELIMITER)
 print len(data)
 
@@ -42,7 +42,7 @@ def getDecimalFieldValue(field_name):
         return float(getFieldValue(field_name))
     except ValueError:
         return None
-
+##### End of Common section to all files #####
 
 for line in input_file:
     # Ignore the \r and \n character

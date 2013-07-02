@@ -7,7 +7,7 @@ class BroadRegion(models.Model):
     Broad Regions (continents).
     """
 
-    name = models.CharField("Broad region name", max_length=35)
+    name = models.CharField("Broad region name", max_length=60)
     code = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
 
@@ -26,10 +26,10 @@ class Region(models.Model):
     """
 
     name = models.CharField("Specific region (country or colony",
-                                               max_length=35)
+                                               max_length=60)
     broad_region = models.ForeignKey('BroadRegion')
     code = models.IntegerField("Numeric code", max_length=5)
-    how_on_map = models.BooleanField(default=True)
+    show_on_map = models.BooleanField(default=True)
     show_on_main_map = models.BooleanField(default=True)
 
     class Meta:
@@ -46,7 +46,7 @@ class Place(models.Model):
     related to: :model:`voyages.apps.voyages.Region`
     """
 
-    name = models.CharField(max_length=35)
+    name = models.CharField(max_length=60)
     region = models.ForeignKey('Region')
     code = models.IntegerField("Numeric code", max_length=5)
     longitude = models.DecimalField("Longitude of point",
@@ -108,7 +108,7 @@ class VoyageShip(models.Model):
         """
         Types of tonnage.
         """
-        ton_type = models.CharField(max_length=35)
+        ton_type = models.CharField(max_length=60)
         code = models.IntegerField(max_length=2)
 
         class Meta:
@@ -168,7 +168,7 @@ class VoyageShip(models.Model):
             ('Nationality', related_name="imputed_nationality",
              null=True, blank=True)
     tonnage_mod = models.DecimalField("Tonnage standardized on British"
-                                      "measured tons, 1773-1835",
+                                      "measured tons, 1773-1860",
                                       max_digits=8,
                                       decimal_places=2,
                                       null=True, blank=True)
@@ -256,7 +256,7 @@ class VoyageOutcome(models.Model):
         """
         Resistance labels
         """
-        name = models.CharField("Resistance label", max_length=35)
+        name = models.CharField("Resistance label", max_length=60)
         code = models.IntegerField("Code of resistance", max_length=1)
 
         def __unicode__(self):
