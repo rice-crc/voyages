@@ -278,6 +278,8 @@ admin.site.register(VoyageShip.TonType, VoyageTonTypeAdmin)
 admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 
+admin.site.register(VoyageDates)
+
 # Voyage Outcome
 # attached as inline in Voyage section
 

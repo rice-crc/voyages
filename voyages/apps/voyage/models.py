@@ -482,14 +482,11 @@ class VoyageDates(models.Model):
     Voyage dates.
     """
 
-    class IntegerDate(models.Model):
-        """
-        Date in integer numbers
-        """
-        day = models.IntegerField()
+    # Constant variables
+    # Dates start
+    years_start = {'5': 1525, '10': 1500, '25': 1500, '100': 1500}
 
     # Data variables
-    # Date variables
     voyage_began = models.CommaSeparatedIntegerField\
             ("Date that voyage began", max_length=10,
              blank=True, null=True,
@@ -534,11 +531,33 @@ class VoyageDates(models.Model):
              help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
             ("Year of arrival at port of disembarkation",
-             max_length=4, blank=True, null=True,
+             max_length=10,
              help_text="Date in format: MM,DD,YYYY")
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
+
+    @property
+    def _calculate_year_period(self, period):
+        """
+        Property to calculates proper period.
+
+        Keyword arguments:
+        period -- which period to calculate
+        """
+        if ((self.imp_arrival_at_port_of_dis[2]-self.years_start[period])
+                % period != 0):
+            return ((self.imp_arrival_at_port_of_dis[2]-self.years_start[period])
+                    / period +1)
+        else:
+            return (self.imp_arrival_at_port_of_dis[2]-self.years_start[period]) \
+                   / period
+
+    # Calculated variables
+    year_five = property(_calculate_year_period, 5)
+    year_ten = property(_calculate_year_period, 10)
+    year_twenty_five = property(_calculate_year_period, 25)
+    year_hundred = property(_calculate_year_period, 100)
 
     class Meta:
         verbose_name = 'Date'
