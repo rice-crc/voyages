@@ -28,7 +28,9 @@ def test():
     if os.path.exists('test-results'):
         shutil.rmtree('test-results')
 
-    local('python manage.py test')
+    # We are specifying apps to test because of problem with autocomplete_light.
+    # There is missing some sub app to test and it causes fail of all tests.
+    local('python manage.py test about assessment common contribute education help resources voyage')
 
 
 def doc():
