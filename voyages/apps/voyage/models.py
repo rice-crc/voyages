@@ -71,14 +71,15 @@ class VoyageGroupings(models.Model):
     """
     Labels for groupings names.
     """
-    grouping_name = models.CharField(max_length=30)
+    value = models.CharField(max_length=30)
+    label = models.IntegerField(max_length=3)
 
     class Meta:
         verbose_name = "Grouping for estimating imputed slaves"
         verbose_name_plural = "Groupings for estimating imputed slaves"
 
     def __unicode__(self):
-        return self.grouping_name
+        return self.value
 
 
 # Voyage Ship, Nation, Owners

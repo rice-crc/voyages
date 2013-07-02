@@ -44,7 +44,8 @@ class Migration(SchemaMigration):
         # Adding model 'VoyageGroupings'
         db.create_table(u'voyage_voyagegroupings', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('grouping_name', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('value', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('label', self.gf('django.db.models.fields.IntegerField')(max_length=3)),
         ))
         db.send_create_signal(u'voyage', ['VoyageGroupings'])
 
@@ -571,8 +572,9 @@ class Migration(SchemaMigration):
         },
         u'voyage.voyagegroupings': {
             'Meta': {'object_name': 'VoyageGroupings'},
-            'grouping_name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'label': ('django.db.models.fields.IntegerField', [], {'max_length': '3'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         u'voyage.voyageitinerary': {
             'Meta': {'object_name': 'VoyageItinerary'},
