@@ -150,18 +150,22 @@ class VoyageShip(models.Model):
              null=True, blank=True)
     vessel_construction_place = models.ForeignKey \
             ('Place', related_name="vessel_construction_place",
+             verbose_name="Place where vessel constructed",
              null=True, blank=True)
     vessel_construction_region = models.ForeignKey \
             ('Region', related_name="vessel_construction_region",
+             verbose_name="Region where vessel constructed",
              null=True, blank=True)
     registered_year = models.IntegerField\
             ("Year of vessel's registration", max_length=4,
              null=True, blank=True)
     registered_place = models.ForeignKey \
             ('Place', related_name="registered_place",
+             verbose_name="Place where vessel registered",
              null=True, blank=True)
     registered_region = models.ForeignKey \
             ('Region', related_name="registered_region",
+             verbose_name="Region where vessel registered",
              null=True, blank=True)
 
     # Imputed variables
@@ -171,7 +175,7 @@ class VoyageShip(models.Model):
     tonnage_mod = models.DecimalField("Tonnage standardized on British"
                                       "measured tons, 1773-1870",
                                       max_digits=8,
-                                      decimal_places=2,
+                                      decimal_places=1,
                                       null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
@@ -267,6 +271,7 @@ class VoyageOutcome(models.Model):
     particular_outcome = models.ForeignKey('ParticularOutcome',
                                            null=True, blank=True)
     resistance = models.ForeignKey('Resistance',
+                                   verbose_name="Resistance",
                                    null=True, blank=True)
 
     # Imputed variables
