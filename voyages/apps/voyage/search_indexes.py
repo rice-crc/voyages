@@ -197,3 +197,18 @@ class VoyageResistanceIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 # Voyage Itinerary
+class VoyageItineraryIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_itinerary_ports_called_buying_slaves = indexes.IntegerField\
+            (model_attr='ports_called_buying_slaves')
+    voyage_itinerary_number_of_ports_of_call = indexes.IntegerField\
+            (model_attr='number_of_ports_of_call')
+
+    def get_model(self):
+        return VoyageOutcome.OwnerOutcome
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
