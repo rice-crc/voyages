@@ -115,3 +115,85 @@ class RigOfVesselIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 
+class VoyageShipOwnerIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_ship_owner_name = indexes.CharField(model_attr='name')
+
+    def get_model(self):
+        return VoyageShipOwner
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+# Voyage Outcome
+class VoyageParticularOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_particular_outcome_name = indexes.CharField(model_attr='name')
+    voyage_particular_outcome_code = indexes.IntegerField(model_attr='code')
+
+    def get_model(self):
+        return VoyageOutcome.ParticularOutcome
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class VoyageSlavesOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_particular_outcome_name = indexes.CharField(model_attr='name')
+    voyage_particular_outcome_code = indexes.IntegerField(model_attr='code')
+
+    def get_model(self):
+        return VoyageOutcome.SlavesOutcome
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class VoyageVesselCapturedOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_vessel_captured_outcome_name = indexes.CharField(model_attr='name')
+    voyage_vessel_captured_outcome_code = indexes.IntegerField\
+            (model_attr='code')
+
+    def get_model(self):
+        return VoyageOutcome.VesselCapturedOutcome
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class VoyageOwnerOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_owner_outcome_name = indexes.CharField(model_attr='name')
+    voyage_owner_outcome_code = indexes.IntegerField\
+            (model_attr='code')
+
+    def get_model(self):
+        return VoyageOutcome.OwnerOutcome
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class VoyageResistanceIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    resistance_name = indexes.CharField(model_attr='name')
+    resistance_code = indexes.IntegerField\
+            (model_attr='code')
+
+    def get_model(self):
+        return VoyageOutcome.Resistance
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+# Voyage Itinerary
