@@ -387,12 +387,9 @@ class VoyageItinerary(models.Model):
             ('Place', related_name="port_of_call_before_atl_crossing",
              verbose_name="Port of call before Atlantic crossing",
              null=True, blank=True)
-    number_of_ports_of_call = models.ForeignKey \
-            ('Place', related_name="number_of_ports_of_call",
-             verbose_name="Number of ports of call in Americas "
-                          "prior to sale of slaves",
+    number_of_ports_of_call = models.IntegerField\
+            ("Number of ports of call in Americas prior to sale of slaves",
              null=True, blank=True)
-
     first_landing_place = models.ForeignKey \
             ('Place', related_name="first_landing_place",
              verbose_name="First place of slave landing",
