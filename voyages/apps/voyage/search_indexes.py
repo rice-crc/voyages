@@ -212,3 +212,54 @@ class VoyageItineraryIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 
+# Voyage Captain and Crew
+class VoyageCaptainIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    name = indexes.CharField(model_attr='name')
+
+    def get_model(self):
+        return VoyageCaptain
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class VoyageCrewIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_crew_crew_voyage_outset = indexes.IntegerField\
+            (model_attr='crew_voyage_outset')
+    voyage_crew_crew_departure_last_port = indexes.IntegerField\
+            (model_attr='crew_departure_last_port')
+    voyage_crew_crew_first_landing = indexes.IntegerField\
+            (model_attr='crew_first_landing')
+    voyage_crew_crew_return_begin = indexes.IntegerField\
+            (model_attr='crew_return_begin')
+    voyage_crew_crew_end_voyage = indexes.IntegerField\
+            (model_attr='crew_end_voyage')
+    voyage_crew_unspecified_crew = indexes.IntegerField\
+            (model_attr='unspecified_crew')
+    voyage_crew_crew_died_before_first_trade = indexes.IntegerField\
+            (model_attr='crew_died_before_first_trade')
+    voyage_crew_crew_died_while_ship_african = indexes.IntegerField\
+            (model_attr='crew_died_while_ship_african')
+    voyage_crew_crew_died_middle_passge = indexes.IntegerField\
+            (model_attr='crew_died_middle_passge')
+    voyage_crew_crew_died_in_americas = indexes.IntegerField\
+            (model_attr='crew_died_in_americas')
+    voyage_crew_crew_died_on_return_voyage = indexes.IntegerField\
+            (model_attr='crew_died_on_return_voyage')
+    voyage_crew_crew_died_complete_voyage = indexes.IntegerField\
+            (model_attr='crew_died_complete_voyage')
+    voyage_crew_crew_deserted = indexes.IntegerField\
+            (model_attr='crew_deserted')
+
+    def get_model(self):
+        return VoyageCrew
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+# Voyage Slaves (numbers)
