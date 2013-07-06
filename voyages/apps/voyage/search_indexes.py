@@ -263,3 +263,16 @@ class VoyageCrewIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 # Voyage Slaves (numbers)
+class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    voyage_sources_short_ref = indexes.CharField\
+            (model_attr='short_ref')
+    voyage_sources_full_ref = indexes.CharField\
+            (model_attr='full_ref')
+
+    def get_model(self):
+        return VoyageSources
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
