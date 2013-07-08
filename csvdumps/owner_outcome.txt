@@ -1,0 +1,5 @@
+"id"	"name"
+"1"	"Delivered slaves for original owners"
+"2"	"Original goal thwarted (natural hazard)"
+"3"	"Original goal thwarted (human agency)"
+"4"	"Unknown outcome"

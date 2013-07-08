@@ -1,14 +1,14 @@
 from voyages.apps.voyage.models import *
+from decimal import *
 
-input_file = open('csvdumps/region.csv', 'r')
+input_file = open('region.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
-DELIMITER = ','
+DELIMITER = '\t'
 
 first_line = input_file.readline()
 data = first_line[0:-2].split(DELIMITER)
-print len(data)
 
 varNameDict = {}
 for index, term in enumerate(data):
@@ -20,7 +20,6 @@ def isNotBlank(field_name):
 
 
 def getFieldValue(field_name):
-    print field_name
     return data[varNameDict[field_name]][1:-1]
 
 
@@ -37,13 +36,13 @@ def getDecimalFieldValue(field_name):
     try:
         if not isNotBlank(field_name):
             return None
-        return float(getFieldValue(field_name))
+        return Decimal(getFieldValue(field_name))
     except ValueError:
         return None
 ##### End of Common section to all files #####
 
 for line in input_file:
-    data = line.split(DELIMITER)
+    data = line[0:-2].split(DELIMITER)
 
     region = Region()
     region.name = getFieldValue('name')

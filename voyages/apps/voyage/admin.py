@@ -30,16 +30,19 @@ class FlatPageAdmin(admin.ModelAdmin):
 # Voyage Admin
 # Regions, Places
 class BroadRegionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code')
-
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    search_fields = ['code', 'name']
 
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code')
-
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    search_fields = ['code', 'name']
 
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code')
-
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    search_fields = ['code', 'name']
 
 # Technical
 class VoyageGroupingsAdmin(admin.ModelAdmin):
@@ -79,44 +82,56 @@ class VoyageShipOwnerAdmin(admin.ModelAdmin):
     """
     Admin for VoyageShipOwner.
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    list_display = ('name',)
+    list_display_links = ('name',)
+    search_fields = ['name']
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageNationalityAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.Nationality
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    list_display = ('code', 'nationality')
+    list_display_links = ('nationality',)
+    search_fields = ['code', 'nationality']
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageRigOfVesselAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.RigOfVessel
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    list_display = ('code', 'rig_of_vessel')
+    list_display_links = ('rig_of_vessel',)
+    search_fields = ['code', 'rig_of_vessel']
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageTonTypeAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.TonType
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    list_display = ('code', 'ton_type')
+    list_display_links = ('ton_type',)
+    search_fields = ['code', 'ton_type']
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 # Voyage Outcome
@@ -132,6 +147,42 @@ class VoyageOutcomeInline(admin.TabularInline):
         """
         return {}
 
+
+class VoyageParticularOutcomeAdmin(admin.ModelAdmin):
+    """
+    Admin for VoyageOutcome.ParticularOutcome
+    """
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
+
+class VoyageSlavesOutcomeAdmin(admin.ModelAdmin):
+    """
+    Admin for VoyageOutcome.SlavesOutcome
+    """
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
+
+class VoyageVesselOutcomeAdmin(admin.ModelAdmin):
+    """
+    Admin for VoyageOutcome.VesselCapturedOutcome
+    """
+    list_display = ('code', 'name')
+    list_display_links = ('name',)
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 # Voyage Itinerary
 class VoyageItineraryInline(admin.StackedInline):
@@ -163,11 +214,25 @@ class VoyageDatesInline(admin.StackedInline):
 
 # Voyage Captain and Crew
 class VoyageCaptainAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    fields = ('name',)
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
+
+
+class VoyageCaptainConnectionAdmin(admin.ModelAdmin):
+
+    """
+    Admin for VoyageOutcome.VesselCapturedOutcome
+    """
+    list_display = ('voyage', 'captain_order', 'captain',)
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageCaptainConnectionInline(admin.TabularInline):
@@ -226,11 +291,12 @@ class VoyageSourcesAdmin(admin.ModelAdmin):
     """
     Admin for VoyageSources.
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    list_display = ('short_ref', 'full_ref')
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageSourcesConnectionInline(admin.TabularInline):
@@ -241,6 +307,7 @@ class VoyageSourcesConnectionInline(admin.TabularInline):
     model = VoyageSourcesConnection
     extra = 5
     max_num = 18
+
 
 # Voyage (main section)
 class VoyageAdmin(admin.ModelAdmin):
@@ -279,6 +346,9 @@ admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 
 # Voyage Outcome
+admin.site.register(VoyageOutcome.ParticularOutcome, VoyageParticularOutcomeAdmin)
+admin.site.register(VoyageOutcome.SlavesOutcome, VoyageSlavesOutcomeAdmin)
+admin.site.register(VoyageOutcome.VesselCapturedOutcome, VoyageVesselOutcomeAdmin)
 # attached as inline in Voyage section
 
 # Voyage Itinerary
@@ -290,6 +360,7 @@ admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
 # Voyage Captain and Crew
 # Crew attached as inline in Voyage section
 admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
+admin.site.register(VoyageCaptainConnection, VoyageCaptainConnectionAdmin)
 
 # Voyage Slaves (numbers)
 # attached as inline in Voyage section
