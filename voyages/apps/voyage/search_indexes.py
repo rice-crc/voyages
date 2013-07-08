@@ -60,8 +60,6 @@ class VoyageGroupingsIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageShipIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     voyage_ship_ship_name = indexes.CharField(model_attr='ship_name')
-    voyage_ship_tonnage = indexes.IntegerField(model_attr='tonnage')
-    voyage_ship_guns_mounted = indexes.IntegerField(model_attr='guns_mounted')
     voyage_ship_year_of_construction = indexes.IntegerField\
             (model_attr='year_of_construction')
     voyage_ship_registered_year = indexes.IntegerField\
@@ -92,7 +90,6 @@ class NationalityIndex(indexes.SearchIndex, indexes.Indexable):
 class TonTypeIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     ton_type_ton_type = indexes.CharField(model_attr='ton_type')
-    ton_type_code = indexes.IntegerField(model_attr='code')
 
     def get_model(self):
         return VoyageShip.TonType
@@ -105,7 +102,6 @@ class TonTypeIndex(indexes.SearchIndex, indexes.Indexable):
 class RigOfVesselIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     rig_of_vessel_rig_of_vessel = indexes.CharField(model_attr='rig_of_vessel')
-    rig_of_vessel_code = indexes.IntegerField(model_attr='code')
 
     def get_model(self):
         return VoyageShip.RigOfVessel
@@ -131,7 +127,6 @@ class VoyageShipOwnerIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageParticularOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     voyage_particular_outcome_name = indexes.CharField(model_attr='name')
-    voyage_particular_outcome_code = indexes.IntegerField(model_attr='code')
 
     def get_model(self):
         return VoyageOutcome.ParticularOutcome
@@ -144,7 +139,6 @@ class VoyageParticularOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageSlavesOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     voyage_particular_outcome_name = indexes.CharField(model_attr='name')
-    voyage_particular_outcome_code = indexes.IntegerField(model_attr='code')
 
     def get_model(self):
         return VoyageOutcome.SlavesOutcome
@@ -157,8 +151,6 @@ class VoyageSlavesOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageVesselCapturedOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     voyage_vessel_captured_outcome_name = indexes.CharField(model_attr='name')
-    voyage_vessel_captured_outcome_code = indexes.IntegerField\
-            (model_attr='code')
 
     def get_model(self):
         return VoyageOutcome.VesselCapturedOutcome
@@ -171,8 +163,6 @@ class VoyageVesselCapturedOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageOwnerOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     voyage_owner_outcome_name = indexes.CharField(model_attr='name')
-    voyage_owner_outcome_code = indexes.IntegerField\
-            (model_attr='code')
 
     def get_model(self):
         return VoyageOutcome.OwnerOutcome
@@ -185,8 +175,6 @@ class VoyageOwnerOutcomeIndex(indexes.SearchIndex, indexes.Indexable):
 class VoyageResistanceIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     resistance_name = indexes.CharField(model_attr='name')
-    resistance_code = indexes.IntegerField\
-            (model_attr='code')
 
     def get_model(self):
         return VoyageOutcome.Resistance
@@ -199,10 +187,6 @@ class VoyageResistanceIndex(indexes.SearchIndex, indexes.Indexable):
 # Voyage Itinerary
 class VoyageItineraryIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-    voyage_itinerary_ports_called_buying_slaves = indexes.IntegerField\
-            (model_attr='ports_called_buying_slaves')
-    voyage_itinerary_number_of_ports_of_call = indexes.IntegerField\
-            (model_attr='number_of_ports_of_call')
 
     def get_model(self):
         return VoyageOutcome.OwnerOutcome
@@ -219,43 +203,6 @@ class VoyageCaptainIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return VoyageCaptain
-
-    def index_queryset(self, using=None):
-        """Used when the entire index for model is updated."""
-        return self.get_model().objects.all()
-
-
-class VoyageCrewIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
-    voyage_crew_crew_voyage_outset = indexes.IntegerField\
-            (model_attr='crew_voyage_outset')
-    voyage_crew_crew_departure_last_port = indexes.IntegerField\
-            (model_attr='crew_departure_last_port')
-    voyage_crew_crew_first_landing = indexes.IntegerField\
-            (model_attr='crew_first_landing')
-    voyage_crew_crew_return_begin = indexes.IntegerField\
-            (model_attr='crew_return_begin')
-    voyage_crew_crew_end_voyage = indexes.IntegerField\
-            (model_attr='crew_end_voyage')
-    voyage_crew_unspecified_crew = indexes.IntegerField\
-            (model_attr='unspecified_crew')
-    voyage_crew_crew_died_before_first_trade = indexes.IntegerField\
-            (model_attr='crew_died_before_first_trade')
-    voyage_crew_crew_died_while_ship_african = indexes.IntegerField\
-            (model_attr='crew_died_while_ship_african')
-    voyage_crew_crew_died_middle_passge = indexes.IntegerField\
-            (model_attr='crew_died_middle_passge')
-    voyage_crew_crew_died_in_americas = indexes.IntegerField\
-            (model_attr='crew_died_in_americas')
-    voyage_crew_crew_died_on_return_voyage = indexes.IntegerField\
-            (model_attr='crew_died_on_return_voyage')
-    voyage_crew_crew_died_complete_voyage = indexes.IntegerField\
-            (model_attr='crew_died_complete_voyage')
-    voyage_crew_crew_deserted = indexes.IntegerField\
-            (model_attr='crew_deserted')
-
-    def get_model(self):
-        return VoyageCrew
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
