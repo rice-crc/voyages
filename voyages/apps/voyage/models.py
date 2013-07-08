@@ -7,7 +7,7 @@ class BroadRegion(models.Model):
     Broad Regions (continents).
     """
 
-    name = models.CharField("Broad region name", max_length=70)
+    name = models.CharField("Broad region (Area) name", max_length=70)
     code = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
 
@@ -18,6 +18,11 @@ class BroadRegion(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Broad Region'
+        verbose_name_plural = 'Broad Regions'
+        ordering = ['code']
+
 
 class Region(models.Model):
     """
@@ -25,7 +30,7 @@ class Region(models.Model):
     related to: :model:`voyages.apps.voyages.BroadRegion`
     """
 
-    name = models.CharField("Specific region (country or colony",
+    name = models.CharField("Specific region (country or colony)",
                                                max_length=70)
     broad_region = models.ForeignKey('BroadRegion')
     code = models.IntegerField("Numeric code", max_length=5)
@@ -38,6 +43,9 @@ class Region(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ['code']
 
 
 class Place(models.Model):
@@ -59,11 +67,14 @@ class Place(models.Model):
     show_on_voyage_map = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = 'Place'
-        verbose_name_plural = "Places"
+        verbose_name = 'Place (Port or Location)'
+        verbose_name_plural = "Places (Ports or Locations)"
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ['code']
 
 
 # Voyage Groupings
@@ -101,6 +112,7 @@ class VoyageShip(models.Model):
         class Meta:
             verbose_name = "Nationality"
             verbose_name_plural = "Nationalities"
+            ordering = ['code']
 
         def __unicode__(self):
             return self.nationality
@@ -115,6 +127,7 @@ class VoyageShip(models.Model):
         class Meta:
             verbose_name = "Type of tons"
             verbose_name_plural = "Types of tons"
+            ordering = ['code']
 
         def __unicode__(self):
             return self.ton_type
@@ -129,6 +142,7 @@ class VoyageShip(models.Model):
         class Meta:
             verbose_name = "Rig of vessel"
             verbose_name_plural = "Rigs of vessel"
+            ordering = ['code']
 
         def __unicode__(self):
             return self.rig_of_vessel
@@ -224,41 +238,56 @@ class VoyageOutcome(models.Model):
         """
         Particular outcome.
         """
-        name = models.CharField("Outcome label", max_length=70)
+        name = models.CharField("Outcome label", max_length=200)
         code = models.IntegerField("Code of outcome", max_length=3)
 
         def __unicode__(self):
             return self.name
 
+        class Meta:
+            ordering = ['code']
+            verbose_name = 'Fate (particular outcome of voyage)'
+            verbose_name_plural = 'Fates (particular outcomes of voyages)'
+
+
     class SlavesOutcome(models.Model):
         """
         Outcome of voyage for slaves.
         """
-        name = models.CharField("Outcome label", max_length=70)
+        name = models.CharField("Outcome label", max_length=200)
         code = models.IntegerField("Code of outcome", max_length=1)
 
         def __unicode__(self):
             return self.name
+
+        class Meta:
+            ordering = ['code']
 
     class VesselCapturedOutcome(models.Model):
         """
         Outcome of voyage if vessel captured.
         """
-        name = models.CharField("Outcome label", max_length=70)
+        name = models.CharField("Outcome label", max_length=200)
         code = models.IntegerField("Code of outcome", max_length=2)
 
         def __unicode__(self):
             return self.name
 
+        class Meta:
+            ordering = ['code']
+
     class OwnerOutcome(models.Model):
         """
         Outcome of voyage for owner.
         """
-        name = models.CharField("Outcome label", max_length=70)
+        name = models.CharField("Outcome label", max_length=200)
         code = models.IntegerField("Code of outcome", max_length=1)
 
         def __unicode__(self):
             return self.name
+
+        class Meta:
+            ordering = ['code']
 
     class Resistance(models.Model):
         """
@@ -269,6 +298,9 @@ class VoyageOutcome(models.Model):
 
         def __unicode__(self):
             return self.name
+
+        class Meta:
+            ordering = ['code']
 
     # Data variables
     particular_outcome = models.ForeignKey('ParticularOutcome',
@@ -313,170 +345,172 @@ class VoyageItinerary(models.Model):
     # Data variables
     port_of_departure = models.ForeignKey \
             ('Place', related_name="port_of_departure",
-             verbose_name="Port of departure",
+             verbose_name="Port of departure (PORTDEP)",
              null=True, blank=True)
     # Intended variables
     int_first_port_emb = models.ForeignKey \
             ('Place', related_name="int_first_port_emb",
-             verbose_name="First intended port of embarkation",
+             verbose_name="First intended port of embarkation (EMBPORT)",
              null=True, blank=True)
     int_second_port_emb = models.ForeignKey \
             ('Place', related_name="int_second_port_emb",
-             verbose_name="Second intended port of embarkation",
+             verbose_name="Second intended port of embarkation (EMBPORT2)",
              null=True, blank=True)
     int_first_region_purchase_slaves = models.ForeignKey \
             ('Region',
              related_name="int_first_region_purchase_slaves",
-             verbose_name="First intended region of purchase of slaves",
+             verbose_name="First intended region of purchase of slaves (EMBREG)",
              null=True, blank=True)
     int_second_region_purchase_slaves = models.ForeignKey \
             ('Region',
              related_name="int_second_region_purchase_slaves",
-             verbose_name="Second intended region of purchase of slaves",
+             verbose_name="Second intended region of purchase of slaves (EMBREG2)",
              null=True, blank=True)
     int_first_port_dis = models.ForeignKey\
             ('Place', related_name="int_first_port_dis",
-             verbose_name="First intended port of disembarkation",
+             verbose_name="First intended port of disembarkation (ARRPORT)",
              null=True, blank=True)
     int_second_port_dis = models.ForeignKey\
             ('Place', related_name="int_second_port_dis",
-             verbose_name="Second intended port of disembarkation",
+             verbose_name="Second intended port of disembarkation (ARRPORT2)",
              null=True, blank=True)
     int_first_region_slave_landing = models.ForeignKey \
             ('Region',
              related_name="int_first_region_slave_landing",
-             verbose_name="First intended region of slave landing",
+             verbose_name="First intended region of slave landing (REGARR)",
              null=True, blank=True)
     int_second_region_slave_landing = models.ForeignKey \
             ('Region',
              related_name="int_second_region_slave_landing",
-             verbose_name="Second intended region of slave landing",
+             verbose_name="Second intended region of slave landing (REGARR2)",
              null=True, blank=True)
 
     # End of intended variables
     ports_called_buying_slaves = models.IntegerField\
-            ("Number of ports of call prior to buying slaves",
+            ("Number of ports of call prior to buying slaves (NPPRETRA)",
              max_length=3, null=True, blank=True)
+
     first_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="first_place_slave_purchase",
-            verbose_name="First place of slave purchase",
+            verbose_name="First place of slave purchase (PLAC1TRA)",
              null=True, blank=True)
     second_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="second_place_slave_purchase",
-             verbose_name="Second place of slave purchase",
+             verbose_name="Second place of slave purchase (PLAC2TRA)",
              null=True, blank=True)
     third_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="third_place_slave_purchase",
-             verbose_name="Third place of slave purchase",
+             verbose_name="Third place of slave purchase (PLAC3TRA)",
              null=True, blank=True)
 
     first_region_slave_emb = models.ForeignKey\
             ('Region', related_name="first_region_slave_emb",
-             verbose_name="First region of embarkation of slaves",
+             verbose_name="First region of embarkation of slaves (REGEM1)",
              null=True, blank=True)
     second_region_slave_emb = models.ForeignKey\
             ('Region', related_name="second_region_slave_emb",
-             verbose_name="Second region of embarkation of slaves",
+             verbose_name="Second region of embarkation of slaves (REGEM2)",
              null=True, blank=True)
     third_region_slave_emb = models.ForeignKey\
             ('Region', related_name="third_region_slave_emb",
-             verbose_name="Third region of embarkation of slaves",
+             verbose_name="Third region of embarkation of slaves (REGEM3)",
              null=True, blank=True)
 
     port_of_call_before_atl_crossing = models.ForeignKey \
             ('Place', related_name="port_of_call_before_atl_crossing",
-             verbose_name="Port of call before Atlantic crossing",
+             verbose_name="Port of call before Atlantic crossing (NPAFTTRA)",
              null=True, blank=True)
+
     number_of_ports_of_call = models.IntegerField\
-            ("Number of ports of call in Americas prior to sale of slaves",
+            ("Number of ports of call in Americas prior to sale of slaves (NPPRIOR)",
              null=True, blank=True)
     first_landing_place = models.ForeignKey \
             ('Place', related_name="first_landing_place",
-             verbose_name="First place of slave landing",
+             verbose_name="First place of slave landing (SLA1PORT)",
              null=True, blank=True)
     second_landing_place = models.ForeignKey \
             ('Place', related_name="second_landing_place",
-             verbose_name="Second place of slave landing",
+             verbose_name="Second place of slave landing (ADPSALE1)",
              null=True, blank=True)
     third_landing_place = models.ForeignKey \
             ('Place', related_name="third_landing_place",
-             verbose_name="Third place of slave landing",
+             verbose_name="Third place of slave landing (ADPSALE2)",
              null=True, blank=True)
 
     first_landing_region = models.ForeignKey \
             ('Region', related_name="first_landing_region",
-             verbose_name="First region of slave landing",
+             verbose_name="First region of slave landing (REGDIS1)",
              null=True, blank=True)
     second_landing_region = models.ForeignKey \
             ('Region', related_name="second_landing_region",
-             verbose_name="Second region of slave landing",
+             verbose_name="Second region of slave landing (REGDIS2)",
              null=True, blank=True)
     third_landing_region = models.ForeignKey \
             ('Region', related_name="third_landing_region",
-             verbose_name="Third region of slave landing",
+             verbose_name="Third region of slave landing (REGDIS3)",
              null=True, blank=True)
 
     place_voyage_ended = models.ForeignKey \
             ('Place', related_name="place_voyage_ended",
-             verbose_name="Place at which voyage ended",
+             verbose_name="Place at which voyage ended (PORTRET)",
              null=True, blank=True)
     region_of_return = models.ForeignKey \
             ('Region', related_name="region_of_return",
-             verbose_name="Region of return",
+             verbose_name="Region of return (RETRNREG)",
              null=True, blank=True)
     broad_region_of_return = models.ForeignKey \
-            ('Region', related_name="broad_region_of_return",
-             verbose_name="Broad region of return",
+            ('BroadRegion', related_name="broad_region_of_return",
+             verbose_name="Broad region of return (RETRNREG1)",
              null=True, blank=True)
 
     # Imputed variables
     imp_port_voyage_begin = models.ForeignKey \
             ('Place', related_name="imp_port_voyage_begin",
-             verbose_name="Imputed port where voyage began",
+             verbose_name="Imputed port where voyage began (PTDEPIMP)",
              null=True, blank=True)
     imp_region_voyage_begin = models.ForeignKey \
             ('Region', related_name="imp_region_voyage_begin",
-             verbose_name="Imputed region where voyage began",
+             verbose_name="Imputed region where voyage began (DEPTREGIMP)",
              null=True, blank=True)
     imp_broad_region_voyage_begin = models.ForeignKey \
             ('BroadRegion', related_name="imp_broad_region_voyage_begin",
-             verbose_name="Imputed broad region where voyage began",
+             verbose_name="Imputed broad region where voyage began (DEPTREGIMP1)",
              null=True, blank=True)
     principal_place_of_slave_purchase = models.ForeignKey \
             ('Place', related_name="principal_place_of_slave_purchase",
-             verbose_name="Principal place of slave purchase",
+             verbose_name="Principal place of slave purchase (MAJBUYPT)",
              null=True, blank=True)
     imp_principal_place_of_slave_purchase = models.ForeignKey \
             ('Place',
              related_name="imp_principal_place_of_slave_purchase",
-             verbose_name="Imputed principal place of slave purchase",
+             verbose_name="Imputed principal place of slave purchase (MJBYPTIMP)",
              null=True, blank=True)
     imp_principal_region_of_slave_purchase = models.ForeignKey \
             ('Region',
              related_name="imp_principal_region_of_slave_purchase",
-             verbose_name="Imputed principal region of slave purchase",
+             verbose_name="Imputed principal region of slave purchase (MAJBYIMP)",
              null=True, blank=True)
     imp_broad_region_of_slave_purchase = models.ForeignKey\
             ('BroadRegion',
              related_name="imp_broad_region_of_slave_purchase",
-             verbose_name="Imputed principal broad region of slave purchase",
+             verbose_name="Imputed principal broad region of slave purchase (MAJBYIMP1)",
              null=True, blank=True)
     principal_port_of_slave_dis = models.ForeignKey \
             ('Place', related_name="principal_port_of_slave_dis",
-             verbose_name="Principal port of slave disembarkation",
+             verbose_name="Principal port of slave disembarkation (MAJSELPT)",
              null=True, blank=True)
     imp_principal_port_slave_dis = models.ForeignKey \
             ('Place', related_name="imp_principal_port_slave_dis",
-             verbose_name="Imputed principal port of slave disembarkation",
+             verbose_name="Imputed principal port of slave disembarkation (MAJSLPTIMP)",
              null=True, blank=True)
     imp_principal_region_slave_dis = models.ForeignKey \
             ('Region',
              related_name="imp_principal_region_slave_dis",
-             verbose_name="Imputed principal region of slave disembarkation",
+             verbose_name="Imputed principal region of slave disembarkation (MJSELIMP)",
              null=True, blank=True)
     imp_broad_region_slave_dis = models.ForeignKey \
             ('BroadRegion', related_name="imp_broad_region_slave_dis",
-             verbose_name="Imputed broad region of slave disembarkation",
+             verbose_name="Imputed broad region of slave disembarkation (MJSELIMP1)",
              null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
@@ -499,37 +533,42 @@ class VoyageDates(models.Model):
 
     # Data variables
     voyage_began = models.CommaSeparatedIntegerField\
-            ("Date that voyage began", max_length=10,
+            ("Date that voyage began (DATEDEPB,A,C)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     slave_purchase_began = models.CommaSeparatedIntegerField\
-            ("Date that slave purchase began", max_length=10,
+            ("Date that slave purchase began (D1SLATRB,A,C)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     vessel_left_port = models.CommaSeparatedIntegerField\
-            ("Date that vessel left last slaving port", max_length=10,
+            ("Date that vessel left last slaving port (DLSLATRB,A,C)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     first_dis_of_slaves = models.CommaSeparatedIntegerField\
-            ("Date of first disembarkation of slaves", max_length=10,
+            ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     arrival_at_second_place_landing = models.CommaSeparatedIntegerField\
-            ("Date of arrival at second place of landing", max_length=10,
+            ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     third_dis_of_slaves = models.CommaSeparatedIntegerField\
-            ("Date of third disembarkation of slaves", max_length=10,
+            ("Date of third disembarkation of slaves (DATARR40,39,41)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     departure_last_place_of_landing = models.CommaSeparatedIntegerField\
-            ("Date of departure from last place of landing", max_length=10,
+            ("Date of departure from last place of landing (DDEPAMB,*,C)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     voyage_completed = models.CommaSeparatedIntegerField\
-            ("Date on which slave voyage completed", max_length=10,
+            ("Date on which slave voyage completed (DATARR44,43,45)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
+
+    # Later this can become just a property/ can be calculated
+    length_middle_passage_days = models.IntegerField\
+            ("Length of Middle Passage in (days) (VOYAGE)",
+             max_length=6, null=True, blank=True)
 
     # Imputed variables
     imp_voyage_began = models.CommaSeparatedIntegerField \
@@ -542,11 +581,20 @@ class VoyageDates(models.Model):
              help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
             ("Year of arrival at port of disembarkation",
-             max_length=10,
+             max_length=10, blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
+
+    # Later this can become just a property/ can be calculated
+    imp_length_home_to_disembark = models.IntegerField\
+            ("Voyage length from home port to disembarkation (days) (VOY1IMP)",
+             max_length=6, null=True, blank=True)
+    imp_length_leaving_africa_to_disembark = models.IntegerField\
+            ("Voyage length from leaving Africa to disembarkation (days) (VOY2IMP)",
+             max_length=6, null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
+
 
     @property
     def _calculate_year_period(self, period):
@@ -570,9 +618,10 @@ class VoyageDates(models.Model):
     year_twenty_five = property(_calculate_year_period, 25)
     year_hundred = property(_calculate_year_period, 100)
 
+
     class Meta:
         verbose_name = 'Date'
-        verbose_name_plural = "Dates"
+        verbose_name_plural = 'Dates'
 
 
 # Voyage Captain and Crew
@@ -601,8 +650,12 @@ class VoyageCaptainConnection(models.Model):
             ('Voyage', related_name='voyage')
     captain_order = models.IntegerField(max_length=1)
 
+    class Meta:
+        verbose_name = 'Voyage Captain Information'
+        verbose_name_plural = 'Voyage Captain Information'
+
     def __unicode__(self):
-        return "Captain:"
+        return "Captain: %d %s" % (self.captain_order, self.captain )
 
 
 class VoyageCrew(models.Model):
@@ -637,7 +690,7 @@ class VoyageCrew(models.Model):
             ("Crew died while ship was on African coast",
              max_length=2,
              null=True, blank=True)
-    crew_died_middle_passge = models.IntegerField \
+    crew_died_middle_passage = models.IntegerField \
             ("Crew died during Middle Passage", max_length=2,
              null=True, blank=True)
     crew_died_in_americas = models.IntegerField \
@@ -758,7 +811,6 @@ class VoyageSlavesNumbers(models.Model):
              "embarked at first port of purchase",
              null=True, blank=True)
 
-
     # Representing MEN2 variables
     num_men_died_middle_passage = models.IntegerField \
             ("Number of men (MEN2) died on Middle Passage",
@@ -800,7 +852,6 @@ class VoyageSlavesNumbers(models.Model):
              "died on Middle Passage",
              null=True, blank=True)
 
-
     # Representing MEN3 variables
     num_men_disembark_first_landing = models.IntegerField \
             ("Number of men (MEN3) disembarked at first place of landing",
@@ -841,7 +892,6 @@ class VoyageSlavesNumbers(models.Model):
             ("Number of females (age unspecified) (FEMALE3) "
              "disembarked at first place of landing",
              null=True, blank=True)
-
 
     # Representing MEN4 variables
     num_men_embark_second_port_purchase = models.IntegerField \
@@ -989,6 +1039,7 @@ class VoyageSources(models.Model):
     class Meta:
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
+        ordering = ['short_ref']
 
 class VoyageSourcesConnection(models.Model):
     """
@@ -1014,22 +1065,22 @@ class Voyage(models.Model):
     related to: :model:`voyages.apps.voyages.VoyageSources`
     """
 
-    voyage_id = models.AutoField(primary_key=True)
+    voyage_id = models.IntegerField("Voyage ID (can be null)", null=True, blank=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",
                                            max_length=1, blank=True)
 
     # Technical variables
-    voyage_groupings = models.ForeignKey('VoyageGroupings')
+    voyage_groupings = models.ForeignKey('VoyageGroupings', blank=True, null=True)
 
     # Data and imputed variables
 
     voyage_captain = models.ManyToManyField \
-            ("VoyageCaptain", through=VoyageCaptainConnection,
+            ("VoyageCaptain", through='VoyageCaptainConnection',
              help_text="Voyage Captain",
              blank=True, null=True)
     voyage_ship_owner = models.ManyToManyField \
-        ("VoyageShipOwner", through=VoyageShipOwnerConnection,
+        ("VoyageShipOwner", through='VoyageShipOwnerConnection',
          help_text="Voyage Ship Owner",
          blank=True, null=True)
 
