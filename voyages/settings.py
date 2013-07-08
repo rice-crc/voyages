@@ -127,11 +127,6 @@ INSTALLED_APPS = (
     'voyages.apps.contribute',
     'voyages.apps.help',
 )
-TEST_RUNNER="ignoretests.DjangoIgnoreTestSuiteRunner"
-IGNORE_TESTS = (
-    # Apps to ignore. example : 'django.contrib.auth',
-    'autocomplete_light',
-)
 
 gettext = lambda s: s
 
