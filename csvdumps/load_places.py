@@ -1,14 +1,13 @@
 from voyages.apps.voyage.models import *
 
-input_file = open('places.csv', 'r')
+input_file = open('place.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
-DELIMITER = ','
+DELIMITER = '\t'
 
 first_line = input_file.readline()
 data = first_line[0:-2].split(DELIMITER)
-print len(data)
 
 varNameDict = {}
 for index, term in enumerate(data):
@@ -20,7 +19,6 @@ def isNotBlank(field_name):
 
 
 def getFieldValue(field_name):
-    print field_name
     return data[varNameDict[field_name]][1:-1]
 
 
@@ -43,14 +41,25 @@ def getDecimalFieldValue(field_name):
 ##### End of Common section to all files #####
 
 for line in input_file:
-    data = line.split(DELIMITER)
+    data = line[0:-2].split(DELIMITER)
 
     location = Place()
     location.name = getFieldValue('name')
     location.code = getFieldValue('id')
-    location.longitude = getDecimalFieldValue('longitude')
-    location.latitude = getDecimalFieldValue('latitude')
+    location.longitude = round(getDecimalFieldValue('longitude'), 5)
+    location.latitude = round(getDecimalFieldValue('latitude'), 5)
     if isNotBlank('region_id'):
-        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))
+        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))[0]
+
+    if getFieldValue('show_on_main_map') == "t":
+        location.show_on_main_map = True
+    else:
+        location.show_on_main_map = False
+
+
+    if getFieldValue('show_on_voyage_map') == "t":
+        location.show_on_voyage_map = True
+    else:
+        location.show_on_voyage_map = False
 
     location.save()

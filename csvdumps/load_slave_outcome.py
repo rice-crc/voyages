@@ -1,6 +1,8 @@
 from voyages.apps.voyage.models import *
 
-input_file = open('tontype.txt', 'r')
+# Load the source csv to the database
+
+input_file = open('slave_outcome.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
@@ -44,8 +46,8 @@ for line in input_file:
     # Ignore the \r and \n character
     data = line[0:-2].split(DELIMITER)
 
-    ton_type = VoyageShip.TonType()
-    ton_type.code = getFieldValue('id')
-    ton_type.ton_type = getFieldValue('name')
+    tmpObj = VoyageOutcome.SlavesOutcome()
+    tmpObj.name = getFieldValue('name')
+    tmpObj.code = getIntFieldValue('id')
 
-    ton_type.save()
+    tmpObj.save()

@@ -1,0 +1,8 @@
+"id"	"name"
+"2"	"No slaves embarked"
+"3"	"Slaves disembarked in Africa/Europe"
+"4"	"Slaves perished with ship"
+"5"	"Slaves embarked, transhipped or no further record"
+"6"	"No information on slaves"
+"1"	"Slaves disembarked in Americas"
+"7"	"Slaves embarked but not disembarked in Europe or America"

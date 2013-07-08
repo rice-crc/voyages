@@ -19,8 +19,8 @@ class BroadRegion(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Broad Region'
-        verbose_name_plural = 'Broad Regions'
+        verbose_name = 'Broad region (area)'
+        verbose_name_plural = 'Broad regions (areas)'
         ordering = ['code']
 
 
@@ -488,7 +488,7 @@ class VoyageItinerary(models.Model):
     imp_principal_region_of_slave_purchase = models.ForeignKey \
             ('Region',
              related_name="imp_principal_region_of_slave_purchase",
-             verbose_name="Imputed principal region of slave purchase (MAJBYIMP)",
+             verbose_name="Imputed principal region of slave purchase (c)",
              null=True, blank=True)
     imp_broad_region_of_slave_purchase = models.ForeignKey\
             ('BroadRegion',
@@ -501,7 +501,7 @@ class VoyageItinerary(models.Model):
              null=True, blank=True)
     imp_principal_port_slave_dis = models.ForeignKey \
             ('Place', related_name="imp_principal_port_slave_dis",
-             verbose_name="Imputed principal port of slave disembarkation (MAJSLPTIMP)",
+             verbose_name="Imputed principal port of slave disembarkation (MJSLPTIMP)",
              null=True, blank=True)
     imp_principal_region_slave_dis = models.ForeignKey \
             ('Region',
@@ -651,8 +651,8 @@ class VoyageCaptainConnection(models.Model):
     captain_order = models.IntegerField(max_length=1)
 
     class Meta:
-        verbose_name = 'Voyage Captain Information'
-        verbose_name_plural = 'Voyage Captain Information'
+        verbose_name = 'Voyage captain information'
+        verbose_name_plural = 'Voyage captain information'
 
     def __unicode__(self):
         return "Captain: %d %s" % (self.captain_order, self.captain )
@@ -735,7 +735,7 @@ class VoyageSlavesNumbers(models.Model):
              "(SLINTEND)", null=True, blank=True, max_length=4)
     num_slaves_intended_second_port = models.IntegerField \
             ("Number of slaves intended from second port of purchase "
-             "(SLINTEND2)", null=True, blank=True, max_length=4)
+             "(SLINTEN2)", null=True, blank=True, max_length=4)
 
     num_slaves_carried_first_port = models.IntegerField \
             ("Number of slaves carried from first port of purchase "
@@ -1064,7 +1064,7 @@ class Voyage(models.Model):
     related to: :model:`voyages.apps.voyages.VoyageShipOwner`
     related to: :model:`voyages.apps.voyages.VoyageSources`
     """
-
+    #voyage_id = models.AutoField(primary_key=True)
     voyage_id = models.IntegerField("Voyage ID (can be null)", null=True, blank=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",

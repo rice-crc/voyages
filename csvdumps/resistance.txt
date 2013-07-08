@@ -1,0 +1,8 @@
+"id"	"name"
+"2"	"Vessel attacked from shore"
+"3"	"Vessel's boats attacked from shore"
+"6"	"Insurrection planned, but thwarted"
+"5"	"Three or more slaves jumping overboard, missing, or escaped"
+"1"	"Slave insurrection"
+"4"	"""Cut-off"" (meaning unclear)"
+"9"	"Other (specify in note)"
