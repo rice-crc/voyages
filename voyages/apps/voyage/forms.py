@@ -1,6 +1,7 @@
 from django import forms
 import autocomplete_light
 from .models import *
+from voyages.extratools import AdvancedEditor
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
@@ -94,3 +95,15 @@ class VoyageSourcesConnectionForm(forms.ModelForm):
     class Meta:
         model = VoyageSourcesConnection
         widgets = autocomplete_light.get_widgets_dict(VoyageSourcesConnection)
+
+
+class VoyagesSourcesAdminForm(forms.ModelForm):
+    """
+    Form for editing HTML for FAQ answer
+    """
+    short_ref = forms.CharField(widget=forms.Textarea(attrs={'rows':4, 'cols':60}))
+    full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class' : 'tinymcetextarea'}))
+
+    class Meta:
+        model = VoyageSources
+

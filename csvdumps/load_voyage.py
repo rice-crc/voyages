@@ -1,8 +1,7 @@
 from decimal import *
 from voyages.apps.voyage.models import *
-from datetime import datetime
 
-input_file = open('voyage-part.txt', 'r')
+input_file = open('voyage.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
@@ -33,6 +32,18 @@ def getIntFieldValue(field_name):
         return None
 
 
+def getIntFieldValuePlace(field_name):
+    try:
+        if not isNotBlank(field_name):
+            return None
+        tmpValue = int(getFieldValue(field_name))
+        if tmpValue > 90000:
+            tmpValue = 99801
+        return tmpValue
+    except ValueError:
+        return None
+
+
 def getDecimalFieldValue(field_name):
     try:
         if not isNotBlank(field_name):
@@ -45,7 +56,7 @@ def getDecimalFieldValue(field_name):
 
 listSources = VoyageSources.objects.all()
 
-print "Opening file"
+count = 0
 
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
@@ -55,14 +66,22 @@ for line in input_file:
 
     voyageObj = Voyage.objects.create()
 
-    # A: voyage ship, nation and owner
-    ship = VoyageShip.objects.create(ship_name=getFieldValue('shipname'))
-    ship.voyage = voyageObj
+    count = count + 1
+    print count
 
     if isNotBlank('voyageid'):
         voyageObj.voyage_id = getIntFieldValue('voyageid')
+        voyageObj.save()
 
-    print voyageObj.voyage_id
+    #print voyageObj.voyage_id
+
+    # A: voyage ship, nation and owner
+    ship = VoyageShip()
+
+    ship.voyage = voyageObj
+
+    if isNotBlank('shipname'):
+        ship.ship_name = getFieldValue('shipname')
 
     if isNotBlank('national'):
         ship.nationality_ship = VoyageShip.Nationality.objects.filter(code=getIntFieldValue('national'))[0]
@@ -76,15 +95,15 @@ for line in input_file:
 
 
     if isNotBlank('placcons'):
-        ship.vessel_construction_place = Place.objects.filter(code=getIntFieldValue('placcons'))[0]
+        ship.vessel_construction_place = Place.objects.filter(code=getIntFieldValuePlace('placcons'))[0]
     if isNotBlank('constreg'):
-        ship.vessel_construction_region = Region.objects.filter(code=getIntFieldValue('constreg'))
+        ship.vessel_construction_region = Region.objects.filter(code=getIntFieldValue('constreg'))[0]
 
     ship.year_of_construction = getIntFieldValue('yrcons')
 
     ship.registered_year = getIntFieldValue('yrreg')
     if isNotBlank('placreg'):
-        ship.registered_place = Place.objects.filter(code=getIntFieldValue('placreg'))[0]
+        ship.registered_place = Place.objects.filter(code=getIntFieldValuePlace('placreg'))[0]
     if isNotBlank('regisreg'):
         ship.registered_region = Region.objects.filter(code=getIntFieldValue('regisreg'))[0]
 
@@ -94,13 +113,14 @@ for line in input_file:
     if isNotBlank('tonmod'):
         ship.tonnage_mod = round(getDecimalFieldValue('tonmod'), 1)
 
+    ship.save()
 
     # Owners section
     letters = map(chr, range(97, 97 + 16)) # from a to p
     for idx, letter in enumerate(letters):
         # Inserting ownera, ownerb, ..., ownerp
         if isNotBlank('owner' + letter):
-            tmpOwner, created = VoyageShipOwner.objects.get_or_create(name=getIntFieldValue('owner' + letter))
+            tmpOwner, created = VoyageShipOwner.objects.get_or_create(name=getFieldValue('owner' + letter))
             # Create a voyage-owner connection
             VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=voyageObj,
                                                      owner_order=(idx+1))
@@ -123,14 +143,16 @@ for line in input_file:
         outcome.outcome_owner = VoyageOutcome.OwnerOutcome.objects.filter(
                 code=getIntFieldValue('fate4'))[0]
 
-    itinerary = VoyageItinerary.objects.create(voyage=voyageObj)
+    itinerary = VoyageItinerary()
+
+    itinerary.voyage = voyage=voyageObj
     # Voyage itinerary
     if isNotBlank('portdep'):
-        itinerary.port_of_departure = Place.objects.filter(code=getIntFieldValue('portdep'))[0]
+        itinerary.port_of_departure = Place.objects.filter(code=getIntFieldValuePlace('portdep'))[0]
     if isNotBlank('embport'):
-        itinerary.int_first_port_emb = Place.objects.filter(code=getIntFieldValue('embport'))[0]
+        itinerary.int_first_port_emb = Place.objects.filter(code=getIntFieldValuePlace('embport'))[0]
     if isNotBlank('embport2'):
-        itinerary.int_second_port_emb = Place.objects.filter(code=getIntFieldValue('embport2'))[0]
+        itinerary.int_second_port_emb = Place.objects.filter(code=getIntFieldValuePlace('embport2'))[0]
 
     if isNotBlank('embreg'):
         itinerary.int_first_region_purchase_slaves = Region.objects.filter(code=getIntFieldValue('embreg'))[0]
@@ -138,9 +160,9 @@ for line in input_file:
         itinerary.int_second_region_purchase_slaves = Region.objects.filter(code=getIntFieldValue('embreg2'))[0]
 
     if isNotBlank('arrport'):
-        itinerary.int_first_port_dis = Place.objects.filter(code=getIntFieldValue('arrport'))[0]
+        itinerary.int_first_port_dis = Place.objects.filter(code=getIntFieldValuePlace('arrport'))[0]
     if isNotBlank('arrport2'):
-        itinerary.int_second_port_dis = Place.objects.filter(code=getIntFieldValue('arrport2'))[0]
+        itinerary.int_second_port_dis = Place.objects.filter(code=getIntFieldValuePlace('arrport2'))[0]
 
     if isNotBlank('regarr'):
         itinerary.int_first_region_slave_landing = Region.objects.filter(code=getIntFieldValue('regarr'))[0]
@@ -150,11 +172,11 @@ for line in input_file:
     itinerary.ports_called_buying_slaves = getIntFieldValue('nppretra')
 
     if isNotBlank('plac1tra'):
-        itinerary.first_place_slave_purchase = Place.objects.filter(code=getIntFieldValue('plac1tra'))[0]
+        itinerary.first_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac1tra'))[0]
     if isNotBlank('plac2tra'):
-        itinerary.second_place_slave_purchase = Place.objects.filter(code=getIntFieldValue('plac2tra'))[0]
+        itinerary.second_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac2tra'))[0]
     if isNotBlank('plac3tra'):
-        itinerary.third_place_slave_purchase = Place.objects.filter(code=getIntFieldValue('plac3tra'))[0]
+        itinerary.third_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac3tra'))[0]
 
     if isNotBlank('regem1'):
         itinerary.first_region_slave_emb = Region.objects.filter(code=getIntFieldValue('regem1'))[0]
@@ -164,16 +186,16 @@ for line in input_file:
         itinerary.third_region_slave_emb = Region.objects.filter(code=getIntFieldValue('regem3'))[0]
     if isNotBlank('npafttra'):
         itinerary.port_of_call_before_atl_crossing = Place.objects.filter(
-                code=getIntFieldValue('npafttra'))[0]
+                code=getIntFieldValuePlace('npafttra'))[0]
 
     itinerary.number_of_ports_of_call = getIntFieldValue('npprior')
 
     if isNotBlank('sla1port'):
-        itinerary.first_landing_place = Place.objects.filter(code=getIntFieldValue('sla1port'))[0]
+        itinerary.first_landing_place = Place.objects.filter(code=getIntFieldValuePlace('sla1port'))[0]
     if isNotBlank('adpsale1'):
-        itinerary.second_landing_place = Place.objects.filter(code=getIntFieldValue('adpsale1'))[0]
+        itinerary.second_landing_place = Place.objects.filter(code=getIntFieldValuePlace('adpsale1'))[0]
     if isNotBlank('adpsale2'):
-        itinerary.third_landing_place = Place.objects.filter(code=getIntFieldValue('adpsale2'))[0]
+        itinerary.third_landing_place = Place.objects.filter(code=getIntFieldValuePlace('adpsale2'))[0]
 
     if isNotBlank('regdis1'):
         itinerary.first_landing_region = Region.objects.filter(code=getIntFieldValue('regdis1'))[0]
@@ -183,7 +205,7 @@ for line in input_file:
         itinerary.third_landing_region = Region.objects.filter(code=getIntFieldValue('regdis3'))[0]
 
     if isNotBlank('portret'):
-        itinerary.place_voyage_ended = Place.objects.filter(code=getIntFieldValue('portret'))[0]
+        itinerary.place_voyage_ended = Place.objects.filter(code=getIntFieldValuePlace('portret'))[0]
     if isNotBlank('retrnreg'):
         itinerary.region_of_return = Region.objects.filter(code=getIntFieldValue('retrnreg'))[0]
     if isNotBlank('retrnreg1'):
@@ -191,28 +213,30 @@ for line in input_file:
 
     # Imputed itinerary variables
     if isNotBlank('ptdepimp'):
-        itinerary.imp_port_voyage_begin = Place.objects.filter(code=getIntFieldValue('ptdepimp'))[0]
+        itinerary.imp_port_voyage_begin = Place.objects.filter(code=getIntFieldValuePlace('ptdepimp'))[0]
     if isNotBlank('deptregimp'):
         itinerary.imp_region_voyage_begin = Region.objects.filter(code=getIntFieldValue('deptregimp'))[0]
     if isNotBlank('deptregimp1'):
         itinerary.imp_broad_region_voyage_begin = BroadRegion.objects.filter(code=getIntFieldValue('deptregimp1'))[0]
     if isNotBlank('majbuypt'):
         itinerary.principal_place_of_slave_purchase = Place.objects.filter(
-                code=getIntFieldValue('majbuypt'))[0]
+                code=getIntFieldValuePlace('majbuypt'))[0]
     if isNotBlank('mjbyptimp'):
-        itinerary.imp_principal_place_of_slave_purchase = Place.objects.filter(code=getIntFieldValue('mjbyptimp'))[0]
+        itinerary.imp_principal_place_of_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('mjbyptimp'))[0]
     if isNotBlank('majbyimp'):
         itinerary.imp_principal_region_of_slave_purchase = Region.objects.filter(code=getIntFieldValue('majbyimp'))[0]
     if isNotBlank('majbyimp1'):
         itinerary.imp_broad_region_of_slave_purchase = BroadRegion.objects.filter(code=getIntFieldValue('majbyimp1'))[0]
     if isNotBlank('majselpt'):
-        itinerary.principal_port_of_slave_dis = Place.objects.filter(code=getIntFieldValue('majselpt'))[0]
+        itinerary.principal_port_of_slave_dis = Place.objects.filter(code=getIntFieldValuePlace('majselpt'))[0]
     if isNotBlank('mjslptimp'):
-        itinerary.imp_principal_port_slave_dis = Place.objects.filter(code=getIntFieldValue('mjslptimp'))[0]
+        itinerary.imp_principal_port_slave_dis = Place.objects.filter(code=getIntFieldValuePlace('mjslptimp'))[0]
     if isNotBlank('mjselimp'):
         itinerary.imp_principal_region_slave_dis = Region.objects.filter(code=getIntFieldValue('mjselimp'))[0]
     if isNotBlank('mjselimp1'):
         itinerary.imp_broad_region_slave_dis = BroadRegion.objects.filter(code=getIntFieldValue('mjselimp1'))[0]
+
+    itinerary.save()
 
     def construct_date_string(day_field, month_field, year_field):
         """
@@ -235,7 +259,8 @@ for line in input_file:
         return tmpStr
 
     # Voyage dates
-    date_info = VoyageDates.objects.create(voyage=voyageObj)
+    date_info = VoyageDates()
+    date_info.voyage = voyageObj
     date_info.voyage_began = construct_date_string('datedepa', 'datedepb', 'datedepc')
     date_info.slave_purchase_began = construct_date_string('d1slatra', 'd1slatrb', 'd1slatrc')
     date_info.vessel_left_port = construct_date_string('dlslatra', 'dlslatrb', 'dlslatrc')
@@ -252,9 +277,11 @@ for line in input_file:
 
     date_info.imp_length_home_to_disembark = getIntFieldValue('voy1imp')
     date_info.imp_length_leaving_africa_to_disembark = getIntFieldValue('voy2imp')
+    date_info.save()
 
     # Captain and Crew section
-    crew = VoyageCrew.objects.create(voyage=voyageObj)
+    crew = VoyageCrew()
+    crew.voyage = voyageObj
     crew.crew_voyage_outset = getIntFieldValue('crew1')
     crew.crew_departure_last_port = getIntFieldValue('crew2')
     crew.crew_first_landing = getIntFieldValue('crew3')
@@ -286,9 +313,11 @@ for line in input_file:
             name=getFieldValue('captainc'))
         VoyageCaptainConnection.objects.create(
             captain_order=3, captain=third_captain, voyage=voyageObj)
+    crew.save()
 
     # Voyage numbers and characteristics
-    characteristics = VoyageSlavesNumbers.objects.create()
+    characteristics = VoyageSlavesNumbers()
+    characteristics.voyage = voyageObj
 
     characteristics.num_slaves_intended_first_port = getIntFieldValue("slintend")
     characteristics.num_slaves_intended_second_port = getIntFieldValue("slinten2")
@@ -362,7 +391,7 @@ for line in input_file:
     characteristics.num_males_embark_first_port_purchase = getIntFieldValue("male6")
     characteristics.num_females_embark_first_port_purchase = getIntFieldValue("female6")
 
-    characteristics.voyage = voyageObj
+    characteristics.save()
 
     # Voyage sources
     # Potentially has a bug!!!!!!!!
@@ -376,15 +405,15 @@ for line in input_file:
                 continue
             if len(source.short_ref) < len(matchstring):
                 continue
-            sourcestr = source.short_ref.encode('utf-8')
-            print "source string: %s" % sourcestr
+            #sourcestr = source.short_ref.decode('utf-8')
+            sourcestr = source.short_ref
 
             if sourcestr.find(matchstring) > -1:
                 return source
 
         # Find the best matching/contains the substring
         # : should be the last delimiter, then
-        tmpPos = max(matchstring.rfind(':'), matchstring.rfind(","))
+        tmpPos = max(matchstring.rfind(':'), matchstring.rfind(","), matchstring.rfind("-"))
         if tmpPos > -1:
             return findBestMachingSource(matchstring[: tmpPos])
         else:
@@ -392,21 +421,21 @@ for line in input_file:
 
     def insertSource(fieldname, order):
         if isNotBlank(fieldname):
-            to_be_matched = getFieldValue(fieldname).encode('utf-8')
-
-            print "looking for %s" % to_be_matched
-
+            to_be_matched = getFieldValue(fieldname).decode('utf-8')
             src = findBestMachingSource(to_be_matched)
-
             if src is not None:
                 VoyageSourcesConnection.objects.create(source=src, source_order=order,
                                                       text_ref=getFieldValue(fieldname),
                                                       group=voyageObj)
+               # print "Found match %s" % to_be_matched
             else :
-                print "Error finding matching source %s" % getFieldValue(fieldname)
+                #print "No match found for %s" % getFieldValue(fieldname)
+                pass
 
     # Alphabetical letters between a and r
     letters = map(chr, range(97, 97 + 18))
     for idx, letter in enumerate(letters):
         # Inserting sourcea, sourceb. .. sourcer
         insertSource('source' + letter, (idx + 1))
+
+    voyageObj.save()
