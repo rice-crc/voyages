@@ -92,8 +92,8 @@ class Nationality(models.Model):
     """
     Nationality of ships.
     """
-    nationality = models.CharField(max_length=70)
-    code = models.IntegerField(max_length=2)
+    label = models.CharField(max_length=70)
+    value = models.IntegerField(max_length=2)
 
     class Meta:
         verbose_name = "Nationality"
@@ -107,8 +107,8 @@ class TonType(models.Model):
     """
     Types of tonnage.
     """
-    ton_type = models.CharField(max_length=70)
-    code = models.IntegerField(max_length=2)
+    label = models.CharField(max_length=70)
+    value = models.IntegerField(max_length=2)
 
     class Meta:
         verbose_name = "Type of tons"
@@ -122,8 +122,8 @@ class RigOfVessel(models.Model):
     """
     Rig of Vessel.
     """
-    rig_of_vessel = models.CharField(max_length=25)
-    code = models.IntegerField(max_length=2)
+    label = models.CharField(max_length=25)
+    value = models.IntegerField(max_length=2)
 
     class Meta:
         verbose_name = "Rig of vessel"
@@ -231,8 +231,8 @@ class ParticularOutcome(models.Model):
     """
     Particular outcome.
     """
-    name = models.CharField("Outcome label", max_length=200)
-    code = models.IntegerField("Code of outcome", max_length=3)
+    label = models.CharField("Outcome label", max_length=200)
+    value = models.IntegerField("Code of outcome", max_length=3)
 
     def __unicode__(self):
         return self.name
@@ -247,8 +247,8 @@ class SlavesOutcome(models.Model):
     """
     Outcome of voyage for slaves.
     """
-    name = models.CharField("Outcome label", max_length=200)
-    code = models.IntegerField("Code of outcome", max_length=1)
+    label = models.CharField("Outcome label", max_length=200)
+    value = models.IntegerField("Code of outcome", max_length=1)
 
     def __unicode__(self):
         return self.name
@@ -260,8 +260,8 @@ class VesselCapturedOutcome(models.Model):
     """
     Outcome of voyage if vessel captured.
     """
-    name = models.CharField("Outcome label", max_length=200)
-    code = models.IntegerField("Code of outcome", max_length=2)
+    label = models.CharField("Outcome label", max_length=200)
+    value = models.IntegerField("Code of outcome", max_length=2)
 
     def __unicode__(self):
         return self.name
@@ -273,8 +273,8 @@ class OwnerOutcome(models.Model):
     """
     Outcome of voyage for owner.
     """
-    name = models.CharField("Outcome label", max_length=200)
-    code = models.IntegerField("Code of outcome", max_length=1)
+    label = models.CharField("Outcome label", max_length=200)
+    value = models.IntegerField("Code of outcome", max_length=1)
 
     def __unicode__(self):
         return self.name
@@ -286,8 +286,8 @@ class Resistance(models.Model):
     """
     Resistance labels
     """
-    name = models.CharField("Resistance label", max_length=70)
-    code = models.IntegerField("Code of resistance", max_length=1)
+    label = models.CharField("Resistance label", max_length=70)
+    value = models.IntegerField("Code of resistance", max_length=1)
 
     def __unicode__(self):
         return self.name
