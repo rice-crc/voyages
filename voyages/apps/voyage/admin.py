@@ -30,20 +30,20 @@ class FlatPageAdmin(admin.ModelAdmin):
 # Voyage Admin
 # Regions, Places
 class BroadRegionAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
-    search_fields = ['code', 'name']
+    list_display = ('value', 'broad_region')
+    list_display_links = ('broad_region',)
+    search_fields = ['value', 'broad_region']
 
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
-    search_fields = ['code', 'name']
+    list_display = ('value', 'region')
+    list_display_links = ('region',)
+    search_fields = ['value', 'region']
 
 
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
-    search_fields = ['code', 'name']
+    list_display = ('value', 'place')
+    list_display_links = ('place',)
+    search_fields = ['value', 'place']
 
 
 # Technical
@@ -98,9 +98,9 @@ class VoyageNationalityAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.Nationality
     """
-    list_display = ('code', 'nationality')
-    list_display_links = ('nationality',)
-    search_fields = ['code', 'nationality']
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
+    search_fields = ['value', 'label']
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -112,9 +112,9 @@ class VoyageRigOfVesselAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.RigOfVessel
     """
-    list_display = ('code', 'rig_of_vessel')
-    list_display_links = ('rig_of_vessel',)
-    search_fields = ['code', 'rig_of_vessel']
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
+    search_fields = ['value', 'label']
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -126,9 +126,9 @@ class VoyageTonTypeAdmin(admin.ModelAdmin):
     """
     Admin for Voyage.TonType
     """
-    list_display = ('code', 'ton_type')
-    list_display_links = ('ton_type',)
-    search_fields = ['code', 'ton_type']
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
+    search_fields = ['value', 'label']
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -154,8 +154,8 @@ class VoyageParticularOutcomeAdmin(admin.ModelAdmin):
     """
     Admin for VoyageOutcome.ParticularOutcome
     """
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -167,8 +167,8 @@ class VoyageSlavesOutcomeAdmin(admin.ModelAdmin):
     """
     Admin for VoyageOutcome.SlavesOutcome
     """
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -179,8 +179,8 @@ class VoyageVesselOutcomeAdmin(admin.ModelAdmin):
     """
     Admin for VoyageOutcome.VesselCapturedOutcome
     """
-    list_display = ('code', 'name')
-    list_display_links = ('name',)
+    list_display = ('value', 'label')
+    list_display_links = ('label',)
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -348,15 +348,15 @@ admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
 admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
-admin.site.register(VoyageShip.Nationality, VoyageNationalityAdmin)
-admin.site.register(VoyageShip.TonType, VoyageTonTypeAdmin)
-admin.site.register(VoyageShip.RigOfVessel, VoyageRigOfVesselAdmin)
+admin.site.register(Nationality, VoyageNationalityAdmin)
+admin.site.register(TonType, VoyageTonTypeAdmin)
+admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)
 #admin.site.register(VoyageShip, VoyageShipAdmin)
 
 # Voyage Outcome
-admin.site.register(VoyageOutcome.ParticularOutcome, VoyageParticularOutcomeAdmin)
-admin.site.register(VoyageOutcome.SlavesOutcome, VoyageSlavesOutcomeAdmin)
-admin.site.register(VoyageOutcome.VesselCapturedOutcome, VoyageVesselOutcomeAdmin)
+admin.site.register(ParticularOutcome, VoyageParticularOutcomeAdmin)
+admin.site.register(SlavesOutcome, VoyageSlavesOutcomeAdmin)
+admin.site.register(VesselCapturedOutcome, VoyageVesselOutcomeAdmin)
 # attached as inline in Voyage section
 
 # Voyage Itinerary
