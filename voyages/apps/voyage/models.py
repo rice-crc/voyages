@@ -69,12 +69,10 @@ class Place(models.Model):
     class Meta:
         verbose_name = 'Place (Port or Location)'
         verbose_name_plural = "Places (Ports or Locations)"
+        ordering = ['code']
 
     def __unicode__(self):
         return self.name
-
-    class Meta:
-        ordering = ['code']
 
 
 # Voyage Groupings
@@ -379,7 +377,7 @@ class VoyageItinerary(models.Model):
              related_name="int_first_region_slave_landing",
              verbose_name="First intended region of slave landing (REGARR)",
              null=True, blank=True)
-    int_second_region_slave_landing = models.ForeignKey \
+    int_second_place_region_slave_landing = models.ForeignKey \
             ('Region',
              related_name="int_second_region_slave_landing",
              verbose_name="Second intended region of slave landing (REGARR2)",
@@ -576,7 +574,7 @@ class VoyageDates(models.Model):
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     imp_departed_africa = models.CommaSeparatedIntegerField \
-            ("Year departed Africa", max_length=4,
+            ("Year departed Africa", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
@@ -1014,7 +1012,7 @@ class VoyageSlavesNumbers(models.Model):
             ("Number of females (age unspecified) (FEMALE6) "
              "disembarked at second place of landing", null=True, blank=True)
 
-    voyage = models.ForeignKey('Voyage', null=True, blank=True,
+    voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
 
     class Meta:
@@ -1039,7 +1037,10 @@ class VoyageSources(models.Model):
     class Meta:
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
-        ordering = ['short_ref']
+        ordering = ['short_ref', 'full_ref']
+
+    def __unicode__(self):
+        return self.full_ref
 
 class VoyageSourcesConnection(models.Model):
     """
@@ -1048,7 +1049,8 @@ class VoyageSourcesConnection(models.Model):
     related to: :model:`voyages.apps.voyages.VoyageSources`
     related to: :model:`voyages.apps.voyages.Voyage`
     """
-    source = models.ForeignKey('VoyageSources', related_name="source")
+    source = models.ForeignKey('VoyageSources', related_name="source",
+                               null=True, blank=True)
     group = models.ForeignKey('Voyage', related_name="group")
     source_order = models.IntegerField(max_length=2)
     text_ref = models.CharField(_('Text reference(citation)'),
@@ -1065,7 +1067,7 @@ class Voyage(models.Model):
     related to: :model:`voyages.apps.voyages.VoyageSources`
     """
     #voyage_id = models.AutoField(primary_key=True)
-    voyage_id = models.IntegerField("Voyage ID (can be null)", null=True, blank=True)
+    voyage_id = models.IntegerField("Voyage ID (can be empty)", null=True, blank=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",
                                            max_length=1, blank=True)
@@ -1091,8 +1093,9 @@ class Voyage(models.Model):
              related_name='voyage_sources', blank=True, null=True)
 
     class Meta:
+        ordering = ['voyage_id',]
         verbose_name = 'Voyage'
         verbose_name_plural = "Voyages"
 
     def __unicode__(self):
-        return "Voyage " + str(self.voyage_id)
+        return "Voyage #%s" % str(self.voyage_id)

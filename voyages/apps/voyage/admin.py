@@ -39,10 +39,12 @@ class RegionAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     search_fields = ['code', 'name']
 
+
 class PlaceAdmin(admin.ModelAdmin):
     list_display = ('code', 'name')
     list_display_links = ('name',)
     search_fields = ['code', 'name']
+
 
 # Technical
 class VoyageGroupingsAdmin(admin.ModelAdmin):
@@ -159,6 +161,7 @@ class VoyageParticularOutcomeAdmin(admin.ModelAdmin):
     #    Return empty perms dict thus hiding the model from admin index.
     #    """
     #    return {}
+
 
 class VoyageSlavesOutcomeAdmin(admin.ModelAdmin):
     """
@@ -292,6 +295,8 @@ class VoyageSourcesAdmin(admin.ModelAdmin):
     Admin for VoyageSources.
     """
     list_display = ('short_ref', 'full_ref')
+    search_fields = ('short_ref', 'full_ref')
+    form = VoyagesSourcesAdminForm
     #def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
@@ -321,7 +326,10 @@ class VoyageAdmin(admin.ModelAdmin):
                VoyageCrewInline, VoyageSlavesNumbersInline,
                VoyageSourcesConnectionInline)
     form = autocomplete_light.modelform_factory(Voyage)
-    ordering = ['voyage_in_cd_rom', 'voyage_groupings']
+    ordering = ['voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
+    search_fields = ('voyage_id',)
+    #list_display = ('voyage_id',)
+
 
 
 # Registers section
@@ -353,9 +361,11 @@ admin.site.register(VoyageOutcome.VesselCapturedOutcome, VoyageVesselOutcomeAdmi
 
 # Voyage Itinerary
 # attached as inline in Voyage section
+admin.site.register(VoyageItinerary)
 
 # Voyage Dates
 # attached as inline in Voyage section
+admin.site.register(VoyageDates)
 
 # Voyage Captain and Crew
 # Crew attached as inline in Voyage section
@@ -364,6 +374,7 @@ admin.site.register(VoyageCaptainConnection, VoyageCaptainConnectionAdmin)
 
 # Voyage Slaves (numbers)
 # attached as inline in Voyage section
+admin.site.register(VoyageSlavesNumbers)
 
 # Voyage Slaves (characteristics)
 # attached as inline in Voyage section
