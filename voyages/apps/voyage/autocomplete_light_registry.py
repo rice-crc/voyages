@@ -10,13 +10,13 @@ autocomplete_light.register(VoyageGroupings, search_fields=('value',),
 autocomplete_light.register(VoyageCaptain, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Captain name...'})
 
-autocomplete_light.register(VoyageShip.Nationality, search_fields=('nationality',),
+autocomplete_light.register(Nationality, search_fields=('label',),
     autocomplete_js_attributes={'placeholder': 'Nationality of ship...'})
 
-autocomplete_light.register(VoyageShip.TonType, search_fields=('ton_type',),
+autocomplete_light.register(TonType, search_fields=('label',),
     autocomplete_js_attributes={'placeholder': 'Ton type...'})
 
-autocomplete_light.register(VoyageShip.RigOfVessel, search_fields=('rig_of_vessel',),
+autocomplete_light.register(RigOfVessel, search_fields=('label',),
     autocomplete_js_attributes={'placeholder': 'Rig of vessel...'})
 
 autocomplete_light.register(Place, search_fields=('name',),
@@ -31,28 +31,28 @@ autocomplete_light.register(BroadRegion, search_fields=('name',),
 autocomplete_light.register(VoyageShipOwner, search_fields=('name',),
     autocomplete_js_attributes={'placeholder': 'Owner name...'})
 
-autocomplete_light.register(VoyageOutcome.ParticularOutcome,
-                            search_fields=('name',),
+autocomplete_light.register(ParticularOutcome,
+                            search_fields=('label',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Particular outcome...'})
 
-autocomplete_light.register(VoyageOutcome.SlavesOutcome,
-                            search_fields=('name',),
+autocomplete_light.register(SlavesOutcome,
+                            search_fields=('label',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Slave outcome...'})
 
-autocomplete_light.register(VoyageOutcome.VesselCapturedOutcome,
-                            search_fields=('name',),
+autocomplete_light.register(VesselCapturedOutcome,
+                            search_fields=('label',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Vessel captured outcome...'})
 
-autocomplete_light.register(VoyageOutcome.OwnerOutcome,
-                            search_fields=('name',),
+autocomplete_light.register(OwnerOutcome,
+                            search_fields=('label',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Owner outcome...'})
 
-autocomplete_light.register(VoyageOutcome.Resistance,
-                            search_fields=('name',),
+autocomplete_light.register(Resistance,
+                            search_fields=('label',),
                             autocomplete_js_attributes=
                             {'placeholder': 'Resistance...'})
 
