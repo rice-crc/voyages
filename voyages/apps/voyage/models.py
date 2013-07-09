@@ -17,7 +17,7 @@ class BroadRegion(models.Model):
     class Meta:
         verbose_name = 'Broad region (area)'
         verbose_name_plural = 'Broad regions (areas)'
-        ordering = ['code']
+        ordering = ['value']
 
 
 class Region(models.Model):
@@ -41,7 +41,7 @@ class Region(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
 
 
 class Place(models.Model):
@@ -65,7 +65,7 @@ class Place(models.Model):
     class Meta:
         verbose_name = 'Place (Port or Location)'
         verbose_name_plural = "Places (Ports or Locations)"
-        ordering = ['code']
+        ordering = ['value']
 
     def __unicode__(self):
         return self.name
@@ -98,7 +98,7 @@ class Nationality(models.Model):
     class Meta:
         verbose_name = "Nationality"
         verbose_name_plural = "Nationalities"
-        ordering = ['code']
+        ordering = ['value']
 
     def __unicode__(self):
         return self.nationality
@@ -113,7 +113,7 @@ class TonType(models.Model):
     class Meta:
         verbose_name = "Type of tons"
         verbose_name_plural = "Types of tons"
-        ordering = ['code']
+        ordering = ['value']
 
     def __unicode__(self):
         return self.ton_type
@@ -128,7 +128,7 @@ class RigOfVessel(models.Model):
     class Meta:
         verbose_name = "Rig of vessel"
         verbose_name_plural = "Rigs of vessel"
-        ordering = ['code']
+        ordering = ['value']
 
     def __unicode__(self):
         return self.rig_of_vessel
@@ -238,7 +238,7 @@ class ParticularOutcome(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
         verbose_name = 'Fate (particular outcome of voyage)'
         verbose_name_plural = 'Fates (particular outcomes of voyages)'
 
@@ -254,7 +254,7 @@ class SlavesOutcome(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
 
 class VesselCapturedOutcome(models.Model):
     """
@@ -267,7 +267,7 @@ class VesselCapturedOutcome(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
 
 class OwnerOutcome(models.Model):
     """
@@ -280,7 +280,7 @@ class OwnerOutcome(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
 
 class Resistance(models.Model):
     """
@@ -293,7 +293,7 @@ class Resistance(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['code']
+        ordering = ['value']
 
 
 class VoyageOutcome(models.Model):
