@@ -7,13 +7,9 @@ class BroadRegion(models.Model):
     Broad Regions (continents).
     """
 
-    name = models.CharField("Broad region (Area) name", max_length=70)
-    code = models.IntegerField("Numeric code", max_length=5)
+    broad_region = models.CharField("Broad region (Area) name", max_length=70)
+    value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = 'Broad Region'
-        verbose_name_plural = "Broad Regions"
 
     def __unicode__(self):
         return self.name
@@ -30,10 +26,10 @@ class Region(models.Model):
     related to: :model:`voyages.apps.voyages.BroadRegion`
     """
 
-    name = models.CharField("Specific region (country or colony)",
+    region = models.CharField("Specific region (country or colony)",
                                                max_length=70)
     broad_region = models.ForeignKey('BroadRegion')
-    code = models.IntegerField("Numeric code", max_length=5)
+    value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
     show_on_main_map = models.BooleanField(default=True)
 
@@ -54,9 +50,9 @@ class Place(models.Model):
     related to: :model:`voyages.apps.voyages.Region`
     """
 
-    name = models.CharField(max_length=70)
+    place = models.CharField(max_length=70)
     region = models.ForeignKey('Region')
-    code = models.IntegerField("Numeric code", max_length=5)
+    value = models.IntegerField("Numeric code", max_length=5)
     longitude = models.DecimalField("Longitude of point",
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
@@ -94,58 +90,62 @@ class VoyageGroupings(models.Model):
 
 
 # Voyage Ship, Nation, Owners
+class Nationality(models.Model):
+    """
+    Nationality of ships.
+    """
+    nationality = models.CharField(max_length=70)
+    code = models.IntegerField(max_length=2)
+
+    class Meta:
+        verbose_name = "Nationality"
+        verbose_name_plural = "Nationalities"
+        ordering = ['code']
+
+    def __unicode__(self):
+        return self.nationality
+
+class TonType(models.Model):
+    """
+    Types of tonnage.
+    """
+    ton_type = models.CharField(max_length=70)
+    code = models.IntegerField(max_length=2)
+
+    class Meta:
+        verbose_name = "Type of tons"
+        verbose_name_plural = "Types of tons"
+        ordering = ['code']
+
+    def __unicode__(self):
+        return self.ton_type
+
+class RigOfVessel(models.Model):
+    """
+    Rig of Vessel.
+    """
+    rig_of_vessel = models.CharField(max_length=25)
+    code = models.IntegerField(max_length=2)
+
+    class Meta:
+        verbose_name = "Rig of vessel"
+        verbose_name_plural = "Rigs of vessel"
+        ordering = ['code']
+
+    def __unicode__(self):
+        return self.rig_of_vessel
+
+
 class VoyageShip(models.Model):
     """
     Information about voyage ship.
     related to: :model:`voyages.apps.voyages.Region`
     related to: :model:`voyages.apps.voyages.Place`
     related to: :model:`voyages.apps.voyages.Voyage`
+    related to: :model:`voyages.apps.voyages.Nationality`
+    related to: :model:`voyages.apps.voyages.TonType`
+    related to: :model:`voyages.apps.voyages.RigOfVessel`
     """
-
-    class Nationality(models.Model):
-        """
-        Nationality of ships.
-        """
-        nationality = models.CharField(max_length=70)
-        code = models.IntegerField(max_length=2)
-
-        class Meta:
-            verbose_name = "Nationality"
-            verbose_name_plural = "Nationalities"
-            ordering = ['code']
-
-        def __unicode__(self):
-            return self.nationality
-
-    class TonType(models.Model):
-        """
-        Types of tonnage.
-        """
-        ton_type = models.CharField(max_length=70)
-        code = models.IntegerField(max_length=2)
-
-        class Meta:
-            verbose_name = "Type of tons"
-            verbose_name_plural = "Types of tons"
-            ordering = ['code']
-
-        def __unicode__(self):
-            return self.ton_type
-
-    class RigOfVessel(models.Model):
-        """
-        Rig of Vessel.
-        """
-        rig_of_vessel = models.CharField(max_length=25)
-        code = models.IntegerField(max_length=2)
-
-        class Meta:
-            verbose_name = "Rig of vessel"
-            verbose_name_plural = "Rigs of vessel"
-            ordering = ['code']
-
-        def __unicode__(self):
-            return self.rig_of_vessel
 
     # Data variables
     ship_name = models.CharField("Name of vessel", max_length=70,
@@ -229,78 +229,79 @@ class VoyageShipOwnerConnection(models.Model):
 
 
 # Voyage Outcome
+class ParticularOutcome(models.Model):
+    """
+    Particular outcome.
+    """
+    name = models.CharField("Outcome label", max_length=200)
+    code = models.IntegerField("Code of outcome", max_length=3)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['code']
+        verbose_name = 'Fate (particular outcome of voyage)'
+        verbose_name_plural = 'Fates (particular outcomes of voyages)'
+
+
+class SlavesOutcome(models.Model):
+    """
+    Outcome of voyage for slaves.
+    """
+    name = models.CharField("Outcome label", max_length=200)
+    code = models.IntegerField("Code of outcome", max_length=1)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['code']
+
+class VesselCapturedOutcome(models.Model):
+    """
+    Outcome of voyage if vessel captured.
+    """
+    name = models.CharField("Outcome label", max_length=200)
+    code = models.IntegerField("Code of outcome", max_length=2)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['code']
+
+class OwnerOutcome(models.Model):
+    """
+    Outcome of voyage for owner.
+    """
+    name = models.CharField("Outcome label", max_length=200)
+    code = models.IntegerField("Code of outcome", max_length=1)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['code']
+
+class Resistance(models.Model):
+    """
+    Resistance labels
+    """
+    name = models.CharField("Resistance label", max_length=70)
+    code = models.IntegerField("Code of resistance", max_length=1)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['code']
+
+
 class VoyageOutcome(models.Model):
     """
     Information about Outcomes
     """
-
-    class ParticularOutcome(models.Model):
-        """
-        Particular outcome.
-        """
-        name = models.CharField("Outcome label", max_length=200)
-        code = models.IntegerField("Code of outcome", max_length=3)
-
-        def __unicode__(self):
-            return self.name
-
-        class Meta:
-            ordering = ['code']
-            verbose_name = 'Fate (particular outcome of voyage)'
-            verbose_name_plural = 'Fates (particular outcomes of voyages)'
-
-
-    class SlavesOutcome(models.Model):
-        """
-        Outcome of voyage for slaves.
-        """
-        name = models.CharField("Outcome label", max_length=200)
-        code = models.IntegerField("Code of outcome", max_length=1)
-
-        def __unicode__(self):
-            return self.name
-
-        class Meta:
-            ordering = ['code']
-
-    class VesselCapturedOutcome(models.Model):
-        """
-        Outcome of voyage if vessel captured.
-        """
-        name = models.CharField("Outcome label", max_length=200)
-        code = models.IntegerField("Code of outcome", max_length=2)
-
-        def __unicode__(self):
-            return self.name
-
-        class Meta:
-            ordering = ['code']
-
-    class OwnerOutcome(models.Model):
-        """
-        Outcome of voyage for owner.
-        """
-        name = models.CharField("Outcome label", max_length=200)
-        code = models.IntegerField("Code of outcome", max_length=1)
-
-        def __unicode__(self):
-            return self.name
-
-        class Meta:
-            ordering = ['code']
-
-    class Resistance(models.Model):
-        """
-        Resistance labels
-        """
-        name = models.CharField("Resistance label", max_length=70)
-        code = models.IntegerField("Code of resistance", max_length=1)
-
-        def __unicode__(self):
-            return self.name
-
-        class Meta:
-            ordering = ['code']
 
     # Data variables
     particular_outcome = models.ForeignKey('ParticularOutcome',
