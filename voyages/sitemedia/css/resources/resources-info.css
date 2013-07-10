@@ -14,13 +14,8 @@ h1 {
 	display: block;
 	float: left;
 	margin: 5px 0px 15px 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	border: #C09C42 1px solid;
-	background-color: #FFFFFF;
 	padding: 10px 8px 10px 8px;
 }
-
 
 #left-menu {
     width: 280px;
@@ -29,7 +24,6 @@ h1 {
 	margin: 0px;
 	padding: 10px 8px 10px 8px;
 }
-
 
 div.images-nav-path {
 	margin-bottom: 2px; }
