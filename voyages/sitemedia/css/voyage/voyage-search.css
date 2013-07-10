@@ -1,19 +1,181 @@
-/* main panels */
+body {
+    background:  #FFFFFF url('/static/images/voyage/voyage-bg.png') repeat-x 0px 60px;
+}
+
+a {
+    color: #8A5D04;
+}
+
+input {
+    font-size: 8pt;
+    margin-bottom: 5px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+#main-content-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    clear: both;
+}
+
+h1 {
+	padding: 0px;
+	margin: 0px 0px 10px 0px;
+}
+
+#left-menu, #center-content {
+	display: block;
+	float: left;
+	margin: 0;
+}
+
+/* Set the width of the left-menu */
+#left-menu {
+	padding: 10px 5px 10px 5px;
+	width: 19%;
+	border: #895D03 1px solid;
+}
+
+/* Set the width of the main content */
+#center-content {
+    border-top: #895D03 1px solid;
+	width: 77%;
+    overflow: hidden;
+	padding: 10px 12px 10px 12px;
+    background-color: #FFFFFF;
+}
+
+.search-side-panel {
+    font-size: 8pt;
+}
+
+.box-main-table, .box-main-table-tail {
+    margin-bottom: 15px;
+}
+
+.box-text-label {
+    font-weight: bold;
+    padding: 3px;
+}
+
+.box-collapsed .box-header, .box-expanded .box-header,
+.box-expanded .box-header-tail, .box-collapsed .box-header-tail,
+.box-collapsed .box-header-head, .box-expanded .box-header-head{
+    padding: 3px 3px 0px 5px;
+    background-color: #EDD99F;
+    height: 15pt;
+    overflow: hidden;
+}
+
+
+.box-collapsed .box-header {
+    margin: 2px 5px 5px 5px;
+    -moz-border-radius: 7px;
+	border-radius: 7px;
+    border: #8A5D04 1px solid;
+}
+
+.box-expanded .box-header {
+    margin: 2px 5px 0px 5px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+
+    border-top: #8A5D04 1px solid;
+    border-left: #8A5D04 1px solid;
+    border-right: #8A5D04 1px solid;
+}
+
+.box-mid-end {
+    background: #FFFFFF url('/static/images/voyage/database-box-content-center.png') repeat-x;
+    margin: 0px 5px 0px 5px;
+    padding: 5px 5px 2px 10px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border: #8A5D04 1px solid;
+    min-height: 30px;
+}
+
+.box-mid {
+    background: #FFFFFF url('/static/images/voyage/database-box-content-center.png') repeat-x;
+    margin: 0 5px 0 5px;
+    padding: 5px 0 2px 10px;
+    border: #8A5D04 1px solid;
+    min-height: 30px;
+}
+
+.box-collapsed .box-mid-end, .box-collapsed .box-mid {
+    display: none;
+}
+
+.box-button {
+    float: right;
+    margin: 0;
+    padding: 0 20px 0 0;
+    display: block;
+    height: 14pt;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.box-expanded .box-button {
+    float: right;
+    background: #EDD99F url('/static/images/voyage/database-box-minus.png') no-repeat;
+    display: visible;
+}
+
+.box-collapsed .box-button {
+    float: right;
+    background: #EDD99F url('/static/images/voyage/database-box-plus.png') no-repeat;
+}
+
+
+.box-header-head {
+    margin: 2px 5px 0px 5px;
+    border-top: #8A5D04 1px solid;
+    border-left: #8A5D04 1px solid;
+    border-right: #8A5D04 1px solid;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.box-collapsed .box-header-head {
+    border: #8A5D04 1px solid;
+}
+
+
+
+.box-collapsed .box-header-tail {
+    margin: 0px 5px 5px 5px;
+    -moz-border-radius-bottomleft: 7px;
+    -moz-border-radius-bottomright: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    border-bottom: #8A5D04 1px solid;
+    border-left: #8A5D04 1px solid;
+    border-right: #8A5D04 1px solid;
+}
+
+.box-expanded .box-header-tail {
+    margin: 0px 5px 0px 5px;
+   -moz-border-radius: 0px;
+	border-left: #8A5D04 1px solid;
+    border-right: #8A5D04 1px solid;
+}
+
+
 
 table.search-main-table {
 	width: 100%;
 	border-top: 1px solid #895D03; }
-	
-td.search-side-panel {
-	background-image: url(../images/database-bg.png);
-	background-position: top left;
-	background-repeat: repeat-x;
-	border-right: 1px solid #895D03;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	width: 300px;
-	vertical-align: top; }
 
 td.search-main-panel {
 	vertical-align: top; }

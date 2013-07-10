@@ -5,13 +5,15 @@
 {% load i18n %}
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css">
 {% endblock %}
 
 {% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
 
 {% block jslist %}
-<script src="{{ STATIC_URL }}" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/voyage/voyage-search.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
