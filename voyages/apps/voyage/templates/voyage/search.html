@@ -1,0 +1,28 @@
+{% extends "voyage/voyagebase.html" %}
+
+<!-- Basic template for pages in the Voyage section -->
+
+{% load i18n %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
+{% endblock %}
+
+{% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "voyage/search_left_menu.html" %}
+</div>
+
+<div id="center-content">
+	{% block center-content %}
+
+	{% endblock %}
+</div>
+{% endblock %}

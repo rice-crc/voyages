@@ -84,12 +84,12 @@ for line in input_file:
         ship.ship_name = getFieldValue('shipname')
 
     if isNotBlank('national'):
-        ship.nationality_ship = VoyageShip.Nationality.objects.filter(code=getIntFieldValue('national'))[0]
+        ship.nationality_ship = Nationality.objects.filter(code=getIntFieldValue('national'))[0]
     ship.tonnage = getIntFieldValue('tonnage')
     if isNotBlank('tontype'):
-        ship.ton_type = VoyageShip.TonType.objects.filter(code=getIntFieldValue('tontype'))[0]
+        ship.ton_type = TonType.objects.filter(code=getIntFieldValue('tontype'))[0]
     if isNotBlank('rig'):
-        ship.rig_of_vessel = VoyageShip.RigOfVessel.objects.filter(code=getIntFieldValue('rig'))[0]
+        ship.rig_of_vessel = RigOfVessel.objects.filter(code=getIntFieldValue('rig'))[0]
     ship.guns_mounted = getIntFieldValue('guns')
     ship.year_of_construction = getIntFieldValue('yrcons')
 
@@ -109,7 +109,7 @@ for line in input_file:
 
     # Imputed variables in nationality
     if isNotBlank('natinimp'):
-        ship.imputed_nationality = VoyageShip.Nationality.objects.filter(code=getIntFieldValue('natinimp'))[0]
+        ship.imputed_nationality = Nationality.objects.filter(code=getIntFieldValue('natinimp'))[0]
     if isNotBlank('tonmod'):
         ship.tonnage_mod = round(getDecimalFieldValue('tonmod'), 1)
 

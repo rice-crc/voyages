@@ -43,7 +43,7 @@ def getDecimalFieldValue(field_name):
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
-    rov_obj = VoyageShip.RigOfVessel()
+    rov_obj = RigOfVessel()
     rov_obj.code = getFieldValue('id')
     rov_obj.rig_of_vessel = getFieldValue('name')
 

@@ -14,7 +14,7 @@ urlpatterns += patterns('',
     url(r'^c01_s03_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='variables'),
     url(r'^c01_s04_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='sources'),
     
-    url(r'^search$', TemplateView.as_view(template_name='under_constr.html'), name='search'),
+    url(r'^search$', TemplateView.as_view(template_name='voyage/search.html'), name='search'),
 
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
     

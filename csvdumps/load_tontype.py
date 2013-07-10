@@ -44,7 +44,7 @@ for line in input_file:
     # Ignore the \r and \n character
     data = line[0:-2].split(DELIMITER)
 
-    ton_type = VoyageShip.TonType()
+    ton_type = TonType()
     ton_type.code = getFieldValue('id')
     ton_type.ton_type = getFieldValue('name')
 
