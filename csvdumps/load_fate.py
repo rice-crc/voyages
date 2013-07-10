@@ -46,7 +46,7 @@ for line in input_file:
     # Ignore the \r and \n character
     data = line[0:-2].split(DELIMITER)
 
-    fate = VoyageOutcome.ParticularOutcome()
+    fate = ParticularOutcome()
     fate.name = getFieldValue('name')
     fate.code = getIntFieldValue('id')
     fate.save()

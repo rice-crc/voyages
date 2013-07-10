@@ -44,7 +44,7 @@ def getDecimalFieldValue(field_name):
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
-    nation = VoyageShip.Nationality()
+    nation = Nationality()
     nation.code = getFieldValue('order_num')
     nation.nationality = getFieldValue('name')
 
