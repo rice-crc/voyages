@@ -336,9 +336,9 @@ class VoyageOutcome(models.Model):
 class VoyageItinerary(models.Model):
     """
     Voyage Itinerary data.
-    related to: :model:`voyages.apps.voyages.Voyage.BroadRegion`
-    related to: :model:`voyages.apps.voyages.Voyage.SpecificRegion`
-    related to: :model:`voyages.apps.voyages.Voyage.Place`
+    related to: :model:`voyages.apps.voyages.BroadRegion`
+    related to: :model:`voyages.apps.voyages.SpecificRegion`
+    related to: :model:`voyages.apps.voyages.Place`
     """
 
     # Data variables
