@@ -1,0 +1,110 @@
+{% load i18n %}
+<!-- Left menu for Understanding the Database -->
+
+<form id="form" name="form" method="post" action="{% url 'voyage:search' %}"
+      enctype="application/x-www-form-urlencoded" style="margin: 0px;">
+<div class="search-side-panel">
+
+    <div class="box-main-table">
+        <div class="box-header>
+            <div class="box-text-label">
+                {% trans 'Select time frame' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+            From <input type="text" name= "from-date" id="from-date" value="1514" style="width: 60px"/>
+            To <input type="text" name= "to-date" id="from-date" value="1866" style="width: 60px" />
+            <p>
+                {% trans 'The full extent of time from the first to the last voyage is 1514 – 1866 (restore it).' %}
+            </p>
+        </div>
+
+
+    </div>
+
+    <div class="box-main-table">
+        <div class="box-header">
+            <div class="box-text-label">
+                {% trans 'Basic variables' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+
+
+        </div>
+    </div>
+
+    <div class="box-main-table">
+        <div class="box-header">
+            <div class="box-text-label">
+                {% trans 'General variables' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+
+
+        </div>
+    </div>
+
+    <div class="box-main-table">
+        <div class="box-header">
+            <div class="box-text-label">
+                {% trans 'Current query' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+
+
+        </div>
+    </div>
+
+    <div class="box-main-table">
+        <div class="box-header">
+            <div class="box-text-label">
+                {% trans 'Create a link' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+
+
+        </div>
+    </div>
+
+    <div class="box-main-table">
+        <div class="box-header">
+            <div class="box-text-label">
+                {% trans 'Previous queries' %}
+            </div>
+            <div class="box-table" onclick="dosthhere;">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="box-mid">
+
+
+        </div>
+    </div>
+
+</div>
+</form>

@@ -46,7 +46,7 @@ for line in input_file:
     # Ignore the \r and \n character
     data = line[0:-2].split(DELIMITER)
 
-    tmpObj = VoyageOutcome.Resistance()
+    tmpObj = Resistance()
     tmpObj.name = getFieldValue('name')
     tmpObj.code = getIntFieldValue('id')
 
