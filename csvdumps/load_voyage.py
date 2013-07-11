@@ -116,8 +116,8 @@ for line in input_file:
 
     ship.save()
 
-    if 1 == 1:
-        continue
+    if count >= 200:
+        break
 
     # Owners section
     letters = map(chr, range(97, 97 + 16)) # from a to p
@@ -132,24 +132,24 @@ for line in input_file:
     # Voyage outcome
     outcome = VoyageOutcome.objects.create(voyage=voyageObj)
     if isNotBlank('fate'):
-        outcome.particular_outcome = VoyageOutcome.ParticularOutcome.objects.filter(
+        outcome.particular_outcome = ParticularOutcome.objects.filter(
                 value=getIntFieldValue('fate'))[0]
     if isNotBlank('resistance'):
-        outcome.resistance = VoyageOutcome.Resistance.objects.filter(
+        outcome.resistance = Resistance.objects.filter(
                 value=getIntFieldValue('resistance'))[0]
     if isNotBlank('fate2'):
-        outcome.outcome_slaves = VoyageOutcome.SlavesOutcome.objects.filter(
+        outcome.outcome_slaves = SlavesOutcome.objects.filter(
                 value=getIntFieldValue('fate2'))[0]
     if isNotBlank('fate3'):
-        outcome.vessel_captured_outcome = VoyageOutcome.VesselCapturedOutcome.objects.filter(
+        outcome.vessel_captured_outcome = VesselCapturedOutcome.objects.filter(
                 value=getIntFieldValue('fate3'))[0]
     if isNotBlank('fate4'):
-        outcome.outcome_owner = VoyageOutcome.OwnerOutcome.objects.filter(
+        outcome.outcome_owner = OwnerOutcome.objects.filter(
                 value=getIntFieldValue('fate4'))[0]
 
     itinerary = VoyageItinerary()
 
-    itinerary.voyage = voyage=voyageObj
+    itinerary.voyage = voyageObj
     # Voyage itinerary
     if isNotBlank('portdep'):
         itinerary.port_of_departure = Place.objects.filter(value=getIntFieldValuePlace('portdep'))[0]
