@@ -17,6 +17,7 @@ input {
     font-weight: bold;
 }
 
+
 /* Override the default width (from base.css) */
 #main-content-container {
     width: 100%;
@@ -35,21 +36,25 @@ h1 {
 	display: block;
 	float: left;
 	margin: 0;
+    padding: 0;
 }
 
 /* Set the width of the left search menu */
 #left-menu {
 	padding: 10px 5px 10px 5px;
-	width: 19%;
+	width: 298px;
 	border: #895D03 1px solid;
+    overflow: hidden;
 }
 
 /* Set the width of the main content */
 #center-content {
+    position: absolute;
+    left: 310px;
+    width: 100%;
     border-top: #895D03 1px solid;
-	width: 77%;
+    float: left;
     overflow: hidden;
-	padding: 10px 12px 10px 12px;
     background-color: #FFFFFF;
 }
 
@@ -169,14 +174,62 @@ h1 {
     border-right: #8A5D04 1px solid;
 }
 
-
-
 .search-main-table {
 	width: 100%;
 	border-top: 1px solid #895D03; }
 
 .search-main-panel {
-	vertical-align: top; }
+	vertical-align: top;
+    margin: 0;
+    padding: 0;
+}
 
 div.permlink-info {
 	margin-bottom: 5px; }
+
+/* Result section */
+.tabs-selection {
+	margin: 0;
+    padding: 0;
+    background: url('/static/images/voyage/database-tabs-bg.png') repeat-x 0 0;
+}
+
+.tabs-selection ul {
+    width: 100%;
+    padding: 14px 0 4px 0;
+    margin: 0;
+}
+
+.tabs-selection ul li {
+	display: inline;
+    padding: 0;
+    margin-left: 13px;
+    margin-right: -10px;
+}
+
+.tab-menu-item {
+	padding: 6px 13px 3px 13px;
+	color: #000000;
+	font-size: 8pt;
+	text-decoration: none;
+	background-color: #EED083;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-topright: 10px;
+
+    border-top: #8A5D04 1px solid;
+    border-left: #8A5D04 1px solid;
+    border-right: #8A5D04 1px solid;
+}
+
+.tab-menu-item-selected {
+	color: #000000;
+	background-color: #FFFFFF;
+    border-bottom: #FFFFFF 1px solid;
+}
+
+.search-panel {
+    min-height: 60px;
+    padding: 10px;
+}

@@ -68,7 +68,8 @@ table.top-bar {
 	background-color: #B5DEE6;
 }
 
-div#help-section-title {clear; both;
+div#help-section-title {
+    clear: both;
 	background-color: #B5DEE6;
 	height: 45px;
 	display: block;
