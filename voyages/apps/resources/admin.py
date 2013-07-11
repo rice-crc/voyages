@@ -10,7 +10,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class ImageCategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
+    list_display = ['value', 'label']
 
     class Meta:
         model = ImageCategory
