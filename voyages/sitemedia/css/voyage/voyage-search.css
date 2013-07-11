@@ -1,7 +1,9 @@
+/* General style */
 body {
     background:  #FFFFFF url('/static/images/voyage/voyage-bg.png') repeat-x 0px 60px;
 }
 
+/* Default link color */
 a {
     color: #8A5D04;
 }
@@ -15,6 +17,7 @@ input {
     font-weight: bold;
 }
 
+/* Override the default width (from base.css) */
 #main-content-container {
     width: 100%;
     margin: 0;
@@ -27,13 +30,14 @@ h1 {
 	margin: 0px 0px 10px 0px;
 }
 
+/* Two-column view style */
 #left-menu, #center-content {
 	display: block;
 	float: left;
 	margin: 0;
 }
 
-/* Set the width of the left-menu */
+/* Set the width of the left search menu */
 #left-menu {
 	padding: 10px 5px 10px 5px;
 	width: 19%;
@@ -49,10 +53,6 @@ h1 {
     background-color: #FFFFFF;
 }
 
-.search-side-panel {
-    font-size: 8pt;
-}
-
 .box-main-table, .box-main-table-tail {
     margin-bottom: 15px;
 }
@@ -62,6 +62,7 @@ h1 {
     padding: 3px;
 }
 
+/* Header text and color of each search box */
 .box-collapsed .box-header, .box-expanded .box-header,
 .box-expanded .box-header-tail, .box-collapsed .box-header-tail,
 .box-collapsed .box-header-head, .box-expanded .box-header-head{
@@ -71,7 +72,7 @@ h1 {
     overflow: hidden;
 }
 
-
+/* Gap and corner style of collapsed boxes */
 .box-collapsed .box-header {
     margin: 2px 5px 5px 5px;
     -moz-border-radius: 7px;
@@ -79,6 +80,7 @@ h1 {
     border: #8A5D04 1px solid;
 }
 
+/* No bottom margin between the header and body search box */
 .box-expanded .box-header {
     margin: 2px 5px 0px 5px;
     -moz-border-radius-topleft: 7px;
@@ -86,28 +88,27 @@ h1 {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 
+    /* No bottom border */
     border-top: #8A5D04 1px solid;
     border-left: #8A5D04 1px solid;
     border-right: #8A5D04 1px solid;
 }
 
-.box-mid-end {
+/* Default background image for each search box body */
+.box-mid-end, .box-mid {
     background: #FFFFFF url('/static/images/voyage/database-box-content-center.png') repeat-x;
-    margin: 0px 5px 0px 5px;
-    padding: 5px 5px 2px 10px;
+    margin: 0 5px 0 5px;
+    padding: 5px 5px 5px 10px;
+    min-height: 30px;
+    border: #8A5D04 1px solid;
+}
+
+.box-mid-end {
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
-    border: #8A5D04 1px solid;
     min-height: 30px;
 }
 
-.box-mid {
-    background: #FFFFFF url('/static/images/voyage/database-box-content-center.png') repeat-x;
-    margin: 0 5px 0 5px;
-    padding: 5px 0 2px 10px;
-    border: #8A5D04 1px solid;
-    min-height: 30px;
-}
 
 .box-collapsed .box-mid-end, .box-collapsed .box-mid {
     display: none;
@@ -124,13 +125,10 @@ h1 {
 }
 
 .box-expanded .box-button {
-    float: right;
     background: #EDD99F url('/static/images/voyage/database-box-minus.png') no-repeat;
-    display: visible;
 }
 
 .box-collapsed .box-button {
-    float: right;
     background: #EDD99F url('/static/images/voyage/database-box-plus.png') no-repeat;
 }
 
@@ -173,84 +171,12 @@ h1 {
 
 
 
-table.search-main-table {
+.search-main-table {
 	width: 100%;
 	border-top: 1px solid #895D03; }
 
-td.search-main-panel {
+.search-main-panel {
 	vertical-align: top; }
-	
-h1 {
-	margin-bottom: 10px; }
-
-h1.with-subtitle {
-	margin-bottom: 0px; }
-	
-div.subtitle {
-	margin-bottom: 5px;
-	font-weight: bold; }
- 
-td.search-side-panel table.box-main-table {
-	margin-bottom: 0px; }
-
-div.search-panel {
-	padding: 10px; }
 
 div.permlink-info {
 	margin-bottom: 5px; }
-
-div.chart-back-button {
-	position: absolute; 
-	top: 290px; 
-	left: 12px; 
-	cursor: pointer;
-	width: 24px;
-	height: 24px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(map-icon-back.png); }
-
-div.chart-back-button:hover {
-	background-position: 0px -24px; }
-
-div.detailTab {
-	padding-top: 5px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-	
-div.map-legend-note{
-	font-style:italic;
-	padding-bottom: 2px;
-	padding-top: 2px;
-	padding-left: 5px;
-	padding-right: 10px;
-}
-
-div.map-legend-section-title {
-	background-color: #F2E3B8;
-	font-weight: bold;
-	padding-bottom: 2px;
-	padding-top: 2px;
-	padding-left: 5px;
-	padding-right: 10px;
-	border-bottom: 0px solid #895D03; }
-
-div.map-legend-section {
-	margin-bottom: 10px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-left: 5px;
-	padding-right: 10px; }
-
-input.map-legend-refresh {
-	margin-top: 0px; }
-
-div.tooltip {
-	width: 300px;
-	background-color: #EEFFFF;
-	padding: 5px;
-	border: 1px solid #2299AA; }
-
-span.grid-value-with-tooltip {
-	border-bottom: 1px dotted #895D03; } 

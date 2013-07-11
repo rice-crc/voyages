@@ -1,9 +1,8 @@
+/*  Styles for flyout menus (General and Basic variables) */
 div.menu-popup-item-main-first,
 div.menu-popup-item-main,
 div.menu-popup-item-main-last {
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-left: 5px;
+    padding: 5px 0px 5px 5px;
 	cursor: pointer;
 }
 
@@ -25,11 +24,9 @@ div.menu-popup-item-main-last {
 	cursor: pointer;
 	padding-bottom: 5px;
 	padding-top: 5px;
-	background-repeat: no-repeat;
-	background-position: 95% center;
-	background-image: url('/static/images/voyage/icon-arrow-right.png'); }
+    background: url('/static/images/voyage/icon-arrow-right.png') no-repeat 95% center;
+}
 
-div.menu-popup-item-main-first:hover,
 div.menu-popup-item-main:hover,
 div.menu-popup-item-main-last:hover {
 	background-color: #F1E7C8;
@@ -52,58 +49,9 @@ div.menu-popup-submenu-item {
 	color: Black !important;
 	cursor: pointer;
 	background-color: White;
-	padding-top: 2px; 
-	padding-bottom: 2px; 
-	padding-left: 10px; 
-	padding-right: 10px; }	
+    padding: 2px 10px 2px 10px;
+}
 			
 div.menu-popup-submenu-item:hover {
 	background-color: #CA4223;
 	color: White !important; }
-
-div.menu-slider-item-main-collapsed {
-	cursor: pointer;
-	border-bottom: 2px solid #F1E7C8;
-	padding-left: 25px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-right: 5px;
-	background-repeat: no-repeat;
-	background-position: 10px center;
-	background-image: url('/static/images/voyage/icon-arrow-right.png');
-}
-
-div.menu-slider-item-main-expanded {
-	cursor: pointer;
-	border-bottom: 2px solid #F1E7C8;
-	padding-left: 25px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	padding-right: 5px;
-	background-repeat: no-repeat;
-	background-position: 10px center;
-	background-image: url('/static/images/voyage/icon-arrow-down.png');
-}
-
-div.menu-slider-item-main-collapsed:hover {
-	background-color: #F1E7C8; }
-
-div.menu-slider-item-main-expanded:hover {
-	background-color: #F1E7C8; }
-
-div.menu-slider-submenu {
-	border-bottom: 2px solid #F1E7C8; }
-		
-div.menu-slider-submenu-item {
-	cursor: pointer;
-	padding-top: 2px; 
-	padding-bottom: 2px; 
-	padding-left: 25px; }
-
-div.menu-slider-submenu-item:hover {
-	color: White;
-	background-color: #CA4223; }
-	
-span.attribute-selected {
-	font-weight: normal;
-	color: #E2873B; }
