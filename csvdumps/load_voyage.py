@@ -116,9 +116,6 @@ for line in input_file:
 
     ship.save()
 
-    if count >= 200:
-        break
-
     # Owners section
     letters = map(chr, range(97, 97 + 16)) # from a to p
     for idx, letter in enumerate(letters):
