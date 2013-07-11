@@ -12,7 +12,7 @@ class BroadRegion(models.Model):
     show_on_map = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.name
+        return self.broad_region
 
     class Meta:
         verbose_name = 'Broad region (area)'
@@ -38,7 +38,7 @@ class Region(models.Model):
         verbose_name_plural = "Regions"
 
     def __unicode__(self):
-        return self.name
+        return self.region
 
     class Meta:
         ordering = ['value']
@@ -68,7 +68,7 @@ class Place(models.Model):
         ordering = ['value']
 
     def __unicode__(self):
-        return self.name
+        return self.place
 
 
 # Voyage Groupings
@@ -76,15 +76,15 @@ class VoyageGroupings(models.Model):
     """
     Labels for groupings names.
     """
-    value = models.CharField(max_length=30)
-    label = models.IntegerField(max_length=3)
+    label = models.CharField(max_length=30)
+    value = models.IntegerField(max_length=3)
 
     class Meta:
         verbose_name = "Grouping for estimating imputed slaves"
         verbose_name_plural = "Groupings for estimating imputed slaves"
 
     def __unicode__(self):
-        return self.value
+        return self.label
 
 
 # Voyage Ship, Nation, Owners
@@ -101,7 +101,7 @@ class Nationality(models.Model):
         ordering = ['value']
 
     def __unicode__(self):
-        return self.nationality
+        return self.label
 
 class TonType(models.Model):
     """
@@ -116,7 +116,7 @@ class TonType(models.Model):
         ordering = ['value']
 
     def __unicode__(self):
-        return self.ton_type
+        return self.label
 
 class RigOfVessel(models.Model):
     """
@@ -131,7 +131,7 @@ class RigOfVessel(models.Model):
         ordering = ['value']
 
     def __unicode__(self):
-        return self.rig_of_vessel
+        return self.label
 
 
 class VoyageShip(models.Model):
@@ -235,7 +235,7 @@ class ParticularOutcome(models.Model):
     value = models.IntegerField("Code of outcome", max_length=3)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     class Meta:
         ordering = ['value']
@@ -251,7 +251,7 @@ class SlavesOutcome(models.Model):
     value = models.IntegerField("Code of outcome", max_length=1)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     class Meta:
         ordering = ['value']
@@ -264,7 +264,7 @@ class VesselCapturedOutcome(models.Model):
     value = models.IntegerField("Code of outcome", max_length=2)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     class Meta:
         ordering = ['value']
@@ -277,7 +277,7 @@ class OwnerOutcome(models.Model):
     value = models.IntegerField("Code of outcome", max_length=1)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     class Meta:
         ordering = ['value']
@@ -290,7 +290,7 @@ class Resistance(models.Model):
     value = models.IntegerField("Code of resistance", max_length=1)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     class Meta:
         ordering = ['value']
