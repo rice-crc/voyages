@@ -1,4 +1,4 @@
-from voyages.apps.voyage.models import *
+from voyages.apps.resources.models import *
 from decimal import *
 
 input_file = open('images.txt', 'r')
@@ -16,6 +16,10 @@ for index, term in enumerate(data):
 
 
 def isNotBlank(field_name):
+    # Empty field
+
+    if data[varNameDict[field_name]] == "":
+        return False
     return data[varNameDict[field_name]][1:-1] != NULL_VAL
 
 
@@ -41,24 +45,62 @@ def getDecimalFieldValue(field_name):
         return None
 ##### End of Common section to all files #####
 
-for line in input_file:
+count = 0
+
+for line in input_file.read().split("\r\n"):
     data = line[0:-2].split(DELIMITER)
 
-    region = Region()
-    region.region = getFieldValue('name')
-    region.value = getIntFieldValue('order_num')
+    if len(data) == 1:
+        # Done with last line
+        break
 
-    if getFieldValue('show_on_map') == "t":
-        region.show_on_map = True
+    img = Image()
+    if isNotBlank('file_name'):
+        img.file.name = 'images/' + getFieldValue('file_name')
+    if isNotBlank('title'):
+        img.title = getFieldValue('title')
+
+    if isNotBlank('description'):
+        img.description = getFieldValue('description')
+
+    img.width = getIntFieldValue('width')
+    img.height = getIntFieldValue('height')
+    if isNotBlank('mime_type'):
+        img.mime_type = getFieldValue('mime_type')
+    if isNotBlank('creator'):
+        img.creator = getFieldValue('creator')
+    if isNotBlank('language'):
+        img.language = getFieldValue('language')
+    if isNotBlank('size'):
+        img.size = getIntFieldValue('size')
+    if isNotBlank('source'):
+        img.source = getFieldValue('source')
+    if isNotBlank('comments'):
+        img.comments = getFieldValue('comments')
+    if isNotBlank('other_references'):
+        img.comments = getFieldValue('other_references')
+    if getFieldValue('emory') == "t":
+        img.emory = True
     else:
-        region.show_on_map = False
+        img.emory = False
 
-    if getFieldValue('show_on_main_map') == "t":
-        region.show_on_main_map = True
+    if isNotBlank('emory_location'):
+        img.emory_location = getFieldValue('emory_location')
+    img.authorization_status = getIntFieldValue('authorization_status')
+
+    img.image_status = getIntFieldValue('image_status')
+
+    if getFieldValue('ready_to_go') == "t":
+        img.ready_to_go = True
     else:
-        region.show_on_main_map = False
+        img.ready_to_go = False
 
-    if isNotBlank('area_id'):
-        region.broad_region = BroadRegion.objects.filter(value=getIntFieldValue('area_id'))[0]
+    img.order_num = getIntFieldValue('order_num')
+    if isNotBlank('category'):
+        img.category = ImageCategory.objects.filter(value=getIntFieldValue('category'))[0]
 
-    region.save()
+    img.date = getIntFieldValue('date')
+
+    img.image_id = getIntFieldValue('image_id')
+
+    img.save()
