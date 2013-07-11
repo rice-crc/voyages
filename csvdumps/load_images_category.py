@@ -46,8 +46,7 @@ for line in input_file:
 
     cat = ImageCategory()
 
-    if isNotBlank('name'):
-        cat.label = getFieldValue('name')
+    cat.label = getFieldValue('name')
 
     cat.value = getIntFieldValue('id')
 
