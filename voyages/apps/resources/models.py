@@ -52,11 +52,12 @@ class ImageCategory(models.Model):
     Model stores categories for images.
     """
 
-    name = models.CharField(max_length=20)
+    value = models.IntegerField("Code")
+    label = models.CharField("Category name", max_length=20)
 
     class Meta:
         verbose_name = "Image Category"
         verbose_name_plural = "Image Categories"
 
     def __unicode__(self):
-        return str(self.id) + ", " + self.name
+        return str(self.value) + ", " + self.label
