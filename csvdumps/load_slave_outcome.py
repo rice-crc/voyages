@@ -47,7 +47,7 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     tmpObj = SlavesOutcome()
-    tmpObj.name = getFieldValue('name')
-    tmpObj.code = getIntFieldValue('id')
+    tmpObj.label = getFieldValue('name')
+    tmpObj.value = getIntFieldValue('id')
 
     tmpObj.save()

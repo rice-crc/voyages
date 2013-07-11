@@ -84,36 +84,40 @@ for line in input_file:
         ship.ship_name = getFieldValue('shipname')
 
     if isNotBlank('national'):
-        ship.nationality_ship = Nationality.objects.filter(code=getIntFieldValue('national'))[0]
+        ship.nationality_ship = Nationality.objects.filter(value=getIntFieldValue('national'))[0]
     ship.tonnage = getIntFieldValue('tonnage')
     if isNotBlank('tontype'):
-        ship.ton_type = TonType.objects.filter(code=getIntFieldValue('tontype'))[0]
+        ship.ton_type = TonType.objects.filter(value=getIntFieldValue('tontype'))[0]
     if isNotBlank('rig'):
-        ship.rig_of_vessel = RigOfVessel.objects.filter(code=getIntFieldValue('rig'))[0]
+        ship.rig_of_vessel = RigOfVessel.objects.filter(value=getIntFieldValue('rig'))[0]
     ship.guns_mounted = getIntFieldValue('guns')
     ship.year_of_construction = getIntFieldValue('yrcons')
 
 
+
     if isNotBlank('placcons'):
-        ship.vessel_construction_place = Place.objects.filter(code=getIntFieldValuePlace('placcons'))[0]
+        ship.vessel_construction_place = Place.objects.filter(value=getIntFieldValuePlace('placcons'))[0]
     if isNotBlank('constreg'):
-        ship.vessel_construction_region = Region.objects.filter(code=getIntFieldValue('constreg'))[0]
+        ship.vessel_construction_region = Region.objects.filter(value=getIntFieldValue('constreg'))[0]
 
     ship.year_of_construction = getIntFieldValue('yrcons')
 
     ship.registered_year = getIntFieldValue('yrreg')
     if isNotBlank('placreg'):
-        ship.registered_place = Place.objects.filter(code=getIntFieldValuePlace('placreg'))[0]
+        ship.registered_place = Place.objects.filter(value=getIntFieldValuePlace('placreg'))[0]
     if isNotBlank('regisreg'):
-        ship.registered_region = Region.objects.filter(code=getIntFieldValue('regisreg'))[0]
+        ship.registered_region = Region.objects.filter(value=getIntFieldValue('regisreg'))[0]
 
     # Imputed variables in nationality
     if isNotBlank('natinimp'):
-        ship.imputed_nationality = Nationality.objects.filter(code=getIntFieldValue('natinimp'))[0]
+        ship.imputed_nationality = Nationality.objects.filter(value=getIntFieldValue('natinimp'))[0]
     if isNotBlank('tonmod'):
         ship.tonnage_mod = round(getDecimalFieldValue('tonmod'), 1)
 
     ship.save()
+
+    if 1 == 1:
+        continue
 
     # Owners section
     letters = map(chr, range(97, 97 + 16)) # from a to p
@@ -129,112 +133,112 @@ for line in input_file:
     outcome = VoyageOutcome.objects.create(voyage=voyageObj)
     if isNotBlank('fate'):
         outcome.particular_outcome = VoyageOutcome.ParticularOutcome.objects.filter(
-                code=getIntFieldValue('fate'))[0]
+                value=getIntFieldValue('fate'))[0]
     if isNotBlank('resistance'):
         outcome.resistance = VoyageOutcome.Resistance.objects.filter(
-                code=getIntFieldValue('resistance'))[0]
+                value=getIntFieldValue('resistance'))[0]
     if isNotBlank('fate2'):
         outcome.outcome_slaves = VoyageOutcome.SlavesOutcome.objects.filter(
-                code=getIntFieldValue('fate2'))[0]
+                value=getIntFieldValue('fate2'))[0]
     if isNotBlank('fate3'):
         outcome.vessel_captured_outcome = VoyageOutcome.VesselCapturedOutcome.objects.filter(
-                code=getIntFieldValue('fate3'))[0]
+                value=getIntFieldValue('fate3'))[0]
     if isNotBlank('fate4'):
         outcome.outcome_owner = VoyageOutcome.OwnerOutcome.objects.filter(
-                code=getIntFieldValue('fate4'))[0]
+                value=getIntFieldValue('fate4'))[0]
 
     itinerary = VoyageItinerary()
 
     itinerary.voyage = voyage=voyageObj
     # Voyage itinerary
     if isNotBlank('portdep'):
-        itinerary.port_of_departure = Place.objects.filter(code=getIntFieldValuePlace('portdep'))[0]
+        itinerary.port_of_departure = Place.objects.filter(value=getIntFieldValuePlace('portdep'))[0]
     if isNotBlank('embport'):
-        itinerary.int_first_port_emb = Place.objects.filter(code=getIntFieldValuePlace('embport'))[0]
+        itinerary.int_first_port_emb = Place.objects.filter(value=getIntFieldValuePlace('embport'))[0]
     if isNotBlank('embport2'):
-        itinerary.int_second_port_emb = Place.objects.filter(code=getIntFieldValuePlace('embport2'))[0]
+        itinerary.int_second_port_emb = Place.objects.filter(value=getIntFieldValuePlace('embport2'))[0]
 
     if isNotBlank('embreg'):
-        itinerary.int_first_region_purchase_slaves = Region.objects.filter(code=getIntFieldValue('embreg'))[0]
+        itinerary.int_first_region_purchase_slaves = Region.objects.filter(value=getIntFieldValue('embreg'))[0]
     if isNotBlank('embreg2'):
-        itinerary.int_second_region_purchase_slaves = Region.objects.filter(code=getIntFieldValue('embreg2'))[0]
+        itinerary.int_second_region_purchase_slaves = Region.objects.filter(value=getIntFieldValue('embreg2'))[0]
 
     if isNotBlank('arrport'):
-        itinerary.int_first_port_dis = Place.objects.filter(code=getIntFieldValuePlace('arrport'))[0]
+        itinerary.int_first_port_dis = Place.objects.filter(value=getIntFieldValuePlace('arrport'))[0]
     if isNotBlank('arrport2'):
-        itinerary.int_second_port_dis = Place.objects.filter(code=getIntFieldValuePlace('arrport2'))[0]
+        itinerary.int_second_port_dis = Place.objects.filter(value=getIntFieldValuePlace('arrport2'))[0]
 
     if isNotBlank('regarr'):
-        itinerary.int_first_region_slave_landing = Region.objects.filter(code=getIntFieldValue('regarr'))[0]
+        itinerary.int_first_region_slave_landing = Region.objects.filter(value=getIntFieldValue('regarr'))[0]
     if isNotBlank('regarr2'):
-        itinerary.int_second_region_slave_landing = Region.objects.filter(code=getIntFieldValue('regarr2'))[0]
+        itinerary.int_second_region_slave_landing = Region.objects.filter(value=getIntFieldValue('regarr2'))[0]
 
     itinerary.ports_called_buying_slaves = getIntFieldValue('nppretra')
 
     if isNotBlank('plac1tra'):
-        itinerary.first_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac1tra'))[0]
+        itinerary.first_place_slave_purchase = Place.objects.filter(value=getIntFieldValuePlace('plac1tra'))[0]
     if isNotBlank('plac2tra'):
-        itinerary.second_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac2tra'))[0]
+        itinerary.second_place_slave_purchase = Place.objects.filter(value=getIntFieldValuePlace('plac2tra'))[0]
     if isNotBlank('plac3tra'):
-        itinerary.third_place_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('plac3tra'))[0]
+        itinerary.third_place_slave_purchase = Place.objects.filter(value=getIntFieldValuePlace('plac3tra'))[0]
 
     if isNotBlank('regem1'):
-        itinerary.first_region_slave_emb = Region.objects.filter(code=getIntFieldValue('regem1'))[0]
+        itinerary.first_region_slave_emb = Region.objects.filter(value=getIntFieldValue('regem1'))[0]
     if isNotBlank('regem2'):
-        itinerary.second_region_slave_emb = Region.objects.filter(code=getIntFieldValue('regem2'))[0]
+        itinerary.second_region_slave_emb = Region.objects.filter(value=getIntFieldValue('regem2'))[0]
     if isNotBlank('regem3'):
-        itinerary.third_region_slave_emb = Region.objects.filter(code=getIntFieldValue('regem3'))[0]
+        itinerary.third_region_slave_emb = Region.objects.filter(value=getIntFieldValue('regem3'))[0]
     if isNotBlank('npafttra'):
         itinerary.port_of_call_before_atl_crossing = Place.objects.filter(
-                code=getIntFieldValuePlace('npafttra'))[0]
+                value=getIntFieldValuePlace('npafttra'))[0]
 
     itinerary.number_of_ports_of_call = getIntFieldValue('npprior')
 
     if isNotBlank('sla1port'):
-        itinerary.first_landing_place = Place.objects.filter(code=getIntFieldValuePlace('sla1port'))[0]
+        itinerary.first_landing_place = Place.objects.filter(value=getIntFieldValuePlace('sla1port'))[0]
     if isNotBlank('adpsale1'):
-        itinerary.second_landing_place = Place.objects.filter(code=getIntFieldValuePlace('adpsale1'))[0]
+        itinerary.second_landing_place = Place.objects.filter(value=getIntFieldValuePlace('adpsale1'))[0]
     if isNotBlank('adpsale2'):
-        itinerary.third_landing_place = Place.objects.filter(code=getIntFieldValuePlace('adpsale2'))[0]
+        itinerary.third_landing_place = Place.objects.filter(value=getIntFieldValuePlace('adpsale2'))[0]
 
     if isNotBlank('regdis1'):
-        itinerary.first_landing_region = Region.objects.filter(code=getIntFieldValue('regdis1'))[0]
+        itinerary.first_landing_region = Region.objects.filter(value=getIntFieldValue('regdis1'))[0]
     if isNotBlank('regdis2'):
-        itinerary.second_landing_region = Region.objects.filter(code=getIntFieldValue('regdis2'))[0]
+        itinerary.second_landing_region = Region.objects.filter(value=getIntFieldValue('regdis2'))[0]
     if isNotBlank('regdis3'):
-        itinerary.third_landing_region = Region.objects.filter(code=getIntFieldValue('regdis3'))[0]
+        itinerary.third_landing_region = Region.objects.filter(value=getIntFieldValue('regdis3'))[0]
 
     if isNotBlank('portret'):
-        itinerary.place_voyage_ended = Place.objects.filter(code=getIntFieldValuePlace('portret'))[0]
+        itinerary.place_voyage_ended = Place.objects.filter(value=getIntFieldValuePlace('portret'))[0]
     if isNotBlank('retrnreg'):
-        itinerary.region_of_return = Region.objects.filter(code=getIntFieldValue('retrnreg'))[0]
+        itinerary.region_of_return = Region.objects.filter(value=getIntFieldValue('retrnreg'))[0]
     if isNotBlank('retrnreg1'):
-        itinerary.broad_region_of_return = BroadRegion.objects.filter(code=getIntFieldValue('retrnreg1'))[0]
+        itinerary.broad_region_of_return = BroadRegion.objects.filter(value=getIntFieldValue('retrnreg1'))[0]
 
     # Imputed itinerary variables
     if isNotBlank('ptdepimp'):
-        itinerary.imp_port_voyage_begin = Place.objects.filter(code=getIntFieldValuePlace('ptdepimp'))[0]
+        itinerary.imp_port_voyage_begin = Place.objects.filter(value=getIntFieldValuePlace('ptdepimp'))[0]
     if isNotBlank('deptregimp'):
-        itinerary.imp_region_voyage_begin = Region.objects.filter(code=getIntFieldValue('deptregimp'))[0]
+        itinerary.imp_region_voyage_begin = Region.objects.filter(value=getIntFieldValue('deptregimp'))[0]
     if isNotBlank('deptregimp1'):
-        itinerary.imp_broad_region_voyage_begin = BroadRegion.objects.filter(code=getIntFieldValue('deptregimp1'))[0]
+        itinerary.imp_broad_region_voyage_begin = BroadRegion.objects.filter(value=getIntFieldValue('deptregimp1'))[0]
     if isNotBlank('majbuypt'):
         itinerary.principal_place_of_slave_purchase = Place.objects.filter(
-                code=getIntFieldValuePlace('majbuypt'))[0]
+                value=getIntFieldValuePlace('majbuypt'))[0]
     if isNotBlank('mjbyptimp'):
-        itinerary.imp_principal_place_of_slave_purchase = Place.objects.filter(code=getIntFieldValuePlace('mjbyptimp'))[0]
+        itinerary.imp_principal_place_of_slave_purchase = Place.objects.filter(value=getIntFieldValuePlace('mjbyptimp'))[0]
     if isNotBlank('majbyimp'):
-        itinerary.imp_principal_region_of_slave_purchase = Region.objects.filter(code=getIntFieldValue('majbyimp'))[0]
+        itinerary.imp_principal_region_of_slave_purchase = Region.objects.filter(value=getIntFieldValue('majbyimp'))[0]
     if isNotBlank('majbyimp1'):
-        itinerary.imp_broad_region_of_slave_purchase = BroadRegion.objects.filter(code=getIntFieldValue('majbyimp1'))[0]
+        itinerary.imp_broad_region_of_slave_purchase = BroadRegion.objects.filter(value=getIntFieldValue('majbyimp1'))[0]
     if isNotBlank('majselpt'):
-        itinerary.principal_port_of_slave_dis = Place.objects.filter(code=getIntFieldValuePlace('majselpt'))[0]
+        itinerary.principal_port_of_slave_dis = Place.objects.filter(value=getIntFieldValuePlace('majselpt'))[0]
     if isNotBlank('mjslptimp'):
-        itinerary.imp_principal_port_slave_dis = Place.objects.filter(code=getIntFieldValuePlace('mjslptimp'))[0]
+        itinerary.imp_principal_port_slave_dis = Place.objects.filter(value=getIntFieldValuePlace('mjslptimp'))[0]
     if isNotBlank('mjselimp'):
-        itinerary.imp_principal_region_slave_dis = Region.objects.filter(code=getIntFieldValue('mjselimp'))[0]
+        itinerary.imp_principal_region_slave_dis = Region.objects.filter(value=getIntFieldValue('mjselimp'))[0]
     if isNotBlank('mjselimp1'):
-        itinerary.imp_broad_region_slave_dis = BroadRegion.objects.filter(code=getIntFieldValue('mjselimp1'))[0]
+        itinerary.imp_broad_region_slave_dis = BroadRegion.objects.filter(value=getIntFieldValue('mjselimp1'))[0]
 
     itinerary.save()
 

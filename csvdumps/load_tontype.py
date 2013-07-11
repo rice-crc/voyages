@@ -45,7 +45,7 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     ton_type = TonType()
-    ton_type.code = getFieldValue('id')
-    ton_type.ton_type = getFieldValue('name')
+    ton_type.value = getFieldValue('id')
+    ton_type.label = getFieldValue('name')
 
     ton_type.save()

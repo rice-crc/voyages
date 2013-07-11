@@ -44,12 +44,12 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     location = Place()
-    location.name = getFieldValue('name')
-    location.code = getFieldValue('id')
+    location.place = getFieldValue('name')
+    location.value = getFieldValue('id')
     location.longitude = round(getDecimalFieldValue('longitude'), 5)
     location.latitude = round(getDecimalFieldValue('latitude'), 5)
     if isNotBlank('region_id'):
-        location.region = Region.objects.filter(code=getIntFieldValue('region_id'))[0]
+        location.region = Region.objects.filter(value=getIntFieldValue('region_id'))[0]
 
     if getFieldValue('show_on_main_map') == "t":
         location.show_on_main_map = True

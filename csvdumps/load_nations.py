@@ -45,7 +45,7 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     nation = Nationality()
-    nation.code = getFieldValue('order_num')
-    nation.nationality = getFieldValue('name')
+    nation.value = getFieldValue('order_num')
+    nation.label = getFieldValue('name')
 
     nation.save()

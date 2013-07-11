@@ -45,8 +45,8 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     region = Region()
-    region.name = getFieldValue('name')
-    region.code = getIntFieldValue('order_num')
+    region.region = getFieldValue('name')
+    region.value = getIntFieldValue('order_num')
 
     if getFieldValue('show_on_map') == "t":
         region.show_on_map = True
@@ -59,6 +59,6 @@ for line in input_file:
         region.show_on_main_map = False
 
     if isNotBlank('area_id'):
-        region.broad_region = BroadRegion.objects.filter(code=getIntFieldValue('area_id'))[0]
+        region.broad_region = BroadRegion.objects.filter(value=getIntFieldValue('area_id'))[0]
 
     region.save()
