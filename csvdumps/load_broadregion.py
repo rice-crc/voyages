@@ -47,9 +47,9 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     b_region = BroadRegion()
-    b_region.name = getFieldValue('name')
+    b_region.broad_region = getFieldValue('name')
 
-    b_region.code = getIntFieldValue('id')
+    b_region.value = getIntFieldValue('id')
     if getFieldValue('show_on_map') == "t":
         b_region.show_on_map = True
     else:

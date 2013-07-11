@@ -47,6 +47,6 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     fate = ParticularOutcome()
-    fate.name = getFieldValue('name')
-    fate.code = getIntFieldValue('id')
+    fate.label = getFieldValue('name')
+    fate.value = getIntFieldValue('id')
     fate.save()
