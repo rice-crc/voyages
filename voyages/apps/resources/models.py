@@ -41,6 +41,8 @@ class Image(models.Model):
         verbose_name = "Image"
         verbose_name_plural = "Images"
 
+        ordering = ["date", "image_id"]
+
     def get_file_name(self):
         """
         Returns file name of each file
@@ -64,4 +66,4 @@ class ImageCategory(models.Model):
         ordering = ['value',]
 
     def __unicode__(self):
-        return self.name
+        return self.label

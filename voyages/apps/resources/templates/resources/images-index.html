@@ -4,6 +4,7 @@
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-images.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/images-search-expandable-box.css">
@@ -19,7 +20,7 @@
 <div id="center-content">
 
     {%  for k, v in images.iteritems %}
-        {% if v  %}
+        {% if v %}
             <div class="images-category">
                 <div class="images-category-name">{{ k }}</div>
                 <div class="images-category-link"><a href="#">See all images ...</a></div>
@@ -27,22 +28,31 @@
             <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             <tr>
-
                 {% for item in v %}
                     <td class="gallery-image">
                     {% for key, value in item.iteritems %}
+                        {% if key == "file" %}
                         <div class="gallery-image">
-                            <a href={% url 'resources:images-detail' arg1=v arg2=1 %}>
-                                <img width="100" height="100" border="0" src="{{ MEDIA_URL }}/{{ value }}">
-                            </a>
+                                <form id="form" action="{% url 'resources:images-detail' %}" method="post">
+{#                                <img width="100" height="100" border="0" src="{{ MEDIA_URL }}{{ value }}">#}
+                                    {% csrf_token %}
+                                <input type="hidden" name="zmienna" value="testowowow"></input>
+                                <input type="image" src="{{ MEDIA_URL }}{{ value }}" value="submit" />
+                                </form>
+
                         </div>
-                        <div class="gallery-image-text">
-                            <div class="gallery-image-label">
-                                Register of Africans from the Schooner "Esperanza"
-                            </div>
-                            <div class="gallery-image-description">(1819)</div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
+                    <div class="gallery-image-text">
+                    {% for key, value in item.iteritems %}
+                            {% if key == "title" %}
+                            <div class="gallery-image-label"><a href="#">{{ value }}</a></div>
+                            {% endif %}
+                            {% if key == "year" and value != 0 %}
+                            <div class="gallery-image-description">({{ value }})</div>
+                            {% endif %}
+                    {% endfor %}
+                    </div>
                     </td>
                 {% endfor %}
             </tr>

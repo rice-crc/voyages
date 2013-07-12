@@ -19,13 +19,13 @@ autocomplete_light.register(TonType, search_fields=('label',),
 autocomplete_light.register(RigOfVessel, search_fields=('label',),
     autocomplete_js_attributes={'placeholder': 'Rig of vessel...'})
 
-autocomplete_light.register(Place, search_fields=('name',),
+autocomplete_light.register(Place, search_fields=('place',),
     autocomplete_js_attributes={'placeholder': 'Place...'})
 
-autocomplete_light.register(Region, search_fields=('name',),
+autocomplete_light.register(Region, search_fields=('region',),
     autocomplete_js_attributes={'placeholder': 'Region...'})
 
-autocomplete_light.register(BroadRegion, search_fields=('name',),
+autocomplete_light.register(BroadRegion, search_fields=('broad_region',),
     autocomplete_js_attributes={'placeholder': 'Broad region...'})
 
 autocomplete_light.register(VoyageShipOwner, search_fields=('name',),

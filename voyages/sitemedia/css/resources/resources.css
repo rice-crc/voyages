@@ -4,7 +4,8 @@ body {
 	background-repeat: repeat-x; }
 
 a {
-	color: #165B31; }
+	color: #165B31;
+    text-decoration: none}
 
 div.licence {
 	border-color: #165B31; }
