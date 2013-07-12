@@ -7,7 +7,6 @@ from .models import *
 
 def get_all_images(request):
     images = SortedDict()
-    form = ImagesForm()
 
     for i in ImageCategory.objects.all().order_by("-value"):
         images[i.label] = []
@@ -19,7 +18,7 @@ def get_all_images(request):
 
     dict = sorted(images, key=lambda key: images[key])
     return render_to_response('resources/images-index.html',
-                              {'images': images, 'form': form},
+                              {'images': images},
                               context_instance=RequestContext(request))
 
 
