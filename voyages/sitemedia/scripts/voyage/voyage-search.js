@@ -22,6 +22,11 @@
 	}, function() {
         $(this).children(".menu-popup-submenu-frame").addClass("hidden");
 	});
-
-
 });
+
+/* Support functions */
+function setelem(elemname, value) {
+    /* Elements in voyage/search_left_menu.html */
+    $("#" + elemname).val(value);
+
+}

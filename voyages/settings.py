@@ -72,7 +72,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     # version
-    "voyages.version_context"
+    "voyages.version_context",
+    "voyages.apps.voyage.context_processors.voyage_span",
     )
 
 MIDDLEWARE_CLASSES = (

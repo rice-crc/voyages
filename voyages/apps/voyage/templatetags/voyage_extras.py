@@ -14,4 +14,3 @@ def parse_blocks(value):
     t = Template(value)
     c = Context({ 'MEDIA_URL': settings.MEDIA_URL })
     return t.render(c)
-
