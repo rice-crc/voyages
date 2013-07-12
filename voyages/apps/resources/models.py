@@ -59,4 +59,4 @@ class ImageCategory(models.Model):
         verbose_name_plural = "Image Categories"
 
     def __unicode__(self):
-        return str(self.id) + ", " + self.name
+        return self.name
