@@ -17,12 +17,13 @@
         </div>
 
         <div class="box-mid-end">
-            From <input type="text" name= "from-date" id="from-date" value="1514" style="width: 60px"/>
-            To <input type="text" name= "to-date" id="from-date" value="1866" style="width: 60px" />
+            From <input type="text" name= "from-date" id="input-from-date" value="{{ voyage_span_first_year }}" style="width: 60px"/>
+            To <input type="text" name= "to-date" id="input-to-date" value="{{ voyage_span_last_year }}"  style="width: 60px"/>
             <br />
             <span class="italic">
-                {% trans 'The full extent of time from the first to the last voyage is 1514 – 1866' %}
-                <a id="restore_form" onclick="" href="#">{%  trans '(restore it)' %}</a>.
+                {% trans 'The full extent of time from the first to the last voyage is ' %}{{ voyage_span_first_year }}-{{ voyage_span_last_year }}
+                <a id="restore_form" onclick="setelem('input-from-date', {{ voyage_span_first_year }});
+                        setelem('input-to-date', {{ voyage_span_last_year }});" href="#">{%  trans '(restore it)' %}</a>.
             </span>
         </div>
 
@@ -260,9 +261,14 @@
         </div>
 
         <div class="box-mid-end">
-            <br />
+            <div class=query-builder>
+                {% if query %}
+
+                {% endif %}
+            </div>
             <input type="submit" value="{% trans 'Search' %}"/>
             <input type="submit" value="{% trans 'New query' %}"/>
+
         </div>
     </div>
 

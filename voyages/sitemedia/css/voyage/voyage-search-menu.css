@@ -34,7 +34,7 @@ div.menu-popup-item-main-last:hover {
 }
 
 div.menu-popup-submenu-frame {
-	z-index: 1;	
+	z-index: 99;
 	top: -7px;
 	left: 260px;
 	position: relative;

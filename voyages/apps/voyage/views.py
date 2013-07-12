@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
-from django.template import TemplateDoesNotExist, Context, loader, RequestContext
+from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -70,3 +70,10 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
+
+def search(request):
+    """
+    Currently on renders the initial page
+    """
+    return render_to_response("voyage/search.html", {},
+                context_instance=RequestContext(request))
