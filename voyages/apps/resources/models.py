@@ -64,8 +64,4 @@ class ImageCategory(models.Model):
         ordering = ['value',]
 
     def __unicode__(self):
-<<<<<<< HEAD
         return self.name
-=======
-        return str(self.value) + ", " + self.label
->>>>>>> 4d4a5de50a9712dd38253ff692a48a5365e97cb3
