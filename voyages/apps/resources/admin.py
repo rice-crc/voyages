@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import *
 
+
 class ImageAdmin(admin.ModelAdmin):
     list_filter = ['category']
-    list_display = ['id', 'file', 'title']
+    list_display = ['image_id', 'file', 'title' ]
 
     class Meta:
         model = Image
