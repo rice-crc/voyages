@@ -21,18 +21,21 @@ class Image(models.Model):
     other_references = models.CharField(max_length=500, null=True, blank=True)
     emory = models.BooleanField()
     emory_location = models.CharField(max_length=500, null=True, blank=True)
-    authorization_status = models.IntegerField()
-    image_status = models.IntegerField()
-    ready_to_go = models.BooleanField()
-    order_num = models.IntegerField()
-    category = models.IntegerField()
-    date = models.IntegerField(max_length=4)
-    external_id = models.CharField(max_length=2000)
+
+    authorization_status = models.IntegerField(null=True, blank=True)
+    image_status = models.IntegerField(null=True, blank=True)
+    ready_to_go = models.BooleanField(default=False)
+    order_num = models.IntegerField('Code value')
+
+    date = models.IntegerField(max_length=4, null=True, blank=True)
+    external_id = models.CharField(max_length=500, null=True, blank=True)
 
     # Category
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")
     # FIXME: 'null=True, blank=True' will be removed (for tests)
     voyage = models.ForeignKey(Voyage, null=True, blank=True)
+
+    image_id = models.IntegerField('Image ID number', null=True, blank=True)
 
     class Meta:
         verbose_name = "Image"
@@ -52,11 +55,17 @@ class ImageCategory(models.Model):
     Model stores categories for images.
     """
 
-    name = models.CharField(max_length=20)
+    value = models.IntegerField("Code")
+    label = models.CharField("Category name", max_length=20)
 
     class Meta:
         verbose_name = "Image Category"
         verbose_name_plural = "Image Categories"
+        ordering = ['value',]
 
     def __unicode__(self):
+<<<<<<< HEAD
         return self.name
+=======
+        return str(self.value) + ", " + self.label
+>>>>>>> 4d4a5de50a9712dd38253ff692a48a5365e97cb3

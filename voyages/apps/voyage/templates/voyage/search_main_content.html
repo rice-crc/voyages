@@ -1,0 +1,43 @@
+{% load i18n %}
+
+<div class="search-main-panel">
+    <div class="tabs-selection">
+        <ul>
+            <li>
+                <a href="#" id="result_results" class="tab-menu-item tab-menu-item-selected">{% trans "Results" %}</a>
+            </li>
+            <li>
+                <a href="#" id="result_statistics" class="tab-menu-item">{% trans "Summary statistics" %}</a>
+            </li>
+            <li>
+                <a href="#" id="result_tables" class="tab-menu-item">{% trans "Tables" %}</a>
+            </li>
+            <li>
+                <a href="#" id="result_graphs" class="tab-menu-item">{% trans "Custom graphs" %}</a>
+            </li>
+            <li>
+                <a href="#" id="result_timeline" class="tab-menu-item">{% trans "Timeline" %}</a>
+            </li>
+            <li>
+                <a href="#" id="result_maps" class="tab-menu-item">{% trans "Maps" %}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="search-panel">
+        {% if statistics %}
+            {% include "voyage/search_statistics.html" %}
+        {% elif tables %}
+            {% include "voyage/search_tables.html" %}
+        {% elif graphs %}
+            {% include "voyage/search_graphs.html" %}
+        {% elif timeline %}
+            {% include "voyage/search_timeline.html" %}
+        {% elif maps %}
+            {% include "voyage/search_maps.html" %}
+        {% else %}
+            {% include "voyage/search_results.html" %}
+        {%  endif %}
+    </div>
+</div>
+
