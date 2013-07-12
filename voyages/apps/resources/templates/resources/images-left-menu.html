@@ -1,5 +1,7 @@
 {% load i18n %}
 <!-- Left menu for Images in Resources -->
+{# TODO: Number of images hardcoded, has to be changed! #}
+
 
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
     <tbody>
@@ -10,7 +12,7 @@
             <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             <tr>
-                <td class="box-label">Search for images</td>
+                <td class="box-label">{% trans "Search for images" %}</td>
                 <td>
                     <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp6_state'].value = 'collapsed'; document.forms['form'].submit(); return false;"></div>
                 </td>
@@ -30,13 +32,13 @@
                     <table style="border-collapse: collapse">
                     <tbody>
                     <tr>
-                        <td style="padding: 5px 10px 5px 0px;">Keyword</td>
+                        <td style="padding: 5px 10px 5px 0px;">{% trans "Keyword" %}</td>
                         <td style="padding: 5px 0px">
                             <input id="form:_idJsp13" type="text" style="width: 150px;" value="" name="form:_idJsp13">
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 5px 10px 5px 0px;">Time frame</td>
+                        <td style="padding: 5px 10px 5px 0px;">{% trans "Time frame" %}</td>
                         <td style="padding: 5px 0px">
                             <input id="form:_idJsp18" type="text" style="width: 40px;" value="" name="form:_idJsp18"> -
                             <input id="form:_idJsp20" type="text" style="width: 40px;" value="" name="form:_idJsp20">
@@ -57,7 +59,7 @@
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label for="form:_idJsp24_checkbox_4">
-                                    Manuscripts
+                                    {% trans "Manuscripts" %}
                                     <span class="images-count">(171 images)</span>
                                 </label>
                             </td>
@@ -68,7 +70,7 @@
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label for="form:_idJsp24_checkbox_3">
-                                    Places
+                                    {% trans "Places" %}
                                     <span class="images-count">(42 images)</span>
                                 </label>
                             </td>
@@ -79,7 +81,7 @@
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label for="form:_idJsp24_checkbox_2">
-                                    Slaves
+                                    {% trans "Slaves" %}
                                     <span class="images-count">(9 images)</span>
                                 </label>
                             </td>
@@ -90,7 +92,7 @@
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label for="form:_idJsp24_checkbox_1">
-                                    Vessels
+                                    {% trans "Vessels" %}
                                     <span class="images-count">(9 images)</span>
                                 </label>
                             </td>
