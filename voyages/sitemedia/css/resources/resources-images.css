@@ -1,29 +1,7 @@
 body {
 	background-position: 0px 60px;
-	background-image: url('/static/images/resources/resources-bg.png');
-	background-repeat: repeat-x;
-	background-color: #FFFFFF;
-}
-
-h1 {
-	padding: 0px;
-	margin: 0px 0px 10px 0px;
-}
-
-#center-content {
-	display: block;
-	float: left;
-	margin: 5px 0px 15px 10px;
-	padding: 10px 8px 10px 8px;
-}
-
-#left-menu {
-    width: 280px;
-	float: left;
-    border-right: 1px solid #165B31;
-	margin: 0px;
-	padding: 10px 8px 10px 8px;
-}
+	background-image: url(/static/images/resources/resources-bg.png);
+	background-repeat: repeat-x; }
 
 div.images-nav-path {
 	margin-bottom: 2px; }
@@ -31,7 +9,7 @@ div.images-nav-path {
 /* images homepage */
 
 div.images-category {
-    width: 625px;
+	width: 625px;
 	border-collapse: collapse;
 	border-bottom: 1px dotted #165B31;
 	margin-bottom: 10px; }
@@ -57,15 +35,15 @@ td.td-side-panel {
 	vertical-align: top;
 	border-right: 1px solid #165B31;}
 
-div.images-category-sample td.gallery-image,
-div.images-category-sample td.gallery-image-selected,
-div.images-gallery-query td.gallery-image,
-div.images-gallery-query td.gallery-image-selected {
+div.images-category-sample, td.gallery-image,
+div.images-category-sample, td.gallery-image-selected,
+div.images-gallery-query, td.gallery-image,
+div.images-gallery-query, td.gallery-image-selected {
 	vertical-align: top;
 	width: 160px; }
 
-div.images-category-sample div.gallery-image,
-div.images-gallery-query div.gallery-image {
+div.images-category-sample, div.gallery-image,
+div.images-gallery-query, div.gallery-image {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100px; }
@@ -75,19 +53,19 @@ div.images-gallery-query div.gallery-image img {
 	cursor: pointer;
 	border: 1px solid #165B31; }
 
-div.images-category-sample div.gallery-image-text,
-div.images-gallery-query div.gallery-image-text {
+div.images-category-sample, div.gallery-image-text,
+div.images-gallery-query, div.gallery-image-text {
 	margin-bottom: 5px;
 	margin-left: 5px;
 	margin-right: 5px; }
 
-div.images-category-sample div.gallery-image-label,
-div.images-gallery-query div.gallery-image-label {
+div.images-category-sample, div.gallery-image-label,
+div.images-gallery-query, div.gallery-image-label {
 	margin-top: 3px;
 	text-align: center; }
 
-div.images-category-sample div.gallery-image-description,
-div.images-gallery-query div.gallery-image-description {
+div.images-category-sample, div.gallery-image-description,
+div.images-gallery-query, div.gallery-image-description {
 	text-align: center; }
 
 /* left column */
@@ -134,21 +112,21 @@ table.image-navigation a:hover {
 a.link-back-to-list {
 	padding-left: 15px;
 	padding-right: 5px;
-	background-image: url(../images/resources-icon-arrow-up.png);
+	background-image: url(/static/images/resources/resources-icon-arrow-up.png);
 	background-repeat: no-repeat;
 	background-position: left center; }
 
 a.link-prev-image {
 	padding-left: 10px;
 	padding-right: 5px;
-	background-image: url(../images/resources-icon-arrow-left.png);
+	background-image: url(/static/images/resources/resources-icon-arrow-left.png);
 	background-repeat: no-repeat;
 	background-position: left center; }
 
 a.link-next-image {
 	padding-left: 5px;
 	padding-right: 10px;
-	background-image: url(../images/resources-icon-arrow-right.png);
+	background-image: url(/static/images/resources/resources-icon-arrow-right.png);
 	background-repeat: no-repeat;
 	background-position: right center; }
 
@@ -165,7 +143,7 @@ div.images-gallery-detail {
 div.images-gallery-detail td.gallery-image-selected div.gallery-image {
 	background-repeat: no-repeat;
 	background-position: center 80px;
-	background-image: url(../images/resources-icon-arrow-up.png);
+	background-image: url(/static/images/resources/resources-icon-arrow-up.png);
 	padding-bottom: 8px;
 	margin-right: 5px; }
 
