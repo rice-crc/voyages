@@ -44,7 +44,6 @@ h1 {
 	padding: 10px 5px 10px 5px;
 	width: 298px;
 	border: #895D03 1px solid;
-    overflow: hidden;
 }
 
 /* Set the width of the main content */
@@ -54,8 +53,8 @@ h1 {
     width: 100%;
     border-top: #895D03 1px solid;
     float: left;
-    overflow: hidden;
     background-color: #FFFFFF;
+    z-index: 1;
 }
 
 .box-main-table, .box-main-table-tail {
@@ -125,7 +124,6 @@ h1 {
     padding: 0 20px 0 0;
     display: block;
     height: 14pt;
-    overflow: hidden;
     cursor: pointer;
 }
 
