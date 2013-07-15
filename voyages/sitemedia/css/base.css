@@ -125,8 +125,8 @@ td.secondary-bar-language-active {
 }
 
 div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar {
-	padding: 2px;
-	margin: 0px;
+	padding: 2px 0 2px 0;
+	margin: 0;
 }
 
 .language_change_bar {

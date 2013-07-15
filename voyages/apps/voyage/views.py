@@ -1,4 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
+from django import forms
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -75,5 +76,17 @@ def search(request):
     """
     Currently on renders the initial page
     """
+    if request.method == 'POST':
+        pass
+    elif request.method == 'GET':
+        pass
+    return render_to_response("voyage/search.html", {},
+                context_instance=RequestContext(request))
+
+def search(request, added_field):
+    if request.method == 'POST':
+        pass
+    elif request.method == 'GET':
+        pass
     return render_to_response("voyage/search.html", {},
                 context_instance=RequestContext(request))
