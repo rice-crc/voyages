@@ -1,7 +1,7 @@
-from django.http import Http404, HttpResponseRedirect
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.utils.datastructures import SortedDict
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 
 
@@ -22,6 +22,11 @@ def get_all_images(request):
                               context_instance=RequestContext(request))
 
 
-def get_image_detail(request):
-    3/0
-    pass
+def get_images_category(request, category, page):
+    manu = Image.objects.filter(category__label=category)
+    paginator = Paginator(manu, 1)
+    pagins = paginator.page(page)
+
+    return render_to_response('resources/image-category.html',
+                              {'images': pagins, 'category': category},
+                              context_instance=RequestContext(request))
