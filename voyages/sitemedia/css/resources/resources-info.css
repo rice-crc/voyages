@@ -11,14 +11,13 @@ h1 {
 }
 
 #center-content {
-	display: block;
 	float: left;
 	margin: 5px 0px 15px 10px;
 	padding: 10px 8px 10px 8px;
 }
 
 #left-menu {
-    width: 260px;
+    width: 240px;
 	float: left;
     border-right: 1px solid #165B31;
 	margin: 0px;
