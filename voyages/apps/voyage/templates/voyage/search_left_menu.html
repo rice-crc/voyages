@@ -133,7 +133,12 @@
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Voyage identification number' %}</div>
+                            <div class="menu-popup-submenu-item"
+                                    onclick="animateAttribute(this ,
+                                    function() {document.forms['form'].elements['form:popupMenuAttributesBeginner_selected'].value = 'voyageid';
+                                    document.forms['form'].submit(); return false;});"
+
+                                    >{% trans 'Voyage identification number' %}</div>
                             <div class="menu-popup-submenu-item">{% trans 'Voyage in 1999 CD-ROM' %}</div>
                             <div class="menu-popup-submenu-item">{% trans 'Vessel name' %}</div>
                             <div class="menu-popup-submenu-item">{% trans 'Flag' %}</div>

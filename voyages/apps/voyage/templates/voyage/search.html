@@ -12,9 +12,11 @@
 
 {% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
 
+
+<script src="{{ STATIC_URL }}scripts/voyage/query-builder.js.js" type="text/javascript"></script>
+
 {% block jslist %}
 <script src="{{ STATIC_URL }}scripts/voyage/voyage-search.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/voyage/query-builder.js.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/search-bundle.min.js.js" type="text/javascript"></script>
 {% endblock %}
 
