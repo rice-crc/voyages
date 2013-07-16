@@ -83,10 +83,29 @@ def search(request):
     return render_to_response("voyage/search.html", {},
                 context_instance=RequestContext(request))
 
+
 def search(request, added_field):
     if request.method == 'POST':
-        pass
+        if not request.GET('form:attr_selected') is None:
+            pass
     elif request.method == 'GET':
         pass
     return render_to_response("voyage/search.html", {},
                 context_instance=RequestContext(request))
+
+def get_var_box(request, varname):
+
+    # Return/construct a box with information about the variables:
+    list_text_fields = ['basic_voyage_id', 'basic_ship_name', 'basic_owner',]
+    list_select_fields = ['']
+
+
+    if varname in list_text_fields:
+        return render_to_response("voyage/search_box_plain_text.html", {'varname': varname},
+                context_instance=RequestContext(request))
+    elif varname in list_select_fields:
+        # Numeric variables
+        pass
+    else:
+        5/0
+        pass
