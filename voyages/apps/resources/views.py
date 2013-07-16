@@ -6,13 +6,16 @@ from .models import *
 
 
 def get_all_images(request):
+    """
+    View to get demo images (4 per group).
+    """
     images = SortedDict()
 
     for i in ImageCategory.objects.all().order_by("-value"):
         images[i.label] = []
         for j in Image.objects.filter(category__label=i.label, ready_to_go=True).order_by('date', 'image_id'):
             images[i.label].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
-            # TODO: Ugly, have to be changed.
+            # TODO: May be too ugly, considered to change
             if len(images[i.label]) == 4:
                 break
 
@@ -23,6 +26,9 @@ def get_all_images(request):
 
 
 def get_images_category(request, category, page):
+    """
+    View to show images by group.
+    """
     manu = Image.objects.filter(category__label=category)
     paginator = Paginator(manu, 1)
     pagins = paginator.page(page)

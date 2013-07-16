@@ -11,14 +11,13 @@ h1 {
 }
 
 #center-content {
-	float: left;
-	margin: 5px 0px 15px 10px;
+    margin-left:260px;
 	padding: 10px 8px 10px 8px;
 }
 
 #left-menu {
     width: 240px;
-	float: left;
+    float:left;
     border-right: 1px solid #165B31;
 	margin: 0px;
 	padding: 10px 8px 10px 8px;
@@ -27,10 +26,16 @@ h1 {
 div.images-nav-path {
 	margin-bottom: 2px; }
 
+#main-content-container {
+    width: 100%;
+	margin: 0;
+	padding:0;
+}
+
 /* images homepage */
 
 div.images-category {
-    width: 625px;
+	width: 625px;
 	border-collapse: collapse;
 	border-bottom: 1px dotted #165B31;
 	margin-bottom: 10px; }
@@ -56,15 +61,15 @@ td.td-side-panel {
 	vertical-align: top;
 	border-right: 1px solid #165B31;}
 
-div.images-category-sample td.gallery-image,
-div.images-category-sample td.gallery-image-selected,
-div.images-gallery-query td.gallery-image,
-div.images-gallery-query td.gallery-image-selected {
+div.images-category-sample, td.gallery-image,
+div.images-category-sample, td.gallery-image-selected,
+div.images-gallery-query, td.gallery-image,
+div.images-gallery-query, td.gallery-image-selected {
 	vertical-align: top;
 	width: 160px; }
 
-div.images-category-sample div.gallery-image,
-div.images-gallery-query div.gallery-image {
+div.images-category-sample, div.gallery-image,
+div.images-gallery-query, div.gallery-image {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100px; }
@@ -74,19 +79,19 @@ div.images-gallery-query div.gallery-image img {
 	cursor: pointer;
 	border: 1px solid #165B31; }
 
-div.images-category-sample div.gallery-image-text,
-div.images-gallery-query div.gallery-image-text {
+div.images-category-sample, div.gallery-image-text,
+div.images-gallery-query, div.gallery-image-text {
 	margin-bottom: 5px;
 	margin-left: 5px;
 	margin-right: 5px; }
 
-div.images-category-sample div.gallery-image-label,
-div.images-gallery-query div.gallery-image-label {
+div.images-category-sample, div.gallery-image-label,
+div.images-gallery-query, div.gallery-image-label {
 	margin-top: 3px;
 	text-align: center; }
 
-div.images-category-sample div.gallery-image-description,
-div.images-gallery-query div.gallery-image-description {
+div.images-category-sample, div.gallery-image-description,
+div.images-gallery-query, div.gallery-image-description {
 	text-align: center; }
 
 /* left column */
