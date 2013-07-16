@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-images.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
@@ -48,53 +48,70 @@
     </table>
 </div>
 
-<table style="border-collapse: collapse;">
-<tbody>
-<tr>
-<td style="padding: 0px; vertical-align: top;">
-<img class="image-detail" width=400, height=273 src="{{ MEDIA_URL }}/images/E5CBA0D5E5FFD4B94F4815E41F3F9A4B.JPG">
-</td>
-<td style="padding: 0px 10px 0px 10px;">
-<div class="image-description">The Schooner "Fabiana" was captured at sea by British cruisers and adjudicated at a court established at Sierra Leone under international anti-slave trade treaties. The image is of a picture of the first page of the court’s register of "Liberated Africans" taken from the "Fabiana". The register was kept as a formal record of emancipation that helped protect the individual from subsequent re-enslavement. The image is reproduced courtesy of the British National Archives.</div>
-<table class="image-detail-info">
-<tbody id="form:_idJsp53:tbody_element">
-<tr>
-<td>
-<div class="image-detail-info-label">Year:</div>
-</td>
-<td>1819</td>
-</tr>
-<tr>
-<td>
-<div class="image-detail-info-label">Source:</div>
-</td>
-<td>British National Archives, Foreign Office, ser. 84, vol. 4, p. 217.</td>
-</tr>
-<tr>
-<td>
-<div class="image-detail-info-label">Language:</div>
-</td>
-<td>English</td>
-</tr>
-</tbody>
-</table>
-<div class="image-detail-voyages-title">Related voyages</div>
-<table class="image-detail-voyages">
-<tbody id="form:_idJsp61:tbody_element">
-<tr>
-<td>
-Voyage ID =
-<a id="form:_idJsp61:0:_idJsp64" onclick="clear_form();document.forms['form'].elements['form:_link_hidden_'].value='form:_idJsp61:0:_idJsp64';if(document.forms['form'].onsubmit){var result=document.forms['form'].onsubmit(); if( (typeof result == 'undefined') || result ) {document.forms['form'].submit();}}else{document.forms['form'].submit();}return false;" href="#">2315</a>
-- Fabiana, 1819
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+    {% for i in images %}
+    <table style="border-collapse: collapse;">
+    <tbody>
+    <tr>
+        <td style="padding: 0px; vertical-align: top;">
+            {% thumbnail i.file "400" as im %}
+                <img src="{{ im.url }}">
+            {% endthumbnail %}
+        </td>
+        <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
+            <div class="image-description">
+                {{ i.description }}
+            </div>
+            <table class="image-detail-info">
+                <tbody id="form:_idJsp53:tbody_element">
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">Year:</div>
+                    </td>
+                    <td>
+                        {{ i.date }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            Source:
+                        </div>
+                    </td>
+                    <td>
+                        {{ i.source }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            Language:
+                        </div>
+                    </td>
+                    <td>
+                        {{ i.language }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="image-detail-voyages-title">
+                Related voyages
+            </div>
+            <table class="image-detail-voyages">
+                <tbody>
+                <tr>
+                    <td>
+                        Voyage ID =
+                        {{ i.voyage.voyage_id }} - {{ i.voyage }}, 1819
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+    </table>
 </div>
+    {% endfor %}
 
 {% endblock %}
 
