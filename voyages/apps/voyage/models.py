@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+# TODO:
+# - add foreign keys of subclass (Ship, Dates, ...) to the main Voyage model.
+
+
 # Voyage Regions and Places
 class BroadRegion(models.Model):
     """
