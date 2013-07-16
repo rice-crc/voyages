@@ -8,4 +8,5 @@ pysolr
 wsgiref
 mock
 django-autocomplete-light
+sorl-thumbnail 
 
