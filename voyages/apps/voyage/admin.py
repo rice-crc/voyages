@@ -351,7 +351,7 @@ admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(Nationality, VoyageNationalityAdmin)
 admin.site.register(TonType, VoyageTonTypeAdmin)
 admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)
-#admin.site.register(VoyageShip, VoyageShipAdmin)
+admin.site.register(VoyageShip)
 
 # Voyage Outcome
 admin.site.register(ParticularOutcome, VoyageParticularOutcomeAdmin)

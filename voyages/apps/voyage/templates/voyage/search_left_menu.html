@@ -43,21 +43,28 @@
 
             <div class="box-mid">
                 <div class="menu-popup-item-main">
-                    <div class="menu-popup-submenu-frame hidden">
+                    <div class="menu-popup-submenu-frame hidden" id="test_section">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Voyage identification number' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Vessel name' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Flag' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Vessel owner' %}</div>
+                            <div class="menu-popup-submenu-item" id="basic_voyage_id">
+                                {% trans 'Voyage identification number' %}</div>
+                            <div class="menu-popup-submenu-item" id="basic_ship_name">
+                                {% trans 'Vessel name' %}</div>
+                            <div class="menu-popup-submenu-item" id="basic_nationality">
+                                {% trans 'Flag' %}*</div>
+                            <div class="menu-popup-submenu-item" id="basic_owner">
+                                {% trans 'Vessel owner' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Ship, nation, owners' %}</span> ({% trans '4 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Outcome of voyage for slaves' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Outcome of voyage for owner' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'African resistance' %}*</div>
+                            <div class="menu-popup-submenu-item" id="basic_outcome_slaves">
+                                {% trans 'Outcome of voyage for slaves' %}*</div>
+                            <div class="menu-popup-submenu-item" id="basic_outcome_owner">
+                                {% trans 'Outcome of voyage for owner' %}*</div>
+                            <div class="menu-popup-submenu-item" id="basic_resistance">
+                                {% trans 'African resistance' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Voyage Outcome' %}</span> ({% trans '3 variables' %})</div>
@@ -133,25 +140,33 @@
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item"
-                                    onclick="animateAttribute(this ,
-                                    function() {document.forms['form'].elements['form:popupMenuAttributesBeginner_selected'].value = 'voyageid';
-                                    document.forms['form'].submit(); return false;});"
-
-                                    >{% trans 'Voyage identification number' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Voyage in 1999 CD-ROM' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Vessel name' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Flag' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Flag' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Place constructed' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Year constructed' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Place registered' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Year registered' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Rig' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Tonnage' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Standardized tonnage' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Guns mounted' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Vessel owners' %}</div>
+                            <div class="menu-popup-submenu-item" id="voyage_id">{% trans 'Voyage identification number' %}</div>
+                            <div class="menu-popup-submenu-item" id="voyage_in_cd_rom">
+                                {% trans 'Voyage in 1999 CD-ROM' %}</div>
+                            <div class="menu-popup-submenu-item" id="ship_name">
+                                {% trans 'Vessel name' %}</div>
+                            <div class="menu-popup-submenu-item" id="nationality_ship">
+                                {% trans 'Flag' %}</div>
+                            <div class="menu-popup-submenu-item" id="imputed_nationality" >
+                                {% trans 'Flag' %}*</div>
+                            <div class="menu-popup-submenu-item" id="vessel_construction_place">
+                                {% trans 'Place constructed' %}</div>
+                            <div class="menu-popup-submenu-item" id="year_of_construction">
+                                {% trans 'Year constructed' %}</div>
+                            <div class="menu-popup-submenu-item" id="registered_place">
+                                {% trans 'Place registered' %}</div>
+                            <div class="menu-popup-submenu-item" id="registered_year">
+                                {% trans 'Year registered' %}</div>
+                            <div class="menu-popup-submenu-item" id="rig_of_vessel">
+                                {% trans 'Rig' %}</div>
+                            <div class="menu-popup-submenu-item" id="tonnage">
+                                {% trans 'Tonnage' %}</div>
+                            <div class="menu-popup-submenu-item" id="tonnage_mod">
+                                {% trans 'Standardized tonnage' %}*</div>
+                            <div class="menu-popup-submenu-item" id="guns_mounted">
+                                {% trans 'Guns mounted' %}</div>
+                            <div class="menu-popup-submenu-item" id="owner">
+                                {% trans 'Vessel owners' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Ship, nation, owners' %}</span> ({% trans '14 variables' %})</div>
@@ -254,7 +269,7 @@
         </div>
     </div>
 
-    <div class="box-main-table  box-collapsed">
+    <div class="box-main-table box-expanded">
          <div class="box-header">
             <div class="box-button">
                 &nbsp;
@@ -267,12 +282,9 @@
 
         <div class="box-mid-end">
             <div class=query-builder>
-                {% if query %}
-
-                {% endif %}
             </div>
-            <input type="submit" value="{% trans 'Search' %}"/>
-            <input type="submit" value="{% trans 'New query' %}"/>
+            <input type="submit" value="{% trans 'Search' %}" name="buttonSearch"/>
+            <input type="submit" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>
     </div>

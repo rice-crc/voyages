@@ -46,7 +46,7 @@ div.menu-popup-submenu {
 
 div.menu-popup-submenu-item {
 	white-space: nowrap;
-	color: Black !important;
+	color: Black;
 	cursor: pointer;
 	background-color: White;
     padding: 2px 10px 2px 10px;
@@ -55,3 +55,45 @@ div.menu-popup-submenu-item {
 div.menu-popup-submenu-item:hover {
 	background-color: #CA4223;
 	color: White !important; }
+
+
+div.side-box {
+    border-bottom: 1px solid #EEDAA2;
+    color: black;
+    margin: 0 0 5px;
+    padding-bottom: 5px;
+}
+
+div.side-box table, div.side-box tr {
+    width: 100%;
+}
+
+td.query-builder-button img {
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+}
+td.query-builder-button-separator {
+    overflow: hidden;
+    width: 5px;
+}
+table.query-builder-label {
+    margin-bottom: 5px;
+    width: 270px;
+}
+
+
+div.attribute-selected {
+    color: #E2873B ;
+}
+
+.query-builder {
+    min-height: 15px;
+}
+
+input.query-builder-text {
+    background-color: #F1E7C8;
+    border: 0 none;
+    padding: 2px;
+    width: 260px;
+}

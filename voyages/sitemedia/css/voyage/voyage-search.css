@@ -135,7 +135,6 @@ h1 {
     background: #EDD99F url('/static/images/voyage/database-box-plus.png') no-repeat;
 }
 
-
 .box-header-head {
     margin: 2px 5px 0px 5px;
     border-top: #8A5D04 1px solid;
@@ -150,8 +149,6 @@ h1 {
 .box-collapsed .box-header-head {
     border: #8A5D04 1px solid;
 }
-
-
 
 .box-collapsed .box-header-tail {
     margin: 0px 5px 5px 5px;
@@ -172,6 +169,8 @@ h1 {
     border-right: #8A5D04 1px solid;
 }
 
+
+/* Result section */
 .search-main-table {
 	width: 100%;
 	border-top: 1px solid #895D03; }
