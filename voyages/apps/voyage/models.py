@@ -1081,6 +1081,18 @@ class Voyage(models.Model):
     voyage_groupings = models.ForeignKey('VoyageGroupings', blank=True, null=True)
 
     # Data and imputed variables
+    voyage_ship = models.ForeignKey('VoyageShip', blank=True, null=True,
+                                    related_name='voyage_ship')
+    voyage_itinerary = models.ForeignKey('VoyageItinerary',
+                                         blank=True, null=True,
+                                         related_name='voyage_itinerary')
+    voyage_dates = models.ForeignKey('VoyageDates', blank=True, null=True,
+                                     related_name='voyage_dates')
+    voyage_crew = models.ForeignKey('VoyageCrew', blank=True, null=True,
+                                    related_name='voyage_crew')
+    voyage_slaves_numbers = models.ForeignKey('VoyageSlavesNumbers',
+                                              blank=True, null=True,
+                                              related_name='voyage_slaves_numbers')
 
     voyage_captain = models.ManyToManyField \
             ("VoyageCaptain", through='VoyageCaptainConnection',
