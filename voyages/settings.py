@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.admindocs',
     'autocomplete_light',
+    'sorl.thumbnail',
     'south',
     # used to index django models
     'haystack',
