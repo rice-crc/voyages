@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/images-search-expandable-box.css">
+{% endblock %}
+
+{% block title %}Images{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/images-left-menu.html" %}
+</div>
+
+<div id="center-content">
+
+    <div class="images-query-title"> Images of {{ category }} </div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

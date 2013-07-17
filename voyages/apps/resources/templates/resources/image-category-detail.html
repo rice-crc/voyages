@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load thumbnail %}
+{% load resources_extras %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
@@ -20,13 +21,17 @@
 
 <div id="center-content">
 
-<div class="image-title"> Register of Africans from the Schooner "Esperanza" </div>
+<div class="image-title">
+    {% for i in images %}
+        {{ i.title }}
+    {% endfor %}
+</div>
 <div class="image-navigation">
     <table class="image-navigation">
     <tbody>
     <tr>
         <td style="padding: 0px 10px 0px 0px;">
-        Images of {{ category }}
+        <a href="{% url 'resources:images-category' category %}">Images of {{ category }}</a>
         </td>
         <td style="padding: 0px 0px 0px 0px;">
             {% if images.has_previous %}
@@ -93,19 +98,21 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="image-detail-voyages-title">
-                Related voyages
-            </div>
-            <table class="image-detail-voyages">
-                <tbody>
-                <tr>
-                    <td>
-                        Voyage ID =
-                        {{ i.voyage.voyage_id }} - {{ i.voyage }}, 1819
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            {% if i.voyage.voyage_ship.ship_name %}
+                <div class="image-detail-voyages-title">
+                    Related voyages
+                </div>
+                <table class="image-detail-voyages">
+                    <tbody>
+                    <tr>
+                        <td>
+                            Voyage ID =
+                            {{ i.voyage.voyage_id }} - {{ i.voyage.voyage_ship.ship_name }}, {{ i.voyage.voyage_dates.imp_voyage_began|get_year_value }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
         </td>
     </tr>
     </tbody>
