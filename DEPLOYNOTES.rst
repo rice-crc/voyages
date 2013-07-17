@@ -33,6 +33,10 @@ spawned from that shell will read their environment only from this
 directory, not from the system-wide site packages. Installations will
 correspondingly be installed into this environment.
 
+Install needed packages using system package manage (e.g. for Ubuntu)::
+
+  $ apt-get install libjpeg-dev libjpeg62 libjpeg62-dev zlib1g-dev
+
 .. Note::
   Installation instructions and upgrade notes below assume that
   you are already in an activated shell.

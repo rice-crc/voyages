@@ -9,4 +9,5 @@ wsgiref
 mock
 django-autocomplete-light
 sorl-thumbnail 
+PIL
 
