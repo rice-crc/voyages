@@ -2,7 +2,9 @@ from django.template import TemplateDoesNotExist, Context, loader, RequestContex
 from django.shortcuts import render_to_response
 from django.utils.datastructures import SortedDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from voyages.apps.voyage.models import *
 from .models import *
+
 
 
 def get_all_images(request):
@@ -25,14 +27,27 @@ def get_all_images(request):
                               context_instance=RequestContext(request))
 
 
-def get_images_category(request, category, page):
+def get_images_category(request, category):
     """
     View to show images by group.
     """
+
+    images = Image.objects.filter(category__label=category)
+
+    return render_to_response('resources/images-category.html',
+                              {'images': images},
+                              context_instance=RequestContext(request))
+
+
+def get_images_category_detail(request, category, page):
+    """
+    View to show images by group in detail.
+    """
     manu = Image.objects.filter(category__label=category)
+
     paginator = Paginator(manu, 1)
     pagins = paginator.page(page)
 
-    return render_to_response('resources/image-category.html',
+    return render_to_response('resources/image-category-detail.html',
                               {'images': pagins, 'category': category},
                               context_instance=RequestContext(request))
