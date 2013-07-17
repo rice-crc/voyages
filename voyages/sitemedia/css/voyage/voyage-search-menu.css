@@ -97,3 +97,7 @@ input.query-builder-text {
     padding: 2px;
     width: 260px;
 }
+
+.query-builder-button-separator {
+    width: 5px;
+}

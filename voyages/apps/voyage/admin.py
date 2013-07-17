@@ -328,6 +328,7 @@ class VoyageAdmin(admin.ModelAdmin):
     form = autocomplete_light.modelform_factory(Voyage)
     ordering = ['voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
     search_fields = ('voyage_id',)
+    exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew', 'voyage_slaves_numbers')
     #list_display = ('voyage_id',)
 
 

@@ -33,15 +33,13 @@
             var var_full_name = $.trim($(this).text());
             $(this).addClass(attr_selected_class);
 
-            $(".query-builder").append("<div class='side-box'></div>");
+            $(".query-builder").append("<div class=\"side-box\"></div>");
+            var new_box = $(".query-builder").children().last()
             $(".query-builder").children().last().load("/voyage/varbox/" + this.id);
             $(".query-builder").resize();
 
             /* Attach event handlers for the box */
             /* To be updated */
-            alert(var_full_name);
-
-            $(".query-builder-label:last").text(var_full_name);
         }
 	});
 });
