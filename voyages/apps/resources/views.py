@@ -35,7 +35,7 @@ def get_images_category(request, category):
     images = Image.objects.filter(category__label=category)
 
     return render_to_response('resources/images-category.html',
-                              {'images': images},
+                              {'images': images, 'category': category},
                               context_instance=RequestContext(request))
 
 
