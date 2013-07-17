@@ -17,4 +17,4 @@ class Migration(SchemaMigration):
 
     }
 
-    complete_apps = ['voyage']
+    complete_apps = ['contribute']

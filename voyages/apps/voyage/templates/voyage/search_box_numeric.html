@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% include 'voyage/search_box_header.html' %}
+
+<select name="input_{{  varname }}_type" style="width: 100px;">
+<option value="between">Between</option>
+<option value="le">At most</option>
+<option value="ge">At least</option>
+<option selected="selected" value="eq">Is equal to</option>
+</select>
+
+<input class="query-builder-text" type="text" autocomplete="off" value=""
+       name="input_{{  varname }}_range" style="width: 100px;" />

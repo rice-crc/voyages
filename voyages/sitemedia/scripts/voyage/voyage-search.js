@@ -34,10 +34,12 @@
             $(this).addClass(attr_selected_class);
 
             $(".query-builder").append("<div class=\"side-box\"></div>");
-            var new_box = $(".query-builder").children().last()
-            $(".query-builder").children().last().load("/voyage/varbox/" + this.id);
-            $(".query-builder").resize();
-
+            var $new_box = $(".query-builder").children().last()
+            $new_box.load("/voyage/varbox/" + this.id, function() {
+                    $new_box.children().first().text(var_full_name);
+                    $(".query-builder").resize();
+                }
+            );
             /* Attach event handlers for the box */
             /* To be updated */
         }
@@ -50,10 +52,11 @@ function setelem(elemname, value) {
     $("#" + elemname).val(value);
 }
 
-function add_variables(elem) {
-    animateAttribute(this , function() {
-        document.forms['form'].elements['form:attr_selected'].value = 'voyageid';
-        document.forms['form'].submit();
-        return false;
-    })
+function expandChoices(elem_id) {
+    $("#" + elem_id).children(".query-select-initial").addClass("hidden");
+    $("#" + elem_id).children(".query-select-full").removeClass("hidden");
+}
+
+function checkAllBoxes(elem_id) {
+    $("#" + elem_id).children(".query-select-full .query-builder-edit-list").attr('checked', 'checked');
 }

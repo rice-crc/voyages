@@ -68,20 +68,19 @@ div.side-box table, div.side-box tr {
     width: 100%;
 }
 
-td.query-builder-button img {
+.query-builder-button img {
+    display: inline-block;
     cursor: pointer;
     width: 12px;
     height: 12px;
-}
-td.query-builder-button-separator {
-    overflow: hidden;
-    width: 5px;
-}
-table.query-builder-label {
-    margin-bottom: 5px;
-    width: 270px;
+    padding: 0 2px 0 2px;
 }
 
+.query-builder-label {
+    display: inline-block;
+    margin-bottom: 5px;
+    width: 205px;
+}
 
 div.attribute-selected {
     color: #E2873B ;
@@ -98,6 +97,14 @@ input.query-builder-text {
     width: 260px;
 }
 
-.query-builder-button-separator {
-    width: 5px;
+select {
+    font-size: 8pt;
+}
+
+.display_inline {
+    display: inline-block;
+}
+
+dov.query-builder-edit-list {
+
 }
