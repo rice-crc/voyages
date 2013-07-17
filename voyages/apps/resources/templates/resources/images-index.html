@@ -33,7 +33,7 @@
                     {% for key, value in item.iteritems %}
                         {% if key == "file" %}
                         <div class="gallery-image">
-                            <form id="form" action="{% url 'resources:images-category' category=k page=forloop.parentloop.counter %}" method="post">
+                            <form id="form" action="{% url 'resources:images-category-detail' category=k page=forloop.parentloop.counter %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="test" value="testowowow"></input>
                                 {% thumbnail value "100x100" as im %}
