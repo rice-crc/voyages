@@ -74,8 +74,8 @@ div.images-gallery-query, div.gallery-image {
 	margin-right: auto;
 	width: 100px; }
 
-div.images-category-sample div.gallery-image img,
-div.images-gallery-query div.gallery-image img {
+div.images-category-sample, div.gallery-image img,
+div.images-gallery-query, div.gallery-image img {
 	cursor: pointer;
 	border: 1px solid #165B31; }
 

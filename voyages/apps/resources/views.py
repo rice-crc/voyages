@@ -32,8 +32,10 @@ def get_images_category(request, category):
     View to show images by group.
     """
 
-    images = Image.objects.filter(category__label=category)
+    images = SortedDict()
 
+    for i in Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id'):
+        images[i.image_id] = SortedDict({'file': i.file, 'year': i.date, 'title': i.title})
     return render_to_response('resources/images-category.html',
                               {'images': images, 'category': category},
                               context_instance=RequestContext(request))
@@ -43,7 +45,7 @@ def get_images_category_detail(request, category, page):
     """
     View to show images by group in detail.
     """
-    manu = Image.objects.filter(category__label=category)
+    manu = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')
 
     paginator = Paginator(manu, 1)
     pagins = paginator.page(page)
