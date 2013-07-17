@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% include 'voyage/search_box_header.html' %}
+<div id="{{ varname }}_select">
+    <div class="query-select-initial" >
+        <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
+        </div>
+    <br /><input type="button" onclick="expandChoices('{{ varname }}_select');" value="Select" class="display_inline">
+    </div>
+
+    <div class="query-select-full hidden">
+    {% trans 'Quicksearch' %} <input class="query-builder-text" type="text" autocomplete="off" value=""
+           name="input_{{  varname }}_range" style="width: 150px;" />
+
+    <div class="query-builder-edit-list">
+    {% if choices %}
+        {% for choice in choices %}
+            <input type="checkbox" name="{{ varname }}_choice_{{ choice.choice_id }}"
+                   value="{{ varname }}_choice_{{ choice.choice_id }}" />{{ choice.choice_text }}<br />
+        {% endfor %}
+    {% endif %}
+    </div>
+    <input type="button" onclick="" value="OK" class="display_inline">
+    <input type="button" onclick="" value="Select all" class="display_inline">
+    <input type="button" onclick="" value="Deselect all" class="display_inline">
+    </div>
+</div>

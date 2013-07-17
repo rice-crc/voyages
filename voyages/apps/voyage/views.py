@@ -9,6 +9,8 @@ from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 import time
 from .forms import UploadFileForm
+from voyages.apps.voyage.models import Nationality
+
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -96,16 +98,35 @@ def search(request, added_field):
 def get_var_box(request, varname):
 
     # Return/construct a box with information about the variables:
-    list_text_fields = ['basic_voyage_id', 'basic_ship_name', 'basic_owner',]
-    list_select_fields = ['']
-
+    list_text_fields = ['basic_ship_name', 'basic_owner',]
+    list_select_fields = ['basic_nationality', 'basic_outcome_slaves',
+                          'basic_outcome_owner', 'basic_outcome_resistance']
+    list_numeric_fields = ['basic_voyage_id']
 
     if varname in list_text_fields:
+        # Plain text fields
         return render_to_response("voyage/search_box_plain_text.html", {'varname': varname},
                 context_instance=RequestContext(request))
     elif varname in list_select_fields:
+        # Select box variables
+        choices = getChoices(varname)
+        return render_to_response("voyage/search_box_select.html",
+                {'varname': varname, 'choices': choices},
+                context_instance=RequestContext(request))
+    elif varname in list_numeric_fields:
         # Numeric variables
-        pass
+        return render_to_response("voyage/search_box_numeric.html", {'varname': varname},
+                context_instance=RequestContext(request))
     else:
-        5/0
         pass
+
+def getChoices(varname):
+    choices = []
+    if varname in ['basic_nationality', ]:
+        for nation in Nationality.objects.all():
+            if choices.label == "Other (specify in note)":
+                # exclude those temporarily
+                continue
+            choices.append({'choice_id': nation.pk, 'choice_text': nation.label })
+
+    return choices
