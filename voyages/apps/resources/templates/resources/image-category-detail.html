@@ -7,6 +7,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/gallery.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
 {% endblock %}
 
@@ -56,10 +57,14 @@
     <table style="border-collapse: collapse;">
     <tbody>
     <tr>
-        <td style="padding: 0px; vertical-align: top;">
+        <td class="image-detail-link">
+                            <a href="{% url 'resources:image-detail.html' category 1 %}">
             {% thumbnail i.file "400" as im %}
+
                 <img src="{{ im.url }}">
+
             {% endthumbnail %}
+                                            </a>
         </td>
         <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
             <div class="image-description">
@@ -85,7 +90,7 @@
                         {{ i.source }}
                     </td>
                 </tr>
-                {% if i.language != None %}
+                {% if i.language %}
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
@@ -93,7 +98,7 @@
                         </div>
                     </td>
                     <td>
-                        {{ i.language }}
+                        {{ i.language|decode_language }}
                     </td>
                 </tr>
                 {% endif %}
