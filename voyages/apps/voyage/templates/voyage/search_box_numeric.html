@@ -2,12 +2,21 @@
 
 {% include 'voyage/search_box_header.html' %}
 
-<select name="input_{{  varname }}_type" style="width: 100px;">
+<select id="input_select_{{ varname }}"
+        name="input_{{  varname }}_type" style="width: 100px;"
+        onchange="update_numeric_field('input_select_{{ varname }}');" >
 <option value="between">Between</option>
 <option value="le">At most</option>
 <option value="ge">At least</option>
 <option selected="selected" value="eq">Is equal to</option>
 </select>
 
-<input class="query-builder-text" type="text" autocomplete="off" value=""
-       name="input_{{  varname }}_range" style="width: 100px;" />
+<span class="range_field between_field hidden">
+    <input type="text" autocomplete="off" value="" name="{{ varname }}_from" style="width: 60px;" />
+    -
+    <input type="text" autocomplete="off" value="" name="{{ varname }}_to" style="width: 60px;" />
+</span>
+<span class="range_field threshold_field">
+    <input type="text" autocomplete="off" value="" name="{{ varname }}_threshold" style="width: 100px;"/>
+</span>
+

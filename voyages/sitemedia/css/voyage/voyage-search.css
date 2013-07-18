@@ -11,6 +11,11 @@ a {
 input {
     font-size: 8pt;
     margin-bottom: 5px;
+    margin-top: 2px;
+}
+
+select {
+    font-size: 8pt;
 }
 
 .bold {

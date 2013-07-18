@@ -97,14 +97,14 @@ input.query-builder-text {
     width: 260px;
 }
 
-select {
-    font-size: 8pt;
-}
 
 .display_inline {
     display: inline-block;
 }
 
-dov.query-builder-edit-list {
-
+div.query-builder-edit-list {
+	padding: 2px;
+	background-color: #F1E7C8;
+	overflow: scroll;
+	height: 200px;
 }
