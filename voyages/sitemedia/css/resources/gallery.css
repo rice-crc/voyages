@@ -170,3 +170,8 @@ td.gallery-selected {
 	/*background-color: #CF5435;*/
 	/*border: 2px solid #CF5435; */
 }
+
+td.image-detail-link {
+    padding: 0px;
+    vertical-align: top;
+}
