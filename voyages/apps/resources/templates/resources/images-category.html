@@ -11,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/images-search-expandable-box.css">
 {% endblock %}
 
-{% block title %}Images{% endblock %}
+{% block title %}Category Images{% endblock %}
 
 {% block content %}
 
@@ -59,12 +59,12 @@
                         {% for key, value in v.iteritems %}
                             {% if key == "title" %}
                                 <div class="gallery-image-label">
-                                    {{ value }}
+                                    <a href="{% url 'resources:images-category-detail' category forloop.parentloop.counter %}">{{ value }}</a>
                                 </div>
                             {% endif %}
                         {% endfor %}
                         {% for key, value in v.iteritems %}
-                            {% if key == "year" %}
+                            {% if key == "year" and value %}
                                 <div class="gallery-image-description">
                                     ({{ value }})
                                 </div>
