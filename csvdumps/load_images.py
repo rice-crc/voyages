@@ -71,24 +71,10 @@ for line in input_file.read().split("\r\n"):
         img.creator = getFieldValue('creator')
     if isNotBlank('language'):
         img.language = getFieldValue('language')
-    if isNotBlank('size'):
-        img.size = getIntFieldValue('size')
     if isNotBlank('source'):
         img.source = getFieldValue('source')
     if isNotBlank('comments'):
         img.comments = getFieldValue('comments')
-    if isNotBlank('other_references'):
-        img.comments = getFieldValue('other_references')
-    if getFieldValue('emory') == "t":
-        img.emory = True
-    else:
-        img.emory = False
-
-    if isNotBlank('emory_location'):
-        img.emory_location = getFieldValue('emory_location')
-    img.authorization_status = getIntFieldValue('authorization_status')
-
-    img.image_status = getIntFieldValue('image_status')
 
     if getFieldValue('ready_to_go') == "t":
         img.ready_to_go = True

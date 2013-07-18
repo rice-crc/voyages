@@ -9,7 +9,7 @@ from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 import time
 from .forms import UploadFileForm
-from voyages.apps.voyage.models import Nationality
+from .models import *
 
 
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -124,9 +124,14 @@ def getChoices(varname):
     choices = []
     if varname in ['basic_nationality', ]:
         for nation in Nationality.objects.all():
-            if choices.label == "Other (specify in note)":
-                # exclude those temporarily
-                continue
             choices.append({'choice_id': nation.pk, 'choice_text': nation.label })
-
+    elif varname in ['basic_outcome_slaves',]:
+        for outcome in ParticularOutcome.objects.all():
+            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
+    elif varname in ['basic_outcome_owner',]:
+        for outcome in OwnerOutcome.objects.all():
+            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
+    elif varname in ['basic_outcome_resistance',]:
+        for outcome in Resistance.objects.all():
+            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
     return choices
