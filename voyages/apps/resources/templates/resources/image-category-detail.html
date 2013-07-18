@@ -8,10 +8,9 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/images-search-expandable-box.css">
 {% endblock %}
 
-{% block title %}Images{% endblock %}
+{% block title %}Image Detail{% endblock %}
 
 {% block content %}
 
@@ -67,7 +66,7 @@
                 {{ i.description }}
             </div>
             <table class="image-detail-info">
-                <tbody id="form:_idJsp53:tbody_element">
+                <tbody>
                 <tr>
                     <td>
                         <div class="image-detail-info-label">Year:</div>
@@ -86,6 +85,7 @@
                         {{ i.source }}
                     </td>
                 </tr>
+                {% if i.language != None %}
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
@@ -96,6 +96,7 @@
                         {{ i.language }}
                     </td>
                 </tr>
+                {% endif %}
                 </tbody>
             </table>
             {% if i.voyage.voyage_ship.ship_name %}
