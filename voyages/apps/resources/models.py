@@ -1,11 +1,13 @@
 from django.db import models
-from os.path import basename
+from os.path import basename, getsize
 from voyages.apps.voyage.models import Voyage
 
 class Image(models.Model):
     """
     Model to store information about image.
     """
+
+    image_id = models.IntegerField('Image ID number', null=True, blank=True)
 
     file = models.FileField(upload_to='images')
     title = models.CharField(max_length=200)
@@ -15,27 +17,17 @@ class Image(models.Model):
     mime_type = models.CharField(max_length=100, null=True, blank=True)
     creator = models.CharField(max_length=200, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
-    size = models.IntegerField(null=True, blank=True)
     source = models.CharField(max_length=500, null=True, blank=True)
     comments = models.CharField(max_length=2000, null=True, blank=True)
-    other_references = models.CharField(max_length=500, null=True, blank=True)
-    emory = models.BooleanField()
-    emory_location = models.CharField(max_length=500, null=True, blank=True)
 
-    authorization_status = models.IntegerField(null=True, blank=True)
-    image_status = models.IntegerField(null=True, blank=True)
     ready_to_go = models.BooleanField(default=False)
     order_num = models.IntegerField('Code value')
 
     date = models.IntegerField(max_length=4, null=True, blank=True)
-    external_id = models.CharField(max_length=500, null=True, blank=True)
 
     # Category
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")
-    # FIXME: 'null=True, blank=True' will be removed (for tests)
     voyage = models.ForeignKey(Voyage, null=True, blank=True)
-
-    image_id = models.IntegerField('Image ID number', null=True, blank=True)
 
     class Meta:
         verbose_name = "Image"
@@ -48,6 +40,12 @@ class Image(models.Model):
         Returns file name of each file
         """
         return basename(self.file.name)
+
+    def get_file_size(self):
+        """
+        Returns file size of each file
+        """
+        return basename(self.file.size)
 
     def __unicode__(self):
         return str(self.id) + ", " + self.get_file_name()
