@@ -6,7 +6,7 @@ var majorSectionName = {
 	"resources" : "Resources",
 	"education" : "Educational Materials",
 	"about" : "About the Project",
-	"contribute" : "Contribute",
+	"contribute" : "Contribute"
 }
 
 /* Call breadcrumb handler in breadcrumb.js to update the breadcrumb section
@@ -28,6 +28,12 @@ $(document).ready(function() {
 		ev.preventDefault(); /* Disable the default/nothing action */
 		openPopup(this.href); /* Open the pop up window */
 	});
+
+    /* Secondary menu event handler */
+	$(".image-detail-link a").click(function(ev){
+		ev.preventDefault(); /* Disable the default/nothing action */
+		openPopup_images(this.href); /* Open the pop up window */
+	});
 });
 
 /* Display a new pop-up window for help-links when the user clicks on it*/
@@ -40,4 +46,16 @@ window.open( pageUrl,
 	"scrollbars=yes, " +
 	"width=680, " +
 	"height=680").focus();
-} 
+}
+
+/* Display a new pop-up window for help-links when the user clicks on it*/
+function openPopup_images(pageUrl) {
+window.open( pageUrl,
+	"tastPopupHelp",
+	"resizable=yes, " +
+	"location=no, " +
+	"status=no, " +
+    "width=950, " +
+    "height=750", +
+	"scrollbars=yes").focus();
+}
