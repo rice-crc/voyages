@@ -79,3 +79,10 @@ def get_image_detail(request, category, page):
     return render_to_response('resources/image-detail.html',
                               {'image': image},
                               context_instance=RequestContext(request))
+
+
+def images_search(request):
+
+    return render_to_response('resources/images-search-results.html',
+        {},
+                              context_instance=RequestContext(request))
