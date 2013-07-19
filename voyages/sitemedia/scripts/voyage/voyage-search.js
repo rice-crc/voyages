@@ -39,6 +39,15 @@ $(document).ready(function() {
             $new_box.load("/voyage/varbox/" + $(this).attr('name'), function() {
                     $new_box.children().first().text(var_full_name);
                     $(".query-builder").resize();
+
+
+                    /* Add event handler for numeric fields */
+                    if ($(".select_field:last").hasClass("newly_inserted")) {
+                        $(this).removeClass("newly_inserted");
+                        $(".select_field:last").change(function() {
+                            update_numeric_field($(this).parent().children().first().attr("id"));
+                        });
+                    }
                 }
             );
         }
@@ -125,16 +134,19 @@ function delete_box(label, varname) {
 }
 
 function update_numeric_field(label) {
-    var $cur_select_elem = $("#" + label);
+    var $cur_select_elem = $("#" + label).parent();
 
-    $cur_select_elem.parent().children(".range_field").each(function() {
-        if ($cur_select_elem.val() == "between") {
+    $cur_select_elem.children(".range_field").each(function() {
+        if ($cur_select_elem.children("select").val() == 1) {
+            /* Between = 1 */
             if ($(this).hasClass('between_field')) {
                 $(this).removeClass('hidden');
             } else {
                 $(this).addClass('hidden');
             }
         } else {
+
+
             if ($(this).hasClass('threshold_field')) {
                 $(this).removeClass('hidden');
             } else {

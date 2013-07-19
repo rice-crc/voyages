@@ -108,3 +108,17 @@ div.query-builder-edit-list {
 	overflow: scroll;
 	height: 200px;
 }
+
+.medium_field, .short_field {
+    background-color: #F1E7C8;
+    border: 0 none;
+    padding: 2px;
+}
+
+.short_field {
+    width: 71px;
+}
+
+.medium_field {
+    width: 90px;
+}

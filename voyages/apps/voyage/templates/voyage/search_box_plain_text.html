@@ -2,5 +2,15 @@
 
 {% include 'voyage/search_box_header.html' %}
 
-<input class="query-builder-text" type="text" autocomplete="off" value=""
-       name="{{  input_field_name }}" />
+{% if form %}
+    {% if form.errors %}
+        <p style="color: red;">
+           Invalid input {{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    {% for field in form %}
+        {{ field }}
+    {% endfor %}
+
+{% endif %}
