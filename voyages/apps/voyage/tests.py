@@ -50,10 +50,10 @@ class VoyageDatesPeriodsTest(TestCase):
         self.assertEqual(voyage_dates_obj.calculate_year_period(5), 14)
         self.assertEqual(voyage_dates_obj.calculate_year_period(10), 10)
         self.assertEqual(voyage_dates_obj.calculate_year_period(25), 4)
-        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 1)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 1500)
 
         voyage_dates_obj = VoyageDates.objects.get(pk=180)
         self.assertEqual(voyage_dates_obj.calculate_year_period(5), 67)
         self.assertEqual(voyage_dates_obj.calculate_year_period(10), 36)
         self.assertEqual(voyage_dates_obj.calculate_year_period(25), 15)
-        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 4)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 1800)
