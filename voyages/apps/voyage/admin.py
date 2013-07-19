@@ -51,11 +51,11 @@ class VoyageGroupingsAdmin(admin.ModelAdmin):
     """
     Admin for VoyageGroupings
     """
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 # Ship, Nation, Owners
@@ -326,6 +326,7 @@ class VoyageAdmin(admin.ModelAdmin):
                VoyageCrewInline, VoyageSlavesNumbersInline,
                VoyageSourcesConnectionInline)
     form = autocomplete_light.modelform_factory(Voyage)
+    list_display = ['voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
     ordering = ['voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
     search_fields = ('voyage_id',)
     exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew', 'voyage_slaves_numbers')

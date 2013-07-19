@@ -8,7 +8,7 @@ $(document).ready(function() {
 
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
-        curBox = $(this).parent().parent();
+        var curBox = $(this).parent().parent();
 		curBox.toggleClass("box-collapsed box-expanded");
         if (curBox.hasClass("box-expanded")) {
             curBox.parent().children().not(curBox).removeClass("box-expanded");
@@ -31,17 +31,16 @@ $(document).ready(function() {
             /* Deselect the attribute ? */
         } else {
             var var_full_name = $.trim($(this).text());
-            $(this).addClass(attr_selected_class);
+
+            $(".menu-popup-submenu-item[name='" + $(this).attr('name') + "']").addClass(attr_selected_class);
 
             $(".query-builder").append("<div class=\"side-box\"></div>");
             var $new_box = $(".query-builder").children().last()
-            $new_box.load("/voyage/varbox/" + this.id, function() {
+            $new_box.load("/voyage/varbox/" + $(this).attr('name'), function() {
                     $new_box.children().first().text(var_full_name);
                     $(".query-builder").resize();
                 }
             );
-            /* Attach event handlers for the box */
-            /* To be updated */
         }
 	});
 });

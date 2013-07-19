@@ -1,18 +1,18 @@
 {% load i18n %}
 
 {% include 'voyage/search_box_header.html' %}
-<div id="{{ varname }}_select">
+<div id="{{ varname_wrapper }}">
     <div class="query-select-initial" >
         <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
         </div>
-    <br /><input type="button" onclick="expandChoices('{{ varname }}_select');" value="Select" class="display_inline">
+    <br /><input type="button" onclick="expandChoices('{{ varname_wrapper }}');" value="Select" class="display_inline">
     </div>
 
     <div class="query-select-full hidden">
         {% trans 'Quicksearch' %}
             <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
-               onkeyup="filter_edit_list('{{ varname }}_select');"
-               name="input_{{  varname }}_range" style="width: 200px;" />
+               onkeyup="filter_edit_list('{{ varname_wrapper }}');"
+               name="" style="width: 200px;" />
 
         <div class="query-builder-edit-list">
             {% if choices %}

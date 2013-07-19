@@ -101,17 +101,22 @@ def get_var_box(request, varname):
     list_text_fields = ['basic_ship_name', 'basic_owner',]
     list_select_fields = ['basic_nationality', 'basic_outcome_slaves',
                           'basic_outcome_owner', 'basic_outcome_resistance']
-    list_numeric_fields = ['basic_voyage_id']
+    list_numeric_fields = ['var_voyage_id']
 
     if varname in list_text_fields:
         # Plain text fields
-        return render_to_response("voyage/search_box_plain_text.html", {'varname': varname},
+        input_field_name = "input_" + varname
+        return render_to_response("voyage/search_box_plain_text.html",
+                {'varname': varname, 'input_field_name' : input_field_name},
                 context_instance=RequestContext(request))
     elif varname in list_select_fields:
         # Select box variables
         choices = getChoices(varname)
+        varname_wrapper = "select_" + varname
+        quicksearch_field = "qs_" + varname
         return render_to_response("voyage/search_box_select.html",
-                {'varname': varname, 'choices': choices},
+                {'varname': varname, 'choices': choices,
+                 'varname_wrapper' : varname_wrapper,},
                 context_instance=RequestContext(request))
     elif varname in list_numeric_fields:
         # Numeric variables
