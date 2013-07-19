@@ -532,7 +532,7 @@ class VoyageDates(models.Model):
 
     # Constant variables
     # Dates start
-    years_start = {'5': 1525, '10': 1500, '25': 1500, '100': 1500}
+    years_start = {5: 1525, 10: 1500, 25: 1500, 100: 1500}
 
     # Data variables
     voyage_began = models.CommaSeparatedIntegerField\
@@ -598,33 +598,47 @@ class VoyageDates(models.Model):
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
 
-
-    @property
-    def _calculate_year_period(self, period):
+    def get_date_year(self, value):
         """
-        Property to calculates proper period.
+        Returns year value from CommaSeparatedField
+        """
+
+        return int(value.split(',')[2])
+
+    def get_date_month(self, value):
+        """
+        Returns month value from CommaSeparatedField
+        """
+
+        return int(value.split(',')[1])
+
+    def get_date_day(self, value):
+        """
+        Returns date value from CommaSeparatedField
+        """
+
+        return int(value.split(',')[0])
+
+    def calculate_year_period(self, period):
+        """
+        Function to calculate proper period.
 
         Keyword arguments:
         period -- which period to calculate
         """
-        if ((self.imp_arrival_at_port_of_dis[2]-self.years_start[period])
-                % period != 0):
-            return ((self.imp_arrival_at_port_of_dis[2]-self.years_start[period])
+
+        if ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
+                    % period != 0):
+            return ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
                     / period +1)
         else:
-            return (self.imp_arrival_at_port_of_dis[2]-self.years_start[period]) \
-                   / period
-
-    # Calculated variables
-    year_five = property(_calculate_year_period, 5)
-    year_ten = property(_calculate_year_period, 10)
-    year_twenty_five = property(_calculate_year_period, 25)
-    year_hundred = property(_calculate_year_period, 100)
-
+            return (self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period]) \
+                    / period
 
     class Meta:
         verbose_name = 'Date'
         verbose_name_plural = 'Dates'
+
 
 
 # Voyage Captain and Crew
