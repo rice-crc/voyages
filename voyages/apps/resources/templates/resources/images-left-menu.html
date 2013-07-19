@@ -28,14 +28,15 @@
             <div class="box-middle-row-left"></div>
         </td>
         <td class="box-middle-row-middle">
-            <div class="box-main-text">
+            <div class="box-main-text"><form action="/resources/images/search" method="post">
+                {% csrf_token %}
                 <div class="images-query-box">
                     <table style="border-collapse: collapse">
                     <tbody>
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Keyword" %}</td>
                         <td style="padding: 5px 0px">
-                            <input type="text" style="width: 150px;" value="">
+                            <input type="text" style="width: 150px;" value="" name="keyword">
                         </td>
                     </tr>
                     <tr>
@@ -103,10 +104,10 @@
                     </div>
                 </div>
                 <div class="images-query-search-button">
-                    <input type="submit" onclick="clear_form();" value="Search images">
+                    <input type="submit" value="Submit" >
                     <input type="submit" onclick="clear_form();" value="Start again">
                 </div>
-            </div>
+            </form></div>
         </td>
         <td class="box-middle-row-right">
             <div class="box-middle-row-right"></div>

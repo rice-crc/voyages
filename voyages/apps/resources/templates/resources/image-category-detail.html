@@ -58,7 +58,7 @@
     <tbody>
     <tr>
         <td class="image-detail-link">
-                            <a href="{% url 'resources:image-detail.html' category 1 %}">
+                            <a href="{% url 'resources:image-detail' category 1 %}">
             {% thumbnail i.file "400" as im %}
 
                 <img src="{{ im.url }}">
