@@ -8,13 +8,14 @@
     <tr>
         <td class="box-upper-row-left"></td>
         <td class="box-upper-row-middle">
-            <input type="hidden" value="expanded" name="form:_idJsp6_state">
+            <input type="hidden" value="expanded">
             <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
             <tr>
                 <td class="box-label">{% trans "Search for images" %}</td>
                 <td>
-                    <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp6_state'].value = 'collapsed'; document.forms['form'].submit(); return false;"></div>
+                    {# TODO: Load jquery to hiding this section #}
+                    <div class="box-button"></div>
                 </td>
             </tr>
             </tbody>
@@ -27,21 +28,21 @@
             <div class="box-middle-row-left"></div>
         </td>
         <td class="box-middle-row-middle">
-            <div id="form:_idJsp6" class="box-main-text">
+            <div class="box-main-text">
                 <div class="images-query-box">
                     <table style="border-collapse: collapse">
                     <tbody>
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Keyword" %}</td>
                         <td style="padding: 5px 0px">
-                            <input id="form:_idJsp13" type="text" style="width: 150px;" value="" name="form:_idJsp13">
+                            <input type="text" style="width: 150px;" value="">
                         </td>
                     </tr>
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Time frame" %}</td>
                         <td style="padding: 5px 0px">
-                            <input id="form:_idJsp18" type="text" style="width: 40px;" value="" name="form:_idJsp18"> -
-                            <input id="form:_idJsp20" type="text" style="width: 40px;" value="" name="form:_idJsp20">
+                            <input type="text" style="width: 40px;" value=""> -
+                            <input type="text" style="width: 40px;" value="">
                         </td>
                     </tr>
                     </tbody>
@@ -50,15 +51,15 @@
                 <div class="images-query-box">
                     Category
                     <div style="margin: 5px 0px 0px 0px;">
-                        <input type="hidden" value="" name="form:_idJsp24_expanded_values">
+                        <input type="hidden" value="">
                         <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
                         <tbody>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input id="form:_idJsp24_checkbox_4" type="checkbox" checked="checked" value="4" name="form:_idJsp24">
+                                <input type="checkbox" checked="checked" value="4">
                             </td>
                             <td class="checkbox-list-label-0">
-                                <label for="form:_idJsp24_checkbox_4">
+                                <label>
                                     {% trans "Manuscripts" %}
                                     <span class="images-count">(171 images)</span>
                                 </label>
@@ -66,10 +67,10 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input id="form:_idJsp24_checkbox_3" type="checkbox" checked="checked" value="3" name="form:_idJsp24">
+                                <input type="checkbox" checked="checked" value="3">
                             </td>
                             <td class="checkbox-list-label-0">
-                                <label for="form:_idJsp24_checkbox_3">
+                                <label>
                                     {% trans "Places" %}
                                     <span class="images-count">(42 images)</span>
                                 </label>
@@ -77,10 +78,10 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input id="form:_idJsp24_checkbox_2" type="checkbox" checked="checked" value="2" name="form:_idJsp24">
+                                <input type="checkbox" checked="checked" value="2">
                             </td>
                             <td class="checkbox-list-label-0">
-                                <label for="form:_idJsp24_checkbox_2">
+                                <label>
                                     {% trans "Slaves" %}
                                     <span class="images-count">(9 images)</span>
                                 </label>
@@ -88,10 +89,10 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input id="form:_idJsp24_checkbox_1" type="checkbox" checked="checked" value="1" name="form:_idJsp24">
+                                <input type="checkbox" checked="checked" value="1">
                             </td>
                             <td class="checkbox-list-label-0">
-                                <label for="form:_idJsp24_checkbox_1">
+                                <label>
                                     {% trans "Vessels" %}
                                     <span class="images-count">(9 images)</span>
                                 </label>
@@ -102,8 +103,8 @@
                     </div>
                 </div>
                 <div class="images-query-search-button">
-                    <input id="form:_idJsp26" type="submit" onclick="clear_form();" value="Search images" name="form:_idJsp26">
-                    <input id="form:_idJsp28" type="submit" onclick="clear_form();" value="Start again" name="form:_idJsp28">
+                    <input type="submit" onclick="clear_form();" value="Search images">
+                    <input type="submit" onclick="clear_form();" value="Start again">
                 </div>
             </div>
         </td>
