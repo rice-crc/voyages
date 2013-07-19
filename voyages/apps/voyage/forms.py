@@ -1,6 +1,8 @@
 from django import forms
 import autocomplete_light
 from .models import *
+from django.forms import widgets
+from django.forms.extras.widgets import *
 from voyages.extratools import AdvancedEditor
 
 class UploadFileForm(forms.Form):
@@ -107,3 +109,34 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     class Meta:
         model = VoyageSources
 
+
+class SimpleTextForm(forms.Form):
+    """
+    Simple one field form to perform text search
+    """
+    text_search = forms.CharField(widget=forms.TextInput(attrs={'class': "query-builder-text"}))
+
+
+class SimpleNumericSearchForm(forms.Form):
+    """
+    Simple numeric search form
+    """
+    OPERATORS = (('1', 'Between'), ('2', 'At most'), ('3', 'At least'), ('4', 'Is equal to'))
+    options = forms.ChoiceField(choices=OPERATORS,
+                                widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
+    threshold = forms.IntegerField(widget=forms.TextInput(
+        attrs={'class': "medium_field"}))
+    lower_bound = forms.IntegerField(widget=forms.TextInput(attrs={'class': "short_field"}))
+    upper_bound = forms.IntegerField(widget=forms.TextInput(attrs={'class': "short_field"}))
+
+
+class SimpleSelectSearchForm(forms.Form):
+    """
+    Simple checkbox search form
+    """
+    CHOICES = ["Random",]
+    def __init__(self, listChoices, *args, **kwargs):
+        CHOICES = listChoices
+        super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
+
+    selects = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHOICES)

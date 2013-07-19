@@ -49,7 +49,7 @@
                                 {% trans 'Voyage identification number' %}</div>
                             <div class="menu-popup-submenu-item" name="var_ship_name">
                                 {% trans 'Vessel name' %}</div>
-                            <div class="menu-popup-submenu-item" name="var_nationality">
+                            <div class="menu-popup-submenu-item" name="var_imputed_nationality">
                                 {% trans 'Flag' %}*</div>
                             <div class="menu-popup-submenu-item" name="var_owner">
                                 {% trans 'Vessel owner' %}</div>
@@ -63,7 +63,7 @@
                                 {% trans 'Outcome of voyage for slaves' %}*</div>
                             <div class="menu-popup-submenu-item" name="var_outcome_owner">
                                 {% trans 'Outcome of voyage for owner' %}*</div>
-                            <div class="menu-popup-submenu-item" name="var_imputed_resistance">
+                            <div class="menu-popup-submenu-item" name="var_resistance">
                                 {% trans 'African resistance' %}*</div>
                         </div>
                     </div>
@@ -71,54 +71,71 @@
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Place where voyage began' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Principal place of slave purchase' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Principal place of slave landing' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Place where voyage ended' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_port_voyage_begin">
+                                {% trans 'Place where voyage began' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_principal_place_of_slave_purchase">
+                                {% trans 'Principal place of slave purchase' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_principal_port_slave_dis">
+                                {% trans 'Principal place of slave landing' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_place_voyage_ended">
+                                {% trans 'Place where voyage ended' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Voyage Itinerary' %}</span> ({% trans '4 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Year arrived with slaves' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_arrival_at_port_of_dis">
+                                {% trans 'Year arrived with slaves' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Voyage Dates' %}</span> ({% trans '1 variable' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Captain's name" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Crew at voyage outset' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Crew deaths during voyage' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_captain">
+                                {% trans "Captain's name" %}</div>
+                            <div class="menu-popup-submenu-item" name="var_crew_voyage_outset">
+                                {% trans 'Crew at voyage outset' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_crew_died_complete_voyage">
+                                {% trans 'Crew deaths during voyage' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Captain and Crew' %}</span> ({% trans '3 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Total slaves embarked" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Total slaves disembarked' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_total_num_slaves_purchased">
+                                {% trans "Total slaves embarked" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_total_slaves_disembarked">
+                                {% trans 'Total slaves disembarked' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Slaves (numbers)' %}</span> ({% trans '2 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Percentage men" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage women' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage boys' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage girls' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Percentage male" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage children' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Mortality rate" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_men">
+                                {% trans "Percentage men" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_women">
+                                {% trans 'Percentage women' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_boys">
+                                {% trans 'Percentage boys' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_girls">
+                                {% trans 'Percentage girls' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_male">
+                                {% trans "Percentage male" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_child">
+                                {% trans 'Percentage children' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_mortality">
+                                {% trans "Mortality rate" %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Slaves (characteristics)' %}</span> ({% trans '7 variables' %})</div>
                 <div class="menu-popup-item-main-last">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Sources' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_sources">{% trans 'Sources' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Source' %}</span> ({% trans '1 variable' %})
@@ -145,7 +162,7 @@
                                 {% trans 'Voyage in 1999 CD-ROM' %}</div>
                             <div class="menu-popup-submenu-item" name="var_ship_name">
                                 {% trans 'Vessel name' %}</div>
-                            <div class="menu-popup-submenu-item" name="var_nationality_ship">
+                            <div class="menu-popup-submenu-item" name="var_nationality">
                                 {% trans 'Flag' %}</div>
                             <div class="menu-popup-submenu-item" name="var_imputed_nationality" >
                                 {% trans 'Flag' %}*</div>
@@ -173,28 +190,44 @@
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Particular outcome of voyage' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Outcome of voyage for slaves' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Outcome of voyage if ship captured' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Outcome of voyage for owner' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'African resistance' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_outcome_voyage">
+                                {% trans 'Particular outcome of voyage' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_outcome_slaves">
+                                {% trans 'Outcome of voyage for slaves' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_outcome_ship_captured">
+                                {% trans 'Outcome of voyage if ship captured' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_outcome_owner">
+                                {% trans 'Outcome of voyage for owner' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_resistance">
+                                {% trans 'African resistance' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Voyage Outcome' %}</span> ({% trans '5 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Place where voyage began' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'First place of slave purchase' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Second place of slave purchase' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Third place of slave purchase' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Principal place of slave purchase' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Places of call before Atlantic crossing' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'First place of slave landing' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Second place of slave landing' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Third place of slave landing' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Principal place of slave landing' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Place where voyage ended' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_port_of_departure">
+                                {% trans 'Place where voyage began' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_first_place_slave_purchase">
+                                {% trans 'First place of slave purchase' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_second_place_slave_purchase">
+                                {% trans 'Second place of slave purchase' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_third_place_slave_purchase">
+                                {% trans 'Third place of slave purchase' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_principal_place_of_slave_purchase">
+                                {% trans 'Principal place of slave purchase' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_port_of_call_before_atl_crossing">
+                                {% trans 'Places of call before Atlantic crossing' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_first_landing_place">
+                                {% trans 'First place of slave landing' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_second_landing_place">
+                                {% trans 'Second place of slave landing' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_third_landing_place">
+                                {% trans 'Third place of slave landing' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_principal_port_of_slave_dis">
+                                {% trans 'Principal place of slave landing' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_place_voyage_ended">
+                                {% trans 'Place where voyage ended' %}</div>
 
                         </div>
                     </div>
@@ -202,65 +235,99 @@
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Year arrived with slaves' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date voyage began' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date trade began in Africa' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date vessel departed Africa' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date vessel arrived with slaves' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date vessel departed for homeport' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Date voyage completed' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Voyage length, homeport to slaves landing (days)*' %}</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Middle passage (days)*' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_arrival_at_port_of_dis">
+                                {% trans 'Year arrived with slaves' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_voyage_began">
+                                {% trans 'Date voyage began' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_slave_purchase_began">
+                                {% trans 'Date trade began in Africa' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_vessel_left_port">
+                                {% trans 'Date vessel departed Africa' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_first_dis_of_slaves">
+                                {% trans 'Date vessel arrived with slaves' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_departure_last_place_of_landing">
+                                {% trans 'Date vessel departed for homeport' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_voyage_completed">
+                                {% trans 'Date voyage completed' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_length_home_to_disembark">
+                                {% trans 'Voyage length, homeport to slaves landing (days)' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_length_middle_passage_days">
+                                {% trans 'Middle passage (days)' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Voyage Dates' %}</span> ({% trans '9 variable' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Captain's name" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Crew at voyage outset' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Crew at first landing of slaves' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Crew deaths during voyage' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_captain">
+                                {% trans "Captain's name" %}</div>
+                            <div class="menu-popup-submenu-item" name="var_crew_voyage_outset">
+                                {% trans 'Crew at voyage outset' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_crew_first_landing">
+                                {% trans 'Crew at first landing of slaves' %}</div>
+                            <div class="menu-popup-submenu-item" name="var_crew_died_complete_voyage">
+                                {% trans 'Crew deaths during voyage' %}</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Captain and Crew' %}</span> ({% trans '3 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Number of slaves intended at first place of purchase" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Slaves carried from first port of purchase" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Slaves carried from second port of purchase" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Slaves carried from third port of purchase" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Total slaves embarked" %}</div>
-                            <div class="menu-popup-submenu-item">{% trans "Total slaves embarked" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Number of slaves arriving at first place of landing" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Number of slaves disembarked at first place of landing" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Number of slaves disembarked at second place of landing" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Number of slaves disembarked at third place of landing" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Total slaves disembarked' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_intended_first_port">
+                                {% trans "Number of slaves intended at first place of purchase" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_carried_first_port">
+                                {% trans "Slaves carried from first port of purchase" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_carried_second_port">
+                                {% trans "Slaves carried from second port of purchase" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_carried_third_port">
+                                {% trans "Slaves carried from third port of purchase" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_total_num_slaves_purchased">
+                                {% trans "Total slaves embarked" %}</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_total_num_slaves_purchased">
+                                {% trans "Total slaves embarked" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_total_num_slaves_arr_first_port_embark">
+                                {% trans "Number of slaves arriving at first place of landing" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_disembark_first_place">
+                                {% trans "Number of slaves disembarked at first place of landing" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_second place of landing">
+                                {% trans "Number of slaves disembarked at second place of landing" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_num_slaves_disembark_third_place">
+                                {% trans "Number of slaves disembarked at third place of landing" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imp_total_slaves_disembarked">
+                                {% trans 'Total slaves disembarked' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Slaves (numbers)' %}</span> ({% trans '11 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans "Percentage men" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage women' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage boys' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage girls' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Percentage female" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Percentage male" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans 'Percentage children' %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Sterling cash price in Jamaica" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Slave deaths during middle passage" %}*</div>
-                            <div class="menu-popup-submenu-item">{% trans "Mortality rate" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_men">
+                                {% trans "Percentage men" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_women">
+                                {% trans 'Percentage women' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_boys">
+                                {% trans 'Percentage boys' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_girls">
+                                {% trans 'Percentage girls' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_female">
+                                {% trans "Percentage female" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_male">
+                                {% trans "Percentage male" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_percentage_child">
+                                {% trans 'Percentage children' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_sterling_cash">
+                                {% trans "Sterling cash price in Jamaica" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_death_middle_passage">
+                                {% trans "Slave deaths during middle passage" %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_imputed_mortality">
+                                {% trans "Mortality rate" %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Slaves (characteristics)' %}</span> ({% trans '9 variables' %})</div>
                 <div class="menu-popup-item-main-last">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                            <div class="menu-popup-submenu-item">{% trans 'Sources' %}*</div>
+                            <div class="menu-popup-submenu-item" name="var_sources">{% trans 'Sources' %}*</div>
                         </div>
                     </div>
                     <span class="bold">{% trans 'Source' %}</span> ({% trans '1 variable' %})

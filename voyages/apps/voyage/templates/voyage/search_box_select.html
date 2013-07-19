@@ -1,6 +1,7 @@
 {% load i18n %}
 
 {% include 'voyage/search_box_header.html' %}
+{% if form %}
 <div id="{{ varname_wrapper }}">
     <div class="query-select-initial" >
         <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
@@ -30,3 +31,4 @@
         </div>
     </div>
 </div>
+{% endif %}

@@ -8,9 +8,86 @@ from os import listdir, stat
 from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 import time
-from .forms import UploadFileForm
+from .forms import *
 from .models import *
 
+list_text_fields = ['var_ship_name',
+                        'var_owner',
+                        'var_captain',
+                        'var_sources']
+list_select_fields = ['var_nationality',
+                      'var_imputed_nationality',
+                      'var_vessel_construction_place',
+                      'var_registered_place',
+                      'var_outcome_voyage',
+                      'var_outcome_slaves',
+                      'var_outcome_owner',
+                      'var_resistance',
+                      'var_outcome_ship_captured',
+                      'var_port_of_departure',
+                      'var_first_place_slave_purchase'
+                      ]
+list_numeric_fields = ['var_voyage_id',
+                       'var_year_of_construction',
+                       'var_registered_year',
+                       'var_rig_of_vessel',
+                       'var_guns_mounted',
+                       'var_imp_arrival_at_port_of_dis',
+                       'var_voyage_began',
+                       'var_imp_length_home_to_disembark',
+                       'var_length_middle_passage_days',
+                       'var_crew_voyage_outset',
+                       'var_crew_first_landing',
+                       'var_crew_died_complete_voyage',
+                       'var_num_slaves_carried_first_port',
+                       'var_num_slaves_carried_second_port',
+                       'var_num_slaves_carried_third_port',
+                       'var_total_num_slaves_purchased',
+                       'var_imp_total_num_slaves_purchased',
+                       'var_total_num_slaves_arr_first_port_embark',
+                       'var_num_slaves_disembark_first_place',
+                       'var_second place of landing',
+                       'var_num_slaves_disembark_third_place',
+                       'var_imp_total_slaves_disembarked',
+                       # Possible change the below to decimal fields
+                       'var_tonnage',
+                       'var_tonnage_mod',
+                       'var_imputed_percentage_men',
+                       'var_imputed_percentage_women',
+                       'var_imputed_percentage_boys',
+                       'var_imputed_percentage_girls',
+                       'var_imputed_percentage_female',
+                       'var_imputed_percentage_male',
+                       'var_imputed_percentage_child',
+                       'var_imputed_sterling_cash',
+                       'var_imputed_death_middle_passage',
+                       '"var_imputed_mortality'
+                       ]
+
+list_date_fields = ['var_slave_purchase_began',
+                    'var_vessel_left_port',
+                    'var_first_dis_of_slaves',
+                    'var_departure_last_place_of_landing',
+                    'var_voyage_completed'
+                    ]
+
+list_place_fields = ['var_port_of_departure',
+                     'var_first_place_slave_purchase',
+                     'var_second_place_slave_purchase',
+                     'var_third_place_slave_purchase',
+                     'var_principal_place_of_slave_purchase',
+                     'var_port_of_call_before_atl_crossing',
+                     'var_first_landing_place',
+                     'var_second_landing_place',
+                     'var_third_landing_place',
+                     'var_principal_port_of_slave_dis',
+                     'var_place_voyage_ended',
+                     'var_imp_port_voyage_begin',
+                     'var_imp_principal_place_of_slave_purchase',
+                     'var_imp_principal_port_slave_dis',
+                        ]
+
+list_boolean_fields = ['var_voyage_in_cd_rom',]
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -98,45 +175,50 @@ def search(request, added_field):
 def get_var_box(request, varname):
 
     # Return/construct a box with information about the variables:
-    list_text_fields = ['basic_ship_name', 'basic_owner',]
-    list_select_fields = ['basic_nationality', 'basic_outcome_slaves',
-                          'basic_outcome_owner', 'basic_outcome_resistance']
-    list_numeric_fields = ['var_voyage_id']
+    input_field_name = "header_" + varname
 
     if varname in list_text_fields:
         # Plain text fields
-        input_field_name = "input_" + varname
+        form = SimpleTextForm(auto_id = ('id_' + varname + "_%s"))
         return render_to_response("voyage/search_box_plain_text.html",
-                {'varname': varname, 'input_field_name' : input_field_name},
+                {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
                 context_instance=RequestContext(request))
+
     elif varname in list_select_fields:
         # Select box variables
         choices = getChoices(varname)
+        form = SimpleSelectSearchForm(choices)
         varname_wrapper = "select_" + varname
         quicksearch_field = "qs_" + varname
         return render_to_response("voyage/search_box_select.html",
-                {'varname': varname, 'choices': choices,
-                 'varname_wrapper' : varname_wrapper,},
+                {'varname': varname, 'choices': choices, 'input_field_name': input_field_name,
+                 'varname_wrapper' : varname_wrapper, 'form': form},
                 context_instance=RequestContext(request))
+
     elif varname in list_numeric_fields:
         # Numeric variables
-        return render_to_response("voyage/search_box_numeric.html", {'varname': varname},
+        form = SimpleNumericSearchForm(auto_id = ('id_' + varname + "_%s"), initial={'options': '4'})
+        return render_to_response("voyage/search_box_numeric.html", {'varname': varname,
+                'input_field_name': input_field_name, 'form': form},
                 context_instance=RequestContext(request))
+    elif varname in list_boolean_fields:
+        pass
+
     else:
         pass
 
 def getChoices(varname):
     choices = []
-    if varname in ['basic_nationality', ]:
+    if varname in ['var_nationality', 'var_imputed_nationality' ]:
         for nation in Nationality.objects.all():
             choices.append({'choice_id': nation.pk, 'choice_text': nation.label })
-    elif varname in ['basic_outcome_slaves',]:
+    elif varname in ['var_outcome_slaves',]:
         for outcome in ParticularOutcome.objects.all():
             choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
-    elif varname in ['basic_outcome_owner',]:
+    elif varname in ['var_outcome_owner',]:
         for outcome in OwnerOutcome.objects.all():
             choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
-    elif varname in ['basic_outcome_resistance',]:
+    elif varname in ['var_outcome_resistance',]:
         for outcome in Resistance.objects.all():
             choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
     return choices

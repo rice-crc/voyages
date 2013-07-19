@@ -2,21 +2,19 @@
 
 {% include 'voyage/search_box_header.html' %}
 
-<select id="input_select_{{ varname }}"
-        name="input_{{  varname }}_type" style="width: 100px;"
-        onchange="update_numeric_field('input_select_{{ varname }}');" >
-<option value="between">Between</option>
-<option value="le">At most</option>
-<option value="ge">At least</option>
-<option selected="selected" value="eq">Is equal to</option>
-</select>
+{% if form %}
+    {% if form.errors %}
+        <p style="color: red;">
+           Invalid input {{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
 
-<span class="range_field between_field hidden">
-    <input type="text" autocomplete="off" value="" name="{{ varname }}_from" style="width: 60px;" />
-    -
-    <input type="text" autocomplete="off" value="" name="{{ varname }}_to" style="width: 60px;" />
-</span>
-<span class="range_field threshold_field">
-    <input type="text" autocomplete="off" value="" name="{{ varname }}_threshold" style="width: 100px;"/>
-</span>
+    {{ form.options }}
 
+    <span class="range_field between_field hidden">
+    {{ form.lower_bound }} - {{ form.upper_bound }}
+    </span>
+    <span class="range_field threshold_field">
+    {{ form.threshold }}
+    </span>
+{% endif %}
