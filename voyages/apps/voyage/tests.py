@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test.utils import override_settings
+from .models import VoyageDates
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):
@@ -30,3 +31,29 @@ class SimpleGetPageTest(TestCase):
         for i in range(25, 40):
             response = self.client.get("/voyage/c01_s02_p" + str(i))
             self.assertEqual(response.status_code, 404)
+
+
+class VoyageDatesPeriodsTest(TestCase):
+    """
+    Test of the calculating period variables in the
+    VoyageDates.
+    """
+
+    fixtures = ['test_set_200_voyages.json']
+
+    def test_calculate_period_year(self):
+        """
+        Check returned values of calculated periods.
+        """
+
+        voyage_dates_obj = VoyageDates.objects.get(pk=3)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(5), 14)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(10), 10)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(25), 4)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 1500)
+
+        voyage_dates_obj = VoyageDates.objects.get(pk=180)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(5), 67)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(10), 36)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(25), 15)
+        self.assertEqual(voyage_dates_obj.calculate_year_period(100), 1800)
