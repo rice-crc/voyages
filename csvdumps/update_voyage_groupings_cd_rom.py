@@ -66,6 +66,8 @@ for line in input_file:
 
     count = count + 1
     print count
+    if count > 200:
+        break
 
     voyageObj = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))[0]
     if isNotBlank('evgreen'):

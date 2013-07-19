@@ -68,6 +68,8 @@ for line in input_file:
 
     count = count + 1
     print count
+    if count > 200:
+        break
 
     if isNotBlank('voyageid'):
         voyageObj.voyage_id = getIntFieldValue('voyageid')
@@ -79,6 +81,7 @@ for line in input_file:
     ship = VoyageShip()
 
     ship.voyage = voyageObj
+
 
     if isNotBlank('shipname'):
         ship.ship_name = getFieldValue('shipname')
@@ -115,6 +118,8 @@ for line in input_file:
         ship.tonnage_mod = round(getDecimalFieldValue('tonmod'), 1)
 
     ship.save()
+    voyageObj.voyage_ship = ship
+    voyageObj.save()
 
     # Owners section
     letters = map(chr, range(97, 97 + 16)) # from a to p
@@ -143,6 +148,9 @@ for line in input_file:
     if isNotBlank('fate4'):
         outcome.outcome_owner = OwnerOutcome.objects.filter(
                 value=getIntFieldValue('fate4'))[0]
+
+    outcome.save()
+
 
     itinerary = VoyageItinerary()
 
@@ -238,6 +246,8 @@ for line in input_file:
         itinerary.imp_broad_region_slave_dis = BroadRegion.objects.filter(value=getIntFieldValue('mjselimp1'))[0]
 
     itinerary.save()
+    voyageObj.voyage_itinerary = itinerary
+    voyageObj.save()
 
     def construct_date_string(day_field, month_field, year_field):
         """
@@ -280,6 +290,9 @@ for line in input_file:
     date_info.imp_length_leaving_africa_to_disembark = getIntFieldValue('voy2imp')
     date_info.save()
 
+    voyageObj.voyage_dates = date_info
+    voyageObj.save()
+
     # Captain and Crew section
     crew = VoyageCrew()
     crew.voyage = voyageObj
@@ -315,6 +328,8 @@ for line in input_file:
         VoyageCaptainConnection.objects.create(
             captain_order=3, captain=third_captain, voyage=voyageObj)
     crew.save()
+    voyageObj.voyage_crew = crew
+    voyageObj.save()
 
     # Voyage numbers and characteristics
     characteristics = VoyageSlavesNumbers()
@@ -393,6 +408,8 @@ for line in input_file:
     characteristics.num_females_embark_first_port_purchase = getIntFieldValue("female6")
 
     characteristics.save()
+    voyageObj.voyage_slaves_numbers = characteristics
+    voyageObj.save()
 
     # Voyage sources
     # Potentially has a bug!!!!!!!!
