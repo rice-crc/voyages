@@ -19,8 +19,16 @@
 </div>
 
 <div id="center-content">
-Search results
+
+
+{{ results|length }}
 </div>
+
+    {% if query %}
+        <div class="images-query-title"> Search results </div>
+    {% else %}
+        <div class="images-query-title"> All images </div>
+    {% endif %}
 
 {% endblock %}
 

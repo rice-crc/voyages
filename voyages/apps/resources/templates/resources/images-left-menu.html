@@ -28,7 +28,7 @@
             <div class="box-middle-row-left"></div>
         </td>
         <td class="box-middle-row-middle">
-            <div class="box-main-text"><form action="/resources/images/search" method="post">
+            <div class="box-main-text"><form action="/resources/images/search" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="images-query-box">
                     <table style="border-collapse: collapse">
@@ -36,7 +36,7 @@
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Keyword" %}</td>
                         <td style="padding: 5px 0px">
-                            <input type="text" style="width: 150px;" value="" name="keyword">
+                            <input type="text" style="width: 150px;" value="" name="q">
                         </td>
                     </tr>
                     <tr>
@@ -57,7 +57,7 @@
                         <tbody>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" value="4">
+                                <input type="checkbox" checked="checked" name="checkbox1" value="Manuscripts">
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -68,7 +68,7 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" value="3">
+                                <input type="checkbox" checked="checked" name="checkbox2" value="Places">
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -79,7 +79,7 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" value="2">
+                                <input type="checkbox" checked="checked" name="checkbox3" value="Slaves">
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -90,7 +90,7 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" value="1">
+                                <input type="checkbox" checked="checked" name="checkbox4" value="Vessel">
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
