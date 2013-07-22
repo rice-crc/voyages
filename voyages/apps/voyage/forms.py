@@ -134,9 +134,8 @@ class SimpleSelectSearchForm(forms.Form):
     """
     Simple checkbox search form
     """
-    CHOICES = ["Random",]
-    def __init__(self, listChoices, *args, **kwargs):
-        CHOICES = listChoices
-        super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
+    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class' : 'var-checkbox'}, choices=[]))
 
-    selects = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHOICES)
+    def __init__(self, listChoices, *args, **kwargs):
+        super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
+        self.fields['choice_field'].widget.choices = listChoices
