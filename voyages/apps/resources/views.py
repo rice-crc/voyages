@@ -2,6 +2,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.utils.datastructures import SortedDict
 from django.core.paginator import Paginator
+from haystack.query import SearchQuerySet
+from haystack.forms import SearchForm
 from .models import *
 
 
@@ -83,6 +85,30 @@ def get_image_detail(request, category, page):
 
 def images_search(request):
 
-    return render_to_response('resources/images-search-results.html',
-        {},
-                              context_instance=RequestContext(request))
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            # Perform the query
+            query = form.cleaned_data['q']
+            category = form.cleaned_data['category']
+            try:
+                time_start = form.cleaned_data['time_start']
+                time_end = form.cleaned_data['time_end']
+                results = \
+                    SearchQuerySet().filter(content=query,
+                                            category_label__exact=category,
+                                            date__gte=time_start,
+                                            date__lte=time_end).models(Image)
+            except:
+                results = \
+                    SearchQuerySet().filter(content=query,
+                                            category_label__exact=category).models(Image)
+
+        else:
+            form = SearchForm()
+            results = SearchQuerySet().models(Image).order_by('date', 'image_id')
+
+        return render_to_response('resources/images-search-results.html',
+            {'results': results, 'query': query},
+            context_instance=RequestContext(request))
