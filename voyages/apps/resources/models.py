@@ -50,6 +50,7 @@ class Image(models.Model):
     def __unicode__(self):
         return str(self.id) + ", " + self.get_file_name()
 
+
 class ImageCategory(models.Model):
     """
     Model stores categories for images.
@@ -71,5 +72,5 @@ from .search_indexes import ImagesIndex
 
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_image_category(sender, **kwargs):
-    ImageCategory.update()
-models.signals.post_save.connect(reindex_image_category(), sender=ImageCategory)
+    ImagesIndex.update()
+models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
