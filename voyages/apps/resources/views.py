@@ -124,6 +124,17 @@ def images_search(request):
             form = SearchForm()
             results = SearchQuerySet().all()
 
+        request.session['results'] = results
         return render_to_response('resources/images-search-results.html',
             {'results': results, 'query': query, 'time_start': time_start, 'time_end': time_end},
             context_instance=RequestContext(request))
+
+def images_search_detail(request, page):
+    images = request.session['results']
+
+    paginator = Paginator(images, 1)
+    pagins = paginator.page(page)
+
+    return render_to_response('resources/image-category-detail.html',
+                              {'images': pagins, 'category': "Search"},
+                              context_instance=RequestContext(request))
