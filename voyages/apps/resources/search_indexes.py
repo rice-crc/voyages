@@ -21,13 +21,22 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.category.label
 
     def prepare_voyage_id(self, obj):
-        return obj.voyage.voyage_id
+        if obj.voyage is not None:
+            return obj.voyage.voyage_id
+        else:
+            return None
 
     def prepare_voyage_vessel_name(self, obj):
-        return obj.voyage.voyage_ship.ship_name
+        if obj.voyage is not None:
+            return obj.voyage.voyage_ship.ship_name
+        else:
+            return None
 
     def prepare_voyage_year(self, obj):
-        return obj.voyage.voyage_dates.imp_voyage_began
+        if obj.voyage is not None:
+            return obj.voyage.voyage_dates.imp_voyage_began
+        else:
+            return None
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
