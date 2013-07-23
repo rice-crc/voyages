@@ -19,27 +19,28 @@
                 <ul>
                 {% for item_layer0 in choices %}
                     <li>
-                        <div class="query-builder-list-item-collapsed">&nbsp;</div>
+                        <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
                         <label for="{{ item_layer0.id }}">
                             <input id="{{ item_layer0.id }}" class="var-checkbox checkbox-layer0" type="checkbox"
-                                   value="{{ item_layer0.order_num }}" >
+                                   value="{{ item_layer0.order_num }}" onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
                             {{ item_layer0.text }}
                         </label>
-                        <ul>
+                        <ul class="hidden">
                         {% for item_layer1 in item_layer0.choices %}
                             <li class="select-collapsed">
-                            <div class="query-builder-list-item-collapsed">&nbsp;</div>
+                            <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer1.id }}')" >&nbsp;</div>
                             <label for="{{ item_layer1.id }}">
                             <input id="{{ item_layer1.id }}" class="var-checkbox checkbox-layer1" type="checkbox"
-                                   value="{{ item_layer1.order_num }}" >
+                                   value="{{ item_layer1.order_num }}" onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
                             {{ item_layer1.text }}
                             </label>
-                            <ul>
+                            <ul class="hidden">
                                 {% for item_layer2 in item_layer1.choices %}
-                                    <li class="hidden">
+                                    <li>
                                         <label for="{{ item_layer2.id }}">
                                         <input id="{{ item_layer2.id }}" class="var-checkbox checkbox-layer2" type="checkbox"
-                                               value="{{ item_layer2.order_num }}" >
+                                               value="{{ item_layer2.order_num }}"
+                                                onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                         {{ item_layer2.text }}
                                         </label>
                                     </li>
