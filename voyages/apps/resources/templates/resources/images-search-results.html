@@ -21,8 +21,6 @@
 
 <div id="center-content">
 
-</div>
-
     {% if query %}
         <div class="images-query-title"> Search results </div>
     {% else %}
@@ -34,7 +32,7 @@
         <tbody>
             <tr>
                 <td style="padding: 0px 10px 0px 0px;">
-                    <a id="form:_idJsp37" class="link-back-to-list" onclick="clear_form();document.forms['form'].elements['form:_link_hidden_'].value='form:_idJsp37';if(document.forms['form'].onsubmit){var result=document.forms['form'].onsubmit(); if( (typeof result == 'undefined') || result ) {document.forms['form'].submit();}}else{document.forms['form'].submit();}return false;" href="#">Back to start</a>
+                    <a href="{% url 'resources:images' %}">Back to start</a>
                 </td>
                 <td style="padding: 0px">
                     {{ results|length }} images
@@ -51,11 +49,13 @@
                     <tr>
                 {% endifequal %}
                 <td class="gallery-image">
+                    <a href="{% url 'resources:images-search-detail' forloop.counter %}">
                     {% thumbnail result.file "100x100" as im %}
                         <div class="gallery-image">
                         <img src="{{ im.url }}" width="100" height="100"/>
                         </div>
                     {% endthumbnail %}
+                    </a>
                     <div class="gallery-image-text">
                         <div class="gallery-image-label">
                             {{ result.title }}
@@ -72,8 +72,9 @@
                 {% endif %}
             {% endfor %}
         </tbody>
-        </table>
+    </table>
 
+</div>
 {% endblock %}
 
 {% block footer %}
