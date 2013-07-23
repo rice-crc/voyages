@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load resources_extras %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/gallery.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
+{% endblock %}
+
+{% block title %}Image Detail{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/images-left-menu.html" %}
+</div>
+
+<div id="center-content">
+
+<div class="image-title">
+    {% for i in images %}
+        {{ i.title }}
+    {% endfor %}
+</div>
+<div class="image-navigation">
+    <table class="image-navigation">
+    <tbody>
+    <tr>
+        <td style="padding: 0px 10px 0px 0px;">
+            {% if all_images %}
+                <a href="{% url 'resources:images-search-result' %}">All images</a>
+            {% else %}
+                <a href="{% url 'resources:images-search-result' %}">Search results</a>
+            {% endif %}
+        </td>
+        <td style="padding: 0px 0px 0px 0px;">
+            {% if images.has_previous %}
+                <a href={{ images.previous_page_number }}>Previous</a>
+            {% else %}
+                Previous
+            {% endif %}
+        </td>
+        <td style="padding: 0px 10px 0px 10px"> {{ images.number }} / {{ images.paginator.num_pages }}  </td>
+        <td style="padding: 0px;">
+            {% if images.has_next %}
+                <a href={{ images.next_page_number }}>Next</a>
+            {% else %}
+                Next
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+
+    {% for i in images %}
+    <table style="border-collapse: collapse;">
+    <tbody>
+    <tr>
+        <td class="image-detail-link">
+                            <a href="{% url 'resources:image-detail' category 1 %}">
+            {% thumbnail i.file "400" as im %}
+
+                <img src="{{ im.url }}">
+
+            {% endthumbnail %}
+                                            </a>
+        </td>
+        <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
+            <div class="image-description">
+                {{ i.description }}
+            </div>
+            <table class="image-detail-info">
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">Year:</div>
+                    </td>
+                    <td>
+                        {{ i.date }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            Source:
+                        </div>
+                    </td>
+                    <td>
+                        {{ i.source }}
+                    </td>
+                </tr>
+                {% if i.language %}
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            Language:
+                        </div>
+                    </td>
+                    <td>
+                        {{ i.language|decode_language }}
+                    </td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+            {% if i.voyage.voyage_ship.ship_name %}
+                <div class="image-detail-voyages-title">
+                    Related voyages
+                </div>
+                <table class="image-detail-voyages">
+                    <tbody>
+                    <tr>
+                        <td>
+                            Voyage ID =
+                            {{ i.voyage.voyage_id }} - {{ i.voyage.voyage_ship.ship_name }}, {{ i.voyage.voyage_dates.imp_voyage_began|get_year_value }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
