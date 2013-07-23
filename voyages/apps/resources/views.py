@@ -84,40 +84,42 @@ def get_image_detail(request, category, page):
 
 
 def images_search(request):
+    query = ""
+    time_start = ''
+    time_end = ''
 
     if request.method == 'POST':
         form = SearchForm(request.POST)
-        time_start = ''
-        time_end = ''
+
 
         if form.is_valid():
             categories_to_search = []
             query = form.cleaned_data['q']
 
             # Get categories to search.
-            if query != "":
-                for i in range(1,5):
-                    if request.POST.get("checkbox" + str(i)):
-                        categories_to_search.append(ImageCategory.objects.get(value=i).label)
-
+            for i in range(1,5):
+                if request.POST.get("checkbox" + str(i)):
+                    categories_to_search.append(ImageCategory.objects.get(value=i).label)
             if query != "":
                 # If time has been provided, use it in search.
-                try:
-                    time_start = request.POST.get('time_start')
-                    time_end = request.POST.get('time_end')
+                request.session['all_images'] = False
+                time_start = request.POST.get('time_start')
+                time_end = request.POST.get('time_end')
+                if time_start != "":
                     results = \
                         SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
                                                 date__lte=time_end).models(Image).\
                             order_by('date', 'image_id')
-                except:
+                else:
                     results = \
                         SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search).models(Image).\
                             order_by('date', 'image_id')
             else:
                 results = SearchQuerySet().all().filter(ready_to_go=True).order_by('date', 'image_id')
+                request.session['all_images'] = True
 
 
         else:
@@ -129,12 +131,19 @@ def images_search(request):
             {'results': results, 'query': query, 'time_start': time_start, 'time_end': time_end},
             context_instance=RequestContext(request))
 
+    else:
+        results = request.session['results']
+        return render_to_response('resources/images-search-results.html',
+            {'results': results, 'query': query, 'time_start': time_start, 'time_end': time_end},
+            context_instance=RequestContext(request))
+
+
 def images_search_detail(request, page):
     images = request.session['results']
 
     paginator = Paginator(images, 1)
     pagins = paginator.page(page)
 
-    return render_to_response('resources/image-category-detail.html',
-                              {'images': pagins, 'category': "Search"},
+    return render_to_response('resources/images-search-detail.html',
+                              {'images': pagins, 'category': "Search", 'all_images': request.session['all_images']},
                               context_instance=RequestContext(request))
