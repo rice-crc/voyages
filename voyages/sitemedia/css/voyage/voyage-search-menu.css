@@ -122,3 +122,63 @@ div.query-builder-edit-list {
 .medium_field {
     width: 90px;
 }
+
+
+
+div.query-builder-edit-list label {
+    display: none;
+}
+
+div.query-builder-edit-list ul li label {
+    display: inherit;
+}
+
+div.query-builder-edit-list ul {
+    padding: 0;
+    margin: 0;
+}
+
+div.query-builder-edit-list ul li {
+    list-style-type:  none;
+    padding: 0;
+    margin: 0;
+}
+
+div.query-builder-edit-list ul li {
+    list-style-type: none;
+}
+div.query-builder-edit-list-expandable {
+    background-color: #F1E7C8;
+    overflow: scroll;
+    height: 200px;
+}
+
+div.query-builder-edit-list-expandable ul, div.query-builder-edit-list-expandable ul ul {
+    margin: 0;
+    padding: 0;
+}
+
+
+div.query-builder-edit-list-expandable ul li {
+    list-style-type: none;
+}
+
+
+div.query-builder-edit-list-expandable ul ul li {
+    list-style-type: none;
+    padding-left: 25px;
+}
+
+div.query-builder-edit-list-expandable ul ul ul li {
+    list-style-type: none;
+    padding-left: 35px;
+}
+
+
+div.query-builder-list-item-collapsed {
+    background: url('/static/images/voyage/icon-arrow-right.png') 0 0 no-repeat;
+    display: inline-block;
+    overflow: visible;
+    width: 10px;
+    height: 11px;
+}
