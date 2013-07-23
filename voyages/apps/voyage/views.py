@@ -1,5 +1,4 @@
 from django.http import Http404, HttpResponseRedirect
-from django import forms
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -85,9 +84,13 @@ list_place_fields = ['var_port_of_departure',
                      'var_imp_port_voyage_begin',
                      'var_imp_principal_place_of_slave_purchase',
                      'var_imp_principal_port_slave_dis',
-                        ]
+                     ]
 
 list_boolean_fields = ['var_voyage_in_cd_rom',]
+
+list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
+                                   'Netherlands', 'U.S.A', 'France', 'Denmark / Baltic',
+                                   'Other (specify in note)']
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -141,6 +144,7 @@ def download_file(request):
     return render_to_response(templatename, {'form': form, 'uploaded_files': uploaded_files_info},
                 context_instance=RequestContext(request))
 
+
 def handle_uploaded_file(f):
     """
     Function handles uploaded files by saving them
@@ -172,6 +176,7 @@ def search(request, added_field):
     return render_to_response("voyage/search.html", {},
                 context_instance=RequestContext(request))
 
+
 def get_var_box(request, varname):
 
     # Return/construct a box with information about the variables:
@@ -179,46 +184,98 @@ def get_var_box(request, varname):
 
     if varname in list_text_fields:
         # Plain text fields
-        form = SimpleTextForm(auto_id = ('id_' + varname + "_%s"))
+        form = SimpleTextForm(auto_id=('id_' + varname + "_%s"))
         return render_to_response("voyage/search_box_plain_text.html",
-                {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
-                context_instance=RequestContext(request))
+            {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
+            context_instance=RequestContext(request))
 
     elif varname in list_select_fields:
         # Select box variables
         choices = getChoices(varname)
-        form = SimpleSelectSearchForm(choices)
+        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
         varname_wrapper = "select_" + varname
-        quicksearch_field = "qs_" + varname
         return render_to_response("voyage/search_box_select.html",
-                {'varname': varname, 'choices': choices, 'input_field_name': input_field_name,
-                 'varname_wrapper' : varname_wrapper, 'form': form},
-                context_instance=RequestContext(request))
+            {'varname': varname, 'choices': choices,
+                'input_field_name': input_field_name,
+                'varname_wrapper' : varname_wrapper, 'form': form},
+            context_instance=RequestContext(request))
 
     elif varname in list_numeric_fields:
         # Numeric variables
-        form = SimpleNumericSearchForm(auto_id = ('id_' + varname + "_%s"), initial={'options': '4'})
-        return render_to_response("voyage/search_box_numeric.html", {'varname': varname,
+        form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'})
+        return render_to_response("voyage/search_box_numeric.html",
+            {'varname': varname,
                 'input_field_name': input_field_name, 'form': form},
-                context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
+    elif varname in list_place_fields:
+        choices = getNestedListPlaces(varname)
+        varname_wrapper = "select_" + varname
+        return render_to_response("voyage/search_box_select_three_layers.html",
+            {'varname': varname, 'choices': choices,
+                'input_field_name': input_field_name,
+                'varname_wrapper': varname_wrapper},
+            context_instance=RequestContext(request))
+
     elif varname in list_boolean_fields:
         pass
 
     else:
         pass
 
+
 def getChoices(varname):
+    """
+    Retrieve a list of two-tuple items for select boxes depending on the model
+    :param varname variable name:
+    :return:
+    """
     choices = []
-    if varname in ['var_nationality', 'var_imputed_nationality' ]:
+    if varname in ['var_nationality']:
         for nation in Nationality.objects.all():
-            choices.append({'choice_id': nation.pk, 'choice_text': nation.label })
+            if "/" in nation.label or "Other (specify in note)" in nation.label:
+                continue
+            choices.append((nation.pk, nation.label))
+    elif varname in ['var_imputed_nationality']:
+        for nation in Nationality.objects.all():
+            # imputed flags
+            if nation.label in list_imputed_nationality_values:
+                choices.append((nation.pk, nation.label))
     elif varname in ['var_outcome_slaves',]:
         for outcome in ParticularOutcome.objects.all():
-            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
+            choices.append((outcome.pk, outcome.label))
     elif varname in ['var_outcome_owner',]:
         for outcome in OwnerOutcome.objects.all():
-            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
+            choices.append((outcome.pk, outcome.label))
     elif varname in ['var_outcome_resistance',]:
         for outcome in Resistance.objects.all():
-            choices.append({'choice_id': outcome.pk, 'choice_text': outcome.label })
+            choices.append((outcome.pk, outcome.label))
+    return choices
+
+
+def getNestedListPlaces(varname):
+    """
+    Retrieve a nested list of places sorted by broad region (area) and then region
+    :param varname:
+    :return:
+    """
+    choices = []
+    print "got here"
+    for area in BroadRegion.objects.all():
+        area_content = []
+        for reg in Region.objects.filter(broad_region=area):
+            reg_content = []
+            for place in Place.objects.filter(region=reg):
+                if place.place == "???":
+                    continue
+                reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
+                                    'text': place.place,
+                                    'order_num': place.pk})
+            area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
+                                'text': reg.region,
+                                'order_num': reg.pk,
+                                'choices': reg_content})
+        choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
+                        'text': area.broad_region,
+                        'order_num': area.pk,
+                        'choices': area_content})
     return choices

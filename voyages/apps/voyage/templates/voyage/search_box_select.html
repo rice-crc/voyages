@@ -16,18 +16,12 @@
                name="" style="width: 200px;" />
 
         <div class="query-builder-edit-list">
-            {% if choices %}
-                {% for choice in choices %}
-                    <div><input type="checkbox" name="{{ varname }}_choice_{{ choice.choice_id }}"
-                           value="{{ choice.choice_text }}" class="var-checkbox"/>{{ choice.choice_text }}<br />
-                    </div>
-                {% endfor %}
-            {% endif %}
+            {{ form }}
         </div>
         <div style="margin-top: 5px;">
-            <input type="button" onclick="collapseCheckBoxes('{{ varname }}_select')" value="OK" class="display_inline">
-            <input type="button" onclick="checkAllBoxes('{{ varname }}_select');" value="Select all" class="display_inline">
-            <input type="button" onclick="uncheckAllBoxes('{{ varname }}_select');" value="Deselect all" class="display_inline">
+            <input type="button" onclick="collapseCheckBoxes('{{ varname_wrapper }}')" value="OK" class="display_inline">
+            <input type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');" value="Select all" class="display_inline">
+            <input type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');" value="Deselect all" class="display_inline">
         </div>
     </div>
 </div>

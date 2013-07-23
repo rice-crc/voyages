@@ -48,6 +48,20 @@ $(document).ready(function() {
                             update_numeric_field($(this).parent().children().first().attr("id"));
                         });
                     }
+
+                    if ($(".select_field:last").hasClass("newly_inserted")) {
+                        $(this).removeClass("newly_inserted");
+                        $(".select_field:last").change(function() {
+                            update_numeric_field($(this).parent().children().first().attr("id"));
+                        });
+                    }
+
+
+                    if ($(".query-builder-list-item-collapsed:last").hasClass("newly_inserted")) {
+                        $(this).removeClass("newly_inserted");
+                        $parent_wrapper = $(".query-builder-list-item-collapsed:last");
+
+                    }
                 }
             );
         }
@@ -79,7 +93,7 @@ function collapseCheckBoxes(elem_id) {
 
     $("#" + elem_id + " .var-checkbox").each(function () {
         if ($(this).prop("checked")) {
-            selectedItems.push($(this).attr('value'));
+            selectedItems.push($(this).parent().text());
         }
     });
     if (selectedItems.length == 0) {
