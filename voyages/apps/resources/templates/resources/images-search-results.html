@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load thumbnail %}
+{% load resources_extras %}
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
@@ -20,8 +21,6 @@
 
 <div id="center-content">
 
-
-{{ results|length }}
 </div>
 
     {% if query %}
@@ -29,6 +28,51 @@
     {% else %}
         <div class="images-query-title"> All images </div>
     {% endif %}
+
+    <div class="image-navigation">
+        <table class="image-navigation">
+        <tbody>
+            <tr>
+                <td style="padding: 0px 10px 0px 0px;">
+                    <a id="form:_idJsp37" class="link-back-to-list" onclick="clear_form();document.forms['form'].elements['form:_link_hidden_'].value='form:_idJsp37';if(document.forms['form'].onsubmit){var result=document.forms['form'].onsubmit(); if( (typeof result == 'undefined') || result ) {document.forms['form'].submit();}}else{document.forms['form'].submit();}return false;" href="#">Back to start</a>
+                </td>
+                <td style="padding: 0px">
+                    {{ results|length }} images
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            {% for result in results %}
+                {% ifequal forloop.counter0|modulo:5 0 %}
+                    <tr>
+                {% endifequal %}
+                <td class="gallery-image">
+                    {% thumbnail result.file "100x100" as im %}
+                        <div class="gallery-image">
+                        <img src="{{ im.url }}" width="100" height="100"/>
+                        </div>
+                    {% endthumbnail %}
+                    <div class="gallery-image-text">
+                        <div class="gallery-image-label">
+                            {{ result.title }}
+                        </div>
+                        {% if result.date %}
+                            <div class="gallery-image-description">
+                                ({{ result.date }})
+                            </div>
+                        {% endif %}
+                     </div>
+                </td>
+                {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table>
 
 {% endblock %}
 
