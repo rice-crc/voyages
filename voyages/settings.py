@@ -130,6 +130,15 @@ INSTALLED_APPS = (
     'voyages.apps.help',
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.file"
+
 gettext = lambda s: s
 
 LANGUAGE_CODE='en'
