@@ -1,11 +1,13 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils.datastructures import SortedDict
 from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
 from .models import *
-
 
 
 def get_all_images(request):
@@ -84,13 +86,14 @@ def get_image_detail(request, category, page):
 
 
 def images_search(request):
-    query = ""
+    query = ''
     time_start = ''
     time_end = ''
 
     if request.method == 'POST':
+        # New search, clear data stored in session
+        request.session['results'] = None
         form = SearchForm(request.POST)
-
 
         if form.is_valid():
             categories_to_search = []
@@ -100,6 +103,7 @@ def images_search(request):
             for i in range(1,5):
                 if request.POST.get("checkbox" + str(i)):
                     categories_to_search.append(ImageCategory.objects.get(value=i).label)
+
             if query != "":
                 # If time has been provided, use it in search.
                 request.session['all_images'] = False
@@ -118,23 +122,44 @@ def images_search(request):
                                                 category_label__in=categories_to_search).models(Image).\
                             order_by('date', 'image_id')
             else:
-                results = SearchQuerySet().all().filter(ready_to_go=True).order_by('date', 'image_id')
-                request.session['all_images'] = True
+                if len(categories_to_search) == 1:
+                    # return HttpResponseRedirect(
+                    #     reverse('images-category',
+                    #             args=(),
+                    #             kwargs={'category': categories_to_search.pop()}
+                    #     )
+                    # )
+                    #return redirect('resources:images_category', category=categories_to_search.pop())
+                    return get_images_category(request, categories_to_search.pop())
+                    #return redirect("/resources/images/category/" + categories_to_search.pop())
+                    #return HttpResponseRedirect(reverse('resources:images_category',
+                    #                                    kwargs={'category': categories_to_search.pop()}))
+                else:
+                    results = SearchQuerySet().all().filter(ready_to_go=True,
+                                                        category_label__in=categories_to_search).\
+                        order_by('date', 'image_id')
 
 
         else:
             form = SearchForm()
             results = SearchQuerySet().all()
 
+        # Store results in session
         request.session['results'] = results
-        return render_to_response('resources/images-search-results.html',
-            {'results': results, 'query': query, 'time_start': time_start, 'time_end': time_end},
-            context_instance=RequestContext(request))
+        request.session['enabled_categories'] = categories_to_search
+        request.session['query'] = query
+        request.session['time_start'] = time_start
+        request.session['time_end'] = time_end
 
     else:
         results = request.session['results']
-        return render_to_response('resources/images-search-results.html',
-            {'results': results, 'query': query, 'time_start': time_start, 'time_end': time_end},
+
+    return render_to_response('resources/images-search-results.html',
+            {'results': results,
+             'query': request.session['query'],
+             'time_start': request.session['time_start'],
+             'time_end': request.session['time_end'],
+             'enabled_categories': request.session['enabled_categories']},
             context_instance=RequestContext(request))
 
 
@@ -145,5 +170,10 @@ def images_search_detail(request, page):
     pagins = paginator.page(page)
 
     return render_to_response('resources/images-search-detail.html',
-                              {'images': pagins, 'category': "Search", 'all_images': request.session['all_images']},
+                              {'images': pagins, 'category': "Search",
+                               'all_images': request.session['all_images'],
+                               'query': request.session['query'],
+                               'time_start': request.session['time_start'],
+                               'time_end': request.session['time_end'],
+                               'enabled_categories': request.session['enabled_categories']},
                               context_instance=RequestContext(request))

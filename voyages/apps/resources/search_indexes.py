@@ -9,9 +9,11 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     date = indexes.IntegerField(model_attr="date", null=True)
     title = indexes.CharField(model_attr="title")
     description = indexes.CharField(model_attr="description", null=True)
+    source = indexes.CharField(model_attr="source", null=True)
     category_label = indexes.CharField()
     voyage_id = indexes.IntegerField(null=True)
     voyage_vessel_name = indexes.CharField(null=True)
+    voyage_imp_voyage_began = indexes.CharField(null=True)
     voyage_year = indexes.CharField(null=True)
 
     def get_model(self):
@@ -29,6 +31,12 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_voyage_vessel_name(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_ship.ship_name
+        else:
+            return None
+
+    def prepare_voyage_imp_voyage_began(self, obj):
+        if obj.voyage is not None:
+            return obj.voyage.voyage_dates.imp_voyage_began
         else:
             return None
 
