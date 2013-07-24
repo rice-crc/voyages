@@ -4,6 +4,7 @@
 {{ object.date }}
 {{ object.title }}
 {{ object.description }}
+{{ object.source }}
 {{ object.category.label }}
 {{ object.voyage.voyage_id }}
 {{ object.voyage.voyage_ship.ship_name }}
