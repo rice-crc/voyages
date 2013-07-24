@@ -36,7 +36,11 @@
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Keyword" %}</td>
                         <td style="padding: 5px 0px">
-                            <input type="text" style="width: 150px;" value="" name="q">
+                            {% if not query %}
+                                <input type="text" style="width: 150px;" value="" name="q">
+                            {% else %}
+                                <input type="text" style="width: 150px;" value="{{ query }}" name="q">
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -57,7 +61,11 @@
                         <tbody>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" name="checkbox4" value="Manuscripts">
+                                {% if enabled_categories and "Manuscripts" not in enabled_categories %}
+                                    <input type="checkbox" name="checkbox4" value="Manuscripts">
+                                {% else %}
+                                    <input type="checkbox" checked="checked" name="checkbox4" value="Manuscripts">
+                                {% endif %}
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -68,7 +76,11 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" name="checkbox3" value="Places">
+                                {% if enabled_categories and "Places" not in enabled_categories %}
+                                    <input type="checkbox" name="checkbox3" value="Places">
+                                {% else %}
+                                    <input type="checkbox" checked="checked" name="checkbox3" value="Places">
+                                {% endif %}
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -79,7 +91,11 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" name="checkbox2" value="Slaves">
+                                {% if enabled_categories and "Slaves" not in enabled_categories %}
+                                    <input type="checkbox" name="checkbox2" value="Slaves">
+                                {% else %}
+                                    <input type="checkbox" checked="checked" name="checkbox2" value="Slaves">
+                                {% endif %}
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
@@ -90,7 +106,11 @@
                         </tr>
                         <tr>
                             <td class="checkbox-list-checkbox-0">
-                                <input type="checkbox" checked="checked" name="checkbox1" value="Vessel">
+                                {% if enabled_categories and "Vessels" not in enabled_categories %}
+                                    <input type="checkbox" name="checkbox1" value="Vessel">
+                                {% else %}
+                                    <input type="checkbox" checked="checked" name="checkbox1" value="Vessel">
+                                {% endif %}
                             </td>
                             <td class="checkbox-list-label-0">
                                 <label>
