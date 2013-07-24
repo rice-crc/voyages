@@ -123,8 +123,6 @@ div.query-builder-edit-list {
     width: 90px;
 }
 
-
-
 div.query-builder-edit-list label {
     display: none;
 }
@@ -188,4 +186,47 @@ div.query-builder-list-item-collapsed {
 
 div.query-builder-list-item-expanded {
     background: url('/static/images/voyage/icon-arrow-down.png') 0 0 no-repeat;
+}
+
+.simple-field {
+    margin: 0;
+    padding: 0;
+}
+
+.simple-field ul li {
+    list-style-type: none;
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.simple-field ul {
+    margin: 0;
+    padding: 0;
+}
+
+.date_field_short, .date_field_long {
+    background-color: #F1E7C8;
+    border: 0 none;
+    padding: 2px;
+}
+
+.date_field_short {
+    width: 21px;
+}
+
+.date_field_long {
+    width: 31px;
+}
+
+.month-list span {
+    padding: 1px;
+    cursor: pointer;
+}
+
+.month-toggled {
+    background-color: #F1E7C8;
+}
+
+.month-untoggled {
+    background-color: #FFFFFF;
 }
