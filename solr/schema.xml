@@ -156,17 +156,21 @@
 
     <field name="voyage_year" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="voyage_imp_voyage_began" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="image_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="category_label" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="ready_to_go" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="voyage_vessel_name" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="source" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="file" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="date" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="category_label" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="faq_question_order" type="long" indexed="true" stored="true" multiValued="false" />
 
