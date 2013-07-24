@@ -31,10 +31,18 @@
     <tbody>
     <tr>
         <td style="padding: 0px 10px 0px 0px;">
-            {% if all_images %}
-                <a href="{% url 'resources:images-search-result' %}">All images</a>
+            {% if not query %}
+                {% if enabled_categories|length == 1 %}
+                    {% for i in enabled_categories %}
+                        <a href="{% url 'resources:get_images_category' i %}">Images of {{ i }}</a>
+                    {% endfor %}
+                {% elif enabled_categories|length == 4 %}
+                    <a href="{% url 'resources:images-search' %}">All images</a>
+                {% else %}
+                    <a href="{% url 'resources:images-search' %}">Search results</a>
+                {% endif %}
             {% else %}
-                <a href="{% url 'resources:images-search-result' %}">Search results</a>
+                <a href="{% url 'resources:images-search' %}">Search results</a>
             {% endif %}
         </td>
         <td style="padding: 0px 0px 0px 0px;">
@@ -108,7 +116,7 @@
                 {% endif %}
                 </tbody>
             </table>
-            {% if i.voyage.voyage_ship.ship_name %}
+            {% if i.voyage_vessel_name %}
                 <div class="image-detail-voyages-title">
                     Related voyages
                 </div>
@@ -117,7 +125,7 @@
                     <tr>
                         <td>
                             Voyage ID =
-                            {{ i.voyage.voyage_id }} - {{ i.voyage.voyage_ship.ship_name }}, {{ i.voyage.voyage_dates.imp_voyage_began|get_year_value }}
+                            {{ i.voyage_id }} - {{ i.voyage_vessel_name }}, {{ i.voyage_imp_voyage_began|get_year_value }}
                         </td>
                     </tr>
                     </tbody>

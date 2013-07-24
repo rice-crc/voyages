@@ -21,10 +21,18 @@
 
 <div id="center-content">
 
-    {% if query %}
-        <div class="images-query-title"> Search results </div>
+    {% if not query %}
+        {% if enabled_categories|length == 1 %}
+            {% for i in enabled_categories %}
+                <div class="images-query-title">Images of {{ i }}</div>
+            {% endfor %}
+        {% elif enabled_categories|length == 4 %}
+            <div class="images-query-title">All images</div>
+        {% else %}
+            <div class="images-query-title">Search results</div>
+        {% endif %}
     {% else %}
-        <div class="images-query-title"> All images </div>
+        <div class="images-query-title">Search results</div>
     {% endif %}
 
     <div class="image-navigation">
