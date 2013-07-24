@@ -55,13 +55,6 @@ $(document).ready(function() {
                             update_numeric_field($(this).parent().children().first().attr("id"));
                         });
                     }
-
-
-                    if ($(".query-builder-list-item-collapsed:last").hasClass("newly_inserted")) {
-                        $(this).removeClass("newly_inserted");
-                        $parent_wrapper = $(".query-builder-list-item-collapsed:last");
-
-                    }
                 }
             );
         }
@@ -175,15 +168,74 @@ function filter_edit_list(label) {
 
     if (text_to_search == "") {
         $("#" + label + " .var-checkbox").each(function() {
-           $(this).parent().removeClass("hidden");
+           $(this).parent().parent().removeClass("hidden");
         });
     } else {
         $("#" + label + " .var-checkbox").each(function() {
-           if ($(this).val().toLowerCase().indexOf(text_to_search) >= 0) {
-               $(this).parent().removeClass("hidden");
+
+           if ($(this).parent().text().toLowerCase().indexOf(text_to_search) >= 0) {
+               $(this).parent().parent().removeClass("hidden");
            } else {
-               $(this).parent().addClass("hidden");
+               $(this).parent().parent().addClass("hidden");
            }
         });
+    }
+}
+
+function expandOrCollapse(input_id) {
+    var $label_id = $("#" + input_id).parent();
+    if ($label_id.prev().hasClass('query-builder-list-item-collapsed')) {
+        /* Is already collapsed */
+        $label_id.prev().toggleClass('query-builder-list-item-collapsed query-builder-list-item-expanded')
+        $label_id.next().removeClass('hidden');
+    } else {
+        /* Is already expanded */
+        $label_id.prev().toggleClass('query-builder-list-item-collapsed query-builder-list-item-expanded')
+        $label_id.next().addClass('hidden');
+    }
+}
+
+function click_select_checkbox(input_id, parent_id, hasChildren) {
+    if ($("#" + input_id).prop('checked')) {
+        /* Box became checked */
+        /* Check parent if all siblings items are checked */
+        if (parent_id != null) {
+            var $children = $("#" + parent_id).parent().next().children("li").children("label");
+            if ($children.children(".var-checkbox:checked").length
+                == $children.children(".var-checkbox").length) {
+                /* Highlight parent if all siblings are checked */
+                $("#" + parent_id).prop('checked', true);
+
+                /* Highlight the grandparent if all its children are checked */
+                /* To be fixed */
+                var $grandparent =  $("#" + parent_id).parent().parent().parent();
+                var $parent_siblings = $grandparent.children("li").children("label");
+                if ($parent_siblings.children(".var-checkbox:checked").length
+                    == $parent_siblings.children(".var-checkbox").length) {
+                     /* Highlight parent if all siblings are checked */
+                    $grandparent.prev().children(".var-checkbox").prop('checked', true);
+                }
+            }
+        }
+        if (hasChildren) {
+            /* Check all children */
+            $children = $("#" + input_id).parent().next().children("li").children("label");
+            $children.children(".var-checkbox").prop('checked', true);
+        }
+    } else {
+        /* Box got unchecked so uncheck the parent*/
+        if (parent_id != null) {
+            $("#" + parent_id).prop('checked', false);
+        }
+        if (hasChildren) {
+            /* Uncheck also all children */
+            var $children = $("#" + input_id).parent().next().children("li").children("label");
+            $children.children(".var-checkbox").prop('checked', false);
+
+            /* Uncheck also all grandchildren */
+            $children.each(function() {
+                $(this).children("ul").children("li").children("label").children(".var-checkbox").prop('checked', false);
+            })
+        }
     }
 }
