@@ -9,12 +9,12 @@ from voyages.apps.help.models import Glossary, Faq, FaqCategory
 import mock
 
 
-@override_settings(LANGUAGE_CODE='en')
 class TestGlossaryEmpty(TestCase):
     """
     Test for empty glossary
     """
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_rendering_response_code(self):
         """
         Test if initial website is rendering properly
@@ -25,7 +25,6 @@ class TestGlossaryEmpty(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-@override_settings(LANGUAGE_CODE='en')
 class TestGlossaryInitial(TestCase):
     """
     Tests for initial data from glossary
@@ -36,6 +35,7 @@ class TestGlossaryInitial(TestCase):
     def setUp(self):
         self.initial_objects = Glossary.objects.count()
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_rendering_response_code(self):
         """
         Test if initial website is rendering properly
@@ -45,6 +45,7 @@ class TestGlossaryInitial(TestCase):
         response = self.client.get('/help/page_glossary')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_glossary_content(self):
         """
         Test if glossary website contains all initial data
@@ -56,7 +57,6 @@ class TestGlossaryInitial(TestCase):
             self.assertEqual(response, i.description)
 
 
-@override_settings(LANGUAGE_CODE='en')
 class TestGlossaryModified(TestCase):
     """
     Tests for modified data from glossary
@@ -67,6 +67,7 @@ class TestGlossaryModified(TestCase):
     def setUp(self):
         self.initial_objects = Glossary.objects.count()
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_rendering_response_code(self):
         """
         Test if initial website is rendering properly
@@ -77,6 +78,7 @@ class TestGlossaryModified(TestCase):
         self.assertEqual(response.status_code, 200)
         print
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_glossary_content(self):
         """
         Test if glossary website contains all initial data
@@ -87,6 +89,7 @@ class TestGlossaryModified(TestCase):
             self.assertContains(response, i.term)
             self.assertContains(response, i.description)
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_adding_items(self):
         """
         Test adding glossary items (adding and response)
@@ -113,6 +116,7 @@ class TestGlossaryModified(TestCase):
         response = self.client.get('/help/page_glossary')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_deleting_items(self):
         """
         Test deleting items (deleting and response)
@@ -140,6 +144,7 @@ class TestGlossaryModified(TestCase):
             self.assertContains(response, i.term)
             self.assertContains(response, i.description)
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_editing_items(self):
         """
         Test editing items (editing and response)
@@ -169,7 +174,6 @@ class TestGlossaryModified(TestCase):
             self.assertContains(response, i.description)
 
 
-@override_settings(LANGUAGE_CODE='en')
 class TestGlossarySearch(TestCase):
     """
     Post a query with a key word that would NOT generate a result
@@ -177,6 +181,7 @@ class TestGlossarySearch(TestCase):
     """
     fixtures = ['glossary.json']
 
+    @override_settings(LANGUAGE_CODE='en')
     def test_search_noresult(self):
         """
         Should not display any matching record
@@ -191,11 +196,11 @@ class TestGlossarySearch(TestCase):
 
 # Test for the FAQ model
 #
-@override_settings(LANGUAGE_CODE='en')
 class TestEmptyFaq(TestCase):
     """
     Test when FAQ contains no record
     """
+    @override_settings(LANGUAGE_CODE='en')
     def test_rendering_response_code(self):
         """
         Test if initial website is rendering properly
@@ -203,14 +208,15 @@ class TestEmptyFaq(TestCase):
         response = self.client.get(reverse('help:faqs'))
         self.assertEqual(response.status_code, 200)
 
-@override_settings(LANGUAGE_CODE='en')
-@override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+
 class TestFaqAllData(TestCase):
     """
     Tests on the full dataset of FAQ
     """
     fixtures = ['faq_data_all.json']
 
+    @override_settings(LANGUAGE_CODE='en')
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
     def test_rendering_response_code(self):
         """
         Test if initial website is rendering properly
@@ -219,6 +225,8 @@ class TestFaqAllData(TestCase):
         response = self.client.get(reverse('help:faqs'))
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(LANGUAGE_CODE='en')
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
     def test_contain_words(self):
         """
         Test if the page displays all FAQs
@@ -234,14 +242,15 @@ class TestFaqAllData(TestCase):
         for category in FaqCategory.objects.all():
             self.assertContains(response, category.text)
 
-@override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
-@override_settings(LANGUAGE_CODE='en')
+
 class TestFaqModification(TestCase):
     """
     Modification test on FAQs
     """
     fixtures = ['faq_data_all.json']
 
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+    @override_settings(LANGUAGE_CODE='en')
     def test_adding_new_faqs(self):
         """
         Test adding several random new FAQs
@@ -267,6 +276,8 @@ class TestFaqModification(TestCase):
         for i in objectList:
             i.delete()
             
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+    @override_settings(LANGUAGE_CODE='en')
     def test_deleting_faqs(self):
         """
         Test deleting FAQs
@@ -287,6 +298,8 @@ class TestFaqModification(TestCase):
         for text in answerList:
             self.assertNotContains(response, text)
             
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+    @override_settings(LANGUAGE_CODE='en')
     def test_deleting_entire_category(self):
         """
         Test deleting all FAQs belonging to a category
@@ -305,13 +318,14 @@ class TestFaqModification(TestCase):
         response = self.client.get(reverse('help:faqs'))
         self.assertNotContains(response, faq_category.text)
 
-@override_settings(LANGUAGE_CODE='en')
 class TestFaqSearch(TestCase):
     """
     Simple test of the search engine
     """
     fixtures = ['faq_data_all.json']
     
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+    @override_settings(LANGUAGE_CODE='en')
     def test_search_noresult(self):
         """
         Should not display any matching record
@@ -323,6 +337,8 @@ class TestFaqSearch(TestCase):
             # The result should appear only once (in the search field)
             self.assertContains(response, no_res_query, 1)
 
+    @override_settings(HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine','SILENTLY_FAIL': True,},})
+    @override_settings(LANGUAGE_CODE='en')
     def test_not_using_realtime(self):
         """
         Post a query with a key word that would NOT generate a result
@@ -347,8 +363,6 @@ class TestFaqSearch(TestCase):
         self.assertContains(response, 'panda' , loop_count)
 
 
-@override_settings(HAYSTACK_SIGNAL_PROCESSOR='haystack.signals.RealtimeSignalProcessor')
-@override_settings(LANGUAGE_CODE='en')
 class TestFaqSearchRealTime(TestCase):
     """
     Simple test of the search engine using real time processing to reach Solr
@@ -362,6 +376,8 @@ class TestFaqSearchRealTime(TestCase):
     def tearDown(self):
         haystack.backend = self._haystack_backend
     
+    @override_settings(HAYSTACK_SIGNAL_PROCESSOR='haystack.signals.RealtimeSignalProcessor')
+    @override_settings(LANGUAGE_CODE='en')
     def not_in_use_test_search_with_results(self):
         """
         Post a query with a key word that would generate a result
