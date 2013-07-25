@@ -5,7 +5,8 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 import haystack
-from .models import Glossary, Faq, FaqCategory
+from voyages.apps.help.models import Glossary, Faq, FaqCategory
+import mock
 
 
 @override_settings(LANGUAGE_CODE='en')
@@ -188,34 +189,6 @@ class TestGlossarySearch(TestCase):
             self.assertContains(response, no_res_query, 1)
 
 
-    @override_settings(LANGUAGE_CODE='en')
-    def test_not_using_realtime(self):
-        """
-        Post a query with a key word that would NOT generate a result
-        because Solr is not updated
-        """
-        prefix_term = "Goofy term"
-        prefix_description = "This is a goofy description that describes Goofy term."
-        loop_count = 10
-
-        for i in range(1, loop_count):
-            glossary_item_term = prefix_term + str(random.randint(0, 10000))
-            glossary_item_description = prefix_description + str(random.randint(0, 1000000))
-            faq_item_question_order = random.randint(10,20)
-            faq_item_category = FaqCategory.objects.order_by('?')[0]
-
-            # Generate a FAQ
-            faq_item = Glossary.objects.create(term=glossary_item_term,
-                        description=glossary_item_description)
-
-        response = self.client.post(reverse('help:faqs'), { 'q': 'Goofy',})
-        # The only matching text is the text in the search box itself
-        self.assertContains(response, 'Goofy' , loop_count)
-
-
-import mock
-
-#
 # Test for the FAQ model
 #
 @override_settings(LANGUAGE_CODE='en')
