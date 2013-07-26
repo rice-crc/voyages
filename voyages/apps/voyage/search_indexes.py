@@ -69,6 +69,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_total_slaves_disembarked = indexes.IntegerField()
 
     # Sources
+    var_sources = indexes.MultiValueField()
 
     def get_model(self):
         return Voyage
@@ -212,3 +213,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_total_slaves_disembarked(self, obj):
         return obj.voyage_slaves_numbers.imp_total_slaves_disembarked
+
+    def prepare_var_sources(self, obj):
+        return [connection.captain.name for connection in VoyageSourcesConnection.objects.filter(voyage=obj)]
