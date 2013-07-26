@@ -114,7 +114,7 @@ def images_search(request):
                 #if time_start != "":
                 if time_start != "" and time_end != "":
                     results = \
-                        SearchQuerySet().filter(content_icontains=query, ready_to_go=True,
+                        SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
                                                 date__lte=time_end).models(Image).\
@@ -122,14 +122,14 @@ def images_search(request):
 
                 elif time_start != "":
                     results = \
-                        SearchQuerySet().filter(content_icontains=query, ready_to_go=True,
+                        SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start).models(Image).\
                             order_by('date', 'image_id')
 
                 elif time_end != "":
                     results = \
-                        SearchQuerySet().filter(content_icontains=query, ready_to_go=True,
+                        SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__lte=time_end).models(Image).\
                             order_by('date', 'image_id')
@@ -171,6 +171,10 @@ def images_search(request):
                                                             category_label__in=categories_to_search).\
                             order_by('date', 'image_id')
 
+            else:
+                results = SearchQuerySet().all().filter(ready_to_go=True,
+                                                            category_label__in=categories_to_search).\
+                            order_by('date', 'image_id')
 
         else:
             form = SearchForm()
