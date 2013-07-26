@@ -7,6 +7,7 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     file = indexes.CharField(model_attr="file")
     ready_to_go = indexes.BooleanField(model_attr="ready_to_go", default=False)
     date = indexes.IntegerField(model_attr="date", null=True)
+    language = indexes.CharField(model_attr="language", null=True)
     title = indexes.CharField(model_attr="title")
     description = indexes.CharField(model_attr="description", null=True)
     source = indexes.CharField(model_attr="source", null=True)
