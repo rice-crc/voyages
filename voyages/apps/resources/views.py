@@ -91,6 +91,9 @@ def images_search(request):
     time_end = ''
 
     if request.method == 'POST':
+        # Check if session have to be deleted
+        if request.POST.get('clear_form'):
+            request.session.flush()
         # New search, clear data stored in session
         request.session['results'] = None
         form = SearchForm(request.POST)
@@ -121,6 +124,7 @@ def images_search(request):
                         SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search).models(Image).\
                             order_by('date', 'image_id')
+
             else:
                 if len(categories_to_search) == 1:
                     # return HttpResponseRedirect(
