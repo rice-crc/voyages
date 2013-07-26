@@ -29,7 +29,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     voyage_ship_owner_name = indexes.CharField()
 
     # Voyage Ship
-    voyage_ship_nationality_ship_value = indexes.InetegerField()
+    voyage_ship_nationality_ship_value = indexes.IntegerField()
     voyage_ship_nationality_ship_label = indexes.CharField()
     voyage_ship_tonnage_value = indexes.IntegerField()
     voyage_ship_tonnage_label = indexes.CharField()
