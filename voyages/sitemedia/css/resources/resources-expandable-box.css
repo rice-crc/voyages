@@ -121,7 +121,7 @@ td.box-lower-row-right {
 div.box-button-collapsed {
 	background-image: url(/static/images/resources/resources-box-plus.png); }
 
-div.box-button {
+div.box-button-expanded {
 	background-image: url(/static/images/resources/resources-box-minus.png); }
 
 td.box-label {
