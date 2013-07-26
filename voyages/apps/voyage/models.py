@@ -954,7 +954,6 @@ class VoyageSlavesNumbers(models.Model):
              "embarked at second port of purchase",
              null=True, blank=True)
 
-
     # Representing MEN5 variables
     num_men_embark_third_port_purchase = models.IntegerField \
             ("Number of men (MEN5) embarked at third port of purchase",
