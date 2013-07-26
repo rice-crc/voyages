@@ -146,6 +146,64 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
+    <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_year_of_construction" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_year_of_construction" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_guns_mounted" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_owner" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_year" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_place" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_voyage" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imputed_nationality" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_tonnage" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_rig_of_vessel_value" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_rig_of_vessel" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_sources" type="text_en" indexed="true" stored="true" multiValued="true" />
+
+    <field name="voyage_ship_tonnage_label" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_owner_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_voyage_in_cd_rom" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_ship_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_nationality_ship_label" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_slaves" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_tonnage_mod" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_nationality_ship_value" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_rig_of_vessel_label" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_nationality" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_captain" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="voyage_ship_tonnage_value" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_resistance" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_ship_captured" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_owner" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="language" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -153,8 +211,6 @@
     <field name="title" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="voyage_year" type="text_en" indexed="true" stored="true" multiValued="false" />
 
