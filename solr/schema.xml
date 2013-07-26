@@ -148,6 +148,8 @@
 
     <field name="description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="language" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="title" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
