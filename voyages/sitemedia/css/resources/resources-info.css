@@ -102,6 +102,7 @@ div.images-query-box {
 	padding-bottom: 10px; }
 
 div.images-query-search-button {
+    display: inline;
 	}
 
 span.images-count {

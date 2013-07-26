@@ -84,14 +84,18 @@
             </div>
             <table class="image-detail-info">
                 <tbody>
-                <tr>
-                    <td>
-                        <div class="image-detail-info-label">Year:</div>
-                    </td>
-                    <td>
-                        {{ i.date }}
-                    </td>
-                </tr>
+                {% if i.date %}
+                    <tr>
+                        <td>
+                            <div class="image-detail-info-label">
+                                Year:
+                            </div>
+                        </td>
+                        <td>
+                            {{ i.date }}
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
