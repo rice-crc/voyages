@@ -40,7 +40,7 @@ list_numeric_fields = ['var_voyage_id',
                        'var_imp_total_num_slaves_purchased',
                        'var_total_num_slaves_arr_first_port_embark',
                        'var_num_slaves_disembark_first_place',
-                       'var_second place of landing',
+                       'var_second_place_of_landing',
                        'var_num_slaves_disembark_third_place',
                        'var_imp_total_slaves_disembarked',
                        # Possible change the below to decimal fields
@@ -55,7 +55,7 @@ list_numeric_fields = ['var_voyage_id',
                        'var_imputed_percentage_child',
                        'var_imputed_sterling_cash',
                        'var_imputed_death_middle_passage',
-                       '"var_imputed_mortality'
+                       'var_imputed_mortality'
                        ]
 
 list_date_fields = ['var_voyage_began',
