@@ -1,6 +1,9 @@
 ﻿var attr_selected_class = "attribute-selected";
 
 $(document).ready(function() {
+    /* Set the initial values for time frame */
+    $("#restore_form").trigger('click');
+
     /* Collapsible boxes */
     $(".box-header .box-button").click(function(ev){
 		$(this).parent().parent().toggleClass("box-collapsed box-expanded");
@@ -64,10 +67,16 @@ $(document).ready(function() {
             );
         }
 	});
+
+    /* Form submissing handler */
+    $("#form").submit(function() {
+
+        return true;
+    });
 });
 
 /* Support functions */
-function setelem(elemname, value) {
+function set_elem(elemname, value) {
     /* Elements in voyage/search_left_menu.html */
     $("#" + elemname).val(value);
 }
@@ -274,6 +283,9 @@ function filter_hierarchical_list(label) {
     });
 }
 
+function resetSearch() {
+
+}
 
 
 function formatArray(selectedItems) {

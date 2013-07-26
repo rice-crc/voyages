@@ -47,19 +47,20 @@ h1 {
 /* Set the width of the left search menu */
 #left-menu {
 	padding: 10px 5px 10px 5px;
-	width: 298px;
+	width: 20%;
 	border: #895D03 1px solid;
 }
 
 /* Set the width of the main content */
 #center-content {
     position: absolute;
-    left: 310px;
-    width: 100%;
+    left: 20.8%;
+    width: 79.2%;
     border-top: #895D03 1px solid;
     float: left;
     background-color: #FFFFFF;
     z-index: 1;
+    overflow: hidden;
 }
 
 .box-main-table, .box-main-table-tail {
