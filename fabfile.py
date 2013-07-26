@@ -23,6 +23,7 @@ def all_deps():
         local('pip install -r requirements /local.txt')
 
 
+@task
 def test():
     '''Locally run all tests.'''
     if os.path.exists('test-results'):
