@@ -2,9 +2,10 @@ from django.conf.urls import *
 from django.views.generic import TemplateView, RedirectView
 
 urlpatterns = patterns('',
-    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$','voyages.apps.voyage.views.get_page', name='get-page'),
-    url(r'^varbox/(?P<varname>[\w\d\s]+)$','voyages.apps.voyage.views.get_var_box', name='get-var-box'),
-
+    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$',
+        'voyages.apps.voyage.views.get_page', name='get-page'),
+    url(r'^varbox/(?P<varname>[\w\d\s]+)$',
+        'voyages.apps.voyage.views.get_var_box', name='get-var-box'),
 )
 
 urlpatterns += patterns('',
@@ -15,7 +16,7 @@ urlpatterns += patterns('',
     url(r'^c01_s03_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='variables'),
     url(r'^c01_s04_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='sources'),
     
-    url(r'^search$', TemplateView.as_view(template_name='voyage/search.html'), name='search'),
+    url(r'^search$', 'voyages.apps.voyage.views.search', name='search'),
 
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
     

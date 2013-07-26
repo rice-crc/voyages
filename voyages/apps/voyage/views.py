@@ -8,12 +8,12 @@ from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 import time
 from .forms import *
-from .models import *
+from django.db.models import Max, Min
 
 list_text_fields = ['var_ship_name',
-                      'var_owner',
-                      'var_captain',
-                      'var_sources']
+                    'var_owner',
+                    'var_captain',
+                    'var_sources']
 list_select_fields = ['var_nationality',
                       'var_imputed_nationality',
                       'var_outcome_voyage',
@@ -84,7 +84,7 @@ list_place_fields = ['var_vessel_construction_place',
                      'var_imp_principal_port_slave_dis',
                      ]
 
-list_boolean_fields = ['var_voyage_in_cd_rom',]
+list_boolean_fields = ['var_voyage_in_cd_rom']
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A', 'France', 'Denmark / Baltic',
@@ -92,6 +92,13 @@ list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Grea
 
 list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+if VoyageDates.objects.count() > 1:
+    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+else:
+    voyage_span_first_year = 1514
+    voyage_span_last_year = 1866
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -143,7 +150,7 @@ def download_file(request):
         uploaded_files_info.append({'name': f, 'size': size(st[ST_SIZE]), 'date_mod': time.asctime(time.localtime(st[ST_MTIME]))})
 
     return render_to_response(templatename, {'form': form, 'uploaded_files': uploaded_files_info},
-                context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def handle_uploaded_file(f):
@@ -160,22 +167,17 @@ def search(request):
     """
     Currently on renders the initial page
     """
+    time_span_form = TimeFrameSpanSearchForm()
     if request.method == 'POST':
-        pass
+        print "Data from post:"
+        print request.POST
+
     elif request.method == 'GET':
         pass
-    return render_to_response("voyage/search.html", {},
-                context_instance=RequestContext(request))
-
-
-def search(request, added_field):
-    if request.method == 'POST':
-        if not request.GET('form:attr_selected') is None:
-            pass
-    elif request.method == 'GET':
-        pass
-    return render_to_response("voyage/search.html", {},
-                context_instance=RequestContext(request))
+    return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
+                              'voyage_span_first_year': voyage_span_first_year,
+                              'voyage_span_last_year': voyage_span_last_year},
+                              context_instance=RequestContext(request))
 
 
 def get_var_box(request, varname):
@@ -185,7 +187,7 @@ def get_var_box(request, varname):
 
     if varname in list_text_fields:
         # Plain text fields
-        form = SimpleTextForm(auto_id=('id_' + varname + "_%s"))
+        form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
         return render_to_response("voyage/search_box_plain_text.html",
             {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
             context_instance=RequestContext(request))
@@ -193,7 +195,7 @@ def get_var_box(request, varname):
     elif varname in list_select_fields:
         # Select box variables
         choices = getChoices(varname)
-        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
+        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
         varname_wrapper = "select_" + varname
         return render_to_response("voyage/search_box_select.html",
             {'varname': varname, 'choices': choices,
@@ -203,14 +205,14 @@ def get_var_box(request, varname):
 
     elif varname in list_numeric_fields:
         # Numeric variables
-        form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'})
+        form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
         return render_to_response("voyage/search_box_numeric.html",
             {'varname': varname,
                 'input_field_name': input_field_name, 'form': form},
             context_instance=RequestContext(request))
     elif varname in list_date_fields:
         # Numeric variables
-        form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'})
+        form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
         return render_to_response("voyage/search_box_date.html",
             {'varname': varname, 'list_months': list_months,
                 'input_field_name': input_field_name, 'form': form},
@@ -277,7 +279,6 @@ def getNestedListPlaces(varname):
     :return:
     """
     choices = []
-    print "got here"
     for area in BroadRegion.objects.all():
         area_content = []
         for reg in Region.objects.filter(broad_region=area):

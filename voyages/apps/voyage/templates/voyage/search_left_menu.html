@@ -17,13 +17,16 @@
         </div>
 
         <div class="box-mid-end">
-            From <input type="text" name= "from-date" id="input-from-date" value="{{ voyage_span_first_year }}" style="width: 60px"/>
-            To <input type="text" name= "to-date" id="input-to-date" value="{{ voyage_span_last_year }}"  style="width: 60px"/>
+            From: {{ time_span_form.frame_from_year }}
+            To: {{ time_span_form.frame_to_year }}
             <br />
             <span class="italic">
-                {% trans 'The full extent of time from the first to the last voyage is ' %}{{ voyage_span_first_year }}-{{ voyage_span_last_year }}
-                <a id="restore_form" onclick="setelem('input-from-date', {{ voyage_span_first_year }});
-                        setelem('input-to-date', {{ voyage_span_last_year }});" href="#">{%  trans '(restore it)' %}</a>.
+                {% trans 'The full extent of time from the first to the last voyage is ' %}
+                {{ voyage_span_first_year }}-{{ voyage_span_last_year }}
+                <a id="restore_form"
+                   onclick="set_elem('id_frame_from_year', {{ voyage_span_first_year }});
+                        set_elem('id_frame_to_year', {{ voyage_span_last_year }});"
+                   href="">{%  trans '(restore it)' %}</a>.
             </span>
         </div>
 
@@ -351,7 +354,7 @@
             <div class=query-builder>
             </div>
             <input type="submit" value="{% trans 'Search' %}" name="buttonSearch"/>
-            <input type="submit" value="{% trans 'New query' %}" name="buttonAgain"/>
+            <input type="reset" onclick="window.location.reload();" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>
     </div>

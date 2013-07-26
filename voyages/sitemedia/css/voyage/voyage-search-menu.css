@@ -115,6 +115,10 @@ div.query-builder-edit-list {
     padding: 2px;
 }
 
+.short_field_white {
+    width: 60px;
+}
+
 .short_field {
     width: 71px;
 }

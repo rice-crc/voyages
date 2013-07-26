@@ -1,9 +1,9 @@
 from django import forms
 import autocomplete_light
 from .models import *
-from django.forms import widgets
-from django.forms.extras.widgets import *
 from voyages.extratools import AdvancedEditor
+
+
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
@@ -139,11 +139,11 @@ class SimpleDateSearchForm(forms.Form):
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
     from_month = forms.IntegerField(initial="01", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    from_year = forms.IntegerField(initial="YYYY", widget=forms.TextInput(
+    from_year = forms.IntegerField(widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
     to_month = forms.IntegerField(initial="12", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    to_year = forms.IntegerField(initial="YYYY",widget=forms.TextInput(
+    to_year = forms.IntegerField(widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
     threshold_month = forms.IntegerField(initial="MM", widget=forms.TextInput(
@@ -152,13 +152,19 @@ class SimpleDateSearchForm(forms.Form):
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
 
-
 class SimpleSelectSearchForm(forms.Form):
     """
     Simple checkbox search form
     """
-    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class' : 'var-checkbox'}, choices=[]))
+    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}))
 
     def __init__(self, listChoices, *args, **kwargs):
         super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
         self.fields['choice_field'].widget.choices = listChoices
+
+
+class TimeFrameSpanSearchForm(forms.Form):
+    frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
+        attrs={'class': "short_field_white"}))
+    frame_to_year = forms.IntegerField(label = "To", widget=forms.TextInput(
+        attrs={'class': "short_field_white"}))
