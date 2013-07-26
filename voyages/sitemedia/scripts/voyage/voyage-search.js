@@ -43,16 +43,21 @@ $(document).ready(function() {
 
                     /* Add event handler for numeric fields */
                     if ($(".select_field:last").hasClass("newly_inserted")) {
-                        $(this).removeClass("newly_inserted");
+                        $(".select_field:last").removeClass("newly_inserted");
                         $(".select_field:last").change(function() {
-                            update_numeric_field($(this).parent().children().first().attr("id"));
+                            update_numeric_field($(this).parent().children().first().attr("id"), "range_field");
                         });
                     }
 
-                    if ($(".select_field:last").hasClass("newly_inserted")) {
-                        $(this).removeClass("newly_inserted");
-                        $(".select_field:last").change(function() {
-                            update_numeric_field($(this).parent().children().first().attr("id"));
+                    if ($(".date_field:last").hasClass("newly_inserted")) {
+                        $(".date_field:last").removeClass("newly_inserted");
+                        $(".date_field:last").change(function() {
+                            update_numeric_field($(this).parent().children().first().attr("id"), "date_field_wrapper");
+                        });
+
+                        $(".month-list:last").children("span").click(function(ev) {
+
+                            $(this).toggleClass("month-toggled month-untoggled");
                         });
                     }
                 }
@@ -80,13 +85,13 @@ function uncheckAllBoxes(elem_id) {
     $("#" + elem_id + " .var-checkbox").prop('checked', false);
 }
 
-function collapseCheckBoxes(elem_id) {
+function collapseCheckBoxes(elem_id, boxclassname) {
     $("#" + elem_id + " .query-select-selected-text").text("");
     var selectedItems = []
 
-    $("#" + elem_id + " .var-checkbox").each(function () {
+    $("#" + elem_id + " ." + boxclassname).each(function () {
         if ($(this).prop("checked")) {
-            selectedItems.push($(this).parent().text());
+            selectedItems.push($.trim($(this).parent().text()));
         }
     });
     if (selectedItems.length == 0) {
@@ -97,22 +102,6 @@ function collapseCheckBoxes(elem_id) {
 
     $("#" + elem_id).children(".query-select-initial").removeClass("hidden");
     $("#" + elem_id).children(".query-select-full").addClass("hidden");
-
-    function formatArray(selectedItems) {
-        var i;
-        var result = ""
-
-        for(i = 0; i < selectedItems.length - 1; i++) {
-            result += selectedItems[i] + ", ";
-        }
-        result += selectedItems[i];
-
-        if (result.length >= 70) {
-            result = result.substr(0, 69) + "...";
-        }
-
-        return result;
-    }
 }
 
 function move_box_up(label) {
@@ -140,10 +129,10 @@ function delete_box(label, varname) {
     $("#" + label).parent().remove();
 }
 
-function update_numeric_field(label) {
+function update_numeric_field(label, fieldname) {
     var $cur_select_elem = $("#" + label).parent();
 
-    $cur_select_elem.children(".range_field").each(function() {
+    $cur_select_elem.children("." + fieldname).each(function() {
         if ($cur_select_elem.children("select").val() == 1) {
             /* Between = 1 */
             if ($(this).hasClass('between_field')) {
@@ -207,7 +196,6 @@ function click_select_checkbox(input_id, parent_id, hasChildren) {
                 $("#" + parent_id).prop('checked', true);
 
                 /* Highlight the grandparent if all its children are checked */
-                /* To be fixed */
                 var $grandparent =  $("#" + parent_id).parent().parent().parent();
                 var $parent_siblings = $grandparent.children("li").children("label");
                 if ($parent_siblings.children(".var-checkbox:checked").length
@@ -221,11 +209,18 @@ function click_select_checkbox(input_id, parent_id, hasChildren) {
             /* Check all children */
             $children = $("#" + input_id).parent().next().children("li").children("label");
             $children.children(".var-checkbox").prop('checked', true);
+
+            /* Check all grandchildren */
+            $children.next().each(function() {
+                $(this).children("li").children("label").children(".var-checkbox").prop('checked', true)
+            });
         }
     } else {
         /* Box got unchecked so uncheck the parent*/
         if (parent_id != null) {
             $("#" + parent_id).prop('checked', false);
+
+            /* Uncheck grandparent */
         }
         if (hasChildren) {
             /* Uncheck also all children */
@@ -233,9 +228,66 @@ function click_select_checkbox(input_id, parent_id, hasChildren) {
             $children.children(".var-checkbox").prop('checked', false);
 
             /* Uncheck also all grandchildren */
-            $children.each(function() {
-                $(this).children("ul").children("li").children("label").children(".var-checkbox").prop('checked', false);
+            $children.next().each(function() {
+                $(this).children("li").children("label").children(".var-checkbox").prop('checked', false);
             })
         }
     }
+}
+
+function filter_hierarchical_list(label) {
+    var text_to_search = $("#" + label + " .quick-query-builder-text").val().toLowerCase();
+
+    if (text_to_search == "") {
+        /* Expand all items */
+        $("#" + label + " ul").removeClass("hidden");
+        $("#" + label + " li").removeClass("hidden");
+    }
+    $("#" + label + " .query-builder-list-item-collapsed").each(function() {
+           $(this).toggleClass('query-builder-list-item-collapsed query-builder-list-item-expanded')
+    });
+
+    $("#" + label + " .checkbox-layer0").each(function() {
+        var found = false;
+        $(this).parent().next().children("li").each(function() {
+            var foundInner = false;
+            $(this).children("ul").children("li").each(function() {
+                if ($(this).children("label").text().toLowerCase().indexOf(text_to_search) > 0) {
+                    found = true;
+                    foundInner = true;
+                    $(this).removeClass("hidden");
+                } else {
+                    $(this).addClass("hidden");
+                }
+            });
+            if (foundInner) {
+                $(this).removeClass("hidden");
+            } else {
+                $(this).addClass("hidden");
+            }
+        });
+        if (found) {
+            $(this).parent().parent().removeClass("hidden");
+        } else {
+            $(this).parent().parent().addClass("hidden");
+        }
+    });
+}
+
+
+
+function formatArray(selectedItems) {
+    /* Return a comma-separated list */
+    var i;
+    var result = ""
+
+    for(i = 0; i < selectedItems.length - 1; i++) {
+        result += selectedItems[i] + ", ";
+    }
+    result += selectedItems[i];
+
+    if (result.length >= 70) {
+        result = result.substr(0, 69) + "...";
+    }
+    return result;
 }

@@ -11,20 +11,16 @@ from .forms import *
 from .models import *
 
 list_text_fields = ['var_ship_name',
-                        'var_owner',
-                        'var_captain',
-                        'var_sources']
+                      'var_owner',
+                      'var_captain',
+                      'var_sources']
 list_select_fields = ['var_nationality',
                       'var_imputed_nationality',
-                      'var_vessel_construction_place',
-                      'var_registered_place',
                       'var_outcome_voyage',
                       'var_outcome_slaves',
                       'var_outcome_owner',
                       'var_resistance',
                       'var_outcome_ship_captured',
-                      'var_port_of_departure',
-                      'var_first_place_slave_purchase'
                       ]
 list_numeric_fields = ['var_voyage_id',
                        'var_year_of_construction',
@@ -32,7 +28,6 @@ list_numeric_fields = ['var_voyage_id',
                        'var_rig_of_vessel',
                        'var_guns_mounted',
                        'var_imp_arrival_at_port_of_dis',
-                       'var_voyage_began',
                        'var_imp_length_home_to_disembark',
                        'var_length_middle_passage_days',
                        'var_crew_voyage_outset',
@@ -63,14 +58,17 @@ list_numeric_fields = ['var_voyage_id',
                        '"var_imputed_mortality'
                        ]
 
-list_date_fields = ['var_slave_purchase_began',
+list_date_fields = ['var_voyage_began',
+                    'var_slave_purchase_began',
                     'var_vessel_left_port',
                     'var_first_dis_of_slaves',
                     'var_departure_last_place_of_landing',
                     'var_voyage_completed'
                     ]
 
-list_place_fields = ['var_port_of_departure',
+list_place_fields = ['var_vessel_construction_place',
+                     'var_registered_place',
+                     'var_port_of_departure',
                      'var_first_place_slave_purchase',
                      'var_second_place_slave_purchase',
                      'var_third_place_slave_purchase',
@@ -91,6 +89,9 @@ list_boolean_fields = ['var_voyage_in_cd_rom',]
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A', 'France', 'Denmark / Baltic',
                                    'Other (specify in note)']
+
+list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -207,6 +208,13 @@ def get_var_box(request, varname):
             {'varname': varname,
                 'input_field_name': input_field_name, 'form': form},
             context_instance=RequestContext(request))
+    elif varname in list_date_fields:
+        # Numeric variables
+        form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'})
+        return render_to_response("voyage/search_box_date.html",
+            {'varname': varname, 'list_months': list_months,
+                'input_field_name': input_field_name, 'form': form},
+            context_instance=RequestContext(request))
     elif varname in list_place_fields:
         choices = getNestedListPlaces(varname)
         varname_wrapper = "select_" + varname
@@ -217,8 +225,12 @@ def get_var_box(request, varname):
             context_instance=RequestContext(request))
 
     elif varname in list_boolean_fields:
-        pass
-
+         # Boolean field
+        choices=(('1', 'Yes'), ('2', 'No'))
+        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
+        return render_to_response("voyage/search_box_plain_text.html",
+            {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
+            context_instance=RequestContext(request))
     else:
         pass
 
@@ -240,14 +252,20 @@ def getChoices(varname):
             # imputed flags
             if nation.label in list_imputed_nationality_values:
                 choices.append((nation.pk, nation.label))
-    elif varname in ['var_outcome_slaves',]:
+    elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
             choices.append((outcome.pk, outcome.label))
-    elif varname in ['var_outcome_owner',]:
+    elif varname in ['var_outcome_slaves']:
+        for outcome in SlavesOutcome.objects.all():
+            choices.append((outcome.pk, outcome.label))
+    elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
             choices.append((outcome.pk, outcome.label))
-    elif varname in ['var_outcome_resistance',]:
+    elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
+            choices.append((outcome.pk, outcome.label))
+    elif varname in ['var_outcome_ship_captured']:
+        for outcome in VesselCapturedOutcome.objects.all():
             choices.append((outcome.pk, outcome.label))
     return choices
 
@@ -279,3 +297,15 @@ def getNestedListPlaces(varname):
                         'order_num': area.pk,
                         'choices': area_content})
     return choices
+
+
+def getMonth(value):
+    return value.split(",")[0]
+
+
+def getDay(value):
+    return value.split(",")[1]
+
+
+def getYear(value):
+    return value.split(",")[2]

@@ -130,6 +130,29 @@ class SimpleNumericSearchForm(forms.Form):
     upper_bound = forms.IntegerField(widget=forms.TextInput(attrs={'class': "short_field"}))
 
 
+class SimpleDateSearchForm(forms.Form):
+    """
+    Simple date search form
+    """
+    OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
+    options = forms.ChoiceField(choices=OPERATORS,
+                                widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
+    from_month = forms.IntegerField(initial="01", widget=forms.TextInput(
+        attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
+    from_year = forms.IntegerField(initial="YYYY", widget=forms.TextInput(
+        attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
+    to_month = forms.IntegerField(initial="12", widget=forms.TextInput(
+        attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
+    to_year = forms.IntegerField(initial="YYYY",widget=forms.TextInput(
+        attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
+
+    threshold_month = forms.IntegerField(initial="MM", widget=forms.TextInput(
+        attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
+    threshold_year = forms.IntegerField(initial="YYYY",widget=forms.TextInput(
+        attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
+
+
+
 class SimpleSelectSearchForm(forms.Form):
     """
     Simple checkbox search form

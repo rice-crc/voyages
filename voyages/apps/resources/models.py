@@ -72,5 +72,5 @@ from .search_indexes import ImagesIndex
 
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_image_category(sender, **kwargs):
-    ImagesIndex.update()
+    ImagesIndex().update()
 models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
