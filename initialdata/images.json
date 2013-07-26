@@ -1,5 +1,53 @@
 [
 {
+    "pk": 2, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 1, 
+        "label": "Vessels"
+    }
+},
+{
+    "pk": 3, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 2, 
+        "label": "Slaves"
+    }
+},
+{
+    "pk": 4, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 99, 
+        "label": "Presentation"
+    }
+},
+{
+    "pk": 5, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 100, 
+        "label": "Ports updated"
+    }
+},
+{
+    "pk": 6, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 3, 
+        "label": "Places"
+    }
+},
+{
+    "pk": 7, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "value": 4, 
+        "label": "Manuscripts"
+    }
+},
+{
     "pk": 1, 
     "model": "resources.image", 
     "fields": {
@@ -7587,54 +7635,6 @@
         "order_num": 0, 
         "creator": "W.G. Corrie", 
         "mime_type": "image/jpeg"
-    }
-},
-{
-    "pk": 2, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 1, 
-        "label": "Vessels"
-    }
-},
-{
-    "pk": 3, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 2, 
-        "label": "Slaves"
-    }
-},
-{
-    "pk": 4, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 99, 
-        "label": "Presentation"
-    }
-},
-{
-    "pk": 5, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 100, 
-        "label": "Ports updated"
-    }
-},
-{
-    "pk": 6, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 3, 
-        "label": "Places"
-    }
-},
-{
-    "pk": 7, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "value": 4, 
-        "label": "Manuscripts"
     }
 }
 ]
