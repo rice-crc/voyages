@@ -30,7 +30,8 @@ td.box-upper-row-right-collapsed, td.box-set-upper-row-upper-right-collapsed, td
 	overflow: hidden; }
 
 td.box-middle-row-left {
-	width: 10px;
+	width: 5px;
+    border-spacing: 0;
 	background-color: White;
 	background-position: left top;
 	vertical-align: top;
