@@ -20,7 +20,7 @@ def get_all_images(request):
 
     for i in ImageCategory.objects.all().order_by("-value"):
         images[i.label] = []
-        for j in Image.objects.filter(category__label=i.label, ready_to_go=True).order_by('date', 'image_id'):
+        for j in SearchQuerySet().filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id'):
             images[i.label].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
             # TODO: May be too ugly, considered to change
             if len(images[i.label]) == 4:
@@ -61,6 +61,7 @@ def get_images_category_detail(request, category, page):
 
     manu = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')
 
+
     # Set paginator on proper page.
     paginator = Paginator(manu, 1)
     pagins = paginator.page(page)
@@ -78,7 +79,7 @@ def get_image_detail(request, category, page):
     :param page: Number of page to serve
     """
 
-    image = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')[int(page)]
+    image = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
 
     return render_to_response('resources/image-detail.html',
                               {'image': image},
@@ -94,6 +95,7 @@ def images_search(request):
         # Check if session have to be deleted
         if request.POST.get('clear_form'):
             request.session.flush()
+            pass
         # New search, clear data stored in session
         request.session['results'] = None
         form = SearchForm(request.POST)
@@ -165,16 +167,21 @@ def images_search(request):
 
                 else:
                     if len(categories_to_search) == 1:
-                        return get_images_category(request, categories_to_search.pop())
+                        # TODO: It have to be changed to call of view with parameters
+                        return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
                     else:
                         results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
                             order_by('date', 'image_id')
 
             else:
-                results = SearchQuerySet().all().filter(ready_to_go=True,
+                if len(categories_to_search) > 1:
+                    results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
                             order_by('date', 'image_id')
+                else:
+                    return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
+
 
         else:
             form = SearchForm()
@@ -212,4 +219,13 @@ def images_search_detail(request, page):
                                'time_start': request.session['time_start'],
                                'time_end': request.session['time_end'],
                                'enabled_categories': request.session['enabled_categories']},
+                              context_instance=RequestContext(request))
+
+
+def get_image_search_detail(request, page):
+
+    image = request.session['results'][int(page)-1]
+
+    return render_to_response('resources/image-search-detail-window.html',
+                              {'image': image},
                               context_instance=RequestContext(request))
