@@ -333,7 +333,6 @@ class VoyageAdmin(admin.ModelAdmin):
     #list_display = ('voyage_id',)
 
 
-
 # Registers section
 # Flat Page
 admin.site.unregister(FlatPage)
@@ -356,6 +355,8 @@ admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)
 admin.site.register(VoyageShip)
 
 # Voyage Outcome
+admin.site.register(VoyageOutcome)
+admin.site.register(OwnerOutcome)
 admin.site.register(ParticularOutcome, VoyageParticularOutcomeAdmin)
 admin.site.register(SlavesOutcome, VoyageSlavesOutcomeAdmin)
 admin.site.register(VesselCapturedOutcome, VoyageVesselOutcomeAdmin)

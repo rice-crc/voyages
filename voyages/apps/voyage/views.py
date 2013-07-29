@@ -171,6 +171,7 @@ def search(request):
     if request.method == 'POST':
         print "Data from post:"
         print request.POST
+        list_search_vars = request.POST['list-input-params']
 
     elif request.method == 'GET':
         pass

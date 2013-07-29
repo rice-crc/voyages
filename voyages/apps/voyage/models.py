@@ -260,6 +260,7 @@ class SlavesOutcome(models.Model):
     class Meta:
         ordering = ['value']
 
+
 class VesselCapturedOutcome(models.Model):
     """
     Outcome of voyage if vessel captured.
@@ -273,6 +274,7 @@ class VesselCapturedOutcome(models.Model):
     class Meta:
         ordering = ['value']
 
+
 class OwnerOutcome(models.Model):
     """
     Outcome of voyage for owner.
@@ -285,6 +287,7 @@ class OwnerOutcome(models.Model):
 
     class Meta:
         ordering = ['value']
+
 
 class Resistance(models.Model):
     """
@@ -329,7 +332,7 @@ class VoyageOutcome(models.Model):
 
     def __unicode__(self):
         #TODO: We may want to change this.
-        return self.particular_outcome
+        return "Outcome"
 
     class Meta:
         verbose_name = "Outcome"
