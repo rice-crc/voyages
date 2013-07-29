@@ -27,12 +27,16 @@ list_numeric_fields = ['var_voyage_id',
                        'var_registered_year',
                        'var_rig_of_vessel',
                        'var_guns_mounted',
-                       'var_imp_arrival_at_port_of_dis',
+
+                        # Voyage dates variables
+                       'var_imp_arrival_at_port_of_dis', # Year arrived with salves
                        'var_imp_length_home_to_disembark',
                        'var_length_middle_passage_days',
+
                        'var_crew_voyage_outset',
                        'var_crew_first_landing',
                        'var_crew_died_complete_voyage',
+
                        'var_num_slaves_carried_first_port',
                        'var_num_slaves_carried_second_port',
                        'var_num_slaves_carried_third_port',
@@ -43,9 +47,11 @@ list_numeric_fields = ['var_voyage_id',
                        'var_second_place_of_landing',
                        'var_num_slaves_disembark_third_place',
                        'var_imp_total_slaves_disembarked',
+
                        # Possible change the below to decimal fields
                        'var_tonnage',
                        'var_tonnage_mod',
+
                        'var_imputed_percentage_men',
                        'var_imputed_percentage_women',
                        'var_imputed_percentage_boys',
@@ -68,20 +74,17 @@ list_date_fields = ['var_voyage_began',
 
 list_place_fields = ['var_vessel_construction_place',
                      'var_registered_place',
-                     'var_port_of_departure',
+                     'var_imp_port_voyage_begin',
                      'var_first_place_slave_purchase',
                      'var_second_place_slave_purchase',
                      'var_third_place_slave_purchase',
-                     'var_principal_place_of_slave_purchase',
+                     'var_imp_principal_place_of_slave_purchase',
                      'var_port_of_call_before_atl_crossing',
                      'var_first_landing_place',
                      'var_second_landing_place',
                      'var_third_landing_place',
                      'var_principal_port_of_slave_dis',
                      'var_place_voyage_ended',
-                     'var_imp_port_voyage_begin',
-                     'var_imp_principal_place_of_slave_purchase',
-                     'var_imp_principal_port_slave_dis',
                      ]
 
 list_boolean_fields = ['var_voyage_in_cd_rom']

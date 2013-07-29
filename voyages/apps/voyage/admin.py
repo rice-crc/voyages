@@ -372,6 +372,7 @@ admin.site.register(VoyageDates)
 
 # Voyage Captain and Crew
 # Crew attached as inline in Voyage section
+admin.site.register(VoyageCrew)
 admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
 admin.site.register(VoyageCaptainConnection, VoyageCaptainConnectionAdmin)
 
