@@ -18,10 +18,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_registered_place = indexes.CharField(null=True)
     var_registered_year = indexes.IntegerField(null=True)
     var_rig_of_vessel = indexes.IntegerField(null=True)
-    var_tonnage = indexes.DecimalField(null=True)
-    var_tonnage_mod = indexes.DecimalField(null=True)
+    var_tonnage = indexes.FloatField(null=True)
+    var_tonnage_mod = indexes.FloatField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
-    var_owner = indexes.CharField(null=True)
+    var_owner = indexes.MultiValueField(null=True)
 
     # Voyage Outcome
     var_outcome_voyage = indexes.CharField(null=True)
@@ -56,7 +56,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_region_voyage_ended = indexes.CharField(null=True)
 
     # Voyage captain and crew
-    var_captain = indexes.CharField(null=True)
+    var_captain = indexes.MultiValueField(null=True)
     var_crew_voyage_outset = indexes.IntegerField(null=True)
     var_crew_first_landing = indexes.IntegerField(null=True)
     var_crew_died_complete_voyage = indexes.IntegerField(null=True)
@@ -86,16 +86,16 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_total_slaves_disembarked = indexes.IntegerField(null=True)
 
     # Voyage characteristics
-    var_imputed_percentage_men = indexes.DecimalField(null=True)
-    var_imputed_percentage_women = indexes.DecimalField(null=True)
-    var_imputed_percentage_boys = indexes.DecimalField(null=True)
-    var_imputed_percentage_girls = indexes.DecimalField(null=True)
-    var_imputed_percentage_female = indexes.DecimalField(null=True)
-    var_imputed_percentage_male = indexes.DecimalField(null=True)
-    var_imputed_percentage_child = indexes.DecimalField(null=True)
-    var_imputed_sterling_cash = indexes.DecimalField(null=True)
+    var_imputed_percentage_men = indexes.FloatField(null=True)
+    var_imputed_percentage_women = indexes.FloatField(null=True)
+    var_imputed_percentage_boys = indexes.FloatField(null=True)
+    var_imputed_percentage_girls = indexes.FloatField(null=True)
+    var_imputed_percentage_female = indexes.FloatField(null=True)
+    var_imputed_percentage_male = indexes.FloatField(null=True)
+    var_imputed_percentage_child = indexes.FloatField(null=True)
+    var_imputed_sterling_cash = indexes.FloatField(null=True)
     var_imputed_death_middle_passage = indexes.IntegerField(null=True)
-    var_imputed_mortality = indexes.DecimalField(null=True)
+    var_imputed_mortality = indexes.FloatField(null=True)
 
     # Sources
     var_sources = indexes.MultiValueField(null=True)
@@ -474,7 +474,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
+        return None
+        #return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
 
     def prepare_var_crew_voyage_outset(self, obj):
         try:
