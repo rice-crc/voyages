@@ -45,12 +45,12 @@
                     <tr>
                         <td style="padding: 5px 10px 5px 0px;">{% trans "Time frame" %}</td>
                         <td style="padding: 5px 0px">
-                            {% if not query %}
+                            {% if not time_start %}
                                 <input type="text" style="width: 40px;" value="" name="time_start"> -
                             {% else %}
                                 <input type="text" style="width: 40px;" value="{{ time_start }}" name="time_start"> -
                             {% endif %}
-                            {% if not query %}
+                            {% if not time_end %}
                                 <input type="text" style="width: 40px;" value="" name="time_end">
                             {% else %}
                                 <input type="text" style="width: 40px;" value="{{ time_end }}" name="time_end">
