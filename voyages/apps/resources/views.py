@@ -167,8 +167,8 @@ def images_search(request):
 
                 else:
                     if len(categories_to_search) == 1:
-                        # TODO: It have to be changed to call of view with parameters
-                        return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
+                        return HttpResponseRedirect(reverse('resources:images-category',
+                                                        kwargs={'category': categories_to_search.pop()}))
                     else:
                         results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
@@ -180,7 +180,8 @@ def images_search(request):
                                                             category_label__in=categories_to_search).\
                             order_by('date', 'image_id')
                 else:
-                    return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
+                    return HttpResponseRedirect(reverse('resources:images-category',
+                                                        kwargs={'category': categories_to_search.pop()}))
 
 
         else:
