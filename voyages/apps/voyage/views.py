@@ -314,3 +314,4 @@ def getDay(value):
 
 def getYear(value):
     return value.split(",")[2]
+
