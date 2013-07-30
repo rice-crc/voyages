@@ -1,0 +1,230 @@
+select.attributes-and-groups {
+	margin-left: 10px;
+	margin-top: 10px;
+	background-color: #F1E7C8;
+	border: 0px;
+	width: 276px;
+	width: 280px;
+	padding: 2px; }
+	
+input.main-box-button {
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px; }
+	
+div.query-builder {
+	}
+	
+div.side-box {
+	color: black;
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #EEDAA2; }
+	
+img.query-builder-remove-button {
+	float: right;
+	cursor: pointer;
+	text-align: right; }
+
+span.query-builder-error {
+	background-color: #CA4223;
+	color: White;
+	font-weight: bold; }
+
+/*
+td.side-box-button {
+	cursor: pointer;
+	padding: 1px 5px 1px 5px;
+	text-align:center; 
+	border:thin solid; 
+	border-color: grey;
+	border-width: 0px 1px 1px 0px;
+	background-color: white; }
+
+td.side-box-button:hover {
+	background-color: #F3F3F3; }
+
+td.side-box-button-space {
+	width: 5px; }	
+
+table.query-builder-remove {
+	margin-right: 0px;
+	margin-left: auto; }
+*/
+
+td.query-builder-button img {
+	cursor: pointer; }
+
+td.query-builder-button-separator {
+	width: 5px;
+	overflow: hidden; }
+
+table.query-builder-label {
+	margin-bottom: 5px;
+	width: 270px; }
+
+input.query-builder-text {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 2px;
+	width: 266px; }
+
+td.query-builder-range-type {
+	width: 115px; }
+
+td.query-builder-range-type select {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 1px;
+	width: 103px; }
+
+td.query-builder-range-dash {
+	text-align: center;
+	width: 15px; }
+
+td.query-builder-range-value {
+	width: 75px; }
+
+td.query-builder-range-value input {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 2px;
+	width: 71px; }
+	
+td.query-builder-range-month {
+	width: 25px; }
+
+td.query-builder-range-month input {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 2px;
+	width: 21px; }
+
+td.query-builder-range-slash {
+	overflow: hidden;
+	text-align: center;
+	width: 10px; }
+
+td.query-builder-range-year {
+	width: 35px; }
+
+td.query-builder-range-year input {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 2px;
+	width: 31px; }
+
+table.query-builder-range-months {
+	margin-top: 5px;
+	width: 270px; }
+	
+td.query-builder-range-month-delected {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	cursor: pointer;
+	text-align: center; }
+
+td.query-builder-range-month-selected {
+	background-color: #F1E7C8;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	cursor: pointer;
+	text-align: center; }
+
+div.query-builder-show {
+	}
+
+div.query-builder-show-list {
+	}
+	
+div.query-builder-edit {
+	}
+
+div.query-builder-list-button {
+	padding-top: 5px; }
+
+table.query-builder-list-buttons {
+	margin-top: 5px; }
+
+table.query-builder-list-buttons td {
+	padding-right: 5px; }
+	
+div.query-builder-edit-list {
+	padding: 2px;
+	background-color: #F1E7C8;
+	overflow: scroll;
+	/*overflow: -moz-scrollbars-vertical;*/
+	height: 200px; }
+	
+table.query-builder-quicksearch {
+	margin-bottom: 5px; }
+	
+td.query-builder-quicksearch-label {
+	width: 80px; }
+	
+td.query-builder-quicksearch-input input {
+	background-color: #F1E7C8;
+	border: 0px;
+	padding: 2px;
+	width: 200px; }	
+	
+div.query-builder-edit-list td {
+	padding: 1px; }
+	
+td.quer-builder-list-item-0 {
+	}	
+
+td.quer-builder-list-item-1 {
+	}	
+
+td.quer-builder-list-item-2 {
+	}	
+
+td.query-builder-list-item-with-children {
+	font-weight: normal; }
+	
+div.query-builder-list-item-expanded {
+	background-image: url(../images/icon-arrow-down.png);
+	background-repeat: no-repeat;
+	width: 11px;
+	height: 11px; }
+
+div.query-builder-list-item-collapsed {
+	background-image: url(../images/icon-arrow-right.png);
+	background-repeat: no-repeat;
+	width: 11px;
+	height: 11px; }
+
+table.history-item-buttons {
+	margin-top: 5px; }
+	
+td.history-list-icon {
+	cursor: pointer;
+	text-align: center;
+	height: 16px;
+	width: 16px;
+	background-color: #CA4223;
+	padding-right: 0px; }
+	
+td.history-list-icon-text {
+	height: 16px;
+	background-color: #F1E7C8;
+	padding-left: 5px;
+	padding-right: 5px;
+	cursor: pointer; }	
+	
+td.history-list-icon-text:hover {
+	background-color: #571B1D;
+	color: White; }
+
+td.history-list-icon-space {
+	width: 2px; }	
+	
+td.query-checkbox-first {
+	}
+	
+td.query-checkbox-second {
+	padding-left: 10px;	}
