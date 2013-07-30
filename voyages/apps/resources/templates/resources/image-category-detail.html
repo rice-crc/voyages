@@ -58,13 +58,11 @@
     <tbody>
     <tr>
         <td class="image-detail-link">
-                            <a href="{% url 'resources:image-detail' category 1 %}">
-            {% thumbnail i.file "400" as im %}
-
-                <img src="{{ im.url }}">
-
-            {% endthumbnail %}
-                                            </a>
+            <a href="{% url 'resources:image-detail' category images.number %}">
+                {% thumbnail i.file "400" as im %}
+                    <img src="{{ im.url }}">
+                {% endthumbnail %}
+            </a>
         </td>
         <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
             <div class="image-description">
