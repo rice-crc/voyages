@@ -1,4 +1,5 @@
-{%  load i18n %}
+{% load i18n %}
+{% load voyage_extras %}
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-search-table.css">
 
@@ -53,28 +54,33 @@
             </th>
         </tr>
 
-        <tr class="grid-row-even grid-row-first">
-            <td>
-                1
-            </td>
-            <td>
-                Pastora de Lima
-            </td>
-            <td>
-                <div>
-                    Dias, Manoel José
-                </div>
-            </td>
-            <td style="text-align: left">
-                1817
-            </td>
-            <td>
-                Southeast Africa and Indian Ocean islands
-            </td>
-            <td>
-                Bahia
-            </td>
-        </tr>
+        {% for i in results %}
+            <tr class="grid-row-even grid-row-first">
+                <td>
+                    {{ i.voyage_id }}
+                </td>
+                <td>
+                    {{ i.voyage_ship.ship_name }}
+                </td>
+                <td>
+                    <div>
+                        {# TODO: Probably it have to be changed #}
+                        {% for j in i.voyage_captain.all %}
+                            {{ j.name }}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td style="text-align: left">
+                    {{ i.voyage_dates.imp_arrival_at_port_of_dis|get_year_value }}
+                </td>
+                <td>
+                    {{ i.voyage_itinerary.imp_principal_region_of_slave_purchase }}
+                </td>
+                <td>
+                    {{ i.voyage_itinerary.first_landing_region }}
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

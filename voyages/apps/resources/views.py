@@ -2,7 +2,6 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.utils.datastructures import SortedDict
 from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet

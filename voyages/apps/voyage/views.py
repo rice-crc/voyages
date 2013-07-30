@@ -1,4 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
+from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -6,9 +7,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat
 from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
+from django.core.paginator import Paginator
 import time
 from .forms import *
-from django.db.models import Max, Min
+
 
 list_text_fields = ['var_ship_name',
                     'var_owner',
@@ -177,10 +179,13 @@ def search(request):
         list_search_vars = request.POST['list-input-params']
 
     elif request.method == 'GET':
-        pass
+        results = Voyage.objects.all()
+        paginator = Paginator(results, 10)
+        pagins = paginator.page(1)
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
-                              'voyage_span_last_year': voyage_span_last_year},
+                              'voyage_span_last_year': voyage_span_last_year,
+                              'results': pagins},
                               context_instance=RequestContext(request))
 
 
