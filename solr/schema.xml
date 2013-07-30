@@ -192,7 +192,7 @@
 
     <field name="var_imp_region_voyage_begin" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_tonnage" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_tonnage" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_male" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -252,7 +252,7 @@
 
     <field name="var_imp_total_slaves_disembarked" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_tonnage_mod" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_tonnage_mod" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
