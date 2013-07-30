@@ -1,0 +1,123 @@
+table.box-main-table td {
+	border-color: #8A5D04; }
+		
+td.box-upper-row-left {
+	background-image: url(../images/database-box-expanded-title-left.png); }
+	
+td.box-upper-row-left-collapsed {
+	background-image: url(../images/database-box-collapsed-title-left.png); }
+
+td.box-set-upper-row-upper-left {
+	background-image: url(../images/database-box-set-collapsed-title-upper-left.png); }
+
+td.box-set-upper-row-upper-left-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-upper-left.png); }
+
+td.box-set-upper-row-middle-left {
+	background-image: url(../images/database-box-set-collapsed-title-middle-left.png); }
+
+td.box-set-upper-row-middle-left-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-middle-left.png); }
+
+td.box-set-upper-row-bottom-left {
+	background-image: url(../images/database-box-set-collapsed-title-middle-left.png); }
+
+td.box-set-upper-row-bottom-left-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-bottom-left.png); }
+
+td.box-set-lower-row-upper-middle, 
+td.box-set-lower-row-middle-middle,
+td.box-set-lower-row-bottom-middle {
+	}
+
+
+td.box-upper-row-middle,
+td.box-upper-row-middle-collapsed,
+td.box-set-upper-row-upper-middle-collapsed,
+td.box-set-upper-row-middle-middle-collapsed,
+td.box-set-upper-row-bottom-middle-collapsed,
+td.box-set-upper-row-upper-middle {
+	background-image: url(../images/database-box-title-center.png); }
+ 
+td.box-set-upper-row-middle-middle, 
+td.box-set-upper-row-bottom-middle {
+	background-image: url(../images/database-box-set-title-center.png); }
+
+td.box-upper-row-right {
+	background-image: url(../images/database-box-expanded-title-right.png); }
+
+td.box-upper-row-right-collapsed {
+	background-image: url(../images/database-box-collapsed-title-right.png); }
+
+
+td.box-set-upper-row-upper-right {
+	background-image: url(../images/database-box-set-collapsed-title-upper-right.png); }
+	
+td.box-set-upper-row-upper-right-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-upper-right.png); }
+
+td.box-set-upper-row-middle-right {
+	background-image: url(../images/database-box-set-collapsed-title-middle-right.png); }
+	
+td.box-set-upper-row-middle-right-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-middle-right.png); }
+	
+td.box-set-upper-row-bottom-right {
+	background-image: url(../images/database-box-set-collapsed-title-middle-right.png); }
+	
+td.box-set-upper-row-bottom-right-collapsed {
+	background-image: url(../images/database-box-set-collapsed-title-bottom-right.png); }
+
+
+
+td.box-middle-row-left {
+	background-image: url(../images/database-box-set-bottom-left.png); }
+	
+div.box-middle-row-left {
+	background-image: url(../images/database-box-content-left.png); }
+	
+	
+td.box-middle-row-middle {
+	background-image: url(../images/database-box-content-center.png); }
+	
+td.box-middle-row-right {
+	background-image: url(../images/database-box-set-bottom-right.png); }
+	
+div.box-middle-row-right {
+	background-image: url(../images/database-box-content-right.png); }
+
+td.box-lower-row-left {
+	background-image: url(../images/database-box-bottom-left.png); }
+		
+td.box-lower-row-middle {
+	 }
+	
+td.box-set-lower-row-upper-left {
+	background-image: url(../images/database-box-set-bottom-left.png); }
+
+td.box-set-lower-row-bottom-left {
+	background-image: url(../images/database-box-bottom-left.png); }
+	
+td.box-set-lower-row-middle-left {
+	background-image: url(../images/database-box-set-bottom-left.png); }
+
+	
+	
+td.box-lower-row-right {
+	background-image: url(../images/database-box-bottom-right.png); }
+
+td.box-set-lower-row-upper-right {
+	background-image: url(../images/database-box-set-bottom-right.png); }
+
+td.box-set-lower-row-middle-right {
+	background-image: url(../images/database-box-set-bottom-right.png); }
+	
+td.box-set-lower-row-bottom-right {
+	background-image: url(../images/database-box-bottom-right.png); }
+
+
+div.box-button-collapsed {
+	background-image: url(../images/database-box-plus.png); }
+
+div.box-button {
+	background-image: url(../images/database-box-minus.png); }
