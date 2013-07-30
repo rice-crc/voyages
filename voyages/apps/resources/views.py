@@ -42,7 +42,7 @@ def get_images_category(request, category):
     images = SortedDict()
 
     # Pack all images from category with needed data.
-    for i in Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id'):
+    for i in SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id'):
         images[i.image_id] = SortedDict({'file': i.file, 'year': i.date, 'title': i.title})
 
     return render_to_response('resources/images-category.html',
@@ -58,7 +58,7 @@ def get_images_category_detail(request, category, page):
     :param page: Number of page to serve
     """
 
-    manu = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')
+    manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')
 
 
     # Set paginator on proper page.
@@ -78,7 +78,7 @@ def get_image_detail(request, category, page):
     :param page: Number of page to serve
     """
 
-    image = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
+    image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
 
     return render_to_response('resources/image-detail.html',
                               {'image': image},
