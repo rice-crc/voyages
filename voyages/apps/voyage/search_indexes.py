@@ -18,8 +18,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_registered_place = indexes.CharField(null=True)
     var_registered_year = indexes.IntegerField(null=True)
     var_rig_of_vessel = indexes.IntegerField(null=True)
-    var_tonnage = indexes.IntegerField(null=True)
-    var_tonnage_mod = indexes.IntegerField(null=True)
+    var_tonnage = indexes.DecimalField(null=True)
+    var_tonnage_mod = indexes.DecimalField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
     var_owner = indexes.CharField(null=True)
 
