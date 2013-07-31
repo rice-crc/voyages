@@ -269,12 +269,7 @@ def search(request):
                             cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
                         elif tmp_varname in list_select_fields:
                             # Select box variables
-                            cur_choices = cur_var['form'].fields['choice_field'].widget.choices
-
-                            cur_var['form'] = SimpleSelectSearchForm(
-                                listChoices=cur_choices,
-                                auto_id=('id_' + tmp_varname + "_%s"),
-                                prefix=tmp_varname)
+                            cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
 
                         elif tmp_varname in list_numeric_fields:
                             # Numeric variables
