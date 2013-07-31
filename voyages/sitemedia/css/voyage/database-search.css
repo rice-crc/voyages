@@ -1,0 +1,106 @@
+/* main pannels */
+
+table.search-main-table {
+	width: 100%;
+	border-top: 1px solid #895D03; }
+	
+td.search-side-panel {
+	background-image: url(../images/database-bg.png);
+	background-position: top left;
+	background-repeat: repeat-x;
+	border-right: 1px solid #895D03;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	width: 300px;
+	vertical-align: top; }
+
+td.search-main-panel {
+	vertical-align: top; }
+	
+h1 {
+	margin-bottom: 10px; }
+
+h1.with-subtitle {
+	margin-bottom: 0px; }
+	
+div.subtitle {
+	margin-bottom: 5px;
+	font-weight: bold; }
+ 
+td.search-side-panel table.box-main-table {
+	margin-bottom: 0px; }
+
+td.search-side-panel td.box-upper-row-middle,
+td.search-side-panel td.box-upper-row-middle-collapsed,
+td.search-side-panel td.box-middle-row-middle,
+td.search-side-panel td.box-lower-row-middle,
+td.search-side-panel td.box-set-upper-row-upper-middle-collapsed,
+td.search-side-panel td.box-set-upper-row-upper-middle, 
+td.search-side-panel td.box-set-upper-row-middle-middle-collapsed,
+td.search-side-panel td.box-set-upper-row-middle-middle, 
+td.search-side-panel td.box-set-upper-row-bottom-middle-collapsed,
+td.search-side-panel td.box-set-upper-row-bottom-middle {
+	width: 270px; }
+	
+div.search-panel {
+	padding: 10px; }
+
+div.permlink-info {
+	margin-bottom: 5px; }
+
+div.chart-back-button {
+	position: absolute; 
+	top: 290px; 
+	left: 12px; 
+	cursor: pointer;
+	width: 24px;
+	height: 24px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	background-image: url(map-icon-back.png); }
+
+div.chart-back-button:hover {
+	background-position: 0px -24px; }
+
+div.detailTab {
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+	
+div.map-legend-note{
+	font-style:italic;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	padding-left: 5px;
+	padding-right: 10px;
+}
+
+div.map-legend-section-title {
+	background-color: #F2E3B8;
+	font-weight: bold;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	padding-left: 5px;
+	padding-right: 10px;
+	border-bottom: 0px solid #895D03; }
+
+div.map-legend-section {
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 10px; }
+
+input.map-legend-refresh {
+	margin-top: 0px; }
+
+div.tooltip {
+	width: 300px;
+	background-color: #EEFFFF;
+	padding: 5px;
+	border: 1px solid #2299AA; }
+
+span.grid-value-with-tooltip {
+	border-bottom: 1px dotted #895D03; } 

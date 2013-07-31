@@ -1,0 +1,34 @@
+div.results-panel {
+	padding: 10px;}
+	
+div.database-table-options {
+	margin-bottom: 15px;
+	border-bottom: 1px solid #EEDAA2;
+	border-top: 1px solid #EEDAA2;
+	padding: 5px 10px 5px 0px;	}
+
+div.estimates-table table.simple-table {
+	border-collapse: collapse; }
+	
+div.estimates-table table.simple-table td {
+	text-align: right;
+	padding: 5px;
+	border: 1px solid #895D03; }
+	
+div.estimates-table table.simple-table td.tbl-label {
+	background-color: #ECD698;
+	text-align: left; }
+
+div.estimates-table table.simple-table td.tbl-total {
+	font-weight: bold;
+	background-color: #ECD698; }
+
+div.estimates-table table.simple-table td.tbl-total-row-label {
+	background-color: #ECD698;
+	font-weight: bold;
+	text-align: left; }
+	
+div.estimates-table table.simple-table td.tbl-total-col-label {
+	background-color: #ECD698;
+	font-weight: bold;
+	text-align: right; }

@@ -1,4 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
+from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -6,11 +7,16 @@ from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat
 from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
+from django.core.paginator import Paginator
 import time
 from .forms import *
+<<<<<<< HEAD
 from django.db.models import Max, Min
 from django.conf import settings
 from django.contrib.sessions.middleware import SessionMiddleware
+=======
+
+>>>>>>> 5687fd375512a30b6f08047506abe2a2f41bc26b
 
 list_text_fields = ['var_ship_name',
                     'var_owner',
@@ -245,9 +251,13 @@ def search(request):
         existing_form = []
         request.session['existing_form'] = existing_form
 
+        results = Voyage.objects.all()
+        paginator = Paginator(results, 10)
+        pagins = paginator.page(1)
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
-                              'voyage_span_last_year': voyage_span_last_year},
+                              'voyage_span_last_year': voyage_span_last_year,
+                              'results': pagins},
                               context_instance=RequestContext(request))
 
 
@@ -381,3 +391,4 @@ def getDay(value):
 
 def getYear(value):
     return value.split(",")[2]
+
