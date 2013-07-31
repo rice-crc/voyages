@@ -4,6 +4,10 @@ $(document).ready(function() {
     /* Set the initial values for time frame */
     $("#restore_form").trigger('click');
 
+    $(".query-builder-label").each(function() {
+       $(this).attr("id")
+    });
+
     /* Collapsible boxes */
     $(".box-header .box-button").click(function(ev){
 		$(this).parent().parent().toggleClass("box-collapsed box-expanded");
@@ -28,44 +32,55 @@ $(document).ready(function() {
 	});
 
     /* Event handler to highlight adding variables */
-    $(".query-builder-label").each(function() {
-        tmpVar = $(this).attr("id")
-        $(".menu-popup-submenu-item[name='" + tmpVar.substr(7) + "']").addClass(attr_selected_class);
-
-    });
-
-
-    $(".select_field").change(function() {
-        update_numeric_field($(this).parent().children().first().attr("id"), "range_field");
-    });
-
-    $(".date_field").change(function() {
-         update_numeric_field($(this).parent().children().first().attr("id"), "date_field_wrapper");
-    });
-
-    $(".month-list").children("span").click(function(ev) {
-        $(this).toggleClass("month-toggled month-untoggled");
-    });
 
     $(".menu-popup-submenu-item").click(function(ev){
         if ($(this).hasClass(attr_selected_class)) {
-            /* Deselect the attribute ? */
+            /* Do nothing */
         } else {
 
-            $(".query-builder-label").each(function(){
-                $('#form').append("<input type='hidden' name='list_input_params' value='" + $.trim($(this).text()) + "' />");
-            });
 
-            $('#form').append("<input type='hidden' name='submitVal' value='add_var' />");
-            $('#form').append("<input type='hidden' name='new_var_name' value='" + $(this).attr('name') + "' />");
-            $('#form').append("<input type='hidden' name='new_var_fullname' value='" + $.trim($(this).text()) + "' />");
 
-            $("#form").submit();
-            return true;
+            var var_full_name = $.trim($(this).text());
+
+            $(".menu-popup-submenu-item[name='" + $(this).attr('name') + "']").addClass(attr_selected_class);
+
+            $(".query-builder").append("<div class=\"side-box\"></div>");
+            var $new_box = $(".query-builder").children().last()
+            $new_box.load("/voyage/varbox/" + $(this).attr('name'), function() {
+                    $new_box.children().first().text(var_full_name);
+                    $(".query-builder").resize();
+
+
+                    /* Add event handler for numeric fields */
+                    if ($(".select_field:last").hasClass("newly_inserted")) {
+                        $(".select_field:last").removeClass("newly_inserted");
+                        $(".select_field:last").change(function() {
+                            update_numeric_field($(this).parent().children().first().attr("id"), "range_field");
+                        });
+                    }
+
+                    if ($(".date_field:last").hasClass("newly_inserted")) {
+                        $(".date_field:last").removeClass("newly_inserted");
+                        $(".date_field:last").change(function() {
+                            update_numeric_field($(this).parent().children().first().attr("id"), "date_field_wrapper");
+                        });
+
+                        $(".month-list:last").children("span").click(function(ev) {
+
+                            $(this).toggleClass("month-toggled month-untoggled");
+                        });
+                    }
+                }
+            );
         }
 	});
-});
 
+    /* Form submissing handler */
+    $("#form").submit(function() {
+
+        return true;
+    });
+});
 
 /* Support functions */
 function set_elem(elemname, value) {
@@ -126,7 +141,7 @@ function move_box_down(label) {
 }
 
 function delete_box(label, varname) {
-    $(".menu-popup-submenu-item[name='" + varname + "']").removeClass(attr_selected_class);
+    $("#" + varname).removeClass(attr_selected_class);
     $("#" + label).parent().remove();
 }
 
@@ -276,9 +291,7 @@ function filter_hierarchical_list(label) {
 }
 
 function resetSearch() {
-     $('#form').append("<input type='hidden' name='submitVal' value='reset' />");
-     $("#form").submit();
-     return true;
+
 }
 
 

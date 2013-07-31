@@ -10,13 +10,9 @@ from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
 from .forms import *
-<<<<<<< HEAD
 from django.db.models import Max, Min
 from django.conf import settings
-from django.contrib.sessions.middleware import SessionMiddleware
-=======
 
->>>>>>> 5687fd375512a30b6f08047506abe2a2f41bc26b
 
 list_text_fields = ['var_ship_name',
                     'var_owner',
@@ -184,76 +180,108 @@ def search(request):
         request.session.create()
 
     if request.method == 'POST':
-        print "Data from post:"
-        print request.POST
-
-        list_search_vars = request.POST.getlist('list-input-params')
-        if list_search_vars:
+        if request.POST.get('submitVal') == 'add_var':
             # Add variables
             existing_form = request.session['existing_form']
 
-            for varname in list_search_vars:
-                input_field_name = "header_" + varname
-                print varname
-                if varname in list_text_fields:
-                    # Plain text fields
-                    form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
-                    existing_form.append({'varname': varname,
-                                          'type': 'plain_text',
-                                          'form': form,
-                                          'input_field_name':  input_field_name})
-                elif varname in list_select_fields:
-                    # Select box variables
-                    choices = getChoices(varname)
-                    form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
-                    varname_wrapper = "select_" + varname
-                    existing_form.append({'varname': varname, 'form': form,
-                                          'type': 'select',
-                                          'input_field_name':  input_field_name,
-                                          'varname_wrapper': varname_wrapper})
-                elif varname in list_numeric_fields:
-                    # Numeric variables
-                    form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
-                    existing_form.append({'varname': varname,
-                                          'type': 'numeric',
-                                          'form': form,
-                                          'input_field_name':  input_field_name})
-                elif varname in list_date_fields:
-                    # Numeric variables
-                    form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
-                    existing_form.append({'varname': varname,
-                                          'type': 'date',
-                                          'form': form,
-                                          'list_months': list_months,
-                                          'input_field_name':  input_field_name})
-                elif varname in list_place_fields:
-                    choices = getNestedListPlaces(varname)
-                    varname_wrapper = "select_" + varname
-                    existing_form.append({'varname': varname, 'form': form,
-                                          'type': 'select_three_layers',
-                                          'input_field_name':  input_field_name,
-                                          'choices': choices,
-                                          'varname_wrapper': varname_wrapper})
+            tmpElemDict = {}
 
-                elif varname in list_boolean_fields:
-                     # Boolean field
-                    choices = (('1', 'Yes'), ('2', 'No'))
-                    form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
-                    existing_form.append({'varname': varname, 'form': form,
-                                          'type': 'plain_text',
-                                          'input_field_name':  input_field_name})
-                else:
-                    pass
+            varname = request.POST.get('new_var_name')
+            tmpElemDict['varname'] = request.POST.get('new_var_name')
+            tmpElemDict['var_full_name'] = request.POST.get('new_var_fullname')
+            tmpElemDict['input_field_name'] = "header_" + varname
 
+            if varname in list_text_fields:
+                # Plain text fields
+                form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+                tmpElemDict['form'] = form
+                tmpElemDict['type'] = 'plain_text'
+
+            elif varname in list_select_fields:
+                # Select box variables
+                choices = getChoices(varname)
+                form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+                tmpElemDict['form'] = form
+                tmpElemDict['type'] = 'select'
+                tmpElemDict['varname_wrapper'] = "select_" + varname
+
+            elif varname in list_numeric_fields:
+                # Numeric variables
+                form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
+                tmpElemDict['form'] = form
+                tmpElemDict['type'] = 'numeric'
+
+            elif varname in list_date_fields:
+                # Numeric variables
+                form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
+                tmpElemDict['form'] = form
+                tmpElemDict['type'] = 'date'
+                tmpElemDict['list_months'] = list_months
+
+            elif varname in list_place_fields:
+                choices = getNestedListPlaces(varname)
+
+                tmpElemDict['type'] = 'select_three_layers'
+                tmpElemDict['varname_wrapper'] = "select_" + varname
+                tmpElemDict['choices'] = choices
+
+            elif varname in list_boolean_fields:
+                 # Boolean field
+                choices = (('1', 'Yes'), ('2', 'No'))
+                form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
+                tmpElemDict['form'] = form
+                tmpElemDict['type'] = 'plain_text'
+            else:
+                pass
+
+            existing_form.append(tmpElemDict)
+
+            list_search_vars = request.POST.getlist('list-input-params')
+            new_existing_form = []
+
+            for tmp_varname in list_search_vars:
+                for cur_var in existing_form:
+                    if tmp_varname == cur_var['varname']:
+                        if tmp_varname in list_text_fields:
+                            # Plain text fields
+
+                            cur_var['form'].fields['text_search'].initial = request.POST.get(tmp_varname + "_text_search")
+
+                        elif varname in list_select_fields:
+                            # Select box variables
+                            choices = getChoices(varname)
+                            form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+
+                        elif varname in list_numeric_fields:
+                            # Numeric variables
+                            form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
+
+                        elif varname in list_date_fields:
+                            # Numeric variables
+                            form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
+
+                        elif varname in list_place_fields:
+                            pass
+
+                        elif varname in list_boolean_fields:
+                             # Boolean field
+                            pass
+                        new_existing_form.append(cur_var)
+
+            new_existing_form.append(tmpElemDict)
+            request.session['existing_form'] = new_existing_form
+
+        elif request.POST.get('submitVal') == 'reset':
+            existing_form = []
             request.session['existing_form'] = existing_form
     elif request.method == 'GET':
         # Create a new form
         existing_form = []
         request.session['existing_form'] = existing_form
 
-        results = Voyage.objects.all()
-        paginator = Paginator(results, 10)
-        pagins = paginator.page(1)
+    results = Voyage.objects.all()
+    paginator = Paginator(results, 10)
+    pagins = paginator.page(1)
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,

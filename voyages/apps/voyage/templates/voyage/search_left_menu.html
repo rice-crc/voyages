@@ -355,7 +355,7 @@
                     {% for elem in request.session.existing_form %}
                     <div class="sidebox">
                         <!-- Search box header -->
-                        <span class="query-builder-label" id="{{ elem.input_field_name }}">Variable</span>
+                        <span class="query-builder-label" id="{{ elem.input_field_name }}">{{ elem.var_full_name }}</span>
                         <input type="hidden" name="list-input-params" value="{{ elem.varname }}">
                         <span class="query-builder-button move-up-button">
                             <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
@@ -400,7 +400,7 @@
                                            name="" style="width: 200px;" />
 
                                     <div class="query-builder-edit-list">
-                                        {{ form }}
+                                        {{ elem.form }}
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <input type="button"
@@ -497,7 +497,7 @@
                 {% endif %}
             </div>
             <input type="submit" value="{% trans 'Search' %}" name="buttonSearch"/>
-            <input type="reset" onclick="window.location.reload();" value="{% trans 'New query' %}" name="buttonAgain"/>
+            <input type="reset" onclick="resetSearch();" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>
     </div>
