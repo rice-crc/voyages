@@ -98,6 +98,8 @@ list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
+DEFAULT_RESULTS_PER_PAGE=10
 
 if VoyageDates.objects.count() > 1:
     voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
@@ -175,15 +177,24 @@ def search(request):
     """
 
     time_span_form = TimeFrameSpanSearchForm()
-    results_per_page = ""
 
-    results = Voyage.objects.all()
+    # Check if there is any result in session, save if necessary
+    try:
+        results = request.session['search_results']
+    except KeyError:
+        results = Voyage.objects.all()
+        request.session['search_results'] = results
 
     # Prepare results per page
-    try:
-        results_per_page = request.session['results_per_page']
-    except KeyError:
-        results_per_page = 10
+    if request.POST.get('results_per_page') is not None:
+        results_per_page = request.POST.get('results_per_page')
+        request.session['results_per_page'] = results_per_page
+    else:
+        try:
+            results_per_page = request.session['results_per_page']
+        except KeyError:
+            request.session['results_per_page'] = DEFAULT_RESULTS_PER_PAGE
+            results_per_page = DEFAULT_RESULTS_PER_PAGE
 
     if request.POST.get('desired_page') is None:
         current_page = 1
@@ -306,7 +317,8 @@ def search(request):
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
                               'paginator_range': paginator_range,
-                              'results_per_page': results_per_page},
+                              'results_per_page': results_per_page,
+                              'option_results_per_page': option_results_per_page},
                               context_instance=RequestContext(request))
 
 
