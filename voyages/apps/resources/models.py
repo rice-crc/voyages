@@ -9,11 +9,9 @@ class Image(models.Model):
 
     image_id = models.IntegerField('Image ID number', null=True, blank=True)
 
-    file = models.FileField(upload_to='images')
+    file = models.ImageField(upload_to='images')
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=2000, null=True, blank=True)
-    width = models.IntegerField(null=True, blank=True)
-    height = models.IntegerField(null=True, blank=True)
     mime_type = models.CharField(max_length=100, null=True, blank=True)
     creator = models.CharField(max_length=200, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
@@ -40,12 +38,6 @@ class Image(models.Model):
         Returns file name of each file
         """
         return basename(self.file.name)
-
-    def get_file_size(self):
-        """
-        Returns file size of each file
-        """
-        return basename(self.file.size)
 
     def __unicode__(self):
         return str(self.id) + ", " + self.get_file_name()

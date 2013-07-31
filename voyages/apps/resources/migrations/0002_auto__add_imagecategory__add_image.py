@@ -20,11 +20,9 @@ class Migration(SchemaMigration):
         db.create_table(u'resources_image', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('image_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True, blank=True)),
-            ('width', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('height', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('mime_type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('creator', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
             ('language', self.gf('django.db.models.fields.CharField')(max_length=2, null=True, blank=True)),
@@ -55,8 +53,7 @@ class Migration(SchemaMigration):
             'creator': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'date': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
@@ -65,8 +62,7 @@ class Migration(SchemaMigration):
             'ready_to_go': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']", 'null': 'True', 'blank': 'True'}),
-            'width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']", 'null': 'True', 'blank': 'True'})
         },
         u'resources.imagecategory': {
             'Meta': {'ordering': "['value']", 'object_name': 'ImageCategory'},
