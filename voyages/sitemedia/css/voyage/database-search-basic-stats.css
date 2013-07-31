@@ -1,0 +1,22 @@
+div.search-panel table.simple-table {
+	border-collapse: collapse;}
+
+div.search-panel table.simple-table td {
+	border: 1px solid #895D03;
+	padding: 5px; }
+
+td.search-simple-stat-c_c1 {
+	background-color: #ECD698; }
+	
+td.search-simple-stat-c_c2, td.search-simple-stat-c_c3, td.search-simple-stat-c_c4 {
+	text-align: right;
+	padding-left: 30px;
+	width: 70px; }
+
+td.search-simple-stat-h_c1 {
+	text-align: center; }
+	
+td.search-simple-stat-h_c2, td.search-simple-stat-h_c3, td.search-simple-stat-h_c4 {
+	background-color: #ECD698;
+	font-weight: bold;
+	text-align: right; }

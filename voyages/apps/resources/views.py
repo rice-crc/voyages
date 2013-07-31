@@ -2,7 +2,6 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.utils.datastructures import SortedDict
 from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet
@@ -26,7 +25,6 @@ def get_all_images(request):
             if len(images[i.label]) == 4:
                 break
 
-    dict = sorted(images, key=lambda key: images[key])
     return render_to_response('resources/images-index.html',
                               {'images': images},
                               context_instance=RequestContext(request))
@@ -43,7 +41,7 @@ def get_images_category(request, category):
     images = SortedDict()
 
     # Pack all images from category with needed data.
-    for i in Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id'):
+    for i in SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id'):
         images[i.image_id] = SortedDict({'file': i.file, 'year': i.date, 'title': i.title})
 
     return render_to_response('resources/images-category.html',
@@ -59,7 +57,7 @@ def get_images_category_detail(request, category, page):
     :param page: Number of page to serve
     """
 
-    manu = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')
+    manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')
 
 
     # Set paginator on proper page.
@@ -79,7 +77,7 @@ def get_image_detail(request, category, page):
     :param page: Number of page to serve
     """
 
-    image = Image.objects.filter(category__label=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
+    image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
 
     return render_to_response('resources/image-detail.html',
                               {'image': image},
@@ -87,15 +85,23 @@ def get_image_detail(request, category, page):
 
 
 def images_search(request):
+    """
+    View to make search of images.
+
+    :param request: Request to serve
+    """
+
     query = ''
     time_start = ''
     time_end = ''
 
     if request.method == 'POST':
+
         # Check if session have to be deleted
         if request.POST.get('clear_form'):
             request.session.flush()
             pass
+
         # New search, clear data stored in session
         request.session['results'] = None
         form = SearchForm(request.POST)
@@ -112,8 +118,8 @@ def images_search(request):
             time_start = request.POST.get('time_start')
             time_end = request.POST.get('time_end')
 
+            # Options if query is provided
             if query != "":
-                #if time_start != "":
                 if time_start != "" and time_end != "":
                     results = \
                         SearchQuerySet().filter(content__icontains=query, ready_to_go=True,
@@ -167,8 +173,8 @@ def images_search(request):
 
                 else:
                     if len(categories_to_search) == 1:
-                        # TODO: It have to be changed to call of view with parameters
-                        return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
+                        return HttpResponseRedirect(reverse('resources:images-category',
+                                                        kwargs={'category': categories_to_search.pop()}))
                     else:
                         results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
@@ -180,11 +186,10 @@ def images_search(request):
                                                             category_label__in=categories_to_search).\
                             order_by('date', 'image_id')
                 else:
-                    return HttpResponseRedirect("/resources/images/category/" + categories_to_search.pop())
-
+                    return HttpResponseRedirect(reverse('resources:images-category',
+                                                        kwargs={'category': categories_to_search.pop()}))
 
         else:
-            form = SearchForm()
             results = SearchQuerySet().all()
 
         # Store results in session
@@ -207,6 +212,13 @@ def images_search(request):
 
 
 def images_search_detail(request, page):
+    """
+    Get image search subpage divided by paginator
+
+    :param request: Request to serve
+    :param page: Number of page to serve
+    """
+
     images = request.session['results']
 
     paginator = Paginator(images, 1)
@@ -223,6 +235,12 @@ def images_search_detail(request, page):
 
 
 def get_image_search_detail(request, page):
+    """
+    Get details of one of the found images.
+
+    :param request: Request to serve
+    :param page: Number of page to serve details
+    """
 
     image = request.session['results'][int(page)-1]
 

@@ -1,10 +1,90 @@
-{%  load i18n %}
-<h1>{% trans 'List of voyages' %}</h1>
+{% load i18n %}
+{% load voyage_extras %}
 
-<table class=grid>
-    <th>
-        <td>{% trans 'Voyage Identification number' %}</td>
-        <td>{% trans 'Vessel name' %}</td>
-    </th>
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-search-table.css">
 
-</table>
+<div>
+    <table style="border-collapse: collapse; width: 100%;">
+    <tbody>
+        <tr>
+            <td>
+                <h1>{% trans 'List of voyages' %}</h1>
+            </td>
+            <td style="text-align: right;">
+                <a href="#">Configure columns of the table></a>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+<div>
+    <table class="grid">
+        <tbody>
+        <tr>
+            <th>
+                <div class="grid-first-column grid-header-icon-asc grid-header-text">
+                    <a href="#">Voyage identification number</a>
+                </div>
+            </th>
+            <th>
+                <div class="grid-header-text">
+                    <a href="#">Vessel name</a>
+                </div>
+            </th>
+            <th>
+                <div class="grid-header-text">
+                    <a href="#">Captain's name</a>
+                </div>
+            </th>
+            <th>
+                <div class="grid-header-text-left">
+                    <a href="#">Year arrived with slaves*</a>
+                </div>
+            </th>
+            <th>
+                <div class="grid-header-text">
+                    <a href="#">Principal region of slave purchase*</a>
+                </div>
+            </th>
+            <th>
+                <div class="grid-header-text">
+                    <a href="#">Principal region of slave landing*</a>
+                </div>
+            </th>
+        </tr>
+
+        {% for i in results %}
+            <tr class="grid-row-even grid-row-first">
+                <td>
+                    {{ i.voyage_id }}
+                </td>
+                <td>
+                    {{ i.voyage_ship.ship_name }}
+                </td>
+                <td>
+                    <div>
+                        {# TODO: Probably it have to be changed #}
+                        {% for j in i.voyage_captain.all %}
+                            {{ j.name }}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td style="text-align: left">
+                    {{ i.voyage_dates.imp_arrival_at_port_of_dis|get_year_value }}
+                </td>
+                <td>
+                    {{ i.voyage_itinerary.imp_principal_region_of_slave_purchase }}
+                </td>
+                <td>
+                    {{ i.voyage_itinerary.first_landing_region }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<span id="form:tableResults"></span>
+<div class="table-bottom-tools"></div>
+<div style="margin-top: 5px;"></div>
