@@ -11,7 +11,6 @@ from django.core.paginator import Paginator
 import time
 from .forms import *
 
-
 list_text_fields = ['var_ship_name',
                     'var_owner',
                     'var_captain',
@@ -196,6 +195,76 @@ def search(request):
 
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page)
+
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+
+    if request.method == 'POST':
+
+        list_search_vars = request.POST.getlist('list-input-params')
+        if list_search_vars:
+            # Add variables
+            existing_form = request.session['existing_form']
+
+            for varname in list_search_vars:
+                input_field_name = "header_" + varname
+                print varname
+                if varname in list_text_fields:
+                    # Plain text fields
+                    form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+                    existing_form.append({'varname': varname,
+                                          'type': 'plain_text',
+                                          'form': form,
+                                          'input_field_name':  input_field_name})
+                elif varname in list_select_fields:
+                    # Select box variables
+                    choices = getChoices(varname)
+                    form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+                    varname_wrapper = "select_" + varname
+                    existing_form.append({'varname': varname, 'form': form,
+                                          'type': 'select',
+                                          'input_field_name':  input_field_name,
+                                          'varname_wrapper': varname_wrapper})
+                elif varname in list_numeric_fields:
+                    # Numeric variables
+                    form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
+                    existing_form.append({'varname': varname,
+                                          'type': 'numeric',
+                                          'form': form,
+                                          'input_field_name':  input_field_name})
+                elif varname in list_date_fields:
+                    # Numeric variables
+                    form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
+                    existing_form.append({'varname': varname,
+                                          'type': 'date',
+                                          'form': form,
+                                          'list_months': list_months,
+                                          'input_field_name':  input_field_name})
+                elif varname in list_place_fields:
+                    choices = getNestedListPlaces(varname)
+                    varname_wrapper = "select_" + varname
+                    existing_form.append({'varname': varname, 'form': form,
+                                          'type': 'select_three_layers',
+                                          'input_field_name':  input_field_name,
+                                          'choices': choices,
+                                          'varname_wrapper': varname_wrapper})
+
+                elif varname in list_boolean_fields:
+                     # Boolean field
+                    choices = (('1', 'Yes'), ('2', 'No'))
+                    form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
+                    existing_form.append({'varname': varname, 'form': form,
+                                          'type': 'plain_text',
+                                          'input_field_name':  input_field_name})
+                else:
+                    pass
+
+            request.session['existing_form'] = existing_form
+
+    elif request.method == 'GET':
+        # Create a new form
+        existing_form = []
+        request.session['existing_form'] = existing_form
 
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
