@@ -5,7 +5,7 @@
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 <div class="search-side-panel">
 
-    <div class="box-main-table box-collapsed">
+    <div class="box-main-table box-expanded">
         <div class="box-header">
             <div class="box-button" onclick="">
                 &nbsp;
@@ -347,11 +347,154 @@
             <div class="box-text-label">
                 {% trans 'Current query' %}
             </div>
-
         </div>
 
         <div class="box-mid-end">
             <div class=query-builder>
+                {%  if request.session.existing_form %}
+                    {% for elem in request.session.existing_form %}
+                    <div class="sidebox">
+                        <!-- Search box header -->
+                        <span class="query-builder-label" id="{{ elem.input_field_name }}">Variable</span>
+                        <input type="hidden" name="list-input-params" value="{{ elem.varname }}">
+                        <span class="query-builder-button move-up-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
+                                 onclick="move_box_up('{{ elem.input_field_name }}');" />
+                        </span>
+                        <span class="query-builder-button move-down-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-down.png"
+                                 onclick="move_box_down('header_{{ elem.varname }}');" />
+                        </span>
+                        <span class="query-builder-button close-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-remove.png"
+                                 onclick="delete_box('header_{{ elem.varname }}', '{{ elem.varname }}');" />
+                        </span>
+
+                        {% if elem.type == "plain_text" %}
+                            {% for field in elem.form %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
+
+                        {% elif elem.type == "numeric" %}
+                            {{ elem.form.options }}
+                            <span class="range_field between_field hidden">
+                            {{ elem.form.lower_bound }} - {{ elem.form.upper_bound }}
+                            </span>
+                            <span class="range_field threshold_field">
+                            {{ elem.form.threshold }}
+                            </span>
+
+                        {% elif elem.type == "select" %}
+                            <div id="{{ elem.varname_wrapper }}">
+                                <div class="query-select-initial" >
+                                    <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
+                                    </div>
+                                <br /><input type="button" onclick="expandChoices('{{ elem.varname_wrapper }}');"
+                                             value="Select" class="display_inline">
+                                </div>
+
+                                <div class="query-select-full hidden">
+                                    {% trans 'Quicksearch' %}
+                                        <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
+                                           onkeyup="filter_edit_list('{{ elem.varname_wrapper }}');"
+                                           name="" style="width: 200px;" />
+
+                                    <div class="query-builder-edit-list">
+                                        {{ form }}
+                                    </div>
+                                    <div style="margin-top: 5px;">
+                                        <input type="button"
+                                               onclick="collapseCheckBoxes('{{ elem.varname_wrapper }}', 'var-checkbox')"
+                                               value="OK" class="display_inline">
+                                        <input type="button" onclick="checkAllBoxes('{{ elem.varname_wrapper }}');"
+                                               value="Select all" class="display_inline">
+                                        <input type="button" onclick="uncheckAllBoxes('{{ elem.varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% elif elem.type == "select_three_layers" %}
+                            <div id="{{ elem.varname_wrapper }}">
+                                <div class="query-select-initial" >
+                                    <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
+                                    </div>
+                                <br /><input type="button" onclick="expandChoices('{{ elem.varname_wrapper }}');" value="Select" class="display_inline">
+                                </div>
+
+                                <div class="query-select-full hidden">
+                                    {% trans 'Quicksearch' %}
+                                        <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
+                                           onkeyup="filter_hierarchical_list('{{ elem.varname_wrapper }}');"
+                                           name="" style="width: 200px;" />
+
+                                    <div class="query-builder-edit-list-expandable newly_inserted">
+                                        {% if elem.choices %}
+                                            <ul>
+                                            {% for item_layer0 in elem.choices %}
+                                                <li>
+                                                    <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
+                                                    <label for="{{ item_layer0.id }}">
+                                                        <input id="{{ item_layer0.id }}" class="var-checkbox checkbox-layer0" type="checkbox"
+                                                               value="{{ item_layer0.order_num }}" onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
+                                                        {{ item_layer0.text }}
+                                                    </label>
+                                                    <ul class="hidden">
+                                                    {% for item_layer1 in item_layer0.choices %}
+                                                        <li class="select-collapsed">
+                                                        <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer1.id }}')" >&nbsp;</div>
+                                                        <label for="{{ item_layer1.id }}">
+                                                        <input id="{{ item_layer1.id }}" class="var-checkbox checkbox-layer1" type="checkbox"
+                                                               value="{{ item_layer1.order_num }}" onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
+                                                        {{ item_layer1.text }}
+                                                        </label>
+                                                        <ul class="hidden">
+                                                            {% for item_layer2 in item_layer1.choices %}
+                                                                <li>
+                                                                    <label for="{{ item_layer2.id }}">
+                                                                    <input id="{{ item_layer2.id }}" class="var-checkbox checkbox-layer2" type="checkbox"
+                                                                           value="{{ item_layer2.order_num }}"
+                                                                            onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
+                                                                    {{ item_layer2.text }}
+                                                                    </label>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endfor %}
+                                                    </ul>
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                    <div style="margin-top: 5px;">
+                                        <input type="button" onclick="collapseCheckBoxes('{{ elem.varname_wrapper }}', 'checkbox-layer2')" value="OK" class="display_inline">
+                                        <input type="button" onclick="checkAllBoxes('{{ elem.varname_wrapper }}');" value="Select all" class="display_inline">
+                                        <input type="button" onclick="uncheckAllBoxes('{{ elem.varname_wrapper }}');" value="Deselect all" class="display_inline">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        {% elif elem.type == "date" %}
+                            {{ elem.form.options }}
+                            <span class="date_field_wrapper between_field">
+                            {{ elem.form.from_month }} / {{ elem.form.from_year }} -
+                            {{ elem.form.to_month }} / {{ elem.form.to_year }}
+                            </span>
+                            <span class="date_field_wrapper threshold_field hidden">
+                            {{ elem.form.threshold_month }} - {{ elem.form.threshold_year }}
+                            </span>
+
+                            <div class="month-list">
+                                {% for month in elem.list_months %}
+                                <span class="month-toggled">{{ month }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
             <input type="submit" value="{% trans 'Search' %}" name="buttonSearch"/>
             <input type="reset" onclick="window.location.reload();" value="{% trans 'New query' %}" name="buttonAgain"/>
