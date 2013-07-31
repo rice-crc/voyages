@@ -98,6 +98,8 @@ list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Grea
 list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+
 if VoyageDates.objects.count() > 1:
     voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
     voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
@@ -172,20 +174,35 @@ def search(request):
     """
     Currently on renders the initial page
     """
-    time_span_form = TimeFrameSpanSearchForm()
-    if request.method == 'POST':
-        print "Data from post:"
-        print request.POST
-        list_search_vars = request.POST['list-input-params']
 
-    elif request.method == 'GET':
-        results = Voyage.objects.all()
-        paginator = Paginator(results, 10)
-        pagins = paginator.page(1)
+    time_span_form = TimeFrameSpanSearchForm()
+    results_per_page = ""
+
+    results = Voyage.objects.all()
+
+    # Prepare results per page
+    try:
+        results_per_page = request.session['results_per_page']
+    except KeyError:
+        results_per_page = 10
+
+    if request.POST.get('desired_page') is None:
+        current_page = 1
+    else:
+        current_page = request.POST.get('desired_page')
+
+    paginator = Paginator(results, results_per_page)
+    pagins = paginator.page(int(current_page))
+
+    # Prepare paginator ranges
+    paginator_range = prepare_paginator_ranges(paginator, current_page)
+
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,
-                              'results': pagins},
+                              'results': pagins,
+                              'paginator_range': paginator_range,
+                              'results_per_page': results_per_page},
                               context_instance=RequestContext(request))
 
 
@@ -308,6 +325,36 @@ def getNestedListPlaces(varname):
                         'choices': area_content})
     return choices
 
+
+def prepare_paginator_ranges(paginator, current_page):
+    """
+    Function prepares set of paginator links for template.
+
+    :param paginator: Paginator which links are calculating for
+    :param current_page: Current page serves on search site
+    """
+
+    paginator_range = []
+
+    for i in paginator_range_factors:
+
+        # Get last inserted index
+        try:
+            last = last = paginator_range[-1]
+        except IndexError:
+            last = 0
+
+        # Index can't be less than '1'
+        if int(current_page) + i < 1:
+            paginator_range.append(last+1)
+        else:
+            # Index has to be always +1 from the last one
+            if int(current_page) + i <= last:
+                paginator_range.append(paginator_range[-1] + 1)
+            else:
+                paginator_range.append(int(current_page) + i)
+
+    return paginator_range
 
 def getMonth(value):
     return value.split(",")[0]
