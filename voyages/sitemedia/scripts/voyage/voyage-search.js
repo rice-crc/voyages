@@ -9,6 +9,8 @@ $(document).ready(function() {
 		$(this).parent().parent().toggleClass("box-collapsed box-expanded");
 	});
 
+    $(".collapseCheckBoxButton").trigger('click');
+
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
         var curBox = $(this).parent().parent();

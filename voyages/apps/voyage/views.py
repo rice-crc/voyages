@@ -233,9 +233,11 @@ def search(request):
                 # Select box variables
                 choices = getChoices(varname)
                 form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+
                 tmpElemDict['form'] = form
                 tmpElemDict['type'] = 'select'
                 tmpElemDict['varname_wrapper'] = "select_" + varname
+                tmpElemDict['choices'] = choices
 
             elif varname in list_numeric_fields:
                 # Numeric variables
@@ -275,27 +277,23 @@ def search(request):
                 for cur_var in existing_form:
                     if tmp_varname == cur_var['varname']:
                         if tmp_varname in list_text_fields:
-                            # Plain text fields
-
-                            cur_var['form'].fields['text_search'].initial = request.POST.get(tmp_varname + "_text_search")
-
-                        elif varname in list_select_fields:
+                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
+                        elif tmp_varname in list_select_fields:
                             # Select box variables
-                            choices = getChoices(varname)
-                            form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+                            cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
 
-                        elif varname in list_numeric_fields:
+                        elif tmp_varname in list_numeric_fields:
                             # Numeric variables
-                            form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
+                            cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
 
-                        elif varname in list_date_fields:
+                        elif tmp_varname in list_date_fields:
                             # Numeric variables
-                            form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
+                            cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
 
-                        elif varname in list_place_fields:
+                        elif tmp_varname in list_place_fields:
                             pass
 
-                        elif varname in list_boolean_fields:
+                        elif tmp_varname in list_boolean_fields:
                              # Boolean field
                             pass
                         new_existing_form.append(cur_var)
