@@ -85,6 +85,94 @@
     </table>
 </div>
 
-<span id="form:tableResults"></span>
-<div class="table-bottom-tools"></div>
-<div style="margin-top: 5px;"></div>
+<div class="table-bottom-tools">
+    <table style="border-collapse: collapse; width: 100%;">
+        <tbody>
+        <tr>
+            <td style="padding: 0px; text-align: left">
+                Showing 1-10 out of 34946, display
+                <select id="form:pageSize" onchange="submit()" size="1" name="form:pageSize">
+                    <option selected="selected" value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+                results per page.
+            </td>
+            <td style="padding: 0px;">
+                <table class="td-table-links">
+                    <tbody>
+                    <tr>
+                        {# First, prev section #}
+                        {% if results.number != 1 %}
+                            <td class="pager-fast-back">
+                                <form id="form_first_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="1" name="desired_page">
+                                    <a href="#" onclick="document.forms['form_first_page'].submit(); return false;">« First</a>
+                                </form>
+                            </td>
+                        {% else %}
+                            <td class="pager-fast-back-no-click">
+                                « First
+                            </td>
+                        {% endif %}
+
+                        {% if results.has_previous %}
+                            <td class="pager-back">
+                                <a href="{{ results.previous_page_number|add:"-1" }}">« Prev</a>
+                            </td>
+                        {% else %}
+                            <td class="pager-back-no-click">
+                                « Prev
+                            </td>
+                        {% endif %}
+
+                        {# Paginator num pages #}
+                        {% for i in paginator_range %}
+                            {% if i == results.number %}
+                                <td class="pager-number-active">
+                                    {{ i }}
+                                </td>
+                            {% else %}
+                                <form id="form_page_{{ i }}" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ i }}" name="desired_page">
+                                    <td class="pager-number">
+                                        <a href="#" onclick="document.forms['form_page_{{ i }}'].submit(); return false;">{{ i }}</a>
+                                    </td>
+                                </form>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if results.has_next %}
+                        <td class="pager-fast-forward">
+                            <a href="#">Next »</a>
+                        </td>
+                        {% else %}
+                            <td class="pager-fast-forward-no-click">
+                                Next »
+                            </td>
+                        {% endif %}
+
+                        {% if results.number == results.paginator.num_pages %}
+                            <td class="pager-forward">
+                                <a href="#">Last »</a>
+                            </td>
+                        {% else %}
+                            <td class="pager-forward-no-click">
+                                Last »
+                            </td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
