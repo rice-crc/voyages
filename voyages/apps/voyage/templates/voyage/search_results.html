@@ -90,7 +90,14 @@
         <tbody>
         <tr>
             <td style="padding: 0px; text-align: left">
-                Showing 1-10 out of 34946, display
+                {% for i in results %}
+                    {% if forloop.first %}
+                        Showing {{ i.voyage_id }} -
+                    {% endif %}
+                    {% if forloop.last %}
+                        {{ i.voyage_id }} out of {{ results.paginator.count }}, display
+                    {% endif %}
+                {% endfor %}
                 <select id="form:pageSize" onchange="submit()" size="1" name="form:pageSize">
                     <option selected="selected" value="10">10</option>
                     <option value="15">15</option>
@@ -123,7 +130,11 @@
 
                         {% if results.has_previous %}
                             <td class="pager-back">
-                                <a href="{{ results.previous_page_number|add:"-1" }}">« Prev</a>
+                                <form id="form_prev_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ results.previous_page_number }}" name="desired_page">
+                                    <a href="#" onclick="document.forms['form_prev_page'].submit(); return false;">« Prev</a>
+                                </form>
                             </td>
                         {% else %}
                             <td class="pager-back-no-click">
@@ -149,18 +160,26 @@
                         {% endfor %}
 
                         {% if results.has_next %}
-                        <td class="pager-fast-forward">
-                            <a href="#">Next »</a>
-                        </td>
+                            <td class="pager-fast-forward">
+                                <form id="form_next_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ results.next_page_number }}" name="desired_page">
+                                    <a href="#" onclick="document.forms['form_next_page'].submit(); return false;">Next »</a>
+                                </form>
+                            </td>
                         {% else %}
                             <td class="pager-fast-forward-no-click">
-                                Next »
+                                <a href="#">Next »</a>
                             </td>
                         {% endif %}
 
-                        {% if results.number == results.paginator.num_pages %}
+                        {% if results.number != results.paginator.count %}
                             <td class="pager-forward">
-                                <a href="#">Last »</a>
+                                <form id="form_last_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ results.paginator.num_pages }}" name="desired_page">
+                                    <a href="#" onclick="document.forms['form_last_page'].submit(); return false;">Last »</a>
+                                </form>
                             </td>
                         {% else %}
                             <td class="pager-forward-no-click">
