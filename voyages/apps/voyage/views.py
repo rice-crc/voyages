@@ -1,7 +1,7 @@
 from django.http import Http404, HttpResponseRedirect
 from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader, RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat
@@ -124,11 +124,11 @@ def get_page(request, chapternum, sectionnum, pagenum):
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "voyage/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "voyage/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"
+
     try:
         loader.get_template(pagepath)
         loader.get_template(templatename)
-        return render_to_response(templatename, {},
-                              context_instance=RequestContext(request, {"pagepath" : pagepath}))
+        return render(request, templatename, dictionary={"pagepath": pagepath})
     except TemplateDoesNotExist:
         raise Http404
 
@@ -157,8 +157,7 @@ def download_file(request):
         st = stat(settings.MEDIA_ROOT + '/download/' + f)
         uploaded_files_info.append({'name': f, 'size': size(st[ST_SIZE]), 'date_mod': time.asctime(time.localtime(st[ST_MTIME]))})
 
-    return render_to_response(templatename, {'form': form, 'uploaded_files': uploaded_files_info},
-                              context_instance=RequestContext(request))
+    return render(request, templatename, {'form': form, 'uploaded_files': uploaded_files_info})
 
 
 def handle_uploaded_file(f):
@@ -391,13 +390,12 @@ def search(request):
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page)
 
-    return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
+    return render(request, "voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
                               'paginator_range': paginator_range,
-                              'options_results_per_page_form': form},
-                              context_instance=RequestContext(request))
+                              'options_results_per_page_form': form})
 
 
 def getChoices(varname):

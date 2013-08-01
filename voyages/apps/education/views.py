@@ -1,7 +1,7 @@
 # Create your views here.
-from django.template import TemplateDoesNotExist, Context, loader, RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from voyages.apps.education.models import *
+
 
 def lessonplan(request):
     """
@@ -26,10 +26,9 @@ def lessonplan(request):
         for std_type in LessonStandardType.objects.all():
             text_list = LessonStandard.objects.filter(lesson=lesson.id,type=std_type)
             if len(text_list) != 0:
-                sub_lesson.append({'type' : std_type.type, 'text' : text_list})
+                sub_lesson.append({'type': std_type.type, 'text' : text_list})
         
-        lesson_plan_list.append({'lesson' : lesson, 'standard' : sub_lesson, 'download' : LessonPlanFile.objects.filter(lesson=lesson.id)})
+        lesson_plan_list.append({'lesson': lesson, 'standard': sub_lesson,
+                                 'download': LessonPlanFile.objects.filter(lesson=lesson.id)})
     
-    return render_to_response('education/lesson-plans.html', {"lesson_plans" : lesson_plan_list},
-                              context_instance=RequestContext(request));
-                            
+    return render(request, 'education/lesson-plans.html', {"lesson_plans": lesson_plan_list})
