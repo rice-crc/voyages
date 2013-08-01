@@ -181,6 +181,7 @@ def search(request):
         request.session.create()
 
     if request.method == 'POST':
+        results = None
         submitVal = request.POST.get('submitVal')
 
         # Update variable values
@@ -340,6 +341,9 @@ def search(request):
 
             # Initially sort by voyage_id
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+
+        if results is None:
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
     elif request.method == 'GET':
         # Create a new form
