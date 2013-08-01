@@ -111,7 +111,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
-            return obj.voyage_dates.imp_voyage_began
+            return obj.voyage_dates.imp_voyage_began[2:]
         except AttributeError:
             return None
 
@@ -357,7 +357,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage dates
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
-        return None
+        try:
+            print obj.voyage_dates.imp_arrival_at_port_of_dis[2:]
+            return int(obj.voyage_dates.imp_arrival_at_port_of_dis[2:])
+        except AttributeError:
+            return None
 
     def prepare_var_voyage_began(self, obj):
         return None
@@ -375,9 +379,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         return None
 
     def prepare_var_voyage_completed(self, obj):
-        return None
-
-    def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         return None
 
     def prepare_var_imp_length_home_to_disembark(self, obj):
