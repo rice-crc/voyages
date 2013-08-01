@@ -374,7 +374,6 @@ def search(request):
 
         # paginator = Paginator(results, results_per_page)
         # pagins = paginator.page(int(current_page))
-
     elif request.method == 'GET':
         # Create a new form
         existing_form = []
@@ -408,13 +407,14 @@ def search(request):
     form, results_per_page = check_and_save_options_form(request)
 
     # Prepare paginator ranges
-    paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)
+    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
     return render(request, "voyage/search.html", {
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
                               'paginator_range': paginator_range,
+                              'pages_range': pages_range,
                               'no_result': no_result,
                               'options_results_per_page_form': form})
 
@@ -482,7 +482,7 @@ def getNestedListPlaces(varname):
     return choices
 
 
-def prepare_paginator_ranges(paginator, current_page, results_per_page):
+def prepare_paginator_variables(paginator, current_page, results_per_page):
     """
     Function prepares set of paginator links for template.
 
@@ -491,8 +491,10 @@ def prepare_paginator_ranges(paginator, current_page, results_per_page):
     """
 
     paginator_range = []
+    pages_range = []
     last_saved_index = 0
 
+    # Prepare page numbers
     for i in paginator_range_factors:
 
         # Get last inserted index
@@ -504,7 +506,7 @@ def prepare_paginator_ranges(paginator, current_page, results_per_page):
         # If page number would be greater than max page number,
         # return, since this is the end of page paginator ranges
         if last_saved_index >= len(paginator.object_list):
-            return paginator_range
+            continue
         # Index can't be less than '1'
         if int(current_page) + i < 1:
             paginator_range.append(last+1)
@@ -520,7 +522,14 @@ def prepare_paginator_ranges(paginator, current_page, results_per_page):
                 paginator_range.append(int(current_page) + i)
                 last_saved_index = ((int(current_page)+i) * results_per_page)
 
-    return paginator_range
+    # Prepare results range
+    pages_range.append(int(current_page)*results_per_page - results_per_page + 1)
+    if (int(current_page)*results_per_page) > len(paginator.object_list):
+        pages_range.append(len(paginator.object_list))
+    else:
+        pages_range.append(int(current_page)*results_per_page)
+
+    return (paginator_range, pages_range)
 
 
 def check_and_save_options_form(request):

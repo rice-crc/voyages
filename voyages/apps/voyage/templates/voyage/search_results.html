@@ -91,12 +91,12 @@
         <tr>
 
             <td style="padding: 0px; text-align: left">
-                {% for i in results %}
+                {% for i in pages_range %}
                     {% if forloop.first %}
-                        Showing {{ i.get_stored_fields.var_voyage_id }} -
+                        Showing {{ i }} -
                     {% endif %}
                     {% if forloop.last %}
-                        {{ i.get_stored_fields.var_voyage_id }} out of {{ results.paginator.count }}, display
+                        {{ i }} out of {{ results.paginator.count }}, display
                     {% endif %}
                 {% endfor %}
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
