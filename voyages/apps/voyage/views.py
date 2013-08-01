@@ -175,7 +175,6 @@ def search(request):
     """
     Currently on renders the initial page
     """
-
     time_span_form = TimeFrameSpanSearchForm()
     pagins = None
     paginator_range = None
@@ -191,12 +190,11 @@ def search(request):
     else:
         current_page = request.POST.get('desired_page')
 
-
-
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
     if request.method == 'POST':
+        results = None
         submitVal = request.POST.get('submitVal')
 
         # Update variable values
@@ -365,15 +363,32 @@ def search(request):
         # Prepare paginator ranges
         paginator_range = prepare_paginator_ranges(paginator, current_page)
 
+        if results is None:
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+
     elif request.method == 'GET':
         # Create a new form
         existing_form = []
         request.session['existing_form'] = existing_form
+
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         paginator = Paginator(results, results_per_page)
         pagins = paginator.page(int(current_page))
         # Prepare paginator ranges
         paginator_range = prepare_paginator_ranges(paginator, current_page)
+
+        # Check if there is any result in session, save if necessary
+        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+
+    form, results_per_page = check_and_save_options_form(request)
+
+    if request.POST.get('desired_page') is None:
+        current_page = 1
+    else:
+        current_page = request.POST.get('desired_page')
+
+    # Prepare paginator ranges
+    paginator_range = prepare_paginator_ranges(paginator, current_page)
 
     return render_to_response("voyage/search.html", {'time_span_form': time_span_form,
                               'voyage_span_first_year': voyage_span_first_year,
@@ -494,6 +509,7 @@ def check_and_save_options_form(request):
 
     if request.method == "POST":
         form = ResultsPerPageOptionForm(request.POST)
+
         if form.is_valid():
             results_per_page = form.cleaned_option()
         else:
