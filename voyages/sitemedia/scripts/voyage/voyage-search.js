@@ -2,7 +2,6 @@
 
 $(document).ready(function() {
     /* Set the initial values for time frame */
-    $("#restore_form").trigger('click');
 
     /* Collapsible boxes */
     $(".box-header .box-button").click(function(ev){
@@ -36,11 +35,21 @@ $(document).ready(function() {
 
     });
 
+    /* Update numeric field */
+    $(".select_field").each(function() {
+        update_numeric_field($(this).parent().children().first().attr("id"), "range_field");
+    });
 
     $(".select_field").change(function() {
         update_numeric_field($(this).parent().children().first().attr("id"), "range_field");
     });
 
+
+
+    /* Update date field */
+    $(".date_field").each(function() {
+         update_numeric_field($(this).parent().children().first().attr("id"), "date_field_wrapper");
+    });
     $(".date_field").change(function() {
          update_numeric_field($(this).parent().children().first().attr("id"), "date_field_wrapper");
     });
@@ -50,11 +59,8 @@ $(document).ready(function() {
     });
 
     $(".menu-popup-submenu-item").click(function(ev){
-        if ($(this).hasClass(attr_selected_class)) {
-            /* Deselect the attribute ? */
-        } else {
-
-            $(".query-builder-label").each(function(){
+        if (!($(this).hasClass(attr_selected_class))) {
+        $(".query-builder-label").each(function(){
                 $('#form').append("<input type='hidden' name='list_input_params' value='" + $.trim($(this).text()) + "' />");
             });
 
