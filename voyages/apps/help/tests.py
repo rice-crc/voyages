@@ -8,23 +8,6 @@ import haystack
 from voyages.apps.help.models import Glossary, Faq, FaqCategory
 import mock
 
-
-class TestGlossaryEmpty(TestCase):
-    """
-    Test for empty glossary
-    """
-
-    @override_settings(LANGUAGE_CODE='en')
-    def test_rendering_response_code(self):
-        """
-        Test if initial website is rendering properly
-        """
-
-        # Check response code
-        response = self.client.get('/help/page_glossary')
-        self.assertEqual(response.status_code, 200)
-
-
 class TestGlossaryInitial(TestCase):
     """
     Tests for initial data from glossary
@@ -35,15 +18,6 @@ class TestGlossaryInitial(TestCase):
     def setUp(self):
         self.initial_objects = Glossary.objects.count()
 
-    @override_settings(LANGUAGE_CODE='en')
-    def test_rendering_response_code(self):
-        """
-        Test if initial website is rendering properly
-        """
-
-        # Check response code
-        response = self.client.get('/help/page_glossary')
-        self.assertEqual(response.status_code, 200)
 
     @override_settings(LANGUAGE_CODE='en')
     def test_glossary_content(self):
@@ -51,7 +25,7 @@ class TestGlossaryInitial(TestCase):
         Test if glossary website contains all initial data
         """
 
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         for i in Glossary.objects.all():
             self.assertEqual(response, i.term)
             self.assertEqual(response, i.description)
@@ -74,7 +48,7 @@ class TestGlossaryModified(TestCase):
         """
 
         # Check response code
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         self.assertEqual(response.status_code, 200)
         print
 
@@ -84,7 +58,7 @@ class TestGlossaryModified(TestCase):
         Test if glossary website contains all initial data
         """
 
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         for i in Glossary.objects.all():
             self.assertContains(response, i.term)
             self.assertContains(response, i.description)
@@ -107,13 +81,13 @@ class TestGlossaryModified(TestCase):
         self.assertEqual(Glossary.objects.get(pk=self.initial_objects+2).term, "Wgsfew")
         self.assertEqual(Glossary.objects.get(pk=self.initial_objects+2).description, "Homarro palium was ques: R. Effic fros ru nonamba soccom men unater par?")
 
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         for i in [Glossary.objects.get(pk=self.initial_objects+1), Glossary.objects.get(pk=self.initial_objects+2)]:
             self.assertContains(response, i.term)
             self.assertContains(response, i.description)
 
         # Check response code
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         self.assertEqual(response.status_code, 200)
 
     @override_settings(LANGUAGE_CODE='en')
@@ -133,7 +107,7 @@ class TestGlossaryModified(TestCase):
         Glossary.objects.get(pk=rand2).delete()
 
         # Check if they are not showing up on the glossary page
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         for i in (self.rand1, self.rand2):
             self.assertNotContains(response, i.term)
             self.assertNotContains(response, i.description)
@@ -165,7 +139,7 @@ class TestGlossaryModified(TestCase):
         Glossary.objects.get(pk=rand2).term = "Buyrty"
         Glossary.objects.get(pk=rand2).description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
 
-        response = self.client.get('/help/page_glossary')
+        response = self.client.get(reverse('help:glossary'))
         self.assertEqual(response.status_code, 200)
 
         # Check response
