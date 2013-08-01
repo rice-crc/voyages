@@ -178,19 +178,26 @@ def search(request):
     paginator_range = None
     no_result = False
 
-    # Check if there is any result in session, save if necessary
+    # Get and update form of option results per page if necessary
     form, results_per_page = check_and_save_options_form(request)
 
-    if request.POST.get('desired_page') is None:
-        current_page = 1
-    else:
-        current_page = request.POST.get('desired_page')
+    # Get number of requested page
+    # if request.POST.get('desired_page') is None:
+    #     current_page = 1
+    # else:
+    #     current_page = request.POST.get('desired_page')
 
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
+    # Try to retrieve results from session
+    try:
+        results = request.session['results_voyages']
+    except:
+        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        request.session['results_voyages'] = results
+
     if request.method == 'POST':
-        results = None
         submitVal = request.POST.get('submitVal')
 
         time_span_form = TimeFrameSpanSearchForm(request.POST)
@@ -235,6 +242,7 @@ def search(request):
         request.session['existing_form'] = new_existing_form
 
         if submitVal == 'add_var':
+
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
             # Add variables
             tmpElemDict = {}
@@ -288,11 +296,12 @@ def search(request):
             else:
                 pass
             request.session['existing_form'].append(tmpElemDict)
-            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
         elif submitVal == 'reset':
             existing_form = []
             request.session['existing_form'] = existing_form
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+            request.session['results_voyages'] = results
 
         elif submitVal == 'search':
             list_search_vars = request.POST.getlist('list-input-params')
@@ -359,26 +368,26 @@ def search(request):
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
             if results.count() == 0:
                 no_result = True
-        else:
-            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+            request.session['results_voyages'] = results
+        # else:
+        #     results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
-        paginator = Paginator(results, results_per_page)
-        pagins = paginator.page(int(current_page))
 
-        if results is None:
-            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # paginator = Paginator(results, results_per_page)
+        # pagins = paginator.page(int(current_page))
 
     elif request.method == 'GET':
         # Create a new form
         existing_form = []
         request.session['existing_form'] = existing_form
 
-        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        paginator = Paginator(results, results_per_page)
-        pagins = paginator.page(int(current_page))
+        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # paginator = Paginator(results, results_per_page)
+        # pagins = paginator.page(int(current_page))
 
         # Check if there is any result in session, save if necessary
-        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
         request.session['time_span_form'] = TimeFrameSpanSearchForm(
             initial={'frame_from_year': voyage_span_first_year,
@@ -390,6 +399,11 @@ def search(request):
         current_page = 1
     else:
         current_page = request.POST.get('desired_page')
+
+    paginator = Paginator(results, results_per_page)
+    pagins = paginator.page(int(current_page))
+
+    form, results_per_page = check_and_save_options_form(request)
 
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)

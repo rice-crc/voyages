@@ -238,6 +238,7 @@ div.permlink-info {
 }
 
 .no_result_box {
+    padding: 20px;
     display: block;
     width: 60%;
     margin-top: 50px;
