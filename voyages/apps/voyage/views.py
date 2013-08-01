@@ -174,16 +174,17 @@ def search(request):
     """
     Currently on renders the initial page
     """
-    time_span_form = TimeFrameSpanSearchForm()
+    pagins = None
+    paginator_range = None
 
     # Get and update form of option results per page if necessary
     form, results_per_page = check_and_save_options_form(request)
 
     # Get number of requested page
-    if request.POST.get('desired_page') is None:
-        current_page = 1
-    else:
-        current_page = request.POST.get('desired_page')
+    # if request.POST.get('desired_page') is None:
+    #     current_page = 1
+    # else:
+    #     current_page = request.POST.get('desired_page')
 
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -198,10 +199,18 @@ def search(request):
     if request.method == 'POST':
         submitVal = request.POST.get('submitVal')
 
+        time_span_form = TimeFrameSpanSearchForm(request.POST)
+
+
         # Update variable values
         list_search_vars = request.POST.getlist('list-input-params')
         existing_form = request.session['existing_form']
         new_existing_form = []
+
+        # Time frame search
+        frame_form = TimeFrameSpanSearchForm(request.POST)
+        if frame_form.is_valid():
+            request.session['time_span_form'] = frame_form
 
         for tmp_varname in list_search_vars:
             for cur_var in existing_form:
@@ -300,11 +309,8 @@ def search(request):
             query_dict = {}
 
             # Time frame search
-            frame_form = TimeFrameSpanSearchForm(request.POST)
-            if frame_form.is_valid():
-                pass
-                #query_dict['var_imp_voyage_began__range'] = [frame_form.cleaned_data['frame_from_year'],
-                #                                             frame_form.cleaned_data['frame_to_year']]
+            query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
+                                                             request.session['time_span_form'].cleaned_data['frame_to_year']]
 
             for tmp_varname in list_search_vars:
                 for cur_var in request.session['existing_form']:
@@ -377,6 +383,13 @@ def search(request):
 
         # Check if there is any result in session, save if necessary
         # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+
+        request.session['time_span_form'] = TimeFrameSpanSearchForm(
+            initial={'frame_from_year': voyage_span_first_year,
+                     'frame_to_year': voyage_span_last_year})
+
+    form, results_per_page = check_and_save_options_form(request)
 
     if request.POST.get('desired_page') is None:
         current_page = 1
@@ -384,8 +397,6 @@ def search(request):
         current_page = request.POST.get('desired_page')
 
     paginator = Paginator(results, results_per_page)
-    a = paginator.object_list
-
     pagins = paginator.page(int(current_page))
 
     form, results_per_page = check_and_save_options_form(request)
@@ -393,7 +404,7 @@ def search(request):
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)
 
-    return render(request, "voyage/search.html", {'time_span_form': time_span_form,
+    return render(request, "voyage/search.html", {
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
