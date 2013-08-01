@@ -62,10 +62,15 @@ div.side-box {
     color: black;
     margin: 0 0 5px;
     padding-bottom: 5px;
+    width: 100%;
 }
 
 div.side-box table, div.side-box tr {
     width: 100%;
+}
+
+span.query-builder-button {
+    float: right;
 }
 
 .query-builder-button img {
@@ -79,7 +84,7 @@ div.side-box table, div.side-box tr {
 .query-builder-label {
     display: inline-block;
     margin-bottom: 5px;
-    width: 225px;
+    width: 70%;
 }
 
 div.attribute-selected {
