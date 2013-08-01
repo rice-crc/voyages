@@ -1,6 +1,5 @@
 # Create your views here.
-from django.template import TemplateDoesNotExist, RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -18,7 +17,6 @@ def index(request):
     :template:`contribute/voyagelogin.html`
     """
     if request.user.is_authenticated():
-        return render_to_response("contribute/index.html", {},
-                              context_instance=RequestContext(request))  
+        return render(request, "contribute/index.html")
     else:
         return HttpResponseRedirect(reverse('contribute:login'))

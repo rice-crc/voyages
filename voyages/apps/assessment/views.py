@@ -1,7 +1,7 @@
 # Create your views here.
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
                               
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -24,7 +24,6 @@ def get_page(request, chapternum, sectionnum, pagenum):
     try:
         loader.get_template(pagepath)
         loader.get_template(templatename)
-        return render_to_response(templatename, {},
-                              context_instance=RequestContext(request, {"pagepath" : pagepath}))
+        return render(request, templatename, {"pagepath" : pagepath})
     except TemplateDoesNotExist:
         raise Http404                          

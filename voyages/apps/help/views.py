@@ -1,5 +1,4 @@
-from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.utils.datastructures import SortedDict
 from .models import Glossary, Faq
 from haystack.query import SearchQuerySet
@@ -92,11 +91,11 @@ def glossary_page(request):
 
     letters, letters_found, glossary_content = getsortedresults(results)
 
-    return render_to_response('help/page_glossary.html',
+    return render(request, 'help/page_glossary.html',
                               {'glossary': sort_dict(glossary_content),
                                'letters': letters, 'form': form,
                                'letters_found': letters_found, 'results': results,
-                               'query': query}, context_instance=RequestContext(request))
+                               'query': query})
 
 
 def get_faqs(request):
@@ -168,6 +167,5 @@ def get_faqs(request):
 
     faq_list = getsortedresults(query_result)
 
-    return render_to_response('help/page_faqs.html',
-                              {'form': form, "faq_list": faq_list, 'current_query': current_query},
-                              context_instance=RequestContext(request))
+    return render(request, 'help/page_faqs.html',
+                              {'form': form, "faq_list": faq_list, 'current_query': current_query})

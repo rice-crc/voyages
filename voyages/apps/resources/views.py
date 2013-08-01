@@ -1,5 +1,4 @@
-from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.datastructures import SortedDict
@@ -25,9 +24,7 @@ def get_all_images(request):
             if len(images[i.label]) == 4:
                 break
 
-    return render_to_response('resources/images-index.html',
-                              {'images': images},
-                              context_instance=RequestContext(request))
+    return render(request, 'resources/images-index.html', {'images': images})
 
 
 def get_images_category(request, category):
@@ -44,9 +41,8 @@ def get_images_category(request, category):
     for i in SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id'):
         images[i.image_id] = SortedDict({'file': i.file, 'year': i.date, 'title': i.title})
 
-    return render_to_response('resources/images-category.html',
-                              {'images': images, 'category': category},
-                              context_instance=RequestContext(request))
+    return render(request, 'resources/images-category.html',
+                              {'images': images, 'category': category})
 
 
 def get_images_category_detail(request, category, page):
@@ -64,9 +60,8 @@ def get_images_category_detail(request, category, page):
     paginator = Paginator(manu, 1)
     pagins = paginator.page(page)
 
-    return render_to_response('resources/image-category-detail.html',
-                              {'images': pagins, 'category': category},
-                              context_instance=RequestContext(request))
+    return render(request, 'resources/image-category-detail.html',
+                              {'images': pagins, 'category': category})
 
 
 def get_image_detail(request, category, page):
@@ -79,9 +74,7 @@ def get_image_detail(request, category, page):
 
     image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
 
-    return render_to_response('resources/image-detail.html',
-                              {'image': image},
-                              context_instance=RequestContext(request))
+    return render(request, 'resources/image-detail.html', {'image': image})
 
 
 def images_search(request):
@@ -202,13 +195,12 @@ def images_search(request):
     else:
         results = request.session['results']
 
-    return render_to_response('resources/images-search-results.html',
+    return render(request, 'resources/images-search-results.html',
             {'results': results,
              'query': request.session['query'],
              'time_start': request.session['time_start'],
              'time_end': request.session['time_end'],
-             'enabled_categories': request.session['enabled_categories']},
-            context_instance=RequestContext(request))
+             'enabled_categories': request.session['enabled_categories']})
 
 
 def images_search_detail(request, page):
@@ -224,14 +216,12 @@ def images_search_detail(request, page):
     paginator = Paginator(images, 1)
     pagins = paginator.page(page)
 
-    return render_to_response('resources/images-search-detail.html',
+    return render(request, 'resources/images-search-detail.html',
                               {'images': pagins, 'category': "Search",
-                               'all_images': request.session['all_images'],
                                'query': request.session['query'],
                                'time_start': request.session['time_start'],
                                'time_end': request.session['time_end'],
-                               'enabled_categories': request.session['enabled_categories']},
-                              context_instance=RequestContext(request))
+                               'enabled_categories': request.session['enabled_categories']})
 
 
 def get_image_search_detail(request, page):
@@ -244,6 +234,4 @@ def get_image_search_detail(request, page):
 
     image = request.session['results'][int(page)-1]
 
-    return render_to_response('resources/image-search-detail-window.html',
-                              {'image': image},
-                              context_instance=RequestContext(request))
+    return render(request, 'resources/image-search-detail-window.html',  {'image': image})
