@@ -174,14 +174,10 @@ def search(request):
     """
     Currently on renders the initial page
     """
-
     pagins = None
     paginator_range = None
 
     # Check if there is any result in session, save if necessary
-
-    #results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-
     form, results_per_page = check_and_save_options_form(request)
 
     if request.POST.get('desired_page') is None:
@@ -238,6 +234,7 @@ def search(request):
         request.session['existing_form'] = new_existing_form
 
         if submitVal == 'add_var':
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
             # Add variables
             tmpElemDict = {}
             varname = request.POST.get('new_var_name')
@@ -365,9 +362,6 @@ def search(request):
         paginator = Paginator(results, results_per_page)
         pagins = paginator.page(int(current_page))
 
-        # Prepare paginator ranges
-        paginator_range = prepare_paginator_ranges(paginator, current_page)
-
         if results is None:
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
@@ -379,8 +373,6 @@ def search(request):
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         paginator = Paginator(results, results_per_page)
         pagins = paginator.page(int(current_page))
-        # Prepare paginator ranges
-        paginator_range = prepare_paginator_ranges(paginator, current_page)
 
         # Check if there is any result in session, save if necessary
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -397,7 +389,7 @@ def search(request):
         current_page = request.POST.get('desired_page')
 
     # Prepare paginator ranges
-    paginator_range = prepare_paginator_ranges(paginator, current_page)
+    paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)
 
     return render(request, "voyage/search.html", {
                               'voyage_span_first_year': voyage_span_first_year,
@@ -470,7 +462,7 @@ def getNestedListPlaces(varname):
     return choices
 
 
-def prepare_paginator_ranges(paginator, current_page):
+def prepare_paginator_ranges(paginator, current_page, results_per_page):
     """
     Function prepares set of paginator links for template.
 
@@ -479,6 +471,7 @@ def prepare_paginator_ranges(paginator, current_page):
     """
 
     paginator_range = []
+    last_saved_index = 0
 
     for i in paginator_range_factors:
 
@@ -488,15 +481,24 @@ def prepare_paginator_ranges(paginator, current_page):
         except IndexError:
             last = 0
 
+        # If page number would be greater than max page number,
+        # return, since this is the end of page paginator ranges
+        if last_saved_index >= len(paginator.object_list):
+            return paginator_range
         # Index can't be less than '1'
         if int(current_page) + i < 1:
             paginator_range.append(last+1)
+            last_saved_index = ((last+1) * results_per_page)
         else:
             # Index has to be always +1 from the last one
+            # (e.g. current_page is '1')
             if int(current_page) + i <= last:
-                paginator_range.append(paginator_range[-1] + 1)
+                paginator_range.append(last+1)
+                last_saved_index = ((last+1) * results_per_page)
+            # Otherwise, just increment current_page
             else:
                 paginator_range.append(int(current_page) + i)
+                last_saved_index = ((int(current_page)+i) * results_per_page)
 
     return paginator_range
 
