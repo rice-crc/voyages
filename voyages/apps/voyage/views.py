@@ -185,20 +185,6 @@ def search(request):
         results = Voyage.objects.all()
         request.session['search_results'] = results
 
-    #form = check_and_save_options_form(request)
-
-    # options_results_per_page_form = check_and_save_options_form(request)
-    if request.method == "POST":
-        pass
-        # form = ResultsPerPageOptionForm(request.POST)
-        # form.is_valid()
-        # results_per_page = form.cleaned_option()
-    else:
-        pass
-        # form = ResultsPerPageOptionForm()
-        # results_per_page = form.cleaned_option()
-
-    #results_per_page = form.cleaned_option()
     form, results_per_page = check_and_save_options_form(request)
 
     if request.POST.get('desired_page') is None:
@@ -561,7 +547,7 @@ def check_and_save_options_form(request):
         form = ResultsPerPageOptionForm(request.POST)
         form.is_valid()
         results_per_page = form.cleaned_option()
-        3/0
+
         if form_in_session != form:
             request.session['results_per_page_form'] = form
     else:
