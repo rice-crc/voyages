@@ -283,6 +283,11 @@ function resetSearch() {
      return true;
 }
 
+function performSearch() {
+    $('#form').append("<input type='hidden' name='submitVal' value='search' />");
+     $("#form").submit();
+     return true;
+}
 
 function formatArray(selectedItems) {
     /* Return a comma-separated list */

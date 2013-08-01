@@ -491,12 +491,19 @@
                                 <span class="month-toggled">{{ month }}</span>
                                 {% endfor %}
                             </div>
+
+                        {% elif elem.type == "boolean" %}
+
+                            {% for field in elem.form %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
+
                         {% endif %}
                         </div>
                     {% endfor %}
                 {% endif %}
             </div>
-            <input type="submit" value="{% trans 'Search' %}" name="buttonSearch"/>
+            <input type="submit" onclick="performSearch();" value="{% trans 'Search' %}" name="buttonSearch"/>
             <input type="reset" onclick="resetSearch();" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>
