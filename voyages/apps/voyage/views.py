@@ -211,15 +211,46 @@ def search(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
+
     if request.method == 'POST':
         submitVal = request.POST.get('submitVal')
+
+        # Update variable values
+        list_search_vars = request.POST.getlist('list-input-params')
+        existing_form = request.session['existing_form']
+        new_existing_form = []
+
+        for tmp_varname in list_search_vars:
+            for cur_var in existing_form:
+                if tmp_varname == cur_var['varname']:
+                    if tmp_varname in list_text_fields:
+                        cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
+
+                    elif tmp_varname in list_select_fields:
+                        # Select box variables
+                        oldChoices = cur_var['form'].fields['choice_field'].choices
+                        cur_var['form'] = SimpleSelectSearchForm(oldChoices, request.POST, prefix=tmp_varname)
+                    elif tmp_varname in list_numeric_fields:
+                        # Numeric variables
+                        cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
+
+                    elif tmp_varname in list_date_fields:
+                        # Numeric variables
+                        cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + tmp_varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
+
+                    elif tmp_varname in list_place_fields:
+                        pass
+
+                    elif tmp_varname in list_boolean_fields:
+                         # Boolean field
+                        cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
+                    new_existing_form.append(cur_var)
+
+        request.session['existing_form'] = new_existing_form
+
         if submitVal == 'add_var':
-
             # Add variables
-            existing_form = request.session['existing_form']
-
             tmpElemDict = {}
-
             varname = request.POST.get('new_var_name')
             tmpElemDict['varname'] = request.POST.get('new_var_name')
             tmpElemDict['var_full_name'] = request.POST.get('new_var_fullname')
@@ -263,45 +294,12 @@ def search(request):
 
             elif varname in list_boolean_fields:
                  # Boolean field
-                choices = (('1', 'Yes'), ('2', 'No'))
-                form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
+                form = SimpleSelectBooleanForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
                 tmpElemDict['form'] = form
-                tmpElemDict['type'] = 'plain_text'
+                tmpElemDict['type'] = 'boolean'
             else:
                 pass
-
-            existing_form.append(tmpElemDict)
-
-            list_search_vars = request.POST.getlist('list-input-params')
-            new_existing_form = []
-
-            for tmp_varname in list_search_vars:
-                for cur_var in existing_form:
-                    if tmp_varname == cur_var['varname']:
-                        if tmp_varname in list_text_fields:
-                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
-                        elif tmp_varname in list_select_fields:
-                            # Select box variables
-                            cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
-
-                        elif tmp_varname in list_numeric_fields:
-                            # Numeric variables
-                            cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
-
-                        elif tmp_varname in list_date_fields:
-                            # Numeric variables
-                            cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
-
-                        elif tmp_varname in list_place_fields:
-                            pass
-
-                        elif tmp_varname in list_boolean_fields:
-                             # Boolean field
-                            pass
-                        new_existing_form.append(cur_var)
-
-            new_existing_form.append(tmpElemDict)
-            request.session['existing_form'] = new_existing_form
+            request.session['existing_form'].append(tmpElemDict)
 
         elif submitVal == 'reset':
             existing_form = []
@@ -310,30 +308,52 @@ def search(request):
         elif submitVal == 'search':
             list_search_vars = request.POST.getlist('list-input-params')
 
-            querystr = []
             new_existing_form = []
-            queryDict2 = {}
+            query_dict = {}
+
+            # Time frame search
+            frame_form = TimeFrameSpanSearchForm(request.POST)
+            if frame_form.is_valid():
+                pass
+                #query_dict['var_imp_voyage_began__range'] = [frame_form.cleaned_data['frame_from_year'],
+                #                                             frame_form.cleaned_data['frame_to_year']]
 
             for tmp_varname in list_search_vars:
                 for cur_var in request.session['existing_form']:
+
                     if tmp_varname == cur_var['varname']:
                         if tmp_varname in list_text_fields:
                             cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
                             if cur_var['form'].is_valid():
-                                querystr.append(tmp_varname + "__contains='" + cur_var['form'].cleaned_data['text_search'] + "'")
+                                query_dict[tmp_varname + "__contains"] = cur_var['form'].cleaned_data['text_search']
 
-                                queryDict2[tmp_varname + "__contains"] = cur_var['form'].cleaned_data['text_search']
                         elif tmp_varname in list_select_fields:
                             # Select box variables
-                            cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
+                            oldChoices = cur_var['form'].fields['choice_field'].choices
+                            cur_var['form'] = SimpleSelectSearchForm(oldChoices, request.POST, prefix=tmp_varname)
+                            if cur_var['form'].is_valid():
+                                query_dict[tmp_varname + "__in"] = cur_var['form'].cleaned_data['choice_field']
 
                         elif tmp_varname in list_numeric_fields:
                             # Numeric variables
                             cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
+                            if cur_var['form'].is_valid():
+                                opt = cur_var['form'].cleaned_data['options']
+                                if opt == '1': # Between
+                                    query_dict[tmp_varname + "__range"] = [cur_var['form'].cleaned_data['lower_bound'],
+                                                                           cur_var['form'].cleaned_data['upper_bound']]
+                                elif opt == '2': #
+                                    query_dict[tmp_varname + "__lte"] = cur_var['form'].cleaned_data['threshold']
+                                elif opt == '3':
+                                    query_dict[tmp_varname + "__gte"] = cur_var['form'].cleaned_data['threshold']
+                                elif opt == '4': # Is equal
+                                    query_dict[tmp_varname + "__exact"] = cur_var['form'].cleaned_data['threshold']
+                                else:
+                                    pass
 
                         elif tmp_varname in list_date_fields:
                             # Numeric variables
-                            cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
+                            cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
 
                         elif tmp_varname in list_place_fields:
                             # To be updated
@@ -341,18 +361,18 @@ def search(request):
 
                         elif tmp_varname in list_boolean_fields:
                              # Boolean field
-                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
+                            cur_var['form'] = SimpleSelectBooleanForm(request.POST, prefix=tmp_varname)
+                            if cur_var['form'].is_valid():
+                                query_dict[tmp_varname + "__in"] = cur_var['form'].cleaned_data['choice_field']
 
                         new_existing_form.append(cur_var)
 
             request.session['existing_form'] = new_existing_form
 
-            finalQueryStr =  ",".join(querystr)
-            print finalQueryStr
+            print query_dict
+            results = SearchQuerySet().filter(**query_dict)
 
-            results = SearchQuerySet().filter(**queryDict2)
-
-            print 'Count: ' + str(results.count())
+            #print 'Count: ' + str(results.count())
 
     elif request.method == 'GET':
         # Create a new form
@@ -417,7 +437,7 @@ def get_var_box(request, varname):
 
     elif varname in list_boolean_fields:
          # Boolean field
-        choices=(('1', 'Yes'), ('2', 'No'))
+        choices = (('1', 'Yes'), ('2', 'No'))
         form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
         return render_to_response("voyage/search_box_plain_text.html",
             {'varname': varname, 'input_field_name': input_field_name, 'form': form,},

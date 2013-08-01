@@ -9,6 +9,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     """
     text = indexes.CharField(document=True, use_template=True)
 
+    var_imp_voyage_began = indexes.IntegerField(null=True)
+
     var_voyage_id = indexes.IntegerField(model_attr='voyage_id', null=True)
     var_voyage_in_cd_rom = indexes.BooleanField(model_attr="voyage_in_cd_rom", null=True)
     var_ship_name = indexes.CharField(null=True)
@@ -106,6 +108,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
+
+    def prepare_var_imp_voyage_began(self, obj):
+        try:
+            return obj.voyage_dates.imp_voyage_began
+        except AttributeError:
+            return None
 
     def prepare_var_ship_name(self, obj):
         try:

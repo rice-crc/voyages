@@ -491,6 +491,13 @@
                                 <span class="month-toggled">{{ month }}</span>
                                 {% endfor %}
                             </div>
+
+                        {% elif elem.type == "boolean" %}
+
+                            {% for field in elem.form %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
+
                         {% endif %}
                         </div>
                     {% endfor %}
