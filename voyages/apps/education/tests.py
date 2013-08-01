@@ -11,19 +11,6 @@ class TestAllData(TestCase):
     Simple test of the Education: Lesson plan view
     """
     fixtures = ['help_lessonplan_data_all.json',]
-    def test_simple_rendering_lessonplan_view(self):
-        """
-        Test simple rendering of the page
-        """
-        response = self.client.get(reverse('education:lesson-plans'))
-        self.assertEqual(response.status_code, 200)
-        
-    def test_not_empty_lessonplan(self):
-        """
-        Test that the loaded fixture is non-empty (for other test to work)
-        """
-        listAllObjects = LessonPlan.objects.all()
-        self.assertEqual(len(listAllObjects) > 0, True)
         
     def test_word_contains(self):
         """
