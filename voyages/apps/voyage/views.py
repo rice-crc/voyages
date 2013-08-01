@@ -198,7 +198,6 @@ def search(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
-
     if request.method == 'POST':
         submitVal = request.POST.get('submitVal')
 
@@ -484,8 +483,16 @@ def check_and_save_options_form(request):
 
     if request.method == "POST":
         form = ResultsPerPageOptionForm(request.POST)
-        form.is_valid()
-        results_per_page = form.cleaned_option()
+        if form.is_valid():
+            results_per_page = form.cleaned_option()
+        else:
+            form = form_in_session
+            if form is not None:
+                form.is_valid()
+                results_per_page = form.cleaned_option()
+            else:
+                form = ResultsPerPageOptionForm()
+                results_per_page = form.cleaned_option()
 
         if form_in_session != form:
             request.session['results_per_page_form'] = form
