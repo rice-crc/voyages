@@ -57,27 +57,27 @@
         {% for i in results %}
             <tr class="grid-row-even grid-row-first">
                 <td>
-                    {{ i.voyage_id }}
+                    {{ i.get_stored_fields.var_voyage_id }}
                 </td>
                 <td>
-                    {{ i.voyage_ship.ship_name }}
+                    {{ i.get_stored_fields.var_ship_name }}
                 </td>
                 <td>
                     <div>
                         {# TODO: Probably it have to be changed #}
-                        {% for j in i.voyage_captain.all %}
+                        {% for j in i.get_stored_fields.var_captain.all %}
                             {{ j.name }}
                         {% endfor %}
                     </div>
                 </td>
                 <td style="text-align: left">
-                    {{ i.voyage_dates.imp_arrival_at_port_of_dis|get_year_value }}
+                    {{ i.get_stored_fields.var_imp_arrival_at_port_of_dis }}
                 </td>
                 <td>
-                    {{ i.voyage_itinerary.imp_principal_region_of_slave_purchase }}
+                    {{ i.get_stored_fields.var_principal_region_of_slave_purchase }}
                 </td>
                 <td>
-                    {{ i.voyage_itinerary.first_landing_region }}
+                    {{ i.get_stored_fields.var_first_landing_region }}
                 </td>
             </tr>
         {% endfor %}
@@ -93,10 +93,10 @@
             <td style="padding: 0px; text-align: left">
                 {% for i in results %}
                     {% if forloop.first %}
-                        Showing {{ i.voyage_id }} -
+                        Showing {{ i.get_stored_fields.voyage_id }} -
                     {% endif %}
                     {% if forloop.last %}
-                        {{ i.voyage_id }} out of {{ results.paginator.count }}, display
+                        {{ i.get_stored_fields.voyage_id }} out of {{ results.paginator.count }}, display
                     {% endif %}
                 {% endfor %}
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
