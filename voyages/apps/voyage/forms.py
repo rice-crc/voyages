@@ -178,3 +178,19 @@ class TimeFrameSpanSearchForm(forms.Form):
         attrs={'class': "short_field_white"}))
     frame_to_year = forms.IntegerField(label = "To", widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
+
+
+class ResultsPerPageOptionForm(forms.Form):
+    choices = (('1', 10), ('2', 15), ('3', 20), ('4', 30), ('5', 50), ('6', 100), ('7', 200))
+    option = forms.ChoiceField(widget=forms.Select(attrs={'onchange': 'this.form.submit();'}), choices=choices, initial='1')
+
+    def cleaned_option(self):
+        try:
+            option_value = self.cleaned_data['option']
+        except:
+            option_value = None
+
+        if option_value is None:
+            option_value = '1'
+
+        return dict(self.fields['option'].choices)[option_value]

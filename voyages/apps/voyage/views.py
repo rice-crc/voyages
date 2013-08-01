@@ -100,7 +100,6 @@ list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
 option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
-DEFAULT_RESULTS_PER_PAGE=10
 
 if VoyageDates.objects.count() > 1:
     voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
@@ -183,16 +182,21 @@ def search(request):
 
     results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
-    # Prepare results per page
-    if request.POST.get('results_per_page') is not None:
-        results_per_page = request.POST.get('results_per_page')
-        request.session['results_per_page'] = results_per_page
+    #form = check_and_save_options_form(request)
+
+    # options_results_per_page_form = check_and_save_options_form(request)
+    if request.method == "POST":
+        pass
+        # form = ResultsPerPageOptionForm(request.POST)
+        # form.is_valid()
+        # results_per_page = form.cleaned_option()
     else:
-        try:
-            results_per_page = request.session['results_per_page']
-        except KeyError:
-            request.session['results_per_page'] = DEFAULT_RESULTS_PER_PAGE
-            results_per_page = DEFAULT_RESULTS_PER_PAGE
+        pass
+        # form = ResultsPerPageOptionForm()
+        # results_per_page = form.cleaned_option()
+
+    #results_per_page = form.cleaned_option()
+    form, results_per_page = check_and_save_options_form(request)
 
     if request.POST.get('desired_page') is None:
         current_page = 1
@@ -380,8 +384,7 @@ def search(request):
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
                               'paginator_range': paginator_range,
-                              'results_per_page': results_per_page,
-                              'option_results_per_page': option_results_per_page},
+                              'options_results_per_page_form': form},
                               context_instance=RequestContext(request))
 
 
@@ -477,6 +480,40 @@ def prepare_paginator_ranges(paginator, current_page):
                 paginator_range.append(int(current_page) + i)
 
     return paginator_range
+
+
+def check_and_save_options_form(request):
+    """
+    Function checks and replaces if necessary
+    form (results per page) form in the session.
+
+    :param request: Request to serve
+    """
+
+    # Try to get a form from session
+    try:
+        form_in_session = request.session['results_per_page_form']
+    except KeyError:
+        form_in_session = None
+
+    if request.method == "POST":
+        form = ResultsPerPageOptionForm(request.POST)
+        form.is_valid()
+        results_per_page = form.cleaned_option()
+        3/0
+        if form_in_session != form:
+            request.session['results_per_page_form'] = form
+    else:
+        if form_in_session is not None:
+            form = request.session['results_per_page_form']
+            form.is_valid()
+            results_per_page = form.cleaned_option()
+        else:
+            form = ResultsPerPageOptionForm()
+            results_per_page = form.cleaned_option()
+
+    return form, results_per_page
+
 
 def getMonth(value):
     return value.split(",")[0]

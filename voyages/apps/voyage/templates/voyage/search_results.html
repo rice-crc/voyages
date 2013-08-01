@@ -89,6 +89,7 @@
     <table style="border-collapse: collapse; width: 100%;">
         <tbody>
         <tr>
+
             <td style="padding: 0px; text-align: left">
                 {% for i in results %}
                     {% if forloop.first %}
@@ -98,17 +99,13 @@
                         {{ i.get_stored_fields.voyage_id }} out of {{ results.paginator.count }}, display
                     {% endif %}
                 {% endfor %}
-                <select id="form:pageSize" onchange="submit()" size="1" name="form:pageSize">
-                    <option selected="selected" value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                </select>
-                results per page.
+                <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ options_results_per_page_form.option }}
+                </form>
+                        results per page.
             </td>
+
             <td style="padding: 0px;">
                 <table class="td-table-links">
                     <tbody>
