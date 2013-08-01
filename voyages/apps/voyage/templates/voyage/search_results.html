@@ -65,8 +65,8 @@
                 <td>
                     <div>
                         {# TODO: Probably it have to be changed #}
-                        {% for j in i.get_stored_fields.var_captain.all %}
-                            {{ j.name }}
+                        {% for j in i.get_stored_fields.var_captain %}
+                            {{ j }}
                         {% endfor %}
                     </div>
                 </td>
@@ -74,7 +74,7 @@
                     {{ i.get_stored_fields.var_imp_arrival_at_port_of_dis }}
                 </td>
                 <td>
-                    {{ i.get_stored_fields.var_principal_region_of_slave_purchase }}
+                    {{ i.get_stored_fields.var_first_region_slave_emb }}
                 </td>
                 <td>
                     {{ i.get_stored_fields.var_first_landing_region }}
