@@ -176,6 +176,7 @@ def search(request):
     """
     pagins = None
     paginator_range = None
+    no_result = False
 
     # Check if there is any result in session, save if necessary
     form, results_per_page = check_and_save_options_form(request)
@@ -356,6 +357,8 @@ def search(request):
 
             # Initially sort by voyage_id
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+            if results.count() == 0:
+                no_result = True
         else:
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
@@ -391,11 +394,14 @@ def search(request):
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)
 
+    print no_result
+
     return render(request, "voyage/search.html", {
                               'voyage_span_first_year': voyage_span_first_year,
                               'voyage_span_last_year': voyage_span_last_year,
                               'results': pagins,
                               'paginator_range': paginator_range,
+                              'no_result': no_result,
                               'options_results_per_page_form': form})
 
 

@@ -236,3 +236,17 @@ div.permlink-info {
     min-height: 60px;
     padding: 10px;
 }
+
+.no_result_box {
+    display: block;
+    width: 60%;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #038DA6;
+    border-radius: 7px;
+}
+
+.no_result_box_head {
+    background-color: #DBF7FD;
+}

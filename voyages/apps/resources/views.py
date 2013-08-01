@@ -96,7 +96,7 @@ def images_search(request):
             pass
 
         # New search, clear data stored in session
-        request.session['results'] = None
+        request.session['results_images'] = None
         form = SearchForm(request.POST)
 
         if form.is_valid():
@@ -186,14 +186,14 @@ def images_search(request):
             results = SearchQuerySet().all()
 
         # Store results in session
-        request.session['results'] = results
+        request.session['results_images'] = results
         request.session['enabled_categories'] = categories_to_search
         request.session['query'] = query
         request.session['time_start'] = time_start
         request.session['time_end'] = time_end
 
     else:
-        results = request.session['results']
+        results = request.session['results_images']
 
     return render(request, 'resources/images-search-results.html',
             {'results': results,
@@ -211,7 +211,7 @@ def images_search_detail(request, page):
     :param page: Number of page to serve
     """
 
-    images = request.session['results']
+    images = request.session['results_images']
 
     paginator = Paginator(images, 1)
     pagins = paginator.page(page)
