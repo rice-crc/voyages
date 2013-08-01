@@ -96,7 +96,7 @@
                         Showing {{ i.get_stored_fields.var_voyage_id }} -
                     {% endif %}
                     {% if forloop.last %}
-                        {{ i.get_stored_fields.var_voyage_id }} out of {{ results|length }}, display
+                        {{ i.get_stored_fields.var_voyage_id }} out of {{ results.paginator.count }}, display
                     {% endif %}
                 {% endfor %}
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
@@ -166,11 +166,10 @@
                             </td>
                         {% else %}
                             <td class="pager-fast-forward-no-click">
-                                <a href="#">Next »</a>
+                                Next »
                             </td>
                         {% endif %}
-
-                        {% if results.number != results.paginator.count %}
+                        {% if results.has_next %}
                             <td class="pager-forward">
                                 <form id="form_last_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
