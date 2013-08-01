@@ -10,6 +10,7 @@ from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
 from .forms import *
+from haystack.query import SearchQuerySet
 
 list_text_fields = ['var_ship_name',
                     'var_owner',
@@ -200,7 +201,8 @@ def search(request):
         request.session.create()
 
     if request.method == 'POST':
-        if request.POST.get('submitVal') == 'add_var':
+        submitVal = request.POST.get('submitVal')
+        if submitVal == 'add_var':
 
             # Add variables
             existing_form = request.session['existing_form']
@@ -290,9 +292,56 @@ def search(request):
             new_existing_form.append(tmpElemDict)
             request.session['existing_form'] = new_existing_form
 
-        elif request.POST.get('submitVal') == 'reset':
+        elif submitVal == 'reset':
             existing_form = []
             request.session['existing_form'] = existing_form
+
+        elif submitVal == 'search':
+            list_search_vars = request.POST.getlist('list-input-params')
+
+            querystr = []
+            new_existing_form = []
+            queryDict2 = {}
+
+            for tmp_varname in list_search_vars:
+                for cur_var in request.session['existing_form']:
+                    if tmp_varname == cur_var['varname']:
+                        if tmp_varname in list_text_fields:
+                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
+                            if cur_var['form'].is_valid():
+                                querystr.append(tmp_varname + "__contains='" + cur_var['form'].cleaned_data['text_search'] + "'")
+
+                                queryDict2[tmp_varname + "__contains"] = cur_var['form'].cleaned_data['text_search']
+                        elif tmp_varname in list_select_fields:
+                            # Select box variables
+                            cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
+
+                        elif tmp_varname in list_numeric_fields:
+                            # Numeric variables
+                            cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
+
+                        elif tmp_varname in list_date_fields:
+                            # Numeric variables
+                            cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
+
+                        elif tmp_varname in list_place_fields:
+                            # To be updated
+                            pass
+
+                        elif tmp_varname in list_boolean_fields:
+                             # Boolean field
+                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
+
+                        new_existing_form.append(cur_var)
+
+            request.session['existing_form'] = new_existing_form
+
+            finalQueryStr =  ",".join(querystr)
+            print finalQueryStr
+
+            results = SearchQuerySet().filter(**queryDict2)
+
+            print 'Count: ' + str(results.count())
 
     elif request.method == 'GET':
         # Create a new form
