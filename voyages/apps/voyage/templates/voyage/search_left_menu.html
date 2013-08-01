@@ -453,7 +453,8 @@
                                                                 <li>
                                                                     <label for="{{ item_layer2.id }}">
                                                                     <input id="{{ item_layer2.id }}" class="var-checkbox checkbox-layer2" type="checkbox"
-                                                                           value="{{ item_layer2.order_num }}"
+                                                                           name="{{ elem.selected_choices }}"
+                                                                           value="{{ item_layer2.text }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                                                     {{ item_layer2.text }}
                                                                     </label>

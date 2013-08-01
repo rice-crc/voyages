@@ -301,8 +301,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_first_region_slave_emb(self, obj):
         try:
-            return obj.voyage_itinerary.first_region_emb.region
+            return obj.voyage_itinerary.principal_place_of_slave_purchase.region.region
         except AttributeError:
+            return None
+        except IndexError:
             return None
 
     def prepare_var_second_region_slave_emb(self, obj):
@@ -482,8 +484,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return None
-        #return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
+        return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
 
     def prepare_var_crew_voyage_outset(self, obj):
         try:

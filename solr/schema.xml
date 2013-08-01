@@ -212,7 +212,7 @@
 
     <field name="var_ship_name" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_place_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_voyage_began" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_voyage_began" type="date" indexed="true" stored="true" multiValued="false" />
 
@@ -255,6 +255,8 @@
     <field name="var_tonnage_mod" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_place_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_carried_second_port" type="long" indexed="true" stored="true" multiValued="false" />
 

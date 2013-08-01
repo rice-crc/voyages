@@ -179,11 +179,8 @@ def search(request):
     time_span_form = TimeFrameSpanSearchForm()
 
     # Check if there is any result in session, save if necessary
-    try:
-        results = request.session['search_results']
-    except KeyError:
-        results = Voyage.objects.all()
-        request.session['search_results'] = results
+
+    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
     form, results_per_page = check_and_save_options_form(request)
 
@@ -281,6 +278,7 @@ def search(request):
                 tmpElemDict['type'] = 'select_three_layers'
                 tmpElemDict['varname_wrapper'] = "select_" + varname
                 tmpElemDict['choices'] = choices
+                tmpElemDict['selected_choices'] = varname + "_selected"
 
             elif varname in list_boolean_fields:
                  # Boolean field
@@ -342,12 +340,12 @@ def search(request):
                                     pass
 
                         elif tmp_varname in list_date_fields:
-                            # Numeric variables
+                            # Currently in progress
+                            # To be updated
                             cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
 
                         elif tmp_varname in list_place_fields:
-                            # To be updated
-                            pass
+                            query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
 
                         elif tmp_varname in list_boolean_fields:
                              # Boolean field
@@ -359,10 +357,8 @@ def search(request):
 
             request.session['existing_form'] = new_existing_form
 
-            print query_dict
-            results = SearchQuerySet().filter(**query_dict)
-
-            #print 'Count: ' + str(results.count())
+            # Initially sort by voyage_id
+            results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
     elif request.method == 'GET':
         # Create a new form
@@ -378,63 +374,6 @@ def search(request):
                               context_instance=RequestContext(request))
 
 
-def get_var_box(request, varname):
-
-    # Return/construct a box with information about the variables:
-    input_field_name = "header_" + varname
-
-    if varname in list_text_fields:
-        # Plain text fields
-        form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
-        return render_to_response("voyage/search_box_plain_text.html",
-            {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
-            context_instance=RequestContext(request))
-
-    elif varname in list_select_fields:
-        # Select box variables
-        choices = getChoices(varname)
-        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
-        varname_wrapper = "select_" + varname
-        return render_to_response("voyage/search_box_select.html",
-            {'varname': varname, 'choices': choices,
-                'input_field_name': input_field_name,
-                'varname_wrapper' : varname_wrapper, 'form': form},
-            context_instance=RequestContext(request))
-
-    elif varname in list_numeric_fields:
-        # Numeric variables
-        form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
-        return render_to_response("voyage/search_box_numeric.html",
-            {'varname': varname,
-                'input_field_name': input_field_name, 'form': form},
-            context_instance=RequestContext(request))
-    elif varname in list_date_fields:
-        # Numeric variables
-        form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
-        return render_to_response("voyage/search_box_date.html",
-            {'varname': varname, 'list_months': list_months,
-                'input_field_name': input_field_name, 'form': form},
-            context_instance=RequestContext(request))
-    elif varname in list_place_fields:
-        choices = getNestedListPlaces(varname)
-        varname_wrapper = "select_" + varname
-        return render_to_response("voyage/search_box_select_three_layers.html",
-            {'varname': varname, 'choices': choices,
-                'input_field_name': input_field_name,
-                'varname_wrapper': varname_wrapper},
-            context_instance=RequestContext(request))
-
-    elif varname in list_boolean_fields:
-         # Boolean field
-        choices = (('1', 'Yes'), ('2', 'No'))
-        form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"))
-        return render_to_response("voyage/search_box_plain_text.html",
-            {'varname': varname, 'input_field_name': input_field_name, 'form': form,},
-            context_instance=RequestContext(request))
-    else:
-        pass
-
-
 def getChoices(varname):
     """
     Retrieve a list of two-tuple items for select boxes depending on the model
@@ -446,27 +385,27 @@ def getChoices(varname):
         for nation in Nationality.objects.all():
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
-            choices.append((nation.pk, nation.label))
+            choices.append((nation.label, nation.label))
     elif varname in ['var_imputed_nationality']:
         for nation in Nationality.objects.all():
             # imputed flags
             if nation.label in list_imputed_nationality_values:
-                choices.append((nation.pk, nation.label))
+                choices.append((nation.label, nation.label))
     elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
-            choices.append((outcome.pk, outcome.label))
+            choices.append((outcome.label, outcome.label))
     elif varname in ['var_outcome_slaves']:
         for outcome in SlavesOutcome.objects.all():
-            choices.append((outcome.pk, outcome.label))
+            choices.append((outcome.label, outcome.label))
     elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
-            choices.append((outcome.pk, outcome.label))
+            choices.append((outcome.label, outcome.label))
     elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
-            choices.append((outcome.pk, outcome.label))
+            choices.append((outcome.label, outcome.label))
     elif varname in ['var_outcome_ship_captured']:
         for outcome in VesselCapturedOutcome.objects.all():
-            choices.append((outcome.pk, outcome.label))
+            choices.append((outcome.label, outcome.label))
     return choices
 
 
