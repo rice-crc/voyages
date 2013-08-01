@@ -103,8 +103,8 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     """
     Form for editing HTML for FAQ answer
     """
-    short_ref = forms.CharField(widget=forms.Textarea(attrs={'rows':4, 'cols':60}))
-    full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class' : 'tinymcetextarea'}))
+    short_ref = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'cols': 60}))
+    full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class': 'tinymcetextarea'}))
 
     class Meta:
         model = VoyageSources
@@ -124,10 +124,10 @@ class SimpleNumericSearchForm(forms.Form):
     OPERATORS = (('1', 'Between'), ('2', 'At most'), ('3', 'At least'), ('4', 'Is equal to'))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
-    threshold = forms.IntegerField(widget=forms.TextInput(
+    threshold = forms.IntegerField(required=False, widget=forms.TextInput(
         attrs={'class': "medium_field"}))
-    lower_bound = forms.IntegerField(widget=forms.TextInput(attrs={'class': "short_field"}))
-    upper_bound = forms.IntegerField(widget=forms.TextInput(attrs={'class': "short_field"}))
+    lower_bound = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': "short_field"}))
+    upper_bound = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': "short_field"}))
 
 
 class SimpleDateSearchForm(forms.Form):
@@ -137,18 +137,18 @@ class SimpleDateSearchForm(forms.Form):
     OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
-    from_month = forms.IntegerField(initial="01", widget=forms.TextInput(
+    from_month = forms.IntegerField(required=False, initial="01", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    from_year = forms.IntegerField(widget=forms.TextInput(
+    from_year = forms.IntegerField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
-    to_month = forms.IntegerField(initial="12", widget=forms.TextInput(
+    to_month = forms.IntegerField(required=False, initial="12", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    to_year = forms.IntegerField(widget=forms.TextInput(
+    to_year = forms.IntegerField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
-    threshold_month = forms.IntegerField(initial="MM", widget=forms.TextInput(
+    threshold_month = forms.IntegerField(required=False, initial="MM", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    threshold_year = forms.IntegerField(initial="YYYY",widget=forms.TextInput(
+    threshold_year = forms.IntegerField(required=False, initial="YYYY",widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
 
@@ -156,11 +156,21 @@ class SimpleSelectSearchForm(forms.Form):
     """
     Simple checkbox search form
     """
-    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}))
+    INIT_CHOICES = (('1', 'Yes'), ('2', 'No'))
+    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'})
+                    , choices=INIT_CHOICES)
 
     def __init__(self, listChoices, *args, **kwargs):
         super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
-        self.fields['choice_field'].widget.choices = listChoices
+        self.fields['choice_field'].choices = listChoices
+
+
+class SimpleSelectBooleanForm(forms.Form):
+    BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
+
+    choice_field = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
+        choices=BOOLEAN_CHOICES)
 
 
 class TimeFrameSpanSearchForm(forms.Form):
