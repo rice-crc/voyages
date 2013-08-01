@@ -19,6 +19,8 @@
 
 {% block content %}
 
+<form id="form" name="form" method="post" action="{% url 'voyage:search' %}"
+      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 <div id="left-menu" class="left-menu-box">
 	{% include "voyage/search_left_menu.html" %}
 </div>
@@ -28,4 +30,5 @@
         {% include "voyage/search_main_content.html" %}
 	{% endblock %}
 </div>
+</form>
 {% endblock %}
