@@ -198,11 +198,10 @@ def search(request):
         request.session['results_voyages'] = results
 
     if request.method == 'POST':
+
         submitVal = request.POST.get('submitVal')
 
         time_span_form = TimeFrameSpanSearchForm(request.POST)
-
-
         # Update variable values
         list_search_vars = request.POST.getlist('list-input-params')
         existing_form = request.session['existing_form']
@@ -395,6 +394,9 @@ def search(request):
 
     form, results_per_page = check_and_save_options_form(request)
 
+    if results.count() == 0:
+        no_result = True
+
     if request.POST.get('desired_page') is None:
         current_page = 1
     else:
@@ -407,8 +409,6 @@ def search(request):
 
     # Prepare paginator ranges
     paginator_range = prepare_paginator_ranges(paginator, current_page, results_per_page)
-
-    print no_result
 
     return render(request, "voyage/search.html", {
                               'voyage_span_first_year': voyage_span_first_year,
