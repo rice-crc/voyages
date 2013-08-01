@@ -357,18 +357,22 @@
                         <!-- Search box header -->
                         <span class="query-builder-label" id="{{ elem.input_field_name }}">{{ elem.var_full_name }}</span>
                         <input type="hidden" name="list-input-params" value="{{ elem.varname }}">
-                        <span class="query-builder-button move-up-button">
-                            <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
-                                 onclick="move_box_up('{{ elem.input_field_name }}');" />
-                        </span>
-                        <span class="query-builder-button move-down-button">
-                            <img src="{{ STATIC_URL }}images/voyage/icon-move-down.png"
-                                 onclick="move_box_down('header_{{ elem.varname }}');" />
-                        </span>
+
                         <span class="query-builder-button close-button">
                             <img src="{{ STATIC_URL }}images/voyage/icon-remove.png"
                                  onclick="delete_box('header_{{ elem.varname }}', '{{ elem.varname }}');" />
                         </span>
+
+                        <span class="query-builder-button move-down-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-down.png"
+                                 onclick="move_box_down('header_{{ elem.varname }}');" />
+                        </span>
+
+                        <span class="query-builder-button move-up-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
+                                 onclick="move_box_up('{{ elem.input_field_name }}');" />
+                        </span>
+
 
                         {% if elem.type == "plain_text" %}
                             {% for field in elem.form %}

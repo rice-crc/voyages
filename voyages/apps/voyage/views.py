@@ -283,6 +283,7 @@ def search(request):
             else:
                 pass
             request.session['existing_form'].append(tmpElemDict)
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
         elif submitVal == 'reset':
             existing_form = []
