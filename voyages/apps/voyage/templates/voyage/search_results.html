@@ -93,10 +93,10 @@
             <td style="padding: 0px; text-align: left">
                 {% for i in results %}
                     {% if forloop.first %}
-                        Showing {{ i.get_stored_fields.voyage_id }} -
+                        Showing {{ i.get_stored_fields.var_voyage_id }} -
                     {% endif %}
                     {% if forloop.last %}
-                        {{ i.get_stored_fields.voyage_id }} out of {{ results.paginator.count }}, display
+                        {{ i.get_stored_fields.var_voyage_id }} out of {{ results|length }}, display
                     {% endif %}
                 {% endfor %}
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
