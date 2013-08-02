@@ -622,7 +622,7 @@ class VoyageDates(models.Model):
 
         return int(value.split(',')[0])
 
-    def calculate_year_period(self, period):
+    def  calculate_year_period(self, period):
         """
         Function to calculate proper period.
 
