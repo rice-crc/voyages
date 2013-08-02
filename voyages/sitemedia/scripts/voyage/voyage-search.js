@@ -1,7 +1,6 @@
 ﻿var attr_selected_class = "attribute-selected";
 
 $(document).ready(function() {
-    /* Set the initial values for time frame */
 
     /* Collapsible boxes */
     $(".box-header .box-button").click(function(ev){
@@ -72,6 +71,8 @@ $(document).ready(function() {
             return true;
         }
 	});
+
+    $(".search-panel").resize();
 });
 
 

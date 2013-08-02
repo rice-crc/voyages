@@ -71,14 +71,14 @@ div.grid-header-icon-asc {
 	padding-right: 15px;
 	background-position: right center;
 	background-repeat: no-repeat;
-	background-image: url(../images/icon-arrow-down.png);}
+	background-image: url(/static/images/voyage/icon-arrow-down.png);}
 
 div.grid-header-icon-desc {
 	margin-right: 5px;
 	padding-right: 15px;
 	background-position: right center;
 	background-repeat: no-repeat;
-	background-image: url(../images/icon-arrow-up.png); }
+	background-image: url(/static/images/voyage/icon-arrow-up.png); }
 
 
 td.grid-first-column,
@@ -171,139 +171,3 @@ div.grid-tooltip {
     font: normal 8pt sans-serif; 
     
 }
-
-
-
-table.bubble {
-	display: none;
-	position: absolute; }
- 
-td.bubble-11 {
-	width: 12px;
-	height: 12px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-11-right.png); }	
-	
-
-td.bubble-11l {
-	width: 12px;
-	height: 12px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-11.png); }	
-	
-	
-td.bubble-11 div {
-	width: 12px;
-	height: 12px; }
-	
-td.bubble-12 {
-	height: 12px;
-	overflow: hidden;
-	background-repeat: repeat-x;
-	background-image: url(../images/bubble-12.png); }	
-	
-td.bubble-13 {
-	width: 32px;
-	height: 12px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-13-right.png); }	
-	
-	
-td.bubble-12l {
-	height: 12px;
-	overflow: hidden;
-	background-repeat: repeat-x;
-	background-image: url(../images/bubble-12.png); }	
-	
-td.bubble-13l {
-	width: 32px;
-	height: 12px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-13.png); }	
-
-td.bubble-13 div {
-	width: 32px;
-	height: 12px; }
-
-td.bubble-21 {
-	width: 12px;
-	overflow: hidden;
-	background-repeat: repeat-y;
-	background-image: url(../images/bubble-21-right.png); }	
-	
-td.bubble-22 {
-	color: White;
-	padding-left: 5px;
-	padding-right: 5px;
-	background-image: url(../images/bubble-22.png); }	
-	
-td.bubble-23 {
-	width: 32px;
-	overflow: hidden;
-	background-repeat: repeat-y;
-	background-image: url(../images/bubble-23-right.png); }	
-	
-	
-td.bubble-21l {
-	width: 12px;
-	overflow: hidden;
-	background-repeat: repeat-y;
-	background-image: url(../images/bubble-21.png); }	
-	
-td.bubble-22l {
-	color: White;
-	width: 350px;
-	padding-left: 5px;
-	padding-right: 5px;
-	background-image: url(../images/bubble-22.png); }	
-	
-td.bubble-23l {
-	width: 32px;
-	overflow: hidden;
-	background-repeat: repeat-y;
-	background-image: url(../images/bubble-23.png); }	
-	
-td.bubble-31 {
-	width: 12px;
-	height: 32px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-33-right.png); }	
-	
-td.bubble-32 {
-	height: 32px;
-	overflow: hidden;
-	background-repeat: repeat-x;
-	background-image: url(../images/bubble-32.png); }	
-	
-td.bubble-33 {
-	width: 32px;
-	height: 32px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-31-right.png); }
-	
-td.bubble-33l {
-	width: 12px;
-	height: 32px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-33.png); }	
-	
-td.bubble-32l {
-	height: 32px;
-	overflow: hidden;
-	background-repeat: repeat-x;
-	background-image: url(../images/bubble-32.png); }	
-	
-td.bubble-31l {
-	width: 32px;
-	height: 32px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-image: url(../images/bubble-31.png); }
-	
