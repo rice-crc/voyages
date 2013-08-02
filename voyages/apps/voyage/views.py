@@ -359,6 +359,19 @@ def search(request):
                             # Currently in progress
                             # To be updated
                             cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
+                            if cur_var['form'].is_valid():
+                                opt = cur_var['form'].cleaned_data['options']
+                                if opt == '1': # Between
+                                    query_dict[tmp_varname + "__range"] = [cur_var['form'].cleaned_data['from_month'],
+                                                                           cur_var['form'].cleaned_data['upper_bound']]
+                                elif opt == '2': #
+                                    query_dict[tmp_varname + "__lte"] = cur_var['form'].cleaned_data['threshold']
+                                elif opt == '3':
+                                    query_dict[tmp_varname + "__gte"] = cur_var['form'].cleaned_data['threshold']
+                                elif opt == '4': # Is equal
+                                    query_dict[tmp_varname + "__exact"] = cur_var['form'].cleaned_data['threshold']
+                                else:
+                                    pass
 
                         elif tmp_varname in list_place_fields:
                             query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
