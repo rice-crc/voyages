@@ -365,6 +365,10 @@ def search(request):
 
             # Initially sort by voyage_id
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+
+            print query_dict
+            print results.count()
+
             if results.count() == 0:
                 no_result = True
             request.session['results_voyages'] = results

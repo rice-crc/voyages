@@ -233,6 +233,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
+    def prepare_var_imp_port_voyage_begin(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_port_voyage_begin.place
+        except AttributeError:
+            return None
+
     def prepare_var_first_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.first_place_slave_purchase.place
