@@ -1,6 +1,16 @@
 from haystack import indexes
 from .models import *
 
+def getMonth(value):
+    return value.split(",")[0]
+
+
+def getDay(value):
+    return value.split(",")[1]
+
+
+def getYear(value):
+    return value.split(",")[2]
 
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
@@ -111,8 +121,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
-            return obj.voyage_dates.imp_voyage_began[2:]
-        except AttributeError:
+            return getYear(obj.voyage_dates.imp_voyage_began)
+        except AttributeError, TypeError:
             return None
 
     def prepare_var_ship_name(self, obj):
@@ -364,8 +374,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         try:
-            return int(obj.voyage_dates.imp_arrival_at_port_of_dis[2:])
-        except AttributeError:
+            return int(getYear(obj.voyage_dates.imp_arrival_at_port_of_dis))
+        except AttributeError, TypeError:
             return None
 
     def prepare_var_voyage_began(self, obj):
