@@ -9,6 +9,9 @@ $(document).ready(function() {
 
     $(".collapseCheckBoxButton").trigger('click');
 
+    /* Update text content for places */
+    $(".place_collapse_button").trigger('click');
+
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
         var curBox = $(this).parent().parent();
@@ -72,7 +75,6 @@ $(document).ready(function() {
         }
 	});
 
-    $(".search-panel").resize();
 });
 
 
@@ -252,6 +254,7 @@ function filter_hierarchical_list(label) {
         /* Expand all items */
         $("#" + label + " ul").removeClass("hidden");
         $("#" + label + " li").removeClass("hidden");
+        return;
     }
     $("#" + label + " .query-builder-list-item-collapsed").each(function() {
            $(this).toggleClass('query-builder-list-item-collapsed query-builder-list-item-expanded')

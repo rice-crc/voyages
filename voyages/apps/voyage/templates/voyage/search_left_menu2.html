@@ -399,15 +399,11 @@
                                     {% trans 'Quicksearch' %}
                                         <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
                                            onkeyup="filter_edit_list('{{ elem.varname_wrapper }}');"
-                                           name="tmp" style="width: 200px;" />
+                                           name="" style="width: 200px;" />
 
                                     <div class="query-builder-edit-list">
-                                        {% for opt in elem.form.choice_field %}
-                                            {{ opt }}
-                                        {% endfor %}
+                                        {{ elem.form }}
                                     </div>
-
-
                                     <div style="margin-top: 5px;">
                                         <input type="button" class="collapseCheckBoxButton"
                                                onclick="collapseCheckBoxes('{{ elem.varname_wrapper }}', 'var-checkbox')"
@@ -425,8 +421,7 @@
                                 <div class="query-select-initial" >
                                     <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
                                     </div>
-                                <br /><input type="button" onclick="expandChoices('{{ elem.varname_wrapper }}');"
-                                             value="Select" class="display_inline">
+                                <br /><input type="button" onclick="expandChoices('{{ elem.varname_wrapper }}');" value="Select" class="display_inline">
                                 </div>
 
                                 <div class="query-select-full hidden">
@@ -440,39 +435,27 @@
                                             <ul>
                                             {% for item_layer0 in elem.choices %}
                                                 <li>
-                                                    <div class="query-builder-list-item-collapsed"
-                                                         onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
+                                                    <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
                                                     <label for="{{ item_layer0.id }}">
-                                                        <input id="{{ item_layer0.id }}"
-                                                               name="{{ elem.selected_areas }}"
-                                                               value="{{ item_layer0.text }}"
-                                                               class="var-checkbox checkbox-layer0" type="checkbox"
-                                                               {% if item_layer0.selected == True %} checked="checked" {% endif %}
-                                                               onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
+                                                        <input id="{{ item_layer0.id }}" class="var-checkbox checkbox-layer0" type="checkbox"
+                                                               value="{{ item_layer0.order_num }}" onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
                                                         {{ item_layer0.text }}
                                                     </label>
                                                     <ul class="hidden">
                                                     {% for item_layer1 in item_layer0.choices %}
                                                         <li class="select-collapsed">
-                                                        <div class="query-builder-list-item-collapsed"
-                                                             onclick="expandOrCollapse('{{ item_layer1.id }}')" >&nbsp;</div>
+                                                        <div class="query-builder-list-item-collapsed" onclick="expandOrCollapse('{{ item_layer1.id }}')" >&nbsp;</div>
                                                         <label for="{{ item_layer1.id }}">
-                                                        <input id="{{ item_layer1.id }}"
-                                                               class="var-checkbox checkbox-layer1" type="checkbox"
-                                                               name="{{ elem.selected_regs }}"
-                                                               value="{{ item_layer1.text }}"
-                                                               {% if item_layer1.selected == True %} checked="checked" {% endif %}
-                                                               onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
+                                                        <input id="{{ item_layer1.id }}" class="var-checkbox checkbox-layer1" type="checkbox"
+                                                               value="{{ item_layer1.order_num }}" onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
                                                         {{ item_layer1.text }}
                                                         </label>
                                                         <ul class="hidden">
                                                             {% for item_layer2 in item_layer1.choices %}
                                                                 <li>
                                                                     <label for="{{ item_layer2.id }}">
-                                                                    <input id="{{ item_layer2.id }}"
-                                                                           class="var-checkbox checkbox-layer2" type="checkbox"
+                                                                    <input id="{{ item_layer2.id }}" class="var-checkbox checkbox-layer2" type="checkbox"
                                                                            name="{{ elem.selected_choices }}"
-                                                                            {% if item_layer2.selected == True %} checked="checked" {% endif %}
                                                                            value="{{ item_layer2.text }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                                                     {{ item_layer2.text }}
@@ -488,14 +471,9 @@
                                         {% endif %}
                                     </div>
                                     <div style="margin-top: 5px;">
-                                        <input type="button"
-                                               class="place_collapse_button"
-                                               onclick="collapseCheckBoxes('{{ elem.varname_wrapper }}', 'checkbox-layer2')"
-                                               value="OK" class="display_inline">
-                                        <input type="button" onclick="checkAllBoxes('{{ elem.varname_wrapper }}');"
-                                               value="Select all" class="display_inline">
-                                        <input type="button" onclick="uncheckAllBoxes('{{ elem.varname_wrapper }}');"
-                                               value="Deselect all" class="display_inline">
+                                        <input type="button" onclick="collapseCheckBoxes('{{ elem.varname_wrapper }}', 'checkbox-layer2')" value="OK" class="display_inline">
+                                        <input type="button" onclick="checkAllBoxes('{{ elem.varname_wrapper }}');" value="Select all" class="display_inline">
+                                        <input type="button" onclick="uncheckAllBoxes('{{ elem.varname_wrapper }}');" value="Deselect all" class="display_inline">
                                     </div>
                                 </div>
                             </div>
