@@ -233,6 +233,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
+    def prepare_var_imp_port_voyage_begin(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_port_voyage_begin.place
+        except AttributeError:
+            return None
+
     def prepare_var_first_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.first_place_slave_purchase.place
@@ -358,7 +364,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         try:
-            print obj.voyage_dates.imp_arrival_at_port_of_dis[2:]
             return int(obj.voyage_dates.imp_arrival_at_port_of_dis[2:])
         except AttributeError:
             return None
@@ -507,4 +512,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        return obj.voyage_sources
+        result = []
+        for connection in VoyageSourcesConnection.objects.filter(group=obj):
+            result.append(connection.text_ref)
+            result.append(connection.source.full_ref)
+        return result

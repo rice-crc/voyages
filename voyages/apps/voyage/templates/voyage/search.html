@@ -6,7 +6,6 @@
 
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-expandable-box.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css">
 {% endblock %}
 
@@ -21,14 +20,21 @@
 
 <form id="form" name="form" method="post" action="{% url 'voyage:search' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
-<div id="left-menu" class="left-menu-box">
+<table class="query_window">
+<tr>
+<td id="left-menu" class="left-menu-box">
 	{% include "voyage/search_left_menu.html" %}
-</div>
+</td>
 
-<div id="center-content">
+<td id="center-content">
 	{% block center-content %}
         {% include "voyage/search_main_content.html" %}
 	{% endblock %}
-</div>
+</td>
+
+</tr>
+</table>
+
+
 </form>
 {% endblock %}

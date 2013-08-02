@@ -1,7 +1,6 @@
 ﻿var attr_selected_class = "attribute-selected";
 
 $(document).ready(function() {
-    /* Set the initial values for time frame */
 
     /* Collapsible boxes */
     $(".box-header .box-button").click(function(ev){
@@ -9,6 +8,9 @@ $(document).ready(function() {
 	});
 
     $(".collapseCheckBoxButton").trigger('click');
+
+    /* Update text content for places */
+    $(".place_collapse_button").trigger('click');
 
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
@@ -72,6 +74,7 @@ $(document).ready(function() {
             return true;
         }
 	});
+
 });
 
 
@@ -251,6 +254,7 @@ function filter_hierarchical_list(label) {
         /* Expand all items */
         $("#" + label + " ul").removeClass("hidden");
         $("#" + label + " li").removeClass("hidden");
+        return;
     }
     $("#" + label + " .query-builder-list-item-collapsed").each(function() {
            $(this).toggleClass('query-builder-list-item-collapsed query-builder-list-item-expanded')

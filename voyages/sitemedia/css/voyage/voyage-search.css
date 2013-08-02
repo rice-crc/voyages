@@ -36,12 +36,13 @@ h1 {
 	margin: 0px 0px 10px 0px;
 }
 
+
+
 /* Two-column view style */
 #left-menu, #center-content {
-	display: block;
-	float: left;
 	margin: 0;
     padding: 0;
+    vertical-align: top;
 }
 
 /* Set the width of the left search menu */
@@ -53,13 +54,10 @@ h1 {
 
 /* Set the width of the main content */
 #center-content {
-    position: absolute;
-    left: 20.8%;
-    width: 79.2%;
     border-top: #895D03 1px solid;
-    float: left;
     background-color: #FFFFFF;
     z-index: 1;
+    width: 79%;
     overflow: hidden;
 }
 
@@ -235,19 +233,4 @@ div.permlink-info {
 .search-panel {
     min-height: 60px;
     padding: 10px;
-}
-
-.no_result_box {
-    padding: 20px;
-    display: block;
-    width: 60%;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid #038DA6;
-    border-radius: 7px;
-}
-
-.no_result_box_head {
-    background-color: #DBF7FD;
 }
