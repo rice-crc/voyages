@@ -57,7 +57,7 @@ div.menu-popup-submenu-item:hover {
 	color: White !important; }
 
 
-div.side-box {
+div.sidebox {
     border-bottom: 1px solid #EEDAA2;
     color: black;
     margin: 0 0 5px;
@@ -225,6 +225,10 @@ div.query-builder-list-item-expanded {
 
 .date_field_long {
     width: 31px;
+}
+
+.month-list {
+    padding-bottom: 5px;
 }
 
 .month-list span {

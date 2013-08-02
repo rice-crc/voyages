@@ -228,14 +228,18 @@ def search(request):
 
                     elif tmp_varname in list_date_fields:
                         # Numeric variables
-                        cur_var['form'] = SimpleDateSearchForm(auto_id=('id_' + tmp_varname + "_%s"), initial={'options': '1'}, prefix=tmp_varname)
+                        cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
 
                     elif tmp_varname in list_place_fields:
-                        pass
+                        place_selected = request.POST.getlist(tmp_varname + "_selected")
+                        region_selected = request.POST.getlist(tmp_varname + "_selected_regs")
+                        area_selected = request.POST.getlist(tmp_varname + "_selected_areas")
+                        cur_var['choices'] = getNestedListPlaces(tmp_varname,
+                                                                 place_selected, region_selected, area_selected)
 
                     elif tmp_varname in list_boolean_fields:
                          # Boolean field
-                        cur_var['form'].initial = {'choice_field': request.POST.getlist(tmp_varname + '-choice_field')}
+                        cur_var['form'] = SimpleSelectBooleanForm(request.POST, prefix=tmp_varname)
                     new_existing_form.append(cur_var)
 
         request.session['existing_form'] = new_existing_form
@@ -274,18 +278,24 @@ def search(request):
 
             elif varname in list_date_fields:
                 # Numeric variables
-                form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '1'}, prefix=varname)
+                form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"),
+                                            initial={'options': '1',
+                                                     'from_year': voyage_span_first_year,
+                                                     'to_year': voyage_span_last_year},
+                                            prefix=varname)
                 tmpElemDict['form'] = form
                 tmpElemDict['type'] = 'date'
                 tmpElemDict['list_months'] = list_months
 
             elif varname in list_place_fields:
-                choices = getNestedListPlaces(varname)
+                choices = getNestedListPlaces(varname, [], [], [])
 
                 tmpElemDict['type'] = 'select_three_layers'
                 tmpElemDict['varname_wrapper'] = "select_" + varname
                 tmpElemDict['choices'] = choices
                 tmpElemDict['selected_choices'] = varname + "_selected"
+                tmpElemDict['selected_regs'] = varname + "_selected_regs"
+                tmpElemDict['selected_areas'] = varname + "_selected_areas"
 
             elif varname in list_boolean_fields:
                  # Boolean field
@@ -366,15 +376,11 @@ def search(request):
             # Initially sort by voyage_id
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
-            print query_dict
-            print results.count()
-
             if results.count() == 0:
                 no_result = True
             request.session['results_voyages'] = results
         # else:
         #     results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-
 
         # paginator = Paginator(results, results_per_page)
         # pagins = paginator.page(int(current_page))
@@ -413,14 +419,14 @@ def search(request):
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
-    return render(request, "voyage/search.html", {
-                              'voyage_span_first_year': voyage_span_first_year,
-                              'voyage_span_last_year': voyage_span_last_year,
-                              'results': pagins,
-                              'paginator_range': paginator_range,
-                              'pages_range': pages_range,
-                              'no_result': no_result,
-                              'options_results_per_page_form': form})
+    return render(request, "voyage/search.html",
+                  {'voyage_span_first_year': voyage_span_first_year,
+                   'voyage_span_last_year': voyage_span_last_year,
+                   'results': pagins,
+                   'paginator_range': paginator_range,
+                   'pages_range': pages_range,
+                   'no_result': no_result,
+                   'options_results_per_page_form': form})
 
 
 def getChoices(varname):
@@ -458,7 +464,7 @@ def getChoices(varname):
     return choices
 
 
-def getNestedListPlaces(varname):
+def getNestedListPlaces(varname, place_selected, region_selected, area_selected):
     """
     Retrieve a nested list of places sorted by broad region (area) and then region
     :param varname:
@@ -472,16 +478,30 @@ def getNestedListPlaces(varname):
             for place in Place.objects.filter(region=reg):
                 if place.place == "???":
                     continue
-                reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
-                                    'text': place.place,
-                                    'order_num': place.pk})
-            area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
+                if place.place in place_selected:
+                    reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
+                                        'text': place.place, 'selected': True})
+
+                else:
+                    reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
+                                        'text': place.place})
+            if reg.region in region_selected:
+                area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
                                 'text': reg.region,
-                                'order_num': reg.pk,
+                                'choices': reg_content,
+                                'selected' : True})
+            else:
+                area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
+                                'text': reg.region,
                                 'choices': reg_content})
-        choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
+        if area.broad_region in area_selected:
+            choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
                         'text': area.broad_region,
-                        'order_num': area.pk,
+                        'choices': area_content,
+                        'selected' : True})
+        else:
+            choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
+                        'text': area.broad_region,
                         'choices': area_content})
     return choices
 

@@ -36,12 +36,7 @@ h1 {
 	margin: 0px 0px 10px 0px;
 }
 
-.query_window {
-    margin: 0;
-    padding: 0;
-    border-collapse: collapse;
-    vertical-align: top;
-}
+
 
 /* Two-column view style */
 #left-menu, #center-content {
