@@ -3,12 +3,14 @@ from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat
 from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
+import types
 from .forms import *
 from haystack.query import SearchQuerySet
 
@@ -174,9 +176,10 @@ def search(request):
     """
     Currently on renders the initial page
     """
-    pagins = None
-    paginator_range = None
+
     no_result = False
+    url_to_copy = ""
+    query_dict = {}
 
     # Get and update form of option results per page if necessary
     form, results_per_page = check_and_save_options_form(request)
@@ -316,7 +319,6 @@ def search(request):
             list_search_vars = request.POST.getlist('list-input-params')
 
             new_existing_form = []
-            query_dict = {}
 
             # Time frame search
             query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
@@ -387,6 +389,7 @@ def search(request):
             request.session['existing_form'] = new_existing_form
 
             # Initially sort by voyage_id
+            url_to_copy = encode_to_url(request, query_dict)
             results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
             if results.count() == 0:
@@ -429,6 +432,10 @@ def search(request):
 
     form, results_per_page = check_and_save_options_form(request)
 
+    # If search has not been requested, create default url to copy
+    if url_to_copy == "":
+        url_to_copy = encode_to_url(request, default=True)
+
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
@@ -439,6 +446,7 @@ def search(request):
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'no_result': no_result,
+                   'url_to_copy': url_to_copy,
                    'options_results_per_page_form': form})
 
 
@@ -609,6 +617,36 @@ def check_and_save_options_form(request):
             results_per_page = form.cleaned_option()
 
     return form, results_per_page
+
+
+def encode_to_url(request, dict={}, default=None):
+    url = request.build_absolute_uri(reverse('voyage:search',)) + "?"
+
+    if default:
+        pass
+
+    for k, v in dict.iteritems():
+
+        # If this is the __range component.
+        if "__range" in k:
+            url += str(k) + "=" + str(v[0]) + "|" + str(v[1])
+
+        # If list, split and join with underscores
+        elif isinstance(v, types.ListType):
+            url += str(k) + "="
+            for j in v:
+                url += "_".join(j.split(" ")) + "|"
+            url = url[0:-1]
+        else:
+            url += str(k) + "=" + str(v)
+
+        url += "&"
+
+    url = url[0:-1]
+
+    # Store dict in session and return url
+    request.session[url] = dict
+    return url
 
 
 def getMonth(value):
