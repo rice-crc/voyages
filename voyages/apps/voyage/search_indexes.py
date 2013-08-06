@@ -493,11 +493,17 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
 
     def prepare_var_imp_total_slaves_disembarked(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_total_num_slaves_disembarked
+        except AttributeError:
+            return None
 
     # Voyage characteristics
     def prepare_var_imputed_percentage_men(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_total_num_slaves_disembarked
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_percentage_women(self, obj):
         return None
@@ -525,7 +531,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imputed_mortality(self, obj):
         # = SLADVOY /
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_mortality_during_voyage \
+                   / obj.voyage_slaves_numbers.imp_total_num_slaves_embarked
+        except AttributeError:
+            return None
 
     # Voyage crew
     def prepare_var_captain(self, obj):

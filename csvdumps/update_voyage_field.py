@@ -64,18 +64,11 @@ for line in input_file:
     if getFieldValue('suggestion') != "f" or getIntFieldValue('revision') != 1:
         continue
 
+    voyageObj = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))[0]
     count = count + 1
     print count
-    if count > 200:
-        break
 
-    voyageObj = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))[0]
-    if isNotBlank('evgreen'):
-        if getFieldValue('evgreen') == "t":
-            voyageObj.voyage_in_cd_rom = True
-        if getFieldValue('evgreen') == "f":
-            voyageObj.voyage_in_cd_rom = False
-    if isNotBlank('xmimpflag'):
-        if len(VoyageGroupings.objects.filter(value=getIntFieldValue('xmimpflag'))) >= 1:
-            voyageObj.voyage_groupings = VoyageGroupings.objects.filter(value=getIntFieldValue('xmimpflag'))[0]
+    if isNotBlank('slaximp'):
+        voyageObj.voyage_slaves_numbers.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
+
     voyageObj.save()
