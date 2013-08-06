@@ -791,6 +791,19 @@ class VoyageSlavesNumbers(models.Model):
             ("Number of slaves disembarked at third place "
              "(SLAS39)", null=True, blank=True)
 
+    # Imputed variables
+    imp_total_num_slaves_disembarked = models.IntegerField \
+            ("Total slaves disembarked imputed * "
+             "(SLAMIMP)", null=True, blank=True)
+
+    imp_jamaican_cash_price = models.DecimalField \
+            ("Sterling cash price in Jamaica* (imputed)", null=True, blank=True,
+             max_digits=10, decimal_places=4)
+
+    imp_mortality_during_voyage = models.IntegerField \
+            ("Total number of slave deaths during voyage "
+             "(vymrtimp)", null=True, blank=True)
+
     # Voyage characteristics
 
     # Representing MEN1 variables
@@ -1035,6 +1048,32 @@ class VoyageSlavesNumbers(models.Model):
     num_females_disembark_second_landing = models.IntegerField \
             ("Number of females (age unspecified) (FEMALE6) "
              "disembarked at second place of landing", null=True, blank=True)
+
+    # Representing MEN7 variables
+    imp_num_men_total = models.IntegerField \
+            ("Number of men (MEN7)", null=True, blank=True)
+    # Representing WOMEN7 variables
+    imp_num_women_total = models.IntegerField \
+            ("Number of women (WOMEN7) ", null=True, blank=True)
+    # Representing BOY7 variables
+    imp_num_boy_total = models.IntegerField \
+            ("Number of boys (BOY7)", null=True, blank=True)
+    # Representing GIRL7 variables
+    imp_num_girl_total = models.IntegerField \
+            ("Number of girls (GIRL7)", null=True, blank=True)
+    # Representing ADULT7 variables
+    imp_num_adult_total = models.IntegerField \
+            ("Number of adults (gender unspecified) (ADULT7)", null=True, blank=True)
+    # Representing CHILD7 variables
+    imp_num_child_total = models.IntegerField \
+            ("Number of children (gender unspecified) (CHILD7)", null=True, blank=True)
+
+    # Representing MALE7 variables
+    imp_num_males_total = models.IntegerField \
+            ("Number of males (age unspecified) (MALE7)", null=True, blank=True)
+    # Representing FEMALE7 variables
+    imp_num_females_total = models.IntegerField \
+            ("Number of females (age unspecified) (FEMALE7) ", null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
