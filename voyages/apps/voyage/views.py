@@ -3,12 +3,14 @@ from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader, RequestContext
 from django.shortcuts import render
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
 from os import listdir, stat
 from stat import ST_SIZE, ST_MTIME
 from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
+import types
 from .forms import *
 from haystack.query import SearchQuerySet
 
@@ -174,18 +176,13 @@ def search(request):
     """
     Currently on renders the initial page
     """
-    pagins = None
-    paginator_range = None
+
     no_result = False
+    url_to_copy = ""
+    query_dict = {}
 
     # Get and update form of option results per page if necessary
     form, results_per_page = check_and_save_options_form(request)
-
-    # Get number of requested page
-    # if request.POST.get('desired_page') is None:
-    #     current_page = 1
-    # else:
-    #     current_page = request.POST.get('desired_page')
 
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -316,7 +313,6 @@ def search(request):
             list_search_vars = request.POST.getlist('list-input-params')
 
             new_existing_form = []
-            query_dict = {}
 
             # Time frame search
             query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
@@ -392,23 +388,11 @@ def search(request):
             if results.count() == 0:
                 no_result = True
             request.session['results_voyages'] = results
-        # else:
-        #     results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
-        # paginator = Paginator(results, results_per_page)
-        # pagins = paginator.page(int(current_page))
     elif request.method == 'GET':
         # Create a new form
         existing_form = []
         request.session['existing_form'] = existing_form
-
-        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        # paginator = Paginator(results, results_per_page)
-        # pagins = paginator.page(int(current_page))
-
-        # Check if there is any result in session, save if necessary
-        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
         request.session['time_span_form'] = TimeFrameSpanSearchForm(
             initial={'frame_from_year': voyage_span_first_year,
@@ -429,6 +413,9 @@ def search(request):
 
     form, results_per_page = check_and_save_options_form(request)
 
+    # Encode url to url_to_copy form (for user)
+    url_to_copy = encode_to_url(request, query_dict)
+
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
@@ -439,6 +426,7 @@ def search(request):
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'no_result': no_result,
+                   'url_to_copy': url_to_copy,
                    'options_results_per_page_form': form})
 
 
@@ -609,6 +597,46 @@ def check_and_save_options_form(request):
             results_per_page = form.cleaned_option()
 
     return form, results_per_page
+
+
+def encode_to_url(request, dict={}):
+    """
+    Function to encode dictionary into url to copy form.
+
+    :param request: request to serve
+    :param dict: dict contains search conditions.
+    If empty, returns default url.
+    """
+    url = request.build_absolute_uri(reverse('voyage:search',)) + "?"
+
+    # If search has not performed, return default url
+    if dict == {}:
+        url += "var_imp_voyage_began__range=1514|1866"
+
+    else:
+        for k, v in dict.iteritems():
+
+            # If this is the __range component.
+            if "__range" in k:
+                url += str(k) + "=" + str(v[0]) + "|" + str(v[1])
+
+            # If list, split and join with underscores
+            elif isinstance(v, types.ListType):
+                url += str(k) + "="
+                for j in v:
+                    url += "_".join(j.split(" ")) + "|"
+                url = url[0:-1]
+            else:
+                url += str(k) + "=" + str(v)
+
+            url += "&"
+
+        # At the end, delete the last unnecessary underscore
+        url = url[0:-1]
+
+    # Store dict in session and return url
+    request.session[url] = dict
+    return url
 
 
 def getMonth(value):
