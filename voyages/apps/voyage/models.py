@@ -622,7 +622,7 @@ class VoyageDates(models.Model):
 
         return int(value.split(',')[0])
 
-    def  calculate_year_period(self, period):
+    def calculate_year_period(self, period):
         """
         Function to calculate proper period.
 
@@ -644,7 +644,6 @@ class VoyageDates(models.Model):
     class Meta:
         verbose_name = 'Date'
         verbose_name_plural = 'Dates'
-
 
 
 # Voyage Captain and Crew
@@ -1082,6 +1081,38 @@ class VoyageSlavesNumbers(models.Model):
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
 
+    @property
+    def percentage_men(self):
+        return self.imp_num_men_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_women(self):
+        return self.imp_num_women_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_boy(self):
+        return self.imp_num_boy_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_girl(self):
+        return self.imp_num_girl_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_adult(self):
+        return self.imp_num_adult_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_child(self):
+        return self.imp_num_child_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_males(self):
+        return self.imp_num_males_total / self.imp_total_num_slaves_embarked
+
+    @property
+    def percentage_females(self):
+        return self.imp_num_females_total / self.imp_total_num_slaves_embarked
+
     class Meta:
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
@@ -1108,6 +1139,7 @@ class VoyageSources(models.Model):
 
     def __unicode__(self):
         return self.full_ref
+
 
 class VoyageSourcesConnection(models.Model):
     """
