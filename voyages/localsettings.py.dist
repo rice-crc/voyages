@@ -42,6 +42,10 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+# when using an ImageField setting this DEBUG to Ture will give debug info about ImageFields and thumbnails
+THUMBNAIL_DEBUG = False
+
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
