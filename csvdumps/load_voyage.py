@@ -1,7 +1,7 @@
 from decimal import *
 from voyages.apps.voyage.models import *
 
-input_file = open('voyage.txt', 'r')
+input_file = open('voyage_extra_voyage.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
