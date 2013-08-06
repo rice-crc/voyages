@@ -792,6 +792,10 @@ class VoyageSlavesNumbers(models.Model):
              "(SLAS39)", null=True, blank=True)
 
     # Imputed variables
+    imp_total_num_slaves_embarked = models.IntegerField \
+            ("Total slaves embarked imputed * "
+             "(slaximp)", null=True, blank=True)
+
     imp_total_num_slaves_disembarked = models.IntegerField \
             ("Total slaves disembarked imputed * "
              "(SLAMIMP)", null=True, blank=True)

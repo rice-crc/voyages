@@ -2,7 +2,7 @@ from haystack import indexes
 from .models import Image
 
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
+    text = indexes.EdgeNgramField(document=True, use_template=True)
     image_id = indexes.IntegerField(model_attr="image_id", null=True)
     file = indexes.CharField(model_attr="file")
     ready_to_go = indexes.BooleanField(model_attr="ready_to_go", default=False)
