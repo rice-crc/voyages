@@ -1,6 +1,9 @@
 {% load i18n %}
 <!-- Left menu for Understanding the Database -->
 
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup-permlink.css">
+
 <div class="search-side-panel">
 
     <div class="box-main-table box-expanded">
@@ -546,9 +549,32 @@
         </div>
 
         <div class="box-mid-end">
-        <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
-            To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
-        <input type="submit" value="{% trans 'Create a link' %}"/>
+            <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
+                To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
+            <div class="blackout"></div>
+{#            <div class="msgbox">#}
+{#                <div class="close-link-box">#}
+{#                    Close#}
+{#                </div>#}
+{#                Your Message Goes Here!#}
+{#            </div>#}
+            <div class="msgbox">
+                <div class="permlink-info">
+                    <div class="permlink-title">
+                        URL has been created
+                    </div>
+                    <div class="permlink-desc">
+                        To reactivate the current database query in the future, copy the following URL and then paste it into the address bar:
+                    </div>
+                    <div class="permlink-link">
+                        <textarea wrap="virtual" rows="4">http://slavevoyages.org/tast/database/search.faces?yearFrom=1514&yearTo=1866</textarea>
+                    </div>
+                    <div class="permlink-close">
+                        <input class="permlink-close-button" type="submit" value="OK, Close This">
+                    </div>
+                </div>
+            </div>
+            <input type="button" id="link-button" value="Click Here"/>
         </div>
     </div>
 

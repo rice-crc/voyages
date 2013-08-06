@@ -75,6 +75,9 @@ $(document).ready(function() {
         }
 	});
 
+    $("#link-button").click(strtBlackout); // open if btn is pressed
+    $(".close-link-box").click(endBlackout); // close if close btn clicked
+
 });
 
 
@@ -313,4 +316,15 @@ function formatArray(selectedItems) {
         result = result.substr(0, 69) + "...";
     }
     return result;
+}
+
+function endBlackout(){
+$(".blackout").css("display", "none");
+$(".msgbox").css("display", "none");
+}
+
+//This is the function that closes the pop-up
+function strtBlackout(){
+$(".msgbox").css("display", "block");
+$(".blackout").css("display", "block");
 }
