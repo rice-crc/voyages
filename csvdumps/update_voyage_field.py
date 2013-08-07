@@ -65,10 +65,11 @@ for line in input_file:
         continue
 
     voyageObj = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))[0]
-    count = count + 1
+    count += 1
     print count
 
     if isNotBlank('slaximp'):
-        voyageObj.voyage_slaves_numbers.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
-
-    voyageObj.save()
+        print "updating"
+        characteristic = voyageObj.voyage_slaves_numbers
+        characteristic.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
+        characteristic.save()
