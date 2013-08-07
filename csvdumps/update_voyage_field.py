@@ -68,8 +68,30 @@ for line in input_file:
     count += 1
     print count
 
-    if isNotBlank('slaximp'):
-        print "updating"
-        characteristic = voyageObj.voyage_slaves_numbers
-        characteristic.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
-        characteristic.save()
+    if count > 200:
+        break;
+
+    characteristic = voyageObj.voyage_slaves_numbers
+    characteristic.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
+    characteristic.imp_num_adult_embarked = getIntFieldValue('adlt1imp')
+    characteristic.imp_num_children_embarked = getIntFieldValue('chil1imp')
+    characteristic.imp_num_male_embarked = getIntFieldValue('male1imp')
+    characteristic.imp_num_female_embarked = getIntFieldValue('feml1imp')
+    characteristic.total_slaves_embarked_age_identified = getIntFieldValue('slavema1')
+    characteristic.total_slaves_embarked_gender_identified = getIntFieldValue('slavemx1')
+
+    characteristic.imp_adult_death_middle_passage = getIntFieldValue('adlt2imp')
+    characteristic.imp_child_death_middle_passage = getIntFieldValue('chil2imp')
+    characteristic.imp_male_death_middle_passage = getIntFieldValue('male2imp')
+    characteristic.imp_female_death_middle_passage = getIntFieldValue('feml2imp')
+    characteristic.imp_num_adult_landed = getIntFieldValue('adlt3imp')
+    characteristic.imp_num_child_landed = getIntFieldValue('chil3imp')
+    characteristic.imp_num_male_landed = getIntFieldValue('male3imp')
+    characteristic.imp_num_female_landed = getIntFieldValue('feml3imp')
+    characteristic.total_slaves_landed_age_identified = getIntFieldValue('slavema3')
+    characteristic.total_slaves_landed_gender_identified = getIntFieldValue('slavemx3')
+    characteristic.total_slaves_dept_or_arr_age_identified = getIntFieldValue('slavema7')
+    characteristic.total_slaves_dept_or_arr_gender_identified = getIntFieldValue('slavemx7')
+    characteristic.imp_slaves_embarked_for_mortality = getIntFieldValue('tslmtimp')
+
+    characteristic.save()

@@ -516,7 +516,8 @@
 
                             <div class="month-list">
                                 {% for month in elem.list_months %}
-                                <span class="month-toggled">{{ month }}</span>
+                                <span class="month-toggled">{{ month.0 }}
+                                    <input type="hidden" name="{{ elem.selected_months }}" value="{{ month.1 }}" /></span>
                                 {% endfor %}
                             </div>
 

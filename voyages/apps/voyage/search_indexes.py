@@ -3,15 +3,15 @@ from .models import *
 
 
 def getMonth(value):
-    return value.split(",")[0]
+    return str(value.split(",")[0]).zfill(2)
 
 
 def getDay(value):
-    return value.split(",")[1]
+    return str(value.split(",")[1]).zfill(2)
 
 
 def getYear(value):
-    return value.split(",")[2]
+    return str(value.split(",")[2]).zfill(2)
 
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
@@ -390,14 +390,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_voyage_began(self, obj):
         try:
             data = obj.voyage_dates.voyage_began
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) != 10:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
     def prepare_var_slave_purchase_began(self, obj):
         try:
             data = obj.voyage_dates.slave_purchase_began
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) != 10:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -406,28 +412,40 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_vessel_left_port(self, obj):
         try:
             data = obj.voyage_dates.imp_departed_africa
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) != 10:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
     def prepare_var_first_dis_of_slaves(self, obj):
         try:
             data = obj.voyage_dates.first_dis_of_slaves
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) < 7:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
     def prepare_var_departure_last_place_of_landing(self, obj):
         try:
             data = obj.voyage_dates.departure_last_place_of_landing
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) != 10:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
     def prepare_var_voyage_completed(self, obj):
         try:
             data = obj.voyage_dates.voyage_completed
-            return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+            if len(data) != 10:
+                return None
+            else:
+                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 

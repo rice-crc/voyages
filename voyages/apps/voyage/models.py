@@ -1102,7 +1102,7 @@ class VoyageSlavesNumbers(models.Model):
             ("Total slaves identified by age at departure or arrival (SLAVEMA7)",
              null=True, blank=True)
     total_slaves_dept_or_arr_gender_identified = models.IntegerField \
-            ("Total slaves identified by gender at departure or arrival(SLAVEMX3)",
+            ("Total slaves identified by gender at departure or arrival(SLAVEMX7)",
              null=True, blank=True)
     imp_slaves_embarked_for_mortality = models.IntegerField \
             ("Imputed number of slaves embarked for mortality calculation (TSLMTIMP)",
@@ -1135,41 +1135,40 @@ class VoyageSlavesNumbers(models.Model):
             ("Number of females (age unspecified) (FEMALE7) ", null=True, blank=True)
 
 
-
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
 
     @property
     def percentage_men(self):
-        return self.imp_num_men_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_men_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_women(self):
-        return self.imp_num_women_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_women_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_boy(self):
-        return self.imp_num_boy_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_boy_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_girl(self):
-        return self.imp_num_girl_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_girl_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_adult(self):
-        return self.imp_num_adult_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_child(self):
-        return self.imp_num_child_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_male(self):
-        return self.imp_num_males_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_males_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     @property
     def percentage_female(self):
-        return self.imp_num_females_total / float(self.imp_total_num_slaves_embarked)
+        return self.imp_num_females_total / float(self.total_slaves_dept_or_arr_gender_identified)
 
     class Meta:
         verbose_name = 'Slaves Characteristic'

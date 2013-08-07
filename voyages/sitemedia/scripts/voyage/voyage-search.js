@@ -58,6 +58,12 @@ $(document).ready(function() {
 
     $(".month-list").children("span").click(function(ev) {
         $(this).toggleClass("month-toggled month-untoggled");
+
+        if ($(this).children("input").prop('disabled')) {
+            $(this).children("input").prop('disabled', false);
+        } else{
+            $(this).children("input").prop('disabled', true);
+        }
     });
 
     $(".menu-popup-submenu-item").click(function(ev){
