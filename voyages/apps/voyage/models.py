@@ -804,8 +804,8 @@ class VoyageSlavesNumbers(models.Model):
              max_digits=10, decimal_places=4)
 
     imp_mortality_during_voyage = models.IntegerField \
-            ("Total number of slave deaths during voyage "
-             "(vymrtimp)", null=True, blank=True)
+            ("Imputed number of slave deaths during Middle Passage "
+             "(VYMRTIMP)", null=True, blank=True)
 
     # Voyage characteristics
 
@@ -1052,6 +1052,62 @@ class VoyageSlavesNumbers(models.Model):
             ("Number of females (age unspecified) (FEMALE6) "
              "disembarked at second place of landing", null=True, blank=True)
 
+    # Imputed slave characteristics
+    imp_num_adult_embarked = models.IntegerField \
+            ("Imputed number of adults embarked (ADLT1IMP)", null=True, blank=True)
+    imp_num_children_embarked = models.IntegerField \
+            ("Imputed number of adults embarked (CHIL1IMP)", null=True, blank=True)
+    imp_num_male_embarked = models.IntegerField \
+            ("Imputed number of males embarked (MALE1IMP)", null=True, blank=True)
+    imp_num_female_embarked = models.IntegerField \
+            ("Imputed number of females embarked (FEML1IMP)", null=True, blank=True)
+    total_slaves_embarked_age_identified = models.IntegerField \
+            ("Total slaves embarked with age identified (SLAVEMA1)",
+             null=True, blank=True)
+    total_slaves_embarked_gender_identified = models.IntegerField \
+            ("Total slaves embarked with gender identified (SLAVEMX1)",
+             null=True, blank=True)
+
+    imp_adult_death_middle_passage = models.IntegerField \
+            ("Imputed number of adults who died on Middle Passage (ADLT2IMP)",
+             null=True, blank=True)
+    imp_child_death_middle_passage = models.IntegerField \
+            ("Imputed number of children who died on Middle Passage (CHIL2IMP)",
+             null=True, blank=True)
+    imp_male_death_middle_passage = models.IntegerField \
+            ("Imputed number of males who died on Middle Passage (MALE2IMP)",
+             null=True, blank=True)
+    imp_female_death_middle_passage = models.IntegerField \
+            ("Imputed number of females who died on Middle Passage (FEML2IMP)",
+             null=True, blank=True)
+    imp_num_adult_landed = models.IntegerField \
+            ("Imputed number of adults landed (ADLT3IMP)",
+             null=True, blank=True)
+    imp_num_child_landed = models.IntegerField \
+            ("Imputed number of children landed (CHIL3IMP)",
+             null=True, blank=True)
+    imp_num_male_landed = models.IntegerField \
+            ("Imputed number of males landed (MALE3IMP)",
+             null=True, blank=True)
+    imp_num_female_landed = models.IntegerField \
+            ("Imputed number of females landed (FEML3IMP)",
+             null=True, blank=True)
+    total_slaves_landed_age_identified = models.IntegerField \
+            ("Total slaves identified by age among landed slaves (SLAVEMA3)",
+             null=True, blank=True)
+    total_slaves_landed_gender_identified = models.IntegerField \
+            ("Total slaves identified by gender among landed slaves (SLAVEMX3)",
+             null=True, blank=True)
+    total_slaves_dept_or_arr_age_identified = models.IntegerField \
+            ("Total slaves identified by age at departure or arrival (SLAVEMA7)",
+             null=True, blank=True)
+    total_slaves_dept_or_arr_gender_identified = models.IntegerField \
+            ("Total slaves identified by gender at departure or arrival(SLAVEMX3)",
+             null=True, blank=True)
+    imp_slaves_embarked_for_mortality = models.IntegerField \
+            ("Imputed number of slaves embarked for mortality calculation (TSLMTIMP)",
+             null=True, blank=True)
+
     # Representing MEN7 variables
     imp_num_men_total = models.IntegerField \
             ("Number of men (MEN7)", null=True, blank=True)
@@ -1078,40 +1134,42 @@ class VoyageSlavesNumbers(models.Model):
     imp_num_females_total = models.IntegerField \
             ("Number of females (age unspecified) (FEMALE7) ", null=True, blank=True)
 
+
+
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
 
     @property
     def percentage_men(self):
-        return self.imp_num_men_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_men_total / float(self.imp_total_num_slaves_embarked)
 
     @property
     def percentage_women(self):
-        return self.imp_num_women_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_women_total / float(self.imp_total_num_slaves_embarked)
 
     @property
     def percentage_boy(self):
-        return self.imp_num_boy_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_boy_total / float(self.imp_total_num_slaves_embarked)
 
     @property
     def percentage_girl(self):
-        return self.imp_num_girl_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_girl_total / float(self.imp_total_num_slaves_embarked)
 
     @property
     def percentage_adult(self):
-        return self.imp_num_adult_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_adult_total / float(self.imp_total_num_slaves_embarked)
 
     @property
     def percentage_child(self):
-        return self.imp_num_child_total / self.imp_total_num_slaves_embarked
+        return self.imp_num_child_total / float(self.imp_total_num_slaves_embarked)
 
     @property
-    def percentage_males(self):
-        return self.imp_num_males_total / self.imp_total_num_slaves_embarked
+    def percentage_male(self):
+        return self.imp_num_males_total / float(self.imp_total_num_slaves_embarked)
 
     @property
-    def percentage_females(self):
-        return self.imp_num_females_total / self.imp_total_num_slaves_embarked
+    def percentage_female(self):
+        return self.imp_num_females_total / float(self.imp_total_num_slaves_embarked)
 
     class Meta:
         verbose_name = 'Slaves Characteristic'

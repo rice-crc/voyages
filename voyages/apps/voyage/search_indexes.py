@@ -22,7 +22,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_imp_voyage_began = indexes.IntegerField(null=True)
 
-    var_voyage_id = indexes.IntegerField(model_attr='voyage_id', null=True)
+    var_voyage_id = indexes.IntegerField(null=True)
     var_voyage_in_cd_rom = indexes.BooleanField(model_attr="voyage_in_cd_rom", null=True)
     var_ship_name = indexes.CharField(null=True)
     var_nationality = indexes.CharField(null=True)
@@ -120,6 +120,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
+
+    def prepare_var_voyage_id(self, obj):
+        try:
+            print obj.pk
+            return obj.voyage_id
+        except AttributeError:
+            return None
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
@@ -501,40 +508,63 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage characteristics
     def prepare_var_imputed_percentage_men(self, obj):
         try:
-            return obj.voyage_slaves_numbers.imp_total_num_slaves_disembarked
-        except AttributeError:
+            return obj.voyage_slaves_numbers.percentage_men
+        except (AttributeError, TypeError):
             return None
 
     def prepare_var_imputed_percentage_women(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_women
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_boys(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_boy
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_girls(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_girl
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_female(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_female
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_male(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_male
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_child(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_child
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_sterling_cash(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_jamaican_cash_price
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_death_middle_passage(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_mortality_during_voyage
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_mortality(self, obj):
-        # = SLADVOY /
         try:
             return obj.voyage_slaves_numbers.imp_mortality_during_voyage \
                    / obj.voyage_slaves_numbers.imp_total_num_slaves_embarked
-        except AttributeError:
+        except (AttributeError, TypeError):
             return None
 
     # Voyage crew

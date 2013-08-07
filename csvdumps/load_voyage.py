@@ -1,7 +1,7 @@
 from decimal import *
 from voyages.apps.voyage.models import *
 
-input_file = open('voyage_extra_voyage.txt', 'r')
+input_file = open('voyage.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
@@ -66,8 +66,10 @@ for line in input_file:
 
     voyageObj = Voyage.objects.create()
 
-    count = count + 1
+    count += 1
     print count
+    if count > 200:
+        break
 
     if isNotBlank('voyageid'):
         voyageObj.voyage_id = getIntFieldValue('voyageid')
@@ -352,6 +354,7 @@ for line in input_file:
     characteristics.num_slaves_disembark_third_place = getIntFieldValue("slas39")
 
     # Imputed variables
+    characteristics.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
     characteristics.imp_total_num_slaves_disembarked = getIntFieldValue("slamimp")
     characteristics.imp_jamaican_cash_price = getDecimalFieldValue("jamcaspr")
     characteristics.imp_mortality_during_voyage = getIntFieldValue("vymrtimp")
