@@ -140,7 +140,7 @@ class SimpleDateSearchForm(forms.Form):
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
     from_year = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
-    to_month = forms.CharField(required=False, initial="12", widget=forms.TextInput(
+    to_month = forms.CharField(required=False, initial="12", widge=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
     to_year = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
