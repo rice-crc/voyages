@@ -63,12 +63,7 @@
                     {{ i.get_stored_fields.var_ship_name }}
                 </td>
                 <td>
-                    <div>
-                        {# TODO: Probably it have to be changed #}
-                        {% for j in i.get_stored_fields.var_captain %}
-                            {{ j }}
-                        {% endfor %}
-                    </div>
+                   {{  i.get_stored_fields.var_captain | safe }}
                 </td>
                 <td style="text-align: left">
                     {{ i.get_stored_fields.var_imp_arrival_at_port_of_dis }}
