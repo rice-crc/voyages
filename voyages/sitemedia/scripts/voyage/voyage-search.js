@@ -15,6 +15,9 @@ $(document).ready(function() {
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
         var curBox = $(this).parent().parent();
+        var $list_exp = curBox.parent().children("input");
+        $list_exp.prop("disabled", !$list_exp.prop("disabled"));
+
 		curBox.toggleClass("box-collapsed box-expanded");
         if (curBox.hasClass("box-expanded")) {
             curBox.parent().children().not(curBox).removeClass("box-expanded");
