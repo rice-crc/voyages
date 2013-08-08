@@ -4,7 +4,6 @@ from .models import *
 from voyages.extratools import AdvancedEditor
 
 
-
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
     downloadfile = forms.FileField(label='Select your file')
@@ -176,7 +175,7 @@ class SimpleSelectBooleanForm(forms.Form):
 class TimeFrameSpanSearchForm(forms.Form):
     frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
-    frame_to_year = forms.IntegerField(label = "To", widget=forms.TextInput(
+    frame_to_year = forms.IntegerField(label="To", widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
 
 
