@@ -512,6 +512,8 @@ def search(request):
                         elif tmp_varname in list_date_fields:
                             # Numeric variables
                             cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
+                            cur_var['list_deselected'] = request.POST.getlist(tmp_varname + '_deselected_months')
+                            print cur_var['list_deselected']
 
                         elif tmp_varname in list_place_fields:
                             place_selected = request.POST.getlist(tmp_varname + "_selected")
@@ -572,6 +574,7 @@ def search(request):
                     tmpElemDict['type'] = 'date'
                     tmpElemDict['list_months'] = list_months
                     tmpElemDict['deselected_months'] = varname + '_deselected_months'
+                    tmpElemDict['list_deselected'] = []
 
                 elif varname in list_place_fields:
                     choices = getNestedListPlaces(varname, [], [], [])
@@ -669,10 +672,11 @@ def search(request):
                                     else:
                                         pass
 
-                                    deselected_months = request.POST.getlist(tmp_varname + "_selected_months")
+                                    deselected_months = request.POST.getlist(tmp_varname + "_deselected_months")
 
                                     if 0 < len(deselected_months) < len(list_months):
-                                        date_filters.append({'varname': tmp_varname, 'deselected_months': selected_months})
+                                        date_filters.append({'varname': tmp_varname,
+                                                             'deselected_months': deselected_months})
                                     elif len(deselected_months) == len(list_months):
                                         no_result = True
                                     else:  # user selected all 12 months
@@ -696,12 +700,16 @@ def search(request):
 
                 # Date filters
                 if date_filters:
+                    print "got here"
                     for var_filter in date_filters:
+                        l_months = []
+                        tmp_query = dict()
                         for month in var_filter['deselected_months']:
-                            # Exclude the deselected months from the query result set
-                            tmp_query = dict()
-                            tmp_query[var_filter['varname']] = "," + month + ","
-                            results = results.exclude(**tmp_query)
+                            l_months.append("-" + month + "-")
+
+                        tmp_query[tmp_varname + "__in"] = l_months
+                        results = results.exclude(**tmp_query)
+                        print tmp_query
 
                 if results.count() == 0:
                     no_result = True
@@ -756,7 +764,7 @@ def getChoices(varname):
     """
     Retrieve a list of two-tuple items for select boxes depending on the model
     :param varname variable name:
-    :return:
+    :return: nested list of choices/options for that variable
     """
     choices = []
     if varname in ['var_nationality']:
