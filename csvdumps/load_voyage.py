@@ -66,7 +66,7 @@ for line in input_file:
 
     voyageObj = Voyage.objects.create()
 
-    count = count + 1
+    count += 1
     print count
     if count > 200:
         break
@@ -81,7 +81,14 @@ for line in input_file:
     ship = VoyageShip()
 
     ship.voyage = voyageObj
-
+    if isNotBlank('evgreen'):
+        if getFieldValue('evgreen') == "t":
+            voyageObj.voyage_in_cd_rom = True
+        if getFieldValue('evgreen') == "f":
+            voyageObj.voyage_in_cd_rom = False
+    if isNotBlank('xmimpflag'):
+        if len(VoyageGroupings.objects.filter(value=getIntFieldValue('xmimpflag'))) >= 1:
+            voyageObj.voyage_groupings = VoyageGroupings.objects.filter(value=getIntFieldValue('xmimpflag'))[0]
 
     if isNotBlank('shipname'):
         ship.ship_name = getFieldValue('shipname')
@@ -150,7 +157,6 @@ for line in input_file:
                 value=getIntFieldValue('fate4'))[0]
 
     outcome.save()
-
 
     itinerary = VoyageItinerary()
 
@@ -347,6 +353,12 @@ for line in input_file:
     characteristics.num_slaves_disembark_second_place = getIntFieldValue("slas36")
     characteristics.num_slaves_disembark_third_place = getIntFieldValue("slas39")
 
+    # Imputed variables
+    characteristics.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
+    characteristics.imp_total_num_slaves_disembarked = getIntFieldValue("slamimp")
+    characteristics.imp_jamaican_cash_price = getDecimalFieldValue("jamcaspr")
+    characteristics.imp_mortality_during_voyage = getIntFieldValue("vymrtimp")
+
     characteristics.num_men_embark_first_port_purchase = getIntFieldValue("men1")
     characteristics.num_women_embark_first_port_purchase = getIntFieldValue("women1")
     characteristics.num_boy_embark_first_port_purchase = getIntFieldValue("boy1")
@@ -406,6 +418,16 @@ for line in input_file:
     characteristics.num_infant_embark_first_port_purchase = getIntFieldValue("infant6")
     characteristics.num_males_embark_first_port_purchase = getIntFieldValue("male6")
     characteristics.num_females_embark_first_port_purchase = getIntFieldValue("female6")
+
+    # imputed variables 7
+    characteristics.imp_num_men_total = getIntFieldValue('men7')
+    characteristics.imp_num_women_total = getIntFieldValue('women7')
+    characteristics.imp_num_boy_total = getIntFieldValue('boy7')
+    characteristics.imp_num_girl_total = getIntFieldValue('girl7')
+    characteristics.imp_num_adult_total = getIntFieldValue('adult7')
+    characteristics.imp_num_child_total = getIntFieldValue('child7')
+    characteristics.imp_num_males_total = getIntFieldValue('male7')
+    characteristics.imp_num_females_total = getIntFieldValue('female7')
 
     characteristics.save()
     voyageObj.voyage_slaves_numbers = characteristics

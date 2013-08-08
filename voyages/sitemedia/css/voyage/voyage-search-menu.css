@@ -232,7 +232,7 @@ div.query-builder-list-item-expanded {
 }
 
 .month-list span {
-    padding: 1px;
+    padding: 1px 1px 1px 0;
     cursor: pointer;
 }
 

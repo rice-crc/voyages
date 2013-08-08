@@ -21,7 +21,7 @@ class Image(models.Model):
     ready_to_go = models.BooleanField(default=False)
     order_num = models.IntegerField('Code value')
 
-    date = models.IntegerField(max_length=4, null=True, blank=True)
+    date = models.IntegerField('Date(Year YYYY)', max_length=4, null=True, blank=True)
 
     # Category
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")

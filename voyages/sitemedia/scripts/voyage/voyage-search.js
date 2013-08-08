@@ -15,6 +15,9 @@ $(document).ready(function() {
     /* Collapse same section search boxes when one expands */
     $(".box-header-head .box-button, .box-header-tail .box-button").click(function(ev){
         var curBox = $(this).parent().parent();
+        var $list_exp = curBox.parent().children("input");
+        $list_exp.prop("disabled", !$list_exp.prop("disabled"));
+
 		curBox.toggleClass("box-collapsed box-expanded");
         if (curBox.hasClass("box-expanded")) {
             curBox.parent().children().not(curBox).removeClass("box-expanded");
@@ -58,6 +61,12 @@ $(document).ready(function() {
 
     $(".month-list").children("span").click(function(ev) {
         $(this).toggleClass("month-toggled month-untoggled");
+
+        if ($(this).children("input").prop('disabled')) {
+            $(this).children("input").prop('disabled', false);
+        } else{
+            $(this).children("input").prop('disabled', true);
+        }
     });
 
     $(".menu-popup-submenu-item").click(function(ev){
@@ -74,6 +83,9 @@ $(document).ready(function() {
             return true;
         }
 	});
+
+    $("#link-button").click(strtBlackout); // open if btn is pressed
+    $(".close-link-box").click(endBlackout); // close if close btn clicked
 
 });
 
@@ -313,4 +325,15 @@ function formatArray(selectedItems) {
         result = result.substr(0, 69) + "...";
     }
     return result;
+}
+
+function endBlackout(){
+$(".blackout").css("display", "none");
+$(".msgbox").css("display", "none");
+}
+
+//This is the function that closes the pop-up
+function strtBlackout(){
+$(".msgbox").css("display", "block");
+$(".blackout").css("display", "block");
 }
