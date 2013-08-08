@@ -24,7 +24,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_voyage_id = indexes.IntegerField(null=True)
     var_voyage_in_cd_rom = indexes.BooleanField(model_attr="voyage_in_cd_rom", null=True)
-    var_ship_name = indexes.CharField(null=True)
+    var_ship_name = indexes.NgramField(null=True)
     var_nationality = indexes.CharField(null=True)
     var_imputed_nationality = indexes.CharField(null=True)
     var_year_of_construction = indexes.IntegerField(null=True)
@@ -34,7 +34,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_tonnage = indexes.FloatField(null=True)
     var_tonnage_mod = indexes.FloatField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
-    var_owner = indexes.MultiValueField(null=True)
+    var_owner = indexes.NgramField(null=True)
 
     # Voyage Outcome
     var_outcome_voyage = indexes.CharField(null=True)
@@ -69,20 +69,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_region_voyage_ended = indexes.CharField(null=True)
 
     # Voyage captain and crew
-    var_captain = indexes.MultiValueField(null=True)
+    var_captain = indexes.NgramField(null=True)
     var_crew_voyage_outset = indexes.IntegerField(null=True)
     var_crew_first_landing = indexes.IntegerField(null=True)
     var_crew_died_complete_voyage = indexes.IntegerField(null=True)
 
     # Voyage dates
-    # Dates are used as strings with facets to allow sorting lexicographically
+    # Dates are used as strings to allow sorting lexicographically
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
     var_voyage_began = indexes.NgramField(null=True)
-    var_slave_purchase_began = indexes.CharField(faceted=True, null=True)
-    var_vessel_left_port = indexes.CharField(faceted=True, null=True)
-    var_first_dis_of_slaves = indexes.CharField(faceted=True, null=True)
-    var_departure_last_place_of_landing = indexes.CharField(faceted=True, null=True)
-    var_voyage_completed = indexes.CharField(faceted=True, null=True)
+    var_slave_purchase_began = indexes.NgramField(null=True)
+    var_vessel_left_port = indexes.NgramField(null=True)
+    var_first_dis_of_slaves = indexes.NgramField(null=True)
+    var_departure_last_place_of_landing = indexes.NgramField(null=True)
+    var_voyage_completed = indexes.NgramField(null=True)
 
     var_imp_length_home_to_disembark = indexes.IntegerField(null=True)
     var_length_middle_passage_days = indexes.IntegerField(null=True)
@@ -112,7 +112,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imputed_mortality = indexes.FloatField(null=True)
 
     # Sources
-    var_sources = indexes.MultiValueField(null=True)
+    var_sources = indexes.NgramField(null=True)
 
     def get_model(self):
         return Voyage
