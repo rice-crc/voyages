@@ -202,7 +202,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_owner(self, obj):
         try:
-            return [connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)]
+            return ', '.join([connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)])
         except AttributeError:
             return None
 
@@ -393,7 +393,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -403,7 +403,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -415,7 +415,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -425,7 +425,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) < 7:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -435,7 +435,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -445,7 +445,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -587,7 +587,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
+        return '<br/> '.join([connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)])
 
     def prepare_var_crew_voyage_outset(self, obj):
         try:
@@ -609,8 +609,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        result = []
+        result = ""
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            result.append(connection.text_ref)
-            result.append(connection.source.full_ref)
+            result += connection.text_ref + ", "
+            result += connection.source.full_ref + ", "
         return result
