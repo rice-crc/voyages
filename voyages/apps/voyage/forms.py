@@ -137,18 +137,18 @@ class SimpleDateSearchForm(forms.Form):
     OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
-    from_month = forms.IntegerField(required=False, initial="01", widget=forms.TextInput(
+    from_month = forms.CharField(required=False, initial="01", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    from_year = forms.IntegerField(required=False, widget=forms.TextInput(
+    from_year = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
-    to_month = forms.IntegerField(required=False, initial="12", widget=forms.TextInput(
+    to_month = forms.CharField(required=False, initial="12", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    to_year = forms.IntegerField(required=False, widget=forms.TextInput(
+    to_year = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
-    threshold_month = forms.IntegerField(required=False, initial="MM", widget=forms.TextInput(
+    threshold_month = forms.CharField(required=False, initial="MM", widget=forms.TextInput(
         attrs={'class': "date_field_short", 'size': '2', 'maxlength': '2'}))
-    threshold_year = forms.IntegerField(required=False, initial="YYYY",widget=forms.TextInput(
+    threshold_year = forms.CharField(required=False, initial="YYYY",widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
 
@@ -158,7 +158,7 @@ class SimpleSelectSearchForm(forms.Form):
     """
     INIT_CHOICES = (('1', 'Yes'), ('2', 'No'))
     choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'})
-                    , choices=INIT_CHOICES)
+                                             , choices=INIT_CHOICES)
 
     def __init__(self, listChoices, *args, **kwargs):
         super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
