@@ -393,7 +393,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -403,7 +403,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -415,7 +415,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -425,7 +425,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) < 7:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -435,7 +435,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 
@@ -445,7 +445,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if len(data) != 10:
                 return None
             else:
-                return "%s,%s,%s" % (getYear(data), getMonth(data), getDay(data))
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
         except (AttributeError, TypeError):
             return None
 

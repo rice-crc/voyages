@@ -516,8 +516,14 @@
 
                             <div class="month-list">
                                 {% for month in elem.list_months %}
-                                <span class="month-toggled">{{ month.0 }}
-                                    <input type="hidden" disabled="disabled"
+                                <span {% if month.1 in elem.list_deselected %}
+                                                class="month-untoggled"
+                                      {% else %}
+                                                class="month-toggled"
+                                      {% endif %} >
+                                    {{ month.0 }}
+                                    <input type="hidden"
+                                           {% if month.1 not in elem.list_deselected %}disabled="disabled"{% endif %}
                                            name="{{ elem.deselected_months }}" value="{{ month.1 }}" /></span>
                                 {% endfor %}
                             </div>
