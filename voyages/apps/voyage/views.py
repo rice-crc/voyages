@@ -297,7 +297,7 @@ def search(request):
                     tmpElemDict['form'] = form
                     tmpElemDict['type'] = 'date'
                     tmpElemDict['list_months'] = list_months
-                    tmpElemDict['selected_months'] = varname + '_selected_months'
+                    tmpElemDict['deselected_months'] = varname + '_deselected_months'
 
                 elif varname in list_place_fields:
                     choices = getNestedListPlaces(varname, [], [], [])
@@ -395,13 +395,11 @@ def search(request):
                                     else:
                                         pass
 
-                                    selected_months = request.POST.getlist(tmp_varname + "_selected_months")
-                                    print selected_months
+                                    deselected_months = request.POST.getlist(tmp_varname + "_selected_months")
 
-                                    if 0 < len(selected_months) < len(list_months):
-                                        print "adding ", selected_months
-                                        date_filters.append({'varname': tmp_varname, 'selected_months': selected_months})
-                                    elif len(selected_months) == 0:
+                                    if 0 < len(deselected_months) < len(list_months):
+                                        date_filters.append({'varname': tmp_varname, 'deselected_months': selected_months})
+                                    elif len(deselected_months) == len(list_months):
                                         no_result = True
                                     else:  # user selected all 12 months
                                         pass
@@ -422,23 +420,14 @@ def search(request):
                 # Initially sort by voyage_id
                 results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
-
-                res2 = SearchQuerySet().filter(var_voyage_began_exact__contains=u'12')
-                res3 = SearchQuerySet().filter(text__contains=u'prese')
-                3/0
-
                 # Date filters
                 if date_filters:
                     for var_filter in date_filters:
-                        tmp_res = []
-                        for month in var_filter['selected_months']:
+                        for month in var_filter['deselected_months']:
+                            # Exclude the deselected months from the query result set
                             tmp_query = dict()
-                            tmp_query[var_filter['varname'] + "__contains"] = "," + month + ","
-                            tmp_res.append(SearchQuerySet().filter(**tmp_query))
-
-                            print tmp_query
-                            print tmp_res
-                    results = tmp_res
+                            tmp_query[var_filter['varname']] = "," + month + ","
+                            results = results.exclude(**tmp_query)
 
                 if results.count() == 0:
                     no_result = True
@@ -451,7 +440,7 @@ def search(request):
             request.session['existing_form'] = existing_form
 
             # Get all results (get means 'reset')
-            results = SearchQuerySet().all()
+            results = SearchQuerySet().models(Voyage)
 
             request.session['time_span_form'] = TimeFrameSpanSearchForm(
                 initial={'frame_from_year': voyage_span_first_year,
