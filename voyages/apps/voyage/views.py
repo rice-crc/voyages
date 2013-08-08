@@ -672,7 +672,7 @@ def search(request):
                                     deselected_months = request.POST.getlist(tmp_varname + "_selected_months")
 
                                     if 0 < len(deselected_months) < len(list_months):
-                                        date_filters.append({'varname': tmp_varname, 'deselected_months': selected_months})
+                                        date_filters.append({'varname': tmp_varname, 'deselected_months': deselected_months})
                                     elif len(deselected_months) == len(list_months):
                                         no_result = True
                                     else:  # user selected all 12 months
@@ -1007,12 +1007,87 @@ def create_menu_forms(dict):
     """
 
     for k, v in dict.iteritems():
-        # Get var_name
+        elem_dict = {}
         var_name = k.split("__")[0]
+        var_type = var_dict[var_name]['var_type']
 
+        elem_dict['varname'] = var_name
+        elem_dict['type'] = var_type
+        elem_dict['input_field_name'] = "header_" + var_name
 
-        3/0
-        pass
+        if var_type == "plain_text":
+            # Plain text fields
+            form = SimpleTextForm(auto_id=('id_' + var_name + "_%s"), initial={'text_search': v}, prefix=var_name)
+            elem_dict['form'] = form
+
+        elif var_type == "select":
+            # Select box variables
+            choices = getChoices(var_name)
+            form = SimpleSelectSearchForm(listChoices=choices,
+                                          auto_id=('id_' + var_name + "_%s"),
+                                          #initial={'choice_field': },
+                                          prefix=var_name)
+
+            elem_dict['form'] = form
+            elem_dict['varname_wrapper'] = "select_" + varname
+            elem_dict['choices'] = choices
+
+        elif var_type == "numeric":
+            # Numeric variables
+            word_option = var_name = k.split("__")[1]
+            if word_option == "range":
+                option = 1
+                lower_bound = v.split("|")[0]
+                upper_bound = v.split("|")[1]
+            elif word_option == "lte":
+                option = 2
+            elif word_option == "gte":
+                option = 3
+            elif word_option == "exact":
+                option = 4
+
+            if word_option == 1:
+                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                                       initial={'options': option,
+                                                'lower_bound': lower_bound,
+                                                'upper_bound': upper_bound},
+                                       prefix=var_name)
+            else:
+                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                                       initial={'options': option,
+                                                'threshold': v},
+                                       prefix=var_name)
+            elem_dict['form'] = form
+
+        elif var_type == "date":
+            # Numeric variables
+            form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
+                                        initial={'options': '1',
+                                                 'from_year': voyage_span_first_year,
+                                                 'to_year': voyage_span_last_year},
+                                        prefix=var_name)
+            elem_dict['form'] = form
+            elem_dict['type'] = 'date'
+            elem_dict['list_months'] = list_months
+            elem_dict['deselected_months'] = var_name + '_deselected_months'
+
+        elif var_type in "select_three_layers":
+            choices = getNestedListPlaces(var_name, [], [], [])
+
+            elem_dict['type'] = 'select_three_layers'
+            elem_dict['varname_wrapper'] = "select_" + var_name
+            elem_dict['choices'] = choices
+            elem_dict['selected_choices'] = var_name + "_selected"
+            elem_dict['selected_regs'] = var_name + "_selected_regs"
+            elem_dict['selected_areas'] = var_name + "_selected_areas"
+
+        elif var_type == "boolean":
+             # Boolean field
+            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"), prefix=var_name)
+            elem_dict['form'] = form
+            elem_dict['type'] = 'boolean'
+        else:
+            pass
 
 def getMonth(value):
     return value.split(",")[0]
