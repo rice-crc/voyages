@@ -1,0 +1,11 @@
+{{ object.image_id }}
+{{ object.file }}
+{{ object.ready_to_go }}
+{{ object.date }}
+{{ object.title }}
+{{ object.description }}
+{{ object.source }}
+{{ object.category.label }}
+{{ object.voyage.voyage_id }}
+{{ object.voyage.voyage_ship.ship_name }}
+{{ object.voyage.voyage_dates.imp_voyage_began }}

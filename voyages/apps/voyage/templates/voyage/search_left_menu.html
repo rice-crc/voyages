@@ -1,6 +1,9 @@
 {% load i18n %}
 <!-- Left menu for Understanding the Database -->
 
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup-permlink.css">
+
 <div class="search-side-panel">
 
     <div class="box-main-table box-expanded">
@@ -15,8 +18,8 @@
         </div>
 
         <div class="box-mid-end">
-            From: {{ request.session.time_span_form.frame_from_year }}
-            To: {{ request.session.time_span_form.frame_to_year }}
+            From {{ request.session.time_span_form.frame_from_year }}&nbsp;&nbsp;
+            To {{ request.session.time_span_form.frame_to_year }}
             <br />
             <span class="italic">
                 {% trans 'The full extent of time from the first to the last voyage is ' %}
@@ -31,10 +34,13 @@
 
     </div>
     <div>
-        <div class="box-expanded">
+        <input type="hidden" name="basic_list_expanded" value="true"
+                {% if not request.session.basic_list_contracted %}disabled="true"{% endif %} />
+
+        <div class="{% if request.session.basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
             <div class="box-header-head">
                 <div class="box-button" onclick="">
-                    &nbsp;
+
                 </div>
                 <div class="box-text-label">
                     {% trans 'Basic variables' %}
@@ -143,7 +149,7 @@
                 </div>
             </div>
         </div>
-        <div class="box-main-table-tail box-collapsed">
+        <div class="box-main-table-tail {% if request.session.basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
              <div class="box-header-tail">
                 <div class="box-button">
                     &nbsp;
@@ -256,7 +262,7 @@
                                 {% trans 'Middle passage (days)' %}*</div>
                         </div>
                     </div>
-                    <span class="bold">{% trans 'Voyage Dates' %}</span> ({% trans '9 variable' %})</div>
+                    <span class="bold">{% trans 'Voyage Dates' %}</span> ({% trans '9 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
@@ -270,7 +276,7 @@
                                 {% trans 'Crew deaths during voyage' %}</div>
                         </div>
                     </div>
-                    <span class="bold">{% trans 'Captain and Crew' %}</span> ({% trans '3 variables' %})</div>
+                    <span class="bold">{% trans 'Captain and Crew' %}</span> ({% trans '4 variables' %})</div>
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
@@ -290,7 +296,7 @@
                                 {% trans "Number of slaves arriving at first place of landing" %}*</div>
                             <div class="menu-popup-submenu-item" name="var_num_slaves_disembark_first_place">
                                 {% trans "Number of slaves disembarked at first place of landing" %}*</div>
-                            <div class="menu-popup-submenu-item" name="var_second place of landing">
+                            <div class="menu-popup-submenu-item" name="var_second_place_of_landing">
                                 {% trans "Number of slaves disembarked at second place of landing" %}*</div>
                             <div class="menu-popup-submenu-item" name="var_num_slaves_disembark_third_place">
                                 {% trans "Number of slaves disembarked at third place of landing" %}*</div>
@@ -324,7 +330,7 @@
                                 {% trans "Mortality rate" %}*</div>
                         </div>
                     </div>
-                    <span class="bold">{% trans 'Slaves (characteristics)' %}</span> ({% trans '9 variables' %})</div>
+                    <span class="bold">{% trans 'Slaves (characteristics)' %}</span> ({% trans '10 variables' %})</div>
                 <div class="menu-popup-item-main-last">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
@@ -513,7 +519,15 @@
 
                             <div class="month-list">
                                 {% for month in elem.list_months %}
-                                <span class="month-toggled">{{ month }}</span>
+                                <span {% if month.1 in elem.list_deselected %}
+                                                class="month-untoggled"
+                                      {% else %}
+                                                class="month-toggled"
+                                      {% endif %} >
+                                    {{ month.0 }}
+                                    <input type="hidden"
+                                           {% if month.1 not in elem.list_deselected %}disabled="disabled"{% endif %}
+                                           name="{{ elem.deselected_months }}" value="{{ month.1 }}" /></span>
                                 {% endfor %}
                             </div>
 
@@ -546,9 +560,26 @@
         </div>
 
         <div class="box-mid-end">
-        <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
-            To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
-        <input type="submit" value="{% trans 'Create a link' %}"/>
+            <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
+                To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
+            <div class="blackout"></div>
+            <div class="msgbox">
+                <div class="permlink-info">
+                    <div class="permlink-title">
+                        URL has been created
+                    </div>
+                    <div class="permlink-desc">
+                        To reactivate the current database query in the future, copy the following URL and then paste it into the address bar:
+                    </div>
+                    <div class="permlink-link">
+                        <textarea wrap="virtual" rows="4">{{ url_to_copy }}</textarea>
+                    </div>
+                    <div class="permlink-close">
+                        <input class="permlink-close-button" type="submit" value="OK, Close This">
+                    </div>
+                </div>
+            </div>
+            <input type="button" id="link-button" value="Click Here"/>
         </div>
     </div>
 

@@ -36,7 +36,10 @@ h1 {
 	margin: 0px 0px 10px 0px;
 }
 
-
+.query_window {
+    width: 100%;
+    border-collapse: collapse;
+}
 
 /* Two-column view style */
 #left-menu, #center-content {
@@ -47,9 +50,11 @@ h1 {
 
 /* Set the width of the left search menu */
 #left-menu {
-	padding: 10px 5px 10px 5px;
-	width: 20%;
+	padding: 10px 5px 10px 7px;
+	width: 300px;
+    min-width: 300px;
 	border: #895D03 1px solid;
+    overflow: auto;
 }
 
 /* Set the width of the main content */
@@ -57,7 +62,6 @@ h1 {
     border-top: #895D03 1px solid;
     background-color: #FFFFFF;
     z-index: 1;
-    width: 79%;
     overflow: hidden;
 }
 

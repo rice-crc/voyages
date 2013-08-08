@@ -1,16 +1,17 @@
 from haystack import indexes
 from .models import *
 
+
 def getMonth(value):
-    return value.split(",")[0]
+    return str(value.split(",")[0]).zfill(2)
 
 
 def getDay(value):
-    return value.split(",")[1]
+    return str(value.split(",")[1]).zfill(2)
 
 
 def getYear(value):
-    return value.split(",")[2]
+    return str(value.split(",")[2]).zfill(2)
 
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
@@ -21,9 +22,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_imp_voyage_began = indexes.IntegerField(null=True)
 
-    var_voyage_id = indexes.IntegerField(model_attr='voyage_id', null=True)
+    var_voyage_id = indexes.IntegerField(null=True)
     var_voyage_in_cd_rom = indexes.BooleanField(model_attr="voyage_in_cd_rom", null=True)
-    var_ship_name = indexes.CharField(null=True)
+    var_ship_name = indexes.NgramField(null=True)
     var_nationality = indexes.CharField(null=True)
     var_imputed_nationality = indexes.CharField(null=True)
     var_year_of_construction = indexes.IntegerField(null=True)
@@ -33,7 +34,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_tonnage = indexes.FloatField(null=True)
     var_tonnage_mod = indexes.FloatField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
-    var_owner = indexes.MultiValueField(null=True)
+    var_owner = indexes.NgramField(null=True)
 
     # Voyage Outcome
     var_outcome_voyage = indexes.CharField(null=True)
@@ -68,19 +69,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_region_voyage_ended = indexes.CharField(null=True)
 
     # Voyage captain and crew
-    var_captain = indexes.MultiValueField(null=True)
+    var_captain = indexes.NgramField(null=True)
     var_crew_voyage_outset = indexes.IntegerField(null=True)
     var_crew_first_landing = indexes.IntegerField(null=True)
     var_crew_died_complete_voyage = indexes.IntegerField(null=True)
 
     # Voyage dates
+    # Dates are used as strings to allow sorting lexicographically
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
-    var_voyage_began = indexes.DateField(null=True)
-    var_slave_purchase_began = indexes.DateField(null=True)
-    var_vessel_left_port = indexes.DateField(null=True)
-    var_first_dis_of_slaves = indexes.DateField(null=True)
-    var_departure_last_place_of_landing = indexes.DateField(null=True)
-    var_voyage_completed = indexes.DateField(null=True)
+    var_voyage_began = indexes.NgramField(null=True)
+    var_slave_purchase_began = indexes.NgramField(null=True)
+    var_vessel_left_port = indexes.NgramField(null=True)
+    var_first_dis_of_slaves = indexes.NgramField(null=True)
+    var_departure_last_place_of_landing = indexes.NgramField(null=True)
+    var_voyage_completed = indexes.NgramField(null=True)
 
     var_imp_length_home_to_disembark = indexes.IntegerField(null=True)
     var_length_middle_passage_days = indexes.IntegerField(null=True)
@@ -110,7 +112,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imputed_mortality = indexes.FloatField(null=True)
 
     # Sources
-    var_sources = indexes.MultiValueField(null=True)
+    var_sources = indexes.NgramField(null=True)
 
     def get_model(self):
         return Voyage
@@ -118,6 +120,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
+
+    def prepare_var_voyage_id(self, obj):
+        try:
+            print obj.pk
+            return obj.voyage_id
+        except AttributeError:
+            return None
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
@@ -193,7 +202,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_owner(self, obj):
         try:
-            return [connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)]
+            return ', '.join([connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)])
         except AttributeError:
             return None
 
@@ -375,26 +384,70 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         try:
             return int(getYear(obj.voyage_dates.imp_arrival_at_port_of_dis))
-        except AttributeError, TypeError:
+        except (AttributeError, TypeError):
             return None
 
     def prepare_var_voyage_began(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.voyage_began
+            if len(data) != 10:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_slave_purchase_began(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.slave_purchase_began
+            if len(data) != 10:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
+    # departed Africa
+    # Change??
     def prepare_var_vessel_left_port(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.imp_departed_africa
+            if len(data) != 10:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_first_dis_of_slaves(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.first_dis_of_slaves
+            if len(data) < 7:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_departure_last_place_of_landing(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.departure_last_place_of_landing
+            if len(data) != 10:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_voyage_completed(self, obj):
-        return None
+        try:
+            data = obj.voyage_dates.voyage_completed
+            if len(data) != 10:
+                return None
+            else:
+                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imp_length_home_to_disembark(self, obj):
         try:
@@ -465,42 +518,76 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
 
     def prepare_var_imp_total_slaves_disembarked(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_total_num_slaves_disembarked
+        except AttributeError:
+            return None
 
     # Voyage characteristics
     def prepare_var_imputed_percentage_men(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_men
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_women(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_women
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_boys(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_boy
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_girls(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_girl
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_female(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_female
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_male(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_male
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_percentage_child(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.percentage_child
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_imputed_sterling_cash(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_jamaican_cash_price
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_death_middle_passage(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_mortality_during_voyage
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_mortality(self, obj):
-        return None
+        try:
+            return obj.voyage_slaves_numbers.imp_mortality_during_voyage \
+                   / obj.voyage_slaves_numbers.imp_total_num_slaves_embarked
+        except (AttributeError, TypeError):
+            return None
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)]
+        return '<br/> '.join([connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)])
 
     def prepare_var_crew_voyage_outset(self, obj):
         try:
@@ -522,8 +609,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        result = []
+        result = ""
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            result.append(connection.text_ref)
-            result.append(connection.source.full_ref)
+            result += connection.text_ref + ", "
+            result += connection.source.full_ref + ", "
         return result
