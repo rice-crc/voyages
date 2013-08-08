@@ -77,7 +77,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     # Dates are used as strings with facets to allow sorting lexicographically
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
-    var_voyage_began = indexes.CharField(faceted=True, null=True)
+    var_voyage_began = indexes.NgramField(null=True)
     var_slave_purchase_began = indexes.CharField(faceted=True, null=True)
     var_vessel_left_port = indexes.CharField(faceted=True, null=True)
     var_first_dis_of_slaves = indexes.CharField(faceted=True, null=True)

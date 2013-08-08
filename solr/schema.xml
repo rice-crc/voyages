@@ -180,8 +180,6 @@
 
     <field name="var_registered_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_began_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_crew_first_landing" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -272,7 +270,7 @@
 
     <field name="var_region_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_began" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_voyage_began" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_boys" type="float" indexed="true" stored="true" multiValued="false" />
 

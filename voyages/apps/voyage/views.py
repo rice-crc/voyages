@@ -33,8 +33,8 @@ list_numeric_fields = ['var_voyage_id',
                        'var_rig_of_vessel',
                        'var_guns_mounted',
 
-                        # Voyage dates variables
-                       'var_imp_arrival_at_port_of_dis', # Year arrived with salves
+                       # Voyage dates variables
+                       'var_imp_arrival_at_port_of_dis',  # Year arrived with salves
                        'var_imp_length_home_to_disembark',
                        'var_length_middle_passage_days',
 
@@ -98,8 +98,8 @@ list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Grea
                                    'Netherlands', 'U.S.A', 'France', 'Denmark / Baltic',
                                    'Other (specify in note)']
 
-list_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+list_months = [('Jan', '01'), ('Feb', '02'), ('Mar', '03'), ('Apr', '04'), ('May', '05'), ('Jun', '06'),
+               ('Jul', '07'), ('Aug', '08'), ('Sep', '09'), ('Oct', '10'), ('Nov', '11'), ('Dec', '12')]
 
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
 option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
@@ -110,6 +110,7 @@ if VoyageDates.objects.count() > 1:
 else:
     voyage_span_first_year = 1514
     voyage_span_last_year = 1866
+
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -135,6 +136,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
     except TemplateDoesNotExist:
         raise Http404
 
+
 @staff_member_required
 def download_file(request):
     """
@@ -158,7 +160,8 @@ def download_file(request):
     uploaded_files_info =[]
     for f in uploaded_files:
         st = stat(settings.MEDIA_ROOT + '/download/' + f)
-        uploaded_files_info.append({'name': f, 'size': size(st[ST_SIZE]), 'date_mod': time.asctime(time.localtime(st[ST_MTIME]))})
+        uploaded_files_info.append({'name': f, 'size': size(st[ST_SIZE]),
+                                    'date_mod': time.asctime(time.localtime(st[ST_MTIME]))})
 
     return render(request, templatename, {'form': form, 'uploaded_files': uploaded_files_info})
 
@@ -208,7 +211,6 @@ def search(request):
 
             submitVal = request.POST.get('submitVal')
 
-            time_span_form = TimeFrameSpanSearchForm(request.POST)
             # Update variable values
             list_search_vars = request.POST.getlist('list-input-params')
             existing_form = request.session['existing_form']
@@ -270,7 +272,8 @@ def search(request):
                 elif varname in list_select_fields:
                     # Select box variables
                     choices = getChoices(varname)
-                    form = SimpleSelectSearchForm(listChoices=choices, auto_id=('id_' + varname + "_%s"), prefix=varname)
+                    form = SimpleSelectSearchForm(listChoices=choices,
+                                                  auto_id=('id_' + varname + "_%s"), prefix=varname)
 
                     tmpElemDict['form'] = form
                     tmpElemDict['type'] = 'select'
@@ -279,7 +282,8 @@ def search(request):
 
                 elif varname in list_numeric_fields:
                     # Numeric variables
-                    form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"), initial={'options': '4'}, prefix=varname)
+                    form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"),
+                                                   initial={'options': '4'}, prefix=varname)
                     tmpElemDict['form'] = form
                     tmpElemDict['type'] = 'numeric'
 
@@ -293,6 +297,7 @@ def search(request):
                     tmpElemDict['form'] = form
                     tmpElemDict['type'] = 'date'
                     tmpElemDict['list_months'] = list_months
+                    tmpElemDict['selected_months'] = varname + '_selected_months'
 
                 elif varname in list_place_fields:
                     choices = getNestedListPlaces(varname, [], [], [])
@@ -326,7 +331,8 @@ def search(request):
 
                 # Time frame search
                 query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
-                                                                 request.session['time_span_form'].cleaned_data['frame_to_year']]
+                                                             request.session['time_span_form'].cleaned_data['frame_to_year']]
+                date_filters = []
 
                 for tmp_varname in list_search_vars:
                     for cur_var in request.session['existing_form']:
@@ -349,34 +355,55 @@ def search(request):
                                 cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
                                 if cur_var['form'].is_valid():
                                     opt = cur_var['form'].cleaned_data['options']
-                                    if opt == '1': # Between
+                                    if opt == '1':  # Between
                                         query_dict[tmp_varname + "__range"] = [cur_var['form'].cleaned_data['lower_bound'],
                                                                                cur_var['form'].cleaned_data['upper_bound']]
-                                    elif opt == '2': #
+                                    elif opt == '2':  # Less or equal to
                                         query_dict[tmp_varname + "__lte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '3':
+                                    elif opt == '3':  # Greater or equal to
                                         query_dict[tmp_varname + "__gte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '4': # Is equal
+                                    elif opt == '4':  # Is equal
                                         query_dict[tmp_varname + "__exact"] = cur_var['form'].cleaned_data['threshold']
                                     else:
                                         pass
 
                             elif tmp_varname in list_date_fields:
-                                # Currently in progress
-                                # To be updated
+                            # Currently in progress
+                            # To be updated
                                 cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
                                 if cur_var['form'].is_valid():
                                     opt = cur_var['form'].cleaned_data['options']
-                                    if opt == '1': # Between
-                                        query_dict[tmp_varname + "__range"] = [cur_var['form'].cleaned_data['from_month'],
-                                                                               cur_var['form'].cleaned_data['upper_bound']]
-                                    elif opt == '2': #
-                                        query_dict[tmp_varname + "__lte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '3':
-                                        query_dict[tmp_varname + "__gte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '4': # Is equal
-                                        query_dict[tmp_varname + "__exact"] = cur_var['form'].cleaned_data['threshold']
+                                    if opt == '1':  # Between
+                                        query_dict[tmp_varname + "__range"] = [
+                                            formatDate(cur_var['form'].cleaned_data['from_year'],
+                                                       cur_var['form'].cleaned_data['from_month']),
+                                            formatDate(cur_var['form'].cleaned_data['to_year'],
+                                                       cur_var['form'].cleaned_data['to_month'])]
+
+                                    elif opt == '2':  # Less or equal to
+                                        query_dict[tmp_varname + "__lte"] = \
+                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
+                                                       cur_var['form'].cleaned_data['threshold_month'])
+                                    elif opt == '3':  # Greater or equal to
+                                        query_dict[tmp_varname + "__gte"] = \
+                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
+                                                       cur_var['form'].cleaned_data['threshold_month'])
+                                    elif opt == '4':  # Is equal
+                                        query_dict[tmp_varname + "__exact"] = \
+                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
+                                                       cur_var['form'].cleaned_data['threshold_month'])
                                     else:
+                                        pass
+
+                                    selected_months = request.POST.getlist(tmp_varname + "_selected_months")
+                                    print selected_months
+
+                                    if 0 < len(selected_months) < len(list_months):
+                                        print "adding ", selected_months
+                                        date_filters.append({'varname': tmp_varname, 'selected_months': selected_months})
+                                    elif len(selected_months) == 0:
+                                        no_result = True
+                                    else:  # user selected all 12 months
                                         pass
 
                             elif tmp_varname in list_place_fields:
@@ -395,8 +422,27 @@ def search(request):
                 # Initially sort by voyage_id
                 results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
+
+                res2 = SearchQuerySet().filter(var_voyage_began_exact__contains=u'12')
+                res3 = SearchQuerySet().filter(text__contains=u'prese')
+                3/0
+
+                # Date filters
+                if date_filters:
+                    for var_filter in date_filters:
+                        tmp_res = []
+                        for month in var_filter['selected_months']:
+                            tmp_query = dict()
+                            tmp_query[var_filter['varname'] + "__contains"] = "," + month + ","
+                            tmp_res.append(SearchQuerySet().filter(**tmp_query))
+
+                            print tmp_query
+                            print tmp_res
+                    results = tmp_res
+
                 if results.count() == 0:
                     no_result = True
+                    results = []
                 request.session['results_voyages'] = results
 
         elif request.method == 'GET':
@@ -501,22 +547,22 @@ def getNestedListPlaces(varname, place_selected, region_selected, area_selected)
                                         'text': place.place})
             if reg.region in region_selected:
                 area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
-                                'text': reg.region,
-                                'choices': reg_content,
-                                'selected' : True})
+                                    'text': reg.region,
+                                    'choices': reg_content,
+                                    'selected': True})
             else:
                 area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
-                                'text': reg.region,
-                                'choices': reg_content})
+                                    'text': reg.region,
+                                    'choices': reg_content})
         if area.broad_region in area_selected:
             choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
-                        'text': area.broad_region,
-                        'choices': area_content,
-                        'selected' : True})
+                            'text': area.broad_region,
+                            'choices': area_content,
+                            'selected' : True})
         else:
             choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
-                        'text': area.broad_region,
-                        'choices': area_content})
+                            'text': area.broad_region,
+                            'choices': area_content})
     return choices
 
 
@@ -537,7 +583,7 @@ def prepare_paginator_variables(paginator, current_page, results_per_page):
 
         # Get last inserted index
         try:
-            last = last = paginator_range[-1]
+            last = paginator_range[-1]
         except IndexError:
             last = 0
 
@@ -567,7 +613,7 @@ def prepare_paginator_variables(paginator, current_page, results_per_page):
     else:
         pages_range.append(int(current_page)*results_per_page)
 
-    return (paginator_range, pages_range)
+    return paginator_range, pages_range
 
 
 def check_and_save_options_form(request):
@@ -702,3 +748,12 @@ def getDay(value):
 def getYear(value):
     return value.split(",")[2]
 
+
+def formatDate(year, month):
+    """
+    Format the passed year month to a YYYY,MM string
+    :param year:
+    :param month:
+    :return:
+    """
+    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
