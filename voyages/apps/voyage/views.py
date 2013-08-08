@@ -668,11 +668,11 @@ def decode_from_url(request):
     #FIXME: existing_form is not saved out of session.
 
     # Check if this path is in session
-    try:
-        session_dict = request.session[request.get_full_path()]
-        return session_dict['dict'], session_dict['existing_form']
-    except KeyError:
-        pass
+    # try:
+    #     session_dict = request.session[request.get_full_path()]
+    #     return session_dict['dict'], session_dict['existing_form']
+    # except KeyError:
+    #     pass
 
     dict = {}
 
@@ -689,8 +689,22 @@ def decode_from_url(request):
         else:
             dict[k] = v
 
+    create_menu_forms(dict)
     return dict, 1
 
+
+def create_menu_forms(dict):
+    """
+    Function to create forms.
+    """
+
+    for k, v in dict.iteritems():
+        # Get var_name
+        var_name = k.split("__")[0]
+
+
+        3/0
+        pass
 
 def getMonth(value):
     return value.split(",")[0]
