@@ -175,9 +175,8 @@ def handle_uploaded_file(f):
 
 def search(request):
     """
-    Currently on renders the initial page
+    Handles the Search the Database part
     """
-
     no_result = False
     url_to_copy = ""
     query_dict = {}
