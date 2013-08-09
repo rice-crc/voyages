@@ -682,6 +682,8 @@ def search(request):
                                         pass
 
                             elif tmp_varname in list_place_fields:
+                                a = request.POST.getlist(tmp_varname + "_selected")
+                                3/0
                                 query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
 
                             elif tmp_varname in list_boolean_fields:
@@ -1055,28 +1057,74 @@ def create_menu_forms(dict):
 
             if word_option == 1:
                 form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                       initial={'options': option,
-                                                'lower_bound': lower_bound,
-                                                'upper_bound': upper_bound},
-                                       prefix=var_name)
+                                               initial={'options': option,
+                                                        'lower_bound': lower_bound,
+                                                        'upper_bound': upper_bound},
+                                               prefix=var_name)
             else:
                 form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                       initial={'options': option,
-                                                'threshold': v},
-                                       prefix=var_name)
+                                               initial={'options': option,
+                                                        'threshold': v},
+                                               prefix=var_name)
             elem_dict['form'] = form
 
         elif var_type == "date":
-            # Numeric variables
+            # Date variables
+
+            word_option = var_name = k.split("__")[1]
+            if word_option == "range":
+                option = 1
+                from_month = v.split("|")[0]
+                from_year = v.split("|")[1]
+                to_month = v.split("|")[2]
+                to_year = v.split("|")[3]
+            elif word_option == "lte":
+                threshold_month = v.split("|")[0]
+                threshold_year = v.split("|")[1]
+                option = 2
+            elif word_option == "gte":
+                threshold_month = v.split("|")[0]
+                threshold_year = v.split("|")[1]
+                option = 3
+            elif word_option == "exact":
+                threshold_month = v.split("|")[0]
+                threshold_year = v.split("|")[1]
+                option = 4
+
+            if word_option == 1:
+                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                                               initial={'options': option,
+                                               'from_month': from_month,
+                                               'from_year': from_year,
+                                               'to_month': to_month,
+                                               'to_year': to_year},
+                                               prefix=var_name)
+            else:
+                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                                               initial={'options': option,
+                                                        'threshold_month': threshold_month,
+                                                        'threshold_year': threshold_year},
+                                               prefix=var_name)
+
+
             form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
                                         initial={'options': '1',
                                                  'from_year': voyage_span_first_year,
                                                  'to_year': voyage_span_last_year},
                                         prefix=var_name)
+
             elem_dict['form'] = form
-            elem_dict['type'] = 'date'
-            elem_dict['list_months'] = list_months
-            elem_dict['deselected_months'] = var_name + '_deselected_months'
+
+            # Check if there is list_month to deselect
+            if option == 1:
+                months_list = v.split("|")[4:0]
+            else:
+                months_list = v.split("|")[2:0]
+            if isinstance(months_list, types.ListType):
+                for i in months_list:
+                    elem_dict['list_months'].append(i)
+
+                elem_dict['deselected_months'] = var_name + '_deselected_months'
 
         elif var_type in "select_three_layers":
             choices = getNestedListPlaces(var_name, [], [], [])
