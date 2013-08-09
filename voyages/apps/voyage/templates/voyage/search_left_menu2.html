@@ -37,7 +37,7 @@
         <input type="hidden" name="basic_list_expanded" value="true"
                 {% if not request.session.basic_list_contracted %}disabled="true"{% endif %} />
 
-        <div class="{% if request.session.basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
+        <div class="{% if request.session.basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
             <div class="box-header-head">
                 <div class="box-button" onclick="">
 
@@ -49,28 +49,25 @@
             </div>
 
             <div class="box-mid">
-                {% regroup basic_variables by var_category as basic_var_all_list %}
-
-                {% for variable in basic_var_all_list %}
+                {% for group in variable_group %}
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-
-                        {% for item in variable.list %}
-                          {% if item.is_basic == True %}
-                               <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
-                                {{ item.var_full_name }}
+                            {% for variable in group.variables %}
+                            {% if variable.is_basic == True %}
+                               <div class="menu-popup-submenu-item" name="{{ variable.var_name }}">
+                                {{ variable.var_full_name }}
                                </div>
-                          {% endif %}
-                        {% endfor %}
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list | length }} variables)
+                    <span class="bold">{{ group.var_category }}</span> ({{ group.variables | length }} variables)
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="box-main-table-tail {% if request.session.basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
+        <div class="box-main-table-tail {% if request.session.basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
              <div class="box-header-tail">
                 <div class="box-button">
                     &nbsp;
@@ -82,22 +79,20 @@
             </div>
 
             <div class="box-mid-end">
-                {% regroup general_variables by var_category as general_var_all_list %}
-
-                {% for variable in general_var_all_list %}
+                {% for group in variable_group %}
                 <div class="menu-popup-item-main">
                     <div class="menu-popup-submenu-frame hidden">
                         <div class="menu-popup-submenu">
-                        {% for item in variable.list %}
-                          {% if item.is_general == True %}
-                               <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
-                                {{ item.var_full_name }}
+                            {% for variable in group.variables %}
+                            {% if variable.is_general == True %}
+                               <div class="menu-popup-submenu-item" name="{{ variable.var_name }}">
+                                {{ variable.var_full_name }}
                                </div>
-                          {% endif %}
-                        {% endfor %}
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list | length }} variables)
+                    <span class="bold">{{ group.var_category }}</span> ({{ group.variables | length }} variables)
                 </div>
                 {% endfor %}
             </div>
