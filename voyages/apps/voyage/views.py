@@ -483,6 +483,12 @@ def search(request):
 
         if request.method == 'POST':
 
+            # Handles what list of variables should be collapsed or expanded
+            if request.POST.get("basic_list_expanded"):
+                request.session["basic_list_contracted"] = True
+            else:
+                request.session["basic_list_contracted"] = None
+
             submitVal = request.POST.get('submitVal')
 
             # Update variable values
@@ -701,7 +707,6 @@ def search(request):
 
                 # Date filters
                 if date_filters:
-                    print "got here"
                     for var_filter in date_filters:
                         l_months = []
                         tmp_query = dict()
@@ -710,7 +715,6 @@ def search(request):
 
                         tmp_query[tmp_varname + "__in"] = l_months
                         results = results.exclude(**tmp_query)
-                        print tmp_query
 
                 if results.count() == 0:
                     no_result = True

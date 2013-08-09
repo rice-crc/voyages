@@ -103,7 +103,11 @@ In addition, these sets of initial data need to be loaded
   * lessonplan_data.json
   * glossary.json
   * downloads.json
-  * users.json::
+  * faq_all.json
+  * glossary.json
+  * images.json
+  * users.json
+  * voyage.json.gz::
 
     $ python manage.py loaddata initialdata/*
 
