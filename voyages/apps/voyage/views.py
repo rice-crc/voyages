@@ -298,7 +298,7 @@ var_dict = [
              "is_estimate": False,
              "is_basic": False,
              "is_general": True},
-            {'var_name': 'var_imp_principal_place_of_slave_purchase',
+            {'var_name': 'var_principal_place_of_slave_purchase',
              'spss_name': 'mjbyptimp',
              'var_full_name': 'Principal place of slave purchase*',
              'var_type': 'select_three_layers',
@@ -564,85 +564,95 @@ var_dict = [
             # Slaves (characteristics)
             {'var_name': 'var_imputed_percentage_men',
              'spss_name': 'menrat7',
-             'var_full_name': 'Percentage men',
+             'var_full_name': 'Percentage men*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by age and gender"},
             {'var_name': 'var_imputed_percentage_women',
              'spss_name': 'womrat7',
-             'var_full_name': 'Percentage women',
+             'var_full_name': 'Percentage women*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by age and gender"},
             {'var_name': 'var_imputed_percentage_boys',
              'spss_name': 'boyrat7',
-             'var_full_name': 'Percentage boys',
+             'var_full_name': 'Percentage boys*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by age and gender"},
             {'var_name': 'var_imputed_percentage_girls',
              'spss_name': 'girlrat7',
-             'var_full_name': 'Percentage girls',
+             'var_full_name': 'Percentage girls*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by age and gender"},
             {'var_name': 'var_imputed_percentage_male',
              'spss_name': 'chilrat7',
-             'var_full_name': 'Percentage male',
+             'var_full_name': 'Percentage male*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by gender (males/females)"},
             {'var_name': 'var_imputed_percentage_child',
              'spss_name': '',
-             'var_full_name': 'Percentage children',
+             'var_full_name': 'Percentage children*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note" : "Captives identified by age group (adults/children)"},
             {'var_name': 'var_imputed_sterling_cash',
              'spss_name': 'jamcaspr',
-             'var_full_name': 'Sterling cash price in Jamaica',
+             'var_full_name': 'Sterling cash price in Jamaica*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
              "is_general": True},
             {'var_name': 'var_imputed_death_middle_passage',
-             'spss_name': '',
-             'var_full_name': 'Slave deaths during middle passage',
+             'spss_name': 'vymrtimp',
+             'var_full_name': 'Slave deaths during middle passage*',
              'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note": "Documented or difference between embarked "
+                     "and disembarked captives (data variables)"},
             {'var_name': 'var_imputed_mortality',
-             'spss_name': '',
-             'var_full_name': 'Mortality rate',
-             'var_type': '',
+             'spss_name': 'vymrtrat',
+             'var_full_name': 'Mortality rate*',
+             'var_type': 'numeric',
              'var_category': 'Slave (characteristics)',
              "is_estimate": False,
              "is_basic": False,
-             "is_general": True},
+             "is_general": True,
+             "note": "Slave deaths during Middle Passage divided by number of "
+                     "captives leaving Africa"},
 
             # Source
             {'var_name': 'var_sources',
-             'spss_name': '',
+             'spss_name': 'vymrtrat',
              'var_full_name': 'Sources',
              'var_type': 'plain_text',
              'var_category': 'Source',
              "is_estimate": False,
-             "is_basic": False,
+             "is_basic": True,
              "is_general": True}
 ]
 
@@ -790,7 +800,6 @@ def search(request):
                             # Numeric variables
                             cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
                             cur_var['list_deselected'] = request.POST.getlist(tmp_varname + '_deselected_months')
-                            print cur_var['list_deselected']
 
                         elif tmp_varname in list_place_fields:
                             place_selected = request.POST.getlist(tmp_varname + "_selected")
@@ -1453,14 +1462,19 @@ def variable_list(request):
 
     grouped_list_vars = groupby(var_dict, lambda x: x['var_category'])
 
-    query = {}
+    count = 5
 
     for key, group in grouped_list_vars:
         tmpGroup = []
+
         for elem in group:
+            query = {}
+
             var_name = elem['var_name']
             if var_name == 'var_voyage_in_cd_rom':
                 query[var_name + "__exact"] = True
+            elif elem['var_type'] == 'numeric':
+                query[var_name + "__gte"] = -1
             else:
                 query[var_name + "__gte"] = ""
 
