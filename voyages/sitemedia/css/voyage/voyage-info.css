@@ -157,7 +157,9 @@ div#variables-list table.simple-table {
 	border-collapse: collapse; }
 
 div#variables-list table.simple-table td {
-	padding: 2px 5px; }
+	padding: 2px 5px;
+    text-align: left;
+}
 
 div#variables-list table.simple-table td.check {
 	text-align: center; }
@@ -188,12 +190,12 @@ div#variables-list table.simple-table td.first {
 	background-color: White;
 	border-bottom: 1px solid #DDCA9D; }
 
-div#variables-list table.simple-table td.odd {
+tr.odd_row td {
 	background-color: White;
 	border-top: 1px solid #DDCA9D;
 	border-bottom: 1px solid #DDCA9D; }
 
-div#variables-list table.simple-table td.even {
+tr.even_row td  {
 	background-color: #FFF5C2;
 	border-top: 1px solid #DDCA9D;
 	border-bottom: 1px solid #DDCA9D; }

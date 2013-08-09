@@ -89,6 +89,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_length_middle_passage_days = indexes.IntegerField(null=True)
 
     # Voyage numbers
+    var_num_slaves_intended_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_second_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_third_port = indexes.IntegerField(null=True)
@@ -453,6 +454,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_length_middle_passage_days(self, obj):
         try:
             return obj.voyage_dates.length_middle_passage_days
+        except AttributeError:
+            return None
+
+    def prepare_var_num_slaves_intended_first_port(self, obj):
+        try:
+            return obj.voyage_slaves_numbers.num_slaves_intended_first_port
         except AttributeError:
             return None
 
