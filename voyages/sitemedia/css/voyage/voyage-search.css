@@ -52,7 +52,9 @@ h1 {
 #left-menu {
 	padding: 10px 5px 10px 7px;
 	width: 300px;
+    min-width: 300px;
 	border: #895D03 1px solid;
+    overflow: auto;
 }
 
 /* Set the width of the main content */
