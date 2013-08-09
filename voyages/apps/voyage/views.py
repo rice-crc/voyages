@@ -667,10 +667,21 @@ else:
     voyage_span_first_year = 1514
     voyage_span_last_year = 1866
 
+# List of basic variables
 basic_variables = []
 for item in var_dict:
     if item['is_basic'] == True:
         basic_variables.append(item)
+
+# List of default result columns
+default_result_columns = [
+    'var_voyage_id',
+    'var_ship_name',
+    'var_captain',
+    'var_imp_arrival_at_port_of_dis',
+    'var_imp_principal_place_of_slave_purchase',
+    'var_imp_principal_port_of_slave_dis',
+]
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -752,13 +763,13 @@ def search(request):
         if results.count() == 0:
             no_result = True
 
-        request.session['results_voyages'] = results
 
     # Otherwise, process next
     else:
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
+            request.session['result_columns'] = default_result_columns
 
         # Try to retrieve results from session
         try:
@@ -1018,6 +1029,8 @@ def search(request):
                 initial={'frame_from_year': voyage_span_first_year,
                          'frame_to_year': voyage_span_last_year})
 
+
+
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, request.session['existing_form'], query_dict)
 
@@ -1039,11 +1052,25 @@ def search(request):
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
+    # Customize result page
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+
+    request.session['result_columns'] = default_result_columns
+    result_columns = []
+    for column in request.session['result_columns']:
+        for item in var_dict:
+            if item['var_name'] == column:
+                result_columns.append([item['var_name'],
+                                       item['var_full_name']])
+    print result_columns
+
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
                    'basic_variables': basic_variables,
                    'general_variables': var_dict,
+                   'result_columns': result_columns,
                    'results': pagins,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
@@ -1460,7 +1487,7 @@ def formatDate(year, month):
 
 def variable_list(request):
     """
-    renders a list of variables and their statistics
+    renders a list of variables and their statistics into Variable List web page
     :param request:
     :return:
     """
@@ -1478,6 +1505,7 @@ def variable_list(request):
             if var_name == 'var_voyage_in_cd_rom':
                 query[var_name + "__exact"] = True
 
+            ### TO BE DELETED (after updating solr schema)
             elif var_name == "var_num_slaves_intended_first_port" or var_name == "var_num_slaves_disembark_second_place":
                 continue
 
