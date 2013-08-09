@@ -14,6 +14,7 @@ import time
 import types
 from .forms import *
 from haystack.query import SearchQuerySet
+from itertools import groupby
 
 list_text_fields = ['var_ship_name',
                     'var_owner',
@@ -49,7 +50,7 @@ list_numeric_fields = ['var_voyage_id',
                        'var_imp_total_num_slaves_purchased',
                        'var_total_num_slaves_arr_first_port_embark',
                        'var_num_slaves_disembark_first_place',
-                       'var_second_place_of_landing',
+                       'var_num_slaves_disembark_second_place',
                        'var_num_slaves_disembark_third_place',
                        'var_imp_total_slaves_disembarked',
 
@@ -143,7 +144,7 @@ var_dict = [
              "is_estimate": True,
              "is_basic": True,
              "is_general": True,
-             "note" : "Falg regrouped into seven major national carriers"},
+             "note" : "Flag regrouped into seven major national carriers"},
             {'var_name': 'var_vessel_construction_place',
              'spss_name': 'placcons',
              'var_full_name': 'Place constructed',
@@ -236,7 +237,7 @@ var_dict = [
              "is_basic": True,
              "is_general": True,
              "note": "Derived from particular outcome"},
-            {'var_name': 'var_outcome_ship_captured*',
+            {'var_name': 'var_outcome_ship_captured',
              'spss_name': 'fate3',
              'var_full_name': 'Outcome of voyage if ship captured*',
              'var_type': 'select',
@@ -298,7 +299,7 @@ var_dict = [
              "is_estimate": False,
              "is_basic": False,
              "is_general": True},
-            {'var_name': 'var_principal_place_of_slave_purchase',
+            {'var_name': 'var_imp_principal_place_of_slave_purchase',
              'spss_name': 'mjbyptimp',
              'var_full_name': 'Principal place of slave purchase*',
              'var_type': 'select_three_layers',
@@ -535,7 +536,7 @@ var_dict = [
              "is_estimate": False,
              "is_basic": False,
              "is_general": True},
-            {'var_name': 'var_second_place_of_landing',
+            {'var_name': 'var_num_slaves_disembark_second_place',
              'spss_name': 'slas36',
              'var_full_name': 'Number of slaves disembarked at second place of landing',
              'var_type': 'numeric',
@@ -666,6 +667,10 @@ else:
     voyage_span_first_year = 1514
     voyage_span_last_year = 1866
 
+basic_variables = []
+for item in var_dict:
+    if item['is_basic'] == True:
+        basic_variables.append(item)
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -1037,6 +1042,8 @@ def search(request):
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
+                   'basic_variables': basic_variables,
+                   'general_variables': var_dict,
                    'results': pagins,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
@@ -1451,7 +1458,6 @@ def formatDate(year, month):
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
 
-from itertools import groupby
 def variable_list(request):
     """
     renders a list of variables and their statistics
@@ -1462,8 +1468,6 @@ def variable_list(request):
 
     grouped_list_vars = groupby(var_dict, lambda x: x['var_category'])
 
-    count = 5
-
     for key, group in grouped_list_vars:
         tmpGroup = []
 
@@ -1473,6 +1477,10 @@ def variable_list(request):
             var_name = elem['var_name']
             if var_name == 'var_voyage_in_cd_rom':
                 query[var_name + "__exact"] = True
+
+            elif var_name == "var_num_slaves_intended_first_port" or var_name == "var_num_slaves_disembark_second_place":
+                continue
+
             elif elem['var_type'] == 'numeric':
                 query[var_name + "__gte"] = -1
             else:
@@ -1483,6 +1491,4 @@ def variable_list(request):
 
         var_list_stats.append({"var_category": key, "variables": tmpGroup})
 
-    2/0
-
-    render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
+    return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
