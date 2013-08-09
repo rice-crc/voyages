@@ -1100,6 +1100,7 @@ def create_menu_forms(dict):
         else:
             pass
 
+
 def getMonth(value):
     return value.split(",")[0]
 
@@ -1120,3 +1121,120 @@ def formatDate(year, month):
     :return:
     """
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+
+
+var_dict2 = [
+    # Ship, Nation, Owners
+    {'varname': 'var_voyage_id',
+     'var_full_name': 'Voyage identification number',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_voyage_in_cd_rom',
+     'var_full_name': 'Voyage in 1999 CD-ROM',
+     'var_type': 'boolean',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_ship_name',
+     'var_full_name': 'Vessel name',
+     'var_type': 'plain_text',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_nationality',
+     'var_full_name': 'Flag',
+     'var_type': 'select',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_imputed_nationality',
+     'var_full_name': 'Flag' + "*",
+     'var_type': 'select',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_vessel_construction_place',
+     'var_full_name': 'Place constructed',
+     'var_type': 'select_three_layers',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_year_of_construction',
+     'var_full_name': 'Year constructed',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_registered_place',
+     'var_full_name': 'Place registered',
+     'var_type': 'select_three_layers',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_rig_of_vessel',
+     'var_full_name': 'Rig',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_tonnage',
+     'var_full_name': 'Tonnage',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_tonnage_mod',
+     'var_full_name': 'Standardized tonnage',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_guns_mounted',
+     'var_full_name': 'Guns mounted',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+
+    {'varname': 'var_owner',
+     'var_full_name': 'Vessel owners',
+     'var_type': 'plain_text',
+     'var_category': 'Ship, nation, owners'},
+
+    # Voyage outcome
+
+    {'varname': 'var_outcome_voyage',
+     'var_full_name': 'Particular outcome of voyage',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+
+    {'varname': 'var_outcome_slaves',
+     'var_full_name': 'Outcome of voyage for slaves',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+
+    {'varname': 'var_outcome_ship_captured',
+     'var_full_name': 'Outcome of voyage if ship captured',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+
+    {'varname': 'var_outcome_owner',
+     'var_full_name': 'Outcome of voyage for owner',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+
+    {'varname': 'var_resistance',
+     'var_full_name': 'African resistance',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+]
+
+
+from itertools import groupby
+def variable_list(request):
+    """
+    renders a list of variables and their statistics
+    :param request:
+    :return:
+    """
+    var_list_stats = []
+
+    grouped_list_vars = groupby(var_dict2, lambda x: x['var_category'])
+
+    for key, group in grouped_list_vars:
+        tmpGroup = []
+        for elem in group:
+            print elem
+
+    2/0
+
+    render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
