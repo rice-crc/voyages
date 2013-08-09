@@ -11,7 +11,7 @@ urlpatterns += patterns('',
     url(r'^understanding-db$', TemplateView.as_view(template_name='voyage/c01_base.html'), name='guide'),
     
     url(r'^c01_s01_cover$', TemplateView.as_view(template_name='voyage/c01_s01_cover.html'), name='voyage-guide-intro'),
-    url(r'^c01_s03_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='variables'),
+    url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),
     url(r'^c01_s04_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='sources'),
     
     url(r'^search', 'voyages.apps.voyage.views.search', name='search'),
