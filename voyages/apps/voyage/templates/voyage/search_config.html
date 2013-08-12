@@ -8,23 +8,13 @@
 
 <div class="voyage_configure_panel">
     <div>{% trans 'Choose group of variables' %}</div>
-    {% for variable in general_var_all_list %}
-         {{ variable.grouper }}
-    {% endfor %}
 
-    <div>
-        <select id="form:configure_groupSetCombo" onchange="submit()" style="width: 300px;" size="1"
+        <select id="configure_group" onchange="submit()" style="width: 300px;" size="1"
                 name="form:configure_groupSetCombo">
-            <option selected="selected" value="ship">Ship, nation, owners</option>
-            <option value="outcome">Voyage Outcome</option>
-            <option value="itinerary">Voyage Itinerary</option>
-            <option value="dates">Voyage Dates</option>
-            <option value="crew">Captain and Crew</option>
-            <option value="slaves-numbers">Slaves (numbers)</option>
-            <option value="slaves-chars">Slaves (characteristics)</option>
-            <option value="sources">Source</option>
+            {% for variable in general_var_all_list %}
+                {{ variable.grouper }}
+            {% endfor %}
         </select>
-    </div>
 
     <div>
         <select id="form:configure_groupSetCombo" onchange="submit()" style="width: 300px;" size="1"
