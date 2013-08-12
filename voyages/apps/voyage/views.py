@@ -102,288 +102,281 @@ list_months = [('Jan', '01'), ('Feb', '02'), ('Mar', '03'), ('Apr', '04'), ('May
                ('Jul', '07'), ('Aug', '08'), ('Sep', '09'), ('Oct', '10'), ('Nov', '11'), ('Dec', '12')]
 
 var_dict = [
-            # Ship, Nation, Owners
-            {'var_name': 'var_voyage_id',
-             'var_full_name': 'Voyage identification number',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_voyage_in_cd_rom',
-             'var_full_name': 'Voyage in 1999 CD-ROM',
-             'var_type': 'boolean',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_ship_name',
-             'var_full_name': 'Vessel name',
-             'var_type': 'plain_text',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_nationality',
-             'var_full_name': 'Flag',
-             'var_type': 'select',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_imputed_nationality',
-             'var_full_name': 'Flag' + "*",
-             'var_type': 'select',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_vessel_construction_place',
-             'var_full_name': 'Place constructed',
-             'var_type': 'select_three_layers',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_year_of_construction',
-             'var_full_name': 'Year constructed',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_registered_place',
-             'var_full_name': 'Place registered',
-             'var_type': 'select_three_layers',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_rig_of_vessel',
-             'var_full_name': 'Rig',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_tonnage',
-             'var_full_name': 'Tonnage',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_tonnage_mod',
-             'var_full_name': 'Standardized tonnage',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_guns_mounted',
-             'var_full_name': 'Guns mounted',
-             'var_type': 'numeric',
-             'var_category': 'Ship, nation, owners'},
-            {'var_name': 'var_owner',
-             'var_full_name': 'Vessel owners',
-             'var_type': 'plain_text',
-             'var_category': 'Ship, nation, owners'},
+    # Ship, Nation, Owners
+    {'var_name': 'var_voyage_id',
+     'var_full_name': 'Voyage identification number',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_voyage_in_cd_rom',
+     'var_full_name': 'Voyage in 1999 CD-ROM',
+     'var_type': 'boolean',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_ship_name',
+     'var_full_name': 'Vessel name',
+     'var_type': 'plain_text',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_nationality',
+     'var_full_name': 'Flag',
+     'var_type': 'select',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_imputed_nationality',
+     'var_full_name': 'Flag' + "*",
+     'var_type': 'select',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_vessel_construction_place',
+     'var_full_name': 'Place constructed',
+     'var_type': 'select_three_layers',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_year_of_construction',
+     'var_full_name': 'Year constructed',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_registered_place',
+     'var_full_name': 'Place registered',
+     'var_type': 'select_three_layers',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_rig_of_vessel',
+     'var_full_name': 'Rig',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_tonnage',
+     'var_full_name': 'Tonnage',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_tonnage_mod',
+     'var_full_name': 'Standardized tonnage',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_guns_mounted',
+     'var_full_name': 'Guns mounted',
+     'var_type': 'numeric',
+     'var_category': 'Ship, nation, owners'},
+    {'var_name': 'var_owner',
+     'var_full_name': 'Vessel owners',
+     'var_type': 'plain_text',
+     'var_category': 'Ship, nation, owners'},
 
-            # Voyage outcome
-            {'var_name': 'var_outcome_voyage',
-             'var_full_name': 'Particular outcome of voyage',
-             'var_type': 'select',
-             'var_category': 'Voyage Outcome'},
-            {'var_name': 'var_outcome_slaves',
-             'var_full_name': 'Outcome of voyage for slaves',
-             'var_type': 'select',
-             'var_category': 'Voyage Outcome'},
-            {'var_name': 'var_outcome_ship_captured',
-             'var_full_name': 'Outcome of voyage if ship captured',
-             'var_type': 'select',
-             'var_category': 'Voyage Outcome'},
-            {'var_name': 'var_outcome_owner',
-             'var_full_name': 'Outcome of voyage for owner',
-             'var_type': 'select',
-             'var_category': 'Voyage Outcome'},
-            {'var_name': 'var_resistance',
-             'var_full_name': 'African resistance',
-             'var_type': 'select',
-             'var_category': 'Voyage Outcome'},
+    # Voyage outcome
+    {'var_name': 'var_outcome_voyage',
+     'var_full_name': 'Particular outcome of voyage',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+    {'var_name': 'var_outcome_slaves',
+     'var_full_name': 'Outcome of voyage for slaves',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+    {'var_name': 'var_outcome_ship_captured',
+     'var_full_name': 'Outcome of voyage if ship captured',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+    {'var_name': 'var_outcome_owner',
+     'var_full_name': 'Outcome of voyage for owner',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
+    {'var_name': 'var_resistance',
+     'var_full_name': 'African resistance',
+     'var_type': 'select',
+     'var_category': 'Voyage Outcome'},
 
-            # Voyage Itinerary
-            {'var_name': 'var_imp_port_voyage_begin',
-             'var_full_name': 'Place where voyage began',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_first_place_slave_purchase',
-             'var_full_name': 'First place of slave purchase',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_second_place_slave_purchase',
-             'var_full_name': 'Second place of slave purchase',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_third_place_slave_purchase',
-             'var_full_name': 'Third place of slave purchase',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_imp_principal_place_of_slave_purchase',
-             'var_full_name': 'Principal place of slave purchase',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_port_of_call_before_atl_crossing',
-             'var_full_name': 'Places of call before Atlantic crossing',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_first_landing_place',
-             'var_full_name': 'First place of slave landing',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_second_landing_place',
-             'var_full_name': 'Second place of slave landing',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_third_landing_place',
-             'var_full_name': 'Third place of slave landing',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_imp_principal_port_of_slave_dis',
-             'var_full_name': 'Principal place of slave landing',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
-            {'var_name': 'var_place_voyage_ended',
-             'var_full_name': 'Place where voyage ended',
-             'var_type': 'select_three_layers',
-             'var_category': 'Voyage Itinerary'},
+    # Voyage Itinerary
+    {'var_name': 'var_imp_port_voyage_begin',
+     'var_full_name': 'Place where voyage began',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_first_place_slave_purchase',
+     'var_full_name': 'First place of slave purchase',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_second_place_slave_purchase',
+     'var_full_name': 'Second place of slave purchase',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_third_place_slave_purchase',
+     'var_full_name': 'Third place of slave purchase',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_imp_principal_place_of_slave_purchase',
+     'var_full_name': 'Principal place of slave purchase',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_port_of_call_before_atl_crossing',
+     'var_full_name': 'Places of call before Atlantic crossing',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_first_landing_place',
+     'var_full_name': 'First place of slave landing',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_second_landing_place',
+     'var_full_name': 'Second place of slave landing',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_third_landing_place',
+     'var_full_name': 'Third place of slave landing',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_imp_principal_port_of_slave_dis',
+     'var_full_name': 'Principal place of slave landing',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
+    {'var_name': 'var_place_voyage_ended',
+     'var_full_name': 'Place where voyage ended',
+     'var_type': 'select_three_layers',
+     'var_category': 'Voyage Itinerary'},
 
-            # Voyage Dates
-            {'var_name': 'var_imp_arrival_at_port_of_dis',
-             'var_full_name': 'Year arrived with slaves',
-             'var_type': 'numeric',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_voyage_began',
-             'var_full_name': 'Date voyage began',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_slave_purchase_began',
-             'var_full_name': 'Date trade began in Africa',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_vessel_left_port',
-             'var_full_name': 'Date vessel departed Africa',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_first_dis_of_slaves',
-             'var_full_name': 'Date vessel arrived with slaves',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_departure_last_place_of_landing',
-             'var_full_name': 'Date vessel departed for homeport',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_voyage_completed',
-             'var_full_name': 'Date voyage completed',
-             'var_type': 'date',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_imp_length_home_to_disembark',
-             'var_full_name': 'Voyage length, homeport to slaves landing (days)',
-             'var_type': 'numeric',
-             'var_category': 'Voyage Dates'},
-            {'var_name': 'var_length_middle_passage_days',
-             'var_full_name': 'Middle passage (days)',
-             'var_type': 'numeric',
-             'var_category': 'Voyage Dates'},
+    # Voyage Dates
+    {'var_name': 'var_imp_arrival_at_port_of_dis',
+     'var_full_name': 'Year arrived with slaves',
+     'var_type': 'numeric',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_voyage_began',
+     'var_full_name': 'Date voyage began',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_slave_purchase_began',
+     'var_full_name': 'Date trade began in Africa',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_vessel_left_port',
+     'var_full_name': 'Date vessel departed Africa',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_first_dis_of_slaves',
+     'var_full_name': 'Date vessel arrived with slaves',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_departure_last_place_of_landing',
+     'var_full_name': 'Date vessel departed for homeport',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_voyage_completed',
+     'var_full_name': 'Date voyage completed',
+     'var_type': 'date',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_imp_length_home_to_disembark',
+     'var_full_name': 'Voyage length, homeport to slaves landing (days)',
+     'var_type': 'numeric',
+     'var_category': 'Voyage Dates'},
+    {'var_name': 'var_length_middle_passage_days',
+     'var_full_name': 'Middle passage (days)',
+     'var_type': 'numeric',
+     'var_category': 'Voyage Dates'},
 
-            # Captain and Crew
-            {'var_name': 'var_captain',
-             'var_full_name': 'Captain\'s name',
-             'var_type': 'plain_text',
-             'var_category': 'Captain and Crew'},
-            {'var_name': 'var_crew_voyage_outset',
-             'var_full_name': 'Crew at voyage outset',
-             'var_type': 'numeric',
-             'var_category': 'Captain and Crew'},
-            {'var_name': 'var_crew_first_landing',
-             'var_full_name': 'Crew at first landing of slaves',
-             'var_type': 'numeric',
-             'var_category': 'Captain and Crew'},
-            {'var_name': 'var_crew_died_complete_voyage',
-             'var_full_name': 'Crew deaths during voyage',
-             'var_type': 'numeric',
-             'var_category': 'Captain and Crew'},
+    # Captain and Crew
+    {'var_name': 'var_captain',
+     'var_full_name': 'Captain\'s name',
+     'var_type': 'plain_text',
+     'var_category': 'Captain and Crew'},
+    {'var_name': 'var_crew_voyage_outset',
+     'var_full_name': 'Crew at voyage outset',
+     'var_type': 'numeric',
+     'var_category': 'Captain and Crew'},
+    {'var_name': 'var_crew_first_landing',
+     'var_full_name': 'Crew at first landing of slaves',
+     'var_type': 'numeric',
+     'var_category': 'Captain and Crew'},
+    {'var_name': 'var_crew_died_complete_voyage',
+     'var_full_name': 'Crew deaths during voyage',
+     'var_type': 'numeric',
+     'var_category': 'Captain and Crew'},
 
-            # Slaves (numbers)
-            {'var_name': 'var_num_slaves_intended_first_port',
-             'var_full_name': 'Number of slaves intended at first place of purchase',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_num_slaves_carried_first_port',
-             'var_full_name': 'Slaves carried from first port of purchase',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_num_slaves_carried_second_port',
-             'var_full_name': 'Slaves carried from second port of purchase',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_num_slaves_carried_third_port',
-             'var_full_name': 'Slaves carried from third port of purchase',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_total_num_slaves_purchased',
-             'var_full_name': 'Total slaves embarked',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_imp_total_num_slaves_purchased',
-             'var_full_name': 'Total slaves embarked',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_total_num_slaves_arr_first_port_embark',
-             'var_full_name': 'Number of slaves arriving at first place of landing',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_num_slaves_disembark_first_place',
-             'var_full_name': 'Number of slaves disembarked at first place of landing',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_second_place_of_landing',
-             'var_full_name': 'Number of slaves disembarked at second place of landing',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_num_slaves_disembark_third_place',
-             'var_full_name': 'Number of slaves disembarked at third place of landing',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
-            {'var_name': 'var_imp_total_slaves_disembarked',
-             'var_full_name': 'Total slaves disembarked',
-             'var_type': 'numeric',
-             'var_category': 'Slave (numbers)'},
+    # Slaves (numbers)
+    {'var_name': 'var_num_slaves_intended_first_port',
+     'var_full_name': 'Number of slaves intended at first place of purchase',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_num_slaves_carried_first_port',
+     'var_full_name': 'Slaves carried from first port of purchase',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_num_slaves_carried_second_port',
+     'var_full_name': 'Slaves carried from second port of purchase',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_num_slaves_carried_third_port',
+     'var_full_name': 'Slaves carried from third port of purchase',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_total_num_slaves_purchased',
+     'var_full_name': 'Total slaves embarked',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_imp_total_num_slaves_purchased',
+     'var_full_name': 'Total slaves embarked',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_total_num_slaves_arr_first_port_embark',
+     'var_full_name': 'Number of slaves arriving at first place of landing',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_num_slaves_disembark_first_place',
+     'var_full_name': 'Number of slaves disembarked at first place of landing',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_second_place_of_landing',
+     'var_full_name': 'Number of slaves disembarked at second place of landing',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_num_slaves_disembark_third_place',
+     'var_full_name': 'Number of slaves disembarked at third place of landing',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
+    {'var_name': 'var_imp_total_slaves_disembarked',
+     'var_full_name': 'Total slaves disembarked',
+     'var_type': 'numeric',
+     'var_category': 'Slave (numbers)'},
 
-            # Slaves (characteristics)
-            {'var_name': 'var_imputed_percentage_men',
-             'var_full_name': 'Percentage men',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_women',
-             'var_full_name': 'Percentage women',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_boys',
-             'var_full_name': 'Percentage boys',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_girls',
-             'var_full_name': 'Percentage girls',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_female',
-             'var_full_name': 'Percentage female',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_male',
-             'var_full_name': 'Percentage male',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_percentage_child',
-             'var_full_name': 'Percentage children',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_sterling_cash',
-             'var_full_name': 'Sterling cash price in Jamaica',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_death_middle_passage',
-             'var_full_name': 'Slave deaths during middle passage',
-             'var_type': 'numeric',
-             'var_category': 'Slave (characteristics)'},
-            {'var_name': 'var_imputed_mortality',
-             'var_full_name': 'Mortality rate',
-             'var_type': '',
-             'var_category': 'Slave (characteristics)'},
+    # Slaves (characteristics)
+    {'var_name': 'var_imputed_percentage_men',
+     'var_full_name': 'Percentage men',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_women',
+     'var_full_name': 'Percentage women',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_boys',
+     'var_full_name': 'Percentage boys',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_girls',
+     'var_full_name': 'Percentage girls',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_female',
+     'var_full_name': 'Percentage female',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_male',
+     'var_full_name': 'Percentage male',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_percentage_child',
+     'var_full_name': 'Percentage children',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_sterling_cash',
+     'var_full_name': 'Sterling cash price in Jamaica',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_death_middle_passage',
+     'var_full_name': 'Slave deaths during middle passage',
+     'var_type': 'numeric',
+     'var_category': 'Slave (characteristics)'},
+    {'var_name': 'var_imputed_mortality',
+     'var_full_name': 'Mortality rate',
+     'var_type': '',
+     'var_category': 'Slave (characteristics)'},
 
-            # Source
-            {'var_name': 'var_sources',
-             'var_full_name': 'Sources',
-             'var_type': 'plain_text',
-             'var_category': 'Source'}
+    # Source
+    {'var_name': 'var_sources',
+     'var_full_name': 'Sources',
+     'var_type': 'plain_text',
+     'var_category': 'Source'},
 ]
 
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
 option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
-
-if VoyageDates.objects.count() > 1:
-    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-else:
-    voyage_span_first_year = 1514
-    voyage_span_last_year = 1866
 
 
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -460,16 +453,28 @@ def search(request):
 
     # Check if saved url has been used
     if request.GET.values():
-        query_dict, request.session['existing_form'] = decode_from_url(request)
+        query_dict, date_filters, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result = \
+        decode_from_url(request)
         results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+        if date_filters and no_result is not True:
+            results = date_filter_query(date_filters, results)
 
-        if results.count() == 0:
+        if len(results) == 0:
             no_result = True
 
         request.session['results_voyages'] = results
 
     # Otherwise, process next
     else:
+
+        date_filters = []
+
+        if VoyageDates.objects.count() > 1:
+            voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+            voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+        else:
+            voyage_span_first_year = 1514
+            voyage_span_last_year = 1866
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
@@ -607,6 +612,19 @@ def search(request):
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = results
 
+                # Reset time_frame form as well
+                if VoyageDates.objects.count() > 1:
+                    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+                    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+                else:
+                    voyage_span_first_year = 1514
+                    voyage_span_last_year = 1866
+
+                # Time frame search
+                request.session['time_span_form'] = TimeFrameSpanSearchForm(
+                initial={'frame_from_year': voyage_span_first_year,
+                         'frame_to_year': voyage_span_last_year})
+
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
 
@@ -615,7 +633,6 @@ def search(request):
                 # Time frame search
                 query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
                                                              request.session['time_span_form'].cleaned_data['frame_to_year']]
-                date_filters = []
 
                 for tmp_varname in list_search_vars:
                     for cur_var in request.session['existing_form']:
@@ -689,7 +706,6 @@ def search(request):
 
                             elif tmp_varname in list_place_fields:
                                 a = request.POST.getlist(tmp_varname + "_selected")
-                                3/0
                                 query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
 
                             elif tmp_varname in list_boolean_fields:
@@ -706,17 +722,10 @@ def search(request):
                 results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
                 # Date filters
-                if date_filters:
-                    for var_filter in date_filters:
-                        l_months = []
-                        tmp_query = dict()
-                        for month in var_filter['deselected_months']:
-                            l_months.append("-" + month + "-")
 
-                        tmp_query[tmp_varname + "__in"] = l_months
-                        results = results.exclude(**tmp_query)
+                results = date_filter_query(date_filters, results)
 
-                if results.count() == 0:
+                if len(results) == 0:
                     no_result = True
                     results = []
                 request.session['results_voyages'] = results
@@ -734,11 +743,11 @@ def search(request):
                          'frame_to_year': voyage_span_last_year})
 
         # Encode url to url_to_copy form (for user)
-        url_to_copy = encode_to_url(request, request.session['existing_form'], query_dict)
+        url_to_copy = encode_to_url(request, request.session['existing_form'], date_filters,  query_dict)
 
     form, results_per_page = check_and_save_options_form(request)
 
-    if results.count() == 0:
+    if len(results) == 0:
         no_result = True
 
     if request.POST.get('desired_page') is None:
@@ -934,7 +943,7 @@ def check_and_save_options_form(request):
     return form, results_per_page
 
 
-def encode_to_url(request, session, dict={}):
+def encode_to_url(request, session, date_filters=[], dict={}):
     """
     Function to encode dictionary into url to copy form.
 
@@ -951,11 +960,11 @@ def encode_to_url(request, session, dict={}):
 
     else:
         for k, v in dict.iteritems():
+            var_name = k.split("__")[0]
 
             # If this is the __range component.
             if "__range" in k:
                 url += str(k) + "=" + str(v[0]) + "|" + str(v[1])
-
             # If list, split and join with underscores
             elif isinstance(v, types.ListType):
                 url += str(k) + "="
@@ -965,6 +974,11 @@ def encode_to_url(request, session, dict={}):
             else:
                 url += str(k) + "=" + str(v)
 
+            # If variable is date, try to also store deselected months.
+            for i in date_filters:
+                # There is deselected months
+                if i['varname'] == var_name:
+                    url += "|" + ",".join(i['deselected_months'])
             url += "&"
 
         # At the end, delete the last unnecessary underscore
@@ -973,7 +987,8 @@ def encode_to_url(request, session, dict={}):
         session_dict['existing_form'] = session
 
     # Store dict in session and return url
-    url_key = iri_to_uri("/" + str("/".join(url.split("/")[3:])))
+    safe_url = url.encode('ascii', 'ignore')
+    url_key = iri_to_uri("/" + str("/".join(safe_url.split("/")[3:])))
 
     request.session[url_key] = session_dict
     return url
@@ -998,20 +1013,33 @@ def decode_from_url(request):
     dict = {}
 
     for k, v in request.GET.iteritems():
-        if "__range" in k:
-            dict[k] = []
-            dict[k].append(v.split("|")[0])
-            dict[k].append(v.split("|")[1])
-
-        elif isinstance(v, types.ListType):
+        # if "__range" in k:
+        #     dict[k] = []
+        #     dict[k].append(v.split("|")[0])
+        #     dict[k].append(v.split("|")[1])
+        #
+        # elif isinstance(v, types.ListType):
+        #     dict[k] = []
+        #     for i in v.split("|"):
+        #         dict[k].append(i)
+        if v.split("|")[1]:
             dict[k] = []
             for i in v.split("|"):
                 dict[k].append(i)
         else:
             dict[k] = v
 
-    create_menu_forms(dict)
-    return dict, 1
+        # Deselected months
+        if "__range" in k and len(v.split("|")) == 3:
+            dict[k].append(v.split("|")[2])
+        elif isinstance(v, types.ListType) and len(v.split("|") == 2):
+            dict[k].append(v.split("|")[1])
+
+    date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result = create_menu_forms(dict)
+    request.session['time_span_form'] = TimeFrameSpanSearchForm(
+                initial={'frame_from_year': voyage_span_first_year,
+                         'frame_to_year': voyage_span_last_year})
+    return dict, date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result
 
 
 def create_menu_forms(dict):
@@ -1019,14 +1047,30 @@ def create_menu_forms(dict):
     Function to create forms.
     """
 
+    new_existing_form = []
+    date_filters = []
+    no_result = False
+
     for k, v in dict.iteritems():
         elem_dict = {}
-        var_name = k.split("__")[0]
-        var_type = var_dict[var_name]['var_type']
 
-        elem_dict['varname'] = var_name
-        elem_dict['type'] = var_type
+        # e.g.: k = var_imp_voyage_began__range
+        # var_name = var_imp_voyage_began
+
+        var_name = k.split("__")[0]
+
+        if var_name == "var_imp_voyage_began":
+            voyage_span_first_year = v[0]
+            voyage_span_last_year = v[1]
+            continue
+
+        var = search_var_dict(var_name)
+        var_type = var['var_type']
+
+        elem_dict['varname'] = var['var_name']
+        elem_dict['type'] = var['var_type']
         elem_dict['input_field_name'] = "header_" + var_name
+        elem_dict['var_full_name'] = var['var_full_name']
 
         if var_type == "plain_text":
             # Plain text fields
@@ -1035,10 +1079,14 @@ def create_menu_forms(dict):
 
         elif var_type == "select":
             # Select box variables
+            choices_list = []
             choices = getChoices(var_name)
+            for select_field in v.split("|"):
+                choices_list.append(" ".join(select_field.split("_")))
+
             form = SimpleSelectSearchForm(listChoices=choices,
                                           auto_id=('id_' + var_name + "_%s"),
-                                          #initial={'choice_field': },
+                                          initial={'choice_field': choices_list},
                                           prefix=var_name)
 
             elem_dict['form'] = form
@@ -1050,8 +1098,8 @@ def create_menu_forms(dict):
             word_option = var_name = k.split("__")[1]
             if word_option == "range":
                 option = 1
-                lower_bound = v.split("|")[0]
-                upper_bound = v.split("|")[1]
+                lower_bound = v[0]
+                upper_bound = v[1]
             elif word_option == "lte":
                 option = 2
             elif word_option == "gte":
@@ -1059,7 +1107,7 @@ def create_menu_forms(dict):
             elif word_option == "exact":
                 option = 4
 
-            if word_option == 1:
+            if option == 1:
                 form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                         'lower_bound': lower_bound,
@@ -1075,28 +1123,38 @@ def create_menu_forms(dict):
         elif var_type == "date":
             # Date variables
 
-            word_option = var_name = k.split("__")[1]
+            deselected_months = []
+            word_option = k.split("__")[1]
             if word_option == "range":
                 option = 1
-                from_month = v.split("|")[0]
-                from_year = v.split("|")[1]
-                to_month = v.split("|")[2]
-                to_year = v.split("|")[3]
-            elif word_option == "lte":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 2
-            elif word_option == "gte":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 3
-            elif word_option == "exact":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 4
+                from_month = v[0].split(",")[1]
+                from_year = v[0].split(",")[0]
+                to_month = v[1].split(",")[1]
+                to_year = v[1].split(",")[0]
+                if len(v) == 3:
+                    for month in v[2].split(","):
+                        deselected_months.append(month)
 
-            if word_option == 1:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+            else:
+                threshold_month = v.split(",")[1]
+                threshold_year = v.split(",")[0]
+
+                if word_option == "lte":
+                    option = 2
+                elif word_option == "gte":
+                    option = 3
+                elif word_option == "exact":
+                    option = 4
+
+                if len(v.split("|")) == 2:
+                    for month in v.split("|")[1].split(","):
+                        deselected_months.append(month)
+
+                    # Also, fix threshold month
+                    threshold_month = v.split(",")[1].split("|")[0]
+
+            if word_option == "range":
+                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                'from_month': from_month,
                                                'from_year': from_year,
@@ -1104,36 +1162,28 @@ def create_menu_forms(dict):
                                                'to_year': to_year},
                                                prefix=var_name)
             else:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                         'threshold_month': threshold_month,
                                                         'threshold_year': threshold_year},
                                                prefix=var_name)
 
-
-            form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                        initial={'options': '1',
-                                                 'from_year': voyage_span_first_year,
-                                                 'to_year': voyage_span_last_year},
-                                        prefix=var_name)
-
+            elem_dict['list_months'] = list_months
             elem_dict['form'] = form
 
-            # Check if there is list_month to deselect
-            if option == 1:
-                months_list = v.split("|")[4:0]
-            else:
-                months_list = v.split("|")[2:0]
-            if isinstance(months_list, types.ListType):
-                for i in months_list:
-                    elem_dict['list_months'].append(i)
+            elem_dict['list_deselected'] = deselected_months
+            elem_dict['deselected_months'] = var_name + '_deselected_months'
 
-                elem_dict['deselected_months'] = var_name + '_deselected_months'
+            if 0 < len(deselected_months) < len(list_months):
+                date_filters.append({'varname': var_name, 'deselected_months': deselected_months})
+            elif len(deselected_months) == len(list_months):
+                no_result = True
 
         elif var_type in "select_three_layers":
-            choices = getNestedListPlaces(var_name, [], [], [])
+            # Get places
 
-            elem_dict['type'] = 'select_three_layers'
+            choices = getNestedListPlaces(var_name, v, [], [])
+
             elem_dict['varname_wrapper'] = "select_" + var_name
             elem_dict['choices'] = choices
             elem_dict['selected_choices'] = var_name + "_selected"
@@ -1142,11 +1192,40 @@ def create_menu_forms(dict):
 
         elif var_type == "boolean":
              # Boolean field
-            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"), prefix=var_name)
+
+            [k for k, v in enumerate(SimpleSelectBooleanForm.BOOLEAN_CHOICES) if v[0] == v]
+            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"),
+                                           initial={'choice_field': SimpleSelectBooleanForm.BOOLEAN_CHOICES[k]},
+                                           prefix=var_name)
             elem_dict['form'] = form
-            elem_dict['type'] = 'boolean'
+
         else:
             pass
+
+        new_existing_form.append(elem_dict)
+
+    return date_filters, new_existing_form, voyage_span_first_year, voyage_span_last_year, no_result
+
+
+def search_var_dict(var_name):
+    for i in var_dict:
+        if i['var_name'] == var_name:
+            return i
+
+
+def date_filter_query(date_filters, results):
+    if date_filters:
+        for var_filter in date_filters:
+            l_months = []
+            tmp_query = dict()
+            for month in var_filter['deselected_months']:
+                l_months.append("-" + month + "-")
+
+            tmp_query[var_filter['varname'] + "__in"] = l_months
+            results = results.exclude(**tmp_query)
+
+    return results
+
 
 def getMonth(value):
     return value.split(",")[0]
