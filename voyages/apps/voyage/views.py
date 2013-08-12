@@ -660,13 +660,6 @@ var_dict = [
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
 option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
 
-if VoyageDates.objects.count() > 1:
-    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-else:
-    voyage_span_first_year = 1514
-    voyage_span_last_year = 1866
-
 # List of basic variables
 basic_variables = []
 for item in var_dict:
@@ -757,15 +750,27 @@ def search(request):
 
     # Check if saved url has been used
     if request.GET.values():
-        query_dict, request.session['existing_form'] = decode_from_url(request)
+        query_dict, date_filters, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result = \
+        decode_from_url(request)
         results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+        if date_filters and no_result is not True:
+            results = date_filter_query(date_filters, results)
 
-        if results.count() == 0:
+        if len(results) == 0:
             no_result = True
 
 
     # Otherwise, process next
     else:
+
+        date_filters = []
+
+        if VoyageDates.objects.count() > 1:
+            voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+            voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+        else:
+            voyage_span_first_year = 1514
+            voyage_span_last_year = 1866
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
@@ -903,6 +908,19 @@ def search(request):
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = results
 
+                # Reset time_frame form as well
+                if VoyageDates.objects.count() > 1:
+                    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+                    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+                else:
+                    voyage_span_first_year = 1514
+                    voyage_span_last_year = 1866
+
+                # Time frame search
+                request.session['time_span_form'] = TimeFrameSpanSearchForm(
+                initial={'frame_from_year': voyage_span_first_year,
+                         'frame_to_year': voyage_span_last_year})
+
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
 
@@ -911,7 +929,6 @@ def search(request):
                 # Time frame search
                 query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
                                                              request.session['time_span_form'].cleaned_data['frame_to_year']]
-                date_filters = []
 
                 for tmp_varname in list_search_vars:
                     for cur_var in request.session['existing_form']:
@@ -985,7 +1002,6 @@ def search(request):
 
                             elif tmp_varname in list_place_fields:
                                 a = request.POST.getlist(tmp_varname + "_selected")
-                                3/0
                                 query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
 
                             elif tmp_varname in list_boolean_fields:
@@ -1002,17 +1018,10 @@ def search(request):
                 results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
                 # Date filters
-                if date_filters:
-                    for var_filter in date_filters:
-                        l_months = []
-                        tmp_query = dict()
-                        for month in var_filter['deselected_months']:
-                            l_months.append("-" + month + "-")
 
-                        tmp_query[tmp_varname + "__in"] = l_months
-                        results = results.exclude(**tmp_query)
+                results = date_filter_query(date_filters, results)
 
-                if results.count() == 0:
+                if len(results) == 0:
                     no_result = True
                     results = []
                 request.session['results_voyages'] = results
@@ -1032,11 +1041,11 @@ def search(request):
 
 
         # Encode url to url_to_copy form (for user)
-        url_to_copy = encode_to_url(request, request.session['existing_form'], query_dict)
+        url_to_copy = encode_to_url(request, request.session['existing_form'], date_filters,  query_dict)
 
     form, results_per_page = check_and_save_options_form(request)
 
-    if results.count() == 0:
+    if len(results) == 0:
         no_result = True
 
     if request.POST.get('desired_page') is None:
@@ -1248,7 +1257,7 @@ def check_and_save_options_form(request):
     return form, results_per_page
 
 
-def encode_to_url(request, session, dict={}):
+def encode_to_url(request, session, date_filters=[], dict={}):
     """
     Function to encode dictionary into url to copy form.
 
@@ -1265,11 +1274,11 @@ def encode_to_url(request, session, dict={}):
 
     else:
         for k, v in dict.iteritems():
+            var_name = k.split("__")[0]
 
             # If this is the __range component.
             if "__range" in k:
                 url += str(k) + "=" + str(v[0]) + "|" + str(v[1])
-
             # If list, split and join with underscores
             elif isinstance(v, types.ListType):
                 url += str(k) + "="
@@ -1279,6 +1288,11 @@ def encode_to_url(request, session, dict={}):
             else:
                 url += str(k) + "=" + str(v)
 
+            # If variable is date, try to also store deselected months.
+            for i in date_filters:
+                # There is deselected months
+                if i['varname'] == var_name:
+                    url += "|" + ",".join(i['deselected_months'])
             url += "&"
 
         # At the end, delete the last unnecessary underscore
@@ -1287,7 +1301,8 @@ def encode_to_url(request, session, dict={}):
         session_dict['existing_form'] = session
 
     # Store dict in session and return url
-    url_key = iri_to_uri("/" + str("/".join(url.split("/")[3:])))
+    safe_url = url.encode('ascii', 'ignore')
+    url_key = iri_to_uri("/" + str("/".join(safe_url.split("/")[3:])))
 
     request.session[url_key] = session_dict
     return url
@@ -1312,20 +1327,33 @@ def decode_from_url(request):
     dict = {}
 
     for k, v in request.GET.iteritems():
-        if "__range" in k:
-            dict[k] = []
-            dict[k].append(v.split("|")[0])
-            dict[k].append(v.split("|")[1])
-
-        elif isinstance(v, types.ListType):
+        # if "__range" in k:
+        #     dict[k] = []
+        #     dict[k].append(v.split("|")[0])
+        #     dict[k].append(v.split("|")[1])
+        #
+        # elif isinstance(v, types.ListType):
+        #     dict[k] = []
+        #     for i in v.split("|"):
+        #         dict[k].append(i)
+        if v.split("|")[1]:
             dict[k] = []
             for i in v.split("|"):
                 dict[k].append(i)
         else:
             dict[k] = v
 
-    create_menu_forms(dict)
-    return dict, 1
+        # Deselected months
+        if "__range" in k and len(v.split("|")) == 3:
+            dict[k].append(v.split("|")[2])
+        elif isinstance(v, types.ListType) and len(v.split("|") == 2):
+            dict[k].append(v.split("|")[1])
+
+    date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result = create_menu_forms(dict)
+    request.session['time_span_form'] = TimeFrameSpanSearchForm(
+                initial={'frame_from_year': voyage_span_first_year,
+                         'frame_to_year': voyage_span_last_year})
+    return dict, date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result
 
 
 def create_menu_forms(dict):
@@ -1333,14 +1361,30 @@ def create_menu_forms(dict):
     Function to create forms.
     """
 
+    new_existing_form = []
+    date_filters = []
+    no_result = False
+
     for k, v in dict.iteritems():
         elem_dict = {}
-        var_name = k.split("__")[0]
-        var_type = var_dict[var_name]['var_type']
 
-        elem_dict['varname'] = var_name
-        elem_dict['type'] = var_type
+        # e.g.: k = var_imp_voyage_began__range
+        # var_name = var_imp_voyage_began
+
+        var_name = k.split("__")[0]
+
+        if var_name == "var_imp_voyage_began":
+            voyage_span_first_year = v[0]
+            voyage_span_last_year = v[1]
+            continue
+
+        var = search_var_dict(var_name)
+        var_type = var['var_type']
+
+        elem_dict['varname'] = var['var_name']
+        elem_dict['type'] = var['var_type']
         elem_dict['input_field_name'] = "header_" + var_name
+        elem_dict['var_full_name'] = var['var_full_name']
 
         if var_type == "plain_text":
             # Plain text fields
@@ -1349,10 +1393,14 @@ def create_menu_forms(dict):
 
         elif var_type == "select":
             # Select box variables
+            choices_list = []
             choices = getChoices(var_name)
+            for select_field in v.split("|"):
+                choices_list.append(" ".join(select_field.split("_")))
+
             form = SimpleSelectSearchForm(listChoices=choices,
                                           auto_id=('id_' + var_name + "_%s"),
-                                          #initial={'choice_field': },
+                                          initial={'choice_field': choices_list},
                                           prefix=var_name)
 
             elem_dict['form'] = form
@@ -1364,8 +1412,8 @@ def create_menu_forms(dict):
             word_option = var_name = k.split("__")[1]
             if word_option == "range":
                 option = 1
-                lower_bound = v.split("|")[0]
-                upper_bound = v.split("|")[1]
+                lower_bound = v[0]
+                upper_bound = v[1]
             elif word_option == "lte":
                 option = 2
             elif word_option == "gte":
@@ -1373,7 +1421,7 @@ def create_menu_forms(dict):
             elif word_option == "exact":
                 option = 4
 
-            if word_option == 1:
+            if option == 1:
                 form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                         'lower_bound': lower_bound,
@@ -1389,28 +1437,38 @@ def create_menu_forms(dict):
         elif var_type == "date":
             # Date variables
 
-            word_option = var_name = k.split("__")[1]
+            deselected_months = []
+            word_option = k.split("__")[1]
             if word_option == "range":
                 option = 1
-                from_month = v.split("|")[0]
-                from_year = v.split("|")[1]
-                to_month = v.split("|")[2]
-                to_year = v.split("|")[3]
-            elif word_option == "lte":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 2
-            elif word_option == "gte":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 3
-            elif word_option == "exact":
-                threshold_month = v.split("|")[0]
-                threshold_year = v.split("|")[1]
-                option = 4
+                from_month = v[0].split(",")[1]
+                from_year = v[0].split(",")[0]
+                to_month = v[1].split(",")[1]
+                to_year = v[1].split(",")[0]
+                if len(v) == 3:
+                    for month in v[2].split(","):
+                        deselected_months.append(month)
 
-            if word_option == 1:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+            else:
+                threshold_month = v.split(",")[1]
+                threshold_year = v.split(",")[0]
+
+                if word_option == "lte":
+                    option = 2
+                elif word_option == "gte":
+                    option = 3
+                elif word_option == "exact":
+                    option = 4
+
+                if len(v.split("|")) == 2:
+                    for month in v.split("|")[1].split(","):
+                        deselected_months.append(month)
+
+                    # Also, fix threshold month
+                    threshold_month = v.split(",")[1].split("|")[0]
+
+            if word_option == "range":
+                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                'from_month': from_month,
                                                'from_year': from_year,
@@ -1418,36 +1476,28 @@ def create_menu_forms(dict):
                                                'to_year': to_year},
                                                prefix=var_name)
             else:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
+                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
                                                initial={'options': option,
                                                         'threshold_month': threshold_month,
                                                         'threshold_year': threshold_year},
                                                prefix=var_name)
 
-
-            form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                        initial={'options': '1',
-                                                 'from_year': voyage_span_first_year,
-                                                 'to_year': voyage_span_last_year},
-                                        prefix=var_name)
-
+            elem_dict['list_months'] = list_months
             elem_dict['form'] = form
 
-            # Check if there is list_month to deselect
-            if option == 1:
-                months_list = v.split("|")[4:0]
-            else:
-                months_list = v.split("|")[2:0]
-            if isinstance(months_list, types.ListType):
-                for i in months_list:
-                    elem_dict['list_months'].append(i)
+            elem_dict['list_deselected'] = deselected_months
+            elem_dict['deselected_months'] = var_name + '_deselected_months'
 
-                elem_dict['deselected_months'] = var_name + '_deselected_months'
+            if 0 < len(deselected_months) < len(list_months):
+                date_filters.append({'varname': var_name, 'deselected_months': deselected_months})
+            elif len(deselected_months) == len(list_months):
+                no_result = True
 
         elif var_type in "select_three_layers":
-            choices = getNestedListPlaces(var_name, [], [], [])
+            # Get places
 
-            elem_dict['type'] = 'select_three_layers'
+            choices = getNestedListPlaces(var_name, v, [], [])
+
             elem_dict['varname_wrapper'] = "select_" + var_name
             elem_dict['choices'] = choices
             elem_dict['selected_choices'] = var_name + "_selected"
@@ -1456,11 +1506,39 @@ def create_menu_forms(dict):
 
         elif var_type == "boolean":
              # Boolean field
-            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"), prefix=var_name)
+
+            [k for k, v in enumerate(SimpleSelectBooleanForm.BOOLEAN_CHOICES) if v[0] == v]
+            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"),
+                                           initial={'choice_field': SimpleSelectBooleanForm.BOOLEAN_CHOICES[k]},
+                                           prefix=var_name)
             elem_dict['form'] = form
-            elem_dict['type'] = 'boolean'
+
         else:
             pass
+
+        new_existing_form.append(elem_dict)
+
+    return date_filters, new_existing_form, voyage_span_first_year, voyage_span_last_year, no_result
+
+
+def search_var_dict(var_name):
+    for i in var_dict:
+        if i['var_name'] == var_name:
+            return i
+
+
+def date_filter_query(date_filters, results):
+    if date_filters:
+        for var_filter in date_filters:
+            l_months = []
+            tmp_query = dict()
+            for month in var_filter['deselected_months']:
+                l_months.append("-" + month + "-")
+
+            tmp_query[var_filter['varname'] + "__in"] = l_months
+            results = results.exclude(**tmp_query)
+
+    return results
 
 
 def getMonth(value):
