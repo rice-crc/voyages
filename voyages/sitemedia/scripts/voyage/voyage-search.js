@@ -84,6 +84,8 @@ $(document).ready(function() {
         }
 	});
 
+    /* Handle for the */
+
     $("#link-button").click(strtBlackout); // open if btn is pressed
     $(".close-link-box").click(endBlackout); // close if close btn clicked
 
@@ -299,6 +301,15 @@ function filter_hierarchical_list(label) {
     });
 }
 
+function config_change_group(group_id) {
+    /* Configure to display only this value */
+
+    /* Deselect current values */
+    $(".voyage_config_all_list option:selected").prop('selected', false);
+    $(".voyage_config_all_list select").addClass("hidden");
+    $("#" + group_id).removeClass("hidden");
+}
+
 function resetSearch() {
     $('#form').append("<input type='hidden' name='submitVal' value='reset' />");
     $("#form").submit();
@@ -317,10 +328,58 @@ function configure_columns() {
     return true;
 }
 
+
+function apply_config() {
+    $('#form').append("<input type='hidden' name='submitVal' value='applyConfig' />");
+    $("#form").submit();
+    return true;
+}
+
+function cancel_config() {
+    $('#form').append("<input type='hidden' name='submitVal' value='cancelConfig' />");
+    $("#form").submit();
+    return true;
+}
+
+/* Add variables to the display list */
+function add_var_to_display() {
+    $newly_selected_vals = $(".voyage_config_all_list option:selected");
+
+    /* List currently selected */
+    var cur_selected_text = []
+
+    $currently_selected = $("#configure_visibleAttributes option");
+    $currently_selected.each(function() {
+       cur_selected_text.push($(this).val());
+    });
+
+    $newly_selected_vals.each(function() {
+        /* Check if the current variable is already in the list*/
+        if ($.inArray($(this).val(), cur_selected_text) == -1) {
+            $("#configure_visibleAttributes option:last").parent().append($(this));
+        }
+    });
+}
+
+function remove_from_display() {
+    $("#configure_visibleAttributes option:selected").remove();
+}
+
+/* Move variables up and down in the display column */
+function move_var(direction) {
+    var $selected_elem = $("#configure_visibleAttributes option:selected");
+    if (direction == 'up') {
+        $selected_elem.first().prev().before($selected_elem);
+    } else {
+        $selected_elem.last().next().after($selected_elem);
+    }
+}
+
+
 function formatArray(selectedItems) {
     /* Return a comma-separated list */
     var i;
-    var result = ""
+    var result = "";
 
     for(i = 0; i < selectedItems.length - 1; i++) {
         result += selectedItems[i] + ", ";
@@ -334,12 +393,12 @@ function formatArray(selectedItems) {
 }
 
 function endBlackout(){
-$(".blackout").css("display", "none");
-$(".msgbox").css("display", "none");
+    $(".blackout").css("display", "none");
+    $(".msgbox").css("display", "none");
 }
 
-//This is the function that closes the pop-up
+/* This is the function that closes the pop-up */
 function strtBlackout(){
-$(".msgbox").css("display", "block");
-$(".blackout").css("display", "block");
+    $(".msgbox").css("display", "block");
+    $(".blackout").css("display", "block");
 }

@@ -38,7 +38,7 @@
             <tr class="grid-row-even grid-row-first">
                 {% for item in result_columns %}
                     <td>
-                        {{ i.get_stored_fields| getattribute:item.0 }}
+                        {{ i.get_stored_fields| getattribute:item.0 | safe }}
                     </td>
                 {% endfor %}
             </tr>
