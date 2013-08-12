@@ -747,6 +747,7 @@ def search(request):
     no_result = False
     url_to_copy = ""
     query_dict = {}
+    tab = ""
 
     # Check if saved url has been used
     if request.GET.values():
@@ -903,6 +904,7 @@ def search(request):
                 request.session['existing_form'].append(tmpElemDict)
 
             elif submitVal == 'reset':
+                # Reset the search page
                 existing_form = []
                 request.session['existing_form'] = existing_form
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -920,6 +922,10 @@ def search(request):
                 request.session['time_span_form'] = TimeFrameSpanSearchForm(
                 initial={'frame_from_year': voyage_span_first_year,
                          'frame_to_year': voyage_span_last_year})
+            elif submitVal == 'configColumn':
+                # Configure columns in the result page
+                tab = 'config_column'
+                pass
 
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
@@ -1085,6 +1091,7 @@ def search(request):
                    'pages_range': pages_range,
                    'no_result': no_result,
                    'url_to_copy': url_to_copy,
+                   'tab': tab,
                    'options_results_per_page_form': form})
 
 
