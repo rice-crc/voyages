@@ -1,0 +1,97 @@
+{% load i18n %}
+
+<h1>{% trans 'List of voyages' %}</h1>
+
+<div>{% trans 'Configure columns' %}</div>
+
+{% regroup general_variables by var_category as general_var_all_list %}
+
+<div class="voyage_configure_panel">
+    <div>{% trans 'Choose group of variables' %}</div>
+    {% for variable in general_var_all_list %}
+         {{ variable.grouper }}
+    {% endfor %}
+
+    <div>
+        <select id="form:configure_groupSetCombo" onchange="submit()" style="width: 300px;" size="1"
+                name="form:configure_groupSetCombo">
+            <option selected="selected" value="ship">Ship, nation, owners</option>
+            <option value="outcome">Voyage Outcome</option>
+            <option value="itinerary">Voyage Itinerary</option>
+            <option value="dates">Voyage Dates</option>
+            <option value="crew">Captain and Crew</option>
+            <option value="slaves-numbers">Slaves (numbers)</option>
+            <option value="slaves-chars">Slaves (characteristics)</option>
+            <option value="sources">Source</option>
+        </select>
+    </div>
+
+    <div>
+        <select id="form:configure_groupSetCombo" onchange="submit()" style="width: 300px;" size="1"
+                name="form:configure_groupSetCombo">
+            <option selected="selected" value="ship">Ship, nation, owners</option>
+            <option value="outcome">Voyage Outcome</option>
+            <option value="itinerary">Voyage Itinerary</option>
+            <option value="dates">Voyage Dates</option>
+            <option value="crew">Captain and Crew</option>
+            <option value="slaves-numbers">Slaves (numbers)</option>
+            <option value="slaves-chars">Slaves (characteristics)</option>
+            <option value="sources">Source</option>
+        </select>
+    </div>
+
+</div>
+
+<div>
+    <table style="border-collapse: collapse;">
+        <tbody>
+        <tr>
+            <td style="padding: 0px;">
+                <div style="font-weight: normal; margin-bottom: 5px;">Available variables</div>
+                <select style="width: 300px" size="10" multiple="multiple" name="form:configure_availAttributes"
+                        id="form:configure_availAttributes">
+                    <option value="Attribute_voyageid">Voyage identification number</option>
+                    <option value="Attribute_evgreen">Voyage in 1999 CD-ROM</option>
+                    <option value="Attribute_shipname">Vessel name</option>
+                    <option value="Attribute_national">Flag</option>
+                    <option value="Attribute_natinimp">Flag*</option>
+                    <option value="Attribute_placcons">Place constructed</option>
+                    <option value="Attribute_yrcons">Year constructed</option>
+                    <option value="Attribute_placreg">Place registered</option>
+                    <option value="Attribute_yrreg">Year registered</option>
+                    <option value="Attribute_rig">Rig</option>
+                    <option value="Attribute_tonnage">Tonnage</option>
+                    <option value="Attribute_tonmod">Standardized tonnage*</option>
+                    <option value="Attribute_guns">Guns mounted</option>
+                    <option value="Attribute_anyowner">Vessel owners</option>
+                </select></td>
+            <td style="padding-left: 10px; padding-right: 10px; padding-top: 0px; padding-bottom: 0px;">
+                <div style="margin-bottom: 5px;"><input type="submit" style="width: 30px" onclick="clear_form();"
+                                                        value="&gt;" name="form:configure_AddAttrButton"
+                                                        id="form:configure_AddAttrButton"></div>
+                <div><input type="submit" style="width: 30px" onclick="clear_form();" value="&lt;"
+                            name="form:configure_RemAttrButton" id="form:configure_RemAttrButton"></div>
+            </td>
+            <td style="padding: 0px;">
+                <div style="font-weight: normal; margin-bottom: 5px;">Selected columns</div>
+                <select style="width: 300px" size="10" multiple="multiple" name="form:configure_visibleAttributes"
+                        id="form:configure_visibleAttributes">
+                    <option value="Attribute_voyageid">Voyage identification number</option>
+                    <option value="Attribute_shipname">Vessel name</option>
+                    <option value="Attribute_anycaptain">Captain's name</option>
+                    <option value="Attribute_yearam">Year arrived with slaves*</option>
+                    <option value="Attribute_majbyimp">Principal region of slave purchase*</option>
+                    <option value="Attribute_mjselimp">Principal region of slave landing*</option>
+                    <option value="Attribute_national">Flag</option>
+                </select></td>
+            <td style="padding-left: 10px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;">
+                <div style="margin-bottom: 5px;"><input type="submit" style="width: 80px" onclick="clear_form();"
+                                                        value="Move up" name="form:configure_UpAttrButton"
+                                                        id="form:configure_UpAttrButton"></div>
+                <div><input type="submit" style="width: 80px" onclick="clear_form();" value="Move down"
+                            name="form:configure_DownAttrButton" id="form:configure_DownAttrButton"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

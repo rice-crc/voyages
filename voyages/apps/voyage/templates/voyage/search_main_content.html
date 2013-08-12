@@ -27,15 +27,17 @@
     <div class="search-panel">
         {% if no_result == True %}
             {% include "voyage/search_no_result.html" %}
-        {% elif statistics %}
+        {% elif tab == 'statistics' %}
             {% include "voyage/search_statistics.html" %}
-        {% elif tables %}
+        {% elif tab == 'config_column' %}
+            {% include "voyage/search_config.html" %}
+        {% elif tab == 'tables' %}
             {% include "voyage/search_tables.html" %}
-        {% elif graphs %}
+        {% elif tab == 'graphs' %}
             {% include "voyage/search_graphs.html" %}
-        {% elif timeline %}
+        {% elif tab == 'timeline' %}
             {% include "voyage/search_timeline.html" %}
-        {% elif maps %}
+        {% elif tab == 'maps' %}
             {% include "voyage/search_maps.html" %}
         {% else %}
             {% include "voyage/search_results.html" %}
