@@ -27,6 +27,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_ship_name = indexes.NgramField(null=True)
     var_nationality = indexes.CharField(null=True)
     var_imputed_nationality = indexes.CharField(null=True)
+    var_vessel_construction_place = indexes.CharField(null=True)
     var_year_of_construction = indexes.IntegerField(null=True)
     var_registered_place = indexes.CharField(null=True)
     var_registered_year = indexes.IntegerField(null=True)
@@ -48,7 +49,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_first_place_slave_purchase = indexes.CharField(null=True)
     var_second_place_slave_purchase = indexes.CharField(null=True)
     var_third_place_slave_purchase = indexes.CharField(null=True)
-    var_principal_place_of_slave_purchase = indexes.CharField(null=True)
+    var_imp_principal_place_of_slave_purchase = indexes.CharField(null=True)
     var_port_of_call_before_atl_crossing = indexes.CharField(null=True)
     var_first_landing_place = indexes.CharField(null=True)
     var_second_landing_place = indexes.CharField(null=True)
@@ -88,6 +89,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_length_middle_passage_days = indexes.IntegerField(null=True)
 
     # Voyage numbers
+    var_num_slaves_intended_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_second_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_third_port = indexes.IntegerField(null=True)
@@ -248,7 +250,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
         try:
-            return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
+            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
         except AttributeError:
             return None
 
@@ -273,12 +275,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_third_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.third_place_slave_purchase.place
-        except AttributeError:
-            return None
-
-    def prepare_var_principal_place_of_slave_purchase(self, obj):
-        try:
-            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
         except AttributeError:
             return None
 
@@ -344,7 +340,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
+    def prepare_var_imp_principal_region_of_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
         except AttributeError:
@@ -458,6 +454,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_length_middle_passage_days(self, obj):
         try:
             return obj.voyage_dates.length_middle_passage_days
+        except AttributeError:
+            return None
+
+    def prepare_var_num_slaves_intended_first_port(self, obj):
+        try:
+            return obj.voyage_slaves_numbers.num_slaves_intended_first_port
         except AttributeError:
             return None
 
