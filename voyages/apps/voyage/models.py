@@ -1175,6 +1175,23 @@ class VoyageSlavesNumbers(models.Model):
         verbose_name_plural = "Slaves Characteristics"
 
 
+class VoyageSourcesType(models.Model):
+    """
+    Voyage sources type.
+    Representing the group of sources.
+    """
+
+    group_id = models.IntegerField(max_length=1)
+    group_name = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name = "Sources type"
+        verbose_name_plural = "Sources types"
+        ordering = ['group_id']
+
+    def __unicode__(self):
+        return self.group_name
+
 # Voyage Sources
 class VoyageSources(models.Model):
     """
@@ -1188,6 +1205,7 @@ class VoyageSources(models.Model):
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=1000, null=True, blank=True)
+    source_type = models.ForeignKey('VoyageSourcesType', null=True)
 
     class Meta:
         verbose_name = 'Source'
