@@ -1072,7 +1072,6 @@ def search(request):
             if item['var_name'] == column:
                 result_columns.append([item['var_name'],
                                        item['var_full_name']])
-    print result_columns
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
