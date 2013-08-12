@@ -676,7 +676,6 @@ default_result_columns = [
     'var_imp_principal_port_of_slave_dis',
 ]
 
-
 def get_page(request, chapternum, sectionnum, pagenum):
     """
     Voyage Understanding the Database part
