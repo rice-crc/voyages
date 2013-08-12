@@ -795,8 +795,14 @@ def create_menu_forms(dict):
                         deselected_months.append(month)
 
             else:
-                threshold_month = v.split(",")[1]
-                threshold_year = v.split(",")[0]
+                if len(v) == 1:
+                    threshold_month = v.split(",")[1]
+                    threshold_year = v.split(",")[0]
+                else:
+                    threshold_month = v[0].split(",")[1]
+                    threshold_year = v[0].split(",")[0]
+                    for month in v[1].split(","):
+                        deselected_months.append(month)
 
                 if word_option == "lte":
                     option = 2
@@ -804,13 +810,6 @@ def create_menu_forms(dict):
                     option = 3
                 elif word_option == "exact":
                     option = 4
-
-                if len(v.split("|")) == 2:
-                    for month in v.split("|")[1].split(","):
-                        deselected_months.append(month)
-
-                    # Also, fix threshold month
-                    threshold_month = v.split(",")[1].split("|")[0]
 
             if word_option == "range":
                 form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
