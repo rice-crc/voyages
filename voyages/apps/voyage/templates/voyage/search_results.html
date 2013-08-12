@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load voyage_extras %}
+{% load voyage_tags %}
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
 
@@ -22,58 +23,24 @@
     <table class="grid">
         <tbody>
         <tr>
-            <th>
+            {% for item in result_columns %}
+                <th>
                 <div class="grid-first-column grid-header-icon-asc grid-header-text">
-                    <a href="#">Voyage identification number</a>
+                    <a href="#">{{  item.1 }}</a>
                 </div>
-            </th>
-            <th>
-                <div class="grid-header-text">
-                    <a href="#">Vessel name</a>
-                </div>
-            </th>
-            <th>
-                <div class="grid-header-text">
-                    <a href="#">Captain's name</a>
-                </div>
-            </th>
-            <th>
-                <div class="grid-header-text-left">
-                    <a href="#">Year arrived with slaves*</a>
-                </div>
-            </th>
-            <th>
-                <div class="grid-header-text">
-                    <a href="#">Principal region of slave purchase*</a>
-                </div>
-            </th>
-            <th>
-                <div class="grid-header-text">
-                    <a href="#">Principal region of slave landing*</a>
-                </div>
-            </th>
+                </th>
+
+            {% endfor %}
+
         </tr>
 
         {% for i in results %}
             <tr class="grid-row-even grid-row-first">
-                <td>
-                    {{ i.get_stored_fields.var_voyage_id }}
-                </td>
-                <td>
-                    {{ i.get_stored_fields.var_ship_name }}
-                </td>
-                <td>
-                   {{  i.get_stored_fields.var_captain | safe }}
-                </td>
-                <td style="text-align: left">
-                    {{ i.get_stored_fields.var_imp_arrival_at_port_of_dis }}
-                </td>
-                <td>
-                    {{ i.get_stored_fields.var_first_region_slave_emb }}
-                </td>
-                <td>
-                    {{ i.get_stored_fields.var_first_landing_region }}
-                </td>
+                {% for item in result_columns %}
+                    <td>
+                        {{ i.get_stored_fields| getattribute:item.0 }}
+                    </td>
+                {% endfor %}
             </tr>
         {% endfor %}
         </tbody>

@@ -146,8 +146,6 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
-    <field name="var_principal_place_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_imp_port_voyage_begin" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -212,11 +210,15 @@
 
     <field name="var_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_principal_place_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imp_voyage_began" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_voyage_began" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_vessel_left_port" type="ngram" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_vessel_construction_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -268,8 +270,6 @@
 
     <field name="var_nationality" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_imputed_percentage_female" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_length_home_to_disembark" type="long" indexed="true" stored="true" multiValued="false" />
@@ -281,6 +281,8 @@
     <field name="var_imputed_mortality" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_resistance" type="text_en" indexed="true" stored="true" multiValued="false" />
 
