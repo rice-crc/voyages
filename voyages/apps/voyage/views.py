@@ -751,27 +751,24 @@ def search(request):
 
     # Check if saved url has been used
     if request.GET.values():
-        query_dict, date_filters, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result = \
+        query_dict, date_filters, request.session['existing_form'], \
+        voyage_span_first_year, voyage_span_last_year, no_result = \
         decode_from_url(request)
         results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+
+        # Check if dates filters have to be used
         if date_filters and no_result is not True:
             results = date_filter_query(date_filters, results)
 
         if len(results) == 0:
             no_result = True
 
-
     # Otherwise, process next
     else:
 
         date_filters = []
 
-        if VoyageDates.objects.count() > 1:
-            voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-            voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-        else:
-            voyage_span_first_year = 1514
-            voyage_span_last_year = 1866
+        voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
@@ -911,12 +908,7 @@ def search(request):
                 request.session['results_voyages'] = results
 
                 # Reset time_frame form as well
-                if VoyageDates.objects.count() > 1:
-                    voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-                    voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-                else:
-                    voyage_span_first_year = 1514
-                    voyage_span_last_year = 1866
+                voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
                 # Time frame search
                 request.session['time_span_form'] = TimeFrameSpanSearchForm(
@@ -1546,6 +1538,17 @@ def date_filter_query(date_filters, results):
             results = results.exclude(**tmp_query)
 
     return results
+
+
+def calculate_maxmin_years():
+    if VoyageDates.objects.count() > 1:
+        voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+        voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+    else:
+        voyage_span_first_year = 1514
+        voyage_span_last_year = 1866
+
+    return voyage_span_first_year, voyage_span_last_year
 
 
 def getMonth(value):
