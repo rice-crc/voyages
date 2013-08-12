@@ -300,15 +300,21 @@ function filter_hierarchical_list(label) {
 }
 
 function resetSearch() {
-     $('#form').append("<input type='hidden' name='submitVal' value='reset' />");
-     $("#form").submit();
-     return true;
+    $('#form').append("<input type='hidden' name='submitVal' value='reset' />");
+    $("#form").submit();
+    return true;
 }
 
 function performSearch() {
     $('#form').append("<input type='hidden' name='submitVal' value='search' />");
-     $("#form").submit();
-     return true;
+    $("#form").submit();
+    return true;
+}
+
+function configure_columns() {
+    $('#form').append("<input type='hidden' name='submitVal' value='configColumn' />");
+    $("#form").submit();
+    return true;
 }
 
 function formatArray(selectedItems) {
