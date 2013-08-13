@@ -242,6 +242,8 @@
 
     <field name="var_third_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_num_slaves_intended_first_port" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_length_middle_passage_days" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_carried_first_port" type="long" indexed="true" stored="true" multiValued="false" />

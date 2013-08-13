@@ -4,72 +4,76 @@
 
 <div>{% trans 'Configure columns' %}</div>
 
-{% regroup general_variables by var_category as general_var_all_list %}
+{% regroup all_var_list by var_category as general_var_all_list %}
 
+<div class="voyage_config_wrapper">
 <div class="voyage_configure_panel">
     <div>{% trans 'Choose group of variables' %}</div>
 
-        <select id="configure_group" onchange="config_change_group();" style="width: 300px;" size="1"
+        <select id="configure_group" onchange="config_change_group(this.value);" style="width: 300px;" size="1"
                 name="configure_group">
             {% for variable in general_var_all_list %}
-                <option value="{{ variable.grouper }}">{{ variable.grouper }}</option>
+                <option value="config_group_{{ forloop.counter0 }}">{{ variable.grouper }}</option>
             {% endfor %}
         </select>
 </div>
 
-<div>
+<div class="voyage_config_main">
     <table>
         <tbody>
         <tr>
-            <td>
+            <td class="voyage_config_all_list">
                 <div style="font-weight: normal; margin-bottom: 5px;">Available variables</div>
 
                 {% for variable in general_var_all_list %}
                     <select style="width: 300px" size="10" multiple="multiple"
-                            name="config_{{ variable.grouper }}"
-                             id="config_{{ variable.grouper }}">
+                            {% if not forloop.first %}class="hidden"{% endif %}
+                            name="config_group_{{ forloop.counter0 }}"
+                             id="config_group_{{ forloop.counter0 }}">
                          {% for item in variable.list %}
-                        <option value="{{ item.var_full_name }}">{{ item.var_full_name }}</option>
+                            <option value="{{ item.var_name }}">{{ item.var_full_name }}</option>
                         {% endfor %}
                     </select>
                 {% endfor %}
             </td>
 
             <td>
-                <div><input type="submit" style="width: 30px" onclick="clear_form();"
-                           value="&gt;" name="form:configure_AddAttrButton"
-                           id="configure_AddAttrButton"></div>
-                <div><input type="submit" style="width: 30px" onclick="clear_form();"
-                           value="&lt;" name="form:configure_RemAttrButton"
-                           id="configure_RemAttrButton"></div>
+                <div><input type="submit" style="width: 30px"
+                           onclick="add_var_to_display();return false;"
+                           value="&gt;" ></div>
+                <div><input type="submit" style="width: 30px"
+                           onclick="remove_from_display();return false;"
+                           value="&lt;" ></div>
             </td>
             <td>
                 <div style="font-weight: normal; margin-bottom: 5px;">Selected columns</div>
 
-                <select style="width: 300px" size="10" multiple="multiple" name="form:configure_visibleAttributes"
+                <select style="width: 300px" size="10" multiple="multiple" name="configure_visibleAttributes"
                         id="configure_visibleAttributes">
-                    {% for item in result_columns %}
+                    {% for item in request.session.result_columns %}
                         <option value="{{ item.0 }}">{{ item.1 }}</option>
                     {% endfor %}
                 </select>
             </td>
             <td>
-                <div style="margin-bottom: 5px;">
-                    <input type="submit" style="width: 80px" onclick="clear_form();"
-                                                        value="Move up" name="form:configure_UpAttrButton"
-                                                        id="form:configure_UpAttrButton"></div>
-                <div><input type="submit" style="width: 80px" onclick="clear_form();" value="Move down"
-                            name="form:configure_DownAttrButton" id="form:configure_DownAttrButton"></div>
+                <div style="margin-bottom: 5px;" class="select_move_up_down">
+                    <input type="submit" style="width: 80px"
+                           onclick="move_var('up');return false;"
+                           value="Move up"></div>
+                <div>
+                    <input type="submit" style="width: 80px"
+                           onclick="move_var('down');return false;"
+                            value="Move down"></div>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
+</div>
+
 <div>
-    <input type="submit" onclick="clear_form();" value="Apply configuration"
-           name="form:configureApplyConfigButton"
-           id="form:configureApplyConfigButton">
-    <input type="submit" onclick="clear_form();" value="Cancel" name="form:configureCancel"
-           id="form:configureCancel">
+    <input type="submit" onclick="apply_config();" value="Apply configuration">
+    <input type="submit" onclick="cancel_config();" value="Cancel">
+    <input type="submit" onclick="restore_config();" value="Restore default columns">
 </div>

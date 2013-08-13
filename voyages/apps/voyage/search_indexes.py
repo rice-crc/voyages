@@ -46,27 +46,38 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage itinerary
     var_imp_port_voyage_begin = indexes.CharField(null=True)
+
     var_first_place_slave_purchase = indexes.CharField(null=True)
     var_second_place_slave_purchase = indexes.CharField(null=True)
     var_third_place_slave_purchase = indexes.CharField(null=True)
+
     var_imp_principal_place_of_slave_purchase = indexes.CharField(null=True)
+
     var_port_of_call_before_atl_crossing = indexes.CharField(null=True)
+
     var_first_landing_place = indexes.CharField(null=True)
     var_second_landing_place = indexes.CharField(null=True)
     var_third_landing_place = indexes.CharField(null=True)
+
     var_imp_principal_port_of_slave_dis = indexes.CharField(null=True)
+
     var_place_voyage_ended = indexes.CharField(null=True)
 
     ## Region variables
     var_imp_region_voyage_begin = indexes.CharField(null=True)
+
     var_first_region_slave_emb = indexes.CharField(null=True)
     var_second_region_slave_emb = indexes.CharField(null=True)
     var_third_region_slave_emb = indexes.CharField(null=True)
+
     var_imp_principal_region_of_slave_purchase = indexes.CharField(null=True)
+
     var_first_landing_region = indexes.CharField(null=True)
     var_second_landing_region = indexes.CharField(null=True)
     var_third_landing_region = indexes.CharField(null=True)
+
     var_imp_principal_region_slave_dis = indexes.CharField(null=True)
+
     var_region_voyage_ended = indexes.CharField(null=True)
 
     # Voyage captain and crew
@@ -248,11 +259,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except IndexError:
             return None
 
-    def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
-        try:
-            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
-        except AttributeError:
-            return None
+    # Voyage itinerary
 
     def prepare_var_imp_port_voyage_begin(self, obj):
         try:
@@ -275,6 +282,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_third_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.third_place_slave_purchase.place
+        except AttributeError:
+            return None
+
+    def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
+        try:
+            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
         except AttributeError:
             return None
 
@@ -302,9 +315,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_principal_port_of_slave_dis(self, obj):
+    def prepare_var_imp_principal_port_slave_dis(self, obj):
         try:
-            return obj.voyage_itinerary.principal_port_of_slave_dis.place
+            return obj.voyage_itinerary.imp_principal_port_slave_dis.place
         except AttributeError:
             return None
 
@@ -314,15 +327,16 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
+    # Region variables
     def prepare_var_imp_region_voyage_begin(self, obj):
         try:
-            return obj.voyage_itineraryimp_region_voyage_begin.region
+            return obj.voyage_itinerary.imp_region_voyage_begin.region
         except AttributeError:
             return None
 
     def prepare_var_first_region_slave_emb(self, obj):
         try:
-            return obj.voyage_itinerary.principal_place_of_slave_purchase.region.region
+            return obj.voyage_itinerary.first_region_slave_emb.region
         except AttributeError:
             return None
         except IndexError:
@@ -342,7 +356,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_principal_region_of_slave_purchase(self, obj):
         try:
-            return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
+            return obj.voyage_itinerary.imp_principal_region_of_slave_purchase.region
         except AttributeError:
             return None
 
@@ -364,9 +378,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_imp_principal_port_slave_dis(self, obj):
+    def prepare_var_imp_principal_region_slave_dis(self, obj):
         try:
-            return obj.voyage_itinerary.imp_principal_port_slave_dis.place
+            return obj.voyage_itinerary.imp_principal_region_slave_dis.region
         except AttributeError:
             return None
 
