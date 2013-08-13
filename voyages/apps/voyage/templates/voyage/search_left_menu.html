@@ -303,8 +303,8 @@
                     {% endfor %}
                 {% endif %}
             </div>
-            <input type="submit" onclick="performSearch();" value="{% trans 'Search' %}" name="buttonSearch"/>
-            <input type="reset" onclick="resetSearch();" value="{% trans 'New query' %}" name="buttonAgain"/>
+            <input type="submit" onclick="submitWithValue('search');" value="{% trans 'Search' %}" name="buttonSearch"/>
+            <input type="reset" onclick="submitWithValue('reset');" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>
     </div>

@@ -310,43 +310,16 @@ function config_change_group(group_id) {
     $("#" + group_id).removeClass("hidden");
 }
 
-function resetSearch() {
-    $('#form').append("<input type='hidden' name='submitVal' value='reset' />");
+function submitWithValue(submitVal) {
+    $('#form').append("<input type='hidden' name='submitVal' value='" + submitVal + "' />");
     $("#form").submit();
     return true;
 }
 
-function performSearch() {
-    $('#form').append("<input type='hidden' name='submitVal' value='search' />");
-    $("#form").submit();
-    return true;
-}
-
-function configure_columns() {
-    $('#form').append("<input type='hidden' name='submitVal' value='configColumn' />");
-    $("#form").submit();
-    return true;
-}
-
-
-function apply_config() {
-    $('#form').append("<input type='hidden' name='submitVal' value='applyConfig' />");
+function applyConfig() {
     /* Select all options so the form submit all values */
     $('#configure_visibleAttributes option').prop('selected', true);
-    $("#form").submit();
-    return true;
-}
-
-function cancel_config() {
-    $('#form').append("<input type='hidden' name='submitVal' value='cancelConfig' />");
-    $("#form").submit();
-    return true;
-}
-
-function restore_config() {
-    $('#form').append("<input type='hidden' name='submitVal' value='restoreConfig' />");
-    $("#form").submit();
-    return true;
+    return submitWithValue('applyConfig');
 }
 
 /* Add variables to the display list */
