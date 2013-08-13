@@ -259,6 +259,7 @@ var_dict = [
      "is_general": True,
      "note": "Same as data variable in most cases, but derived from "
              "port of return for certain Brazilian voyages"},
+
     {'var_name': 'var_first_place_slave_purchase',
      'spss_name': 'plac1tra',
      'var_full_name': 'First place of slave purchase',
@@ -267,6 +268,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_second_place_slave_purchase',
      'spss_name': 'plac2tra',
      'var_full_name': 'Second place of slave purchase',
@@ -275,6 +277,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_third_place_slave_purchase',
      'spss_name': 'plac3tra',
      'var_full_name': 'Third place of slave purchase',
@@ -283,6 +286,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_imp_principal_place_of_slave_purchase',
      'spss_name': 'mjbyptimp',
      'var_full_name': 'Principal place of slave purchase*',
@@ -292,6 +296,7 @@ var_dict = [
      "is_basic": True,
      "is_general": True,
      "note": "Place where largest number of captives embarked"},
+
     {'var_name': 'var_port_of_call_before_atl_crossing',
      'spss_name': 'npafttra',
      'var_full_name': 'Places of call before Atlantic crossing',
@@ -300,6 +305,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_first_landing_place',
      'spss_name': 'sla1port',
      'var_full_name': 'First place of slave landing',
@@ -308,6 +314,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_second_landing_place',
      'spss_name': 'adpsale1',
      'var_full_name': 'Second place of slave landing',
@@ -316,6 +323,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_third_landing_place',
      'spss_name': 'adpsale2',
      'var_full_name': 'Third place of slave landing',
@@ -324,6 +332,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
     {'var_name': 'var_imp_principal_port_of_slave_dis',
      'spss_name': 'mjslptimp',
      'var_full_name': 'Principal place of slave landing*',
@@ -333,6 +342,7 @@ var_dict = [
      "is_basic": True,
      "is_general": True,
      "note": "Place where largest number of captives embarked"},
+
     {'var_name': 'var_place_voyage_ended',
      'spss_name': 'portret',
      'var_full_name': 'Place where voyage ended',
@@ -341,6 +351,88 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
+
+    # Itinerary - region variables
+    {'var_name': 'var_imp_region_voyage_begin',
+     'spss_name': 'deptregimp',
+     'var_full_name': 'Region where voyage began*',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_first_region_slave_emb',
+     'spss_name': 'regem1',
+     'var_full_name': 'First region of slave purchase',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+
+    {'var_name': 'var_second_region_slave_emb',
+     'spss_name': 'regem2',
+     'var_full_name': 'Second region of slave purchase',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_third_region_slave_emb',
+     'spss_name': 'regem3',
+     'var_full_name': 'Third region of slave purchase',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_imp_principal_region_of_slave_purchase',
+     'spss_name': 'majbyimp',
+     'var_full_name': 'Principal region of slave purchase*',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_first_landing_region',
+     'spss_name': 'regdis1',
+     'var_full_name': 'First region of slave landing',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_second_landing_region',
+     'spss_name': 'regdis2',
+     'var_full_name': 'Second region of slave landing',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_third_landing_region',
+     'spss_name': 'regdis3',
+     'var_full_name': 'Third region of slave landing',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_imp_principal_region_slave_dis',
+     'spss_name': 'mjselimp',
+     'var_full_name': 'Principal region of slave landing*',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
+
+    {'var_name': 'var_region_voyage_ended',
+     'spss_name': 'retrnreg',
+     'var_full_name': 'Region where voyage ended',
+     'var_category': 'Voyage Itinerary',
+     "is_estimate": False,
+     "is_basic": False,
+     "is_general": False},
 
     # Voyage Dates
     {'var_name': 'var_imp_arrival_at_port_of_dis',
@@ -646,8 +738,13 @@ option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
 
 basic_variables = []
 for item in var_dict:
-    if item['is_basic'] == True:
+    if item['is_basic']:
         basic_variables.append(item)
+
+general_variables = []
+for item in var_dict:
+    if item['is_general']:
+        general_variables.append(item)
 
 # List of default result columns
 default_result_columns = [
@@ -655,6 +752,6 @@ default_result_columns = [
     'var_ship_name',
     'var_captain',
     'var_imp_arrival_at_port_of_dis',
-    'var_imp_principal_place_of_slave_purchase',
-    'var_imp_principal_port_of_slave_dis',
+    'var_imp_principal_region_of_slave_purchase',
+    'var_imp_principal_region_slave_dis',
 ]

@@ -238,3 +238,11 @@ div.permlink-info {
     min-height: 60px;
     padding: 10px;
 }
+
+/* Config menu */
+.voyage_config_wrapper {
+    border-top: 1px solid #EEDAA2;
+    border-bottom: 1px solid #EEDAA2;
+    padding: 10px 5px 5px 0px;
+    margin: 5px 0 5px 0;
+}

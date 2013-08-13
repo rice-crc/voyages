@@ -23,7 +23,7 @@
     <table class="grid">
         <tbody>
         <tr>
-            {% for item in result_columns %}
+            {% for item in request.session.result_columns %}
                 <th>
                 <div class="grid-first-column grid-header-icon-asc grid-header-text">
                     <a href="#">{{  item.1 }}</a>
@@ -36,9 +36,9 @@
 
         {% for i in results %}
             <tr class="grid-row-even grid-row-first">
-                {% for item in result_columns %}
+                {% for item in request.session.result_columns %}
                     <td>
-                        {{ i.get_stored_fields| getattribute:item.0 }}
+                        {{ i.get_stored_fields| getattribute:item.0 | safe }}
                     </td>
                 {% endfor %}
             </tr>
