@@ -13,6 +13,32 @@ def getDay(value):
 def getYear(value):
     return str(value.split(",")[2]).zfill(2)
 
+
+# Index for Sources
+class VoyageSources(indexes.SearchIndex, indexes.Indexable):
+    """
+    Index method for class Voyage.
+    """
+    text = indexes.CharField(document=True, use_template=True)
+
+    short_ref = indexes.CharField(model_attr='short_ref')
+    full_ref = indexes.CharField(model_attr='full_ref')
+    group_id = indexes.IntegerField()
+    group_name = indexes.CharField()
+
+    def get_model(self):
+        return VoyageSources
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+    def prepare_group_id(self):
+        return self.source_type.group_id
+
+    def prepare_group_name(self):
+        return self.source_type.group_name
+
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     """
