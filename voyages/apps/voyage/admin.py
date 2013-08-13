@@ -386,6 +386,7 @@ admin.site.register(VoyageSlavesNumbers)
 
 # Voyage Sources
 admin.site.register(VoyageSources, VoyageSourcesAdmin)
+admin.site.register(VoyageSourcesType)
 
 # Voyage (main section)
 admin.site.register(Voyage, VoyageAdmin)

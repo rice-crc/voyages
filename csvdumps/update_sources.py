@@ -38,25 +38,19 @@ obj0.save()
 
 
 obj1 = VoyageSourcesType()
-obj1.group_id = 0
+obj1.group_id = 1
 obj1.group_name = 'Newspaper'
 obj1.save()
 
 obj2 = VoyageSourcesType()
-obj2.group_id = 1
+obj2.group_id = 2
 obj2.group_name = 'Published source'
 obj2.save()
 
 obj3 = VoyageSourcesType()
-obj3.group_id = 2
+obj3.group_id = 3
 obj3.group_name = 'Unpublished secondary source'
 obj3.save()
-
-obj0 = VoyageSourcesType()
-obj0.group_id = 3
-obj0.group_name = 'Documentary source'
-obj0.save()
-
 
 obj4 = VoyageSourcesType()
 obj4.group_id = 4
