@@ -972,3 +972,7 @@ def variable_list(request):
         var_list_stats.append({"var_category": key, "variables": tmpGroup})
 
     return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
+
+
+def sources_list(request, category="documentary_sources"):
+    pass
