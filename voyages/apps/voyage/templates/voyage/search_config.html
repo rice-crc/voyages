@@ -4,7 +4,7 @@
 
 <div>{% trans 'Configure columns' %}</div>
 
-{% regroup general_variables by var_category as general_var_all_list %}
+{% regroup all_var_list by var_category as general_var_all_list %}
 
 <div class="voyage_config_wrapper">
 <div class="voyage_configure_panel">
@@ -40,19 +40,17 @@
             <td>
                 <div><input type="submit" style="width: 30px"
                            onclick="add_var_to_display();return false;"
-                           value="&gt;" name="form:configure_AddAttrButton"
-                           id="configure_AddAttrButton"></div>
+                           value="&gt;" ></div>
                 <div><input type="submit" style="width: 30px"
                            onclick="remove_from_display();return false;"
-                           value="&lt;" name="form:configure_RemAttrButton"
-                           id="configure_RemAttrButton"></div>
+                           value="&lt;" ></div>
             </td>
             <td>
                 <div style="font-weight: normal; margin-bottom: 5px;">Selected columns</div>
 
                 <select style="width: 300px" size="10" multiple="multiple" name="configure_visibleAttributes"
                         id="configure_visibleAttributes">
-                    {% for item in result_columns %}
+                    {% for item in request.session.result_columns %}
                         <option value="{{ item.0 }}">{{ item.1 }}</option>
                     {% endfor %}
                 </select>
@@ -75,9 +73,7 @@
 </div>
 
 <div>
-    <input type="submit" onclick="apply_config();" value="Apply configuration"
-           name="form:configureApplyConfigButton"
-           id="form:configureApplyConfigButton">
-    <input type="submit" onclick="cancel_config();" value="Cancel" name="form:configureCancel"
-           id="form:configureCancel">
+    <input type="submit" onclick="apply_config();" value="Apply configuration">
+    <input type="submit" onclick="cancel_config();" value="Cancel">
+    <input type="submit" onclick="restore_config();" value="Restore default columns">
 </div>
