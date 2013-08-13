@@ -755,3 +755,12 @@ default_result_columns = [
     'var_imp_principal_region_of_slave_purchase',
     'var_imp_principal_region_slave_dis',
 ]
+
+# Dictionary of sources
+sources_id = {
+    'documentary': 0,
+    'newspapers': 1,
+    'published_sources': 2,
+    'unpublished_secondary_sources': 3,
+    'private_notes_and_collections': 4
+}
