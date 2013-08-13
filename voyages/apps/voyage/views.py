@@ -975,4 +975,6 @@ def variable_list(request):
 
 
 def sources_list(request, category="documentary_sources"):
+    # Prepare items
+    #voyage_sources = VoyageSources.objects.filter(source_type=)
     pass
