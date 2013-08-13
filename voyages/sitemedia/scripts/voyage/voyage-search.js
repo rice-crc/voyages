@@ -331,6 +331,8 @@ function configure_columns() {
 
 function apply_config() {
     $('#form').append("<input type='hidden' name='submitVal' value='applyConfig' />");
+    /* Select all options so the form submit all values */
+    $('#configure_visibleAttributes option').prop('selected', true);
     $("#form").submit();
     return true;
 }
@@ -341,21 +343,28 @@ function cancel_config() {
     return true;
 }
 
+function restore_config() {
+    $('#form').append("<input type='hidden' name='submitVal' value='restoreConfig' />");
+    $("#form").submit();
+    return true;
+}
+
 /* Add variables to the display list */
 function add_var_to_display() {
-    $newly_selected_vals = $(".voyage_config_all_list option:selected");
+    var $newly_selected_vals = $(".voyage_config_all_list option:selected");
 
     /* List currently selected */
     var cur_selected_text = []
 
-    $currently_selected = $("#configure_visibleAttributes option");
+    var $currently_selected = $("#configure_visibleAttributes option");
     $currently_selected.each(function() {
        cur_selected_text.push($(this).val());
     });
 
     $newly_selected_vals.each(function() {
         /* Check if the current variable is already in the list*/
-        if ($.inArray($(this).val(), cur_selected_text) == -1) {
+        if (cur_selected_text.length == 0 ||
+            $.inArray($(this).val(), cur_selected_text) == -1) {
             $("#configure_visibleAttributes option:last").parent().append($(this));
         }
     });

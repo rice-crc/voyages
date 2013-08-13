@@ -738,8 +738,13 @@ option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
 
 basic_variables = []
 for item in var_dict:
-    if item['is_basic'] == True:
+    if item['is_basic']:
         basic_variables.append(item)
+
+general_variables = []
+for item in var_dict:
+    if item['is_general']:
+        general_variables.append(item)
 
 # List of default result columns
 default_result_columns = [

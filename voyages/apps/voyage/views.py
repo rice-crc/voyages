@@ -118,14 +118,7 @@ def search(request):
             if request.session['result_columns']:
                 pass
         except KeyError:
-            result_columns = []
-            for column in globals.default_result_columns:
-                for item in globals.var_dict:
-                    if item['var_name'] == column:
-                        result_columns.append([item['var_name'],
-                                               item['var_full_name']])
-            request.session['result_columns'] = result_columns
-
+            request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
         # Try to retrieve results from session
         try:
@@ -259,19 +252,34 @@ def search(request):
                 request.session['existing_form'] = existing_form
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = results
+                request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
                 # Reset time_frame form as well
                 voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
                 # Time frame search
                 request.session['time_span_form'] = TimeFrameSpanSearchForm(
-                initial={'frame_from_year': voyage_span_first_year,
-                         'frame_to_year': voyage_span_last_year})
+                    initial={'frame_from_year': voyage_span_first_year,
+                             'frame_to_year': voyage_span_last_year})
 
             elif submitVal == 'configColumn':
                 # Configure columns in the result page
                 tab = 'config_column'
-                pass
+
+            elif submitVal == 'applyConfig':
+                # Update the session variables
+                print request.POST.getlist('configure_visibleAttributes')
+                request.session['result_columns'] = get_new_visible_attrs(
+                    request.POST.getlist('configure_visibleAttributes'))
+                tab = 'result'
+
+            elif submitVal == 'cancelConfig':
+                # Does nothing and return to the result page
+                tab = 'result'
+
+            elif submitVal == 'restoreConfig':
+                request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+                tab = 'config_column'
 
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
@@ -421,7 +429,8 @@ def search(request):
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
                    'basic_variables': globals.basic_variables,
-                   'general_variables': globals.var_dict,
+                   'general_variables': globals.general_variables,
+                   'all_var_list': globals.var_dict,
                    'results': pagins,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
@@ -816,18 +825,18 @@ def create_menu_forms(dict):
 
             if word_option == "range":
                 form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                               initial={'options': option,
-                                               'from_month': from_month,
-                                               'from_year': from_year,
-                                               'to_month': to_month,
-                                               'to_year': to_year},
-                                               prefix=var_name)
+                                            initial={'options': option,
+                                                     'from_month': from_month,
+                                                     'from_year': from_year,
+                                                     'to_month': to_month,
+                                                     'to_year': to_year},
+                                            prefix=var_name)
             else:
                 form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                               initial={'options': option,
-                                                        'threshold_month': threshold_month,
-                                                        'threshold_year': threshold_year},
-                                               prefix=var_name)
+                                            initial={'options': option,
+                                                     'threshold_month': threshold_month,
+                                                     'threshold_year': threshold_year},
+                                            prefix=var_name)
 
             elem_dict['list_months'] = globals.list_months
             elem_dict['form'] = form
@@ -899,18 +908,6 @@ def calculate_maxmin_years():
     return voyage_span_first_year, voyage_span_last_year
 
 
-def getMonth(value):
-    return value.split(",")[0]
-
-
-def getDay(value):
-    return value.split(",")[1]
-
-
-def getYear(value):
-    return value.split(",")[2]
-
-
 def formatDate(year, month):
     """
     Format the passed year month to a YYYY,MM string
@@ -919,6 +916,19 @@ def formatDate(year, month):
     :return:
     """
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+
+
+def get_new_visible_attrs(list_column_varnames):
+    """
+    :param list_column_varnames: a list of variable names (short_name)
+    :return: a list of tuples containing short names and full names of variables from the passed parameter
+    """
+    result_columns = []
+    for column in list_column_varnames:
+        for item in globals.var_dict:
+            if item['var_name'] == column:
+                result_columns.append([item['var_name'], item['var_full_name']])
+    return result_columns
 
 
 def variable_list(request):
