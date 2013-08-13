@@ -86,22 +86,22 @@
 	<a href="#" id="c01_s03_cover" >{% trans "Variable List" %}</a>
 </div>
 <div class="secondary-menu-item-0">
-	<a href="#" id="c01_s04_cover">{% trans "Sources" %}</a>
+	<a href="{% url 'voyage:sources' 'documentary' %}">{% trans "Sources" %}</a>
 </div>
-<div class="secondary-menu-subitems-0"  id="c01_s04_submenu">
+<div class="secondary-menu-subitems-0">
 	<div class="secondary-menu-item-1">
-		<a href="#" id="c01_s04_p01">{% trans "Documentary Sources" %}</a>
+		<a href="{% url 'voyage:sources' 'documentary' %}">{% trans "Documentary Sources" %}</a>
 	</div>
 	<div class="secondary-menu-item-1">
-		<a href="#" id="c01_s04_p02">{% trans "Newspapers" %}</a>
+		<a href="{% url 'voyage:sources' 'newspapers' %}">{% trans "Newspapers" %}</a>
 	</div>
 	<div class="secondary-menu-item-1">
-		<a href="#" id="c01_s04_p03">{% trans "Published Sources" %}</a>
+		<a href="{% url 'voyage:sources' 'published_sources' %}">{% trans "Published Sources" %}</a>
 	</div>
 	<div class="secondary-menu-item-1">
-		<a href="#" id="c01_s04_p04">{% trans "Unpublished Secondary Sources" %}</a>
+		<a href="{% url 'voyage:sources' 'unpublished_secondary_sources' %}">{% trans "Unpublished Secondary Sources" %}</a>
 	</div>
 	<div class="secondary-menu-item-1">
-		<a href="#" id="c01_s04_p05">{% trans "Private Notes and Collections" %}</a>
+		<a href="{% url 'voyage:sources' 'private_notes_and_collections' %}">{% trans "Private Notes and Collections" %}</a>
 	</div>
 </div>
