@@ -268,7 +268,6 @@ def search(request):
 
             elif submitVal == 'applyConfig':
                 # Update the session variables
-                print request.POST.getlist('configure_visibleAttributes')
                 request.session['result_columns'] = get_new_visible_attrs(
                     request.POST.getlist('configure_visibleAttributes'))
                 tab = 'result'
@@ -385,6 +384,13 @@ def search(request):
                     no_result = True
                     results = []
                 request.session['results_voyages'] = results
+                request.session['voyage_last_query'] = query_dict
+
+            elif submitVal == 'downloadCurrentView':
+                pass
+
+            elif submitVal == 'downloadAllResult':
+                pass
 
         elif request.method == 'GET':
             # Create a new form
