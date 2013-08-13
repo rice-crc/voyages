@@ -494,7 +494,7 @@ class VoyageItinerary(models.Model):
     imp_principal_region_of_slave_purchase = models.ForeignKey \
             ('Region',
              related_name="imp_principal_region_of_slave_purchase",
-             verbose_name="Imputed principal region of slave purchase (c)",
+             verbose_name="Imputed principal region of slave purchase (MAJBYIMP)",
              null=True, blank=True)
     imp_broad_region_of_slave_purchase = models.ForeignKey\
             ('BroadRegion',

@@ -112,7 +112,20 @@ def search(request):
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
-            request.session['result_columns'] = globals.default_result_columns
+
+        # Set up the initial column of display
+        try:
+            if request.session['result_columns']:
+                pass
+        except KeyError:
+            result_columns = []
+            for column in globals.default_result_columns:
+                for item in globals.var_dict:
+                    if item['var_name'] == column:
+                        result_columns.append([item['var_name'],
+                                               item['var_full_name']])
+            request.session['result_columns'] = result_columns
+
 
         # Try to retrieve results from session
         try:
@@ -404,20 +417,11 @@ def search(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
-    request.session['result_columns'] = globals.default_result_columns
-    result_columns = []
-    for column in request.session['result_columns']:
-        for item in globals.var_dict:
-            if item['var_name'] == column:
-                result_columns.append([item['var_name'],
-                                       item['var_full_name']])
-
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
                    'basic_variables': globals.basic_variables,
                    'general_variables': globals.var_dict,
-                   'result_columns': result_columns,
                    'results': pagins,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
