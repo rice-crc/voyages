@@ -12,8 +12,8 @@ urlpatterns += patterns('',
     
     url(r'^c01_s01_cover$', TemplateView.as_view(template_name='voyage/c01_s01_cover.html'), name='voyage-guide-intro'),
     url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),
-    url(r'^c01_s04_cover$', TemplateView.as_view(template_name='raw_under_constr.html'), name='sources'),
-    
+    url(r'^sources/(?P<category>\w*)$', 'voyages.apps.voyage.views.sources_list', name='sources'),
+    url(r'^sources$', 'voyages.apps.voyage.views.sources_list', name='sources'),
     url(r'^search', 'voyages.apps.voyage.views.search', name='search'),
 
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
@@ -24,4 +24,3 @@ urlpatterns += patterns('',
 urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^download$', 'flatpage', {'url': '/voyage/download/'}, name='download'),
 )
-
