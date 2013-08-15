@@ -171,8 +171,17 @@ def search(request):
                             place_selected = request.POST.getlist(tmp_varname + "_selected")
                             region_selected = request.POST.getlist(tmp_varname + "_selected_regs")
                             area_selected = request.POST.getlist(tmp_varname + "_selected_areas")
-                            cur_var['choices'] = getNestedListPlaces(tmp_varname,
-                                                                     place_selected, region_selected, area_selected)
+                            if tmp_varname != "var_imp_principal_place_of_slave_purchase":
+                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
+                                                                     place_selected=place_selected,
+                                                                     region_selected=region_selected,
+                                                                     area_selected=area_selected)
+                            else:
+                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
+                                                                     place_selected=place_selected,
+                                                                     region_selected=region_selected,
+                                                                     area_selected=area_selected,
+                                                                     area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
 
                         elif tmp_varname in globals.list_boolean_fields:
                              # Boolean field
@@ -229,7 +238,10 @@ def search(request):
                     tmpElemDict['list_deselected'] = []
 
                 elif varname in globals.list_place_fields:
-                    choices = getNestedListPlaces(varname, [], [], [])
+                    if varname != "var_imp_principal_place_of_slave_purchase":
+                        choices = getNestedListPlaces(varname)
+                    else:
+                        choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
 
                     tmpElemDict['type'] = 'select_three_layers'
                     tmpElemDict['varname_wrapper'] = "select_" + varname
@@ -237,6 +249,7 @@ def search(request):
                     tmpElemDict['selected_choices'] = varname + "_selected"
                     tmpElemDict['selected_regs'] = varname + "_selected_regs"
                     tmpElemDict['selected_areas'] = varname + "_selected_areas"
+                    #3/0
 
                 elif varname in globals.list_boolean_fields:
                      # Boolean field
@@ -482,18 +495,36 @@ def getChoices(varname):
     return choices
 
 
-def getNestedListPlaces(varname, place_selected, region_selected, area_selected):
+def getNestedListPlaces(varname, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
     """
     Retrieve a nested list of places sorted by broad region (area) and then region
     :param varname:
     :return:
     """
     choices = []
-    for area in BroadRegion.objects.all():
+
+    if not place_visible:
+        place_visible = Place.objects.all()
+    else:
+        place_visible = Place.objects.filter(place__in=place_visible)
+
+    if not region_visible:
+        region_visible = Region.objects.all()
+    else:
+        region_visible = Region.objects.filter(region__in=region_visible)
+
+    if not area_visible:
+        area_visible = BroadRegion.objects.all()
+    else:
+        area_visible = BroadRegion.objects.filter(broad_region__in=area_visible)
+
+    for area in area_visible:
         area_content = []
-        for reg in Region.objects.filter(broad_region=area):
+        #for reg in Region.objects.filter(broad_region=area, region__in=region_visible):
+        for reg in region_visible.filter(broad_region=area):
             reg_content = []
-            for place in Place.objects.filter(region=reg):
+            #for place in Place.objects.filter(region=reg, place__in=place_visible):
+            for place in place_visible.filter(region=reg):
                 if place.place == "???":
                     continue
                 if place.place in place_selected:
@@ -679,7 +710,7 @@ def decode_from_url(request):
 
     """
 
-    # Check if this path is in session
+    Check if this path is in session
     try:
         session_dict = request.session[request.get_full_path()]
         return session_dict['dict'], session_dict['date_filters'], \
@@ -859,7 +890,10 @@ def create_menu_forms(dict):
         elif var_type in "select_three_layers":
             # Get places
 
-            choices = getNestedListPlaces(var_name, v, [], [])
+            if var_name != "var_imp_principal_place_of_slave_purchase":
+                choices = getNestedListPlaces(var_name, place_selected=v)
+            else:
+                choices = getNestedListPlaces(var_name, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields, place_selected=v)
 
             elem_dict['varname_wrapper'] = "select_" + var_name
             elem_dict['choices'] = choices
@@ -979,6 +1013,9 @@ def sources_list(request, category="documentary_sources"):
     # Prepare items
     sources = SearchQuerySet().filter(group_name__exact=category)
 
+
+    print "dupa"
+
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
         try:
@@ -986,7 +1023,7 @@ def sources_list(request, category="documentary_sources"):
         except:
             safe_short_ref = ""
         # print "Short ref: " + str(safe_short_ref)
-        print "Full ref: " + safe_full_ref
+        # print "Full ref: " + safe_full_ref
 
     if category == "documentary_sources":
         # Find all cities in sources
@@ -995,41 +1032,49 @@ def sources_list(request, category="documentary_sources"):
 
         for i in sources:
             insert_source(divided_groups, i)
+            print i
 
-
-        #for i in sources:
 
     else:
         pass
         # just long and short refs
 
-
-    return render(request, "voyage/voyage_sources.html", {'query_set': sources})
+    return render(request, "voyage/voyage_sources.html", {'results': divided_groups})
 
 
 def insert_source(dict, source):
-    source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
+    # source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
     # Match:
     # - name of the group (between <i> marks
     # - city, country (in parentheses)
     # - text (rest of the text)
+    a = source.full_ref
     m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
-    group_name = m.group(1)
-    (city, country) = extract_places(m.group(2))
-    text = m.group(3)
+
+    # Regular entry
+    if m is not None:
+        group_name = m.group(1)
+        (city, country) = extract_places(m.group(2))
+        text = m.group(3)
+    else:
+        group_name = source.short_ref
+        city = "uncategorized"
+        country = "uncategorized"
+        text = source.short_ref
+
 
     # Get (create if doesn't exist) cities in country
-    if not dict[country]:
-        dict[country] = []
+    try:
         cities_list = dict[country]
-    else:
+    except KeyError:
+        dict[country] = {}
         cities_list = dict[country]
 
     # Get (create if doesn't exist) city in country
-    if not cities_list[city]:
+    try:
+        groups_list = cities_list[city]
+    except KeyError:
         cities_list[city] = []
-        groups_list = cities_list
-    else:
         groups_list = cities_list[city]
 
     # Try to find group in list
@@ -1047,12 +1092,25 @@ def insert_source(dict, source):
         new_group_dict["sources"] = []
 
         # If it's a source, put on the list
-        if text != "":
-            #new_source
-            pass
+        # TODO: Check in data if this case is possible
+        # if text != "":
+        #     new_source["short_ref"] =
+        #     pass
 
         groups_list.append(new_group_dict)
-    3/0
+        source_list = new_group_dict["sources"]
+    else:
+        source_list = group_dict["sources"]
+
+    # If contains text, put on the list
+    if text != "":
+        new_source = {}
+        new_source["short_ref"] = source.short_ref
+        new_source["full_ref"] = text
+        source_list.append(new_source)
+
+
+    #3/0
 
 
 def extract_places(string):
