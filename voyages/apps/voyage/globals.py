@@ -733,6 +733,9 @@ var_dict = [
      "is_general": True}
 ]
 
+# This variable has only these field visible
+var_imp_principal_place_of_slave_purchase_fields = ["Africa", "Other"]
+
 paginator_range_factors = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
 option_results_per_page = [10, 15, 20, 30, 50, 100, 200]
 
