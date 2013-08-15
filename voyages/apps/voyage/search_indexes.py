@@ -15,14 +15,14 @@ def getYear(value):
 
 
 # Index for Sources
-class VoyageSources(indexes.SearchIndex, indexes.Indexable):
+class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
     """
     Index method for class Voyage.
     """
     text = indexes.CharField(document=True, use_template=True)
 
-    short_ref = indexes.CharField(model_attr='short_ref')
-    full_ref = indexes.CharField(model_attr='full_ref')
+    short_ref = indexes.CharField(model_attr='short_ref', null=True)
+    full_ref = indexes.CharField(model_attr='full_ref', null=True)
     group_id = indexes.IntegerField()
     group_name = indexes.CharField()
 
@@ -33,11 +33,12 @@ class VoyageSources(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
-    def prepare_group_id(self):
-        return self.source_type.group_id
+    def prepare_group_id(self, obj):
+        return obj.source_type.group_id
 
-    def prepare_group_name(self):
-        return self.source_type.group_name
+    def prepare_group_name(self, obj):
+        return obj.source_type.group_name
+
 
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
