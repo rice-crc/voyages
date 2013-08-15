@@ -710,7 +710,7 @@ def decode_from_url(request):
 
     """
 
-    Check if this path is in session
+    # Check if this path is in session
     try:
         session_dict = request.session[request.get_full_path()]
         return session_dict['dict'], session_dict['date_filters'], \
