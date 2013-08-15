@@ -65,7 +65,13 @@
                         {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list | length }} variables)
+                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} {% spaceless %}
+                    {% if variable.list|length == 1 %}
+                        variable)
+                    {% else %}
+                        variables)
+                    {% endif %}
+                    {% endspaceless %}
                 </div>
                 {% endfor %}
             </div>
@@ -97,7 +103,13 @@
                         {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list | length }} variables)
+                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} {% spaceless %}
+                    {% if variable.list|length == 1 %}
+                        variable)
+                    {% else %}
+                        variables)
+                    {% endif %}
+                    {% endspaceless %}
                 </div>
                 {% endfor %}
             </div>
