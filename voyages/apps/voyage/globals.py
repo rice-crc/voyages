@@ -349,7 +349,7 @@ var_dict = [
      'var_type': 'select_three_layers',
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
-     "is_basic": False,
+     "is_basic": True,
      "is_general": True},
 
     # Itinerary - region variables
