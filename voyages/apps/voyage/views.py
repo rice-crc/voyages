@@ -12,6 +12,7 @@ from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
 import types
+import re
 from .forms import *
 from haystack.query import SearchQuerySet
 from itertools import groupby
@@ -976,5 +977,92 @@ def variable_list(request):
 
 def sources_list(request, category="documentary_sources"):
     # Prepare items
-    #voyage_sources = VoyageSources.objects.filter(source_type=)
-    pass
+    sources = SearchQuerySet().filter(group_name__exact=category)
+
+    for i in sources:
+        safe_full_ref = i.full_ref.encode('ascii', 'ignore')
+        try:
+            safe_short_ref = i.short_ref.encode('ascii', 'ignore')
+        except:
+            safe_short_ref = ""
+        # print "Short ref: " + str(safe_short_ref)
+        print "Full ref: " + safe_full_ref
+
+    if category == "documentary_sources":
+        # Find all cities in sources
+        cities_list = []
+        divided_groups = {}
+
+        for i in sources:
+            insert_source(divided_groups, i)
+
+
+        #for i in sources:
+
+    else:
+        pass
+        # just long and short refs
+
+
+    return render(request, "voyage/voyage_sources.html", {'query_set': sources})
+
+
+def insert_source(dict, source):
+    source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
+    # Match:
+    # - name of the group (between <i> marks
+    # - city, country (in parentheses)
+    # - text (rest of the text)
+    m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
+    group_name = m.group(1)
+    (city, country) = extract_places(m.group(2))
+    text = m.group(3)
+
+    # Get (create if doesn't exist) cities in country
+    if not dict[country]:
+        dict[country] = []
+        cities_list = dict[country]
+    else:
+        cities_list = dict[country]
+
+    # Get (create if doesn't exist) city in country
+    if not cities_list[city]:
+        cities_list[city] = []
+        groups_list = cities_list
+    else:
+        groups_list = cities_list[city]
+
+    # Try to find group in list
+    group_dict = None
+    for i in groups_list:
+        if i["group_name"] == group_name:
+            group_dict = i
+            break
+
+    # If group_dict doesn't exist, create
+    if group_dict == None:
+        new_group_dict = {}
+        new_group_dict["group_name"] = group_name
+        new_group_dict["short_ref"] = source.short_ref
+        new_group_dict["sources"] = []
+
+        # If it's a source, put on the list
+        if text != "":
+            #new_source
+            pass
+
+        groups_list.append(new_group_dict)
+    3/0
+
+
+def extract_places(string):
+    # Delete parentheses
+    string = string[1:-1]
+
+    places_list = string.split(", ")
+
+    # Get city (and state eventually)
+    if len(places_list) == 2:
+        return places_list[0], places_list[1]
+    else:
+        return places_list[0] + ", " +  places_list[1], places_list[2]
