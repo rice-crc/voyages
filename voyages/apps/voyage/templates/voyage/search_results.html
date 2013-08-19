@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load voyage_extras %}
 {% load voyage_tags %}
+{% load url from future %}
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
 
@@ -153,9 +154,9 @@
         <tr>
             <td>
                 <div class="download_button">
-                    <a href="{% url 'voyage:csv_all_download' %}" target="_blank">{% trans 'Download current view' %}</a>
+                    <a href="{% url 'voyage:csv_all_download' results.number %}" target="_blank">{% trans 'Download current view' %}</a>
                     &nbsp; &nbsp;
-                    <a href="{% url 'voyage:csv_all_download' %}" target="_blank">{% trans 'Download all results' %}</a>
+                    <a href="{% url 'voyage:csv_all_download' -1  %}" target="_blank">{% trans 'Download all results' %}</a>
                 </div>
             </td>
             <td></td>
