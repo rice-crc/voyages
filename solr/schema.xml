@@ -300,6 +300,14 @@
 
     <field name="var_registered_year" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="short_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="group_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="group_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="full_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="language" type="text_en" indexed="true" stored="true" multiValued="false" />

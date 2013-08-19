@@ -1192,6 +1192,7 @@ class VoyageSourcesType(models.Model):
     def __unicode__(self):
         return self.group_name
 
+
 # Voyage Sources
 class VoyageSources(models.Model):
     """
