@@ -1,0 +1,4 @@
+{{ object.short_ref }}
+{{ object.full_ref }}
+{{ object.group_id }}
+{{ object.group_name }}
