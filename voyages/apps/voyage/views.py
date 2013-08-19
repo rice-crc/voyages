@@ -1016,13 +1016,13 @@ def variable_list(request):
     return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
 
 
-def sources_list(request, category="documentary_sources"):
+def sources_list(request, category="documentary_sources", sort="sort"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
     sources = SearchQuerySet().filter(group_name__exact=category)
 
 
-    print "dupa"
+    print "view sources_list beginning"
 
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
@@ -1040,14 +1040,25 @@ def sources_list(request, category="documentary_sources"):
 
         for i in sources:
             insert_source(divided_groups, i)
-            print i
+            # print i
 
 
+        # Count sources in each city
+        for v in divided_groups.itervalues():
+            city_rows = 0
+            print v
+            for city in v:
+                city_rows = 0
+                for j in city["city_groups_dict"]:
+                    city_rows += int(len(j['sources']) + 1)
+                city["number_of_rows"] = city_rows
     else:
         pass
         # just long and short refs
 
-    return render(request, "voyage/voyage_sources.html", {'results': divided_groups})
+    return render(request, "voyage/voyage_sources.html",
+                  {'results': divided_groups,
+                   'category': category})
 
 
 def insert_source(dict, source):
@@ -1070,44 +1081,41 @@ def insert_source(dict, source):
         country = "uncategorized"
         text = source.short_ref
 
-
     # Get (create if doesn't exist) cities in country
     try:
         cities_list = dict[country]
     except KeyError:
-        dict[country] = {}
+        dict[country] = []
         cities_list = dict[country]
 
-    # Get (create if doesn't exist) city in country
-    try:
-        groups_list = cities_list[city]
-    except KeyError:
-        cities_list[city] = []
-        groups_list = cities_list[city]
-
-    # Try to find group in list
-    group_dict = None
-    for i in groups_list:
-        if i["group_name"] == group_name:
-            group_dict = i
+    # Try to find city in a list
+    city_dict = None
+    for i in cities_list:
+        if i["city_name"] == city:
+            city_dict = i
             break
 
-    # If group_dict doesn't exist, create
-    if group_dict == None:
-        new_group_dict = {}
-        new_group_dict["group_name"] = group_name
-        new_group_dict["short_ref"] = source.short_ref
-        new_group_dict["sources"] = []
+    # If nothing found, create a city
+    if city_dict is None:
+        city_dict = {}
+        city_dict["city_name"] = city
+        city_dict["city_groups_dict"] = []
+        cities_list.append(city_dict)
 
-        # If it's a source, put on the list
-        # TODO: Check in data if this case is possible
-        # if text != "":
-        #     new_source["short_ref"] =
-        #     pass
+    # Try to find a group
+    source_list = None
+    for i in city_dict["city_groups_dict"]:
+        if i["group_name"] == group_name:
+            source_list = i["sources"]
+            break
 
-        groups_list.append(new_group_dict)
-        source_list = new_group_dict["sources"]
-    else:
+    # If nothing found, create w group
+    if source_list is None:
+        group_dict = {}
+        group_dict["group_name"] = group_name
+        group_dict["short_ref"] = source.short_ref
+        group_dict["sources"] = []
+        city_dict["city_groups_dict"].append(group_dict)
         source_list = group_dict["sources"]
 
     # If contains text, put on the list
@@ -1116,9 +1124,6 @@ def insert_source(dict, source):
         new_source["short_ref"] = source.short_ref
         new_source["full_ref"] = text
         source_list.append(new_source)
-
-
-    #3/0
 
 
 def extract_places(string):

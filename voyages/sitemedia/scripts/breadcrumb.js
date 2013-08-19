@@ -29,6 +29,8 @@ function writebreadcrumb() {
 		
 		if (elem[3] == "voyage" && (elem[4] == "understanding-db")) {
 			path += seperatorst + "Understanding the Database";
+        } else if (elem[3] == "voyage" && (elem[4] == "source")) {
+            path += seperatorst + "Understanding the Database";
 		} else if (elem[3] == "assessment" && (elem[4] == "essays")) {
 			path += seperatorst + "Essays";
         } else if (elem[3] == "resources" && (elem[4] == "images")) {

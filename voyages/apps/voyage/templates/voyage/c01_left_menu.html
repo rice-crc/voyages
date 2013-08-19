@@ -88,9 +88,20 @@
 <div class="secondary-menu-item-0">
 	<a href="#" id="source_cover">{% trans "Sources" %}</a>
 </div>
-<div class="secondary-menu-subitems-0" id="source_submenu">
-		<div class="secondary-menu-item-1" id="source_documentary_sources">
-		    <a href="#">{% trans "Documentary Sources" %}</a>
-	    </div>
-
+<div class="secondary-menu-subitems-0">
+	<div class="secondary-menu-item-1">
+        <a href="{% url 'voyage:sources-list' 'documentary_sources' %}">{% trans "Documentary Sources" %}</a>
+	</div>
+    <div class="secondary-menu-item-1">
+        <a href="{% url 'voyage:sources-list' 'newspapers' %}">{% trans "Newspapers" %}</a>
+	</div>
+    <div class="secondary-menu-item-1">
+        <a href="{% url 'voyage:sources-list' 'published_sources' %}">{% trans "Published Sources" %}</a>
+	</div>
+    <div class="secondary-menu-item-1">
+        <a href="{% url 'voyage:sources-list' 'unpublished_secondary_sources' %}">{% trans "Unpublished Secondary Sources" %}</a>
+	</div>
+    <div class="secondary-menu-item-1">
+        <a href="{% url 'voyage:sources-list' 'private_notes_and_collections' %}">{% trans "Private Notes and Collections" %}</a>
+	</div>
 </div>
