@@ -12,11 +12,8 @@ from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
 import types
-<<<<<<< HEAD
 import csv
-=======
 import re
->>>>>>> 5762d2879ab3e77396985284b0d4fa82c86b659c
 from .forms import *
 from haystack.query import SearchQuerySet
 from itertools import groupby
