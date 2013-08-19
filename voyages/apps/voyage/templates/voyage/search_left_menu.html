@@ -222,7 +222,7 @@
                                                                class="var-checkbox checkbox-layer0" type="checkbox"
                                                                {% if item_layer0.selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
-                                                        {{ item_layer0.text }}
+                                                        <span class="text-label">{{ item_layer0.text }}<span>
                                                     </label>
                                                     <ul class="hidden">
                                                     {% for item_layer1 in item_layer0.choices %}
@@ -236,7 +236,7 @@
                                                                value="{{ item_layer1.text }}"
                                                                {% if item_layer1.selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
-                                                        {{ item_layer1.text }}
+                                                            <span class="text-label">{{ item_layer1.text }}<span>
                                                         </label>
                                                         <ul class="hidden">
                                                             {% for item_layer2 in item_layer1.choices %}
@@ -248,7 +248,7 @@
                                                                             {% if item_layer2.selected == True %} checked="checked" {% endif %}
                                                                            value="{{ item_layer2.text }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
-                                                                    {{ item_layer2.text }}
+                                                                    <span class="text-label">{{ item_layer2.text }}<span>
                                                                     </label>
                                                                 </li>
                                                             {% endfor %}
