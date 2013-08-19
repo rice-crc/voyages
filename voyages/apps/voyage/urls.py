@@ -19,6 +19,8 @@ urlpatterns += patterns('',
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
     
     url(r'^voyage$', TemplateView.as_view(template_name='under_constr.html'), name='voyage'),
+
+    url(r'^csv_all_download$', 'voyages.apps.voyage.views.download_all_results', name='csv_all_download'),
 )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
