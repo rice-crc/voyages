@@ -1,0 +1,125 @@
+{% extends "voyage/voyagebase.html" %}
+{% load voyage_tags %}
+
+
+{% load i18n %}
+
+{% block title %}Sources{% endblock %}
+
+{% block content %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css">
+
+<div id="left-menu" class="left-menu-box">
+	{% include "voyage/c01_left_menu.html" %}
+</div>
+
+<div id="center-content">
+	{% block center-content %}
+		<div id="center-content-inner">
+
+        <table class="simple-box" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+    <tr>
+        <td class="simple-box-11">
+            <div></div>
+        </td>
+        <td class="simple-box-12">
+            <div></div>
+        </td>
+        <td class="simple-box-13">
+            <div></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="simple-box-21">
+            <div></div>
+        </td>
+        <td class="simple-box-22">
+            <h1>Documentary Sources</h1>
+            <div class="switch-layout">
+                <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td class="switch-layout-second-link">
+                            <a id="main:_idJsp47" class="" href="sources.faces?type=documentary&idColumnFirst=true" name="main:_idJsp47">Sort by long reference</a>
+                        </td>
+                        <td class="switch-layout-second-link">
+                            <a id="main:_idJsp47" class="active" href="sources.faces?type=documentary&idColumnFirst=true" name="main:_idJsp47">Sort by short reference</a>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            <div id="sources">
+                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                {% for country, country_dict in results.iteritems %}
+                    <tr>
+                    {% if forloop.first %}
+                        <td class="sources-country-first" colspan="3">{{ country }}</td>
+                    {% else %}
+                        <td class="sources-country" colspan="3">{{ country }}</td>
+                    {% endif %}
+                    </tr>
+                    {% for city in country_dict %}
+                        <tr>
+                        {% if forloop.first %}
+                            <td class="sources-city-first" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                        {% else %}
+                            <td class="sources-city" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                        {% endif %}
+                        <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                        <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                        </tr>
+                        {% for group in city.city_groups_dict %}
+                            {% if not forloop.first %}
+                            <tr>
+                                <td class="source-id-even">{{ group.short_ref|safe }}</td>
+                                <td class="source-name-even">{{ group.group_name|safe }}</td>
+                            </tr>
+                            {% endif %}
+                            {% for source in group.sources %}
+                                <tr>
+                                    {% if forloop.counter|divisibleby:2 %}
+                                        {% if source.short_ref != None %}
+                                        <td class="source-id-even">{{ source.short_ref|safe }}</td>
+                                        {% else %}
+                                        <td class="source-id-even"></td>
+                                        {% endif %}
+                                        <td class="source-name-even">{{ source.full_ref|safe }}</td>
+                                    {% else %}
+                                        {% if source.short_ref != None %}
+                                        <td class="source-id-odd">{{ source.short_ref|safe }}</td>
+                                        {% else %}
+                                        <td class="source-id-odd"></td>
+                                        {% endif %}
+                                        <td class="source-name-odd">{{ source.full_ref|safe }}</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+        </td>
+    </tr>
+    <tr></tr>
+</tbody>
+</table>
+
+		</div>
+
+		<!-- Previous/Next navigation menu -->
+		<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
+			<tr>
+				<td class="method-prev"><a id="prev-page" href="#">&nbsp;</a></td>
+				<td class="method-next"><a id="next-page" href="#">&nbsp;</a></td>
+			</tr>
+		</table>
+	{% endblock %}
+</div>
+{% endblock %}
