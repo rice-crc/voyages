@@ -89,6 +89,7 @@ def search(request):
     Handles the Search the Database part
     """
     no_result = False
+    to_reset_form = False
     url_to_copy = ""
     query_dict = {}
     tab = ""
@@ -268,6 +269,8 @@ def search(request):
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = results
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+                request.session['results_per_page_form'] = None
+                to_reset_form = True
 
                 # Reset time_frame form as well
                 voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
@@ -301,7 +304,7 @@ def search(request):
                 new_existing_form = []
 
                 # Time frame search
-                query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
+                query_dict['var_imp_arrival_at_port_of_dis__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
                                                              request.session['time_span_form'].cleaned_data['frame_to_year']]
 
                 for tmp_varname in list_search_vars:
@@ -412,7 +415,7 @@ def search(request):
             request.session['existing_form'] = existing_form
 
             # Get all results (get means 'reset')
-            results = SearchQuerySet().models(Voyage)
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
             request.session['time_span_form'] = TimeFrameSpanSearchForm(
                 initial={'frame_from_year': voyage_span_first_year,
@@ -423,7 +426,7 @@ def search(request):
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
-    form, results_per_page = check_and_save_options_form(request)
+    form, results_per_page = check_and_save_options_form(request, to_reset_form)
 
     if len(results) == 0:
         no_result = True
@@ -436,8 +439,6 @@ def search(request):
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
     request.session['voyage_current_result_page'] = pagins
-
-    form, results_per_page = check_and_save_options_form(request)
 
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
@@ -606,7 +607,7 @@ def prepare_paginator_variables(paginator, current_page, results_per_page):
     return paginator_range, pages_range
 
 
-def check_and_save_options_form(request):
+def check_and_save_options_form(request, to_reset_form):
     """
     Function checks and replaces if necessary
     form (results per page) form in the session.
@@ -620,30 +621,34 @@ def check_and_save_options_form(request):
     except KeyError:
         form_in_session = None
 
-    if request.method == "POST":
-        form = ResultsPerPageOptionForm(request.POST)
+    if to_reset_form:
+        form = ResultsPerPageOptionForm()
+        results_per_page = form.cleaned_option()
+    else:
+        if request.method == "POST":
+            form = ResultsPerPageOptionForm(request.POST)
 
-        if form.is_valid():
-            results_per_page = form.cleaned_option()
+            if form.is_valid():
+                results_per_page = form.cleaned_option()
+            else:
+                form = form_in_session
+                if form is not None:
+                    form.is_valid()
+                    results_per_page = form.cleaned_option()
+                else:
+                    form = ResultsPerPageOptionForm()
+                    results_per_page = form.cleaned_option()
+
+            if form_in_session != form:
+                request.session['results_per_page_form'] = form
         else:
-            form = form_in_session
-            if form is not None:
+            if form_in_session is not None:
+                form = request.session['results_per_page_form']
                 form.is_valid()
                 results_per_page = form.cleaned_option()
             else:
                 form = ResultsPerPageOptionForm()
                 results_per_page = form.cleaned_option()
-
-        if form_in_session != form:
-            request.session['results_per_page_form'] = form
-    else:
-        if form_in_session is not None:
-            form = request.session['results_per_page_form']
-            form.is_valid()
-            results_per_page = form.cleaned_option()
-        else:
-            form = ResultsPerPageOptionForm()
-            results_per_page = form.cleaned_option()
 
     return form, results_per_page
 

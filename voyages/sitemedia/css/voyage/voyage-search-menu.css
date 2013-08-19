@@ -136,9 +136,7 @@ div.query-builder-edit-list label {
     display: none;
 }
 
-div.query-builder-edit-list ul li label {
-    display: inherit;
-}
+
 
 div.query-builder-edit-list ul {
     padding: 0;
@@ -147,8 +145,13 @@ div.query-builder-edit-list ul {
 
 div.query-builder-edit-list ul li {
     list-style-type:  none;
-    padding: 0;
     margin: 0;
+    padding: 0 0 0 25px;
+    text-indent: -25px;
+}
+
+div.query-builder-edit-list ul li label {
+    display: inherit;
 }
 
 div.query-builder-edit-list ul li {
@@ -168,19 +171,11 @@ div.query-builder-edit-list-expandable ul, div.query-builder-edit-list-expandabl
 
 div.query-builder-edit-list-expandable ul li {
     list-style-type: none;
-    margin-left: 5px;
+    margin: 0;
+    padding: 0 0 0 37px;
+    text-indent: -37px;
 }
 
-
-div.query-builder-edit-list-expandable ul ul li {
-    list-style-type: none;
-    padding-left: 25px;
-}
-
-div.query-builder-edit-list-expandable ul ul ul li {
-    list-style-type: none;
-    padding-left: 35px;
-}
 
 div.query-builder-list-item-collapsed, div.query-builder-list-item-expanded {
     display: inline-block;

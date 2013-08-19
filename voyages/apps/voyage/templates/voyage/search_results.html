@@ -39,7 +39,7 @@
             <tr class="grid-row-even grid-row-first">
                 {% for item in request.session.result_columns %}
                     <td>
-                        {{ i.get_stored_fields| getattribute:item.0 | safe }}
+                        {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
                     </td>
                 {% endfor %}
             </tr>

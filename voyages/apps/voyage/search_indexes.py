@@ -153,6 +153,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Sources
     var_sources = indexes.NgramField(null=True)
+    var_short_ref = indexes.MultiValueField()
+    var_long_ref = indexes.CharField(null=True)
 
     def get_model(self):
         return Voyage
