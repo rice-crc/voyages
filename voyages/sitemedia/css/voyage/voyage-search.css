@@ -177,7 +177,6 @@ h1 {
     border-right: #8A5D04 1px solid;
 }
 
-
 /* Result section */
 .search-main-table {
 	width: 100%;
@@ -200,20 +199,21 @@ div.permlink-info {
 }
 
 .tabs-selection ul {
+    display: inline-block;
     width: 100%;
     padding: 15px 0 4px 0;
     margin: 0;
 }
 
 .tabs-selection ul li {
-	display: inline;
+	display: inline-block;
     padding: 0;
-    margin-left: 13px;
+    margin-left: 12px;
     margin-right: -10px;
 }
 
 .tab-menu-item {
-	padding: 6px 13px 3px 13px;
+	padding: 6px 10px 3px 10px;
 	color: #000000;
 	font-size: 8pt;
 	text-decoration: none;
@@ -237,6 +237,18 @@ div.permlink-info {
 .search-panel {
     min-height: 60px;
     padding: 10px;
+}
+
+.download_button a {
+    padding: 3px 5px 3px 5px;
+    background-color: white;
+    border: 1px solid #EED083;
+    text-decoration: none;
+    display: inline-block
+}
+
+.download_button a:hover {
+    background-color: #EED083;
 }
 
 /* Config menu */

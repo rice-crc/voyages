@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load voyage_extras %}
 {% load voyage_tags %}
+{% load url from future %}
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
 
@@ -38,7 +39,7 @@
             <tr class="grid-row-even grid-row-first">
                 {% for item in request.session.result_columns %}
                     <td>
-                        {{ i.get_stored_fields| getattribute:item.0 | safe }}
+                        {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
                     </td>
                 {% endfor %}
             </tr>
@@ -149,6 +150,18 @@
                 </table>
             </td>
         </tr>
+
+        <tr>
+            <td>
+                <div class="download_button">
+                    <a href="{% url 'voyage:csv_all_download' results.number %}" target="_blank">{% trans 'Download current view' %}</a>
+                    &nbsp; &nbsp;
+                    <a href="{% url 'voyage:csv_all_download' -1  %}" target="_blank">{% trans 'Download all results' %}</a>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+
         </tbody>
     </table>
 </div>

@@ -1,6 +1,6 @@
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.db.models import Max, Min
-from django.template import TemplateDoesNotExist, loader, RequestContext
+from django.template import TemplateDoesNotExist, loader
 from django.shortcuts import render
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -12,6 +12,8 @@ from hurry.filesize import size
 from django.core.paginator import Paginator
 import time
 import types
+import csv
+import re
 from .forms import *
 from haystack.query import SearchQuerySet
 from itertools import groupby
@@ -87,6 +89,7 @@ def search(request):
     Handles the Search the Database part
     """
     no_result = False
+    to_reset_form = False
     url_to_copy = ""
     query_dict = {}
     tab = ""
@@ -170,8 +173,17 @@ def search(request):
                             place_selected = request.POST.getlist(tmp_varname + "_selected")
                             region_selected = request.POST.getlist(tmp_varname + "_selected_regs")
                             area_selected = request.POST.getlist(tmp_varname + "_selected_areas")
-                            cur_var['choices'] = getNestedListPlaces(tmp_varname,
-                                                                     place_selected, region_selected, area_selected)
+                            if tmp_varname != "var_imp_principal_place_of_slave_purchase":
+                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
+                                                                     place_selected=place_selected,
+                                                                     region_selected=region_selected,
+                                                                     area_selected=area_selected)
+                            else:
+                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
+                                                                     place_selected=place_selected,
+                                                                     region_selected=region_selected,
+                                                                     area_selected=area_selected,
+                                                                     area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
 
                         elif tmp_varname in globals.list_boolean_fields:
                              # Boolean field
@@ -228,7 +240,10 @@ def search(request):
                     tmpElemDict['list_deselected'] = []
 
                 elif varname in globals.list_place_fields:
-                    choices = getNestedListPlaces(varname, [], [], [])
+                    if varname != "var_imp_principal_place_of_slave_purchase":
+                        choices = getNestedListPlaces(varname)
+                    else:
+                        choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
 
                     tmpElemDict['type'] = 'select_three_layers'
                     tmpElemDict['varname_wrapper'] = "select_" + varname
@@ -236,6 +251,7 @@ def search(request):
                     tmpElemDict['selected_choices'] = varname + "_selected"
                     tmpElemDict['selected_regs'] = varname + "_selected_regs"
                     tmpElemDict['selected_areas'] = varname + "_selected_areas"
+                    #3/0
 
                 elif varname in globals.list_boolean_fields:
                      # Boolean field
@@ -253,6 +269,8 @@ def search(request):
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = results
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+                request.session['results_per_page_form'] = None
+                to_reset_form = True
 
                 # Reset time_frame form as well
                 voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
@@ -286,7 +304,7 @@ def search(request):
                 new_existing_form = []
 
                 # Time frame search
-                query_dict['var_imp_voyage_began__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
+                query_dict['var_imp_arrival_at_port_of_dis__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
                                                              request.session['time_span_form'].cleaned_data['frame_to_year']]
 
                 for tmp_varname in list_search_vars:
@@ -386,11 +404,10 @@ def search(request):
                 request.session['results_voyages'] = results
                 request.session['voyage_last_query'] = query_dict
 
-            elif submitVal == 'downloadCurrentView':
-                pass
-
-            elif submitVal == 'downloadAllResult':
-                pass
+                if date_filters:
+                    request.session['voyage_last_query_date_filters'] = date_filters
+                else:
+                    request.session['voyage_last_query_date_filters'] = None
 
         elif request.method == 'GET':
             # Create a new form
@@ -398,7 +415,7 @@ def search(request):
             request.session['existing_form'] = existing_form
 
             # Get all results (get means 'reset')
-            results = SearchQuerySet().models(Voyage)
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
             request.session['time_span_form'] = TimeFrameSpanSearchForm(
                 initial={'frame_from_year': voyage_span_first_year,
@@ -409,7 +426,7 @@ def search(request):
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
-    form, results_per_page = check_and_save_options_form(request)
+    form, results_per_page = check_and_save_options_form(request, to_reset_form)
 
     if len(results) == 0:
         no_result = True
@@ -421,8 +438,7 @@ def search(request):
 
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
-
-    form, results_per_page = check_and_save_options_form(request)
+    request.session['voyage_current_result_page'] = pagins
 
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
@@ -481,18 +497,36 @@ def getChoices(varname):
     return choices
 
 
-def getNestedListPlaces(varname, place_selected, region_selected, area_selected):
+def getNestedListPlaces(varname, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
     """
     Retrieve a nested list of places sorted by broad region (area) and then region
     :param varname:
     :return:
     """
     choices = []
-    for area in BroadRegion.objects.all():
+
+    if not place_visible:
+        place_visible = Place.objects.all()
+    else:
+        place_visible = Place.objects.filter(place__in=place_visible)
+
+    if not region_visible:
+        region_visible = Region.objects.all()
+    else:
+        region_visible = Region.objects.filter(region__in=region_visible)
+
+    if not area_visible:
+        area_visible = BroadRegion.objects.all()
+    else:
+        area_visible = BroadRegion.objects.filter(broad_region__in=area_visible)
+
+    for area in area_visible:
         area_content = []
-        for reg in Region.objects.filter(broad_region=area):
+        #for reg in Region.objects.filter(broad_region=area, region__in=region_visible):
+        for reg in region_visible.filter(broad_region=area):
             reg_content = []
-            for place in Place.objects.filter(region=reg):
+            #for place in Place.objects.filter(region=reg, place__in=place_visible):
+            for place in place_visible.filter(region=reg):
                 if place.place == "???":
                     continue
                 if place.place in place_selected:
@@ -573,7 +607,7 @@ def prepare_paginator_variables(paginator, current_page, results_per_page):
     return paginator_range, pages_range
 
 
-def check_and_save_options_form(request):
+def check_and_save_options_form(request, to_reset_form):
     """
     Function checks and replaces if necessary
     form (results per page) form in the session.
@@ -587,30 +621,34 @@ def check_and_save_options_form(request):
     except KeyError:
         form_in_session = None
 
-    if request.method == "POST":
-        form = ResultsPerPageOptionForm(request.POST)
+    if to_reset_form:
+        form = ResultsPerPageOptionForm()
+        results_per_page = form.cleaned_option()
+    else:
+        if request.method == "POST":
+            form = ResultsPerPageOptionForm(request.POST)
 
-        if form.is_valid():
-            results_per_page = form.cleaned_option()
+            if form.is_valid():
+                results_per_page = form.cleaned_option()
+            else:
+                form = form_in_session
+                if form is not None:
+                    form.is_valid()
+                    results_per_page = form.cleaned_option()
+                else:
+                    form = ResultsPerPageOptionForm()
+                    results_per_page = form.cleaned_option()
+
+            if form_in_session != form:
+                request.session['results_per_page_form'] = form
         else:
-            form = form_in_session
-            if form is not None:
+            if form_in_session is not None:
+                form = request.session['results_per_page_form']
                 form.is_valid()
                 results_per_page = form.cleaned_option()
             else:
                 form = ResultsPerPageOptionForm()
                 results_per_page = form.cleaned_option()
-
-        if form_in_session != form:
-            request.session['results_per_page_form'] = form
-    else:
-        if form_in_session is not None:
-            form = request.session['results_per_page_form']
-            form.is_valid()
-            results_per_page = form.cleaned_option()
-        else:
-            form = ResultsPerPageOptionForm()
-            results_per_page = form.cleaned_option()
 
     return form, results_per_page
 
@@ -858,7 +896,10 @@ def create_menu_forms(dict):
         elif var_type in "select_three_layers":
             # Get places
 
-            choices = getNestedListPlaces(var_name, v, [], [])
+            if var_name != "var_imp_principal_place_of_slave_purchase":
+                choices = getNestedListPlaces(var_name, place_selected=v)
+            else:
+                choices = getNestedListPlaces(var_name, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields, place_selected=v)
 
             elem_dict['varname_wrapper'] = "select_" + var_name
             elem_dict['choices'] = choices
@@ -890,6 +931,12 @@ def search_var_dict(var_name):
 
 
 def date_filter_query(date_filters, results):
+    """
+    Further filter the results passed in by excluding those that have months in date_filtered list (deselected)
+    :param date_filters:
+    :param results:
+    :return:
+    """
     if date_filters:
         for var_filter in date_filters:
             l_months = []
@@ -974,7 +1021,199 @@ def variable_list(request):
     return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
 
 
-def sources_list(request, category="documentary_sources"):
+def sources_list(request, category="documentary_sources", sort="sort"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
-    pass
+    sources = SearchQuerySet().filter(group_name__exact=category)
+
+    for i in sources:
+        safe_full_ref = i.full_ref.encode('ascii', 'ignore')
+        try:
+            safe_short_ref = i.short_ref.encode('ascii', 'ignore')
+        except:
+            safe_short_ref = ""
+        print "Short ref: " + str(safe_short_ref)
+        print "Full ref: " + safe_full_ref
+
+    if category == "documentary_sources":
+        # Find all cities in sources
+        cities_list = []
+        divided_groups = {}
+
+        for i in sources:
+            insert_source(divided_groups, i)
+
+        # Count sources in each city
+        for v in divided_groups.itervalues():
+            for city in v:
+                city_rows = 0
+                for j in city["city_groups_dict"]:
+                    city_rows += int(len(j['sources']) + 1)
+                city["number_of_rows"] = city_rows
+
+        # Sort dictionary
+
+    else:
+        pass
+        # just long and short refs
+    #3/0
+    return render(request, "voyage/voyage_sources.html",
+                  {'results': divided_groups,
+                   'category': category})
+
+
+def insert_source(dict, source):
+    # source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
+    # Match:
+    # - name of the group (between <i> marks
+    # - city, country (in parentheses)
+    # - text (rest of the text)
+    a = source.full_ref
+    m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
+
+    # Regular entry
+    if m is not None:
+        group_name = m.group(1)
+        (city, country) = extract_places(m.group(2))
+        text = m.group(3)
+    else:
+        group_name = source.short_ref
+        city = "uncategorized"
+        country = "uncategorized"
+        text = source.short_ref
+
+    # Get (create if doesn't exist) cities in country
+    try:
+        cities_list = dict[country]
+    except KeyError:
+        dict[country] = []
+        cities_list = dict[country]
+
+    # Try to find city in a list
+    city_dict = None
+    for i in cities_list:
+        if i["city_name"] == city:
+            city_dict = i
+            break
+
+    # If nothing found, create a city
+    if city_dict is None:
+        city_dict = {}
+        city_dict["city_name"] = city
+        city_dict["city_groups_dict"] = []
+        cities_list.append(city_dict)
+
+    # Try to find a group
+    source_list = None
+    for i in city_dict["city_groups_dict"]:
+        if i["group_name"] == group_name:
+            source_list = i["sources"]
+            group_dict = i
+            break
+
+    # If nothing found, create w group
+    if source_list is None:
+        group_dict = {}
+        group_dict["group_name"] = group_name
+        group_dict["short_ref"] = source.short_ref
+        group_dict["sources"] = []
+        city_dict["city_groups_dict"].append(group_dict)
+        source_list = group_dict["sources"]
+
+    # If contains text, put on the list
+    if text != "":
+        new_source = {}
+        new_source["short_ref"] = source.short_ref
+        new_source["full_ref"] = text
+        if new_source["short_ref"] == group_dict["short_ref"]:
+            group_dict["short_ref"] = ""
+        source_list.append(new_source)
+
+
+def extract_places(string):
+    # Delete parentheses
+    string = string[1:-1]
+
+    places_list = string.split(", ")
+
+    # Get city (and state eventually)
+    if len(places_list) == 2:
+        return places_list[0], places_list[1]
+    else:
+        return places_list[0] + ", " + places_list[1], places_list[2]
+
+
+def download_results(request, page):
+    """
+    Renders a downloadable csv file
+    page indicates the current page the user is on
+    page = -1 indicates download all results
+    :param request:
+    :param page:
+    :return:
+    """
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+
+    try:
+        query_dict = request.session['voyage_last_query']
+        display_columns = request.session['result_columns']
+    except KeyError:
+        query_dict = None
+        display_columns = get_new_visible_attrs(globals.default_result_columns)
+
+    #writer = UnicodeWriter(response, quoting=csv.QUOTE_ALL, encoding="utf-8-sig")
+
+    writer = csv.writer(response)
+
+    if page == "-1":
+        # Download all results
+        #results = request.session['results_voyages']
+        pass
+    else:
+        # Download current view
+        results = request.session['voyage_current_result_page']
+
+    # Writing query
+    if query_dict is None:
+    #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        writer.writerow(['All results', ])
+    else:
+    #    results = SearchQuerySet().models(Voyage).filter(**query_dict)
+    #    if request.session['voyage_last_query_date_filters']:
+    #        results = date_filter_query(request.session['voyage_last_query_date_filters'], results)
+        writer.writerow([str(query_dict),])
+
+    tmpRow = []
+    for column in display_columns:
+        tmpRow.append(get_spss_name(column[0]))
+    writer.writerow(tmpRow)
+
+    for item in results:
+        tmpRow = []
+        stored_fields = item.get_stored_fields()
+        for column in display_columns:
+            data = stored_fields[column[0]]
+            if data is None:
+                tmpRow.append("")
+            elif isinstance(data, (int, long)):
+                tmpRow.append(str(data))
+            else:
+                tmpRow.append(data.encode("utf-8"))
+        writer.writerow(tmpRow)
+
+    writer.writerow(["The number of total records: " + str(len(results))])
+
+    return response
+
+
+def get_spss_name(var_short_name):
+    """
+    Retrieves a variable spss name based on its django name
+    :param var_short_name:
+    :return:
+    """
+    for var in globals.var_dict:
+        if var['var_name'] == var_short_name:
+            return var['spss_name']
+    return None

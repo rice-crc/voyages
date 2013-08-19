@@ -166,6 +166,9 @@ HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 # updates solr when object is saved
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
+# Default empty string
+TEMPLATE_STRING_IF_INVALID = "Nothing"
+
 # import localsettings
 # This will override any previously set valaue
 try:
