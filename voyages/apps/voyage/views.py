@@ -1026,17 +1026,14 @@ def sources_list(request, category="documentary_sources", sort="sort"):
     #voyage_sources = VoyageSources.objects.filter(source_type=)
     sources = SearchQuerySet().filter(group_name__exact=category)
 
-
-    print "view sources_list beginning"
-
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
         try:
             safe_short_ref = i.short_ref.encode('ascii', 'ignore')
         except:
             safe_short_ref = ""
-        # print "Short ref: " + str(safe_short_ref)
-        # print "Full ref: " + safe_full_ref
+        print "Short ref: " + str(safe_short_ref)
+        print "Full ref: " + safe_full_ref
 
     if category == "documentary_sources":
         # Find all cities in sources
@@ -1045,22 +1042,21 @@ def sources_list(request, category="documentary_sources", sort="sort"):
 
         for i in sources:
             insert_source(divided_groups, i)
-            # print i
-
 
         # Count sources in each city
         for v in divided_groups.itervalues():
-            city_rows = 0
-            print v
             for city in v:
                 city_rows = 0
                 for j in city["city_groups_dict"]:
                     city_rows += int(len(j['sources']) + 1)
                 city["number_of_rows"] = city_rows
+
+        # Sort dictionary
+
     else:
         pass
         # just long and short refs
-
+    #3/0
     return render(request, "voyage/voyage_sources.html",
                   {'results': divided_groups,
                    'category': category})
@@ -1112,6 +1108,7 @@ def insert_source(dict, source):
     for i in city_dict["city_groups_dict"]:
         if i["group_name"] == group_name:
             source_list = i["sources"]
+            group_dict = i
             break
 
     # If nothing found, create w group
@@ -1128,6 +1125,8 @@ def insert_source(dict, source):
         new_source = {}
         new_source["short_ref"] = source.short_ref
         new_source["full_ref"] = text
+        if new_source["short_ref"] == group_dict["short_ref"]:
+            group_dict["short_ref"] = ""
         source_list.append(new_source)
 
 

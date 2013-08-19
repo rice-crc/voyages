@@ -1,4 +1,6 @@
 {% extends "voyage/voyagebase.html" %}
+{% load voyage_tags %}
+
 
 {% load i18n %}
 
@@ -15,7 +17,6 @@
 <div id="center-content">
 	{% block center-content %}
 		<div id="center-content-inner">
-
 
         <table class="simple-box" cellspacing="0" cellpadding="0" border="0">
 <tbody>
@@ -53,14 +54,6 @@
             <div id="sources">
                 <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
                 <tbody>
-{#                    <tr>#}
-{#                        <td class="sources-country-first" colspan="3">1978</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                        <td class="sources-city-first">Princeton</td>#}
-{#                        <td class="source-id-first"></td>#}
-{#                        <td class="source-name-first">Códices 8-1-59, 9/C-4-24, 9-1-50, 10-1-50, 12, 2571, 2574, 7182, A-3-6, B-12-2, B-14-1, B-14-3, C-8-4, C-9-3, C-9-4, C-12-2, C-12-3, C-13-1, C-16-1, C-16-2, D-1-4, D-1-5, D-3-3, D-7-1, E-1-1-E-1-3, E-1-5, <E-2-1-></E-2-1->2-4, E-3-1, E-3-4, E-4-2-E-4-4, E-17-2, E-19-5, E-20-21, E-20-3, E-20-4, E-20-5</td>#}
-{#                    </tr>#}
                 {% for country, country_dict in results.iteritems %}
                     <tr>
                     {% if forloop.first %}
@@ -76,8 +69,8 @@
                         {% else %}
                             <td class="sources-city" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
                         {% endif %}
-                        <td class="source-id-even">aaaaaaa</t></td>
-                        <td class="source-name-even">bbbbbbb</td>
+                        <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                        <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
                         </tr>
                         {% for group in city.city_groups_dict %}
                             {% if not forloop.first %}
@@ -89,11 +82,19 @@
                             {% for source in group.sources %}
                                 <tr>
                                     {% if forloop.counter|divisibleby:2 %}
-                                        <td class="source-id-even">{{ source.short_ref }}</td>
-                                        <td class="source-name-even">{{ source.full_ref }}</td>
+                                        {% if source.short_ref != None %}
+                                        <td class="source-id-even">{{ source.short_ref|safe }}</td>
+                                        {% else %}
+                                        <td class="source-id-even"></td>
+                                        {% endif %}
+                                        <td class="source-name-even">{{ source.full_ref|safe }}</td>
                                     {% else %}
-                                        <td class="source-id-odd">{{ source.short_ref }}</td>
-                                        <td class="source-name-odd">{{ source.full_ref }}</td>
+                                        {% if source.short_ref != None %}
+                                        <td class="source-id-odd">{{ source.short_ref|safe }}</td>
+                                        {% else %}
+                                        <td class="source-id-odd"></td>
+                                        {% endif %}
+                                        <td class="source-name-odd">{{ source.full_ref|safe }}</td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
