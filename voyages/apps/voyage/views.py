@@ -401,6 +401,11 @@ def search(request):
                 request.session['results_voyages'] = results
                 request.session['voyage_last_query'] = query_dict
 
+                if date_filters:
+                    request.session['voyage_last_query_date_filters'] = date_filters
+                else:
+                    request.session['voyage_last_query_date_filters'] = None
+
         elif request.method == 'GET':
             # Create a new form
             existing_form = []
@@ -430,6 +435,7 @@ def search(request):
 
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
+    request.session['voyage_current_result_page'] = pagins
 
     form, results_per_page = check_and_save_options_form(request)
 
@@ -920,6 +926,12 @@ def search_var_dict(var_name):
 
 
 def date_filter_query(date_filters, results):
+    """
+    Further filter the results passed in by excluding those that have months in date_filtered list (deselected)
+    :param date_filters:
+    :param results:
+    :return:
+    """
     if date_filters:
         for var_filter in date_filters:
             l_months = []
@@ -1119,76 +1131,18 @@ def extract_places(string):
     if len(places_list) == 2:
         return places_list[0], places_list[1]
     else:
-        return places_list[0] + ", " +  places_list[1], places_list[2]
+        return places_list[0] + ", " + places_list[1], places_list[2]
 
 
-
-
-
-
-
-import csv, codecs, cStringIO
-
-class UTF8Recoder:
+def download_results(request, page):
     """
-    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    Renders a downloadable csv file
+    page indicates the current page the user is on
+    page = -1 indicates download all results
+    :param request:
+    :param page:
+    :return:
     """
-    def __init__(self, f, encoding):
-        self.reader = codecs.getreader(encoding)(f)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        return self.reader.next().encode("utf-8")
-
-class UnicodeReader:
-    """
-    A CSV reader which will iterate over lines in the CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        f = UTF8Recoder(f, encoding)
-        self.reader = csv.reader(f, dialect=dialect, **kwds)
-
-    def next(self):
-        row = self.reader.next()
-        return [unicode(s, "utf-8") for s in row]
-
-    def __iter__(self):
-        return self
-
-class UnicodeWriter:
-    """
-    A CSV writer which will write rows to CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
-        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
-        self.stream = f
-        self.encoder = codecs.getincrementalencoder(encoding)()
-
-    def writerow(self, row):
-        self.writer.writerow([s.encode("utf-8") for s in row])
-        # Fetch UTF-8 output from the queue ...
-        data = self.queue.getvalue()
-        data = data.decode("utf-8")
-        # ... and reencode it into the target encoding
-        data = self.encoder.encode(data)
-        # write to the target stream
-        self.stream.write(data)
-        # empty queue
-        self.queue.truncate(0)
-
-    def writerows(self, rows):
-        for row in rows:
-            self.writerow(row)
-
-def download_all_results(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="data.csv"'
 
@@ -1197,28 +1151,60 @@ def download_all_results(request):
         display_columns = request.session['result_columns']
     except KeyError:
         query_dict = None
-        display_columns = globals.default_result_columns
+        display_columns = get_new_visible_attrs(globals.default_result_columns)
 
-    writer = UnicodeWriter(response, quoting=csv.QUOTE_ALL, encoding="utf-8-sig")
-    tmpRow = []
-    for column in display_columns:
-        tmpRow.append(column[1])
-    writer.writerow(tmpRow)
+    #writer = UnicodeWriter(response, quoting=csv.QUOTE_ALL, encoding="utf-8-sig")
 
-        # Missing date filter TO BE ADDED and possibly order_by
+    writer = csv.writer(response)
+
+    if page == "-1":
+        # Download all results
+        #results = request.session['results_voyages']
+        pass
+    else:
+        # Download current view
+        results = request.session['voyage_current_result_page']
+
+    # Writing query
     if query_dict is None:
-        result = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+    #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         writer.writerow(['All results', ])
     else:
-        result = SearchQuerySet().models(Voyage).filter(**query_dict)
-        writer.writerow([str(query_dict), ])
+    #    results = SearchQuerySet().models(Voyage).filter(**query_dict)
+    #    if request.session['voyage_last_query_date_filters']:
+    #        results = date_filter_query(request.session['voyage_last_query_date_filters'], results)
+        writer.writerow([str(query_dict),])
 
-    for item in result:
+    tmpRow = []
+    for column in display_columns:
+        tmpRow.append(get_spss_name(column[0]))
+    writer.writerow(tmpRow)
+
+    for item in results:
         tmpRow = []
         stored_fields = item.get_stored_fields()
         for column in display_columns:
-            tmpRow.append(str(stored_fields[column[0]]))
+            data = stored_fields[column[0]]
+            if data is None:
+                tmpRow.append("")
+            elif isinstance(data, (int, long)):
+                tmpRow.append(str(data))
+            else:
+                tmpRow.append(data.encode("utf-8"))
         writer.writerow(tmpRow)
 
-    writer.writerow(['The number of total records: ' + str(result.count())])
+    writer.writerow(["The number of total records: " + str(len(results))])
+
     return response
+
+
+def get_spss_name(var_short_name):
+    """
+    Retrieves a variable spss name based on its django name
+    :param var_short_name:
+    :return:
+    """
+    for var in globals.var_dict:
+        if var['var_name'] == var_short_name:
+            return var['spss_name']
+    return None

@@ -103,13 +103,7 @@
                         {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} {% spaceless %}
-                    {% if variable.list|length == 1 %}
-                        variable)
-                    {% else %}
-                        variables)
-                    {% endif %}
-                    {% endspaceless %}
+                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} variable{{ variable.list|pluralize }})
                 </div>
                 {% endfor %}
             </div>
