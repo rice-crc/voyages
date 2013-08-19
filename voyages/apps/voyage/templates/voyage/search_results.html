@@ -149,6 +149,18 @@
                 </table>
             </td>
         </tr>
+
+        <tr>
+            <td>
+                <div class="download_button">
+                    <a href="{% url 'voyage:csv_all_download' %}" target="_blank">{% trans 'Download current view' %}</a>
+                    &nbsp; &nbsp;
+                    <a href="{% url 'voyage:csv_all_download' %}" target="_blank">{% trans 'Download all results' %}</a>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+
         </tbody>
     </table>
 </div>
