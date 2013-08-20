@@ -270,7 +270,7 @@ tfoot td {
     color: #666;
     padding: 2px 5px;
     font-size: 11px;
-    background: #e1e1e1 url(/static/images/admin/nav-bg.gif) top left repeat-x;
+    background: #e1e1e1 url(/static/admin/img/nav-bg.gif) top left repeat-x;
     border-left: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
@@ -326,7 +326,7 @@ thead th a:link, thead th a:visited {
 }
 
 thead th.sorted {
-    background: #c5c5c5 url(/static/images/admin/nav-bg-selected.gif) top left repeat-x;
+    background: #c5c5c5 url(/static/admin/img/nav-bg-selected.gif) top left repeat-x;
 }
 
 table thead th .text span {
@@ -341,7 +341,7 @@ table thead th .text a {
 }
 
 table thead th.sortable:hover {
-    background: white url(/static/images/admin/nav-bg-reverse.gif) 0 -5px repeat-x;
+    background: white url(/static/admin/img/nav-bg-reverse.gif) 0 -5px repeat-x;
 }
 
 thead th.sorted a.sortremove {
@@ -373,27 +373,27 @@ table thead th.sorted .sortoptions a {
 }
 
 table thead th.sorted .sortoptions a.sortremove {
-    background: url(/static/images/admin/sorting-icons.gif) -4px -5px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -4px -5px no-repeat;
 }
 
 table thead th.sorted .sortoptions a.sortremove:hover {
-    background: url(/static/images/admin/sorting-icons.gif) -4px -27px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -4px -27px no-repeat;
 }
 
 table thead th.sorted .sortoptions a.ascending {
-    background: url(/static/images/admin/sorting-icons.gif) -5px -50px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -5px -50px no-repeat;
 }
 
 table thead th.sorted .sortoptions a.ascending:hover {
-    background: url(/static/images/admin/sorting-icons.gif) -5px -72px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -5px -72px no-repeat;
 }
 
 table thead th.sorted .sortoptions a.descending {
-    background: url(/static/images/admin/sorting-icons.gif) -5px -94px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -5px -94px no-repeat;
 }
 
 table thead th.sorted .sortoptions a.descending:hover {
-    background: url(/static/images/admin/sorting-icons.gif) -5px -115px no-repeat;
+    background: url(/static/admin/img/sorting-icons.gif) -5px -115px no-repeat;
 }
 
 /* ORDERABLE TABLES */
@@ -404,7 +404,7 @@ table.orderable tbody tr td:hover {
 
 table.orderable tbody tr td:first-child {
     padding-left: 14px;
-    background-image: url(/static/images/admin/nav-bg-grabber.gif);
+    background-image: url(/static/admin/img/nav-bg-grabber.gif);
     background-repeat: repeat-y;
 }
 
@@ -434,7 +434,7 @@ input[type=text], input[type=password], textarea, select, .vTextField {
 /* FORM BUTTONS */
 
 .button, input[type=submit], input[type=button], .submit-row input {
-    background: white url(/static/images/admin/nav-bg.gif) bottom repeat-x;
+    background: white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
     padding: 3px 5px;
     color: black;
     border: 1px solid #bbb;
@@ -442,31 +442,31 @@ input[type=text], input[type=password], textarea, select, .vTextField {
 }
 
 .button:active, input[type=submit]:active, input[type=button]:active {
-    background-image: url(/static/images/admin/nav-bg-reverse.gif);
+    background-image: url(/static/admin/img/nav-bg-reverse.gif);
     background-position: top;
 }
 
 .button[disabled], input[type=submit][disabled], input[type=button][disabled] {
-	background-image: url(/static/images/admin/nav-bg.gif);
+	background-image: url(/static/admin/img/nav-bg.gif);
 	background-position: bottom;
 	opacity: 0.4;
 }
 
 .button.default, input[type=submit].default, .submit-row input.default {
     border: 2px solid #5b80b2;
-    background: #7CA0C7 url(/static/images/admin/default-bg.gif) bottom repeat-x;
+    background: #7CA0C7 url(/static/admin/img/default-bg.gif) bottom repeat-x;
     font-weight: bold;
     color: white;
     float: right;
 }
 
 .button.default:active, input[type=submit].default:active {
-    background-image: url(/static/images/admin/default-bg-reverse.gif);
+    background-image: url(/static/admin/img/default-bg-reverse.gif);
     background-position: top;
 }
 
 .button[disabled].default, input[type=submit][disabled].default, input[type=button][disabled].default {
-	background-image: url(/static/images/admin/default-bg.gif);
+	background-image: url(/static/admin/img/default-bg.gif);
 	background-position: bottom;
 	opacity: 0.4;
 }
@@ -503,7 +503,7 @@ input[type=text], input[type=password], textarea, select, .vTextField {
     font-size: 11px;
     text-align: left;
     font-weight: bold;
-    background: #7CA0C7 url(/static/images/admin/default-bg.gif) top left repeat-x;
+    background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x;
     color: white;
 }
 
@@ -525,15 +525,15 @@ ul.messagelist li {
     margin: 0 0 3px 0;
     border-bottom: 1px solid #ddd;
     color: #666;
-    background: #ffc url(/static/images/admin/icon_success.gif) 5px .3em no-repeat;
+    background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
 }
 
 ul.messagelist li.warning{
-    background-image: url(/static/images/admin/icon_alert.gif);
+    background-image: url(/static/admin/img/icon_alert.gif);
 }
 
 ul.messagelist li.error{
-    background-image: url(/static/images/admin/icon_error.gif);
+    background-image: url(/static/admin/img/icon_error.gif);
 }
 
 .errornote {
@@ -543,7 +543,7 @@ ul.messagelist li.error{
     margin: 0 0 3px 0;
     border: 1px solid red;
     color: red;
-    background: #ffc url(/static/images/admin/icon_error.gif) 5px .3em no-repeat;
+    background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em no-repeat;
 }
 
 ul.errorlist {
@@ -558,7 +558,7 @@ ul.errorlist {
     margin: 0 0 3px 0;
     border: 1px solid red;
     color: white;
-    background: red url(/static/images/admin/icon_alert.gif) 5px .3em no-repeat;
+    background: red url(/static/admin/img/icon_alert.gif) 5px .3em no-repeat;
 }
 
 .errorlist li a {
@@ -594,7 +594,7 @@ div.system-message p.system-message-title {
     padding: 4px 5px 4px 25px;
     margin: 0;
     color: red;
-    background: #ffc url(/static/images/admin/icon_error.gif) 5px .3em no-repeat;
+    background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em no-repeat;
 }
 
 .description {
@@ -605,7 +605,7 @@ div.system-message p.system-message-title {
 /* BREADCRUMBS */
 
 div.breadcrumbs {
-    background: white url(/static/images/admin/nav-bg-reverse.gif) 0 -10px repeat-x;
+    background: white url(/static/admin/img/nav-bg-reverse.gif) 0 -10px repeat-x;
     padding: 2px 8px 3px 8px;
     font-size: 11px;
     color: #999;
@@ -618,17 +618,17 @@ div.breadcrumbs {
 
 .addlink {
     padding-left: 12px;
-    background: url(/static/images/admin/icon_addlink.gif) 0 .2em no-repeat;
+    background: url(/static/admin/img/icon_addlink.gif) 0 .2em no-repeat;
 }
 
 .changelink {
     padding-left: 12px;
-    background: url(/static/images/admin/icon_changelink.gif) 0 .2em no-repeat;
+    background: url(/static/admin/img/icon_changelink.gif) 0 .2em no-repeat;
 }
 
 .deletelink {
     padding-left: 12px;
-    background: url(/static/images/admin/icon_deletelink.gif) 0 .25em no-repeat;
+    background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
 }
 
 a.deletelink:link, a.deletelink:visited {
@@ -663,14 +663,14 @@ a.deletelink:hover {
 .object-tools li {
     display: block;
     float: left;
-    background: url(/static/images/admin/tool-left.gif) 0 0 no-repeat;
+    background: url(/static/admin/img/tool-left.gif) 0 0 no-repeat;
     padding: 0 0 0 8px;
     margin-left: 2px;
     height: 16px;
 }
 
 .object-tools li:hover {
-    background: url(/static/images/admin/tool-left_over.gif) 0 0 no-repeat;
+    background: url(/static/admin/img/tool-left_over.gif) 0 0 no-repeat;
 }
 
 .object-tools a:link, .object-tools a:visited {
@@ -679,29 +679,29 @@ a.deletelink:hover {
     color: white;
     padding: .1em 14px .1em 8px;
     height: 14px;
-    background: #999 url(/static/images/admin/tool-right.gif) 100% 0 no-repeat;
+    background: #999 url(/static/admin/img/tool-right.gif) 100% 0 no-repeat;
 }
 
 .object-tools a:hover, .object-tools li:hover a {
-    background: #5b80b2 url(/static/images/admin/tool-right_over.gif) 100% 0 no-repeat;
+    background: #5b80b2 url(/static/admin/img/tool-right_over.gif) 100% 0 no-repeat;
 }
 
 .object-tools a.viewsitelink, .object-tools a.golink {
-    background: #999 url(/static/images/admin/tooltag-arrowright.gif) top right no-repeat;
+    background: #999 url(/static/admin/img/tooltag-arrowright.gif) top right no-repeat;
     padding-right: 28px;
 }
 
 .object-tools a.viewsitelink:hover, .object-tools a.golink:hover {
-    background: #5b80b2 url(/static/images/admin/tooltag-arrowright_over.gif) top right no-repeat;
+    background: #5b80b2 url(/static/admin/img/tooltag-arrowright_over.gif) top right no-repeat;
 }
 
 .object-tools a.addlink {
-    background: #999 url(/static/images/admin/tooltag-add.gif) top right no-repeat;
+    background: #999 url(/static/admin/img/tooltag-add.gif) top right no-repeat;
     padding-right: 28px;
 }
 
 .object-tools a.addlink:hover {
-    background: #5b80b2 url(/static/images/admin/tooltag-add_over.gif) top right no-repeat;
+    background: #5b80b2 url(/static/admin/img/tooltag-add_over.gif) top right no-repeat;
 }
 
 /* OBJECT HISTORY */
@@ -889,7 +889,7 @@ div.secondary-bar td, div.secondary-bar th {
 }
 
 #content-related .module h2 {
-    background: #eee url(/static/images/admin/nav-bg.gif) bottom left repeat-x;
+    background: #eee url(/static/admin/img/nav-bg.gif) bottom left repeat-x;
     color: #666;
 }
 

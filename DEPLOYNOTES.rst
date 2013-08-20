@@ -115,6 +115,10 @@ To initalize the Solr data the following manage command should be run::
 
   $ python manage.py rebuild_index
 
+To cleanup the thumbnail image cache run::
+
+  $ python manage.py thumbnail cleanup
+
 
 
 Cron jobs
