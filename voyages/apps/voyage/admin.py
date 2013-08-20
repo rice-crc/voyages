@@ -283,11 +283,12 @@ class VoyageSlavesNumbersInline(admin.StackedInline):
 
 # Voyage Sources
 class VoyageSourcesConnectionAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    pass
+    #def get_model_perms(self, request):
+    #    """
+    #    Return empty perms dict thus hiding the model from admin index.
+    #    """
+    #    return {}
 
 
 class VoyageSourcesAdmin(admin.ModelAdmin):
@@ -387,6 +388,7 @@ admin.site.register(VoyageSlavesNumbers)
 # Voyage Sources
 admin.site.register(VoyageSources, VoyageSourcesAdmin)
 admin.site.register(VoyageSourcesType)
+admin.site.register(VoyageSourcesConnection)
 
 # Voyage (main section)
 admin.site.register(Voyage, VoyageAdmin)
