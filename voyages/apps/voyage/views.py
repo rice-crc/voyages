@@ -1026,33 +1026,35 @@ def sources_list(request, category="documentary_sources", sort="sort"):
             safe_short_ref = i.short_ref.encode('ascii', 'ignore')
         except:
             safe_short_ref = ""
-        print "Short ref: " + str(safe_short_ref)
-        print "Full ref: " + safe_full_ref
+        # print "Short ref: " + str(safe_short_ref)
+        # print "Full ref: " + safe_full_ref
 
     if category == "documentary_sources":
         # Find all cities in sources
         cities_list = []
-        divided_groups = {}
+        divided_groups = []
 
         for i in sources:
             insert_source(divided_groups, i)
 
         # Count sources in each city
-        for v in divided_groups.itervalues():
-            for city in v:
+        for v in divided_groups:
+            for city in v["cities_list"]:
                 city_rows = 0
                 for j in city["city_groups_dict"]:
                     city_rows += int(len(j['sources']) + 1)
                 city["number_of_rows"] = city_rows
 
         # Sort dictionary
+        sorted_dict = sort_documentary_sources_dict(divided_groups)
+        set_even_odd_sources_dict(sorted_dict)
 
     else:
         pass
         # just long and short refs
     #3/0
     return render(request, "voyage/voyage_sources.html",
-                  {'results': divided_groups,
+                  {'results': sorted_dict,
                    'category': category})
 
 
@@ -1077,15 +1079,20 @@ def insert_source(dict, source):
         text = source.short_ref
 
     # Get (create if doesn't exist) cities in country
-    try:
-        cities_list = dict[country]
-    except KeyError:
-        dict[country] = []
-        cities_list = dict[country]
+    cities_list = None
+    for i in dict:
+        if i["country"] == country:
+            cities_list = i
+
+    if cities_list is None:
+        cities_list = {}
+        cities_list["country"] = country
+        cities_list["cities_list"] = []
+        dict.append(cities_list)
 
     # Try to find city in a list
     city_dict = None
-    for i in cities_list:
+    for i in cities_list["cities_list"]:
         if i["city_name"] == city:
             city_dict = i
             break
@@ -1095,7 +1102,7 @@ def insert_source(dict, source):
         city_dict = {}
         city_dict["city_name"] = city
         city_dict["city_groups_dict"] = []
-        cities_list.append(city_dict)
+        cities_list["cities_list"].append(city_dict)
 
     # Try to find a group
     source_list = None
@@ -1122,6 +1129,38 @@ def insert_source(dict, source):
         if new_source["short_ref"] == group_dict["short_ref"]:
             group_dict["short_ref"] = ""
         source_list.append(new_source)
+
+
+def sort_documentary_sources_dict(dict):
+    for country in dict:
+        for city_dict in country["cities_list"]:
+            for city_group_dict in city_dict["city_groups_dict"]:
+                # print "Source = " + str(city_group_dict["sources"])
+                city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['short_ref'])
+            city_dict["city_groups_dict"] = sorted(city_dict["city_groups_dict"], key=lambda k: k['group_name'])
+
+        country["cities_list"] = sorted(country["cities_list"], key=lambda k: k['city_name'])
+
+    sorted_dict = sorted(dict, key=lambda k: k['country'])
+    return sorted_dict
+
+
+def set_even_odd_sources_dict(dict):
+    for country in dict:
+        counter = 0
+        for city_dict in country["cities_list"]:
+            for city_group_dict in city_dict["city_groups_dict"]:
+                if counter%2 == 0:
+                    city_group_dict["mark"] = 0
+                else:
+                    city_group_dict["mark"] = 1
+                counter += 1
+                for source in city_group_dict["sources"]:
+                    if counter%2 == 0:
+                        source["mark"] = 0
+                    else:
+                        source["mark"] = 1
+                    counter += 1
 
 
 def extract_places(string):
