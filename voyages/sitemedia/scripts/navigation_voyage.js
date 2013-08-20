@@ -8,6 +8,5 @@ var lm_sectionToc = [
 	{"mainid" : "c01_s01",},
 	{"mainid" : "c01_s02",},
 	{"mainid" : "c01_s03",},
-	{"mainid" : "c01_s04",},
-    {"mainid" : "source"}
+	{"mainid" : "c01_s04",}
 ]
