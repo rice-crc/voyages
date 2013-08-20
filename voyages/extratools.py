@@ -1,9 +1,8 @@
 from django import forms
 from django.conf import settings
-from django.utils.safestring import mark_safe
-from haystack.forms import HighlightedSearchForm
 from haystack.utils import Highlighter
-     
+
+
 class AdvancedEditor(forms.Textarea):
     class Media:
       js = ('scripts/tiny_mce/tinymce.min.js', 'scripts/tiny_mce/textareas_small.js',)
