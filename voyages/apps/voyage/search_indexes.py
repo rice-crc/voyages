@@ -656,5 +656,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         result = ""
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
             result += connection.text_ref + ", "
-            result += connection.source.full_ref + ", "
+            if connection.source is not None:
+                result += connection.source.full_ref + ", "
         return result
