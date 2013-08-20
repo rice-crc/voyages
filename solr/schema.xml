@@ -162,8 +162,6 @@
 
     <field name="var_guns_mounted" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_principal_port_of_slave_dis" type="text_en" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_crew_voyage_outset" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_second_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -259,6 +257,8 @@
     <field name="var_imp_total_slaves_disembarked" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_tonnage_mod" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_port_slave_dis" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
