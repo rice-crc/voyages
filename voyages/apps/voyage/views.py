@@ -1015,7 +1015,7 @@ def variable_list(request):
     return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
 
 
-def sources_list(request, category="documentary_sources", sort="sort"):
+def sources_list(request, category="documentary_sources", sort="short_ref"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
     sources = SearchQuerySet().filter(group_name__exact=category)
@@ -1031,7 +1031,6 @@ def sources_list(request, category="documentary_sources", sort="sort"):
 
     if category == "documentary_sources":
         # Find all cities in sources
-        cities_list = []
         divided_groups = []
 
         for i in sources:
@@ -1046,15 +1045,15 @@ def sources_list(request, category="documentary_sources", sort="sort"):
                 city["number_of_rows"] = city_rows
 
         # Sort dictionary
-        sorted_dict = sort_documentary_sources_dict(divided_groups)
+        sorted_dict = sort_documentary_sources_dict(divided_groups, sort)
         set_even_odd_sources_dict(sorted_dict)
 
     else:
         pass
         # just long and short refs
-    #3/0
     return render(request, "voyage/voyage_sources.html",
                   {'results': sorted_dict,
+                   'sort_method': sort,
                    'category': category})
 
 
@@ -1131,12 +1130,16 @@ def insert_source(dict, source):
         source_list.append(new_source)
 
 
-def sort_documentary_sources_dict(dict):
+def sort_documentary_sources_dict(dict, sort):
     for country in dict:
         for city_dict in country["cities_list"]:
             for city_group_dict in city_dict["city_groups_dict"]:
                 # print "Source = " + str(city_group_dict["sources"])
-                city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['short_ref'])
+                if sort == "short_ref":
+                    city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['short_ref'])
+                else:
+                    city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['full_ref'])
+
             city_dict["city_groups_dict"] = sorted(city_dict["city_groups_dict"], key=lambda k: k['group_name'])
 
         country["cities_list"] = sorted(country["cities_list"], key=lambda k: k['city_name'])
