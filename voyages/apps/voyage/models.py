@@ -554,6 +554,12 @@ class VoyageDates(models.Model):
             ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10,
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
+
+    date_departed_africa = models.CommaSeparatedIntegerField\
+            ("Date vessel departed Africa (DATELEFTAFR)", max_length=10,
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
+
     arrival_at_second_place_landing = models.CommaSeparatedIntegerField\
             ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10,
              blank=True, null=True,
@@ -586,7 +592,7 @@ class VoyageDates(models.Model):
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
-            ("Year of arrival at port of disembarkation",
+            ("Year of arrival at port of disembarkation (YEARAM)",
              max_length=10, blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 

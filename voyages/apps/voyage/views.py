@@ -992,7 +992,7 @@ def variable_list(request):
     """
     var_list_stats = []
 
-    grouped_list_vars = groupby(globals.var_dict, lambda x: x['var_category'])
+    grouped_list_vars = groupby(globals.general_variables, lambda x: x['var_category'])
 
     for key, group in grouped_list_vars:
         tmpGroup = []
@@ -1003,10 +1003,6 @@ def variable_list(request):
             var_name = elem['var_name']
             if var_name == 'var_voyage_in_cd_rom':
                 query[var_name + "__exact"] = True
-
-            ### TO BE DELETED (after updating solr schema)
-            elif var_name == "var_num_slaves_intended_first_port" or var_name == "var_num_slaves_disembark_second_place":
-                continue
 
             elif elem['var_type'] == 'numeric':
                 query[var_name + "__gte"] = -1

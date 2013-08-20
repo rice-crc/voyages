@@ -429,6 +429,28 @@ for line in input_file:
     characteristics.imp_num_males_total = getIntFieldValue('male7')
     characteristics.imp_num_females_total = getIntFieldValue('female7')
 
+    characteristics.imp_total_num_slaves_embarked = getIntFieldValue('slaximp')
+    characteristics.imp_num_adult_embarked = getIntFieldValue('adlt1imp')
+    characteristics.imp_num_children_embarked = getIntFieldValue('chil1imp')
+    characteristics.imp_num_male_embarked = getIntFieldValue('male1imp')
+    characteristics.imp_num_female_embarked = getIntFieldValue('feml1imp')
+    characteristics.total_slaves_embarked_age_identified = getIntFieldValue('slavema1')
+    characteristics.total_slaves_embarked_gender_identified = getIntFieldValue('slavemx1')
+
+    characteristics.imp_adult_death_middle_passage = getIntFieldValue('adlt2imp')
+    characteristics.imp_child_death_middle_passage = getIntFieldValue('chil2imp')
+    characteristics.imp_male_death_middle_passage = getIntFieldValue('male2imp')
+    characteristics.imp_female_death_middle_passage = getIntFieldValue('feml2imp')
+    characteristics.imp_num_adult_landed = getIntFieldValue('adlt3imp')
+    characteristics.imp_num_child_landed = getIntFieldValue('chil3imp')
+    characteristics.imp_num_male_landed = getIntFieldValue('male3imp')
+    characteristics.imp_num_female_landed = getIntFieldValue('feml3imp')
+    characteristics.total_slaves_landed_age_identified = getIntFieldValue('slavema3')
+    characteristics.total_slaves_landed_gender_identified = getIntFieldValue('slavemx3')
+    characteristics.total_slaves_dept_or_arr_age_identified = getIntFieldValue('slavema7')
+    characteristics.total_slaves_dept_or_arr_gender_identified = getIntFieldValue('slavemx7')
+    characteristics.imp_slaves_embarked_for_mortality = getIntFieldValue('tslmtimp')
+
     characteristics.save()
     voyageObj.voyage_slaves_numbers = characteristics
     voyageObj.save()
@@ -437,7 +459,7 @@ for line in input_file:
     # Potentially has a bug!!!!!!!!
     def findBestMachingSource(matchstring):
         # Base case if the string is too short
-        if len(matchstring) <= 2:
+        if len(matchstring) <= 1:
             return None
 
         for source in listSources:
@@ -465,11 +487,14 @@ for line in input_file:
             src = findBestMachingSource(to_be_matched)
             if src is not None:
                 VoyageSourcesConnection.objects.create(source=src, source_order=order,
-                                                      text_ref=getFieldValue(fieldname),
-                                                      group=voyageObj)
+                                                       text_ref=getFieldValue(fieldname),
+                                                       group=voyageObj)
                # print "Found match %s" % to_be_matched
             else :
                 #print "No match found for %s" % getFieldValue(fieldname)
+                VoyageSourcesConnection.objects.create(source_order=order,
+                                                      text_ref=getFieldValue(fieldname),
+                                                      group=voyageObj)
                 pass
 
     # Alphabetical letters between a and r

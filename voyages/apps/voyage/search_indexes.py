@@ -118,7 +118,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
     var_voyage_began = indexes.NgramField(null=True)
     var_slave_purchase_began = indexes.NgramField(null=True)
-    var_vessel_left_port = indexes.NgramField(null=True)
+    var_date_departed_africa = indexes.NgramField(null=True)
     var_first_dis_of_slaves = indexes.NgramField(null=True)
     var_departure_last_place_of_landing = indexes.NgramField(null=True)
     var_voyage_completed = indexes.NgramField(null=True)
@@ -218,7 +218,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_var_rig_of_vessel(self, obj):
+    def prepare_var_rig_of_vessel(self, obj):
         try:
             return obj.voyage_ship.rig_of_vessel.label
         except AttributeError:
@@ -447,10 +447,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
 
     # departed Africa
-    # Change??
-    def prepare_var_vessel_left_port(self, obj):
+    def prepare_var_date_departed_africa(self, obj):
         try:
-            data = obj.voyage_dates.imp_departed_africa
+            data = obj.voyage_dates.date_departed_africa
             if len(data) != 10:
                 return None
             else:
@@ -496,7 +495,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_length_middle_passage_days(self, obj):
         try:
-            return obj.voyage_dates.length_middle_passage_days
+            return obj.voyage_dates.imp_length_leaving_africa_to_disembark
         except AttributeError:
             return None
 

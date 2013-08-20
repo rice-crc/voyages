@@ -1,84 +1,5 @@
 # List of basic variables
 
-list_text_fields = ['var_ship_name',
-                    'var_owner',
-                    'var_captain',
-                    'var_sources']
-list_select_fields = ['var_nationality',
-                      'var_imputed_nationality',
-                      'var_outcome_voyage',
-                      'var_outcome_slaves',
-                      'var_outcome_owner',
-                      'var_resistance',
-                      'var_outcome_ship_captured',
-                      ]
-list_numeric_fields = ['var_voyage_id',
-                       'var_year_of_construction',
-                       'var_registered_year',
-                       'var_rig_of_vessel',
-                       'var_guns_mounted',
-
-                       # Voyage dates variables
-                       'var_imp_arrival_at_port_of_dis',  # Year arrived with salves
-                       'var_imp_length_home_to_disembark',
-                       'var_length_middle_passage_days',
-
-                       'var_crew_voyage_outset',
-                       'var_crew_first_landing',
-                       'var_crew_died_complete_voyage',
-                       'var_num_slaves_intended_first_port',
-                       'var_num_slaves_carried_first_port',
-                       'var_num_slaves_carried_second_port',
-                       'var_num_slaves_carried_third_port',
-                       'var_total_num_slaves_purchased',
-                       'var_imp_total_num_slaves_purchased',
-                       'var_total_num_slaves_arr_first_port_embark',
-                       'var_num_slaves_disembark_first_place',
-                       'var_num_slaves_disembark_second_place',
-                       'var_num_slaves_disembark_third_place',
-                       'var_imp_total_slaves_disembarked',
-
-                       # Possible change the below to decimal fields
-                       'var_tonnage',
-                       'var_tonnage_mod',
-
-                       'var_imputed_percentage_men',
-                       'var_imputed_percentage_women',
-                       'var_imputed_percentage_boys',
-                       'var_imputed_percentage_girls',
-                       'var_imputed_percentage_female',
-                       'var_imputed_percentage_male',
-                       'var_imputed_percentage_child',
-                       'var_imputed_sterling_cash',
-                       'var_imputed_death_middle_passage',
-                       'var_imputed_mortality'
-                       ]
-
-list_date_fields = ['var_voyage_began',
-                    'var_slave_purchase_began',
-                    'var_vessel_left_port',
-                    'var_first_dis_of_slaves',
-                    'var_departure_last_place_of_landing',
-                    'var_voyage_completed'
-                    ]
-
-list_place_fields = ['var_vessel_construction_place',
-                     'var_registered_place',
-                     'var_imp_port_voyage_begin',
-                     'var_first_place_slave_purchase',
-                     'var_second_place_slave_purchase',
-                     'var_third_place_slave_purchase',
-                     'var_imp_principal_place_of_slave_purchase',
-                     'var_port_of_call_before_atl_crossing',
-                     'var_first_landing_place',
-                     'var_second_landing_place',
-                     'var_third_landing_place',
-                     'var_principal_port_of_slave_dis',
-                     'var_place_voyage_ended',
-                     ]
-
-list_boolean_fields = ['var_voyage_in_cd_rom']
-
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A', 'France', 'Denmark / Baltic',
                                    'Other (specify in note)']
@@ -162,9 +83,9 @@ var_dict = [
      "is_basic": False,
      "is_general": True},
     {'var_name': 'var_rig_of_vessel',
-     'spss_name': 'yrreg',
+     'spss_name': 'rig',
      'var_full_name': 'Rig',
-     'var_type': 'numeric',
+     'var_type': 'select',
      'var_category': 'Ship, nation, owners',
      "is_estimate": False,
      "is_basic": False,
@@ -333,7 +254,7 @@ var_dict = [
      "is_basic": False,
      "is_general": True},
 
-    {'var_name': 'var_imp_principal_port_of_slave_dis',
+    {'var_name': 'var_imp_principal_port_slave_dis',
      'spss_name': 'mjslptimp',
      'var_full_name': 'Principal place of slave landing*',
      'var_type': 'select_three_layers',
@@ -460,7 +381,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True},
-    {'var_name': 'var_vessel_left_port',
+    {'var_name': 'var_date_departed_africa',
      'spss_name': 'date_leftAfr',
      'var_full_name': 'Date vessel departed Africa',
      'var_type': 'date',
@@ -724,7 +645,7 @@ var_dict = [
 
     # Source
     {'var_name': 'var_sources',
-     'spss_name': 'vymrtrat',
+     'spss_name': 'source',
      'var_full_name': 'Sources',
      'var_type': 'plain_text',
      'var_category': 'Source',
@@ -748,6 +669,36 @@ general_variables = []
 for item in var_dict:
     if item['is_general']:
         general_variables.append(item)
+
+list_text_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'plain_text':
+        list_text_fields.append(item['var_name'])
+
+list_select_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'select':
+        list_select_fields.append(item['var_name'])
+
+list_numeric_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'numeric':
+        list_numeric_fields.append(item['var_name'])
+
+list_date_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'date':
+        list_date_fields.append(item['var_name'])
+
+list_place_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'select_three_layers':
+        list_place_fields.append(item['var_name'])
+
+list_boolean_fields = []
+for item in var_dict:
+    if 'var_type' in item and item['var_type'] == 'boolean':
+        list_boolean_fields.append(item['var_name'])
 
 # List of default result columns
 default_result_columns = [

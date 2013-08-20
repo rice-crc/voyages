@@ -4,8 +4,7 @@ table.grid {
 	border-collapse: collapse; 
 	border: 1px solid #895D03; }
 
-table.grid td {
-	white-space: nowrap; }
+table.grid td { }
 
 table.grid th {
 	padding: 5px;
