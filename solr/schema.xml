@@ -196,7 +196,7 @@
 
     <field name="var_imputed_percentage_male" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_rig_of_vessel" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_rig_of_vessel" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_second_region_slave_emb" type="text_en" indexed="true" stored="true" multiValued="false" />
 
