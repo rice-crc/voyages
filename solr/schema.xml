@@ -174,9 +174,11 @@
 
     <field name="var_registered_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_short_ref" type="text_en" indexed="true" stored="true" multiValued="true" />
+
     <field name="var_crew_first_landing" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_third_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_date_departed_africa" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_disembark_third_place" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -200,6 +202,8 @@
 
     <field name="var_num_slaves_carried_third_port" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_long_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_sources" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_second_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -216,9 +220,7 @@
 
     <field name="var_voyage_began" type="ngram" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_vessel_left_port" type="ngram" indexed="true" stored="true" multiValued="false" />
-
-    <field name="var_vessel_construction_place" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -272,6 +274,8 @@
 
     <field name="var_nationality" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_third_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imputed_percentage_female" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_length_home_to_disembark" type="long" indexed="true" stored="true" multiValued="false" />
@@ -284,7 +288,7 @@
 
     <field name="var_third_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
+    <field name="var_vessel_construction_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_resistance" type="text_en" indexed="true" stored="true" multiValued="false" />
 
