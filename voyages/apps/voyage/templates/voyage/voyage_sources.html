@@ -1,6 +1,4 @@
 {% extends "voyage/voyagebase.html" %}
-{% load voyage_tags %}
-
 
 {% load i18n %}
 
@@ -16,9 +14,9 @@
 
 <div id="center-content">
 	{% block center-content %}
-		<div id="center-content-inner">
+    <div id="center-content-inner">
 
-        <table class="simple-box" cellspacing="0" cellpadding="0" border="0">
+<table class="simple-box" cellspacing="0" cellpadding="0" border="0">
 <tbody>
     <tr>
         <td class="simple-box-11">
@@ -54,45 +52,75 @@
             <div id="sources">
                 <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
                 <tbody>
-                {% for country, country_dict in results.iteritems %}
+                {% for country_dict in results %}
                     <tr>
+                    {# Print country name #}
                     {% if forloop.first %}
-                        <td class="sources-country-first" colspan="3">{{ country }}</td>
+                        <td class="sources-country-first" colspan="3">{{ country_dict.country }}</td>
                     {% else %}
-                        <td class="sources-country" colspan="3">{{ country }}</td>
+                        <td class="sources-country" colspan="3">{{ country_dict.country }}</td>
                     {% endif %}
                     </tr>
-                    {% for city in country_dict %}
+                    {# For all cities in country #}
+                    {% for city in country_dict.cities_list %}
+                        {# If first city, use *-first classes #}
                         <tr>
                         {% if forloop.first %}
                             <td class="sources-city-first" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                            {% if city.city_groups_dict.0.short_ref != None %}
+                                <td class="source-id-first">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                            {% else %}
+                                <td class="source-id-first"></td>
+                            {% endif %}
+                            <td class="source-name-first">{{ city.city_groups_dict.0.group_name|safe }}</td>
                         {% else %}
                             <td class="sources-city" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                            {% if city.city_groups_dict.0.mark == 0 %}
+                                {% if city.city_groups_dict.0.short_ref != None %}
+                                    <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                {% else %}
+                                    <td class="source-id-even"></td>
+                                {% endif %}
+                                <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                            {% else %}
+                                {% if city.city_groups_dict.0.short_ref != None %}
+                                    <td class="source-id-odd">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                {% else %}
+                                    <td class="source-id-odd"></td>
+                                {% endif %}
+                                <td class="source-name-odd">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                            {% endif %}
                         {% endif %}
-                        <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
-                        <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
                         </tr>
+                        {# Print all groups for each city #}
                         {% for group in city.city_groups_dict %}
                             {% if not forloop.first %}
-                            <tr>
-                                <td class="source-id-even">{{ group.short_ref|safe }}</td>
-                                <td class="source-name-even">{{ group.group_name|safe }}</td>
-                            </tr>
+                                <tr>
+                                    {% if group.mark == 0 %}
+                                        <td class="source-id-even">{{ group.short_ref|safe }}</td>
+                                        <td class="source-name-even">{{ group.group_name|safe }}</td>
+                                        {% setvar "odd" as counter %}
+                                    {% else %}
+                                        <td class="source-id-odd">{{ group.short_ref|safe }}</td>
+                                        <td class="source-name-odd">{{ group.group_name|safe }}</td>
+                                        {% setvar "even" as counter %}
+                                    {% endif %}
+                                </tr>
                             {% endif %}
                             {% for source in group.sources %}
                                 <tr>
-                                    {% if forloop.counter|divisibleby:2 %}
+                                    {% if source.mark == 0 %}
                                         {% if source.short_ref != None %}
-                                        <td class="source-id-even">{{ source.short_ref|safe }}</td>
+                                            <td class="source-id-even">{{ source.short_ref|safe }}</td>
                                         {% else %}
-                                        <td class="source-id-even"></td>
+                                            <td class="source-id-even"></td>
                                         {% endif %}
                                         <td class="source-name-even">{{ source.full_ref|safe }}</td>
                                     {% else %}
                                         {% if source.short_ref != None %}
-                                        <td class="source-id-odd">{{ source.short_ref|safe }}</td>
+                                            <td class="source-id-odd">{{ source.short_ref|safe }}</td>
                                         {% else %}
-                                        <td class="source-id-odd"></td>
+                                            <td class="source-id-odd"></td>
                                         {% endif %}
                                         <td class="source-name-odd">{{ source.full_ref|safe }}</td>
                                     {% endif %}
@@ -113,13 +141,6 @@
 
 		</div>
 
-		<!-- Previous/Next navigation menu -->
-		<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
-			<tr>
-				<td class="method-prev"><a id="prev-page" href="#">&nbsp;</a></td>
-				<td class="method-next"><a id="next-page" href="#">&nbsp;</a></td>
-			</tr>
-		</table>
-	{% endblock %}
+    {% endblock %}
 </div>
 {% endblock %}
