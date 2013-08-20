@@ -1,5 +1,5 @@
 from voyages.apps.voyage.models import *
-input_file = open('voyage.txt', 'r')
+input_file = open('voyage_extra_voyage.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"
@@ -59,7 +59,7 @@ for line in input_file:
             #sourcestr = source.short_ref.decode('utf-8')
             sourcestr = source.short_ref
 
-            if sourcestr.find(matchstring) > -1:
+            if sourcestr.startswith(matchstring):
                 return source
 
         # Find the best matching/contains the substring

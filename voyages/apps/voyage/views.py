@@ -116,13 +116,6 @@ def search(request):
         if not request.session.exists(request.session.session_key):
             request.session.create()
 
-        # Set up the initial column of display
-        try:
-            if request.session['result_columns']:
-                pass
-        except KeyError:
-            request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
-
         # Try to retrieve results from session
         try:
             results = request.session['results_voyages']
@@ -422,7 +415,6 @@ def search(request):
                          'frame_to_year': voyage_span_last_year})
 
 
-
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
@@ -446,6 +438,10 @@ def search(request):
     # Customize result page
     if not request.session.exists(request.session.session_key):
         request.session.create()
+
+    # Set up the initial column of display
+    if not 'result_columns' in request.session:
+        request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -682,7 +678,7 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
                     url += "_".join(j.split(" ")) + "|"
                 url = url[0:-1]
             else:
-                url += str(k) + "=" + str(v)
+                url += str(k) + "=" + str(v.encode('ascii', 'ignore'))
 
             # If variable is date, try to also store deselected months.
             for i in date_filters:
@@ -778,6 +774,8 @@ def create_menu_forms(dict):
             voyage_span_first_year = v[0]
             voyage_span_last_year = v[1]
             continue
+        else:
+            voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
         var = search_var_dict(var_name)
         var_type = var['var_type']
