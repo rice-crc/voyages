@@ -4,10 +4,12 @@ from django.views.generic import TemplateView, RedirectView
 urlpatterns = patterns('',
     url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$',
         'voyages.apps.voyage.views.get_page', name='get-page'),
-    url(r'^source/(?P<category>\w+)[/]?(?P<sort>\w*)$',
+    url(r'^source/(?P<category>\w+)/(?P<sort>\w+)$',
         'voyages.apps.voyage.views.sources_list', name='sources-list-sort'),
     url(r'^source/(?P<category>\w+)$',
-        'voyages.apps.voyage.views.sources_list', name='sources-list')
+        'voyages.apps.voyage.views.sources_list', name='sources-list'),
+    url(r'^source$',
+        'voyages.apps.voyage.views.sources_list', name='sources-list-default')
 )
 
 urlpatterns += patterns('',
