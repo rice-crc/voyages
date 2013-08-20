@@ -58,7 +58,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_year_of_construction = indexes.IntegerField(null=True)
     var_registered_place = indexes.CharField(null=True)
     var_registered_year = indexes.IntegerField(null=True)
-    var_rig_of_vessel = indexes.IntegerField(null=True)
+    var_rig_of_vessel = indexes.CharField(null=True)
     var_tonnage = indexes.FloatField(null=True)
     var_tonnage_mod = indexes.FloatField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
@@ -656,6 +656,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         result = ""
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
             result += connection.text_ref + ", "
+            result += "<>"
             if connection.source is not None:
                 result += connection.source.full_ref + ", "
+            else:
+                result += ""
+            result += ";;"
+
         return result
