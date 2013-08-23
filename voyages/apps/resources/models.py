@@ -50,6 +50,9 @@ class ImageCategory(models.Model):
 
     value = models.IntegerField("Code")
     label = models.CharField("Category name", max_length=20)
+    visible_on_website = models.BooleanField("Visible on website (If checked, category will display on website "
+                                             "if there is at least one image to display.)",
+                                             default=True)
 
     class Meta:
         verbose_name = "Image Category"

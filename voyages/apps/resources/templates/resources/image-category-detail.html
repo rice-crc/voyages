@@ -21,9 +21,7 @@
 <div id="center-content">
 
 <div class="image-title">
-    {% for i in images %}
-        {{ i.title }}
-    {% endfor %}
+    {{ pagins.0.title }}
 </div>
 <div class="image-navigation">
     <table class="image-navigation">
@@ -33,16 +31,16 @@
         <a href="{% url 'resources:images-category' category %}">Images of {{ category }}</a>
         </td>
         <td style="padding: 0px 0px 0px 0px;">
-            {% if images.has_previous %}
-                <a href={{ images.previous_page_number }}>Previous</a>
+            {% if pagins.has_previous %}
+                <a href={{ pagins.previous_page_number }}>Previous</a>
             {% else %}
                 Previous
             {% endif %}
         </td>
-        <td style="padding: 0px 10px 0px 10px"> {{ images.number }} / {{ images.paginator.num_pages }}  </td>
+        <td style="padding: 0px 10px 0px 10px"> {{ pagins.number }} / {{ pagins.paginator.num_pages }}  </td>
         <td style="padding: 0px;">
-            {% if images.has_next %}
-                <a href={{ images.next_page_number }}>Next</a>
+            {% if pagins.has_next %}
+                <a href={{ pagins.next_page_number }}>Next</a>
             {% else %}
                 Next
             {% endif %}
@@ -52,24 +50,23 @@
     </table>
 </div>
 
-    {% for i in images %}
     <table style="border-collapse: collapse;">
     <tbody>
     <tr>
         <td class="image-detail-link">
-            <a href="{% url 'resources:image-detail' category images.number %}">
-                {% thumbnail i.file "400" as im %}
+            <a href="{% url 'resources:image-detail' category pagins.number %}">
+                {% thumbnail pagins.0.file "400" as im %}
                     <img src="{{ im.url }}">
                 {% endthumbnail %}
             </a>
         </td>
         <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
             <div class="image-description">
-                {{ i.description }}
+                {{ pagins.0.description }}
             </div>
             <table class="image-detail-info">
                 <tbody>
-                {% if i.date %}
+                {% if pagins.0.date %}
                     <tr>
                         <td>
                             <div class="image-detail-info-label">
@@ -77,7 +74,7 @@
                             </div>
                         </td>
                         <td>
-                            {{ i.date }}
+                            {{ pagins.0.date }}
                         </td>
                     </tr>
                 {% endif %}
@@ -88,10 +85,10 @@
                         </div>
                     </td>
                     <td>
-                        {{ i.source }}
+                        {{ pagins.0.source }}
                     </td>
                 </tr>
-                {% if i.language %}
+                {% if pagins.0.language %}
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
@@ -99,13 +96,17 @@
                         </div>
                     </td>
                     <td>
-                        {{ i.language|decode_language }}
+                        {{ pagins.0.language|decode_language }}
                     </td>
                 </tr>
                 {% endif %}
                 </tbody>
             </table>
-            {% if i.voyage.voyage_ship.ship_name %}
+            {% for k,v in pagins.0.iteritems %}
+
+                {{ k }}
+        {% endfor %}
+            {% if pagins.0.voyage.voyage_ship.ship_name %}
                 <div class="image-detail-voyages-title">
                     Related voyages
                 </div>
@@ -114,7 +115,7 @@
                     <tr>
                         <td>
                             Voyage ID =
-                            {{ i.voyage.voyage_id }} - {{ i.voyage.voyage_ship.ship_name }}, {{ i.voyage.voyage_dates.imp_voyage_began|get_year_value }}
+                            {{ pagins.0.voyage.voyage_id }} - {{ pagins.0.voyage.voyage_ship.ship_name }}, {{ pagins.0.voyage.voyage_dates.imp_voyage_began|get_year_value }}
                         </td>
                     </tr>
                     </tbody>
@@ -125,7 +126,6 @@
     </tbody>
     </table>
 </div>
-    {% endfor %}
 
 {% endblock %}
 
