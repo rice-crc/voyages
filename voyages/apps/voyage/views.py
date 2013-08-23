@@ -318,6 +318,7 @@ def search(request):
                 list_search_vars = request.POST.getlist('list-input-params')
 
                 new_existing_form = []
+                query_dict = {}
 
                 # Time frame search
                 query_dict['var_imp_arrival_at_port_of_dis__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
@@ -406,6 +407,8 @@ def search(request):
                             new_existing_form.append(cur_var)
 
                 request.session['existing_form'] = new_existing_form
+
+                print(query_dict)
 
                 results = perform_search(query_dict, date_filters)
 
