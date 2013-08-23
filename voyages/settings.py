@@ -129,12 +129,6 @@ INSTALLED_APPS = (
     'voyages.apps.help',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
-    }
-}
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
@@ -164,7 +158,7 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 
 # updates solr when object is saved
-#HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"
