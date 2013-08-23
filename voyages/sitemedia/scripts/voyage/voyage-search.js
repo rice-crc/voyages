@@ -84,7 +84,8 @@ $(document).ready(function() {
         }
 	});
 
-    /* Handle for the */
+    /* Tool tip for sources */
+    $(".source_entry").tooltip({content: "Tooltip here", track: true});
 
     $("#link-button").click(strtBlackout); // open if btn is pressed
     $(".close-link-box").click(endBlackout); // close if close btn clicked
@@ -355,6 +356,13 @@ function move_var(direction) {
     } else {
         $selected_elem.last().next().after($selected_elem);
     }
+}
+
+function retrieve_page(page_elem) {
+    /* Enable the button with desired page to be submitted */
+    $('#' + page_elem).prop('disabled', false);
+    submitWithValue('retrieve_page');
+    return false;
 }
 
 

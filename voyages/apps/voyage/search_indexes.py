@@ -86,8 +86,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_second_landing_place = indexes.CharField(null=True)
     var_third_landing_place = indexes.CharField(null=True)
 
-    var_imp_principal_port_of_slave_dis = indexes.CharField(null=True)
-
+    var_imp_principal_port_slave_dis = indexes.CharField(null=True)
     var_place_voyage_ended = indexes.CharField(null=True)
 
     ## Region variables
