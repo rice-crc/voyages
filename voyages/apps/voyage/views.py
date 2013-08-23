@@ -115,13 +115,31 @@ def search(request):
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
+            print 'new session created'
 
         # Try to retrieve results from session
-        try:
-            results = request.session['results_voyages']
-        except KeyError:
+        #try:
+        #    results = request.session['results_voyages']
+        #except KeyError:
+        #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        #    request.session['results_voyages'] = results
+
+        if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
+                and request.session['voyage_last_query']:
+            query_dict = request.session['voyage_last_query']
+            if 'voyage_last_query_date_filters' in request.session\
+                    and request.session['voyage_last_query_date_filters'] is not None:
+                date_filters = request.session['voyage_last_query_date_filters']
+            else:
+                date_filters = []
+
+            results = perform_search(query_dict, date_filters)
+
+            if len(results) == 0:
+                no_result = True
+                results = []
+        else:
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-            request.session['results_voyages'] = results
 
         if request.method == 'POST':
 
@@ -257,12 +275,17 @@ def search(request):
 
             elif submitVal == 'reset':
                 # Reset the search page
+
+                print 'resetting'
+
                 existing_form = []
                 request.session['existing_form'] = existing_form
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-                request.session['results_voyages'] = results
+                request.session['results_voyages'] = None
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
                 request.session['results_per_page_form'] = None
+                request.session['voyage_last_query'] = None
+                request.session['voyage_last_query_date_filters'] = []
                 to_reset_form = True
 
                 # Reset time_frame form as well
@@ -384,26 +407,22 @@ def search(request):
 
                 request.session['existing_form'] = new_existing_form
 
-                # Initially sort by voyage_id
-                results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
-
-                # Date filters
-
-                results = date_filter_query(date_filters, results)
+                results = perform_search(query_dict, date_filters)
 
                 if len(results) == 0:
                     no_result = True
                     results = []
-                request.session['results_voyages'] = results
+
                 request.session['voyage_last_query'] = query_dict
 
                 if date_filters:
                     request.session['voyage_last_query_date_filters'] = date_filters
                 else:
-                    request.session['voyage_last_query_date_filters'] = None
+                    request.session['voyage_last_query_date_filters'] = []
 
         elif request.method == 'GET':
             # Create a new form
+            print 'getting'
             existing_form = []
             request.session['existing_form'] = existing_form
 
@@ -660,6 +679,7 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
     url = request.build_absolute_uri(reverse('voyage:search',)) + "?"
     session_dict = {}
 
+
     # If search has not performed, return default url
     if dict == {}:
         url += "var_imp_voyage_began__range=1514|1866"
@@ -678,7 +698,10 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
                     url += "_".join(j.split(" ")) + "|"
                 url = url[0:-1]
             else:
-                url += str(k) + "=" + str(v.encode('ascii', 'ignore'))
+                if isinstance(v, (int, float)):
+                    url += str(k) + "=" + str(v)
+                else:
+                    url += str(k) + "=" + str(v.encode('ascii', 'ignore'))
 
             # If variable is date, try to also store deselected months.
             for i in date_filters:
@@ -926,6 +949,19 @@ def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
             return i
+
+
+def perform_search(query_dict, date_filters):
+    """
+    Perform the actual query towards SOLR
+    :param query_dict:
+    :param date_filters:
+    :return:
+    """
+    # Initially sort by voyage_id
+    results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+    # Date filters
+    return date_filter_query(date_filters, results)
 
 
 def date_filter_query(date_filters, results):

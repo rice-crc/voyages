@@ -21,3 +21,19 @@ def getattribute(value, arg):
 
 
 register.filter('getattribute', getattribute)
+
+
+def filtersource(value):
+    sources = value.split(";;")
+    result = ""
+    for source in sources:
+        try:
+            ref = source.split("<>");
+            result += "<div class='source_entry'>" + ref[0] + "<span class='source_full_ref hidden'>" \
+                      + ref[1] + "</span> </div>"
+        except IndexError:
+            continue
+    return result
+
+
+register.filter('filtersource', filtersource)

@@ -75,8 +75,6 @@ configuration files used by the index.
 The url for accessing the configured Solr instance should be set in
 ``localsettings.py`` as **SOLR_SERVER_URL**.
 
-
-
 Install the application
 -----------------------
 
@@ -99,7 +97,7 @@ tables and initial data using::
   $ python manage.py syncdb
   $ python manage.py migrate
 
-In addition, these sets of initial data need to be loaded
+In addition, these sets of initial data need to be loaded (Please load in that order)
   * lessonplan_data.json
   * glossary.json
   * downloads.json
@@ -120,6 +118,131 @@ To cleanup the thumbnail image cache run::
   $ python manage.py thumbnail cleanup
 
 
+
+Creating initial data
+----------------------
+Users are entered manually (through the admin interface) or via JSON file: users.json
+
+Lesson plans are entered manually or via JSON file: lessonplan_data.json.
+
+Glossary is entered manually or via JSON file: glossary.json .
+
+FAQ is entered manually or via JSON file: faq_all.json .
+  Notice than on exporting data, please run
+     $ ./manage.py dumpdata help.faqcategory help.faq
+         > initialdata/faq_all.json
+         since category has to be exported before actual FAQ.
+          (database consistency/foreign-key constraint)
+
+Downloads is entered manually via the admin interface.
+HTML codes for static pages like download can be pasted in the admin interface.
+    (Use HTML code not rich text editor.)
+
+Voyage
+  Creating data from legacy mySQL
+     Export the following tables with the following format: TABBED format!
+     (Select EXPORT option in SQL admin)
+
+     (Make sure TAB is not used elsewhere in SQL field)
+     Export the following tables into a directory csvdumps/
+      Table areas into broadregion.txt
+      Table regions into region.txt
+      Table ports into place.txt
+      Table owner_outcome into owner_outcome.txt
+      Table slave_outcome into slave_outcome.txt
+      Table vessel_outcome into vessel_outcome.txt
+      Table resistance into resistance.txt
+      Table nations into nation.txt
+      Table vessel_rigs into rigofvessel.txt
+      Table sources into source.txt
+      Table ton_type into ton_type.txt
+      Table xmimpflag into groupings.txt
+      Table voyages into voyage.txt
+
+      Then run:
+      $ ./manage.py shell
+      In the shell execute:
+      $ execfile('csvdumps/load_all_data.py')
+
+  If in the middle of any smaller load file, the load fails,
+  manually cd (change directory to csvdumps) and resume execution
+  (open load_all_data.py to see the order of loading)
+
+   *** Note:voyage with voyageid=51655 has an extra tab character in 1 field that needs to removed,
+               otherwise the voyage will not appear in the result
+
+Images
+  Creating data from legacy mySQL
+      Export the following tables with the following format: TABBED format!
+         (Select EXPORT option in SQL admin)
+      Table images into images.txt
+      Table images_voyages into images_voyage.txt
+      Table image_categories into images_category.txt
+
+      Then run:
+      $ ./manage.py shell
+      In the shell execute:
+      $ execfile('csvdumps/load_all_images.py')
+
+  Note that on exporting data, please run
+  $ ./manage.py dumpdata voyage.imageCategory voyage.image
+                              > initialdata/images.json
+          since category has to be exported before actual FAQ.
+          (database consistency/foreign-key constraint)
+
+Multilanguage support
+--------------------
+Enable multilanguage support:
+   in template/secondarybar.html uncomment section for multilang support (Line 29-47)
+
+Add/Remove supported languages from settings.py:
+LANGUAGE_CODE='en'   <--- Default language
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('de', gettext('German')),
+    ('fr', gettext('French')),
+    ('es', gettext('Spanish')),
+)
+
+Mark text to be translated in template:
+  1) Make sure to include {% load i18n %} on the top of the template
+  2) Single line/short string: surround by {% trans 'String to be translated' %}
+     Block translation: surround by {% blocktrans %}  and {% endblocktrans %}
+  3) Actual language file:
+     To create or update files: django-admin.py makemessages -l de
+     ("de" can be replaced by the actual language code)
+     The file will be located in voyages/locale/de/LC_MESSAGES/django.po
+             for German language for instance
+
+     Inside the file:
+     #: path/to/python/module.py:23
+        msgid "Welcome to my site."
+        msgstr ""
+      The msgstr is the translation that will show up for msgid.
+      If empty, the default msgid will be used.
+
+   4) Execute the following to compile translated messages:
+      $ ./manage.py compilemessages
+
+     See more information on https://docs.djangoproject.com/en/1.6/topics/i18n/translation/
+
+Extra tools: (residing in voyages/extratools.py)
+-------------------------------
+  Custom highlighter:
+     Current settings in settings.py:
+         HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
+     Use to highlight SOLR result for FAQ and Glossary
+     (the default highlighter used by haystack will truncate the text).
+
+  TinyMCE editor known as AdvancedEditor: gives the user rich text editor interface
+    scripts/tiny_mce/tinymce.min.js contains the core javascript for tinymce to function
+    scripts/tiny_mce/textareas_small.js contains the customization or the page
+        selector gives the option to replace which text area to replace with TinyMCE
+        plugins give the list of enabled plugins
+    This is used to replace widget in customized form.
+    Usage (example):
+      In forms.py:
+           field_name = forms.CharField(widget=AdvancedEditor(attrs={'class' : 'tinymcetextarea'}))
 
 Cron jobs
 ~~~~~~~~~
