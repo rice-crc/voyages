@@ -57,6 +57,8 @@
             <a href="{% url 'resources:image-detail' category pagins.number %}">
                 {% thumbnail pagins.0.file "400" as im %}
                     <img src="{{ im.url }}">
+                    {% empty %}
+                        <img src="{{ MEDIA_URL }}{{ pagins.0.file }}" width="100" height="100">
                 {% endthumbnail %}
             </a>
         </td>
@@ -102,8 +104,7 @@
                 {% endif %}
                 </tbody>
             </table>
-        {{ pagins.0.voyage }}
-            {% if pagins.0.voyage.voyage_ship.ship_name %}
+            {% if pagins.0.voyage_id %}
                 <div class="image-detail-voyages-title">
                     Related voyages
                 </div>
@@ -112,7 +113,7 @@
                     <tr>
                         <td>
                             Voyage ID =
-                            {{ pagins.0.voyage.voyage_id }} - {{ pagins.0.voyage.voyage_ship.ship_name }}, {{ pagins.0.voyage.voyage_dates.imp_voyage_began|get_year_value }}
+                            {{ pagins.0.voyage_id }} - {{ pagins.0.voyage_vessel_name }}, {{ pagins.0.voyage_imp_voyage_began|get_year_value }}
                         </td>
                     </tr>
                     </tbody>

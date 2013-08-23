@@ -20,6 +20,7 @@ def get_all_images(request):
         if i.visible_on_website is True:
             category_images = {}
             category_images["label_name"] = i.label
+            category_images["label_code"] = i.value
             category_images["images"] = []
             search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
             category_images["number_of_images"] = len(search_set)
@@ -31,7 +32,8 @@ def get_all_images(request):
 
             images.append(category_images)
 
-    sorted(images, key=lambda k: k["label_name"])
+    #3/0
+    images = sorted(images, key=lambda k: k["label_name"])
 
     return render(request, 'resources/images-index.html', {'images': images})
 
@@ -51,6 +53,7 @@ def get_images_category(request, category):
         if i.visible_on_website is True:
             category_images = {}
             category_images["label_name"] = i.label
+            category_images["label_code"] = i.value
             category_images["images"] = []
             search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
             category_images["number_of_images"] = len(search_set)
@@ -60,7 +63,7 @@ def get_images_category(request, category):
 
             images.append(category_images)
 
-    sorted(images, key=lambda k: k["label_name"])
+    images = sorted(images, key=lambda k: k["label_name"])
 
     # 3/0
     return render(request, 'resources/images-category.html',
@@ -83,6 +86,7 @@ def get_images_category_detail(request, category, page):
         if i.visible_on_website is True:
             category_images = {}
             category_images["label_name"] = i.label
+            category_images["label_code"] = i.value
             category_images["images"] = []
             search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
             category_images["number_of_images"] = len(search_set)
@@ -92,6 +96,8 @@ def get_images_category_detail(request, category, page):
                 pagins = paginator.page(page)
 
             images.append(category_images)
+
+    images = sorted(images, key=lambda k: k["label_name"])
 
     return render(request, 'resources/image-category-detail.html',
                               {'images': images,
@@ -135,13 +141,24 @@ def images_search(request):
         form = SearchForm(request.POST)
 
         if form.is_valid():
+            images = []
             categories_to_search = []
             query = form.cleaned_data['q']
 
-            # Get categories to search.
-            for i in range(1,5):
-                if request.POST.get("checkbox" + str(i)):
-                    categories_to_search.append(ImageCategory.objects.get(value=i).label)
+            # Get categories to search and get left menu data
+            for i in ImageCategory.objects.filter(visible_on_website=True):
+                category_images = {}
+                category_images["label_name"] = i.label
+                category_images["label_code"] = i.value
+                category_images["images"] = []
+                search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+                category_images["number_of_images"] = len(search_set)
+                if request.POST.get("checkbox" + str(i.value)):
+                    categories_to_search.append(i.label)
+
+                images.append(category_images)
+
+            images = sorted(images, key=lambda k: k["label_name"])
 
             time_start = request.POST.get('time_start')
             time_end = request.POST.get('time_end')
@@ -218,10 +235,11 @@ def images_search(request):
                                                         kwargs={'category': categories_to_search.pop()}))
 
         else:
-            results = SearchQuerySet().all()
+            results = SearchQuerySet().model(Image).all()
 
         # Store results in session
         request.session['results_images'] = results
+        request.session['images_images'] = images
         request.session['enabled_categories'] = categories_to_search
         request.session['query'] = query
         request.session['time_start'] = time_start
@@ -229,9 +247,11 @@ def images_search(request):
 
     else:
         results = request.session['results_images']
+        images = request.session['images_images']
 
     return render(request, 'resources/images-search-results.html',
             {'results': results,
+             'images': images,
              'query': request.session['query'],
              'time_start': request.session['time_start'],
              'time_end': request.session['time_end'],
@@ -246,13 +266,16 @@ def images_search_detail(request, page):
     :param page: Number of page to serve
     """
 
-    images = request.session['results_images']
+    results = request.session['results_images']
+    images = request.session['images_images']
 
-    paginator = Paginator(images, 1)
+    paginator = Paginator(results, 1)
     pagins = paginator.page(page)
 
     return render(request, 'resources/images-search-detail.html',
-                              {'images': pagins, 'category': "Search",
+                              {'images': images,
+                               'results': pagins,
+                               'category': "Search",
                                'query': request.session['query'],
                                'time_start': request.session['time_start'],
                                'time_end': request.session['time_end'],
@@ -267,6 +290,6 @@ def get_image_search_detail(request, page):
     :param page: Number of page to serve details
     """
 
-    image = request.session['results'][int(page)-1]
+    image = request.session['results_images'][int(page)-1]
 
     return render(request, 'resources/image-search-detail-window.html',  {'image': image})

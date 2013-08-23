@@ -45,16 +45,16 @@
             {% endif %}
         </td>
         <td style="padding: 0px 0px 0px 0px;">
-            {% if images.has_previous %}
-                <a href={{ images.previous_page_number }}>Previous</a>
+            {% if results.has_previous %}
+                <a href={{ results.previous_page_number }}>Previous</a>
             {% else %}
                 Previous
             {% endif %}
         </td>
-        <td style="padding: 0px 10px 0px 10px"> {{ images.number }} / {{ images.paginator.num_pages }}  </td>
+        <td style="padding: 0px 10px 0px 10px"> {{ results.number }} / {{ results.paginator.num_pages }}  </td>
         <td style="padding: 0px;">
-            {% if images.has_next %}
-                <a href={{ images.next_page_number }}>Next</a>
+            {% if results.has_next %}
+                <a href={{ results.next_page_number }}>Next</a>
             {% else %}
                 Next
             {% endif %}
@@ -63,14 +63,16 @@
     </tbody>
     </table>
 </div>
-    {% for i in images %}
+    {% for i in results %}
     <table style="border-collapse: collapse;">
     <tbody>
     <tr>
         <td class="image-detail-link">
-            <a href="{% url 'resources:image-search-detail-window' images.number %}">
+            <a href="{% url 'resources:image-search-detail-window' results.number %}">
                 {% thumbnail i.file "400" as im %}
                     <img src="{{ im.url }}">
+                    {% empty %}
+                        <img src="{{ MEDIA_URL }}{{ i.file }}" width="100" height="100">
                 {% endthumbnail %}
             </a>
         </td>
