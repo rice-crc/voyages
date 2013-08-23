@@ -21,6 +21,10 @@ def modulo(num, val):
     return num % val
 
 @register.filter
+def spaces_to_underscores(str):
+    return "_".join(str.split(" "))
+
+@register.filter
 def decode_language(code):
     if code == "en":
         return "English"

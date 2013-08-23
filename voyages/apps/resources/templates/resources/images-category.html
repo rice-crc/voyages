@@ -53,6 +53,8 @@
                             {% thumbnail image.file "100x100" as im %}
                                 <div class="gallery-image">
                                     <a href="{% url 'resources:images-category-detail' category forloop.counter %}"><img src="{{ im.url }}" width="100" height="100"/></a>
+                                    {% empty %}
+                                        <img src="{{ MEDIA_URL }}{{ image.file }}" width="100" height="100">
                                 </div>
                             {% endthumbnail %}
                             <div class="gallery-image-text">

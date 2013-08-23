@@ -2,24 +2,21 @@ from django.db import models
 from os.path import basename, getsize
 from voyages.apps.voyage.models import Voyage
 
+
 class Image(models.Model):
     """
     Model to store information about image.
     """
 
-    image_id = models.IntegerField('Image ID number', null=True, blank=True)
-
     file = models.ImageField(upload_to='images')
-    title = models.CharField(max_length=200)
-    description = models.CharField(max_length=2000, null=True, blank=True)
-    mime_type = models.CharField(max_length=100, null=True, blank=True)
+    title = models.CharField(max_length=200, default="")
+    description = models.CharField(max_length=2000, default="")
     creator = models.CharField(max_length=200, null=True, blank=True)
     language = models.CharField(max_length=2, null=True, blank=True)
     source = models.CharField(max_length=500, null=True, blank=True)
-    comments = models.CharField(max_length=2000, null=True, blank=True)
 
     ready_to_go = models.BooleanField(default=False)
-    order_num = models.IntegerField('Code value')
+    order_num = models.IntegerField('Code value', null=True, blank=True, max_length=2)
 
     date = models.IntegerField('Date(Year YYYY)', max_length=4, null=True, blank=True)
 
@@ -31,7 +28,7 @@ class Image(models.Model):
         verbose_name = "Image"
         verbose_name_plural = "Images"
 
-        ordering = ["date", "image_id"]
+        ordering = ["date"]
 
     def get_file_name(self):
         """
@@ -69,3 +66,4 @@ from .search_indexes import ImagesIndex
 def reindex_image_category(sender, **kwargs):
     ImagesIndex().update()
 models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
+models.signals.post_save.connect(reindex_image_category, sender=Image)
