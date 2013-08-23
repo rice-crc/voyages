@@ -45,6 +45,13 @@ LANGUAGE_CODE = 'en-us'
 # when using an ImageField setting this DEBUG to Ture will give debug info about ImageFields and thumbnails
 THUMBNAIL_DEBUG = False
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django_cache/voyages',
+    }
+}
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
