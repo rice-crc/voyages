@@ -85,7 +85,28 @@ $(document).ready(function() {
 	});
 
     /* Tool tip for sources */
-    $(".source_entry").tooltip({content: "Tooltip here", track: true});
+    /*$(".source_entry").qtip({
+        content: "Tooltip here"
+    }); */
+
+    if ($(".search-panel").children().length > 0) {
+        $('.source_entry').qtip({
+        content: {
+           text: function (api) {
+               return $(this).next().html();
+           }
+        },
+        position: {
+            my: 'top left',
+            target: 'mouse',
+            viewport: $(window), // Keep it on-screen at all times if possible
+            adjust: {
+                x: -300, y: 10
+            }
+        },
+        delay: 0,
+        });
+    }
 
     $("#link-button").click(strtBlackout); // open if btn is pressed
     $(".close-link-box").click(endBlackout); // close if close btn clicked
