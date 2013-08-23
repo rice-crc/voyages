@@ -164,7 +164,7 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 
 # updates solr when object is saved
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+#HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"

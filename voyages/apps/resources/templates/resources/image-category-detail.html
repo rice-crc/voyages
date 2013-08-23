@@ -102,10 +102,7 @@
                 {% endif %}
                 </tbody>
             </table>
-            {% for k,v in pagins.0.iteritems %}
-
-                {{ k }}
-        {% endfor %}
+        {{ pagins.0.voyage }}
             {% if pagins.0.voyage.voyage_ship.ship_name %}
                 <div class="image-detail-voyages-title">
                     Related voyages
