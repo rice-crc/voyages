@@ -68,8 +68,6 @@ for line in input_file:
 
     count += 1
     print count
-    if count > 200:
-        break
 
     if isNotBlank('voyageid'):
         voyageObj.voyage_id = getIntFieldValue('voyageid')
@@ -294,6 +292,11 @@ for line in input_file:
 
     date_info.imp_length_home_to_disembark = getIntFieldValue('voy1imp')
     date_info.imp_length_leaving_africa_to_disembark = getIntFieldValue('voy2imp')
+    if isNotBlank('dateleftafr'):
+        tmp = getFieldValue('dateleftafr')
+        # MM,DD,YYYY
+        date_info.date_departed_africa = tmp[5:7] + "," + tmp[8:10] + "," + tmp[0:4]
+
     date_info.save()
 
     voyageObj.voyage_dates = date_info

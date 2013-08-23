@@ -1252,12 +1252,13 @@ def download_results(request, page):
     # Writing query
     if query_dict is None:
     #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        writer.writerow(['All results', ])
+        writer.writerow(['All records', ])
     else:
     #    results = SearchQuerySet().models(Voyage).filter(**query_dict)
     #    if request.session['voyage_last_query_date_filters']:
     #        results = date_filter_query(request.session['voyage_last_query_date_filters'], results)
-        writer.writerow([str(query_dict),])
+        writer.writerow([extract_query_for_download(query_dict, []), ])
+        print extract_query_for_download(query_dict, [])
 
     tmpRow = []
     for column in display_columns:
@@ -1292,3 +1293,52 @@ def get_spss_name(var_short_name):
         if var['var_name'] == var_short_name:
             return var['spss_name']
     return None
+
+
+def extract_query_for_download(query_dict, date_filter):
+    """
+    Return a more user-friendly format of the query string from query dictionary
+    :param query_dict:
+    :param date_filter:
+    :return:
+    """
+    query_arr = []
+    for key in query_dict.keys():
+        query_str = ""
+        split_arr = key.split('__')
+        var_name_indexed = split_arr[0]
+        query_str += get_spss_name(var_name_indexed)
+        if split_arr[1] == 'lte':
+            query_str += " <= "
+        elif split_arr[1] == 'gte':
+            query_str += " <= "
+        elif split_arr[1] == 'contains':
+            query_str += " contains "
+        elif split_arr[1] == 'in':
+            query_str += " in "
+        elif split_arr[1] == 'range':
+            query_str += " in range "
+
+        if isinstance(query_dict[key], (int, float)):
+            query_str += str(query_dict[key])
+        elif isinstance(query_dict[key], (list, tuple)):
+            for elem in query_dict[key]:
+                if isinstance(elem, (int, float)):
+                    typeElem = 'number'
+                    break
+                else:
+                    typeElem = 'text'
+                    break
+
+                if typeElem == 'number':
+                    query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
+                else:
+                    query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
+
+            # Encode to sign
+        else:
+            query_str += str(query_dict[key].encode('ascii', 'ignore'))
+
+        query_arr.append(query_str)
+
+    return " AND ".join(query_arr)

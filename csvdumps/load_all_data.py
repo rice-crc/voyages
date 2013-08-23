@@ -16,6 +16,5 @@ execfile('load_sources.py')
 execfile('load_tontype.py')
 execfile('load_groupings.py')
 execfile('load_voyage.py')
-execfile('update_voyage_field.py')
 
 os.chdir("./..")
