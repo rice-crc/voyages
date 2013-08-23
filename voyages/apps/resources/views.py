@@ -14,15 +14,24 @@ def get_all_images(request):
     :param request: Request to serve
     """
 
-    images = SortedDict()
+    images = []
 
     for i in ImageCategory.objects.all().order_by("-value"):
-        images[i.label] = []
-        for j in SearchQuerySet().filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id'):
-            images[i.label].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
-            # TODO: May be too ugly, considered to change
-            if len(images[i.label]) == 4:
-                break
+        if i.visible_on_website is True:
+            category_images = {}
+            category_images["label_name"] = i.label
+            category_images["images"] = []
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            category_images["number_of_images"] = len(search_set)
+            for j in search_set:
+                category_images["images"].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
+                # TODO: May be too ugly, considered to change
+                if len(category_images["images"]) == 4:
+                    break
+
+            images.append(category_images)
+
+    sorted(images, key=lambda k: k["label_name"])
 
     return render(request, 'resources/images-index.html', {'images': images})
 
@@ -35,12 +44,25 @@ def get_images_category(request, category):
     :param category: Get images from this category
     """
 
-    images = SortedDict()
+    images = []
 
     # Pack all images from category with needed data.
-    for i in SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id'):
-        images[i.image_id] = SortedDict({'file': i.file, 'year': i.date, 'title': i.title})
+    for i in ImageCategory.objects.all().order_by("-value"):
+        if i.visible_on_website is True:
+            category_images = {}
+            category_images["label_name"] = i.label
+            category_images["images"] = []
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            category_images["number_of_images"] = len(search_set)
+            if i.label == category:
+                for i in search_set:
+                    category_images["images"].append(SortedDict({'file': i.file, 'year': i.date, 'title': i.title}))
 
+            images.append(category_images)
+
+    sorted(images, key=lambda k: k["label_name"])
+
+    # 3/0
     return render(request, 'resources/images-category.html',
                               {'images': images, 'category': category})
 
@@ -54,14 +76,27 @@ def get_images_category_detail(request, category, page):
     """
 
     manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')
+    images = []
 
+    # Pack all images from category with needed data.
+    for i in ImageCategory.objects.all().order_by("-value"):
+        if i.visible_on_website is True:
+            category_images = {}
+            category_images["label_name"] = i.label
+            category_images["images"] = []
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            category_images["number_of_images"] = len(search_set)
+            if i.label == category:
+                # Set paginator on proper page.
+                paginator = Paginator(manu, 1)
+                pagins = paginator.page(page)
 
-    # Set paginator on proper page.
-    paginator = Paginator(manu, 1)
-    pagins = paginator.page(page)
+            images.append(category_images)
 
     return render(request, 'resources/image-category-detail.html',
-                              {'images': pagins, 'category': category})
+                              {'images': images,
+                               'pagins': pagins,
+                               'category': category})
 
 
 def get_image_detail(request, category, page):

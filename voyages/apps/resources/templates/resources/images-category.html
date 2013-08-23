@@ -30,7 +30,11 @@
                     <a href="{% url 'resources:images' %}">Back to start</a>
                 </td>
                 <td style="padding: 0px">
-                    {{ images|length }} images
+                    {% for i in images %}
+                        {% if i.label_name == category %}
+                            {{ i.images|length }} images
+                        {% endif %}
+                    {% endfor %}
                 </td>
             </tr>
         </tbody>
@@ -39,39 +43,31 @@
 
         <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
         <tbody>
-            {% for k, v in images.iteritems %}
-                {% ifequal forloop.counter0|modulo:5 0 %}
-                    <tr>
-                {% endifequal %}
-                <td class="gallery-image">
-                    {% for key, value in v.iteritems %}
-                        {% if key == "file" %}
-                            {% thumbnail value "100x100" as im %}
+            {% for i in images %}
+                {% if i.label_name == category %}
+                    {% for image in i.images %}
+                        {% ifequal forloop.counter0|modulo:5 0 %}
+                            <tr>
+                        {% endifequal %}
+                        <td class="gallery-image">
+                            {% thumbnail image.file "100x100" as im %}
                                 <div class="gallery-image">
-                                <a href="{% url 'resources:images-category-detail' category forloop.parentloop.counter %}"><img src="{{ im.url }}" width="100" height="100"/></a>
+                                    <a href="{% url 'resources:images-category-detail' category forloop.counter %}"><img src="{{ im.url }}" width="100" height="100"/></a>
                                 </div>
                             {% endthumbnail %}
+                            <div class="gallery-image-text">
+                                <div class="gallery-image-label">
+                                    <a href="{% url 'resources:images-category-detail' category forloop.counter %}">{{ image.title }}</a>
+                                </div>
+                                <div class="gallery-image-description">
+                                    ({{ image.year }})
+                                </div>
+                            </div>
+                        </td>
+                        {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
+                            </tr>
                         {% endif %}
                     {% endfor %}
-                    <div class="gallery-image-text">
-                        {% for key, value in v.iteritems %}
-                            {% if key == "title" %}
-                                <div class="gallery-image-label">
-                                    <a href="{% url 'resources:images-category-detail' category forloop.parentloop.counter %}">{{ value }}</a>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {% for key, value in v.iteritems %}
-                            {% if key == "year" and value %}
-                                <div class="gallery-image-description">
-                                    ({{ value }})
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                     </div>
-                </td>
-                {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
-                    </tr>
                 {% endif %}
             {% endfor %}
         </tbody>

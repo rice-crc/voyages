@@ -68,66 +68,33 @@
                         <input type="hidden" value="">
                         <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
                         <tbody>
-                        <tr>
-                            <td class="checkbox-list-checkbox-0">
-                                {% if enabled_categories and "Manuscripts" not in enabled_categories %}
-                                    <input type="checkbox" name="checkbox4" value="Manuscripts">
-                                {% else %}
-                                    <input type="checkbox" checked="checked" name="checkbox4" value="Manuscripts">
-                                {% endif %}
-                            </td>
-                            <td class="checkbox-list-label-0">
-                                <label>
-                                    {% trans "Manuscripts" %}
-                                    <span class="images-count">(171 images)</span>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-list-checkbox-0">
-                                {% if enabled_categories and "Places" not in enabled_categories %}
-                                    <input type="checkbox" name="checkbox3" value="Places">
-                                {% else %}
-                                    <input type="checkbox" checked="checked" name="checkbox3" value="Places">
-                                {% endif %}
-                            </td>
-                            <td class="checkbox-list-label-0">
-                                <label>
-                                    {% trans "Places" %}
-                                    <span class="images-count">(42 images)</span>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-list-checkbox-0">
-                                {% if enabled_categories and "Slaves" not in enabled_categories %}
-                                    <input type="checkbox" name="checkbox2" value="Slaves">
-                                {% else %}
-                                    <input type="checkbox" checked="checked" name="checkbox2" value="Slaves">
-                                {% endif %}
-                            </td>
-                            <td class="checkbox-list-label-0">
-                                <label>
-                                    {% trans "Slaves" %}
-                                    <span class="images-count">(9 images)</span>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-list-checkbox-0">
-                                {% if enabled_categories and "Vessels" not in enabled_categories %}
-                                    <input type="checkbox" name="checkbox1" value="Vessel">
-                                {% else %}
-                                    <input type="checkbox" checked="checked" name="checkbox1" value="Vessel">
-                                {% endif %}
-                            </td>
-                            <td class="checkbox-list-label-0">
-                                <label>
-                                    {% trans "Vessels" %}
-                                    <span class="images-count">(9 images)</span>
-                                </label>
-                            </td>
-                        </tr>
+                        {% for images_set in images %}
+                            {% if images_set.number_of_images > 0 %}
+                                <tr>
+                                    <td class="checkbox-list-checkbox-{{ forloop.counter0 }}">
+                                        {% if enabled_categories and images_set.label_name not in enabled_categories %}
+                                            <input type="checkbox" name="checkbox4" value="{% trans images_set.label_name %}">
+                                        {% else %}
+                                            <input type="checkbox" checked="checked" name="checkbox{{ forloop.revcounter0 }}" value="{% trans images_set.label_name %}">
+                                        {% endif %}
+                                    </td>
+                                    <td class="checkbox-list-label-{{ forloop.counter0 }}">
+                                        <label>
+                                            {% trans images_set.label_name %}
+                                            {% spaceless %}
+                                            <span class="images-count">({{ images_set.number_of_images }}
+                                                {% if images_set.number_of_images == 1 %}
+                                                    image)
+                                                {% else %}
+                                                    images)
+                                                {% endif %}
+                                            </span>
+                                            {% endspaceless %}
+                                        </label>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                         </tbody>
                     </table>
                     </div>
