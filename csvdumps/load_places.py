@@ -1,4 +1,5 @@
 from voyages.apps.voyage.models import *
+import Decimal
 
 input_file = open('place.txt', 'r')
 
@@ -46,8 +47,8 @@ for line in input_file:
     location = Place()
     location.place = getFieldValue('name')
     location.value = getFieldValue('id')
-    location.longitude = round(getDecimalFieldValue('longitude'), 5)
-    location.latitude = round(getDecimalFieldValue('latitude'), 5)
+    location.longitude = Decimal(str(round(getDecimalFieldValue('longitude'), 5)))
+    location.latitude = Decimal(str(round(getDecimalFieldValue('latitude'), 5)))
     if isNotBlank('region_id'):
         location.region = Region.objects.filter(value=getIntFieldValue('region_id'))[0]
 
