@@ -1330,10 +1330,13 @@ def extract_query_for_download(query_dict, date_filter):
                     typeElem = 'text'
                     break
 
-                if typeElem == 'number':
-                    query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
-                else:
-                    query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
+            if typeElem == 'number':
+                query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
+            else:
+                tmp_arr = []
+                for elem in query_dict[key]:
+                    tmp_arr.append(elem.encode('ascii', 'ignore'))
+                query_str += "(" + " , ".join(tmp_arr) + ")"
 
             # Encode to sign
         else:
