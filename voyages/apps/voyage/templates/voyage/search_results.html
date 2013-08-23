@@ -4,6 +4,8 @@
 {% load url from future %}
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/qtip/jquery.qtip.min.css.css">
+<script type="text/javascript" src="{{ STATIC_URL }}css"></script>
 
 <div>
     <table style="border-collapse: collapse; width: 100%;">
@@ -39,7 +41,12 @@
             <tr class="grid-row-even grid-row-first">
                 {% for item in request.session.result_columns %}
                     <td>
-                        {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
+                        {% if item.0 == 'var_sources' %}
+                            {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
+                        {% else %}
+                            {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
+                        {% endif %}
+
                     </td>
                 {% endfor %}
             </tr>
@@ -76,11 +83,8 @@
                         {# First, prev section #}
                         {% if results.number != 1 %}
                             <td class="pager-fast-back">
-                                <form id="form_first_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="1" name="desired_page">
-                                    <a href="#" onclick="document.forms['form_first_page'].submit(); return false;">« First</a>
-                                </form>
+                                    <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
+                                    <a href="#" onclick="retrieve_page('form_first_page');">« First</a>
                             </td>
                         {% else %}
                             <td class="pager-fast-back-no-click">
@@ -90,11 +94,8 @@
 
                         {% if results.has_previous %}
                             <td class="pager-back">
-                                <form id="form_prev_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ results.previous_page_number }}" name="desired_page">
-                                    <a href="#" onclick="document.forms['form_prev_page'].submit(); return false;">« Prev</a>
-                                </form>
+                                    <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
+                                    <a href="#" onclick="retrieve_page('form_prev_page');">« Prev</a>
                             </td>
                         {% else %}
                             <td class="pager-back-no-click">
@@ -109,23 +110,17 @@
                                     {{ i }}
                                 </td>
                             {% else %}
-                                <form id="form_page_{{ i }}" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ i }}" name="desired_page">
+                                    <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true" disabled="true">
                                     <td class="pager-number">
-                                        <a href="#" onclick="document.forms['form_page_{{ i }}'].submit(); return false;">{{ i }}</a>
+                                        <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
                                     </td>
-                                </form>
                             {% endif %}
                         {% endfor %}
 
                         {% if results.has_next %}
                             <td class="pager-fast-forward">
-                                <form id="form_next_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ results.next_page_number }}" name="desired_page">
-                                    <a href="#" onclick="document.forms['form_next_page'].submit(); return false;">Next »</a>
-                                </form>
+                                    <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
+                                    <a href="#" onclick="retrieve_page('form_next_page');">Next »</a>
                             </td>
                         {% else %}
                             <td class="pager-fast-forward-no-click">
@@ -134,11 +129,8 @@
                         {% endif %}
                         {% if results.has_next %}
                             <td class="pager-forward">
-                                <form id="form_last_page" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ results.paginator.num_pages }}" name="desired_page">
-                                    <a href="#" onclick="document.forms['form_last_page'].submit(); return false;">Last »</a>
-                                </form>
+                                    <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
+                                    <a href="#" onclick="retrieve_page('form_last_page');">Last »</a>
                             </td>
                         {% else %}
                             <td class="pager-forward-no-click">

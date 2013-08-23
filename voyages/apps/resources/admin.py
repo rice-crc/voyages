@@ -5,6 +5,10 @@ from .forms import *
 class ImageAdmin(admin.ModelAdmin):
     list_filter = ['category']
     list_display = ['image_id', 'file', 'title' ]
+<<<<<<< HEAD
+=======
+    #exclude = ['voyage']
+>>>>>>> a3ae4af8fa81d4b9000b58bb1a5931b90a5612fb
     form = ImageAdminForm
 
     class Meta:
