@@ -59,6 +59,8 @@
                     {% thumbnail result.file "100x100" as im %}
                         <div class="gallery-image">
                         <img src="{{ im.url }}" width="100" height="100"/>
+                        {% empty %}
+                            <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100">
                         </div>
                     {% endthumbnail %}
                     </a>
