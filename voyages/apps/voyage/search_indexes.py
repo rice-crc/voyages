@@ -654,10 +654,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_sources(self, obj):
         result = ""
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            result += connection.text_ref + ", "
+            result += connection.text_ref
             result += "<>"
             if connection.source is not None:
-                result += connection.source.full_ref + ", "
+                result += connection.source.full_ref
             else:
                 result += ""
             result += ";;"

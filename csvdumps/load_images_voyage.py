@@ -52,10 +52,7 @@ for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
     img = Image.objects.get(image_id=getIntFieldValue('image_id'))
-    print img.image_id
     returnres = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))
-    print "voyageid: " + getFieldValue('voyageid')
-
     if len(returnres) >= 1:
         img.voyage = returnres[0]
         print "found"

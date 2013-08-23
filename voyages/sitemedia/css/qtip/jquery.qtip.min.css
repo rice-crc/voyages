@@ -4,13 +4,13 @@
     left: -28000px;
     top: -28000px;
     display: none;
-    max-width: 280px;
-    min-width: 50px;
+    width: 290px;
+    /* min-width: 50px; */
     font-size: 10.5px;
     line-height: 12px;
     direction: ltr;
     box-shadow: none;
-    padding: 0
+    padding: 0;
 }
 
 .qtip-content {
@@ -87,9 +87,9 @@
 .qtip-default {
     border-width: 1px;
     border-style: solid;
-    border-color: #F1D031;
-    background-color: #FFFFA3;
-    color: #555
+    border-color: #A4DAE0;
+    background-color: #EEFFFF;
+    color: black;
 }
 
 .qtip-default .qtip-titlebar {
@@ -98,8 +98,8 @@
 
 .qtip-default .qtip-icon {
     border-color: #CCC;
-    background: #F1F1F1;
-    color: #777
+    background: #EEFFFF;
+    color: black;
 }
 
 .qtip-default .qtip-titlebar .qtip-close {
