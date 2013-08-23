@@ -1,6 +1,6 @@
 from voyages.apps.voyage.models import *
 
-input_file = open('tontype.txt', 'r')
+input_file = open('ton_type.txt', 'r')
 
 ##### Common section to all files #####
 NULL_VAL = "\N"

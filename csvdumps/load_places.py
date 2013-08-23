@@ -1,5 +1,5 @@
 from voyages.apps.voyage.models import *
-import Decimal
+from decimal import *
 
 input_file = open('place.txt', 'r')
 
