@@ -65,16 +65,12 @@ for line in input_file.read().split("\r\n"):
 
     img.width = getIntFieldValue('width')
     img.height = getIntFieldValue('height')
-    if isNotBlank('mime_type'):
-        img.mime_type = getFieldValue('mime_type')
     if isNotBlank('creator'):
         img.creator = getFieldValue('creator')
     if isNotBlank('language'):
         img.language = getFieldValue('language')
     if isNotBlank('source'):
         img.source = getFieldValue('source')
-    if isNotBlank('comments'):
-        img.comments = getFieldValue('comments')
 
     if getFieldValue('ready_to_go') == "t":
         img.ready_to_go = True
@@ -86,7 +82,5 @@ for line in input_file.read().split("\r\n"):
         img.category = ImageCategory.objects.filter(value=getIntFieldValue('category'))[0]
 
     img.date = getIntFieldValue('date')
-
-    img.image_id = getIntFieldValue('image_id')
 
     img.save()
