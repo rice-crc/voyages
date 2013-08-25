@@ -1057,7 +1057,7 @@ def variable_list(request):
 def sources_list(request, category="documentary_sources", sort="short_ref"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
-    sources = SearchQuerySet().filter(group_name__exact=category)
+    sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
 
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
@@ -1161,12 +1161,13 @@ def insert_source(dict, source):
 
     # If contains text, put on the list
     if text != "":
-        new_source = {}
-        new_source["short_ref"] = source.short_ref
-        new_source["full_ref"] = text
-        if new_source["short_ref"] == group_dict["short_ref"]:
-            group_dict["short_ref"] = ""
-        source_list.append(new_source)
+        if city != "uncategorized":
+            new_source = {}
+            new_source["short_ref"] = source.short_ref
+            new_source["full_ref"] = text
+            if new_source["short_ref"] == group_dict["short_ref"]:
+                group_dict["short_ref"] = ""
+            source_list.append(new_source)
 
 
 def sort_documentary_sources_dict(dict, sort):
