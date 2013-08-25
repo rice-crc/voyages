@@ -1058,6 +1058,7 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
     sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
+    divided_groups = []
 
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
@@ -1069,11 +1070,8 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         # print "Full ref: " + safe_full_ref
 
     if category == "documentary_sources":
-        # Find all cities in sources
-        divided_groups = []
-
         for i in sources:
-            insert_source(divided_groups, i)
+            insert_source(divided_groups, category, i)
 
         # Count sources in each city
         for v in divided_groups:
@@ -1088,7 +1086,8 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         set_even_odd_sources_dict(sorted_dict)
 
     else:
-        pass
+        for i in sources:
+            insert_source(divided_groups, category, i)
         # just long and short refs
     return render(request, "voyage/voyage_sources.html",
                   {'results': sorted_dict,
@@ -1096,7 +1095,7 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
                    'category': category})
 
 
-def insert_source(dict, source):
+def insert_source(dict, category, source):
     # source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
     # Match:
     # - name of the group (between <i> marks
