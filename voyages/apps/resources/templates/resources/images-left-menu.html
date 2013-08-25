@@ -74,9 +74,9 @@
                                 <tr>
                                     <td class="checkbox-list-checkbox-{{ forloop.counter0 }}">
                                         {% if enabled_categories and images_set.label_name not in enabled_categories %}
-                                            <input type="checkbox" name="checkbox4" value="{% trans images_set.label_name %}">
+                                            <input type="checkbox" name="checkbox4" value="{% trans images_set.label_name|spaces_to_underscores %}">
                                         {% else %}
-                                            <input type="checkbox" checked="checked" name="checkbox{{ images_set.label_code }}" value="{% trans images_set.label_name %}">
+                                            <input type="checkbox" checked="checked" name="checkbox{{ images_set.label_code }}" value="{% trans images_set.label_name|spaces_to_underscores %}">
                                         {% endif %}
                                     </td>
                                     <td class="checkbox-list-label-{{ forloop.counter0 }}">
