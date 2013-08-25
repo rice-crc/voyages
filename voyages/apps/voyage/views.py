@@ -1111,10 +1111,10 @@ def insert_source(dict, source):
         (city, country) = extract_places(m.group(2))
         text = m.group(3)
     else:
-        group_name = source.short_ref
+        group_name = source.full_ref
         city = "uncategorized"
         country = "uncategorized"
-        text = source.short_ref
+        text = source.full_ref
 
     # Get (create if doesn't exist) cities in country
     cities_list = None
