@@ -1057,7 +1057,8 @@ def variable_list(request):
 def sources_list(request, category="documentary_sources", sort="short_ref"):
     # Prepare items
     #voyage_sources = VoyageSources.objects.filter(source_type=)
-    sources = SearchQuerySet().filter(group_name__exact=category)
+    sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
+    divided_groups = []
 
     for i in sources:
         safe_full_ref = i.full_ref.encode('ascii', 'ignore')
@@ -1069,11 +1070,8 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         # print "Full ref: " + safe_full_ref
 
     if category == "documentary_sources":
-        # Find all cities in sources
-        divided_groups = []
-
         for i in sources:
-            insert_source(divided_groups, i)
+            insert_source(divided_groups, category, i)
 
         # Count sources in each city
         for v in divided_groups:
@@ -1088,7 +1086,8 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         set_even_odd_sources_dict(sorted_dict)
 
     else:
-        pass
+        for i in sources:
+            insert_source(divided_groups, category, i)
         # just long and short refs
     return render(request, "voyage/voyage_sources.html",
                   {'results': sorted_dict,
@@ -1096,7 +1095,7 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
                    'category': category})
 
 
-def insert_source(dict, source):
+def insert_source(dict, category, source):
     # source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
     # Match:
     # - name of the group (between <i> marks
@@ -1111,10 +1110,10 @@ def insert_source(dict, source):
         (city, country) = extract_places(m.group(2))
         text = m.group(3)
     else:
-        group_name = source.short_ref
+        group_name = source.full_ref
         city = "uncategorized"
         country = "uncategorized"
-        text = source.short_ref
+        text = source.full_ref
 
     # Get (create if doesn't exist) cities in country
     cities_list = None
@@ -1161,12 +1160,13 @@ def insert_source(dict, source):
 
     # If contains text, put on the list
     if text != "":
-        new_source = {}
-        new_source["short_ref"] = source.short_ref
-        new_source["full_ref"] = text
-        if new_source["short_ref"] == group_dict["short_ref"]:
-            group_dict["short_ref"] = ""
-        source_list.append(new_source)
+        if city != "uncategorized":
+            new_source = {}
+            new_source["short_ref"] = source.short_ref
+            new_source["full_ref"] = text
+            if new_source["short_ref"] == group_dict["short_ref"]:
+                group_dict["short_ref"] = ""
+            source_list.append(new_source)
 
 
 def sort_documentary_sources_dict(dict, sort):

@@ -56,13 +56,13 @@
                 {% endifequal %}
                 <td class="gallery-image">
                     <a href="{% url 'resources:images-search-detail' forloop.counter %}">
-                    {% thumbnail result.file "100x100" as im %}
-                        <div class="gallery-image">
-                        <img src="{{ im.url }}" width="100" height="100"/>
-                        {% empty %}
-                            <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100">
-                        </div>
-                    {% endthumbnail %}
+                        {% thumbnail result.file "100x100" as im %}
+                            <div class="gallery-image">
+                            <img src="{{ im.url }}" width="100" height="100"/>
+                            {% empty %}
+                                <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100">
+                            </div>
+                        {% endthumbnail %}
                     </a>
                     <div class="gallery-image-text">
                         <div class="gallery-image-label">

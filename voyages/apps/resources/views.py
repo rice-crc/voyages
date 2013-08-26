@@ -47,6 +47,7 @@ def get_images_category(request, category):
     """
 
     images = []
+    category = " ".join(category.split("_"))
 
     # Pack all images from category with needed data.
     for i in ImageCategory.objects.all().order_by("-value"):
@@ -78,6 +79,7 @@ def get_images_category_detail(request, category, page):
     :param page: Number of page to serve
     """
 
+    category = " ".join(category.split("_"))
     manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')
     images = []
 
@@ -113,6 +115,7 @@ def get_image_detail(request, category, page):
     :param page: Number of page to serve
     """
 
+    category = " ".join(category.split("_"))
     image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
 
     return render(request, 'resources/image-detail.html', {'image': image})
