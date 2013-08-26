@@ -2,6 +2,7 @@ from voyages.apps.resources.models import *
 from voyages.apps.voyage.models import *
 from decimal import *
 
+image_file = open('images.txt')
 input_file = open('images_voyage.txt', 'r')
 
 ##### Common section to all files #####
@@ -46,12 +47,27 @@ def getDecimalFieldValue(field_name):
         return None
 ##### End of Common section to all files #####
 
+image_dict = {}
+images_first_line = image_file.readline()
+images_data = images_first_line[0:-2].split(DELIMITER)
+
 count = 0
+
+for line in image_file.read().split("\r\n"):
+    data = line[0:-2].split(DELIMITER)
+    if len(data) == 1:
+        # Done with last line
+        break
+
+    count += 1
+    img_obj = Image.objects.get(pk=count)
+    image_dict[getIntFieldValue('image_id')] = img_obj
 
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
-    img = Image.objects.get(image_id=getIntFieldValue('image_id'))
+    img = image_dict[getIntFieldValue('image_id')]
+
     returnres = Voyage.objects.filter(voyage_id=getIntFieldValue('voyageid'))
     if len(returnres) >= 1:
         img.voyage = returnres[0]

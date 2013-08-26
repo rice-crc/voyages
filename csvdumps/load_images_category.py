@@ -41,6 +41,9 @@ def getDecimalFieldValue(field_name):
         return None
 ##### End of Common section to all files #####
 
+Image.objects.all().delete()
+ImageCategory.objects.all().delete()
+
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
 

@@ -55,6 +55,10 @@ for line in input_file.read().split("\r\n"):
         break
 
     img = Image()
+    count += 1
+
+    img.pk = count
+
     if isNotBlank('file_name'):
         img.file.name = 'images/' + getFieldValue('file_name')
     if isNotBlank('title'):
