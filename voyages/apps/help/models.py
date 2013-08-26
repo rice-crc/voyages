@@ -60,4 +60,7 @@ from .search_indexes import FaqIndex
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_faqCategory(sender, **kwargs):
     FaqIndex().update()
+    for obj in Faq.objects.filter(category=kwargs['instance']):
+        FaqIndex().update_object(obj)
+
 models.signals.post_save.connect(reindex_faqCategory, sender=FaqCategory)

@@ -63,11 +63,13 @@ class ImageCategory(models.Model):
 
 from .search_indexes import ImagesIndex
 
+
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_image_category(sender, **kwargs):
-    ImagesIndex().update()
+    for obj in Image.objects.filter(category=kwargs['instance']):
+        ImagesIndex().update_object(obj)
 
 
-if hasattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR'):
+if not hasattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR'):
     models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
     #models.signals.post_save.connect(reindex_image_category, sender=Image)
