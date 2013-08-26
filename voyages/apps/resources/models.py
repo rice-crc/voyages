@@ -1,6 +1,7 @@
 from django.db import models
 from os.path import basename, getsize
 from voyages.apps.voyage.models import Voyage
+from django.conf import settings
 
 
 class Image(models.Model):
@@ -66,7 +67,6 @@ from .search_indexes import ImagesIndex
 def reindex_image_category(sender, **kwargs):
     ImagesIndex().update()
 
-from django.conf import settings
 
 if hasattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR'):
     models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
