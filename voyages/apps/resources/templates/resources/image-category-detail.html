@@ -28,7 +28,7 @@
     <tbody>
     <tr>
         <td style="padding: 0px 10px 0px 0px;">
-        <a href="{% url 'resources:images-category' category %}">Images of {{ category }}</a>
+        <a href="{% url 'resources:images-category' category|spaces_to_underscores %}">Images of {{ category }}</a>
         </td>
         <td style="padding: 0px 0px 0px 0px;">
             {% if pagins.has_previous %}
@@ -54,7 +54,7 @@
     <tbody>
     <tr>
         <td class="image-detail-link">
-            <a href="{% url 'resources:image-detail' category pagins.number %}">
+            <a href="{% url 'resources:image-detail' category|spaces_to_underscores pagins.number %}">
                 {% thumbnail pagins.0.file "400" as im %}
                     <img src="{{ im.url }}">
                     {% empty %}

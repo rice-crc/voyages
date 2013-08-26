@@ -5,7 +5,6 @@ from .models import Image
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     imgtext = indexes.NgramField(use_template=True)
-    image_id = indexes.IntegerField(model_attr="image_id", null=True)
     file = indexes.CharField(model_attr="file")
     ready_to_go = indexes.BooleanField(model_attr="ready_to_go", default=False)
     date = indexes.IntegerField(model_attr="date", null=True)
