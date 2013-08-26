@@ -36,8 +36,8 @@ class Migration(SchemaMigration):
         # Changing field 'Image.description'
         db.alter_column(u'resources_image', 'description', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True))
 
-        # User chose to not deal with backwards NULL issues for 'Image.order_num'
-        raise RuntimeError("Cannot reverse this migration. 'Image.order_num' and its values cannot be restored.")
+        # Changing field 'Image.order_num'
+        db.alter_column(u'resources_image', 'order_num', self.gf('django.db.models.fields.IntegerField')(max_length=11, null=False))
 
     models = {
         u'resources.image': {
