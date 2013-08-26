@@ -65,5 +65,9 @@ from .search_indexes import ImagesIndex
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_image_category(sender, **kwargs):
     ImagesIndex().update()
-models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
-models.signals.post_save.connect(reindex_image_category, sender=Image)
+
+from django.conf import settings
+
+if hasattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR'):
+    models.signals.post_save.connect(reindex_image_category, sender=ImageCategory)
+#models.signals.post_save.connect(reindex_image_category, sender=Image)
