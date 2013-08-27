@@ -92,7 +92,8 @@ def search(request):
     to_reset_form = False
     url_to_copy = ""
     query_dict = {}
-    tab = ""
+    result_data = {}
+    tab = 'result'
 
     # Check if saved url has been used
     if request.GET.values():
@@ -115,7 +116,6 @@ def search(request):
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
-            print 'new session created'
 
         # Try to retrieve results from session
         #try:
@@ -275,9 +275,6 @@ def search(request):
 
             elif submitVal == 'reset':
                 # Reset the search page
-
-                print 'resetting'
-
                 existing_form = []
                 request.session['existing_form'] = existing_form
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -311,9 +308,32 @@ def search(request):
                 tab = 'result'
 
             elif submitVal == 'restoreConfig':
+                # Restore default columns
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
                 tab = 'config_column'
 
+            # Tab changes
+            elif submitVal == 'tab_results':
+                tab = 'results'
+
+            elif submitVal == 'tab_statistics':
+                tab = 'statistics'
+
+                result_data['summary_statistics'] = retrieve_summary_stats(results)
+
+            elif submitVal == 'tab_tables':
+                tab = 'tables'
+
+            elif submitVal == 'tab_graphs':
+                tab = 'graphs'
+
+            elif submitVal == 'tab_timeline':
+                tab = 'timeline'
+
+            elif submitVal == 'tab_maps':
+                tab = 'maps'
+
+            # User clicked Search
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
 
@@ -407,9 +427,6 @@ def search(request):
                             new_existing_form.append(cur_var)
 
                 request.session['existing_form'] = new_existing_form
-
-                print(query_dict)
-
                 results = perform_search(query_dict, date_filters)
 
                 if len(results) == 0:
@@ -425,7 +442,6 @@ def search(request):
 
         elif request.method == 'GET':
             # Create a new form
-            print 'getting'
             existing_form = []
             request.session['existing_form'] = existing_form
 
@@ -472,6 +488,7 @@ def search(request):
                    'general_variables': globals.general_variables,
                    'all_var_list': globals.var_dict,
                    'results': pagins,
+                   'result_data': result_data,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'no_result': no_result,
@@ -1238,13 +1255,27 @@ def download_results(request, page):
         display_columns = get_new_visible_attrs(globals.default_result_columns)
 
     #writer = UnicodeWriter(response, quoting=csv.QUOTE_ALL, encoding="utf-8-sig")
-
     writer = csv.writer(response)
 
     if page == "-1":
         # Download all results
-        #results = request.session['results_voyages']
-        pass
+        if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
+                and request.session['voyage_last_query']:
+            query_dict = request.session['voyage_last_query']
+            if 'voyage_last_query_date_filters' in request.session\
+                    and request.session['voyage_last_query_date_filters'] is not None:
+                date_filters = request.session['voyage_last_query_date_filters']
+            else:
+                date_filters = []
+
+            results = perform_search(query_dict, date_filters)
+
+            if len(results) == 0:
+                no_result = True
+                results = []
+        else:
+            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+
     else:
         # Download current view
         results = request.session['voyage_current_result_page']
@@ -1258,7 +1289,6 @@ def download_results(request, page):
     #    if request.session['voyage_last_query_date_filters']:
     #        results = date_filter_query(request.session['voyage_last_query_date_filters'], results)
         writer.writerow([extract_query_for_download(query_dict, []), ])
-        print extract_query_for_download(query_dict, [])
 
     tmpRow = []
     for column in display_columns:
@@ -1283,6 +1313,44 @@ def download_results(request, page):
     return response
 
 
+def csv_stats_download(request):
+    """
+    Renders a downloadable csv file of summary statistics
+    :param request:
+    :param page:
+    :return:
+    """
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+
+    writer = csv.writer(response)
+    if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
+            and request.session['voyage_last_query']:
+        query_dict = request.session['voyage_last_query']
+        if 'voyage_last_query_date_filters' in request.session\
+                and request.session['voyage_last_query_date_filters'] is not None:
+            date_filters = request.session['voyage_last_query_date_filters']
+        else:
+            date_filters = []
+
+        results = perform_search(query_dict, date_filters)
+
+        if len(results) == 0:
+            no_result = True
+            results = []
+    else:
+        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+
+    # Write headers
+    tmpRow = ["",]
+    for column in globals.summary_statistics:
+        tmpRow.append(column['display_name'])
+    writer.writerow(tmpRow)
+
+    for tmpRow in retrieve_summary_stats(results):
+        writer.writerow(tmpRow)
+    return response
+
 def get_spss_name(var_short_name):
     """
     Retrieves a variable spss name based on its django name
@@ -1294,6 +1362,37 @@ def get_spss_name(var_short_name):
             return var['spss_name']
     return None
 
+
+def retrieve_summary_stats(results):
+    """
+    Return a list of summary statistics
+    :param results:
+    :return:
+    """
+    tmp_list = []
+    for item in globals.summary_statistics:
+        tmp_row = [item['display_name'],]
+        stats = results.stats(item['var_name']).stats_results()[item['var_name']]
+
+        if item['has_total']:
+            tmp_row.append(int(stats['sum']))
+        else:
+            tmp_row.append("")
+
+        # Number of voyages
+        tmp_row.append(stats['count'])
+
+        if item['is_percentage']:
+            # Average
+            tmp_row.append(str(round(stats['mean']*100, 1)) + "%")
+            # Standard deviation
+            tmp_row.append(str(round(stats['stddev'], 1)) + "%")
+        else:
+            tmp_row.append(round(stats['mean'], 1))
+            tmp_row.append(round(stats['stddev'], 1))
+
+        tmp_list.append(tmp_row)
+    return tmp_list
 
 def extract_query_for_download(query_dict, date_filter):
     """
