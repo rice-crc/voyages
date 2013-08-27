@@ -156,6 +156,8 @@
 
     <field name="var_guns_mounted" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imputed_percentage_male_exact" type="float" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_outcome_owner" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_crew_first_landing" type="long" indexed="true" stored="true" multiValued="false" />
@@ -249,8 +251,6 @@
     <field name="var_voyage_completed" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="var_imputed_percentage_men_exact" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_rig_of_vessel" type="text_en" indexed="true" stored="true" multiValued="false" />
 

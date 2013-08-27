@@ -718,3 +718,13 @@ sources_id = {
     'unpublished_secondary_sources': 3,
     'private_notes_and_collections': 4
 }
+
+summary_statistics = [
+    {'display_name' : 'Slaves embarked *', 'var_name': 'var_imp_total_num_slaves_purchased'},
+    {'display_name' : 'Slaves disembarked *', 'var_name': 'var_imp_total_slaves_disembarked'},
+    {'display_name' : 'Percentage of slaves embarked who died during voyage *',
+        'var_name': 'var_imputed_mortality'},
+    {'display_name' : 'Percentage male *', 'var_name': 'var_imputed_percentage_male'},
+    {'display_name' : 'Percentage children*', 'var_name': 'var_imputed_percentage_child'},
+    {'display_name' : 'Tonnage of vessel', 'var_name': 'var_tonnage var_tonnage'},
+]
