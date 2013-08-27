@@ -1,9 +1,14 @@
 ﻿var attr_selected_class = "attribute-selected";
 
 $(document).ready(function() {
+    /* Handler for changing tabs */
+    $(".tab-menu-item").click(function(){
+        submitWithValue($(this).attr('id'));
+        return false;
+	});
 
     /* Collapsible boxes */
-    $(".box-header .box-button").click(function(ev){
+    $(".box-header .box-button").click(function(){
 		$(this).parent().parent().toggleClass("box-collapsed box-expanded");
 	});
 
@@ -335,7 +340,7 @@ function config_change_group(group_id) {
 function submitWithValue(submitVal) {
     $('#form').append("<input type='hidden' name='submitVal' value='" + submitVal + "' />");
     $("#form").submit();
-    return true;
+    return false;
 }
 
 function applyConfig() {
