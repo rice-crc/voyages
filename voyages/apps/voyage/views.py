@@ -1055,24 +1055,16 @@ def variable_list(request):
 
 
 def sources_list(request, category="documentary_sources", sort="short_ref"):
+
     # Prepare items
-    #voyage_sources = VoyageSources.objects.filter(source_type=)
     sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
     divided_groups = []
+    sorted_letters = False
 
     for i in sources:
-        safe_full_ref = i.full_ref.encode('ascii', 'ignore')
-        try:
-            safe_short_ref = i.short_ref.encode('ascii', 'ignore')
-        except:
-            safe_short_ref = ""
-        # print "Short ref: " + str(safe_short_ref)
-        # print "Full ref: " + safe_full_ref
+        insert_source(divided_groups, category, i)
 
     if category == "documentary_sources":
-        for i in sources:
-            insert_source(divided_groups, category, i)
-
         # Count sources in each city
         for v in divided_groups:
             for city in v["cities_list"]:
@@ -1086,12 +1078,19 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         set_even_odd_sources_dict(sorted_dict)
 
     else:
-        for i in sources:
-            insert_source(divided_groups, category, i)
-        # just long and short refs
+        if sort == "long_ref":
+            sorted_dict = sorted(divided_groups, key=lambda k: k["full_ref"])
+        else:
+            sorted_dict = sorted(divided_groups, key=lambda k: k["short_ref"])
+
+    if category in globals.letters_sorted_source_types:
+        sorted_letters = True
+        sorted_dict = sort_by_first_letter(sorted_dict, sort)
+
     return render(request, "voyage/voyage_sources.html",
                   {'results': sorted_dict,
                    'sort_method': sort,
+                   'sorted_letters': sorted_letters,
                    'category': category})
 
 
@@ -1101,14 +1100,24 @@ def insert_source(dict, category, source):
     # - name of the group (between <i> marks
     # - city, country (in parentheses)
     # - text (rest of the text)
-    a = source.full_ref
-    m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
+
+    if category == "documentary_sources":
+        m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
+    else:
+        new_dict_item = {}
+        new_dict_item["short_ref"] = source.short_ref
+        new_dict_item["full_ref"] = source.full_ref
+        dict.append(new_dict_item)
+        return
 
     # Regular entry
     if m is not None:
-        group_name = m.group(1)
-        (city, country) = extract_places(m.group(2))
-        text = m.group(3)
+        if category == "documentary_sources":
+            group_name = m.group(1)
+            (city, country) = extract_places(m.group(2))
+            text = m.group(3)
+        else:
+            group_name = m.group(1)
     else:
         group_name = source.full_ref
         city = "uncategorized"
@@ -1203,6 +1212,30 @@ def set_even_odd_sources_dict(dict):
                     else:
                         source["mark"] = 1
                     counter += 1
+
+
+def sort_by_first_letter(dict, sort_method):
+    new_dict = []
+    current_item = {}
+
+    if sort_method == "long_ref":
+        sort_method = "full_ref"
+
+    for i in dict:
+        a = i[sort_method][0]
+
+        if not current_item or current_item["letter"] != i[sort_method][0]:
+            if current_item:
+                new_dict.append(current_item)
+            current_item = {}
+            current_item["letter"] = i[sort_method][0].capitalize()
+            current_item["items"] = []
+            current_item["items"].append(i)
+            continue
+        else:
+            current_item["items"].append(i)
+
+    return new_dict
 
 
 def extract_places(string):
