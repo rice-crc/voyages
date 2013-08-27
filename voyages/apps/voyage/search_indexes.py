@@ -59,7 +59,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_registered_place = indexes.CharField(null=True)
     var_registered_year = indexes.IntegerField(null=True)
     var_rig_of_vessel = indexes.CharField(null=True)
-    var_tonnage = indexes.FloatField(null=True)
+    var_tonnage = indexes.FloatField(null=True, faceted=True)
     var_tonnage_mod = indexes.FloatField(null=True)
     var_guns_mounted = indexes.IntegerField(null=True)
     var_owner = indexes.NgramField(null=True)
@@ -123,20 +123,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_voyage_completed = indexes.NgramField(null=True)
 
     var_imp_length_home_to_disembark = indexes.IntegerField(null=True)
-    var_length_middle_passage_days = indexes.IntegerField(null=True)
+    var_length_middle_passage_days = indexes.IntegerField(null=True, faceted=True)
 
     # Voyage numbers
     var_num_slaves_intended_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_first_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_second_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_third_port = indexes.IntegerField(null=True)
-    var_total_num_slaves_purchased = indexes.IntegerField(null=True)
-    var_imp_total_num_slaves_purchased = indexes.IntegerField(null=True)
+    var_total_num_slaves_purchased = indexes.IntegerField(null=True, faceted=True)
+    var_imp_total_num_slaves_purchased = indexes.IntegerField(null=True, faceted=True)
     var_total_num_slaves_arr_first_port_embark = indexes.IntegerField(null=True)
     var_num_slaves_disembark_first_place = indexes.IntegerField(null=True)
     var_num_slaves_disembark_second_place = indexes.IntegerField(null=True)
     var_num_slaves_disembark_third_place = indexes.IntegerField(null=True)
-    var_imp_total_slaves_disembarked = indexes.IntegerField(null=True)
+    var_imp_total_slaves_disembarked = indexes.IntegerField(null=True, faceted=True)
 
     # Voyage characteristics
     var_imputed_percentage_men = indexes.FloatField(null=True)
@@ -144,11 +144,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imputed_percentage_boys = indexes.FloatField(null=True)
     var_imputed_percentage_girls = indexes.FloatField(null=True)
     var_imputed_percentage_female = indexes.FloatField(null=True)
-    var_imputed_percentage_male = indexes.FloatField(null=True)
-    var_imputed_percentage_child = indexes.FloatField(null=True)
+    var_imputed_percentage_male = indexes.FloatField(null=True, faceted=True)
+    var_imputed_percentage_child = indexes.FloatField(null=True, faceted=True)
     var_imputed_sterling_cash = indexes.FloatField(null=True)
     var_imputed_death_middle_passage = indexes.IntegerField(null=True)
-    var_imputed_mortality = indexes.FloatField(null=True)
+    var_imputed_mortality = indexes.FloatField(null=True, faceted=True)
 
     # Sources
     var_sources = indexes.NgramField(null=True)
@@ -524,16 +524,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_total_num_slaves_purchased(self, obj):
-        try:
-            return obj.voyage_slaves_numbers.total_num_slaves_purchased
-        except AttributeError:
-            return None
-
     def prepare_var_imp_total_num_slaves_purchased(self, obj):
         try:
         # To be corrected
-            return obj.voyage_slaves_numbers.total_num_slaves_purchased
+            return obj.voyage_slaves_numbers.imp_total_num_slaves_embarked
         except AttributeError:
             return None
 

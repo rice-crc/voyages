@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     #Flatpages apps
     'django.contrib.flatpages',
     'django.contrib.admindocs',
+    'django.contrib.humanize',
     'autocomplete_light',
     'sorl.thumbnail',
     'south',
