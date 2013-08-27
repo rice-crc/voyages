@@ -131,7 +131,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_num_slaves_carried_second_port = indexes.IntegerField(null=True)
     var_num_slaves_carried_third_port = indexes.IntegerField(null=True)
     var_total_num_slaves_purchased = indexes.IntegerField(null=True, faceted=True)
-    var_imp_total_num_slaves_purchased = indexes.IntegerField(null=True)
+    var_imp_total_num_slaves_purchased = indexes.IntegerField(null=True, faceted=True)
     var_total_num_slaves_arr_first_port_embark = indexes.IntegerField(null=True)
     var_num_slaves_disembark_first_place = indexes.IntegerField(null=True)
     var_num_slaves_disembark_second_place = indexes.IntegerField(null=True)
@@ -524,16 +524,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_total_num_slaves_purchased(self, obj):
-        try:
-            return obj.voyage_slaves_numbers.total_num_slaves_purchased
-        except AttributeError:
-            return None
-
     def prepare_var_imp_total_num_slaves_purchased(self, obj):
         try:
         # To be corrected
-            return obj.voyage_slaves_numbers.total_num_slaves_purchased
+            return obj.voyage_slaves_numbers.imp_total_num_slaves_embarked
         except AttributeError:
             return None
 
