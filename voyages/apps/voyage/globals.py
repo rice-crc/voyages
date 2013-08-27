@@ -718,3 +718,8 @@ sources_id = {
     'unpublished_secondary_sources': 3,
     'private_notes_and_collections': 4
 }
+
+# Source types sorted by letters
+letters_sorted_source_types = [
+    "published_sources"
+]

@@ -28,3 +28,12 @@ def get_year_value(value):
         ret = ""
     return ret
 
+
+@register.filter
+@stringfilter
+def translate_source_name(label_name):
+    print label_name
+    ret = ""
+    for i in label_name.split("_"):
+        ret += " " + i.capitalize()
+    return ret
