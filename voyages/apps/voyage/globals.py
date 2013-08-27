@@ -719,7 +719,26 @@ sources_id = {
     'private_notes_and_collections': 4
 }
 
+
 # Source types sorted by letters
 letters_sorted_source_types = [
     "published_sources"
+]
+
+summary_statistics = [
+    {'display_name' : 'Slaves embarked *', 'var_name': 'var_imp_total_num_slaves_purchased',
+     'has_total': True, 'is_percentage' : False},
+    {'display_name' : 'Slaves disembarked *', 'var_name': 'var_imp_total_slaves_disembarked',
+     'has_total' : True, 'is_percentage' : False},
+    {'display_name' : 'Percentage of slaves embarked who died during voyage *',
+     'var_name': 'var_imputed_mortality', 'has_total' : False, 'is_percentage' : True},
+    {'display_name' : 'Length of Middle Passage (in days) *',
+     'var_name': 'var_length_middle_passage_days',
+     'has_total' : False, 'is_percentage' : False},
+    {'display_name' : 'Percentage male *', 'var_name': 'var_imputed_percentage_male',
+     'has_total' : False, 'is_percentage' : True},
+    {'display_name' : 'Percentage children*', 'var_name': 'var_imputed_percentage_child',
+     'has_total' : False, 'is_percentage' : True},
+    {'display_name' : 'Tonnage of vessel', 'var_name': 'var_tonnage',
+     'has_total' : False, 'is_percentage' : False},
 ]
