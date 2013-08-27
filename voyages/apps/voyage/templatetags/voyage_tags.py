@@ -37,3 +37,8 @@ def filtersource(value):
 
 
 register.filter('filtersource', filtersource)
+
+
+def percentage(value):
+    return format(value, "%")
+register.filter('percentage', percentage)

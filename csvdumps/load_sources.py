@@ -31,6 +31,34 @@ def getIntFieldValue(field_name):
 
 ##### End of Common section to all files #####
 
+VoyageSourcesType.objects.all().delete()
+
+obj0 = VoyageSourcesType()
+obj0.group_id = 0
+obj0.group_name = 'Documentary source'
+obj0.save()
+
+
+obj1 = VoyageSourcesType()
+obj1.group_id = 1
+obj1.group_name = 'Newspaper'
+obj1.save()
+
+obj2 = VoyageSourcesType()
+obj2.group_id = 2
+obj2.group_name = 'Published source'
+obj2.save()
+
+obj3 = VoyageSourcesType()
+obj3.group_id = 3
+obj3.group_name = 'Unpublished secondary source'
+obj3.save()
+
+obj4 = VoyageSourcesType()
+obj4.group_id = 4
+obj4.group_name = 'Private note or collection'
+obj4.save()
+
 for line in input_file:
     data = line[0:-2].split(DELIMITER)
 
@@ -39,5 +67,7 @@ for line in input_file:
         source.short_ref = getFieldValue('id')
     if isNotBlank('name'):
         source.full_ref = getFieldValue('name')
+    if isNotBlank('type'):
+        source.source_type = VoyageSourcesType.objects.get(group_id=getIntFieldValue('type'))
 
     source.save()

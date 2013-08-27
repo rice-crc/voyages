@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load voyage_tags %}
+{% load humanize %}
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-basic-stats.css">
+
+<h1>{% trans 'Summary Statistics' %}</h1>
+
+<table cellspacing="0" cellpadding="0" border="0" class="simple-table">
+
+     <tr>
+        <td class="search-simple-stat-h_c1"></td>
+        <td class="search-simple-stat-h_c2">Total slaves</td>
+        <td class="search-simple-stat-h_c3">Total voyages</td>
+        <td class="search-simple-stat-h_c4">Average</td>
+        <td class="search-simple-stat-h_c4">Standard deviation</td>
+    </tr>
+    {% if result_data.summary_statistics %}
+    {% for variable in result_data.summary_statistics %}
+    <tr>
+       {% for col in variable %}
+
+           <td class="{% if forloop.first %}search-simple-stat-c_c1{% else %}search-simple-stat-c_c2{% endif %}" >
+               {{ col|intcomma }}</td>
+       {% endfor %}
+    </tr>
+    {% endfor %}
+
+    {% endif %}
+
+</table>
+<div class="download_button">
+  <a href="{% url 'voyage:csv_stats_download' %}" target="_blank">{% trans 'Download table view' %}</a>
+</div>

@@ -1,12 +1,13 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+
 class Glossary(models.Model):
     """
     A single glossary entry used to explain a particular term
 
     """
-    term = models.CharField(_('Term'),max_length=50)
+    term = models.CharField(_('Term'), max_length=50)
     description = models.CharField(_('Description'), max_length=1000)
 
     class Meta:
@@ -24,7 +25,7 @@ class FaqCategory(models.Model):
 
     """
     text = models.CharField(_('Category'), max_length=100)
-    type_order = models.IntegerField(('Category Order'))
+    type_order = models.IntegerField('Category Order')
     
     class Meta:
         ordering = ['type_order']
@@ -34,7 +35,7 @@ class FaqCategory(models.Model):
     def __unicode__(self):
         return self.text
 
-from django.utils.safestring import mark_safe 
+
 class Faq(models.Model):
     """
     A single FAQ question and answer to it

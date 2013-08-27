@@ -25,6 +25,7 @@ urlpatterns += patterns('',
     url(r'^voyage$', TemplateView.as_view(template_name='under_constr.html'), name='voyage'),
 
     url(r'^csv_all_download/(-?\d+)/$', 'voyages.apps.voyage.views.download_results', name='csv_all_download'),
+    url(r'^csv_stats_download/(-?\d+)/$', 'voyages.apps.voyage.views.csv_stats_download', name='csv_stats_download'),
 )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
