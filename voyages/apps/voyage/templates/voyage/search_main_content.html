@@ -4,22 +4,58 @@
     <div class="tabs-selection">
         <ul>
             <li>
-                <a href="#" id="result_results" class="tab-menu-item tab-menu-item-selected">{% trans "Results" %}</a>
+            {% if tab == 'result' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Results" %}</span>
+            {% else %}
+                <a href="#" id="tab_results"
+                   class="tab-menu-item">
+                    {% trans "Results" %}</a>
+            {% endif %}
             </li>
             <li>
-                <a href="#" id="result_statistics" class="tab-menu-item">{% trans "Summary statistics" %}</a>
+            {% if tab == 'statistics' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Summary statistics" %}</span>
+            {% else %}
+                <a href="#" id="tab_statistics"
+                   class="tab-menu-item">
+                     {% trans "Summary statistics" %}</a>
+            {% endif %}
             </li>
             <li>
-                <a href="#" id="result_tables" class="tab-menu-item">{% trans "Tables" %}</a>
+            {% if tab == 'tables' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Tables" %}</span>
+            {% else %}
+                <a href="#" id="tab_tables"
+                   class="tab-menu-item">
+                     {% trans "Tables" %}</a>
+            {% endif %}
             </li>
             <li>
-                <a href="#" id="result_graphs" class="tab-menu-item">{% trans "Custom graphs" %}</a>
+            {% if tab == 'graphs' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Custom graphs" %}</span>
+            {% else %}
+                <a href="#" id="tab_graphs"
+                   class="tab-menu-item">
+                     {% trans "Custom graphs" %}</a>
+            {% endif %}
             </li>
             <li>
-                <a href="#" id="result_timeline" class="tab-menu-item">{% trans "Timeline" %}</a>
+            {% if tab == 'timeline' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Timeline" %}</span>
+            {% else %}
+                <a href="#" id="tab_timeline"
+                   class="tab-menu-item">
+                     {% trans "Timeline" %}</a>
+            {% endif %}
             </li>
             <li>
-                <a href="#" id="result_maps" class="tab-menu-item">{% trans "Maps" %}</a>
+            {% if tab == 'maps' %}
+                <span class="tab-menu-item tab-menu-item-selected">{% trans "Maps" %}</span>
+            {% else %}
+                <a href="#" id="tab_maps"
+                   class="tab-menu-item">
+                     {% trans "Maps" %}</a>
+            {% endif %}
             </li>
         </ul>
     </div>

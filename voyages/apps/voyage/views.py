@@ -92,7 +92,8 @@ def search(request):
     to_reset_form = False
     url_to_copy = ""
     query_dict = {}
-    tab = ""
+    result_data = {}
+    tab = 'result'
 
     # Check if saved url has been used
     if request.GET.values():
@@ -275,9 +276,6 @@ def search(request):
 
             elif submitVal == 'reset':
                 # Reset the search page
-
-                print 'resetting'
-
                 existing_form = []
                 request.session['existing_form'] = existing_form
                 results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -311,9 +309,45 @@ def search(request):
                 tab = 'result'
 
             elif submitVal == 'restoreConfig':
+                # Restore default columns
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
                 tab = 'config_column'
 
+            # Tab changes
+            elif submitVal == 'tab_results':
+                tab = 'results'
+
+            elif submitVal == 'tab_statistics':
+                tab = 'statistics'
+                # Compute statistics
+                #Slaves embarked* var_imp_total_num_slaves_purchased
+                voyage_result_set = Voyage.objects.filter(p)
+
+                #Slaves disembarked* var_imp_total_slaves_disembarked
+
+
+                #Percentage of slaves embarked who died during voyage *
+                #Length of Middle Passage (in days)*
+                #Percentage male*
+                #Percentage children*
+                #Tonnage of vessel
+
+#                result_data
+                pass
+
+            elif submitVal == 'tab_tables':
+                tab = 'tables'
+
+            elif submitVal == 'tab_graphs':
+                tab = 'graphs'
+
+            elif submitVal == 'tab_timeline':
+                tab = 'timeline'
+
+            elif submitVal == 'tab_maps':
+                tab = 'maps'
+
+            # User clicked Search
             elif submitVal == 'search':
                 list_search_vars = request.POST.getlist('list-input-params')
 
@@ -472,6 +506,7 @@ def search(request):
                    'general_variables': globals.general_variables,
                    'all_var_list': globals.var_dict,
                    'results': pagins,
+                   'result_data': result_data,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'no_result': no_result,
