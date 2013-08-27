@@ -321,19 +321,25 @@ def search(request):
                 tab = 'statistics'
                 # Compute statistics
                 #Slaves embarked* var_imp_total_num_slaves_purchased
-                voyage_result_set = Voyage.objects.filter(p)
 
                 #Slaves disembarked* var_imp_total_slaves_disembarked
 
+                #Percentage of slaves embarked who died during voyage *  var_imputed_mortality
 
-                #Percentage of slaves embarked who died during voyage *
-                #Length of Middle Passage (in days)*
-                #Percentage male*
-                #Percentage children*
-                #Tonnage of vessel
+                #Length of Middle Passage (in days)*  var_length_middle_passage_days
+
+                #Percentage male* var_imputed_percentage_men
+
+                #Percentage children*  var_imputed_percentage_child
+
+                #Tonnage of vessel var_tonnage var_tonnage
 
 #                result_data
-                pass
+
+ #               stats1 = results.stats_facet('var_imp_total_num_slaves_purchased')
+
+#                stats2 = results.stats('var_imp_total_num_slaves_purchased').stats_results()
+               # print stats1
 
             elif submitVal == 'tab_tables':
                 tab = 'tables'

@@ -139,12 +139,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_total_slaves_disembarked = indexes.IntegerField(null=True, faceted=True)
 
     # Voyage characteristics
-    var_imputed_percentage_men = indexes.FloatField(null=True, faceted=True)
+    var_imputed_percentage_men = indexes.FloatField(null=True)
     var_imputed_percentage_women = indexes.FloatField(null=True)
     var_imputed_percentage_boys = indexes.FloatField(null=True)
     var_imputed_percentage_girls = indexes.FloatField(null=True)
     var_imputed_percentage_female = indexes.FloatField(null=True)
-    var_imputed_percentage_male = indexes.FloatField(null=True)
+    var_imputed_percentage_male = indexes.FloatField(null=True, faceted=True)
     var_imputed_percentage_child = indexes.FloatField(null=True, faceted=True)
     var_imputed_sterling_cash = indexes.FloatField(null=True)
     var_imputed_death_middle_passage = indexes.IntegerField(null=True)
