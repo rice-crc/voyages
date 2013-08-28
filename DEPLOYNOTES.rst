@@ -97,17 +97,34 @@ tables and initial data using::
   $ python manage.py syncdb
   $ python manage.py migrate
 
-In addition, these sets of initial data need to be loaded (Please load in that order)
-  * lessonplan_data.json
-  * glossary.json
-  * downloads.json
-  * faq_all.json
-  * glossary.json
-  * images.json
-  * users.json
-  * voyage.json.gz::
+In addition, these sets of initial data need to be loaded (Please load in this order)
 
-    $ python manage.py loaddata initialdata/*
+Before loading data comment the `HAYSTACK_SIGNAL_PROCESSOR` variable out in the `localsettings`::
+
+  #HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+Export a copy of the voyages tables to a sqldump file.  This will load much faster than a json dump. Alternately you
+can  use the provided dump in initialdata/voyages.sql.gz::
+
+  mysqldump -p -h <HOST> <DATABASE> voyage_broadregion voyage_nationality voyage_owneroutcome voyage_particularoutcome voyage_place voyage_region voyage_resistance voyage_rigofvessel voyage_slavesoutcome voyage_tontype voyage_vesselcapturedoutcome voyage_voyage voyage_voyagecaptain voyage_voyagecaptainconnection voyage_voyagecrew voyage_voyagedates voyage_voyagegroupings voyage_voyageitinerary voyage_voyageoutcome voyage_voyageship voyage_voyageshipowner voyage_voyageshipownerconnection voyage_voyageslavesnumbers voyage_voyagesources voyage_voyagesourcesconnection voyage_voyagesourcestype > voyages.sql
+
+
+Run these commands to load the data::
+
+  $ python manage.py loaddata initialdata/lessonplan_data.json
+  $ python manage.py loaddata initialdata/glossary.json
+  $ python manage.py loaddata initialdata/downloads.json
+  $ python manage.py loaddata initialdata/faq_all.json
+  $ python manage.py loaddata initialdata/users.json
+  mysql -h <HOSTNAME> -u <USER> -p <DATABASE> < <INPUTFILE>
+  $ python manage.py loaddata initialdata/images.json
+
+
+
+After loading data uncomment the `HAYSTACK_SIGNAL_PROCESSOR` variable in the `localsettings`::
+
+  HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
 
 To initalize the Solr data the following manage command should be run::
 
