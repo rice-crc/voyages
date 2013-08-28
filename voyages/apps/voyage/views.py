@@ -1095,14 +1095,11 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         set_even_odd_sources_dict(sorted_dict)
 
     else:
-        if sort == "long_ref":
-            sorted_dict = sorted(divided_groups, key=lambda k: k["full_ref"])
+        if category in globals.letters_sorted_source_types:
+            sorted_letters = True
+            sorted_dict = sort_by_first_letter(divided_groups, sort)
         else:
-            sorted_dict = sorted(divided_groups, key=lambda k: k["short_ref"])
-
-    if category in globals.letters_sorted_source_types:
-        sorted_letters = True
-        sorted_dict = sort_by_first_letter(sorted_dict, sort)
+            sorted_dict = sorted(divided_groups, key=lambda k: k[sort])
 
     return render(request, "voyage/voyage_sources.html",
                   {'results': sorted_dict,
@@ -1234,25 +1231,37 @@ def set_even_odd_sources_dict(dict):
 def sort_by_first_letter(dict, sort_method):
     new_dict = []
     current_item = {}
+    letters = []
 
     if sort_method == "long_ref":
         sort_method = "full_ref"
 
     for i in dict:
-        a = i[sort_method][0]
+        first_letter = get_first_letter (i[sort_method])
 
-        if not current_item or current_item["letter"] != i[sort_method][0]:
-            if current_item:
-                new_dict.append(current_item)
-            current_item = {}
-            current_item["letter"] = i[sort_method][0].capitalize()
-            current_item["items"] = []
-            current_item["items"].append(i)
-            continue
-        else:
-            current_item["items"].append(i)
+        if first_letter not in letters:
+            letters.append(first_letter)
+            new_item = {}
+            new_item["letter"] = first_letter
+            new_item["items"] = []
+            new_dict.append(new_item)
 
-    return new_dict
+        # Insert entry
+        for j in new_dict:
+            if j["letter"] == first_letter:
+                j["items"].append(i)
+                break
+
+    for i in new_dict:
+        i["items"] = sorted(i["items"], key=lambda k: k[sort_method])
+
+    return sorted(new_dict, key= lambda k: k["letter"])
+
+
+def get_first_letter(string):
+    for j in string:
+            if (j >= 'a' and j <= 'z') or (j>= 'A' and j <= 'Z'):
+                return j.capitalize()
 
 
 def extract_places(string):

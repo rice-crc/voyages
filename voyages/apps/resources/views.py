@@ -22,7 +22,7 @@ def get_all_images(request):
             category_images["label_name"] = i.label
             category_images["label_code"] = i.value
             category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date')
             category_images["number_of_images"] = len(search_set)
             for j in search_set:
                 category_images["images"].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
@@ -56,7 +56,7 @@ def get_images_category(request, category):
             category_images["label_name"] = i.label
             category_images["label_code"] = i.value
             category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date')
             category_images["number_of_images"] = len(search_set)
             if i.label == category:
                 for i in search_set:
@@ -90,7 +90,7 @@ def get_images_category_detail(request, category, page):
             category_images["label_name"] = i.label
             category_images["label_code"] = i.value
             category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date')
             category_images["number_of_images"] = len(search_set)
             if i.label == category:
                 # Set paginator on proper page.
@@ -116,7 +116,7 @@ def get_image_detail(request, category, page):
     """
 
     category = " ".join(category.split("_"))
-    image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')[int(page)-1]
+    image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date')[int(page)-1]
 
     return render(request, 'resources/image-detail.html', {'image': image})
 
@@ -154,7 +154,7 @@ def images_search(request):
                 category_images["label_name"] = i.label
                 category_images["label_code"] = i.value
                 category_images["images"] = []
-                search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date', 'image_id')
+                search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True).order_by('date')
                 category_images["number_of_images"] = len(search_set)
                 if request.POST.get("checkbox" + str(i.value)):
                     categories_to_search.append(i.label)
@@ -174,27 +174,27 @@ def images_search(request):
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
                                                 date__lte=time_end).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 elif time_start != "":
                     results = \
                         SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 elif time_end != "":
                     results = \
                         SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__lte=time_end).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 else:
                     results = \
                         SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
             elif time_start != "" or time_end != "":
                 if time_start != "" and time_end != "":
@@ -203,21 +203,21 @@ def images_search(request):
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
                                                 date__lte=time_end).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 elif time_start != "":
                     results = \
                         SearchQuerySet().filter(ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 elif time_end != "":
                     results = \
                         SearchQuerySet().filter(ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__lte=time_end).models(Image).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
                 else:
                     if len(categories_to_search) == 1:
@@ -226,13 +226,13 @@ def images_search(request):
                     else:
                         results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
-                            order_by('date', 'image_id')
+                            order_by('date')
 
             else:
                 if len(categories_to_search) > 1:
                     results = SearchQuerySet().all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
-                            order_by('date', 'image_id')
+                            order_by('date')
                 else:
                     return HttpResponseRedirect(reverse('resources:images-category',
                                                         kwargs={'category': categories_to_search.pop()}))
