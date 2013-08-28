@@ -45,10 +45,10 @@
                 <tbody>
                     <tr>
                         <td class="switch-layout-second-link">
-                            {% if sort_method == "long_ref" %}
-                                <a class="active" href="{% url 'voyage:sources-list-sort' category "long_ref" %}">Sort by long reference</a>
+                            {% if sort_method == "full_ref" %}
+                                <a class="active" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">Sort by long reference</a>
                             {% else %}
-                                <a class="" href="{% url 'voyage:sources-list-sort' category "long_ref" %}">Sort by long reference</a>
+                                <a class="" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">Sort by long reference</a>
                             {% endif %}
                         </td>
                         <td class="switch-layout-second-link">
