@@ -266,6 +266,8 @@
 
     <field name="var_voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_total_num_slaves_purchased_exact" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_place_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_region_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
