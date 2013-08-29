@@ -1072,17 +1072,26 @@ def variable_list(request):
 
 
 def sources_list(request, category="documentary_sources", sort="short_ref"):
+    """
+    Creates list of sources of required category, sorted by 'sort'
+    method.
+    :param request: request to serve
+    :param category: category of source list
+    :param sort: sort type
+    :return: render object
+    """
 
-    # Prepare items
     sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
     divided_groups = []
     sorted_letters = False
 
+    # Create dictionary with sources
     for i in sources:
         insert_source(divided_groups, category, i)
 
+    # Additional sorting is needed for documentary_sources (by cities and countries)
     if category == "documentary_sources":
-        # Count sources in each city
+        # Count sources in each city (needed in template)
         for v in divided_groups:
             for city in v["cities_list"]:
                 city_rows = 0
@@ -1090,11 +1099,12 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
                     city_rows += int(len(j['sources']) + 1)
                 city["number_of_rows"] = city_rows
 
-        # Sort dictionary
+        # Sort dictionary and set even and odd marks in dictionary
         sorted_dict = sort_documentary_sources_dict(divided_groups, sort)
         set_even_odd_sources_dict(sorted_dict)
 
     else:
+        # Another sorting by first letter is needed for some categories.
         if category in globals.letters_sorted_source_types:
             sorted_letters = True
             sorted_dict = sort_by_first_letter(divided_groups, sort)
@@ -1109,12 +1119,17 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
 
 
 def insert_source(dict, category, source):
-    # source.full_ref = "<i>Huntington Library</i> (San Marino, California, USA)"
-    # Match:
-    # - name of the group (between <i> marks
-    # - city, country (in parentheses)
-    # - text (rest of the text)
+    """
+    Inserts source in appropriate place in dictionary
+    :param dict: dictionary to place source in
+    :param category: category of inserting source
+    :param source: inserting source
+    :return:
+    """
 
+    # If category is documentary_sources, full_ref has to be parsed
+    # to get information about city, country and text of source
+    # Otherwise, just append new item to directory
     if category == "documentary_sources":
         m = re.match(r"(<i>[^<]*</i>)[\s]{1}(\([^\)]*\))[\s]?([^\n]*)", source.full_ref)
     else:
@@ -1124,7 +1139,8 @@ def insert_source(dict, category, source):
         dict.append(new_dict_item)
         return
 
-    # Regular entry
+    # If string has been parsed, get information,
+    # Otherwise, it will be uncategorized item
     if m is not None:
         if category == "documentary_sources":
             group_name = m.group(1)
@@ -1138,12 +1154,13 @@ def insert_source(dict, category, source):
         country = "uncategorized"
         text = source.full_ref
 
-    # Get (create if doesn't exist) cities in country
+    # Get cities in country
     cities_list = None
     for i in dict:
         if i["country"] == country:
             cities_list = i
 
+    # If country item doesn't exist, create new one.
     if cities_list is None:
         cities_list = {}
         cities_list["country"] = country
@@ -1157,7 +1174,7 @@ def insert_source(dict, category, source):
             city_dict = i
             break
 
-    # If nothing found, create a city
+    # If nothing found, create a city in country item
     if city_dict is None:
         city_dict = {}
         city_dict["city_name"] = city
@@ -1172,7 +1189,7 @@ def insert_source(dict, category, source):
             group_dict = i
             break
 
-    # If nothing found, create w group
+    # If nothing found, create new group
     if source_list is None:
         group_dict = {}
         group_dict["group_name"] = group_name
@@ -1183,6 +1200,7 @@ def insert_source(dict, category, source):
 
     # If contains text, put on the list
     if text != "":
+        # If city is uncategorized, it's been already created
         if city != "uncategorized":
             new_source = {}
             new_source["short_ref"] = source.short_ref
@@ -1211,15 +1229,24 @@ def sort_documentary_sources_dict(dict, sort):
 
 
 def set_even_odd_sources_dict(dict):
+    """
+    Sets even and odd marks for template
+    :param dict: dict with sources
+    :return:
+    """
+
     for country in dict:
+        # Counter is reset every country
         counter = 0
         for city_dict in country["cities_list"]:
             for city_group_dict in city_dict["city_groups_dict"]:
+                # Set mark for city_group
                 if counter%2 == 0:
                     city_group_dict["mark"] = 0
                 else:
                     city_group_dict["mark"] = 1
                 counter += 1
+                # Set mark for sources in group sources
                 for source in city_group_dict["sources"]:
                     if counter%2 == 0:
                         source["mark"] = 0
@@ -1229,16 +1256,23 @@ def set_even_odd_sources_dict(dict):
 
 
 def sort_by_first_letter(dict, sort_method):
+    """
+    Sorts dictionary by first letter of source
+    (ref type (short or full) depends on sort_method)
+    :param dict: dict with sources
+    :param sort_method: sort method
+    :return: sorted dictionary by first letter
+    """
+
     new_dict = []
-    current_item = {}
     letters = []
 
-    if sort_method == "long_ref":
-        sort_method = "full_ref"
-
     for i in dict:
+        # Get first letter from source ref
         first_letter = get_first_letter (i[sort_method])
 
+        # If there is no entry with this first_letter,
+        # Create a new one
         if first_letter not in letters:
             letters.append(first_letter)
             new_item = {}
@@ -1246,19 +1280,27 @@ def sort_by_first_letter(dict, sort_method):
             new_item["items"] = []
             new_dict.append(new_item)
 
-        # Insert entry
+        # Insert entry to dictionary
         for j in new_dict:
             if j["letter"] == first_letter:
                 j["items"].append(i)
                 break
 
+    # Sort all items in letter element list
     for i in new_dict:
         i["items"] = sorted(i["items"], key=lambda k: k[sort_method])
 
+    # Return sorted dict by letter
     return sorted(new_dict, key= lambda k: k["letter"])
 
 
 def get_first_letter(string):
+    """
+    Gets first letter from string (a-zA-Z)
+    :param string: string to get from
+    :return: first letter from string
+    """
+
     for j in string:
             if (j >= 'a' and j <= 'z') or (j>= 'A' and j <= 'Z'):
                 return j.capitalize()
