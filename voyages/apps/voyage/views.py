@@ -541,6 +541,7 @@ def getNestedListPlaces(varname, place_visible=[], region_visible=[], area_visib
     """
     choices = []
 
+    # Check if visible parameters have been passed, if so filter
     if not place_visible:
         place_visible = Place.objects.all()
     else:
@@ -558,10 +559,8 @@ def getNestedListPlaces(varname, place_visible=[], region_visible=[], area_visib
 
     for area in area_visible:
         area_content = []
-        #for reg in Region.objects.filter(broad_region=area, region__in=region_visible):
         for reg in region_visible.filter(broad_region=area):
             reg_content = []
-            #for place in Place.objects.filter(region=reg, place__in=place_visible):
             for place in place_visible.filter(region=reg):
                 if place.place == "???":
                     continue
@@ -657,6 +656,8 @@ def check_and_save_options_form(request, to_reset_form):
     except KeyError:
         form_in_session = None
 
+
+    # Reset form if necessary
     if to_reset_form:
         form = ResultsPerPageOptionForm()
         results_per_page = form.cleaned_option()
@@ -699,7 +700,6 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
     """
     url = request.build_absolute_uri(reverse('voyage:search',)) + "?"
     session_dict = {}
-
 
     # If search has not performed, return default url
     if dict == {}:
@@ -767,16 +767,8 @@ def decode_from_url(request):
 
     dict = {}
 
+    # Rebuild dictionary from GET data
     for k, v in request.GET.iteritems():
-        # if "__range" in k:
-        #     dict[k] = []
-        #     dict[k].append(v.split("|")[0])
-        #     dict[k].append(v.split("|")[1])
-        #
-        # elif isinstance(v, types.ListType):
-        #     dict[k] = []
-        #     for i in v.split("|"):
-        #         dict[k].append(i)
         if len(v.split("|")) > 1:
             dict[k] = []
             for i in v.split("|"):
@@ -790,6 +782,7 @@ def decode_from_url(request):
         elif isinstance(v, types.ListType) and len(v.split("|") == 2):
             dict[k].append(v.split("|")[1])
 
+    # Rebuild left menu
     date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result = create_menu_forms(dict)
     request.session['time_span_form'] = TimeFrameSpanSearchForm(
                 initial={'frame_from_year': voyage_span_first_year,
@@ -800,6 +793,8 @@ def decode_from_url(request):
 def create_menu_forms(dict):
     """
     Function to create forms.
+
+    :param dict: dictionary with search options
     """
 
     new_existing_form = []
@@ -814,6 +809,7 @@ def create_menu_forms(dict):
 
         var_name = k.split("__")[0]
 
+        # imputed voyage began is special case
         if var_name == "var_imp_voyage_began":
             voyage_span_first_year = v[0]
             voyage_span_last_year = v[1]
@@ -838,6 +834,7 @@ def create_menu_forms(dict):
             # Select box variables
             choices_list = []
             choices = getChoices(var_name)
+            # Get selected fields
             for select_field in v.split("|"):
                 choices_list.append(" ".join(select_field.split("_")))
 
@@ -879,7 +876,6 @@ def create_menu_forms(dict):
 
         elif var_type == "date":
             # Date variables
-
             deselected_months = []
             word_option = k.split("__")[1]
             if word_option == "range":
