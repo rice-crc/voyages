@@ -98,32 +98,28 @@ def search(request):
     # Check if saved url has been used
     if request.GET.values():
         query_dict, date_filters, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result = decode_from_url(request)
+        # Get results with saved query
         results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
         # Check if dates filters have to be used
         if date_filters and no_result is not True:
             results = date_filter_query(date_filters, results)
 
+        # If saved query doesn't return any results
         if len(results) == 0:
             no_result = True
 
-    # Otherwise, process next
     else:
 
         date_filters = []
 
+        # Get max and min years (based on database)
         voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
         if not request.session.exists(request.session.session_key):
             request.session.create()
 
-        # Try to retrieve results from session
-        #try:
-        #    results = request.session['results_voyages']
-        #except KeyError:
-        #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        #    request.session['results_voyages'] = results
-
+        # If last query exists, retrieve last results, otherwise get all results
         if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
                 and request.session['voyage_last_query']:
             query_dict = request.session['voyage_last_query']
@@ -161,6 +157,7 @@ def search(request):
             if frame_form.is_valid():
                 request.session['time_span_form'] = frame_form
 
+            # Create new existing form based on search_vars
             for tmp_varname in list_search_vars:
                 for cur_var in existing_form:
                     if tmp_varname == cur_var['varname']:
@@ -201,11 +198,12 @@ def search(request):
                             cur_var['form'] = SimpleSelectBooleanForm(request.POST, prefix=tmp_varname)
                         new_existing_form.append(cur_var)
 
+            # Set new existing_form in session
             request.session['existing_form'] = new_existing_form
 
             if submitVal == 'add_var':
 
-                results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+                # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 # Add variables
                 tmpElemDict = {}
                 varname = request.POST.get('new_var_name')
@@ -277,7 +275,7 @@ def search(request):
                 # Reset the search page
                 existing_form = []
                 request.session['existing_form'] = existing_form
-                results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+                #results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
                 request.session['results_voyages'] = None
                 request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
                 request.session['results_per_page_form'] = None
@@ -456,16 +454,19 @@ def search(request):
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
+    # results per page and form (change in session if necessary)
     form, results_per_page = check_and_save_options_form(request, to_reset_form)
 
     if len(results) == 0:
         no_result = True
 
+    # If there is no requested page number, serve 1
     if request.POST.get('desired_page') is None:
         current_page = 1
     else:
         current_page = request.POST.get('desired_page')
 
+    # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
     request.session['voyage_current_result_page'] = pagins
