@@ -1,6 +1,5 @@
 from haystack import indexes
 from .models import Image
-from __future__ import division
 
 
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):

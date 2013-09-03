@@ -1,3 +1,4 @@
+from __future__ import division
 from haystack import indexes
 from .models import *
 
