@@ -23,11 +23,10 @@
 
 <div>
     <table class="grid">
-        <tbody>
         <tr>
             {% for item in request.session.result_columns %}
                 <th>
-                <div class="grid-first-column grid-header-icon-asc grid-header-text">
+                <div class="{% if forloop.first %}grid-first-column grid-header-icon-asc grid-header-text{% elif item.2 %}grid-header-text-left{% else %}grid-header-text{% endif %}">
                     <a href="#">{{  item.1 }}</a>
                 </div>
                 </th>
@@ -39,18 +38,14 @@
         {% for i in results %}
             <tr class="grid-row-even grid-row-first">
                 {% for item in request.session.result_columns %}
-                    <td>
-                        {% if item.0 == 'var_sources' %}
+                    <td>{% if item.0 == 'var_sources' %}
                             {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
                         {% else %}
                             {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
-                        {% endif %}
-
-                    </td>
+                        {% endif %}</td>
                 {% endfor %}
             </tr>
         {% endfor %}
-        </tbody>
     </table>
 </div>
 

@@ -1,10 +1,14 @@
 table.grid {
+    clear: both;
 	width: 100%;
 	background: white;
 	border-collapse: collapse; 
-	border: 1px solid #895D03; }
+	border: 1px solid #895D03;
+}
 
-table.grid td { }
+table.grid td {
+    white-space: nowrap;
+}
 
 table.grid th {
 	padding: 5px;
