@@ -312,7 +312,7 @@ def search(request):
 
             # Tab changes
             elif submitVal == 'tab_results':
-                tab = 'results'
+                tab = 'result'
 
             elif submitVal == 'tab_statistics':
                 tab = 'statistics'

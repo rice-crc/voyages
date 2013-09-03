@@ -40,7 +40,7 @@ $(document).ready(function() {
 
     /* Event handler to highlight adding variables */
     $(".query-builder-label").each(function() {
-        tmpVar = $(this).attr("id")
+        var tmpVar = $(this).attr("id")
         $(".menu-popup-submenu-item[name='" + tmpVar.substr(7) + "']").addClass(attr_selected_class);
 
     });
@@ -310,12 +310,14 @@ function filter_hierarchical_list(label) {
                     found = true;
                     foundInner = true;
                     $(this).removeClass("hidden");
+                    $(this).parent().removeClass("hidden");
                 } else {
                     $(this).addClass("hidden");
                 }
             });
             if (foundInner) {
                 $(this).removeClass("hidden");
+                $(this).parent().removeClass("hidden");
             } else {
                 $(this).addClass("hidden");
             }
