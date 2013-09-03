@@ -1467,7 +1467,7 @@ def retrieve_summary_stats(results):
             # Average
             tmp_row.append(str(round(stats['mean']*100, 1)) + "%")
             # Standard deviation
-            tmp_row.append(str(round(stats['stddev'], 1)) + "%")
+            tmp_row.append(str(round(stats['stddev']*100, 1)) + "%")
         else:
             tmp_row.append(round(stats['mean'], 1))
             tmp_row.append(round(stats['stddev'], 1))
