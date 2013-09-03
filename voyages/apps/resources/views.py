@@ -80,7 +80,7 @@ def get_images_category_detail(request, category, page):
     """
 
     category = " ".join(category.split("_"))
-    manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date', 'image_id')
+    manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date')
     images = []
 
     # Pack all images from category with needed data.

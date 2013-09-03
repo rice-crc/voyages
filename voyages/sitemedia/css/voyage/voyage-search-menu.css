@@ -34,14 +34,15 @@ div.menu-popup-item-main-last:hover {
 }
 
 div.menu-popup-submenu-frame {
-	z-index: 99;
+	position: relative;
 	top: -7px;
 	left: 85%;
-	position: relative;
+	z-index: 1;
 }
 
 div.menu-popup-submenu {
 	position: absolute;
+    display: block;
 	border: 1px solid #895D03; }
 
 div.menu-popup-submenu-item {
