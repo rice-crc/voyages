@@ -1078,7 +1078,8 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
     :return: render object
     """
 
-    sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category)
+    category_search = " ".join(category.split("_"))
+    sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category_search)
     divided_groups = []
     sorted_letters = False
 
