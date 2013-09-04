@@ -5,8 +5,9 @@
 	<h3>{% trans "Understanding the Database" %}</h3>
 </div>
 
+{% if not category %}
 <div class="secondary-menu-item-0">
-	<a href="#" id="c01_s01_cover">{% trans "Guide" %}</a>
+	<a href="{% url 'voyage:guide' %}" id="c01_s01_cover">{% trans "Guide" %}</a>
 </div>
 
 <div class="secondary-menu-item-0">
@@ -16,7 +17,8 @@
 <div class="secondary-menu-subitems-0" id="c01_s02_submenu">
 
 	<div class="secondary-menu-item-1" id="c01_s02_p01">
-		<a href="#">{% trans "Introduction" %}</a>
+{#		<a href="#">{% trans "Introduction" %}</a>#}
+        <a href="{% url 'voyage:guide' %}" id="c01_s01_cover">{% trans "Guide" %}</a>
 	</div>
 	<div class="secondary-menu-item-1" id="c01_s02_p02">
 		<a href="#">{% trans "Coverage of the Slave Trade" %}</a>
@@ -85,6 +87,89 @@
 <div class="secondary-menu-item-0">
 	<a href="#" id="c01_s03_cover" >{% trans "Variable List" %}</a>
 </div>
+{% else %}
+    <div class="secondary-menu-item-0">
+	<a href="{% url 'voyage:guide' %}" id="c01_s01_cover">{% trans "Guide" %}</a>
+</div>
+
+<div class="secondary-menu-item-0">
+	<a href="{% url 'voyage:guide' %}" id="c01_s02_cover">{% trans "Methodology" %}</a>
+</div>
+
+<div class="secondary-menu-subitems-0" id="c01_s02_submenu">
+
+	<div class="secondary-menu-item-1" id="c01_s02_p01">
+{#		<a href="#">{% trans "Introduction" %}</a>#}
+        <a href="{% url 'voyage:guide' %}" id="c01_s01_cover">{% trans "Guide" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p02">
+		<a href="{% url 'voyage:guide' %}#chapternum=1">{% trans "Coverage of the Slave Trade" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p03">
+		<a href="{% url 'voyage:guide' %}">{% trans "Nature of Sources" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p04">
+		<a href="{% url 'voyage:guide' %}">{% trans "Cases and Variables" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p05">
+		<a href="{% url 'voyage:guide' %}">{% trans "Data Variables" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p06">
+		<a href="{% url 'voyage:guide' %}">{% trans "Age Categories" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p07">
+		<a href="{% url 'voyage:guide' %}">{% trans "Date" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p08">
+		<a href="{% url 'voyage:guide' %}">{% trans "Names" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p09">
+		<a href="{% url 'voyage:guide' %}">{% trans "Imputed Variables" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p10">
+		<a href="{% url 'voyage:guide' %}">{% trans "Geographic Data" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p11">
+		<a href="{% url 'voyage:guide' %}">{% trans "Imputed Voyage Dates" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p12">
+		<a href="{% url 'voyage:guide' %}">{% trans "Classification as a Trans-Atlantic Slaving Voyage" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p13">
+		<a href="{% url 'voyage:guide' %}">{% trans "Voyage Outcomes" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p14">
+		<a href="{% url 'voyage:guide' %}">{% trans "Inferring Places of Trade" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p15">
+		<a href="{% url 'voyage:guide' %}">{% trans "Imputing Numbers of Slaves" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p16">
+		<a href="{% url 'voyage:guide' %}">{% trans "Regions of Embarkation and Disembarkation" %}</a>
+	</div>
+	<div class="secondary-menu-item-1"id="c01_s02_p17">
+		<a href="{% url 'voyage:guide' %}">{% trans "Age and Gender Ratios" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p18">
+		<a href="{% url 'voyage:guide' %}">{% trans "National Carriers" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p19">
+		<a href="{% url 'voyage:guide' %}">{% trans "Tonnage" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p20">
+		<a href="{% url 'voyage:guide' %}">{% trans "Resistance and Price of Slaves" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p21">
+		<a href="{% url 'voyage:guide' %}">{% trans "Appendix" %}</a>
+	</div>
+	<div class="secondary-menu-item-1" id="c01_s02_p22">
+		<a href="{% url 'voyage:guide' %}">{% trans "Notes" %}</a>
+	</div>
+</div>
+<div class="secondary-menu-item-0">
+	<a href="{% url 'voyage:guide' %}" id="c01_s03_cover" >{% trans "Variable List" %}</a>
+</div>
+{% endif %}
 <div class="secondary-menu-item-0">
 	<a href="#" id="source_cover">{% trans "Sources" %}</a>
 </div>
