@@ -37,3 +37,9 @@ def translate_source_name(label_name):
     for i in label_name.split("_"):
         ret += " " + i.capitalize()
     return ret
+
+
+@register.filter
+@stringfilter
+def create_page_name(name, number):
+    return str(name + "-" + str(number))

@@ -64,8 +64,20 @@ div.secondary-menu-item-0 a, div.secondary-menu-item-0-selected a {
 	border-bottom: 1px solid #E4D6B1;
 }
 
-div.secondary-menu-item-1 a, div.secondary-menu-item-1-selected a {
+div.secondary-menu-item-1 a {
 	color: #8A5D04;
+	background-image: url('/static/images/voyage/secondary-menu-symbol-1.png');
+	background-repeat: no-repeat;
+	background-position: 16px 4px;
+	padding-left: 30px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #E4D6B1;
+}
+
+div.secondary-menu-item-1-selected a {
+    background-color: #FFF5C2;
+    color: #8A5D04;
 	background-image: url('/static/images/voyage/secondary-menu-symbol-1.png');
 	background-repeat: no-repeat;
 	background-position: 16px 4px;

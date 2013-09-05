@@ -14,7 +14,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
     
     ** Basic templates that might be rendered**
     :template:`assessment/c01_s01_generic.html`
-    :template:`assessment/c01_s02_generic.html`
+    :template:`assessment/methodology-generic.html`
     
     The further content is rendered using the pagepath parameter 
     """
