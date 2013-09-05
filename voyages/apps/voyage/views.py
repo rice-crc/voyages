@@ -29,7 +29,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
     ``RequestContext``
     
     ** Basic template that will be rendered **
-    :template:`voyage/c01_s02_generic.html`
+    :template:`voyage/methodology-generic.html`
     
     Further content is rendered using the pagepath parameter 
     """
@@ -43,6 +43,40 @@ def get_page(request, chapternum, sectionnum, pagenum):
         return render(request, templatename, dictionary={"pagepath": pagepath})
     except TemplateDoesNotExist:
         raise Http404
+
+
+def understanding_page(request, name):
+    dictionary = {}
+
+    if "methodology" in name:
+        dictionary['pagepath'] = "voyage/" + name + ".html"
+        dictionary['pagename'] = name
+        dictionary['page'] = "voyage/methodology-generic.html"
+        dictionary['title'] = "Methodology"
+        m = re.match(r'[a-zA-Z]+-([0-9]+)', name)
+
+        dictionary['right'] = ""
+        for num, index in enumerate(globals.methodology_items):
+            if index['number'] == int(m.group(1)):
+                if num > 0:
+                    dictionary['left'] = globals.methodology_items[num-1]
+                else:
+                    dictionary['left'] = ""
+                if num != len(globals.methodology_items)-1:
+                    dictionary['right'] = globals.methodology_items[num+1]
+                else:
+                    dictionary['right'] = ""
+                break
+    elif "variable-list" in name:
+        dictionary['title'] = "Variable List"
+        dictionary['var_list_stats'] = variable_list()
+        dictionary['page'] = 'voyage/variable-list.html'
+    else:
+        page = "voyage/" + name + ".html"
+        dictionary['page'] = 'voyage/' + name + ".html"
+        dictionary['title'] = 'Guide'
+
+    return render(request, 'voyage/understanding_base.html', dictionary)
 
 
 @staff_member_required
@@ -1035,7 +1069,7 @@ def get_new_visible_attrs(list_column_varnames):
     return result_columns
 
 
-def variable_list(request):
+def variable_list():
     """
     renders a list of variables and their statistics into Variable List web page
     :param request:
@@ -1065,7 +1099,7 @@ def variable_list(request):
 
         var_list_stats.append({"var_category": key, "variables": tmpGroup})
 
-    return render(request, "voyage/variable_list.html", {'var_list_stats': var_list_stats })
+    return var_list_stats
 
 
 def sources_list(request, category="documentary_sources", sort="short_ref"):
