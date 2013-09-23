@@ -628,24 +628,25 @@ class VoyageDates(models.Model):
 
         return int(value.split(',')[0])
 
-    def calculate_year_period(self, period):
-        """
-        Function to calculate proper period.
-
-        Keyword arguments:
-        period -- which period to calculate
-        """
-
-        if (period != 100):
-            if ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
-                        % period != 0):
-                return ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
-                        / period +1)
-            else:
-                return (self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period]) \
-                        / period
-        else:
-            return ((self.get_date_year(self.imp_arrival_at_port_of_dis))/100 * 100)
+    # don't think this is being used anywhere
+#    def calculate_year_period(self, period):
+#        """
+#        Function to calculate proper period.
+#
+#        Keyword arguments:
+#        period -- which period to calculate
+#        """
+#
+#        if (period != 100):
+#            if ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
+#                        % period != 0):
+#                return ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
+#                        / period +1)
+#            else:
+#                return (self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period]) \
+#                        / period
+#        else:
+#            return ((self.get_date_year(self.imp_arrival_at_port_of_dis))/100 * 100)
 
     class Meta:
         verbose_name = 'Date'

@@ -161,13 +161,29 @@ HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"
 
+import sys
+
 # import localsettings
-# This will override any previously set valaue
+# This will override any previously set value
 try:
     from localsettings import *
 except ImportError:
-    import sys
     print >>sys.stderr, '''Settings not defined. Please configure a version
         of localsettings.py for this site. See localsettings.py.dist for
         setup details.'''
-    del sys
+
+
+# Modify HAYSTACK config for fixture loading durring tests
+# It is not possible to use override_settings decorator 
+# because HAYSTACK triggers an update on save() when fixtures are loaded
+# turns out fixtures are loaded before decorators are applied.
+
+try:
+    if 'test' in sys.argv:
+        HAYSTACK_CONNECTIONS['default']['ENGINE'] = 'haystack.backends.simple_backend.SimpleEngine' 
+        del HAYSTACK_CONNECTIONS['default']['URL'] 
+        del HAYSTACK_SIGNAL_PROCESSOR
+except Exceptions as e:
+    print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
+
+del sys
