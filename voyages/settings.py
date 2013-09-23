@@ -183,7 +183,7 @@ try:
         HAYSTACK_CONNECTIONS['default']['ENGINE'] = 'haystack.backends.simple_backend.SimpleEngine' 
         del HAYSTACK_CONNECTIONS['default']['URL'] 
         del HAYSTACK_SIGNAL_PROCESSOR
-except Exceptions as e:
+except Exception as e:
     print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
 
 del sys
