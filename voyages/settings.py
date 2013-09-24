@@ -180,12 +180,9 @@ except ImportError:
 
 try:
     if 'test' in sys.argv:
-        if HAYSTACK_CONNECTIONS:
-            HAYSTACK_CONNECTIONS = {}
-            HAYSTACK_CONNECTIONS['default'] = {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine'}
-
-        if HAYSTACK_SIGNAL_PROCESSOR:
-            del HAYSTACK_SIGNAL_PROCESSOR
+        HAYSTACK_CONNECTIONS = {'default' : {'ENGINE' : 'haystack.backends.simple_backend.SimpleEngine'}}
+        HAYSTACK_SIGNAL_PROCESSOR = ''
+        del HAYSTACK_SIGNAL_PROCESSOR
 except Exception as e:
     print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
 
