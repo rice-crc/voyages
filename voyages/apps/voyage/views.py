@@ -24,12 +24,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
     """
     Voyage Understanding the Database part
     
-    Display an html page corresponding to the chapter-section-page passed in
-    ** Context **
-    ``RequestContext``
-    
-    ** Basic template that will be rendered **
-    :template:`voyage/methodology-generic.html`
+    Display an html page corresponding to the chapter-section-page
     
     Further content is rendered using the pagepath parameter 
     """
@@ -87,7 +82,6 @@ def download_file(request):
     information regarding uploaded files and call 
     handle_uploaded_file() to store files on the disk.
     This view is available only for admin users.
-    :template:`voyage/upload.html`
     """
     templatename = 'voyage/upload.html'
 
@@ -730,6 +724,7 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
 
     :param request: request to serve
     :param dict: dict contains search conditions
+    
     If empty, returns default url
     """
     url = request.build_absolute_uri(reverse('voyage:search',)) + "?"

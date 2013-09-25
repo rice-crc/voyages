@@ -5,18 +5,8 @@ from voyages.apps.education.models import *
 
 def lessonplan(request):
     """
-    Display the lesson plan page in the Education section
-    ** Context **
-    ``RequestContext``
-    ``mymodel``
-        An instance of 
-        :model:`voyages.apps.education.LessonPlan`
-        requires :model:`voyages.apps.education.LessonStandard`
-        requires :model:`voyages.apps.education.LessonStandardType`
-        requires :model:`voyages.apps.education.LessonPlanFile`
-    
-    ** Template **
-    :template:`education/lesson-plans.html`
+    Display :class:`~voyages.apps.education.models.LessonPlan` modles
+    in the lesson plan page in the Education section
     """
     lesson_plan_list = []
     for lesson in LessonPlan.objects.order_by('order'):

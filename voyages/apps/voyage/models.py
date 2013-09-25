@@ -27,7 +27,7 @@ class BroadRegion(models.Model):
 class Region(models.Model):
     """
     Specific Regions (countries or colonies).
-    related to: :model:`voyages.apps.voyages.BroadRegion`
+    related to: :class:`~voyages.apps.voyage.models.BroadRegion`
     """
 
     region = models.CharField("Specific region (country or colony)",
@@ -51,7 +51,7 @@ class Region(models.Model):
 class Place(models.Model):
     """
     Place (port or location).
-    related to: :model:`voyages.apps.voyages.Region`
+    related to: :class:`voyages.apps.voyage.modles.Region`
     """
 
     place = models.CharField(max_length=70)
@@ -141,12 +141,12 @@ class RigOfVessel(models.Model):
 class VoyageShip(models.Model):
     """
     Information about voyage ship.
-    related to: :model:`voyages.apps.voyages.Region`
-    related to: :model:`voyages.apps.voyages.Place`
-    related to: :model:`voyages.apps.voyages.Voyage`
-    related to: :model:`voyages.apps.voyages.Nationality`
-    related to: :model:`voyages.apps.voyages.TonType`
-    related to: :model:`voyages.apps.voyages.RigOfVessel`
+    related to: :class:`~voyages.apps.voyage.models.Region`
+    related to: :class:`~voyages.apps.voyage.models.Place`
+    related to: :class:`~voyages.apps.voyage.models.Voyage`
+    related to: :class:`~voyages.apps.voyage.models.Nationality`
+    related to: :class:`~voyages.apps.voyage.models.TonType`
+    related to: :class:`~voyages.apps.voyage.models.RigOfVessel`
     """
 
     # Data variables
@@ -343,9 +343,9 @@ class VoyageOutcome(models.Model):
 class VoyageItinerary(models.Model):
     """
     Voyage Itinerary data.
-    related to: :model:`voyages.apps.voyages.BroadRegion`
-    related to: :model:`voyages.apps.voyages.SpecificRegion`
-    related to: :model:`voyages.apps.voyages.Place`
+    related to: :class:`~voyages.apps.voyage.models.BroadRegion`
+    related to: :class:`~voyages.apps.voyage.models.SpecificRegion`
+    related to: :class:`~voyages.apps.voyage.models.Place`
     """
 
     # Data variables
@@ -669,8 +669,8 @@ class VoyageCaptainConnection(models.Model):
     Represents the relation between Voyage Captain and
     Voyage.
     captain_order represents order of each captain (1st, 2nd, ...)
-    related to: :model:`voyages.apps.voyages.VoyageCaptain`
-    related to: :model:`voyages.apps.voyages.Voyage`
+    related to: :class:`~voyages.apps.voyage.models.VoyageCaptain`
+    related to: :class:`~voyages.apps.voyage.models.Voyage`
     """
 
     captain = models.ForeignKey\
@@ -690,7 +690,7 @@ class VoyageCaptainConnection(models.Model):
 class VoyageCrew(models.Model):
     """
     Voyage Crew.
-    related to: :model:`voyages.apps.voyages.Voyage`
+    related to: :class:`~voyages.apps.voyage.models.Voyage`
     """
 
     crew_voyage_outset = models.IntegerField\
@@ -747,7 +747,7 @@ class VoyageCrew(models.Model):
 class VoyageSlavesNumbers(models.Model):
     """
     Voyage slaves (numbers).
-    related to: :model:`voyages.apps.voyages.Voyage`
+    related to: :class:`~voyages.apps.voyage.models.Voyage`
     """
 
     slave_deaths_before_africa = models.IntegerField \
@@ -1228,8 +1228,8 @@ class VoyageSourcesConnection(models.Model):
     """
     Represents the relationship between Voyage and VoyageSources
     source_order determines the order sources appear for each voyage
-    related to: :model:`voyages.apps.voyages.VoyageSources`
-    related to: :model:`voyages.apps.voyages.Voyage`
+    related to: :class:`~voyages.apps.voyage.models.VoyageSources`
+    related to: :class:`~voyages.apps.voyage.models.Voyage`
     """
     source = models.ForeignKey('VoyageSources', related_name="source",
                                null=True, blank=True)
@@ -1243,10 +1243,10 @@ class VoyageSourcesConnection(models.Model):
 class Voyage(models.Model):
     """
     Information about voyages.
-    related to: :model:`voyages.apps.voyages.VoyageGroupings`
-    related to: :model:`voyages.apps.voyages.VoyageCaptain`
-    related to: :model:`voyages.apps.voyages.VoyageShipOwner`
-    related to: :model:`voyages.apps.voyages.VoyageSources`
+    related to: :class:`~voyages.apps.voyage.models.VoyageGroupings`
+    related to: :class:`~voyages.apps.voyage.models.VoyageCaptain`
+    related to: :class:`~voyages.apps.voyage.models.VoyageShipOwner`
+    related to: :class:`~voyages.apps.voyage.models.VoyageSources`
     """
     #voyage_id = models.AutoField(primary_key=True)
     voyage_id = models.IntegerField("Voyage ID (can be empty)", null=True, blank=True)
