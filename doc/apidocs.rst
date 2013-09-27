@@ -80,6 +80,21 @@ Views
    :members:
 
 
+Help
+---------
+
+Models
+^^^^^^
+
+.. automodule:: voyages.apps.help.models
+   :members:
+
+Views
+^^^^^
+
+.. automodule:: voyages.apps.help.views
+   :members:
+
 Resources
 ---------
 
