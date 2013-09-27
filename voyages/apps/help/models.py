@@ -21,7 +21,7 @@ class Glossary(models.Model):
 class FaqCategory(models.Model):
     """
     A FAQ question category, may contain many faq questions
-    related to :model:`voyages.apps.help.Faq`
+    related to :class:`~voyages.apps.help.models.Faq`
 
     """
     text = models.CharField(_('Category'), max_length=100)
@@ -39,7 +39,7 @@ class FaqCategory(models.Model):
 class Faq(models.Model):
     """
     A single FAQ question and answer to it
-    related to :model:`voyages.apps.help.FaqCategory`
+    related to :class:`~voyages.apps.help.models.FaqCategory`
 
     """
     question = models.TextField(_('Question'), max_length=300)
