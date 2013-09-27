@@ -350,37 +350,19 @@ admin.site.register(Place, PlaceAdmin)
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
-admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
+#admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(Nationality, VoyageNationalityAdmin)
 admin.site.register(TonType, VoyageTonTypeAdmin)
 admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)
 admin.site.register(VoyageShip)
 
 # Voyage Outcome
-admin.site.register(VoyageOutcome)
 admin.site.register(OwnerOutcome)
 admin.site.register(ParticularOutcome, VoyageParticularOutcomeAdmin)
 admin.site.register(SlavesOutcome, VoyageSlavesOutcomeAdmin)
 admin.site.register(VesselCapturedOutcome, VoyageVesselOutcomeAdmin)
 # attached as inline in Voyage section
 
-# Voyage Itinerary
-# attached as inline in Voyage section
-admin.site.register(VoyageItinerary)
-
-# Voyage Dates
-# attached as inline in Voyage section
-admin.site.register(VoyageDates)
-
-# Voyage Captain and Crew
-# Crew attached as inline in Voyage section
-admin.site.register(VoyageCrew)
-admin.site.register(VoyageCaptain, VoyageCaptainAdmin)
-admin.site.register(VoyageCaptainConnection, VoyageCaptainConnectionAdmin)
-
-# Voyage Slaves (numbers)
-# attached as inline in Voyage section
-admin.site.register(VoyageSlavesNumbers)
 
 # Voyage Slaves (characteristics)
 # attached as inline in Voyage section
@@ -388,7 +370,6 @@ admin.site.register(VoyageSlavesNumbers)
 # Voyage Sources
 admin.site.register(VoyageSources, VoyageSourcesAdmin)
 admin.site.register(VoyageSourcesType)
-admin.site.register(VoyageSourcesConnection)
 
 # Voyage (main section)
 admin.site.register(Voyage, VoyageAdmin)
