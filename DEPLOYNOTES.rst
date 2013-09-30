@@ -130,10 +130,17 @@ To initalize the Solr data the following manage command should be run::
 
   $ python manage.py rebuild_index
 
+Documents of lessonplan, Images, Download files have to be copied to the global location.
+Since this is a one time process per environment,they should be coppied manually.
+Change into the root directory of the project and perform the following commands::
+
+  $ cp -pr documents/* <localsettings.MEDIA_ROOT>
+
+
+
 To cleanup the thumbnail image cache run::
 
   $ python manage.py thumbnail cleanup
-
 
 
 Creating initial data
