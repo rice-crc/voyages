@@ -13,7 +13,7 @@ class LessonPlanAdmin(admin.ModelAdmin):
     fields = ['text', 'author', 'grade_level', 'course', 'key_words', 'order', 'abstract']
     inlines = [LessonStandardInline, FileDownloadInline,]
     search_fields = ('text','author', 'grade_level', 'course', 'key_words',  'abstract')
-    list_display=  ['order', 'text', 'author', 'key_words']
+    list_display=  ['order', 'text', 'author', 'key_words', 'grade_level', 'course']
     list_display_links = ['text']
     list_editable = ['order']
     

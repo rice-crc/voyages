@@ -198,7 +198,7 @@ class VoyageShip(models.Model):
                                related_name="voyage_name_ship")
 
     def __unicode__(self):
-        return self.ship_name
+        return self.ship_name if self.ship_name is not None else "None"
 
     class Meta:
         verbose_name = 'Ship'

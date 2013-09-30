@@ -21,7 +21,7 @@ class FaqAdminInline(admin.StackedInline):
 
 class FaqCategoryAdmin(admin.ModelAdmin):
     fields = ['text', 'type_order']
-    search_fields = ('text', 'type_order')
+    search_fields = ['text']
     list_display =  ['type_order', 'text',]
     list_display_links = ['text']
     list_editable = ['type_order']
@@ -38,7 +38,7 @@ class FaqAdmin(admin.ModelAdmin):
     )
     search_fields = ('question', 'answer',)
     form = FaqAdminForm
-    list_display =  ['category', 'question_order', 'question',]
+    list_display =  ['question_order', 'category', 'question',]
     list_display_links = ['question']
     list_editable = ['question_order']
 
