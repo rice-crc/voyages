@@ -23,7 +23,13 @@ DATABASES = {
     }
 }
 
-# Used to index Django models, in our case using Solr 
+
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Should be in a location outside the deploy like /home/httpd/sites/voyages/media
+MEDIA_ROOT = '/path/to/media/'
+
+
+# Used to index Django models, in our case using Solr
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
