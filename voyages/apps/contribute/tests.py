@@ -30,8 +30,10 @@ class TestAuthentication(TestCase):
         """
         # Should redirect
         response = self.client.post(reverse('contribute:index'),
-                                    {'id_username': 'admin', 'id_password': 'should_not_work'})
-        self.assertEqual(response.status_code, 302)
+                                    {'id_username': 'admin', 'id_password': 'should_not_work'}, follow=True)
+        self.assertEqual(response.redirect_chain[0][0], 'http://testserver/contribute/login/')
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.status_code, 200)
 
         response = self.client.post(reverse('contribute:login'),
                                     {'id_username': 'admin', 'id_password': 'should_not_work'})
@@ -44,7 +46,7 @@ class TestAuthentication(TestCase):
         self.assertEqual(login_res, False)
 
         # Should redirect, since we are not logged in
-        response = self.client.get(reverse('contribute:index'))
+        response = self.client.get(reverse('contribute:index'), follow=True)
         self.assertRedirects(response, reverse('contribute:login'), status_code=302, target_status_code=200)
 
 
@@ -61,3 +63,15 @@ class TestAuthentication(TestCase):
         response = self.client.get(reverse('contribute:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Welcome to the Contribute Section")
+        # Not a staff user
+        self.assertNotContains(response, "Live Admin")
+
+        user_obj.is_staff=True
+        user_obj.save()
+        login_res = self.client.login(username=usr_name, password=usr_password)
+        self.assertEqual(login_res, True)
+        response = self.client.get(reverse('contribute:index'))
+        self.assertEqual(response.status_code, 200)
+
+        #Is a staff user
+        self.assertContains(response, "Live Admin")
