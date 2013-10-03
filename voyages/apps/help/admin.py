@@ -41,6 +41,8 @@ class FaqAdmin(admin.ModelAdmin):
     list_display =  ['question_order', 'category', 'question',]
     list_display_links = ['question']
     list_editable = ['question_order']
+    list_filter = ['category']
+    ordering = ['category', 'question_order']
 
 admin.site.register(Glossary, GlossaryAdmin)
 admin.site.register(FaqCategory, FaqCategoryAdmin)

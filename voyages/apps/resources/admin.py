@@ -7,6 +7,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ['ready_to_go', 'title', 'file' ]
     list_display_links = ['title']
     list_editable = ['ready_to_go']
+    search_fields = ['title', 'description']
     exclude = ['voyage']
 
     form = ImageAdminForm
@@ -16,9 +17,11 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class ImageCategoryAdmin(admin.ModelAdmin):
-    list_display = ['visible_on_website', 'label']
+    list_display = ['visible_on_website', 'label', 'value']
     list_display_links = ['label']
     list_editable =  ['visible_on_website']
+    ordering = ['value']
+    search_fields = ['value']
 
     class Meta:
         model = ImageCategory
