@@ -34,7 +34,9 @@ td.sources-city {
 	padding-top: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
-	font-weight: bold; }
+	font-weight: bold;
+    text-align: left;
+}
 	
 td.sources-city {
 	border-top: 1px solid #DDCA9D; }	
