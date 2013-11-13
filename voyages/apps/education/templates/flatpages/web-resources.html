@@ -1,0 +1,20 @@
+{% extends "education/educationbase.html" %}
+
+{% load i18n %}
+{% load voyage_extras %}
+
+{% block title %}Web Resources{% endblock %}
+
+
+{% block pagecsslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education-links.css">
+{% endblock %}}
+
+
+{% block center-content %}
+{{ block.super }}
+
+{{ flatpage.content|parse_blocks }}
+
+{% endblock %}
+
