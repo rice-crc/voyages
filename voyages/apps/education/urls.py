@@ -7,9 +7,12 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='education/index.html'), name='index'),
-    url(r'^web-resources$', TemplateView.as_view(template_name='education/others.html'), name='others'),
 )
 
 urlpatterns += patterns('',
     url(r'^lesson-plans$', 'voyages.apps.education.views.lessonplan', name='lesson-plans'),                    
+)
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+   url(r'^education', 'flatpage', {'url': '/education/web-resources/'}, name='web-resources'),
 )

@@ -113,7 +113,7 @@ Run these commands to load the data::
 
   $ python manage.py loaddata initialdata/lessonplan_data.json
   $ python manage.py loaddata initialdata/glossary.json
-  $ python manage.py loaddata initialdata/downloads.json
+  $ python manage.py loaddata initialdata/flatpages.json
   $ python manage.py loaddata initialdata/faq_all.json
   $ python manage.py loaddata initialdata/users.json
   mysql -h <HOSTNAME> -u <USER> -p <DATABASE> < <INPUTFILE>
