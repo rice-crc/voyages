@@ -14,5 +14,5 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
-   url(r'^education', 'flatpage', {'url': '/education/web-resources/'}, name='web-resources'),
+   url(r'^web-resources', 'flatpage', {'url': '/education/web-resources/'}, name='web-resources'),
 )
