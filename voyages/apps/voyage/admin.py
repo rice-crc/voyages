@@ -21,6 +21,9 @@ class FlatPageAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
     class Media:
         js = ( 'scripts/tiny_mce/tinymce.min.js',
               'scripts/tiny_mce/textareas.js',
