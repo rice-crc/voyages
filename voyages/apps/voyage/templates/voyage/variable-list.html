@@ -1,5 +1,5 @@
 {% load i18n %}
-
+{% load humanize %}
 
 <h1>{% trans "Variable list" %}</h1>
 
@@ -32,7 +32,7 @@
         <tr class="{% cycle 'odd_row' 'even_row' %}">
             <td class="">{{ variable.var_full_name }}</td>
             <td class="">{{ variable.spss_name }}</td>
-            <td class="number">{{ variable.num_voyages }}</td>
+            <td class="number">{{ variable.num_voyages|intcomma }}</td>
             <td class="check">{% if variable.is_estimate == True %}&bull;{% endif %}</td>
             <td class="check">{% if variable.is_basic == True %}&bull;{% endif %}</td>
             <td class="check">{% if variable.is_general == True %}&bull;{% endif %}</td>
