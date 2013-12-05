@@ -63,7 +63,7 @@ CACHES = {
 
 # bitly generic oauth token
 # Replace this with a valid bitly oauth token
-BITLY_OAUTH_TOKEN = '1bb245738398fbccc83985487482947563484398'
+BITLY_OAUTH_TOKEN = '[40 digit hex bitly oauth token here]'
 
 
 # A sample logging configuration. The only tangible logging

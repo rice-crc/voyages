@@ -730,15 +730,15 @@ def shorten_url(long_url):
     """
     try:
         con = bitly_api.Connection(access_token=settings.BITLY_OAUTH_TOKEN)
-        short_url = con.shorten(long_url)['url'].encode('utf-8')
+        url = con.shorten(long_url)['url'].encode('utf-8')
     except bitly_api.BitlyError:
-        short_url = long_url
+        url = long_url
     else:
         try:
-            resp = urllib2.urlopen(short_url)
+            resp = urllib2.urlopen(url)
         except:
-            short_url = long_url
-    return short_url
+            url = long_url
+    return url
 
 def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], dict={}):
     """
