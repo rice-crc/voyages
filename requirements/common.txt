@@ -10,4 +10,4 @@ mock
 django-autocomplete-light
 sorl-thumbnail 
 PIL
-
+bitly_api
