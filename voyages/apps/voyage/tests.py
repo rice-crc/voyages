@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from .models import VoyageDates
 from django.core.urlresolvers import reverse
+from .views import shorten_url
+import urllib2
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):
@@ -18,7 +20,29 @@ class SimpleGetPageTest(TestCase):
             response = self.client.get(reverse('voyage:understanding-page', kwargs={'name': 'methodology-%s' % str(i)}))
             self.assertEqual(response.status_code, 200)
 
-            
+class UrlShortenerTest(TestCase):
+    """
+    Test of the shorten_url method that uses bitly to shorten url
+    """
+    def test_shorten_valid_url(self):
+        """
+        Attempt to shorten a valid url
+        """
+        long_url = 'http://www.google.com/'
+        short_url = shorten_url(long_url)
+        self.assertNotEqual(short_url, long_url)
+        try:
+            resp = urllib2.urlopen(short_url)
+        except:
+            self.fail("Invalid url provided by shorten_url method")
+
+    def test_shorten_invalid_url(self):
+        """
+        Attempt to shorten an invalid url
+        """
+        long_url = 'adsfasdfafdjgkdf.hgvkaadsadsfhgkjfm.com'
+        short_url = shorten_url(long_url)
+        self.assertEqual(short_url, long_url, "When url is invalid, shorten_url should return the long_url")
     
 #don't think the function is being used 
 #class VoyageDatesPeriodsTest(TestCase):
