@@ -18,7 +18,8 @@ from .forms import *
 from haystack.query import SearchQuerySet
 from itertools import groupby
 import globals
-
+import bitly_api
+import urllib2
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -480,7 +481,9 @@ def search(request):
 
 
         # Encode url to url_to_copy form (for user)
-        url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
+        a_long_url = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
+
+        url_to_copy = shorten_url(a_long_url)
 
     # results per page and form (change in session if necessary)
     form, results_per_page = check_and_save_options_form(request, to_reset_form)
@@ -717,6 +720,25 @@ def check_and_save_options_form(request, to_reset_form):
 
     return form, results_per_page
 
+def shorten_url(long_url):
+    """
+    Function to shorten url using bitly service.
+
+    :param long_url: Long url to shorten
+
+    If bitly doesn't provide url or the bitly url doesn't work, then it will just return the long_url
+    """
+    try:
+        con = bitly_api.Connection(access_token=settings.BITLY_OAUTH_TOKEN)
+        url = con.shorten(long_url)['url'].encode('utf-8')
+    except bitly_api.BitlyError:
+        url = long_url
+    else:
+        try:
+            resp = urllib2.urlopen(url)
+        except:
+            url = long_url
+    return url
 
 def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], dict={}):
     """
