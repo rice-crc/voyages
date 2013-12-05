@@ -726,6 +726,14 @@ letters_sorted_source_types = [
     "published_sources"
 ]
 
+summary_statistics_columns = [
+    '',
+    'Total slaves',
+    'Total voyages',
+    'Average',
+    'Standard deviation'
+]
+
 summary_statistics = [
     {'display_name' : 'Slaves embarked *', 'var_name': 'var_imp_total_num_slaves_purchased',
      'has_total': True, 'is_percentage' : False},

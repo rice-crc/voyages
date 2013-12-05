@@ -123,6 +123,7 @@ def search(request):
     query_dict = {}
     result_data = {}
     tab = 'result'
+    result_data['summary_statistics_columns'] = globals.summary_statistics_columns
 
     # Check if saved url has been used
     if request.GET.values():
@@ -1475,9 +1476,9 @@ def csv_stats_download(request):
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
     # Write headers
-    tmpRow = ["",]
-    for column in globals.summary_statistics:
-        tmpRow.append(column['display_name'])
+    tmpRow = []
+    for columnname in globals.summary_statistics_columns:
+        tmpRow.append(columnname)
     writer.writerow(tmpRow)
 
     for tmpRow in retrieve_summary_stats(results):
