@@ -76,6 +76,7 @@
           <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
         <filter class="solr.PorterStemFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -92,6 +93,7 @@
           <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
         <filter class="solr.PorterStemFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
     </fieldType>
 
