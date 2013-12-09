@@ -4,6 +4,22 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup-permlink.css">
 
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#link-button').click(shortenURL);
+});
+/* Get bitly shortened search url */
+function shortenURL(){
+  var long_url_var = $("#permlink-text-link").text();
+  $.get( "{% url 'voyage:shorten_search_url' %}",
+    { long_url: long_url_var},
+    function ( data ) {
+      $("#permlink-text-link").text(data.url);
+      strtBlackout();
+    });
+}
+</script>
+
 <div class="search-side-panel">
 
     <div class="box-main-table box-expanded">
