@@ -113,9 +113,7 @@ $(document).ready(function() {
         });
     }
 
-    $("#link-button").click(strtBlackout); // open if btn is pressed
     $(".close-link-box").click(endBlackout); // close if close btn clicked
-
 });
 
 
