@@ -430,7 +430,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_voyage_began(self, obj):
         try:
             data = obj.voyage_dates.voyage_began
-            if len(data) != 10:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
@@ -440,7 +440,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_slave_purchase_began(self, obj):
         try:
             data = obj.voyage_dates.slave_purchase_began
-            if len(data) != 10:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
@@ -451,7 +451,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_date_departed_africa(self, obj):
         try:
             data = obj.voyage_dates.date_departed_africa
-            if len(data) != 10:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
@@ -461,7 +461,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_first_dis_of_slaves(self, obj):
         try:
             data = obj.voyage_dates.first_dis_of_slaves
-            if len(data) < 7:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
@@ -471,7 +471,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_departure_last_place_of_landing(self, obj):
         try:
             data = obj.voyage_dates.departure_last_place_of_landing
-            if len(data) != 10:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
@@ -481,7 +481,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_voyage_completed(self, obj):
         try:
             data = obj.voyage_dates.voyage_completed
-            if len(data) != 10:
+            if data == ',,' or len(data) == 0:
                 return None
             else:
                 return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
