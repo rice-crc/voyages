@@ -20,6 +20,7 @@ from itertools import groupby
 import globals
 import bitly_api
 import urllib2
+import json
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -482,9 +483,7 @@ def search(request):
 
 
         # Encode url to url_to_copy form (for user)
-        a_long_url = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
-
-        url_to_copy = shorten_url(a_long_url)
+        url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
     # results per page and form (change in session if necessary)
     form, results_per_page = check_and_save_options_form(request, to_reset_form)
@@ -720,6 +719,12 @@ def check_and_save_options_form(request, to_reset_form):
                 results_per_page = form.cleaned_option()
 
     return form, results_per_page
+
+def shorten_search_url(request):
+    response_data = {}
+    url = shorten_url(request.GET['long_url'])
+    response_data['url'] = url
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def shorten_url(long_url):
     """
