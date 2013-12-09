@@ -113,7 +113,6 @@ $(document).ready(function() {
         });
     }
 
-    $('#link-button').click(shortenURL);
     $(".close-link-box").click(endBlackout); // close if close btn clicked
 });
 
@@ -418,14 +417,4 @@ function endBlackout(){
 function strtBlackout(){
     $(".msgbox").css("display", "block");
     $(".blackout").css("display", "block");
-}
-/* Get bitly shortened search url */
-function shortenURL(){
-    var long_url_var = $("#permlink-text-link").text();
-    $.get( "/voyage/shorten_search_url",
-	   { long_url: long_url_var},
-	   function ( data ) {
-	       $("#permlink-text-link").text(data.url);
-	       strtBlackout();
-	   });
 }
