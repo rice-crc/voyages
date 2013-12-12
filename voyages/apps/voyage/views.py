@@ -180,7 +180,7 @@ def search(request):
 
             # Update variable values
             list_search_vars = request.POST.getlist('list-input-params')
-            existing_form = request.session['existing_form']
+            existing_form = request.session.get('existing_form')
             new_existing_form = []
 
             # Time frame search
