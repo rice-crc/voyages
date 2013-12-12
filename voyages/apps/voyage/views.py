@@ -113,6 +113,9 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
+def create_query_dict(request):
+    query_dict = {}
+    return query_dict
 
 def search(request):
     """
@@ -188,6 +191,7 @@ def search(request):
             if frame_form.is_valid():
                 request.session['time_span_form'] = frame_form
 
+            # TODO: only do this when adding a new variable or building search form from url (maybe)
             # Create new existing form based on search_vars
             for tmp_varname in list_search_vars:
                 for cur_var in existing_form:
@@ -369,9 +373,12 @@ def search(request):
                 new_existing_form = []
                 query_dict = {}
 
+
+                # TODO: refactor this into another method
                 # Time frame search
-                query_dict['var_imp_arrival_at_port_of_dis__range'] = [request.session['time_span_form'].cleaned_data['frame_from_year'],
-                                                             request.session['time_span_form'].cleaned_data['frame_to_year']]
+                query_dict['var_imp_arrival_at_port_of_dis__range'] = [
+                    request.session['time_span_form'].cleaned_data['frame_from_year'],
+                    request.session['time_span_form'].cleaned_data['frame_to_year']]
 
                 for tmp_varname in list_search_vars:
                     for cur_var in request.session['existing_form']:
