@@ -19,7 +19,7 @@ from haystack.query import SearchQuerySet
 from itertools import groupby
 import globals
 import bitly_api
-import urllib2
+import requests
 import json
 
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -741,7 +741,10 @@ def shorten_url(long_url):
         url = long_url
     else:
         try:
-            resp = urllib2.urlopen(url)
+            # Python can't handle the redirect to the testvoyages url
+            req = requests.get(url, allow_redirects=False)
+            if not req.ok:
+                url = long_url
         except:
             url = long_url
     return url
