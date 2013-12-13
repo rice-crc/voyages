@@ -113,9 +113,89 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
-def create_query_dict(request):
+def create_query_dict(query):
     query_dict = {}
     return query_dict
+
+def create_query_from_url(request):
+    return request
+
+def create_form_from_query(query):
+    return query
+
+def create_query_from_request(request):
+    search_vars = request.POST.getlist('list-input-params')
+    query = create_forms_and_dict(request, search_vars)
+    query['list-input-params'] = search_vars
+    query['to_year'] = request.POST.get('frame_to_year')
+    query['from_year'] = request.POST.get('frame_from_year')
+    
+    
+    #print to_year
+    #print from_year
+    print search_vars
+    return None
+
+def create_forms_and_dict(request, search_vars):
+    query_forms = {}
+    query_dict = {}
+    for search_var in search_vars:
+        if search_var in globals.list_text_fields:
+            query_forms[search_var] = SimpleTextForm(request.POST, prefix=search_var)
+            if query_forms[search_var].is_valid():
+                query_dict[search_var + "__contains"] = query_forms[search_var].cleaned_data['text_search']
+        elif search_var in globals.list_select_fields:
+            query_forms[search_var] = SimpleSelectSearchForm(request.POST, prefix=search_var)
+            if query_forms[search_var].is_valid():
+                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+        elif search_var in globals.list_numeric_fields:
+            query_forms[search_var] = SimpleNumericSearchForm(request.POST, prefix=search_var)
+            if query_forms[search_var].is_valid():
+                opt = query_forms[search_var].cleaned_data['options']
+                if opt == '1': # Between
+                    query_dict[search_var + "__range"] = [query_forms[search_var].cleaned_data['lower_bound'],
+                                                          query_forms[search_var].cleaned_data['upper_bound']]
+                elif opt == '2': # Less than or equal to
+                    query_dict[search_var + "__lte"] = query_forms[search_var].cleaned_data['threshold']
+                elif opt == '3': # Greater than or equal to
+                    query_dict[search_var + "__gte"] = query_forms[search_var].cleaned_data['threshold']
+                elif opt == '4': # Equal to
+                    query_dict[search_var + "__exact"] = query_forms[search_var].cleaned_data['threshold']
+                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+        elif search_var in globals.list_date_fields:
+            query_forms[search_var] = SimpleDateSearchForm(request.POST, prefix=search_var)
+            if query_forms[search_var].is_valid():
+                opt = query_forms[search_var].cleaned_data['options']
+                if opt == '1': # Between
+                    query_dict[search_var + "__range"] = [
+                        formatDate(query_forms[search_var].cleaned_data['from_year'],
+                                   query_forms[search_var].cleaned_data['from_month']),
+                        formatDate(query_forms[search_var].cleaned_data['to_year'],
+                                   query_forms[search_var].cleaned_data['to_month'])]
+                elif opt == '2': # Less than or equal to
+                    query_dict[search_var + "__lte"] = \
+                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
+                                   query_forms[search_var].cleaned_data['theshold_month'])
+                elif opt == '3': # Greater than or equal to
+                    query_dict[search_var + "__gte"] = \
+                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
+                                   query_forms[search_var].cleaned_data['theshold_month'])
+                elif opt == '2': # Equal to
+                    query_dict[search_var + "__exact"] = \
+                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
+                                   query_forms[search_var].cleaned_data['theshold_month'])
+        elif search_var in globals.list_place_fields:
+            # TODO: How do I make the form for this? Is this ever used? Isn't it the select form used instead
+            places = request.POST.getlist(search_var + "_selected")
+            query_dict[search_var + "__in"] = places
+        elif search_var in globals.list_boolean_fields:
+            query_forms[search_var] = SimpleSelectBooleanForm(request.POST, prefix=search_var)
+            if query_forms[search_var].is_valid():
+                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+    query = {}
+    query['forms'] = query_forms
+    query['dict'] = query_dict
+    return query
 
 def search(request):
     """
@@ -128,6 +208,17 @@ def search(request):
     result_data = {}
     tab = 'result'
     result_data['summary_statistics_columns'] = globals.summary_statistics_columns
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+    print request.POST
+    print "Session:"
+    print request.session
+    #for i in request.session.items():
+    #    print i
+    #    print "\n"
+    #print "Existing form"
+    #print request.session['existing_form']
+    query_act = create_query_from_request(request)
 
     # Check if saved url has been used
     if request.GET.values():
@@ -145,21 +236,19 @@ def search(request):
 
     else:
 
+
+        # TODO: is this part necessary before the POST? This should probably be after the POST.
+
         date_filters = []
 
         # Get max and min years (based on database)
         voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
-        if not request.session.exists(request.session.session_key):
-            request.session.create()
-
         # If last query exists, retrieve last results, otherwise get all results
-        if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
-                and request.session['voyage_last_query']:
-            query_dict = request.session['voyage_last_query']
-            if 'voyage_last_query_date_filters' in request.session\
-                    and request.session['voyage_last_query_date_filters'] is not None:
-                date_filters = request.session['voyage_last_query_date_filters']
+        if request.session.get('voyage_last_query'):
+            query_dict = request.session.get('voyage_last_query')
+            if request.session.get('voyage_last_query_date_filters'):
+                date_filters = request.session.get('voyage_last_query_date_filters')
             else:
                 date_filters = []
 
@@ -187,6 +276,7 @@ def search(request):
             new_existing_form = []
 
             # Time frame search
+            # TODO: How does this work without specifying the prefix?
             frame_form = TimeFrameSpanSearchForm(request.POST)
             if frame_form.is_valid():
                 request.session['time_span_form'] = frame_form
@@ -504,6 +594,8 @@ def search(request):
     else:
         current_page = request.POST.get('desired_page')
 
+
+    #TODO: refactor pagination
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
