@@ -148,17 +148,17 @@ class Command(BaseCommand):
             #group.save()
         
         # Voyages
-        #models.Voyage.objects.all().delete()
-        #models.VoyageShip.objects.all().delete()
-        #models.VoyageShipOwnerConnection.objects.all().delete()
-        #models.VoyageShipOwner.objects.all().delete()
-        #models.VoyageOutcome.objects.all().delete()
-        #models.VoyageDates.objects.all().delete()
-        #models.VoyageCaptain.objects.all().delete()
-        #models.VoyageCaptainConnection.objects.all().delete()
-        #models.VoyageSourcesConnection.objects.all().delete()
-        #models.VoyageItinerary.objects.all().delete()
-        #models.VoyageSlavesNumbers.objects.all().delete()
+        models.Voyage.objects.all().delete()
+        models.VoyageShip.objects.all().delete()
+        models.VoyageShipOwnerConnection.objects.all().delete()
+        models.VoyageShipOwner.objects.all().delete()
+        models.VoyageOutcome.objects.all().delete()
+        models.VoyageDates.objects.all().delete()
+        models.VoyageCaptain.objects.all().delete()
+        models.VoyageCaptainConnection.objects.all().delete()
+        models.VoyageSourcesConnection.objects.all().delete()
+        models.VoyageItinerary.objects.all().delete()
+        models.VoyageSlavesNumbers.objects.all().delete()
         count = 0
         for i in legacy_models.Voyages.objects.all():
             #TODO: This if statement looks suspicious
@@ -170,7 +170,7 @@ class Command(BaseCommand):
             print count
             if i.voyageid is not None:
                 voyageObj.voyage_id = i.voyageid
-                #voyageObj.save()
+                voyageObj.save()
             ship = models.VoyageShip()
             ship.voyage = voyageObj
             voyageObj.voyage_in_cd_rom = i.evgreen
@@ -206,9 +206,9 @@ class Command(BaseCommand):
                 ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp.id)
             if i.tonmod:
                 ship.tonnage_mod = round(i.tonmod, 1)
-            #ship.save()
+            ship.save()
             voyageObj.voyage_ship = ship
-            #voyageObj.save()
+            voyageObj.save()
 
             # Owners section
             letters = map(chr, range(97, 97 + 16)) # from a to p
@@ -217,10 +217,9 @@ class Command(BaseCommand):
                 attr = getattr(i, 'owner' + letter)
                 if attr:
                     #TODO change to get_or_create for actual run. This is just testing that it gets the right stuff
-                    tmpOwners = models.VoyageShipOwner.objects.filter(name=attr)
-                    print "Number owners: %s" % len(tmpOwners)
+                    tmpOwners, created = models.VoyageShipOwner.objects.create_or_get(name=attr)
                     # Create voyage-owner connection
-                    #models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=tmpVoyage, owner_order=(idx+1))
+                    models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=tmpVoyage, owner_order=(idx+1))
             outcome = models.VoyageOutcome()
             outcome.voyage = voyageObj
             if i.fate:
@@ -233,28 +232,22 @@ class Command(BaseCommand):
                 outcome.vessel_captured_outcome = models.VesselCapturedOutcome.objects.get(value=i.fate3.id)
             if i.fate4:
                 outcome.outcome_owner = models.OwnerOutcome.objects.get(value=i.fate4.id)
-            #outcome.save()
+            outcome.save()
             
             itinerary = models.VoyageItinerary()
             itinerary.voyage = voyageObj
-            print "A"
             if i.portdep:
                 itinerary.port_of_departure = models.Place.objects.get(value=i.portdep.id)
-            print "B"
             if i.embport:
                 itinerary.int_first_port_emb = models.Place.objects.get(value=i.embport.id)
-            print "C"
             if i.embport2:
                 itinerary.int_second_port_emb = models.Place.objects.get(value=i.embport2.id)
-            print "D"
             if i.embreg:
                 itinerary.int_first_region_purchase_slaves = models.Region.objects.get(value=i.embreg)
             if i.embreg2:
                 itinerary.int_second_region_purchase_slaves = models.Region.objects.get(value=i.embreg2)
-            print "E"
             if i.arrport:
                 itinerary.int_first_port_dis = models.Place.objects.get(value=i.arrport.id)
-            print "F"
             if i.arrport2:
                 itinerary.int_second_port_dis = models.Place.objects.get(value=i.arrport2.id)
             if i.regarr:
@@ -270,32 +263,24 @@ class Command(BaseCommand):
                 itinerary.third_place_slave_purchase = models.Place.objects.get(value=i.plac3tra.id)
             if i.regem1:
                 itinerary.first_region_slave_emb = models.Region.objects.get(value=i.regem1.id)
-            print "G"
             if i.regem2:
                 itinerary.second_region_slave_emb = models.Region.objects.get(value=i.regem2.id)
-            print "1"
             if i.regem3:
                 itinerary.third_region_slave_emb = models.Region.objects.get(value=i.regem3.id)
-            print "2"
             npafttras = models.Place.objects.filter(value=i.npafttra)
             if i.npafttra and len(npafttras) >= 1:
                 itinerary.port_of_call_before_atl_crossing = npafttras[0]
             if i.npafttra and len(npafttras) < 1:
                 print "ERROR: npafttra is invalid port value of %s" % i.npafttra
             itinerary.number_of_ports_of_call = i.npprior
-            print "3"
             if i.sla1port:
                 itinerary.first_landing_place = models.Place.objects.get(value=i.sla1port.id)
-            print "4"
             if i.adpsale1:
                 itinerary.second_landing_place = models.Place.objects.get(value=i.adpsale1.id)
-            print "5"
             if i.adpsale2:
                 itinerary.third_landing_place = models.Place.objects.get(value=i.adpsale2.id)
-            print "6"
             if i.regdis1:
                 itinerary.first_landing_region = models.Region.objects.get(value=i.regdis1.id)
-            print "H" 
             if i.regdis2:
                 itinerary.second_landing_region = models.Region.objects.get(value=i.regdis2.id)
             if i.regdis3:
@@ -313,7 +298,6 @@ class Command(BaseCommand):
                 itinerary.imp_region_voyage_begin = models.Region.objects.get(value=i.deptregimp)
             if i.deptregimp1:
                 itinerary.imp_broad_region_voyage_begin = models.BroadRegion.objects.get(value=i.deptregimp1)
-            print "I"
             if i.majbuypt:
                 itinerary.principal_place_of_slave_purchase = models.Place.objects.get(value=i.majbuypt)
             if i.mjbyptimp:
@@ -324,16 +308,15 @@ class Command(BaseCommand):
                 itinerary.imp_broad_region_of_slave_purchase = models.BroadRegion.objects.get(value=i.majbyimp1)
             if i.majselpt:
                 itinerary.principal_port_of_slave_dis = models.Place.objects.get(value=i.majselpt)
-            print "J"
             if i.mjslptimp:
                 itinerary.imp_principal_port_slave_dis = models.Place.objects.get(value=i.mjslptimp)
             if i.mjselimp:
                 itinerary.imp_principal_region_slave_dis = models.Region.objects.get(value=i.mjselimp.id)
             if i.mjselimp1:
                 itinerary.imp_broad_region_slave_dis = models.BroadRegion.objects.get(value=i.mjselimp1)
-            #itinerary.save()
+            itinerary.save()
             voyageObj.voyage_itinerary = itinerary
-            #voyageObj.save()
+            voyageObj.save()
             
             def mk_date(day_value, month_value, year_value):
                 """
@@ -376,7 +359,7 @@ class Command(BaseCommand):
                 tmp = i.dateleftafr
                 # MM,DD,YYYY
                 date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
-            #date_info.save()
+            date_info.save()
               
             # Captain and Crew section
             crew = models.VoyageCrew()
@@ -396,22 +379,21 @@ class Command(BaseCommand):
             crew.crew_deserted = i.ndesert
             if i.captaina:
                 #TODO change to get_or_create
-                #first_captain = models.VoyageCaptain.objects.get(name=i.captaina)
-                #models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
+                first_captain, created = models.VoyageCaptain.objects.get_or_create(name=i.captaina)
+                models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
                 f = 6+3
             if i.captainb:
                 #TODO change to get_or_create
-                #second_captain = models.VoyageCaptain.objects.get(name=i.captainb)
-                #models.VoyageCaptainConnetion.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
+                second_captain, created  = models.VoyageCaptain.objects.get_or_create(name=i.captainb)
+                models.VoyageCaptainConnetion.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
                 f = 7
             if i.captainc:
                 #TODO change to get_or_create
-                #third_captain = models.VoyageCaptain.objects.get(name=i.captainc)
-                #models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
-                #crew.save()
-                f = 8
+                third_captain, created = models.VoyageCaptain.objects.get_or_create(name=i.captainc)
+                models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
+            crew.save()
             voyageObj.voyage_crew = crew
-            #voyageObj.save()
+            voyageObj.save()
 
             # Voyage numbers and characteristics
             characteristics = models.VoyageSlavesNumbers()
@@ -525,9 +507,9 @@ class Command(BaseCommand):
             characteristics.total_slaves_dept_or_arr_gender_identified = i.slavemx7
             characteristics.imp_slaves_embarked_for_mortality = i.tslmtimp
 
-            #characteristics.save()
+            characteristics.save()
             voyageObj.voyage_slaves_numbers = characteristics
-            #voyageObj.save()
+            voyageObj.save()
 
             listSources = models.VoyageSources.objects.all()
 
@@ -560,18 +542,15 @@ class Command(BaseCommand):
                     to_be_matched = fieldvalue
                     src = findBestMatchingSource(to_be_matched)
                     if src:
-                        #models.VoyageSourcesConnection.objects.create(source=src, source_order = order, text_ref=fieldvalue, group=voyageObj)
-                        #print "Found match %s" % to_be_matched
-                        f = 8 + 4
+                        models.VoyageSourcesConnection.objects.create(source=src, source_order = order, text_ref=fieldvalue, group=voyageObj)
                     else:
-                        #models.VoyageSourcesConnection.objects.create(source_order=order, text_ref=fieldvalue, group=voyageObj)
-                        #print "No match found for %s" % fieldvalue
+                        models.VoyageSourcesConnection.objects.create(source_order=order, text_ref=fieldvalue, group=voyageObj)
                         pass
             # Alphabetical letters between a and r
             letters = map(chr, range(97, 97+18))
             for idx, letter in enumerate(letters):
                 # Inserting sourcea, sourceb, ..., sourcer
                 insertSource(getattr(i, 'source' + letter), (idx + 1))
-            #voyageObj.save()
+            voyageObj.save()
                             
                     
