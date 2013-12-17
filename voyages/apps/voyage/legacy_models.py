@@ -9,6 +9,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+#from voyages.apps.voyage import legacy_models
 
 class LegacyModel(models.Model):
     class Meta:
@@ -174,7 +175,7 @@ class Regions(LegacyModel):
         db_table = 'regions'
 
 # Keep
-class Resistance(LegacyModel):
+class LegacyResistance(LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -259,7 +260,7 @@ class Voyages(LegacyModel):
     placcons = models.ForeignKey(Ports, null=True, db_column='placcons', related_name='voyages_placcons', blank=True)
     yrreg = models.IntegerField(null=True, blank=True)
     crew3 = models.IntegerField(null=True, blank=True)
-    resistance = models.ForeignKey(Resistance, null=True, db_column='resistance', blank=True)
+    resistance = models.ForeignKey(LegacyResistance, null=True, db_column='resistance', blank=True)
     ownera = models.CharField(max_length=60, blank=True)
     ownerb = models.CharField(max_length=60, blank=True)
     ownerc = models.CharField(max_length=60, blank=True)
@@ -462,7 +463,7 @@ class Voyages(LegacyModel):
     slavemx3 = models.FloatField(null=True, blank=True)
     slavema3 = models.FloatField(null=True, blank=True)
     adlt3imp = models.FloatField(null=True, blank=True)
-    filter_dollar = models.FloatField(null=True, blank=True)
+    #filter_$ = models.FloatField(null=True, blank=True)
     womrat1 = models.FloatField(null=True, blank=True)
     womrat3 = models.FloatField(null=True, blank=True)
     menrat1 = models.FloatField(null=True, blank=True)
@@ -471,7 +472,7 @@ class Voyages(LegacyModel):
     girlrat3 = models.FloatField(null=True, blank=True)
     boyrat3 = models.FloatField(null=True, blank=True)
     boyrat1 = models.FloatField(null=True, blank=True)
-    pound_price = models.FloatField(null=True, blank=True)
+    #pound_price = models.FloatField(null=True, blank=True)
     female7 = models.FloatField(null=True, blank=True)
     male7 = models.FloatField(null=True, blank=True)
     men7 = models.FloatField(null=True, blank=True)
