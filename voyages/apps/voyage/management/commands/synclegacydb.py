@@ -5,7 +5,7 @@ from decimal import *
 
 class Command(BaseCommand):
     args = '<>'
-    help = 'Syncs the data from the legacy wilson database to the database configured in this project'
+    help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
         # BroadRegion
         #models.BroadRegion.objects.all().delete()
@@ -148,6 +148,9 @@ class Command(BaseCommand):
             #group.save()
         
         # Voyages
+        #for j in models.Voyage.objects.all():
+        #    print "deleting %s" % j.id
+        #    j.delete()
         models.Voyage.objects.all().delete()
         models.VoyageShip.objects.all().delete()
         models.VoyageShipOwnerConnection.objects.all().delete()
@@ -173,7 +176,8 @@ class Command(BaseCommand):
                 voyageObj.save()
             ship = models.VoyageShip()
             ship.voyage = voyageObj
-            voyageObj.voyage_in_cd_rom = i.evgreen
+            # There are some null values in wilson that should be false instead
+            voyageObj.voyage_in_cd_rom = not not i.evgreen
             if i.xmimpflag:
                 xmimpflag = int(i.xmimpflag)
                 xmimpflags = models.VoyageGroupings.objects.filter(value=xmimpflag)
@@ -216,10 +220,10 @@ class Command(BaseCommand):
                 # Inserting ownera, ownerb, ..., ownerp
                 attr = getattr(i, 'owner' + letter)
                 if attr:
-                    #TODO change to get_or_create for actual run. This is just testing that it gets the right stuff
-                    tmpOwners, created = models.VoyageShipOwner.objects.create_or_get(name=attr)
+                    # TODO: see if this should just be a create instead
+                    tmpOwner = models.VoyageShipOwner.objects.create(name=attr)
                     # Create voyage-owner connection
-                    models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=tmpVoyage, owner_order=(idx+1))
+                    models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=voyageObj, owner_order=(idx+1))
             outcome = models.VoyageOutcome()
             outcome.voyage = voyageObj
             if i.fate:
@@ -354,12 +358,14 @@ class Command(BaseCommand):
             if i.yearam:
                 date_info.imp_arrival_at_port_of_dis = ",," + str(i.yearam)
             date_info.imp_length_home_to_disembark = i.voy1imp
-            date_info.imp_length_leaving_africa_to_disembark = str(i.voy2imp)
+            date_info.imp_length_leaving_africa_to_disembark = i.voy2imp
             if i.dateleftafr:
                 tmp = i.dateleftafr
                 # MM,DD,YYYY
                 date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
+            voyageObj.voyage_dates = date_info
             date_info.save()
+            voyageObj.save()
               
             # Captain and Crew section
             crew = models.VoyageCrew()
@@ -379,17 +385,17 @@ class Command(BaseCommand):
             crew.crew_deserted = i.ndesert
             if i.captaina:
                 #TODO change to get_or_create
-                first_captain, created = models.VoyageCaptain.objects.get_or_create(name=i.captaina)
+                first_captain = models.VoyageCaptain.objects.create(name=i.captaina)
                 models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
                 f = 6+3
             if i.captainb:
                 #TODO change to get_or_create
-                second_captain, created  = models.VoyageCaptain.objects.get_or_create(name=i.captainb)
-                models.VoyageCaptainConnetion.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
+                second_captain  = models.VoyageCaptain.objects.create(name=i.captainb)
+                models.VoyageCaptainConnection.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
                 f = 7
             if i.captainc:
                 #TODO change to get_or_create
-                third_captain, created = models.VoyageCaptain.objects.get_or_create(name=i.captainc)
+                third_captain = models.VoyageCaptain.objects.create(name=i.captainc)
                 models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
             crew.save()
             voyageObj.voyage_crew = crew
