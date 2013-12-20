@@ -205,7 +205,7 @@ class Command(BaseCommand):
             if i.regisreg:
                 ship.registered_region = models.Region.objects.get(value=i.regisreg)
             if i.natinimp:
-                ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp.id)
+                ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp)
             if i.tonmod:
                 ship.tonnage_mod = round(i.tonmod, 1)
             ship.save()
@@ -295,7 +295,7 @@ class Command(BaseCommand):
                 itinerary.broad_region_of_return = models.BroadRegion.objects.get(value=i.retrnreg1)
             # Imputed itinerary variables
             if i.ptdepimp:
-                itinerary.imp_port_voyage_began = models.Place.objects.get(value=i.ptdepimp)
+                itinerary.imp_port_voyage_begin = models.Place.objects.get(value=i.ptdepimp)
             if i.deptregimp:
                 itinerary.imp_region_voyage_begin = models.Region.objects.get(value=i.deptregimp)
             if i.deptregimp1:
@@ -361,8 +361,8 @@ class Command(BaseCommand):
                 tmp = i.dateleftafr
                 # MM,DD,YYYY
                 date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
-            voyageObj.voyage_dates = date_info
             date_info.save()
+            voyageObj.voyage_dates = date_info
             voyageObj.save()
               
             # Captain and Crew section
