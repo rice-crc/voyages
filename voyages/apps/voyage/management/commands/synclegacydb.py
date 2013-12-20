@@ -164,8 +164,6 @@ class Command(BaseCommand):
         models.VoyageSlavesNumbers.objects.all().delete()
         count = 0
         for i in legacy_models.Voyages.objects.all():
-            #TODO: This if statement looks suspicious
-            # The revision number seems wierd, shouldn't it take the latest revision? Maybe this is where the data problems came from?
             if i.suggestion or (i.revision != 1):
                 continue
             voyageObj = models.Voyage()
