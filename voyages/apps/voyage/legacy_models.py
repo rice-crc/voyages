@@ -9,15 +9,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
+import voyages
 #from voyages.apps.voyage import legacy_models
 
-class LegacyModel(models.Model):
-    class Meta:
-        managed = False
-        abstract = True
 
 # Keep
-class Areas(LegacyModel):
+class Areas(voyages.apps.voyage.models.LegacyModel):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     order_num = models.IntegerField(null=True, blank=True)
@@ -30,7 +27,7 @@ class Areas(LegacyModel):
         db_table = 'areas'
 
 # Keep
-class Estimates(LegacyModel):
+class Estimates(voyages.apps.voyage.models.LegacyModel):
     nation = models.ForeignKey('EstimatesNations', db_column='nation')
     yeardep = models.IntegerField()
     majbuyrg = models.ForeignKey('EstimatesExportRegions', null=True, db_column='majbuyrg', blank=True)
@@ -43,7 +40,7 @@ class Estimates(LegacyModel):
         db_table = 'estimates'
 
 # Keep
-class EstimatesExportAreas(LegacyModel):
+class EstimatesExportAreas(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200)
     order_num = models.IntegerField()
@@ -55,7 +52,7 @@ class EstimatesExportAreas(LegacyModel):
         db_table = 'estimates_export_areas'
 
 # Keep
-class EstimatesExportRegions(LegacyModel):
+class EstimatesExportRegions(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     name = models.CharField(max_length=200)
     order_num = models.IntegerField()
@@ -68,7 +65,7 @@ class EstimatesExportRegions(LegacyModel):
         db_table = 'estimates_export_regions'
 
 # Keep
-class EstimatesImportAreas(LegacyModel):
+class EstimatesImportAreas(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     name = models.CharField(max_length=200)
     order_num = models.IntegerField()
@@ -81,7 +78,7 @@ class EstimatesImportAreas(LegacyModel):
         db_table = 'estimates_import_areas'
 
 # Keep
-class EstimatesImportRegions(LegacyModel):
+class EstimatesImportRegions(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     name = models.CharField(max_length=200)
     order_num = models.IntegerField()
@@ -95,7 +92,7 @@ class EstimatesImportRegions(LegacyModel):
         db_table = 'estimates_import_regions'
 
 # Keep xmimpflag
-class EstimatesNations(LegacyModel):
+class EstimatesNations(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     name = models.CharField(max_length=200, blank=True)
     order_num = models.IntegerField()
@@ -104,7 +101,7 @@ class EstimatesNations(LegacyModel):
         db_table = 'estimates_nations'
 
 # Keep
-class Fates(LegacyModel):
+class Fates(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -112,7 +109,7 @@ class Fates(LegacyModel):
         db_table = 'fates'
 
 # Keep
-class FatesOwner(LegacyModel):
+class FatesOwner(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -120,7 +117,7 @@ class FatesOwner(LegacyModel):
         db_table = 'fates_owner'
 
 # Keep
-class FatesSlaves(LegacyModel):
+class FatesSlaves(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -128,7 +125,7 @@ class FatesSlaves(LegacyModel):
         db_table = 'fates_slaves'
 
 # Keep
-class FatesVessel(LegacyModel):
+class FatesVessel(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -136,7 +133,7 @@ class FatesVessel(LegacyModel):
         db_table = 'fates_vessel'
 
 # Keep
-class Nations(LegacyModel):
+class Nations(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200)
     order_num = models.IntegerField(null=True, blank=True)
@@ -145,7 +142,7 @@ class Nations(LegacyModel):
         db_table = 'nations'
 
 # Keep
-class Ports(LegacyModel):
+class Ports(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     region = models.ForeignKey('Regions')
     name = models.CharField(max_length=200)
@@ -160,7 +157,7 @@ class Ports(LegacyModel):
         db_table = 'ports'
 
 # Keep
-class Regions(LegacyModel):
+class Regions(voyages.apps.voyage.models.LegacyModel):
 #    id = models.BigIntegerField()
     name = models.CharField(max_length=200)
     latitude = models.FloatField()
@@ -175,7 +172,7 @@ class Regions(LegacyModel):
         db_table = 'regions'
 
 # Keep
-class LegacyResistance(LegacyModel):
+class LegacyResistance(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -183,7 +180,7 @@ class LegacyResistance(LegacyModel):
         db_table = 'resistance'
 
 # Keep
-class Sources(LegacyModel):
+class Sources(voyages.apps.voyage.models.LegacyModel):
     iid = models.BigIntegerField(primary_key=True)
     type = models.SmallIntegerField(null=True, blank=True)
     id = models.CharField(max_length=100, blank=True)
@@ -193,7 +190,7 @@ class Sources(LegacyModel):
         db_table = 'sources'
 
 # Keep
-class TonType(LegacyModel):
+class TonType(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -201,7 +198,7 @@ class TonType(LegacyModel):
         db_table = 'ton_type'
 
 # Keep
-class VesselRigs(LegacyModel):
+class VesselRigs(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
@@ -209,7 +206,7 @@ class VesselRigs(LegacyModel):
         db_table = 'vessel_rigs'
 
 # Keep
-class Voyages(LegacyModel):
+class Voyages(voyages.apps.voyage.models.LegacyModel):
     voyageid = models.IntegerField(blank=True, primary_key=True)
     shipname = models.CharField(max_length=300, blank=True)
     captaina = models.CharField(max_length=60, blank=True)
@@ -589,7 +586,7 @@ class Voyages(LegacyModel):
         db_table = 'voyages'
 
 # Keep
-class Xmimpflag(LegacyModel):
+class Xmimpflag(voyages.apps.voyage.models.LegacyModel):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=200, blank=True)
     class Meta:
