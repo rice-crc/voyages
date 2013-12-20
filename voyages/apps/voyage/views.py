@@ -141,6 +141,8 @@ def create_forms_and_dict(request, search_vars):
     query_dict = {}
     for search_var in search_vars:
         if search_var in globals.list_text_fields:
+            print "Made it to text field %s" % search_var
+            print "Query thing is %s" % SimpleTextForm(request.POST, prefix=search_var)
             query_forms[search_var] = SimpleTextForm(request.POST, prefix=search_var)
             if query_forms[search_var].is_valid():
                 query_dict[search_var + "__contains"] = query_forms[search_var].cleaned_data['text_search']
@@ -161,7 +163,7 @@ def create_forms_and_dict(request, search_vars):
                     query_dict[search_var + "__gte"] = query_forms[search_var].cleaned_data['threshold']
                 elif opt == '4': # Equal to
                     query_dict[search_var + "__exact"] = query_forms[search_var].cleaned_data['threshold']
-                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+                #query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
         elif search_var in globals.list_date_fields:
             query_forms[search_var] = SimpleDateSearchForm(request.POST, prefix=search_var)
             if query_forms[search_var].is_valid():
@@ -281,50 +283,6 @@ def search(request):
             if frame_form.is_valid():
                 request.session['time_span_form'] = frame_form
 
-            # TODO: only do this when adding a new variable or building search form from url (maybe)
-            # Create new existing form based on search_vars
-            for tmp_varname in list_search_vars:
-                for cur_var in existing_form:
-                    if tmp_varname == cur_var['varname']:
-                        if tmp_varname in globals.list_text_fields:
-                            cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
-
-                        elif tmp_varname in globals.list_select_fields:
-                            # Select box variables
-                            oldChoices = cur_var['form'].fields['choice_field'].choices
-                            cur_var['form'] = SimpleSelectSearchForm(oldChoices, request.POST, prefix=tmp_varname)
-                        elif tmp_varname in globals.list_numeric_fields:
-                            # Numeric variables
-                            cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
-
-                        elif tmp_varname in globals.list_date_fields:
-                            # Numeric variables
-                            cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
-                            cur_var['list_deselected'] = request.POST.getlist(tmp_varname + '_deselected_months')
-
-                        elif tmp_varname in globals.list_place_fields:
-                            place_selected = request.POST.getlist(tmp_varname + "_selected")
-                            region_selected = request.POST.getlist(tmp_varname + "_selected_regs")
-                            area_selected = request.POST.getlist(tmp_varname + "_selected_areas")
-                            if tmp_varname != "var_imp_principal_place_of_slave_purchase":
-                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
-                                                                     place_selected=place_selected,
-                                                                     region_selected=region_selected,
-                                                                     area_selected=area_selected)
-                            else:
-                                cur_var['choices'] = getNestedListPlaces(tmp_varname,
-                                                                     place_selected=place_selected,
-                                                                     region_selected=region_selected,
-                                                                     area_selected=area_selected,
-                                                                     area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
-
-                        elif tmp_varname in globals.list_boolean_fields:
-                             # Boolean field
-                            cur_var['form'] = SimpleSelectBooleanForm(request.POST, prefix=tmp_varname)
-                        new_existing_form.append(cur_var)
-
-            # Set new existing_form in session
-            request.session['existing_form'] = new_existing_form
 
             if submitVal == 'add_var':
 
@@ -470,89 +428,6 @@ def search(request):
                     request.session['time_span_form'].cleaned_data['frame_from_year'],
                     request.session['time_span_form'].cleaned_data['frame_to_year']]
 
-                for tmp_varname in list_search_vars:
-                    for cur_var in request.session['existing_form']:
-
-                        if tmp_varname == cur_var['varname']:
-                            if tmp_varname in globals.list_text_fields:
-                                cur_var['form'] = SimpleTextForm(request.POST, prefix=tmp_varname)
-                                if cur_var['form'].is_valid():
-                                    query_dict[tmp_varname + "__contains"] = cur_var['form'].cleaned_data['text_search']
-
-                            elif tmp_varname in globals.list_select_fields:
-                                # Select box variables
-                                oldChoices = cur_var['form'].fields['choice_field'].choices
-                                cur_var['form'] = SimpleSelectSearchForm(oldChoices, request.POST, prefix=tmp_varname)
-                                if cur_var['form'].is_valid():
-                                    query_dict[tmp_varname + "__in"] = cur_var['form'].cleaned_data['choice_field']
-
-                            elif tmp_varname in globals.list_numeric_fields:
-                                # Numeric variables
-                                cur_var['form'] = SimpleNumericSearchForm(request.POST, prefix=tmp_varname)
-                                if cur_var['form'].is_valid():
-                                    opt = cur_var['form'].cleaned_data['options']
-                                    if opt == '1':  # Between
-                                        query_dict[tmp_varname + "__range"] = [cur_var['form'].cleaned_data['lower_bound'],
-                                                                               cur_var['form'].cleaned_data['upper_bound']]
-                                    elif opt == '2':  # Less or equal to
-                                        query_dict[tmp_varname + "__lte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '3':  # Greater or equal to
-                                        query_dict[tmp_varname + "__gte"] = cur_var['form'].cleaned_data['threshold']
-                                    elif opt == '4':  # Is equal
-                                        query_dict[tmp_varname + "__exact"] = cur_var['form'].cleaned_data['threshold']
-                                    else:
-                                        pass
-
-                            elif tmp_varname in globals.list_date_fields:
-                            # Currently in progress
-                            # To be updated
-                                cur_var['form'] = SimpleDateSearchForm(request.POST, prefix=tmp_varname)
-                                if cur_var['form'].is_valid():
-                                    opt = cur_var['form'].cleaned_data['options']
-                                    if opt == '1':  # Between
-                                        query_dict[tmp_varname + "__range"] = [
-                                            formatDate(cur_var['form'].cleaned_data['from_year'],
-                                                       cur_var['form'].cleaned_data['from_month']),
-                                            formatDate(cur_var['form'].cleaned_data['to_year'],
-                                                       cur_var['form'].cleaned_data['to_month'])]
-
-                                    elif opt == '2':  # Less or equal to
-                                        query_dict[tmp_varname + "__lte"] = \
-                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
-                                                       cur_var['form'].cleaned_data['threshold_month'])
-                                    elif opt == '3':  # Greater or equal to
-                                        query_dict[tmp_varname + "__gte"] = \
-                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
-                                                       cur_var['form'].cleaned_data['threshold_month'])
-                                    elif opt == '4':  # Is equal
-                                        query_dict[tmp_varname + "__exact"] = \
-                                            formatDate(cur_var['form'].cleaned_data['threshold_year'],
-                                                       cur_var['form'].cleaned_data['threshold_month'])
-                                    else:
-                                        pass
-
-                                    deselected_months = request.POST.getlist(tmp_varname + "_deselected_months")
-
-                                    if 0 < len(deselected_months) < len(globals.list_months):
-                                        date_filters.append({'varname': tmp_varname, 'deselected_months': deselected_months})
-                                    elif len(deselected_months) == len(globals.list_months):
-                                        no_result = True
-                                    else:  # user selected all 12 months
-                                        pass
-
-                            elif tmp_varname in globals.list_place_fields:
-                                a = request.POST.getlist(tmp_varname + "_selected")
-                                query_dict[tmp_varname + "__in"] = request.POST.getlist(tmp_varname + "_selected")
-
-                            elif tmp_varname in globals.list_boolean_fields:
-                                 # Boolean field
-                                cur_var['form'] = SimpleSelectBooleanForm(request.POST, prefix=tmp_varname)
-                                if cur_var['form'].is_valid():
-                                    query_dict[tmp_varname + "__in"] = cur_var['form'].cleaned_data['choice_field']
-
-                            new_existing_form.append(cur_var)
-
-                request.session['existing_form'] = new_existing_form
                 results = perform_search(query_dict, date_filters)
 
                 if len(results) == 0:
@@ -612,6 +487,18 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
+    # !!!!!!!Replacement below this line
+    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    submitVal = request.POST.get('submitVal')
+
+    if submitVal == 'tab_statistics':
+        result_data = retrieve_summary_stats(results)
+    
+    qry = create_forms_and_dict(request, request.POST.getlist('list-input-params'))
+    print "Query forms total is %s" % qry['forms']
+    #print qry['forms']['var_ship_name']
+    theform = ResultsPerPageOptionForm(request.POST)
+
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
@@ -625,7 +512,7 @@ def search(request):
                    'no_result': no_result,
                    'url_to_copy': url_to_copy,
                    'tab': tab,
-                   'options_results_per_page_form': form})
+                   'options_results_per_page_form': theform})
 
 
 def getChoices(varname):
