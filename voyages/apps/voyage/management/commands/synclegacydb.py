@@ -361,8 +361,8 @@ class Command(BaseCommand):
                 tmp = i.dateleftafr
                 # MM,DD,YYYY
                 date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
-            voyageObj.voyage_dates = date_info
             date_info.save()
+            voyageObj.voyage_dates = date_info
             voyageObj.save()
               
             # Captain and Crew section
