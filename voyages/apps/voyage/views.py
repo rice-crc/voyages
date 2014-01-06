@@ -291,19 +291,11 @@ def search(request):
         request.session.create()
     if 'variable_list' not in request.session:
         request.session['variable_list'] = {}
-    #print request.POST
-    #print "Session:"
-    #print request.session
-    #for i in request.session.items():
-    #    print i
-    #    print "\n"
-    #print "Existing form"
-    #print request.session['existing_form']
     query_act = create_query_from_request(request)
 
     # Check if saved url has been used
     if request.GET.values():
-        query_dict, date_filters, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result = decode_from_url(request)
+        query_dict, date_filters, exist_form, voyage_span_first_year, voyage_span_last_year, no_result = decode_from_url(request)
         # Get results with saved query
         results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
 
@@ -360,8 +352,8 @@ def search(request):
             # Time frame search
             # TODO: How does this work without specifying the prefix?
             frame_form = TimeFrameSpanSearchForm(request.POST)
-            if frame_form.is_valid():
-                request.session['time_span_form'] = frame_form
+            #if frame_form.is_valid():
+            #    request.session['time_span_form'] = frame_form
 
             if submitVal == 'add_var':
                 
@@ -436,12 +428,15 @@ def search(request):
                 new_existing_form = []
                 query_dict = {}
 
+                qry = create_query_dict(request, request.POST.getlist('list-input-params'))
+                query_dict = qry['dict']
+
 
                 # TODO: refactor this into another method
                 # Time frame search
                 query_dict['var_imp_arrival_at_port_of_dis__range'] = [
-                    request.session['time_span_form'].cleaned_data['frame_from_year'],
-                    request.session['time_span_form'].cleaned_data['frame_to_year']]
+                    frame_form.cleaned_data['frame_from_year'],
+                    frame_form.cleaned_data['frame_to_year']]
 
                 results = perform_search(query_dict, date_filters)
 
@@ -466,14 +461,16 @@ def search(request):
 
             # Get all results (get means 'reset')
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+            frame_form = TimeFrameSpanSearchForm(request.POST, initial={'frame_from_year': voyage_span_first_year,
+                                                                        'frame_to_year': voyage_span_last_year})
 
-            request.session['time_span_form'] = TimeFrameSpanSearchForm(
-                initial={'frame_from_year': voyage_span_first_year,
-                         'frame_to_year': voyage_span_last_year})
+            #request.session['time_span_form'] = TimeFrameSpanSearchForm(
+            #    initial={'frame_from_year': voyage_span_first_year,
+            #             'frame_to_year': voyage_span_last_year})
 
 
         # Encode url to url_to_copy form (for user)
-        url_to_copy = encode_to_url(request, request.session['existing_form'], voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
+        url_to_copy = encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
 
     # results per page and form (change in session if necessary)
     form, results_per_page = check_and_save_options_form(request, to_reset_form)
@@ -753,7 +750,7 @@ def shorten_url(long_url):
             url = long_url
     return url
 
-def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], dict={}):
+def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], dict={}):
     """
     Function to encode dictionary into url to copy form.
 
@@ -798,7 +795,7 @@ def encode_to_url(request, session, voyage_span_first_year, voyage_span_last_yea
         # At the end, delete the last unnecessary underscore
         url = url[0:-1]
         session_dict['dict'] = dict
-        session_dict['existing_form'] = session
+        #session_dict['existing_form'] = session
         session_dict['date_filters'] = date_filters
         session_dict['no_result'] = no_result
         session_dict['voyage_span_first_year'] = voyage_span_first_year
