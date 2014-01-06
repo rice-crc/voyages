@@ -274,7 +274,7 @@ class Voyages(voyages.apps.voyage.models.LegacyModel):
     ownern = models.CharField(max_length=60, blank=True)
     ownero = models.CharField(max_length=60, blank=True)
     ownerp = models.CharField(max_length=60, blank=True)
-    natinimp = models.ForeignKey(Nations, null=True, db_column='natinimp', blank=True)
+    natinimp = models.IntegerField(null=True, blank=True)
     retrnreg = models.ForeignKey(Regions, null=True, db_column='retrnreg', related_name='voyages_retrnreg', blank=True)
     yearam = models.IntegerField(null=True, blank=True)
     tonmod = models.FloatField(null=True, blank=True)

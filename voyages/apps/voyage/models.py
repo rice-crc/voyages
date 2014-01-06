@@ -1178,11 +1178,11 @@ class VoyageSlavesNumbers(models.Model):
 
     @property
     def percentage_adult(self):
-        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_gender_identified)
+        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_age_identified)
 
     @property
     def percentage_child(self):
-        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_gender_identified)
+        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_age_identified)
 
     @property
     def percentage_male(self):
