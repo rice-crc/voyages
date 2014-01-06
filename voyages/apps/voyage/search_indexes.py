@@ -317,7 +317,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
         try:
-            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
+            return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
         except AttributeError:
             return None
 
