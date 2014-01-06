@@ -7,6 +7,7 @@ class Command(BaseCommand):
     args = '<>'
     help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
+        unknown_port_value = 99801
         models.Voyage.objects.all().delete()
         models.VoyageShip.objects.all().delete()
         models.VoyageShipOwnerConnection.objects.all().delete()
@@ -129,7 +130,8 @@ class Command(BaseCommand):
             if i.npafttra and len(npafttras) >= 1:
                 itinerary.port_of_call_before_atl_crossing = npafttras[0]
             if i.npafttra and len(npafttras) < 1:
-                print "ERROR: npafttra is invalid port value of %s" % i.npafttra
+                print "ERROR: npafttra is invalid port value of %s, replacing value with '???' 99801" % i.npafttra
+                itinerary.port_of_call_before_atl_crossing = models.Place.objects.get(value=unknown_port_value)
             itinerary.number_of_ports_of_call = i.npprior
             if i.sla1port:
                 itinerary.first_landing_place = models.Place.objects.get(value=i.sla1port.id)
