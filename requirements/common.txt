@@ -11,4 +11,4 @@ django-autocomplete-light==1.4.7
 sorl-thumbnail 
 PIL
 bitly_api
-psychopg2
+psycopg2
