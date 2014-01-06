@@ -35,20 +35,20 @@ class FlatPageAdmin(admin.ModelAdmin):
 class BroadRegionAdmin(admin.ModelAdmin):
     list_display = ('broad_region', 'value', 'show_on_map')
     list_display_links = ('broad_region',)
-    search_fields = ['broad_region']
+    search_fields = ['broad_region', 'value']
     list_editable =['show_on_map']
 
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('region', 'value', 'broad_region', 'show_on_map', 'show_on_main_map')
     list_display_links = ('region',)
-    search_fields = ['region']
+    search_fields = ['region', 'value']
     list_editable = ['show_on_map', 'show_on_main_map']
 
 
 class PlaceAdmin(admin.ModelAdmin):
     list_display = ('place', 'value', 'region', 'longitude', 'latitude', 'show_on_main_map', 'show_on_voyage_map')
     list_display_links = ('place',)
-    search_fields = ['place']
+    search_fields = ['place', 'value']
     ordering = ['value']
     list_editable = ['show_on_main_map', 'show_on_voyage_map']
 
@@ -62,7 +62,7 @@ class VoyageGroupingsAdmin(admin.ModelAdmin):
     list_display = ['label', 'value']
     list_display_links = ['label']
     ordering = ['value']
-    search_fields = ['label']
+    search_fields = ['label', 'value']
 
 
 # Ship, Nation, Owners
@@ -107,7 +107,7 @@ class VoyageNationalityAdmin(admin.ModelAdmin):
     """
     list_display = ('label', 'value')
     list_display_links = ('label',)
-    search_fields = ['label']
+    search_fields = ['label', 'value']
     ordering = ['value']
 
 
@@ -117,7 +117,7 @@ class VoyageRigOfVesselAdmin(admin.ModelAdmin):
     """
     list_display = ('label', 'value')
     list_display_links = ('label',)
-    search_fields = ['label']
+    search_fields = ['label', 'value']
     ordering =['value']
 
 
@@ -127,7 +127,7 @@ class VoyageTonTypeAdmin(admin.ModelAdmin):
     """
     list_display = ('label', 'value')
     list_display_links = ('label',)
-    search_fields = ['label']
+    search_fields = ['label', 'value']
 
 
 # Voyage Outcome
@@ -151,7 +151,7 @@ class VoyageParticularOutcomeAdmin(admin.ModelAdmin):
     list_display = ['label', 'value']
     list_display_links = ['label']
     ordering = ['value']
-    search_fields = ['label']
+    search_fields = ['label', 'value']
 
 
 
@@ -162,7 +162,7 @@ class VoyageSlavesOutcomeAdmin(admin.ModelAdmin):
     list_display = ('label', 'value')
     list_display_links = ('label',)
     ordering = ['value']
-    search_fields = ['label']
+    search_fields = ['label', 'value']
 
 
 class VoyageVesselOutcomeAdmin(admin.ModelAdmin):
@@ -171,7 +171,7 @@ class VoyageVesselOutcomeAdmin(admin.ModelAdmin):
     """
     list_display = ('label', 'value')
     list_display_links = ('label',)
-    search_fields = ['label']
+    search_fields = ['label', 'value']
 
 
 # Voyage Itinerary
@@ -299,7 +299,7 @@ class VoyageSourcesConnectionInline(admin.TabularInline):
 class OwnerOutcomesAdmin(admin.ModelAdmin):
     list_display = ('label', 'value')
     list_display_links = ('label',)
-    search_fields = ['label']
+    search_fields = ['label', 'value']
     ordering = ['value']
 
 
