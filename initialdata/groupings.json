@@ -1166,5 +1166,61 @@
         "value": 199, 
         "label": "Other (specify in note)"
     }
+},
+{
+    "pk": 147, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 12, 
+        "label": "group12"
+    }
+},
+{
+    "pk": 148, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 13, 
+        "label": "group13"
+    }
+},
+{
+    "pk": 149, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 72, 
+        "label": "group72"
+    }
+},
+{
+    "pk": 150, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 96, 
+        "label": "group96"
+    }
+},
+{
+    "pk": 151, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 100, 
+        "label": "group100"
+    }
+},
+{
+    "pk": 152, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 121, 
+        "label": "group121"
+    }
+},
+{
+    "pk": 153, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 127, 
+        "label": "group127"
+    }
 }
 ]
