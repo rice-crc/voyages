@@ -19,7 +19,7 @@ from haystack.query import SearchQuerySet
 from itertools import groupby
 import globals
 import bitly_api
-import urllib2
+import requests
 import json
 
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -275,7 +275,7 @@ def search(request):
 
             # Update variable values
             """list_search_vars = request.POST.getlist('list-input-params')
-            existing_form = request.session['existing_form']
+            existing_form = request.session.get('existing_form')
             new_existing_form = []"""
 
             # Time frame search
@@ -739,7 +739,10 @@ def shorten_url(long_url):
         url = long_url
     else:
         try:
-            resp = urllib2.urlopen(url)
+            # Python can't handle the redirect to the testvoyages url
+            req = requests.get(url, allow_redirects=False)
+            if not req.ok:
+                url = long_url
         except:
             url = long_url
     return url
@@ -1511,22 +1514,29 @@ def retrieve_summary_stats(results):
         tmp_row = [item['display_name'],]
         stats = results.stats(item['var_name']).stats_results()[item['var_name']]
 
-        if item['has_total']:
+        if item['has_total'] and stats:
             tmp_row.append(int(stats['sum']))
         else:
             tmp_row.append("")
 
         # Number of voyages
-        tmp_row.append(stats['count'])
-
-        if item['is_percentage']:
-            # Average
-            tmp_row.append(str(round(stats['mean']*100, 1)) + "%")
-            # Standard deviation
-            tmp_row.append(str(round(stats['stddev']*100, 1)) + "%")
+        if stats:
+            tmp_row.append(stats['count'])
         else:
-            tmp_row.append(round(stats['mean'], 1))
-            tmp_row.append(round(stats['stddev'], 1))
+            tmp_row.append("")
+
+        if stats:
+            if item['is_percentage']:
+                # Average
+                tmp_row.append(str(round(stats['mean']*100, 1)) + "%")
+                # Standard deviation
+                tmp_row.append(str(round(stats['stddev']*100, 1)) + "%")
+            else:
+                tmp_row.append(round(stats['mean'], 1))
+                tmp_row.append(round(stats['stddev'], 1))
+        else:
+            tmp_row.append("")
+            tmp_row.append("")
 
         tmp_list.append(tmp_row)
     return tmp_list

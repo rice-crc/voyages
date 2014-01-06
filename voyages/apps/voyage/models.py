@@ -609,24 +609,39 @@ class VoyageDates(models.Model):
 
     def get_date_year(self, value):
         """
-        Returns year value from CommaSeparatedField
+        Returns year value from CommaSeparatedField, or None if undefined
         """
-
-        return int(value.split(',')[2])
+        if not value:
+            return None
+        strval = value.split(',')[2]
+        if len(strval) < 1:
+            return None
+        else:
+            return int(strval)
 
     def get_date_month(self, value):
         """
-        Returns month value from CommaSeparatedField
+        Returns month value from CommaSeparatedField, or 0 if undefined
         """
-
-        return int(value.split(',')[1])
+        if not value:
+            return 0
+        strval = value.split(',')[1]
+        if len(strval) < 1:
+            return 0
+        else:
+            return int(strval)
 
     def get_date_day(self, value):
         """
-        Returns date value from CommaSeparatedField
+        Returns date value from CommaSeparatedField, or 0 if undefined
         """
-
-        return int(value.split(',')[0])
+        if not value:
+            return 0
+        strval = value.split(',')[0]
+        if len(strval) < 1:
+            return 0
+        else:
+            return int(strval)
 
     # don't think this is being used anywhere
 #    def calculate_year_period(self, period):
@@ -1163,11 +1178,11 @@ class VoyageSlavesNumbers(models.Model):
 
     @property
     def percentage_adult(self):
-        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_gender_identified)
+        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_age_identified)
 
     @property
     def percentage_child(self):
-        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_gender_identified)
+        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_age_identified)
 
     @property
     def percentage_male(self):
@@ -1252,7 +1267,7 @@ class Voyage(models.Model):
     voyage_id = models.IntegerField("Voyage ID (can be empty)", null=True, blank=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",
-                                           max_length=1, blank=True)
+                                           max_length=1, default=False, blank=True)
 
     # Technical variables
     voyage_groupings = models.ForeignKey('VoyageGroupings', blank=True, null=True)
@@ -1293,3 +1308,9 @@ class Voyage(models.Model):
 
     def __unicode__(self):
         return "Voyage #%s" % str(self.voyage_id)
+
+
+class LegacyModel(models.Model):
+    class Meta:
+        managed = False
+        abstract = True

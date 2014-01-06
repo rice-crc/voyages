@@ -190,7 +190,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imputed_nationality(self, obj):
         try:
-            return obj.voyage_ship.nationality_ship.label
+            return obj.voyage_ship.imputed_nationality.label
         except AttributeError:
             return None
 
@@ -317,7 +317,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imp_principal_place_of_slave_purchase(self, obj):
         try:
-            return obj.voyage_itinerary.principal_place_of_slave_purchase.place
+            return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
         except AttributeError:
             return None
 
@@ -522,6 +522,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_num_slaves_carried_third_port(self, obj):
         try:
             return obj.voyage_slaves_numbers.num_slaves_carried_third_port
+        except AttributeError:
+            return None
+
+    def prepare_var_total_num_slaves_purchased(self, obj):
+        try:
+        # To be corrected
+            return obj.voyage_slaves_numbers.total_num_slaves_dep_last_slaving_port
         except AttributeError:
             return None
 
