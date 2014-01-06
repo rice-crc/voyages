@@ -138,7 +138,7 @@ function shortenURL(){
 
         <div class="box-mid-end">
             <div class=query-builder>
-                {%  if request.session.existing_form %}
+                {%  if options_results_per_page_form %}
                     {% for elem in options_results_per_page_form %}
                     <div class="sidebox">
                         <!-- Search box header -->
@@ -159,11 +159,7 @@ function shortenURL(){
                             <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
                                  onclick="move_box_up('{{ elem.input_field_name }}');" />
                         </span>
-			<!--{% for val in options_results_per_page_form %}
-			    <span class="simple-field"> {{ options_results_per_page_form.var_ship_name }}</span>
-			
-			{% endfor %}
-			blarg/-->
+
 
                         {% if elem.type == "plain_text" %}
                             {% for field in elem.form %}
