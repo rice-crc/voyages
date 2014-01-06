@@ -125,7 +125,7 @@ def create_form_from_query(query):
 
 def create_query_from_request(request):
     search_vars = request.POST.getlist('list-input-params')
-    query = create_forms_and_dict(request, search_vars)
+    query = create_query_dict(request, search_vars)
     query['list-input-params'] = search_vars
     query['to_year'] = request.POST.get('frame_to_year')
     query['from_year'] = request.POST.get('frame_from_year')
@@ -133,17 +133,92 @@ def create_query_from_request(request):
     
     #print to_year
     #print from_year
-    print search_vars
+    #print search_vars
     return None
 
+def create_query_forms(varlist):
+    search_forms = []
+    for single_variable in varlist:
+        # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        # Add variables
+        tmpElemDict = {}
+                #varname = request.POST.get('new_var_name')
+        varname = single_variable
+        fullvarname = varlist[single_variable]
+        tmpElemDict['varname'] = varname
+        tmpElemDict['var_full_name'] = fullvarname
+        tmpElemDict['input_field_name'] = "header_" + varname
+        
 
-def create_forms_and_dict(request, search_vars):
+        if varname in globals.list_text_fields:
+            # Plain text fields
+            form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+            tmpElemDict['form'] = form
+            tmpElemDict['type'] = 'plain_text'
+
+        elif varname in globals.list_select_fields:
+            # Select box variables
+            choices = getChoices(varname)
+            form = SimpleSelectSearchForm(listChoices=choices,
+                                          auto_id=('id_' + varname + "_%s"), prefix=varname)
+
+            tmpElemDict['form'] = form
+            tmpElemDict['type'] = 'select'
+            tmpElemDict['varname_wrapper'] = "select_" + varname
+            tmpElemDict['choices'] = choices
+
+        elif varname in globals.list_numeric_fields:
+            # Numeric variables
+            form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"),
+                                           initial={'options': '4'}, prefix=varname)
+            tmpElemDict['form'] = form
+            tmpElemDict['type'] = 'numeric'
+
+        elif varname in globals.list_date_fields:
+            # Numeric variables
+            form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"),
+                                        initial={'options': '1',
+                                                 'from_year': voyage_span_first_year,
+                                                 'to_year': voyage_span_last_year},
+                                        prefix=varname)
+            tmpElemDict['form'] = form
+            tmpElemDict['type'] = 'date'
+            tmpElemDict['list_months'] = globals.list_months
+            tmpElemDict['deselected_months'] = varname + '_deselected_months'
+            tmpElemDict['list_deselected'] = []
+
+        elif varname in globals.list_place_fields:
+            if varname != "var_imp_principal_place_of_slave_purchase":
+                choices = getNestedListPlaces(varname)
+            else:
+                choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
+
+            tmpElemDict['type'] = 'select_three_layers'
+            tmpElemDict['varname_wrapper'] = "select_" + varname
+            tmpElemDict['choices'] = choices
+            tmpElemDict['selected_choices'] = varname + "_selected"
+            tmpElemDict['selected_regs'] = varname + "_selected_regs"
+            tmpElemDict['selected_areas'] = varname + "_selected_areas"
+            #3/0
+
+        elif varname in globals.list_boolean_fields:
+            # Boolean field
+            form = SimpleSelectBooleanForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+            tmpElemDict['form'] = form
+            tmpElemDict['type'] = 'boolean'
+        else:
+            pass
+        search_forms.append(tmpElemDict)
+    return search_forms
+
+
+def create_query_dict(request, search_vars):
     query_forms = {}
     query_dict = {}
     for search_var in search_vars:
         if search_var in globals.list_text_fields:
-            print "Made it to text field %s" % search_var
-            print "Query thing is %s" % SimpleTextForm(request.POST, prefix=search_var)
+            #print "Made it to text field %s" % search_var
+            #print "Query thing is %s" % SimpleTextForm(request.POST, prefix=search_var)
             query_forms[search_var] = SimpleTextForm(request.POST, prefix=search_var)
             if query_forms[search_var].is_valid():
                 query_dict[search_var + "__contains"] = query_forms[search_var].cleaned_data['text_search']
@@ -209,13 +284,16 @@ def search(request):
     url_to_copy = ""
     query_dict = {}
     result_data = {}
+    search_forms = []
     tab = 'result'
     result_data['summary_statistics_columns'] = globals.summary_statistics_columns
     if not request.session.exists(request.session.session_key):
         request.session.create()
-    print request.POST
-    print "Session:"
-    print request.session
+    if 'variable_list' not in request.session:
+        request.session['variable_list'] = {}
+    #print request.POST
+    #print "Session:"
+    #print request.session
     #for i in request.session.items():
     #    print i
     #    print "\n"
@@ -248,7 +326,7 @@ def search(request):
         voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
         # If last query exists, retrieve last results, otherwise get all results
-     """   if request.session.get('voyage_last_query'):
+        """   if request.session.get('voyage_last_query'):
             query_dict = request.session.get('voyage_last_query')
             if request.session.get('voyage_last_query_date_filters'):
                 date_filters = request.session.get('voyage_last_query_date_filters')
@@ -262,6 +340,7 @@ def search(request):
                 results = []
         else:
             results = SearchQuerySet().models(Voyage).order_by('var_voyage_id') """
+        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
 
         if request.method == 'POST':
 
@@ -309,7 +388,6 @@ def search(request):
                 request.session['time_span_form'] = TimeFrameSpanSearchForm(
                     initial={'frame_from_year': voyage_span_first_year,
                              'frame_to_year': voyage_span_last_year})
-                request.session[
 
             elif submitVal == 'configColumn':
                 # Configure columns in the result page
@@ -378,79 +456,7 @@ def search(request):
                 else:
                     request.session['voyage_last_query_date_filters'] = []
 
-            search_forms = {}
-            for single_variable in request.session['variable_list']:
-                # results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-                # Add variables
-                tmpElemDict = {}
-                #varname = request.POST.get('new_var_name')
-                varname = single_variable
-                fullvarname = request.session['variable_list'][single_variable]
-                tmpElemDict['varname'] = varname
-                tmpElemDict['var_full_name'] = fullvarname
-                tmpElemDict['input_field_name'] = "header_" + varname
-                
-
-                if varname in globals.list_text_fields:
-                    # Plain text fields
-                    form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
-                    tmpElemDict['form'] = form
-                    tmpElemDict['type'] = 'plain_text'
-
-                elif varname in globals.list_select_fields:
-                    # Select box variables
-                    choices = getChoices(varname)
-                    form = SimpleSelectSearchForm(listChoices=choices,
-                                                  auto_id=('id_' + varname + "_%s"), prefix=varname)
-
-                    tmpElemDict['form'] = form
-                    tmpElemDict['type'] = 'select'
-                    tmpElemDict['varname_wrapper'] = "select_" + varname
-                    tmpElemDict['choices'] = choices
-
-                elif varname in globals.list_numeric_fields:
-                    # Numeric variables
-                    form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"),
-                                                   initial={'options': '4'}, prefix=varname)
-                    tmpElemDict['form'] = form
-                    tmpElemDict['type'] = 'numeric'
-
-                elif varname in globals.list_date_fields:
-                    # Numeric variables
-                    form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"),
-                                                initial={'options': '1',
-                                                         'from_year': voyage_span_first_year,
-                                                         'to_year': voyage_span_last_year},
-                                                prefix=varname)
-                    tmpElemDict['form'] = form
-                    tmpElemDict['type'] = 'date'
-                    tmpElemDict['list_months'] = globals.list_months
-                    tmpElemDict['deselected_months'] = varname + '_deselected_months'
-                    tmpElemDict['list_deselected'] = []
-
-                elif varname in globals.list_place_fields:
-                    if varname != "var_imp_principal_place_of_slave_purchase":
-                        choices = getNestedListPlaces(varname)
-                    else:
-                        choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
-
-                    tmpElemDict['type'] = 'select_three_layers'
-                    tmpElemDict['varname_wrapper'] = "select_" + varname
-                    tmpElemDict['choices'] = choices
-                    tmpElemDict['selected_choices'] = varname + "_selected"
-                    tmpElemDict['selected_regs'] = varname + "_selected_regs"
-                    tmpElemDict['selected_areas'] = varname + "_selected_areas"
-                    #3/0
-
-                elif varname in globals.list_boolean_fields:
-                     # Boolean field
-                    form = SimpleSelectBooleanForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
-                    tmpElemDict['form'] = form
-                    tmpElemDict['type'] = 'boolean'
-                else:
-                    pass
-                search_forms.append(tmpElemDict)
-
+            search_forms = create_query_forms(request.session['variable_list'])
 
 
         elif request.method == 'GET':
@@ -506,8 +512,8 @@ def search(request):
     if submitVal == 'tab_statistics':
         result_data = retrieve_summary_stats(results)
     
-    qry = create_forms_and_dict(request, request.POST.getlist('list-input-params'))
-    print "Query forms total is %s" % qry['forms']
+    qry = create_query_dict(request, request.POST.getlist('list-input-params'))
+    #print "Query forms total is %s" % qry['forms']
     #print qry['forms']['var_ship_name']
     theform = ResultsPerPageOptionForm(request.POST)
 
