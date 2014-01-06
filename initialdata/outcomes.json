@@ -1,0 +1,1731 @@
+[
+{
+    "pk": 1, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 1, 
+        "label": "Voyage completed as intended"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 2, 
+        "label": "Shipwrecked or destroyed, before slaves embarked"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 3, 
+        "label": "Shipwrecked or destroyed, after embarkation of slaves or during slaving"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 4, 
+        "label": "Shipwrecked or destroyed, after disembarkation"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 5, 
+        "label": "Shipwrecked or destroyed - unspecified"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 6, 
+        "label": "Captured by pirates or privateers - before slaves embarked"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 7, 
+        "label": "Captured by pirates or privateers - after embarkation of slaves"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 8, 
+        "label": "Captured by pirates or privateers - after disembarkation"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 9, 
+        "label": "Captured by pirates or privateers - unspecified"
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 10, 
+        "label": "Captured by British - before slaves embarked"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 11, 
+        "label": "Captured by British - after embarkation of slaves"
+    }
+},
+{
+    "pk": 12, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 12, 
+        "label": "Captured by British - after disembarkation"
+    }
+},
+{
+    "pk": 13, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 13, 
+        "label": "Captured by British - unspecified"
+    }
+},
+{
+    "pk": 14, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 14, 
+        "label": "Captured by Spanish - before slaves embarked"
+    }
+},
+{
+    "pk": 15, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 15, 
+        "label": "Captured by Spanish - after embarkation of slaves"
+    }
+},
+{
+    "pk": 16, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 16, 
+        "label": "Captured by Spanish - after disembarkation"
+    }
+},
+{
+    "pk": 17, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 17, 
+        "label": "Captured by Spanish - unspecified"
+    }
+},
+{
+    "pk": 18, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 18, 
+        "label": "Captured by Dutch - before slaves embarked"
+    }
+},
+{
+    "pk": 19, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 19, 
+        "label": "Captured by Dutch - after embarkation of slaves"
+    }
+},
+{
+    "pk": 20, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 20, 
+        "label": "Captured by Dutch - after disembarkation"
+    }
+},
+{
+    "pk": 21, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 21, 
+        "label": "Captured by Dutch - unspecified"
+    }
+},
+{
+    "pk": 22, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 22, 
+        "label": "Captured by Portuguese - before slaves embarked"
+    }
+},
+{
+    "pk": 23, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 23, 
+        "label": "Captured by Portuguese - after embarkation of slaves"
+    }
+},
+{
+    "pk": 24, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 24, 
+        "label": "Captured by Portuguese - Americas after disembarkation"
+    }
+},
+{
+    "pk": 25, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 25, 
+        "label": "Captured by Portuguese - unspecified"
+    }
+},
+{
+    "pk": 26, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 26, 
+        "label": "Captured - unspecified"
+    }
+},
+{
+    "pk": 27, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 27, 
+        "label": "Condemned - before slaves embarked"
+    }
+},
+{
+    "pk": 28, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 28, 
+        "label": "Condemned - after embarkation of slaves"
+    }
+},
+{
+    "pk": 29, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 29, 
+        "label": "Condemned - Americas after disembarkation"
+    }
+},
+{
+    "pk": 30, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 30, 
+        "label": "Condemned - unspecified"
+    }
+},
+{
+    "pk": 31, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 31, 
+        "label": "Captured by the Barbary Powers before embarking slaves"
+    }
+},
+{
+    "pk": 32, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 39, 
+        "label": "Destroyed - unspecified"
+    }
+},
+{
+    "pk": 33, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 40, 
+        "label": "Sold"
+    }
+},
+{
+    "pk": 34, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 41, 
+        "label": "Left coast with trading cargo intact"
+    }
+},
+{
+    "pk": 35, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 42, 
+        "label": "Taken by Africans"
+    }
+},
+{
+    "pk": 36, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 43, 
+        "label": "Captured by Cie du Senegal"
+    }
+},
+{
+    "pk": 37, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 44, 
+        "label": "Abandoned and/or sold off Africa"
+    }
+},
+{
+    "pk": 38, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 45, 
+        "label": "Captured unspecified before slaves embarked"
+    }
+},
+{
+    "pk": 39, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 46, 
+        "label": "Captured unspecified after embarkation of slaves"
+    }
+},
+{
+    "pk": 40, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 47, 
+        "label": "Captured unspecified after slaves disembarked"
+    }
+},
+{
+    "pk": 41, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 48, 
+        "label": "Captured by pirates - slaves sold in Americas from another ship"
+    }
+},
+{
+    "pk": 42, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 49, 
+        "label": "Sold slaves in Americas - subsequent fate unknown"
+    }
+},
+{
+    "pk": 43, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 50, 
+        "label": "Captured by the French - before slaves embarked"
+    }
+},
+{
+    "pk": 44, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 51, 
+        "label": "Captured by the French - after embarkation of slaves"
+    }
+},
+{
+    "pk": 45, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 52, 
+        "label": "Captured by the French - after slaves disembarked"
+    }
+},
+{
+    "pk": 46, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 53, 
+        "label": "Captured by the French - unspecified"
+    }
+},
+{
+    "pk": 47, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 54, 
+        "label": "Condemned in the Americas by British after slaves disembarked"
+    }
+},
+{
+    "pk": 48, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 55, 
+        "label": "Pressed into government service"
+    }
+},
+{
+    "pk": 49, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 56, 
+        "label": "Captured by slaves: ship did not reach the Americas"
+    }
+},
+{
+    "pk": 50, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 57, 
+        "label": "Captured by crew: fate unknown"
+    }
+},
+{
+    "pk": 51, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 58, 
+        "label": "Condemned in the Americas by British before slaves disembarked"
+    }
+},
+{
+    "pk": 52, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 59, 
+        "label": "Bought at least one slave in Africa - subsequent fate unknown"
+    }
+},
+{
+    "pk": 53, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 66, 
+        "label": "Destroyed, lost or sold as result of slave rebellion"
+    }
+},
+{
+    "pk": 54, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 67, 
+        "label": "Taken, retaken and salvaged before reaching African trade site"
+    }
+},
+{
+    "pk": 55, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 68, 
+        "label": "Sold in the Americas after disembarking slaves"
+    }
+},
+{
+    "pk": 56, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 69, 
+        "label": "Cut off by Africans from shore, ship did not reach the Americas"
+    }
+},
+{
+    "pk": 57, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 70, 
+        "label": "Sold in the Americas - not known whether ship brought slaves"
+    }
+},
+{
+    "pk": 58, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 71, 
+        "label": "Captured before disembarking slaves; vessel recaptured or released subsequently"
+    }
+},
+{
+    "pk": 59, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 72, 
+        "label": "Driven off the African Coast with slaves on board"
+    }
+},
+{
+    "pk": 60, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 73, 
+        "label": "Captured by slaves, unknown outcome"
+    }
+},
+{
+    "pk": 61, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 74, 
+        "label": "Captured by crew, did not land slaves in the Americas"
+    }
+},
+{
+    "pk": 62, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 75, 
+        "label": "Lost before reaching Americas: slaves reached port in other ships"
+    }
+},
+{
+    "pk": 63, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 76, 
+        "label": "Some slaves removed by pirates/privateers"
+    }
+},
+{
+    "pk": 64, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 77, 
+        "label": "Arrived in Africa, subsequent fate unknown"
+    }
+},
+{
+    "pk": 65, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 78, 
+        "label": "Captured and recaptured after disembarking slaves"
+    }
+},
+{
+    "pk": 66, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 79, 
+        "label": "Crew mutiny; slaves landed in the Americas"
+    }
+},
+{
+    "pk": 67, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 80, 
+        "label": "Cut off by Africans from shore. Recaptured and landed slaves in Americas"
+    }
+},
+{
+    "pk": 68, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 81, 
+        "label": "Captured by slaves, recaptured and landed slaves in the Americas"
+    }
+},
+{
+    "pk": 69, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 82, 
+        "label": "Captured by slaves, recaptured and landed slaves in the Americas, lost"
+    }
+},
+{
+    "pk": 70, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 83, 
+        "label": " to be completed after Curto consulted on Arquivos Angola, II, vol 25, pp.189-91."
+    }
+},
+{
+    "pk": 71, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 84, 
+        "label": "ditto Arquivos Angola, II, vol 25, pp. 432-33."
+    }
+},
+{
+    "pk": 72, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 85, 
+        "label": "Completed voyage after slaves removed for salvage"
+    }
+},
+{
+    "pk": 73, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 86, 
+        "label": "Ship returned direct to home port after selling slaves to another vessel"
+    }
+},
+{
+    "pk": 74, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 87, 
+        "label": "Taken by slaves, vessel recaptured, unknown outcome"
+    }
+},
+{
+    "pk": 75, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 88, 
+        "label": "Sold prematurely in Europe after disembarking slaves in the Americas"
+    }
+},
+{
+    "pk": 76, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 89, 
+        "label": "Captured by the crew, slaves sold in Africa"
+    }
+},
+{
+    "pk": 77, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 90, 
+        "label": "Captured by the crew, no slaves taken, crew sold gold in Europe"
+    }
+},
+{
+    "pk": 78, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 91, 
+        "label": "Condemned in Africa with slaves, slaves transshipped/sold"
+    }
+},
+{
+    "pk": 79, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 92, 
+        "label": "Returned direct to Africa after bringing slaves to the Americas"
+    }
+},
+{
+    "pk": 80, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 93, 
+        "label": "Returned to Europe or Americas without obtaining slaves"
+    }
+},
+{
+    "pk": 81, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 94, 
+        "label": "Laid up (disarmed) or broken up in Africa"
+    }
+},
+{
+    "pk": 82, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 95, 
+        "label": "Laid up (disarmed) or broken up in the Americas"
+    }
+},
+{
+    "pk": 83, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 96, 
+        "label": "Either shipwrecked or captured by pirates before slaves taken on board"
+    }
+},
+{
+    "pk": 84, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 97, 
+        "label": "Abandoned or condemned for unseaworthiness in the Americas"
+    }
+},
+{
+    "pk": 85, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 98, 
+        "label": "Ship and slaves sold in Africa"
+    }
+},
+{
+    "pk": 86, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 99, 
+        "label": "Taken by slaves, recaptured, then ship lost"
+    }
+},
+{
+    "pk": 87, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 102, 
+        "label": "Vice-Admiralty Court, St.Helena,  condemned"
+    }
+},
+{
+    "pk": 88, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 103, 
+        "label": "Vice-Admiralty Court, St. Helena, restored"
+    }
+},
+{
+    "pk": 89, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 104, 
+        "label": "Vice-Admiralty Court, British Guiana, condemned"
+    }
+},
+{
+    "pk": 90, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 105, 
+        "label": "Vice-Admiralty Court, British Guiana, restored"
+    }
+},
+{
+    "pk": 91, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 106, 
+        "label": "Vice-Admiralty Court, Cape of Good Hope, condemned"
+    }
+},
+{
+    "pk": 92, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 107, 
+        "label": "Vice-Admiralty Court, Cape of Good Hope, restored"
+    }
+},
+{
+    "pk": 93, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 108, 
+        "label": "Vice-Admiralty Court, Jamaica, condemned"
+    }
+},
+{
+    "pk": 94, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 109, 
+        "label": "Vice-Admiralty Court, Jamaica, restored"
+    }
+},
+{
+    "pk": 95, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 110, 
+        "label": "Vice-Admiralty Court, Sierra Leone, condemned    ,"
+    }
+},
+{
+    "pk": 96, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 111, 
+        "label": "Vice-Admiralty Court, Sierra Leone, restored"
+    }
+},
+{
+    "pk": 97, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 112, 
+        "label": "Vice-Admiralty Court, Barbados, condemned"
+    }
+},
+{
+    "pk": 98, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 113, 
+        "label": "Vice-Admiralty Court, Barbados, restored"
+    }
+},
+{
+    "pk": 99, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 114, 
+        "label": "Vice-Admiralty Court, Mauritius, condemned"
+    }
+},
+{
+    "pk": 100, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 115, 
+        "label": "Vice-Admiralty Court, Mauritius, restored"
+    }
+},
+{
+    "pk": 101, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 118, 
+        "label": "High Court of Admiralty, condemned"
+    }
+},
+{
+    "pk": 102, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 119, 
+        "label": "High Court of Admiralty, restored"
+    }
+},
+{
+    "pk": 103, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 120, 
+        "label": "Court of Mixed Commission, Sierra Leone, condemned"
+    }
+},
+{
+    "pk": 104, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 121, 
+        "label": "Court of Mixed Commission, Sierra Leone, restored"
+    }
+},
+{
+    "pk": 105, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 122, 
+        "label": "Court of Mixed Commission, Havana, condemned"
+    }
+},
+{
+    "pk": 106, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 123, 
+        "label": "Court of Mixed Commission, Havana, restored"
+    }
+},
+{
+    "pk": 107, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 124, 
+        "label": "Court of Mixed Commission, Rio de Janeiro, condemned"
+    }
+},
+{
+    "pk": 108, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 125, 
+        "label": "Court of Mixed Commission, Rio de Janeiro, restored"
+    }
+},
+{
+    "pk": 109, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 126, 
+        "label": "Court of Mixed Commission, Luanda, condemned"
+    }
+},
+{
+    "pk": 110, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 127, 
+        "label": "Court of Mixed Commission, Luanda, restored"
+    }
+},
+{
+    "pk": 111, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 128, 
+        "label": "Court of Mixed Commission, Cape of Good Hope, condemned"
+    }
+},
+{
+    "pk": 112, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 129, 
+        "label": "Court of Mixed Commission, Cape of Good Hope, restored"
+    }
+},
+{
+    "pk": 113, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 130, 
+        "label": "Lagos, Vice-Admiralty Court, condemned"
+    }
+},
+{
+    "pk": 114, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 132, 
+        "label": "Vice-Admiralty Court, Antigua, condemned"
+    }
+},
+{
+    "pk": 115, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 134, 
+        "label": "Vice-Admiralty Court, Tortola, condemned"
+    }
+},
+{
+    "pk": 116, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 135, 
+        "label": "Vice-Admiralty Court, Tortola, restored"
+    }
+},
+{
+    "pk": 117, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 138, 
+        "label": "Vice-Admiralty Court, unspecified, condemned"
+    }
+},
+{
+    "pk": 118, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 139, 
+        "label": "Vice-Admiralty Court, unspecified, restored"
+    }
+},
+{
+    "pk": 119, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 141, 
+        "label": "Given up to the United States government"
+    }
+},
+{
+    "pk": 120, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 142, 
+        "label": "Arrested by Brazil or given up to the Brazilian government"
+    }
+},
+{
+    "pk": 121, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 144, 
+        "label": "Vice Admiralty Court, Dominica, condemned"
+    }
+},
+{
+    "pk": 122, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 148, 
+        "label": "Vice-Admiralty Court, Bahamas, condemned"
+    }
+},
+{
+    "pk": 123, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 149, 
+        "label": " Vice-Admiralty Court, Bahamas, restored"
+    }
+},
+{
+    "pk": 124, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 153, 
+        "label": "Captured and released without court proceedings"
+    }
+},
+{
+    "pk": 125, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 154, 
+        "label": "Driven or run on shore in the Americas: no court proceedings"
+    }
+},
+{
+    "pk": 126, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 155, 
+        "label": "Given up to the Mexican Government, Vera Cruz"
+    }
+},
+{
+    "pk": 127, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 156, 
+        "label": "Taken to Genoa and given up to Sardinian authorities"
+    }
+},
+{
+    "pk": 128, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 157, 
+        "label": "Abandoned in Europe after completing voyage"
+    }
+},
+{
+    "pk": 129, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 159, 
+        "label": "Captured by Argentinian privateers after embarkation of slaves"
+    }
+},
+{
+    "pk": 130, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 160, 
+        "label": "Captured by United States before slaves embarked"
+    }
+},
+{
+    "pk": 131, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 161, 
+        "label": "Captured by United States with slaves"
+    }
+},
+{
+    "pk": 132, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 162, 
+        "label": "Captured by United States after slaves disembarked"
+    }
+},
+{
+    "pk": 133, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 163, 
+        "label": "Captured by United States, slave presence unspecified"
+    }
+},
+{
+    "pk": 134, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 164, 
+        "label": "French proceedings initiated in Africa, acquittal"
+    }
+},
+{
+    "pk": 135, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 165, 
+        "label": "French proceedings initiated in Africa, condemned"
+    }
+},
+{
+    "pk": 136, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 166, 
+        "label": "French proceedings initiated in Africa, unknown outcome"
+    }
+},
+{
+    "pk": 137, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 170, 
+        "label": "French proceedings, initiated in unknown location, acquittal"
+    }
+},
+{
+    "pk": 138, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 171, 
+        "label": "French proceedings, initiated in unknown location, condemned"
+    }
+},
+{
+    "pk": 139, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 172, 
+        "label": "French proceedings, initiated in unknown location, unknown outcome"
+    }
+},
+{
+    "pk": 140, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 173, 
+        "label": "French proceedings initiated in Guadaloupe, acquittal"
+    }
+},
+{
+    "pk": 141, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 174, 
+        "label": "French proceedings initiated in Guadaloupe, condemned"
+    }
+},
+{
+    "pk": 142, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 175, 
+        "label": "French proceedings initiated in Guadaloupe, unknown outcome"
+    }
+},
+{
+    "pk": 143, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 176, 
+        "label": "French proceedings initiated in Martinique, acquittal"
+    }
+},
+{
+    "pk": 144, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 177, 
+        "label": "French proceedings initiated in Martinique, condemned"
+    }
+},
+{
+    "pk": 145, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 178, 
+        "label": "French proceedings initiated in Martinique, unknown outcome"
+    }
+},
+{
+    "pk": 146, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 179, 
+        "label": "French proceedings initiated in Cayenne, acquittal"
+    }
+},
+{
+    "pk": 147, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 180, 
+        "label": "French proceedings initiated in Cayenne, condemned"
+    }
+},
+{
+    "pk": 148, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 181, 
+        "label": "French proceedings initiated in Cayenne, unknown outcome"
+    }
+},
+{
+    "pk": 149, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 182, 
+        "label": "French proceedings initiated in France, acquittal"
+    }
+},
+{
+    "pk": 150, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 183, 
+        "label": "French proceedings initiated in France, condemned"
+    }
+},
+{
+    "pk": 151, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 184, 
+        "label": "French proceedings initiated in France, unknown outcome"
+    }
+},
+{
+    "pk": 152, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 185, 
+        "label": "Detained and condemned in the United States after slaves disembarked"
+    }
+},
+{
+    "pk": 153, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 186, 
+        "label": "Captured by Dutch, slaves turned loose in Africa"
+    }
+},
+{
+    "pk": 154, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 187, 
+        "label": "Captured by Dutch, slaves turned loose in Brazil"
+    }
+},
+{
+    "pk": 155, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 188, 
+        "label": "Temporarily detained by the Dutch: Voyage allowed to continue with slaves"
+    }
+},
+{
+    "pk": 156, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 189, 
+        "label": "Slaves are removed by the Dutch and vessel allowed to continue, subsequent fate unknown"
+    }
+},
+{
+    "pk": 157, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 191, 
+        "label": "Captured by Portuguese and Dutch"
+    }
+},
+{
+    "pk": 158, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 192, 
+        "label": "Captured by Algerian pirates"
+    }
+},
+{
+    "pk": 159, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 193, 
+        "label": "Captured by Turks"
+    }
+},
+{
+    "pk": 160, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 194, 
+        "label": "Captured by British, released"
+    }
+},
+{
+    "pk": 161, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 195, 
+        "label": "Looted by Dutch at Elmina"
+    }
+},
+{
+    "pk": 162, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 196, 
+        "label": "Captured by first by the British and then by the Dutch after slaves embarked"
+    }
+},
+{
+    "pk": 163, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 198, 
+        "label": "Vessel driven back into Portdep by British and voyage aborted"
+    }
+},
+{
+    "pk": 164, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 199, 
+        "label": "Arrived in Brazil and refused permission to disembark"
+    }
+},
+{
+    "pk": 165, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 200, 
+        "label": "Ship and cargo captured by Africans and ship released"
+    }
+},
+{
+    "pk": 166, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 201, 
+        "label": "Ship captured by Haitian navy and slaves released in Haiti"
+    }
+},
+{
+    "pk": 167, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 202, 
+        "label": "Condemned at Goree by the British"
+    }
+},
+{
+    "pk": 168, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 203, 
+        "label": "Captured by the British, retaken by original crew, completed voyage"
+    }
+},
+{
+    "pk": 169, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 204, 
+        "label": "Captured by pirates after slaves embarked, ship and slaves burned."
+    }
+},
+{
+    "pk": 170, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 205, 
+        "label": "Captured by English, slaves turned loose on Spanish Main"
+    }
+},
+{
+    "pk": 171, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 206, 
+        "label": "Sold slaves in Africa"
+    }
+},
+{
+    "pk": 172, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 207, 
+        "label": "Sold slaves in Europe - subsequent fate unknown"
+    }
+},
+{
+    "pk": 173, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 208, 
+        "label": "Left home port, no further record"
+    }
+},
+{
+    "pk": 174, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 209, 
+        "label": "captured by pirates and burned"
+    }
+},
+{
+    "pk": 175, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 210, 
+        "label": "looted by pirates, voyage continued"
+    }
+},
+{
+    "pk": 176, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 211, 
+        "label": "captured by Venezuelans before disembarkation of slaves"
+    }
+},
+{
+    "pk": 177, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 999, 
+        "label": "Other (specify in note)"
+    }
+},
+{
+    "pk": 178, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 136, 
+        "label": "Vice-Admiralty Court, Halifax, Condemned"
+    }
+},
+{
+    "pk": 179, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 212, 
+        "label": "Captured by the Swedes"
+    }
+},
+{
+    "pk": 180, 
+    "model": "voyage.particularoutcome", 
+    "fields": {
+        "value": 213, 
+        "label": "Captured by the Dominican Republic"
+    }
+}
+]
+[
+{
+    "pk": 1, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 2, 
+        "label": "No slaves embarked"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 3, 
+        "label": "Slaves disembarked in Africa/Europe"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 4, 
+        "label": "Slaves perished with ship"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 5, 
+        "label": "Slaves embarked, transhipped or no further record"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 6, 
+        "label": "No information on slaves"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 1, 
+        "label": "Slaves disembarked in Americas"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.slavesoutcome", 
+    "fields": {
+        "value": 7, 
+        "label": "Slaves embarked but not disembarked in Europe or America"
+    }
+}
+]
+[
+{
+    "pk": 1, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 1, 
+        "label": "Natural hazard"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 2, 
+        "label": "pirate/privateer action"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 3, 
+        "label": "British"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 4, 
+        "label": "Spanish"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 5, 
+        "label": "Dutch"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 6, 
+        "label": "Portuguese"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 8, 
+        "label": "French"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 9, 
+        "label": "US"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 10, 
+        "label": "African"
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 11, 
+        "label": "Crew action"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 12, 
+        "label": "Brazil"
+    }
+},
+{
+    "pk": 12, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 13, 
+        "label": "Captor unspecified"
+    }
+},
+{
+    "pk": 13, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 14, 
+        "label": "Not captured"
+    }
+},
+{
+    "pk": 14, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 15, 
+        "label": "Unknown"
+    }
+},
+{
+    "pk": 15, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 16, 
+        "label": "Haitians"
+    }
+},
+{
+    "pk": 16, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 17, 
+        "label": "Venezuela"
+    }
+},
+{
+    "pk": 17, 
+    "model": "voyage.vesselcapturedoutcome", 
+    "fields": {
+        "value": 18, 
+        "label": "Sweden"
+    }
+}
+]
+[
+{
+    "pk": 1, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 1, 
+        "label": "Delivered slaves for original owners"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 2, 
+        "label": "Original goal thwarted (natural hazard)"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 3, 
+        "label": "Original goal thwarted (human agency)"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 4, 
+        "label": "Unknown outcome"
+    }
+}
+]
+[
+{
+    "pk": 1, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 2, 
+        "label": "Vessel attacked from shore"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 3, 
+        "label": "Vessel's boats attacked from shore"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 6, 
+        "label": "Insurrection planned, but thwarted"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 5, 
+        "label": "Three or more slaves jumping overboard, missing, or escaped"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 1, 
+        "label": "Slave insurrection"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 4, 
+        "label": "\"\"Cut-off\"\" (meaning unclear)"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 9, 
+        "label": "Other (specify in note)"
+    }
+}
+]
+
