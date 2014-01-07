@@ -103,22 +103,14 @@ Before loading data comment the `HAYSTACK_SIGNAL_PROCESSOR` variable out in the 
 
   #HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-Export a copy of the voyages tables to a sqldump file.  This will load much faster than a json dump. Alternately you
-can  use the provided dump in initialdata/voyages.sql.gz::
 
-  mysqldump -p -h <HOST> <DATABASE> voyage_broadregion voyage_nationality voyage_owneroutcome voyage_particularoutcome voyage_place voyage_region voyage_resistance voyage_rigofvessel voyage_slavesoutcome voyage_tontype voyage_vesselcapturedoutcome voyage_voyage voyage_voyagecaptain voyage_voyagecaptainconnection voyage_voyagecrew voyage_voyagedates voyage_voyagegroupings voyage_voyageitinerary voyage_voyageoutcome voyage_voyageship voyage_voyageshipowner voyage_voyageshipownerconnection voyage_voyageslavesnumbers voyage_voyagesources voyage_voyagesourcesconnection voyage_voyagesourcestype > voyages.sql
+Run these commands to load the data fixtures::
 
+  $ python manage.py loaddata initialdata/*.json
 
-Run these commands to load the data::
+Sync voyage data from legacy system
 
-  $ python manage.py loaddata initialdata/lessonplan_data.json
-  $ python manage.py loaddata initialdata/glossary.json
-  $ python manage.py loaddata initialdata/flatpages.json
-  $ python manage.py loaddata initialdata/faq_all.json
-  $ python manage.py loaddata initialdata/users.json
-  mysql -h <HOSTNAME> -u <USER> -p <DATABASE> < <INPUTFILE>
-  $ python manage.py loaddata initialdata/images.json
-
+  $ python manage.py synclegacydb
 
 
 After loading data uncomment the `HAYSTACK_SIGNAL_PROCESSOR` variable in the `localsettings`::
