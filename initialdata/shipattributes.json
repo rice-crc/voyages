@@ -174,187 +174,7 @@
         "value": 99, 
         "label": "Other (specify in note)"
     }
-}
-]
-[
-{
-    "pk": 1, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 1, 
-        "label": "Portuguese"
-    }
 },
-{
-    "pk": 2, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 2, 
-        "label": "Brazilian"
-    }
-},
-{
-    "pk": 3, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 3, 
-        "label": "Spanish"
-    }
-},
-{
-    "pk": 4, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 4, 
-        "label": "French"
-    }
-},
-{
-    "pk": 5, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 5, 
-        "label": "U.S.A."
-    }
-},
-{
-    "pk": 6, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 6, 
-        "label": "Uruguayan"
-    }
-},
-{
-    "pk": 7, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 7, 
-        "label": "Dutch"
-    }
-},
-{
-    "pk": 8, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 8, 
-        "label": "Hanse Towns, Brandenburg"
-    }
-},
-{
-    "pk": 9, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 9, 
-        "label": "Argentinian"
-    }
-},
-{
-    "pk": 10, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 10, 
-        "label": "Swedish"
-    }
-},
-{
-    "pk": 11, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 11, 
-        "label": "Russian"
-    }
-},
-{
-    "pk": 12, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 12, 
-        "label": "Danish"
-    }
-},
-{
-    "pk": 13, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 13, 
-        "label": "English 1"
-    }
-},
-{
-    "pk": 14, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 14, 
-        "label": "English 2"
-    }
-},
-{
-    "pk": 15, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 15, 
-        "label": "English 3"
-    }
-},
-{
-    "pk": 16, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 17, 
-        "label": "English 4"
-    }
-},
-{
-    "pk": 17, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 18, 
-        "label": "Sardinian"
-    }
-},
-{
-    "pk": 18, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 19, 
-        "label": "Norwegian"
-    }
-},
-{
-    "pk": 19, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 20, 
-        "label": "Mexican"
-    }
-},
-{
-    "pk": 20, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 21, 
-        "label": "English RAC"
-    }
-},
-{
-    "pk": 21, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 22, 
-        "label": "English pre-1775"
-    }
-},
-{
-    "pk": 22, 
-    "model": "voyage.tontype", 
-    "fields": {
-        "value": 99, 
-        "label": "Other (specify in note)"
-    }
-}
-]
-[
 {
     "pk": 1, 
     "model": "voyage.rigofvessel", 
@@ -998,6 +818,182 @@
 {
     "pk": 81, 
     "model": "voyage.rigofvessel", 
+    "fields": {
+        "value": 99, 
+        "label": "Other (specify in note)"
+    }
+},
+{
+    "pk": 1, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 1, 
+        "label": "Portuguese"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 2, 
+        "label": "Brazilian"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 3, 
+        "label": "Spanish"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 4, 
+        "label": "French"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 5, 
+        "label": "U.S.A."
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 6, 
+        "label": "Uruguayan"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 7, 
+        "label": "Dutch"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 8, 
+        "label": "Hanse Towns, Brandenburg"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 9, 
+        "label": "Argentinian"
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 10, 
+        "label": "Swedish"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 11, 
+        "label": "Russian"
+    }
+},
+{
+    "pk": 12, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 12, 
+        "label": "Danish"
+    }
+},
+{
+    "pk": 13, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 13, 
+        "label": "English 1"
+    }
+},
+{
+    "pk": 14, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 14, 
+        "label": "English 2"
+    }
+},
+{
+    "pk": 15, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 15, 
+        "label": "English 3"
+    }
+},
+{
+    "pk": 16, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 17, 
+        "label": "English 4"
+    }
+},
+{
+    "pk": 17, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 18, 
+        "label": "Sardinian"
+    }
+},
+{
+    "pk": 18, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 19, 
+        "label": "Norwegian"
+    }
+},
+{
+    "pk": 19, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 20, 
+        "label": "Mexican"
+    }
+},
+{
+    "pk": 20, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 21, 
+        "label": "English RAC"
+    }
+},
+{
+    "pk": 21, 
+    "model": "voyage.tontype", 
+    "fields": {
+        "value": 22, 
+        "label": "English pre-1775"
+    }
+},
+{
+    "pk": 22, 
+    "model": "voyage.tontype", 
     "fields": {
         "value": 99, 
         "label": "Other (specify in note)"

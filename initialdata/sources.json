@@ -1,48 +1,6 @@
 [
 {
     "pk": 1, 
-    "model": "voyage.voyagesourcestype", 
-    "fields": {
-        "group_id": 0, 
-        "group_name": "Documentary source"
-    }
-},
-{
-    "pk": 2, 
-    "model": "voyage.voyagesourcestype", 
-    "fields": {
-        "group_id": 1, 
-        "group_name": "Newspaper"
-    }
-},
-{
-    "pk": 3, 
-    "model": "voyage.voyagesourcestype", 
-    "fields": {
-        "group_id": 2, 
-        "group_name": "Published source"
-    }
-},
-{
-    "pk": 4, 
-    "model": "voyage.voyagesourcestype", 
-    "fields": {
-        "group_id": 3, 
-        "group_name": "Unpublished secondary source"
-    }
-},
-{
-    "pk": 5, 
-    "model": "voyage.voyagesourcestype", 
-    "fields": {
-        "group_id": 4, 
-        "group_name": "Private note or collection"
-    }
-}
-]
-[
-{
-    "pk": 1, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": null, 
@@ -7824,6 +7782,86 @@
         "short_ref": "VFH site", 
         "full_ref": "http://hitchcock.itc.virginia.edu/Slavery/  (Image 028) ", 
         "source_type": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 0, 
+        "group_name": "Documentary source"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 1, 
+        "group_name": "Newspaper"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 2, 
+        "group_name": "Published source"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 3, 
+        "group_name": "Unpublished secondary source"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 4, 
+        "group_name": "Private note or collection"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 0, 
+        "group_name": "Documentary source"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 1, 
+        "group_name": "Newspaper"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 2, 
+        "group_name": "Published source"
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 3, 
+        "group_name": "Unpublished secondary source"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 4, 
+        "group_name": "Private note or collection"
     }
 }
 ]
