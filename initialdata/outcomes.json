@@ -1,6 +1,38 @@
 [
 {
     "pk": 1, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 1, 
+        "label": "Delivered slaves for original owners"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 2, 
+        "label": "Original goal thwarted (natural hazard)"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 3, 
+        "label": "Original goal thwarted (human agency)"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.owneroutcome", 
+    "fields": {
+        "value": 4, 
+        "label": "Unknown outcome"
+    }
+},
+{
+    "pk": 1, 
     "model": "voyage.particularoutcome", 
     "fields": {
         "value": 1, 
@@ -1438,9 +1470,63 @@
         "value": 213, 
         "label": "Captured by the Dominican Republic"
     }
-}
-]
-[
+},
+{
+    "pk": 1, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 2, 
+        "label": "Vessel attacked from shore"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 3, 
+        "label": "Vessel's boats attacked from shore"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 6, 
+        "label": "Insurrection planned, but thwarted"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 5, 
+        "label": "Three or more slaves jumping overboard, missing, or escaped"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 1, 
+        "label": "Slave insurrection"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 4, 
+        "label": "\"\"Cut-off\"\" (meaning unclear)"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.resistance", 
+    "fields": {
+        "value": 9, 
+        "label": "Other (specify in note)"
+    }
+},
 {
     "pk": 1, 
     "model": "voyage.slavesoutcome", 
@@ -1496,9 +1582,7 @@
         "value": 7, 
         "label": "Slaves embarked but not disembarked in Europe or America"
     }
-}
-]
-[
+},
 {
     "pk": 1, 
     "model": "voyage.vesselcapturedoutcome", 
@@ -1636,96 +1720,3 @@
     }
 }
 ]
-[
-{
-    "pk": 1, 
-    "model": "voyage.owneroutcome", 
-    "fields": {
-        "value": 1, 
-        "label": "Delivered slaves for original owners"
-    }
-},
-{
-    "pk": 2, 
-    "model": "voyage.owneroutcome", 
-    "fields": {
-        "value": 2, 
-        "label": "Original goal thwarted (natural hazard)"
-    }
-},
-{
-    "pk": 3, 
-    "model": "voyage.owneroutcome", 
-    "fields": {
-        "value": 3, 
-        "label": "Original goal thwarted (human agency)"
-    }
-},
-{
-    "pk": 4, 
-    "model": "voyage.owneroutcome", 
-    "fields": {
-        "value": 4, 
-        "label": "Unknown outcome"
-    }
-}
-]
-[
-{
-    "pk": 1, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 2, 
-        "label": "Vessel attacked from shore"
-    }
-},
-{
-    "pk": 2, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 3, 
-        "label": "Vessel's boats attacked from shore"
-    }
-},
-{
-    "pk": 3, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 6, 
-        "label": "Insurrection planned, but thwarted"
-    }
-},
-{
-    "pk": 4, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 5, 
-        "label": "Three or more slaves jumping overboard, missing, or escaped"
-    }
-},
-{
-    "pk": 5, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 1, 
-        "label": "Slave insurrection"
-    }
-},
-{
-    "pk": 6, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 4, 
-        "label": "\"\"Cut-off\"\" (meaning unclear)"
-    }
-},
-{
-    "pk": 7, 
-    "model": "voyage.resistance", 
-    "fields": {
-        "value": 9, 
-        "label": "Other (specify in note)"
-    }
-}
-]
-
