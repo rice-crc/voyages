@@ -124,11 +124,11 @@ def create_form_from_query(query):
     return query
 
 def create_query_from_request(request):
-    search_vars = request.POST.getlist('list-input-params')
-    query = create_query_dict(request, search_vars)
-    query['list-input-params'] = search_vars
-    query['to_year'] = request.POST.get('frame_to_year')
-    query['from_year'] = request.POST.get('frame_from_year')
+#    search_vars = request.POST.getlist('list-input-params')
+#    query = create_query_dict(request, search_vars)
+#    query['list-input-params'] = search_vars
+#    query['to_year'] = request.POST.get('frame_to_year')
+#    query['from_year'] = request.POST.get('frame_from_year')
     
     
     #print to_year
@@ -155,6 +155,7 @@ def create_query_forms(varlist):
             form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
             tmpElemDict['form'] = form
             tmpElemDict['type'] = 'plain_text'
+            print dir(form)
 
         elif varname in globals.list_select_fields:
             # Select box variables
@@ -212,64 +213,65 @@ def create_query_forms(varlist):
     return search_forms
 
 
-def create_query_dict(request, search_vars):
-    query_forms = {}
+def create_query_dict(request, search_vars, query_forms):
     query_dict = {}
     for search_var in search_vars:
+        qform = next((l for l in query_forms if l['varname'] == search_var), None)
         if search_var in globals.list_text_fields:
             #print "Made it to text field %s" % search_var
             #print "Query thing is %s" % SimpleTextForm(request.POST, prefix=search_var)
-            query_forms[search_var] = SimpleTextForm(request.POST, prefix=search_var)
-            if query_forms[search_var].is_valid():
-                query_dict[search_var + "__contains"] = query_forms[search_var].cleaned_data['text_search']
+            #print query_forms[varname=search_var]
+            qform['form'] = SimpleTextForm(request.POST, prefix=search_var)
+            if qform['form'].is_valid():
+                query_dict[search_var + "__contains"] = qform['form'].cleaned_data['text_search']
         elif search_var in globals.list_select_fields:
-            query_forms[search_var] = SimpleSelectSearchForm(request.POST, prefix=search_var)
-            if query_forms[search_var].is_valid():
-                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+            qform['form'] = SimpleSelectSearchForm(request.POST, prefix=search_var)
+            if qform['form'].is_valid():
+                query_dict[search_var + "__in"] = qform['form'].cleaned_data['choice_field']
         elif search_var in globals.list_numeric_fields:
-            query_forms[search_var] = SimpleNumericSearchForm(request.POST, prefix=search_var)
-            if query_forms[search_var].is_valid():
-                opt = query_forms[search_var].cleaned_data['options']
+            qform['form'] = SimpleNumericSearchForm(request.POST, prefix=search_var)
+            if qform['form'].is_valid():
+                opt = qform['form'].cleaned_data['options']
                 if opt == '1': # Between
-                    query_dict[search_var + "__range"] = [query_forms[search_var].cleaned_data['lower_bound'],
-                                                          query_forms[search_var].cleaned_data['upper_bound']]
+                    query_dict[search_var + "__range"] = [qform['form'].cleaned_data['lower_bound'],
+                                                          qform['form'].cleaned_data['upper_bound']]
                 elif opt == '2': # Less than or equal to
-                    query_dict[search_var + "__lte"] = query_forms[search_var].cleaned_data['threshold']
+                    query_dict[search_var + "__lte"] = qform['form'].cleaned_data['threshold']
                 elif opt == '3': # Greater than or equal to
-                    query_dict[search_var + "__gte"] = query_forms[search_var].cleaned_data['threshold']
+                    query_dict[search_var + "__gte"] = qform['form'].cleaned_data['threshold']
                 elif opt == '4': # Equal to
-                    query_dict[search_var + "__exact"] = query_forms[search_var].cleaned_data['threshold']
-                #query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+                    query_dict[search_var + "__exact"] = qform['form'].cleaned_data['threshold']
+                #query_dict[search_var + "__in"] = qform.cleaned_data['choice_field']
         elif search_var in globals.list_date_fields:
-            query_forms[search_var] = SimpleDateSearchForm(request.POST, prefix=search_var)
-            if query_forms[search_var].is_valid():
-                opt = query_forms[search_var].cleaned_data['options']
+            qform['form'] = SimpleDateSearchForm(request.POST, prefix=search_var)
+            if qform['form'].is_valid():
+                opt = qform['form'].cleaned_data['options']
                 if opt == '1': # Between
                     query_dict[search_var + "__range"] = [
-                        formatDate(query_forms[search_var].cleaned_data['from_year'],
-                                   query_forms[search_var].cleaned_data['from_month']),
-                        formatDate(query_forms[search_var].cleaned_data['to_year'],
-                                   query_forms[search_var].cleaned_data['to_month'])]
+                        formatDate(qform['form'].cleaned_data['from_year'],
+                                   qform['form'].cleaned_data['from_month']),
+                        formatDate(qform['form'].cleaned_data['to_year'],
+                                   qform['form'].cleaned_data['to_month'])]
                 elif opt == '2': # Less than or equal to
                     query_dict[search_var + "__lte"] = \
-                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
-                                   query_forms[search_var].cleaned_data['theshold_month'])
+                        formatDate(qform['form'].cleaned_data['threshold_year'],
+                                   qform['form'].cleaned_data['theshold_month'])
                 elif opt == '3': # Greater than or equal to
                     query_dict[search_var + "__gte"] = \
-                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
-                                   query_forms[search_var].cleaned_data['theshold_month'])
+                        formatDate(qform['form'].cleaned_data['threshold_year'],
+                                   qform['form'].cleaned_data['theshold_month'])
                 elif opt == '2': # Equal to
                     query_dict[search_var + "__exact"] = \
-                        formatDate(query_forms[search_var].cleaned_data['threshold_year'],
-                                   query_forms[search_var].cleaned_data['theshold_month'])
+                        formatDate(qform['form'].cleaned_data['threshold_year'],
+                                   qform['form'].cleaned_data['theshold_month'])
         elif search_var in globals.list_place_fields:
             # TODO: How do I make the form for this? Is this ever used? Isn't it the select form used instead
             places = request.POST.getlist(search_var + "_selected")
             query_dict[search_var + "__in"] = places
         elif search_var in globals.list_boolean_fields:
-            query_forms[search_var] = SimpleSelectBooleanForm(request.POST, prefix=search_var)
-            if query_forms[search_var].is_valid():
-                query_dict[search_var + "__in"] = query_forms[search_var].cleaned_data['choice_field']
+            qform['form'] = SimpleSelectBooleanForm(request.POST, prefix=search_var)
+            if qform['form'].is_valid():
+                query_dict[search_var + "__in"] = qform['form'].cleaned_data['choice_field']
     query = {}
     query['forms'] = query_forms
     query['dict'] = query_dict
@@ -291,7 +293,7 @@ def search(request):
         request.session.create()
     if 'variable_list' not in request.session:
         request.session['variable_list'] = {}
-    query_act = create_query_from_request(request)
+    #query_act = create_query_from_request(request)
 
     # Check if saved url has been used
     if request.GET.values():
@@ -351,9 +353,13 @@ def search(request):
 
             # Time frame search
             # TODO: How does this work without specifying the prefix?
-            frame_form = TimeFrameSpanSearchForm(request.POST)
+            frame_form = TimeFrameSpanSearchForm(request.POST,
+                                                 initial={'frame_from_year': voyage_span_first_year,
+                                                          'frame_to_year': voyage_span_last_year})
             #if frame_form.is_valid():
             #    request.session['time_span_form'] = frame_form
+            qry = {}
+            search_forms = create_query_forms(request.session['variable_list'])
 
             if submitVal == 'add_var':
                 
@@ -377,9 +383,9 @@ def search(request):
                 voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
 
                 # Time frame search
-                request.session['time_span_form'] = TimeFrameSpanSearchForm(
-                    initial={'frame_from_year': voyage_span_first_year,
-                             'frame_to_year': voyage_span_last_year})
+                #request.session['time_span_form'] = TimeFrameSpanSearchForm(
+                #    initial={'frame_from_year': voyage_span_first_year,
+                #             'frame_to_year': voyage_span_last_year})
 
             elif submitVal == 'configColumn':
                 # Configure columns in the result page
@@ -427,16 +433,17 @@ def search(request):
 
                 new_existing_form = []
                 query_dict = {}
+                qry = create_query_dict(request, request.POST.getlist('list-input-params'), search_forms)
 
-                qry = create_query_dict(request, request.POST.getlist('list-input-params'))
                 query_dict = qry['dict']
 
 
                 # TODO: refactor this into another method
                 # Time frame search
-                query_dict['var_imp_arrival_at_port_of_dis__range'] = [
-                    frame_form.cleaned_data['frame_from_year'],
-                    frame_form.cleaned_data['frame_to_year']]
+                print dir(frame_form)
+                #query_dict['var_imp_arrival_at_port_of_dis__range'] = [
+                #    frame_form.cleaned_data['frame_from_year'],
+                #    frame_form.cleaned_data['frame_to_year']]
 
                 results = perform_search(query_dict, date_filters)
 
@@ -451,7 +458,7 @@ def search(request):
                 else:
                     request.session['voyage_last_query_date_filters'] = []
 
-            search_forms = create_query_forms(request.session['variable_list'])
+            
 
 
         elif request.method == 'GET':
@@ -471,6 +478,8 @@ def search(request):
 
         # Encode url to url_to_copy form (for user)
         url_to_copy = encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
+        qry = create_query_dict(request, request.POST.getlist('list-input-params'), search_forms)
+
 
     # results per page and form (change in session if necessary)
     form, results_per_page = check_and_save_options_form(request, to_reset_form)
@@ -509,7 +518,7 @@ def search(request):
     if submitVal == 'tab_statistics':
         result_data = retrieve_summary_stats(results)
     
-    qry = create_query_dict(request, request.POST.getlist('list-input-params'))
+    #qry = create_query_dict(request, request.POST.getlist('list-input-params'))
     #print "Query forms total is %s" % qry['forms']
     #print qry['forms']['var_ship_name']
     theform = ResultsPerPageOptionForm(request.POST)
@@ -845,9 +854,9 @@ def decode_from_url(request):
 
     # Rebuild left menu
     date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result = create_menu_forms(dict)
-    request.session['time_span_form'] = TimeFrameSpanSearchForm(
-                initial={'frame_from_year': voyage_span_first_year,
-                         'frame_to_year': voyage_span_last_year})
+    #request.session['time_span_form'] = TimeFrameSpanSearchForm(
+    #            initial={'frame_from_year': voyage_span_first_year,
+    #                     'frame_to_year': voyage_span_last_year})
     return dict, date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result
 
 
