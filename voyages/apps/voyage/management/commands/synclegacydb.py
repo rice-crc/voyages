@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 if i.natinimp:
                     ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp)
                 if i.tonmod:
-                    ship.tonnage_mod = round(i.tonmod, 1)
+                    ship.tonnage_mod = str(round(i.tonmod, 1))
                 ship.save()
                 voyageObj.voyage_ship = ship
                 voyageObj.save()
@@ -276,7 +276,8 @@ class Command(BaseCommand):
                 #Imputed variables
                 characteristics.imp_total_num_slaves_embarked = i.slaximp
                 characteristics.imp_total_num_slaves_disembarked = i.slamimp
-                characteristics.imp_jamaican_cash_price = i.jamcaspr
+                if i.jamcaspr:
+                    characteristics.imp_jamaican_cash_price = str(i.jamcaspr)
                 characteristics.imp_mortality_during_voyage = i.vymrtimp
 
                 characteristics.num_men_embark_first_port_purchase = i.men1
