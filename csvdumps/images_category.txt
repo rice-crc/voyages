@@ -1,7 +1,0 @@
-"id"	"name"
-"1"	"Vessels"
-"2"	"Slaves"
-"99"	"Presentation"
-"100"	"Ports updated"
-"3"	"Places"
-"4"	"Manuscripts"
