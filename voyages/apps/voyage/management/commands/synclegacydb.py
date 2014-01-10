@@ -4,12 +4,15 @@ from django.core.management.base import BaseCommand, CommandError
 from voyages.apps.voyage import models, legacy_models
 from decimal import *
 
-
 class Command(BaseCommand):
     args = '<>'
     help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
         unknown_port_value = 99801
+        pag = Paginator(legacy_models.Voyages.objects.filter(suggestion=False, revision=1), 100)
+        print "Paginator count %s" % pag.count
+        print "Paginator page range count %s" % len(pag.page_range)
+        print "Paginator last page number %s" % pag.page_range[-1]
         models.Voyage.objects.all().delete()
         models.VoyageShip.objects.all().delete()
         models.VoyageShipOwnerConnection.objects.all().delete()
@@ -23,11 +26,8 @@ class Command(BaseCommand):
         models.VoyageSlavesNumbers.objects.all().delete()
         count = 0
         try:
-            pag = Paginator(legacy_models.Voyages.objects.all(), 100)
-            for x in range(1, pag.num_pages + 1):
+            for x in pag.page_range:
                 for i in pag.page(x).object_list:
-                    if i.suggestion or (i.revision != 1):
-                        continue
                     voyageObj = models.Voyage()
                     count += 1
                     print count
