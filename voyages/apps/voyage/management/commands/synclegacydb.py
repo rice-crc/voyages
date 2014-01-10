@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
         unknown_port_value = 99801
-        pag = Paginator(legacy_models.Voyages.objects.filter(suggestion=False, revision=1), 100)
+        pag = Paginator(legacy_models.Voyages.objects.filter(suggestion=False, revision=1).order_by('voyageid'), 100)
         print "Paginator count %s" % pag.count
         print "Paginator page range count %s" % len(pag.page_range)
         print "Paginator last page number %s" % pag.page_range[-1]
