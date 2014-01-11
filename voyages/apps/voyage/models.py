@@ -1255,6 +1255,12 @@ class VoyageSourcesConnection(models.Model):
 
 
 # Voyage (main) model
+# for parsing natural key
+class VoyageManager(models.Manager):
+    def get_by_natural_key(self, voyage_id):
+        return self.get(voyage_id=voyage_id)
+
+
 class Voyage(models.Model):
     """
     Information about voyages.
@@ -1263,6 +1269,9 @@ class Voyage(models.Model):
     related to: :class:`~voyages.apps.voyage.models.VoyageShipOwner`
     related to: :class:`~voyages.apps.voyage.models.VoyageSources`
     """
+    # for parsing natural key
+    objects = VoyageManager()
+
     #voyage_id = models.AutoField(primary_key=True)
     voyage_id = models.IntegerField("Voyage ID (can be empty)", null=True, blank=True)
 
@@ -1300,6 +1309,12 @@ class Voyage(models.Model):
     voyage_sources = models.ManyToManyField \
             ('VoyageSources', through='VoyageSourcesConnection',
              related_name='voyage_sources', blank=True, null=True)
+
+
+    # generate natural key
+    def natural_key(self):
+        return (self.voyage_id)
+
 
     class Meta:
         ordering = ['voyage_id',]
