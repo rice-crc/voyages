@@ -310,7 +310,7 @@
 
     <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_port_of_call_before_atl_crossing" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_port_of_call_before_atl_crossing" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
