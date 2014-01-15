@@ -220,7 +220,7 @@
 
     <field name="var_length_middle_passage_days_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_principal_place_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_place_of_slave_purchase" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_arr_first_port_embark" type="long" indexed="true" stored="true" multiValued="false" />
 
