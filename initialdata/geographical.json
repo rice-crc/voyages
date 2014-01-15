@@ -11863,5 +11863,173 @@
         "value": 41200, 
         "broad_region": 3
     }
+},
+{
+    "pk": 1, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 1, 
+        "label": "Spain"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 2, 
+        "label": "Uruguay"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 3, 
+        "label": "Spain / Uruguay"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 4, 
+        "label": "Portugal"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 5, 
+        "label": "Brazil"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 6, 
+        "label": "Portugal / Brazil"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 7, 
+        "label": "Great Britain"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 8, 
+        "label": "Netherlands"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 9, 
+        "label": "U.S.A."
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 10, 
+        "label": "France"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 11, 
+        "label": "Denmark"
+    }
+},
+{
+    "pk": 12, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 12, 
+        "label": "Hanse Towns, Brandenburg"
+    }
+},
+{
+    "pk": 13, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 13, 
+        "label": "Sweden"
+    }
+},
+{
+    "pk": 14, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 18, 
+        "label": "Sardinia"
+    }
+},
+{
+    "pk": 15, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 19, 
+        "label": "Mexico"
+    }
+},
+{
+    "pk": 16, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 24, 
+        "label": "Genoa"
+    }
+},
+{
+    "pk": 17, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 14, 
+        "label": "Norway"
+    }
+},
+{
+    "pk": 18, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 15, 
+        "label": "Denmark / Baltic"
+    }
+},
+{
+    "pk": 19, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 16, 
+        "label": "Argentina"
+    }
+},
+{
+    "pk": 20, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 17, 
+        "label": "Russia"
+    }
+},
+{
+    "pk": 21, 
+    "model": "voyage.nationality", 
+    "fields": {
+        "value": 30, 
+        "label": "Other (specify in note)"
+    }
 }
 ]
