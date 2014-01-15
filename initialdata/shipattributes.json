@@ -168,14 +168,6 @@
     }
 },
 {
-    "pk": 22, 
-    "model": "voyage.nationality", 
-    "fields": {
-        "value": 99, 
-        "label": "Other (specify in note)"
-    }
-},
-{
     "pk": 1, 
     "model": "voyage.rigofvessel", 
     "fields": {
