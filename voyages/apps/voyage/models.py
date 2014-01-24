@@ -1160,37 +1160,22 @@ class VoyageSlavesNumbers(models.Model):
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
 
-    @property
-    def percentage_men(self):
-        return self.imp_num_men_total / float(self.total_slaves_dept_or_arr_gender_identified)
-
-    @property
-    def percentage_women(self):
-        return self.imp_num_women_total / float(self.total_slaves_dept_or_arr_gender_identified)
-
-    @property
-    def percentage_boy(self):
-        return self.imp_num_boy_total / float(self.total_slaves_dept_or_arr_gender_identified)
-
-    @property
-    def percentage_girl(self):
-        return self.imp_num_girl_total / float(self.total_slaves_dept_or_arr_gender_identified)
-
-    @property
-    def percentage_adult(self):
-        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_age_identified)
-
-    @property
-    def percentage_child(self):
-        return self.imp_num_child_total / float(self.total_slaves_dept_or_arr_age_identified)
-
-    @property
-    def percentage_male(self):
-        return self.imp_num_males_total / float(self.total_slaves_dept_or_arr_gender_identified)
-
-    @property
-    def percentage_female(self):
-        return self.imp_num_females_total / float(self.total_slaves_dept_or_arr_gender_identified)
+    # menrat7
+    percentage_men = models.FloatField("Percentage men on voyage", null=True, blank=True)
+    # womrat7
+    percentage_women = models.FloatField("Percentage women on voyage", null=True, blank=True)
+    # boyrat7
+    percentage_boy = models.FloatField("Percentage boy on voyage", null=True, blank=True)
+    # girlrat7
+    percentage_girl = models.FloatField("Percentage girl on voyage", null=True, blank=True)
+    # malrat7
+    percentage_male = models.FloatField("Percentage male on voyage", null=True, blank=True)
+    # chilrat7
+    percentage_child = models.FloatField("Percentage children on voyage", null=True, blank=True)
+    # Calculated from chilrat7
+    percentage_adult = models.FloatField("Percentage adult on voyage", null=True, blank=True)
+    # Calculated from malrat7
+    percentage_female = models.FloatField("Percentage female on voyage", null=True, blank=True)
 
     class Meta:
         verbose_name = 'Slaves Characteristic'
