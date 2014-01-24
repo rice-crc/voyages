@@ -1172,14 +1172,10 @@ class VoyageSlavesNumbers(models.Model):
     percentage_male = models.FloatField("Percentage male on voyage", null=True, blank=True)
     # chilrat7
     percentage_child = models.FloatField("Percentage children on voyage", null=True, blank=True)
-
-    @property
-    def percentage_adult(self):
-        return self.imp_num_adult_total / float(self.total_slaves_dept_or_arr_age_identified)
-
-    @property
-    def percentage_female(self):
-        return self.imp_num_females_total / float(self.total_slaves_dept_or_arr_gender_identified)
+    # Calculated from chilrat7
+    percentage_adult = models.FloatField("Percentage adult on voyage", null=True, blank=True)
+    # Calculated from malrat7
+    percentage_female = models.FloatField("Percentage female on voyage", null=True, blank=True)
 
     class Meta:
         verbose_name = 'Slaves Characteristic'
