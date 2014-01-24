@@ -380,12 +380,16 @@ class Command(BaseCommand):
                     characteristics.total_slaves_dept_or_arr_gender_identified = i.slavemx7
                     characteristics.imp_slaves_embarked_for_mortality = i.tslmtimp
 
+                    characteristics.percentage_men = i.menrat7
                     characteristics.percentage_women = i.womrat7
                     characteristics.percentage_boy = i.boyrat7
                     characteristics.percentage_girl = i.girlrat7
                     characteristics.percentage_male = i.malrat7
                     characteristics.percentage_child = i.chilrat7
-                    characteristics.percentage_men = i.menrat7
+                    if i.chilrat7:
+                        characteristics.percentage_adult = 1 - i.chilrat7
+                    if i.malrat7:
+                        characteristics.percentage_female = 1 - i.malrat7
 
                     characteristics.save()
                     voyageObj.voyage_slaves_numbers = characteristics
