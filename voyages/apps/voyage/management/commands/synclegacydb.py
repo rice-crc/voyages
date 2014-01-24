@@ -220,10 +220,17 @@ class Command(BaseCommand):
                         date_info.imp_arrival_at_port_of_dis = ",," + str(i.yearam)
                     date_info.imp_length_home_to_disembark = i.voy1imp
                     date_info.imp_length_leaving_africa_to_disembark = i.voy2imp
+                    # dateleftafr is made of:
+                    # day: dlslatra
+                    # month: dlslatrb
+                    # year: dlslatrc
+                    # Maybe the dlslatr. variables should be used always instead of the dateleftafr
                     if i.dateleftafr:
                         tmp = i.dateleftafr
                         # MM,DD,YYYY
                         date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
+                    elif i.dlslatrc or i.dlslatrb or i.dlslatra:
+                        date_info.date_departed_africa = mk_date(i.dlslatra, i.dlslatrb, i.dlslatrc)
                     date_info.save()
                     voyageObj.voyage_dates = date_info
                     voyageObj.save()
@@ -248,12 +255,10 @@ class Command(BaseCommand):
                         #TODO change to get_or_create
                         first_captain = models.VoyageCaptain.objects.create(name=i.captaina)
                         models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
-                        f = 6+3
                     if i.captainb:
                         #TODO change to get_or_create
                         second_captain  = models.VoyageCaptain.objects.create(name=i.captainb)
                         models.VoyageCaptainConnection.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
-                        f = 7
                     if i.captainc:
                         #TODO change to get_or_create
                         third_captain = models.VoyageCaptain.objects.create(name=i.captainc)
@@ -374,6 +379,13 @@ class Command(BaseCommand):
                     characteristics.total_slaves_dept_or_arr_age_identified = i.slavema7
                     characteristics.total_slaves_dept_or_arr_gender_identified = i.slavemx7
                     characteristics.imp_slaves_embarked_for_mortality = i.tslmtimp
+
+                    characteristics.percentage_women = i.womrat7
+                    characteristics.percentage_boy = i.boyrat7
+                    characteristics.percentage_girl = i.girlrat7
+                    characteristics.percentage_male = i.malrat7
+                    characteristics.percentage_child = i.chilrat7
+                    characteristics.percentage_men = i.menrat7
 
                     characteristics.save()
                     voyageObj.voyage_slaves_numbers = characteristics
