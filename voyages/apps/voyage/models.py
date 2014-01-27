@@ -1298,7 +1298,7 @@ class Voyage(models.Model):
 
     # generate natural key
     def natural_key(self):
-        return (self.voyage_id)
+        return (self.voyage_id,)
 
 
     class Meta:
