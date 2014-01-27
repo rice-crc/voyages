@@ -1,64 +1,12 @@
 [
 {
-    "pk": 55, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 1, 
-        "label": "Vessels"
-    }
-},
-{
-    "pk": 56, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 2, 
-        "label": "Slaves"
-    }
-},
-{
-    "pk": 57, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 99, 
-        "label": "Presentation"
-    }
-},
-{
-    "pk": 58, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 100, 
-        "label": "Ports updated"
-    }
-},
-{
-    "pk": 59, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 3, 
-        "label": "Places"
-    }
-},
-{
-    "pk": 60, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 4, 
-        "label": "Manuscripts"
-    }
-},
-{
     "pk": 1, 
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4629], 
+        "voyage": [
+            4629
+        ], 
         "date": 1850, 
         "description": "The image represents the H.M.S. \"\"Rifleman\"\" (right) pursuing the \nslaver \"\"Esmeralda\"\" (left). An account in The Illustrated London News, the source of this \nimage, describes the attempt of the British \"\"Rifleman\"\" to intercept the \"\"Esmeralda\"\" off \nthe Brazilian coast. The slaver, however, escaped and landed slaves on the coast of Rio de \nJaneiro. The image is reproduced courtesy of the Manuscript, Archives and Rare Book \nLibrary, Emory University.", 
         "language": "en", 
@@ -75,7 +23,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4974], 
+        "voyage": [
+            4974
+        ], 
         "date": 1856, 
         "description": "The \"\"Wanderer\"\" was the last vessel to disembark slaves in the United States, \nin 1858. She was built to be a racing yacht, but was converted into a slave vessel in an \nattempt to re-open the slave trade at the eve of the American Civil War.", 
         "language": "  ", 
@@ -92,7 +42,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4907], 
+        "voyage": [
+            4907
+        ], 
         "date": 1860, 
         "description": "The image describes the H.M.S. \"\"Pluto\"\" capturing the slaver \"\"Orion\"\" on \nNovember 30th, 1859. The Illustrated London News, the source of this image, identifies the \nslaver only as a \"\"large barque\"\" sailing off the African coast, but the sources in the \ndatabase recovered the name of the slave vessel and its route. The slaver departed from \nNew York, loaded slaves at Cabinda and intended to deliver them to Cuba. However, the \nBritish naval force intercepted the \"\"Orion\"\", loaded with a large cargo of slaves, and \nconducted her to St. Helena. The image is reproduced courtesy of the Manuscript, Archives \nand Rare Book Library, Emory University.", 
         "language": "en", 
@@ -126,7 +78,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4247], 
+        "voyage": [
+            4247
+        ], 
         "date": 1857, 
         "description": "The slaver \"\"Abbot Devereux\"\" was captured off the coast of Whydah by H.M. \nGun-boat \"\"Teaser\"\". An eyewitness provided an account of the capture dated August 6th, \n1857, to The Illustrated London News, the source of this image. The slaver had a full \ncargo of slaves destined to Cuba, but instead it was conducted to Sierra Leone by the \nBritish naval force. The image is reproduced courtesy of the Manuscript, Archives and Rare \nBook Library, Emory University.", 
         "language": "en", 
@@ -143,7 +97,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [3829], 
+        "voyage": [
+            3829
+        ], 
         "date": 1849, 
         "description": "The image describes the H.M.S. \"\"Rattler\"\" (left) capturing the slaver \n\"\"Andorinha\"\" (right). The Illustrated London News, the source of this image, reported that \nthe vessel was in charge of a Brazilian commander and that she was often employed in the \nslave trade from the Bight of Benin. The slaver was captured off Lagos, at present-day \nNigeria, in August, 1849. The image is reproduced courtesy of the Manuscript, Archives and \nRare Book Library, Emory University.", 
         "language": "en", 
@@ -160,7 +116,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [666], 
+        "voyage": [
+            666
+        ], 
         "date": 1850, 
         "description": "U.S. Naval Brig \"\"Perry\"\" (left) approaching \nAmerican slave vessel \"\"Martha\"\" (right). Slave vessel \"\"Martha\"\" was captured as a prize \noff-shore Ambriz, at the West-Central African coast, on June 6, 1850. The vessel was fully \nequiped for the slave trade, but no slaves were found on board.The image is reproduced \ncourtesy of the Robert W. Woodruff Library, Emory University.", 
         "language": "en", 
@@ -228,7 +186,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4247], 
+        "voyage": [
+            4247
+        ], 
         "date": 1857, 
         "description": "The image represents the H.M. Gun-boat \"\"Teaser\"\" (on left) \napproaching the slaver \"\"Abbot Devereux\"\" (on right). The slaver was captured off the coast \nof Whydah. An eyewitness provided an account of the capture dated August 6th, 1857, to The \nIllustrated London News, the source of this image. The slaver had a full cargo of slaves \ndestined for Cuba, but instead it was conducted to Sierra Leone by the British naval \nforce. The image is reproduced courtesy of the Manuscript, Archives and Rare Book Library, \nEmory University.", 
         "language": "en", 
@@ -245,7 +205,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 55, 
-        "voyage": [4229], 
+        "voyage": [
+            4229
+        ], 
         "date": 1857, 
         "description": "The image shows the slaver \"\"Zeldina\"\" anchored at Port Royal in 1857. It is a reproduction \nof one of the images sent with a letter from Kingston, Jamaica, dated May 11th, 1857, to \nThe Illustrated London News, the source of this image. The newspaper published the letter \nand the pictures provided by the letter. The schooner \"\"Zeldina\"\" embarked slaves at \nCabinda, but she was blown off her way to Cuba and captured by the British naval force in \nApril, 1857. The image is reproduced courtesy of the Manuscript, Archives and Rare Book \nLibrary, Emory University.", 
         "language": "en", 
@@ -262,7 +224,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2525], 
+        "voyage": [
+            2525
+        ], 
         "date": 1836, 
         "description": "The Brigantine \"\"F\u00e9lix\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"F\u00e9lix\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -279,7 +243,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [666], 
+        "voyage": [
+            666
+        ], 
         "date": 0, 
         "description": "Charles Lamar \nonwed the Schooner \"\"Wanderer\"\". The \"\"Wanderer\"\" was the last vessel to disembark slaves in \nthe United States, in 1858. She was built to be a racing yacht, but was converted into a \nslave vessel in an attempt to re-open the Atlantic slave trade at the eve of the American \nCivil War.", 
         "language": "  ", 
@@ -296,7 +262,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4229], 
+        "voyage": [
+            4229
+        ], 
         "date": 1857, 
         "description": "This is one image of a group of illustrations published in The \nIllustrated London News on June 20th, 1857. The illustrations were created by the \nnewspaper based on images sent with a letter from Kingston, Jamaica, dated May 11th, 1857, \ndescribing the capture of slaver \"\"Zeldina\"\" and the conditions of the slaves disembarked.  \nThe schooner \"\"Zeldina\"\" embarked slaves at Cabinda, but she was blown off her route to \nCuba, captured by the British naval force in April, 1857, and stationed at Port Royal, \nJamaica. The image is reproduced courtesy of the Manuscript, Archives and Rare Book \nLibrary, Emory University.", 
         "language": "en", 
@@ -313,7 +281,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4229], 
+        "voyage": [
+            4229
+        ], 
         "date": 1857, 
         "description": "This is one image of a group of illustrations published in The \nIllustrated London News on June 20th, 1857. The illustrations were created by the \nnewspaper based on images sent with a letter from Kingston, Jamaica, dated May 11th, 1857, \ndescribing the capture of slaver \"\"Zeldina\"\" and the conditions of the slaves disembarked.  \nThe schooner \"\"Zeldina\"\" embarked slaves at Cabinda, but she was blown off her route to \nCuba, captured by the British naval force in April, 1857, and stationed at Port Royal, \nJamaica.", 
         "language": "en", 
@@ -330,7 +300,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4229], 
+        "voyage": [
+            4229
+        ], 
         "date": 1857, 
         "description": "This is one image of a group of illustrations published in The \nIllustrated London News on June 20th, 1857. The illustrations were created by the \nnewspaper based on images sent with a letter from Kingston, Jamaica, dated May 11th, 1857, \ndescribing the capture of slaver \"\"Zeldina\"\" and the conditions of the slaves disembarked.  \nThe schooner \"\"Zeldina\"\" embarked slaves at Cabinda, but she was blown off her route to \nCuba, captured by the British naval force in April, 1857, and stationed at Port Royal, \nJamaica. The image is reproduced courtesy of the Manuscript, Archives and Rare Book \nLibrary, Emory University.", 
         "language": "en", 
@@ -347,7 +319,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4362], 
+        "voyage": [
+            4362
+        ], 
         "date": 1860, 
         "description": "The \"\"Wildfire\"\" was sailing to Cuba when it was intercepted by anti-slave trade cruisers \non its way back from Congo. It was escorted to Key West, Florida, and eventually Liberia, \nwhere the Africans disembarked. The image shows a picture of a child who survived the \ntransatlantic voyage in bark \"\"Wildfire\"\". The image is reproduced courtesy of Tracy W. \nMcGregor Library of American History, Special Collections, University of Virginia Library. \nPermission required to reproduce.", 
         "language": "en", 
@@ -398,7 +372,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4229], 
+        "voyage": [
+            4229
+        ], 
         "date": 1857, 
         "description": "This is one image of a group of illustrations published in The \nIllustrated London News on June 20th, 1857. The illustrations were created by the \nnewspaper based on images sent with a letter from Kingston, Jamaica, dated May 11th, 1857, \ndescribing the capture of slaver \"\"Zeldina\"\" and the conditions of the slaves disembarked.  \nThe schooner \"\"Zeldina\"\" embarked slaves at Cabinda, but she was blown off her route to \nCuba, captured by the British naval force in April, 1857, and stationed at Port Royal, \nJamaica. The image is reproduced courtesy of the Manuscript, Archives and Rare Book \nLibrary, Emory University.", 
         "language": "en", 
@@ -415,7 +391,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4362], 
+        "voyage": [
+            4362
+        ], 
         "date": 1860, 
         "description": "The bark \"\"Wildfire\"\" departed from New York, embarked slaves in the \nCongo River, with the intention of selling them in Cuba. However, before it could do so, \nAmerican anti-slave trade cruisers intercepted the \u201cWildfire\u201d at sea and conducted her to \nKey West, Florida, and eventually to Liberia. The image is of an illustration of the \nslaves on the deck of the \"\"Wildfire\"\" published in the \"\"Harper\u2019s Weekly\"\" from a \ndaguerreotype. The image is reproduced courtesy of Tracy W. McGregor Library of American \nHistory, Special Collections, University of Virginia Library. Permission required to \nreproduce.", 
         "language": "en", 
@@ -432,7 +410,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [4362], 
+        "voyage": [
+            4362
+        ], 
         "date": 1860, 
         "description": "Pricess Madia \nwas one of the survivors of the slave bark \"\"Wildfire\"\". The \"\"Wildfire\"\" was sailing to Cuba \nwhen it was intercepted by anti-slave trade cruisers on its way back from Congo. Princess \nMadia together with hundreds of other Africans were eventually taken back to Africa, but \nto Liberia rather than the Congo River. No one knows whether Madia was a real African \nprincess. She received this title from the crew members of the \"\"Wildfire\"\", who called her \nprincess because of her dignified look which inspired deference from some of the other \nAfricans sailing with her. The image is reproduced courtesy of Tracy W. McGregor Library \nof American History, Special Collections, University of Virginia Library. Permission \nrequired to reproduce.", 
         "language": "en", 
@@ -449,7 +429,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [75094], 
+        "voyage": [
+            75094
+        ], 
         "date": 1750, 
         "description": "Ayuba Suleiman Diallo, better known as Job Ben Solomon, was a Fulbe \nMuslim from the present-day region of Senegal. He was captured and sold to English slave \ntraders after returning from a trading expedition in which he, himself, intended to sell \ntwo slaves to the same English traders. Solomon embarked on the slave vessel \"\"Arabella\"\", \nin 1731, sailing from the Gambia to Maryland where he worked as a slave in tobacco farms \nfor about a year. Because of his skills in Arabic writing, he moved to England where he \nwas subsequently employed in the Royal African Company in Gambia. Job Ben Solomon remained \n in the Gambia until he died in 1773. The image shows, in black and white engravings, a \ndetail of a page from the Gentleman\u2019s Magazine in which a picture of Job Ben Solomon was \npublished in 1750. The image is reproduced courtesy of the Manuscript, Archives and Rare \nBook Library, Emory University.", 
         "language": "en", 
@@ -466,7 +448,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 59, 
-        "voyage": [111], 
+        "voyage": [
+            111
+        ], 
         "date": 0, 
         "description": "The great earthquake of Portugal in 1755 spawned the production of \nseveral images of Lisbon. The earthquake destroyed a large part of the city. Lisbon was \nthe capital of the Portuguese Empire, so the catastrophe was felt by all Europeans. The \nearly voyages of exploration departed from Lisbon, where the first African slaves were \nbrought from the regions south of the Sahara Desert. The image provides a view of Lisbon \nfrom the Tagus River before the great earthquake. It portrays the city as a highly \nurbanized busy port and indicates some of the main buildings. This illustration is located \nin the City Museum of Lisbon, Portugal. The image is reproduced courtesy of the Digital \nLibrary of Portuguese Urban Cartography.", 
         "language": "fr", 
@@ -1231,7 +1215,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2440], 
+        "voyage": [
+            2440
+        ], 
         "date": 1834, 
         "description": "The Brigantine \"\"Carolina\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Carolina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -2421,7 +2407,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1249], 
+        "voyage": [
+            1249
+        ], 
         "date": 1832, 
         "description": "The Brigantine \"\"Aguila\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Aguila\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -2523,7 +2511,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 59, 
-        "voyage": [4362], 
+        "voyage": [
+            4362
+        ], 
         "date": 1860, 
         "description": "Barracoons were a common feature in the transatlantic slave trade, but particularly in \nthe mid-nineteenth century when slaves could be held on the coast for long periods while \nslave ships looked for opportunities to evade patrolling naval cruisers. The word probably \nderived from the Portuguese \"\"Barrac\u00e3o\"\", which merely means warehouse, but when adopted by \nother languages the meaning became slave hold. The image is of an illustration of a \nbarracoon at Key West, Florida, in 1860. This particular barracoon, however, did not store \nslaves. Rather, it served as a place to shelter liberated Africans from slave vessels \ncaptured at sea by American cruisers during the suppression of the transatlantic slave \ntrade. The image is reproduced courtesy of Tracy W. McGregor Library of American History, \nSpecial Collections, University of Virginia Library. Permission required to reproduce.", 
         "language": "en", 
@@ -2778,7 +2768,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1368], 
+        "voyage": [
+            1368
+        ], 
         "date": 1835, 
         "description": "The Brigantine \"\"Chubasco\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Chubasco\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -2999,7 +2991,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2558], 
+        "voyage": [
+            2558
+        ], 
         "date": 1837, 
         "description": "The Brigantine \"\"Felicidade\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Felicidade\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3016,7 +3010,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1631], 
+        "voyage": [
+            1631
+        ], 
         "date": 1837, 
         "description": "The Goleta \"\"Matilde\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Matilde\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3033,7 +3029,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3071], 
+        "voyage": [
+            3071
+        ], 
         "date": 1837, 
         "description": "The Brig \"\"Am\u00e9lia\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Am\u00e9lia\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3050,7 +3048,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2466], 
+        "voyage": [
+            2466
+        ], 
         "date": 1834, 
         "description": "The Brigantine \"\"Clemente\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Clemente\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3067,7 +3067,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2980], 
+        "voyage": [
+            2980
+        ], 
         "date": 1827, 
         "description": "The Brigantine \"\"Crioula\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Crioula\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3084,7 +3086,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3855], 
+        "voyage": [
+            3855
+        ], 
         "date": 1844, 
         "description": "The Brigantine \"\"Cyrus\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Cyrus\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3101,7 +3105,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3073], 
+        "voyage": [
+            3073
+        ], 
         "date": 1837, 
         "description": "The Brigantine \"\"Deixa Falar\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Deixa Falar\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3118,7 +3124,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2385], 
+        "voyage": [
+            2385
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"De Snelheid\"\" or \"\"Enterprize\"\" was captured at \nsea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"De Snelheid\"\". The register \nwas kept as a formal record of emancipation that helped protect the individual from \nsubsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -3135,7 +3143,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2944], 
+        "voyage": [
+            2944
+        ], 
         "date": 1824, 
         "description": "The Brigantine \"\"Diana\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Diana\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3152,7 +3162,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2970], 
+        "voyage": [
+            2970
+        ], 
         "date": 1827, 
         "description": "The Brigantine \"\"Dois Amigos\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Dois Amigos\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -3169,7 +3181,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [963], 
+        "voyage": [
+            963
+        ], 
         "date": 1830, 
         "description": "The Brigantine \"\"Em\u00edlio\"\" or \"\"C\u00e9sar\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Havana under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Em\u00edlio\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3186,7 +3200,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2500], 
+        "voyage": [
+            2500
+        ], 
         "date": 1836, 
         "description": "The Brigantine \"\"Felicia\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Felicia\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3203,7 +3219,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2584], 
+        "voyage": [
+            2584
+        ], 
         "date": 1838, 
         "description": "The Brigantine \"\"Felicidade\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Felicidade\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3220,7 +3238,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [756], 
+        "voyage": [
+            756
+        ], 
         "date": 1828, 
         "description": "The Brigantine \"\"Firme\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Firme\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3237,7 +3257,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2380], 
+        "voyage": [
+            2380
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"Intr\u00e9pida\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Intr\u00e9pida\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3254,7 +3276,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2366], 
+        "voyage": [
+            2366
+        ], 
         "date": 1825, 
         "description": "The Brigantine \"\"Isabel\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Isabel\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3271,7 +3295,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2487], 
+        "voyage": [
+            2487
+        ], 
         "date": 1836, 
         "description": "The Brigantine \"\"Isabella Segunda\"\" or \"\"Cuatra Estrella\"\"  \nwas captured at sea by British cruisers and adjudicated at a court established at Sierra \nLeone under international anti-slave trade treaties. The image is of a picture of the \nfirst page of the court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Isabella \nSegunda\"\". The register was kept as a formal record of emancipation that helped protect the \nindividual from subsequent re-enslavement. The image is reproduced courtesy of the British \nNational Archives.", 
         "language": "en", 
@@ -3288,7 +3314,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3091], 
+        "voyage": [
+            3091
+        ], 
         "date": 1839, 
         "description": "The Brigantine \"\"Jacu\u00ed\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Jacu\u00ed\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3305,7 +3333,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2691], 
+        "voyage": [
+            2691
+        ], 
         "date": 1840, 
         "description": "The Brigantine \"\"Josefina\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Josefina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3322,7 +3352,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2374], 
+        "voyage": [
+            2374
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"M\u00e1gico\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"M\u00e1gico\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3339,7 +3371,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1372], 
+        "voyage": [
+            1372
+        ], 
         "date": 1835, 
         "description": "The Brigantine \"\"Marte\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Marte\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3356,7 +3390,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [777], 
+        "voyage": [
+            777
+        ], 
         "date": 1829, 
         "description": "The Brigantine \"\"Midas\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Midas\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3373,7 +3409,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3067], 
+        "voyage": [
+            3067
+        ], 
         "date": 1836, 
         "description": "The Bringantine \"\"Mindelo\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Mindelo\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3390,7 +3428,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1266], 
+        "voyage": [
+            1266
+        ], 
         "date": 1832, 
         "description": "The Brigantine \"\"Negrito\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Negrito\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -3407,7 +3447,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2957], 
+        "voyage": [
+            2957
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"Netuno\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Netuno\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -3424,7 +3466,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2977], 
+        "voyage": [
+            2977
+        ], 
         "date": 1827, 
         "description": "The Brigantine \"\"NS da Conce\u00e7\u00e3o de Maria\"\" was \ncaptured at sea by British cruisers and adjudicated at a court established at Sierra Leone \nunder international anti-slave trade treaties. The image is of a picture of the first page \nof the court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"NS da Conce\u00e7\u00e3o de Maria\"\". \nThe register was kept as a formal record of emancipation that helped protect the \nindividual from subsequent re-enslavement. The image is reproduced courtesy of the British \nNational Archives.", 
         "language": "en", 
@@ -3441,7 +3485,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [557], 
+        "voyage": [
+            557
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"Orestes\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Orestes\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -3458,7 +3504,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2572], 
+        "voyage": [
+            2572
+        ], 
         "date": 1838, 
         "description": "The Brigantine \"\"Paquete Feliz\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Paquete Feliz\"\". The register \nwas kept as a formal record of emancipation that helped protect the individual from \nsubsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -3475,7 +3523,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2490], 
+        "voyage": [
+            2490
+        ], 
         "date": 1836, 
         "description": "The Brigantine \"\"Seis Hermanos\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Seis Hermanos\"\". The register \nwas kept as a formal record of emancipation that helped protect the individual from \nsubsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -3492,7 +3542,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2479], 
+        "voyage": [
+            2479
+        ], 
         "date": 1835, 
         "description": "The Brigantine \"\"Semiramis\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Semiramis\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3509,7 +3561,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2955], 
+        "voyage": [
+            2955
+        ], 
         "date": 1826, 
         "description": "The Brigantine \"\"S Jo\u00e3o e Segunda Ros\u00e1lia\"\" was \ncaptured at sea by British cruisers and adjudicated at a court established at Sierra Leone \nunder international anti-slave trade treaties. The image is of a picture of the first page \nof the court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"S Jo\u00e3o e Segunda Ros\u00e1lia\"\". \nThe register was kept as a formal record of emancipation that helped protect the \nindividual from subsequent re-enslavement. The image is reproduced courtesy of the British \nNational Archives. ", 
         "language": "en", 
@@ -3526,7 +3580,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2439], 
+        "voyage": [
+            2439
+        ], 
         "date": 1834, 
         "description": "The Brigantine \"\"Vengador\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Vengador\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -3543,7 +3599,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3878], 
+        "voyage": [
+            3878
+        ], 
         "date": 1844, 
         "description": "The Brigantine \"\"Vetereano\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Vetereano\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3560,7 +3618,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2443], 
+        "voyage": [
+            2443
+        ], 
         "date": 1833, 
         "description": "The Brigantine \"\"Virtude\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Virtude\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3577,7 +3637,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2477], 
+        "voyage": [
+            2477
+        ], 
         "date": 1835, 
         "description": "The Brigantine \"\"Volador\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Volador\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3594,7 +3656,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1462], 
+        "voyage": [
+            1462
+        ], 
         "date": 1836, 
         "description": "The Brigantine \"\"Zafiro\"\" or \"\"Ricomar\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Havana under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Zafiro\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -3611,7 +3675,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2480], 
+        "voyage": [
+            2480
+        ], 
         "date": 1835, 
         "description": "The Brig \"\"Argos\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Argos\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3628,7 +3694,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2946], 
+        "voyage": [
+            2946
+        ], 
         "date": 1824, 
         "description": "The Brig \"\"Aviso\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Aviso\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives. ", 
         "language": "en", 
@@ -3645,7 +3713,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2947], 
+        "voyage": [
+            2947
+        ], 
         "date": 1824, 
         "description": "The Brig \"\"Bela Eliza\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Bela Eliza\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -3662,7 +3732,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [34423], 
+        "voyage": [
+            34423
+        ], 
         "date": 1824, 
         "description": "The Brig \"\"Charles\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Charles\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3679,7 +3751,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2999], 
+        "voyage": [
+            2999
+        ], 
         "date": 1828, 
         "description": "The Brig \"\"Clementina\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Clementina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3696,7 +3770,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2931], 
+        "voyage": [
+            2931
+        ], 
         "date": 1822, 
         "description": "The Brig \"\"Comerciante\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Comerciante\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3713,7 +3789,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2945], 
+        "voyage": [
+            2945
+        ], 
         "date": 1824, 
         "description": "The Brig \"\"Dois Amigos Brasileiros\"\" was captured at sea \nby British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Dois Amigos Brasileiros\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -3730,7 +3808,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2603], 
+        "voyage": [
+            2603
+        ], 
         "date": 1838, 
         "description": "The Brig \"\"Empreendedor\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Empreendedor\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3747,7 +3827,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3130], 
+        "voyage": [
+            3130
+        ], 
         "date": 1843, 
         "description": "The Brig \"\"F\u00faria\"\" or \"\"Flor de Luanda\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"F\u00faria\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3764,7 +3846,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3074], 
+        "voyage": [
+            3074
+        ], 
         "date": 1838, 
         "description": "The Brigue \"\"Gratid\u00e3o\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Gratid\u00e3o\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3781,7 +3865,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2856], 
+        "voyage": [
+            2856
+        ], 
         "date": 1828, 
         "description": "The Brig \"\"Henriette\"\" or \"\"Confiance\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Henriette\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3798,7 +3884,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2983], 
+        "voyage": [
+            2983
+        ], 
         "date": 1827, 
         "description": "The Brig \"\"Henriqueta\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Henriqueta\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3815,7 +3903,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2390], 
+        "voyage": [
+            2390
+        ], 
         "date": 1828, 
         "description": "The Brig \"\"Juan\"\" was captured at sea by British cruisers and adjudicated at \na court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Juan\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3832,7 +3922,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2635], 
+        "voyage": [
+            2635
+        ], 
         "date": 1839, 
         "description": "The Schooner \"\"Liberal\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Liberal\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3849,7 +3941,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2841], 
+        "voyage": [
+            2841
+        ], 
         "date": 1827, 
         "description": "The Brig \"\"Lynx\"\" was captured at sea by British cruisers and adjudicated at \na court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Lynx\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3866,7 +3960,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2325], 
+        "voyage": [
+            2325
+        ], 
         "date": 1821, 
         "description": "The Brig \"\"NS de Caridad\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"NS de Caridad\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3883,7 +3979,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2405], 
+        "voyage": [
+            2405
+        ], 
         "date": 1829, 
         "description": "The Brig \"\"Octavio\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Octavio\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3900,7 +3998,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2954], 
+        "voyage": [
+            2954
+        ], 
         "date": 1825, 
         "description": "The Brig \"\"Paquete da Bahia\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Paquete da Bahia\"\". The register was kept \nas a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -3917,7 +4017,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2438], 
+        "voyage": [
+            2438
+        ], 
         "date": 1833, 
         "description": "The Brig \"\"Primo\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"Primo\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3934,7 +4036,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2965], 
+        "voyage": [
+            2965
+        ], 
         "date": 1826, 
         "description": "The Brig \"\"Pr\u00edncipe de Guin\u00e9\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Pr\u00edncipe de Guin\u00e9\"\". The register was kept \nas a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3951,7 +4055,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2981], 
+        "voyage": [
+            2981
+        ], 
         "date": 1827, 
         "description": "The Brig \"\"Silveirinha\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Silveirinha\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -3968,7 +4074,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2444], 
+        "voyage": [
+            2444
+        ], 
         "date": 1834, 
         "description": "The Brig \"\"T\u00e2mega\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Sierra Leone under international anti-slave trade treaties. The \nimage is of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" \ntaken from the \"\"T\u00e2mega\"\". The register was kept as a formal record of emancipation that \nhelped protect the individual from subsequent re-enslavement. The image is reproduced \ncourtesy of the British National Archives.", 
         "language": "en", 
@@ -3985,7 +4093,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3465], 
+        "voyage": [
+            3465
+        ], 
         "date": 1843, 
         "description": "The Brig \"\"Temer\u00e1rio\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Temer\u00e1rio\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4002,7 +4112,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3012], 
+        "voyage": [
+            3012
+        ], 
         "date": 1828, 
         "description": "The Brig \"\"Vingador\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Vingador\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4019,7 +4131,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2969], 
+        "voyage": [
+            2969
+        ], 
         "date": 1827, 
         "description": "The Galera \"\"Invenc\u00edvel\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Invenc\u00edvel\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4036,7 +4150,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1367], 
+        "voyage": [
+            1367
+        ], 
         "date": 1835, 
         "description": "The Galeta \"\"Joven Reina\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Joven Reina\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4053,7 +4169,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1396], 
+        "voyage": [
+            1396
+        ], 
         "date": 1835, 
         "description": "The Goleta \"\"Am\u00e1lia\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Am\u00e1lia\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4070,7 +4188,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1860], 
+        "voyage": [
+            1860
+        ], 
         "date": 1839, 
         "description": "The Goleta \"\"Caridad Cubana\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Havana under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Caridad Cubana\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4087,7 +4207,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1338], 
+        "voyage": [
+            1338
+        ], 
         "date": 1834, 
         "description": "The Goleta \"\"Carlota\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Carlota\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4104,7 +4226,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1403], 
+        "voyage": [
+            1403
+        ], 
         "date": 1835, 
         "description": "The Goleta \"\"Dilig\u00eancia\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Dilig\u00eancia\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4121,7 +4245,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1469], 
+        "voyage": [
+            1469
+        ], 
         "date": 1836, 
         "description": "The Goleta \"\"Empresa\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Empresa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4138,7 +4264,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [558], 
+        "voyage": [
+            558
+        ], 
         "date": 1826, 
         "description": "The Goleta \"\"Fingal\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Fingal\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4155,7 +4283,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [941], 
+        "voyage": [
+            941
+        ], 
         "date": 1829, 
         "description": "The Goleta \"\"Gallito\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Gallito\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4172,7 +4302,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1250], 
+        "voyage": [
+            1250
+        ], 
         "date": 1832, 
         "description": "The Goleta \"\"Indagadora\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Indagadora\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4189,7 +4321,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [668], 
+        "voyage": [
+            668
+        ], 
         "date": 1828, 
         "description": "The Goleta \"\"Intrepido\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Intrepido\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4206,7 +4340,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2071], 
+        "voyage": [
+            2071
+        ], 
         "date": 1840, 
         "description": "The Goleta \"\"Jesus Maria\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Jesus Maria\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -4223,7 +4359,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1295], 
+        "voyage": [
+            1295
+        ], 
         "date": 1833, 
         "description": "The Goleta \"\"Joaquina\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Joaquina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4240,7 +4378,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [770], 
+        "voyage": [
+            770
+        ], 
         "date": 1829, 
         "description": "The Goleta \"\"Josefa\"\" or \"\"Fortuna\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Havana under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Josefa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4257,7 +4397,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1361], 
+        "voyage": [
+            1361
+        ], 
         "date": 1835, 
         "description": "The Goleta \"\"Julita\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Julita\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4274,7 +4416,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1298], 
+        "voyage": [
+            1298
+        ], 
         "date": 1833, 
         "description": "The Goleta \"\"Manuelita\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Manuelita\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4291,7 +4435,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1355], 
+        "voyage": [
+            1355
+        ], 
         "date": 1835, 
         "description": "The Goleta \"\"Maria\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Maria\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4308,7 +4454,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1446], 
+        "voyage": [
+            1446
+        ], 
         "date": 1836, 
         "description": "The Goleta \"\"Ninfa\"\" or \"\"Matanza\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ninfa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4325,7 +4473,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [561], 
+        "voyage": [
+            561
+        ], 
         "date": 1826, 
         "description": "The Goleta \"\"Nuevo Campeador\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Havana under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Nuevo Campeador\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4342,7 +4492,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1245], 
+        "voyage": [
+            1245
+        ], 
         "date": 1832, 
         "description": "The Goleta \"\"Planeta\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Planeta\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4359,7 +4511,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1479], 
+        "voyage": [
+            1479
+        ], 
         "date": 1836, 
         "description": "The Goleta \"\"Preciosa\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Preciosa\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -4376,7 +4530,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2358], 
+        "voyage": [
+            2358
+        ], 
         "date": 1824, 
         "description": "The Goleta \"\"Relampago\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Relampago\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4393,7 +4549,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1307], 
+        "voyage": [
+            1307
+        ], 
         "date": 1834, 
         "description": "The Goleta \"\"Rosa\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Havana under international anti-slave trade treaties. The image \nis of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" taken \nfrom the \"\"Rosa\"\". The register was kept as a formal record of emancipation that helped \nprotect the individual from subsequent re-enslavement. The image is reproduced courtesy of \nthe British National Archives.", 
         "language": "es", 
@@ -4410,7 +4568,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [960], 
+        "voyage": [
+            960
+        ], 
         "date": 1830, 
         "description": "The Goleta \"\"Santiago\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Havana under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Santiago\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "es", 
@@ -4427,7 +4587,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1383], 
+        "voyage": [
+            1383
+        ], 
         "date": 1835, 
         "description": "The Goleta \"\"Tita\"\" was captured at sea by British cruisers and adjudicated \nat a court established at Havana under international anti-slave trade treaties. The image \nis of a picture of the first page of the court\u2019s register of \"\"Liberated Africans\"\" taken \nfrom the \"\"Tita\"\". The register was kept as a formal record of emancipation that helped \nprotect the individual from subsequent re-enslavement. The image is reproduced courtesy of \nthe British National Archives.", 
         "language": "en", 
@@ -4444,7 +4606,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2465], 
+        "voyage": [
+            2465
+        ], 
         "date": 1834, 
         "description": "The Schonner \"\"Indagadora\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Indagadora\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4461,7 +4625,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2488], 
+        "voyage": [
+            2488
+        ], 
         "date": 1836, 
         "description": "The Schonner \"\"Ligera\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ligera\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4478,7 +4644,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3007], 
+        "voyage": [
+            3007
+        ], 
         "date": 1828, 
         "description": "The Schonner \"\"Zeferina\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Zeferina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4495,7 +4663,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2912], 
+        "voyage": [
+            2912
+        ], 
         "date": 1821, 
         "description": "The Schooner \"\"Adelaide\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Adelaide\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4512,7 +4682,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2347], 
+        "voyage": [
+            2347
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Ana\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ana\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4529,7 +4701,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2323], 
+        "voyage": [
+            2323
+        ], 
         "date": 1821, 
         "description": "The Schooner \"\"Ana Maria\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ana Maria\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4546,7 +4720,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2464], 
+        "voyage": [
+            2464
+        ], 
         "date": 1834, 
         "description": "The Schooner \"\"Arrogante Mayag\u00fcesana\"\" was captured at \nsea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Arrogante Mayag\u00fcesana\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives. ", 
         "language": "en", 
@@ -4563,7 +4739,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3009], 
+        "voyage": [
+            3009
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Ars\u00eania\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ars\u00eania\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4580,7 +4758,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2650], 
+        "voyage": [
+            2650
+        ], 
         "date": 1839, 
         "description": "The Schooner \"\"Causalidade\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Causalidade\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -4597,7 +4777,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2489], 
+        "voyage": [
+            2489
+        ], 
         "date": 1836, 
         "description": "The Schooner \"\"Vandolero\"\" or \"\"Estrella\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Vandolero\"\". The register was \nkept as a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4614,7 +4796,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2330], 
+        "voyage": [
+            2330
+        ], 
         "date": 1822, 
         "description": "The Schooner \"\"Vecua\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Vecua\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4631,7 +4815,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2968], 
+        "voyage": [
+            2968
+        ], 
         "date": 1827, 
         "description": "The Schooner \"\"V\u00eanus\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"V\u00eanus\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4648,7 +4834,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2554], 
+        "voyage": [
+            2554
+        ], 
         "date": 1837, 
         "description": "The Schooner \"\"V\u00edbora de Cabo Verde\"\" was captured at sea \nby British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"V\u00edbora de Cabo Verde\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -4665,7 +4853,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2728], 
+        "voyage": [
+            2728
+        ], 
         "date": 1819, 
         "description": "The Schooner \"\"Virginie\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Virginie\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4682,7 +4872,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2529], 
+        "voyage": [
+            2529
+        ], 
         "date": 1836, 
         "description": "The Schooner \"\"Vit\u00f3ria\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Vit\u00f3ria\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4699,7 +4891,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2531], 
+        "voyage": [
+            2531
+        ], 
         "date": 1836, 
         "description": "The Ship \"\"Quato de Abril\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Quato de Abril\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4716,7 +4910,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2918], 
+        "voyage": [
+            2918
+        ], 
         "date": 1822, 
         "description": "The Sloop \"\"Defensora da P\u00e1tria\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Defensora da P\u00e1tria\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -4733,7 +4929,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2758], 
+        "voyage": [
+            2758
+        ], 
         "date": 1822, 
         "description": "The Schooner \"\"Aurora\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Aurora\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4750,7 +4948,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3889], 
+        "voyage": [
+            3889
+        ], 
         "date": 1844, 
         "description": "The Schooner \"\"Aventura\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Aventura\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4767,7 +4967,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2391], 
+        "voyage": [
+            2391
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Campeadora\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Campeadora\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -4784,7 +4986,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2346], 
+        "voyage": [
+            2346
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Clara\"\" or \"\"Clarita\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Clara\"\". The register was kept as a formal \nrecord of emancipation that helped protect the individual from subsequent re-enslavement. \nThe image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4801,7 +5005,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2481], 
+        "voyage": [
+            2481
+        ], 
         "date": 1835, 
         "description": "The Schooner \"\"Conde de los Andes\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Conde de los Andes\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -4818,7 +5024,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2898], 
+        "voyage": [
+            2898
+        ], 
         "date": 1822, 
         "description": "The Schooner \"\"Conde de Vila Flor\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Conde de Vila Flor\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -4835,7 +5043,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2625], 
+        "voyage": [
+            2625
+        ], 
         "date": 1839, 
         "description": "The Schooner \"\"Constitui\u00e7\u00e3o\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Constitui\u00e7\u00e3o\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4852,7 +5062,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2991], 
+        "voyage": [
+            2991
+        ], 
         "date": 1827, 
         "description": "The Schooner \"\"Diana\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Diana\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4886,7 +5098,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3892], 
+        "voyage": [
+            3892
+        ], 
         "date": 1844, 
         "description": "The Schooner \"\"Dilig\u00eancia\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Dilig\u00eancia\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4903,7 +5117,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2586], 
+        "voyage": [
+            2586
+        ], 
         "date": 1838, 
         "description": "The Schooner \"\"Dois Irm\u00e3os\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Dois Irm\u00e3os\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4920,7 +5136,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2601], 
+        "voyage": [
+            2601
+        ], 
         "date": 1838, 
         "description": "The Schooner \"\"Dulcin\u00e9a\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Dulcin\u00e9a\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4937,7 +5155,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2384], 
+        "voyage": [
+            2384
+        ], 
         "date": 1827, 
         "description": "The Schooner \"\"Em\u00edlia\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Em\u00edlia\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -4954,7 +5174,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3884], 
+        "voyage": [
+            3884
+        ], 
         "date": 1844, 
         "description": "The Schooner \"\"Enganador\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Enganador\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -4971,7 +5193,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2333], 
+        "voyage": [
+            2333
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Espa\u00f1ola\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Espa\u00f1ola\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -4988,7 +5212,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2316], 
+        "voyage": [
+            2316
+        ], 
         "date": 1819, 
         "description": "The Schooner \"\"Esperanza\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Esperanza\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.  ", 
         "language": "en", 
@@ -5005,7 +5231,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2315], 
+        "voyage": [
+            2315
+        ], 
         "date": 1819, 
         "description": "The Schooner \"\"Fabiana\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Fabiana\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5022,7 +5250,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2383], 
+        "voyage": [
+            2383
+        ], 
         "date": 1827, 
         "description": "The Schooner \"\"Fama\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Fama\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5039,7 +5269,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2397], 
+        "voyage": [
+            2397
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Fanny\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Fanny\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5056,7 +5288,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2840], 
+        "voyage": [
+            2840
+        ], 
         "date": 1826, 
         "description": "The Schooner \"\"Fortun\u00e9e\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Fortun\u00e9e\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5073,7 +5307,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2320], 
+        "voyage": [
+            2320
+        ], 
         "date": 1820, 
         "description": "The Schooner \"\"Francisco\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Francisco\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5090,7 +5326,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2491], 
+        "voyage": [
+            2491
+        ], 
         "date": 1836, 
         "description": "The Schooner \"\"Gaceta\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Gaceta\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5107,7 +5345,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2387], 
+        "voyage": [
+            2387
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Gertrudes\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Gertrudes\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5124,7 +5364,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3888], 
+        "voyage": [
+            3888
+        ], 
         "date": 1844, 
         "description": "The Schooner \"\"Grande Poder de Deus\"\" was captured at sea \nby British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Grande Poder de Deus\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives. ", 
         "language": "en", 
@@ -5141,7 +5383,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2855], 
+        "voyage": [
+            2855
+        ], 
         "date": 1829, 
         "description": "The Schooner \"\"Hirondelle\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Hirondelle\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5158,7 +5402,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3014], 
+        "voyage": [
+            3014
+        ], 
         "date": 1829, 
         "description": "The Schooner \"\"Hosse\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Hosse\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5175,7 +5421,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2471], 
+        "voyage": [
+            2471
+        ], 
         "date": 1835, 
         "description": "The Schooner \"\"Iberia\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Iberia\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5192,7 +5440,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2368], 
+        "voyage": [
+            2368
+        ], 
         "date": 1826, 
         "description": "The Schooner \"\"Ib\u00e9ria\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ib\u00e9ria\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5209,7 +5459,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2351], 
+        "voyage": [
+            2351
+        ], 
         "date": 1822, 
         "description": "The Schooner \"\"Josefa\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Josefa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5226,7 +5478,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2997], 
+        "voyage": [
+            2997
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Josefina\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Josefina\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5243,7 +5497,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2560], 
+        "voyage": [
+            2560
+        ], 
         "date": 1837, 
         "description": "The Schooner \"\"Ligeira\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Ligeira\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5260,7 +5516,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3021], 
+        "voyage": [
+            3021
+        ], 
         "date": 1829, 
         "description": "The Schooner \"\"Mensageira\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Mensageira\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5277,7 +5535,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2367], 
+        "voyage": [
+            2367
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Ninfa Habanera\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Ninfa Habanera\"\". The register was kept as \na formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5294,7 +5554,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2482], 
+        "voyage": [
+            2482
+        ], 
         "date": 1835, 
         "description": "The Schooner \"\"Norma\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Norma\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5311,7 +5573,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2998], 
+        "voyage": [
+            2998
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"Nova Viagem\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Nova Viagem\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5328,7 +5592,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3011], 
+        "voyage": [
+            3011
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"NS da Concei\u00e7\u00e3o Minerva\"\" was captured \nat sea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"NS da Concei\u00e7\u00e3o Minerva\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5345,7 +5611,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3008], 
+        "voyage": [
+            3008
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"NS da Penha de Fran\u00e7a\"\" was captured at \nsea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"NS da Penha de Fran\u00e7a\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5362,7 +5630,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2314], 
+        "voyage": [
+            2314
+        ], 
         "date": 1819, 
         "description": "The Schooner \"\"NS de Regla\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"NS de Regla\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5379,7 +5649,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2322], 
+        "voyage": [
+            2322
+        ], 
         "date": 1820, 
         "description": "The Schooner \"\"NS do Monserrate\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"NS do Monserrate\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives. ", 
         "language": "en", 
@@ -5396,7 +5668,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2324], 
+        "voyage": [
+            2324
+        ], 
         "date": 1821, 
         "description": "The Schooner \"\"Nueva Virgen\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Nueva Virgen\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5413,7 +5687,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2474], 
+        "voyage": [
+            2474
+        ], 
         "date": 1835, 
         "description": "The Schooner \"\"Numero Dos\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Numero Dos\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5430,7 +5706,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2653], 
+        "voyage": [
+            2653
+        ], 
         "date": 1840, 
         "description": "The Schooner \"\"Olimpa\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Olimpa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5447,7 +5725,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2395], 
+        "voyage": [
+            2395
+        ], 
         "date": 1829, 
         "description": "The Schooner \"\"Panchita\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Panchita\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5464,7 +5744,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2441], 
+        "voyage": [
+            2441
+        ], 
         "date": 1834, 
         "description": "The Schooner \"\"Pantica\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Pantica\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5481,7 +5763,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2382], 
+        "voyage": [
+            2382
+        ], 
         "date": 1827, 
         "description": "The Schooner \"\"Paulita\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Paulita\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5498,7 +5782,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2553], 
+        "voyage": [
+            2553
+        ], 
         "date": 1837, 
         "description": "The Schooner \"\"Primorosa\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Primorosa\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5515,7 +5801,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2580], 
+        "voyage": [
+            2580
+        ], 
         "date": 1837, 
         "description": "The Schooner \"\"Princesa Africana\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Princesa Africana\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5532,7 +5820,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2587], 
+        "voyage": [
+            2587
+        ], 
         "date": 1838, 
         "description": "The Schooner \"\"Prova\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Prova\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5549,7 +5839,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3070], 
+        "voyage": [
+            3070
+        ], 
         "date": 1837, 
         "description": "The Schooner \"\"Provid\u00eancia\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Provid\u00eancia\"\". The register was kept as a \nformal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5566,7 +5858,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2930], 
+        "voyage": [
+            2930
+        ], 
         "date": 1842, 
         "description": "The Schooner \"\"Que Lhe Importa\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Que Lhe Importa\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5583,7 +5877,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2681], 
+        "voyage": [
+            2681
+        ], 
         "date": 1840, 
         "description": "The Schooner \"\"Reglano\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Reglano\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5600,7 +5896,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3006], 
+        "voyage": [
+            3006
+        ], 
         "date": 1828, 
         "description": "The Schooner \"\"S Efig\u00eania\"\" was captured at sea by British cruisers \nand adjudicated at a court established at Sierra Leone under international anti-slave \ntrade treaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"S Efig\u00eania\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5617,7 +5915,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2345], 
+        "voyage": [
+            2345
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Segunda Gallega\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Segunda Gallega\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5634,7 +5934,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2486], 
+        "voyage": [
+            2486
+        ], 
         "date": 1836, 
         "description": "The Schooner \"\"Segunda Iberia\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Segunda Iberia\"\". The register was kept as \na formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5651,7 +5953,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2078], 
+        "voyage": [
+            2078
+        ], 
         "date": 1841, 
         "description": "The Schooner \"\"Segunda Ros\u00e1lia\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Havana under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Segunda Ros\u00e1lia\"\". The register was kept \nas a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -5668,7 +5972,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2435], 
+        "voyage": [
+            2435
+        ], 
         "date": 1833, 
         "description": "The Schooner \"\"Segunda Socorro\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Segunda Socorro\"\". The \nregister was kept as a formal record of emancipation that helped protect the individual \nfrom subsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives.", 
         "language": "en", 
@@ -5685,7 +5991,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2637], 
+        "voyage": [
+            2637
+        ], 
         "date": 1839, 
         "description": "The Schooner \"\"Sete de Abril\"\" or \"\"Mary Cushing\"\" was captured at \nsea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Sete de Abril\"\". The register \nwas kept as a formal record of emancipation that helped protect the individual from \nsubsequent re-enslavement. The image is reproduced courtesy of the British National \nArchives. ", 
         "language": "en", 
@@ -5702,7 +6010,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [1856], 
+        "voyage": [
+            1856
+        ], 
         "date": 1839, 
         "description": "The Schooner \"\"Sierra del Pilar\"\" was captured at sea by \nBritish cruisers and adjudicated at a court established at Havana under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"Sierra del Pilar\"\". The register was kept \nas a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives. ", 
         "language": "es", 
@@ -5719,7 +6029,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [3048], 
+        "voyage": [
+            3048
+        ], 
         "date": 1835, 
         "description": "The Schooner \"\"Teresa\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Teresa\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5736,7 +6048,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2953], 
+        "voyage": [
+            2953
+        ], 
         "date": 1825, 
         "description": "The Schooner \"\"Uni\u00e3o\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Uni\u00e3o\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives. ", 
         "language": "en", 
@@ -5753,7 +6067,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2952], 
+        "voyage": [
+            2952
+        ], 
         "date": 1825, 
         "description": "The Sumaca \"\"Bom Jesus dos Navegantes\"\" was captured at \nsea by British cruisers and adjudicated at a court established at Sierra Leone under \ninternational anti-slave trade treaties. The image is of a picture of the first page of \nthe court\u2019s register of \"\"Liberated Africans\"\" taken from the \"\"Bom Jesus dos Navegantes\"\". \nThe register was kept as a formal record of emancipation that helped protect the \nindividual from subsequent re-enslavement. The image is reproduced courtesy of the British \nNational Archives.", 
         "language": "en", 
@@ -5770,7 +6086,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2948], 
+        "voyage": [
+            2948
+        ], 
         "date": 1825, 
         "description": "The Sumaca \"\"Bonfim\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Bonfim\"\". The register was kept as a formal record of \nemancipation that helped protect the individual from subsequent re-enslavement. The image \nis reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5787,7 +6105,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2920], 
+        "voyage": [
+            2920
+        ], 
         "date": 1822, 
         "description": "The Sumaca \"\"Esperan\u00e7a\"\" was captured at sea by British cruisers and \nadjudicated at a court established at Sierra Leone under international anti-slave trade \ntreaties. The image is of a picture of the first page of the court\u2019s register of \n\"\"Liberated Africans\"\" taken from the \"\"Esperan\u00e7a\"\". The register was kept as a formal record \nof emancipation that helped protect the individual from subsequent re-enslavement. The \nimage is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5804,7 +6124,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [2915], 
+        "voyage": [
+            2915
+        ], 
         "date": 1822, 
         "description": "The Sumaca \"\"NS da Concei\u00e7\u00e3o\"\" was captured at sea by British \ncruisers and adjudicated at a court established at Sierra Leone under international \nanti-slave trade treaties. The image is of a picture of the first page of the court\u2019s \nregister of \"\"Liberated Africans\"\" taken from the \"\"NS da Concei\u00e7\u00e3o\"\". The register was kept \nas a formal record of emancipation that helped protect the individual from subsequent \nre-enslavement. The image is reproduced courtesy of the British National Archives.", 
         "language": "en", 
@@ -5821,7 +6143,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 56, 
-        "voyage": [41890], 
+        "voyage": [
+            41890
+        ], 
         "date": 1873, 
         "description": "Catherine Zimmermann-Mulgrave, the third person from the left, was a survivor of \na slave voyage from Africa. She sailed in the slave vessel \"\"Heroina\"\". In 1833, the \n\"\"Heroina\"\" embarked slaves in Angola, on the West-Central African coast, and set sail to \nCuba, but wrecked off the coast of Jamaica. She escaped from the wreck, along with other \nslaves, and received the western name of Catherine Mulgrave after the Governor of Jamaica \nat the time, the Earl of Mulgrave. The image shows a picture of the Zimmermann-Mulgrave \nfamily made in an unknown studio. Catherine married Mr. Johannes Zimmermann in 1851, after \ndivorcing Mr. Georg Peter Thompson, in 1849, with whom she had two children, Rosie and \nGeorg Thompson. Copies of this image are held by the archives of mission 21, Basel, \nSwitzerland, and by the archives of the city of Gerlingen, Baden-W\u00fcrttemberg, Germany.", 
         "language": "  ", 
@@ -5906,7 +6230,9 @@
     "model": "resources.image", 
     "fields": {
         "category": 60, 
-        "voyage": [4974], 
+        "voyage": [
+            4974
+        ], 
         "date": 1858, 
         "description": "The yacht \"\"Wanderer\"\" was one of the last vessels to disembark slaves in the United States \nof America. It sailed from New York, in June of 1858, towards the Caribbean Sea, from \nwhere it crossed the Atlantic to Africa, and arrived in Savannah, Georgia, later that \nyear. The image shows a page of the \"\"Wanderer\u2019s\"\" logbook. This page indicates the first \ntime that the yacht touched the African coast. According to the logbook, the \"\"Wanderer\"\" \narrived first at the Congo River, but later sailed southwards to Benguela. Other sources \nindicate that the yacht embarked slaves at Ambriz, on the Angolan coast, but the logbook \nprovides no further information on the voyage after the \"\"Wanderer\"\" arrived at Benguela. \nThe image is reproduced courtesy of the Manuscript, Archives and Rare Book Library, Emory \nUniversity.", 
         "language": "en", 
@@ -5916,6 +6242,60 @@
         "ready_to_go": true, 
         "file": "images/196E5FE3303B6EA2D9CCDAE1EEA20786.JPG", 
         "order_num": 0
+    }
+},
+{
+    "pk": 55, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 1, 
+        "label": "Vessels"
+    }
+},
+{
+    "pk": 56, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 2, 
+        "label": "Slaves"
+    }
+},
+{
+    "pk": 57, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 99, 
+        "label": "Presentation"
+    }
+},
+{
+    "pk": 58, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 100, 
+        "label": "Ports updated"
+    }
+},
+{
+    "pk": 59, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 3, 
+        "label": "Places"
+    }
+},
+{
+    "pk": 60, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 4, 
+        "label": "Manuscripts"
     }
 }
 ]
