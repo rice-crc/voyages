@@ -1,0 +1,1226 @@
+[
+{
+    "pk": 1, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 1, 
+        "label": "Spanish, pre-1626"
+    }
+},
+{
+    "pk": 2, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 2, 
+        "label": "Spanish, 1626-41"
+    }
+},
+{
+    "pk": 3, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 3, 
+        "label": "French, pre1716"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 4, 
+        "label": "Pernambuco, pre-1701"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 5, 
+        "label": "Pernambuco, 1701-1800"
+    }
+},
+{
+    "pk": 6, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 6, 
+        "label": "Pernambuco, post-1800"
+    }
+},
+{
+    "pk": 7, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 7, 
+        "label": "Dutch, pre-1650"
+    }
+},
+{
+    "pk": 8, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 8, 
+        "label": "Dutch, 1650-73"
+    }
+},
+{
+    "pk": 9, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 9, 
+        "label": "Dutch, 1674-1730"
+    }
+},
+{
+    "pk": 10, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 10, 
+        "label": "Dutch, post-1730"
+    }
+},
+{
+    "pk": 11, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 11, 
+        "label": "Bahia, pre-1751"
+    }
+},
+{
+    "pk": 12, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 14, 
+        "label": "Bahia, 1801-25"
+    }
+},
+{
+    "pk": 13, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 15, 
+        "label": "Bahia, post-1825"
+    }
+},
+{
+    "pk": 14, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 16, 
+        "label": "Spanish, 1642-62"
+    }
+},
+{
+    "pk": 15, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 17, 
+        "label": "Brig, pre-1751"
+    }
+},
+{
+    "pk": 16, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 18, 
+        "label": "Brig, 1776-1800"
+    }
+},
+{
+    "pk": 17, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 19, 
+        "label": "Brig, 1801-25"
+    }
+},
+{
+    "pk": 18, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 20, 
+        "label": "Brig, 1826-50"
+    }
+},
+{
+    "pk": 19, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 21, 
+        "label": "Brig, post-1850"
+    }
+},
+{
+    "pk": 20, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 22, 
+        "label": "Schooner, pre-1776"
+    }
+},
+{
+    "pk": 21, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 23, 
+        "label": "Schooner, 1776-1800"
+    }
+},
+{
+    "pk": 22, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 24, 
+        "label": "Schooner, 1801-25"
+    }
+},
+{
+    "pk": 23, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 25, 
+        "label": "Schooner, 1826-50"
+    }
+},
+{
+    "pk": 24, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 26, 
+        "label": "Schooner, 1851-66"
+    }
+},
+{
+    "pk": 25, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 27, 
+        "label": "Curveta, pre-1751"
+    }
+},
+{
+    "pk": 26, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 28, 
+        "label": "Curveta, 1751-75"
+    }
+},
+{
+    "pk": 27, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 29, 
+        "label": "Curveta, 1776-1800"
+    }
+},
+{
+    "pk": 28, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 30, 
+        "label": "Curveta, post-1800"
+    }
+},
+{
+    "pk": 29, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 31, 
+        "label": "Ship, pre1726"
+    }
+},
+{
+    "pk": 30, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 32, 
+        "label": "Ship, 1726-50"
+    }
+},
+{
+    "pk": 31, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 33, 
+        "label": "Ship, 1751-75"
+    }
+},
+{
+    "pk": 32, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 34, 
+        "label": "Ship, 1776-1800"
+    }
+},
+{
+    "pk": 33, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 35, 
+        "label": "Ship, 1801-25"
+    }
+},
+{
+    "pk": 34, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 36, 
+        "label": "Ship, 1826-1850"
+    }
+},
+{
+    "pk": 35, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 37, 
+        "label": "Ship, post-1850"
+    }
+},
+{
+    "pk": 36, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 38, 
+        "label": "Schooner-brig"
+    }
+},
+{
+    "pk": 37, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 39, 
+        "label": "Smack"
+    }
+},
+{
+    "pk": 38, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 40, 
+        "label": "Patacho"
+    }
+},
+{
+    "pk": 39, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 41, 
+        "label": "Brigantine, pre-1776"
+    }
+},
+{
+    "pk": 40, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 42, 
+        "label": "Brigantine, 1776-1800"
+    }
+},
+{
+    "pk": 41, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 43, 
+        "label": "Brigantine, 1801-25"
+    }
+},
+{
+    "pk": 42, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 44, 
+        "label": "Brigantine, 1825-50"
+    }
+},
+{
+    "pk": 43, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 45, 
+        "label": "Brigantine, post-1850"
+    }
+},
+{
+    "pk": 44, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 46, 
+        "label": "Barque, pre-1826"
+    }
+},
+{
+    "pk": 45, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 47, 
+        "label": "Barque, 1826-50"
+    }
+},
+{
+    "pk": 46, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 48, 
+        "label": "Barque, 1851-75"
+    }
+},
+{
+    "pk": 47, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 49, 
+        "label": "Polacca"
+    }
+},
+{
+    "pk": 48, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 50, 
+        "label": "Pilot"
+    }
+},
+{
+    "pk": 49, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 51, 
+        "label": "Sumaca, pre-1751"
+    }
+},
+{
+    "pk": 50, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 52, 
+        "label": "Sumaca, 1751-76"
+    }
+},
+{
+    "pk": 51, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 53, 
+        "label": "Sumaca, 1776-1800"
+    }
+},
+{
+    "pk": 52, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 54, 
+        "label": "Sumaca, 1800-25"
+    }
+},
+{
+    "pk": 53, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 55, 
+        "label": "Sumaca, 1826-66"
+    }
+},
+{
+    "pk": 54, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 56, 
+        "label": "Felucca"
+    }
+},
+{
+    "pk": 55, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 57, 
+        "label": "Barqua"
+    }
+},
+{
+    "pk": 56, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 58, 
+        "label": "Navio Mercante"
+    }
+},
+{
+    "pk": 57, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 59, 
+        "label": "Chalupa"
+    }
+},
+{
+    "pk": 58, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 60, 
+        "label": "Galera, pre-1751"
+    }
+},
+{
+    "pk": 59, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 61, 
+        "label": "Galera,1751-76"
+    }
+},
+{
+    "pk": 60, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 62, 
+        "label": "Galera, 1776-1800"
+    }
+},
+{
+    "pk": 61, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 63, 
+        "label": "Galera, 1801-25"
+    }
+},
+{
+    "pk": 62, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 64, 
+        "label": "Galera, post-1850"
+    }
+},
+{
+    "pk": 63, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 65, 
+        "label": "Sloop, pre-1751"
+    }
+},
+{
+    "pk": 64, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 66, 
+        "label": "Sloop, 1751-76"
+    }
+},
+{
+    "pk": 65, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 67, 
+        "label": "Sloop, 1776-1800"
+    }
+},
+{
+    "pk": 66, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 68, 
+        "label": "Sloop, post-1800"
+    }
+},
+{
+    "pk": 67, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 69, 
+        "label": "Steamer"
+    }
+},
+{
+    "pk": 68, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 70, 
+        "label": "Fregata, pre-1726"
+    }
+},
+{
+    "pk": 69, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 71, 
+        "label": "Fregata, 1726-75"
+    }
+},
+{
+    "pk": 70, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 73, 
+        "label": "Fluit"
+    }
+},
+{
+    "pk": 71, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 74, 
+        "label": "Snow, pre-1726"
+    }
+},
+{
+    "pk": 72, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 75, 
+        "label": "Snow, 1726-50"
+    }
+},
+{
+    "pk": 73, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 76, 
+        "label": "Snow, 1751-75"
+    }
+},
+{
+    "pk": 74, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 77, 
+        "label": "Snow, 1776-1800"
+    }
+},
+{
+    "pk": 75, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 78, 
+        "label": "Snow, post-1800"
+    }
+},
+{
+    "pk": 76, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 79, 
+        "label": "Bergantine, pre-1776"
+    }
+},
+{
+    "pk": 77, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 80, 
+        "label": "Bergantine, 1776-1800"
+    }
+},
+{
+    "pk": 78, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 81, 
+        "label": "Bergantine, 1801-25"
+    }
+},
+{
+    "pk": 79, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 82, 
+        "label": "Bergantine, 1826-75"
+    }
+},
+{
+    "pk": 80, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 83, 
+        "label": "Penque"
+    }
+},
+{
+    "pk": 81, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 84, 
+        "label": "Charrua"
+    }
+},
+{
+    "pk": 82, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 85, 
+        "label": "Fregata, post-1800"
+    }
+},
+{
+    "pk": 83, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 86, 
+        "label": "Balandra"
+    }
+},
+{
+    "pk": 84, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 87, 
+        "label": "Paquete"
+    }
+},
+{
+    "pk": 85, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 88, 
+        "label": "Iate, pre-1826"
+    }
+},
+{
+    "pk": 86, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 89, 
+        "label": "Iate, post-1825"
+    }
+},
+{
+    "pk": 87, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 90, 
+        "label": "Galeta, -pre1826"
+    }
+},
+{
+    "pk": 88, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 91, 
+        "label": "Galeta, 1826-50"
+    }
+},
+{
+    "pk": 89, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 92, 
+        "label": "Galeta, 1851-75"
+    }
+},
+{
+    "pk": 90, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 93, 
+        "label": "Small craft"
+    }
+},
+{
+    "pk": 91, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 94, 
+        "label": "Buque, pre-1726"
+    }
+},
+{
+    "pk": 92, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 95, 
+        "label": "Buque, 1726-1825"
+    }
+},
+{
+    "pk": 93, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 97, 
+        "label": "Fregata, 1776-1800"
+    }
+},
+{
+    "pk": 94, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 98, 
+        "label": "Brig, 1751-75"
+    }
+},
+{
+    "pk": 95, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 99, 
+        "label": "North America, pre-1851"
+    }
+},
+{
+    "pk": 96, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 101, 
+        "label": "Senegambia, pre-1701"
+    }
+},
+{
+    "pk": 97, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 102, 
+        "label": "Senegambia, 1701-1800"
+    }
+},
+{
+    "pk": 98, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 103, 
+        "label": "Senegambia, post-1800"
+    }
+},
+{
+    "pk": 99, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 104, 
+        "label": "Sierra Leone, pre-1701"
+    }
+},
+{
+    "pk": 100, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 105, 
+        "label": "Sierra Leone, 1701-1800"
+    }
+},
+{
+    "pk": 101, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 106, 
+        "label": "Sierra Leone, post-1800"
+    }
+},
+{
+    "pk": 102, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 107, 
+        "label": "Gold Coast, pre-1701"
+    }
+},
+{
+    "pk": 103, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 108, 
+        "label": "Gold Coast, post-1700"
+    }
+},
+{
+    "pk": 104, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 110, 
+        "label": "B. of Benin, pre-1700"
+    }
+},
+{
+    "pk": 105, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 111, 
+        "label": "B. of Benin, 1700-1800"
+    }
+},
+{
+    "pk": 106, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 112, 
+        "label": "B. of Benin, post-1800"
+    }
+},
+{
+    "pk": 107, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 113, 
+        "label": "B. of Biafra, pre-1700"
+    }
+},
+{
+    "pk": 108, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 114, 
+        "label": "B. of Biafra, 1700-1800"
+    }
+},
+{
+    "pk": 109, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 115, 
+        "label": "B. of Biafra, post-1800"
+    }
+},
+{
+    "pk": 110, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 116, 
+        "label": "WC Africa, pre-1701"
+    }
+},
+{
+    "pk": 111, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 117, 
+        "label": "WC Africa, 1701-1800"
+    }
+},
+{
+    "pk": 112, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 118, 
+        "label": "WC Africa, post-1800"
+    }
+},
+{
+    "pk": 113, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 120, 
+        "label": "Windward Coast"
+    }
+},
+{
+    "pk": 114, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 122, 
+        "label": "SE. Africa, pre-1701"
+    }
+},
+{
+    "pk": 115, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 123, 
+        "label": "SE. Africa, 1701-1800"
+    }
+},
+{
+    "pk": 116, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 124, 
+        "label": "SE. Africa, post-1800"
+    }
+},
+{
+    "pk": 117, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 128, 
+        "label": "No rig, 1651-75"
+    }
+},
+{
+    "pk": 118, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 129, 
+        "label": "No rig, 1676-1700"
+    }
+},
+{
+    "pk": 119, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 130, 
+        "label": "No rig, 1701-25"
+    }
+},
+{
+    "pk": 120, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 131, 
+        "label": "No rig, 1726-50"
+    }
+},
+{
+    "pk": 121, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 132, 
+        "label": "No rig, 1751-75"
+    }
+},
+{
+    "pk": 122, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 133, 
+        "label": "No rig, 1776-1800"
+    }
+},
+{
+    "pk": 123, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 134, 
+        "label": "No rig, 1801-25"
+    }
+},
+{
+    "pk": 124, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 135, 
+        "label": "No rig, 1826-50"
+    }
+},
+{
+    "pk": 125, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 136, 
+        "label": "No rig, 1851-66"
+    }
+},
+{
+    "pk": 126, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 137, 
+        "label": "US brig, pre-1776"
+    }
+},
+{
+    "pk": 127, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 138, 
+        "label": "US brig, 1776-1800"
+    }
+},
+{
+    "pk": 128, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 139, 
+        "label": "US brig, 1801-25"
+    }
+},
+{
+    "pk": 129, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 140, 
+        "label": "US brig, post-1825"
+    }
+},
+{
+    "pk": 130, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 141, 
+        "label": "US schooner, pre-1776"
+    }
+},
+{
+    "pk": 131, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 142, 
+        "label": "US schooner, 1776-1800"
+    }
+},
+{
+    "pk": 132, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 143, 
+        "label": "US schooner, 1801-25"
+    }
+},
+{
+    "pk": 133, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 145, 
+        "label": "US schooner, post-1825"
+    }
+},
+{
+    "pk": 134, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 146, 
+        "label": "US ship, pre-1776"
+    }
+},
+{
+    "pk": 135, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 147, 
+        "label": "US ship, 1776-1800"
+    }
+},
+{
+    "pk": 136, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 148, 
+        "label": "US ship, 1801-25"
+    }
+},
+{
+    "pk": 137, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 149, 
+        "label": "US ship, post-1825"
+    }
+},
+{
+    "pk": 138, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 150, 
+        "label": "US brigantine, pre-1776"
+    }
+},
+{
+    "pk": 139, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 151, 
+        "label": "US brigantine, 1776-1825"
+    }
+},
+{
+    "pk": 140, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 152, 
+        "label": "US brigantine, post-1825"
+    }
+},
+{
+    "pk": 141, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 154, 
+        "label": "US barque"
+    }
+},
+{
+    "pk": 142, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 155, 
+        "label": "US sloop"
+    }
+},
+{
+    "pk": 143, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 156, 
+        "label": "US snow"
+    }
+},
+{
+    "pk": 144, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 157, 
+        "label": "Danish, pre-1794"
+    }
+},
+{
+    "pk": 145, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 159, 
+        "label": "Danish, 1794-1806"
+    }
+},
+{
+    "pk": 146, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 199, 
+        "label": "Other (specify in note)"
+    }
+},
+{
+    "pk": 147, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 12, 
+        "label": "group12"
+    }
+},
+{
+    "pk": 148, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 13, 
+        "label": "group13"
+    }
+},
+{
+    "pk": 149, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 72, 
+        "label": "group72"
+    }
+},
+{
+    "pk": 150, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 96, 
+        "label": "group96"
+    }
+},
+{
+    "pk": 151, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 100, 
+        "label": "group100"
+    }
+},
+{
+    "pk": 152, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 121, 
+        "label": "group121"
+    }
+},
+{
+    "pk": 153, 
+    "model": "voyage.voyagegroupings", 
+    "fields": {
+        "value": 127, 
+        "label": "group127"
+    }
+}
+]

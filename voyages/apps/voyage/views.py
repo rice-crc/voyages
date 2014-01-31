@@ -1443,18 +1443,18 @@ def download_results(request, page):
         writer.writerow([extract_query_for_download(query_dict, []), ])
 
     tmpRow = []
-    for column in display_columns:
-        tmpRow.append(get_spss_name(column[0]))
+    for column in globals.general_variables:
+        tmpRow.append(column['spss_name'])
     writer.writerow(tmpRow)
 
     for item in results:
         tmpRow = []
         stored_fields = item.get_stored_fields()
-        for column in display_columns:
-            data = stored_fields[column[0]]
+        for column in [x['var_name'] for x in globals.general_variables]:
+            data = stored_fields[column]
             if data is None:
                 tmpRow.append("")
-            elif isinstance(data, (int, long)):
+            elif isinstance(data, (int, long, float)):
                 tmpRow.append(str(data))
             else:
                 tmpRow.append(data.encode("utf-8"))
