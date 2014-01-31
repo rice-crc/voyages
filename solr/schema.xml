@@ -310,7 +310,7 @@
 
     <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_port_of_call_before_atl_crossing" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_port_of_call_before_atl_crossing" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -320,7 +320,7 @@
 
     <field name="var_crew_voyage_outset" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_principal_port_slave_dis" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_port_slave_dis" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
