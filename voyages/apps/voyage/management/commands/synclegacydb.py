@@ -229,7 +229,7 @@ class Command(BaseCommand):
                         tmp = i.dateleftafr
                         # MM,DD,YYYY
                         date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
-                    elif i.dlslatrc or i.dlslatrb or i.dlslatra:
+                    elif i.dlslatrc:
                         date_info.date_departed_africa = mk_date(i.dlslatra, i.dlslatrb, i.dlslatrc)
                     date_info.save()
                     voyageObj.voyage_dates = date_info
