@@ -380,6 +380,8 @@ class Command(BaseCommand):
                     characteristics.total_slaves_dept_or_arr_gender_identified = i.slavemx7
                     characteristics.imp_slaves_embarked_for_mortality = i.tslmtimp
 
+                    characteristics.imp_mortality_ratio = i.vymrtrat
+
                     characteristics.percentage_men = i.menrat7
                     characteristics.percentage_women = i.womrat7
                     characteristics.percentage_boy = i.boyrat7
