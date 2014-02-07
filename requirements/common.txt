@@ -12,3 +12,4 @@ sorl-thumbnail
 PIL
 bitly_api
 psycopg2
+xlwt
