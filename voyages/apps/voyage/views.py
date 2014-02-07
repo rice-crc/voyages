@@ -21,6 +21,7 @@ import globals
 import bitly_api
 import requests
 import json
+from xlwt import Workbook
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -1377,17 +1378,18 @@ def extract_places(string):
         return places_list[0] + ", " + places_list[1], places_list[2]
 
 
+# Writes an excel file
 def download_results(request, page):
     """
-    Renders a downloadable csv file
+    Renders a downloadable excel file
     page indicates the current page the user is on
     page = -1 indicates download all results
     :param request:
     :param page:
     :return:
     """
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="data.xls"'
 
     try:
         query_dict = request.session['voyage_last_query']
@@ -1396,8 +1398,8 @@ def download_results(request, page):
         query_dict = None
         display_columns = get_new_visible_attrs(globals.default_result_columns)
 
-    #writer = UnicodeWriter(response, quoting=csv.QUOTE_ALL, encoding="utf-8-sig")
-    writer = csv.writer(response)
+    wb = Workbook(encoding='utf-8')
+    ws = wb.add_sheet("data")
 
     if page == "-1":
         # Download all results
@@ -1424,33 +1426,25 @@ def download_results(request, page):
 
     # Writing query
     if query_dict is None:
-    #    results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        writer.writerow(['All records', ])
+        ws.write(0,0,label='All records')
     else:
-    #    results = SearchQuerySet().models(Voyage).filter(**query_dict)
-    #    if request.session['voyage_last_query_date_filters']:
-    #        results = date_filter_query(request.session['voyage_last_query_date_filters'], results)
-        writer.writerow([extract_query_for_download(query_dict, []), ])
+        ws.write(0,0,label=extract_query_for_download(query_dict, []))
 
-    tmpRow = []
-    for column in globals.general_variables:
-        tmpRow.append(column['spss_name'])
-    writer.writerow(tmpRow)
+    for idx, column in enumerate(globals.general_variables):
+        ws.write(1,idx,label=column['spss_name'])
 
-    for item in results:
-        tmpRow = []
+    for idx, item in enumerate(results):
         stored_fields = item.get_stored_fields()
-        for column in [x['var_name'] for x in globals.general_variables]:
+        for idy, column in enumerate([x['var_name'] for x in globals.general_variables]):
             data = stored_fields[column]
             if data is None:
-                tmpRow.append("")
+                ws.write(idx+2,idy,label="")
             elif isinstance(data, (int, long, float)):
-                tmpRow.append(str(data))
+                ws.write(idx+2,idy,label=data)
             else:
-                tmpRow.append(data.encode("utf-8"))
-        writer.writerow(tmpRow)
+                ws.write(idx+2,idy,label=data.encode("utf-8"))
 
-    writer.writerow(["The number of total records: " + str(len(results))])
+    wb.save(response)
 
     return response
 
