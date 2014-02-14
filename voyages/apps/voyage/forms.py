@@ -9,6 +9,20 @@ class UploadFileForm(forms.Form):
     downloadfile = forms.FileField(label='Select your file')
 
 
+class VoyageMultiSelectField(forms.TypedMultipleChoiceField):
+    """Form to contain layered multiple choice list"""
+    items = []
+
+class VoyageMultiSelectItem():
+    """An item in a tiered multiple choice list such as for locations"""
+    def is_leaf(self):
+        return len(self.items) == 0
+    def is_selected(self):
+        # Do mapreduce on list
+        
+    
+
+
 # Voyage
 # Ship, Nation, Owners
 class VoyageShipForm(forms.ModelForm):
