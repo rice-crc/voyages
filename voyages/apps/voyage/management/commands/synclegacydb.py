@@ -169,7 +169,7 @@ class Command(BaseCommand):
                     if i.mjbyptimp:
                         itinerary.imp_principal_place_of_slave_purchase = models.Place.objects.get(value=i.mjbyptimp.id)
                     if i.majbyimp:
-                        itinerary.imp_principle_region_of_slave_purchase = models.Region.objects.get(value=i.majbyimp.id)
+                        itinerary.imp_principal_region_of_slave_purchase = models.Region.objects.get(value=i.majbyimp.id)
                     if i.majbyimp1:
                         itinerary.imp_broad_region_of_slave_purchase = models.BroadRegion.objects.get(value=i.majbyimp1)
                     if i.majselpt:
