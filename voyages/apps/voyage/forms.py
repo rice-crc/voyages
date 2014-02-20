@@ -9,19 +9,9 @@ class UploadFileForm(forms.Form):
     downloadfile = forms.FileField(label='Select your file')
 
 
-class VoyageMultiSelectField(forms.TypedMultipleChoiceField):
-    """Form to contain layered multiple choice list"""
-    items = []
-
-class VoyageMultiSelectItem():
-    """An item in a tiered multiple choice list such as for locations"""
-    def is_leaf(self):
-        return len(self.items) == 0
-    def is_selected(self):
-        # Do mapreduce on list
-        
     
-
+class VoyageBaseForm(forms.Form):
+    is_shown_field = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput())
 
 # Voyage
 # Ship, Nation, Owners
@@ -123,14 +113,14 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
         model = VoyageSources
 
 
-class SimpleTextForm(forms.Form):
+class SimpleTextForm(VoyageBaseForm):
     """
     Simple one field form to perform text search
     """
     text_search = forms.CharField(widget=forms.TextInput(attrs={'class': "query-builder-text"}))
 
 
-class SimpleNumericSearchForm(forms.Form):
+class SimpleNumericSearchForm(VoyageBaseForm):
     """
     Simple numeric search form
     """
@@ -143,7 +133,7 @@ class SimpleNumericSearchForm(forms.Form):
     upper_bound = forms.IntegerField(required=False, widget=forms.TextInput(attrs={'class': "short_field"}))
 
 
-class SimpleDateSearchForm(forms.Form):
+class SimpleDateSearchForm(VoyageBaseForm):
     """
     Simple date search form
     """
@@ -165,7 +155,7 @@ class SimpleDateSearchForm(forms.Form):
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
 
-class SimpleSelectSearchForm(forms.Form):
+class SimpleSelectSearchForm(VoyageBaseForm):
     """
     Simple checkbox search form
     """
@@ -178,7 +168,7 @@ class SimpleSelectSearchForm(forms.Form):
         self.fields['choice_field'].choices = listChoices
 
 
-class SimpleSelectBooleanForm(forms.Form):
+class SimpleSelectBooleanForm(VoyageBaseForm):
     BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
 
     choice_field = forms.MultipleChoiceField(
@@ -186,7 +176,7 @@ class SimpleSelectBooleanForm(forms.Form):
         choices=BOOLEAN_CHOICES)
 
 
-class TimeFrameSpanSearchForm(forms.Form):
+class TimeFrameSpanSearchForm(VoyageBaseForm):
     frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
     frame_to_year = forms.IntegerField(label="To", widget=forms.TextInput(
