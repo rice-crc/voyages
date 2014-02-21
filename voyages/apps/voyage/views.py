@@ -174,6 +174,7 @@ def create_query_forms():
         else:
             pass
         form.fields['var_name_field'].initial = varname
+        print dir(form.fields['var_name_field'])
         elem = {}
         elem['var_name'] = varname
         elem['var_full_name'] = var['var_full_name']
@@ -193,7 +194,7 @@ def retrieve_post_search_forms(post):
         if varname in globals.list_text_fields:
             form = SimpleTextForm(post, prefix=varname)
         elif varname in globals.list_select_fields:
-            form = SimpleSelectSearchForm(post, prefix=varname)
+            form = SimpleSelectSearchForm(data=post, listChoices=getChoices(varname), prefix=varname)
             form.fields['choice_field'].choices = getChoices(varname)
             #print dir(form)
         elif varname in globals.list_numeric_fields:
