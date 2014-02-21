@@ -2,7 +2,7 @@ from django import forms
 import autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
-
+import globals
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
@@ -11,7 +11,12 @@ class UploadFileForm(forms.Form):
 
     
 class VoyageBaseForm(forms.Form):
-    is_shown_field = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput())
+    # Use a char field to keep track of the order of shown forms. Hide it because it is irrelavent to the user.
+    # If not shown use empty string, if shown use a number, higher numbers will be shown further down.
+    # This is used mostly if not solely in the javascript code
+    
+    is_shown_field = forms.CharField(required=False, widget=forms.HiddenInput())
+    var_name_field = forms.CharField(required=True, widget=forms.HiddenInput())
 
 # Voyage
 # Ship, Nation, Owners
@@ -117,13 +122,15 @@ class SimpleTextForm(VoyageBaseForm):
     """
     Simple one field form to perform text search
     """
-    text_search = forms.CharField(widget=forms.TextInput(attrs={'class': "query-builder-text"}))
+    text_search = forms.CharField(widget=forms.TextInput(attrs={'class': "query-builder-text"}), label="")
+    type_str = "plain_text"
 
 
 class SimpleNumericSearchForm(VoyageBaseForm):
     """
     Simple numeric search form
     """
+    type_str = "numeric"
     OPERATORS = (('1', 'Between'), ('2', 'At most'), ('3', 'At least'), ('4', 'Is equal to'))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
@@ -137,6 +144,8 @@ class SimpleDateSearchForm(VoyageBaseForm):
     """
     Simple date search form
     """
+    type_str = "date"
+    list_months = globals.list_months
     OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
@@ -159,24 +168,26 @@ class SimpleSelectSearchForm(VoyageBaseForm):
     """
     Simple checkbox search form
     """
+    type_str = "select"
     INIT_CHOICES = (('1', 'Yes'), ('2', 'No'))
     choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'})
                                              , choices=INIT_CHOICES)
-
     def __init__(self, listChoices, *args, **kwargs):
         super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
         self.fields['choice_field'].choices = listChoices
 
+class SimplePlaceSearchForm(SimpleSelectSearchForm):
+    type_str = "select_three_layers"
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
     BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
-
+    type_str = "boolean"
     choice_field = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
         choices=BOOLEAN_CHOICES)
 
 
-class TimeFrameSpanSearchForm(VoyageBaseForm):
+class TimeFrameSpanSearchForm(forms.Form):
     frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
     frame_to_year = forms.IntegerField(label="To", widget=forms.TextInput(
