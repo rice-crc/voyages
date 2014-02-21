@@ -137,15 +137,16 @@ function shortenURL(){
         </div>
 
         <div class="box-mid-end">
-            <div class=query-builder>
+	    <div class="query-builder" id="search_form_show">
+	    </div>
+            <div class="hidden" id="search_form_hide">
                 {%  if form_list %}
                     {% for item in form_list %}
 		    <!-- item has var_name, var_full_namel, and form -->
 		    {% with varname_wrapper="select_"|add:item.var_name %}
-                    <div class="sidebox">
+                    <div class="sidebox" id="search_form_box_{{ item.var_name }}">
                         <!-- Search box header -->
                         <span class="query-builder-label" id="header_{{ item.var_name }}">{{ item.var_full_name }}</span>
-                        <input type="hidden" name="list-input-params" value="{{ item.var_name }}">
 
                         <span class="query-builder-button close-button">
                             <img src="{{ STATIC_URL }}images/voyage/icon-remove.png"
@@ -164,10 +165,7 @@ function shortenURL(){
 
 
                         {% if item.form.type_str == "plain_text" %}
-<!--			{{ item.form.as_p }} -->
-                            {% for field in item.form.visible_fields %}
-                                <span class="simple-field">{{ field }}</span>
-                            {% endfor %}
+			{{ item.form.as_p }}
 
                         {% elif item.form.type_str == "numeric" %}
                             {{ item.form.options }}
