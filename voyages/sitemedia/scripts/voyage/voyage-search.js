@@ -117,13 +117,12 @@ $(document).ready(function() {
     $(".close-link-box").click(endBlackout); // close if close btn clicked
 
     /* Go through search boxes and see which ones should be displayed and in what order */
-    var hidden_search_forms = $("#search_form_hide").children();
-    for (var i = 0; i < hidden_search_forms.length; i++) {
-	if(hidden_search_forms[i].find("[id$='-is_shown_field']").val()) {
-	    var varname = hidden_search_forms[i].find("[id$='-var_name_field']").val();
+    var hidden_search_forms = $("#search_form_hide").children().each(function() {
+	if($(this).find("input[id$='-is_shown_field']").attr('value')) {
+	    var varname = $(this).find("[id$='-var_name_field']").val();
 	    show_search_form_by_name(varname);
 	}
-    }
+    });
     
 });
 
@@ -137,16 +136,15 @@ function sort_search_forms() {
 function show_search_form_by_name(varname) {
     $('#search_form_box_'+varname).appendTo("#search_form_show");
     $(".menu-popup-submenu-item[name='" + varname + "']").addClass(attr_selected_class);
-    $("#id_"+varname+"_"+varname+"-is_shown_field").val($("#search_form_box_"+varname).index());
+    $("#id_"+varname+"-is_shown_field").val($("#search_form_box_"+varname).index());
     
 }
 
 /* Renumber search boxes when they are moved */
 function renumber_search_boxes() {
-    var search_form_list = $("#search_form_show").children();
-    for (var i = 0; i < search_form_list.length; i++) {
-	search_form_list[i].find("[id$='-is_shown_field']").val(search_form_list[i].index())
-    }
+    var search_form_list = $("#search_form_show").children().each(function () {
+	$(this).find("[id$='-is_shown_field']").val($(this).index())
+    });
 }
 
 /* Support functions */
@@ -212,7 +210,7 @@ function move_box_down(label) {
 function delete_box(label, varname) {
     $(".menu-popup-submenu-item[name='" + varname + "']").removeClass(attr_selected_class);
     $('#search_form_box_'+varname).appendTo("#search_form_hide");
-    $("#id_"+varname+"_"+varname+"-is_shown_field").val("");
+    jquery.removeData($("#id_"+varname+"-is_shown_field"), 'value');
     //$("#" + label).parent().remove();
 }
 

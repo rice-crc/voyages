@@ -162,10 +162,16 @@ function shortenURL(){
                             <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
                                  onclick="move_box_up('header_{{ item.var_name }}');" />
                         </span>
+			
+			{% for field in item.form.hidden_fields %}
+			    {{ field.as_widget }}
+			{% endfor %}
 
 
                         {% if item.form.type_str == "plain_text" %}
-			{{ item.form.as_p }}
+                            {% for field in item.form.visible_fields %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
 
                         {% elif item.form.type_str == "numeric" %}
                             {{ item.form.options }}
@@ -314,7 +320,7 @@ function shortenURL(){
 
                         {% elif item.form.type_str == "boolean" %}
 
-                            {% for field in elem.form %}
+                            {% for field in elem.form.visible_fields %}
                                 <span class="simple-field">{{ field }}</span>
                             {% endfor %}
 

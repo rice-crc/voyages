@@ -187,6 +187,7 @@ class SimpleSelectSearchForm(VoyageBaseForm):
 class SimplePlaceSearchForm(SimpleSelectSearchForm):
     type_str = "select_three_layers"
 
+
 class SimpleSelectBooleanForm(VoyageBaseForm):
     BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
     type_str = "boolean"
