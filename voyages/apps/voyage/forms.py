@@ -17,6 +17,13 @@ class VoyageBaseForm(forms.Form):
     
     is_shown_field = forms.CharField(required=False, widget=forms.HiddenInput())
     var_name_field = forms.CharField(required=True, widget=forms.HiddenInput())
+    def is_form_shown(self):
+        """
+        Determines if form is used in building the query, and if it is shown on the page
+        """
+        #print dir(self)
+        #print self
+        return not not self.cleaned_data['is_shown_field']
 
 # Voyage
 # Ship, Nation, Owners
@@ -122,6 +129,7 @@ class SimpleTextForm(VoyageBaseForm):
     """
     Simple one field form to perform text search
     """
+    # TODO: Remove empty label
     text_search = forms.CharField(widget=forms.TextInput(attrs={'class': "query-builder-text"}), label="")
     type_str = "plain_text"
 
@@ -169,7 +177,7 @@ class SimpleSelectSearchForm(VoyageBaseForm):
     Simple checkbox search form
     """
     type_str = "select"
-    INIT_CHOICES = (('1', 'Yes'), ('2', 'No'))
+    INIT_CHOICES = [('1', 'Yes'), ('2', 'No')]
     choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'})
                                              , choices=INIT_CHOICES)
     def __init__(self, listChoices, *args, **kwargs):
@@ -185,7 +193,6 @@ class SimpleSelectBooleanForm(VoyageBaseForm):
     choice_field = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
         choices=BOOLEAN_CHOICES)
-
 
 class TimeFrameSpanSearchForm(forms.Form):
     frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
