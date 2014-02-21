@@ -194,9 +194,7 @@ function shortenURL(){
                                            name="tmp" style="width: 200px;" />
 
                                     <div class="query-builder-edit-list">
-                                        {% for opt in item.form.choice_field %}
-                                            {{ opt }}
-                                        {% endfor %}
+				      {{ item.form.choice_field }}
                                     </div>
 
 
