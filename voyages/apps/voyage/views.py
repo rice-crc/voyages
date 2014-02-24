@@ -169,6 +169,7 @@ def create_query_forms():
         elif varname in globals.list_boolean_fields:
             form = SimpleSelectBooleanForm(prefix=varname)
         else:
+            print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
         elem = {}
