@@ -149,17 +149,14 @@ def create_query_forms():
     for var in [x for x in globals.var_dict if x['is_general'] or x['is_basic']]:
         varname = var['var_name']
         if varname in globals.list_text_fields:
-            form = SimpleTextForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+            form = SimpleTextForm(prefix=varname)
         elif varname in globals.list_select_fields:
             choices = getChoices(varname)
-            form = SimpleSelectSearchForm(listChoices=choices,
-                                          auto_id=('id_' + varname + "_%s"), prefix=varname)
+            form = SimpleSelectSearchForm(listChoices=choices, prefix=varname)
         elif varname in globals.list_numeric_fields:
-            form = SimpleNumericSearchForm(auto_id=('id_' + varname + "_%s"),
-                                           initial={'options': '4'}, prefix=varname)
+            form = SimpleNumericSearchForm(initial={'options': '4'}, prefix=varname)
         elif varname in globals.list_date_fields:
-            form = SimpleDateSearchForm(auto_id=('id_' + varname + "_%s"),
-                                        initial={'options': '1',
+            form = SimpleDateSearchForm(initial={'options': '1',
                                                  'from_year': voyage_span_first_year,
                                                  'to_year': voyage_span_last_year},
                                         prefix=varname)
@@ -168,13 +165,12 @@ def create_query_forms():
                 choices = getNestedListPlaces(varname)
             else:
                 choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
-            form = SimplePlaceSearchForm(auto_id=('id_' + varname + "_%s"), listChoices=choices, prefix=varname)
+            form = SimplePlaceSearchForm(listChoices=choices, prefix=varname)
         elif varname in globals.list_boolean_fields:
-            form = SimpleSelectBooleanForm(auto_id=('id_' + varname + "_%s"), prefix=varname)
+            form = SimpleSelectBooleanForm(prefix=varname)
         else:
             pass
         form.fields['var_name_field'].initial = varname
-        print dir(form.fields['var_name_field'])
         elem = {}
         elem['var_name'] = varname
         elem['var_full_name'] = var['var_full_name']
@@ -196,7 +192,6 @@ def retrieve_post_search_forms(post):
         elif varname in globals.list_select_fields:
             form = SimpleSelectSearchForm(data=post, listChoices=getChoices(varname), prefix=varname)
             form.fields['choice_field'].choices = getChoices(varname)
-            #print dir(form)
         elif varname in globals.list_numeric_fields:
             form = SimpleNumericSearchForm(post, prefix=varname)
         elif varname in globals.list_date_fields:
@@ -211,6 +206,7 @@ def retrieve_post_search_forms(post):
             else:
                 choices = getNestedListPlaces(varname, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields)
             form.fields['choice_field'].choices = choices
+
         form_list.append({'var_name': varname,
                           'var_full_name': var['var_full_name'],
                           'form': form})
