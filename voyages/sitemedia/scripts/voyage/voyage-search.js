@@ -41,7 +41,6 @@ $(document).ready(function() {
     /* Event handler to highlight adding variables */
     $(".query-builder-label").each(function() {
         var tmpVar = $(this).attr("id");
-        //$(".menu-popup-submenu-item[name='" + tmpVar.substr(7) + "']").addClass(attr_selected_class);
 
     });
 
@@ -77,15 +76,9 @@ $(document).ready(function() {
     $(".menu-popup-submenu-item").click(function(ev){
         if (!($(this).hasClass(attr_selected_class))) {
         $(".query-builder-label").each(function(){
-                /*$('#form').append("<input type='hidden' name='list_input_params' value='" + $.trim($(this).text()) + "' />");*/
             });
 	    var varname = $(this).attr('name');
 	    show_search_form_by_name(varname);
-            /*$('#form').append("<input type='hidden' name='submitVal' value='add_var' />");
-            $('#form').append("<input type='hidden' name='new_var_name' value='" + $(this).attr('name') + "' />");
-            $('#form').append("<input type='hidden' name='new_var_fullname' value='" + $.trim($(this).text()) + "' />");
-
-            $("#form").submit();*/
             return true;
         }
 	});
@@ -211,7 +204,6 @@ function delete_box(label, varname) {
     $(".menu-popup-submenu-item[name='" + varname + "']").removeClass(attr_selected_class);
     $('#search_form_box_'+varname).appendTo("#search_form_hide");
     $("#id_"+varname+"-is_shown_field").removeAttr('value');
-    //$("#" + label).parent().remove();
 }
 
 function update_numeric_field(label, fieldname) {

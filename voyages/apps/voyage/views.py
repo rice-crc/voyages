@@ -202,7 +202,6 @@ def retrieve_post_search_forms(post):
             form = SimplePlaceSearchForm(post, prefix=varname)
             choices = getNestedListPlaces(varname, var['choices'])
             form.fields['choice_field'].choices = choices
-            print ""
 
         form_list.append({'var_name': varname,
                           'var_full_name': var['var_full_name'],
