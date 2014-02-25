@@ -50,7 +50,7 @@
 <div style="padding: 5px 5px 5px 100px; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
 	{% if form.errors %}
 	<p style="color: red">
-		{% trans "Your username and password didn't match. Please try again." %}
+		{% trans "Your username/email and password didn't match. Please try again." %}
 	</p>
 	{% endif %}
 
@@ -65,9 +65,13 @@
 				<td>{{ form.password.label_tag }}</td>
 				<td>{{ form.password }}</td>
 			</tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit"  value="{% trans 'Sign in' %}" />
+                </td>
+            </tr>
 		</table>
-
-		<input type="submit" style="margin-left: 60px;" value="{% trans 'Sign in' %}" />
 		<input type="hidden" name="next" value="{% url 'contribute:index' %}" />
 	</form>
 </div>

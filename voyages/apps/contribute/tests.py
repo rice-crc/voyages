@@ -39,7 +39,7 @@ class TestAuthentication(TestCase):
                                     {'id_username': 'admin', 'id_password': 'should_not_work'})
         self.assertEqual(response.status_code, 200)
         # Should display the error message
-        self.assertContains(response, "Your username and password didn't match. Please try again")
+        self.assertContains(response, "Your username/email and password didn't match. Please try again")
 
         # Should fail
         login_res = self.client.login(username='admin', password="random_pass")
