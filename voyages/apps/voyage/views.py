@@ -209,66 +209,119 @@ def retrieve_post_search_forms(post):
                           'form': form})
     return form_list
 
-def create_query_dict(query_forms, time_frame_form):
+
+def create_var_dict(query_forms, time_frame_form):
     """
     query_forms: list of dictionaries with var_name and form (also probably var_full_name, but I don't think I need to count on that)
-    returns
+    returns a dictionary of var names and values for that var
     """
     # Creates a query dict based on all the restrictions the user has made
-    query_dict = {}
+    var_list = {}
     # Year Time Frame Search
     if time_frame_form.is_valid():
-        query_dict['var_imp_arrival_at_port_of_dis__range'] = [time_frame_form.cleaned_data['frame_from_year'],
-                                                               time_frame_form.cleaned_data['frame_to_year']]
+        var_list['time_span_var_imp_arrival_at_port_of_dis'] = {'frame_from_year': time_frame_form.cleaned_data['frame_from_year'],
+                                                                'frame_to_year': time_frame_form.cleaned_data['frame_to_year']}
     for qryform in [x for x in query_forms if x['form'].is_valid() and x['form'].is_form_shown()]:
         #qform = next((l for l in query_forms if l['varname'] == search_var), None)
         varname = qryform['var_name']
         form = qryform['form']
         if varname in globals.list_text_fields:
-            query_dict[varname + "__contains"] = form.cleaned_data['text_search']
+            var_list[varname] = {'text_search': form.cleaned_data['text_search']}
         elif varname in globals.list_select_fields:
-            # TODO: this probably needs to be fixed
-            query_dict[varname + "__in"] = form.cleaned_data['choice_field']
+            # TODO: make sure this works. This is supposed to be a list
+            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
         elif varname in globals.list_numeric_fields:
             opt = form.cleaned_data['options']
+            var_list[varname] = {'options': opt}
             if opt == '1': # Between
-                query_dict[varname + "__range"] = [form.cleaned_data['lower_bound'],
-                                                   form.cleaned_data['upper_bound']]
+                var_list[varname]['lower_bound'] = form.cleaned_data['lower_bound']
+                var_list[varname]['upper_bound'] = form.cleaned_data['upper_bound']
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = form.cleaned_data['threshold']
             elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = form.cleaned_data['threshold']
             elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
             opt = form.cleaned_data['options']
+            var_list[varname] = {'option': opt}
             if opt == '1': # Between
-                query_dict[varname + "__range"] = [
-                    formatDate(form.cleaned_data['from_year'],
-                               form.cleaned_data['from_month']),
-                    formatDate(form.cleaned_data['to_year'],
-                               form.cleaned_data['to_month'])]
+                var_list[varname]['from_year'] = form.cleaned_data['from_year']
+                var_list[varname]['from_month'] = form.cleaned_data['from_month']
+                var_list[varname]['to_year'] = form.cleaned_data['to_year']
+                var_list[varname]['to_month'] = form.cleaned_data['to_month']
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = \
-                    formatDate(form.cleaned_data['threshold_year'],
-                               form.cleaned_data['theshold_month'])
+                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
             elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = \
-                    formatDate(form.cleaned_data['threshold_year'],
-                               form.cleaned_data['theshold_month'])
+                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
             elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = \
-                    formatDate(form.cleaned_data['threshold_year'],
-                               form.cleaned_data['theshold_month'])
+                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
         elif varname in globals.list_place_fields:
             # TODO: figure out how to coalesce the list when the region or broadregion is selected
             #places = request.POST.getlist(search_var + "_selected")
-            query_dict[varname + "__in"] = form.cleaned_data['choice_field']
+            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
         elif varname in globals.list_boolean_fields:
-            query_dict[varname + "__in"] = form.cleaned_data['choice_field']
-    query = {}
-    #query['forms'] = query_forms
-    query['dict'] = query_dict
+            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
+    return var_list
+
+def create_query_dict(var_list):
+    """
+    query_forms: list of dictionaries with var_name and form (also probably var_full_name, but I don't think I need to count on that)
+    returns a tuple of query dict and a dictionary of variable names with the value(s) it has
+    """
+    # Creates a query dict based on all the restrictions the user has made
+    query_dict = {}
+    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
+    # Year Time Frame Search
+    if time_span_name in var_list:
+        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list[time_span_name]['frame_from_year'],
+                                                               var_list[time_span_name]['frame_to_year']]
+    for varname in var_list:
+        if varname in globals.list_text_fields:
+            query_dict[varname + "__contains"] = var_list[varname]['text_search']
+        elif varname in globals.list_select_fields:
+            # TODO: this probably needs to be fixed
+            query_dict[varname + "__in"] = var_list[varname]['choice_field']
+        elif varname in globals.list_numeric_fields:
+            opt = form.cleaned_data['options']
+            if opt == '1': # Between
+                query_dict[varname + "__range"] = [var_list[varname]['lower_bound'],
+                                                   var_list[varname]['upper_bound']]
+            elif opt == '2': # Less than or equal to
+                query_dict[varname + "__lte"] = var_list[varname]['threshold']
+            elif opt == '3': # Greater than or equal to
+                query_dict[varname + "__gte"] = var_list[varname]['threshold']
+            elif opt == '4': # Equal to
+                query_dict[varname + "__exact"] = var_list[varname]['threshold']
+        elif varname in globals.list_date_fields:
+            opt = var_list[varname]['options']
+            if opt == '1': # Between
+                query_dict[varname + "__range"] = [
+                    formatDate(var_list[varname]['from_year'],
+                               var_list[varname]['from_month']),
+                    formatDate(var_list[varname]['to_year'],
+                               var_list[varname]['to_month'])]
+            elif opt == '2': # Less than or equal to
+                query_dict[varname + "__lte"] = \
+                    formatDate(var_list[varname]['threshold_year'],
+                               var_list[varname]['theshold_month'])
+            elif opt == '3': # Greater than or equal to
+                query_dict[varname + "__gte"] = \
+                    formatDate(var_list[varname]['threshold_year'],
+                               var_list[varname]['theshold_month'])
+            elif opt == '4': # Equal to
+                query_dict[varname + "__exact"] = \
+                    formatDate(var_list[varname]['threshold_year'],
+                               var_list[varname]['theshold_month'])
+        elif varname in globals.list_place_fields:
+            # TODO: figure out how to coalesce the list when the region or broadregion is selected
+            #places = request.POST.getlist(search_var + "_selected")
+            query_dict[varname + "__in"] = var_list[varname]['choice_field']
+        elif varname in globals.list_boolean_fields:
+            query_dict[varname + "__in"] = var_list[varname]['choice_field']
     return query_dict
 
 def search(request):
@@ -290,18 +343,19 @@ def search(request):
     results_per_page_form = None
     
 
-    if request.method == "GET":
+    if request.method == "GET" or request.POST.get('submitVal') == 'reset':
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
                                                       'frame_to_year': voyage_span_last_year})
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-    if request.method == "POST":
+    elif request.method == "POST":
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         form_list = retrieve_post_search_forms(request.POST)
         time_frame_form = TimeFrameSpanSearchForm(request.POST)
-        query_dict = create_query_dict(form_list, time_frame_form)
+        var_list = create_var_dict(form_list, time_frame_form)
+        query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
         if len(results) == 0:
             no_result = True
@@ -366,26 +420,6 @@ def search(request):
     # Set up the initial column of display
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
-
-    # !!!!!!!Replacement below this line
-    #voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
-    #submitVal = request.POST.get('submitVal')
-
-    #if submitVal == 'tab_statistics':
-    #    result_data = retrieve_summary_stats(results)
-    
-    #qry = create_query_dict(request, request.POST.getlist('list-input-params'))
-    #print "Query forms total is %s" % qry['forms']
-    #print qry['forms']['var_ship_name']
-    #theform = ResultsPerPageOptionForm(request.POST)
-    #print form_list
-    #for thing in form_list:
-    #    frm = thing['form']
-    #    if frm.type_str == "select":
-    #        print thing['var_name']
-    #        print list(frm.fields['choice_field'].choices)
-    #        print frm.fields['choice_field'].choices
-    #        print dir(frm)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -646,7 +680,7 @@ def shorten_url(long_url):
             url = long_url
     return url
 
-def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], dict={}):
+def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], qdict={}):
     """
     Function to encode dictionary into url to copy form.
 
@@ -659,11 +693,11 @@ def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_res
     session_dict = {}
 
     # If search has not performed, return default url
-    if dict == {}:
+    if qdict == {}:
         url += "var_imp_voyage_began__range=1514|1866"
 
     else:
-        for k, v in dict.iteritems():
+        for k, v in qdict.iteritems():
             var_name = k.split("__")[0]
 
             # If this is the __range component.
@@ -682,15 +716,15 @@ def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_res
                     url += str(k) + "=" + str(v.encode('ascii', 'ignore'))
 
             # If variable is date, try to also store deselected months.
-            for i in date_filters:
+            """for i in date_filters:
                 # There is deselected months
                 if i['varname'] == var_name:
-                    url += "|" + ",".join(i['deselected_months'])
+                    url += "|" + ",".join(i['deselected_months'])"""
             url += "&"
 
         # At the end, delete the last unnecessary underscore
         url = url[0:-1]
-        session_dict['dict'] = dict
+        session_dict['dict'] = qdict
         #session_dict['existing_form'] = session
         session_dict['date_filters'] = date_filters
         session_dict['no_result'] = no_result
