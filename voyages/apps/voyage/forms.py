@@ -17,6 +17,7 @@ class VoyageBaseForm(forms.Form):
     
     is_shown_field = forms.CharField(required=False, widget=forms.HiddenInput())
     var_name_field = forms.CharField(required=True, widget=forms.HiddenInput())
+
     def is_form_shown(self):
         """
         Determines if form is used in building the query, and if it is shown on the page
@@ -177,16 +178,11 @@ class SimpleSelectSearchForm(VoyageBaseForm):
     Simple checkbox search form
     """
     type_str = "select"
-    INIT_CHOICES = [('1', 'Yes'), ('2', 'No')]
-    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'})
-                                             , choices=INIT_CHOICES)
-    def __init__(self, listChoices, *args, **kwargs):
-        super(SimpleSelectSearchForm, self).__init__(*args, **kwargs)
-        self.fields['choice_field'].choices = listChoices
+    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}))
 
-class SimplePlaceSearchForm(SimpleSelectSearchForm):
+class SimplePlaceSearchForm(VoyageBaseForm):
     type_str = "select_three_layers"
-
+    choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}))
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
     BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
