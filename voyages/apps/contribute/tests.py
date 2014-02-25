@@ -11,6 +11,8 @@ class TestAuthentication(TestCase):
     Test the basic login mechanism of the Admin site
     """
 
+    fixtures = ['users.json']
+
     def create_random_user(self):
         """
         Create a user with the specified username and password
@@ -75,3 +77,21 @@ class TestAuthentication(TestCase):
 
         #Is a staff user
         self.assertContains(response, "Live Admin")
+
+
+    def test_user_or_email(self):
+        # using username with bad password
+        result = self.client.login(username='testuser', password='xxxxxx')
+        self.assertFalse(result)
+
+        # using username with good password
+        result = self.client.login(username='testuser', password='testuser')
+        self.assertTrue(result)
+
+        # using email with bad password
+        result = self.client.login(username='test@user.com', password='xxxxxx')
+        self.assertFalse(result)
+
+        # using email with good password
+        result = self.client.login(username='test@user.com', password='testuser')
+        self.assertTrue(result)

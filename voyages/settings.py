@@ -72,7 +72,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     )
 
 AUTHENTICATION_BACKENDS = (
-    'voyages.apps.common.backends.EmailOrUsernameModelBackend',
+    'voyages.apps.contribute.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
 
