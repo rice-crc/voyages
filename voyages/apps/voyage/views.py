@@ -357,9 +357,6 @@ def search(request):
         var_list = create_var_dict(form_list, time_frame_form)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
-        if len(results) == 0:
-            no_result = True
-            results = []
         submitVal = request.POST.get('submitVal')
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -385,14 +382,8 @@ def search(request):
         elif submitVal == 'tab_maps':
             tab = 'maps'
 
-
-    # results per page and form (change in session if necessary)
-    # TODO: What is this for?
-    #form, results_per_page = check_and_save_options_form(request, to_reset_form)
-
     if len(results) == 0:
         no_result = True
-
     # If there is no requested page number, serve 1
     if request.POST.get('desired_page') is None:
         current_page = 1
@@ -401,14 +392,11 @@ def search(request):
     results_per_page = 10
     if results_per_page_form.is_valid():
         results_per_page = results_per_page_form.cleaned_option()
-        #print results_per_page_form.cleaned_data['option']
-        
 
     #TODO: refactor pagination
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
-    #request.session['voyage_current_result_page'] = pagins
 
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)

@@ -210,7 +210,7 @@ function move_box_down(label) {
 function delete_box(label, varname) {
     $(".menu-popup-submenu-item[name='" + varname + "']").removeClass(attr_selected_class);
     $('#search_form_box_'+varname).appendTo("#search_form_hide");
-    jquery.removeData($("#id_"+varname+"-is_shown_field"), 'value');
+    $("#id_"+varname+"-is_shown_field").removeAttr('value');
     //$("#" + label).parent().remove();
 }
 
