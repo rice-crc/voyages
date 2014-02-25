@@ -286,180 +286,55 @@ def search(request):
     form_list = []
     voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
     results = None
+    time_frame_form = None
+    results_per_page_form = None
     
 
     if request.method == "GET":
+        results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-        submitVal = request.POST.get('submitVal')
-        frame_form = TimeFrameSpanSearchForm(request.POST,
-                                             initial={'frame_from_year': voyage_span_first_year,
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
                                                       'frame_to_year': voyage_span_last_year})
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
     if request.method == "POST":
+        results_per_page_form = ResultsPerPageOptionForm(request.POST)
         form_list = retrieve_post_search_forms(request.POST)
-        frame_form = TimeFrameSpanSearchForm(request.POST)
-        query_dict = create_query_dict(form_list, frame_form)
+        time_frame_form = TimeFrameSpanSearchForm(request.POST)
+        query_dict = create_query_dict(form_list, time_frame_form)
         results = perform_search(query_dict, None)
         if len(results) == 0:
             no_result = True
             results = []
-
-    # Check if saved url has been used
-    #if request.GET.values():
-    #    query_dict, date_filters, exist_form, voyage_span_first_year, voyage_span_last_year, no_result = decode_from_url(request)
-        # Get results with saved query
-    #    results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
-
-        # Check if dates filters have to be used
-    #    if date_filters and no_result is not True:
-    #        results = date_filter_query(date_filters, results)
-
-        # If saved query doesn't return any results
-    #    if len(results) == 0:
-    #        no_result = True
-
-    #else:
-
-
-        # TODO: is this part necessary before the POST? This should probably be after the POST.
-
-    #    date_filters = []
-
-        # Get max and min years (based on database)
-
-        # If last query exists, retrieve last results, otherwise get all results
-      #  """   if request.session.get('voyage_last_query'):
-      #      query_dict = request.session.get('voyage_last_query')
-      #      if request.session.get('voyage_last_query_date_filters'):
-      #          date_filters = request.session.get('voyage_last_query_date_filters')
-      #      else:
-      #          date_filters = []
-
-      #      results = perform_search(query_dict, date_filters)
-
-      #      if len(results) == 0:
-      #          no_result = True
-      #          results = []
-      #  else:
-      #      results = SearchQuerySet().models(Voyage).order_by('var_voyage_id') """
-
-        #if request.method == 'POST' and False:
-
-            # Handles what list of variables should be collapsed or expanded
-            #if request.POST.get("basic_list_expanded"):
-            #    request.session["basic_list_contracted"] = True
-            #else:
-            #    request.session["basic_list_contracted"] = None
-
-
-            # Update variable values
-     #       """list_search_vars = request.POST.getlist('list-input-params')
-     #       existing_form = request.session.get('existing_form')
-     #       new_existing_form = []"""
-
-            # Time frame search
-            # TODO: How does this work without specifying the prefix?
-            #if frame_form.is_valid():
-            #    request.session['time_span_form'] = frame_form
-#            qry = {}
-            #search_forms = create_query_forms(request.session['variable_list'])
-            #elif submitVal == 'reset':
-                # Reset the search page
-                #existing_form = []
-                #request.session['existing_form'] = existing_form
-                #results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-            #    request.session['results_voyages'] = None
-            #    request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
-                #request.session['results_per_page_form'] = None
-            #    request.session['voyage_last_query'] = None
-            #    request.session['voyage_last_query_date_filters'] = []
-            #    to_reset_form = True
-
-                # Reset time_frame form as well
-            #    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
-
-                # Time frame search
-                #request.session['time_span_form'] = TimeFrameSpanSearchForm(
-                #    initial={'frame_from_year': voyage_span_first_year,
-                #             'frame_to_year': voyage_span_last_year})
-
-            #elif submitVal == 'configColumn':
-                # Configure columns in the result page
-            #    tab = 'config_column'
-
-            #elif submitVal == 'applyConfig':
-                # Update the session variables
-            #    request.session['result_columns'] = get_new_visible_attrs(
-            #        request.POST.getlist('configure_visibleAttributes'))
-            #    tab = 'result'
-
-            #elif submitVal == 'cancelConfig':
-                # Does nothing and return to the result page
-            #    tab = 'result'
-
-            #elif submitVal == 'restoreConfig':
-                # Restore default columns
-            #    request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
-            #    tab = 'config_column'
-
-            # Tab changes
-            #elif submitVal == 'tab_results':
-            #    tab = 'result'
-
-            #elif submitVal == 'tab_statistics':
-            #    tab = 'statistics'
-
-            #    result_data['summary_statistics'] = retrieve_summary_stats(results)
-
-            #elif submitVal == 'tab_tables':
-            #    tab = 'tables'
-
-            #elif submitVal == 'tab_graphs':
-            #    tab = 'graphs'
-
-            #elif submitVal == 'tab_timeline':
-            #    tab = 'timeline'
-
-            #elif submitVal == 'tab_maps':
-            #    tab = 'maps'
-
-            # User clicked Search
-            #elif submitVal == 'search':
-            #    list_search_vars = request.POST.getlist('list-input-params')
-
-            #    new_existing_form = []
-            #    query_dict = {}
-            #    qry = create_query_dict(request, request.POST.getlist('list-input-params'), search_forms)
-
-             #   query_dict = qry['dict']
-
-
-                # TODO: refactor this into another method
-                # Time frame search
-            #    print dir(frame_form)
-                #query_dict['var_imp_arrival_at_port_of_dis__range'] = [
-                #    frame_form.cleaned_data['frame_from_year'],
-                #    frame_form.cleaned_data['frame_to_year']]
-
-            #    results = perform_search(query_dict, date_filters)
-
-
-                #request.session['voyage_last_query'] = query_dict
-
-
-            
-
-
-
-        # Encode url to url_to_copy form (for user)
-    #    url_to_copy = encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters,  query_dict)
-        #qry = create_query_dict(request, request.POST.getlist('list-input-params'), search_forms)
+        submitVal = request.POST.get('submitVal')
+        if submitVal == 'configColumn':
+            tab = 'config_column'
+        elif submitVal == 'applyConfig':
+            request.session['result_columns'] = get_new_visible_attrs(request.POST.getlist('configure_visibleAttributes'))
+            tab = 'result'
+        elif submitVal == 'cancelConfig':
+            tab = 'result'
+        elif submitVal == 'restoreConfig':
+            request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+            tab = 'config_column'
+        elif submitVal == 'tab_results':
+            tab = 'result'
+        elif submitVal == 'tab_statistics':
+            tab = 'statistics'
+            result_data['summary_statistics'] = retrieve_summary_stats(results)
+        elif submitVal == 'tab_tables':
+            tab = 'tables'
+        elif submitVal == 'tab_graphs':
+            tab = 'graphs'
+        elif  submitVal == 'tab_timeline':
+            tab = 'timeline'
+        elif submitVal == 'tab_maps':
+            tab = 'maps'
 
 
     # results per page and form (change in session if necessary)
     # TODO: What is this for?
-    form, results_per_page = check_and_save_options_form(request, to_reset_form)
+    #form, results_per_page = check_and_save_options_form(request, to_reset_form)
 
     if len(results) == 0:
         no_result = True
@@ -469,13 +344,17 @@ def search(request):
         current_page = 1
     else:
         current_page = request.POST.get('desired_page')
-
+    results_per_page = 10
+    if results_per_page_form.is_valid():
+        results_per_page = results_per_page_form.cleaned_option()
+        #print results_per_page_form.cleaned_data['option']
+        
 
     #TODO: refactor pagination
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
-    request.session['voyage_current_result_page'] = pagins
+    #request.session['voyage_current_result_page'] = pagins
 
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
@@ -521,8 +400,9 @@ def search(request):
                    'no_result': no_result,
                    'url_to_copy': url_to_copy,
                    'tab': tab,
-                   'options_results_per_page_form': search_forms,
-                   'form_list': form_list})
+                   'options_results_per_page_form': results_per_page_form,
+                   'form_list': form_list,
+                   'time_frame_search_form': time_frame_form})
 
 
 def getChoices(varname):

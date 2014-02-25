@@ -34,8 +34,8 @@ function shortenURL(){
         </div>
 
         <div class="box-mid-end">
-            From {{ request.session.time_span_form.frame_from_year }}&nbsp;&nbsp;
-            To {{ request.session.time_span_form.frame_to_year }}
+            From {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
+            To {{ time_frame_search_form.frame_to_year }}
             <br />
             <span class="italic">
                 {% trans 'The full extent of time from the first to the last voyage is ' %}
