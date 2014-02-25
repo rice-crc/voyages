@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from voyages.apps.contribute.models import *
 from voyages.extratools import AdvancedEditor
 
@@ -12,3 +13,9 @@ class AdminFaqAdminForm(forms.ModelForm):
     class Meta:
         model = AdminFaq
 
+class LoginForm(AuthenticationForm):
+    x = 1
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['username'].label = "Username or Email"
