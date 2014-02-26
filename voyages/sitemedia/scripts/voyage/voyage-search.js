@@ -40,8 +40,7 @@ $(document).ready(function() {
 
     /* Event handler to highlight adding variables */
     $(".query-builder-label").each(function() {
-        var tmpVar = $(this).attr("id")
-        $(".menu-popup-submenu-item[name='" + tmpVar.substr(7) + "']").addClass(attr_selected_class);
+        var tmpVar = $(this).attr("id");
 
     });
 
@@ -77,14 +76,9 @@ $(document).ready(function() {
     $(".menu-popup-submenu-item").click(function(ev){
         if (!($(this).hasClass(attr_selected_class))) {
         $(".query-builder-label").each(function(){
-                $('#form').append("<input type='hidden' name='list_input_params' value='" + $.trim($(this).text()) + "' />");
             });
-
-            $('#form').append("<input type='hidden' name='submitVal' value='add_var' />");
-            $('#form').append("<input type='hidden' name='new_var_name' value='" + $(this).attr('name') + "' />");
-            $('#form').append("<input type='hidden' name='new_var_fullname' value='" + $.trim($(this).text()) + "' />");
-
-            $("#form").submit();
+	    var varname = $(this).attr('name');
+	    show_search_form_by_name(varname);
             return true;
         }
 	});
@@ -114,8 +108,42 @@ $(document).ready(function() {
     }
 
     $(".close-link-box").click(endBlackout); // close if close btn clicked
+
+    /* Go through search boxes and see which ones should be displayed and in what order */
+    var hidden_search_forms = $("#search_form_hide").children().each(function() {
+	if($(this).find("input[id$='-is_shown_field']").attr('value')) {
+	    var varname = $(this).find("[id$='-var_name_field']").val();
+	    show_search_form_noedit(varname);
+	}
+    });
+    sort_search_forms();
 });
 
+function sort_search_forms() {
+    var shown_search_forms = $("#search_form_show").children();
+    for (var i = 0; i < shown_search_forms.length; i++) {
+	$("#search_form_show").find("[id$='-is_shown_field'][value='" + i + "']").parent().appendTo("#search_form_show");
+    }
+}
+
+function show_search_form_noedit(varname) {
+    $('#search_form_box_'+varname).appendTo("#search_form_show");
+    $(".menu-popup-submenu-item[name='" + varname + "']").addClass(attr_selected_class);
+}
+
+function show_search_form_by_name(varname) {
+    $('#search_form_box_'+varname).appendTo("#search_form_show");
+    $(".menu-popup-submenu-item[name='" + varname + "']").addClass(attr_selected_class);
+    $("#id_"+varname+"-is_shown_field").val($("#search_form_box_"+varname).index());
+    
+}
+
+/* Renumber search boxes when they are moved */
+function renumber_search_boxes() {
+    var search_form_list = $("#search_form_show").children().each(function () {
+	$(this).find("[id$='-is_shown_field']").val($(this).index())
+    });
+}
 
 /* Support functions */
 function set_elem(elemname, value) {
@@ -163,6 +191,7 @@ function move_box_up(label) {
         /* Has a sibling to swap */
         $cur_box_parent.after($prev_parent_sibling);
     }
+    renumber_search_boxes();
 }
 
 function move_box_down(label) {
@@ -173,11 +202,13 @@ function move_box_down(label) {
         /* Has a sibling to swap */
         $cur_box_parent.before($next_parent_sibling);
     }
+    renumber_search_boxes();
 }
 
 function delete_box(label, varname) {
     $(".menu-popup-submenu-item[name='" + varname + "']").removeClass(attr_selected_class);
-    $("#" + label).parent().remove();
+    $('#search_form_box_'+varname).appendTo("#search_form_hide");
+    $("#id_"+varname+"-is_shown_field").removeAttr('value');
 }
 
 function update_numeric_field(label, fieldname) {
@@ -335,6 +366,16 @@ function config_change_group(group_id) {
     $(".voyage_config_all_list option:selected").prop('selected', false);
     $(".voyage_config_all_list select").addClass("hidden");
     $("#" + group_id).removeClass("hidden");
+}
+
+function getxlsDownload(pageNum) {
+    $('#form').append("<input id='xls_download_submit_val' type='hidden' name='submitVal' value='download_xls_current_page' />");
+    $("#form").submit();
+    $('#form').append("<input id='xls_download_page_num' type='hidden' name='pageNum' value='" + pageNum + "' />");
+    $("#form").submit();
+    $('#xls_download_submit_val').remove()
+    $('#xls_download_page_num').remove()
+    return false;
 }
 
 function submitWithValue(submitVal) {

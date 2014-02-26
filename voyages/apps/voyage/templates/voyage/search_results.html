@@ -35,13 +35,13 @@
 
         </tr>
 
-        {% for i in results %}
+        {% for i in result_display %}
             <tr class="grid-row-even grid-row-first">
                 {% for item in request.session.result_columns %}
                     <td>{% if item.0 == 'var_sources' %}
-                            {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
-                        {% else %}
-                            {{ i.get_stored_fields| getattribute:item.0 | default_if_none:"" | safe }}
+                            {{ i| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
+                        {% else  %}
+                            {{ i| getattribute:item.0 | default_if_none:"" | safe }}
                         {% endif %}</td>
                 {% endfor %}
             </tr>
@@ -55,14 +55,7 @@
         <tr>
 
             <td style="padding: 0px; text-align: left">
-                {% for i in pages_range %}
-                    {% if forloop.first %}
-                        Showing {{ i }} -
-                    {% endif %}
-                    {% if forloop.last %}
-                        {{ i }} out of {{ results.paginator.count }}, display
-                    {% endif %}
-                {% endfor %}
+	      Showing {{ results.start_index }} - {{ results.end_index }} out of {{ results.paginator.count }}, display
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ options_results_per_page_form.option }}
@@ -140,9 +133,9 @@
         <tr>
             <td>
                 <div class="download_button">
-                    <a href="{% url 'voyage:csv_all_download' results.number %}" target="_blank">{% trans 'Download current view' %}</a>
+                    <a href="#" onclick="getxlsDownload({{ curpage.number }})">{% trans 'Download current view' %}</a>
                     &nbsp; &nbsp;
-                    <a href="{% url 'voyage:csv_all_download' -1  %}" target="_blank">{% trans 'Download all results' %}</a>
+                    <a href="#" onclick="getxlsDownload(-1)">{% trans 'Download all results' %}</a>
                 </div>
             </td>
             <td></td>
