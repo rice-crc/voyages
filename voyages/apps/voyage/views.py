@@ -113,29 +113,6 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
-def create_query_dict(query):
-    query_dict = {}
-    return query_dict
-
-def create_query_from_url(request):
-    return request
-
-def create_form_from_query(query):
-    return query
-
-def create_query_from_request(request):
-#    search_vars = request.POST.getlist('list-input-params')
-#    query = create_query_dict(request, search_vars)
-#    query['list-input-params'] = search_vars
-#    query['to_year'] = request.POST.get('frame_to_year')
-#    query['from_year'] = request.POST.get('frame_from_year')
-    
-    
-    #print to_year
-    #print from_year
-    #print search_vars
-    return None
-
 def create_query_forms():
     """
     Uses the list of variables in globals.py and creates a form
@@ -243,7 +220,7 @@ def create_var_dict(query_forms, time_frame_form):
                 var_list[varname]['threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
             opt = form.cleaned_data['options']
-            var_list[varname] = {'option': opt}
+            var_list[varname] = {'options': opt}
             if opt == '1': # Between
                 var_list[varname]['from_year'] = form.cleaned_data['from_year']
                 var_list[varname]['from_month'] = form.cleaned_data['from_month']
@@ -285,7 +262,7 @@ def create_query_dict(var_list):
             # TODO: this probably needs to be fixed
             query_dict[varname + "__in"] = var_list[varname]['choice_field']
         elif varname in globals.list_numeric_fields:
-            opt = form.cleaned_data['options']
+            opt = var_list[varname]['options']
             if opt == '1': # Between
                 query_dict[varname + "__range"] = [var_list[varname]['lower_bound'],
                                                    var_list[varname]['upper_bound']]
