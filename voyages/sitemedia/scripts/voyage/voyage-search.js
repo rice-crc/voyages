@@ -113,17 +113,22 @@ $(document).ready(function() {
     var hidden_search_forms = $("#search_form_hide").children().each(function() {
 	if($(this).find("input[id$='-is_shown_field']").attr('value')) {
 	    var varname = $(this).find("[id$='-var_name_field']").val();
-	    show_search_form_by_name(varname);
+	    show_search_form_noedit(varname);
 	}
     });
-    
+    sort_search_forms();
 });
 
 function sort_search_forms() {
     var shown_search_forms = $("#search_form_show").children();
     for (var i = 0; i < shown_search_forms.length; i++) {
-	$("#search_form_show").find("[id$='-is_shown_field'][value='" + i + "']").appendTo("#search_form_show");
+	$("#search_form_show").find("[id$='-is_shown_field'][value='" + i + "']").parent().appendTo("#search_form_show");
     }
+}
+
+function show_search_form_noedit(varname) {
+    $('#search_form_box_'+varname).appendTo("#search_form_show");
+    $(".menu-popup-submenu-item[name='" + varname + "']").addClass(attr_selected_class);
 }
 
 function show_search_form_by_name(varname) {
