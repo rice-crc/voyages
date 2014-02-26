@@ -483,8 +483,6 @@ def search(request):
                 pageNum = 1
                 print "Warning: unable to get page number from post"
             return download_xls_page(results, int(pageNum), results_per_page, display_columns)
-        elif submitVal == 'download_xls_all':
-            return download_xls_page(results, -1, results_per_page, display_columns)
             
     if len(results) == 0:
         no_result = True
