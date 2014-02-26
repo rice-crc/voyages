@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 # List of basic variables
 from django.utils.datastructures import SortedDict
+import models
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
@@ -7,6 +9,100 @@ list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Grea
 
 list_months = [('Jan', '01'), ('Feb', '02'), ('Mar', '03'), ('Apr', '04'), ('May', '05'), ('Jun', '06'),
                ('Jul', '07'), ('Aug', '08'), ('Sep', '09'), ('Oct', '10'), ('Nov', '11'), ('Dec', '12')]
+
+
+def structure_places(place_list):
+    """
+    Takes a list of places and then returns a tree of the places structured by region and broad region.
+    Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
+    """
+    # Dict keyed by region, value is a list of places
+    # Distinct for foreign key returns a list (sort of) of tuples with the django id of the place.
+    # I think it will only ever have one place in each tuple, though it would probably be best to just iterate through the tuple
+    region_list = {}
+    for tup in place_list:
+        for idx in tup:
+            if idx:
+                place = models.Place.objects.get(id=idx)
+                reg = place.region
+                if reg not in region_list:
+                    region_list[reg] = []
+                region_list[reg].append(place)
+    broad_region_list = {}
+    for region, list_of_places in region_list.items():
+        broad_reg = region.broad_region
+        if broad_reg not in broad_region_list:
+            broad_region_list[broad_reg] = {}
+        broad_region_list[broad_reg][region] = list_of_places
+    return broad_region_list
+
+def structure_places_all(place_list):
+    """
+    Takes a list of places and then returns a tree of the places structured by region and broad region.
+    Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
+    """
+    # Dict keyed by region, value is a list of places
+    # Distinct for foreign key returns a list (sort of) of tuples with the django id of the place.
+    # I think it will only ever have one place in each tuple, though it would probably be best to just iterate through the tuple
+    region_list = {}
+    for place in place_list:
+        reg = place.region
+        if reg not in region_list:
+            region_list[reg] = []
+        region_list[reg].append(place)
+    broad_region_list = {}
+    for region, list_of_places in region_list.items():
+        broad_reg = region.broad_region
+        if broad_reg not in broad_region_list:
+            broad_region_list[broad_reg] = {}
+        broad_region_list[broad_reg][region] = list_of_places
+    return broad_region_list
+            
+def display_percent(value):
+    return str(round(value*100, 1)) + "%"
+def display_sterling_price(value):
+    return "£" + str(round(value, 2))
+def display_sterling_price_nopound(value):
+    return str(round(value, 2))
+def display_xls_multiple_names(value):
+    return value.replace('<br/>', ';')
+def mangle_percent(value):
+    """
+    Converts a text percentage to a decimal between 0 and 1
+    """
+    return float(str(value).replace('%', '')) / 100.0
+def no_mangle(value):
+    return value
+
+display_methods = {'var_imputed_percentage_men': display_percent,
+                   'var_imputed_percentage_women': display_percent,
+                   'var_imputed_percentage_boys': display_percent,
+                   'var_imputed_percentage_girls': display_percent,
+                   'var_imputed_percentage_male': display_percent,
+                   'var_imputed_percentage_child': display_percent,
+                   'var_imputed_mortality': display_percent,
+                   'var_imputed_sterling_cash': display_sterling_price}
+display_methods_xls = {'var_imputed_percentage_men': display_percent,
+                       'var_imputed_percentage_women': display_percent,
+                       'var_imputed_percentage_boys': display_percent,
+                       'var_imputed_percentage_girls': display_percent,
+                       'var_imputed_percentage_male': display_percent,
+                       'var_imputed_percentage_child': display_percent,
+                       'var_imputed_mortality': display_percent,
+                       'var_imputed_sterling_cash': display_sterling_price_nopound,
+                       'var_captain': display_xls_multiple_names}
+search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
+                         'var_imputed_percentage_women': mangle_percent,
+                         'var_imputed_percentage_boys': mangle_percent,
+                         'var_imputed_percentage_girls': mangle_percent,
+                         'var_imputed_percentage_male': mangle_percent,
+                         'var_imputed_percentage_child': mangle_percent,
+                         'var_imputed_mortality': mangle_percent}
+
+#print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
+#print models.VoyageShip.objects.values('vessel_construction_place').distinct()
+
+#all_place_list = structure_places_all(models.Place.objects.all())
 
 var_dict = [
     # Ship, Nation, Owners
@@ -58,7 +154,9 @@ var_dict = [
      'var_category': 'Ship, nation, owners',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())},
+#     'choices': all_place_list},
     {'var_name': 'var_year_of_construction',
      'spss_name': 'yrcons',
      'var_full_name': 'Year constructed',
@@ -74,7 +172,9 @@ var_dict = [
      'var_category': 'Ship, nation, owners',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageShip.objects.values_list('registered_place').distinct())},
+#     'choices': all_place_list},
     {'var_name': 'var_registered_year',
      'spss_name': 'yrreg',
      'var_full_name': 'Year registered',
@@ -179,6 +279,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": True,
      "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_port_voyage_begin').distinct()),
+#     'choices': all_place_list,
      "note": "Same as data variable in most cases, but derived from "
              "port of return for certain Brazilian voyages"},
 
@@ -189,7 +291,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_place_slave_purchase').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_second_place_slave_purchase',
      'spss_name': 'plac2tra',
@@ -198,7 +302,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_place_slave_purchase').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_third_place_slave_purchase',
      'spss_name': 'plac3tra',
@@ -207,7 +313,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_place_slave_purchase').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_place_of_slave_purchase',
      'spss_name': 'mjbyptimp',
@@ -217,6 +325,8 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_place_of_slave_purchase').distinct()),
+#     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
     {'var_name': 'var_port_of_call_before_atl_crossing',
@@ -226,7 +336,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('port_of_call_before_atl_crossing').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_first_landing_place',
      'spss_name': 'sla1port',
@@ -235,7 +347,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_landing_place').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_second_landing_place',
      'spss_name': 'adpsale1',
@@ -244,7 +358,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_landing_place').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_third_landing_place',
      'spss_name': 'adpsale2',
@@ -253,7 +369,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": False,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_landing_place').distinct())},
+#     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_port_slave_dis',
      'spss_name': 'mjslptimp',
@@ -263,6 +381,8 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_port_slave_dis').distinct()),
+#     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
     {'var_name': 'var_place_voyage_ended',
@@ -272,7 +392,9 @@ var_dict = [
      'var_category': 'Voyage Itinerary',
      "is_estimate": False,
      "is_basic": True,
-     "is_general": True},
+     "is_general": True,
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('place_voyage_ended').distinct())},
+#     'choices': all_place_list},
 
     # Itinerary - region variables
     {'var_name': 'var_imp_region_voyage_begin',
