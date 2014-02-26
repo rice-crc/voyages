@@ -51,9 +51,9 @@ function shortenURL(){
     </div>
     <div>
         <input type="hidden" name="basic_list_expanded" value="true"
-                {% if not request.session.basic_list_contracted %}disabled="true"{% endif %} />
+                {% if basic_list_contracted %}disabled="true"{% endif %} />
 
-        <div class="{% if request.session.basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
+        <div class="{% if basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
             <div class="box-header-head">
                 <div class="box-button" onclick="">
 
@@ -92,7 +92,7 @@ function shortenURL(){
                 {% endfor %}
             </div>
         </div>
-        <div class="box-main-table-tail {% if request.session.basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
+        <div class="box-main-table-tail {% if basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
              <div class="box-header-tail">
                 <div class="box-button">
                     &nbsp;
