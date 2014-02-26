@@ -23,6 +23,8 @@ import bitly_api
 import requests
 import json
 from xlwt import Workbook
+import urllib
+import unidecode
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -194,65 +196,134 @@ def retrieve_post_search_forms(post):
         form_list.append(tmpElem)
     return form_list
 
+def create_forms_from_var_list(var_list):
+    """
+    Creates filled out forms based on a var_list
+    """
+    form_list = []
+    for idx, varname in enumerate(var_list['used_variable_names'].split(';')):
+        var = search_var_dict(varname)
+        tmpElem = {'var_name': varname,
+                   'var_full_name': var['var_full_name']}
+        if varname in globals.list_text_fields:
+            form = SimpleTextForm(prefix=varname)
+            form.fields['text_search'].initial = var_list[varname + '_text_search']
+        elif varname in globals.list_select_fields:
+            choices = getChoices(varname)
+            form = SimpleSelectSearchForm(prefix=varname)
+            form.fields['choice_field'].choices = choices
+            form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
+        elif varname in globals.list_numeric_fields:
+            form = SimpleNumericSearchForm(prefix=varname)
+            opt = var_list[varname + '_options']
+            if opt == '1': # Between
+                form.fields['lower_bound'].initial = var_list[varname + '_lower_bound']
+                form.fields['upper_bound'].initial = var_list[varname + '_upper_bound']
+            elif opt == '2': # Less than or equal to
+                form.fields['threshold'].initial = var_list[varname + '_threshold']
+            elif opt == '3': # Greater than or equal to
+                form.fields['threshold'].initial = var_list[varname + '_threshold']
+            elif opt == '4': # Equal to
+                form.fields['threshold'].initial = var_list[varname + '_threshold']
+        elif varname in globals.list_date_fields:
+            form = SimpleDateSearchForm(prefix=varname)
+            opt = var_list[varname + '_options']
+            if opt == '1': # Between
+                form.fields['from_year'].initial = var_list[varname + '_from_year']
+                form.fields['from_month'].initial = var_list[varname + '_from_month']
+                form.fields['to_year'].initial = var_list[varname + '_to_year']
+                form.fields['to_month'].initial = var_list[varname + '_to_month']
+            elif opt == '2': # Less than or equal to
+                form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
+                form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
+            elif opt == '3': # Greater than or equal to
+                form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
+                form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
+            elif opt == '4': # Equal to
+                form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
+                form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
+        elif varname in globals.list_place_fields:
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
+            form = SimplePlaceSearchForm(prefix=varname)
+            form.fields['choice_field'].choices = flatChoices
+            tmpElem['nested_choices'] = nestedChoices
+            tmpElem['selected_choices'] = var_list[varname + '_choice_field'].split(';')
+            form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
+        elif varname in globals.list_boolean_fields:
+            form = SimpleSelectBooleanForm(prefix=varname)
+            form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
+        else:
+            print "WARNING: variable not in any form type lists: %s" % varname
+            pass
+        form.fields['var_name_field'].initial = varname
+        form.fields['is_shown_field'].initial = str(idx)
+        tmpElem['form'] = form
+        form_list.append(tmpElem)
+    return form_list
+
 
 def create_var_dict(query_forms, time_frame_form):
     """
-    query_forms: list of dictionaries with var_name and form (also probably var_full_name, but I don't think I need to count on that)
+    query_forms: list of dictionaries with var_name and value (also probably var_full_name, but I don't think I need to count on that)
     returns a dictionary of var names and values for that var
     """
     # Creates a query dict based on all the restrictions the user has made
     var_list = {}
+    used_variables = []
     # Year Time Frame Search
     if time_frame_form.is_valid():
-        var_list['time_span_var_imp_arrival_at_port_of_dis'] = {'frame_from_year': time_frame_form.cleaned_data['frame_from_year'],
-                                                                'frame_to_year': time_frame_form.cleaned_data['frame_to_year']}
+        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_from_year'] = time_frame_form.cleaned_data['frame_from_year']
+        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_to_year'] = time_frame_form.cleaned_data['frame_to_year']
     for qryform in [x for x in query_forms if x['form'].is_valid() and x['form'].is_form_shown()]:
         #qform = next((l for l in query_forms if l['varname'] == search_var), None)
         varname = qryform['var_name']
+        used_variables.append(varname)
         form = qryform['form']
         if varname in globals.list_text_fields:
-            var_list[varname] = {'text_search': form.cleaned_data['text_search']}
+            var_list[varname + '_text_search'] = form.cleaned_data['text_search']
         elif varname in globals.list_select_fields:
-            # TODO: make sure this works. This is supposed to be a list
-            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
+            var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
         elif varname in globals.list_numeric_fields:
             opt = form.cleaned_data['options']
-            var_list[varname] = {'options': opt}
+            var_list[varname + '_options'] = opt
             mangle_method = globals.no_mangle
             if varname in globals.search_mangle_methods:
                 mangle_method = globals.search_mangle_methods[varname]
             if opt == '1': # Between
-                var_list[varname]['lower_bound'] = mangle_method(form.cleaned_data['lower_bound'])
-                var_list[varname]['upper_bound'] = mangle_method(form.cleaned_data['upper_bound'])
+                var_list[varname + '_lower_bound'] = mangle_method(form.cleaned_data['lower_bound'])
+                var_list[varname + '_upper_bound'] = mangle_method(form.cleaned_data['upper_bound'])
             elif opt == '2': # Less than or equal to
-                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
             elif opt == '3': # Greater than or equal to
-                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
             elif opt == '4': # Equal to
-                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
         elif varname in globals.list_date_fields:
             opt = form.cleaned_data['options']
-            var_list[varname] = {'options': opt}
+            var_list[varname + '_options'] = opt
             if opt == '1': # Between
-                var_list[varname]['from_year'] = form.cleaned_data['from_year']
-                var_list[varname]['from_month'] = form.cleaned_data['from_month']
-                var_list[varname]['to_year'] = form.cleaned_data['to_year']
-                var_list[varname]['to_month'] = form.cleaned_data['to_month']
+                var_list[varname + '_from_year'] = form.cleaned_data['from_year']
+                var_list[varname + '_from_month'] = form.cleaned_data['from_month']
+                var_list[varname + '_to_year'] = form.cleaned_data['to_year']
+                var_list[varname + '_to_month'] = form.cleaned_data['to_month']
             elif opt == '2': # Less than or equal to
-                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
-                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
+                var_list[varname + '_threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname + '_threshold_month'] = form.cleaned_data['threshold_month']
             elif opt == '3': # Greater than or equal to
-                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
-                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
+                var_list[varname + '_threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname + '_threshold_month'] = form.cleaned_data['threshold_month']
             elif opt == '4': # Equal to
-                var_list[varname]['threshold_year'] = form.cleaned_data['threshold_year']
-                var_list[varname]['threshold_month'] = form.cleaned_data['threshold_month']
+                var_list[varname + '_threshold_year'] = form.cleaned_data['threshold_year']
+                var_list[varname + '_threshold_month'] = form.cleaned_data['threshold_month']
         elif varname in globals.list_place_fields:
-            # TODO: figure out how to coalesce the list when the region or broadregion is selected
-            #places = request.POST.getlist(search_var + "_selected")
-            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
+            var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
         elif varname in globals.list_boolean_fields:
-            var_list[varname] = {'choice_field': form.cleaned_data['choice_field']}
+            var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
+
+    var_list['used_variable_names'] = ';'.join(used_variables)
+    for var in var_list:
+        var_list[var] = unidecode.unidecode(unicode(var_list[var]))
+    
     return var_list
 
 def create_query_dict(var_list):
@@ -265,52 +336,59 @@ def create_query_dict(var_list):
     time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
     # Year Time Frame Search
     if time_span_name in var_list:
-        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list[time_span_name]['frame_from_year'],
-                                                               var_list[time_span_name]['frame_to_year']]
-    for varname in var_list:
+        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list[time_span_name + '_frame_from_year'],
+                                                               var_list[time_span_name + '_frame_to_year']]
+    for varname in var_list['used_variable_names'].split(';'):
         if varname in globals.list_text_fields:
-            query_dict[varname + "__contains"] = var_list[varname]['text_search']
+            query_dict[varname + "__contains"] = var_list[varname + '_text_search']
         elif varname in globals.list_select_fields:
-            # TODO: this probably needs to be fixed
-            query_dict[varname + "__in"] = var_list[varname]['choice_field']
+            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
         elif varname in globals.list_numeric_fields:
-            opt = var_list[varname]['options']
+            opt = var_list[varname + '_options']
             if opt == '1': # Between
-                query_dict[varname + "__range"] = [var_list[varname]['lower_bound'],
-                                                   var_list[varname]['upper_bound']]
+                query_dict[varname + "__range"] = [var_list[varname + '_lower_bound'],
+                                                   var_list[varname + '_upper_bound']]
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = var_list[varname]['threshold']
+                query_dict[varname + "__lte"] = var_list[varname + '_threshold']
             elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = var_list[varname]['threshold']
+                query_dict[varname + "__gte"] = var_list[varname + '_threshold']
             elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = var_list[varname]['threshold']
+                query_dict[varname + "__exact"] = var_list[varname + '_threshold']
         elif varname in globals.list_date_fields:
-            opt = var_list[varname]['options']
+            opt = var_list[varname + '_options']
             if opt == '1': # Between
                 query_dict[varname + "__range"] = [
-                    formatDate(var_list[varname]['from_year'],
-                               var_list[varname]['from_month']),
-                    formatDate(var_list[varname]['to_year'],
-                               var_list[varname]['to_month'])]
+                    formatDate(var_list[varname + '_from_year'],
+                               var_list[varname + '_from_month']),
+                    formatDate(var_list[varname + '_to_year'],
+                               var_list[varname + '_to_month'])]
             elif opt == '2': # Less than or equal to
                 query_dict[varname + "__lte"] = \
-                    formatDate(var_list[varname]['threshold_year'],
-                               var_list[varname]['theshold_month'])
+                    formatDate(var_list[varname + '_threshold_year'],
+                               var_list[varname + '_theshold_month'])
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
-                    formatDate(var_list[varname]['threshold_year'],
-                               var_list[varname]['theshold_month'])
+                    formatDate(var_list[varname + '_threshold_year'],
+                               var_list[varname + '_theshold_month'])
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = \
-                    formatDate(var_list[varname]['threshold_year'],
-                               var_list[varname]['theshold_month'])
+                    formatDate(var_list[varname + '_threshold_year'],
+                               var_list[varname + '_theshold_month'])
         elif varname in globals.list_place_fields:
-            # TODO: figure out how to coalesce the list when the region or broadregion is selected
-            #places = request.POST.getlist(search_var + "_selected")
-            query_dict[varname + "__in"] = var_list[varname]['choice_field']
+            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
         elif varname in globals.list_boolean_fields:
-            query_dict[varname + "__in"] = var_list[varname]['choice_field']
+            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
     return query_dict
+
+def create_var_list_from_url(get):
+    """
+    Takes a request.GET and returns a var_list with the search parameters
+    """
+    var_list = {}
+    for i in get:
+        var_list[i] = get.get(i)
+    return var_list
+    
 
 def search(request):
     """
@@ -325,6 +403,7 @@ def search(request):
     result_data['summary_statistics_columns'] = globals.summary_statistics_columns
     form_list = []
     voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    search_url = None
     results = None
     time_frame_form = None
     results_per_page_form = None
@@ -337,14 +416,26 @@ def search(request):
     if desired_page:
         current_page = desired_page
 
-    if request.method == "GET" or request.POST.get('submitVal') == 'reset':
+    if request.method == "GET" and 'used_variable_names' in request.GET:
+        # Search parameters were specified in the url
+        var_list = create_var_list_from_url(request.GET)
+        form_list = create_forms_from_var_list(var_list)
+        time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list[time_span_name + '_frame_from_year'],
+                                                           'frame_to_year': var_list[time_span_name + '_frame_to_year']})
+        query_dict = create_query_dict(var_list)
+        results = perform_search(query_dict, None)
+        
+    elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
+        # A new search is being performed
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
-                                                      'frame_to_year': voyage_span_last_year})
+                                                           'frame_to_year': voyage_span_last_year})
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
     elif request.method == "POST":
+        # A normal search is being performed, or it is on another tab, or it is downloading a file
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
@@ -358,6 +449,7 @@ def search(request):
         form_list = retrieve_post_search_forms(request.POST)
         time_frame_form = TimeFrameSpanSearchForm(request.POST)
         var_list = create_var_dict(form_list, time_frame_form)
+        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
 
@@ -424,7 +516,7 @@ def search(request):
                    'pages_range': pages_range,
                    'curpage': pagins,
                    'no_result': no_result,
-                   'url_to_copy': "",
+                   'url_to_copy': search_url,
                    'tab': tab,
                    'options_results_per_page_form': results_per_page_form,
                    'form_list': form_list,

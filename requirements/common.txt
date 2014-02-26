@@ -13,3 +13,4 @@ PIL
 bitly_api
 psycopg2
 xlwt
+unidecode
