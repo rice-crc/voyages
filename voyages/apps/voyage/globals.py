@@ -64,6 +64,8 @@ def display_sterling_price(value):
     return "£" + str(round(value, 2))
 def display_sterling_price_nopound(value):
     return str(round(value, 2))
+def display_xls_multiple_names(value):
+    return value.replace('<br/>', ';')
 
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
@@ -80,7 +82,8 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_male': display_percent,
                        'var_imputed_percentage_child': display_percent,
                        'var_imputed_mortality': display_percent,
-                       'var_imputed_sterling_cash': display_sterling_price_nopound}
+                       'var_imputed_sterling_cash': display_sterling_price_nopound,
+                       'var_captain': display_xls_multiple_names}
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
