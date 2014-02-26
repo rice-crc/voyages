@@ -121,12 +121,13 @@ def create_query_forms():
     for each of them that is either a basic or a general variable
     Returns a list of dictionaries containing the var_name, var_full_name, form
     """
-    print "Creating Query Forms"
     voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
     form_list = []
     # for all basic and/or general variables
     for var in [x for x in globals.var_dict if x['is_general'] or x['is_basic']]:
         varname = var['var_name']
+        tmpElem = {'var_name': varname,
+                   'var_full_name': var['var_full_name']}
         if varname in globals.list_text_fields:
             form = SimpleTextForm(prefix=varname)
         elif varname in globals.list_select_fields:
@@ -141,31 +142,31 @@ def create_query_forms():
                                                  'to_year': voyage_span_last_year},
                                         prefix=varname)
         elif varname in globals.list_place_fields:
-            choices = getNestedListPlaces(varname, var['choices'])
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
             form = SimplePlaceSearchForm(prefix=varname)
-            form.fields['choice_field'].choices = choices
+            form.fields['choice_field'].choices = flatChoices
+            tmpElem['nested_choices'] = nestedChoices
+            tmpElem['selected_choices'] = []
         elif varname in globals.list_boolean_fields:
             form = SimpleSelectBooleanForm(prefix=varname)
         else:
             print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
-        elem = {}
-        elem['var_name'] = varname
-        elem['var_full_name'] = var['var_full_name']
-        elem['form'] = form
-        form_list.append(elem)
+        tmpElem['form'] = form
+        form_list.append(tmpElem)
     return form_list
 
 def retrieve_post_search_forms(post):
     """
     Retrieves the forms in the post and returns a list of dictionaries with var_name, var_full_name, and form
     """
-    print "Retrieving Query Forms from POST"
     form_list = []
     # for all basic and/or general variables
     for var in [x for x in globals.var_dict if x['is_general'] or x['is_basic']]:
         varname = var['var_name']
+        tmpElem = {'var_name': varname,
+                   'var_full_name': var['var_full_name']}
         if varname in globals.list_text_fields:
             form = SimpleTextForm(post, prefix=varname)
         elif varname in globals.list_select_fields:
@@ -179,12 +180,18 @@ def retrieve_post_search_forms(post):
             form = SimpleSelectBooleanForm(post, prefix=varname)
         elif varname in globals.list_place_fields:
             form = SimplePlaceSearchForm(post, prefix=varname)
-            choices = getNestedListPlaces(varname, var['choices'])
-            form.fields['choice_field'].choices = choices
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
+            form.fields['choice_field'].choices = flatChoices
+            selected_choices = []
+            if form.is_valid():
+                selected_choices = form.cleaned_data['choice_field']
+            # Get the nested list places again to fill out the selected regions and areas. Needed to get the flat choices and set the choice field to that before form would validate.
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
+            tmpElem['nested_choices'] = nestedChoices
+            tmpElem['selected_choices'] = selected_choices
 
-        form_list.append({'var_name': varname,
-                          'var_full_name': var['var_full_name'],
-                          'form': form})
+        tmpElem['form'] = form
+        form_list.append(tmpElem)
     return form_list
 
 
@@ -469,31 +476,39 @@ def getChoices(varname):
             choices.append((rig.label, rig.label))
     return choices
 
-
-def getNestedListPlaces(varname, nested_places):#, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
+def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
     """
     Retrieve a nested list of places sorted by broad region (area) and then region
     :param varname:
-    :return:
+    returns a tuple of the nested choices and the choices
     """
-    choices = []
+    nestedChoices = []
+    flatChoices = []
 
     for area, regs in nested_places.items():
         area_content = []
+        is_area_selected = True
         for reg, places in regs.items():
             reg_content = []
+            is_selected = True
             for place in places:
+                if place.place not in selected_places:
+                    is_selected = False
+                    is_area_selected = False
                 if place.place == "???":
                     continue
                 # I don't think I need the selected logic here, but double check
                 reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
                                     'text': place.place})
+                flatChoices.append((place.place, place.place))
             area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
                                  'text': reg.region,
-                                 'choices': reg_content})
-        choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
-                        'text': area.broad_region,
-                        'choices': area_content})
+                                 'choices': reg_content,
+                                 'is_selected': is_selected})
+        nestedChoices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
+                              'text': area.broad_region,
+                              'choices': area_content,
+                              'is_selected': is_area_selected})
     
     # Check if visible parameters have been passed, if so filter
     """if not place_visible:
@@ -544,7 +559,7 @@ def getNestedListPlaces(varname, nested_places):#, place_visible=[], region_visi
             choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
                             'text': area.broad_region,
                             'choices': area_content})"""
-    return choices
+    return nestedChoices, flatChoices
 
 
 def prepare_paginator_variables(paginator, current_page, results_per_page):

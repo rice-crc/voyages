@@ -183,6 +183,7 @@ class SimpleSelectSearchForm(VoyageBaseForm):
 class SimplePlaceSearchForm(VoyageBaseForm):
     type_str = "select_three_layers"
     choice_field = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}))
+    nested_choices = []
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
     BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
