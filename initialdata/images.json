@@ -1,5 +1,59 @@
 [
 {
+    "pk": 55, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 1, 
+        "label": "Vessels"
+    }
+},
+{
+    "pk": 56, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 2, 
+        "label": "Slaves"
+    }
+},
+{
+    "pk": 57, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 99, 
+        "label": "Presentation"
+    }
+},
+{
+    "pk": 58, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 100, 
+        "label": "Ports updated"
+    }
+},
+{
+    "pk": 59, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 3, 
+        "label": "Places"
+    }
+},
+{
+    "pk": 60, 
+    "model": "resources.imagecategory", 
+    "fields": {
+        "visible_on_website": true, 
+        "value": 4, 
+        "label": "Manuscripts"
+    }
+},
+{
     "pk": 1, 
     "model": "resources.image", 
     "fields": {
@@ -6242,60 +6296,6 @@
         "ready_to_go": true, 
         "file": "images/196E5FE3303B6EA2D9CCDAE1EEA20786.JPG", 
         "order_num": 0
-    }
-},
-{
-    "pk": 55, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 1, 
-        "label": "Vessels"
-    }
-},
-{
-    "pk": 56, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 2, 
-        "label": "Slaves"
-    }
-},
-{
-    "pk": 57, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 99, 
-        "label": "Presentation"
-    }
-},
-{
-    "pk": 58, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 100, 
-        "label": "Ports updated"
-    }
-},
-{
-    "pk": 59, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 3, 
-        "label": "Places"
-    }
-},
-{
-    "pk": 60, 
-    "model": "resources.imagecategory", 
-    "fields": {
-        "visible_on_website": true, 
-        "value": 4, 
-        "label": "Manuscripts"
     }
 }
 ]

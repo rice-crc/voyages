@@ -626,8 +626,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_imputed_mortality(self, obj):
         try:
-            return obj.voyage_slaves_numbers.imp_mortality_during_voyage \
-                   / float(obj.voyage_slaves_numbers.imp_total_num_slaves_embarked)
+            return obj.voyage_slaves_numbers.imp_mortality_ratio
         except (AttributeError, TypeError):
             return None
 
