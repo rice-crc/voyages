@@ -218,15 +218,18 @@ def create_var_dict(query_forms, time_frame_form):
         elif varname in globals.list_numeric_fields:
             opt = form.cleaned_data['options']
             var_list[varname] = {'options': opt}
+            mangle_method = globals.no_mangle
+            if varname in globals.search_mangle_methods:
+                mangle_method = globals.search_mangle_methods[varname]
             if opt == '1': # Between
-                var_list[varname]['lower_bound'] = form.cleaned_data['lower_bound']
-                var_list[varname]['upper_bound'] = form.cleaned_data['upper_bound']
+                var_list[varname]['lower_bound'] = mangle_method(form.cleaned_data['lower_bound'])
+                var_list[varname]['upper_bound'] = mangle_method(form.cleaned_data['upper_bound'])
             elif opt == '2': # Less than or equal to
-                var_list[varname]['threshold'] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
             elif opt == '3': # Greater than or equal to
-                var_list[varname]['threshold'] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
             elif opt == '4': # Equal to
-                var_list[varname]['threshold'] = form.cleaned_data['threshold']
+                var_list[varname]['threshold'] = mangle_method(form.cleaned_data['threshold'])
         elif varname in globals.list_date_fields:
             opt = form.cleaned_data['options']
             var_list[varname] = {'options': opt}
