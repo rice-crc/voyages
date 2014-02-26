@@ -229,9 +229,9 @@ function shortenURL(){
                                            name="" style="width: 200px;" />
 
                                     <div class="query-builder-edit-list-expandable">
-                                        {% if item.form.fields.choice_field.choices %}
+                                        {% if item.nested_choices %}
                                             <ul>
-                                            {% for item_layer0 in item.form.fields.choice_field.choices %}
+                                            {% for item_layer0 in item.nested_choices %}
                                                 <li>
                                                     <div class="query-builder-list-item-collapsed"
                                                          onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
@@ -240,7 +240,7 @@ function shortenURL(){
                                                                name="{{ item.var_name }}_selected_areas"
                                                                value="{{ item_layer0.text }}"
                                                                class="var-checkbox checkbox-layer0" type="checkbox"
-                                                               {% if item_layer0.selected == True %} checked="checked" {% endif %}
+                                                               {% if item_layer0.is_selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
                                                         <span class="text-label">{{ item_layer0.text }}</span>
                                                     </label>
@@ -254,7 +254,7 @@ function shortenURL(){
                                                                class="var-checkbox checkbox-layer1" type="checkbox"
                                                                name="{{ item.var_name }}_selected_regs"
                                                                value="{{ item_layer1.text }}"
-                                                               {% if item_layer1.selected == True %} checked="checked" {% endif %}
+                                                               {% if item_layer1.is_selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
                                                             <span class="text-label">{{ item_layer1.text }}</span>
                                                         </label>
@@ -264,8 +264,9 @@ function shortenURL(){
                                                                     <label for="{{ item_layer2.id }}">
                                                                     <input id="{{ item_layer2.id }}"
                                                                            class="var-checkbox checkbox-layer2" type="checkbox"
-                                                                           name="{{ item.var_name }}_selected"
-                                                                            {% if item_layer2.selected == True %} checked="checked" {% endif %}
+                                                                           name="{{ item.var_name }}-choice_field"
+                                                                            {% if item_layer2.text in item.selected_choices %} checked="checked" {% endif %}
+									   
                                                                            value="{{ item_layer2.text }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                                                     <span class="text-label">{{ item_layer2.text }}</span>
