@@ -518,54 +518,6 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
                               'is_selected': is_area_selected})
     
     # Check if visible parameters have been passed, if so filter
-    """if not place_visible:
-        place_visible = Place.objects.all()
-    else:
-        place_visible = Place.objects.filter(place__in=place_visible)
-
-    if not region_visible:
-        region_visible = Region.objects.all()
-    else:
-        region_visible = Region.objects.filter(region__in=region_visible)
-
-    if not area_visible:
-        area_visible = BroadRegion.objects.all()
-    else:
-        area_visible = BroadRegion.objects.filter(broad_region__in=area_visible)
-        
-
-    for area in area_visible:
-        area_content = []
-        for reg in region_visible.filter(broad_region=area):
-            reg_content = []
-            for place in place_visible.filter(region=reg):
-                if place.place == "???":
-                    continue
-                if place.place in place_selected:
-                    reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
-                                        'text': place.place, 'selected': True})
-
-                else:
-                    reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
-                                        'text': place.place})
-            if reg.region in region_selected:
-                area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
-                                    'text': reg.region,
-                                    'choices': reg_content,
-                                    'selected': True})
-            else:
-                area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
-                                    'text': reg.region,
-                                    'choices': reg_content})
-        if area.broad_region in area_selected:
-            choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
-                            'text': area.broad_region,
-                            'choices': area_content,
-                            'selected' : True})
-        else:
-            choices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
-                            'text': area.broad_region,
-                            'choices': area_content})"""
     return nestedChoices, flatChoices
 
 
