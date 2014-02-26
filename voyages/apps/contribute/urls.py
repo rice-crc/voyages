@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
+from voyages.apps.contribute.forms import LoginForm
 
 urlpatterns = patterns('',
     url(r'^$', 'voyages.apps.contribute.views.index', name='index'),   
     
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'contribute/voyagelogin.html'}, name='login'),
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'contribute/voyagelogin.html', 'authentication_form':LoginForm}, name='login'),
     
     url(r'^guidelines$', TemplateView.as_view(template_name='contribute/guidelines.html'), name='guidelines'),
     url(r'^newuser$', TemplateView.as_view(template_name='under_constr.html'), name='newuser'),

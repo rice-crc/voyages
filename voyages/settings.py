@@ -71,6 +71,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "voyages.apps.voyage.context_processors.voyage_span",
     )
 
+AUTHENTICATION_BACKENDS = (
+    'voyages.apps.contribute.backends.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
