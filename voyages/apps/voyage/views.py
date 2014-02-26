@@ -318,7 +318,13 @@ def search(request):
     results = None
     time_frame_form = None
     results_per_page_form = None
+    results_per_page = 10
     
+    # If there is no requested page number, serve 1
+    current_page = 1
+    desired_page = request.POST.get('desired_page')
+    if desired_page:
+        current_page = desired_page
 
     if request.method == "GET" or request.POST.get('submitVal') == 'reset':
         results_per_page_form = ResultsPerPageOptionForm()
@@ -329,11 +335,18 @@ def search(request):
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
     elif request.method == "POST":
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
+        if results_per_page_form.is_valid():
+            results_per_page = results_per_page_form.cleaned_option()
+        display_columns = get_new_visible_attrs(globals.default_result_columns)
+        if 'result_columns' in request.session:
+            display_columns = request.session['result_columns']
+
         form_list = retrieve_post_search_forms(request.POST)
         time_frame_form = TimeFrameSpanSearchForm(request.POST)
         var_list = create_var_dict(form_list, time_frame_form)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
+
         submitVal = request.POST.get('submitVal')
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -358,26 +371,19 @@ def search(request):
             tab = 'timeline'
         elif submitVal == 'tab_maps':
             tab = 'maps'
-
+        elif submitVal == 'download_xls_current_page':
+            return download_xls_page(results, int(current_page), results_per_page, display_columns)
+        elif submitVal == 'download_xls_all':
+            return download_xls_page(results, -1, results_per_page, display_columns)
+            
     if len(results) == 0:
         no_result = True
-    # If there is no requested page number, serve 1
-    if request.POST.get('desired_page') is None:
-        current_page = 1
-    else:
-        current_page = request.POST.get('desired_page')
-    results_per_page = 10
-    if results_per_page_form.is_valid():
-        results_per_page = results_per_page_form.cleaned_option()
 
-    #TODO: refactor pagination
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
-
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
-
     # Customize result page
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -396,6 +402,7 @@ def search(request):
                    'result_data': result_data,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
+                   'curpage': pagins,
                    'no_result': no_result,
                    'url_to_copy': url_to_copy,
                    'tab': tab,
@@ -744,182 +751,6 @@ def decode_from_url(request):
     #            initial={'frame_from_year': voyage_span_first_year,
     #                     'frame_to_year': voyage_span_last_year})
     return dict, date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result
-
-
-def create_menu_forms(dict):
-    """
-    Function to create forms.
-
-    :param dict: dictionary with search options
-    """
-    """
-    print "I SHOULDN'T GET HERE!!!!!"
-    new_existing_form = []
-    date_filters = []
-    no_result = False
-
-    for k, v in dict.iteritems():
-        elem_dict = {}
-
-        # e.g.: k = var_imp_voyage_began__range
-        # var_name = var_imp_voyage_began
-
-        var_name = k.split("__")[0]
-
-        # imputed voyage began is special case
-        if var_name == "var_imp_voyage_began":
-            voyage_span_first_year = v[0]
-            voyage_span_last_year = v[1]
-            continue
-        else:
-            voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
-
-        var = search_var_dict(var_name)
-        var_type = var['var_type']
-
-        elem_dict['varname'] = var['var_name']
-        elem_dict['type'] = var['var_type']
-        elem_dict['input_field_name'] = "header_" + var_name
-        elem_dict['var_full_name'] = var['var_full_name']
-
-        if var_type == "plain_text":
-            # Plain text fields
-            form = SimpleTextForm(auto_id=('id_' + var_name + "_%s"), initial={'text_search': v}, prefix=var_name)
-            elem_dict['form'] = form
-
-        elif var_type == "select":
-            # Select box variables
-            choices_list = []
-            choices = getChoices(var_name)
-            # Get selected fields
-            for select_field in v.split("|"):
-                choices_list.append(" ".join(select_field.split("_")))
-
-            form = SimpleSelectSearchForm(listChoices=choices,
-                                          auto_id=('id_' + var_name + "_%s"),
-                                          initial={'choice_field': choices_list},
-                                          prefix=var_name)
-
-            elem_dict['form'] = form
-            elem_dict['varname_wrapper'] = "select_" + var_name
-            elem_dict['choices'] = choices
-
-        elif var_type == "numeric":
-            # Numeric variables
-            word_option = var_name = k.split("__")[1]
-            if word_option == "range":
-                option = 1
-                lower_bound = v[0]
-                upper_bound = v[1]
-            elif word_option == "lte":
-                option = 2
-            elif word_option == "gte":
-                option = 3
-            elif word_option == "exact":
-                option = 4
-
-            if option == 1:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                               initial={'options': option,
-                                                        'lower_bound': lower_bound,
-                                                        'upper_bound': upper_bound},
-                                               prefix=var_name)
-            else:
-                form = SimpleNumericSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                               initial={'options': option,
-                                                        'threshold': v},
-                                               prefix=var_name)
-            elem_dict['form'] = form
-
-        elif var_type == "date":
-            # Date variables
-            deselected_months = []
-            word_option = k.split("__")[1]
-            if word_option == "range":
-                option = 1
-                from_month = v[0].split(",")[1]
-                from_year = v[0].split(",")[0]
-                to_month = v[1].split(",")[1]
-                to_year = v[1].split(",")[0]
-                if len(v) == 3:
-                    for month in v[2].split(","):
-                        deselected_months.append(month)
-
-            else:
-                if len(v) == 1:
-                    threshold_month = v.split(",")[1]
-                    threshold_year = v.split(",")[0]
-                else:
-                    threshold_month = v[0].split(",")[1]
-                    threshold_year = v[0].split(",")[0]
-                    for month in v[1].split(","):
-                        deselected_months.append(month)
-
-                if word_option == "lte":
-                    option = 2
-                elif word_option == "gte":
-                    option = 3
-                elif word_option == "exact":
-                    option = 4
-
-            if word_option == "range":
-                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                            initial={'options': option,
-                                                     'from_month': from_month,
-                                                     'from_year': from_year,
-                                                     'to_month': to_month,
-                                                     'to_year': to_year},
-                                            prefix=var_name)
-            else:
-                form = SimpleDateSearchForm(auto_id=('id_' + var_name + "_%s"),
-                                            initial={'options': option,
-                                                     'threshold_month': threshold_month,
-                                                     'threshold_year': threshold_year},
-                                            prefix=var_name)
-
-            elem_dict['list_months'] = globals.list_months
-            elem_dict['form'] = form
-
-            elem_dict['list_deselected'] = deselected_months
-            elem_dict['deselected_months'] = var_name + '_deselected_months'
-
-            if 0 < len(deselected_months) < len(globals.list_months):
-                date_filters.append({'varname': var_name, 'deselected_months': deselected_months})
-            elif len(deselected_months) == len(globals.list_months):
-                no_result = True
-
-        elif var_type in "select_three_layers":
-            # Get places
-
-            if var_name != "var_imp_principal_place_of_slave_purchase":
-                choices = getNestedListPlaces(var_name, place_selected=v)
-            else:
-                choices = getNestedListPlaces(var_name, area_visible=globals.var_imp_principal_place_of_slave_purchase_fields, place_selected=v)
-
-            elem_dict['varname_wrapper'] = "select_" + var_name
-            elem_dict['choices'] = choices
-            elem_dict['selected_choices'] = var_name + "_selected"
-            elem_dict['selected_regs'] = var_name + "_selected_regs"
-            elem_dict['selected_areas'] = var_name + "_selected_areas"
-
-        elif var_type == "boolean":
-             # Boolean field
-            print "THIS IS VERY BAD!!!"
-            [k for k, v in enumerate(SimpleSelectBooleanForm.BOOLEAN_CHOICES) if v[0] == v]
-            form = SimpleSelectBooleanForm(auto_id=('id_' + var_name + "_%s"),
-                                           initial={'choice_field': SimpleSelectBooleanForm.BOOLEAN_CHOICES[k]},
-                                           prefix=var_name)
-            elem_dict['form'] = form
-
-        else:
-            pass
-
-        new_existing_form.append(elem_dict)
-
-    return date_filters, new_existing_form, voyage_span_first_year, voyage_span_last_year, no_result
-    """
-    return None
-
 
 def search_var_dict(var_name):
     for i in globals.var_dict:
@@ -1276,65 +1107,26 @@ def extract_places(string):
         return places_list[0] + ", " + places_list[1], places_list[2]
 
 
-# Writes an excel file
-def download_results(request, page):
-    """
-    Renders a downloadable excel file
-    page indicates the current page the user is on
-    page = -1 indicates download all results
-    :param request:
-    :param page:
-    :return:
-    """
+def download_xls_page(results, current_page, results_per_page, columns):
+    # Download only current page
+    res = results
+    if current_page != -1:
+        paginator = Paginator(results, results_per_page)
+        curpage = paginator.page(current_page)
+        res = curpage.object_list
+
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
-
-    try:
-        query_dict = request.session['voyage_last_query']
-        display_columns = request.session['result_columns']
-    except KeyError:
-        query_dict = None
-        display_columns = get_new_visible_attrs(globals.default_result_columns)
-
     wb = Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
+    #TODO: add query to download
+    for idx, column in enumerate(columns):
+        ws.write(1,idx,label=get_spss_name(column[0]))
 
-    if page == "-1":
-        # Download all results
-        if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
-                and request.session['voyage_last_query']:
-            query_dict = request.session['voyage_last_query']
-            if 'voyage_last_query_date_filters' in request.session\
-                    and request.session['voyage_last_query_date_filters'] is not None:
-                date_filters = request.session['voyage_last_query_date_filters']
-            else:
-                date_filters = []
-
-            results = perform_search(query_dict, date_filters)
-
-            if len(results) == 0:
-                no_result = True
-                results = []
-        else:
-            results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
-
-    else:
-        # Download current view
-        results = request.session['voyage_current_result_page']
-
-    # Writing query
-    if query_dict is None:
-        ws.write(0,0,label='All records')
-    else:
-        ws.write(0,0,label=extract_query_for_download(query_dict, []))
-
-    for idx, column in enumerate(globals.general_variables):
-        ws.write(1,idx,label=column['spss_name'])
-
-    for idx, item in enumerate(results):
+    for idx, item in enumerate(res):
         stored_fields = item.get_stored_fields()
-        for idy, column in enumerate([x['var_name'] for x in globals.general_variables]):
-            data = stored_fields[column]
+        for idy, column in enumerate(columns):
+            data = stored_fields[column[0]]
             if data is None:
                 ws.write(idx+2,idy,label="")
             elif isinstance(data, (int, long, float)):
@@ -1345,7 +1137,6 @@ def download_results(request, page):
     wb.save(response)
 
     return response
-
 
 def csv_stats_download(request):
     """
