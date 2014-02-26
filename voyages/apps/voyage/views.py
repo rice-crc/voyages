@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
@@ -372,9 +373,9 @@ def search(request):
         elif submitVal == 'tab_maps':
             tab = 'maps'
         elif submitVal == 'download_xls_current_page':
-            return download_xls_page(results, int(current_page), results_per_page, display_columns)
+            return download_xls_page(mangle_results(results, globals.display_methods_xls), int(current_page), results_per_page, display_columns)
         elif submitVal == 'download_xls_all':
-            return download_xls_page(results, -1, results_per_page, display_columns)
+            return download_xls_page(mangle_results(results, globals.display_methods_xls), -1, results_per_page, display_columns)
             
     if len(results) == 0:
         no_result = True
@@ -392,6 +393,8 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
+    result_display = mangle_results(pagins, globals.display_methods)
+
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
                    'voyage_span_last_year': voyage_span_last_year,
@@ -408,8 +411,26 @@ def search(request):
                    'tab': tab,
                    'options_results_per_page_form': results_per_page_form,
                    'form_list': form_list,
-                   'time_frame_search_form': time_frame_form})
+                   'time_frame_search_form': time_frame_form,
+                   'result_display': result_display})
 
+def mangle_results(results, lookup_table):
+    """
+    Returns a list of dictionaries keyed by variable name, mangles the value so that it displays properly
+    """
+    mangled = []
+    for i in results:
+        idict = {}
+        for varname, varvalue in i.get_stored_fields().items():
+            if varvalue:
+                if varname in lookup_table:
+                    idict[varname] = lookup_table[varname](varvalue)
+                else:
+                    idict[varname] = varvalue
+            else:
+                idict[varname] = None
+        mangled.append(idict)
+    return mangled
 
 def getChoices(varname):
     """
@@ -1124,9 +1145,9 @@ def download_xls_page(results, current_page, results_per_page, columns):
         ws.write(1,idx,label=get_spss_name(column[0]))
 
     for idx, item in enumerate(res):
-        stored_fields = item.get_stored_fields()
+        #stored_fields = item.get_stored_fields()
         for idy, column in enumerate(columns):
-            data = stored_fields[column[0]]
+            data = item[column[0]]
             if data is None:
                 ws.write(idx+2,idy,label="")
             elif isinstance(data, (int, long, float)):
