@@ -380,9 +380,13 @@ def search(request):
         elif submitVal == 'tab_maps':
             tab = 'maps'
         elif submitVal == 'download_xls_current_page':
-            return download_xls_page(mangle_results(results, globals.display_methods_xls), int(current_page), results_per_page, display_columns)
+            pageNum = request.POST.get('pageNum')
+            if not pageNum:
+                pageNum = 1
+                print "Warning: unable to get page number from post"
+            return download_xls_page(results, int(pageNum), results_per_page, display_columns)
         elif submitVal == 'download_xls_all':
-            return download_xls_page(mangle_results(results, globals.display_methods_xls), -1, results_per_page, display_columns)
+            return download_xls_page(results, -1, results_per_page, display_columns)
             
     if len(results) == 0:
         no_result = True
@@ -1150,6 +1154,7 @@ def download_xls_page(results, current_page, results_per_page, columns):
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
         res = curpage.object_list
+    res = mangle_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'

@@ -133,9 +133,9 @@
         <tr>
             <td>
                 <div class="download_button">
-                    <a href="#" onclick="submitWithValue('download_xls_current_page')">{% trans 'Download current view' %}</a>
+                    <a href="#" onclick="getxlsDownload({{ curpage.number }})">{% trans 'Download current view' %}</a>
                     &nbsp; &nbsp;
-                    <a href="#" onclick="submitWithValue('download_xls_all')">{% trans 'Download all results' %}</a>
+                    <a href="#" onclick="getxlsDownload(-1)">{% trans 'Download all results' %}</a>
                 </div>
             </td>
             <td></td>

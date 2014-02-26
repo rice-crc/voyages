@@ -368,6 +368,16 @@ function config_change_group(group_id) {
     $("#" + group_id).removeClass("hidden");
 }
 
+function getxlsDownload(pageNum) {
+    $('#form').append("<input id='xls_download_submit_val' type='hidden' name='submitVal' value='download_xls_current_page' />");
+    $("#form").submit();
+    $('#form').append("<input id='xls_download_page_num' type='hidden' name='pageNum' value='" + pageNum + "' />");
+    $("#form").submit();
+    $('#xls_download_submit_val').remove()
+    $('#xls_download_page_num').remove()
+    return false;
+}
+
 function submitWithValue(submitVal) {
     $('#form').append("<input type='hidden' name='submitVal' value='" + submitVal + "' />");
     $("#form").submit();
