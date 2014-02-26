@@ -1176,6 +1176,9 @@ class VoyageSlavesNumbers(models.Model):
     percentage_adult = models.FloatField("Percentage adult on voyage", null=True, blank=True)
     # Calculated from malrat7
     percentage_female = models.FloatField("Percentage female on voyage", null=True, blank=True)
+    
+    # vymrtrat
+    imp_mortality_ratio = models.FloatField("Imputed mortality ratio", null=True, blank=True)
 
     class Meta:
         verbose_name = 'Slaves Characteristic'

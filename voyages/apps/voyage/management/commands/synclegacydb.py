@@ -24,6 +24,7 @@ class Command(BaseCommand):
         models.VoyageSourcesConnection.objects.all().delete()
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
+        listSources = models.VoyageSources.objects.all()
         count = 0
         try:
             for x in pag.page_range:
@@ -35,7 +36,7 @@ class Command(BaseCommand):
                         voyageObj.voyage_id = i.voyageid
                         voyageObj.save()
                     ship = models.VoyageShip()
-                    ship.voyage = voyageObj
+                    #ship.voyage = voyageObj
                     # There are some null values in wilson that should be false instead
                     voyageObj.voyage_in_cd_rom = not not i.evgreen
                     if i.xmimpflag:
@@ -70,9 +71,9 @@ class Command(BaseCommand):
                         ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp)
                     if i.tonmod:
                         ship.tonnage_mod = str(round(i.tonmod, 1))
-                    ship.save()
-                    voyageObj.voyage_ship = ship
-                    voyageObj.save()
+                    #ship.save()
+                    #voyageObj.voyage_ship = ship
+                    #voyageObj.save()
 
                     # Owners section
                     letters = map(chr, range(97, 97 + 16)) # from a to p
@@ -85,7 +86,7 @@ class Command(BaseCommand):
                             # Create voyage-owner connection
                             models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=voyageObj, owner_order=(idx+1))
                     outcome = models.VoyageOutcome()
-                    outcome.voyage = voyageObj
+                    #outcome.voyage = voyageObj
                     if i.fate:
                         outcome.particular_outcome = models.ParticularOutcome.objects.get(value=i.fate.id)
                     if i.resistance:
@@ -96,10 +97,10 @@ class Command(BaseCommand):
                         outcome.vessel_captured_outcome = models.VesselCapturedOutcome.objects.get(value=i.fate3.id)
                     if i.fate4:
                         outcome.outcome_owner = models.OwnerOutcome.objects.get(value=i.fate4.id)
-                    outcome.save()
+                    #outcome.save()
 
                     itinerary = models.VoyageItinerary()
-                    itinerary.voyage = voyageObj
+                    #itinerary.voyage = voyageObj
                     if i.portdep:
                         itinerary.port_of_departure = models.Place.objects.get(value=i.portdep.id)
                     if i.embport:
@@ -168,7 +169,7 @@ class Command(BaseCommand):
                     if i.mjbyptimp:
                         itinerary.imp_principal_place_of_slave_purchase = models.Place.objects.get(value=i.mjbyptimp.id)
                     if i.majbyimp:
-                        itinerary.imp_principle_region_of_slave_purchase = models.Region.objects.get(value=i.majbyimp.id)
+                        itinerary.imp_principal_region_of_slave_purchase = models.Region.objects.get(value=i.majbyimp.id)
                     if i.majbyimp1:
                         itinerary.imp_broad_region_of_slave_purchase = models.BroadRegion.objects.get(value=i.majbyimp1)
                     if i.majselpt:
@@ -179,9 +180,9 @@ class Command(BaseCommand):
                         itinerary.imp_principal_region_slave_dis = models.Region.objects.get(value=i.mjselimp.id)
                     if i.mjselimp1:
                         itinerary.imp_broad_region_slave_dis = models.BroadRegion.objects.get(value=i.mjselimp1)
-                    itinerary.save()
-                    voyageObj.voyage_itinerary = itinerary
-                    voyageObj.save()
+                    #itinerary.save()
+                    #voyageObj.voyage_itinerary = itinerary
+                    #voyageObj.save()
 
                     def mk_date(day_value, month_value, year_value):
                         """
@@ -204,7 +205,7 @@ class Command(BaseCommand):
                         return tmpStr
                     # Voyage dates
                     date_info = models.VoyageDates()
-                    date_info.voyage = voyageObj
+                    #date_info.voyage = voyageObj
                     date_info.voyage_began = mk_date(i.datedepa, i.datedepb, i.datedepc)
                     date_info.slave_purchase_began = mk_date(i.d1slatra, i.d1slatrb, i.d1slatrc)
                     date_info.vessel_left_port = mk_date(i.dlslatra, i.dlslatrb, i.dlslatrc)
@@ -229,15 +230,15 @@ class Command(BaseCommand):
                         tmp = i.dateleftafr
                         # MM,DD,YYYY
                         date_info.date_departed_africa = mk_date(tmp.day, tmp.month, tmp.year)
-                    elif i.dlslatrc or i.dlslatrb or i.dlslatra:
+                    elif i.dlslatrc:
                         date_info.date_departed_africa = mk_date(i.dlslatra, i.dlslatrb, i.dlslatrc)
-                    date_info.save()
-                    voyageObj.voyage_dates = date_info
-                    voyageObj.save()
+                    #date_info.save()
+                    #voyageObj.voyage_dates = date_info
+                    #voyageObj.save()
 
                     # Captain and Crew section
                     crew = models.VoyageCrew()
-                    crew.voyage = voyageObj
+                    #crew.voyage = voyageObj
                     crew.crew_voyage_outset = i.crew1
                     crew.crew_departure_last_port = i.crew2
                     crew.crew_first_landing = i.crew3
@@ -263,13 +264,13 @@ class Command(BaseCommand):
                         #TODO change to get_or_create
                         third_captain = models.VoyageCaptain.objects.create(name=i.captainc)
                         models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
-                    crew.save()
-                    voyageObj.voyage_crew = crew
-                    voyageObj.save()
+                    #crew.save()
+                    #voyageObj.voyage_crew = crew
+                    #voyageObj.save()
 
                     # Voyage numbers and characteristics
                     characteristics = models.VoyageSlavesNumbers()
-                    characteristics.voyage = voyageObj
+                    #characteristics.voyage = voyageObj
                     characteristics.num_slaves_intended_first_port = i.slintend
                     characteristics.num_slaves_intended_second_port = i.slinten2
                     characteristics.num_slaves_carried_first_port = i.ncar13
@@ -380,6 +381,8 @@ class Command(BaseCommand):
                     characteristics.total_slaves_dept_or_arr_gender_identified = i.slavemx7
                     characteristics.imp_slaves_embarked_for_mortality = i.tslmtimp
 
+                    characteristics.imp_mortality_ratio = i.vymrtrat
+
                     characteristics.percentage_men = i.menrat7
                     characteristics.percentage_women = i.womrat7
                     characteristics.percentage_boy = i.boyrat7
@@ -391,11 +394,34 @@ class Command(BaseCommand):
                     if i.malrat7:
                         characteristics.percentage_female = 1 - i.malrat7
 
-                    characteristics.save()
-                    voyageObj.voyage_slaves_numbers = characteristics
-                    voyageObj.save()
+                    #characteristics.save()
+                    #voyageObj.voyage_slaves_numbers = characteristics
+                    #voyageObj.save()
 
-                    listSources = models.VoyageSources.objects.all()
+                    voyageObj.save()
+                    
+                    ship.voyage = voyageObj
+                    outcome.voyage = voyageObj
+                    itinerary.voyage = voyageObj
+                    date_info.voyage = voyageObj
+                    crew.voyage = voyageObj
+                    characteristics.voyage = voyageObj
+                    
+                    ship.save()
+                    outcome.save()
+                    itinerary.save()
+                    date_info.save()
+                    crew.save()
+                    characteristics.save()
+
+                    voyageObj.voyage_ship = ship
+                    #voyageObj.voyage_outcome = outcome
+                    voyageObj.voyage_itinerary = itinerary
+                    voyageObj.voyage_dates = date_info
+                    voyageObj.voyage_crew = crew
+                    voyageObj.voyage_slaves_numbers = characteristics
+                    
+                    voyageObj.save()
 
                     def findBestMatchingSource(matchstring):
                         #Base case
