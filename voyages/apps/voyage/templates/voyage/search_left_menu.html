@@ -301,26 +301,25 @@ function shortenURL(){
                             {{ item.form.to_month }} / {{ item.form.to_year }}
                             </span>
                             <span class="date_field_wrapper threshold_field hidden">
-                            {{ elem.form.threshold_month }} - {{ elem.form.threshold_year }}
+                            {{ item.form.threshold_month }} - {{ item.form.threshold_year }}
                             </span>
 
                             <div class="month-list">
-                                {% for month in elem.list_months %}
-                                <span {% if month.1 in elem.list_deselected %}
+                                {% for month in item.list_months %}
+                                <span {% if month.1 in item.list_deselected %}
                                                 class="month-untoggled"
                                       {% else %}
                                                 class="month-toggled"
                                       {% endif %} >
                                     {{ month.0 }}
                                     <input type="hidden"
-                                           {% if month.1 not in elem.list_deselected %}disabled="disabled"{% endif %}
-                                           name="{{ elem.deselected_months }}" value="{{ month.1 }}" /></span>
+                                           {% if month.1 not in item.list_deselected %}disabled="disabled"{% endif %}
+                                           name="{{ item.deselected_months }}" value="{{ month.1 }}" /></span>
                                 {% endfor %}
                             </div>
 
                         {% elif item.form.type_str == "boolean" %}
-
-                            {% for field in elem.form.visible_fields %}
+                            {% for field in item.form.visible_fields %}
                                 <span class="simple-field">{{ field }}</span>
                             {% endfor %}
 
