@@ -318,7 +318,6 @@ def search(request):
     """
     no_result = False
     to_reset_form = False
-    url_to_copy = ""
     query_dict = {}
     result_data = {}
     search_forms = []
@@ -425,7 +424,7 @@ def search(request):
                    'pages_range': pages_range,
                    'curpage': pagins,
                    'no_result': no_result,
-                   'url_to_copy': url_to_copy,
+                   'url_to_copy': "",
                    'tab': tab,
                    'options_results_per_page_form': results_per_page_form,
                    'form_list': form_list,
@@ -652,111 +651,10 @@ def shorten_url(long_url):
             url = long_url
     return url
 
-def encode_to_url(request, voyage_span_first_year, voyage_span_last_year, no_result, date_filters=[], qdict={}):
-    """
-    Function to encode dictionary into url to copy form.
-
-    :param request: request to serve
-    :param dict: dict contains search conditions
-    
-    If empty, returns default url
-    """
-    url = request.build_absolute_uri(reverse('voyage:search',)) + "?"
-    session_dict = {}
-
-    # If search has not performed, return default url
-    if qdict == {}:
-        url += "var_imp_voyage_began__range=1514|1866"
-
-    else:
-        for k, v in qdict.iteritems():
-            var_name = k.split("__")[0]
-
-            # If this is the __range component.
-            if "__range" in k:
-                url += str(k) + "=" + str(v[0]) + "|" + str(v[1])
-            # If list, split and join with underscores
-            elif isinstance(v, types.ListType):
-                url += str(k) + "="
-                for j in v:
-                    url += "_".join(j.split(" ")) + "|"
-                url = url[0:-1]
-            else:
-                if isinstance(v, (int, float)):
-                    url += str(k) + "=" + str(v)
-                else:
-                    url += str(k) + "=" + str(v.encode('ascii', 'ignore'))
-
-            # If variable is date, try to also store deselected months.
-            """for i in date_filters:
-                # There is deselected months
-                if i['varname'] == var_name:
-                    url += "|" + ",".join(i['deselected_months'])"""
-            url += "&"
-
-        # At the end, delete the last unnecessary underscore
-        url = url[0:-1]
-        session_dict['dict'] = qdict
-        #session_dict['existing_form'] = session
-        session_dict['date_filters'] = date_filters
-        session_dict['no_result'] = no_result
-        session_dict['voyage_span_first_year'] = voyage_span_first_year
-        session_dict['voyage_span_last_year'] = voyage_span_last_year
-
-    # Store dict in session and return url
-    safe_url = url.encode('ascii', 'ignore')
-    url_key = iri_to_uri("/" + str("/".join(safe_url.split("/")[3:])))
-
-    request.session[url_key] = session_dict
-    return url
-
-
-def decode_from_url(request):
-    """
-    Function to decode url to dict and forms.
-
-    :param request: request to serve
-
-    """
-
-    # Check if this path is in session
-    try:
-        session_dict = request.session[request.get_full_path()]
-        return session_dict['dict'], session_dict['date_filters'], \
-               session_dict['existing_form'], session_dict['voyage_span_first_year'], \
-                session_dict['voyage_span_last_year'], session_dict['no_result']
-    except KeyError:
-        pass
-
-    dict = {}
-
-    # Rebuild dictionary from GET data
-    for k, v in request.GET.iteritems():
-        if len(v.split("|")) > 1:
-            dict[k] = []
-            for i in v.split("|"):
-                dict[k].append(i)
-        else:
-            dict[k] = v
-
-        # Deselected months
-        if "__range" in k and len(v.split("|")) == 3:
-            dict[k].append(v.split("|")[2])
-        elif isinstance(v, types.ListType) and len(v.split("|") == 2):
-            dict[k].append(v.split("|")[1])
-
-    # Rebuild left menu
-    #date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result = create_menu_forms(dict)
-    #request.session['time_span_form'] = TimeFrameSpanSearchForm(
-    #            initial={'frame_from_year': voyage_span_first_year,
-    #                     'frame_to_year': voyage_span_last_year})
-    return dict, date_filters, existing_form, voyage_span_first_year, voyage_span_last_year, no_result
-
 def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
             return i
-
 
 def perform_search(query_dict, date_filters):
     """
