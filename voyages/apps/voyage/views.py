@@ -330,6 +330,7 @@ def search(request):
     time_frame_form = None
     results_per_page_form = None
     results_per_page = 10
+    basic_list_contracted = False
     
     # If there is no requested page number, serve 1
     current_page = 1
@@ -351,6 +352,9 @@ def search(request):
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
+        
+        ble = request.POST.get('basic_list_expanded')
+        basic_list_contracted = not ble
 
         form_list = retrieve_post_search_forms(request.POST)
         time_frame_form = TimeFrameSpanSearchForm(request.POST)
@@ -426,7 +430,8 @@ def search(request):
                    'options_results_per_page_form': results_per_page_form,
                    'form_list': form_list,
                    'time_frame_search_form': time_frame_form,
-                   'result_display': result_display})
+                   'result_display': result_display,
+                   'basic_list_contracted': basic_list_contracted})
 
 def mangle_results(results, lookup_table):
     """
