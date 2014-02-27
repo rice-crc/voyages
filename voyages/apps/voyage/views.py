@@ -196,6 +196,11 @@ def retrieve_post_search_forms(post):
         form_list.append(tmpElem)
     return form_list
 
+def get_place_from_ascii(ascii_name, flat_place_list):
+    for place in flat_place_list:
+        if ascii_name == unidecode.unidecode(place[0]):
+            return place[0]
+
 def create_forms_from_var_list(var_list):
     """
     Creates filled out forms based on a var_list
@@ -247,8 +252,9 @@ def create_forms_from_var_list(var_list):
             form = SimplePlaceSearchForm(prefix=varname)
             form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
-            tmpElem['selected_choices'] = var_list[varname + '_choice_field'].split(';')
-            form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
+            selected_choices = [get_place_from_ascii(ascii_place, flatChoices) for ascii_place in var_list[varname + '_choice_field'].split(';')]
+            tmpElem['selected_choices'] = selected_choices
+            form.fields['choice_field'].initial = selected_choices
         elif varname in globals.list_boolean_fields:
             form = SimpleSelectBooleanForm(prefix=varname)
             form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
@@ -280,8 +286,9 @@ def create_var_dict(query_forms, time_frame_form):
         used_variables.append(varname)
         form = qryform['form']
         if varname in globals.list_text_fields:
-            var_list[varname + '_text_search'] = form.cleaned_data['text_search']
+            var_list[varname + '_text_search'] = unidecode.unidecode(form.cleaned_data['text_search'])
         elif varname in globals.list_select_fields:
+            # I don't think I need to unidecode this for the url
             var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
         elif varname in globals.list_numeric_fields:
             opt = form.cleaned_data['options']
@@ -316,13 +323,13 @@ def create_var_dict(query_forms, time_frame_form):
                 var_list[varname + '_threshold_year'] = form.cleaned_data['threshold_year']
                 var_list[varname + '_threshold_month'] = form.cleaned_data['threshold_month']
         elif varname in globals.list_place_fields:
-            var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
+            var_list[varname + '_choice_field'] = unidecode.unidecode(';'.join(form.cleaned_data['choice_field']))
         elif varname in globals.list_boolean_fields:
             var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
 
     var_list['used_variable_names'] = ';'.join(used_variables)
-    for var in var_list:
-        var_list[var] = unidecode.unidecode(unicode(var_list[var]))
+    #for var in var_list:
+    #    var_list[var] = unidecode.unidecode(unicode(var_list[var]))
     
     return var_list
 
@@ -419,7 +426,17 @@ def search(request):
     if request.method == "GET" and 'used_variable_names' in request.GET:
         # Search parameters were specified in the url
         var_list = create_var_list_from_url(request.GET)
-        form_list = create_forms_from_var_list(var_list)
+        form_list = create_query_forms()
+        var_name_indexes = {}
+        for idx, form in enumerate(form_list):
+            var_name_indexes[form['var_name']] = idx
+        filled_form_list = create_forms_from_var_list(var_list)
+        to_remove_numbers = []
+        for form in filled_form_list:
+            to_remove_numbers.append(var_name_indexes[form['var_name']])
+            form_list.append(form)
+        for idx in sorted(to_remove_numbers, reverse=True):
+            del form_list[idx]
         time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list[time_span_name + '_frame_from_year'],
                                                            'frame_to_year': var_list[time_span_name + '_frame_to_year']})
@@ -482,7 +499,7 @@ def search(request):
             if not pageNum:
                 pageNum = 1
                 print "Warning: unable to get page number from post"
-            return download_xls_page(results, int(pageNum), results_per_page, display_columns)
+            return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list, query_dict)
             
     if len(results) == 0:
         no_result = True
@@ -1095,7 +1112,7 @@ def extract_places(string):
         return places_list[0] + ", " + places_list[1], places_list[2]
 
 
-def download_xls_page(results, current_page, results_per_page, columns):
+def download_xls_page(results, current_page, results_per_page, columns, var_list, query_dict):
     # Download only current page
     res = results
     if current_page != -1:
@@ -1109,6 +1126,10 @@ def download_xls_page(results, current_page, results_per_page, columns):
     wb = Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
     #TODO: add query to download
+    if len(var_list['used_variable_names']) > 0:
+        ws.write(0,0,label=extract_query_for_download(query_dict, []))
+    else:
+        ws.write(0,0,label='All Records')
     for idx, column in enumerate(columns):
         ws.write(1,idx,label=get_spss_name(column[0]))
 
