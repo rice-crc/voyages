@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.test import Client
 from .models import VoyageDates
 from django.core.urlresolvers import reverse
 from .views import shorten_url
+import globals
 import urllib2
 
 @override_settings(LANGUAGE_CODE='en')
@@ -43,6 +45,20 @@ class UrlShortenerTest(TestCase):
         long_url = 'adsfasdfafdjgkdf.hgvkaadsadsfhgkjfm.com'
         short_url = shorten_url(long_url)
         self.assertEqual(short_url, long_url, "When url is invalid, shorten_url should return the long_url")
+@override_settings(LANGUAGE_CODE='en')
+class SearchTest(TestCase):
+    """
+    Tests the search page and associated functions
+    """
+    def setUp(self):
+        self.client = Client()
+    def test_search_forms_exist(self):
+        response = self.client.get('/voyage/search')
+        for var in globals.var_dict:
+            var_name = var['var_name']
+            thing = 'id="id_' + var_name + '-is_shown_field"'
+            if var['is_general'] or var['is_basic']:
+                self.assertIn(thing, response.content, msg=var_name)
     
 #don't think the function is being used 
 #class VoyageDatesPeriodsTest(TestCase):
