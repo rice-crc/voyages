@@ -381,7 +381,23 @@ function shortenURL(){
             </div>
         </div>
         <div class="box-mid-end">
-            &nbsp;
+            {% for num, query in previous_queries %}
+	        <div id="prev_query_{{ num }}" class="side-query-box">
+	            {% for variabletext, values in query %}
+	                {{ variabletext }} <b> {{ values }} </b><br/>
+	            {% endfor %}
+		    <button type="button" class="side-query-box-button" onclick="delete_prev_query({{ num }})" >
+		         <img src="{{ STATIC_URL }}images/voyage/icon-remove-query.png" width="12" height="12" border="0" padding="0"/>
+			 Delete
+		    </button>
+		    <button type="button" class="side-query-box-button" onclick="restore_prev_query({{ num }})" >
+		         <img src="{{ STATIC_URL }}images/voyage/icon-restore-query.png" width="12" height="12" border="0" padding="0" />
+			 Restore
+		    </button>
+		</div>
+		<br/>
+	    {% endfor %}
+	    <br/>
 
         </div>
     </div>
