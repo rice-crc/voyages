@@ -253,6 +253,8 @@ def create_forms_from_var_list(var_list):
             form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
             selected_choices = [get_place_from_ascii(ascii_place, flatChoices) for ascii_place in var_list[varname + '_choice_field'].split(';')]
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
+            tmpElem['nested_choices'] = nestedChoices
             tmpElem['selected_choices'] = selected_choices
             form.fields['choice_field'].initial = selected_choices
         elif varname in globals.list_boolean_fields:
