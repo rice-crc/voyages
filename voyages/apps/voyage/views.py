@@ -546,10 +546,11 @@ def mangle_results(results, lookup_table):
     mangled = []
     for i in results:
         idict = {}
+        voyageid = int(i.get_stored_fields()['var_voyage_id'])
         for varname, varvalue in i.get_stored_fields().items():
             if varvalue:
                 if varname in lookup_table:
-                    idict[varname] = lookup_table[varname](varvalue)
+                    idict[varname] = lookup_table[varname](varvalue, voyageid)
                 else:
                     idict[varname] = varvalue
             else:
