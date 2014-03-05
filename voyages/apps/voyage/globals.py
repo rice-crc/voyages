@@ -77,11 +77,8 @@ def display_xls_sources(value, voyageid):
             ref = lxml.html.fromstring(src.full_ref).text_content()
         srcs.append(ref)
     return ';'.join(srcs)
-    
+# Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value):
-    """
-    Converts a text percentage to a decimal between 0 and 1
-    """
     return float(str(value).replace('%', '')) / 100.0
 def no_mangle(value):
     return value
