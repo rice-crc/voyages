@@ -70,13 +70,11 @@ def display_xls_multiple_names(value, voyageid):
 # Returns a list of the short form sources split by semicolons
 def display_xls_sources(value, voyageid):
     srcs = []
-    vyg = models.Voyage.objects.get(voyage_id=voyageid)
-    for src in vyg.voyage_sources.iterator():
-        ref = src.short_ref
-        if not src.short_ref:
-            ref = lxml.html.fromstring(src.full_ref).text_content()
-        srcs.append(ref)
-    return ';'.join(srcs)
+    for i in value.split(';;'):
+        split = i.split('<>')
+        if split and len(split) > 0 and split[0] != '':
+            srcs.append(split[0])
+    return '; '.join(srcs)
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value):
     return float(str(value).replace('%', '')) / 100.0
