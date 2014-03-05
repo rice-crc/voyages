@@ -2,7 +2,7 @@
 # List of basic variables
 from django.utils.datastructures import SortedDict
 import models
-import lxml
+import lxml.html
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
@@ -71,10 +71,7 @@ def display_xls_multiple_names(value, voyageid):
 def display_xls_sources(value, voyageid):
     srcs = []
     vyg = models.Voyage.objects.get(voyage_id=voyageid)
-    #print(dir(vyg.voyage_sources))
     for src in vyg.voyage_sources.iterator():
-        #print(dir(srccon))
-        #src = srccon.source
         ref = src.short_ref
         if not src.short_ref:
             ref = lxml.html.fromstring(src.full_ref).text_content()
