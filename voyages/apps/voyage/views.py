@@ -517,7 +517,7 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
-    result_display = mangle_results(pagins, globals.display_methods)
+    result_display = prettify_results(pagins, globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -539,9 +539,11 @@ def search(request):
                    'result_display': result_display,
                    'basic_list_contracted': basic_list_contracted})
 
-def mangle_results(results, lookup_table):
+def prettify_results(results, lookup_table):
     """
-    Returns a list of dictionaries keyed by variable name, mangles the value so that it displays properly
+    Returns a list of dictionaries keyed by variable name, prettifies the value so that it displays properly
+    Uses the lookup_table which has the methods to prettify the variable based on the value and the voyage id
+    The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
     """
     mangled = []
     for i in results:
@@ -1120,7 +1122,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
         res = curpage.object_list
-    res = mangle_results(res, globals.display_methods_xls)
+    res = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
