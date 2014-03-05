@@ -451,6 +451,8 @@ def search(request):
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
                                                            'frame_to_year': voyage_span_last_year})
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        if request.POST.get('submitVal') == 'reset':
+            request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
     elif request.method == "POST":
         # A normal search is being performed, or it is on another tab, or it is downloading a file
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
