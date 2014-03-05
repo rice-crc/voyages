@@ -253,6 +253,8 @@ def create_forms_from_var_list(var_list):
             form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
             selected_choices = [get_place_from_ascii(ascii_place, flatChoices) for ascii_place in var_list[varname + '_choice_field'].split(';')]
+            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
+            tmpElem['nested_choices'] = nestedChoices
             tmpElem['selected_choices'] = selected_choices
             form.fields['choice_field'].initial = selected_choices
         elif varname in globals.list_boolean_fields:
@@ -395,8 +397,25 @@ def create_var_list_from_url(get):
     for i in get:
         var_list[i] = get.get(i)
     return var_list
-    
 
+# Takes a var list and then gives tuples of strings that describe the query in a nice way
+def prettify_var_list(varlist):
+    output = []
+    qdict = create_query_dict(varlist)
+    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
+    if (time_span_name + "_frame_from_year") in varlist and (time_span_name + "_frame_to_year") in varlist:
+        output.append(('Time frame:', str(varlist[time_span_name + "_frame_from_year"]) + " - " + str(varlist[time_span_name + "_frame_to_year"])))
+    for kvar, vvar in qdict.items():
+        varname = kvar.split('__')[0]
+        fullname = varname
+        value = str(vvar)
+        for var in globals.var_dict:
+            if varname == var['var_name']:
+                fullname = var['var_full_name']
+                break
+        output.append((fullname + ":", value))
+    return output
+    
 def search(request):
     """
     Handles the Search the Database part
@@ -416,6 +435,7 @@ def search(request):
     results_per_page_form = None
     results_per_page = 10
     basic_list_contracted = False
+    previous_queries = {}
     
     # If there is no requested page number, serve 1
     current_page = 1
@@ -423,9 +443,22 @@ def search(request):
     if desired_page:
         current_page = desired_page
 
-    if request.method == "GET" and 'used_variable_names' in request.GET:
+    submitVal = request.POST.get('submitVal')
+
+    if (request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query':
         # Search parameters were specified in the url
-        var_list = create_var_list_from_url(request.GET)
+        var_list = {}
+        if submitVal == 'restore_prev_query':
+            qnum = int(request.POST.get('prev_query_num'))
+            qprev = request.session['previous_queries']
+            var_list = qprev[qnum]
+            qprev.remove(qprev[qnum])
+            request.session['previous_queries'] = qprev
+        else:
+            var_list = create_var_list_from_url(request.GET)
+        if 'previous_queries' not in request.session:
+            request.session['previous_queries'] = []
+        request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         form_list = create_query_forms()
         var_name_indexes = {}
         for idx, form in enumerate(form_list):
@@ -454,6 +487,7 @@ def search(request):
         if request.POST.get('submitVal') == 'reset':
             request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
     elif request.method == "POST":
+        
         # A normal search is being performed, or it is on another tab, or it is downloading a file
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
@@ -468,11 +502,15 @@ def search(request):
         form_list = retrieve_post_search_forms(request.POST)
         time_frame_form = TimeFrameSpanSearchForm(request.POST)
         var_list = create_var_dict(form_list, time_frame_form)
+        if 'previous_queries' not in request.session:
+            request.session['previous_queries'] = []
+        if submitVal != 'delete_prev_query':
+            request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
 
-        submitVal = request.POST.get('submitVal')
+        
         if submitVal == 'configColumn':
             tab = 'config_column'
         elif submitVal == 'applyConfig':
@@ -502,6 +540,11 @@ def search(request):
                 pageNum = 1
                 print "Warning: unable to get page number from post"
             return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list, query_dict)
+        elif submitVal == 'delete_prev_query':
+            prev_query_num = int(request.POST.get('prev_query_num'))
+            prevqs = request.session['previous_queries']
+            prevqs.remove(prevqs[prev_query_num])
+            request.session['previous_queries'] = prevqs
             
     if len(results) == 0:
         no_result = True
@@ -519,6 +562,7 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
+    previous_queries = enumerate(map(prettify_var_list, request.session['previous_queries']))
     result_display = mangle_results(pagins, globals.display_methods)
 
     return render(request, "voyage/search.html",
@@ -539,7 +583,8 @@ def search(request):
                    'form_list': form_list,
                    'time_frame_search_form': time_frame_form,
                    'result_display': result_display,
-                   'basic_list_contracted': basic_list_contracted})
+                   'basic_list_contracted': basic_list_contracted,
+                   'previous_queries': previous_queries})
 
 def mangle_results(results, lookup_table):
     """

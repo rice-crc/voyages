@@ -370,12 +370,32 @@ function config_change_group(group_id) {
 
 function getxlsDownload(pageNum) {
     $('#form').append("<input id='xls_download_submit_val' type='hidden' name='submitVal' value='download_xls_current_page' />");
-    $("#form").submit();
+    //$("#form").submit();
     $('#form').append("<input id='xls_download_page_num' type='hidden' name='pageNum' value='" + pageNum + "' />");
     $("#form").submit();
     $('#xls_download_submit_val').remove()
     $('#xls_download_page_num').remove()
     return false;
+}
+
+function delete_prev_query(querynum) {
+    $('#form').append("<input id='delete_prev_query_submit_val' type='hidden' name='submitVal' value='delete_prev_query' />");
+    //$("#form").submit();
+    $('#form').append("<input id='prev_query_num' type='hidden' name='prev_query_num' value='" + querynum + "' />");
+    $('#form').submit();
+    $('#prev_query_' + querynum).remove();
+    $('#prev_query_num').remove();
+    $('#delete_prev_query_submit_val').remove();
+}
+
+function restore_prev_query(querynum) {
+    $('#form').append("<input id='restore_prev_query_submit_val' type='hidden' name='submitVal' value='restore_prev_query' />");
+    //$("#form").submit();
+    $('#form').append("<input id='prev_query_num' type='hidden' name='prev_query_num' value='" + querynum + "' />");
+    $('#form').submit();
+    //$('#prev_query_' + querynum).remove();
+    $('#prev_query_num').remove();
+    $('#restore_prev_query_submit_val').remove();
 }
 
 function submitWithValue(submitVal) {
