@@ -2,6 +2,7 @@
 # List of basic variables
 from django.utils.datastructures import SortedDict
 import models
+import lxml.html
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
@@ -58,18 +59,24 @@ def structure_places_all(place_list):
         broad_region_list[broad_reg][region] = list_of_places
     return broad_region_list
             
-def display_percent(value):
+def display_percent(value, voyageid):
     return str(round(value*100, 1)) + "%"
-def display_sterling_price(value):
+def display_sterling_price(value, voyageid):
     return "£" + str(round(value, 2))
-def display_sterling_price_nopound(value):
+def display_sterling_price_nopound(value, voyageid):
     return str(round(value, 2))
-def display_xls_multiple_names(value):
+def display_xls_multiple_names(value, voyageid):
     return value.replace('<br/>', ';')
+# Returns a list of the short form sources split by semicolons
+def display_xls_sources(value, voyageid):
+    srcs = []
+    for i in value.split(';;'):
+        split = i.split('<>')
+        if split and len(split) > 0 and split[0] != '':
+            srcs.append(split[0])
+    return '; '.join(srcs)
+# Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value):
-    """
-    Converts a text percentage to a decimal between 0 and 1
-    """
     return float(str(value).replace('%', '')) / 100.0
 def no_mangle(value):
     return value
@@ -90,7 +97,8 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_child': display_percent,
                        'var_imputed_mortality': display_percent,
                        'var_imputed_sterling_cash': display_sterling_price_nopound,
-                       'var_captain': display_xls_multiple_names}
+                       'var_captain': display_xls_multiple_names,
+                       'var_sources': display_xls_sources}
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
                          'var_imputed_percentage_boys': mangle_percent,
