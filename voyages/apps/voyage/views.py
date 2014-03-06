@@ -562,7 +562,7 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
-    previous_queries = enumerate(map(prettify_var_list, request.session['previous_queries']))
+    previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(pagins, globals.display_methods)
     result_display = prettify_results(pagins, globals.display_methods)
 
