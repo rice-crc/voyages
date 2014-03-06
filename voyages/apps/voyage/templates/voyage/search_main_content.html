@@ -75,6 +75,8 @@
             {% include "voyage/search_timeline.html" %}
         {% elif tab == 'maps' %}
             {% include "voyage/search_maps.html" %}
+	{% elif tab == 'voyage_details' %}
+	    {% include "voyage/voyage_display.html" %}
         {% else %}
             {% include "voyage/search_results.html" %}
         {%  endif %}

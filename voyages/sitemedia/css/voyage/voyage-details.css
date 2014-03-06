@@ -1,0 +1,24 @@
+table.detail {
+	margin-left: 15px;
+	margin-bottom: 15px;
+	border-collapse: collapse;  }
+
+td.detail-label-main,
+td.detail-label {
+	white-space: nowrap;
+	border: 1px solid #895D03;
+	padding: 5px;
+	font-weight: bold;
+	text-align: left; }
+
+td.detail-label-main {
+	vertical-align: top;
+	background-color: #EED083; }
+
+td.detail-label {
+	background-color: #F8ECCD; }
+
+td.detail-data {
+	border: 1px solid #895D03;
+	text-align: left;
+	padding: 5px; }
