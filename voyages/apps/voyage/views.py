@@ -25,6 +25,7 @@ import json
 from xlwt import Workbook
 import urllib
 import unidecode
+from itertools import groupby
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -445,7 +446,28 @@ def search(request):
 
     submitVal = request.POST.get('submitVal')
 
-    if (request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query':
+    if submitVal == 'get_voyage_details':
+        voyagenum = int(request.POST.get('voyage_detail_num'))
+        voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
+        allvargroups = groupby(globals.var_dict, key=lambda x: x['var_category'])
+        allvars = []
+        for i in allvargroups:
+            group = i[0]
+            gvalues = i[1]
+            for idx,j in enumerate(gvalues):
+                val = unicode("")
+                if voyage.get_stored_fields()[j['var_name']]:
+                    val = unicode(voyage.get_stored_fields()[j['var_name']])
+                if idx == 0:
+                    allvars.append((unicode(group),unicode(j['var_full_name']),unicode(val)))
+                else:
+                    allvars.append((None,unicode(j['var_full_name']),unicode(val)))
+        print(allvars)
+        return render(request, "voyage/search.html",
+                      {'voyage_variables': allvars,
+                       'voyage': voyage,
+                       'tab': 'voyage_details'})
+    elif ((request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query'):
         # Search parameters were specified in the url
         var_list = {}
         if submitVal == 'restore_prev_query':
