@@ -76,7 +76,13 @@ def display_xls_sources(value, voyageid):
             srcs.append(split[0])
     return '; '.join(srcs)
 def detail_display_sources(value, voyageid):
-    return '<br/>'.join([' -- '.join(i.split('<>')) for i in value.split(';;')])
+    srcs = []
+    for i in value.split(';;'):
+        parts = i.split('<>')
+        if len(parts) > 1:
+            parts[1] = '<span class="detail-data-rollover"> ' + parts[1] + " </span>\n"
+            srcs.append(': '.join(parts))
+    return ' <br/>'.join(srcs)
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
