@@ -43,7 +43,7 @@ class UrlShortenerTest(TestCase):
         """
         Attempt to shorten an invalid url
         """
-        long_url = 'adsfasdfafdjgkdf.hgvkaadsadsfhgkjfm.com'
+        long_url = '---adsfasdfafdjgkdf.&^*&5hgvkaadsadsfhgkjfm.com'
         short_url = shorten_url(long_url)
         self.assertEqual(short_url, long_url, "When url is invalid, shorten_url should return the long_url")
 @override_settings(LANGUAGE_CODE='en')
