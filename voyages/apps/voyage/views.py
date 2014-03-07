@@ -416,6 +416,26 @@ def prettify_var_list(varlist):
                 break
         output.append((fullname + ":", value))
     return output
+
+def voyage_map(request, voyage_id):
+    """
+    Displays the map for a voyage
+    """
+    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    return render(request, "voyage/voyage_info.html",
+                  {'tab': 'map',
+                   'voyage_id': voyage_id,
+                   'voyage': voyage})
+
+def voyage_images(request, voyage_id):
+    """
+    Displays the images for a voyage
+    """
+    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    return render(request, "voyage/voyage_info.html",
+                  {'tab': 'images',
+                   'voyage_id': voyage_id,
+                   'voyage': voyage})
     
 def voyage_variables(request, voyage_id):
     """
