@@ -1,3 +1,9 @@
+div.detail-title {
+	font-size: 16pt;
+	margin-bottom: 10px;
+	margin-left: 15px;
+	margin-top: 10px; }
+
 table.detail {
 	margin-left: 15px;
 	margin-bottom: 15px;
