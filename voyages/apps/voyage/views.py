@@ -842,16 +842,17 @@ def shorten_search_url(request):
 
 def shorten_url(long_url):
     """
-    Function to shorten url using bitly service.
-
+    Function to shorten url using google url shortening service.
     :param long_url: Long url to shorten
-
-    If bitly doesn't provide url or the bitly url doesn't work, then it will just return the long_url
+    If google doesn't provide url or the google url doesn't work, then it will just return the long_url
     """
+    url = long_url
     try:
-        con = bitly_api.Connection(access_token=settings.BITLY_OAUTH_TOKEN)
-        url = con.shorten(long_url)['url'].encode('utf-8')
-    except bitly_api.BitlyError:
+        payload = json.dumps({'longUrl': long_url})
+        headers = {'Content-Type': 'application/json'}
+        result = requests.post('https://www.googleapis.com/urlshortener/v1/url', headers=headers, data=payload)
+        url = result.json().get('id', long_url)
+    except:
         url = long_url
     else:
         try:
