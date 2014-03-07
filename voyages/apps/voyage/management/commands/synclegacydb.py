@@ -6,24 +6,26 @@ from decimal import *
 import sys
 import unidecode
 
-sources = None
-
-def best_source(text_ref):
-    """
-    Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
-    """
-    if len(text_ref) < 1:
-        print("WARNING: No matching source")
-        return None
-    srcs = sources.filter(short_ref=text_ref)
-    if len(srcs) > 1:
-        print("ERROR: More than one matching source for " + text_ref)
-    if len(srcs) > 0:
-        return srcs[0]
-    else:
-        return best_source(text_ref[:-1])
 
 class Command(BaseCommand):
+    sources = None
+    def best_source(text_ref):
+        """
+        Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
+        """
+        if len(text_ref) < 1:
+            print("WARNING: No matching source")
+            return None
+        srcs = []
+        if self.sources:
+            srcs = self.sources.filter(short_ref=text_ref)
+        if len(srcs) > 1:
+            print("ERROR: More than one matching source for " + text_ref)
+        if len(srcs) > 0:
+            return srcs[0]
+        else:
+            return self.best_source(text_ref[:-1])
+
     args = '<>'
     help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
@@ -43,7 +45,7 @@ class Command(BaseCommand):
         models.VoyageSourcesConnection.objects.all().delete()
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
-        sources = models.VoyageSources.objects.all()
+        self.sources = models.VoyageSources.objects.all()
         count = 0
         try:
             for x in pag.page_range:
@@ -445,7 +447,7 @@ class Command(BaseCommand):
                     def insertSource(fieldvalue, order):
                         if fieldvalue:
                             to_be_matched = fieldvalue
-                            src = best_source(to_be_matched)
+                            src = self.best_source(to_be_matched)
                             if src:
                                 models.VoyageSourcesConnection.objects.create(source=src, source_order=order, text_ref=fieldvalue, group=voyageObj)
                             else:
