@@ -6,7 +6,9 @@ from decimal import *
 import sys
 import unidecode
 
-def best_source(text_ref, sources):
+sources = []
+
+def best_source(text_ref):
     """
     Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
     """
@@ -19,7 +21,7 @@ def best_source(text_ref, sources):
     if len(srcs) > 0:
         return srcs[0]
     else:
-        return best_source(text_ref[:-1], sources)
+        return best_source(text_ref[:-1])
 
 class Command(BaseCommand):
     args = '<>'
@@ -41,7 +43,7 @@ class Command(BaseCommand):
         models.VoyageSourcesConnection.objects.all().delete()
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
-        listSources = models.VoyageSources.objects.all()
+        sources = models.VoyageSources.objects.all()
         count = 0
         try:
             for x in pag.page_range:
@@ -443,7 +445,7 @@ class Command(BaseCommand):
                     def insertSource(fieldvalue, order):
                         if fieldvalue:
                             to_be_matched = fieldvalue
-                            src = best_source(to_be_matched, listSources)
+                            src = best_source(to_be_matched)
                             if src:
                                 models.VoyageSourcesConnection.objects.create(source=src, source_order=order, text_ref=fieldvalue, group=voyageObj)
                             else:
