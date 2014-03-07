@@ -6,6 +6,8 @@ from decimal import *
 import sys
 import unidecode
 
+sources = models.VoyageSources.objects.all()
+
 def best_source(text_ref):
     """
     Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
@@ -13,7 +15,7 @@ def best_source(text_ref):
     if len(text_ref) < 1:
         print("WARNING: No matching source")
         return None
-    srcs = models.VoyageSources.objects.filter(short_ref=text_ref)
+    srcs = sources.filter(short_ref=text_ref)
     if len(srcs) > 1:
         print("ERROR: More than one matching source for " + text_ref)
     if len(srcs) > 0:
