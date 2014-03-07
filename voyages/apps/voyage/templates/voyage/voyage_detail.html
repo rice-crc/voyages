@@ -1,17 +1,17 @@
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-details.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
 <div class="detail-title">
-  Voyage {{ voyage_id }} <i>{{ ship_name }}</i> ({{ year_arrive_with_slaves }})
+  Voyage {{ voyage.voyage_id }} <i>{{ voyage.ship_name }}</i> ({{ year_arrive_with_slaves }})
 </div>
 <div style="margin-right: 10px;">
   <table class="detail" border="0" cellspacing="0" cellpadding="0">
     <tbody>
       {% for lblmain, lbllabel, lbldata in voyage_variables %}
         <tr>
-	  {% if lblmain %}
-	    <td class="detail-label-main" rowspan="14">{{ lblmain }}</td>
+	  {% if lblmain.0 %}
+	    <td class="detail-label-main" rowspan="{{ lblmain.0 }}">{{ lblmain.1 }}</td>
 	  {% endif %}
 	  <td class="detail-label">{{ lbllabel }}</td>
-	  <td class="detail-data">{{ lbldata }}</td>
+	  <td class="detail-data">{{ lbldata | safe }}</td>
 	</tr>
       {% endfor %}
     </tbody>

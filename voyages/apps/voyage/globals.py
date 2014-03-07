@@ -75,6 +75,8 @@ def display_xls_sources(value, voyageid):
         if split and len(split) > 0 and split[0] != '':
             srcs.append(split[0])
     return '; '.join(srcs)
+def detail_display_sources(value, voyageid):
+    return '\n'.join(['--'.join(i.split('<>')) for i in value.split(';;')])
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value):
     return float(str(value).replace('%', '')) / 100.0
@@ -99,6 +101,7 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_sterling_cash': display_sterling_price_nopound,
                        'var_captain': display_xls_multiple_names,
                        'var_sources': display_xls_sources}
+display_methods_details = {'var_sources': detail_display_sources}
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
                          'var_imputed_percentage_boys': mangle_percent,

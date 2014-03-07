@@ -454,15 +454,16 @@ def search(request):
         for i in allvargroups:
             group = i[0]
             gvalues = i[1]
-            for idx,j in enumerate(gvalues):
+            glist = list(gvalues)
+            for idx,j in enumerate(glist):
                 val = unicode("")
                 if voyage.get_stored_fields()[j['var_name']]:
                     val = unicode(voyage.get_stored_fields()[j['var_name']])
                 if idx == 0:
-                    allvars.append((unicode(group),unicode(j['var_full_name']),unicode(val)))
+                    # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
+                    allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),unicode(val)))
                 else:
-                    allvars.append((None,unicode(j['var_full_name']),unicode(val)))
-        print(allvars)
+                    allvars.append(((None,None,),unicode(j['var_full_name']),unicode(val)))
         return render(request, "voyage/search.html",
                       {'voyage_variables': allvars,
                        'voyage': voyage,
@@ -584,7 +585,7 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
 
-    previous_queries = enumerate(map(prettify_var_list, request.session['previous_queries']))
+    previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(pagins, globals.display_methods)
     result_display = prettify_results(pagins, globals.display_methods)
 
