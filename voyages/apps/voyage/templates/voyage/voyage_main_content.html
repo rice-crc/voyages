@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<div class="search-main-panel">
+  <div class="tabs-selection">
+    <ul>
+      <li>
+	<a href="/voyage/search" id="tab_back_to_list" class="tab-back-to-list tab-menu-item">{% trans "Back to the list of voyages" %}</a>
+      </li>
+      <li>
+	{% if tab == 'variables' %}
+	  <span class="tab-menu-item tab-menu-item-selected">{% trans "Voyage Variables" %}</span>
+	{% else %}
+	  <a href="/voyage/{{ voyage_id }}/variables" id="tab_variables" class="tab-menu-item">{% trans "Voyage variables" %}</a>
+	{% endif %}
+      </li>
+      <li>
+	{% if tab == 'map' %}
+	  <span class="tab-menu-item tab-menu-item-selected">{% trans "Map" %}</span>
+	{% else %}
+	  <a href="/voyage/{{ voyage_id }}/map" id="tab_map" class="tab-menu-item">{% trans "Map" %}</a>
+	{% endif %}
+      </li>
+      <li>
+	{% if tab == 'images' %}
+	  <span class="tab-menu-item tab-menu-item-selected">{% trans "Images" %}</span>
+	{% else %}
+	  <a href="/voyage/{{ voyage_id }}/images" id="tab_images" class="tab-menu-item">{% trans "Images" %}</a>
+	{% endif %}
+      </li>
+    </ul>
+  </div>
+  <div class="search-panel">
+    {% if tab == 'variables' %}
+      {% include "voyage/voyage_variables.html" %}
+    {% endif %}
+  </div>
+</div>

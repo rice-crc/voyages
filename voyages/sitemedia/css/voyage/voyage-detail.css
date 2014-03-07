@@ -1,3 +1,8 @@
+a.tab-back-to-list {
+    background-repeat: no-repeat;
+    background-image: url("/static/images/voyage/database-tabs-back-arrow.png");
+    padding-left: 24px;
+}
 div.detail-title {
 	font-size: 16pt;
 	margin-bottom: 10px;

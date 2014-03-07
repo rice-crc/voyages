@@ -417,6 +417,37 @@ def prettify_var_list(varlist):
         output.append((fullname + ":", value))
     return output
     
+def voyage_variables(request, voyage_id):
+    """
+    Displays all the variables for a single voyage
+    """
+    voyagenum = int(voyage_id)
+    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
+    # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
+    voyagevariables = {vname: globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
+                       for vname, vvalue in voyage.get_stored_fields().items()}
+    allvargroups = groupby(globals.var_dict, key=lambda x: x['var_category'])
+    allvars = []
+    for i in allvargroups:
+        group = i[0]
+        gvalues = i[1]
+        glist = list(gvalues)
+        for idx,j in enumerate(glist):
+            val = unicode("")
+            if voyagevariables[j['var_name']]:
+                val = unicode(voyagevariables[j['var_name']])
+            if idx == 0:
+                # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
+                allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
+            else:
+                allvars.append(((None,None,),unicode(j['var_full_name']),val))
+
+    return render(request, "voyage/voyage_info.html",
+                  {'voyage_variables': allvars,
+                   'voyage': voyage,
+                   'tab': 'variables',
+                   'voyage_id': voyage_id})
+
 def search(request):
     """
     Handles the Search the Database part
@@ -446,33 +477,9 @@ def search(request):
 
     submitVal = request.POST.get('submitVal')
 
-    if submitVal == 'get_voyage_details':
-        voyagenum = int(request.POST.get('voyage_detail_num'))
-        voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
-        # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
-        voyagevariables = {vname: globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
-                           for vname, vvalue in voyage.get_stored_fields().items()}
-        allvargroups = groupby(globals.var_dict, key=lambda x: x['var_category'])
-        allvars = []
-        for i in allvargroups:
-            group = i[0]
-            gvalues = i[1]
-            glist = list(gvalues)
-            for idx,j in enumerate(glist):
-                val = unicode("")
-                if voyagevariables[j['var_name']]:
-                    val = unicode(voyagevariables[j['var_name']])
-                if idx == 0:
-                    # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
-                    allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
-                else:
-                    allvars.append(((None,None,),unicode(j['var_full_name']),val))
-
-        return render(request, "voyage/search.html",
-                      {'voyage_variables': allvars,
-                       'voyage': voyage,
-                       'tab': 'voyage_details'})
-    elif ((request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query'):
+#    if submitVal == 'get_voyage_details':
+#        voyagenum = int(request.POST.get('voyage_detail_num'))
+    if ((request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query'):
         # Search parameters were specified in the url
         var_list = {}
         if submitVal == 'restore_prev_query':
