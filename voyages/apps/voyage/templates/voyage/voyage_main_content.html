@@ -30,6 +30,10 @@
     </ul>
   </div>
   <div class="search-panel">
+    <div class="detail-title">
+      Voyage {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+    </div>
+
     {% if tab == 'variables' %}
       {% include "voyage/voyage_variables.html" %}
     {% endif %}

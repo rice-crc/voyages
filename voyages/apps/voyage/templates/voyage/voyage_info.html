@@ -18,16 +18,11 @@
 {% endblock %}
 
 {% block content %}
-<table class="query-window">
-<tr>
-<td id="center-content">
-	{% block center-content %}
-        {% include "voyage/voyage_main_content.html" %}
-	{% endblock %}
-</td>
-
-</tr>
-</table>
+<div style="background: White;">
+  {% block center-content %}
+  {% include "voyage/voyage_main_content.html" %}
+  {% endblock %}
+</div>
 
 
 {% endblock %}
