@@ -378,6 +378,12 @@ function getxlsDownload(pageNum) {
     return false;
 }
 
+function open_voyage_details(voyageNum) {
+    $('#form').append("<input type='hidden' name='submitVal' value='get_voyage_details' />");
+    $('#form').append("<input id='voyage_detail_num' type='hidden' name='voyage_detail_num' value='" + voyageNum + "' />");
+    $('#form').submit();
+}
+
 function delete_prev_query(querynum) {
     $('#form').append("<input id='delete_prev_query_submit_val' type='hidden' name='submitVal' value='delete_prev_query' />");
     //$("#form").submit();
