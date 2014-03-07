@@ -6,7 +6,7 @@ from decimal import *
 import sys
 import unidecode
 
-sources = []
+sources = None
 
 def best_source(text_ref):
     """
