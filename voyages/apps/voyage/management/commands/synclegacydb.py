@@ -9,7 +9,7 @@ import unidecode
 
 class Command(BaseCommand):
     sources = None
-    def best_source(text_ref):
+    def best_source(self, text_ref):
         """
         Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
         """
