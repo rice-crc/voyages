@@ -7,9 +7,25 @@ import sys
 import unidecode
 
 def short_ref_matches(short_ref, text_ref):
-    return short_ref.replace(' ','') == text_ref.replace(' ','')
+    return short_ref and text_ref and short_ref.replace(' ','') == text_ref.replace(' ','')
+
+def find_by_value(vlist, value):
+    return filter(lambda x: x.value == value, vlist)[0]
 
 class Command(BaseCommand):
+    vplaces = []
+    vregions = []
+    vbroad_regions = []
+    vparticular_outcomes = []
+    vresistance = []
+    vslaves_outcomes = []
+    vvessel_captured_outcomes = []
+    vowner_outcomes = []
+    vnationalities = []
+    vnationalities = []
+    vton_types = []
+    vrig_of_vessels = []
+    
     sources = []
     def best_source(self, text_ref):
         """
@@ -46,6 +62,18 @@ class Command(BaseCommand):
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
         self.sources = list(models.VoyageSources.objects.all())
+        self.vplaces = list(models.Place.objects.all())
+        self.vregions = list(models.Region.objects.all())
+        self.vbroad_regions = list(models.BroadRegion.objects.all())
+        self.vparticular_outcomes = list(models.ParticularOutcome.objects.all())
+        self.vresistance = list(models.Resistance.objects.all())
+        self.vslaves_outcomes = list(models.SlavesOutcome.objects.all())
+        self.vvessel_captured_outcomes = list(models.VesselCapturedOutcome.objects.all())
+        self.vowner_outcomes = list(models.OwnerOutcome.objects.all())
+        self.vnationalities = list(models.Nationality.objects.all())
+        self.vton_types = list(models.TonType.objects.all())
+        self.vrig_of_vessels = list(models.RigOfVessel.objects.all())
+        self.vvoyage_groupings = list(models.VoyageGroupings.objects.all())
         count = 0
         try:
             for x in pag.page_range:
@@ -62,7 +90,8 @@ class Command(BaseCommand):
                     voyageObj.voyage_in_cd_rom = not not i.evgreen
                     if i.xmimpflag:
                         xmimpflag = int(i.xmimpflag)
-                        xmimpflags = models.VoyageGroupings.objects.filter(value=xmimpflag)
+                        xmimpflags = filter(lambda x: x.value == xmimpflag, self.vvoyage_groupings)
+                        #xmimpflags = models.VoyageGroupings.objects.filter(value=xmimpflag)
                         if i.xmimpflag and len(xmimpflags) >= 1:
                             voyageObj.voyage_groupings = xmimpflags[0]
                         if i.xmimpflag and len(xmimpflags) < 1:
@@ -70,24 +99,24 @@ class Command(BaseCommand):
                     if i.shipname:
                         ship.ship_name = i.shipname
                     if i.national:
-                        ship.nationality_ship = models.Nationality.objects.get(value=i.national)
+                        ship.nationality_ship = find_by_value(self.vnationalities, i.national)
                     ship.tonnage = i.tonnage
                     if i.tontype:
-                        ship.ton_type = models.TonType.objects.get(value=i.tontype)
+                        ship.ton_type = find_by_value(self.vton_types, i.tontype)
                     if i.rig:
-                        ship.rig_of_vessel = models.RigOfVessel.objects.get(value=i.rig.id)
+                        ship.rig_of_vessel = find_by_value(self.vrig_of_vessels, i.rig.id)
                     ship.guns_mounted = i.guns
                     ship.year_of_construction = i.yrcons
                     if i.placcons:
-                        ship.vessel_construction_place = models.Place.objects.get(value=i.placcons.id)
+                        ship.vessel_construction_place = find_by_value(self.vplaces, i.placcons.id)
                     if i.constreg:
-                        ship.vessel_constructoin_region = models.Region.objects.get(value=i.constreg)
+                        ship.vessel_constructoin_region = find_by_value(self.vregions, i.constreg)
                     ship.year_of_construction = i.yrcons
                     ship.registered_year = i.yrreg
                     if i.placreg:
-                        ship.registered_place = models.Place.objects.get(value=i.placreg)
+                        ship.registered_place = find_by_value(self.vplaces, i.placreg)
                     if i.regisreg:
-                        ship.registered_region = models.Region.objects.get(value=i.regisreg)
+                        ship.registered_region = find_by_value(self.vregions, i.regisreg)
                     if i.natinimp:
                         ship.imputed_nationality = models.Nationality.objects.get(value=i.natinimp)
                     if i.tonmod:
@@ -109,98 +138,99 @@ class Command(BaseCommand):
                     outcome = models.VoyageOutcome()
                     #outcome.voyage = voyageObj
                     if i.fate:
-                        outcome.particular_outcome = models.ParticularOutcome.objects.get(value=i.fate.id)
+                        outcome.particular_outcome = find_by_value(self.vparticular_outcomes, i.fate.id)
                     if i.resistance:
-                        outcome.resistance = models.Resistance.objects.get(value=i.resistance.id)
+                        outcome.resistance = find_by_value(self.vresistance, i.resistance.id)
                     if i.fate2:
-                        outcome.outcome_slaves = models.SlavesOutcome.objects.get(value=i.fate2.id)
+                        outcome.outcome_slaves = find_by_value(self.vslaves_outcomes, i.fate2.id)
                     if i.fate3:
-                        outcome.vessel_captured_outcome = models.VesselCapturedOutcome.objects.get(value=i.fate3.id)
+                        outcome.vessel_captured_outcome = find_by_value(self.vvessel_captured_outcomes, i.fate3.id)
                     if i.fate4:
-                        outcome.outcome_owner = models.OwnerOutcome.objects.get(value=i.fate4.id)
+                        outcome.outcome_owner = find_by_value(self.vowner_outcomes, i.fate4.id)
                     #outcome.save()
 
                     itinerary = models.VoyageItinerary()
                     #itinerary.voyage = voyageObj
                     if i.portdep:
-                        itinerary.port_of_departure = models.Place.objects.get(value=i.portdep.id)
+                        itinerary.port_of_departure = find_by_value(self.vplaces, i.portdep.id)
                     if i.embport:
-                        itinerary.int_first_port_emb = models.Place.objects.get(value=i.embport.id)
+                        itinerary.int_first_port_emb = find_by_value(self.vplaces, i.embport.id)
                     if i.embport2:
-                        itinerary.int_second_port_emb = models.Place.objects.get(value=i.embport2.id)
+                        itinerary.int_second_port_emb = find_by_value(self.vplaces, i.embport2.id)
                     if i.embreg:
-                        itinerary.int_first_region_purchase_slaves = models.Region.objects.get(value=i.embreg)
+                        itinerary.int_first_region_purchase_slaves = find_by_value(self.vregions, i.embreg)
                     if i.embreg2:
-                        itinerary.int_second_region_purchase_slaves = models.Region.objects.get(value=i.embreg2)
+                        itinerary.int_second_region_purchase_slaves = find_by_value(self.vregions, i.embreg2)
                     if i.arrport:
-                        itinerary.int_first_port_dis = models.Place.objects.get(value=i.arrport.id)
+                        itinerary.int_first_port_dis = find_by_value(self.vplaces, i.arrport.id)
                     if i.arrport2:
-                        itinerary.int_second_port_dis = models.Place.objects.get(value=i.arrport2.id)
+                        itinerary.int_second_port_dis = find_by_value(self.vplaces, i.arrport2.id)
                     if i.regarr:
-                        itinerary.int_first_region_slave_landing = models.Region.objects.get(value=i.regarr)
+                        itinerary.int_first_region_slave_landing = find_by_value(self.vregions, i.regarr)
                     if i.regarr2:
-                        itinerary.int_second_region_slave_landing = models.Region.objects.get(value=i.regarr2)
+                        itinerary.int_second_region_slave_landing = find_by_value(self.vregions, i.regarr2)
                     itinerary.ports_called_buying_slaves = i.nppretra
                     if i.plac1tra:
-                        itinerary.first_place_slave_purchase = models.Place.objects.get(value=i.plac1tra.id)
+                        itinerary.first_place_slave_purchase = find_by_value(self.vplaces, i.plac1tra.id)
                     if i.plac2tra:
-                        itinerary.second_place_slave_purchase = models.Place.objects.get(value=i.plac2tra.id)
+                        itinerary.second_place_slave_purchase = find_by_value(self.vplaces, i.plac2tra.id)
                     if i.plac3tra:
-                        itinerary.third_place_slave_purchase = models.Place.objects.get(value=i.plac3tra.id)
+                        itinerary.third_place_slave_purchase = find_by_value(self.vplaces, i.plac3tra.id)
                     if i.regem1:
-                        itinerary.first_region_slave_emb = models.Region.objects.get(value=i.regem1.id)
+                        itinerary.first_region_slave_emb = find_by_value(self.vregions, i.regem1.id)
                     if i.regem2:
-                        itinerary.second_region_slave_emb = models.Region.objects.get(value=i.regem2.id)
+                        itinerary.second_region_slave_emb = find_by_value(self.vregions, i.regem2.id)
                     if i.regem3:
-                        itinerary.third_region_slave_emb = models.Region.objects.get(value=i.regem3.id)
-                    npafttras = models.Place.objects.filter(value=i.npafttra)
+                        itinerary.third_region_slave_emb = find_by_value(self.vregions, i.regem3.id)
+                    npafttras = filter(lambda x: x.value == i.npafttra, self.vplaces)
+                    #npafttras = models.Place.objects.filter(value=i.npafttra)
                     if i.npafttra and len(npafttras) >= 1:
                         itinerary.port_of_call_before_atl_crossing = npafttras[0]
                     if i.npafttra and len(npafttras) < 1:
                         print "WARNING: npafttra is invalid port value of %s, replacing value with '???' 99801" % i.npafttra
-                        itinerary.port_of_call_before_atl_crossing = models.Place.objects.get(value=unknown_port_value)
+                        itinerary.port_of_call_before_atl_crossing = find_by_value(self.vplaces, unknown_port_value)
                     itinerary.number_of_ports_of_call = i.npprior
                     if i.sla1port:
-                        itinerary.first_landing_place = models.Place.objects.get(value=i.sla1port.id)
+                        itinerary.first_landing_place = find_by_value(self.vplaces, i.sla1port.id)
                     if i.adpsale1:
-                        itinerary.second_landing_place = models.Place.objects.get(value=i.adpsale1.id)
+                        itinerary.second_landing_place = find_by_value(self.vplaces, i.adpsale1.id)
                     if i.adpsale2:
-                        itinerary.third_landing_place = models.Place.objects.get(value=i.adpsale2.id)
+                        itinerary.third_landing_place = find_by_value(self.vplaces, i.adpsale2.id)
                     if i.regdis1:
-                        itinerary.first_landing_region = models.Region.objects.get(value=i.regdis1.id)
+                        itinerary.first_landing_region = find_by_value(self.vregions, i.regdis1.id)
                     if i.regdis2:
-                        itinerary.second_landing_region = models.Region.objects.get(value=i.regdis2.id)
+                        itinerary.second_landing_region = find_by_value(self.vregions, i.regdis2.id)
                     if i.regdis3:
-                        itinerary.third_landing_region = models.Region.objects.get(value=i.regdis3.id)
+                        itinerary.third_landing_region = find_by_value(self.vregions, i.regdis3.id)
                     if i.portret:
-                        itinerary.place_voyage_ended = models.Place.objects.get(value=i.portret.id)
+                        itinerary.place_voyage_ended = find_by_value(self.vplaces, i.portret.id)
                     if i.retrnreg:
-                        itinerary.region_of_return = models.Region.objects.get(value=i.retrnreg.id)
+                        itinerary.region_of_return = find_by_value(self.vregions, i.retrnreg.id)
                     if i.retrnreg1:
-                        itinerary.broad_region_of_return = models.BroadRegion.objects.get(value=i.retrnreg1)
+                        itinerary.broad_region_of_return = find_by_value(self.vbroad_regions, i.retrnreg1)
                     # Imputed itinerary variables
                     if i.ptdepimp:
-                        itinerary.imp_port_voyage_begin = models.Place.objects.get(value=i.ptdepimp)
+                        itinerary.imp_port_voyage_begin = find_by_value(self.vplaces, i.ptdepimp)
                     if i.deptregimp:
-                        itinerary.imp_region_voyage_begin = models.Region.objects.get(value=i.deptregimp)
+                        itinerary.imp_region_voyage_begin = find_by_value(self.vregions, i.deptregimp)
                     if i.deptregimp1:
-                        itinerary.imp_broad_region_voyage_begin = models.BroadRegion.objects.get(value=i.deptregimp1)
+                        itinerary.imp_broad_region_voyage_begin = find_by_value(self.vbroad_regions, i.deptregimp1)
                     if i.majbuypt:
-                        itinerary.principal_place_of_slave_purchase = models.Place.objects.get(value=i.majbuypt)
+                        itinerary.principal_place_of_slave_purchase = find_by_value(self.vplaces, i.majbuypt)
                     if i.mjbyptimp:
-                        itinerary.imp_principal_place_of_slave_purchase = models.Place.objects.get(value=i.mjbyptimp.id)
+                        itinerary.imp_principal_place_of_slave_purchase = find_by_value(self.vplaces, i.mjbyptimp.id)
                     if i.majbyimp:
-                        itinerary.imp_principal_region_of_slave_purchase = models.Region.objects.get(value=i.majbyimp.id)
+                        itinerary.imp_principal_region_of_slave_purchase = find_by_value(self.vregions, i.majbyimp.id)
                     if i.majbyimp1:
-                        itinerary.imp_broad_region_of_slave_purchase = models.BroadRegion.objects.get(value=i.majbyimp1)
+                        itinerary.imp_broad_region_of_slave_purchase = find_by_value(self.vbroad_regions, i.majbyimp1)
                     if i.majselpt:
-                        itinerary.principal_port_of_slave_dis = models.Place.objects.get(value=i.majselpt)
+                        itinerary.principal_port_of_slave_dis = find_by_value(self.vplaces, i.majselpt)
                     if i.mjslptimp:
-                        itinerary.imp_principal_port_slave_dis = models.Place.objects.get(value=i.mjslptimp)
+                        itinerary.imp_principal_port_slave_dis = find_by_value(self.vplaces, i.mjslptimp)
                     if i.mjselimp:
-                        itinerary.imp_principal_region_slave_dis = models.Region.objects.get(value=i.mjselimp.id)
+                        itinerary.imp_principal_region_slave_dis = find_by_value(self.vregions, i.mjselimp.id)
                     if i.mjselimp1:
-                        itinerary.imp_broad_region_slave_dis = models.BroadRegion.objects.get(value=i.mjselimp1)
+                        itinerary.imp_broad_region_slave_dis = find_by_value(self.vbroad_regions, i.mjselimp1)
                     #itinerary.save()
                     #voyageObj.voyage_itinerary = itinerary
                     #voyageObj.save()
