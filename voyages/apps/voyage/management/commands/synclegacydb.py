@@ -6,9 +6,11 @@ from decimal import *
 import sys
 import unidecode
 
+def short_ref_matches(short_ref, text_ref):
+    return short_ref.replace(' ','') == text_ref.replace(' ','')
 
 class Command(BaseCommand):
-    sources = None
+    sources = []
     def best_source(self, text_ref):
         """
         Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
@@ -16,9 +18,7 @@ class Command(BaseCommand):
         if len(text_ref) < 1:
             print("WARNING: No matching source")
             return None
-        srcs = []
-        if self.sources:
-            srcs = self.sources.filter(short_ref=text_ref)
+        srcs = filter(lambda src: short_ref_matches(src.short_ref, text_ref), self.sources)
         if len(srcs) > 1:
             print("ERROR: More than one matching source for " + text_ref)
         if len(srcs) > 0:
@@ -45,7 +45,7 @@ class Command(BaseCommand):
         models.VoyageSourcesConnection.objects.all().delete()
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
-        self.sources = models.VoyageSources.objects.all()
+        self.sources = list(models.VoyageSources.objects.all())
         count = 0
         try:
             for x in pag.page_range:
