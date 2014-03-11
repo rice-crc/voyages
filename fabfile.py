@@ -139,22 +139,25 @@ def extract_source():
 
 def setup_virtualenv():
     'Create a virtualenv and install required packages on the remote server.'
+    # with prefix('source /opt/rh/python27/enable'):
+    #     sudo('python --version', user=env.remote_acct)
 
-    with cd('%(remote_path)s/%(build_dir)s' % env):
-        # create the virtualenv under the build dir
-        sudo('virtualenv --no-site-packages --prompt=\'[%(build_dir)s]\' env' \
+    with prefix('source /opt/rh/python27/enable'):
+        with cd('%(remote_path)s/%(build_dir)s' % env):
+            # create the virtualenv under the build dir
+            sudo('virtualenv --no-site-packages --prompt=\'[%(build_dir)s]\' env' \
             % env, user=env.remote_acct)
-        # activate the environment and install required packages
-        with prefix('source env/bin/activate'):
-            pip_cmd = 'pip install -r requirements.txt'
-            if env.remote_proxy:
-                pip_cmd += ' --proxy=%(remote_proxy)s' % env
-            sudo(pip_cmd, user=env.remote_acct)
-            if files.exists('requirments/local.txt'):
-                pip_cmd = 'pip install -r requirments/local.txt'
+            # activate the environment and install required packages
+            with prefix('source env/bin/activate'):
+                pip_cmd = 'pip install -r requirements.txt'
                 if env.remote_proxy:
                     pip_cmd += ' --proxy=%(remote_proxy)s' % env
                 sudo(pip_cmd, user=env.remote_acct)
+                if files.exists('requirments/local.txt'):
+                    pip_cmd = 'pip install -r requirments/local.txt'
+                    if env.remote_proxy:
+                        pip_cmd += ' --proxy=%(remote_proxy)s' % env
+                    sudo(pip_cmd, user=env.remote_acct)
 
 
 def configure_site():
@@ -165,13 +168,14 @@ def configure_site():
         sudo('cp localsettings.py %(build_dir)s/%(project)s/localsettings.py' % env,
              user=env.remote_acct)
 
-    with cd('%(remote_path)s/%(build_dir)s' % env):
-        with prefix('source env/bin/activate'):
-            sudo('python manage.py collectstatic --noinput' % env,
-                 user=env.remote_acct)
-            # make static files world-readable
-            sudo('chmod -R a+r `env DJANGO_SETTINGS_MODULE=\'%(project)s.settings\' python -c \'from django.conf import settings; print settings.STATIC_ROOT\'`' % env,
-                 user=env.remote_acct)
+    with prefix('source /opt/rh/python27/enable'):
+        with cd('%(remote_path)s/%(build_dir)s' % env):
+            with prefix('source env/bin/activate'):
+                sudo('python manage.py collectstatic --noinput' % env,
+                     user=env.remote_acct)
+                # make static files world-readable
+                sudo('chmod -R a+r `env DJANGO_SETTINGS_MODULE=\'%(project)s.settings\' python -c \'from django.conf import settings; print settings.STATIC_ROOT\'`' % env,
+                     user=env.remote_acct)
 
 
 def update_links():
