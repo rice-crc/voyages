@@ -509,6 +509,6 @@ class Command(BaseCommand):
                         insertSource(getattr(i, 'source' + letter), (idx + 1))
                     voyageObj.save()
                     sys.stdout.flush()
-            print("There is " + str(invalid_src_count) + " text_refs without a matching short_ref")
+            print("There is " + str(self.invalid_src_count) + " text_refs without a matching short_ref")
         except Exception as ex:
             traceback.print_exc()
