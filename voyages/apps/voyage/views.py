@@ -444,8 +444,9 @@ def voyage_variables(request, voyage_id):
     voyagenum = int(voyage_id)
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
-    voyagevariables = {vname: globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
-                       for vname, vvalue in voyage.get_stored_fields().items()}
+    voyagevariables = {}
+    for vname, vvalue in voyage.get_stored_fields().items():
+        voyagevariables[vname] = globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
     allvargroups = groupby(globals.var_dict, key=lambda x: x['var_category'])
     allvars = []
     for i in allvargroups:
