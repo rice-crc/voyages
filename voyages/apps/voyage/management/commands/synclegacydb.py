@@ -6,39 +6,50 @@ from decimal import *
 import sys
 import unidecode
 
-def short_ref_matches(short_ref, text_ref):
-    return short_ref and text_ref and short_ref.replace(' ','') == text_ref.replace(' ','')
+#def short_ref_matches(short_ref, text_ref):
+#    return short_ref and text_ref and short_ref.replace(' ','') == text_ref.replace(' ','')
 
 def find_by_value(vlist, value):
-    return filter(lambda x: x.value == value, vlist)[0]
+    # This will error when there is not a matching entry in the dictionary.
+    # That is on purpose since that indicates probable missing/corrupted data
+    return vlist[value]
+    #return filter(lambda x: x.value == value, vlist)[0]
 
 class Command(BaseCommand):
-    vplaces = []
-    vregions = []
-    vbroad_regions = []
-    vparticular_outcomes = []
-    vresistance = []
-    vslaves_outcomes = []
-    vvessel_captured_outcomes = []
-    vowner_outcomes = []
-    vnationalities = []
-    vnationalities = []
-    vton_types = []
-    vrig_of_vessels = []
+    vplaces = {}
+    vregions = {}
+    vbroad_regions = {}
+    vparticular_outcomes = {}
+    vresistance = {}
+    vslaves_outcomes = {}
+    vvessel_captured_outcomes = {}
+    vowner_outcomes = {}
+    vnationalities = {}
+    vnationalities = {}
+    vton_types = {}
+    vrig_of_vessels = {}
+
+    invalid_src_count = 0
     
-    sources = []
+    sources = {}
     def best_source(self, text_ref):
         """
         Finds the source based on the text ref by searching for the short ref that is the beginning of the text_ref
         """
+        #if not text_ref:
+        #    return None
         if len(text_ref) < 1:
             print("WARNING: No matching source")
+            self.invalid_src_count += 1
             return None
-        srcs = filter(lambda src: short_ref_matches(src.short_ref, text_ref), self.sources)
-        if len(srcs) > 1:
-            print("ERROR: More than one matching source for " + text_ref)
-        if len(srcs) > 0:
-            return srcs[0]
+        src = self.sources.get(text_ref, None)
+        #srcs = filter(lambda src: short_ref_matches(src.short_ref, text_ref), self.sources)
+        #if len(srcs) > 1:
+        #    print("ERROR: More than one matching source for " + text_ref)
+        #if len(srcs) > 0:
+        #    return srcs[0]
+        if src:
+            return src
         else:
             return self.best_source(text_ref[:-1])
 
@@ -61,19 +72,19 @@ class Command(BaseCommand):
         models.VoyageSourcesConnection.objects.all().delete()
         models.VoyageItinerary.objects.all().delete()
         models.VoyageSlavesNumbers.objects.all().delete()
-        self.sources = list(models.VoyageSources.objects.all())
-        self.vplaces = list(models.Place.objects.all())
-        self.vregions = list(models.Region.objects.all())
-        self.vbroad_regions = list(models.BroadRegion.objects.all())
-        self.vparticular_outcomes = list(models.ParticularOutcome.objects.all())
-        self.vresistance = list(models.Resistance.objects.all())
-        self.vslaves_outcomes = list(models.SlavesOutcome.objects.all())
-        self.vvessel_captured_outcomes = list(models.VesselCapturedOutcome.objects.all())
-        self.vowner_outcomes = list(models.OwnerOutcome.objects.all())
-        self.vnationalities = list(models.Nationality.objects.all())
-        self.vton_types = list(models.TonType.objects.all())
-        self.vrig_of_vessels = list(models.RigOfVessel.objects.all())
-        self.vvoyage_groupings = list(models.VoyageGroupings.objects.all())
+        self.sources = {x.short_ref.replace(' ', ''): x for x in list(models.VoyageSources.objects.all()) if x.short_ref}
+        self.vplaces = {x.value: x for x in list(models.Place.objects.all())}
+        self.vregions = {x.value: x for x in list(models.Region.objects.all())}
+        self.vbroad_regions = {x.value: x for x in list(models.BroadRegion.objects.all())}
+        self.vparticular_outcomes = {x.value: x for x in list(models.ParticularOutcome.objects.all())}
+        self.vresistance = {x.value: x for x in list(models.Resistance.objects.all())}
+        self.vslaves_outcomes = {x.value: x for x in list(models.SlavesOutcome.objects.all())}
+        self.vvessel_captured_outcomes = {x.value: x for x in list(models.VesselCapturedOutcome.objects.all())}
+        self.vowner_outcomes = {x.value: x for x in list(models.OwnerOutcome.objects.all())}
+        self.vnationalities = {x.value: x for x in list(models.Nationality.objects.all())}
+        self.vton_types = {x.value: x for x in list(models.TonType.objects.all())}
+        self.vrig_of_vessels = {x.value: x for x in list(models.RigOfVessel.objects.all())}
+        self.vvoyage_groupings = {x.value: x for x in list(models.VoyageGroupings.objects.all())}
         count = 0
         try:
             for x in pag.page_range:
@@ -90,11 +101,15 @@ class Command(BaseCommand):
                     voyageObj.voyage_in_cd_rom = not not i.evgreen
                     if i.xmimpflag:
                         xmimpflag = int(i.xmimpflag)
-                        xmimpflags = filter(lambda x: x.value == xmimpflag, self.vvoyage_groupings)
+                        xmimpflagref = find_by_value(self.vvoyage_groupings, xmimpflag)
+                        #xmimpflags = filter(lambda x: x.value == xmimpflag, self.vvoyage_groupings)
                         #xmimpflags = models.VoyageGroupings.objects.filter(value=xmimpflag)
-                        if i.xmimpflag and len(xmimpflags) >= 1:
-                            voyageObj.voyage_groupings = xmimpflags[0]
-                        if i.xmimpflag and len(xmimpflags) < 1:
+                        #if i.xmimpflag and len(xmimpflags) >= 1:
+                        #    voyageObj.voyage_groupings = xmimpflags[0]
+                        if xmimpflagref:
+                            voyageObj.voyage_groupings = xmimpflagref
+                        #if i.xmimpflag and len(xmimpflags) < 1:
+                        elif i.xmimpflag and not xmimpflagref:
                             print "ERROR: xmimpflag has invalid VoyageGroupings value: %s" % xmimpflag
                     if i.shipname:
                         ship.ship_name = i.shipname
@@ -182,13 +197,15 @@ class Command(BaseCommand):
                         itinerary.second_region_slave_emb = find_by_value(self.vregions, i.regem2.id)
                     if i.regem3:
                         itinerary.third_region_slave_emb = find_by_value(self.vregions, i.regem3.id)
-                    npafttras = filter(lambda x: x.value == i.npafttra, self.vplaces)
+                    if i.npafttra:
+                        npafttraref = self.vplaces.get(i.npafttra, self.vplaces[unknown_port_value])
+                    #npafttras = filter(lambda x: x.value == i.npafttra, self.vplaces)
                     #npafttras = models.Place.objects.filter(value=i.npafttra)
-                    if i.npafttra and len(npafttras) >= 1:
-                        itinerary.port_of_call_before_atl_crossing = npafttras[0]
-                    if i.npafttra and len(npafttras) < 1:
-                        print "WARNING: npafttra is invalid port value of %s, replacing value with '???' 99801" % i.npafttra
-                        itinerary.port_of_call_before_atl_crossing = find_by_value(self.vplaces, unknown_port_value)
+                    #if i.npafttra and len(npafttras) >= 1:
+                    #    itinerary.port_of_call_before_atl_crossing = npafttras[0]
+                    #if i.npafttra and len(npafttras) < 1:
+                    #    print "WARNING: npafttra is invalid port value of %s, replacing value with '???' 99801" % i.npafttra
+                    #    itinerary.port_of_call_before_atl_crossing = find_by_value(self.vplaces, unknown_port_value)
                     itinerary.number_of_ports_of_call = i.npprior
                     if i.sla1port:
                         itinerary.first_landing_place = find_by_value(self.vplaces, i.sla1port.id)
@@ -476,7 +493,8 @@ class Command(BaseCommand):
 
                     def insertSource(fieldvalue, order):
                         if fieldvalue:
-                            to_be_matched = fieldvalue
+                            # Remove spaces from text_ref for matching with short_ref
+                            to_be_matched = fieldvalue.replace(' ', '')
                             src = self.best_source(to_be_matched)
                             if src:
                                 models.VoyageSourcesConnection.objects.create(source=src, source_order=order, text_ref=fieldvalue, group=voyageObj)
@@ -491,5 +509,6 @@ class Command(BaseCommand):
                         insertSource(getattr(i, 'source' + letter), (idx + 1))
                     voyageObj.save()
                     sys.stdout.flush()
+            print("There is " + str(invalid_src_count) + " text_refs without a matching short_ref")
         except Exception as ex:
             traceback.print_exc()
