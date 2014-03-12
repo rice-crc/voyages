@@ -583,6 +583,14 @@ def search(request):
             result_data['summary_statistics'] = retrieve_summary_stats(results)
         elif submitVal == 'tab_tables':
             tab = 'tables'
+            tot = 0
+            for i,j in globals.table_rows:
+                print(i)
+                for k,x in j:
+                    le = len(list(SearchQuerySet().filter(**x).models(Voyage)))
+                    print(str(k) + " items is: " + str(le))
+                    tot += le
+            print("total is " + str(tot))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':

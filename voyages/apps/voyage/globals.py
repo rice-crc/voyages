@@ -3,6 +3,7 @@
 from django.utils.datastructures import SortedDict
 import models
 import lxml.html
+from django.db.models import Max, Min
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
@@ -115,6 +116,51 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent}
+
+
+def formatYear(year, month=0):
+    """
+    Format the passed year month to a YYYY,MM string
+    :param year:
+    :param month:
+    :return:
+    """
+    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+
+def calculate_maxmin_years():
+    if models.VoyageDates.objects.count() > 1:
+        voyage_span_first_year = models.VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+        voyage_span_last_year = models.VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+    else:
+        voyage_span_first_year = 1514
+        voyage_span_last_year = 1866
+
+    return voyage_span_first_year, voyage_span_last_year
+
+sfirst_year, slast_year = calculate_maxmin_years()
+first_year = int(sfirst_year)
+last_year = int(slast_year)
+
+def get_incremented_year_tuples(interval):
+    start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
+    current_year = start_year
+    result = []
+    while current_year < last_year:
+        querydict = {'var_imp_voyage_began__range': [current_year, current_year + interval - 1]}
+        result.append((str(current_year) + '-' + str(current_year + interval - 1), querydict))
+        current_year += interval
+    return result
+
+def get_each_from_table(table, lmblbl, qdictkey):
+    result = []
+    for i in table.objects.all():
+        result.append((lmblbl(i), {qdictkey: lmblbl(i)}))
+    return result
+
+# Defines the options selectable for filtering the rows of the table section
+table_rows = [('25-year periods', get_incremented_year_tuples(25)),]
+table_columns = [('Flag*', get_each_from_table(models.Nationality, lambda x: x.label, 'var_nationality__contains')),]
+
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
