@@ -15,7 +15,7 @@
     background-color: White;
     border: 5px solid #333333;
     color:#000;
-    position: absolute;
+    position: fixed;
     left: 250px;
     top: 159.5px;
     width: 420px;
