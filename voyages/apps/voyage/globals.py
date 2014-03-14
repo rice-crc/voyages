@@ -66,7 +66,7 @@ def display_sterling_price(value, voyageid):
 def display_sterling_price_nopound(value, voyageid):
     return str(round(value, 2))
 def display_xls_multiple_names(value, voyageid):
-    return value.replace('<br/>', ';')
+    return value.replace('<br/>', ';').replace('<br>', ';')
 # Returns a list of the short form sources split by semicolons
 def display_xls_sources(value, voyageid):
     srcs = []
@@ -106,6 +106,7 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_mortality': display_percent,
                        'var_imputed_sterling_cash': display_sterling_price_nopound,
                        'var_captain': display_xls_multiple_names,
+                       'var_owner': display_xls_multiple_names,
                        'var_sources': display_xls_sources}
 display_methods_details = {'var_sources': detail_display_sources}
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,

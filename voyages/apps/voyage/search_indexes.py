@@ -244,7 +244,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_owner(self, obj):
         try:
-            return ', '.join(
+            return '<br/> '.join(
                 [connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)])
         except AttributeError:
             return None
