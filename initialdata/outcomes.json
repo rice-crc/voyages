@@ -1516,7 +1516,7 @@
     "model": "voyage.resistance", 
     "fields": {
         "value": 4, 
-        "label": "\"\"Cut-off\"\" (meaning unclear)"
+        "label": "Cut-off (meaning unclear)"
     }
 },
 {
