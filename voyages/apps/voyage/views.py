@@ -718,6 +718,13 @@ def getChoices(varname):
             choices.append((rig.label, rig.label))
     return choices
 
+def putOtherLast(lst):
+    others = filter(lambda x: 'other' in x['text'].lower(), lst)
+    for rem in others:
+        lst.remove(rem)
+        lst.append(rem)
+    return lst
+
 def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
     """
     Retrieve a nested list of places sorted by broad region (area) and then region
@@ -743,14 +750,17 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
                 reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
                                     'text': place.place})
                 flatChoices.append((place.place, place.place))
+            reg_content = putOtherLast(reg_content)
             area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
                                  'text': reg.region,
                                  'choices': reg_content,
                                  'is_selected': is_selected})
+        area_content = putOtherLast(area_content)
         nestedChoices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
                               'text': area.broad_region,
                               'choices': area_content,
                               'is_selected': is_area_selected})
+    nestedChoices = putOtherLast(nestedChoices)
     
     # Check if visible parameters have been passed, if so filter
     return nestedChoices, flatChoices
