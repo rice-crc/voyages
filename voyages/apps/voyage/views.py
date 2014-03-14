@@ -207,7 +207,11 @@ def create_forms_from_var_list(var_list):
     Creates filled out forms based on a var_list
     """
     form_list = []
-    for idx, varname in enumerate(var_list['used_variable_names'].split(';')):
+    vl = var_list.get('used_variable_names', '')
+    vs = []
+    if len(vl) > 0:
+        vs = vl.split(';');
+    for idx, varname in enumerate(vs):
         var = search_var_dict(varname)
         tmpElem = {'var_name': varname,
                    'var_full_name': var['var_full_name']}
@@ -281,8 +285,8 @@ def create_var_dict(query_forms, time_frame_form):
     used_variables = []
     # Year Time Frame Search
     if time_frame_form.is_valid():
-        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_from_year'] = time_frame_form.cleaned_data['frame_from_year']
-        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_to_year'] = time_frame_form.cleaned_data['frame_to_year']
+        var_list['time_span_from_year'] = time_frame_form.cleaned_data['frame_from_year']
+        var_list['time_span_to_year'] = time_frame_form.cleaned_data['frame_to_year']
     for qryform in [x for x in query_forms if x['form'].is_valid() and x['form'].is_form_shown()]:
         #qform = next((l for l in query_forms if l['varname'] == search_var), None)
         varname = qryform['var_name']
@@ -330,7 +334,8 @@ def create_var_dict(query_forms, time_frame_form):
         elif varname in globals.list_boolean_fields:
             var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
 
-    var_list['used_variable_names'] = ';'.join(used_variables)
+    if len(used_variables) > 0:
+        var_list['used_variable_names'] = ';'.join(used_variables)
     #for var in var_list:
     #    var_list[var] = unidecode.unidecode(unicode(var_list[var]))
     
@@ -343,12 +348,16 @@ def create_query_dict(var_list):
     """
     # Creates a query dict based on all the restrictions the user has made
     query_dict = {}
-    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
     # Year Time Frame Search
-    if time_span_name in var_list:
-        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list[time_span_name + '_frame_from_year'],
-                                                               var_list[time_span_name + '_frame_to_year']]
-    for varname in var_list['used_variable_names'].split(';'):
+    #if time_span_name in var_list:
+    if 'time_span_from_year' in var_list and 'time_span_to_year' in var_list:
+        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list['time_span_from_year'],
+                                                               var_list['time_span_to_year']]
+    vl = var_list.get('used_variable_names', '')
+    vs = []
+    if len(vl) > 0:
+        vs = vl.split(';');
+    for varname in vs:
         if varname in globals.list_text_fields:
             query_dict[varname + "__contains"] = var_list[varname + '_text_search']
         elif varname in globals.list_select_fields:
@@ -403,9 +412,8 @@ def create_var_list_from_url(get):
 def prettify_var_list(varlist):
     output = []
     qdict = create_query_dict(varlist)
-    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
-    if (time_span_name + "_frame_from_year") in varlist and (time_span_name + "_frame_to_year") in varlist:
-        output.append(('Time frame:', str(varlist[time_span_name + "_frame_from_year"]) + " - " + str(varlist[time_span_name + "_frame_to_year"])))
+    if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
+        output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         fullname = varname
@@ -498,9 +506,14 @@ def search(request):
 
     submitVal = request.POST.get('submitVal')
 
-#    if submitVal == 'get_voyage_details':
-#        voyagenum = int(request.POST.get('voyage_detail_num'))
-    if ((request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query'):
+    # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
+    # then that means that it is a query url and we should get the query from it.
+    # or if it is restore_prev_query, then restore it from the session.
+    if ((request.method == "GET"
+         and ('used_variable_names' in request.GET
+              or ('time_span_from_year' in request.GET
+                  and 'time_span_to_year' in request.GET)))
+        or submitVal == 'restore_prev_query'):
         # Search parameters were specified in the url
         var_list = {}
         if submitVal == 'restore_prev_query':
@@ -525,9 +538,8 @@ def search(request):
             form_list.append(form)
         for idx in sorted(to_remove_numbers, reverse=True):
             del form_list[idx]
-        time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
-        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list[time_span_name + '_frame_from_year'],
-                                                           'frame_to_year': var_list[time_span_name + '_frame_to_year']})
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list['time_span_from_year'],
+                                                           'frame_to_year': var_list['time_span_to_year']})
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
         
@@ -1233,7 +1245,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     wb = Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
     #TODO: add query to download
-    if len(var_list['used_variable_names']) > 0:
+    if len(var_list.get('used_variable_names', [])) > 0:
         ws.write(0,0,label=extract_query_for_download(query_dict, []))
     else:
         ws.write(0,0,label='All Records')
