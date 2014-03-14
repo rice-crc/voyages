@@ -521,6 +521,9 @@ def search(request):
 
     submitVal = request.POST.get('submitVal')
 
+    if 'submit_val' in request.GET:
+        submitVal = request.GET['submit_val']
+
     # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
     # then that means that it is a query url and we should get the query from it.
     # or if it is restore_prev_query, then restore it from the session.
@@ -532,7 +535,7 @@ def search(request):
         # Search parameters were specified in the url
         var_list = {}
         if submitVal == 'restore_prev_query':
-            qnum = int(request.POST.get('prev_query_num'))
+            qnum = int(request.POST.get('prev_query_num', request.GET.get('prev_query_num')))
             qprev = request.session['previous_queries']
             var_list = qprev[qnum]
             qprev.remove(qprev[qnum])
