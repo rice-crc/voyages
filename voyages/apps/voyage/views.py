@@ -226,6 +226,7 @@ def create_forms_from_var_list(var_list):
         elif varname in globals.list_numeric_fields:
             form = SimpleNumericSearchForm(prefix=varname)
             opt = var_list[varname + '_options']
+            form.fields['options'].initial = opt
             if opt == '1': # Between
                 form.fields['lower_bound'].initial = var_list[varname + '_lower_bound']
                 form.fields['upper_bound'].initial = var_list[varname + '_upper_bound']
@@ -238,6 +239,7 @@ def create_forms_from_var_list(var_list):
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
             opt = var_list[varname + '_options']
+            form.fields['options'].initial = opt
             if opt == '1': # Between
                 form.fields['from_year'].initial = var_list[varname + '_from_year']
                 form.fields['from_month'].initial = var_list[varname + '_from_month']
@@ -417,7 +419,9 @@ def prettify_var_list(varlist):
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         fullname = varname
-        value = str(vvar)
+        if isinstance(vvar, (list, tuple)):
+            vvar = u'["' + u'","'.join(map(unicode, vvar)) + u'"]'
+        value = unicode(vvar)
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
@@ -628,6 +632,8 @@ def search(request):
     # Set up the initial column of display
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+    if len(request.session.get('previous_queries', [])) > 10:
+        request.session['previous_queries'] = request.session['previous_queries'][:10]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(pagins, globals.display_methods)
