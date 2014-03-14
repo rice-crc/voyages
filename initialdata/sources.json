@@ -1,24 +1,46 @@
 [
 {
     "pk": 1, 
-    "model": "voyage.voyagesources", 
+    "model": "voyage.voyagesourcestype", 
     "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Rijksarchief Gent</i> (Ghent, Belgium)", 
-        "source_type": 1
+        "group_id": 0, 
+        "group_name": "Documentary source"
     }
 },
 {
     "pk": 2, 
-    "model": "voyage.voyagesources", 
+    "model": "voyage.voyagesourcestype", 
     "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Simancas</i> (Simancas, Spain)", 
-        "source_type": 1
+        "group_id": 1, 
+        "group_name": "Newspaper"
     }
 },
 {
     "pk": 3, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 2, 
+        "group_name": "Published source"
+    }
+},
+{
+    "pk": 4, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 3, 
+        "group_name": "Unpublished secondary source"
+    }
+},
+{
+    "pk": 5, 
+    "model": "voyage.voyagesourcestype", 
+    "fields": {
+        "group_id": 4, 
+        "group_name": "Private note or collection"
+    }
+},
+{
+    "pk": 12939, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ASR", 
@@ -27,7 +49,7 @@
     }
 },
 {
-    "pk": 4, 
+    "pk": 12940, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BarciaDataset", 
@@ -36,7 +58,7 @@
     }
 },
 {
-    "pk": 5, 
+    "pk": 12941, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BDB", 
@@ -45,7 +67,7 @@
     }
 },
 {
-    "pk": 6, 
+    "pk": 12942, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder", 
@@ -54,7 +76,7 @@
     }
 },
 {
-    "pk": 7, 
+    "pk": 12943, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:ARA,Aanwinsten", 
@@ -63,7 +85,7 @@
     }
 },
 {
-    "pk": 8, 
+    "pk": 12944, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:ARA,NBKG", 
@@ -72,7 +94,7 @@
     }
 },
 {
-    "pk": 9, 
+    "pk": 12945, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Adams", 
@@ -81,7 +103,7 @@
     }
 },
 {
-    "pk": 10, 
+    "pk": 12946, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Fifth", 
@@ -90,7 +112,7 @@
     }
 },
 {
-    "pk": 11, 
+    "pk": 12947, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Sixth", 
@@ -99,7 +121,7 @@
     }
 },
 {
-    "pk": 12, 
+    "pk": 12948, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Seventh", 
@@ -108,7 +130,7 @@
     }
 },
 {
-    "pk": 13, 
+    "pk": 12949, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Eighth", 
@@ -117,7 +139,7 @@
     }
 },
 {
-    "pk": 14, 
+    "pk": 12950, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Ninth", 
@@ -126,7 +148,7 @@
     }
 },
 {
-    "pk": 15, 
+    "pk": 12951, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Tenth", 
@@ -135,7 +157,7 @@
     }
 },
 {
-    "pk": 16, 
+    "pk": 12952, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Twelfth", 
@@ -144,7 +166,7 @@
     }
 },
 {
-    "pk": 17, 
+    "pk": 12953, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Thirteenth", 
@@ -153,7 +175,7 @@
     }
 },
 {
-    "pk": 18, 
+    "pk": 12954, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Fourteenth", 
@@ -162,7 +184,7 @@
     }
 },
 {
-    "pk": 19, 
+    "pk": 12955, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Fifteenth", 
@@ -171,7 +193,7 @@
     }
 },
 {
-    "pk": 20, 
+    "pk": 12956, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Eighteenth", 
@@ -180,7 +202,7 @@
     }
 },
 {
-    "pk": 21, 
+    "pk": 12957, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Nineteenth", 
@@ -189,7 +211,7 @@
     }
 },
 {
-    "pk": 22, 
+    "pk": 12958, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricanInstit, Abstract", 
@@ -198,7 +220,7 @@
     }
 },
 {
-    "pk": 23, 
+    "pk": 12959, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Akinjogbin", 
@@ -207,7 +229,7 @@
     }
 },
 {
-    "pk": 24, 
+    "pk": 12960, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Alford", 
@@ -216,7 +238,7 @@
     }
 },
 {
-    "pk": 25, 
+    "pk": 12961, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ABAPP", 
@@ -225,7 +247,7 @@
     }
 },
 {
-    "pk": 26, 
+    "pk": 12962, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AR", 
@@ -234,7 +256,7 @@
     }
 },
 {
-    "pk": 27, 
+    "pk": 12963, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PWV", 
@@ -243,7 +265,7 @@
     }
 },
 {
-    "pk": 28, 
+    "pk": 12964, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Anon,Journal", 
@@ -252,7 +274,7 @@
     }
 },
 {
-    "pk": 29, 
+    "pk": 12965, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GentMag", 
@@ -261,7 +283,7 @@
     }
 },
 {
-    "pk": 30, 
+    "pk": 12966, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RL", 
@@ -270,7 +292,7 @@
     }
 },
 {
-    "pk": 31, 
+    "pk": 12967, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GentMag,1906", 
@@ -279,7 +301,7 @@
     }
 },
 {
-    "pk": 32, 
+    "pk": 12968, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Appleby,1993", 
@@ -288,7 +310,7 @@
     }
 },
 {
-    "pk": 33, 
+    "pk": 12969, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Appleby,1995", 
@@ -297,7 +319,7 @@
     }
 },
 {
-    "pk": 34, 
+    "pk": 12970, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Armstrong", 
@@ -306,7 +328,7 @@
     }
 },
 {
-    "pk": 35, 
+    "pk": 12971, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AA", 
@@ -315,7 +337,7 @@
     }
 },
 {
-    "pk": 36, 
+    "pk": 12972, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Arthy", 
@@ -324,7 +346,7 @@
     }
 },
 {
-    "pk": 37, 
+    "pk": 12973, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Grace", 
@@ -333,7 +355,7 @@
     }
 },
 {
-    "pk": 38, 
+    "pk": 12974, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Astley", 
@@ -342,7 +364,7 @@
     }
 },
 {
-    "pk": 39, 
+    "pk": 12975, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Atkins", 
@@ -351,7 +373,7 @@
     }
 },
 {
-    "pk": 40, 
+    "pk": 12976, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DDT", 
@@ -360,7 +382,7 @@
     }
 },
 {
-    "pk": 41, 
+    "pk": 12977, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PAST", 
@@ -369,7 +391,7 @@
     }
 },
 {
-    "pk": 42, 
+    "pk": 12978, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Cox", 
@@ -378,7 +400,7 @@
     }
 },
 {
-    "pk": 43, 
+    "pk": 12979, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYG", 
@@ -387,7 +409,7 @@
     }
 },
 {
-    "pk": 44, 
+    "pk": 12980, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Barker", 
@@ -396,7 +418,7 @@
     }
 },
 {
-    "pk": 45, 
+    "pk": 12981, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Barlow", 
@@ -405,7 +427,7 @@
     }
 },
 {
-    "pk": 46, 
+    "pk": 12982, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Barreda", 
@@ -414,7 +436,7 @@
     }
 },
 {
-    "pk": 47, 
+    "pk": 12983, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Behrendt", 
@@ -423,7 +445,7 @@
     }
 },
 {
-    "pk": 48, 
+    "pk": 12984, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Beluche", 
@@ -432,7 +454,7 @@
     }
 },
 {
-    "pk": 49, 
+    "pk": 12985, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Benezet", 
@@ -441,7 +463,7 @@
     }
 },
 {
-    "pk": 50, 
+    "pk": 12986, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Bentley", 
@@ -450,7 +472,7 @@
     }
 },
 {
-    "pk": 51, 
+    "pk": 12987, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Bethell", 
@@ -459,7 +481,7 @@
     }
 },
 {
-    "pk": 52, 
+    "pk": 12988, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DocHist", 
@@ -468,7 +490,7 @@
     }
 },
 {
-    "pk": 53, 
+    "pk": 12989, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "B&ouml;eseken", 
@@ -477,7 +499,7 @@
     }
 },
 {
-    "pk": 54, 
+    "pk": 12990, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boettcher", 
@@ -486,7 +508,7 @@
     }
 },
 {
-    "pk": 55, 
+    "pk": 12991, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BorregoPl&aacute;", 
@@ -495,7 +517,7 @@
     }
 },
 {
-    "pk": 56, 
+    "pk": 12992, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Aspinwall", 
@@ -504,7 +526,7 @@
     }
 },
 {
-    "pk": 57, 
+    "pk": 12993, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boucher1", 
@@ -513,7 +535,7 @@
     }
 },
 {
-    "pk": 58, 
+    "pk": 12994, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boucher2", 
@@ -522,7 +544,7 @@
     }
 },
 {
-    "pk": 59, 
+    "pk": 12995, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boudriot", 
@@ -531,7 +553,7 @@
     }
 },
 {
-    "pk": 60, 
+    "pk": 12996, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boxer,1951", 
@@ -540,7 +562,7 @@
     }
 },
 {
-    "pk": 61, 
+    "pk": 12997, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boxer,1952", 
@@ -549,7 +571,7 @@
     }
 },
 {
-    "pk": 62, 
+    "pk": 12998, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boxer,1957", 
@@ -558,7 +580,7 @@
     }
 },
 {
-    "pk": 63, 
+    "pk": 12999, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MMA", 
@@ -567,7 +589,7 @@
     }
 },
 {
-    "pk": 64, 
+    "pk": 13000, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BFAS,STL", 
@@ -576,7 +598,7 @@
     }
 },
 {
-    "pk": 65, 
+    "pk": 13001, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Braudel", 
@@ -585,7 +607,7 @@
     }
 },
 {
-    "pk": 66, 
+    "pk": 13002, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Cabot", 
@@ -594,7 +616,7 @@
     }
 },
 {
-    "pk": 67, 
+    "pk": 13003, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DCHSNY", 
@@ -603,7 +625,7 @@
     }
 },
 {
-    "pk": 68, 
+    "pk": 13004, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Buffet,1972", 
@@ -612,7 +634,7 @@
     }
 },
 {
-    "pk": 69, 
+    "pk": 13005, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Butterworth", 
@@ -621,7 +643,7 @@
     }
 },
 {
-    "pk": 70, 
+    "pk": 13006, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "C&aacute;ceres", 
@@ -630,7 +652,7 @@
     }
 },
 {
-    "pk": 71, 
+    "pk": 13007, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Canney", 
@@ -639,7 +661,7 @@
     }
 },
 {
-    "pk": 72, 
+    "pk": 13008, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Cardoso", 
@@ -648,7 +670,7 @@
     }
 },
 {
-    "pk": 73, 
+    "pk": 13009, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Carreira,Trafico", 
@@ -657,7 +679,7 @@
     }
 },
 {
-    "pk": 74, 
+    "pk": 13010, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Carreira1969", 
@@ -666,7 +688,7 @@
     }
 },
 {
-    "pk": 75, 
+    "pk": 13011, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Carreira", 
@@ -675,7 +697,7 @@
     }
 },
 {
-    "pk": 76, 
+    "pk": 13012, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Catterall", 
@@ -684,7 +706,7 @@
     }
 },
 {
-    "pk": 77, 
+    "pk": 13013, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Clarkson", 
@@ -693,7 +715,7 @@
     }
 },
 {
-    "pk": 78, 
+    "pk": 13014, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Coffin", 
@@ -702,7 +724,7 @@
     }
 },
 {
-    "pk": 79, 
+    "pk": 13015, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Corry", 
@@ -711,7 +733,7 @@
     }
 },
 {
-    "pk": 80, 
+    "pk": 13016, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Coughtry", 
@@ -720,7 +742,7 @@
     }
 },
 {
-    "pk": 81, 
+    "pk": 13017, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "craig", 
@@ -729,7 +751,7 @@
     }
 },
 {
-    "pk": 82, 
+    "pk": 13018, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHNA", 
@@ -738,7 +760,7 @@
     }
 },
 {
-    "pk": 83, 
+    "pk": 13019, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Crane", 
@@ -747,7 +769,7 @@
     }
 },
 {
-    "pk": 84, 
+    "pk": 13020, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RI Slaver", 
@@ -756,7 +778,7 @@
     }
 },
 {
-    "pk": 85, 
+    "pk": 13021, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Crespi", 
@@ -765,7 +787,7 @@
     }
 },
 {
-    "pk": 86, 
+    "pk": 13022, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Crooks", 
@@ -774,7 +796,7 @@
     }
 },
 {
-    "pk": 87, 
+    "pk": 13023, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Crow", 
@@ -783,7 +805,7 @@
     }
 },
 {
-    "pk": 88, 
+    "pk": 13024, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Cultru", 
@@ -792,7 +814,7 @@
     }
 },
 {
-    "pk": 89, 
+    "pk": 13025, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AfricaRemembered", 
@@ -801,7 +823,7 @@
     }
 },
 {
-    "pk": 90, 
+    "pk": 13026, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Curtis,1855", 
@@ -810,7 +832,7 @@
     }
 },
 {
-    "pk": 91, 
+    "pk": 13027, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Daget", 
@@ -819,7 +841,7 @@
     }
 },
 {
-    "pk": 92, 
+    "pk": 13028, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dalleo", 
@@ -828,7 +850,7 @@
     }
 },
 {
-    "pk": 93, 
+    "pk": 13029, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "D&#8217;Auvergne", 
@@ -837,7 +859,7 @@
     }
 },
 {
-    "pk": 94, 
+    "pk": 13030, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Davenant", 
@@ -846,7 +868,7 @@
     }
 },
 {
-    "pk": 95, 
+    "pk": 13031, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Davis", 
@@ -855,7 +877,7 @@
     }
 },
 {
-    "pk": 96, 
+    "pk": 13032, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kock", 
@@ -864,7 +886,7 @@
     }
 },
 {
-    "pk": 97, 
+    "pk": 13033, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DeLaet", 
@@ -873,7 +895,7 @@
     }
 },
 {
-    "pk": 98, 
+    "pk": 13034, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "D&#8217;Elb&eacute;e", 
@@ -882,7 +904,7 @@
     }
 },
 {
-    "pk": 99, 
+    "pk": 13035, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mello,Nederlanders", 
@@ -891,7 +913,7 @@
     }
 },
 {
-    "pk": 100, 
+    "pk": 13036, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Roever", 
@@ -900,7 +922,7 @@
     }
 },
 {
-    "pk": 101, 
+    "pk": 13037, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Studer", 
@@ -909,7 +931,7 @@
     }
 },
 {
-    "pk": 102, 
+    "pk": 13038, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Defoe", 
@@ -918,7 +940,7 @@
     }
 },
 {
-    "pk": 103, 
+    "pk": 13039, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Heijer", 
@@ -927,7 +949,7 @@
     }
 },
 {
-    "pk": 104, 
+    "pk": 13040, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Heijer,1997", 
@@ -936,7 +958,7 @@
     }
 },
 {
-    "pk": 105, 
+    "pk": 13041, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Diouf", 
@@ -945,7 +967,7 @@
     }
 },
 {
-    "pk": 106, 
+    "pk": 13042, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dixon", 
@@ -954,7 +976,7 @@
     }
 },
 {
-    "pk": 107, 
+    "pk": 13043, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dodson", 
@@ -963,7 +985,7 @@
     }
 },
 {
-    "pk": 108, 
+    "pk": 13044, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Donnan", 
@@ -972,7 +994,7 @@
     }
 },
 {
-    "pk": 109, 
+    "pk": 13045, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Donnan,SouthSeaCo", 
@@ -981,7 +1003,7 @@
     }
 },
 {
-    "pk": 110, 
+    "pk": 13046, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dorsey", 
@@ -990,7 +1012,7 @@
     }
 },
 {
-    "pk": 111, 
+    "pk": 13047, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Santos,1973", 
@@ -999,7 +1021,7 @@
     }
 },
 {
-    "pk": 112, 
+    "pk": 13048, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Santos1993", 
@@ -1008,7 +1030,7 @@
     }
 },
 {
-    "pk": 113, 
+    "pk": 13049, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dow", 
@@ -1017,7 +1039,7 @@
     }
 },
 {
-    "pk": 114, 
+    "pk": 13050, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Driedger", 
@@ -1026,7 +1048,7 @@
     }
 },
 {
-    "pk": 115, 
+    "pk": 13051, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Duffil", 
@@ -1035,7 +1057,7 @@
     }
 },
 {
-    "pk": 116, 
+    "pk": 13052, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Durnford", 
@@ -1044,7 +1066,7 @@
     }
 },
 {
-    "pk": 117, 
+    "pk": 13053, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Edwards", 
@@ -1053,7 +1075,7 @@
     }
 },
 {
-    "pk": 118, 
+    "pk": 13054, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PringleLB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ", 
@@ -1062,7 +1084,7 @@
     }
 },
 {
-    "pk": 119, 
+    "pk": 13055, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Elder", 
@@ -1071,7 +1093,7 @@
     }
 },
 {
-    "pk": 120, 
+    "pk": 13056, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Eltis,1974", 
@@ -1080,7 +1102,7 @@
     }
 },
 {
-    "pk": 121, 
+    "pk": 13057, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Emmer", 
@@ -1089,7 +1111,7 @@
     }
 },
 {
-    "pk": 122, 
+    "pk": 13058, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Emmer,Slavenhandel", 
@@ -1098,7 +1120,7 @@
     }
 },
 {
-    "pk": 123, 
+    "pk": 13059, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ER169", 
@@ -1107,7 +1129,7 @@
     }
 },
 {
-    "pk": 124, 
+    "pk": 13060, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Enthoven2001", 
@@ -1116,7 +1138,7 @@
     }
 },
 {
-    "pk": 125, 
+    "pk": 13061, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Everts2001", 
@@ -1125,7 +1147,7 @@
     }
 },
 {
-    "pk": 126, 
+    "pk": 13062, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Faber", 
@@ -1134,7 +1156,7 @@
     }
 },
 {
-    "pk": 127, 
+    "pk": 13063, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Falconbridge", 
@@ -1143,7 +1165,7 @@
     }
 },
 {
-    "pk": 128, 
+    "pk": 13064, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "FC", 
@@ -1152,7 +1174,7 @@
     }
 },
 {
-    "pk": 129, 
+    "pk": 13065, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Foache", 
@@ -1161,7 +1183,7 @@
     }
 },
 {
-    "pk": 130, 
+    "pk": 13066, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NewEnglandQuart,3", 
@@ -1170,7 +1192,7 @@
     }
 },
 {
-    "pk": 131, 
+    "pk": 13067, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AnteraDuke", 
@@ -1179,7 +1201,7 @@
     }
 },
 {
-    "pk": 132, 
+    "pk": 13068, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ford,WC", 
@@ -1188,7 +1210,7 @@
     }
 },
 {
-    "pk": 133, 
+    "pk": 13069, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Franco,JL", 
@@ -1197,7 +1219,7 @@
     }
 },
 {
-    "pk": 134, 
+    "pk": 13070, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Franco", 
@@ -1206,7 +1228,7 @@
     }
 },
 {
-    "pk": 135, 
+    "pk": 13071, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Froger", 
@@ -1215,7 +1237,7 @@
     }
 },
 {
-    "pk": 136, 
+    "pk": 13072, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Frutuoso", 
@@ -1224,7 +1246,7 @@
     }
 },
 {
-    "pk": 137, 
+    "pk": 13073, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Fytte", 
@@ -1233,7 +1255,7 @@
     }
 },
 {
-    "pk": 138, 
+    "pk": 13074, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Galenson", 
@@ -1242,7 +1264,7 @@
     }
 },
 {
-    "pk": 139, 
+    "pk": 13075, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gaspar", 
@@ -1251,7 +1273,7 @@
     }
 },
 {
-    "pk": 140, 
+    "pk": 13076, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gaspar,2005", 
@@ -1260,7 +1282,7 @@
     }
 },
 {
-    "pk": 141, 
+    "pk": 13077, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gehring&amp;Schiltkamp", 
@@ -1269,7 +1291,7 @@
     }
 },
 {
-    "pk": 142, 
+    "pk": 13078, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gill", 
@@ -1278,7 +1300,7 @@
     }
 },
 {
-    "pk": 143, 
+    "pk": 13079, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Godinho", 
@@ -1287,7 +1309,7 @@
     }
 },
 {
-    "pk": 144, 
+    "pk": 13080, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gomes,Achegas", 
@@ -1296,7 +1318,7 @@
     }
 },
 {
-    "pk": 145, 
+    "pk": 13081, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LiverpoolDirectory", 
@@ -1305,7 +1327,7 @@
     }
 },
 {
-    "pk": 146, 
+    "pk": 13082, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Goslinga,Curacao", 
@@ -1314,7 +1336,7 @@
     }
 },
 {
-    "pk": 147, 
+    "pk": 13083, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Goslinga", 
@@ -1323,7 +1345,7 @@
     }
 },
 {
-    "pk": 148, 
+    "pk": 13084, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gragg,1989", 
@@ -1332,7 +1354,7 @@
     }
 },
 {
-    "pk": 149, 
+    "pk": 13085, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gragg,1995", 
@@ -1341,7 +1363,7 @@
     }
 },
 {
-    "pk": 150, 
+    "pk": 13086, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gragg,Englishmen", 
@@ -1350,7 +1372,7 @@
     }
 },
 {
-    "pk": 151, 
+    "pk": 13087, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Graham,Mowat", 
@@ -1359,7 +1381,7 @@
     }
 },
 {
-    "pk": 152, 
+    "pk": 13088, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Grandidier", 
@@ -1368,7 +1390,7 @@
     }
 },
 {
-    "pk": 153, 
+    "pk": 13089, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ActsPC", 
@@ -1377,7 +1399,7 @@
     }
 },
 {
-    "pk": 154, 
+    "pk": 13090, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CSPCS", 
@@ -1386,7 +1408,7 @@
     }
 },
 {
-    "pk": 155, 
+    "pk": 13091, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CJ,1738-39", 
@@ -1395,7 +1417,7 @@
     }
 },
 {
-    "pk": 156, 
+    "pk": 13092, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IUP,ST", 
@@ -1404,7 +1426,7 @@
     }
 },
 {
-    "pk": 157, 
+    "pk": 13093, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "JBT", 
@@ -1413,7 +1435,7 @@
     }
 },
 {
-    "pk": 158, 
+    "pk": 13094, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "mssHL", 
@@ -1422,7 +1444,7 @@
     }
 },
 {
-    "pk": 159, 
+    "pk": 13095, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PP", 
@@ -1431,7 +1453,7 @@
     }
 },
 {
-    "pk": 160, 
+    "pk": 13096, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "McLeod", 
@@ -1440,7 +1462,7 @@
     }
 },
 {
-    "pk": 161, 
+    "pk": 13097, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Acton", 
@@ -1449,7 +1471,7 @@
     }
 },
 {
-    "pk": 162, 
+    "pk": 13098, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Green", 
@@ -1458,7 +1480,7 @@
     }
 },
 {
-    "pk": 163, 
+    "pk": 13099, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Green-Pedersen", 
@@ -1467,7 +1489,7 @@
     }
 },
 {
-    "pk": 164, 
+    "pk": 13100, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hair", 
@@ -1476,7 +1498,7 @@
     }
 },
 {
-    "pk": 165, 
+    "pk": 13101, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Barbot", 
@@ -1485,7 +1507,7 @@
     }
 },
 {
-    "pk": 166, 
+    "pk": 13102, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Halgar", 
@@ -1494,7 +1516,7 @@
     }
 },
 {
-    "pk": 167, 
+    "pk": 13103, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hall", 
@@ -1503,7 +1525,7 @@
     }
 },
 {
-    "pk": 168, 
+    "pk": 13104, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hallett", 
@@ -1512,7 +1534,7 @@
     }
 },
 {
-    "pk": 169, 
+    "pk": 13105, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hamer", 
@@ -1521,7 +1543,7 @@
     }
 },
 {
-    "pk": 170, 
+    "pk": 13106, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hancock", 
@@ -1530,7 +1552,7 @@
     }
 },
 {
-    "pk": 171, 
+    "pk": 13107, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hand", 
@@ -1539,7 +1561,7 @@
     }
 },
 {
-    "pk": 172, 
+    "pk": 13108, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Harlow,Colonising", 
@@ -1548,7 +1570,7 @@
     }
 },
 {
-    "pk": 173, 
+    "pk": 13109, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Harms", 
@@ -1557,7 +1579,7 @@
     }
 },
 {
-    "pk": 174, 
+    "pk": 13110, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HawkinsVoyage", 
@@ -1566,7 +1588,7 @@
     }
 },
 {
-    "pk": 175, 
+    "pk": 13111, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hawkins,Joseph", 
@@ -1575,7 +1597,7 @@
     }
 },
 {
-    "pk": 176, 
+    "pk": 13112, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hedges", 
@@ -1584,7 +1606,7 @@
     }
 },
 {
-    "pk": 177, 
+    "pk": 13113, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hern&aelig;s", 
@@ -1593,7 +1615,7 @@
     }
 },
 {
-    "pk": 178, 
+    "pk": 13114, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HerreraCasas&uacute;s", 
@@ -1602,7 +1624,7 @@
     }
 },
 {
-    "pk": 179, 
+    "pk": 13115, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hill", 
@@ -1611,7 +1633,7 @@
     }
 },
 {
-    "pk": 180, 
+    "pk": 13116, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HMC,Portland", 
@@ -1620,7 +1642,7 @@
     }
 },
 {
-    "pk": 181, 
+    "pk": 13117, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Holliday", 
@@ -1629,7 +1651,7 @@
     }
 },
 {
-    "pk": 182, 
+    "pk": 13118, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hotten", 
@@ -1638,7 +1660,7 @@
     }
 },
 {
-    "pk": 183, 
+    "pk": 13119, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Howard", 
@@ -1647,7 +1669,7 @@
     }
 },
 {
-    "pk": 184, 
+    "pk": 13120, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Howe", 
@@ -1656,7 +1678,7 @@
     }
 },
 {
-    "pk": 185, 
+    "pk": 13121, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hrodej", 
@@ -1665,7 +1687,7 @@
     }
 },
 {
-    "pk": 186, 
+    "pk": 13122, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hudig", 
@@ -1674,7 +1696,7 @@
     }
 },
 {
-    "pk": 187, 
+    "pk": 13123, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CHdeL", 
@@ -1683,7 +1705,7 @@
     }
 },
 {
-    "pk": 188, 
+    "pk": 13124, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ingersoll", 
@@ -1692,7 +1714,7 @@
     }
 },
 {
-    "pk": 189, 
+    "pk": 13125, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jackson", 
@@ -1701,7 +1723,7 @@
     }
 },
 {
-    "pk": 190, 
+    "pk": 13126, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jameson", 
@@ -1710,7 +1732,7 @@
     }
 },
 {
-    "pk": 191, 
+    "pk": 13127, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Japikse", 
@@ -1719,7 +1741,7 @@
     }
 },
 {
-    "pk": 192, 
+    "pk": 13128, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jeffery", 
@@ -1728,7 +1750,7 @@
     }
 },
 {
-    "pk": 193, 
+    "pk": 13129, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VeraJohnson", 
@@ -1737,7 +1759,7 @@
     }
 },
 {
-    "pk": 194, 
+    "pk": 13130, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jones,Conneau", 
@@ -1746,7 +1768,7 @@
     }
 },
 {
-    "pk": 195, 
+    "pk": 13131, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jones", 
@@ -1755,7 +1777,7 @@
     }
 },
 {
-    "pk": 196, 
+    "pk": 13132, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Jordaan", 
@@ -1764,7 +1786,7 @@
     }
 },
 {
-    "pk": 197, 
+    "pk": 13133, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Justesen", 
@@ -1773,7 +1795,7 @@
     }
 },
 {
-    "pk": 198, 
+    "pk": 13134, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kellenbenz,1960", 
@@ -1782,7 +1804,7 @@
     }
 },
 {
-    "pk": 199, 
+    "pk": 13135, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kellenbenz", 
@@ -1791,7 +1813,7 @@
     }
 },
 {
-    "pk": 200, 
+    "pk": 13136, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kelsey", 
@@ -1800,7 +1822,7 @@
     }
 },
 {
-    "pk": 201, 
+    "pk": 13137, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kernkamp", 
@@ -1809,7 +1831,7 @@
     }
 },
 {
-    "pk": 202, 
+    "pk": 13138, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kirby,1989", 
@@ -1818,7 +1840,7 @@
     }
 },
 {
-    "pk": 203, 
+    "pk": 13139, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,1975", 
@@ -1827,7 +1849,7 @@
     }
 },
 {
-    "pk": 204, 
+    "pk": 13140, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,1978", 
@@ -1836,7 +1858,7 @@
     }
 },
 {
-    "pk": 205, 
+    "pk": 13141, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klooster", 
@@ -1845,7 +1867,7 @@
     }
 },
 {
-    "pk": 206, 
+    "pk": 13142, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klooster,2003", 
@@ -1854,7 +1876,7 @@
     }
 },
 {
-    "pk": 207, 
+    "pk": 13143, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Knutsford", 
@@ -1863,7 +1885,7 @@
     }
 },
 {
-    "pk": 208, 
+    "pk": 13144, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kup", 
@@ -1872,7 +1894,7 @@
     }
 },
 {
-    "pk": 209, 
+    "pk": 13145, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lambert", 
@@ -1881,7 +1903,7 @@
     }
 },
 {
-    "pk": 210, 
+    "pk": 13146, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Landers", 
@@ -1890,7 +1912,7 @@
     }
 },
 {
-    "pk": 211, 
+    "pk": 13147, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "M&eacute;moiresCapitaineLandolphe", 
@@ -1899,7 +1921,7 @@
     }
 },
 {
-    "pk": 212, 
+    "pk": 13148, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LawMagazine", 
@@ -1908,7 +1930,7 @@
     }
 },
 {
-    "pk": 213, 
+    "pk": 13149, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Law,1990", 
@@ -1917,7 +1939,7 @@
     }
 },
 {
-    "pk": 214, 
+    "pk": 13150, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Law,1997", 
@@ -1926,7 +1948,7 @@
     }
 },
 {
-    "pk": 215, 
+    "pk": 13151, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Law,SourceMaterial", 
@@ -1935,7 +1957,7 @@
     }
 },
 {
-    "pk": 216, 
+    "pk": 13152, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Law,EWA", 
@@ -1944,7 +1966,7 @@
     }
 },
 {
-    "pk": 217, 
+    "pk": 13153, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Leglaunec", 
@@ -1953,7 +1975,7 @@
     }
 },
 {
-    "pk": 218, 
+    "pk": 13154, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Leibbrandt", 
@@ -1962,7 +1984,7 @@
     }
 },
 {
-    "pk": 219, 
+    "pk": 13155, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GeorgiaHistQuart,36", 
@@ -1971,7 +1993,7 @@
     }
 },
 {
-    "pk": 220, 
+    "pk": 13156, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Leuftink", 
@@ -1980,7 +2002,7 @@
     }
 },
 {
-    "pk": 221, 
+    "pk": 13157, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lewis,1969", 
@@ -1989,7 +2011,7 @@
     }
 },
 {
-    "pk": 222, 
+    "pk": 13158, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LISANTI", 
@@ -1998,7 +2020,7 @@
     }
 },
 {
-    "pk": 223, 
+    "pk": 13159, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lloyd,1949", 
@@ -2007,7 +2029,7 @@
     }
 },
 {
-    "pk": 224, 
+    "pk": 13160, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LR", 
@@ -2016,7 +2038,7 @@
     }
 },
 {
-    "pk": 225, 
+    "pk": 13161, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lopes,Escravatura", 
@@ -2025,7 +2047,7 @@
     }
 },
 {
-    "pk": 226, 
+    "pk": 13162, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ly", 
@@ -2034,7 +2056,7 @@
     }
 },
 {
-    "pk": 227, 
+    "pk": 13163, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ly,1964", 
@@ -2043,7 +2065,7 @@
     }
 },
 {
-    "pk": 228, 
+    "pk": 13164, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lydon", 
@@ -2052,7 +2074,7 @@
     }
 },
 {
-    "pk": 229, 
+    "pk": 13165, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Macau", 
@@ -2061,7 +2083,7 @@
     }
 },
 {
-    "pk": 230, 
+    "pk": 13166, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MacGregor,Merchant", 
@@ -2070,7 +2092,7 @@
     }
 },
 {
-    "pk": 231, 
+    "pk": 13167, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MacGregor,Fast", 
@@ -2079,7 +2101,7 @@
     }
 },
 {
-    "pk": 232, 
+    "pk": 13168, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MackayLetters", 
@@ -2088,7 +2110,7 @@
     }
 },
 {
-    "pk": 233, 
+    "pk": 13169, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Maclay,Smith", 
@@ -2097,7 +2119,7 @@
     }
 },
 {
-    "pk": 234, 
+    "pk": 13170, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Manchester", 
@@ -2106,7 +2128,7 @@
     }
 },
 {
-    "pk": 235, 
+    "pk": 13171, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mannix", 
@@ -2115,7 +2137,7 @@
     }
 },
 {
-    "pk": 236, 
+    "pk": 13172, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Marques", 
@@ -2124,7 +2146,7 @@
     }
 },
 {
-    "pk": 237, 
+    "pk": 13173, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AmerHistRec", 
@@ -2133,7 +2155,7 @@
     }
 },
 {
-    "pk": 238, 
+    "pk": 13174, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mason", 
@@ -2142,7 +2164,7 @@
     }
 },
 {
-    "pk": 239, 
+    "pk": 13175, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mathieson", 
@@ -2151,7 +2173,7 @@
     }
 },
 {
-    "pk": 240, 
+    "pk": 13176, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Matson", 
@@ -2160,7 +2182,7 @@
     }
 },
 {
-    "pk": 241, 
+    "pk": 13177, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mauro1956", 
@@ -2169,7 +2191,7 @@
     }
 },
 {
-    "pk": 242, 
+    "pk": 13178, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mauro1960", 
@@ -2178,7 +2200,7 @@
     }
 },
 {
-    "pk": 243, 
+    "pk": 13179, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Menard", 
@@ -2187,7 +2209,7 @@
     }
 },
 {
-    "pk": 244, 
+    "pk": 13180, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HDB", 
@@ -2196,7 +2218,7 @@
     }
 },
 {
-    "pk": 245, 
+    "pk": 13181, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "McMillin", 
@@ -2205,7 +2227,7 @@
     }
 },
 {
-    "pk": 246, 
+    "pk": 13182, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Meyer-Heiselberg", 
@@ -2214,7 +2236,7 @@
     }
 },
 {
-    "pk": 247, 
+    "pk": 13183, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Miller", 
@@ -2223,7 +2245,7 @@
     }
 },
 {
-    "pk": 248, 
+    "pk": 13184, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mims", 
@@ -2232,7 +2254,7 @@
     }
 },
 {
-    "pk": 249, 
+    "pk": 13185, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Minch", 
@@ -2241,7 +2263,7 @@
     }
 },
 {
-    "pk": 250, 
+    "pk": 13186, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Minchinton", 
@@ -2250,7 +2272,7 @@
     }
 },
 {
-    "pk": 251, 
+    "pk": 13187, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Saltonstall", 
@@ -2259,7 +2281,7 @@
     }
 },
 {
-    "pk": 252, 
+    "pk": 13188, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Moore,David", 
@@ -2268,7 +2290,7 @@
     }
 },
 {
-    "pk": 253, 
+    "pk": 13189, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "F.Moore,Travel", 
@@ -2277,7 +2299,7 @@
     }
 },
 {
-    "pk": 254, 
+    "pk": 13190, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Moore,George", 
@@ -2286,7 +2308,7 @@
     }
 },
 {
-    "pk": 255, 
+    "pk": 13191, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MoralesCarrion", 
@@ -2295,7 +2317,7 @@
     }
 },
 {
-    "pk": 256, 
+    "pk": 13192, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Morice", 
@@ -2304,7 +2326,7 @@
     }
 },
 {
-    "pk": 257, 
+    "pk": 13193, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mouser,1978", 
@@ -2313,7 +2335,7 @@
     }
 },
 {
-    "pk": 258, 
+    "pk": 13194, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Moutoukias", 
@@ -2322,7 +2344,7 @@
     }
 },
 {
-    "pk": 259, 
+    "pk": 13195, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Munford", 
@@ -2331,7 +2353,7 @@
     }
 },
 {
-    "pk": 260, 
+    "pk": 13196, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Murray", 
@@ -2340,7 +2362,7 @@
     }
 },
 {
-    "pk": 261, 
+    "pk": 13197, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PrideauxNaish", 
@@ -2349,7 +2371,7 @@
     }
 },
 {
-    "pk": 262, 
+    "pk": 13198, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Newson,Minchin", 
@@ -2358,7 +2380,7 @@
     }
 },
 {
-    "pk": 263, 
+    "pk": 13199, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Noordhoff", 
@@ -2367,7 +2389,7 @@
     }
 },
 {
-    "pk": 264, 
+    "pk": 13200, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "N&oslash;rreg&aring;rd,Slaveopr&oslash;ret", 
@@ -2376,7 +2398,7 @@
     }
 },
 {
-    "pk": 265, 
+    "pk": 13201, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "N&oslash;rreg&aring;rd,Madagascar", 
@@ -2385,7 +2407,7 @@
     }
 },
 {
-    "pk": 266, 
+    "pk": 13202, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "N&oslash;rreg&aring;rd", 
@@ -2394,7 +2416,7 @@
     }
 },
 {
-    "pk": 267, 
+    "pk": 13203, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "O&#8217;Callaghan,Voyages", 
@@ -2403,7 +2425,7 @@
     }
 },
 {
-    "pk": 268, 
+    "pk": 13204, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Oettinger", 
@@ -2412,7 +2434,7 @@
     }
 },
 {
-    "pk": 269, 
+    "pk": 13205, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Owen", 
@@ -2421,7 +2443,7 @@
     }
 },
 {
-    "pk": 270, 
+    "pk": 13206, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Preciado", 
@@ -2430,7 +2452,7 @@
     }
 },
 {
-    "pk": 271, 
+    "pk": 13207, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Palmer", 
@@ -2439,7 +2461,7 @@
     }
 },
 {
-    "pk": 272, 
+    "pk": 13208, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PNE", 
@@ -2448,7 +2470,7 @@
     }
 },
 {
-    "pk": 273, 
+    "pk": 13209, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Park", 
@@ -2457,7 +2479,7 @@
     }
 },
 {
-    "pk": 274, 
+    "pk": 13210, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Pfister-Langanay", 
@@ -2466,7 +2488,7 @@
     }
 },
 {
-    "pk": 275, 
+    "pk": 13211, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Pike", 
@@ -2475,7 +2497,7 @@
     }
 },
 {
-    "pk": 276, 
+    "pk": 13212, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Pinckard", 
@@ -2484,7 +2506,7 @@
     }
 },
 {
-    "pk": 277, 
+    "pk": 13213, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Plimpton", 
@@ -2493,7 +2515,7 @@
     }
 },
 {
-    "pk": 278, 
+    "pk": 13214, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Pohl", 
@@ -2502,7 +2524,7 @@
     }
 },
 {
-    "pk": 279, 
+    "pk": 13215, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Poortvliet", 
@@ -2511,7 +2533,7 @@
     }
 },
 {
-    "pk": 280, 
+    "pk": 13216, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Postma", 
@@ -2520,7 +2542,7 @@
     }
 },
 {
-    "pk": 281, 
+    "pk": 13217, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Postma,2003", 
@@ -2529,7 +2551,7 @@
     }
 },
 {
-    "pk": 282, 
+    "pk": 13218, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,Radermacher", 
@@ -2538,7 +2560,7 @@
     }
 },
 {
-    "pk": 283, 
+    "pk": 13219, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Price,1986", 
@@ -2547,7 +2569,7 @@
     }
 },
 {
-    "pk": 284, 
+    "pk": 13220, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Priestley", 
@@ -2556,7 +2578,7 @@
     }
 },
 {
-    "pk": 285, 
+    "pk": 13221, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PruneauPommegorge", 
@@ -2565,7 +2587,7 @@
     }
 },
 {
-    "pk": 286, 
+    "pk": 13222, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Raak", 
@@ -2574,7 +2596,7 @@
     }
 },
 {
-    "pk": 287, 
+    "pk": 13223, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Vijfdagregisters", 
@@ -2583,7 +2605,7 @@
     }
 },
 {
-    "pk": 288, 
+    "pk": 13224, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ratelband", 
@@ -2592,7 +2614,7 @@
     }
 },
 {
-    "pk": 289, 
+    "pk": 13225, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Rediker", 
@@ -2601,7 +2623,7 @@
     }
 },
 {
-    "pk": 290, 
+    "pk": 13226, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VanProoijen", 
@@ -2610,7 +2632,7 @@
     }
 },
 {
-    "pk": 291, 
+    "pk": 13227, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Richardson", 
@@ -2619,7 +2641,7 @@
     }
 },
 {
-    "pk": 292, 
+    "pk": 13228, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Richardson,Schofield", 
@@ -2628,7 +2650,7 @@
     }
 },
 {
-    "pk": 293, 
+    "pk": 13229, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LST,1744-1786", 
@@ -2637,7 +2659,7 @@
     }
 },
 {
-    "pk": 294, 
+    "pk": 13230, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Rink", 
@@ -2646,7 +2668,7 @@
     }
 },
 {
-    "pk": 295, 
+    "pk": 13231, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "STP", 
@@ -2655,7 +2677,7 @@
     }
 },
 {
-    "pk": 296, 
+    "pk": 13232, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Robinson", 
@@ -2664,7 +2686,7 @@
     }
 },
 {
-    "pk": 297, 
+    "pk": 13233, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Roman", 
@@ -2673,7 +2695,7 @@
     }
 },
 {
-    "pk": 298, 
+    "pk": 13234, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Roullon", 
@@ -2682,7 +2704,7 @@
     }
 },
 {
-    "pk": 299, 
+    "pk": 13235, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Roussier", 
@@ -2691,7 +2713,7 @@
     }
 },
 {
-    "pk": 300, 
+    "pk": 13236, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ryder", 
@@ -2700,7 +2722,7 @@
     }
 },
 {
-    "pk": 301, 
+    "pk": 13237, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DickySam", 
@@ -2709,7 +2731,7 @@
     }
 },
 {
-    "pk": 302, 
+    "pk": 13238, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BlackPortsmouth", 
@@ -2718,7 +2740,7 @@
     }
 },
 {
-    "pk": 303, 
+    "pk": 13239, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BarbadosRecords", 
@@ -2727,7 +2749,7 @@
     }
 },
 {
-    "pk": 304, 
+    "pk": 13240, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Santana", 
@@ -2736,7 +2758,7 @@
     }
 },
 {
-    "pk": 305, 
+    "pk": 13241, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Saugera,1989", 
@@ -2745,7 +2767,7 @@
     }
 },
 {
-    "pk": 306, 
+    "pk": 13242, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Saugera", 
@@ -2754,7 +2776,7 @@
     }
 },
 {
-    "pk": 307, 
+    "pk": 13243, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Schofield", 
@@ -2763,7 +2785,7 @@
     }
 },
 {
-    "pk": 308, 
+    "pk": 13244, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Sch&uuml;ck", 
@@ -2772,16 +2794,7 @@
     }
 },
 {
-    "pk": 309, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "Adderley", 
-        "full_ref": "Adderley, Roseanne Marion, \u201c\u2018New Negroes from Africa\u2019: Culture and Community Among Liberated Africans in the Bahamas and Trinidad 1810-1900,\u201d PhD dissertation (University of Pennsylvania, 1996)", 
-        "source_type": 4
-    }
-},
-{
-    "pk": 310, 
+    "pk": 13245, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Araujo", 
@@ -2790,7 +2803,7 @@
     }
 },
 {
-    "pk": 311, 
+    "pk": 13246, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Br\u00fcbach", 
@@ -2799,7 +2812,7 @@
     }
 },
 {
-    "pk": 312, 
+    "pk": 13247, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hamm", 
@@ -2808,7 +2821,7 @@
     }
 },
 {
-    "pk": 313, 
+    "pk": 13248, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klooster,Illicit", 
@@ -2817,7 +2830,7 @@
     }
 },
 {
-    "pk": 314, 
+    "pk": 13249, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LeTr\u00e9hour", 
@@ -2826,7 +2839,7 @@
     }
 },
 {
-    "pk": 315, 
+    "pk": 13250, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Martin", 
@@ -2835,7 +2848,7 @@
     }
 },
 {
-    "pk": 316, 
+    "pk": 13251, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Partenheimer", 
@@ -2844,7 +2857,7 @@
     }
 },
 {
-    "pk": 317, 
+    "pk": 13252, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Priester", 
@@ -2853,7 +2866,7 @@
     }
 },
 {
-    "pk": 318, 
+    "pk": 13253, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Reidy", 
@@ -2862,7 +2875,7 @@
     }
 },
 {
-    "pk": 319, 
+    "pk": 13254, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Sadler", 
@@ -2871,7 +2884,7 @@
     }
 },
 {
-    "pk": 320, 
+    "pk": 13255, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Swanson", 
@@ -2880,7 +2893,7 @@
     }
 },
 {
-    "pk": 321, 
+    "pk": 13256, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Teunissen", 
@@ -2889,7 +2902,7 @@
     }
 },
 {
-    "pk": 322, 
+    "pk": 13257, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VanDantzig,1968", 
@@ -2898,7 +2911,7 @@
     }
 },
 {
-    "pk": 323, 
+    "pk": 13258, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BGDB", 
@@ -2907,7 +2920,7 @@
     }
 },
 {
-    "pk": 324, 
+    "pk": 13259, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Warner-Lewis", 
@@ -2916,7 +2929,7 @@
     }
 },
 {
-    "pk": 325, 
+    "pk": 13260, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Schwartz,Postma", 
@@ -2925,7 +2938,7 @@
     }
 },
 {
-    "pk": 326, 
+    "pk": 13261, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Schwarz", 
@@ -2934,7 +2947,7 @@
     }
 },
 {
-    "pk": 327, 
+    "pk": 13262, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Scott", 
@@ -2943,7 +2956,7 @@
     }
 },
 {
-    "pk": 328, 
+    "pk": 13263, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Searing", 
@@ -2952,7 +2965,7 @@
     }
 },
 {
-    "pk": 329, 
+    "pk": 13264, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Sharafi", 
@@ -2961,7 +2974,7 @@
     }
 },
 {
-    "pk": 330, 
+    "pk": 13265, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Shell", 
@@ -2970,7 +2983,7 @@
     }
 },
 {
-    "pk": 331, 
+    "pk": 13266, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Shingleton", 
@@ -2979,7 +2992,7 @@
     }
 },
 {
-    "pk": 332, 
+    "pk": 13267, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Shurtleff", 
@@ -2988,7 +3001,7 @@
     }
 },
 {
-    "pk": 333, 
+    "pk": 13268, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Skytte", 
@@ -2997,7 +3010,7 @@
     }
 },
 {
-    "pk": 334, 
+    "pk": 13269, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Sluiter", 
@@ -3006,7 +3019,7 @@
     }
 },
 {
-    "pk": 335, 
+    "pk": 13270, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Smallwood", 
@@ -3015,7 +3028,7 @@
     }
 },
 {
-    "pk": 336, 
+    "pk": 13271, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Smith,Venture", 
@@ -3024,7 +3037,7 @@
     }
 },
 {
-    "pk": 337, 
+    "pk": 13272, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Vigilante", 
@@ -3033,7 +3046,7 @@
     }
 },
 {
-    "pk": 338, 
+    "pk": 13273, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Snelgrave,NewAccount", 
@@ -3042,7 +3055,7 @@
     }
 },
 {
-    "pk": 339, 
+    "pk": 13274, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Sosa", 
@@ -3051,7 +3064,7 @@
     }
 },
 {
-    "pk": 340, 
+    "pk": 13275, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Speke", 
@@ -3060,7 +3073,7 @@
     }
 },
 {
-    "pk": 341, 
+    "pk": 13276, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Stevens", 
@@ -3069,7 +3082,7 @@
     }
 },
 {
-    "pk": 342, 
+    "pk": 13277, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Stock", 
@@ -3078,7 +3091,7 @@
     }
 },
 {
-    "pk": 343, 
+    "pk": 13278, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "THSLC,75", 
@@ -3087,7 +3100,7 @@
     }
 },
 {
-    "pk": 344, 
+    "pk": 13279, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SuedBadillo", 
@@ -3096,7 +3109,7 @@
     }
 },
 {
-    "pk": 345, 
+    "pk": 13280, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Svalesen", 
@@ -3105,7 +3118,7 @@
     }
 },
 {
-    "pk": 346, 
+    "pk": 13281, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Svalesen,1995", 
@@ -3114,7 +3127,7 @@
     }
 },
 {
-    "pk": 347, 
+    "pk": 13282, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Szymanksi", 
@@ -3123,7 +3136,7 @@
     }
 },
 {
-    "pk": 348, 
+    "pk": 13283, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Tattersfield", 
@@ -3132,7 +3145,7 @@
     }
 },
 {
-    "pk": 349, 
+    "pk": 13284, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Taunay,1941", 
@@ -3141,7 +3154,7 @@
     }
 },
 {
-    "pk": 350, 
+    "pk": 13285, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Tavares", 
@@ -3150,7 +3163,7 @@
     }
 },
 {
-    "pk": 351, 
+    "pk": 13286, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Thilmans", 
@@ -3159,7 +3172,7 @@
     }
 },
 {
-    "pk": 352, 
+    "pk": 13287, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Thilmans&amp;Moraes", 
@@ -3168,7 +3181,7 @@
     }
 },
 {
-    "pk": 353, 
+    "pk": 13288, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Thornton,WMQ", 
@@ -3177,7 +3190,7 @@
     }
 },
 {
-    "pk": 354, 
+    "pk": 13289, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Torres", 
@@ -3186,7 +3199,7 @@
     }
 },
 {
-    "pk": 355, 
+    "pk": 13290, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Torrington,1798-99,III", 
@@ -3195,7 +3208,7 @@
     }
 },
 {
-    "pk": 356, 
+    "pk": 13291, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Turnbull", 
@@ -3204,7 +3217,7 @@
     }
 },
 {
-    "pk": 357, 
+    "pk": 13292, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Unger,Archief", 
@@ -3213,7 +3226,7 @@
     }
 },
 {
-    "pk": 358, 
+    "pk": 13293, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Unger,I", 
@@ -3222,7 +3235,7 @@
     }
 },
 {
-    "pk": 359, 
+    "pk": 13294, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Unger,II", 
@@ -3231,7 +3244,7 @@
     }
 },
 {
-    "pk": 360, 
+    "pk": 13295, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AmerStatePap", 
@@ -3240,7 +3253,7 @@
     }
 },
 {
-    "pk": 361, 
+    "pk": 13296, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HED", 
@@ -3249,7 +3262,7 @@
     }
 },
 {
-    "pk": 362, 
+    "pk": 13297, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HouseRep", 
@@ -3258,16 +3271,7 @@
     }
 },
 {
-    "pk": 363, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Bank of England</i> (London, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 364, 
+    "pk": 13298, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SED", 
@@ -3276,7 +3280,7 @@
     }
 },
 {
-    "pk": 365, 
+    "pk": 13299, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Uring", 
@@ -3285,7 +3289,7 @@
     }
 },
 {
-    "pk": 366, 
+    "pk": 13300, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Aitzema", 
@@ -3294,7 +3298,7 @@
     }
 },
 {
-    "pk": 367, 
+    "pk": 13301, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "TJB", 
@@ -3303,7 +3307,7 @@
     }
 },
 {
-    "pk": 368, 
+    "pk": 13302, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VanDantzig", 
@@ -3312,7 +3316,7 @@
     }
 },
 {
-    "pk": 369, 
+    "pk": 13303, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Boogaart&amp;Emmer", 
@@ -3321,7 +3325,7 @@
     }
 },
 {
-    "pk": 370, 
+    "pk": 13304, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VdBroeck", 
@@ -3330,7 +3334,7 @@
     }
 },
 {
-    "pk": 371, 
+    "pk": 13305, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VanNorman", 
@@ -3339,7 +3343,7 @@
     }
 },
 {
-    "pk": 372, 
+    "pk": 13306, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Winter", 
@@ -3348,7 +3352,7 @@
     }
 },
 {
-    "pk": 373, 
+    "pk": 13307, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ventura", 
@@ -3357,7 +3361,7 @@
     }
 },
 {
-    "pk": 374, 
+    "pk": 13308, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Verger", 
@@ -3366,7 +3370,7 @@
     }
 },
 {
-    "pk": 375, 
+    "pk": 13309, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Vergolino-Henry", 
@@ -3375,7 +3379,7 @@
     }
 },
 {
-    "pk": 376, 
+    "pk": 13310, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Villiers", 
@@ -3384,7 +3388,7 @@
     }
 },
 {
-    "pk": 377, 
+    "pk": 13311, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gr&ouml;ben", 
@@ -3393,7 +3397,7 @@
     }
 },
 {
-    "pk": 378, 
+    "pk": 13312, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RMC,114", 
@@ -3402,7 +3406,7 @@
     }
 },
 {
-    "pk": 379, 
+    "pk": 13313, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wax,1965", 
@@ -3411,7 +3415,7 @@
     }
 },
 {
-    "pk": 380, 
+    "pk": 13314, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wax,1968", 
@@ -3420,7 +3424,7 @@
     }
 },
 {
-    "pk": 381, 
+    "pk": 13315, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wax,1978", 
@@ -3429,7 +3433,7 @@
     }
 },
 {
-    "pk": 382, 
+    "pk": 13316, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wax,1984", 
@@ -3438,7 +3442,7 @@
     }
 },
 {
-    "pk": 383, 
+    "pk": 13317, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Weeden", 
@@ -3447,7 +3451,7 @@
     }
 },
 {
-    "pk": 384, 
+    "pk": 13318, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Weindl", 
@@ -3456,7 +3460,7 @@
     }
 },
 {
-    "pk": 385, 
+    "pk": 13319, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Westergaard", 
@@ -3465,7 +3469,7 @@
     }
 },
 {
-    "pk": 386, 
+    "pk": 13320, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SystemaAfricanum", 
@@ -3474,7 +3478,7 @@
     }
 },
 {
-    "pk": 387, 
+    "pk": 13321, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HLQ", 
@@ -3483,7 +3487,7 @@
     }
 },
 {
-    "pk": 388, 
+    "pk": 13322, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Williams", 
@@ -3492,7 +3496,7 @@
     }
 },
 {
-    "pk": 389, 
+    "pk": 13323, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Winfield", 
@@ -3501,7 +3505,7 @@
     }
 },
 {
-    "pk": 390, 
+    "pk": 13324, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wood", 
@@ -3510,7 +3514,7 @@
     }
 },
 {
-    "pk": 391, 
+    "pk": 13325, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wright", 
@@ -3519,7 +3523,7 @@
     }
 },
 {
-    "pk": 392, 
+    "pk": 13326, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Zook", 
@@ -3528,7 +3532,7 @@
     }
 },
 {
-    "pk": 393, 
+    "pk": 13327, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:ARA,OWIC", 
@@ -3537,7 +3541,7 @@
     }
 },
 {
-    "pk": 394, 
+    "pk": 13328, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:ARA,SG", 
@@ -3546,7 +3550,7 @@
     }
 },
 {
-    "pk": 395, 
+    "pk": 13329, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:ARA,VWIS", 
@@ -3555,7 +3559,7 @@
     }
 },
 {
-    "pk": 396, 
+    "pk": 13330, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:GAA,NA", 
@@ -3564,7 +3568,7 @@
     }
 },
 {
-    "pk": 397, 
+    "pk": 13331, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Binder:GAR,NA", 
@@ -3573,7 +3577,7 @@
     }
 },
 {
-    "pk": 398, 
+    "pk": 13332, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BlakeNotes", 
@@ -3582,7 +3586,7 @@
     }
 },
 {
-    "pk": 399, 
+    "pk": 13333, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CapelaNotes", 
@@ -3591,7 +3595,7 @@
     }
 },
 {
-    "pk": 400, 
+    "pk": 13334, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "EP", 
@@ -3600,7 +3604,7 @@
     }
 },
 {
-    "pk": 401, 
+    "pk": 13335, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Florentino", 
@@ -3609,7 +3613,7 @@
     }
 },
 {
-    "pk": 402, 
+    "pk": 13336, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "foydatabase", 
@@ -3618,7 +3622,7 @@
     }
 },
 {
-    "pk": 403, 
+    "pk": 13337, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "holsoe", 
@@ -3627,7 +3631,7 @@
     }
 },
 {
-    "pk": 404, 
+    "pk": 13338, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Postma2", 
@@ -3636,7 +3640,7 @@
     }
 },
 {
-    "pk": 405, 
+    "pk": 13339, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SchofieldArchive", 
@@ -3645,7 +3649,7 @@
     }
 },
 {
-    "pk": 406, 
+    "pk": 13340, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SteinArchive", 
@@ -3654,7 +3658,7 @@
     }
 },
 {
-    "pk": 407, 
+    "pk": 13341, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BML", 
@@ -3663,7 +3667,7 @@
     }
 },
 {
-    "pk": 408, 
+    "pk": 13342, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BFP", 
@@ -3672,7 +3676,7 @@
     }
 },
 {
-    "pk": 409, 
+    "pk": 13343, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LDS", 
@@ -3681,7 +3685,7 @@
     }
 },
 {
-    "pk": 410, 
+    "pk": 13344, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RB3", 
@@ -3690,7 +3694,7 @@
     }
 },
 {
-    "pk": 411, 
+    "pk": 13345, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RB6", 
@@ -3699,7 +3703,7 @@
     }
 },
 {
-    "pk": 412, 
+    "pk": 13346, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hoop", 
@@ -3708,7 +3712,7 @@
     }
 },
 {
-    "pk": 413, 
+    "pk": 13347, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "UB,Gent", 
@@ -3717,7 +3721,7 @@
     }
 },
 {
-    "pk": 414, 
+    "pk": 13348, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEJE, 04.06.18", 
@@ -3726,7 +3730,7 @@
     }
 },
 {
-    "pk": 415, 
+    "pk": 13349, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEJE, D.I.-7", 
@@ -3735,7 +3739,7 @@
     }
 },
 {
-    "pk": 416, 
+    "pk": 13350, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEJE, D.I.-9", 
@@ -3744,7 +3748,7 @@
     }
 },
 {
-    "pk": 417, 
+    "pk": 13351, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEJE, R.P.", 
@@ -3753,7 +3757,7 @@
     }
 },
 {
-    "pk": 418, 
+    "pk": 13352, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGCRJ", 
@@ -3762,7 +3766,7 @@
     }
 },
 {
-    "pk": 419, 
+    "pk": 13353, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHI", 
@@ -3771,7 +3775,7 @@
     }
 },
 {
-    "pk": 420, 
+    "pk": 13354, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANRJ", 
@@ -3780,7 +3784,7 @@
     }
 },
 {
-    "pk": 421, 
+    "pk": 13355, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANRJ, JC", 
@@ -3789,7 +3793,7 @@
     }
 },
 {
-    "pk": 422, 
+    "pk": 13356, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANRJ, ON1, L26A", 
@@ -3798,7 +3802,7 @@
     }
 },
 {
-    "pk": 423, 
+    "pk": 13357, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANRJ, SM", 
@@ -3807,7 +3811,7 @@
     }
 },
 {
-    "pk": 424, 
+    "pk": 13358, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANRJ, VR", 
@@ -3816,7 +3820,7 @@
     }
 },
 {
-    "pk": 425, 
+    "pk": 13359, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BNRJ", 
@@ -3825,7 +3829,7 @@
     }
 },
 {
-    "pk": 426, 
+    "pk": 13360, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "TobiasMonteiro", 
@@ -3834,7 +3838,7 @@
     }
 },
 {
-    "pk": 427, 
+    "pk": 13361, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL52.4", 
@@ -3843,7 +3847,7 @@
     }
 },
 {
-    "pk": 428, 
+    "pk": 13362, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL53.1", 
@@ -3852,7 +3856,7 @@
     }
 },
 {
-    "pk": 429, 
+    "pk": 13363, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,CV,54,4", 
@@ -3861,7 +3865,7 @@
     }
 },
 {
-    "pk": 430, 
+    "pk": 13364, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL72.8", 
@@ -3870,7 +3874,7 @@
     }
 },
 {
-    "pk": 431, 
+    "pk": 13365, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL81.2", 
@@ -3879,7 +3883,7 @@
     }
 },
 {
-    "pk": 432, 
+    "pk": 13366, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL82.1", 
@@ -3888,7 +3892,7 @@
     }
 },
 {
-    "pk": 433, 
+    "pk": 13367, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IHGB,DL1132.5", 
@@ -3897,7 +3901,7 @@
     }
 },
 {
-    "pk": 434, 
+    "pk": 13368, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ACSCD", 
@@ -3906,7 +3910,7 @@
     }
 },
 {
-    "pk": 435, 
+    "pk": 13369, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHMS", 
@@ -3915,7 +3919,7 @@
     }
 },
 {
-    "pk": 436, 
+    "pk": 13370, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEB", 
@@ -3924,7 +3928,7 @@
     }
 },
 {
-    "pk": 437, 
+    "pk": 13371, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEB, inv", 
@@ -3933,7 +3937,7 @@
     }
 },
 {
-    "pk": 438, 
+    "pk": 13372, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEB, LN", 
@@ -3942,7 +3946,7 @@
     }
 },
 {
-    "pk": 439, 
+    "pk": 13373, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "APEB, OR", 
@@ -3951,7 +3955,7 @@
     }
 },
 {
-    "pk": 440, 
+    "pk": 13374, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SEPLAN, MA", 
@@ -3960,7 +3964,7 @@
     }
 },
 {
-    "pk": 441, 
+    "pk": 13375, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGN", 
@@ -3969,7 +3973,7 @@
     }
 },
 {
-    "pk": 442, 
+    "pk": 13376, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANSOM", 
@@ -3978,7 +3982,7 @@
     }
 },
 {
-    "pk": 443, 
+    "pk": 13377, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ACM", 
@@ -3987,7 +3991,7 @@
     }
 },
 {
-    "pk": 444, 
+    "pk": 13378, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ADLA", 
@@ -3996,7 +4000,7 @@
     }
 },
 {
-    "pk": 445, 
+    "pk": 13379, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GStA Rep.65", 
@@ -4005,7 +4009,7 @@
     }
 },
 {
-    "pk": 446, 
+    "pk": 13380, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHM", 
@@ -4014,7 +4018,7 @@
     }
 },
 {
-    "pk": 447, 
+    "pk": 13381, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GAA,NA", 
@@ -4023,7 +4027,7 @@
     }
 },
 {
-    "pk": 448, 
+    "pk": 13382, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,Aanwinsten", 
@@ -4032,7 +4036,7 @@
     }
 },
 {
-    "pk": 449, 
+    "pk": 13383, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,Spiegel", 
@@ -4041,7 +4045,7 @@
     }
 },
 {
-    "pk": 450, 
+    "pk": 13384, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,OWIC", 
@@ -4050,7 +4054,7 @@
     }
 },
 {
-    "pk": 451, 
+    "pk": 13385, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,HH", 
@@ -4059,7 +4063,7 @@
     }
 },
 {
-    "pk": 452, 
+    "pk": 13386, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,NBKG", 
@@ -4068,7 +4072,7 @@
     }
 },
 {
-    "pk": 453, 
+    "pk": 13387, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,SG", 
@@ -4077,7 +4081,7 @@
     }
 },
 {
-    "pk": 454, 
+    "pk": 13388, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ARA,WIC", 
@@ -4086,7 +4090,7 @@
     }
 },
 {
-    "pk": 455, 
+    "pk": 13389, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RUL,BPL937", 
@@ -4095,7 +4099,7 @@
     }
 },
 {
-    "pk": 456, 
+    "pk": 13390, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VerheyeCitters", 
@@ -4104,7 +4108,7 @@
     }
 },
 {
-    "pk": 457, 
+    "pk": 13391, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MCC", 
@@ -4113,7 +4117,7 @@
     }
 },
 {
-    "pk": 458, 
+    "pk": 13392, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GAR,Coopstad&Rochussen", 
@@ -4122,7 +4126,7 @@
     }
 },
 {
-    "pk": 459, 
+    "pk": 13393, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Calabar Museum", 
@@ -4131,7 +4135,7 @@
     }
 },
 {
-    "pk": 460, 
+    "pk": 13394, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGAL", 
@@ -4140,7 +4144,7 @@
     }
 },
 {
-    "pk": 461, 
+    "pk": 13395, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHMOP", 
@@ -4149,7 +4153,7 @@
     }
 },
 {
-    "pk": 462, 
+    "pk": 13396, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHU", 
@@ -4158,7 +4162,7 @@
     }
 },
 {
-    "pk": 463, 
+    "pk": 13397, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHU,ACL,CU", 
@@ -4167,7 +4171,7 @@
     }
 },
 {
-    "pk": 464, 
+    "pk": 13398, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHU,ACL,N, Maranh\u00e3o", 
@@ -4176,7 +4180,7 @@
     }
 },
 {
-    "pk": 465, 
+    "pk": 13399, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ATC", 
@@ -4185,7 +4189,7 @@
     }
 },
 {
-    "pk": 466, 
+    "pk": 13400, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Ajuda", 
@@ -4194,7 +4198,7 @@
     }
 },
 {
-    "pk": 467, 
+    "pk": 13401, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BNL", 
@@ -4203,7 +4207,7 @@
     }
 },
 {
-    "pk": 468, 
+    "pk": 13402, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,ALCI", 
@@ -4212,7 +4216,7 @@
     }
 },
 {
-    "pk": 469, 
+    "pk": 13403, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,AHMF,CGGPM", 
@@ -4221,7 +4225,7 @@
     }
 },
 {
-    "pk": 470, 
+    "pk": 13404, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,AHMF,CGPP", 
@@ -4230,7 +4234,7 @@
     }
 },
 {
-    "pk": 471, 
+    "pk": 13405, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,CF", 
@@ -4239,7 +4243,7 @@
     }
 },
 {
-    "pk": 472, 
+    "pk": 13406, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,CC", 
@@ -4248,7 +4252,7 @@
     }
 },
 {
-    "pk": 473, 
+    "pk": 13407, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,DNE", 
@@ -4257,7 +4261,7 @@
     }
 },
 {
-    "pk": 474, 
+    "pk": 13408, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,FF,JIM", 
@@ -4266,7 +4270,7 @@
     }
 },
 {
-    "pk": 475, 
+    "pk": 13409, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,JC", 
@@ -4275,7 +4279,7 @@
     }
 },
 {
-    "pk": 476, 
+    "pk": 13410, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,JT", 
@@ -4284,7 +4288,7 @@
     }
 },
 {
-    "pk": 477, 
+    "pk": 13411, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,MNE", 
@@ -4293,7 +4297,7 @@
     }
 },
 {
-    "pk": 478, 
+    "pk": 13412, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ANTT,MsBrasil", 
@@ -4302,7 +4306,7 @@
     }
 },
 {
-    "pk": 479, 
+    "pk": 13413, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Frei Bartolomeu", 
@@ -4311,7 +4315,7 @@
     }
 },
 {
-    "pk": 480, 
+    "pk": 13414, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGPR", 
@@ -4320,7 +4324,7 @@
     }
 },
 {
-    "pk": 481, 
+    "pk": 13415, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AHNM", 
@@ -4329,7 +4333,7 @@
     }
 },
 {
-    "pk": 482, 
+    "pk": 13416, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGI", 
@@ -4338,7 +4342,7 @@
     }
 },
 {
-    "pk": 483, 
+    "pk": 13417, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGS, CJH", 
@@ -4347,7 +4351,7 @@
     }
 },
 {
-    "pk": 484, 
+    "pk": 13418, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BRO, SMV,mr", 
@@ -4356,7 +4360,7 @@
     }
 },
 {
-    "pk": 485, 
+    "pk": 13419, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BRO, SMV/9/3/3", 
@@ -4365,7 +4369,7 @@
     }
 },
 {
-    "pk": 486, 
+    "pk": 13420, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Hasell Papers", 
@@ -4374,7 +4378,7 @@
     }
 },
 {
-    "pk": 487, 
+    "pk": 13421, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Christchurch LHS", 
@@ -4383,7 +4387,7 @@
     }
 },
 {
-    "pk": 488, 
+    "pk": 13422, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NAS", 
@@ -4392,7 +4396,7 @@
     }
 },
 {
-    "pk": 489, 
+    "pk": 13423, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NMM", 
@@ -4401,7 +4405,7 @@
     }
 },
 {
-    "pk": 490, 
+    "pk": 13424, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wilberforce", 
@@ -4410,7 +4414,7 @@
     }
 },
 {
-    "pk": 491, 
+    "pk": 13425, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DTA", 
@@ -4419,7 +4423,7 @@
     }
 },
 {
-    "pk": 492, 
+    "pk": 13426, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ADM", 
@@ -4428,7 +4432,7 @@
     }
 },
 {
-    "pk": 493, 
+    "pk": 13427, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AO", 
@@ -4437,7 +4441,7 @@
     }
 },
 {
-    "pk": 494, 
+    "pk": 13428, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BT", 
@@ -4446,7 +4450,7 @@
     }
 },
 {
-    "pk": 495, 
+    "pk": 13429, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "C", 
@@ -4455,7 +4459,7 @@
     }
 },
 {
-    "pk": 496, 
+    "pk": 13430, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CO", 
@@ -4464,7 +4468,7 @@
     }
 },
 {
-    "pk": 497, 
+    "pk": 13431, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "EXT", 
@@ -4473,7 +4477,7 @@
     }
 },
 {
-    "pk": 498, 
+    "pk": 13432, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "E", 
@@ -4482,7 +4486,7 @@
     }
 },
 {
-    "pk": 499, 
+    "pk": 13433, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "FO", 
@@ -4491,7 +4495,7 @@
     }
 },
 {
-    "pk": 500, 
+    "pk": 13434, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HCA", 
@@ -4500,7 +4504,7 @@
     }
 },
 {
-    "pk": 501, 
+    "pk": 13435, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PC", 
@@ -4509,7 +4513,7 @@
     }
 },
 {
-    "pk": 502, 
+    "pk": 13436, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ZHC", 
@@ -4518,7 +4522,7 @@
     }
 },
 {
-    "pk": 503, 
+    "pk": 13437, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PROB", 
@@ -4527,7 +4531,7 @@
     }
 },
 {
-    "pk": 504, 
+    "pk": 13438, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SP", 
@@ -4536,7 +4540,7 @@
     }
 },
 {
-    "pk": 505, 
+    "pk": 13439, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "T", 
@@ -4545,7 +4549,7 @@
     }
 },
 {
-    "pk": 506, 
+    "pk": 13440, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Liverpool Museum, mss 53-34", 
@@ -4554,7 +4558,7 @@
     }
 },
 {
-    "pk": 507, 
+    "pk": 13441, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Liverpool Museum, mss 71-190-2", 
@@ -4563,7 +4567,7 @@
     }
 },
 {
-    "pk": 508, 
+    "pk": 13442, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "C&S", 
@@ -4572,7 +4576,7 @@
     }
 },
 {
-    "pk": 509, 
+    "pk": 13443, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Espelho", 
@@ -4581,7 +4585,7 @@
     }
 },
 {
-    "pk": 510, 
+    "pk": 13444, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Leyland", 
@@ -4590,7 +4594,7 @@
     }
 },
 {
-    "pk": 511, 
+    "pk": 13445, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Bostock", 
@@ -4599,7 +4603,7 @@
     }
 },
 {
-    "pk": 512, 
+    "pk": 13446, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Roscoe", 
@@ -4608,7 +4612,7 @@
     }
 },
 {
-    "pk": 513, 
+    "pk": 13447, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LivRO,942HOL(10)", 
@@ -4617,7 +4621,7 @@
     }
 },
 {
-    "pk": 514, 
+    "pk": 13448, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LivRO,Slavery&Privateers", 
@@ -4626,7 +4630,7 @@
     }
 },
 {
-    "pk": 515, 
+    "pk": 13449, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "TUO", 
@@ -4635,7 +4639,7 @@
     }
 },
 {
-    "pk": 516, 
+    "pk": 13450, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MMM,LivReg", 
@@ -4644,7 +4648,7 @@
     }
 },
 {
-    "pk": 517, 
+    "pk": 13451, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MMM,D/EARLE", 
@@ -4653,7 +4657,7 @@
     }
 },
 {
-    "pk": 518, 
+    "pk": 13452, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MMM,D/DAV", 
@@ -4662,7 +4666,7 @@
     }
 },
 {
-    "pk": 519, 
+    "pk": 13453, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MMM,DX/170", 
@@ -4671,7 +4675,7 @@
     }
 },
 {
-    "pk": 520, 
+    "pk": 13454, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dumbell", 
@@ -4680,7 +4684,7 @@
     }
 },
 {
-    "pk": 521, 
+    "pk": 13455, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BankEng", 
@@ -4689,7 +4693,7 @@
     }
 },
 {
-    "pk": 522, 
+    "pk": 13456, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BankEng,PBP", 
@@ -4698,7 +4702,7 @@
     }
 },
 {
-    "pk": 523, 
+    "pk": 13457, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Add.mss", 
@@ -4707,7 +4711,7 @@
     }
 },
 {
-    "pk": 524, 
+    "pk": 13458, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LL", 
@@ -4716,7 +4720,7 @@
     }
 },
 {
-    "pk": 525, 
+    "pk": 13459, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HLRO,MP,HL", 
@@ -4725,7 +4729,7 @@
     }
 },
 {
-    "pk": 526, 
+    "pk": 13460, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ST", 
@@ -4734,7 +4738,7 @@
     }
 },
 {
-    "pk": 527, 
+    "pk": 13461, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BroughamMss", 
@@ -4743,7 +4747,7 @@
     }
 },
 {
-    "pk": 528, 
+    "pk": 13462, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "JRL", 
@@ -4752,7 +4756,7 @@
     }
 },
 {
-    "pk": 529, 
+    "pk": 13463, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Rawl", 
@@ -4761,7 +4765,7 @@
     }
 },
 {
-    "pk": 530, 
+    "pk": 13464, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "B.E.Mss", 
@@ -4770,7 +4774,7 @@
     }
 },
 {
-    "pk": 531, 
+    "pk": 13465, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Bx.Mss", 
@@ -4779,7 +4783,7 @@
     }
 },
 {
-    "pk": 532, 
+    "pk": 13466, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Spencer-Stanhope", 
@@ -4788,7 +4792,7 @@
     }
 },
 {
-    "pk": 533, 
+    "pk": 13467, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Berington acct bk", 
@@ -4797,7 +4801,7 @@
     }
 },
 {
-    "pk": 534, 
+    "pk": 13468, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CL", 
@@ -4806,7 +4810,7 @@
     }
 },
 {
-    "pk": 535, 
+    "pk": 13469, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Shelburne", 
@@ -4815,7 +4819,7 @@
     }
 },
 {
-    "pk": 536, 
+    "pk": 13470, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MSA, S117", 
@@ -4824,16 +4828,7 @@
     }
 },
 {
-    "pk": 537, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo da Casa de Cadaval</i> (Muge, Portugal)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 538, 
+    "pk": 13471, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MSA, S204", 
@@ -4842,7 +4837,7 @@
     }
 },
 {
-    "pk": 539, 
+    "pk": 13472, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MSA, S205-1", 
@@ -4851,7 +4846,7 @@
     }
 },
 {
-    "pk": 540, 
+    "pk": 13473, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MSA, S517-9", 
@@ -4860,7 +4855,7 @@
     }
 },
 {
-    "pk": 541, 
+    "pk": 13474, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MSA, S1006", 
@@ -4869,7 +4864,7 @@
     }
 },
 {
-    "pk": 542, 
+    "pk": 13475, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Wanderer logbook", 
@@ -4878,7 +4873,7 @@
     }
 },
 {
-    "pk": 543, 
+    "pk": 13476, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GSA,Clayton Papers", 
@@ -4887,7 +4882,7 @@
     }
 },
 {
-    "pk": 544, 
+    "pk": 13477, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NARA, Atlanta", 
@@ -4896,7 +4891,7 @@
     }
 },
 {
-    "pk": 545, 
+    "pk": 13478, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "UVA,RobertCarter", 
@@ -4905,7 +4900,7 @@
     }
 },
 {
-    "pk": 546, 
+    "pk": 13479, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "UVA,JCLCarterLetterbk", 
@@ -4914,7 +4909,7 @@
     }
 },
 {
-    "pk": 547, 
+    "pk": 13480, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SC,Treasury", 
@@ -4923,7 +4918,7 @@
     }
 },
 {
-    "pk": 548, 
+    "pk": 13481, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HCL,Britannia", 
@@ -4932,7 +4927,7 @@
     }
 },
 {
-    "pk": 549, 
+    "pk": 13482, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Duke,Ascention", 
@@ -4941,7 +4936,7 @@
     }
 },
 {
-    "pk": 550, 
+    "pk": 13483, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Beinecke,B5", 
@@ -4950,7 +4945,7 @@
     }
 },
 {
-    "pk": 551, 
+    "pk": 13484, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,Angola dataset", 
@@ -4959,7 +4954,7 @@
     }
 },
 {
-    "pk": 552, 
+    "pk": 13485, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,Havana dataset", 
@@ -4968,7 +4963,7 @@
     }
 },
 {
-    "pk": 553, 
+    "pk": 13486, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,Rio de Janeiro dataset 1", 
@@ -4977,7 +4972,7 @@
     }
 },
 {
-    "pk": 554, 
+    "pk": 13487, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Klein,Rio de Janeiro dataset 2", 
@@ -4986,7 +4981,7 @@
     }
 },
 {
-    "pk": 555, 
+    "pk": 13488, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Caulkins", 
@@ -4995,7 +4990,7 @@
     }
 },
 {
-    "pk": 556, 
+    "pk": 13489, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HSA,JournalLogbookScotch", 
@@ -5004,7 +4999,7 @@
     }
 },
 {
-    "pk": 557, 
+    "pk": 13490, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,OldNewYork,vol.9", 
@@ -5013,7 +5008,7 @@
     }
 },
 {
-    "pk": 558, 
+    "pk": 13491, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Farley\u2019s", 
@@ -5022,7 +5017,7 @@
     }
 },
 {
-    "pk": 559, 
+    "pk": 13492, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,Misc microfilm, #5", 
@@ -5031,7 +5026,7 @@
     }
 },
 {
-    "pk": 560, 
+    "pk": 13493, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,RufusKing", 
@@ -5040,7 +5035,7 @@
     }
 },
 {
-    "pk": 561, 
+    "pk": 13494, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,VanCortland,letterbk", 
@@ -5049,7 +5044,7 @@
     }
 },
 {
-    "pk": 562, 
+    "pk": 13495, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,Vernon", 
@@ -5058,7 +5053,7 @@
     }
 },
 {
-    "pk": 563, 
+    "pk": 13496, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYPL,Cortlandt", 
@@ -5067,7 +5062,7 @@
     }
 },
 {
-    "pk": 564, 
+    "pk": 13497, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYPL,Lawrance", 
@@ -5076,7 +5071,7 @@
     }
 },
 {
-    "pk": 565, 
+    "pk": 13498, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYPL,Hall", 
@@ -5085,7 +5080,7 @@
     }
 },
 {
-    "pk": 566, 
+    "pk": 13499, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYPL,Louisa", 
@@ -5094,7 +5089,7 @@
     }
 },
 {
-    "pk": 567, 
+    "pk": 13500, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NHS", 
@@ -5103,16 +5098,7 @@
     }
 },
 {
-    "pk": 568, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Institute of Commonwealth Studies</i> (London, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 569, 
+    "pk": 13501, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Stewart Letterbooks", 
@@ -5121,7 +5107,7 @@
     }
 },
 {
-    "pk": 570, 
+    "pk": 13502, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NARA, Philadelphia", 
@@ -5130,7 +5116,7 @@
     }
 },
 {
-    "pk": 571, 
+    "pk": 13503, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RISA,vol.1", 
@@ -5139,7 +5125,7 @@
     }
 },
 {
-    "pk": 572, 
+    "pk": 13504, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Kinkor", 
@@ -5148,7 +5134,7 @@
     }
 },
 {
-    "pk": 573, 
+    "pk": 13505, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "YCVDWO", 
@@ -5157,7 +5143,7 @@
     }
 },
 {
-    "pk": 574, 
+    "pk": 13506, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VHS,CarterLetterbk", 
@@ -5166,7 +5152,7 @@
     }
 },
 {
-    "pk": 575, 
+    "pk": 13507, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "FHL,Reel39554", 
@@ -5175,7 +5161,7 @@
     }
 },
 {
-    "pk": 576, 
+    "pk": 13508, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "FHL,Reel88762", 
@@ -5184,7 +5170,7 @@
     }
 },
 {
-    "pk": 577, 
+    "pk": 13509, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Huntington,HM30206", 
@@ -5193,7 +5179,7 @@
     }
 },
 {
-    "pk": 578, 
+    "pk": 13510, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Huntington,FCSTP", 
@@ -5202,7 +5188,7 @@
     }
 },
 {
-    "pk": 579, 
+    "pk": 13511, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Banfield", 
@@ -5211,7 +5197,7 @@
     }
 },
 {
-    "pk": 580, 
+    "pk": 13512, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Macaulay", 
@@ -5220,7 +5206,7 @@
     }
 },
 {
-    "pk": 581, 
+    "pk": 13513, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Huntington,ST", 
@@ -5229,7 +5215,7 @@
     }
 },
 {
-    "pk": 582, 
+    "pk": 13514, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Carroll Daybook", 
@@ -5238,7 +5224,7 @@
     }
 },
 {
-    "pk": 583, 
+    "pk": 13515, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dixon Account Book", 
@@ -5247,7 +5233,7 @@
     }
 },
 {
-    "pk": 584, 
+    "pk": 13516, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "H&B Letterbk", 
@@ -5256,7 +5242,7 @@
     }
 },
 {
-    "pk": 585, 
+    "pk": 13517, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LtoSofN", 
@@ -5265,7 +5251,7 @@
     }
 },
 {
-    "pk": 586, 
+    "pk": 13518, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AGNU", 
@@ -5274,214 +5260,7 @@
     }
 },
 {
-    "pk": 587, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Tribunal Judicial de Benguela</i> (Benguela, Angola) Ma\u00e7o 1", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 588, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Nacional de Angola</i> (Luanda, Angola) Caixas 134, 142, 148, 1359, 1602, 3723", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 589, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Nacional de Angola</i> (Luanda, Angola) C\u00f3dices 8-1-59, 9/C-4-24, 9-1-50, 10-1-50, 12, 2571, 2574, 7182, A-3-6, B-12-2, B-14-1, B-14-3, C-8-4, C-9-3, C-9-4, C-12-2, C-12-3, C-13-1, C-16-1, C-16-2, D-1-4, D-1-5, D-3-3, D-7-1, E-1-1-E-1-3, E-1-5, E-2-1-2-4, E-3-1, E-3-4, E-4-2-E-4-4, E-17-2, E-19-5, E-20-21, E-20-3, E-20-4, E-20-5", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 590, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Municipal de Luanda</i> (Luanda, Angola) C\u00f3dices 6, 12, 17, 19, 27", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 591, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Melbourne Archives</i> (Melbourne, Australia)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 592, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Universiteitsbibliotheek Gent</i> (Ghent, Belgium) MS679a, Logbook \u201cHof van Zeeland\u201d (1732-34)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 593, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo P\u00fablico Estadual Jord\u00e3o Emerenciano</i> (Recife, Brazil)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 594, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Geral da C\u00faria do Rio de Janeiro</i> (Rio de Janeiro, Brazil) C\u00f3dice 57/3/7", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 595, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico do Itamarary</i> (Rio de Janeiro, Brazil) Cole\u00e7\u00f5es Especiais", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 596, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Nacional</i> (Rio de Janeiro, Brazil) Caixas 419, 492", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 597, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Nacional</i> (Rio de Janeiro, Brazil) C\u00f3dices 141, 143, 156, 157, 212, 242, 369, 537, 538, 1013, 1148", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 598, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Nacional, Manuscritos</i> (Rio de Janeiro, Brazil) Cartas Alvulsas", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 599, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Nacional, Manuscritos</i> (Rio de Janeiro, Brazil) Ms. 09,3,002, Livro de registro das portarias e ordens passadas pelos governadores e capit\u00e3es gerais do Estado do Brasil (Bahia 1711-19)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 600, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Nacional, Manuscritos</i> (Rio de Janeiro, Brazil) Ms. I-25,02,027", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 601, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Nacional, Manuscritos</i> (Rio de Janeiro, Brazil) Ms. 03,2,005, Cartas de Of\u00edcio (1704-23)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 602, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Instituto Hist\u00f3rico e Geogr\u00e1fico Brasileiro</i> (Rio de Janeiro, Brazil)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 603, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo do Convento de Santa Clara do Desterro</i> (Salvador da Bahia, Brazil) Caixa 3, Pasta Q", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 604, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Municipal de Salvador</i> (Salvador da Bahia, Brazil) C\u00f3dices 2.6, 27.2-27.5, 27.7, 30.1, 56.2, 56.3, 178.1, 182.1", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 605, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo P\u00fablico do Estado da Bahia</i> (Salvador da Bahia, Brazil) C\u00f3dices 437-439, 440, 443, 447, 449, 456, 626.1-626-3", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 606, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo P\u00fablico do Estado da Bahia</i> (Salvador da Bahia, Brazil) Ma\u00e7os 193, 195, 197, 201-22, 3176", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 607, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Secretaria de Estado de Planejamento, Or\u00e7amento e Gest\u00e3o</i> (S\u00e3o Lu\u00eds do Maranh\u00e3o, Brazil)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 608, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de la Naci\u00f3n</i> (Bogot\u00e1, Colombia) Negros y Esclavos, Bol\u00edvar, \u00cdndice 146, n\u00fam. 002, a\u00f1o 1576. Carpeta 146, leg. 4, sig. SC43, fols. 289v-383v", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 609, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo Nacional de Cuba</i> (Havana, Cuba)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 610, 
+    "pk": 13519, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "FP", 
@@ -5490,7 +5269,7 @@
     }
 },
 {
-    "pk": 611, 
+    "pk": 13520, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GA", 
@@ -5499,1015 +5278,7 @@
     }
 },
 {
-    "pk": 612, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) COL-C6 1-3, Correspondance \u00e0 l\u2019arriv\u00e9e re\u00e7ue aux colonies (ca. 1664-1719)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 613, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) COL-C8A 1-2, 4-8, 10, 12-18, Correspondance \u00e0 l\u2019arriv\u00e9e re\u00e7ue aux colonies (ca. 1663-1713)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 614, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Provincetown Museum</i> (Provincetown, Massachusetts, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 615, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) COL-C13A 40, Correspondance \u00e0 l\u2019arriv\u00e9e re\u00e7ue aux colonies (ca. 1758-1761)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 616, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) COL-C14 3-4, Correspondance \u00e0 l\u2019arriv\u00e9e re\u00e7ue aux colonies (1692-1705)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 617, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) COL-F2A 7, Colonies (ca. 1765-1790)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 618, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Nationales, Section d\u2019Outre-mer</i> (Aix-en-Provence, France) FM, DFC, XVI", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 619, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives Charente-Maritime</i> (La Rochelle, France) B235, B5667, B5668, B5670, B5672, B5674-5681, B5684, B5685, B5694", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 620, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives D\u00e9partementales Loire-Atlantique</i> (Nantes, France) 120 J 329, 332-334", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 621, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archives D\u00e9partementales Loire-Atlantique</i> (Nantes, France) B4479, B4480, B4545-4547, B4571-4576, B4642, B4643, B4645, B4703, B4704, B4722", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 622, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Geheimes Staatsarchiv Preu\u00dfischer Kulturbesitz</i> (Berlin, Germany)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 623, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico de Mo\u00e7ambique</i> (Maputo, Mozambique) C\u00f3dices 11-419, 11-1749", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 624, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico de Mo\u00e7ambique</i> (Maputo, Mozambique) Fundo do S\u00e9culo XVIII, VI. 53, 55, 57", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 625, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Stadsarchief</i> (Amsterdam, Netherlands)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 626, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Nationaal Archief</i> (The Hague, Netherlands)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 627, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Rijksuniversiteit Leiden</i> (Leiden, Netherlands)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 628, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Zeeuws Archief</i> (Middelburg, Netherlands)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 629, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Gemeentearchief Rotterdam</i> (Rotterdam, Netherlands)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 630, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Calabar Museum</i> (Calabar, Nigeria) Logbook of SS Faith, and accompanying memo of John Whitford, March 8, 1853", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 631, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Geral da Alf\u00e2ndega de Lisboa</i> (Lisbon, Portugal) Livros 54.1, 54.3, 55, 128", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 632, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico do Minist\u00e9rio das Obras P\u00fablicas</i> (Lisbon, Portugal) SGC 4, Registo da sahida dos navios, Livro 2", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 633, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Angola", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 634, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Bahia", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 635, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Cabo Verde", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 636, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) C\u00f3dices 552, 1362, 1365, 1376", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 637, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Guin\u00e9", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 638, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Maranh\u00e3o", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 639, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Mo\u00e7ambique", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 640, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Par\u00e1", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 641, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Para\u00edba", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 642, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Pernambuco", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 643, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Sala 6, Ma\u00e7o 775", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 644, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Sala 12, Pastas 4, 7-9, 15", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 645, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) Sala 13, Caixa 8", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 646, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo Hist\u00f3rico Ultramarino</i> (Lisbon, Portugal) S\u00e3o Tom\u00e9", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 647, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Arquivo do Tribunal das Contas</i> (Lisbon, Portugal) Cart\u00f3rios Avulsos", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 648, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca de Ajuda</i> (Lisbon, Portugal) Ms 51-VI-54", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 649, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Biblioteca Nacional de Portugal, Reservados</i> (Lisbon, Portugal) C\u00f3dices 7194, 10648", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 650, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Instituto dos Arquivos Nacionais/Torre do Tombo</i> (Lisbon, Portugal)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 651, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Puerto Rico</i> (San Juan, Puerto Rico) Protocolos FA, GS, JFO, PA", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 652, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo Hist\u00f3rico Nacional</i> (Madrid, Spain) Estado", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 653, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo Hist\u00f3rico Nacional</i> (Madrid, Spain) Ultramar", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 654, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Contadur\u00eda", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 655, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Contrataci\u00f3n", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 656, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Escriban\u00eda de C\u00e1mara", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 657, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Estado", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 658, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Indiferente General", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 659, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Panam\u00e1", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 660, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Patronato", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 661, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Santa Fe", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 662, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de Indias</i> (Seville, Spain) Secci\u00f3n de Santo Domingo", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 663, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Bristol Record Office</i> (Bristol, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 664, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Dalemain House</i> (Cumbria, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 665, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives of Scotland</i> (Edinburgh, UK) E504/28/12, Collector\u2019s Quarterly Accounts, Port Glasgow Customs Account Book, April 1764 - April, 1765", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 666, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives of Scotland</i> (Edinburgh, UK) AC9/1042, Horseburgh v Bogle, 1728", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 667, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives of Scotland</i> (Edinburgh, UK) CS96/4370, McNeil, Sadler and Claxton accounts (St. Kitts)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 668, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives of Scotland</i> (Edinburgh, UK) GD46/17/24, Seaforth Papers, Bound volume of letters and other papers, 1802-06", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 669, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives of Scotland</i> (Edinburgh, UK) GD46/7/B, Seaforth Papers, Barbados Papers, 1800-42", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 670, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Maritime Museum, Library</i> (Greenwich, UK) AML/V/13", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 671, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Maritime Museum, Library</i> (Greenwich, UK) AMS/4", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 672, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Maritime Museum, Library</i> (Greenwich, UK) Log/M/21", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 673, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Hull</i> (Hull, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 674, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Keele, Archives</i> (Keele, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 675, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>The National Archives</i> (Kew, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 676, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Merseyside Maritime Museum</i> (Liverpool, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 677, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Liverpool Library</i> (Liverpool, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 678, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 11410, Papers relating to English affairs in the West Indies, chiefly in Jamaica, 1654-1682", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 679, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 3984, Sloan manuscripts", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 680, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 19560, Le Sieur des Marchais, \u201cJournal de Navigation du Voyage de la Coste de Guin\u00e9e\u201d (January 1704 - January 1706)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 681, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 25495-8, 25500-5, 25556, 25562, 25567, South Sea Company, Papers, Minutes and Correspondence", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 682, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 38416, Jenkinson, Charles (1st Earl of Liverpool), Official and Private Correspondence", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 683, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 39946, Narrative of Voyages to the Guinea Coast and the West Indies, 1714-171", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 684, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 43123, 43125, Aberdeen Papers", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 685, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>British Library, Additional Manuscripts</i> (London, UK) 48590, Miscellaneous Letters and Papers", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 686, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>House of Lords Record Office</i> (London, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 687, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of London, Senate House Library</i> (London, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 688, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Manchester, John Rylands University Library</i> (Manchester, UK) English MS 517 3(a)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 689, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Bodleian Library</i> (Oxford, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 690, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Rhodes House Library</i> (Oxford, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 691, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Sheffield Archives</i> (Sheffield, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 692, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Record Office</i> (Worcester, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 693, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Michigan, Clements Library</i> (Ann Arbor, Michigan, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 694, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Maryland State Archives</i> (Annapolis, Maryland, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 695, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives Record Administration, Southeast Region</i> (Atlanta, Georgia, USA) RG60, General Records of the Department of Justice, Supreme Court Case Papers", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 696, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>South Carolina Department of Archives and History</i> (Columbia, South Carolina, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 697, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Harlan Crow Library</i> (Dallas, Texas, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 698, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Duke University, Special Collections Library</i> (Durham, North Carolina, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 699, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Hamilton College, Beinecke Library</i> (Hamilton, New York, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 700, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Wisconsin Library</i> (Madison, Wisconsin, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 701, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>New London Historical Society</i> (New London, Connecticut, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 702, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 703, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 704, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 705, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>New York Public Library, Archives and Manuscripts</i> (New York, New York, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 706, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Historical Society of Pennsylvania</i> (Philadelphia, Pennsylvania, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 707, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives Record Administration, Mid Atlantic Region</i> (Philadelphia, Pennsylvania, USA) RG21, Records of District Courts of the United States", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 708, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Rhode Island State Archives</i> (Providence, Rhode Island, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 709, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Department of Archives</i> (Black Rock, Barbados)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 710, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Liverpool Museum, Manuscripts</i> (Liverpool, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 711, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Liverpool Record Office</i> (Liverpool, UK)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 712, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Emory University, Robert W. Woodruff Library, Special Collections Department</i> (Atlanta, Georgia, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 713, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Georgia State Archives</i> (Atlanta, Georgia, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 714, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives Record Administration, Southeast Region</i> (Atlanta, Georgia, USA) RG21, Records of the District Courts of the United States, Georgia, Southern District, Savannah division, 1790-1860, Boxes 21-27", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 715, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Virginia, Alderman Library</i> (Charlottesville, Virginia, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 716, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Library of Virginia</i> (Richmond, Virginia, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 717, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Virginia Historical Society</i> (Richmond, Virginia, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 718, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Family History Library</i> (Salt Lake City, Utah, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 719, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Huntington Library</i> (San Marino, California, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 720, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Georgetown University Libraries, Special Collections</i> (Washington, DC, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 721, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Library of Congress</i> (Washington, DC, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 722, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>National Archives</i> (Washington, DC, USA)", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 723, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>Archivo General de la Naci\u00f3n</i> (Montevideo, Uruguay) Libros 103, 546, 555", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 724, 
+    "pk": 13521, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "AOWJ", 
@@ -6516,7 +5287,7 @@
     }
 },
 {
-    "pk": 725, 
+    "pk": 13522, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "bg", 
@@ -6525,7 +5296,7 @@
     }
 },
 {
-    "pk": 726, 
+    "pk": 13523, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BJ", 
@@ -6534,7 +5305,7 @@
     }
 },
 {
-    "pk": 727, 
+    "pk": 13524, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BLA", 
@@ -6543,7 +5314,7 @@
     }
 },
 {
-    "pk": 728, 
+    "pk": 13525, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "bm", 
@@ -6552,7 +5323,7 @@
     }
 },
 {
-    "pk": 729, 
+    "pk": 13526, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BostonGazette", 
@@ -6561,7 +5332,7 @@
     }
 },
 {
-    "pk": 730, 
+    "pk": 13527, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BPB", 
@@ -6570,7 +5341,7 @@
     }
 },
 {
-    "pk": 731, 
+    "pk": 13528, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "cc", 
@@ -6579,7 +5350,7 @@
     }
 },
 {
-    "pk": 732, 
+    "pk": 13529, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CharlestonCourier", 
@@ -6588,7 +5359,7 @@
     }
 },
 {
-    "pk": 733, 
+    "pk": 13530, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CJ", 
@@ -6597,7 +5368,7 @@
     }
 },
 {
-    "pk": 734, 
+    "pk": 13531, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CommonSense", 
@@ -6606,7 +5377,7 @@
     }
 },
 {
-    "pk": 735, 
+    "pk": 13532, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "CS", 
@@ -6615,7 +5386,7 @@
     }
 },
 {
-    "pk": 736, 
+    "pk": 13533, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DA", 
@@ -6624,7 +5395,7 @@
     }
 },
 {
-    "pk": 737, 
+    "pk": 13534, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dawk\u2019s", 
@@ -6633,7 +5404,7 @@
     }
 },
 {
-    "pk": 738, 
+    "pk": 13535, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DC", 
@@ -6642,7 +5413,7 @@
     }
 },
 {
-    "pk": 739, 
+    "pk": 13536, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DF", 
@@ -6651,7 +5422,7 @@
     }
 },
 {
-    "pk": 740, 
+    "pk": 13537, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DG", 
@@ -6660,7 +5431,7 @@
     }
 },
 {
-    "pk": 741, 
+    "pk": 13538, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Dgov", 
@@ -6669,7 +5440,7 @@
     }
 },
 {
-    "pk": 742, 
+    "pk": 13539, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DJ", 
@@ -6678,7 +5449,7 @@
     }
 },
 {
-    "pk": 743, 
+    "pk": 13540, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DP", 
@@ -6687,7 +5458,7 @@
     }
 },
 {
-    "pk": 744, 
+    "pk": 13541, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DPB", 
@@ -6696,7 +5467,7 @@
     }
 },
 {
-    "pk": 745, 
+    "pk": 13542, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DPE", 
@@ -6705,7 +5476,7 @@
     }
 },
 {
-    "pk": 746, 
+    "pk": 13543, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DRJ", 
@@ -6714,7 +5485,7 @@
     }
 },
 {
-    "pk": 747, 
+    "pk": 13544, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "DWM", 
@@ -6723,7 +5494,7 @@
     }
 },
 {
-    "pk": 748, 
+    "pk": 13545, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "edg", 
@@ -6732,7 +5503,7 @@
     }
 },
 {
-    "pk": 749, 
+    "pk": 13546, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "EJ", 
@@ -6741,7 +5512,7 @@
     }
 },
 {
-    "pk": 750, 
+    "pk": 13547, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GEP", 
@@ -6750,7 +5521,7 @@
     }
 },
 {
-    "pk": 751, 
+    "pk": 13548, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GG", 
@@ -6759,7 +5530,7 @@
     }
 },
 {
-    "pk": 752, 
+    "pk": 13549, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "gi", 
@@ -6768,7 +5539,7 @@
     }
 },
 {
-    "pk": 753, 
+    "pk": 13550, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GLGA", 
@@ -6777,7 +5548,7 @@
     }
 },
 {
-    "pk": 754, 
+    "pk": 13551, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "GRJ", 
@@ -6786,7 +5557,7 @@
     }
 },
 {
-    "pk": 755, 
+    "pk": 13552, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "HMMGA", 
@@ -6795,7 +5566,7 @@
     }
 },
 {
-    "pk": 756, 
+    "pk": 13553, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "IDO", 
@@ -6804,7 +5575,7 @@
     }
 },
 {
-    "pk": 757, 
+    "pk": 13554, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "JC", 
@@ -6813,7 +5584,7 @@
     }
 },
 {
-    "pk": 758, 
+    "pk": 13555, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "jg", 
@@ -6822,7 +5593,7 @@
     }
 },
 {
-    "pk": 759, 
+    "pk": 13556, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "KC", 
@@ -6831,7 +5602,7 @@
     }
 },
 {
-    "pk": 760, 
+    "pk": 13557, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "kda", 
@@ -6840,7 +5611,7 @@
     }
 },
 {
-    "pk": 761, 
+    "pk": 13558, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "kg", 
@@ -6849,7 +5620,7 @@
     }
 },
 {
-    "pk": 762, 
+    "pk": 13559, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LEP", 
@@ -6858,7 +5629,7 @@
     }
 },
 {
-    "pk": 763, 
+    "pk": 13560, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LG", 
@@ -6867,7 +5638,7 @@
     }
 },
 {
-    "pk": 764, 
+    "pk": 13561, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LGA", 
@@ -6876,7 +5647,7 @@
     }
 },
 {
-    "pk": 765, 
+    "pk": 13562, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "lgga", 
@@ -6885,7 +5656,7 @@
     }
 },
 {
-    "pk": 766, 
+    "pk": 13563, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LJ", 
@@ -6894,7 +5665,7 @@
     }
 },
 {
-    "pk": 767, 
+    "pk": 13564, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LList", 
@@ -6903,7 +5674,7 @@
     }
 },
 {
-    "pk": 768, 
+    "pk": 13565, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "LouisianaGazette", 
@@ -6912,7 +5683,7 @@
     }
 },
 {
-    "pk": 769, 
+    "pk": 13566, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "MG", 
@@ -6921,7 +5692,7 @@
     }
 },
 {
-    "pk": 770, 
+    "pk": 13567, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NL", 
@@ -6930,7 +5701,7 @@
     }
 },
 {
-    "pk": 771, 
+    "pk": 13568, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NM", 
@@ -6939,7 +5710,7 @@
     }
 },
 {
-    "pk": 772, 
+    "pk": 13569, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYEP", 
@@ -6948,7 +5719,7 @@
     }
 },
 {
-    "pk": 773, 
+    "pk": 13570, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYGWM", 
@@ -6957,7 +5728,7 @@
     }
 },
 {
-    "pk": 774, 
+    "pk": 13571, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYGWPB", 
@@ -6966,7 +5737,7 @@
     }
 },
 {
-    "pk": 775, 
+    "pk": 13572, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYM", 
@@ -6975,7 +5746,7 @@
     }
 },
 {
-    "pk": 776, 
+    "pk": 13573, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYWJ", 
@@ -6984,7 +5755,7 @@
     }
 },
 {
-    "pk": 777, 
+    "pk": 13574, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "OCM", 
@@ -6993,7 +5764,7 @@
     }
 },
 {
-    "pk": 778, 
+    "pk": 13575, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "OWJ", 
@@ -7002,7 +5773,7 @@
     }
 },
 {
-    "pk": 779, 
+    "pk": 13576, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PA", 
@@ -7011,7 +5782,7 @@
     }
 },
 {
-    "pk": 780, 
+    "pk": 13577, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PB", 
@@ -7020,7 +5791,7 @@
     }
 },
 {
-    "pk": 781, 
+    "pk": 13578, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PG", 
@@ -7029,7 +5800,7 @@
     }
 },
 {
-    "pk": 782, 
+    "pk": 13579, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PLP", 
@@ -7038,7 +5809,7 @@
     }
 },
 {
-    "pk": 783, 
+    "pk": 13580, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PM", 
@@ -7047,7 +5818,7 @@
     }
 },
 {
-    "pk": 784, 
+    "pk": 13581, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "PostMaster", 
@@ -7056,7 +5827,7 @@
     }
 },
 {
-    "pk": 785, 
+    "pk": 13582, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "ProvidenceGazette", 
@@ -7065,7 +5836,7 @@
     }
 },
 {
-    "pk": 786, 
+    "pk": 13583, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "rg", 
@@ -7074,7 +5845,7 @@
     }
 },
 {
-    "pk": 787, 
+    "pk": 13584, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RGSLA", 
@@ -7083,7 +5854,7 @@
     }
 },
 {
-    "pk": 788, 
+    "pk": 13585, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RMA", 
@@ -7092,7 +5863,7 @@
     }
 },
 {
-    "pk": 789, 
+    "pk": 13586, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RRG", 
@@ -7101,7 +5872,7 @@
     }
 },
 {
-    "pk": 790, 
+    "pk": 13587, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "RWJ", 
@@ -7110,7 +5881,7 @@
     }
 },
 {
-    "pk": 791, 
+    "pk": 13588, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SCG", 
@@ -7119,7 +5890,7 @@
     }
 },
 {
-    "pk": 792, 
+    "pk": 13589, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SCWG", 
@@ -7128,7 +5899,7 @@
     }
 },
 {
-    "pk": 793, 
+    "pk": 13590, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "sem", 
@@ -7137,7 +5908,7 @@
     }
 },
 {
-    "pk": 794, 
+    "pk": 13591, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SG", 
@@ -7146,7 +5917,7 @@
     }
 },
 {
-    "pk": 795, 
+    "pk": 13592, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "stg", 
@@ -7155,7 +5926,7 @@
     }
 },
 {
-    "pk": 796, 
+    "pk": 13593, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "StJEP", 
@@ -7164,7 +5935,7 @@
     }
 },
 {
-    "pk": 797, 
+    "pk": 13594, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "SurinaamscheCourant", 
@@ -7173,7 +5944,7 @@
     }
 },
 {
-    "pk": 798, 
+    "pk": 13595, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "TGA", 
@@ -7182,7 +5953,7 @@
     }
 },
 {
-    "pk": 799, 
+    "pk": 13596, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Times", 
@@ -7191,7 +5962,7 @@
     }
 },
 {
-    "pk": 800, 
+    "pk": 13597, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "USJ", 
@@ -7200,7 +5971,7 @@
     }
 },
 {
-    "pk": 801, 
+    "pk": 13598, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "USWJ", 
@@ -7209,7 +5980,7 @@
     }
 },
 {
-    "pk": 802, 
+    "pk": 13599, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "VG", 
@@ -7218,7 +5989,7 @@
     }
 },
 {
-    "pk": 803, 
+    "pk": 13600, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "w", 
@@ -7227,7 +5998,7 @@
     }
 },
 {
-    "pk": 804, 
+    "pk": 13601, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WEP", 
@@ -7236,7 +6007,7 @@
     }
 },
 {
-    "pk": 805, 
+    "pk": 13602, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WJ", 
@@ -7245,7 +6016,7 @@
     }
 },
 {
-    "pk": 806, 
+    "pk": 13603, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WJBG", 
@@ -7254,7 +6025,7 @@
     }
 },
 {
-    "pk": 807, 
+    "pk": 13604, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WJSP", 
@@ -7263,7 +6034,7 @@
     }
 },
 {
-    "pk": 808, 
+    "pk": 13605, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "wla", 
@@ -7272,7 +6043,7 @@
     }
 },
 {
-    "pk": 809, 
+    "pk": 13606, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WM", 
@@ -7281,7 +6052,7 @@
     }
 },
 {
-    "pk": 810, 
+    "pk": 13607, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WNDR", 
@@ -7290,7 +6061,7 @@
     }
 },
 {
-    "pk": 811, 
+    "pk": 13608, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WR", 
@@ -7299,7 +6070,7 @@
     }
 },
 {
-    "pk": 812, 
+    "pk": 13609, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "WYCI", 
@@ -7308,16 +6079,16 @@
     }
 },
 {
-    "pk": 813, 
+    "pk": 13610, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lessens", 
-        "full_ref": "Lesens, Pierre, <i>M\u00e9moire  pour  le sieur Pierre LESENS, capitaine de navire,  de pr\u00e9sent en la ville des Cayes,  appelant (...) contre le sieur Pierre Guillaume Robert BUNEL,  se disant n\u00e9gociant \u00e0 Honfleur et repr\u00e9sent\u00e9 en cette colonie par le sieur Pierre GRINGUET,  capitaine du navire \"\"La Renomm\u00e9e,\"\" actuellement en rade aux Cayes, ledit sieur BUNEL osant se dire,  agir  au  nom et comme armateur et propri\u00e9taire  du navire  \"\"La Furieuse,\"\"  command\u00e9 par ledit  sieur  LESENS, l'un des int\u00e9ress\u00e9s audit navire, intim\u00e9 sign\u00e9 BAUDRY DES LOZI\u00e8RES\"\"</i> (Port au Prince, impr. Mozard, 1789), in 8\u00b0. 8\u00b0 Fn 1 (sic), in A. Corda, <i>Catalogue  des  factums  et  d'autres documents  judiciaires  ant\u00e9rieurs  \u00e0  1790</i>, 10 vols, Biblioth\u00e8que nationale. Paris.", 
+        "full_ref": "Lesens, Pierre, <i>M\u00e9moire  pour  le sieur Pierre LESENS, capitaine de navire,  de pr\u00e9sent en la ville des Cayes,  appelant (...) contre le sieur Pierre Guillaume Robert BUNEL,  se disant n\u00e9gociant \u00e0 Honfleur et repr\u00e9sent\u00e9 en cette colonie par le sieur Pierre GRINGUET,  capitaine du navire \"La Renomm\u00e9e,\" actuellement en rade aux Cayes, ledit sieur BUNEL osant se dire,  agir  au  nom et comme armateur et propri\u00e9taire  du navire  \"La Furieuse,\"  command\u00e9 par ledit  sieur  LESENS, l'un des int\u00e9ress\u00e9s audit navire, intim\u00e9 sign\u00e9 BAUDRY DES LOZI\u00e8RES\"</i> (Port au Prince, impr. Mozard, 1789), in 8\u00b0. 8\u00b0 Fn 1 (sic), in A. Corda, <i>Catalogue  des  factums  et  d'autres documents  judiciaires  ant\u00e9rieurs  \u00e0  1790</i>, 10 vols, Biblioth\u00e8que nationale. Paris.", 
         "source_type": 3
     }
 },
 {
-    "pk": 814, 
+    "pk": 13611, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "BRO, Hobhouse", 
@@ -7326,7 +6097,7 @@
     }
 },
 {
-    "pk": 815, 
+    "pk": 13612, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Told", 
@@ -7335,7 +6106,7 @@
     }
 },
 {
-    "pk": 816, 
+    "pk": 13613, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Martin, Spurrell", 
@@ -7344,7 +6115,7 @@
     }
 },
 {
-    "pk": 817, 
+    "pk": 13614, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Thes&eacute;e", 
@@ -7353,7 +6124,7 @@
     }
 },
 {
-    "pk": 818, 
+    "pk": 13615, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Tanodi", 
@@ -7362,25 +6133,16 @@
     }
 },
 {
-    "pk": 819, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "SLA,LAR", 
-        "full_ref": "Sierra Leone, Freetown, Fourah Bay, Liberated African Registers", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 820, 
+    "pk": 13616, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "P\u00e9rez Garc\u00eda and Chavez", 
-        "full_ref": "P\u00e9rez Garc\u00eda, Rafael M., and Manuel F. Fern\u00e1ndez Chaves, \"\"Sevilla y la trata negrera atl\u00e1ntica: env\u00edos de esclavos desde Cabo Verde a la Am\u00e9rica espa\u00f1ola, 1569-1579,\"\" in Le\u00f3n Carlos \u00c1lvarez Santal\u00f3 (coord.), <i>Estudios de Historia Moderna en Homenaje al profesor Antonio Garc\u00eda-Baquero</i> (Seville, 2009), 597-622", 
+        "full_ref": "P\u00e9rez Garc\u00eda, Rafael M., and Manuel F. Fern\u00e1ndez Chaves, \"Sevilla y la trata negrera atl\u00e1ntica: env\u00edos de esclavos desde Cabo Verde a la Am\u00e9rica espa\u00f1ola, 1569-1579,\" in Le\u00f3n Carlos \u00c1lvarez Santal\u00f3 (coord.), <i>Estudios de Historia Moderna en Homenaje al profesor Antonio Garc\u00eda-Baquero</i> (Seville, 2009), 597-622", 
         "source_type": 3
     }
 },
 {
-    "pk": 821, 
+    "pk": 13617, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Far\u00edas, 1986", 
@@ -7389,7 +6151,7 @@
     }
 },
 {
-    "pk": 822, 
+    "pk": 13618, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Mac\u00edas Dom\u00ednguez", 
@@ -7398,16 +6160,7 @@
     }
 },
 {
-    "pk": 823, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "JeffersonPapers", 
-        "full_ref": "http://rotunda.upress.virginia.edu/founders/TSJN-01-15-02-0620-0009", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 824, 
+    "pk": 13619, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gelp\u00ed Baiz", 
@@ -7416,7 +6169,7 @@
     }
 },
 {
-    "pk": 825, 
+    "pk": 13620, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Navarrete", 
@@ -7425,7 +6178,7 @@
     }
 },
 {
-    "pk": 826, 
+    "pk": 13621, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Far\u00edas, 1983", 
@@ -7434,7 +6187,7 @@
     }
 },
 {
-    "pk": 827, 
+    "pk": 13622, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Troconis de Veracoechea", 
@@ -7443,25 +6196,25 @@
     }
 },
 {
-    "pk": 828, 
+    "pk": 13623, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lapeyre", 
-        "full_ref": "Lapeyre, Henri, \"\"Le trafic n\u00e9grier avec l'Am\u00e9rique espagnole,\"\" in <i>Homenaje a Jaime Vicens Vives</i>, 2 (Barcelona, 1967), 285-306. ", 
+        "full_ref": "Lapeyre, Henri, \"Le trafic n\u00e9grier avec l'Am\u00e9rique espagnole,\" in <i>Homenaje a Jaime Vicens Vives</i>, 2 (Barcelona, 1967), 285-306. ", 
         "source_type": 3
     }
 },
 {
-    "pk": 829, 
+    "pk": 13624, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Strauss", 
-        "full_ref": "Strauss, Rafael A.,  \"\"Aproximaci\u00f3n a una demograf\u00eda de la esclavitud negra en Venezuela, siglos XVI y XVII,\"\"  <i>Tierra Firme</i> [Caracas], 22, issue 85 (2004): 75-105.", 
+        "full_ref": "Strauss, Rafael A.,  \"Aproximaci\u00f3n a una demograf\u00eda de la esclavitud negra en Venezuela, siglos XVI y XVII,\"  <i>Tierra Firme</i> [Caracas], 22, issue 85 (2004): 75-105.", 
         "source_type": 3
     }
 },
 {
-    "pk": 830, 
+    "pk": 13625, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Saguier", 
@@ -7470,7 +6223,7 @@
     }
 },
 {
-    "pk": 831, 
+    "pk": 13626, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Vila Vilar, 1974", 
@@ -7479,7 +6232,7 @@
     }
 },
 {
-    "pk": 832, 
+    "pk": 13627, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Chaunus", 
@@ -7488,25 +6241,25 @@
     }
 },
 {
-    "pk": 833, 
+    "pk": 13628, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "De la Fuente", 
-        "full_ref": "De la Fuente, Alejandro, \"\"Introducci\u00f3n al estudio de la trata en Cuba. Siglos XVI y XVII,\"\" <i>Santiago</i>, 61 (1986): 155-208.", 
+        "full_ref": "De la Fuente, Alejandro, \"Introducci\u00f3n al estudio de la trata en Cuba. Siglos XVI y XVII,\" <i>Santiago</i>, 61 (1986): 155-208.", 
         "source_type": 3
     }
 },
 {
-    "pk": 834, 
+    "pk": 13629, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": null, 
-        "full_ref": "<i>University of Wisconsin Library</i> (Madison, Wisconsin, USA) Data sets of slave trading voyages collected by Herbert S. Klein and deposited at the University of Wisconsin archives, Madison, Wis. These sets are described in Klein, <i>The Middle Passage: Comparative Studies in the Atlantic Slave Trade</i> (Princeton, 1978). They are held at Wisconsin as follows:", 
+        "short_ref": "SLA,LAR", 
+        "full_ref": "<i>National Archives of Sierra Leone</i> (Fourah Bay, Sierra Leone) Liberated African Registers", 
         "source_type": 1
     }
 },
 {
-    "pk": 835, 
+    "pk": 13630, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Lucena, 1986", 
@@ -7515,7 +6268,7 @@
     }
 },
 {
-    "pk": 836, 
+    "pk": 13631, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Rojas", 
@@ -7524,7 +6277,7 @@
     }
 },
 {
-    "pk": 837, 
+    "pk": 13632, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Walsh Maryland Database", 
@@ -7533,7 +6286,7 @@
     }
 },
 {
-    "pk": 838, 
+    "pk": 13633, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Walsh Virginia Database", 
@@ -7542,7 +6295,7 @@
     }
 },
 {
-    "pk": 839, 
+    "pk": 13634, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Behrendt,AnteraDuke", 
@@ -7551,7 +6304,7 @@
     }
 },
 {
-    "pk": 840, 
+    "pk": 13635, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Molina", 
@@ -7560,7 +6313,7 @@
     }
 },
 {
-    "pk": 841, 
+    "pk": 13636, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Acosta Saignes, 1967", 
@@ -7569,25 +6322,16 @@
     }
 },
 {
-    "pk": 842, 
+    "pk": 13637, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Zeuske, 2012", 
-        "full_ref": "Zeuske, Michael, \"\"Rethinking the Case of the Schooner Amistad, its Captain/Employer and its 'Workers of the Slave Trade:' Contraband and Complicity after 1808/1820,\"\" Journal of Social History, 57 (2012).", 
+        "full_ref": "Zeuske, Michael, \"Rethinking the Case of the Schooner Amistad, its Captain/Employer and its 'Workers of the Slave Trade:' Contraband and Complicity after 1808/1820,\" Journal of Social History, 57 (2012).", 
         "source_type": 3
     }
 },
 {
-    "pk": 843, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "AGNV", 
-        "full_ref": "<i>Archivo General de la Naci\u00f3n,</i> (Caracas, Venezuela), Real Hacienda, Com\u00fan y General", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 844, 
+    "pk": 13638, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Vila Vilar, 1977", 
@@ -7596,16 +6340,16 @@
     }
 },
 {
-    "pk": 845, 
+    "pk": 13639, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Acosta Saignes,1961", 
-        "full_ref": "Acosta Saignes, Miguel, \"\"La Trata de Esclavos en Venezuela,\"\" <i>Revista de Historia</i> (Venezuela), 1 (1960/61): 1-43.", 
+        "full_ref": "Acosta Saignes, Miguel, \"La Trata de Esclavos en Venezuela,\" <i>Revista de Historia</i> (Venezuela), 1 (1960/61): 1-43.", 
         "source_type": 3
     }
 },
 {
-    "pk": 846, 
+    "pk": 13640, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Brito Figueroa", 
@@ -7614,7 +6358,7 @@
     }
 },
 {
-    "pk": 847, 
+    "pk": 13641, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "mettas", 
@@ -7623,7 +6367,7 @@
     }
 },
 {
-    "pk": 848, 
+    "pk": 13642, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Meyer", 
@@ -7632,7 +6376,7 @@
     }
 },
 {
-    "pk": 849, 
+    "pk": 13643, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Far\u00edas, 1946", 
@@ -7641,25 +6385,7 @@
     }
 },
 {
-    "pk": 850, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "www.african-origins.org", 
-        "full_ref": "African names website", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 851, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "Origins", 
-        "full_ref": "www.african-origins.org", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 852, 
+    "pk": 13644, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Prior,pp.12-13", 
@@ -7668,7 +6394,7 @@
     }
 },
 {
-    "pk": 853, 
+    "pk": 13645, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Prior,pp, 12-13", 
@@ -7677,7 +6403,7 @@
     }
 },
 {
-    "pk": 854, 
+    "pk": 13646, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Prior,pp. 12-13", 
@@ -7686,7 +6412,7 @@
     }
 },
 {
-    "pk": 855, 
+    "pk": 13647, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Relations sur le Congo", 
@@ -7695,7 +6421,7 @@
     }
 },
 {
-    "pk": 856, 
+    "pk": 13648, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Brice\u00f1o Iragorry, II", 
@@ -7704,16 +6430,7 @@
     }
 },
 {
-    "pk": 857, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "CO318", 
-        "full_ref": "BNA, Kew,", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 858, 
+    "pk": 13649, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Goslinga,WildCoast", 
@@ -7722,16 +6439,7 @@
     }
 },
 {
-    "pk": 859, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "MMM,DX/2277", 
-        "full_ref": "Merseyside Maritime Museum, (Liverpool, UK) Logbook of Mampookata", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 860, 
+    "pk": 13650, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "http://hitchcock.itc.virginia.edu/Slavery", 
@@ -7740,7 +6448,7 @@
     }
 },
 {
-    "pk": 861, 
+    "pk": 13651, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Gallison", 
@@ -7749,25 +6457,16 @@
     }
 },
 {
-    "pk": 862, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "Riksarkivet", 
-        "full_ref": "St. Barthelemy Samlingen", 
-        "source_type": 1
-    }
-},
-{
-    "pk": 863, 
+    "pk": 13652, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Harries", 
-        "full_ref": "Harries, Patrick, \"\"Abolition's Legal Contours: Negotiating an End to the Transatlantic Slave Trade at Cape Town,\"\" Slavery & Abolition (2013)", 
+        "full_ref": "Harries, Patrick, \"Abolition's Legal Contours: Negotiating an End to the Transatlantic Slave Trade at Cape Town,\" Slavery & Abolition (2013)", 
         "source_type": 3
     }
 },
 {
-    "pk": 864, 
+    "pk": 13653, 
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Emmanuel", 
@@ -7776,92 +6475,156 @@
     }
 },
 {
-    "pk": 865, 
+    "pk": 13654, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "VFH site", 
-        "full_ref": "http://hitchcock.itc.virginia.edu/Slavery/  (Image 028) ", 
+        "short_ref": "Adderley", 
+        "full_ref": "Adderley, Roseanne Marion, 'New Negroes from Africa\u2019: Slave Trade Abolition and Free African Settlement in the Nineteenth Century Caribbean (Bloomington, IN, 2006)", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 13655, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Judd", 
+        "full_ref": "Jacob Judd, \"Frederick Philipse and the Madagascar Trade,\" New-York Historical Society Quarterly, 55 (1971): 354-374.", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 13656, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Origins", 
+        "full_ref": "African Origins: Portal to Africans Liberated from the Transatlantic Slave Trade (Emory University, 2009).  URL: www.african-origins.org", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 13657, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "AGNV", 
+        "full_ref": "<i>Archivo General de la Naci\u00f3n</i> (Caracas, Venezuela) Real Hacienda, Com\u00fan y General", 
         "source_type": 1
     }
 },
 {
-    "pk": 1, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13658, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 0, 
-        "group_name": "Documentary source"
+        "short_ref": "Riksarkivet", 
+        "full_ref": "<i>Riksarkivert</i> (Stockholm, Sweden) St. Barth\u00e9lemy Samlingen", 
+        "source_type": 1
     }
 },
 {
-    "pk": 2, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13659, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 1, 
-        "group_name": "Newspaper"
+        "short_ref": "VFH site", 
+        "full_ref": "<i>Virginia Federation for the Humanities and the University of Virginia Library</i> (Charlottesville, Virginia) image 028, as shown in Jerome S. Handler and Michael L. Tuite Jr., \"The Atlantic Slave Trade and Slave Life in the Americas: A Visual Record\" URL: http://hitchcock.itc.virginia.edu/Slavery/ ", 
+        "source_type": 1
     }
 },
 {
-    "pk": 3, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13660, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 2, 
-        "group_name": "Published source"
+        "short_ref": "JeffersonPapers", 
+        "full_ref": "<i>University of Virginia Press</i> (Charlottesville, Virginia) The Papers of Thomas Jefferson Digital Edition. URL: rotunda.upress.virginia.edu/founders/TSJN-01-15-02-0620-0009", 
+        "source_type": 1
     }
 },
 {
-    "pk": 4, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13661, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 3, 
-        "group_name": "Unpublished secondary source"
+        "short_ref": "MMM,DX/2277", 
+        "full_ref": "<i>Merseyside Maritime Museum</i> (Liverpool, UK) DX/2277, Mampookata logbook", 
+        "source_type": 1
     }
 },
 {
-    "pk": 5, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13662, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 4, 
-        "group_name": "Private note or collection"
+        "short_ref": "Braidwood", 
+        "full_ref": "Braidwood, Stephen J, Black Poor and White Philanthropists: London Poor and the Foundation of the Sierra Leone Settlement, 1786-91 (Liverpool, 1994)", 
+        "source_type": 3
     }
 },
 {
-    "pk": 7, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13663, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 0, 
-        "group_name": "Documentary source"
+        "short_ref": "ANC,Fomento", 
+        "full_ref": "Archivo Nacional de Cuba, Junta de Fomento", 
+        "source_type": 1
     }
 },
 {
-    "pk": 8, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13664, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 1, 
-        "group_name": "Newspaper"
+        "short_ref": "ANC,IH", 
+        "full_ref": "Archivo Nacional de Cuba, Intendencia de Hacienda", 
+        "source_type": 1
     }
 },
 {
-    "pk": 9, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13665, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 2, 
-        "group_name": "Published source"
+        "short_ref": "jm", 
+        "full_ref": "Jamaican Mercury", 
+        "source_type": 2
     }
 },
 {
-    "pk": 10, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13666, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 3, 
-        "group_name": "Unpublished secondary source"
+        "short_ref": "jc", 
+        "full_ref": "Jamaican Courant", 
+        "source_type": 2
     }
 },
 {
-    "pk": 11, 
-    "model": "voyage.voyagesourcestype", 
+    "pk": 13667, 
+    "model": "voyage.voyagesources", 
     "fields": {
-        "group_id": 4, 
-        "group_name": "Private note or collection"
+        "short_ref": "Ferrer", 
+        "full_ref": "Ferrer, Ada, Freedom's Mirror: The Haitian Revolution and Cuban Slave Society (Cambridge, 2014)", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 13668, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "BHS", 
+        "full_ref": "Bristol Historical Society, RI", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 13669, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "AfricanInstit,Sixteenth", 
+        "full_ref": "African Institution, Sixteenth Report of the Directors of the African Institution (London, 1823)", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 13670, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MedfordHS", 
+        "full_ref": "http://www.medfordhistorical.org/slavetradeletters.php", 
+        "source_type": 1
     }
 }
 ]
