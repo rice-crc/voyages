@@ -422,11 +422,22 @@ def prettify_var_list(varlist):
         if isinstance(vvar, (list, tuple)):
             vvar = u'["' + u'","'.join(map(unicode, vvar)) + u'"]'
         value = unicode(vvar)
+        prefix = ''
+        if (varname + '_options') in varlist:
+            opt = varlist[varname + '_options']
+            if opt == '1':
+                prefix = 'Between '
+            elif opt == '2':
+                prefix = 'At most '
+            elif opt == '3':
+                prefix = 'At least '
+            elif opt == '4':
+                prefix = 'Equal to '
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
                 break
-        output.append((fullname + ":", value))
+        output.append((fullname + ":", (prefix + value)))
     return output
 
 def voyage_map(request, voyage_id):
