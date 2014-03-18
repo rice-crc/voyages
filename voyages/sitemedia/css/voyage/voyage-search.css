@@ -48,6 +48,25 @@ h1 {
     vertical-align: top;
 }
 
+#left_column {
+	width: 300px;
+	right: 300px;
+	margin-left: -100%;
+}
+
+#center_column {
+	width: 100%;
+}
+
+#col_container {
+	padding-left: 300px;
+}
+
+#col_container .column {
+	position: relative;
+	float: left;
+}
+
 /* Set the width of the left search menu */
 #left-menu {
 	padding: 10px 5px 10px 7px;
