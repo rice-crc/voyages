@@ -303,17 +303,15 @@ def create_var_dict(query_forms, time_frame_form):
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             mangle_method = globals.no_mangle
-            if varname in globals.search_mangle_methods:
-                mangle_method = globals.search_mangle_methods[varname]
             if opt == '1': # Between
-                var_list[varname + '_lower_bound'] = mangle_method(form.cleaned_data['lower_bound'])
-                var_list[varname + '_upper_bound'] = mangle_method(form.cleaned_data['upper_bound'])
+                var_list[varname + '_lower_bound'] = form.cleaned_data['lower_bound']
+                var_list[varname + '_upper_bound'] = form.cleaned_data['upper_bound']
             elif opt == '2': # Less than or equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '3': # Greater than or equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '4': # Equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
@@ -360,45 +358,46 @@ def create_query_dict(var_list):
     if len(vl) > 0:
         vs = vl.split(';');
     for varname in vs:
+        mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
         if varname in globals.list_text_fields:
-            query_dict[varname + "__contains"] = var_list[varname + '_text_search']
+            query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_select_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
         elif varname in globals.list_numeric_fields:
             opt = var_list[varname + '_options']
             if opt == '1': # Between
-                query_dict[varname + "__range"] = [var_list[varname + '_lower_bound'],
-                                                   var_list[varname + '_upper_bound']]
+                query_dict[varname + "__range"] = [mangle_method(var_list[varname + '_lower_bound']),
+                                                   mangle_method(var_list[varname + '_upper_bound'])]
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = var_list[varname + '_threshold']
+                query_dict[varname + "__lte"] = mangle_method(var_list[varname + '_threshold'])
             elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = var_list[varname + '_threshold']
+                query_dict[varname + "__gte"] = mangle_method(var_list[varname + '_threshold'])
             elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = var_list[varname + '_threshold']
+                query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
         elif varname in globals.list_date_fields:
             opt = var_list[varname + '_options']
             if opt == '1': # Between
                 query_dict[varname + "__range"] = [
-                    formatDate(var_list[varname + '_from_year'],
-                               var_list[varname + '_from_month']),
-                    formatDate(var_list[varname + '_to_year'],
-                               var_list[varname + '_to_month'])]
+                    formatDate(mangle_method(var_list[varname + '_from_year']),
+                               mangle_method(var_list[varname + '_from_month'])),
+                    formatDate(mangle_method(var_list[varname + '_to_year']),
+                               mangle_method(var_list[varname + '_to_month']))]
             elif opt == '2': # Less than or equal to
                 query_dict[varname + "__lte"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
+                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                               mangle_method(var_list[varname + '_theshold_month']))
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
+                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                               mangle_method(var_list[varname + '_theshold_month']))
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
+                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                               mangle_method(var_list[varname + '_theshold_month']))
         elif varname in globals.list_place_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
         elif varname in globals.list_boolean_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
     return query_dict
 
 def create_var_list_from_url(get):
