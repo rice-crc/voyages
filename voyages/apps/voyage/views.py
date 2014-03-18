@@ -732,7 +732,7 @@ def getChoices(varname):
     return choices
 
 def putOtherLast(lst):
-    others = filter(lambda x: 'other' in x['text'].lower(), lst)
+    others = filter(lambda x: 'other' in x['text'].lower() or 'unspecified' in x['text'].lower(), lst)
     for rem in others:
         lst.remove(rem)
         lst.append(rem)
