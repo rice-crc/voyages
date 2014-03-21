@@ -138,10 +138,10 @@ def calculate_maxmin_years():
     return voyage_span_first_year, voyage_span_last_year
 
 sfirst_year, slast_year = calculate_maxmin_years()
-first_year = int(sfirst_year)
-last_year = int(slast_year)
+mfirst_year = int(sfirst_year)
+mlast_year = int(slast_year)
 
-def get_incremented_year_tuples(interval):
+def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlast_year):
     start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
     current_year = start_year
     result = []
