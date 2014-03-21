@@ -86,6 +86,8 @@ def detail_display_sources(value, voyageid):
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
+def unmangle_percent(value, voyageid=None):
+    return str(value * 100) + "%"
 def no_mangle(value, voyageid=None):
     return value
 
@@ -116,6 +118,13 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent}
+display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
+                            'var_imputed_percentage_women': unmangle_percent,
+                            'var_imputed_percentage_boys': unmangle_percent,
+                            'var_imputed_percentage_girls': unmangle_percent,
+                            'var_imputed_percentage_male': unmangle_percent,
+                            'var_imputed_percentage_child': unmangle_percent,
+                            'var_imputed_mortality': unmangle_percent}
 
 
 #all_place_list = structure_places_all(models.Place.objects.all())

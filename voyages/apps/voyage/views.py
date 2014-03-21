@@ -419,6 +419,7 @@ def prettify_var_list(varlist):
     #    output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
+        vvar = globals.display_unmangle_methods.get(varname, globals.no_mangle)(vvar)
         fullname = varname
         if isinstance(vvar, (list, tuple)):
             vvar = u'["' + u'","'.join(map(unicode, vvar)) + u'"]'
