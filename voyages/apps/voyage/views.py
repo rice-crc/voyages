@@ -419,28 +419,28 @@ def prettify_var_list(varlist):
     #    output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
-        vvar = globals.display_unmangle_methods.get(varname, globals.no_mangle)(vvar)
-        fullname = varname
-        if isinstance(vvar, (list, tuple)):
-            vvar = u'["' + u'","'.join(map(unicode, vvar)) + u'"]'
-        value = unicode(vvar)
-        prefix = ''
-        if (varname + '_options') in varlist:
-            opt = varlist[varname + '_options']
-            if opt == '1':
-                prefix = 'Between '
-            elif opt == '2':
-                prefix = 'At most '
-            elif opt == '3':
-                prefix = 'At least '
-            elif opt == '4':
-                prefix = 'Equal to '
-        if varname == 'var_imp_arrival_at_port_of_dis' and not (varname + '_options') in varlist:
-            prefix = 'Between '
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
                 break
+        vvar = globals.display_unmangle_methods.get(varname, globals.no_mangle)(vvar)
+        value = unicode(vvar)
+        if isinstance(vvar, (list, tuple)):
+            value = unicode(u'["' + u'","'.join(map(unicode, vvar)) + u'"]')
+        prefix = ''
+        if (varname + '_options') in varlist:
+            opt = varlist[varname + '_options']
+            if opt == '1' and len(vvar) == 2:
+                value = unicode(vvar[0]) + ' - ' + unicode(vvar[1])
+            elif opt == '2':
+                value = 'At most ' + unicode(vvar)
+            elif opt == '3':
+                value = 'At least ' + unicode(vvar)
+            elif opt == '4':
+                value = 'Equal to ' + unicode(vvar)
+        if varname == 'var_imp_arrival_at_port_of_dis' and not (varname + '_options') in varlist and len(vvar) == 2:
+            value = unicode(vvar[0]) + ' - ' + unicode(vvar[1])
+            fullname = "Time frame"
         output.append((fullname + ":", (prefix + value)))
     return output
 
