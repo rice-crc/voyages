@@ -415,8 +415,8 @@ def prettify_var_list(varlist):
     output = []
     qdict = create_query_dict(varlist)
     # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
-    #if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-    #    output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
+    if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
+        output.append(('Time frame:', unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         for var in globals.var_dict:
@@ -438,9 +438,6 @@ def prettify_var_list(varlist):
                 value = 'At least ' + unicode(vvar)
             elif opt == '4':
                 value = 'Equal to ' + unicode(vvar)
-        if varname == 'var_imp_arrival_at_port_of_dis' and not (varname + '_options') in varlist and len(vvar) == 2:
-            value = unicode(vvar[0]) + ' - ' + unicode(vvar[1])
-            fullname = "Time frame"
         output.append((fullname + ":", (prefix + value)))
     return output
 
