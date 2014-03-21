@@ -426,7 +426,7 @@ def prettify_var_list(varlist):
         vvar = globals.display_unmangle_methods.get(varname, globals.no_mangle)(vvar)
         value = unicode(vvar)
         if isinstance(vvar, (list, tuple)):
-            value = unicode(u'["' + u'","'.join(map(unicode, vvar)) + u'"]')
+            value = unicode(u'["' + u'", "'.join(map(unicode, vvar)) + u'"]')
         prefix = ''
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
@@ -538,6 +538,11 @@ def search(request):
         var_list = {}
         if submitVal == 'restore_prev_query':
             qnum = int(request.POST.get('prev_query_num', request.GET.get('prev_query_num')))
+            if 'prev_query_num' in request.GET:
+                current_page = request.session.get('current_page', 0)
+                results_per_page_form = ResultsPerPageOptionForm()
+                results_per_page_form.fields['option'].initial = request.session.get('results_per_page_choice', '1')
+                results_per_page = dict(results_per_page_form.fields['option'].choices)[request.session.get('results_per_page_choice', '1')]
             qprev = request.session['previous_queries']
             var_list = qprev[qnum]
             qprev.remove(qprev[qnum])
@@ -580,6 +585,7 @@ def search(request):
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
+            request.session['results_per_page_choice'] = results_per_page_form.cleaned_data['option']
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
@@ -641,6 +647,7 @@ def search(request):
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
+    request.session['current_page'] = current_page
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
     # Customize result page
