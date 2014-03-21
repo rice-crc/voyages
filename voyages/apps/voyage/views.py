@@ -410,11 +410,13 @@ def create_var_list_from_url(get):
     return var_list
 
 # Takes a var list and then gives tuples of strings that describe the query in a nice way
+# Used for formatting the display of previous_queries
 def prettify_var_list(varlist):
     output = []
     qdict = create_query_dict(varlist)
-    if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-        output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
+    # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
+    #if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
+    #    output.append(('Time frame:', str(varlist['time_span_from_year']) + " - " + str(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         fullname = varname
@@ -631,6 +633,7 @@ def search(request):
             prevqs = request.session['previous_queries']
             prevqs.remove(prevqs[prev_query_num])
             request.session['previous_queries'] = prevqs
+            prev_queries_open = True
             
     if len(results) == 0:
         no_result = True
