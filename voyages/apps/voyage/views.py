@@ -435,6 +435,8 @@ def prettify_var_list(varlist):
                 prefix = 'At least '
             elif opt == '4':
                 prefix = 'Equal to '
+        if varname == 'var_imp_arrival_at_port_of_dis' and not (varname + '_options') in varlist:
+            prefix = 'Between '
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
