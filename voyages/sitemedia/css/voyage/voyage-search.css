@@ -8,6 +8,13 @@ a {
     color: #8A5D04;
 }
 
+div.database-table-options {
+	margin-bottom: 15px;
+	border-bottom: 1px solid #EEDAA2;
+	border-top: 1px solid #EEDAA2;
+	padding: 5px 10px 5px 0px;
+}
+
 input {
     font-size: 8pt;
     margin-bottom: 5px;

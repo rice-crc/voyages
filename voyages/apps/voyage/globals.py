@@ -145,21 +145,50 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
     start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
     current_year = start_year
     result = []
-    while current_year < last_year:
-        querydict = {'var_imp_voyage_began__range': [current_year, current_year + interval - 1]}
-        result.append((str(current_year) + '-' + str(current_year + interval - 1), querydict))
+    while current_year <= last_year:
+        querydict = {'var_imp_voyage_began__range': [current_year - 1, current_year + interval - 1]}
+        label = str(current_year) + '-' + str(current_year + interval - 1)
+        if interval == 1:
+            label = str(current_year - 1)
+        result.append((label, querydict))
         current_year += interval
     return result
 
-def get_each_from_table(table, lmblbl, qdictkey):
+def get_each_from_list(lst, qdictkey, lmblbl=lambda x: x.label):
     result = []
-    for i in table.objects.all():
-        result.append((lmblbl(i), {qdictkey: lmblbl(i)}))
+    for i in lst:
+        val = lmblbl(i)
+        result.append((val, {qdictkey: val}))
     return result
 
+def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label):
+    result = []
+    for i in table.objects.all():
+        val = lmblbl(i)
+        result.append((val, {qdictkey: val}))
+    return result
+
+imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
+                                        [3, 6, 7, 8, 9, 10, 15, 30])
+
 # Defines the options selectable for filtering the rows of the table section
-table_rows = [('25-year periods', get_incremented_year_tuples(25)),]
-table_columns = [('Flag*', get_each_from_table(models.Nationality, lambda x: x.label, 'var_nationality__contains')),]
+table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality__contains')),
+              ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin__contains', lambda x: x.broad_region)),
+              ('Region where voyage began', get_each_from_table(models.Region, 'var_imp_region_voyage_begin__contains', lambda x: x.region)),
+              ('Port where voyage began', get_each_from_table(models.Place, 'var_imp_port_voyage_begin__contains', lambda x: x.place)),
+              ('Embarkation Regions', get_each_from_table(models.Region, 'var_imp_region_embark__contains', lambda x: x.region)),
+              ('Embarkation Ports', get_each_from_table(models.Place, 'var_imp_port_embark__contains', lambda x: x.place)),
+              ('Specific disembarkation regions', get_each_from_table(models.Region, 'var_imp_region_disembark_specific__contains', lambda x: x.region)),
+              ('Broad disembarkation ports', get_each_from_table(models.Region, 'var_imp_region_disembark_broad__contains', lambda x: x.region)),
+              ('Broad disembarkation ports', get_each_from_table(models.Region, 'var_imp_region_disembark_broad__contains', lambda x: x.region)),
+              ('Individual Years', get_incremented_year_tuples(1)),
+              ('5-year periods', get_incremented_year_tuples(5)),
+              ('10-year periods', get_incremented_year_tuples(10)),
+              ('25-year periods', get_incremented_year_tuples(25)),
+              ('50-year periods', get_incremented_year_tuples(50)),
+              ('100-year periods', get_incremented_year_tuples(100)),]
+table_columns = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality__contains', lambda x: x.label)),]
+table_functions = [('Number of Voyages', lambda x: x.count()),]
 
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
