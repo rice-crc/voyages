@@ -1,0 +1,59 @@
+{% load i18n %}
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/qtip/jquery.qtip.min.css">
+
+<div>
+  <h1>{% trans 'Table' %}</h1>
+</div>
+<div class="database-table-options">
+  <table>
+    <tbody>
+      {% for field in table_stats_form %}
+        <tr>
+          <td> <b> {{ field.label }}: </b> </td>
+          <td> {% for i in field %} {{ i }} {% endfor %} </td>
+	</tr>
+      {% endfor %}
+      <tr>
+	<td></td>
+	<td>
+	  <!-- Show button -->
+	  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_tables');" name="buttonShow" />
+	</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <table class="grid">
+    <tbody>
+      <tr>
+	<td></td>
+	{% for collbl in collabels %}
+	    <th class="grid-header-text"> {{ collbl }} </th>
+	{% endfor %}
+	<th class="grid-header-text"> Totals </th>
+      </tr>
+      {% for row_cell_displays_tuple in cell_displays %}
+        <tr class="grid-row-even grid-row-first">
+	      <th class="grid-header-text"> {{ row_cell_displays_tuple.0 }} </th>
+	  {% for cell_display in row_cell_displays_tuple.1 %}
+	    <td>
+	      {{ cell_display }}
+	    </td>
+	  {% endfor %}
+	  <th class="grid-header-text">
+	    <b> {{ row_cell_displays_tuple.2 }} </b>
+	  </th>
+      {% endfor %}
+      <tr class="grid-row-even grid-row-first">
+	<th class="grid-header-text"> Totals </th>
+	{% for total in col_totals %}
+	  <th class="grid-header-text">
+	    <b> {{ total }} </b>
+	  </th>
+	{% endfor %}
+    </tbody>
+  </table>
+</div>
