@@ -511,6 +511,7 @@ def search(request):
     results_per_page = 10
     basic_list_contracted = False
     previous_queries = {}
+    prev_queries_open = False
     
     # If there is no requested page number, serve 1
     current_page = 1
@@ -539,6 +540,7 @@ def search(request):
             var_list = qprev[qnum]
             qprev.remove(qprev[qnum])
             request.session['previous_queries'] = qprev
+            prev_queries_open = True
         else:
             var_list = create_var_list_from_url(request.GET)
         if 'previous_queries' not in request.session:
@@ -671,7 +673,8 @@ def search(request):
                    'time_frame_search_form': time_frame_form,
                    'result_display': result_display,
                    'basic_list_contracted': basic_list_contracted,
-                   'previous_queries': previous_queries})
+                   'previous_queries': previous_queries,
+                   'prev_queries_open': prev_queries_open})
 
 def prettify_results(results, lookup_table):
     """
