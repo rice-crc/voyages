@@ -26,6 +26,7 @@ from xlwt import Workbook
 import urllib
 import unidecode
 from itertools import groupby
+from django.views.decorators.gzip import gzip_page
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -496,6 +497,7 @@ def voyage_variables(request, voyage_id):
                    'tab': 'variables',
                    'voyage_id': voyage_id})
 
+@gzip_page
 def search(request):
     """
     Handles the Search the Database part
