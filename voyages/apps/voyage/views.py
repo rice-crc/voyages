@@ -424,21 +424,22 @@ def prettify_var_list(varlist):
             if varname == var['var_name']:
                 fullname = var['var_full_name']
                 break
-        vvar = globals.display_unmangle_methods.get(varname, globals.no_mangle)(vvar)
-        value = unicode(vvar)
-        if isinstance(vvar, (list, tuple)):
-            value = unicode(u'["' + u'", "'.join(map(unicode, vvar)) + u'"]')
+        unmangle_method = globals.display_unmangle_methods.get(varname, globals.no_mangle)
+        tvar = unmangle_method(vvar)
+        value = unicode(tvar)
+        if isinstance(tvar, (list, tuple)):
+            value = unicode(u'["' + u'", "'.join(map(unicode, tvar)) + u'"]')
         prefix = ''
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
-            if opt == '1' and len(vvar) == 2:
-                value = unicode(vvar[0]) + ' - ' + unicode(vvar[1])
+            if opt == '1' and len(vvar) >= 2:
+                value = unicode(unmangle_method(vvar[0])) + ' - ' + unicode(unmangle_method(vvar[1]))
             elif opt == '2':
-                value = 'At most ' + unicode(vvar)
+                value = 'is at most ' + unicode(tvar)
             elif opt == '3':
-                value = 'At least ' + unicode(vvar)
+                value = 'is at least ' + unicode(tvar)
             elif opt == '4':
-                value = 'Equal to ' + unicode(vvar)
+                value = 'is equal to ' + unicode(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
@@ -604,7 +605,8 @@ def search(request):
         if 'previous_queries' not in request.session:
             request.session['previous_queries'] = []
         if submitVal != 'delete_prev_query':
-            request.session['previous_queries'] = [var_list] + request.session['previous_queries']
+            if len(request.session['previous_queries']) < 1 or not request.session['previous_queries'][0] == var_list:
+                request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
