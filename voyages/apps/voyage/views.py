@@ -433,7 +433,7 @@ def prettify_var_list(varlist):
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
-                value = unicode(unmangle_method(vvar[0])) + ' - ' + unicode(unmangle_method(vvar[1]))
+                value = 'is between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
             elif opt == '2':
                 value = 'is at most ' + unicode(tvar)
             elif opt == '3':

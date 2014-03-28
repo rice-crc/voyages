@@ -88,6 +88,10 @@ def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
 def unmangle_percent(value, voyageid=None):
     return str(value * 100) + "%"
+def unmangle_date(value, voyageid=None):
+    splitstr = str(value).split(',')
+    splitstr.reverse()
+    return '/'.join(splitstr)
 def no_mangle(value, voyageid=None):
     return value
 
@@ -124,7 +128,13 @@ display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_girls': unmangle_percent,
                             'var_imputed_percentage_male': unmangle_percent,
                             'var_imputed_percentage_child': unmangle_percent,
-                            'var_imputed_mortality': unmangle_percent}
+                            'var_imputed_mortality': unmangle_percent,
+                            'var_voyage_began': unmangle_date,
+                            'var_slave_purchase_began': unmangle_date,
+                            'var_date_departed_africa': unmangle_date,
+                            'var_first_dis_of_slaves': unmangle_date,
+                            'var_departure_last_place_of_landing': unmangle_date,
+                            'var_voyage_completed': unmangle_date}
 
 
 #all_place_list = structure_places_all(models.Place.objects.all())
