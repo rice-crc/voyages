@@ -542,11 +542,11 @@ def search(request):
         or submitVal == 'restore_prev_query'):
         # Search parameters were specified in the url
         var_list = {}
+        results_per_page_form = ResultsPerPageOptionForm()
         if submitVal == 'restore_prev_query':
             qnum = int(request.POST.get('prev_query_num', request.GET.get('prev_query_num')))
             if 'prev_query_num' in request.GET:
                 current_page = request.session.get('current_page', 0)
-                results_per_page_form = ResultsPerPageOptionForm()
                 results_per_page_form.fields['option'].initial = request.session.get('results_per_page_choice', '1')
                 results_per_page = dict(results_per_page_form.fields['option'].choices)[request.session.get('results_per_page_choice', '1')]
             qprev = request.session['previous_queries']
