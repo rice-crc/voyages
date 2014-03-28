@@ -439,7 +439,6 @@ def prettify_var_list(varlist):
                 value = 'At least ' + unicode(vvar)
             elif opt == '4':
                 value = 'Equal to ' + unicode(vvar)
-        print(varname)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
