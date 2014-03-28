@@ -87,7 +87,10 @@ def detail_display_sources(value, voyageid):
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
 def unmangle_percent(value, voyageid=None):
-    return str(value * 100) + "%"
+    if isinstance(value, (str, int, float)):
+        return str(round(float(value) * 100, 1)) + "%"
+    else:
+        return str(value * 100) + "%"
 def unmangle_date(value, voyageid=None):
     splitstr = str(value).split(',')
     splitstr.reverse()
