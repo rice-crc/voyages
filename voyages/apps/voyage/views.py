@@ -434,6 +434,8 @@ def prettify_var_list(varlist):
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
                 value = 'is between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
+            elif isinstance(vvar, (list, tuple)):
+                continue
             elif opt == '2':
                 value = 'is at most ' + unicode(tvar)
             elif opt == '3':
@@ -666,7 +668,7 @@ def search(request):
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
     if len(request.session.get('previous_queries', [])) > 10:
-        request.session['previous_queries'] = request.session['previous_queries'][:10]
+        request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(pagins, globals.display_methods)
