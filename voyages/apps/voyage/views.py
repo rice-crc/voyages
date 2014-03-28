@@ -573,6 +573,7 @@ def search(request):
                                                            'frame_to_year': var_list['time_span_to_year']})
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
+        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
