@@ -484,7 +484,8 @@ def voyage_variables(request, voyage_id):
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:
-                val = unicode(voyagevariables[j['var_name']])
+                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.no_mangle)
+                val = unicode(mangle_method(voyagevariables[j['var_name']]))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
                 allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
