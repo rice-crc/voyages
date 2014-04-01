@@ -534,6 +534,14 @@ def search(request):
     if 'submit_val' in request.GET:
         submitVal = request.GET['submit_val']
 
+    # If session has expired (no search activity for the last globals.session_expire_minutes time) then clear the previous queries
+    old_time = request.session.get('last_access_time', 0.0)
+    if old_time < (time.time() - (globals.session_expire_minutes * 60.0)):
+        #request.session.clear()
+        request.session['previous_queries'] = []
+
+    request.session['last_access_time'] = time.time()
+
     # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
     # then that means that it is a query url and we should get the query from it.
     # or if it is restore_prev_query, then restore it from the session.
@@ -541,7 +549,7 @@ def search(request):
          and ('used_variable_names' in request.GET
               or ('time_span_from_year' in request.GET
                   and 'time_span_to_year' in request.GET)))
-        or submitVal == 'restore_prev_query'):
+        or submitVal == 'restore_prev_query') and len(request.session.get('previous_queries', [])) > 0:
         # Search parameters were specified in the url
         var_list = {}
         results_per_page_form = ResultsPerPageOptionForm()

@@ -4,6 +4,8 @@ from django.utils.datastructures import SortedDict
 import models
 import lxml.html
 
+session_expire_minutes = 60
+
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
                                    'Other (specify in note)']
