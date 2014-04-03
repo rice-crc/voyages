@@ -115,15 +115,22 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+
     #Flatpages apps
     'django.contrib.flatpages',
+
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'autocomplete_light',
     'sorl.thumbnail',
     'south',
+
     # used to index django models
     'haystack',
+
+    # password reset app
+    'password_reset',
+
     'voyages.apps.common',
     'voyages.apps.voyage',
     'voyages.apps.assessment',
