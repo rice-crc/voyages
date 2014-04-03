@@ -14,3 +14,4 @@ bitly_api
 psycopg2
 xlwt
 unidecode
+django-password-reset

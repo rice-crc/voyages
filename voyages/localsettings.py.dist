@@ -72,6 +72,9 @@ CACHES = {
 # Replace this with a valid bitly oauth token
 BITLY_OAUTH_TOKEN = '[40 digit hex bitly oauth token here]'
 
+EMAIL_HOST = 'smtp.service.emory.edu' #should only be set on dev machine
+DEFAULT_FROM_EMAIL = 'admin@slavevoyages.org'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
