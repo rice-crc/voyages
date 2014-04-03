@@ -428,20 +428,20 @@ def prettify_var_list(varlist):
         tvar = unmangle_method(vvar)
         value = unicode(tvar)
         if isinstance(tvar, (list, tuple)):
-            value = unicode(u'["' + u'", "'.join(map(unicode, tvar)) + u'"]')
+            value = unicode(u', '.join(map(unicode, tvar)))
         prefix = ''
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
-                value = 'is between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
+                value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
-                value = 'is at most ' + unicode(tvar)
+                value = 'at most ' + unicode(tvar)
             elif opt == '3':
-                value = 'is at least ' + unicode(tvar)
+                value = 'at least ' + unicode(tvar)
             elif opt == '4':
-                value = 'is equal to ' + unicode(tvar)
+                value = 'equal to ' + unicode(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
