@@ -110,7 +110,9 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_male': display_percent,
                    'var_imputed_percentage_child': display_percent,
                    'var_imputed_mortality': display_percent,
-                   'var_imputed_sterling_cash': display_sterling_price}
+                   'var_imputed_sterling_cash': display_sterling_price,
+                   'var_tonnage': unmangle_truncate,
+                   'var_tonnage_mod': unmangle_truncate}
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
                        'var_imputed_percentage_boys': display_percent,
