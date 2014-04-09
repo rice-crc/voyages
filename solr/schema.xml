@@ -350,7 +350,7 @@
 
     <field name="voyage_vessel_name" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="source" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="source" type="text_en" indexed="true" stored="true" multiValued="true" />
 
     <field name="file" type="text_en" indexed="true" stored="true" multiValued="false" />
 

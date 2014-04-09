@@ -655,14 +655,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        result = ""
+        result = []
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            result += connection.text_ref
-            result += "<>"
+            fr = ""
             if connection.source is not None:
-                result += connection.source.full_ref
-            else:
-                result += ""
-            result += ";;"
-
+                fr = connection.full_ref
+            result.append(connection.text_ref + "<>" + fr + ";;")
         return result
