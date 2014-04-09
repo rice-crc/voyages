@@ -24,7 +24,7 @@ register.filter('getattribute', getattribute)
 
 
 def filtersource(value):
-    sources = value.split(";;")
+    sources = value
     result = ""
     for source in sources:
         try:
