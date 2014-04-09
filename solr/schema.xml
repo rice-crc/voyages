@@ -63,10 +63,12 @@
 
     <fieldType name="source_field" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+	<tokenizer class="solr.KeywordTokenizerFactory"/>
 	<filter class="solr.ASCIIFoldingFilterFactory"/>
 	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
       </analyzer>
       <analyzer type="query">
+	<tokenizer class="solr.KeywordTokenizerFactory"/>
 	<filter class="solr.ASCIIFoldingFilterFactory"/>
 	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
       </analyzer>
