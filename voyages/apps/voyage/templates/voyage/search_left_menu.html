@@ -304,6 +304,16 @@ function shortenURL(){
                             <span class="date_field_wrapper threshold_field hidden">
                             {{ item.form.threshold_month }} - {{ item.form.threshold_year }}
                             </span>
+			    <br>
+			    <table cellspacing="0" cellpadding="0" border="0" class="query-builder-range-months">
+			      <tbody>
+				{% for choice in item.form.list_months %}
+				  <td>
+				    <input name="{{ item.var_name }}-months" type="checkbox" value="{{ choice.0 }}" checked>{{ choice.1 }}</input>
+				  </td>
+				{% endfor %}
+			      </tbody>
+			    </table>
 
                             <div class="month-list">
                                 {% for month in item.list_months %}
