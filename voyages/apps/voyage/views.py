@@ -389,15 +389,15 @@ def create_query_dict(var_list):
             elif opt == '2': # Less than or equal to
                 query_dict[varname + "__lte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
         elif varname in globals.list_place_fields:
             query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
         elif varname in globals.list_boolean_fields:

@@ -19,10 +19,10 @@ def getDate(value):
     if not value:
         return value
     month = getMonth(value)
-    if month == "":
+    if not month or month == "" or int(month) == 0:
         month = 1
     day = getDay(value)
-    if day == "":
+    if not day or day == "" or int(day) == 0:
         day = 1
     year = getYear(value)
     return date(int(year), int(month), int(day))
