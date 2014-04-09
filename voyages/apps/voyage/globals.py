@@ -14,7 +14,6 @@ list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Grea
 list_months = [('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'), ('05', 'May'), ('06', 'Jun'),
                ('07', 'Jul'), ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')]
 
-
 def structure_places(place_list):
     """
     Takes a list of places and then returns a tree of the places structured by region and broad region.
