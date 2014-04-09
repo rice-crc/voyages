@@ -27,6 +27,7 @@ import urllib
 import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
+from datetime import date
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -388,15 +389,15 @@ def create_query_dict(var_list):
             elif opt == '2': # Less than or equal to
                 query_dict[varname + "__lte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_theshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month']))
         elif varname in globals.list_place_fields:
             query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
         elif varname in globals.list_boolean_fields:
@@ -995,7 +996,10 @@ def formatDate(year, month):
     :param month:
     :return:
     """
-    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+    if month == "":
+        month = 1
+    return date(int(year), int(month), 1)
+    #return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
 
 def get_new_visible_attrs(list_column_varnames):
