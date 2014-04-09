@@ -240,6 +240,11 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold'].initial = var_list[varname + '_threshold']
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
+            mdict = dict([(int(choice[0]), choice) for choice in globals.list_months])
+            print(form.fields['months'].initial)
+            form.fields['months'].initial = map(lambda x: str(x).zfill(2), var_list[varname + '_months'])
+            print(form.fields['months'].initial)
+            
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
             if opt == '1': # Between
@@ -315,6 +320,7 @@ def create_var_dict(query_forms, time_frame_form):
             elif opt == '4': # Equal to
                 var_list[varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
+            var_list[varname + '_months'] = map(lambda x: int(x), form.cleaned_data['months'])
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1': # Between
@@ -379,6 +385,12 @@ def create_query_dict(var_list):
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
         elif varname in globals.list_date_fields:
+            print(varname)
+            if varname + '_months' in var_list:
+                months = var_list[varname + '_months']
+                # Only filter by months if not all the months are included
+                if len(months) < 12:
+                    query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
             opt = var_list[varname + '_options']
             if opt == '1': # Between
                 query_dict[varname + "__range"] = [
@@ -423,10 +435,14 @@ def prettify_var_list(varlist):
         output.append(('Time frame:', unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
+        is_real_var = False
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
+                is_real_var = True
                 break
+        if not is_real_var:
+            continue
         unmangle_method = globals.display_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
         value = unicode(tvar)
@@ -952,6 +968,7 @@ def perform_search(query_dict, date_filters):
     :param date_filters:
     :return:
     """
+    print(query_dict)
     # Initially sort by voyage_id
     results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
     # Date filters
