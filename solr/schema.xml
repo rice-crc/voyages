@@ -221,11 +221,17 @@
 
     <field name="var_slave_purchase_began" type="date" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_slave_purchase_began_month" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_registered_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_date_departed_africa" type="date" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_date_departed_africa_month" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_departure_last_place_of_landing" type="date" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_tonnage" type="float" indexed="true" stored="true" multiValued="false" />
 
@@ -244,6 +250,8 @@
     <field name="var_imputed_percentage_child" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_first_dis_of_slaves" type="date" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_first_dis_of_slaves_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_female" type="float" indexed="true" stored="true" multiValued="false" />
 
@@ -267,6 +275,8 @@
 
     <field name="var_voyage_completed" type="date" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_voyage_completed_month" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imp_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_rig_of_vessel" type="text_en" indexed="true" stored="true" multiValued="false" />
@@ -280,6 +290,8 @@
     <field name="var_imp_voyage_began" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_voyage_began" type="date" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_voyage_began_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
 

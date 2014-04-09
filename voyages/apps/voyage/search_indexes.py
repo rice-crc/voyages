@@ -126,14 +126,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_crew_died_complete_voyage = indexes.IntegerField(null=True)
 
     # Voyage dates
-    # Dates are used as strings to allow sorting lexicographically
+    # Month field is used for filtering by month
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
     var_voyage_began = indexes.DateField(null=True)
+    var_voyage_began_month = indexes.IntegerField(null=True)
     var_slave_purchase_began = indexes.DateField(null=True)
+    var_slave_purchase_began_month = indexes.IntegerField(null=True)
     var_date_departed_africa = indexes.DateField(null=True)
+    var_date_departed_africa_month = indexes.IntegerField(null=True)
     var_first_dis_of_slaves = indexes.DateField(null=True)
+    var_first_dis_of_slaves_month = indexes.IntegerField(null=True)
     var_departure_last_place_of_landing = indexes.DateField(null=True)
+    var_departure_last_place_of_landing_month = indexes.IntegerField(null=True)
     var_voyage_completed = indexes.DateField(null=True)
+    var_voyage_completed_month = indexes.IntegerField(null=True)
 
     var_imp_length_home_to_disembark = indexes.IntegerField(null=True)
     var_length_middle_passage_days = indexes.IntegerField(null=True, faceted=True)
@@ -448,6 +454,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return getDate(data)
         except (AttributeError, TypeError):
             return None
+    def prepare_var_voyage_began_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.voyage_began)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_slave_purchase_began(self, obj):
         try:
@@ -456,6 +471,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return None
             else:
                 return getDate(data)
+        except (AttributeError, TypeError):
+            return None
+    def prepare_var_slave_purchase_began_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.slave_purchase_began)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
         except (AttributeError, TypeError):
             return None
 
@@ -469,6 +493,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return getDate(data)
         except (AttributeError, TypeError):
             return None
+    def prepare_var_date_departed_africa_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.date_departed_africa)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_first_dis_of_slaves(self, obj):
         try:
@@ -477,6 +510,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return None
             else:
                 return getDate(data)
+        except (AttributeError, TypeError):
+            return None
+    def prepare_var_first_dis_of_slaves_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.first_dis_of_slaves)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
         except (AttributeError, TypeError):
             return None
 
@@ -489,6 +531,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return getDate(data)
         except (AttributeError, TypeError):
             return None
+    def prepare_var_departure_last_place_of_landing_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.departure_last_place_of_landing)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
+        except (AttributeError, TypeError):
+            return None
 
     def prepare_var_voyage_completed(self, obj):
         try:
@@ -497,6 +548,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return None
             else:
                 return getDate(data)
+        except (AttributeError, TypeError):
+            return None
+    def prepare_var_voyage_completed_month(self, obj):
+        try:
+            data = getMonth(obj.voyage_dates.voyage_completed)
+            if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
+                return None
+            else:
+                return data
         except (AttributeError, TypeError):
             return None
 
