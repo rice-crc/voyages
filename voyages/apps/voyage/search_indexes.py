@@ -152,7 +152,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imputed_mortality = indexes.FloatField(null=True, faceted=True)
 
     # Sources
-    var_sources = indexes.NgramField(null=True)
+    var_sources = indexes.MultiValueField(indexed=True, stored=True, null=True)
     var_short_ref = indexes.MultiValueField()
     var_long_ref = indexes.CharField(null=True)
 
@@ -655,14 +655,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        result = ""
+        result = []
         for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            result += connection.text_ref
-            result += "<>"
+            fr = ""
             if connection.source is not None:
-                result += connection.source.full_ref
-            else:
-                result += ""
-            result += ";;"
-
+                fr = connection.source.full_ref
+            result.append(connection.text_ref + "<>" + fr)
         return result

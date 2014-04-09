@@ -61,6 +61,19 @@
       </analyzer>
     </fieldType>
 
+    <fieldType name="source_field" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+	<tokenizer class="solr.KeywordTokenizerFactory"/>
+	<filter class="solr.ASCIIFoldingFilterFactory"/>
+	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
+      </analyzer>
+      <analyzer type="query">
+	<tokenizer class="solr.KeywordTokenizerFactory"/>
+	<filter class="solr.ASCIIFoldingFilterFactory"/>
+	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
+      </analyzer>
+    </fieldType>
+	
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -260,7 +273,7 @@
 
     <field name="var_imputed_percentage_child_exact" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_sources" type="ngram" indexed="true" stored="true" multiValued="false" />
+    <field name="var_sources" type="source_field" indexed="true" stored="true" multiValued="true" />
 
     <field name="var_num_slaves_disembark_second_place" type="long" indexed="true" stored="true" multiValued="false" />
 

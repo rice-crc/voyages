@@ -3,6 +3,7 @@
 from django.utils.datastructures import SortedDict
 import models
 import lxml.html
+import re
 
 session_expire_minutes = 60
 
@@ -71,15 +72,19 @@ def display_xls_multiple_names(value, voyageid):
     return value.replace('<br/>', ';').replace('<br>', ';')
 # Returns a list of the short form sources split by semicolons
 def display_xls_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         split = i.split('<>')
         if split and len(split) > 0 and split[0] != '':
             srcs.append(split[0])
     return '; '.join(srcs)
 def detail_display_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         parts = i.split('<>')
         if len(parts) > 1:
             parts[1] = '<span class="detail-data-rollover"> ' + parts[1] + " </span>\n"
@@ -88,6 +93,8 @@ def detail_display_sources(value, voyageid):
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
+def mangle_source(value, voyageid=None):
+    return re.sub(r'[,\s]', '', value)
 def unmangle_percent(value, voyageid=None):
     if isinstance(value, (str, int, float)):
         return str(round(float(value) * 100, 1)) + "%"
@@ -131,7 +138,8 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_girls': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
-                         'var_imputed_mortality': mangle_percent}
+                         'var_imputed_mortality': mangle_percent,
+                         'var_sources': mangle_source}
 display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_women': unmangle_percent,
                             'var_imputed_percentage_boys': unmangle_percent,
