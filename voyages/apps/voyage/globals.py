@@ -3,6 +3,7 @@
 from django.utils.datastructures import SortedDict
 import models
 import lxml.html
+import re
 
 session_expire_minutes = 60
 
@@ -92,6 +93,8 @@ def detail_display_sources(value, voyageid):
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
+def mangle_source(value, voyageid=None):
+    return re.sub(r'[,\s]', '', value)
 def unmangle_percent(value, voyageid=None):
     if isinstance(value, (str, int, float)):
         return str(round(float(value) * 100, 1)) + "%"
@@ -135,7 +138,8 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_girls': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
-                         'var_imputed_mortality': mangle_percent}
+                         'var_imputed_mortality': mangle_percent,
+                         'var_sources': mangle_source}
 display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_women': unmangle_percent,
                             'var_imputed_percentage_boys': unmangle_percent,
