@@ -240,6 +240,7 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold'].initial = var_list[varname + '_threshold']
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
+            form.fields['months'].initial = var_list[varname + '_months']
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
             if opt == '1': # Between
@@ -315,6 +316,7 @@ def create_var_dict(query_forms, time_frame_form):
             elif opt == '4': # Equal to
                 var_list[varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
+            var_list[varname + '_months'] = map(lambda x: int(x), form.cleaned_data['months'])
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1': # Between
@@ -379,6 +381,10 @@ def create_query_dict(var_list):
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
         elif varname in globals.list_date_fields:
+            months = var_list[varname + '_months']
+            # Only filter by months if not all the months are included
+            if len(months) < 12:
+                query_dict[varname + '_month' + '__in'] = months
             opt = var_list[varname + '_options']
             if opt == '1': # Between
                 query_dict[varname + "__range"] = [
