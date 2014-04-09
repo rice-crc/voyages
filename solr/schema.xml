@@ -260,7 +260,7 @@
 
     <field name="var_imputed_percentage_child_exact" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_sources" type="ngram" indexed="true" stored="true" multiValued="false" />
+    <field name="var_sources" type="ngram" indexed="true" stored="true" multiValued="true" />
 
     <field name="var_num_slaves_disembark_second_place" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -350,7 +350,7 @@
 
     <field name="voyage_vessel_name" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="source" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="source" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="file" type="text_en" indexed="true" stored="true" multiValued="false" />
 
