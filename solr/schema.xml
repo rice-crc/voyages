@@ -275,7 +275,7 @@
 
     <field name="var_voyage_completed" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_completed" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_voyage_completed_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
