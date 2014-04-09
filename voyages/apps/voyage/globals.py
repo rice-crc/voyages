@@ -71,15 +71,19 @@ def display_xls_multiple_names(value, voyageid):
     return value.replace('<br/>', ';').replace('<br>', ';')
 # Returns a list of the short form sources split by semicolons
 def display_xls_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         split = i.split('<>')
         if split and len(split) > 0 and split[0] != '':
             srcs.append(split[0])
     return '; '.join(srcs)
 def detail_display_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         parts = i.split('<>')
         if len(parts) > 1:
             parts[1] = '<span class="detail-data-rollover"> ' + parts[1] + " </span>\n"
