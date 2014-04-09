@@ -1,6 +1,7 @@
 from __future__ import division
 from haystack import indexes
 from .models import *
+from datetime import date
 
 
 def getMonth(value):
@@ -14,6 +15,17 @@ def getDay(value):
 def getYear(value):
     return str(value.split(",")[2]).zfill(2)
 
+def getDate(value):
+    if not value:
+        return value
+    month = getMonth(value)
+    if month == "":
+        month = 1
+    day = getDay(value)
+    if day == "":
+        day = 1
+    year = getYear(value)
+    return date(int(year), int(month), int(day))
 
 # Index for Sources
 class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
@@ -116,12 +128,12 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     # Dates are used as strings to allow sorting lexicographically
     var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
-    var_voyage_began = indexes.NgramField(null=True)
-    var_slave_purchase_began = indexes.NgramField(null=True)
-    var_date_departed_africa = indexes.NgramField(null=True)
-    var_first_dis_of_slaves = indexes.NgramField(null=True)
-    var_departure_last_place_of_landing = indexes.NgramField(null=True)
-    var_voyage_completed = indexes.NgramField(null=True)
+    var_voyage_began = indexes.DateField(null=True)
+    var_slave_purchase_began = indexes.DateField(null=True)
+    var_date_departed_africa = indexes.DateField(null=True)
+    var_first_dis_of_slaves = indexes.DateField(null=True)
+    var_departure_last_place_of_landing = indexes.DateField(null=True)
+    var_voyage_completed = indexes.DateField(null=True)
 
     var_imp_length_home_to_disembark = indexes.IntegerField(null=True)
     var_length_middle_passage_days = indexes.IntegerField(null=True, faceted=True)
@@ -433,7 +445,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -443,7 +455,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -454,7 +466,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -464,7 +476,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -474,7 +486,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -484,7 +496,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if data == ',,' or len(data) == 0:
                 return None
             else:
-                return "%s-%s-%s" % (getYear(data), getMonth(data), getDay(data))
+                return getDate(data)
         except (AttributeError, TypeError):
             return None
 

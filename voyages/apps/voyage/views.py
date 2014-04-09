@@ -27,6 +27,7 @@ import urllib
 import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
+from datetime import date
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -995,7 +996,10 @@ def formatDate(year, month):
     :param month:
     :return:
     """
-    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+    if month == "":
+        month = 1
+    return date(int(year), int(month), 1)
+    #return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
 
 def get_new_visible_attrs(list_column_varnames):
