@@ -473,7 +473,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return getDate(data)
         except (AttributeError, TypeError):
             return None
-    def prepare_var_slave_purhase_began_month(self, obj):
+    def prepare_var_slave_purchase_began_month(self, obj):
         try:
             data = getMonth(obj.voyage_dates.slave_purchase_began)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:

@@ -172,7 +172,7 @@ class SimpleDateSearchForm(VoyageBaseForm):
     threshold_year = forms.CharField(required=False, initial="YYYY",widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
-    months = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=globals.list_months)
+    months = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=globals.list_months, initial=map(lambda x: x[0], globals.list_months))
 
 
 class SimpleSelectSearchForm(VoyageBaseForm):
