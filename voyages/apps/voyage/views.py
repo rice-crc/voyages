@@ -360,7 +360,9 @@ def create_query_dict(var_list):
         vs = vl.split(';');
     for varname in vs:
         mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
-        if varname in globals.list_text_fields:
+        if varname == 'var_sources':
+            query_dict[varname + "__startswith"] = mangle_method(var_list[varname + '_text_search'])
+        elif varname in globals.list_text_fields:
             query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_select_fields:
             query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
