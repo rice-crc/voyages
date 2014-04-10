@@ -25,7 +25,19 @@ def getDate(value):
     if not day or day == "" or int(day) == 0:
         day = 1
     year = getYear(value)
-    return date(int(year), int(month), int(day))
+    return mkdate(int(year), int(month), int(day))
+
+def mkdate(year, month, day)
+    try:
+        return date(year, month, day)
+    except ValueError:
+        if month > 12:
+            return mkdate(year, 12, day)
+        elif day > 1:
+            return mkdate(year, month, day-1)
+        else:
+            print("Day: " + day + " Month: " + month + " Year: " + year)
+            return date(year, month, day)
 
 # Index for Sources
 class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
