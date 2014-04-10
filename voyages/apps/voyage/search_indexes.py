@@ -27,16 +27,17 @@ def getDate(value):
     year = getYear(value)
     return mkdate(int(year), int(month), int(day))
 
-def mkdate(year, month, day)
+def mkdate(year, month, day):
     try:
         return date(year, month, day)
     except ValueError:
+        print("Warning attempting to estimate invalid date, Day: " + day + " Month: " + month + " Year: " + year)
         if month > 12:
             return mkdate(year, 12, day)
         elif day > 1:
             return mkdate(year, month, day-1)
         else:
-            print("Day: " + day + " Month: " + month + " Year: " + year)
+            print("Error with date Day: " + day + " Month: " + month + " Year: " + year)
             return date(year, month, day)
 
 # Index for Sources
