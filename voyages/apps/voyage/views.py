@@ -607,14 +607,13 @@ def search(request):
             num_col_labels = len(collabels)
             num_row_labels = extra_cols + 1
             for colquery in table_col_query_def[1]:
-                colqueryset = SearchQuerySet().models(Voyage).filter(**colquery)
+                colqueryset = results.filter(**colquery)
                 #if colqueryset.count() > 0:
                 #collabels.append(collabel)
                 col_totals.append(display_function(colqueryset))
                 used_col_query_sets.append(colquery)
             for rowlabels, rowquery in table_row_query_def[1]:
-                # TODO: Replace all searchqueryset calls with the results list
-                rowqueryset = SearchQuerySet().models(Voyage).filter(**rowquery)
+                rowqueryset = results.filter(**rowquery)
                 #if rowqueryset.count() > 0:
                 row_cell_values = []
                 for colquery in used_col_query_sets:
@@ -625,7 +624,7 @@ def search(request):
                 row_list.append((rowlabels, row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             # Append the grand total to the end of the col_totals list
-            col_totals.append(display_function(SearchQuerySet().models(Voyage)))
+            col_totals.append(display_function(results))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
