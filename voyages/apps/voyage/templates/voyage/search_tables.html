@@ -28,16 +28,15 @@
 <div>
   <table class="grid">
     <tbody>
-      <tr>
-	<td></td>
-	{% for i in extra_cols %} <td></td> {% endfor %}
 	{% for collbllist in col_labels_list %}
-	  {% for label_tuple in collbllist %}
-	    <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
-	  {% endfor %}
+	  <tr>
+	    {% if forloop.first %} <td colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels }}"/> {% endif %}
+	    {% for label_tuple in collbllist %}
+	      <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	    {% endfor %}
+	    {% if forloop.first %} <th class="grid-header-text" rowspan="{{ num_col_labels }}"> Totals </th> {% endif %}
+	  </tr>
 	{% endfor %}
-	<th class="grid-header-text"> Totals </th>
-      </tr>
       {% for row_tuple in row_list %}
         <tr class="grid-row-even grid-row-first">
 	  {% for label_tuple in row_tuple.0 %}
@@ -51,7 +50,7 @@
 	  </th>
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
-	<th class="grid-header-text"> Totals </th>
+	<th class="grid-header-text" colspan="{{ num_row_labels }}"> Totals </th>
 	{% for i in extra_cols %} <td></td> {% endfor %}
 	{% for total in col_totals %}
 	  <th class="grid-header-text">

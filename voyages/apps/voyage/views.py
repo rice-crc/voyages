@@ -493,7 +493,8 @@ def search(request):
     row_list = []
     table_stats_form = None
     col_totals = []
-    extra_cols = 1
+    num_col_labels = 1
+    num_row_labels = 1
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -602,18 +603,21 @@ def search(request):
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
-            for collabel, colquery in table_col_query_def[1]:
+            collabels = table_col_query_def[2]
+            num_col_labels = len(collabels)
+            num_row_labels = extra_cols + 1
+            for colquery in table_col_query_def[1]:
                 colqueryset = SearchQuerySet().models(Voyage).filter(**colquery)
                 #if colqueryset.count() > 0:
-                collabels.append(collabel)
+                #collabels.append(collabel)
                 col_totals.append(display_function(colqueryset))
-                used_col_query_sets.append((collabel, colquery,))
+                used_col_query_sets.append(colquery)
             for rowlabels, rowquery in table_row_query_def[1]:
                 # TODO: Replace all searchqueryset calls with the results list
                 rowqueryset = SearchQuerySet().models(Voyage).filter(**rowquery)
                 #if rowqueryset.count() > 0:
                 row_cell_values = []
-                for collbl, colquery in used_col_query_sets:
+                for colquery in used_col_query_sets:
                     cell_queryset = rowqueryset.filter(**colquery)
                     row_cell_values.append(display_function(cell_queryset))
                 cell_values.append(row_cell_values)
@@ -684,7 +688,9 @@ def search(request):
                    'row_list': row_list,
                    'table_stats_form': table_stats_form,
                    'col_totals': col_totals,
-                   'extra_cols': range(extra_cols),})
+                   'extra_cols': range(extra_cols),
+                   'num_col_labels': num_col_labels,
+                   'num_row_labels': num_row_labels,})
 
 def prettify_results(results, lookup_table):
     """
