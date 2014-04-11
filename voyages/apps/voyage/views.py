@@ -493,6 +493,7 @@ def search(request):
     row_list = []
     table_stats_form = None
     col_totals = []
+    extra_cols = 0
     num_col_labels = 1
     num_row_labels = 1
     # If there is no requested page number, serve 1
@@ -569,7 +570,6 @@ def search(request):
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
-
         
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -610,21 +610,21 @@ def search(request):
                 colqueryset = results.filter(**colquery)
                 #if colqueryset.count() > 0:
                 #collabels.append(collabel)
-                col_totals.append(display_function(colqueryset))
-                used_col_query_sets.append(colquery)
+                col_totals.append(display_function(colqueryset, None, colqueryset))
+                used_col_query_sets.append((colquery, colqueryset))
             for rowlabels, rowquery in table_row_query_def[1]:
                 rowqueryset = results.filter(**rowquery)
                 #if rowqueryset.count() > 0:
                 row_cell_values = []
-                for colquery in used_col_query_sets:
+                for colquery, colqueryset in used_col_query_sets:
                     cell_queryset = rowqueryset.filter(**colquery)
-                    row_cell_values.append(display_function(cell_queryset))
+                    row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
                 cell_values.append(row_cell_values)
-                row_total = display_function(rowqueryset)
+                row_total = display_function(rowqueryset, rowqueryset, None)
                 row_list.append((rowlabels, row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             # Append the grand total to the end of the col_totals list
-            col_totals.append(display_function(results))
+            col_totals.append(display_function(results, None, None))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
@@ -927,11 +927,12 @@ def perform_search(query_dict, date_filters):
     :return:
     """
     # Initially sort by voyage_id
+    # TODO: change this to have Voyage before filter
     results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
     # Date filters
     return date_filter_query(date_filters, results)
 
-
+# TODO: remove this function
 def date_filter_query(date_filters, results):
     """
     Further filter the results passed in by excluding those that have months in date_filtered list (deselected)

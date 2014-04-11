@@ -269,8 +269,27 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
                  make_regions_col_filter('Specific regions of disembarkation', 'var_imp_region_disembark'),
                  get_each_from_table_col('Broad regions of disembarkation', models.BroadRegion, '__exact', lambda x: x.broad_region),
                  make_places_col_filter('Disembarkation Ports', 'var_imp_port_disembark_specific'),]
+# Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
+def make_sum_fun(varname):
+    prettifier = display_methods.get(varname, no_mangle)
+    return lambda queryset, rowset, colset: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields()]))
 
-table_functions = [('Number of Voyages', lambda x: x.count()),]
+def make_avg_fun(varname):
+    prettifier = display_methods.get(varname, no_mangle)
+    def avg_fun(queryset, rowset, colset):
+        lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields()]
+        if len(lst) == 0:
+            return prettifier(0)
+        else:
+            return prettifier(sum(lst)/len(lst))
+    return avg_fun
+
+# List of tuples that define a function for a cell value (label, mapping function)
+table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
+                   ('Sum of embarked slaves', make_sum_fun('var_imp_total_num_slaves_purchased'),),
+                   ('Average number of embarked slaves', make_avg_fun('var_imp_total_num_slaves_purchased'),),
+                   ('Number of voyages - embarked slaves', None,),]
+#                   ('Percent of embarked slaves (row total)'
 
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
