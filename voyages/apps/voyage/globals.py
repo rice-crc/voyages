@@ -180,13 +180,6 @@ def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label):
 imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
                                         [3, 6, 7, 8, 9, 10, 15, 30])
 
-print(dir(models.BroadRegion.objects.all()[0]))
-print(type(models.BroadRegion.objects.all()[0]))
-br = models.BroadRegion.objects.all()[3]
-print(br.region_set.values())
-print(dir(br.region_set))
-print(type(br.region_set.values_list()))
-print(br.region_set.values_list())
 def make_regions_filter(varname):
     qdictkey = varname + '__exact'
     results = []
@@ -214,8 +207,6 @@ def make_places_filter(varname):
                 # TODO: Change place filter to use numeric identifiers instead of text
                 results.append((label_list, {qdictkey: reg.region},))
                 label_list = []
-    for i in range(50):
-        print(results[i])
     return results
                 
             
@@ -231,8 +222,9 @@ table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'v
               ('Port where voyage began', make_places_filter('var_imp_port_voyage_begin'), 2,),
               ('Embarkation Regions', make_regions_filter('var_imp_region_embark'), 1,),
               ('Embarkation Ports', make_places_filter('var_imp_port_embark'), 2,),
-              ('Specific regions of disembarkation', make_regions_filter('var_imp_region_disembark_specific'), 1,),
-              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin__exact', lambda x: x.broad_region), 0,),
+              ('Specific regions of disembarkation', make_regions_filter('var_imp_region_disembark'), 1,),
+              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, '__exact', lambda x: x.broad_region), 0,),
+              ('Disembarkation Ports', make_places_filter('var_imp_port_disembark_specific'), 2,),
               ('Individual Years', get_incremented_year_tuples(1), 0,),
               ('5-year periods', get_incremented_year_tuples(5), 0,),
               ('10-year periods', get_incremented_year_tuples(10), 0,),
