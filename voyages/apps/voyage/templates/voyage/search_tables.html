@@ -30,21 +30,23 @@
     <tbody>
       <tr>
 	<td></td>
-	{% for collbl in collabels %}
-	    <th class="grid-header-text"> {{ collbl }} </th>
+	{% for collbllist in col_labels_list %}
+	  {% for label_tuple in collbllist %}
+	    <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	  {% endfor %}
 	{% endfor %}
 	<th class="grid-header-text"> Totals </th>
       </tr>
-      {% for row_cell_displays_tuple in cell_displays %}
+      {% for row_tuple in row_list %}
         <tr class="grid-row-even grid-row-first">
-	      <th class="grid-header-text"> {{ row_cell_displays_tuple.0 }} </th>
-	  {% for cell_display in row_cell_displays_tuple.1 %}
-	    <td>
-	      {{ cell_display }}
-	    </td>
+	  {% for label_tuple in row_tuple.0 %}
+	    <th class="grid-header-text" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	  {% endfor %}
+	  {% for cell_value in row_tuple.1 %}
+	    <td> {% if cell_value != None %} {{ cell_value }} {% endif %} </td>
 	  {% endfor %}
 	  <th class="grid-header-text">
-	    <b> {{ row_cell_displays_tuple.2 }} </b>
+	    <b> {{ row_tuple.2 }} </b>
 	  </th>
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
