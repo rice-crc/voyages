@@ -489,9 +489,8 @@ def search(request):
     results_per_page = 10
     basic_list_contracted = False
     previous_queries = {}
-    rowlabels = []
     collabels = []
-    cell_displays = []
+    row_list = []
     table_stats_form = None
     col_totals = []
     # If there is no requested page number, serve 1
@@ -586,31 +585,41 @@ def search(request):
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
         elif submitVal == 'tab_tables':
-            # row_cell_displays is what is displayed in the cells in the table, it is a list of triples which contain the row_label, the cell values, then the row total
+            # row_cell_values is what is displayed in the cells in the table, it is a list of triples which contain the row_label, the cell values, then the row total
+            # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port). Typically these will just be a list of lists with one entry that is the label tuple for that row/
+            # column labels is similar, but it is a list of column label lists, and will typically be a list of one element that is a list of the column label tuples
+            #  entries in the rowlabels/collabels matrix are tuples that contain the label and then the row/column span of that cell. Most of the time the row/column span will just be 1.
             tab = 'tables'
             table_stats_form = TableSelectionForm(request.POST)
-            print(dir(table_stats_form.fields['rows']))
-            table_row_queries_list = globals.table_rows[0][1]
-            table_col_queries_list = globals.table_columns[0][1]
-            display_function = lambda x: x.count()
+            table_row_query_def = globals.table_rows[0]
+            table_col_query_def = globals.table_columns[0]
+            display_function = globals.table_functions[0][1]
             if table_stats_form.is_valid():
-                table_row_queries_list = globals.table_rows[int(table_stats_form.cleaned_data['rows'])][1]
-                table_col_queries_list = globals.table_columns[int(table_stats_form.cleaned_data['columns'])][1]
+                table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
+                table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
-            for rowlbl, rowquery in table_row_queries_list:
-                rowlabels.append(rowlbl)
-                rowqueryset = SearchQuerySet().models(Voyage).filter(**rowquery)
-                row_total = display_function(rowqueryset)
-                row_cell_displays = []
-                for collbl, colquery in table_col_queries_list:
-                    cell_queryset = rowqueryset.filter(**colquery)
-                    row_cell_displays.append(display_function(cell_queryset))
-                cell_displays.append((rowlbl, row_cell_displays, row_total))
-            for collbl, colquery in table_col_queries_list:
-                collabels.append(collbl)
+            cell_values = []
+            used_col_query_sets = []
+            for collabel, colquery in table_col_query_def[1]:
                 colqueryset = SearchQuerySet().models(Voyage).filter(**colquery)
-                col_total = display_function(colqueryset)
-                col_totals.append(col_total)
+                if colqueryset.count() > 0:
+                    collabels.append(collabel)
+                    col_totals.append(display_function(colqueryset))
+                    used_col_query_sets.append((collabel, colquery,))
+            for rowlabels, rowquery in table_row_query_def[1]:
+                # TODO: Replace all searchqueryset calls with the results list
+                rowqueryset = SearchQuerySet().models(Voyage).filter(**rowquery)
+                if rowqueryset.count() > 0:
+                    row_cell_values = []
+                    for collbl, colquery in used_col_query_sets:
+                        cell_queryset = rowqueryset.filter(**colquery)
+                        row_cell_values.append(display_function(cell_queryset))
+                    cell_values.append(row_cell_values)
+                    row_total = display_function(rowqueryset)
+                    row_list.append((rowlabels, row_cell_values, row_total,))
+                else:
+                    print(rowquery)
+                #cell_displays.append((rowlbl, row_cell_displays, row_total))
             # Append the grand total to the end of the col_totals list
             col_totals.append(display_function(SearchQuerySet().models(Voyage)))
         elif submitVal == 'tab_graphs':
@@ -671,11 +680,10 @@ def search(request):
                    'result_display': result_display,
                    'basic_list_contracted': basic_list_contracted,
                    'previous_queries': previous_queries,
-                   'collabels': collabels,
-                   'rowlabels': rowlabels,
-                   'cell_displays': cell_displays,
+                   'col_labels_list': collabels,
+                   'row_list': row_list,
                    'table_stats_form': table_stats_form,
-                   'col_totals': col_totals})
+                   'col_totals': col_totals,})
 
 def prettify_results(results, lookup_table):
     """
