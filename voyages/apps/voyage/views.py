@@ -493,6 +493,7 @@ def search(request):
     row_list = []
     table_stats_form = None
     col_totals = []
+    extra_cols = 1
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -598,27 +599,26 @@ def search(request):
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
+            extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
             for collabel, colquery in table_col_query_def[1]:
                 colqueryset = SearchQuerySet().models(Voyage).filter(**colquery)
-                if colqueryset.count() > 0:
-                    collabels.append(collabel)
-                    col_totals.append(display_function(colqueryset))
-                    used_col_query_sets.append((collabel, colquery,))
+                #if colqueryset.count() > 0:
+                collabels.append(collabel)
+                col_totals.append(display_function(colqueryset))
+                used_col_query_sets.append((collabel, colquery,))
             for rowlabels, rowquery in table_row_query_def[1]:
                 # TODO: Replace all searchqueryset calls with the results list
                 rowqueryset = SearchQuerySet().models(Voyage).filter(**rowquery)
-                if rowqueryset.count() > 0:
-                    row_cell_values = []
-                    for collbl, colquery in used_col_query_sets:
-                        cell_queryset = rowqueryset.filter(**colquery)
-                        row_cell_values.append(display_function(cell_queryset))
-                    cell_values.append(row_cell_values)
-                    row_total = display_function(rowqueryset)
-                    row_list.append((rowlabels, row_cell_values, row_total,))
-                else:
-                    print(rowquery)
+                #if rowqueryset.count() > 0:
+                row_cell_values = []
+                for collbl, colquery in used_col_query_sets:
+                    cell_queryset = rowqueryset.filter(**colquery)
+                    row_cell_values.append(display_function(cell_queryset))
+                cell_values.append(row_cell_values)
+                row_total = display_function(rowqueryset)
+                row_list.append((rowlabels, row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             # Append the grand total to the end of the col_totals list
             col_totals.append(display_function(SearchQuerySet().models(Voyage)))
@@ -683,7 +683,8 @@ def search(request):
                    'col_labels_list': collabels,
                    'row_list': row_list,
                    'table_stats_form': table_stats_form,
-                   'col_totals': col_totals,})
+                   'col_totals': col_totals,
+                   'extra_cols': range(extra_cols),})
 
 def prettify_results(results, lookup_table):
     """

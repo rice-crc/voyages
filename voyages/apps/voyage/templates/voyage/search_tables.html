@@ -30,6 +30,7 @@
     <tbody>
       <tr>
 	<td></td>
+	{% for i in extra_cols %} <td></td> {% endfor %}
 	{% for collbllist in col_labels_list %}
 	  {% for label_tuple in collbllist %}
 	    <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
@@ -51,6 +52,7 @@
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
 	<th class="grid-header-text"> Totals </th>
+	{% for i in extra_cols %} <td></td> {% endfor %}
 	{% for total in col_totals %}
 	  <th class="grid-header-text">
 	    <b> {{ total }} </b>

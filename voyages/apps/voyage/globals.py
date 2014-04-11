@@ -180,25 +180,65 @@ def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label):
 imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
                                         [3, 6, 7, 8, 9, 10, 15, 30])
 
+print(dir(models.BroadRegion.objects.all()[0]))
+print(type(models.BroadRegion.objects.all()[0]))
+br = models.BroadRegion.objects.all()[3]
+print(br.region_set.values())
+print(dir(br.region_set))
+print(type(br.region_set.values_list()))
+print(br.region_set.values_list())
+def make_regions_filter(varname):
+    qdictkey = varname + '__exact'
+    results = []
+    label_list = []
+    for broad in models.BroadRegion.objects.all():
+        regions = broad.region_set.all()
+        label_list.append((broad.broad_region, broad.region_set.count(),))
+        for reg in broad.region_set.all():
+            label_list.append((reg.region, 1,))
+            results.append((label_list, {qdictkey: reg.region},))
+            label_list = []
+    return results
+
+def make_places_filter(varname):
+    qdictkey = varname + '__exact'
+    results = []
+    label_list = []
+    for broad in models.BroadRegion.objects.all():
+        regions = broad.region_set.all()
+        label_list.append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
+        for reg in broad.region_set.all():
+            label_list.append((reg.region, reg.place_set.count(),))
+            for place in reg.place_set.all():
+                label_list.append((place.place, 1,))
+                # TODO: Change place filter to use numeric identifiers instead of text
+                results.append((label_list, {qdictkey: reg.region},))
+                label_list = []
+    for i in range(50):
+        print(results[i])
+    return results
+                
+            
+            
+
 # Defines the options selectable for filtering the rows/columns of the table section
-# Each element is a tuple with the filter_label, and a list of tuples of the label_list and query_dicts
-# Each element is a triple with the filter name, the row/column labels list, and the list of query dicts that define the filter.
+# Each element is a triple with the filter_label, and a list of tuples of the label_list and query_dicts, and a number indicating the number of title columns need to be made
 #  the row/column labels list is a list of lists of label tuples, which will typically just be a list of lists of one element. However for port and region filters, there will need to be multiple labels of the broadregion, region, and ports.
 #  i.e. they are (filter_label, filter_definition)
-table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality__contains', lambda x: x.label),),
-              ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin__contains', lambda x: x.broad_region)),
-              ('Region where voyage began', get_each_from_table(models.Region, 'var_imp_region_voyage_begin__contains', lambda x: x.region)),
-              ('Port where voyage began', get_each_from_table(models.Place, 'var_imp_port_voyage_begin__contains', lambda x: x.place)),
-              ('Embarkation Regions', get_each_from_table(models.Region, 'var_imp_region_embark__contains', lambda x: x.region)),
-              ('Embarkation Ports', get_each_from_table(models.Place, 'var_imp_port_embark__contains', lambda x: x.place)),
-              ('Specific disembarkation regions', get_each_from_table(models.Region, 'var_imp_region_disembark_specific__contains', lambda x: x.region)),
-              ('Broad disembarkation ports', get_each_from_table(models.Region, 'var_imp_region_disembark_broad__contains', lambda x: x.region)),
-              ('Individual Years', get_incremented_year_tuples(1)),
-              ('5-year periods', get_incremented_year_tuples(5)),
-              ('10-year periods', get_incremented_year_tuples(10)),
-              ('25-year periods', get_incremented_year_tuples(25)),
-              ('50-year periods', get_incremented_year_tuples(50)),
-              ('100-year periods', get_incremented_year_tuples(100)),]
+table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality__contains', lambda x: x.label), 0,),
+              ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin__exact', lambda x: x.broad_region), 0,),
+              ('Region where voyage began', make_regions_filter('var_imp_region_voyage_begin'), 1,),
+              ('Port where voyage began', make_places_filter('var_imp_port_voyage_begin'), 2,),
+              ('Embarkation Regions', make_regions_filter('var_imp_region_embark'), 1,),
+              ('Embarkation Ports', make_places_filter('var_imp_port_embark'), 2,),
+              ('Specific regions of disembarkation', make_regions_filter('var_imp_region_disembark_specific'), 1,),
+              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin__exact', lambda x: x.broad_region), 0,),
+              ('Individual Years', get_incremented_year_tuples(1), 0,),
+              ('5-year periods', get_incremented_year_tuples(5), 0,),
+              ('10-year periods', get_incremented_year_tuples(10), 0,),
+              ('25-year periods', get_incremented_year_tuples(25), 0,),
+              ('50-year periods', get_incremented_year_tuples(50), 0,),
+              ('100-year periods', get_incremented_year_tuples(100), 0,),]
 table_columns = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality__contains', lambda x: x.label),),]
 table_functions = [('Number of Voyages', lambda x: x.count()),]
 
