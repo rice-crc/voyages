@@ -109,6 +109,7 @@ def unmangle_truncate(value, voyageid=None):
 def no_mangle(value, voyageid=None):
     return value
 
+# Run against solr field values when displaying in results table
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
                    'var_imputed_percentage_boys': display_percent,
@@ -119,6 +120,7 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_sterling_cash': display_sterling_price,
                    'var_tonnage': unmangle_truncate,
                    'var_tonnage_mod': unmangle_truncate}
+# Run against solr field values when creating an xls file
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
                        'var_imputed_percentage_boys': display_percent,
@@ -130,7 +132,9 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_captain': display_xls_multiple_names,
                        'var_owner': display_xls_multiple_names,
                        'var_sources': display_xls_sources}
+# Run against solr field values when displaying values for a single voyage
 display_methods_details = {'var_sources': detail_display_sources}
+# Used to convert a form value to a proper value for searching with
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
                          'var_imputed_percentage_boys': mangle_percent,
@@ -139,6 +143,7 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent,
                          'var_sources': mangle_source}
+# Run against solr field values when displaying values for a single voyage and when displaying previous queries
 display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_women': unmangle_percent,
                             'var_imputed_percentage_boys': unmangle_percent,
