@@ -241,9 +241,7 @@ def create_forms_from_var_list(var_list):
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
             mdict = dict([(int(choice[0]), choice) for choice in globals.list_months])
-            print(form.fields['months'].initial)
-            form.fields['months'].initial = map(lambda x: str(x).zfill(2), var_list[varname + '_months'])
-            print(form.fields['months'].initial)
+            form.fields['months'].initial = map(lambda x: str(x).zfill(2), var_list[varname + '_months'].split(','))
             
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
@@ -320,7 +318,7 @@ def create_var_dict(query_forms, time_frame_form):
             elif opt == '4': # Equal to
                 var_list[varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
-            var_list[varname + '_months'] = map(lambda x: int(x), form.cleaned_data['months'])
+            var_list[varname + '_months'] = ','.join(form.cleaned_data['months'])
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1': # Between
@@ -387,7 +385,7 @@ def create_query_dict(var_list):
         elif varname in globals.list_date_fields:
             print(varname)
             if varname + '_months' in var_list:
-                months = var_list[varname + '_months']
+                months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
                 # Only filter by months if not all the months are included
                 if len(months) < 12:
                     query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)

@@ -7,6 +7,7 @@ from .views import shorten_url
 from mock import patch
 import globals
 import urllib2
+from datetime import date
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):
@@ -97,12 +98,14 @@ class SearchTest(TestCase):
         self.assertEqual([u'40', u'2000'], qdict['var_imp_total_num_slaves_purchased__range'])
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_date(self, perform_search_func):
-        self.client.get('/voyage/search?var_voyage_began_to_month=12&var_voyage_began_from_month=01&time_span_from_year=1514&used_variable_names=var_voyage_began&time_span_to_year=1866&var_voyage_began_options=1&var_voyage_began_from_year=1514&var_voyage_began_to_year=1866')
+        self.client.get('/voyage/search?var_voyage_began_to_month=12&var_voyage_began_from_month=01&time_span_from_year=1514&var_voyage_began_months=01%2C03%2C05%2C06%2C07%2C09%2C10%2C11%2C12&used_variable_names=var_voyage_began&time_span_to_year=1866&var_voyage_began_options=1&var_voyage_began_from_year=1514&var_voyage_began_to_year=1866')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
         self.assertIn('var_voyage_began__range', qdict)
-        self.assertEqual(['1514,01', '1866,12'], qdict['var_voyage_began__range'])
+        self.assertIn('var_voyage_began_month__in', qdict)
+        self.assertEqual([1,3,5,6,7,9,10,11,12], qdict['var_voyage_began_month__in'], "Incorrect months filter")
+        self.assertEqual([date(1514,01,01), date(1866,12,31)], qdict['var_voyage_began__range'], "Incorrect date range")
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_boolean(self, perform_search_func):
         response = self.client.get('/voyage/search?time_span_to_year=1866&used_variable_names=var_voyage_in_cd_rom&var_voyage_in_cd_rom_choice_field=1&time_span_from_year=1514')
