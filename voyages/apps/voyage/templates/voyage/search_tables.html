@@ -32,7 +32,9 @@
 	  <tr>
 	    {% if forloop.first %} <td colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels }}"/> {% endif %}
 	    {% for label_tuple in collbllist %}
-	      <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	      {% if label_tuple.1 > 0 %}
+	        <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	      {% endif %}
 	    {% endfor %}
 	    {% if forloop.first %} <th class="grid-header-text" rowspan="{{ num_col_labels }}"> Totals </th> {% endif %}
 	  </tr>
