@@ -601,11 +601,12 @@ def search(request):
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
-                omit_empty = table_stats_form.cleaned_data['omit_empty']
+                omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
+            print("Omit empty: " + str(omit_empty))
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
-            collabels = table_col_query_def[2]
+            collabels = [[j for j in i] for i in table_col_query_def[2]]
             num_col_labels = len(collabels)
             num_row_labels = extra_cols + 1
             remove_cols = []
@@ -615,11 +616,14 @@ def search(request):
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
+                    #print("idx " + str(idx) + " collabel " + str(collabels[2][idx]))
                 else:
                     col_totals.append(display_function(colqueryset, None, colqueryset))
                     used_col_query_sets.append((colquery, colqueryset))
                 #collabels.append(collabel)
             print(remove_cols)
+            for blarg in collabels:
+                print(len(blarg)) 
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
                     idy=0
@@ -627,22 +631,69 @@ def search(request):
                         if col >= idy and col < idy + colstuff[1]:
                             collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
                         idy += colstuff[1]
-                
+            remove_rows = []
             for idx, rowstuff in enumerate(table_row_query_def[1]):
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
                 rowqueryset = results.filter(**rowquery)
-                #if omit_empty and rowqueryset.count() == 0:
-                    
+                if omit_empty and rowqueryset.count() == 0:
+                    remove_rows.insert(0, idx)
+                else:
+                    print(rowstuff[0])
                 row_cell_values = []
                 for colquery, colqueryset in used_col_query_sets:
-                    cell_queryset = rowqueryset.filter(**colquery)
+                    cell_queryset = rowqueryset
+                    if rowqueryset.count() > 0:
+                        cell_queryset = rowqueryset.filter(**colquery)
+                    #if cell_queryset.count() > 0:
+ #                       print(str(colquery))
+#                        print(str(cell_queryset.count()))
                     row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None)
-                row_list.append((rowlabels, row_cell_values, row_total,))
+                row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
-            # Append the grand total to the end of the col_totals list
+            #print(str([i[0] for i in row_list]))
+            for rownum in remove_rows:
+#                print("rownum " + str(rownum))
+                row_counters = [0,0,0]
+                count1 = 0
+                count2 = 0
+                for idx, rl in enumerate(row_list):
+#                    print("idx " + str(idx))
+                    rowlbl = rl[0]
+#                    print(str(rowlbl))
+                    rowlbl.reverse()
+#                    print("reversed " + str(rowlbl))
+#                    print(str(rowlbl))
+                    
+#                    for idl, lblstuff in enumerate(rowlbl):
+#                        print("Revindex " + str(revindex))
+#                        print("lblstuff " + str(lblstuff))
+#                        print("idl " + str(idl))
+                    for idl, lblstuff in enumerate(rowlbl):
+                        revindex = len(rowlbl)-(idl + 1)
+                        if idx != rownum:
+                            count1 += 1
+                            count2 += 2
+                            if idl == 1:
+                                row_list[idx][0][revindex] = (lblstuff[0], count1)
+                                count1 = 0
+                            if idl == 2:
+                                row_list[idx][0][revindex] = (lblstuff[0], count2)
+                                count2 = 0
+                        if idx == rownum:
+                            if idx == rownum and row_list[idx][0][revindex][1] > 0 and len(row_list) > idx+1 and len(row_list[idx+1][0]) < len(row_list[idx][0]):
+                                #                                print(str([i[0] for i in row_list]))
+                                #                                print("lbl " + str(lblstuff))
+                                #                                print("revindex " + str(revindex))
+                                #                                print("current " + str(row_list[idx+1][0]))
+                                #                                print("next " + str(row_list[idx+1][0]))
+                                row_list[idx+1][0].insert(0, row_list[idx][0][revindex])
+                        row_counters[idl] += lblstuff[1]
+#                print("rownum " + str(rownum))
+#                print("numrows " + str(len(row_list)))
+                row_list.pop(rownum)
             col_totals.append(display_function(results, None, None))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
