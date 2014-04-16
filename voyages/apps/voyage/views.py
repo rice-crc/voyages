@@ -596,25 +596,44 @@ def search(request):
             table_row_query_def = globals.table_rows[0]
             table_col_query_def = globals.table_columns[0]
             display_function = globals.table_functions[0][1]
+            omit_empty = False
             if table_stats_form.is_valid():
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
+                omit_empty = table_stats_form.cleaned_data['omit_empty']
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
             collabels = table_col_query_def[2]
             num_col_labels = len(collabels)
             num_row_labels = extra_cols + 1
-            for colquery in table_col_query_def[1]:
+            remove_cols = []
+            for idx, colquery in enumerate(table_col_query_def[1]):
                 colqueryset = results.filter(**colquery)
-                #if colqueryset.count() > 0:
+                if omit_empty and colqueryset.count() == 0:
+                    # Find column label that matches, then find the parent labels that match
+                    # Generate the list of subcolumns for the parent column label
+                    remove_cols.insert(0, idx)
+                else:
+                    col_totals.append(display_function(colqueryset, None, colqueryset))
+                    used_col_query_sets.append((colquery, colqueryset))
                 #collabels.append(collabel)
-                col_totals.append(display_function(colqueryset, None, colqueryset))
-                used_col_query_sets.append((colquery, colqueryset))
-            for rowlabels, rowquery in table_row_query_def[1]:
+            print(remove_cols)
+            for col in remove_cols:
+                for idt, collbllist in enumerate(collabels):
+                    idy=0
+                    for idc, colstuff in enumerate(collbllist):
+                        if col >= idy and col < idy + colstuff[1]:
+                            collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
+                        idy += colstuff[1]
+                
+            for idx, rowstuff in enumerate(table_row_query_def[1]):
+                rowlabels = rowstuff[0]
+                rowquery = rowstuff[1]
                 rowqueryset = results.filter(**rowquery)
-                #if rowqueryset.count() > 0:
+                #if omit_empty and rowqueryset.count() == 0:
+                    
                 row_cell_values = []
                 for colquery, colqueryset in used_col_query_sets:
                     cell_queryset = rowqueryset.filter(**colquery)
