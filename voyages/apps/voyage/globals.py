@@ -279,17 +279,58 @@ def make_avg_fun(varname):
     def avg_fun(queryset, rowset, colset):
         lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields()]
         if len(lst) == 0:
-            return prettifier(0)
+            return None
         else:
             return prettifier(sum(lst)/len(lst))
     return avg_fun
+
+def make_row_tot_percent_fun(varname):
+    def row_tot_fun(queryset, rowset, colset):
+        rowlst = [i.get_stored_fields()[varname] for i in rowset.all() if varname in i.get_stored_fields()]
+        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields()]
+        if len(qlst) > 0:
+            return display_percent(float(sum(qlst))/float(sum(rowlst)))
+        else:
+            return None
+    return row_tot_fun
+
+def make_col_tot_percent_fun(varname):
+    def col_tot_fun(queryset, rowset, colset):
+        collst = [i.get_stored_fields()[varname] for i in colset.all() if varname in i.get_stored_fields()]
+        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields()]
+        if len(qlst) > 0:
+            return display_percent(float(sum(qlst))/float(sum(collst)))
+        else:
+            return None
+    return col_tot_fun
 
 # List of tuples that define a function for a cell value (label, mapping function)
 table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
                    ('Sum of embarked slaves', make_sum_fun('var_imp_total_num_slaves_purchased'),),
                    ('Average number of embarked slaves', make_avg_fun('var_imp_total_num_slaves_purchased'),),
-                   ('Number of voyages - embarked slaves', None,),]
-#                   ('Percent of embarked slaves (row total)'
+                   ('Number of voyages - embarked slaves', None,),
+                   ('Percent of embarked slaves (row total)', make_row_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
+                   ('Percent of embarked slaves (column total)', make_col_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
+                   ('Sum of disembarked slaves', make_sum_fun('var_imp_total_slaves_disembarked'),),
+                   ('Average number of disembarked slaves', make_avg_fun('var_imp_total_slaves_disembarked'),),
+                   ('Number of voyages - disembarked slaves', None),
+                   ('Percent of disembarked slaves (row total)', make_row_tot_percent_fun('var_imp_total_slaves_disembarked'),),
+                   ('Percent of disembarked slaves (column total)', make_col_tot_percent_fun('var_imp_total_slaves_disembarked'),),
+                   ('Sum of embarked/disembarked slaves', None),
+                   ('Average number of embarked/disembarked slaves', None),
+                   ('Number of voyages - embarked/disembarked slaves', None),
+                   ('Average percentage male', None),
+                   ('Number of voyages - percentage male', None),
+                   ('Average percentage children', None),
+                   ('Number of voyages - percentage children', None),
+                   ('Average percentage of slaves embarked who died during voyage', None),
+                   ('Number of voyages - percentage of slaves embarked who died during voyage', None),
+                   ('Average middle passage (days)', make_avg_fun('var_length_middle_passage_days'),),
+                   ('Number of voyages - middle passage (days)', None),
+                   ('Average standarized tonnage', make_avg_fun('var_tonnage_mod'),),
+                   ('Number of voyages - standarized tonnage', None),
+                   ('Sterling cash price in Jamaica', None),
+                   ('Number of voyages - sterling cash price in Jamaica', None),]
 
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
