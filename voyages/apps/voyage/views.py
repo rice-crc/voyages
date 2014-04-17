@@ -199,6 +199,7 @@ def retrieve_post_search_forms(post):
         form_list.append(tmpElem)
     return form_list
 
+# This won't work since some places have the same name
 def get_place_from_ascii(ascii_name, flat_place_list):
     for place in flat_place_list:
         if ascii_name == unidecode.unidecode(place[0]):
@@ -260,12 +261,13 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
                 form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
         elif varname in globals.list_place_fields:
-            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
+            selected_choices = var_list[varname + '_choice_field'].split(';')
+#            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
             form = SimplePlaceSearchForm(prefix=varname)
-            form.fields['choice_field'].choices = flatChoices
-            tmpElem['nested_choices'] = nestedChoices
-            selected_choices = [get_place_from_ascii(ascii_place, flatChoices) for ascii_place in var_list[varname + '_choice_field'].split(';')]
+            #form.fields['choice_field'].choices = flatChoices
+            #tmpElem['nested_choices'] = nestedChoices
             nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
+            form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
             tmpElem['selected_choices'] = selected_choices
             form.fields['choice_field'].initial = selected_choices
@@ -370,7 +372,7 @@ def create_query_dict(var_list):
         elif varname in globals.list_text_fields:
             query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_select_fields:
-            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
+            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
         elif varname in globals.list_numeric_fields:
             opt = var_list[varname + '_options']
             if opt == '1': # Between
@@ -409,7 +411,7 @@ def create_query_dict(var_list):
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
                                mangle_method(var_list[varname + '_threshold_month']))
         elif varname in globals.list_place_fields:
-            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
+            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
         elif varname in globals.list_boolean_fields:
             query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
     return query_dict
@@ -753,30 +755,30 @@ def getChoices(varname):
         for nation in Nationality.objects.all():
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
-            choices.append((nation.label, nation.label))
+            choices.append((nation.value, nation.label))
     elif varname in ['var_imputed_nationality']:
         for nation in Nationality.objects.all():
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
-                choices.append((nation.label, nation.label))
+                choices.append((nation.value, nation.label))
     elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_slaves']:
         for outcome in SlavesOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_ship_captured']:
         for outcome in VesselCapturedOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname == 'var_rig_of_vessel':
         for rig in RigOfVessel.objects.all():
-            choices.append((rig.label, rig.label))
+            choices.append((rig.value, rig.label))
     return choices
 
 def putOtherLast(lst):
@@ -809,18 +811,21 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
                     continue
                 # I don't think I need the selected logic here, but double check
                 reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
-                                    'text': place.place})
-                flatChoices.append((place.place, place.place))
+                                    'text': place.place,
+                                    'value': place.value})
+                flatChoices.append((place.value, place.place))
             reg_content = putOtherLast(reg_content)
             area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
                                  'text': reg.region,
                                  'choices': reg_content,
-                                 'is_selected': is_selected})
+                                 'is_selected': is_selected,
+                                 'value': reg.value})
         area_content = putOtherLast(area_content)
         nestedChoices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
                               'text': area.broad_region,
                               'choices': area_content,
-                              'is_selected': is_area_selected})
+                              'is_selected': is_area_selected,
+                              'value': area.value})
     nestedChoices = putOtherLast(nestedChoices)
     
     # Check if visible parameters have been passed, if so filter
