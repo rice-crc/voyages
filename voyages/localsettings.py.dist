@@ -72,6 +72,9 @@ CACHES = {
 # Replace this with a valid bitly oauth token
 BITLY_OAUTH_TOKEN = '[40 digit hex bitly oauth token here]'
 
+EMAIL_HOST = 'smtp.service.emory.edu' #should only be set on dev machine
+DEFAULT_FROM_EMAIL = 'admin@slavevoyages.org'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -82,21 +85,43 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+     'require_debug_false': {
+         '()': 'django.utils.log.RequireDebugFalse'
+     }
+ },
+    'formatters': {
+        'basic': {
+            'format': '[%(asctime)s] %(levelname)s:%(name)s::%(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+         },
     },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'basic'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename' : '/path/to/file.log',
+            'formatter': 'basic'
         }
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+       # 'django.request': {
+       #     'handlers': ['console'],
+       #     'level': 'DEBUG',
+       #     'propagate': True,
+       # },
+        'voyages': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
             'propagate': True,
         },
     }

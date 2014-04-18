@@ -28,6 +28,9 @@ urlpatterns = patterns('',
     url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
     (r'^search/', include('haystack.urls', namespace='search')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
+
+    # password rest urls
+    url(r'^password/', include('password_reset.urls')),
 )
 
 # XML generated sitemap

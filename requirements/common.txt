@@ -9,8 +9,9 @@ wsgiref
 mock
 django-autocomplete-light==1.4.7
 sorl-thumbnail 
-PIL
+pillow
 bitly_api
 psycopg2
 xlwt
 unidecode
+django-password-reset

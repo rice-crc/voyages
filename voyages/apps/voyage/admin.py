@@ -277,6 +277,7 @@ class VoyageSourcesAdmin(admin.ModelAdmin):
     list_display = ('short_ref', 'source_type', 'full_ref',)
     search_fields = ('short_ref', 'full_ref')
     list_filter = ['source_type']
+    list_per_page = 10000000 # no pages
     form = VoyagesSourcesAdminForm
 
 class VoyageSourcesTypeAdmin(admin.ModelAdmin):

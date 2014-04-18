@@ -7,6 +7,7 @@ from .views import shorten_url
 from mock import patch
 import globals
 import urllib2
+from datetime import date
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):
@@ -74,7 +75,7 @@ class SearchTest(TestCase):
     
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_geographical(self, perform_search_func):
-        self.client.get('/voyage/search?time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866&used_variable_names=var_imp_port_voyage_begin&var_imp_port_voyage_begin_choice_field=Africa.%2C+port+unspecified%3BBissau%3BGoree%3BPortuguese+Guinea%3BCape+Verde+Islands%3BMadeira%3BAzores%3BSaint-Louis%3BSierra+Leone%2C+port+unspecified%3BBance+Island+%28Ben%27s+Island%29%3BCape+Coast+Castle%3BPrinces+Island%3BSao+Tome%3BSao+Tome+or+Princes+Island%3BLuanda%3BCape+of+Good+Hope%3BInhambane%3BMozambique%3BIle+de+France%3BPort-Louis%3BPuerto+Rico%2C+port+unspecified%3BBahia+Honda%3BCabanas%3BCanasi%3BCardenas%3BGuanimar%3BHavana%3BMatanzas%3BSantiago+de+Cuba%3BTrinidad+de+Cuba%3BCuba%2C+port+unspecified%3BTortola%2C+port+unspecified%3BAntigua%2C+port+unspecified%3BSaint+John+%28Antigua%29%3BSt.+Kitts%2C+port+unspecified%3BNevis%2C+port+unspecified%3BMontserrat%2C+port+unspecified%3BDominica%2C+port+unspecified%3BSt.+Lucia%2C+port+unspecified%3BBarbados%2C+port+unspecified%3BGrenada%2C+port+unspecified%3BTobago%2C+port+unspecified%3BMartha+Brae%3BMontego+Bay%3BKingston%3BJamaica%2C+port+unspecified%3BDemerara%3BMartinique%2C+port+unspecified%3BGuadeloupe%2C+port+unspecified%3BCayenne%3BPort-au-Prince%3BSt.+Maarten%3BSt.+Eustatius%3BHonduras%2C+port+unspecified%3BSt.+Barthelemy%2C+port+unspecified%3BGustavia%2C+St.+Bartholomew%3BDanish+West+Indies%2C+colony+unspecified%3BSt.+Croix%3BSt.+Thomas%3BBritish+Leewards%3BBritish+Caribbean%2C+colony+unspecified%3BBermuda%3BHispaniola%2C+unspecified%3BSpanish+Caribbean%2C+unspecified&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514')
+        self.client.get('/voyage/search?time_span_to_year=1866&used_variable_names=var_imp_port_voyage_begin&var_imp_port_voyage_begin_choice_field=Africa.%2C+port+unspecified%3BBissau%3BGoree%3BPortuguese+Guinea%3BCape+Verde+Islands%3BMadeira%3BAzores%3BSaint-Louis%3BSierra+Leone%2C+port+unspecified%3BBance+Island+%28Ben%27s+Island%29%3BCape+Coast+Castle%3BPrinces+Island%3BSao+Tome%3BSao+Tome+or+Princes+Island%3BLuanda%3BCape+of+Good+Hope%3BInhambane%3BMozambique%3BIle+de+France%3BPort-Louis%3BPuerto+Rico%2C+port+unspecified%3BBahia+Honda%3BCabanas%3BCanasi%3BCardenas%3BGuanimar%3BHavana%3BMatanzas%3BSantiago+de+Cuba%3BTrinidad+de+Cuba%3BCuba%2C+port+unspecified%3BTortola%2C+port+unspecified%3BAntigua%2C+port+unspecified%3BSaint+John+%28Antigua%29%3BSt.+Kitts%2C+port+unspecified%3BNevis%2C+port+unspecified%3BMontserrat%2C+port+unspecified%3BDominica%2C+port+unspecified%3BSt.+Lucia%2C+port+unspecified%3BBarbados%2C+port+unspecified%3BGrenada%2C+port+unspecified%3BTobago%2C+port+unspecified%3BMartha+Brae%3BMontego+Bay%3BKingston%3BJamaica%2C+port+unspecified%3BDemerara%3BMartinique%2C+port+unspecified%3BGuadeloupe%2C+port+unspecified%3BCayenne%3BPort-au-Prince%3BSt.+Maarten%3BSt.+Eustatius%3BHonduras%2C+port+unspecified%3BSt.+Barthelemy%2C+port+unspecified%3BGustavia%2C+St.+Bartholomew%3BDanish+West+Indies%2C+colony+unspecified%3BSt.+Croix%3BSt.+Thomas%3BBritish+Leewards%3BBritish+Caribbean%2C+colony+unspecified%3BBermuda%3BHispaniola%2C+unspecified%3BSpanish+Caribbean%2C+unspecified&time_span_from_year=1514')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -83,7 +84,7 @@ class SearchTest(TestCase):
         self.assertEqual(expected, qdict['var_imp_port_voyage_begin__in'])
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_text(self, perform_search_func):
-        response = self.client.get('/voyage/search?time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866&used_variable_names=var_ship_name&var_ship_name_text_search=Ner&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514')
+        response = self.client.get('/voyage/search?time_span_to_year=1866&used_variable_names=var_ship_name&var_ship_name_text_search=Ner&time_span_from_year=1514')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -91,7 +92,7 @@ class SearchTest(TestCase):
         self.assertEqual('Ner', qdict['var_ship_name__contains'])
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_select(self, perform_search_func):
-        self.client.get('/voyage/search?time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866&var_outcome_slaves_choice_field=Slaves+disembarked+in+Americas%3BNo+slaves+embarked%3BSlaves+disembarked+in+Africa%2FEurope%3BSlaves+perished+with+ship&used_variable_names=var_outcome_slaves&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514')
+        self.client.get('/voyage/search?time_span_to_year=1866&var_outcome_slaves_choice_field=Slaves+disembarked+in+Americas%3BNo+slaves+embarked%3BSlaves+disembarked+in+Africa%2FEurope%3BSlaves+perished+with+ship&used_variable_names=var_outcome_slaves&time_span_from_year=1514')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -100,7 +101,7 @@ class SearchTest(TestCase):
         self.assertEqual(expected, qdict['var_outcome_slaves__in'])
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_numeric(self, perform_search_func):
-        response = self.client.get('/voyage/search?var_imp_total_num_slaves_purchased_lower_bound=40&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514&var_imp_total_num_slaves_purchased_upper_bound=2000&var_imp_total_num_slaves_purchased_options=1&used_variable_names=var_imp_total_num_slaves_purchased&time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866')
+        response = self.client.get('/voyage/search?var_imp_total_num_slaves_purchased_lower_bound=40&time_span_from_year=1514&var_imp_total_num_slaves_purchased_upper_bound=2000&var_imp_total_num_slaves_purchased_options=1&used_variable_names=var_imp_total_num_slaves_purchased&time_span_to_year=1866')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -108,15 +109,17 @@ class SearchTest(TestCase):
         self.assertEqual([u'40', u'2000'], qdict['var_imp_total_num_slaves_purchased__range'])
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_date(self, perform_search_func):
-        self.client.get('/voyage/search?var_voyage_began_to_month=12&var_voyage_began_from_month=01&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514&used_variable_names=var_voyage_began&time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866&var_voyage_began_options=1&var_voyage_began_from_year=1514&var_voyage_began_to_year=1866')
+        self.client.get('/voyage/search?var_voyage_began_to_month=12&var_voyage_began_from_month=01&time_span_from_year=1514&var_voyage_began_months=01%2C03%2C05%2C06%2C07%2C09%2C10%2C11%2C12&used_variable_names=var_voyage_began&time_span_to_year=1866&var_voyage_began_options=1&var_voyage_began_from_year=1514&var_voyage_began_to_year=1866')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
         self.assertIn('var_voyage_began__range', qdict)
-        self.assertEqual(['1514,01', '1866,12'], qdict['var_voyage_began__range'])
+        self.assertIn('var_voyage_began_month__in', qdict)
+        self.assertEqual([1,3,5,6,7,9,10,11,12], qdict['var_voyage_began_month__in'], "Incorrect months filter")
+        self.assertEqual([date(1514,01,01), date(1866,12,31)], qdict['var_voyage_began__range'], "Incorrect date range")
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_boolean(self, perform_search_func):
-        response = self.client.get('/voyage/search?time_span_var_imp_arrival_at_port_of_dis_frame_to_year=1866&used_variable_names=var_voyage_in_cd_rom&var_voyage_in_cd_rom_choice_field=1&time_span_var_imp_arrival_at_port_of_dis_frame_from_year=1514')
+        response = self.client.get('/voyage/search?time_span_to_year=1866&used_variable_names=var_voyage_in_cd_rom&var_voyage_in_cd_rom_choice_field=1&time_span_from_year=1514')
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
