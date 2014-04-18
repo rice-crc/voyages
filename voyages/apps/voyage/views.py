@@ -462,7 +462,7 @@ def prettify_var_list(varlist):
                 month_dict[int(monnum)] = monval
             output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
             continue
-        unmangle_method = globals.display_unmangle_methods.get(varname, globals.no_mangle)
+        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
         value = unicode(tvar)
         if isinstance(tvar, (list, tuple)):
@@ -471,17 +471,27 @@ def prettify_var_list(varlist):
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
-                value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
+                tod = None
+                if vvar[1].month == 1:
+                    tod = date(vvar[1].year - 1, 12, vvar[1].day)
+                else:
+                    tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
+                value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
-                    value = 'in ' + unicode(unmangle_method(vvar[0]))[:-3]
+                    value = 'in ' + unicode(unmangle_method(vvar[0]))
                 else:
                     value = 'equal to ' + unicode(tvar)
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
                 if varname in globals.list_date_fields:
-                    value = 'before ' + unicode(tvar)
+                    tod = None
+                    if vvar.month == 1:
+                        tod = date(vvar.year - 1, 12, vvar.day)
+                    else:
+                        tod = date(vvar.year, vvar.month - 1, vvar.day)
+                    value = 'before ' + unicode(unmangle_method(tod))
                 else:
                     value = 'at most ' + unicode(tvar)
             elif opt == '3':
