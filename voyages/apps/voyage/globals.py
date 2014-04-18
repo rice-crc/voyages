@@ -4,6 +4,7 @@ from django.utils.datastructures import SortedDict
 import models
 import lxml.html
 import re
+from datetime import date
 
 session_expire_minutes = 60
 
@@ -100,6 +101,14 @@ def unmangle_percent(value, voyageid=None):
     else:
         return str(value * 100) + "%"
 def unmangle_date(value, voyageid=None):
+    if isinstance(value, date):
+        return unicode(value.month) + u'/' + unicode(value.day) + u'/' + unicode(value.year)
+    splitstr = str(value).split(',')
+    splitstr.reverse()
+    return '/'.join(splitstr)
+def unmangle_datem(value, voyageid=None):
+    if isinstance(value, date):
+        return unicode(value.month) + u'/' + unicode(value.year)
     splitstr = str(value).split(',')
     splitstr.reverse()
     return '/'.join(splitstr)
@@ -143,7 +152,23 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent,
                          'var_sources': mangle_source}
-# Run against solr field values when displaying values for a single voyage and when displaying previous queries
+# Used for display of previous queries
+parameter_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
+                              'var_imputed_percentage_women': unmangle_percent,
+                              'var_imputed_percentage_boys': unmangle_percent,
+                              'var_imputed_percentage_girls': unmangle_percent,
+                              'var_imputed_percentage_male': unmangle_percent,
+                              'var_imputed_percentage_child': unmangle_percent,
+                              'var_imputed_mortality': unmangle_percent,
+                              'var_voyage_began': unmangle_datem,
+                              'var_slave_purchase_began': unmangle_datem,
+                              'var_date_departed_africa': unmangle_datem,
+                              'var_first_dis_of_slaves': unmangle_datem,
+                              'var_departure_last_place_of_landing': unmangle_datem,
+                              'var_voyage_completed': unmangle_datem,
+                              'var_tonnage': unmangle_truncate,
+                              'var_tonnage_mod': unmangle_truncate}
+# Run against solr field values when displaying values for a single voyage
 display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_women': unmangle_percent,
                             'var_imputed_percentage_boys': unmangle_percent,
