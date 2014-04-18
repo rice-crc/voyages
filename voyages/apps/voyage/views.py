@@ -400,19 +400,25 @@ def create_query_dict(var_list):
                     to_date]
             elif opt == '2': # Less than or equal to
                 to_date = None
-                if int(var_list[varname + '_to_month']) == 12:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
+                if int(var_list[varname + '_threshold_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
                 else:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
                 query_dict[varname + "__lte"] = to_date
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
                                mangle_method(var_list[varname + '_threshold_month']))
-            elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = \
+            elif opt == '4': # In
+                to_date = None
+                if int(var_list[varname + '_threshold_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
+                query_dict[varname + "__range"] = [
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_threshold_month']))
+                               mangle_method(var_list[varname + '_threshold_month'])),
+                    to_date]
         elif varname in globals.list_place_fields:
             query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
         elif varname in globals.list_boolean_fields:
@@ -466,14 +472,17 @@ def prettify_var_list(varlist):
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
                 value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
+            elif opt == '4':
+                if isinstance(vvar, (list, tuple)):
+                    value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(vvar[1]))
+                else:
+                    value = 'equal to ' + unicode(tvar)
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
                 value = 'at most ' + unicode(tvar)
             elif opt == '3':
                 value = 'at least ' + unicode(tvar)
-            elif opt == '4':
-                value = 'equal to ' + unicode(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
