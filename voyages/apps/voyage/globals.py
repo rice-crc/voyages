@@ -128,7 +128,13 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_mortality': display_percent,
                    'var_imputed_sterling_cash': display_sterling_price,
                    'var_tonnage': unmangle_truncate,
-                   'var_tonnage_mod': unmangle_truncate}
+                   'var_tonnage_mod': unmangle_truncate,
+                   'var_voyage_began': unmangle_date,
+                   'var_slave_purchase_began': unmangle_date,
+                   'var_date_departed_africa': unmangle_date,
+                   'var_first_dis_of_slaves': unmangle_date,
+                   'var_departure_last_place_of_landing': unmangle_date,
+                   'var_voyage_completed': unmangle_date}
 # Run against solr field values when creating an xls file
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
@@ -140,7 +146,13 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_sterling_cash': display_sterling_price_nopound,
                        'var_captain': display_xls_multiple_names,
                        'var_owner': display_xls_multiple_names,
-                       'var_sources': display_xls_sources}
+                       'var_sources': display_xls_sources,
+                       'var_voyage_began': unmangle_date,
+                       'var_slave_purchase_began': unmangle_date,
+                       'var_date_departed_africa': unmangle_date,
+                       'var_first_dis_of_slaves': unmangle_date,
+                       'var_departure_last_place_of_landing': unmangle_date,
+                       'var_voyage_completed': unmangle_date}
 # Run against solr field values when displaying values for a single voyage
 display_methods_details = {'var_sources': detail_display_sources}
 # Used to convert a form value to a proper value for searching with
