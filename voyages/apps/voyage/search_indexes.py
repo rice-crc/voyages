@@ -90,12 +90,24 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_guns_mounted = indexes.IntegerField(null=True)
     var_owner = indexes.NgramField(null=True)
 
+    var_nationality_idnum = indexes.IntegerField(null=True)
+    var_imputed_nationality_idnum = indexes.IntegerField(null=True)
+    var_vessel_construction_place_idnum = indexes.IntegerField(null=True)
+    var_registered_place_idnum = indexes.IntegerField(null=True)
+    var_rig_of_vessel_idnum = indexes.IntegerField(null=True)
+
     # Voyage Outcome
     var_outcome_voyage = indexes.CharField(null=True)
     var_outcome_slaves = indexes.CharField(null=True)
     var_outcome_ship_captured = indexes.CharField(null=True)
     var_outcome_owner = indexes.CharField(null=True)
     var_resistance = indexes.CharField(null=True)
+    
+    var_outcome_voyage_idnum = indexes.IntegerField(null=True)
+    var_outcome_slaves_idnum = indexes.IntegerField(null=True)
+    var_outcome_ship_captured_idnum = indexes.IntegerField(null=True)
+    var_outcome_owner_idnum = indexes.IntegerField(null=True)
+    var_resistance_idnum = indexes.IntegerField(null=True)
 
     # Voyage itinerary
     var_imp_port_voyage_begin = indexes.CharField(null=True)
@@ -114,6 +126,16 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_imp_principal_port_slave_dis = indexes.NgramField(null=True)
     var_place_voyage_ended = indexes.CharField(null=True)
+    
+    var_imp_port_voyage_begin_idnum = indexes.IntegerField(null=True)
+    var_first_place_slave_purchase_idnum = indexes.IntegerField(null=True)
+    var_second_place_slave_purchase_idnum = indexes.IntegerField(null=True)
+    var_third_place_slave_purchase_idnum = indexes.IntegerField(null=True)
+    var_imp_principal_place_of_slave_purchase_idnum = indexes.IntegerField(null=True)
+    var_port_of_call_before_atl_crossing_idnum = indexes.IntegerField(null=True)
+    var_first_landing_place_idnum = indexes.IntegerField(null=True)
+    var_imp_principal_port_slave_dis_idnum = indexes.IntegerField(null=True)
+    var_place_voyage_ended_idnum = indexes.IntegerField(null=True)
 
     ## Region variables
     var_imp_region_voyage_begin = indexes.CharField(null=True)
@@ -131,6 +153,16 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_principal_region_slave_dis = indexes.CharField(null=True)
 
     var_region_voyage_ended = indexes.CharField(null=True)
+
+    var_imp_region_voyage_begin_idnum = indexes.IntegerField(null=True)
+    var_first_region_slave_emb_idnum = indexes.IntegerField(null=True)
+    var_second_region_slave_emb_idnum = indexes.IntegerField(null=True)
+    var_third_region_slave_emb_idnum = indexes.IntegerField(null=True)
+    var_imp_principal_region_of_slave_purchase_idnum = indexes.IntegerField(null=True)
+    var_first_landing_region_idnum = indexes.IntegerField(null=True)
+    var_second_landing_region_idnum = indexes.IntegerField(null=True)
+    var_imp_principal_region_slave_dis_idnum = indexes.IntegerField(null=True)
+    var_region_voyage_ended_idnum = indexes.IntegerField(null=True)
 
     # Voyage captain and crew
     var_captain = indexes.NgramField(null=True)
@@ -218,10 +250,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_ship.nationality_ship.label
         except AttributeError:
             return None
+    def prepare_var_nationality_idnum(self, obj):
+        try:
+            return obj.voyage_ship.nationality_ship.value
+        except AttributeError:
+            return None
 
     def prepare_var_imputed_nationality(self, obj):
         try:
             return obj.voyage_ship.imputed_nationality.label
+        except AttributeError:
+            return None
+    def prepare_var_imputed_nationality_idnum(self, obj):
+        try:
+            return obj.voyage_ship.imputed_nationality.value
         except AttributeError:
             return None
 
@@ -230,7 +272,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_ship.vessel_construction_place.place
         except AttributeError:
             return None
+    def prepare_var_vessel_construction_place_idnum(self, obj):
+        try:
+            return obj.voyage_ship.vessel_construction_place.value
+        except AttributeError:
+            return None
 
+        
     def prepare_var_year_of_construction(self, obj):
         try:
             return obj.voyage_ship.year_of_construction
@@ -240,6 +288,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_registered_place(self, obj):
         try:
             return obj.voyage_ship.registered_place.place
+        except AttributeError:
+            return None
+    def prepare_var_registered_place_idnum(self, obj):
+        try:
+            return obj.voyage_ship.registered_place.value
         except AttributeError:
             return None
 
@@ -252,6 +305,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_rig_of_vessel(self, obj):
         try:
             return obj.voyage_ship.rig_of_vessel.label
+        except AttributeError:
+            return None
+    def prepare_var_rig_of_vessel_idnum(self, obj):
+        try:
+            return obj.voyage_ship.rig_of_vessel.value
         except AttributeError:
             return None
 
@@ -287,10 +345,24 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
         except IndexError:
             return None
+    def prepare_var_outcome_voyage_idnum(self, obj):
+        try:
+            return VoyageOutcome.objects.filter(voyage=obj)[0].particular_outcome.value
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
 
     def prepare_var_outcome_slaves(self, obj):
         try:
             return VoyageOutcome.objects.filter(voyage=obj)[0].outcome_slaves.label
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
+    def prepare_var_outcome_slaves_idnum(self, obj):
+        try:
+            return VoyageOutcome.objects.filter(voyage=obj)[0].outcome_slaves.value
         except AttributeError:
             return None
         except IndexError:
@@ -303,10 +375,24 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
         except IndexError:
             return None
+    def prepare_var_outcome_owner_idnum(self, obj):
+        try:
+            return VoyageOutcome.objects.filter(voyage=obj)[0].outcome_owner.value
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
 
     def prepare_var_resistance(self, obj):
         try:
             return VoyageOutcome.objects.filter(voyage=obj)[0].resistance.label
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
+    def prepare_var_resistance_idnum(self, obj):
+        try:
+            return VoyageOutcome.objects.filter(voyage=obj)[0].resistance.value
         except AttributeError:
             return None
         except IndexError:
@@ -319,6 +405,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
         except IndexError:
             return None
+    def prepare_var_outcome_ship_captured_idnum(self, obj):
+        try:
+            return VoyageOutcome.objects.filter(voyage=obj)[0].vessel_captured_outcome.value
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
 
     # Voyage itinerary
 
@@ -327,10 +420,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.imp_port_voyage_begin.place
         except AttributeError:
             return None
+    def prepare_var_imp_port_voyage_begin_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_port_voyage_begin.value
+        except AttributeError:
+            return None
 
     def prepare_var_first_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.first_place_slave_purchase.place
+        except AttributeError:
+            return None
+    def prepare_var_first_place_slave_purchase_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.first_place_slave_purchase.value
         except AttributeError:
             return None
 
@@ -339,10 +442,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.second_place_slave_purchase.place
         except AttributeError:
             return None
+    def prepare_var_second_place_slave_purchase_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.second_place_slave_purchase.value
+        except AttributeError:
+            return None
 
     def prepare_var_third_place_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.third_place_slave_purchase.place
+        except AttributeError:
+            return None
+    def prepare_var_third_place_slave_purchase_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.third_place_slave_purchase.value
         except AttributeError:
             return None
 
@@ -351,10 +464,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.place
         except AttributeError:
             return None
+    def prepare_var_imp_principal_place_of_slave_purchase_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_principal_place_of_slave_purchase.value
+        except AttributeError:
+            return None
 
     def prepare_var_port_of_call_before_atl_crossing(self, obj):
         try:
             return obj.voyage_itinerary.port_of_call_before_atl_crossing.place
+        except AttributeError:
+            return None
+    def prepare_var_port_of_call_before_atl_crossing_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.port_of_call_before_atl_crossing.value
         except AttributeError:
             return None
 
@@ -363,10 +486,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.first_landing_place.place
         except AttributeError:
             return None
+    def prepare_var_first_landing_place_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.first_landing_place.value
+        except AttributeError:
+            return None
 
     def prepare_var_second_landing_place(self, obj):
         try:
             return obj.voyage_itinerary.second_landing_place.place
+        except AttributeError:
+            return None
+    def prepare_var_second_landing_place_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.second_landing_place.value
         except AttributeError:
             return None
 
@@ -375,10 +508,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.third_landing_place.place
         except AttributeError:
             return None
+    def prepare_var_third_landing_place_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.third_landing_place.value
+        except AttributeError:
+            return None
 
     def prepare_var_imp_principal_port_slave_dis(self, obj):
         try:
             return obj.voyage_itinerary.imp_principal_port_slave_dis.place
+        except AttributeError:
+            return None
+    def prepare_var_imp_principal_port_slave_dis_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_principal_port_slave_dis.value
         except AttributeError:
             return None
 
@@ -387,11 +530,21 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.place_voyage_ended.place
         except AttributeError:
             return None
+    def prepare_var_place_voyage_ended_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.place_voyage_ended.value
+        except AttributeError:
+            return None
 
     # Region variables
     def prepare_var_imp_region_voyage_begin(self, obj):
         try:
             return obj.voyage_itinerary.imp_region_voyage_begin.region
+        except AttributeError:
+            return None
+    def prepare_var_imp_region_voyage_begin_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_region_voyage_begin.value
         except AttributeError:
             return None
 
@@ -402,10 +555,22 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return None
         except IndexError:
             return None
+    def prepare_var_first_region_slave_emb_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.first_region_slave_emb.value
+        except AttributeError:
+            return None
+        except IndexError:
+            return None
 
     def prepare_var_second_region_slave_emb(self, obj):
         try:
             return obj.voyage_itinerary.second_region_emb.region
+        except AttributeError:
+            return None
+    def prepare_var_second_region_slave_emb_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.second_region_emb.value
         except AttributeError:
             return None
 
@@ -414,10 +579,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.third_region_emb.region
         except AttributeError:
             return None
+    def prepare_var_third_region_slave_emb_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.third_region_emb.value
+        except AttributeError:
+            return None
 
     def prepare_var_imp_principal_region_of_slave_purchase(self, obj):
         try:
             return obj.voyage_itinerary.imp_principal_region_of_slave_purchase.region
+        except AttributeError:
+            return None
+    def prepare_var_imp_principal_region_of_slave_purchase_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_principal_region_of_slave_purchase.value
         except AttributeError:
             return None
 
@@ -426,10 +601,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.first_landing_region.region
         except AttributeError:
             return None
+    def prepare_var_first_landing_region_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.first_landing_region.value
+        except AttributeError:
+            return None
 
     def prepare_var_second_landing_region(self, obj):
         try:
             return obj.voyage_itinerary.second_landing_region.region
+        except AttributeError:
+            return None
+    def prepare_var_second_landing_region_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.second_landing_region.value
         except AttributeError:
             return None
 
@@ -438,16 +623,31 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage_itinerary.third_landing_region.region
         except AttributeError:
             return None
+    def prepare_var_third_landing_region_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.third_landing_region.value
+        except AttributeError:
+            return None
 
     def prepare_var_imp_principal_region_slave_dis(self, obj):
         try:
             return obj.voyage_itinerary.imp_principal_region_slave_dis.region
         except AttributeError:
             return None
+    def prepare_var_imp_principal_region_slave_dis_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_principal_region_slave_dis.value
+        except AttributeError:
+            return None
 
     def prepare_var_region_voyage_ended(self, obj):
         try:
             return obj.voyage_itinerary.place_voyage_ended.region.region
+        except AttributeError:
+            return None
+    def prepare_var_region_voyage_ended_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.place_voyage_ended.region.value
         except AttributeError:
             return None
 

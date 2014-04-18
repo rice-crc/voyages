@@ -265,9 +265,9 @@ function shortenURL(){
                                                                     <input id="{{ item_layer2.id }}"
                                                                            class="var-checkbox checkbox-layer2" type="checkbox"
                                                                            name="{{ item.var_name }}-choice_field"
-                                                                            {% if item_layer2.text in item.selected_choices %} checked="checked" {% endif %}
+                                                                            {% if item_layer2.value in item.selected_choices %} checked="checked" {% endif %}
 									   
-                                                                           value="{{ item_layer2.text }}"
+                                                                           value="{{ item_layer2.value }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                                                     <span class="text-label">{{ item_layer2.text }}</span>
                                                                     </label>

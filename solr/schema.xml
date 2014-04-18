@@ -399,6 +399,35 @@
 
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_port_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_first_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_first_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_first_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imputed_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_resistance_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_third_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_registered_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_outcome_ship_captured_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_outcome_voyage_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_outcome_slaves_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_rig_of_vessel_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_place_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_vessel_construction_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_region_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_region_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_first_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_port_of_call_before_atl_crossing_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_region_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_outcome_owner_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_third_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_place_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_region_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+	
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->
