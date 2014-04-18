@@ -53,7 +53,6 @@
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
 	<th class="grid-header-text" colspan="{{ num_row_labels }}"> Totals </th>
-	{% for i in extra_cols %} <td></td> {% endfor %}
 	{% for total in col_totals %}
 	  <th class="grid-header-text">
 	    <b> {{ total }} </b>
