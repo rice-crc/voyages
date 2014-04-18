@@ -189,7 +189,7 @@ def retrieve_post_search_forms(post):
             form.fields['choice_field'].choices = flatChoices
             selected_choices = []
             if form.is_valid():
-                selected_choices = form.cleaned_data['choice_field']
+                selected_choices = [int(i) for i in form.cleaned_data['choice_field']]
             # Get the nested list places again to fill out the selected regions and areas. Needed to get the flat choices and set the choice field to that before form would validate.
             nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
             tmpElem['nested_choices'] = nestedChoices
@@ -261,11 +261,8 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
                 form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
         elif varname in globals.list_place_fields:
-            selected_choices = var_list[varname + '_choice_field'].split(';')
-#            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
+            selected_choices = [int(i) for i in var_list[varname + '_choice_field'].split(';')]
             form = SimplePlaceSearchForm(prefix=varname)
-            #form.fields['choice_field'].choices = flatChoices
-            #tmpElem['nested_choices'] = nestedChoices
             nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
             form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
@@ -385,7 +382,6 @@ def create_query_dict(var_list):
             elif opt == '4': # Equal to
                 query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
         elif varname in globals.list_date_fields:
-            print(varname)
             if varname + '_months' in var_list:
                 months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
                 # Only filter by months if not all the months are included
@@ -782,7 +778,7 @@ def getChoices(varname):
     return choices
 
 def putOtherLast(lst):
-    others = filter(lambda x: 'other' in x['text'].lower() or 'unspecified' in x['text'].lower(), lst)
+    others = filter(lambda x: 'other' in x['text'].lower() or 'unspecified' in x['text'].lower() or '???' in x['text'], lst)
     for rem in others:
         lst.remove(rem)
         lst.append(rem)
@@ -797,6 +793,8 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
     nestedChoices = []
     flatChoices = []
 
+    select = [int(i) for i in selected_places]
+
     for area, regs in nested_places.items():
         area_content = []
         is_area_selected = True
@@ -804,12 +802,13 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
             reg_content = []
             is_selected = True
             for place in places:
-                if place.place not in selected_places:
+                if place.value not in select:
                     is_selected = False
                     is_area_selected = False
-                if place.place == "???":
-                    continue
-                # I don't think I need the selected logic here, but double check
+                    # Why did I have this here?
+#                if place.place == "???":
+#                    continue
+                # Selected does not need to be part of this, since the form dict will have a list of places selected that the template checks
                 reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
                                     'text': place.place,
                                     'value': place.value})
@@ -971,7 +970,6 @@ def perform_search(query_dict, date_filters):
     :param date_filters:
     :return:
     """
-    print(query_dict)
     # Initially sort by voyage_id
     results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
     # Date filters
