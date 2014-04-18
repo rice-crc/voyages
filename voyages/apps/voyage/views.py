@@ -389,15 +389,22 @@ def create_query_dict(var_list):
                     query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
             opt = var_list[varname + '_options']
             if opt == '1': # Between
+                to_date = None
+                if int(var_list[varname + '_to_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
                 query_dict[varname + "__range"] = [
                     formatDate(mangle_method(var_list[varname + '_from_year']),
                                mangle_method(var_list[varname + '_from_month'])),
-                    formatDate(mangle_method(var_list[varname + '_to_year']),
-                               mangle_method(var_list[varname + '_to_month']))]
+                    to_date]
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = \
-                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_threshold_month']))
+                to_date = None
+                if int(var_list[varname + '_to_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
+                query_dict[varname + "__lte"] = to_date
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
                     formatDate(mangle_method(var_list[varname + '_threshold_year']),
@@ -438,6 +445,16 @@ def prettify_var_list(varlist):
                 is_real_var = True
                 break
         if not is_real_var:
+            # it is a month variable
+            varn = varname[:-7]
+            for var in globals.var_dict:
+                if varn == var['var_name']:
+                    fullname = var['var_full_name']
+                    break
+            month_dict = {}
+            for monnum, monval in globals.list_months:
+                month_dict[int(monnum)] = monval
+            output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
             continue
         unmangle_method = globals.display_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
