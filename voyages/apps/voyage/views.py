@@ -602,7 +602,6 @@ def search(request):
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
                 omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
-            print("Omit empty: " + str(omit_empty))
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
@@ -616,14 +615,9 @@ def search(request):
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
-                    #print("idx " + str(idx) + " collabel " + str(collabels[2][idx]))
                 else:
                     col_totals.append(display_function(colqueryset, None, colqueryset))
                     used_col_query_sets.append((colquery, colqueryset))
-                #collabels.append(collabel)
-            print(remove_cols)
-            for blarg in collabels:
-                print(len(blarg)) 
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
                     idy=0
@@ -638,61 +632,34 @@ def search(request):
                 rowqueryset = results.filter(**rowquery)
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
-                else:
-                    print(rowstuff[0])
                 row_cell_values = []
                 for colquery, colqueryset in used_col_query_sets:
                     cell_queryset = rowqueryset
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
-                    #if cell_queryset.count() > 0:
- #                       print(str(colquery))
-#                        print(str(cell_queryset.count()))
                     row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
-            #print(str([i[0] for i in row_list]))
             for rownum in remove_rows:
-#                print("rownum " + str(rownum))
                 row_counters = [0,0,0]
                 count1 = 0
                 count2 = 0
+                row_list[rownum] = ([(i[0], i[1] - 1) for i in row_list[rownum][0]], row_list[rownum][1], row_list[rownum][2])
+                # Now find the rows with the headers for it and reduce those header counts by 1
                 for idx, rl in enumerate(row_list):
-#                    print("idx " + str(idx))
-                    rowlbl = rl[0]
-#                    print(str(rowlbl))
-                    rowlbl.reverse()
-#                    print("reversed " + str(rowlbl))
-#                    print(str(rowlbl))
-                    
-#                    for idl, lblstuff in enumerate(rowlbl):
-#                        print("Revindex " + str(revindex))
-#                        print("lblstuff " + str(lblstuff))
-#                        print("idl " + str(idl))
-                    for idl, lblstuff in enumerate(rowlbl):
-                        revindex = len(rowlbl)-(idl + 1)
-                        if idx != rownum:
-                            count1 += 1
-                            count2 += 2
-                            if idl == 1:
-                                row_list[idx][0][revindex] = (lblstuff[0], count1)
-                                count1 = 0
-                            if idl == 2:
-                                row_list[idx][0][revindex] = (lblstuff[0], count2)
-                                count2 = 0
-                        if idx == rownum:
-                            if idx == rownum and row_list[idx][0][revindex][1] > 0 and len(row_list) > idx+1 and len(row_list[idx+1][0]) < len(row_list[idx][0]):
-                                #                                print(str([i[0] for i in row_list]))
-                                #                                print("lbl " + str(lblstuff))
-                                #                                print("revindex " + str(revindex))
-                                #                                print("current " + str(row_list[idx+1][0]))
-                                #                                print("next " + str(row_list[idx+1][0]))
-                                row_list[idx+1][0].insert(0, row_list[idx][0][revindex])
-                        row_counters[idl] += lblstuff[1]
-#                print("rownum " + str(rownum))
-#                print("numrows " + str(len(row_list)))
+                    rowlbl = [i for i in rl[0]]
+                    for idy, i in enumerate(rowlbl):
+                        # Don't handle the case for the rownum, since that has already been decremented
+                        if idx < rownum and idx + i[1] > rownum:
+                            row_list[idx][0][idy] = (row_list[idx][0][idy][0], row_list[idx][0][idy][1] - 1)
+                # Now handle the case when this row we are removing has headers of its own
+                rowlbl = [i for i in row_list[rownum][0]]
+                rowlbl.reverse()
+                for lbl, num in rowlbl:
+                    if num > 0:
+                        row_list[rownum+1][0].insert(0, (lbl, num))
                 row_list.pop(rownum)
             col_totals.append(display_function(results, None, None))
         elif submitVal == 'tab_graphs':
