@@ -265,9 +265,9 @@ function shortenURL(){
                                                                     <input id="{{ item_layer2.id }}"
                                                                            class="var-checkbox checkbox-layer2" type="checkbox"
                                                                            name="{{ item.var_name }}-choice_field"
-                                                                            {% if item_layer2.text in item.selected_choices %} checked="checked" {% endif %}
+                                                                            {% if item_layer2.value in item.selected_choices %} checked="checked" {% endif %}
 									   
-                                                                           value="{{ item_layer2.text }}"
+                                                                           value="{{ item_layer2.value }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
                                                                     <span class="text-label">{{ item_layer2.text }}</span>
                                                                     </label>
@@ -304,6 +304,16 @@ function shortenURL(){
                             <span class="date_field_wrapper threshold_field hidden">
                             {{ item.form.threshold_month }} - {{ item.form.threshold_year }}
                             </span>
+			    <br>
+			    <table cellspacing="0" cellpadding="0" border="0" class="query-builder-range-months">
+			      <tbody>
+				{% for choice in item.form.list_months %}
+				  <td>
+				    <input name="{{ item.var_name }}-months" type="checkbox" value="{{ choice.0 }}" {% if choice.0 in item.form.months.value %} checked {% endif %}>{{ choice.1 }}</input>
+				  </td>
+				{% endfor %}
+			      </tbody>
+			    </table>
 
                             <div class="month-list">
                                 {% for month in item.list_months %}
@@ -371,7 +381,7 @@ function shortenURL(){
         </div>
     </div>
 
-    <div class="box-main-table box-collapsed">
+    <div class="box-main-table {% if prev_queries_open %}box-expanded{% else %}box-collapsed{% endif %}">
          <div class="box-header ">
             <div class="box-button">
                 &nbsp;

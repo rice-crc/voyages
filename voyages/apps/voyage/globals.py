@@ -4,14 +4,17 @@ from django.utils.datastructures import SortedDict
 import models
 import lxml.html
 from django.db.models import Max, Min
+import re
+from datetime import date
+
+session_expire_minutes = 60
 
 list_imputed_nationality_values = ['Spain / Uruguay', 'Portugal / Brazil', 'Great Britain',
                                    'Netherlands', 'U.S.A.', 'France', 'Denmark / Baltic',
                                    'Other (specify in note)']
 
-list_months = [('Jan', '01'), ('Feb', '02'), ('Mar', '03'), ('Apr', '04'), ('May', '05'), ('Jun', '06'),
-               ('Jul', '07'), ('Aug', '08'), ('Sep', '09'), ('Oct', '10'), ('Nov', '11'), ('Dec', '12')]
-
+list_months = [('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'), ('05', 'May'), ('06', 'Jun'),
+               ('07', 'Jul'), ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')]
 
 def structure_places(place_list):
     """
@@ -67,18 +70,22 @@ def display_sterling_price(value, voyageid):
 def display_sterling_price_nopound(value, voyageid):
     return str(round(value, 2))
 def display_xls_multiple_names(value, voyageid):
-    return value.replace('<br/>', ';')
+    return value.replace('<br/>', ';').replace('<br>', ';')
 # Returns a list of the short form sources split by semicolons
 def display_xls_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         split = i.split('<>')
         if split and len(split) > 0 and split[0] != '':
             srcs.append(split[0])
     return '; '.join(srcs)
 def detail_display_sources(value, voyageid):
+    if not value:
+        return value
     srcs = []
-    for i in value.split(';;'):
+    for i in value:
         parts = i.split('<>')
         if len(parts) > 1:
             parts[1] = '<span class="detail-data-rollover"> ' + parts[1] + " </span>\n"
@@ -87,9 +94,32 @@ def detail_display_sources(value, voyageid):
 # Converts a text percentage to a decimal between 0 and 1
 def mangle_percent(value, voyageid=None):
     return float(str(value).replace('%', '')) / 100.0
+def mangle_source(value, voyageid=None):
+    return re.sub(r'[,\s]', '', value)
+def unmangle_percent(value, voyageid=None):
+    if isinstance(value, (str, int, float)):
+        return str(round(float(value) * 100, 1)) + "%"
+    else:
+        return str(value * 100) + "%"
+def unmangle_date(value, voyageid=None):
+    if isinstance(value, date):
+        return unicode(value.month) + u'/' + unicode(value.day) + u'/' + unicode(value.year)
+    splitstr = str(value).split(',')
+    splitstr.reverse()
+    return '/'.join(splitstr)
+def unmangle_datem(value, voyageid=None):
+    if isinstance(value, date):
+        return unicode(value.month) + u'/' + unicode(value.year)
+    splitstr = str(value).split(',')
+    splitstr.reverse()
+    return '/'.join(splitstr)
+def unmangle_truncate(value, voyageid=None):
+    val = float(value)
+    return int(round(val))
 def no_mangle(value, voyageid=None):
     return value
 
+# Run against solr field values when displaying in results table
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
                    'var_imputed_percentage_boys': display_percent,
@@ -97,7 +127,16 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_male': display_percent,
                    'var_imputed_percentage_child': display_percent,
                    'var_imputed_mortality': display_percent,
-                   'var_imputed_sterling_cash': display_sterling_price}
+                   'var_imputed_sterling_cash': display_sterling_price,
+                   'var_tonnage': unmangle_truncate,
+                   'var_tonnage_mod': unmangle_truncate,
+                   'var_voyage_began': unmangle_date,
+                   'var_slave_purchase_began': unmangle_date,
+                   'var_date_departed_africa': unmangle_date,
+                   'var_first_dis_of_slaves': unmangle_date,
+                   'var_departure_last_place_of_landing': unmangle_date,
+                   'var_voyage_completed': unmangle_date}
+# Run against solr field values when creating an xls file
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
                        'var_imputed_percentage_boys': display_percent,
@@ -107,15 +146,58 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_mortality': display_percent,
                        'var_imputed_sterling_cash': display_sterling_price_nopound,
                        'var_captain': display_xls_multiple_names,
-                       'var_sources': display_xls_sources}
+                       'var_owner': display_xls_multiple_names,
+                       'var_sources': display_xls_sources,
+                       'var_voyage_began': unmangle_date,
+                       'var_slave_purchase_began': unmangle_date,
+                       'var_date_departed_africa': unmangle_date,
+                       'var_first_dis_of_slaves': unmangle_date,
+                       'var_departure_last_place_of_landing': unmangle_date,
+                       'var_voyage_completed': unmangle_date}
+# Run against solr field values when displaying values for a single voyage
 display_methods_details = {'var_sources': detail_display_sources}
+# Used to convert a form value to a proper value for searching with
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
                          'var_imputed_percentage_boys': mangle_percent,
                          'var_imputed_percentage_girls': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
-                         'var_imputed_mortality': mangle_percent}
+                         'var_imputed_mortality': mangle_percent,
+                         'var_sources': mangle_source} 
+              #Used for display of previous queries
+parameter_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
+                              'var_imputed_percentage_women': unmangle_percent,
+                              'var_imputed_percentage_boys': unmangle_percent,
+                              'var_imputed_percentage_girls': unmangle_percent,
+                              'var_imputed_percentage_male': unmangle_percent,
+                              'var_imputed_percentage_child': unmangle_percent,
+                              'var_imputed_mortality': unmangle_percent,
+                              'var_voyage_began': unmangle_datem,
+                              'var_slave_purchase_began': unmangle_datem,
+                              'var_date_departed_africa': unmangle_datem,
+                              'var_first_dis_of_slaves': unmangle_datem,
+                              'var_departure_last_place_of_landing': unmangle_datem,
+                              'var_voyage_completed': unmangle_datem,
+                              'var_tonnage': unmangle_truncate,
+                              'var_tonnage_mod': unmangle_truncate}
+# Run against solr field values when displaying values for a single voyage
+display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
+                            'var_imputed_percentage_women': unmangle_percent,
+                            'var_imputed_percentage_boys': unmangle_percent,
+                            'var_imputed_percentage_girls': unmangle_percent,
+                            'var_imputed_percentage_male': unmangle_percent,
+                            'var_imputed_percentage_child': unmangle_percent,
+                            'var_imputed_mortality': unmangle_percent,
+                            'var_voyage_began': unmangle_date,
+                            'var_slave_purchase_began': unmangle_date,
+                            'var_date_departed_africa': unmangle_date,
+                            'var_first_dis_of_slaves': unmangle_date,
+                            'var_departure_last_place_of_landing': unmangle_date,
+                            'var_voyage_completed': unmangle_date,
+                            'var_tonnage': unmangle_truncate,
+                            'var_tonnage_mod': unmangle_truncate}
+
 
 
 def formatYear(year, month=0):

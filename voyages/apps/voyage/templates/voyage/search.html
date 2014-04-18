@@ -18,23 +18,32 @@
 {% endblock %}
 
 {% block content %}
-
 <form id="form" name="form" method="post" action="{% url 'voyage:search' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
-<table class="query_window">
-<tr>
-<td id="left-menu" class="left-menu-box">
-	{% include "voyage/search_left_menu.html" %}
-</td>
+<!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
+<div id="col_container">
+  <div id="center_column" class="column">
+	<table class="query_window">
+	  <tr>
+		<td id="center-content">
+		  {% block center-content %}
+		  {% include "voyage/search_main_content.html" %}
+		  {% endblock %}
+		</td>
+	  </tr>
+	</table>
+  </div>
+  <div id="left_column" class="column">
+	<td id="left-menu" class="left-menu-box">
+	  {% include "voyage/search_left_menu.html" %}
+	</td>
+  </div>
+</div>
 
-<td id="center-content">
-	{% block center-content %}
-        {% include "voyage/search_main_content.html" %}
-	{% endblock %}
-</td>
 
-</tr>
-</table>
+
+
+
 
 
 </form>

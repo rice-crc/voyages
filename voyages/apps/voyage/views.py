@@ -26,6 +26,8 @@ from xlwt import Workbook
 import urllib
 import unidecode
 from itertools import groupby
+from django.views.decorators.gzip import gzip_page
+from datetime import date
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -187,7 +189,7 @@ def retrieve_post_search_forms(post):
             form.fields['choice_field'].choices = flatChoices
             selected_choices = []
             if form.is_valid():
-                selected_choices = form.cleaned_data['choice_field']
+                selected_choices = [int(i) for i in form.cleaned_data['choice_field']]
             # Get the nested list places again to fill out the selected regions and areas. Needed to get the flat choices and set the choice field to that before form would validate.
             nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
             tmpElem['nested_choices'] = nestedChoices
@@ -197,6 +199,7 @@ def retrieve_post_search_forms(post):
         form_list.append(tmpElem)
     return form_list
 
+# This won't work since some places have the same name
 def get_place_from_ascii(ascii_name, flat_place_list):
     for place in flat_place_list:
         if ascii_name == unidecode.unidecode(place[0]):
@@ -207,7 +210,11 @@ def create_forms_from_var_list(var_list):
     Creates filled out forms based on a var_list
     """
     form_list = []
-    for idx, varname in enumerate(var_list['used_variable_names'].split(';')):
+    vl = var_list.get('used_variable_names', '')
+    vs = []
+    if len(vl) > 0:
+        vs = vl.split(';');
+    for idx, varname in enumerate(vs):
         var = search_var_dict(varname)
         tmpElem = {'var_name': varname,
                    'var_full_name': var['var_full_name']}
@@ -222,6 +229,7 @@ def create_forms_from_var_list(var_list):
         elif varname in globals.list_numeric_fields:
             form = SimpleNumericSearchForm(prefix=varname)
             opt = var_list[varname + '_options']
+            form.fields['options'].initial = opt
             if opt == '1': # Between
                 form.fields['lower_bound'].initial = var_list[varname + '_lower_bound']
                 form.fields['upper_bound'].initial = var_list[varname + '_upper_bound']
@@ -233,7 +241,11 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold'].initial = var_list[varname + '_threshold']
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
+            mdict = dict([(int(choice[0]), choice) for choice in globals.list_months])
+            form.fields['months'].initial = map(lambda x: str(x).zfill(2), var_list[varname + '_months'].split(','))
+            
             opt = var_list[varname + '_options']
+            form.fields['options'].initial = opt
             if opt == '1': # Between
                 form.fields['from_year'].initial = var_list[varname + '_from_year']
                 form.fields['from_month'].initial = var_list[varname + '_from_month']
@@ -249,12 +261,10 @@ def create_forms_from_var_list(var_list):
                 form.fields['threshold_year'].initial = var_list[varname + '_threshold_year']
                 form.fields['threshold_month'].initial = var_list[varname + '_threshold_month']
         elif varname in globals.list_place_fields:
-            nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'])
+            selected_choices = [int(i) for i in var_list[varname + '_choice_field'].split(';')]
             form = SimplePlaceSearchForm(prefix=varname)
-            form.fields['choice_field'].choices = flatChoices
-            tmpElem['nested_choices'] = nestedChoices
-            selected_choices = [get_place_from_ascii(ascii_place, flatChoices) for ascii_place in var_list[varname + '_choice_field'].split(';')]
             nestedChoices, flatChoices = getNestedListPlaces(varname, var['choices'], selected_choices)
+            form.fields['choice_field'].choices = flatChoices
             tmpElem['nested_choices'] = nestedChoices
             tmpElem['selected_choices'] = selected_choices
             form.fields['choice_field'].initial = selected_choices
@@ -281,8 +291,8 @@ def create_var_dict(query_forms, time_frame_form):
     used_variables = []
     # Year Time Frame Search
     if time_frame_form.is_valid():
-        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_from_year'] = time_frame_form.cleaned_data['frame_from_year']
-        var_list['time_span_var_imp_arrival_at_port_of_dis_frame_to_year'] = time_frame_form.cleaned_data['frame_to_year']
+        var_list['time_span_from_year'] = time_frame_form.cleaned_data['frame_from_year']
+        var_list['time_span_to_year'] = time_frame_form.cleaned_data['frame_to_year']
     for qryform in [x for x in query_forms if x['form'].is_valid() and x['form'].is_form_shown()]:
         #qform = next((l for l in query_forms if l['varname'] == search_var), None)
         varname = qryform['var_name']
@@ -297,18 +307,17 @@ def create_var_dict(query_forms, time_frame_form):
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             mangle_method = globals.no_mangle
-            if varname in globals.search_mangle_methods:
-                mangle_method = globals.search_mangle_methods[varname]
             if opt == '1': # Between
-                var_list[varname + '_lower_bound'] = mangle_method(form.cleaned_data['lower_bound'])
-                var_list[varname + '_upper_bound'] = mangle_method(form.cleaned_data['upper_bound'])
+                var_list[varname + '_lower_bound'] = form.cleaned_data['lower_bound']
+                var_list[varname + '_upper_bound'] = form.cleaned_data['upper_bound']
             elif opt == '2': # Less than or equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '3': # Greater than or equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '4': # Equal to
-                var_list[varname + '_threshold'] = mangle_method(form.cleaned_data['threshold'])
+                var_list[varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
+            var_list[varname + '_months'] = ','.join(form.cleaned_data['months'])
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1': # Between
@@ -330,7 +339,8 @@ def create_var_dict(query_forms, time_frame_form):
         elif varname in globals.list_boolean_fields:
             var_list[varname + '_choice_field'] = ';'.join(form.cleaned_data['choice_field'])
 
-    var_list['used_variable_names'] = ';'.join(used_variables)
+    if len(used_variables) > 0:
+        var_list['used_variable_names'] = ';'.join(used_variables)
     #for var in var_list:
     #    var_list[var] = unidecode.unidecode(unicode(var_list[var]))
     
@@ -343,51 +353,76 @@ def create_query_dict(var_list):
     """
     # Creates a query dict based on all the restrictions the user has made
     query_dict = {}
-    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
     # Year Time Frame Search
-    if time_span_name in var_list:
-        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list[time_span_name + '_frame_from_year'],
-                                                               var_list[time_span_name + '_frame_to_year']]
-    for varname in var_list['used_variable_names'].split(';'):
-        if varname in globals.list_text_fields:
-            query_dict[varname + "__contains"] = var_list[varname + '_text_search']
+    #if time_span_name in var_list:
+    if 'time_span_from_year' in var_list and 'time_span_to_year' in var_list:
+        query_dict['var_imp_arrival_at_port_of_dis__range'] = [var_list['time_span_from_year'],
+                                                               var_list['time_span_to_year']]
+    vl = var_list.get('used_variable_names', '')
+    vs = []
+    if len(vl) > 0:
+        vs = vl.split(';');
+    for varname in vs:
+        mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
+        if varname == 'var_sources':
+            query_dict[varname + "__startswith"] = mangle_method(var_list[varname + '_text_search'])
+        elif varname in globals.list_text_fields:
+            query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_select_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
         elif varname in globals.list_numeric_fields:
             opt = var_list[varname + '_options']
             if opt == '1': # Between
-                query_dict[varname + "__range"] = [var_list[varname + '_lower_bound'],
-                                                   var_list[varname + '_upper_bound']]
+                query_dict[varname + "__range"] = [mangle_method(var_list[varname + '_lower_bound']),
+                                                   mangle_method(var_list[varname + '_upper_bound'])]
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = var_list[varname + '_threshold']
+                query_dict[varname + "__lte"] = mangle_method(var_list[varname + '_threshold'])
             elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = var_list[varname + '_threshold']
+                query_dict[varname + "__gte"] = mangle_method(var_list[varname + '_threshold'])
             elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = var_list[varname + '_threshold']
+                query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
         elif varname in globals.list_date_fields:
+            if varname + '_months' in var_list:
+                months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
+                # Only filter by months if not all the months are included
+                if len(months) < 12:
+                    query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
             opt = var_list[varname + '_options']
             if opt == '1': # Between
+                to_date = None
+                if int(var_list[varname + '_to_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
                 query_dict[varname + "__range"] = [
-                    formatDate(var_list[varname + '_from_year'],
-                               var_list[varname + '_from_month']),
-                    formatDate(var_list[varname + '_to_year'],
-                               var_list[varname + '_to_month'])]
+                    formatDate(mangle_method(var_list[varname + '_from_year']),
+                               mangle_method(var_list[varname + '_from_month'])),
+                    to_date]
             elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
+                to_date = None
+                if int(var_list[varname + '_threshold_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
+                query_dict[varname + "__lte"] = to_date
             elif opt == '3': # Greater than or equal to
                 query_dict[varname + "__gte"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
-            elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = \
-                    formatDate(var_list[varname + '_threshold_year'],
-                               var_list[varname + '_theshold_month'])
+                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                               mangle_method(var_list[varname + '_threshold_month']))
+            elif opt == '4': # In
+                to_date = None
+                if int(var_list[varname + '_threshold_month']) == 12:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
+                else:
+                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
+                query_dict[varname + "__range"] = [
+                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                               mangle_method(var_list[varname + '_threshold_month'])),
+                    to_date]
         elif varname in globals.list_place_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
         elif varname in globals.list_boolean_fields:
-            query_dict[varname + "__in"] = var_list[varname + '_choice_field'].split(';')
+            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
     return query_dict
 
 def create_var_list_from_url(get):
@@ -400,21 +435,73 @@ def create_var_list_from_url(get):
     return var_list
 
 # Takes a var list and then gives tuples of strings that describe the query in a nice way
+# Used for formatting the display of previous_queries
 def prettify_var_list(varlist):
     output = []
     qdict = create_query_dict(varlist)
-    time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
-    if (time_span_name + "_frame_from_year") in varlist and (time_span_name + "_frame_to_year") in varlist:
-        output.append(('Time frame:', str(varlist[time_span_name + "_frame_from_year"]) + " - " + str(varlist[time_span_name + "_frame_to_year"])))
+    # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
+    if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
+        output.append(('Time frame:', unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
-        fullname = varname
-        value = str(vvar)
+        is_real_var = False
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
+                is_real_var = True
                 break
-        output.append((fullname + ":", value))
+        if not is_real_var:
+            # it is a month variable
+            varn = varname[:-7]
+            for var in globals.var_dict:
+                if varn == var['var_name']:
+                    fullname = var['var_full_name']
+                    break
+            month_dict = {}
+            for monnum, monval in globals.list_months:
+                month_dict[int(monnum)] = monval
+            output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
+            continue
+        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
+        tvar = unmangle_method(vvar)
+        value = unicode(tvar)
+        if isinstance(tvar, (list, tuple)):
+            value = unicode(u', '.join(map(unicode, tvar)))
+        prefix = ''
+        if (varname + '_options') in varlist:
+            opt = varlist[varname + '_options']
+            if opt == '1' and len(vvar) >= 2:
+                tod = None
+                if vvar[1].month == 1:
+                    tod = date(vvar[1].year - 1, 12, vvar[1].day)
+                else:
+                    tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
+                value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
+            elif opt == '4':
+                if isinstance(vvar, (list, tuple)):
+                    value = 'in ' + unicode(unmangle_method(vvar[0]))
+                else:
+                    value = 'equal to ' + unicode(tvar)
+            elif isinstance(vvar, (list, tuple)):
+                continue
+            elif opt == '2':
+                if varname in globals.list_date_fields:
+                    tod = None
+                    if vvar.month == 1:
+                        tod = date(vvar.year - 1, 12, vvar.day)
+                    else:
+                        tod = date(vvar.year, vvar.month - 1, vvar.day)
+                    value = 'before ' + unicode(unmangle_method(tod))
+                else:
+                    value = 'at most ' + unicode(tvar)
+            elif opt == '3':
+                if varname in globals.list_date_fields:
+                    value = 'after ' + unicode(tvar)
+                else:
+                    value = 'at least ' + unicode(tvar)
+        # Prevent display of 'Year arrived with slaves*' when it is just the time frame
+        if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
+            output.append((fullname + ":", (prefix + value)))
     return output
 
 def voyage_map(request, voyage_id):
@@ -456,7 +543,8 @@ def voyage_variables(request, voyage_id):
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:
-                val = unicode(voyagevariables[j['var_name']])
+                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.no_mangle)
+                val = unicode(mangle_method(voyagevariables[j['var_name']]))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
                 allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
@@ -469,6 +557,7 @@ def voyage_variables(request, voyage_id):
                    'tab': 'variables',
                    'voyage_id': voyage_id})
 
+@gzip_page
 def search(request):
     """
     Handles the Search the Database part
@@ -490,6 +579,7 @@ def search(request):
     basic_list_contracted = False
     previous_queries = {}
     collabels = []
+    prev_queries_open = False
     row_list = []
     table_stats_form = None
     col_totals = []
@@ -504,17 +594,39 @@ def search(request):
 
     submitVal = request.POST.get('submitVal')
 
-#    if submitVal == 'get_voyage_details':
-#        voyagenum = int(request.POST.get('voyage_detail_num'))
-    if ((request.method == "GET" and 'used_variable_names' in request.GET) or submitVal == 'restore_prev_query'):
+    if 'submit_val' in request.GET:
+        submitVal = request.GET['submit_val']
+
+    # If session has expired (no search activity for the last globals.session_expire_minutes time) then clear the previous queries
+    old_time = request.session.get('last_access_time', 0.0)
+    if old_time < (time.time() - (globals.session_expire_minutes * 60.0)):
+        #request.session.clear()
+        request.session['previous_queries'] = []
+
+    request.session['last_access_time'] = time.time()
+
+    # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
+    # then that means that it is a query url and we should get the query from it.
+    # or if it is restore_prev_query, then restore it from the session.
+    if ((request.method == "GET"
+         and ('used_variable_names' in request.GET
+              or ('time_span_from_year' in request.GET
+                  and 'time_span_to_year' in request.GET)))
+        or submitVal == 'restore_prev_query'):
         # Search parameters were specified in the url
         var_list = {}
+        results_per_page_form = ResultsPerPageOptionForm()
         if submitVal == 'restore_prev_query':
-            qnum = int(request.POST.get('prev_query_num'))
-            qprev = request.session['previous_queries']
+            qnum = int(request.POST.get('prev_query_num', request.GET.get('prev_query_num')))
+            if 'prev_query_num' in request.GET:
+                current_page = request.session.get('current_page', 0)
+                results_per_page_form.fields['option'].initial = request.session.get('results_per_page_choice', '1')
+                results_per_page = dict(results_per_page_form.fields['option'].choices)[request.session.get('results_per_page_choice', '1')]
+            qprev = request.session.get('previous_queries', [])
             var_list = qprev[qnum]
             qprev.remove(qprev[qnum])
             request.session['previous_queries'] = qprev
+            prev_queries_open = True
         else:
             var_list = create_var_list_from_url(request.GET)
         if 'previous_queries' not in request.session:
@@ -531,11 +643,11 @@ def search(request):
             form_list.append(form)
         for idx in sorted(to_remove_numbers, reverse=True):
             del form_list[idx]
-        time_span_name = 'time_span_var_imp_arrival_at_port_of_dis'
-        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list[time_span_name + '_frame_from_year'],
-                                                           'frame_to_year': var_list[time_span_name + '_frame_to_year']})
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list['time_span_from_year'],
+                                                           'frame_to_year': var_list['time_span_to_year']})
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
+        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
@@ -553,6 +665,7 @@ def search(request):
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
+            request.session['results_per_page_choice'] = results_per_page_form.cleaned_data['option']
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
@@ -566,7 +679,8 @@ def search(request):
         if 'previous_queries' not in request.session:
             request.session['previous_queries'] = []
         if submitVal != 'delete_prev_query':
-            request.session['previous_queries'] = [var_list] + request.session['previous_queries']
+            if len(request.session['previous_queries']) < 1 or not request.session['previous_queries'][0] == var_list:
+                request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
@@ -679,6 +793,7 @@ def search(request):
             prevqs = request.session['previous_queries']
             prevqs.remove(prevqs[prev_query_num])
             request.session['previous_queries'] = prevqs
+            prev_queries_open = True
             
     if len(results) == 0:
         no_result = True
@@ -686,6 +801,7 @@ def search(request):
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(int(current_page))
+    request.session['current_page'] = current_page
     # Prepare paginator ranges
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
     # Customize result page
@@ -695,6 +811,8 @@ def search(request):
     # Set up the initial column of display
     if not 'result_columns' in request.session:
         request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
+    if len(request.session.get('previous_queries', [])) > 10:
+        request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(pagins, globals.display_methods)
@@ -720,6 +838,7 @@ def search(request):
                    'result_display': result_display,
                    'basic_list_contracted': basic_list_contracted,
                    'previous_queries': previous_queries,
+                   'prev_queries_open': prev_queries_open,
                    'col_labels_list': collabels,
                    'row_list': row_list,
                    'table_stats_form': table_stats_form,
@@ -760,31 +879,38 @@ def getChoices(varname):
         for nation in Nationality.objects.all():
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
-            choices.append((nation.label, nation.label))
+            choices.append((nation.value, nation.label))
     elif varname in ['var_imputed_nationality']:
         for nation in Nationality.objects.all():
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
-                choices.append((nation.label, nation.label))
+                choices.append((nation.value, nation.label))
     elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_slaves']:
         for outcome in SlavesOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname in ['var_outcome_ship_captured']:
         for outcome in VesselCapturedOutcome.objects.all():
-            choices.append((outcome.label, outcome.label))
+            choices.append((outcome.value, outcome.label))
     elif varname == 'var_rig_of_vessel':
         for rig in RigOfVessel.objects.all():
-            choices.append((rig.label, rig.label))
+            choices.append((rig.value, rig.label))
     return choices
+
+def putOtherLast(lst):
+    others = filter(lambda x: 'other' in x['text'].lower() or 'unspecified' in x['text'].lower() or '???' in x['text'], lst)
+    for rem in others:
+        lst.remove(rem)
+        lst.append(rem)
+    return lst
 
 def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
     """
@@ -795,6 +921,8 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
     nestedChoices = []
     flatChoices = []
 
+    select = [int(i) for i in selected_places]
+
     for area, regs in nested_places.items():
         area_content = []
         is_area_selected = True
@@ -802,23 +930,30 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
             reg_content = []
             is_selected = True
             for place in places:
-                if place.place not in selected_places:
+                if place.value not in select:
                     is_selected = False
                     is_area_selected = False
-                if place.place == "???":
-                    continue
-                # I don't think I need the selected logic here, but double check
+                    # Why did I have this here?
+#                if place.place == "???":
+#                    continue
+                # Selected does not need to be part of this, since the form dict will have a list of places selected that the template checks
                 reg_content.append({'id': 'id_' + varname + '_2_' + str(place.pk),
-                                    'text': place.place})
-                flatChoices.append((place.place, place.place))
+                                    'text': place.place,
+                                    'value': place.value})
+                flatChoices.append((place.value, place.place))
+            reg_content = putOtherLast(reg_content)
             area_content.append({'id': 'id_' + varname + '_1_' + str(reg.pk),
                                  'text': reg.region,
                                  'choices': reg_content,
-                                 'is_selected': is_selected})
+                                 'is_selected': is_selected,
+                                 'value': reg.value})
+        area_content = putOtherLast(area_content)
         nestedChoices.append({'id': 'id_' + varname + '_0_' + str(area.pk),
                               'text': area.broad_region,
                               'choices': area_content,
-                              'is_selected': is_area_selected})
+                              'is_selected': is_area_selected,
+                              'value': area.value})
+    nestedChoices = putOtherLast(nestedChoices)
     
     # Check if visible parameters have been passed, if so filter
     return nestedChoices, flatChoices
@@ -1008,7 +1143,10 @@ def formatDate(year, month):
     :param month:
     :return:
     """
-    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
+    if month == "":
+        month = 1
+    return date(int(year), int(month), 1)
+    #return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
 
 def get_new_visible_attrs(list_column_varnames):
@@ -1320,7 +1458,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     wb = Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
     #TODO: add query to download
-    if len(var_list['used_variable_names']) > 0:
+    if len(var_list.get('used_variable_names', [])) > 0:
         ws.write(0,0,label=extract_query_for_download(query_dict, []))
     else:
         ws.write(0,0,label='All Records')

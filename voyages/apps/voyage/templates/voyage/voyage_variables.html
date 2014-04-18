@@ -5,7 +5,7 @@
     <tbody>
       {% for lblmain, lbllabel, lbldata in voyage_variables %}
         <tr>
-	  {% if lblmain.0 %}
+	  {% if None != lblmain.0 %}
 	    <td class="detail-label-main" rowspan="{{ lblmain.0 }}">{{ lblmain.1 }}</td>
 	  {% endif %}
 	  <td class="detail-label">{{ lbllabel }}</td>
