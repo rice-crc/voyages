@@ -427,6 +427,7 @@
     <field name="var_third_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_place_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_region_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+	<field name="var_imp_principal_broad_region_disembark_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 	
   </fields>
 

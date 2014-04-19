@@ -164,6 +164,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_principal_region_slave_dis_idnum = indexes.IntegerField(null=True)
     var_region_voyage_ended_idnum = indexes.IntegerField(null=True)
 
+    # Broad Region variables
+    
+    var_imp_principal_broad_region_disembark_idnum = indexes.IntegerField(null=True)
+
     # Voyage captain and crew
     var_captain = indexes.NgramField(null=True)
     var_crew_voyage_outset = indexes.IntegerField(null=True)
