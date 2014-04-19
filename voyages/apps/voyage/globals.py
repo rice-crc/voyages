@@ -330,11 +330,11 @@ table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'v
               ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.value), 0,),
               ('Region where voyage began', make_regions_filter('var_imp_region_voyage_begin'), 1,),
               ('Port where voyage began', make_places_filter('var_imp_port_voyage_begin'), 2,),
-              ('Embarkation Regions', make_regions_filter('var_imp_region_embark'), 1,),
-              ('Embarkation Ports', make_places_filter('var_imp_port_embark'), 2,),
-              ('Specific regions of disembarkation', make_regions_filter('var_imp_region_disembark'), 1,),
-              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_disembark_idnum__exact', lambda x: x.value), 0,),
-              ('Disembarkation Ports', make_places_filter('var_imp_port_disembark_specific'), 2,),
+              ('Embarkation Regions', make_regions_filter('var_imp_principal_region_of_slave_purchase'), 1,),
+              ('Embarkation Ports', make_places_filter('var_imp_principal_place_of_slave_purchase'), 2,),
+              ('Specific regions of disembarkation', make_regions_filter('var_imp_principal_region_slave_dis'), 1,),
+              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.value), 0,),
+              ('Disembarkation Ports', make_places_filter('var_imp_principal_port_slave_dis'), 2,),
               ('Individual Years', get_incremented_year_tuples(1), 0,),
               ('5-year periods', get_incremented_year_tuples(5), 0,),
               ('10-year periods', get_incremented_year_tuples(10), 0,),
@@ -346,11 +346,11 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
                  get_each_from_table_col('Broad region where voyage began', models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.value),
                  make_regions_col_filter('Region where voyage began', 'var_imp_region_voyage_begin'),
                  make_places_col_filter('Port where voyage began', 'var_imp_port_voyage_begin'),
-                 make_regions_col_filter('Embarkation Regions', 'var_imp_region_embark'),
-                 make_places_col_filter('Embarkation Ports', 'var_imp_port_embark'),
-                 make_regions_col_filter('Specific regions of disembarkation', 'var_imp_region_disembark'),
-                 get_each_from_table_col('Broad regions of disembarkation', models.BroadRegion, 'var_imp_broad_region_disembark_idnum__exact', lambda x: x.value),
-                 make_places_col_filter('Disembarkation Ports', 'var_imp_port_disembark_specific'),]
+                 make_regions_col_filter('Embarkation Regions', 'var_imp_principal_region_of_slave_purchase'),
+                 make_places_col_filter('Embarkation Ports', 'var_imp_principal_place_of_slave_purchase'),
+                 make_regions_col_filter('Specific regions of disembarkation', 'var_imp_principal_region_slave_dis'),
+                 get_each_from_table_col('Broad regions of disembarkation', models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.value),
+                 make_places_col_filter('Disembarkation Ports', 'var_imp_principal_port_slave_dis'),]
 # Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
@@ -386,33 +386,41 @@ def make_col_tot_percent_fun(varname):
             return None
     return col_tot_fun
 
+# Makes a function that counts how many of the voyages have that particular value defined
+def make_num_fun(varname):
+    def num_fun(queryset, rowset, colset):
+        return len([None for i in queryset.all() if varname in i.get_stored_fields()])
+    return num_fun
+
 # List of tuples that define a function for a cell value (label, mapping function)
 table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
                    ('Sum of embarked slaves', make_sum_fun('var_imp_total_num_slaves_purchased'),),
                    ('Average number of embarked slaves', make_avg_fun('var_imp_total_num_slaves_purchased'),),
-                   ('Number of voyages - embarked slaves', None,),
+                   ('Number of voyages - embarked slaves', make_num_fun('var_imp_total_num_slaves_purchased'),),
                    ('Percent of embarked slaves (row total)', make_row_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
                    ('Percent of embarked slaves (column total)', make_col_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
                    ('Sum of disembarked slaves', make_sum_fun('var_imp_total_slaves_disembarked'),),
                    ('Average number of disembarked slaves', make_avg_fun('var_imp_total_slaves_disembarked'),),
-                   ('Number of voyages - disembarked slaves', None),
+                   ('Number of voyages - disembarked slaves', make_num_fun('var_imp_total_slaves_disembarked')),
                    ('Percent of disembarked slaves (row total)', make_row_tot_percent_fun('var_imp_total_slaves_disembarked'),),
                    ('Percent of disembarked slaves (column total)', make_col_tot_percent_fun('var_imp_total_slaves_disembarked'),),
                    ('Sum of embarked/disembarked slaves', None),
                    ('Average number of embarked/disembarked slaves', None),
                    ('Number of voyages - embarked/disembarked slaves', None),
-                   ('Average percentage male', None),
-                   ('Number of voyages - percentage male', None),
-                   ('Average percentage children', None),
-                   ('Number of voyages - percentage children', None),
-                   ('Average percentage of slaves embarked who died during voyage', None),
-                   ('Number of voyages - percentage of slaves embarked who died during voyage', None),
+                   ('Average percentage male', make_avg_fun('var_imputed_percentage_male')),
+                   ('Number of voyages - percentage male', make_num_fun('var_imputed_percentage_male')),
+                   ('Average percentage children', make_avg_fun('var_imputed_percentage_child')),
+                   ('Number of voyages - percentage children', make_num_fun('var_imputed_percentage_child')),
+                   ('Average percentage of slaves embarked who died during voyage', make_avg_fun('var_imputed_mortality')),
+                   ('Number of voyages - percentage of slaves embarked who died during voyage', make_num_fun('var_imputed_mortality')),
                    ('Average middle passage (days)', make_avg_fun('var_length_middle_passage_days'),),
-                   ('Number of voyages - middle passage (days)', None),
+                   ('Number of voyages - middle passage (days)', make_num_fun('var_length_middle_passage_days')),
                    ('Average standarized tonnage', make_avg_fun('var_tonnage_mod'),),
-                   ('Number of voyages - standarized tonnage', None),
-                   ('Sterling cash price in Jamaica', None),
-                   ('Number of voyages - sterling cash price in Jamaica', None),]
+                   ('Number of voyages - standarized tonnage', make_num_fun('var_tonnage_mod')),
+                   ('Sterling cash price in Jamaica', make_avg_fun('var_imputed_sterling_cash')),
+                   ('Number of voyages - sterling cash price in Jamaica', make_num_fun('var_imputed_sterling_cash')),]
+
+
 
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
