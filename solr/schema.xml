@@ -405,6 +405,8 @@
     <field name="var_first_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_first_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_first_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_third_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_imputed_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_resistance_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_third_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />

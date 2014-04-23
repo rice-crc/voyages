@@ -450,7 +450,12 @@ def prettify_var_list(varlist):
                 fullname = var['var_full_name']
                 is_real_var = True
                 break
+            elif varname[-6:] == '_idnum' and varname[:-6] == var['var_name']:
+                fullname = var['var_full_name']
+                is_real_var = True
+                break
         if not is_real_var:
+            print("Not real " + varname)
             # it is a month variable
             varn = varname[:-7]
             for var in globals.var_dict:
@@ -461,6 +466,7 @@ def prettify_var_list(varlist):
             for monnum, monval in globals.list_months:
                 month_dict[int(monnum)] = monval
             output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
+            print("month " + varname)
             continue
         unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
@@ -471,12 +477,17 @@ def prettify_var_list(varlist):
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
-                tod = None
-                if vvar[1].month == 1:
-                    tod = date(vvar[1].year - 1, 12, vvar[1].day)
+                if varname == 'var_imp_arrival_at_port_of_dis':
+                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
+                elif varname in globals.list_date_fields:
+                    tod = None
+                    if vvar[1].month == 1:
+                        tod = date(vvar[1].year - 1, 12, vvar[1].day)
+                    else:
+                        tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
+                    value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
                 else:
-                    tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
-                value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
+                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
                     value = 'in ' + unicode(unmangle_method(vvar[0]))
@@ -485,7 +496,9 @@ def prettify_var_list(varlist):
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
-                if varname in globals.list_date_fields:
+                if varname == 'var_imp_arrival_at_port_of_dis':
+                    value = 'before ' + unicode(tvar)
+                elif varname in globals.list_date_fields:
                     tod = None
                     if vvar.month == 1:
                         tod = date(vvar.year - 1, 12, vvar.day)
@@ -495,7 +508,9 @@ def prettify_var_list(varlist):
                 else:
                     value = 'at most ' + unicode(tvar)
             elif opt == '3':
-                if varname in globals.list_date_fields:
+                if varname == 'var_imp_arrival_at_port_of_dis':
+                    value = 'after ' + unicode(tvar)
+                elif varname in globals.list_date_fields:
                     value = 'after ' + unicode(tvar)
                 else:
                     value = 'at least ' + unicode(tvar)
