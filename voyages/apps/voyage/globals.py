@@ -118,6 +118,42 @@ def unmangle_truncate(value, voyageid=None):
 def no_mangle(value, voyageid=None):
     return value
 
+# Unmangle methods for select variables, since now the selections are stored as the numeric ids,
+# in previous queries it needs to be converted back to the string representing the place.
+# This will perform a lot of db queries, so all option tables should probably be stored into a dict on startup/every so often
+def unmangle_place(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_place, value)
+    return unicode(models.Place.objects.get(value=int(value)).place)
+def unmangle_nationality(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_nationality, value)
+    return unicode(models.Nationality.objects.get(value=int(value)).label)
+def unmangle_rig(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_rig, value)
+    return unicode(models.RigOfVessel.objects.get(value=int(value)).label)
+def unmangle_outcome_particular(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_outcome_particular, value)
+    return unicode(models.ParticularOutcome.objects.get(value=int(value)).label)
+def unmangle_outcome_slaves(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_outcome_slaves, value)
+    return unicode(models.SlavesOutcome.objects.get(value=int(value)).label)
+def unmangle_outcome_owner(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_outcome_owner, value)
+    return unicode(models.OwnerOutcome.objects.get(value=int(value)).label)
+def unmangle_outcome_ship(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_outcome_ship, value)
+    return unicode(models.VesselCapturedOutcome.objects.get(value=int(value)).label)
+def unmangle_resistance(value, voyageid=None):
+    if isinstance(value, (list, tuple)):
+        return map(unmangle_resistance, value)
+    return unicode(models.Resistance.objects.get(value=int(value)).label)
+
 # Run against solr field values when displaying in results table
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
@@ -179,7 +215,29 @@ parameter_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                               'var_departure_last_place_of_landing': unmangle_datem,
                               'var_voyage_completed': unmangle_datem,
                               'var_tonnage': unmangle_truncate,
-                              'var_tonnage_mod': unmangle_truncate}
+                              'var_tonnage_mod': unmangle_truncate,
+                              'var_nationality_idnum': unmangle_nationality,
+                              'var_imputed_nationality_idnum': unmangle_nationality,
+                              'var_rig_of_vessel_idnum': unmangle_rig,
+                              'var_vessel_construction_place_idnum': unmangle_place,
+                              'var_registered_place_idnum': unmangle_place,
+                              'var_imp_port_voyage_begin_idnum': unmangle_place,
+                              'var_first_place_slave_purchase_idnum': unmangle_place,
+                              'var_second_place_slave_purchase_idnum': unmangle_place,
+                              'var_third_place_slave_purchase_idnum': unmangle_place,
+                              'var_imp_principal_place_of_slave_purchase_idnum': unmangle_place,
+                              'var_port_of_call_before_atl_crossing_idnum': unmangle_place,
+                              'var_first_landing_place_idnum': unmangle_place,
+                              'var_second_landing_place_idnum': unmangle_place,
+                              'var_third_landing_place_idnum': unmangle_place,
+                              'var_imp_principal_port_slave_dis_idnum': unmangle_place,
+                              'var_place_voyage_ended_idnum': unmangle_place,
+                              'var_outcome_voyage_idnum': unmangle_outcome_particular,
+                              'var_outcome_slaves_idnum': unmangle_outcome_slaves,
+                              'var_outcome_ship_captured_idnum': unmangle_outcome_ship,
+                              'var_outcome_owner_idnum': unmangle_outcome_owner,
+                              'var_resistance_idnum': unmangle_resistance,
+                              }
 # Run against solr field values when displaying values for a single voyage
 display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_women': unmangle_percent,
