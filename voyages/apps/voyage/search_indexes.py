@@ -134,6 +134,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_imp_principal_place_of_slave_purchase_idnum = indexes.IntegerField(null=True)
     var_port_of_call_before_atl_crossing_idnum = indexes.IntegerField(null=True)
     var_first_landing_place_idnum = indexes.IntegerField(null=True)
+    var_second_landing_place_idnum = indexes.IntegerField(null=True)
+    var_third_landing_place_idnum = indexes.IntegerField(null=True)
     var_imp_principal_port_slave_dis_idnum = indexes.IntegerField(null=True)
     var_place_voyage_ended_idnum = indexes.IntegerField(null=True)
 
