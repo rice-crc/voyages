@@ -455,7 +455,6 @@ def prettify_var_list(varlist):
                 is_real_var = True
                 break
         if not is_real_var:
-            print("Not real " + varname)
             # it is a month variable
             varn = varname[:-7]
             for var in globals.var_dict:
@@ -466,7 +465,6 @@ def prettify_var_list(varlist):
             for monnum, monval in globals.list_months:
                 month_dict[int(monnum)] = monval
             output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
-            print("month " + varname)
             continue
         unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
@@ -593,8 +591,16 @@ def search(request):
     results_per_page = 10
     basic_list_contracted = False
     previous_queries = {}
+    collabels = []
     prev_queries_open = False
-    
+    row_list = []
+    table_stats_form = None
+    col_totals = []
+    extra_cols = 0
+    num_col_labels_before = 1
+    num_col_labels_total = 1
+    num_row_labels = 1
+    is_double_fun = False
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -693,7 +699,6 @@ def search(request):
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
-
         
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -711,7 +716,117 @@ def search(request):
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
         elif submitVal == 'tab_tables':
+            # row_cell_values is what is displayed in the cells in the table, it is a list of triples which contain the row_label, the cell values, then the row total
+            # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port). Typically these will just be a list of lists with one entry that is the label tuple for that row/
+            # column labels is similar, but it is a list of column label lists, and will typically be a list of one element that is a list of the column label tuples
+            #  entries in the rowlabels/collabels matrix are tuples that contain the label and then the row/column span of that cell. Most of the time the row/column span will just be 1.
             tab = 'tables'
+            pst = {x: y for x,y in request.POST.items()}
+            # Force the initial value
+            if 'columns' not in pst:
+                pst['columns'] = '1'
+            if 'cells' not in request.POST:
+                pst['cells'] = '1'
+            if 'rows' not in request.POST:
+                pst['rows'] = '12'
+            table_stats_form = TableSelectionForm(pst)
+            table_row_query_def = globals.table_rows[12]
+            table_col_query_def = globals.table_columns[1]
+            display_function = globals.table_functions[1][1]
+            display_fun_name = globals.table_functions[1][0]
+            omit_empty = False
+            if table_stats_form.is_valid():
+                table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
+                table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
+                display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
+                display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
+                omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
+            extra_cols = table_row_query_def[2]
+            cell_values = []
+            used_col_query_sets = []
+            collabels = [[j for j in i] for i in table_col_query_def[2]]
+            num_col_labels_total = len(collabels)
+            num_row_labels = extra_cols + 1
+            remove_cols = []
+            if display_fun_name in globals.double_functions:
+                is_double_fun = True
+
+            for idx, colquery in enumerate(table_col_query_def[1]):
+                colqueryset = results.filter(**colquery)
+                if omit_empty and colqueryset.count() == 0:
+                    # Find column label that matches, then find the parent labels that match
+                    # Generate the list of subcolumns for the parent column label
+                    remove_cols.insert(0, idx)
+                else:
+                    if is_double_fun:
+                        display_col_total = display_function(colqueryset, None, colqueryset, results)
+                        col_totals.append(display_col_total[0])
+                        col_totals.append(display_col_total[1])
+                    else:
+                        col_totals.append(display_function(colqueryset, None, colqueryset, results))
+                    used_col_query_sets.append((colquery, colqueryset))
+            for col in remove_cols:
+                for idt, collbllist in enumerate(collabels):
+                    idy=0
+                    for idc, colstuff in enumerate(collbllist):
+                        if col >= idy and col < idy + colstuff[1]:
+                            collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
+                        idy += colstuff[1]
+            remove_rows = []
+            if is_double_fun:
+                collabels = [[(j, k*2) for j, k in i] for i in collabels]
+                lastcol = []
+                for i in collabels[-1]:
+                    lastcol.append(('Embarked', i[1]/2))
+                    lastcol.append(('Disembarked', i[1]/2))
+                collabels.append(lastcol)
+            num_col_labels_before = len(collabels)
+            for idx, rowstuff in enumerate(table_row_query_def[1]):
+                rowlabels = rowstuff[0]
+                rowquery = rowstuff[1]
+                rowqueryset = results.filter(**rowquery)
+                if omit_empty and rowqueryset.count() == 0:
+                    remove_rows.insert(0, idx)
+                row_cell_values = []
+                for colquery, colqueryset in used_col_query_sets:
+                    cell_queryset = rowqueryset
+                    if rowqueryset.count() > 0:
+                        cell_queryset = rowqueryset.filter(**colquery)
+                    if is_double_fun:
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        row_cell_values.append(display_result[0])
+                        row_cell_values.append(display_result[1])
+                    else:
+                        row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset, results))
+                cell_values.append(row_cell_values)
+                row_total = display_function(rowqueryset, rowqueryset, None, results)
+                row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
+                #cell_displays.append((rowlbl, row_cell_displays, row_total))
+            for rownum in remove_rows:
+                row_counters = [0,0,0]
+                count1 = 0
+                count2 = 0
+                row_list[rownum] = ([(i[0], i[1] - 1) for i in row_list[rownum][0]], row_list[rownum][1], row_list[rownum][2])
+                # Now find the rows with the headers for it and reduce those header counts by 1
+                for idx, rl in enumerate(row_list):
+                    rowlbl = [i for i in rl[0]]
+                    for idy, i in enumerate(rowlbl):
+                        # Don't handle the case for the rownum, since that has already been decremented
+                        if idx < rownum and idx + i[1] > rownum:
+                            row_list[idx][0][idy] = (row_list[idx][0][idy][0], row_list[idx][0][idy][1] - 1)
+                # Now handle the case when this row we are removing has headers of its own
+                rowlbl = [i for i in row_list[rownum][0]]
+                rowlbl.reverse()
+                for lbl, num in rowlbl:
+                    if num > 0:
+                        row_list[rownum+1][0].insert(0, (lbl, num))
+                row_list.pop(rownum)
+            if is_double_fun:
+                grand_total_value = display_function(results, None, None, results)
+                col_totals.append(grand_total_value[0])
+                col_totals.append(grand_total_value[1])
+            else:
+                col_totals.append(display_function(results, None, None, results))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
@@ -774,7 +889,16 @@ def search(request):
                    'result_display': result_display,
                    'basic_list_contracted': basic_list_contracted,
                    'previous_queries': previous_queries,
-                   'prev_queries_open': prev_queries_open})
+                   'prev_queries_open': prev_queries_open,
+                   'col_labels_list': collabels,
+                   'row_list': row_list,
+                   'table_stats_form': table_stats_form,
+                   'col_totals': col_totals,
+                   'extra_cols': range(extra_cols),
+                   'num_col_labels_before': num_col_labels_before, 
+                   'num_col_labels_total': num_col_labels_total, 
+                   'num_row_labels': num_row_labels,
+                   'is_double_fun': is_double_fun,})
 
 def prettify_results(results, lookup_table):
     """
@@ -1028,11 +1152,12 @@ def perform_search(query_dict, date_filters):
     :return:
     """
     # Initially sort by voyage_id
+    # TODO: change this to have Voyage before filter
     results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
     # Date filters
     return date_filter_query(date_filters, results)
 
-
+# TODO: remove this function
 def date_filter_query(date_filters, results):
     """
     Further filter the results passed in by excluding those that have months in date_filtered list (deselected)

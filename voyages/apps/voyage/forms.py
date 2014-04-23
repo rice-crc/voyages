@@ -215,3 +215,17 @@ class ResultsPerPageOptionForm(forms.Form):
             option_value = '1'
 
         return dict(self.fields['option'].choices)[option_value]
+
+class TableSelectionForm(forms.Form):
+    lmbd = lambda x: (str(x[0]), x[1][0])
+    rowchoices = map(lmbd, enumerate(globals.table_rows))
+    rows = forms.ChoiceField(label='Rows', choices=rowchoices, initial=[rowchoices[12][1]])#globals.table_rows[12])
+    rows.initial = [rowchoices[12][0]]
+    colchoices = map(lmbd, enumerate(globals.table_columns))
+    columns = forms.ChoiceField(label='Columns', choices=colchoices, initial=[colchoices[1][1]])#globals.table_columns[1])
+    columns.initial = [colchoices[1][0]]
+    cellchoices = map(lmbd, enumerate(globals.table_functions))
+    cells = forms.ChoiceField(label='Cells', choices=cellchoices, initial=[cellchoices[1][1]])#globals.table_functions[1])
+    cells.initial = [cellchoices[1][0]]
+    omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=False)
+    

@@ -47,6 +47,17 @@ class UrlShortenerTest(TestCase):
         long_url = '---adsfasdfafdjgkdf.&^*&5hgvkaadsadsfhgkjfm.com'
         short_url = shorten_url(long_url)
         self.assertEqual(short_url, long_url, "When url is invalid, shorten_url should return the long_url")
+class ReportingTest(TestCase):
+    """
+    Tests some functions used for reporting purposes
+    """
+    def test_incremented_year_tuples(self):
+        list25 = [(1501, 1525), (1526, 1550), (1551, 1575), (1576, 1600),
+                  (1601, 1625), (1626, 1650), (1651, 1675), (1676, 1700),
+                  (1701, 1725), (1726, 1750), (1751, 1775), (1776, 1800),
+                  (1801, 1825), (1826, 1850), (1851, 1875)]
+        flist25 = map(lambda x: (str(x[0]) + '-' + str(x[1]), {'var_imp_voyage_began__range': [x[0], x[1]]}), list25)
+        self.assertEqual(globals.get_incremented_year_tuples(25, 1514, 1866), flist25)
 @override_settings(LANGUAGE_CODE='en')
 class SearchTest(TestCase):
     """
