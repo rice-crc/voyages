@@ -59,14 +59,14 @@
 	  {% endfor %}
 	  {% if is_double_fun %}
 	    <th class="grid-header-text">
-	      <b> {{ row_tuple.2.0 }} </b>
+	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0 }} {% endif %} </b>
 	    </th>
 	    <th class="grid-header-text">
-	      <b> {{ row_tuple.2.1 }} </b>
+	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1 }} {% endif %} </b>
 	    </th>
 	  {% else %}
 	    <th class="grid-header-text">
-	      <b> {{ row_tuple.2 }} </b>
+	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2 }} {% endif %} </b>
 	    </th>
 	  {% endif %}
       {% endfor %}

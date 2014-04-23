@@ -455,7 +455,6 @@ def prettify_var_list(varlist):
                 is_real_var = True
                 break
         if not is_real_var:
-            print("Not real " + varname)
             # it is a month variable
             varn = varname[:-7]
             for var in globals.var_dict:
@@ -466,7 +465,6 @@ def prettify_var_list(varlist):
             for monnum, monval in globals.list_months:
                 month_dict[int(monnum)] = monval
             output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
-            print("month " + varname)
             continue
         unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
         tvar = unmangle_method(vvar)
@@ -723,11 +721,19 @@ def search(request):
             # column labels is similar, but it is a list of column label lists, and will typically be a list of one element that is a list of the column label tuples
             #  entries in the rowlabels/collabels matrix are tuples that contain the label and then the row/column span of that cell. Most of the time the row/column span will just be 1.
             tab = 'tables'
-            table_stats_form = TableSelectionForm(request.POST)
-            table_row_query_def = globals.table_rows[0]
-            table_col_query_def = globals.table_columns[0]
-            display_function = globals.table_functions[0][1]
-            display_fun_name = globals.table_functions[0][0]
+            pst = {x: y for x,y in request.POST.items()}
+            # Force the initial value
+            if 'columns' not in pst:
+                pst['columns'] = '1'
+            if 'cells' not in request.POST:
+                pst['cells'] = '1'
+            if 'rows' not in request.POST:
+                pst['rows'] = '12'
+            table_stats_form = TableSelectionForm(pst)
+            table_row_query_def = globals.table_rows[12]
+            table_col_query_def = globals.table_columns[1]
+            display_function = globals.table_functions[1][1]
+            display_fun_name = globals.table_functions[1][0]
             omit_empty = False
             if table_stats_form.is_valid():
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
@@ -771,8 +777,8 @@ def search(request):
                 collabels = [[(j, k*2) for j, k in i] for i in collabels]
                 lastcol = []
                 for i in collabels[-1]:
-                    lastcol.append(('Embarked', 1))
-                    lastcol.append(('Disembarked', 1))
+                    lastcol.append(('Embarked', i[1]/2))
+                    lastcol.append(('Disembarked', i[1]/2))
                 collabels.append(lastcol)
             num_col_labels_before = len(collabels)
             for idx, rowstuff in enumerate(table_row_query_def[1]):

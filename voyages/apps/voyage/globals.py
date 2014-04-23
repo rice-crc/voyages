@@ -201,7 +201,7 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent,
                          'var_sources': mangle_source} 
-              #Used for display of previous queries
+#Used for display of previous queries
 parameter_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                               'var_imputed_percentage_women': unmangle_percent,
                               'var_imputed_percentage_boys': unmangle_percent,
@@ -309,12 +309,12 @@ def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda
     return result
 
 # TODO: Convert calls to this into a call to the get_each_from_list function
-def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label):
+def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
     result = []
     for i in table.objects.all():
         val = lmblbl(i)
         label_list = [(val, 1,),]
-        result.append((label_list, {qdictkey: val}))
+        result.append((label_list, {qdictkey: lmbval(i)}))
     return result
 
 imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
@@ -375,7 +375,7 @@ def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: unicode(x), 
     uziped = zip(*get_each_from_list(lst, qkey, lmblbl, lmbval))
     return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
 
-def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label):
+def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
     uziped = zip(*get_each_from_table(table, qkey, lmblbl))
     return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
 
@@ -384,14 +384,14 @@ def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label):
 # Each element is a triple with the filter_label, and a list of tuples of the label_list and query_dicts, and a number indicating the number of title columns need to be made
 #  the row/column labels list is a list of lists of label tuples, which will typically just be a list of lists of one element. However for port and region filters, there will need to be multiple labels of the broadregion, region, and ports.
 #  i.e. they are (filter_label, filter_definition)
-table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.value, lambda x: x.value), 0,),
-              ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.value), 0,),
+table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.label, lambda x: x.value), 0,),
+              ('Broad region where voyage began', get_each_from_table(models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.broad_region, lambda x: x.value), 0,),
               ('Region where voyage began', make_regions_filter('var_imp_region_voyage_begin'), 1,),
               ('Port where voyage began', make_places_filter('var_imp_port_voyage_begin'), 2,),
               ('Embarkation Regions', make_regions_filter('var_imp_principal_region_of_slave_purchase'), 1,),
               ('Embarkation Ports', make_places_filter('var_imp_principal_place_of_slave_purchase'), 2,),
               ('Specific regions of disembarkation', make_regions_filter('var_imp_principal_region_slave_dis'), 1,),
-              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.value), 0,),
+              ('Broad regions of disembarkation', get_each_from_table(models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.broad_region, lambda x: x.value), 0,),
               ('Disembarkation Ports', make_places_filter('var_imp_principal_port_slave_dis'), 2,),
               ('Individual Years', get_incremented_year_tuples(1), 0,),
               ('5-year periods', get_incremented_year_tuples(5), 0,),
@@ -400,14 +400,14 @@ table_rows = [('Flag*', get_each_from_list(imputed_nationality_possibilities, 'v
               ('50-year periods', get_incremented_year_tuples(50), 0,),
               ('100-year periods', get_incremented_year_tuples(100), 0,),]
 # Column definitions will be a triple of the filter name, the filter definition (list of queries), and the list of column labels
-table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.value, lambda x: x.value),
-                 get_each_from_table_col('Broad region where voyage began', models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.value),
+table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.label, lambda x: x.value),
+                 get_each_from_table_col('Broad region where voyage began', models.BroadRegion, 'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.broad_region, lambda x: x.value),
                  make_regions_col_filter('Region where voyage began', 'var_imp_region_voyage_begin'),
                  make_places_col_filter('Port where voyage began', 'var_imp_port_voyage_begin'),
                  make_regions_col_filter('Embarkation Regions', 'var_imp_principal_region_of_slave_purchase'),
                  make_places_col_filter('Embarkation Ports', 'var_imp_principal_place_of_slave_purchase'),
                  make_regions_col_filter('Specific regions of disembarkation', 'var_imp_principal_region_slave_dis'),
-                 get_each_from_table_col('Broad regions of disembarkation', models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.value),
+                 get_each_from_table_col('Broad regions of disembarkation', models.BroadRegion, 'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.broad_region, lambda x: x.value),
                  make_places_col_filter('Disembarkation Ports', 'var_imp_principal_port_slave_dis'),]
 # Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
 def make_sum_fun(varname):
