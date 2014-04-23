@@ -391,6 +391,24 @@ def make_num_fun(varname):
     def num_fun(queryset, rowset, colset):
         return len([None for i in queryset.all() if varname in i.get_stored_fields()])
     return num_fun
+emb_name = 'var_imp_total_num_slaves_purchased'
+dis_name = 'var_imp_total_slaves_disembarked'
+def sum_emb_dis(queryset, rowset, colset):
+    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields()]),
+            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields()]))
+def avg_emb_dis(queryset, rowset, colset):
+    lste = [i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields()]
+    lstd = [i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields()]
+    avge = None
+    avgd = None
+    if len(lste) > 0:
+        avge = sum(lste) / len(lste)
+    if len(lstd) > 0:
+        avgd = sum(lstd) / len(lstd)
+    return (avge, avgd)
+def num_emb_dis(queryset, rowset, colset):
+    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields()]),
+            len([None for i in queryset.all() if dis_name in i.get_stored_fields()]))
 
 # List of tuples that define a function for a cell value (label, mapping function)
 table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
@@ -404,9 +422,9 @@ table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
                    ('Number of voyages - disembarked slaves', make_num_fun('var_imp_total_slaves_disembarked')),
                    ('Percent of disembarked slaves (row total)', make_row_tot_percent_fun('var_imp_total_slaves_disembarked'),),
                    ('Percent of disembarked slaves (column total)', make_col_tot_percent_fun('var_imp_total_slaves_disembarked'),),
-                   ('Sum of embarked/disembarked slaves', None),
-                   ('Average number of embarked/disembarked slaves', None),
-                   ('Number of voyages - embarked/disembarked slaves', None),
+                   ('Sum of embarked/disembarked slaves', sum_emb_dis),
+                   ('Average number of embarked/disembarked slaves', avg_emb_dis),
+                   ('Number of voyages - embarked/disembarked slaves', num_emb_dis),
                    ('Average percentage male', make_avg_fun('var_imputed_percentage_male')),
                    ('Number of voyages - percentage male', make_num_fun('var_imputed_percentage_male')),
                    ('Average percentage children', make_avg_fun('var_imputed_percentage_child')),
@@ -419,6 +437,8 @@ table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
                    ('Number of voyages - standarized tonnage', make_num_fun('var_tonnage_mod')),
                    ('Sterling cash price in Jamaica', make_avg_fun('var_imputed_sterling_cash')),
                    ('Number of voyages - sterling cash price in Jamaica', make_num_fun('var_imputed_sterling_cash')),]
+# Cell functions that return two values, embarked/disembarked
+double_functions = ['Sum of embarked/disembarked slaves', 'Average number of embarked/disembarked slaves', 'Number of voyages - embarked/disembarked slaves']
 
 
 

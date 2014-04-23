@@ -30,13 +30,23 @@
     <tbody>
 	{% for collbllist in col_labels_list %}
 	  <tr>
-	    {% if forloop.first %} <td colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels }}"/> {% endif %}
+	    {% if forloop.first %} <td colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels_before }}"/> {% endif %}
 	    {% for label_tuple in collbllist %}
 	      {% if label_tuple.1 > 0 %}
 	        <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
 	      {% endif %}
 	    {% endfor %}
-	    {% if forloop.first %} <th class="grid-header-text" rowspan="{{ num_col_labels }}"> Totals </th> {% endif %}
+	    {% if forloop.first %}
+	      {% if is_double_fun %}
+	        <th class="grid-header-text" rowspan="{{ num_col_labels_total }}", colspan="2"> {% trans 'Totals' %} </th>
+	      {% else %}
+	        <th class="grid-header-text" rowspan="{{ num_col_labels_total }}"> {% trans 'Totals' %} </th>
+	      {% endif %}
+	    {% endif %}
+	    {% if forloop.last and is_double_fun %}
+	      <th class="grid-header-text" rowspan="1"> {% trans 'Embarked' %} </th>
+	      <th class="grid-header-text" rowspan="1"> {% trans 'Disembarked' %} </th>
+	    {% endif %}
 	  </tr>
 	{% endfor %}
       {% for row_tuple in row_list %}
@@ -47,12 +57,21 @@
 	  {% for cell_value in row_tuple.1 %}
 	    <td> {% if cell_value != None %} {{ cell_value }} {% endif %} </td>
 	  {% endfor %}
-	  <th class="grid-header-text">
-	    <b> {{ row_tuple.2 }} </b>
-	  </th>
+	  {% if is_double_fun %}
+	    <th class="grid-header-text">
+	      <b> {{ row_tuple.2.0 }} </b>
+	    </th>
+	    <th class="grid-header-text">
+	      <b> {{ row_tuple.2.1 }} </b>
+	    </th>
+	  {% else %}
+	    <th class="grid-header-text">
+	      <b> {{ row_tuple.2 }} </b>
+	    </th>
+	  {% endif %}
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
-	<th class="grid-header-text" colspan="{{ num_row_labels }}"> Totals </th>
+	<th class="grid-header-text" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
 	{% for total in col_totals %}
 	  <th class="grid-header-text">
 	    <b> {{ total }} </b>
