@@ -584,8 +584,10 @@ def search(request):
     table_stats_form = None
     col_totals = []
     extra_cols = 0
-    num_col_labels = 1
+    num_col_labels_before = 1
+    num_col_labels_total = 1
     num_row_labels = 1
+    is_double_fun = False
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -710,19 +712,24 @@ def search(request):
             table_row_query_def = globals.table_rows[0]
             table_col_query_def = globals.table_columns[0]
             display_function = globals.table_functions[0][1]
+            display_fun_name = globals.table_functions[0][0]
             omit_empty = False
             if table_stats_form.is_valid():
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
+                display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
                 omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
             collabels = [[j for j in i] for i in table_col_query_def[2]]
-            num_col_labels = len(collabels)
+            num_col_labels_total = len(collabels)
             num_row_labels = extra_cols + 1
             remove_cols = []
+            if display_fun_name in globals.double_functions:
+                is_double_fun = True
+
             for idx, colquery in enumerate(table_col_query_def[1]):
                 colqueryset = results.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
@@ -730,7 +737,12 @@ def search(request):
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
                 else:
-                    col_totals.append(display_function(colqueryset, None, colqueryset))
+                    if is_double_fun:
+                        display_col_total = display_function(colqueryset, None, colqueryset)
+                        col_totals.append(display_col_total[0])
+                        col_totals.append(display_col_total[1])
+                    else:
+                        col_totals.append(display_function(colqueryset, None, colqueryset))
                     used_col_query_sets.append((colquery, colqueryset))
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
@@ -740,6 +752,14 @@ def search(request):
                             collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
                         idy += colstuff[1]
             remove_rows = []
+            if is_double_fun:
+                collabels = [[(j, k*2) for j, k in i] for i in collabels]
+                lastcol = []
+                for i in collabels[-1]:
+                    lastcol.append(('Embarked', 1))
+                    lastcol.append(('Disembarked', 1))
+                collabels.append(lastcol)
+            num_col_labels_before = len(collabels)
             for idx, rowstuff in enumerate(table_row_query_def[1]):
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
@@ -751,7 +771,12 @@ def search(request):
                     cell_queryset = rowqueryset
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
-                    row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
+                    if is_double_fun:
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset)
+                        row_cell_values.append(display_result[0])
+                        row_cell_values.append(display_result[1])
+                    else:
+                        row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
@@ -775,7 +800,12 @@ def search(request):
                     if num > 0:
                         row_list[rownum+1][0].insert(0, (lbl, num))
                 row_list.pop(rownum)
-            col_totals.append(display_function(results, None, None))
+            if is_double_fun:
+                grand_total_value = display_function(results, None, None)
+                col_totals.append(grand_total_value[0])
+                col_totals.append(grand_total_value[1])
+            else:
+                col_totals.append(display_function(results, None, None))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
@@ -844,8 +874,10 @@ def search(request):
                    'table_stats_form': table_stats_form,
                    'col_totals': col_totals,
                    'extra_cols': range(extra_cols),
-                   'num_col_labels': num_col_labels,
-                   'num_row_labels': num_row_labels,})
+                   'num_col_labels_before': num_col_labels_before, 
+                   'num_col_labels_total': num_col_labels_total, 
+                   'num_row_labels': num_row_labels,
+                   'is_double_fun': is_double_fun,})
 
 def prettify_results(results, lookup_table):
     """
