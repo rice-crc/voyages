@@ -74,7 +74,7 @@
 	<th class="grid-header-text" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
 	{% for total in col_totals %}
 	  <th class="grid-header-text">
-	    <b> {{ total }} </b>
+	    <b> {% if total != None %} {{ total }} {% endif %} </b>
 	  </th>
 	{% endfor %}
     </tbody>
