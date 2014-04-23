@@ -759,11 +759,11 @@ def search(request):
                     remove_cols.insert(0, idx)
                 else:
                     if is_double_fun:
-                        display_col_total = display_function(colqueryset, None, colqueryset)
+                        display_col_total = display_function(colqueryset, None, colqueryset, results)
                         col_totals.append(display_col_total[0])
                         col_totals.append(display_col_total[1])
                     else:
-                        col_totals.append(display_function(colqueryset, None, colqueryset))
+                        col_totals.append(display_function(colqueryset, None, colqueryset, results))
                     used_col_query_sets.append((colquery, colqueryset))
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
@@ -793,13 +793,13 @@ def search(request):
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
                     if is_double_fun:
-                        display_result = display_function(cell_queryset, rowqueryset, colqueryset)
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
                     else:
-                        row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset))
+                        row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset, results))
                 cell_values.append(row_cell_values)
-                row_total = display_function(rowqueryset, rowqueryset, None)
+                row_total = display_function(rowqueryset, rowqueryset, None, results)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
@@ -822,11 +822,11 @@ def search(request):
                         row_list[rownum+1][0].insert(0, (lbl, num))
                 row_list.pop(rownum)
             if is_double_fun:
-                grand_total_value = display_function(results, None, None)
+                grand_total_value = display_function(results, None, None, results)
                 col_totals.append(grand_total_value[0])
                 col_totals.append(grand_total_value[1])
             else:
-                col_totals.append(display_function(results, None, None))
+                col_totals.append(display_function(results, None, None, results))
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
