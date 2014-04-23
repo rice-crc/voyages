@@ -169,6 +169,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Broad Region variables
     
     var_imp_principal_broad_region_disembark_idnum = indexes.IntegerField(null=True)
+    var_imp_broad_region_voyage_begin_idnum = indexes.IntegerField(null=True)
 
     # Voyage captain and crew
     var_captain = indexes.NgramField(null=True)
@@ -539,6 +540,17 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_place_voyage_ended_idnum(self, obj):
         try:
             return obj.voyage_itinerary.place_voyage_ended.value
+        except AttributeError:
+            return None
+
+    def prepare_var_imp_principal_broad_region_disembark_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_broad_region_slave_dis.value
+        except AttributeError:
+            return None
+    def prepare_var_imp_broad_region_voyage_begin_idnum(self, obj):
+        try:
+            return obj.voyage_itinerary.imp_broad_region_voyage_begin.value
         except AttributeError:
             return None
 
