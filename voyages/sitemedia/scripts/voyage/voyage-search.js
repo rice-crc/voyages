@@ -373,9 +373,15 @@ function getxlsDownload(pageNum) {
     //$("#form").submit();
     $('#form').append("<input id='xls_download_page_num' type='hidden' name='pageNum' value='" + pageNum + "' />");
     $("#form").submit();
-    $('#xls_download_submit_val').remove()
-    $('#xls_download_page_num').remove()
+    $('#xls_download_submit_val').remove();
+    $('#xls_download_page_num').remove();
     return false;
+}
+
+function getxlsTable() {
+    $('#form').append("<input id='xls_download_table' type='hidden' name='submitVal' value='xls_download_table' />");
+    $('#form').submit();
+    $('#xls_download_table').remove();
 }
 
 function open_voyage_details(voyageNum) {
