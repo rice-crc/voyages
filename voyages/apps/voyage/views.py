@@ -715,11 +715,12 @@ def search(request):
         elif submitVal == 'tab_statistics':
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
-        elif submitVal == 'tab_tables':
+        elif submitVal == 'tab_tables' or submitVal == 'xls_download_table':
             # row_cell_values is what is displayed in the cells in the table, it is a list of triples which contain the row_label, the cell values, then the row total
             # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port). Typically these will just be a list of lists with one entry that is the label tuple for that row/
             # column labels is similar, but it is a list of column label lists, and will typically be a list of one element that is a list of the column label tuples
             #  entries in the rowlabels/collabels matrix are tuples that contain the label and then the row/column span of that cell. Most of the time the row/column span will just be 1.
+            xls_table = []
             tab = 'tables'
             pst = {x: y for x,y in request.POST.items()}
             # Force the initial value
@@ -781,13 +782,36 @@ def search(request):
                     lastcol.append(('Disembarked', i[1]/2))
                 collabels.append(lastcol)
             num_col_labels_before = len(collabels)
+            xls_row = []
+            for idx, i in enumerate(collabels):
+                xls_row = []
+                for j in range(num_row_labels):
+                    xls_row.append('')
+                for lbl, num in i:
+                    xls_row.append(lbl)
+                    if num > 1:
+                        for j in range(num - 1):
+                            xls_row.append('')
+                xls_table.append(xls_row)
+                if idx == len(collabels)-1:
+                    if is_double_fun:
+                        xls_row.append('Total Embarked')
+                        xls_row.append('Total Disembarked')
+                    else:
+                        xls_row.append('Total')
             for idx, rowstuff in enumerate(table_row_query_def[1]):
+                xls_row = []
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
                 rowqueryset = results.filter(**rowquery)
+                for i in range(num_row_labels - len(rowlabels)):
+                    xls_row.append('')
+                for i in rowlabels:
+                    xls_row.append(i[0])
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
                 row_cell_values = []
+                # Iterate through column labels to make the labels for the xls download
                 for colquery, colqueryset in used_col_query_sets:
                     cell_queryset = rowqueryset
                     if rowqueryset.count() > 0:
@@ -796,11 +820,39 @@ def search(request):
                         display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
+                        if display_result[0] != None:
+                            xls_row.append(display_result[0])
+                        else:
+                            xls_row.append('')
+                        if display_result[1] != None:
+                            xls_row.append(display_result[1])
+                        else:
+                            xls_row.append('')
                     else:
-                        row_cell_values.append(display_function(cell_queryset, rowqueryset, colqueryset, results))
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        row_cell_values.append(display_result)
+                        if display_result != None:
+                            xls_row.append(display_result)
+                        else:
+                            xls_row.append('')
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None, results)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
+                if is_double_fun:
+                    if row_total[0] != None:
+                        xls_row.append(row_total[0])
+                    else:
+                        xls_row.append('')
+                    if row_total[1] != None:
+                        xls_row.append(row_total[1])
+                    else:
+                        xls_row.append('')
+                else:
+                    if row_total != None:
+                        xls_row.append(row_total)
+                    else:
+                        xls_row.append('')
+                xls_table.append(xls_row)
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
                 row_counters = [0,0,0]
@@ -827,6 +879,28 @@ def search(request):
                 col_totals.append(grand_total_value[1])
             else:
                 col_totals.append(display_function(results, None, None, results))
+            xls_row = []
+            for i in range(num_row_labels):
+                if i == num_row_labels - 1:
+                    xls_row.append('Totals')
+                else:
+                    xls_row.append('')
+            for i in col_totals:
+                if i != None:
+                    xls_row.append(i)
+                else:
+                    xls_row.append('')
+            xls_table.append(xls_row)
+            if 'xls_download_table' == submitVal:
+                response = HttpResponse(content_type='application/vnd.ms-excel')
+                response['Content-Disposition'] = 'attachment; filename="data.xls"'
+                wb = Workbook(encoding='utf-8')
+                ws = wb.add_sheet("data")
+                for idx, i in enumerate(xls_table):
+                    for idy, j in enumerate(i):
+                        ws.write(idx,idy,label=unicode(j).encode('utf-8'))
+                wb.save(response)
+                return response
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
         elif  submitVal == 'tab_timeline':
