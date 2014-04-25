@@ -5,7 +5,7 @@ from voyages.apps.voyage import models, legacy_models
 from decimal import *
 import sys
 import unidecode
-
+from optparse import make_option
 #def short_ref_matches(short_ref, text_ref):
 #    return short_ref and text_ref and short_ref.replace(' ','') == text_ref.replace(' ','')
 
@@ -14,6 +14,9 @@ def find_by_value(vlist, value):
     # That is on purpose since that indicates probable missing/corrupted data
     return vlist[value]
     #return filter(lambda x: x.value == value, vlist)[0]
+
+# This is an auto generated dictionary that is outputted by the script listsourcefixes
+source_fix_dict = {u'Vila Vilar, 258-59': u'Vila Vilar, 258-59', u'Hernaes,275,287': u'Hernaes,275,287', u'Post ManandtheHistorical Account (London),96.06.26': u'Post ManandtheHistorical Account (London),96.06.26', u'PublicAdvertiser,62.01.14.': u'PublicAdvertiser,62.01.14.', u'VilaVilar,Cuadro3, 260-61': u'VilaVilar,Cuadro3, 260-61', u'Adm1/2719, #231': u'ADM1/2719, #231"', u'RIHS,microf,reel12/24,brig"Punch"': u'RIHS,microf,reel12/24,brig"Punch"', u"Lloyd's Evening Post, 64.07.25.": u"Lloyd's Evening Post, 64.07.25", u'Gelpi Baiz, 222': u'Gelpi Baiz, 222', u"St.James'sChronicle,1778.02.21.": u"St.James'sChronicle,1778.02.21.", u'SL,LAR,10115-15143,12571-12597': u'SLA,LAR,10115-15143,12571-12597', u'VilaVilar, Cuadro 3, 258-59': u'VilaVilar, Cuadro 3, 258-59', u'PublicAdvertiser,54.08.27.': u'PublicAdvertiser,54.08.27.', u'Jctp, 50-53': None, u'Proc. of Old Bailey, ref t17250630-58': u'Proc. of Old Bailey, ref t17250630-58', u'HLB,8:379-87': None, u'StJamesChronicle,1775.11.17.': u'StJamesChronicle,1775.11.17.', u'DailyNationalIntelligencer,1820.06.13.': u'DailyNationalIntelligencer,1820.06.13', u'Vila Vilar, 170, n. 48': u'Vila Vilar, 170, n. 48', u'Paesie,305': u'Paesie,305', u'Borrego Pla, 59': u'Borrego Pla, 59', u'Borrego Pla, 58': u'Borrego Pla, 58', u'Barcia dataset': u'BarciaDataset"', u'Farias,1983,II': u'Farias, 1983, II: 149', u"Freeman's Journal,1780.06.01,p.2": u"Freeman's Journal,1780.06.01,p.2", u'Vila Vilar, 268-69': u'Vila Vilar, 268-69', u'Norregard,61': u'Norregard,61', u'Szymanski,76': u'Szymanski,76', u'Norregard,64': u'Norregard,64', u'Radburn,48': u'Radburn,48', u'Radburn,49': u'Radburn,49', u'Guerard': u'Guerard', u'Farley?s,68.04.16.': u"Farley's,68.04.16", u'schofield,268': u'Schofield,268', u'Vila Vilar, 174, 276-77': u'Vila Vilar, 174, 276-77', u'Norregard,122': u'Norregard,122', u'Radburn,46': u'Radburn,46', u'Vila Vilar, Cuadro 3, 258-59': u'Vila Vilar, Cuadro 3, 258-59', u'Paesie,291': u'Paesie,291', u'Vila Vilar, Cuadro 2, 252-53': u'Vila Vilar, Cuadro 2, 252-53', u'British Journal (London), 1723.01.05.': u'British Journal (London), 1723.01.05', u'ANG-U, EGH 40, 87': u'ANGU, EGH 40, 87"', u'Pleitos, Audiencia de Santo Domingo, 1581-1582 ': u'AGI,Escribania 2A, pieza 2, folios 1r-825v.', u'VilaVilar, p. 173': u'VilaVilar, p. 173', u'Hernaes,205-6': u'Hernaes,205-6', u'Norregard,81': u'Norregard,81', u'Post Boy,24.07.1719': u'Post Boy,24.07.1719', u'Hernaes,256-257': u'Hernaes,256-257', u"StJames'sChronicle,67.05.14.": u"StJames'sChronicle,67.05.14.", u'SL,LAR,11909-15967,12571-12597': u'SLA,LAR,11909-15967,12571-12597', u'Vila Vilar, 248-49': u'Vila Vilar, 248-49', u'Farias,1983,II,149': u'Farias,1983,II,149', u'St.JamesChronicle,69.10.07.': u'St.JamesChronicle,69.10.07.', u'Paesie,308': u'Paesie,308', u'Norregard,Madagascar': u'Norregard,Madagascar', u'Post Boy,06.11.05.': u'Post Boy,06.11.05', u'Kew, CO247/97, 63.07.11.': u'CO247/97, 63.07.11', u'Vila Vilar, 174-75, 276-77': u'Vila Vilar, 174-75, 276-77', u'Gazetteer and London Daily Advertiser,1756.10.16.': u'Gazetteer and London Daily Advertiser,1756.10.16', u'D/DAV/1': u'MMM/D/DAV/1', u'Daily Post (London), 1729.05.29.': u'Daily Post, 1729.05.29', u'Norregard,67-68': u'Norregard,67-68', u'Norregard,71': u'Norregard,71', u'Norregard,124-5': u'Norregard,124-5', u'Norregard,72': u'Norregard,72', u'n.1 (1575), ff. 13r, 32r-33r; n.1 (1577), f. 18v': u'AGI,Contaduria,1052, n.1 (1575), ff. 13r, 32r-33r; n.1 (1577), f.18v', u'Paesie,130': u'Paesie,130', u'Dawk?s, December 15, 1713': u"Dawk's, December 15, 1713", u'VilaVilar,142': u'VilaVilar,142', u'Norregard,78': u'Norregard,78', u'Farias, 1986, 254': u'Farias, 1986, 254', u'FelixFarley, 83.06.21.': u"Farley's, 83.06.21", u'Norregard,115': u'Norregard,115', u'http://www.stg.brown.edu/projects/sally/': u'Sally', u'VilaVilar, Cuadro3, 264-65': u'VilaVilar, Cuadro3, 264-65', u'Weekly Packet (London),1719.12.26.': u'Weekly Packet (London),1719.12.26.', u'Gelpi Baiz, 224, 338, fn. 43': u'Gelpi Baiz, 224, 338, fn. 43', u'Hernaes, 256,259': u'Hernaes, 256,259', u'ANTT,JuntaComercio,Lv.74:147v': u'ANTT,JC,Lv.74:147v', u'Stoddart': None, u'WeeklyJamaicaCourant,18.07.30.': u'WeeklyJamaicaCourant,18.07.30.', u'StJamesChronicle,67.05.14.': u'StJamesChronicle,67.05.14.', u'Walsh,II,262': u'Walsh,II,262', u'Norregard,88': u'Norregard,88', u'Public Advertiser, 81.08.10.': u'Public Advertiser, 81.08.10.', u'Paesie,130,308-09': u'Paesie,130,308-09', u'VilaVilar,Cuadro5': u'VilaVilar,Cuadro5', u'BaggeAcctBook': u'BaggeAcctBook', u'Norregard,82': u'Norregard,82', u'VilaVilar,Cuadro6': u'VilaVilar,Cuadro6', u'Studnicki-Gizbert (2007), 60, 197n102': u'Studnicki-Gizbert (2007), 60, 197n102', u'DailyNationalIntelligencer,1820.06.19.': u'DailyNationalIntelligencer,1820.06.19', u'VilaVilar,Cuadro3': u'VilaVilar,Cuadro3', u"Robert Hibbert's diary": u"Robert Hibbert's diary", u'Hernaes,273': u'Hernaes,273', u'Boeseken,143': u'Boeseken,143', u'Daily Advertiser, 31.07.07.': u'Daily Advertiser, 31.07.07', u'Radburn,63': u'Radburn,63', u'Farley?s,73.12.04.': u"Farley's,73.12.04", u'Vila Villar, 1977, p. 171, fn. 52': u'Vila Vilar, 1977, p. 171, fn. 52', u'ADG, 2L, No 206, Actes Notariels,1797-1802': u'ADG, 2L, No 206, Actes Notariels,1797-1802', u'Norregard,66,89': u'Norregard,22,89', u'Hernaes,271,285': u'Hernaes,271,284', u'Hernaes,271,284': u'Hernaes,271,284', u'Hernaes,206,265': u'Hernaes,206,265', u'GUS,1800.08.21.': None, u'Farias, 1986, 152': u'Farias, 1986, 152', u'Norregard,Slaveoproret': u'Norregard,Slaveoproret', u'Norregard,102': u'Norregard,102', u'Norregard,114': u'Norregard,114', u'Norregard,104': u'Norregard,104', u'SL,LAR, register 7508-9758, 9208-9456': u'SLA,LAR, register 7508-9758, 9208-9456', u'Norregard,107': u'Norregard,107', u'Norregard,108': u'Norregard,108', u'Norregard,109': u'Norregard,109', u'Szymanski,65-6,76': u'Szymanski,65-6,76', u'Klein,Havana data-set,1790-1820': u'Klein,Havana data-set,1790-1820', u'VilaVilar,174': u'VilaVilar,174', u'Norregard,124-5,128': u'Norregard,124-5,128', u'FHL,Reel88789,Williams': u'FHL,Reel88789,Williams', u'Hernaes,263-268': u'Hernaes,263-268', u'Hernaes,269,284': u'Hernaes,269,284', u'Farley?s,73.12.11.': u"Farley's,73.12.11", u'Norregard,111': u'Norregard,111', u'Hernaes,251': u'Hernaes,251', u'Remembrancer,49.03.17': u'Remembrancer,49.03.17', u'VilaVilar,Cuadro3, 256-57': u'VilaVilar,Cuadro3, 256-57', u'P,1840,XLVI:67': u'PP,1840,XLVI:67', u'Hernaes,272,273': u'Hernaes,272,273', u'RIHS,USCust,C#1,Dec,1801-2,Cert #24': u'RIHS,USCust,C#1,Dec,1801-2,Cert #24', u'2884, Series 2, no 7.': u'AGI, Contrataci\xf3n, Legajo 2884, Series 2, no 7.', u'VilaVilar,100': u'VilaVilar,100', u'James Stewart, Reports of Cases, 219-20': u'James Stewart, Reports of Cases, 219-20', u'Vila Vilar, Cuadro 4': u'Vila Vilar, Cuadro 4', u'Vila Vilar, Cuadro 3, 260-61': u'Vila Vilar, Cuadro 3, 260-61', u'MassHistSoc,8:337': u'MassHistSoc,8:337', u'Post Man,10.05.02.': u'Post Man,10.05.02.', u'Newson, Minchon, 65': u'Newson, Minchin2, 65', u'Raw,C747,170,212,216': u'Rawl,C747,170,212,216', u'Farley?s,68.03.12.': u"Farley's,68.03.12", u'dg, 9 Feb 1805': u'dg, 9 Feb 1805', u'Acosta Saignes, 33': u'Acosta Saignes, 1961, 33', u'Hernaes,270,284': u'Hernaes,270,285', u'Hernaes,270,285': u'Hernaes,270,285', u'Brasio, MMA, 2a Serie, III: 207-10': u'MMA, 2a Serie, III: 207-10', u'Hernaes,272,285': u'Hernaes,272,285', u'VilaVilar, p.173': u'VilaVilar, p.173', u'Acosta Saignes, 38': u'Acosta Saignes, 1961, 38', u'Public Advertizer, 54.07.06.': u'Public Advertizer, 54.07.06.', u'  .': None, u'Farias, 1983, 149': u'Farias, 1983, II: 149', u'Prior,pp. 12-13': u'Prior,pp. 12-13', u'Boeseken,140-41': u'Boeseken,140-41', u'Hernaes,256,259': u'Hernaes,256,259', u'Hernaes,256,258': u'Hernaes,256,258', u'Lobo Cabrera (1990), 358': u'Lobo Cabrera (1990), 358', u'http://www.cslib.org/slaverlog.htm': u'http://www.cslib.org/slaverlog.htm', u'DailyCourant,28.04.22.': u'DailyCourant,28.04.22', u'MMM,DX/1304': u'MMM,DX/1304', u'Vila Vilar, Cuadro 3, 256-7': u'Vila Vilar, Cuadro 3, 256-7', u'DailyNationalIntelligencer,1821.08.02.': u'DailyNationalIntelligencer,1821.08.02', u'World and Fashionable Advertiser, 1787.09.22.': u'World and Fashionable Advertiser, 1787.09.22.', u'RRNCW,1806.07.07.': u'RRNCW,1806.07.07.', u'Norregard,67-68,89': u'Norregard,67-68,89', u'Hernaes,256,258-259': u'Hernaes,256,258-259', u'Paesie,323': u'Paesie,323', u'JA,SpanishTown,1B/5/13/1,OutLetters,June,1793': u'JA,SpanishTown,1B/5/13/1,OutLetters,June,1793', u'Norregard,99': u'Norregard,99', u'Vila Vilar, Cuadro 2, 254-255': u'Vila Vilar, Cuadro 2, 254-255', u"StJames'sChronicle,65.03.02.": u"StJames'sChronicle,65.03.02.", u'VilaVilar,Cuadro6, 278-79': u'VilaVilar,Cuadro6, 278-79', u'VilaVilar,132': u'VilaVilar,132', u'Denman, 17-21': u'Denman, 17-21', u'Farias,II': u'Farias, 1983, II: 149', u'VilaVilar, Cuadro3, 260-61': u'VilaVilar, Cuadro3, 260-61', u'Vila Vilar, 170, n 48': u'Vila Vilar, 170, n 48', u'HarpersWeekly,60.06.02.': u'HarpersWeekly,60.06.02', u'Vila Vilar, 260-1': u'Vila Vilar, 260-1', u'Acosta Saignes, 79, 99': u'Acosta Saignes, 1967, 79, 99', u'VilaVilar,94,C6': u'VilaVilar,94,C6', u"St.James'sChronicle/British Evening Post,61.04.23.": u"St.James'sChronicle/British Evening Post,61.04.23.", u'Hernaes,205-206': u'Hernaes,205-206', u'Farley?s,73.10.16.': u"Farley's,73.10.16", u'General Evening Post, 1788.01.08.': u'General Evening Post, 1788.01.08.', u'VilaVilar,192': u'VilaVilar,192', u'LDPGA, 40.04.29.': u'LDPGA, 40.04.29.', u'Farias, 1983, 151': u'Farias, 1983, II: 151', u'Hernaes,257,260': u'Hernaes,257,260', u'Vila Vilar, Cuadro 2': u'Vila Vilar, Cuadro 2', u'.': None, u'Norregard,76': u'Norregard,76', u"StJames'sChronicleortheBritishEvenPost,1766.07.29": u"StJames'sChronicleortheBritishEvenPost,1766.07.29.", u'Farias, 1986, 289': u'Farias, 1986, 289', u'Farias, 1986, 288': u'Farias, 1986, 288', u'Farias, 1986, 287': u'Farias, 1986, 287', u'Farias, 1986, 285': u'Farias, 1986, 285', u'Hernaes,188-89': u'Hernaes,188-89', u'Farias, 1986, 283': u'Farias, 1986, 283', u'Farias, 1986, 282': u'Farias, 1986, 282', u'Norregard,64-65': u'Norregard,64-65', u'Farley?s,68.01.02.': u"Farley's,68.01.02", u'Hernaes,251-252': u'Hernaes,251-252', u'Farias, 264': u'Farias, 1986, 264', u'Dawk?s, November 28, 1713': u"Dawk's, November 28, 1713", u'D?Auvergne,73-4': u"D'Auvergne,73-4", u'National Advocate,1816.07.01.': u'National Advocate,1816.07.01.', u'Hernaes,194': u'Hernaes,194', u'DailyNationalIntelligencer,1821.08.23.': u'DailyNationalIntelligencer,1821.08.23', u'D?Elbee,477': u"D'Elbee,477", u'D?Elbee': u"D'Elbee", u'Hildebrand, Ingegerd, "Svenska Kolonin,"pp. 226-27': u'Hildebrand, Ingegerd, "Svenska Kolonin," pp. 226-27', u'O?Callaghan,Voyages': u"O'Callaghan,Voyages", u'Briceno-Iragorry, II (1600-1605), 153-57': u'Brice\xf1o Iragorry, II (1600-1605), 153-57', u'Norwich Gazette, 41.10.17.': u'Norwich Gazette, 41.10.17.', u'PublicAdvertiser,54.07.12.': u'PublicAdvertiser,54.07.12.', u'VilaVilar,Cuadro2': u'VilaVilar,Cuadro2', u'BRO,P/Xch/D/23,1738.04.26': u'BRO,P/Xch/D/23,1738.04.26', u'Hernaes,273,286': u'Hernaes,273,286', u'Sua Majestad,www.african-origins.org': u'Sua Majestad,www.african-origins.org', u'Dawk?s, December 5, 1713': u"Dawk's, December 5, 1713", u"Freeman's Journal,1787.12.13.": u"Freeman's Journal,1787.12.13", u'StJamesChronicle,65.07.30.': u'StJamesChronicle,65.07.30.', u'Hernaes,261': u'Hernaes,261', u'DonganPapers,I:171-72,270-72': u'DonganPapers,I:171-72,270-72', u'Farley?s,49.01.07.': u"Farley's,49.01.07", u'DailyCourant,28.04.25.': u'DailyCourant,28.04.25', u'Hernaes,164-165': u'Hernaes,164-165', u'Hernaes,269': u'Hernaes,269', u'Hernaes,278': u'Hernaes,278', u'HMM,52.05.19.': u'HMMGA,52.05.19', u'Paesie,287': u'Paesie,287', u'Farley?s,74.12.03.': u"Farley's,74.12.03", u'VilaVilar,p. 173': u'VilaVilar,p. 173', u'Norregard,50': u'Norregard,50', u'Vila Vilar, Cuadro 3, 256-57': u'Vila Vilar, Cuadro 3, 256-57', u'Vila Vilar, 260-61': u'Vila Vilar, 260-61', u'VilaVilar, Cuadro3': u'VilaVilar, Cuadro3', u'Santo Domingo, 55, Ramo 19, number 104, doc. 1, 1 Mar 1639. ': u'AGI,Santo Domingo, 55, Ramo 19, number 104, doc. 1, 1 Mar 1639', u'Public Advertiser, 81.07.12.': u'Public Advertiser, 81.07.12.', u'Norregard,116': u'Norregard,116', u'VilaVilar, 250-51': u'VilaVilar, 250-51', u'Hernaes,189': u'Hernaes,189', u'Maria Paul, www.african-origins.org': u'Maria Paul, www.african-origins.org', u"Baldwin's London Weekly Journal,1788.05.13.": u"Baldwin's London Weekly Journal,1788.05.13", u'Vila Vilar, 276-77': u'Vila Vilar, 276-77', u'Weekly Packet (London), 1719.12.26.': u'Weekly Packet (London), 1719.12.26.', u'MMHGA,62.09.14.': u'MMHGA,62.09.14.', u'MorningHeraldandDailyAdvertiser,83.09.04.': u'MorningHeraldandDailyAdvertiser,83.09.04.', u'Farley?s,June2,1754': u"Farley's,June2,1754", u'2 Dobson 413 (Dec. 10, 1819)': u'Dodson2,p.413 (Dec. 10 1819)', u'Hernaes,279': u'Hernaes,279', u'New London Summary,1761.07.24.': u'New London Summary,1761.07.24.', u'VilaVilar,158': u'VilaVilar,158', u'Hernaes,251,253': u'Hernaes,251,253', u'Hernaes,272': u'Hernaes,272', u'Hernaes,256-258': u'Hernaes,256,258', u'Hernaes,270': u'Hernaes,270', u'Hernaes,271': u'Hernaes,271', u'Hernaes, 263-67': u'Hernaes,263-67', u'Hernaes,277': u'Hernaes,277', u'Hernaes,274': u'Hernaes,276', u'Hernaes,275': u'Hernaes,275', u'Vila Vilar, 250-51': u'Vila Vilar, 250-51', u'DailyNationalIntelligencer,1814.04.23.': u'DailyNationalIntelligencer,1814.04.23', u'Vila Vilar, 244-45': u'Vila Vilar, 244-45', u'Farias, 1946, 394': u'Farias, 1946, 394', u'VilaVilar,Cuadro4': u'VilaVilar,Cuadro4', u'Hernaes,276': u'Hernaes,276', u'Farias, 1986, 266': u'Farias, 1986, 266', u'Farias, 1986, 260': u'Farias, 1986, 260', u'Norregard,124-5,128-9': u'Norregard,124-5,128-9', u'Norregard,74': u'Norregard,74', u'AN,cod141,16:140': u'ANRJ,code141,16:140', u'Norregard,104,107': u'Norregard,104,107', u'Report of St. Bartholomew,06.04.19.': u'Report of St. Bartholomew,06.04.19.', u'Studnicki-Gizbert (2007), 60, 197n100': u'Studnicki-Gizbert (2007), 60, 197n100', u'Vila Vilar, 132': u'Vila Vilar, 132', u'Vila Vilar, 252-53': u'Vila Vilar, 252-53', u'Vila Vilar, 148-49n70': u'Vila Vilar, 148-49n70', u'Hernaes,282': u'Hernaes,282', u'London Chronicle, 1787.09.20.': u'London Chronicle, 1787.09.20.', u'Szymanski,67,76': u'Szymanski,67,76', u'Hernaes,281': u'Hernaes,281', u'Hernaes,280': u'Hernaes,280', u'LC,1788,06.24-26': u'LC,1788,06.24-26', u'Post Man,05.03.26.': u'Post Man,05.03.26', u"St.James's Evening  Chronicle, 64.11.17.": u"St.James's Evening  Chronicle, 64.11.17.", u'ANC Database, mfn 68066806-68116811(Regueyra, JBG/27 enero 1': u'ANC Database, mfn 68066806-68116811(Regueyra, JBG/27 enero 1', u'MMHGA,1796.09.06.': u'MMHGA,1796.09.06.', u'Hernaes,209': u'Hernaes,209', u'VilaVilar,149': u'VilaVilar,149', u'VilaVilar,Cuadro3, 262-63': u'VilaVilar,Cuadro3, 262-63', u'Hernaes,206': u'Hernaes,206', u'DailyCourant,28.04.11.': u'DailyCourant,28.04.11', u'Hernaes, 257,260': u'Hernaes, 257,258', u'Hernaes,276,288': u'Hernaes,276,288', u'Heywood Memorandum Book, Liverpool': u'LivRO,Heywood', u'Hernaes,186-88': u'Hernaes,186-88', u'Vila Vilar, 148-49n70, 173': u'Vila Vilar, 148-49n70, 173', u'NARA,RG36Savannahmanifests,box3,1795-96': u'NARA,Atlanta,RG36Savannahmanifests,box3,1795-', u'Santo Domingo, 55, Ramo 19, no 104, doc. 1, 1 Mar 1639.': u'AGI,Santo Domingo, 55, Ramo 19, no 104, doc. 1, 1 Mar 1639', u'Hernaes,366': u'Hernaes,366', u'"Memoire pour le Sieur Pierre Lesens"': u'Lessens', u'Hernaes,279,290': u'Hernaes,279,290', u'Acosta Saignes, 77': u'Acosta Saignes, 1967, 77', u'ANC Database, mfn 1247612476 (Regueyra, JBG / 18 a': u'ANC Database, mfn 1247612476 (Regueyra, JBG / 18 a', u"St.James'sChronicle,69.08.12.": u"St.James'sChronicle,69.08.12.", u'Farias, 1986, 272': u'Farias, 1986, 272', u'Daily Advertiser (London), 1776.07.22.': u'Daily Advertiser, 1776.07.22', u'Daily Post (London), 1720.04.29.': u'Daily Post, 1720.04.29', u'Daily Post (London), 1729.04.29.': u'Daily Post, 1729.04.29', u'VilaVilar,Cuadro2, 254-55': u'VilaVilar,Cuadro2, 254-55', u'Norregard,82,92': u'Norregard,82,92', u"Fog's,29.09.06.": u"Fog's,29.09.06", u'Bowser (1974), 49-50, 58-71, 365, 368-76': u'Bowser (1974), 49-50, 58-71, 365, 368-76"', u'GazetteerandNewDailyAdvertiser,1777.07.0': u'GazetteerandNewDailyAdvertiser,1777.07.0', u'1 Acton 240': u'Acton, 1:240', u'Hernaes,261-262': u'Hernaes,261-262'}
 
 class Command(BaseCommand):
     vplaces = {}
@@ -53,25 +56,36 @@ class Command(BaseCommand):
         else:
             return self.best_source(text_ref[:-1])
 
+    option_list = BaseCommand.option_list + (
+        make_option('--dry-run',
+                    action='store_true',
+                    dest='dry_run',
+                    default=False,
+                    help='Do not make any changes to the database but still look at the sources matching'),
+        )
     args = '<>'
     help = 'Syncs the data from the legacy wilson database to the database configured in this project.'
     def handle(self, *args, **options):
+        make_changes = True
+        if options['dry_run']:
+            make_changes = False
         unknown_port_value = 99801
         pag = Paginator(legacy_models.Voyages.objects.filter(suggestion=False, revision=1).order_by('voyageid'), 100)
         print "Paginator count %s" % pag.count
         print "Paginator page range count %s" % len(pag.page_range)
         print "Paginator last page number %s" % pag.page_range[-1]
-        models.Voyage.objects.all().delete()
-        models.VoyageShip.objects.all().delete()
-        models.VoyageShipOwnerConnection.objects.all().delete()
-        models.VoyageShipOwner.objects.all().delete()
-        models.VoyageOutcome.objects.all().delete()
-        models.VoyageDates.objects.all().delete()
-        models.VoyageCaptain.objects.all().delete()
-        models.VoyageCaptainConnection.objects.all().delete()
-        models.VoyageSourcesConnection.objects.all().delete()
-        models.VoyageItinerary.objects.all().delete()
-        models.VoyageSlavesNumbers.objects.all().delete()
+        if make_changes:
+            models.Voyage.objects.all().delete()
+            models.VoyageShip.objects.all().delete()
+            models.VoyageShipOwnerConnection.objects.all().delete()
+            models.VoyageShipOwner.objects.all().delete()
+            models.VoyageOutcome.objects.all().delete()
+            models.VoyageDates.objects.all().delete()
+            models.VoyageCaptain.objects.all().delete()
+            models.VoyageCaptainConnection.objects.all().delete()
+            models.VoyageSourcesConnection.objects.all().delete()
+            models.VoyageItinerary.objects.all().delete()
+            models.VoyageSlavesNumbers.objects.all().delete()
         self.sources = {x.short_ref.replace(' ', ''): x for x in list(models.VoyageSources.objects.all()) if x.short_ref}
         self.vplaces = {x.value: x for x in list(models.Place.objects.all())}
         self.vregions = {x.value: x for x in list(models.Region.objects.all())}
@@ -94,7 +108,8 @@ class Command(BaseCommand):
                     print count
                     if i.voyageid is not None:
                         voyageObj.voyage_id = i.voyageid
-                        voyageObj.save()
+                        if make_changes:
+                            voyageObj.save()
                     ship = models.VoyageShip()
                     #ship.voyage = voyageObj
                     # There are some null values in wilson that should be false instead
@@ -146,10 +161,10 @@ class Command(BaseCommand):
                         # Inserting ownera, ownerb, ..., ownerp
                         attr = getattr(i, 'owner' + letter)
                         if attr:
-                            # TODO: see if this should just be a create instead
-                            tmpOwner = models.VoyageShipOwner.objects.create(name=attr)
-                            # Create voyage-owner connection
-                            models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=voyageObj, owner_order=(idx+1))
+                            if make_changes:
+                                tmpOwner = models.VoyageShipOwner.objects.create(name=attr)
+                                # Create voyage-owner connection
+                                models.VoyageShipOwnerConnection.objects.create(owner=tmpOwner, voyage=voyageObj, owner_order=(idx+1))
                     outcome = models.VoyageOutcome()
                     #outcome.voyage = voyageObj
                     if i.fate:
@@ -322,16 +337,19 @@ class Command(BaseCommand):
                     crew.crew_deserted = i.ndesert
                     if i.captaina:
                         #TODO change to get_or_create
-                        first_captain = models.VoyageCaptain.objects.create(name=i.captaina)
-                        models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
+                        if make_changes:
+                            first_captain = models.VoyageCaptain.objects.create(name=i.captaina)
+                            models.VoyageCaptainConnection.objects.create(captain_order=1, captain=first_captain, voyage=voyageObj)
                     if i.captainb:
                         #TODO change to get_or_create
-                        second_captain  = models.VoyageCaptain.objects.create(name=i.captainb)
-                        models.VoyageCaptainConnection.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
+                        if make_changes:
+                            second_captain = models.VoyageCaptain.objects.create(name=i.captainb)
+                            models.VoyageCaptainConnection.objects.create(captain_order=2, captain=second_captain, voyage=voyageObj)
                     if i.captainc:
                         #TODO change to get_or_create
-                        third_captain = models.VoyageCaptain.objects.create(name=i.captainc)
-                        models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
+                        if make_changes:
+                            third_captain = models.VoyageCaptain.objects.create(name=i.captainc)
+                            models.VoyageCaptainConnection.objects.create(captain_order=3, captain=third_captain, voyage=voyageObj)
                     #crew.save()
                     #voyageObj.voyage_crew = crew
                     #voyageObj.save()
@@ -466,48 +484,57 @@ class Command(BaseCommand):
                     #voyageObj.voyage_slaves_numbers = characteristics
                     #voyageObj.save()
 
-                    voyageObj.save()
+                    if make_changes:
+                        voyageObj.save()
                     
-                    ship.voyage = voyageObj
-                    outcome.voyage = voyageObj
-                    itinerary.voyage = voyageObj
-                    date_info.voyage = voyageObj
-                    crew.voyage = voyageObj
-                    characteristics.voyage = voyageObj
+                        ship.voyage = voyageObj
+                        outcome.voyage = voyageObj
+                        itinerary.voyage = voyageObj
+                        date_info.voyage = voyageObj
+                        crew.voyage = voyageObj
+                        characteristics.voyage = voyageObj
                     
-                    ship.save()
-                    outcome.save()
-                    itinerary.save()
-                    date_info.save()
-                    crew.save()
-                    characteristics.save()
+                        ship.save()
+                        outcome.save()
+                        itinerary.save()
+                        date_info.save()
+                        crew.save()
+                        characteristics.save()
 
-                    voyageObj.voyage_ship = ship
-                    #voyageObj.voyage_outcome = outcome
-                    voyageObj.voyage_itinerary = itinerary
-                    voyageObj.voyage_dates = date_info
-                    voyageObj.voyage_crew = crew
-                    voyageObj.voyage_slaves_numbers = characteristics
+                        voyageObj.voyage_ship = ship
+                        # voyageObj.voyage_outcome = outcome
+                        voyageObj.voyage_itinerary = itinerary
+                        voyageObj.voyage_dates = date_info
+                        voyageObj.voyage_crew = crew
+                        voyageObj.voyage_slaves_numbers = characteristics
                     
-                    voyageObj.save()
+                        voyageObj.save()
 
                     def insertSource(fieldvalue, order):
                         if fieldvalue:
+                            # get the corrected text_ref from the source_fix_dict if it is there
+                            txt_ref = source_fix_dict.get(fieldvalue, source_fix_dict.get(unicode(fieldvalue), fieldvalue))
+                            if not txt_ref:
+                                print("INFO: Skipping insert of source " + fieldvalue)
+                                return
                             # Remove spaces from text_ref for matching with short_ref
-                            to_be_matched = fieldvalue.replace(' ', '')
+                            to_be_matched = txt_ref.replace(' ', '')
                             src = self.best_source(to_be_matched)
                             if src:
-                                models.VoyageSourcesConnection.objects.create(source=src, source_order=order, text_ref=fieldvalue, group=voyageObj)
+                                if make_changes:
+                                    models.VoyageSourcesConnection.objects.create(source=src, source_order=order, text_ref=txt_ref, group=voyageObj)
                             else:
                                 print("WARNING: Could not find source for " + unidecode.unidecode(fieldvalue) + " on order " + str(order) + " for voyage " + str(voyageObj.voyage_id))
-                                models.VoyageSourcesConnection.objects.create(source_order=order, text_ref=fieldvalue, group=voyageObj)
+                                if make_changes:
+                                    models.VoyageSourcesConnection.objects.create(source_order=order, text_ref=fieldvalue, group=voyageObj)
                                 pass
                     # Alphabetical letters between a and r
                     letters = map(chr, range(97, 97+18))
                     for idx, letter in enumerate(letters):
                         # Inserting sourcea, sourceb, ..., sourcer
                         insertSource(getattr(i, 'source' + letter), (idx + 1))
-                    voyageObj.save()
+                    if make_changes:
+                        voyageObj.save()
                     sys.stdout.flush()
             print("There is " + str(self.invalid_src_count) + " text_refs without a matching short_ref")
         except Exception as ex:
