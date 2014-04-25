@@ -788,7 +788,8 @@ def search(request):
                 for j in range(num_row_labels):
                     xls_row.append('')
                 for lbl, num in i:
-                    xls_row.append(lbl)
+                    if num > 0:
+                        xls_row.append(lbl)
                     if num > 1:
                         for j in range(num - 1):
                             xls_row.append('')
@@ -904,7 +905,7 @@ def search(request):
                 ws = wb.active
                 for idx, i in enumerate(xls_table):
                     for idy, j in enumerate(i):
-                        ws.cell(row=idy,column=idx).value = unicode(j).encode('utf-8')
+                        ws.cell(row=idx,column=idy).value = unicode(j).encode('utf-8')
                 wb.save(response)
                 return response
         elif submitVal == 'tab_graphs':
