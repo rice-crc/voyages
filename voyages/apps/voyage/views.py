@@ -790,11 +790,10 @@ def search(request):
                 for lbl, num in i:
                     if num > 0:
                         xls_row.append(lbl)
-                    if num > 1:
                         for j in range(num - 1):
                             xls_row.append('')
                 xls_table.append(xls_row)
-                if idx == len(collabels)-1:
+                if idx == 0:
                     if is_double_fun:
                         xls_row.append('Total Embarked')
                         xls_row.append('Total Disembarked')
@@ -854,7 +853,7 @@ def search(request):
 #            print(list(enumerate(xls_table)))
 #            print(remove_rows)
             for rownum in remove_rows:
-                xls_table.pop(rownum + 1)
+                xls_table.pop(rownum + num_col_labels_before)
                 row_counters = [0,0,0]
                 count1 = 0
                 count2 = 0
@@ -876,10 +875,10 @@ def search(request):
             for idx, row in enumerate(row_list):
                 rowlbl = [i for i in row[0]]
                 for i in range(num_row_labels - len(rowlbl)):
-                    xls_row.append('')
+                    xls_table[idx+num_col_labels_before].insert(0, '')
                 rowlbl.reverse()
                 for i in rowlbl:
-                    xls_table[idx+1].insert(0, i[0])
+                    xls_table[idx+num_col_labels_before].insert(num_row_labels - len(rowlbl), i[0])
             if is_double_fun:
                 grand_total_value = display_function(results, None, None, results)
                 col_totals.append(grand_total_value[0])
@@ -888,7 +887,7 @@ def search(request):
                 col_totals.append(display_function(results, None, None, results))
             xls_row = []
             for i in range(num_row_labels):
-                if i == num_row_labels - 1:
+                if i == 0:
                     xls_row.append('Totals')
                 else:
                     xls_row.append('')
