@@ -22,6 +22,7 @@ import globals
 import bitly_api
 import requests
 import json
+import xlwt
 from openpyxl import Workbook
 import urllib
 import unidecode
@@ -1588,7 +1589,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
-    wb = Workbook(encoding='utf-8')
+    wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
     #TODO: add query to download
     if len(var_list.get('used_variable_names', [])) > 0:
