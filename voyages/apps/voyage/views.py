@@ -446,6 +446,7 @@ def prettify_var_list(varlist):
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         is_real_var = False
+        fullname = ''
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
