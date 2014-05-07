@@ -479,7 +479,7 @@ def num_emb_dis(queryset, rowset, colset, allset):
             len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 
 # List of tuples that define a function for a cell value (label, mapping function)
-table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
+table_functions = [('Number of Voyages', lambda x, y, z, a: x.count(),),
                    ('Sum of embarked slaves', make_sum_fun('var_imp_total_num_slaves_purchased'),),
                    ('Average number of embarked slaves', make_avg_fun('var_imp_total_num_slaves_purchased'),),
                    ('Number of voyages - embarked slaves', make_num_fun('var_imp_total_num_slaves_purchased'),),
