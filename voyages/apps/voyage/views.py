@@ -775,6 +775,7 @@ def search(request):
                         if col >= idy and col < idy + colstuff[1]:
                             collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
                         idy += colstuff[1]
+            print(dir(results))
             remove_rows = []
             if is_double_fun:
                 collabels = [[(j, k*2) for j, k in i] for i in collabels]

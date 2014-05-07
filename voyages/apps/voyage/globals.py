@@ -412,16 +412,36 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 # Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
-    return lambda queryset, rowset, colset, allset: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
+    def sum_fun(queryset, rowset, colset, allset):
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(int(stats[varname]['sum']))
+        else:
+            return prettifier(0)
+        #return prettifier(sum([i[varname] for i in list(queryset.values(varname)) if varname in i and i[varname] != None]))
+    return sum_fun
+
+#return lambda queryset, rowset, colset, allset: prettifier(sum([i[varname] for i in queryset.values() if varname in i and i[varname] != None]))
+
+def display_average(value):
+    if value != None:
+        return round(value, 1)
+    else:
+        return value
 
 def make_avg_fun(varname):
-    prettifier = display_methods.get(varname, no_mangle)
+    prettifier = display_methods.get(varname, display_average)
     def avg_fun(queryset, rowset, colset, allset):
-        lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(lst) == 0:
-            return None
+        #lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(stats[varname]['mean'])
         else:
-            return prettifier(sum(lst)/len(lst))
+            return None
+#        if len(lst) == 0:
+#            return None
+#        else:
+#            return prettifier(sum(lst)/len(lst))
     return avg_fun
 
 def make_row_tot_percent_fun(varname):
@@ -431,10 +451,10 @@ def make_row_tot_percent_fun(varname):
                 return display_percent(1)
             else:
                 rowset = allset
-        rowlst = [i.get_stored_fields()[varname] for i in rowset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(qlst) > 0:
-            return display_percent(float(sum(qlst))/float(sum(rowlst)))
+        rowstats = rowset.stats(varname).stats_results()
+        qstats = queryset.stats(varname).stats_results()
+        if qstats and qstats[varname]:
+            return display_percent(float(qstats[varname]['sum'])/float(rowstats[varname]['sum']))
         else:
             return None
     return row_tot_fun
@@ -446,10 +466,10 @@ def make_col_tot_percent_fun(varname):
                 return display_percent(1)
             else:
                 colset = allset
-        collst = [i.get_stored_fields()[varname] for i in colset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(qlst) > 0:
-            return display_percent(float(sum(qlst))/float(sum(collst)))
+        colstats = colset.stats(varname).stats_results()
+        qstats = queryset.stats(varname).stats_results()
+        if qstats and qstats[varname]:
+            return display_percent(float(qstats[varname]['sum'])/float(colstats[varname]['sum']))
         else:
             return None
     return col_tot_fun
@@ -457,26 +477,45 @@ def make_col_tot_percent_fun(varname):
 # Makes a function that counts how many of the voyages have that particular value defined
 def make_num_fun(varname):
     def num_fun(queryset, rowset, colset, allset):
-        return len([None for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None])
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return stats[varname]['count']
+        else:
+            return 0
     return num_fun
 emb_name = 'var_imp_total_num_slaves_purchased'
 dis_name = 'var_imp_total_slaves_disembarked'
 def sum_emb_dis(queryset, rowset, colset, allset):
-    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    embs = 0
+    diss = 0
+    if stats[emb_name]:
+        embs = int(stats[emb_name]['sum'])
+    if stats[dis_name]:
+        diss = int(stats[dis_name]['sum'])
+    return (embs, diss)
+#    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
+#            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 def avg_emb_dis(queryset, rowset, colset, allset):
-    lste = [i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]
-    lstd = [i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]
-    avge = None
-    avgd = None
-    if len(lste) > 0:
-        avge = sum(lste) / len(lste)
-    if len(lstd) > 0:
-        avgd = sum(lstd) / len(lstd)
-    return (avge, avgd)
+    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    embs = None
+    diss = None
+    if stats[emb_name]:
+        embs = stats[emb_name]['mean']
+    if stats[dis_name]:
+        diss = stats[dis_name]['mean']
+    return (embs, diss)
 def num_emb_dis(queryset, rowset, colset, allset):
-    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    embc = 0
+    disc = 0
+    if stats[emb_name]:
+        embc = stats[emb_name]['count']
+    if stats[dis_name]:
+        disc = stats[dis_name]['count']
+    return (embc, disc)
+#    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
+#            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 
 # List of tuples that define a function for a cell value (label, mapping function)
 table_functions = [('Number of Voyages', lambda x, y, z, a: x.count(),),
