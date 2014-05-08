@@ -509,6 +509,31 @@ table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
 double_functions = ['Sum of embarked/disembarked slaves', 'Average number of embarked/disembarked slaves', 'Number of voyages - embarked/disembarked slaves']
 
 
+# Graphs
+
+graphs_y_functions = [('Number of voyages', lambda x: x.count(),),
+                      ('Average voyage length, home port to slaves landing (days)*',),
+                      ('Average middle passage (days)*',),
+                      ('Standardized tonnage*', make_avg_fun('var_tonnage_mod')),
+                      ('Average crew at voyage outset',),
+                      ('Average crew at first landing of slaves',),
+                      ('Total crew at voyage outset',),
+                      ('Total crew at first landing of slaves',),
+                      ('Average number of slaves embarked',),
+                      ('Average number of slaves disembarked',),
+                      ('Total number of slaves embarked',),
+                      ('Total number of slaves disembarked',),
+                      ('Percentage men*',),
+                      ('Percentage women*',),
+                      ('Percentage boys*',),
+                      ('Percentage girls*',),
+                      ('Percentage children*',),
+                      ('Percentage male*',),
+                      ('Sterling cash price in Jamaica*',),
+                      ('Rate of resistance',),
+                      ('Percentage of slaves embarked who died during voyage*',),]
+
+
 
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
