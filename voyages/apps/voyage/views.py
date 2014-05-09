@@ -458,7 +458,7 @@ def prettify_var_list(varlist):
                 break
         if not is_real_var:
             # it is a month variable
-            varn = varname[:-7]
+            varn = varname[:-6]
             for var in globals.var_dict:
                 if varn == var['var_name']:
                     fullname = var['var_full_name']
@@ -775,7 +775,6 @@ def search(request):
                         if col >= idy and col < idy + colstuff[1]:
                             collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
                         idy += colstuff[1]
-            print(dir(results))
             remove_rows = []
             if is_double_fun:
                 collabels = [[(j, k*2) for j, k in i] for i in collabels]
@@ -853,8 +852,6 @@ def search(request):
                         xls_row.append('')
                 xls_table.append(xls_row)
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
-#            print(list(enumerate(xls_table)))
-#            print(remove_rows)
             for rownum in remove_rows:
                 xls_table.pop(rownum + num_col_labels_before)
                 row_counters = [0,0,0]
