@@ -486,13 +486,14 @@ def make_num_fun(varname):
 emb_name = 'var_imp_total_num_slaves_purchased'
 dis_name = 'var_imp_total_slaves_disembarked'
 def sum_emb_dis(queryset, rowset, colset, allset):
-    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
     embs = 0
     diss = 0
-    if stats[emb_name]:
-        embs = int(stats[emb_name]['sum'])
-    if stats[dis_name]:
-        diss = int(stats[dis_name]['sum'])
+    if statsemb[emb_name]:
+        embs = int(statsemb[emb_name]['sum'])
+    if statsdis[dis_name]:
+        diss = int(statsdis[dis_name]['sum'])
     return (embs, diss)
 #    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
 #            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
