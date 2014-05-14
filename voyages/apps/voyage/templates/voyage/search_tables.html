@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{% load humanize %}
+
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/qtip/jquery.qtip.min.css">
 
@@ -55,18 +57,18 @@
 	    <th class="grid-header-text" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
 	  {% endfor %}
 	  {% for cell_value in row_tuple.1 %}
-	    <td> {% if cell_value != None %} {{ cell_value }} {% endif %} </td>
+	    <td> {% if cell_value != None %} {{ cell_value|intcomma }} {% endif %} </td>
 	  {% endfor %}
 	  {% if is_double_fun %}
 	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0 }} {% endif %} </b>
+	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0|intcomma }} {% endif %} </b>
 	    </th>
 	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1 }} {% endif %} </b>
+	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1|intcomma }} {% endif %} </b>
 	    </th>
 	  {% else %}
 	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2 }} {% endif %} </b>
+	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2|intcomma }} {% endif %} </b>
 	    </th>
 	  {% endif %}
       {% endfor %}
@@ -74,7 +76,7 @@
 	<th class="grid-header-text" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
 	{% for total in col_totals %}
 	  <th class="grid-header-text">
-	    <b> {% if total != None %} {{ total }} {% endif %} </b>
+	    <b> {% if total != None %} {{ total|intcomma }} {% endif %} </b>
 	  </th>
 	{% endfor %}
     </tbody>
