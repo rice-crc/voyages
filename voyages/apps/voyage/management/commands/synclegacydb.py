@@ -260,9 +260,15 @@ class Command(BaseCommand):
                         :return "mm,dd, yyyy":
                         """
                         tmpStr = ""
-                        if month_value and day_value and year_value:
-                            tmpStr = str(month_value) + "," + str(day_value) + "," + str(year_value)
-                        else
+                        if month_value:
+                            tmpStr += str(month_value)
+                        tmpStr += ","
+                        if day_value:
+                            tmpStr += str(day_value)
+                        tmpStr += ","
+                        if year_value:
+                            tmpStr += str(year_value)
+                        if tmpStr == ',,':
                             return None
                         return tmpStr
                     # Voyage dates
