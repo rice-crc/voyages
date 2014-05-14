@@ -498,22 +498,24 @@ def sum_emb_dis(queryset, rowset, colset, allset):
 #    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
 #            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 def avg_emb_dis(queryset, rowset, colset, allset):
-    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
     embs = None
     diss = None
-    if stats[emb_name]:
-        embs = stats[emb_name]['mean']
-    if stats[dis_name]:
-        diss = stats[dis_name]['mean']
+    if statsemb[emb_name]:
+        embs = statsemb[emb_name]['mean']
+    if statsdis[dis_name]:
+        diss = statsdis[dis_name]['mean']
     return (embs, diss)
 def num_emb_dis(queryset, rowset, colset, allset):
-    stats = queryset.stats(emb_name).stats(dis_name).stats_results()
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
     embc = 0
     disc = 0
-    if stats[emb_name]:
-        embc = stats[emb_name]['count']
-    if stats[dis_name]:
-        disc = stats[dis_name]['count']
+    if statsemb[emb_name]:
+        embc = statsemb[emb_name]['count']
+    if statsdis[dis_name]:
+        disc = statsdis[dis_name]['count']
     return (embc, disc)
 #    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
 #            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
