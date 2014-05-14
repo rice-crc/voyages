@@ -289,14 +289,14 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
     years = []
     while current_year <= last_year:
         # Range is exclusive of the start, and inclusive of the end, so a search for years 1800 to 1899 will need the range 1799-1899
-        years.append([current_year - 1, current_year + interval - 1])
+        years.append([current_year, current_year + interval - 1])
         current_year += interval
     def year_labeler(years):
         if years[0] + 1 == years[1]:
             return years[1]
         else:
             return str(years[0] + 1) + '-' + str(years[1])
-    return get_each_from_list(years, 'var_imp_voyage_began__range', year_labeler)
+    return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range', year_labeler)
 
 # Returns filter definition (list of tuples of (label_list, query_dict)) 
 def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
