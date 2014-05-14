@@ -533,6 +533,14 @@ graphs_y_functions = [('Number of voyages', lambda x: x.count(),),
                       ('Rate of resistance',),
                       ('Percentage of slaves embarked who died during voyage*',),]
 
+graphs_x_functions = [('Year arrived with slaves*',),
+                      ('Voyage length, home port to slaves landing (days)*',),
+                      ('Middle passage (days)*',),
+                      ('Crew at voyage outset',)
+                      ('Crew at first landing of slaves',),
+                      ('Slaves embarked',),
+                      ('Slaves disembarked',),]
+
 
 
 
