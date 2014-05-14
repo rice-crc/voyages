@@ -727,14 +727,14 @@ def search(request):
             pst = {x: y for x,y in request.POST.items()}
             # Force the initial value
             if 'columns' not in pst:
-                pst['columns'] = '1'
+                pst['columns'] = '7'
             if 'cells' not in request.POST:
                 pst['cells'] = '1'
             if 'rows' not in request.POST:
                 pst['rows'] = '12'
             table_stats_form = TableSelectionForm(pst)
             table_row_query_def = globals.table_rows[12]
-            table_col_query_def = globals.table_columns[1]
+            table_col_query_def = globals.table_columns[7]
             display_function = globals.table_functions[1][1]
             display_fun_name = globals.table_functions[1][0]
             omit_empty = False
