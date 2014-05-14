@@ -20,10 +20,10 @@ def getDate(value):
         return value
     month = getMonth(value)
     if not month or month == "" or int(month) == 0:
-        month = 1
+        month = None
     day = getDay(value)
     if not day or day == "" or int(day) == 0:
-        day = 1
+        day = None
     year = getYear(value)
     return mkdate(int(year), int(month), int(day))
 
@@ -36,6 +36,8 @@ def mkdate(year, month, day):
             return mkdate(year, 12, day)
         elif day > 1:
             return mkdate(year, month, day-1)
+        elif not month or not day:
+            return None
         else:
             print("Error with date Day: " + day + " Month: " + month + " Year: " + year)
             return date(year, month, day)
