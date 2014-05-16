@@ -104,13 +104,29 @@ Before loading data comment the `HAYSTACK_SIGNAL_PROCESSOR` variable out in the 
   #HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 
-Run these commands to load the data fixtures::
+Run these commands to load all the data fixtures except images.json::
 
-  $ python manage.py loaddata initialdata/*.json
+  $ python manage.py loaddata initialdata/glossary.json
+  $ python manage.py loaddata initialdata/lessonplan_data.json
+  $ python manage.py loaddata initialdata/flatpages.json
+  $ python manage.py loaddata initialdata/groupings.json
+  $ python manage.py loaddata initialdata/users.json
+  $ python manage.py loaddata initialdata/geographical.json
+  $ python manage.py loaddata initialdata/shipattributes.json
+  $ python manage.py loaddata initialdata/outcomes.json
+  $ python manage.py loaddata initialdata/faq_all.json
+  $ python manage.py loaddata initialdata/sources.json
 
 Sync voyage data from legacy system
 
+.. Note::
+  This process could take over 2 hours to run
+
   $ python manage.py synclegacydb
+
+Now load the images.json file::
+
+  $ python manage.py loaddata initialdata/images.json
 
 
 After loading data uncomment the `HAYSTACK_SIGNAL_PROCESSOR` variable in the `localsettings`::

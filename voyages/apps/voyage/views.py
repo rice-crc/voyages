@@ -22,7 +22,8 @@ import globals
 import bitly_api
 import requests
 import json
-from xlwt import Workbook
+import xlwt
+from openpyxl import Workbook
 import urllib
 import unidecode
 from itertools import groupby
@@ -445,6 +446,7 @@ def prettify_var_list(varlist):
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         is_real_var = False
+        fullname = ''
         for var in globals.var_dict:
             if varname == var['var_name']:
                 fullname = var['var_full_name']
@@ -456,7 +458,7 @@ def prettify_var_list(varlist):
                 break
         if not is_real_var:
             # it is a month variable
-            varn = varname[:-7]
+            varn = varname[:-6]
             for var in globals.var_dict:
                 if varn == var['var_name']:
                     fullname = var['var_full_name']
@@ -725,14 +727,14 @@ def search(request):
             pst = {x: y for x,y in request.POST.items()}
             # Force the initial value
             if 'columns' not in pst:
-                pst['columns'] = '1'
+                pst['columns'] = '7'
             if 'cells' not in request.POST:
                 pst['cells'] = '1'
             if 'rows' not in request.POST:
                 pst['rows'] = '12'
             table_stats_form = TableSelectionForm(pst)
             table_row_query_def = globals.table_rows[12]
-            table_col_query_def = globals.table_columns[1]
+            table_col_query_def = globals.table_columns[7]
             display_function = globals.table_functions[1][1]
             display_fun_name = globals.table_functions[1][0]
             omit_empty = False
@@ -788,26 +790,22 @@ def search(request):
                 for j in range(num_row_labels):
                     xls_row.append('')
                 for lbl, num in i:
-                    xls_row.append(lbl)
-                    if num > 1:
+                    if num > 0:
+                        xls_row.append(lbl)
                         for j in range(num - 1):
                             xls_row.append('')
                 xls_table.append(xls_row)
-                if idx == len(collabels)-1:
+                if idx == 0:
                     if is_double_fun:
                         xls_row.append('Total Embarked')
                         xls_row.append('Total Disembarked')
                     else:
-                        xls_row.append('Total')
+                        xls_row.append('Totals')
             for idx, rowstuff in enumerate(table_row_query_def[1]):
                 xls_row = []
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
                 rowqueryset = results.filter(**rowquery)
-                for i in range(num_row_labels - len(rowlabels)):
-                    xls_row.append('')
-                for i in rowlabels:
-                    xls_row.append(i[0])
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
                 row_cell_values = []
@@ -855,6 +853,7 @@ def search(request):
                 xls_table.append(xls_row)
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
+                xls_table.pop(rownum + num_col_labels_before)
                 row_counters = [0,0,0]
                 count1 = 0
                 count2 = 0
@@ -873,6 +872,13 @@ def search(request):
                     if num > 0:
                         row_list[rownum+1][0].insert(0, (lbl, num))
                 row_list.pop(rownum)
+            for idx, row in enumerate(row_list):
+                rowlbl = [i for i in row[0]]
+                for i in range(num_row_labels - len(rowlbl)):
+                    xls_table[idx+num_col_labels_before].insert(0, '')
+                rowlbl.reverse()
+                for i in rowlbl:
+                    xls_table[idx+num_col_labels_before].insert(num_row_labels - len(rowlbl), i[0])
             if is_double_fun:
                 grand_total_value = display_function(results, None, None, results)
                 col_totals.append(grand_total_value[0])
@@ -881,7 +887,7 @@ def search(request):
                 col_totals.append(display_function(results, None, None, results))
             xls_row = []
             for i in range(num_row_labels):
-                if i == num_row_labels - 1:
+                if i == 0:
                     xls_row.append('Totals')
                 else:
                     xls_row.append('')
@@ -892,13 +898,13 @@ def search(request):
                     xls_row.append('')
             xls_table.append(xls_row)
             if 'xls_download_table' == submitVal:
-                response = HttpResponse(content_type='application/vnd.ms-excel')
-                response['Content-Disposition'] = 'attachment; filename="data.xls"'
-                wb = Workbook(encoding='utf-8')
-                ws = wb.add_sheet("data")
+                response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = 'attachment; filename="data.xlsx"'
+                wb = Workbook()
+                ws = wb.active
                 for idx, i in enumerate(xls_table):
                     for idy, j in enumerate(i):
-                        ws.write(idx,idy,label=unicode(j).encode('utf-8'))
+                        ws.cell(row=idx,column=idy).value = unicode(j).encode('utf-8')
                 wb.save(response)
                 return response
         elif submitVal == 'tab_graphs':
@@ -1582,7 +1588,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
-    wb = Workbook(encoding='utf-8')
+    wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet("data")
     #TODO: add query to download
     if len(var_list.get('used_variable_names', [])) > 0:
