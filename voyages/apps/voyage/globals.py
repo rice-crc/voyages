@@ -412,11 +412,11 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 # Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
-    return lambda queryset, rowset, colset, allset: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
+    return lambda queryset, rowset=None, colset=None, allset=None: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
 
 def make_avg_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
-    def avg_fun(queryset, rowset, colset, allset):
+    def avg_fun(queryset, rowset=None, colset=None, allset=None):
         lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
         if len(lst) == 0:
             return None
@@ -511,7 +511,7 @@ double_functions = ['Sum of embarked/disembarked slaves', 'Average number of emb
 
 # Graphs
 
-# Takes a searchqueryset
+# Takes a searchqueryset and returns a number
 graphs_y_functions = [('Number of voyages', lambda x: x.count(),),
                       ('Average voyage length, home port to slaves landing (days)*', make_avg_fun('var_imp_length_home_to_disembark'),),
                       ('Average middle passage (days)*', make_avg_fun('var_length_middle_passage_days'),),
@@ -532,7 +532,7 @@ graphs_y_functions = [('Number of voyages', lambda x: x.count(),),
                       ('Percentage male*', make_avg_fun('var_imputed_percentage_male'),),
                       ('Sterling cash price in Jamaica*', make_avg_fun('var_imputed_sterling_cash'),),
                       ('Rate of resistance',),
-                      ('Percentage of slaves embarked who died during voyage*', make_num_fun('var_imputed_mortality'),),]
+                      ('Percentage of slaves embarked who died during voyage*', make_avg_fun('var_imputed_mortality'),),]
 
 graphs_x_functions = [('Year arrived with slaves*',),
                       ('Voyage length, home port to slaves landing (days)*',),
