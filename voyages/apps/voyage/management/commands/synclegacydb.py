@@ -20,7 +20,7 @@ source_fix_dict = {u'Vila Vilar, 258-59': u'Vila Vilar, 258-59', u'Hernaes,275,2
 
 # Ignore spaces and accents in short refs
 def source_simplify(short_ref):
-    return unidecode.unidecode(short_ref.replace(' ', ''))
+    return unidecode.unidecode(short_ref.replace(' ', '').replace(',','').replace(';',''))
 
 class Command(BaseCommand):
     vplaces = {}
