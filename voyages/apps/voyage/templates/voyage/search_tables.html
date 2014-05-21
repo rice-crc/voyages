@@ -60,14 +60,14 @@
 	    <td class='vstable'> {% if cell_value != None %} {{ cell_value|intcomma }} {% endif %} </td>
 	  {% endfor %}
 	  {% if is_double_fun %}
-	    <th class="vstable grid-header-text">
+	    <th class="vstable grid-total-text">
 	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0|intcomma }} {% endif %} </b>
 	    </th>
-	    <th class="vstable grid-header-text">
+	    <th class="vstable grid-total-text">
 	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1|intcomma }} {% endif %} </b>
 	    </th>
 	  {% else %}
-	    <th class="grid-header-text vstable">
+	    <th class="grid-total-text vstable">
 	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2|intcomma }} {% endif %} </b>
 	    </th>
 	  {% endif %}
@@ -75,7 +75,7 @@
       <tr class="grid-row-even grid-row-first">
 	<th class="grid-header-text" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
 	{% for total in col_totals %}
-	  <th class="vstable grid-header-text">
+	  <th class="vstable grid-total-text">
 	    <b> {% if total != None %} {{ total|intcomma }} {% endif %} </b>
 	  </th>
 	{% endfor %}
