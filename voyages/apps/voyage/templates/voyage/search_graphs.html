@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<div>
+  <h1>{% trans 'Custom Graphs' %}</h1>
+</div>
+<div >
+  <table>
+    <tbody>
+      {% for field in graph_xy_select_form %}
+        <tr>
+          <td> <b> {{ field.label }}: </b> </td>
+          <td> {% for i in field %} {{ i }} {% endfor %} </td>
+	</tr>
+      {% endfor %}
+      <tr>
+	<td></td>
+	<td>
+	  <!-- Show button -->
+	  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs');" name="buttonShow" />
+	</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

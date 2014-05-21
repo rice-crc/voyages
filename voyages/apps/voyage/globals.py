@@ -509,35 +509,75 @@ table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
 double_functions = ['Sum of embarked/disembarked slaves', 'Average number of embarked/disembarked slaves', 'Number of voyages - embarked/disembarked slaves']
 
 
+
+# I don't think I should worry about Nones, since I should just not include them in the dataset
+def averaging_fun(lst):
+    sm = 0
+    cnt = 0
+    for i in lst:
+        if i != None:
+            cnt += 1
+            sm += i
+    if cnt > 0:
+        return float(sm) / float(cnt)
+    else:
+        # Should I return None or 0? Should I just skip the values that have None?
+        return None
+
+summing_fun = sum
+#def summing_fun(lst):
+#    sm = 0
+#    for i in lst:
+#        if i != None:
+#            sm += i
+#    return sm
+
 # Graphs
 
 # Takes a searchqueryset and returns a number
-graphs_y_functions = [('Number of voyages', lambda x: x.count(),),
-                      ('Average voyage length, home port to slaves landing (days)*', make_avg_fun('var_imp_length_home_to_disembark'),),
-                      ('Average middle passage (days)*', make_avg_fun('var_length_middle_passage_days'),),
-                      ('Standardized tonnage*', make_avg_fun('var_tonnage_mod')),
-                      ('Average crew at voyage outset', make_avg_fun('var_crew_voyage_outset'),),
-                      ('Average crew at first landing of slaves', make_avg_fun('var_crew_first_landing'),),
-                      ('Total crew at voyage outset', make_sum_fun('var_crew_voyage_outset'),),
-                      ('Total crew at first landing of slaves', make_sum_fun('var_crew_first_landing'),),
-                      ('Average number of slaves embarked',make_avg_fun('var_imp_total_num_slaves_purchased'),),
-                      ('Average number of slaves disembarked', make_avg_fun('var_imp_total_slaves_disembarked')),
-                      ('Total number of slaves embarked', make_sum_fun('var_imp_total_num_slaves_purchased'),),
-                      ('Total number of slaves disembarked', make_sum_fun('var_imp_total_slaves_disembarked'),),
-                      ('Percentage men*', make_avg_fun('var_imputed_percentage_men'),),
-                      ('Percentage women*', make_avg_fun('var_imputed_percentage_women'),),
-                      ('Percentage boys*', make_avg_fun('var_imputed_percentage_boys'),),
-                      ('Percentage girls*', make_avg_fun('var_imputed_percentage_girls'),),
-                      ('Percentage children*', make_avg_fun('var_imputed_percentage_child'),),
-                      ('Percentage male*', make_avg_fun('var_imputed_percentage_male'),),
-                      ('Sterling cash price in Jamaica*', make_avg_fun('var_imputed_sterling_cash'),),
+# (description, varname, function on varname values)
+graphs_y_functions = [('Number of voyages', 'var_voyage_id', len, lambda x: x.count(),),
+                      ('Average voyage length, home port to slaves landing (days)*', 'var_imp_length_home_to_disembark', averaging_fun, make_avg_fun('var_imp_length_home_to_disembark'),),
+                      ('Average middle passage (days)*', 'var_length_middle_passage_days', averaging_fun, make_avg_fun('var_length_middle_passage_days'),),
+                      ('Standardized tonnage*', 'var_tonnage_mod', averaging_fun, make_avg_fun('var_tonnage_mod')),
+                      ('Average crew at voyage outset', 'var_crew_voyage_outset', averaging_fun, make_avg_fun('var_crew_voyage_outset'),),
+                      ('Average crew at first landing of slaves', 'var_crew_first_landing', averaging_fun, make_avg_fun('var_crew_first_landing'),),
+                      ('Total crew at voyage outset', 'var_crew_voyage_outset', summing_fun, make_sum_fun('var_crew_voyage_outset'),),
+                      ('Total crew at first landing of slaves', 'var_crew_first_landing', summing_fun, make_sum_fun('var_crew_first_landing'),),
+                      ('Average number of slaves embarked', 'var_imp_total_num_slaves_purchased', averaging_fun, make_avg_fun('var_imp_total_num_slaves_purchased'),),
+                      ('Average number of slaves disembarked', 'var_imp_total_slaves_disembarked', averaging_fun, make_avg_fun('var_imp_total_slaves_disembarked')),
+                      ('Total number of slaves embarked', 'var_imp_total_num_slaves_purchased', summing_fun, make_sum_fun('var_imp_total_num_slaves_purchased'),),
+                      ('Total number of slaves disembarked', 'var_imp_total_slaves_disembarked', summing_fun, make_sum_fun('var_imp_total_slaves_disembarked'),),
+                      ('Percentage men*', 'var_imputed_percentage_men', averaging_fun, make_avg_fun('var_imputed_percentage_men'),),
+                      ('Percentage women*', 'var_imputed_percentage_women', averaging_fun, make_avg_fun('var_imputed_percentage_women'),),
+                      ('Percentage boys*', 'var_imputed_percentage_boys', averaging_fun, make_avg_fun('var_imputed_percentage_boys'),),
+                      ('Percentage girls*', 'var_imputed_percentage_girls', averaging_fun, make_avg_fun('var_imputed_percentage_girls'),),
+                      ('Percentage children*', 'var_imputed_percentage_child', averaging_fun, make_avg_fun('var_imputed_percentage_child'),),
+                      ('Percentage male*', 'var_imputed_percentage_male', averaging_fun, make_avg_fun('var_imputed_percentage_male'),),
+                      ('Sterling cash price in Jamaica*', 'var_imputed_sterling_cash', averaging_fun, make_avg_fun('var_imputed_sterling_cash'),),
                       ('Rate of resistance',),
-                      ('Percentage of slaves embarked who died during voyage*', make_avg_fun('var_imputed_mortality'),),]
+                      ('Percentage of slaves embarked who died during voyage*', 'var_imputed_mortality', averaging_fun, make_avg_fun('var_imputed_mortality'),),]
 
-graphs_x_functions = [('Year arrived with slaves*',),
+
+# get dicts for x and y values, then make a dictionary of x values, put y values into a list for each x value
+def make_x_fun(xvar):
+    def x_fun(sqs, ydef):
+        yvar = ydef[1]
+        yfun = ydef[2]
+        # Perhaps use values_list instead to use less memory?
+        vls = sqs.values(xvar, yvar)
+        vdict = {}
+        for i in vls:
+            if xvar in i and yvar in i:
+                vdict[i[xvar]] = vdict.get(i[xvar], []).append(i[yvar])
+        dataset = [(i[0], yfun(i[1])) for i in vdict.items()]
+        return dataset
+
+# Takes a searchqueryset and a y function definition (description, varname, reduce function) and returns a dataset (list of tuples) in the form (x,y)
+graphs_x_functions = [('Year arrived with slaves*', make_x_fun('var_imp_arrival_at_port_of_dis')),
                       ('Voyage length, home port to slaves landing (days)*',),
                       ('Middle passage (days)*',),
-                      ('Crew at voyage outset',)
+                      ('Crew at voyage outset',),
                       ('Crew at first landing of slaves',),
                       ('Slaves embarked',),
                       ('Slaves disembarked',),]

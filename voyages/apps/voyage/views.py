@@ -603,6 +603,7 @@ def search(request):
     num_col_labels_total = 1
     num_row_labels = 1
     is_double_fun = False
+    graphs_xy_select_form = None
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -911,6 +912,7 @@ def search(request):
                 return response
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
+            graphs_xy_select_form = GraphXYSelectionForm(request.POST)
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
@@ -980,7 +982,8 @@ def search(request):
                    'num_col_labels_before': num_col_labels_before, 
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
-                   'is_double_fun': is_double_fun,})
+                   'is_double_fun': is_double_fun,
+                   'graphs_xy_select_form': graphs_xy_select_form})
 
 def prettify_results(results, lookup_table):
     """
