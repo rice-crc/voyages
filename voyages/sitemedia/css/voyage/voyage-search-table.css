@@ -12,7 +12,6 @@ table.grid td {
 
 table.grid th {
 	padding: 5px;
-	text-align: left;
 	background-color: #EED083; }
 
 table.grid th a {
@@ -51,8 +50,17 @@ table.multiline-attr-table td {
 	white-space: nowrap;
 }
 	
-div.grid-header-text {
-	padding: 0px; }
+.grid-header-text {
+	padding: 5px;
+	text-align: left;
+	background-color: #EED083;
+	}
+
+.grid-total-text {
+	padding: 5px;
+	text-align: right
+	background-color: #EED083; }
+
 
 table.grid-header-right {
 	margin-left: auto;
