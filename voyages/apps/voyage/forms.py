@@ -228,4 +228,11 @@ class TableSelectionForm(forms.Form):
     cells = forms.ChoiceField(label='Cells', choices=cellchoices, initial=[cellchoices[1][1]])#globals.table_functions[1])
     cells.initial = [cellchoices[1][0]]
     omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=False)
-    
+
+class GraphXYSelectionForm(forms.Form):
+    lmbd = lambda x: (str(x[0]), x[1][0])
+    xchoices = map(lmbd, enumerate(globals.graphs_x_functions))
+    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+    xselect = forms.ChoiceField(label='X axis', choices=xchoices)
+    yselect = forms.ChoiceField(label='Y axis', choices=ychoices)
+
