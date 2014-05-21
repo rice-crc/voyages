@@ -6226,8 +6226,8 @@
     "pk": 14358, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Vila Vilar, 1974", 
-        "full_ref": "Vila Vilar, Enriqueta, <i>Historia de Puerto Rico, 1600-1650</i> (Seville, 1974).", 
+        "short_ref": "Vila Vilar, Cuadro 2", 
+        "full_ref": "<p>Vila Vilar, Enriqueta, <em>Historia de Puerto Rico, 1600-1650</em> (Seville, 1974).</p>", 
         "source_type": 3
     }
 },
@@ -6334,8 +6334,8 @@
     "pk": 14370, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Vila Vilar, 1977", 
-        "full_ref": "Vila Vilar, Enriqueta, <i>Hispanoam\u00e9rica y el comercio de esclavos: Los asientos portugueses</i> (Sevilla, 1977).", 
+        "short_ref": "Vila Vilar,", 
+        "full_ref": "<p>Vila Vilar, Enriqueta, <em>Hispanoam&eacute;rica y el comercio de esclavos: Los asientos portugueses</em> (Sevilla, 1977).</p>", 
         "source_type": 3
     }
 },
