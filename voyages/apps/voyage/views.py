@@ -1322,6 +1322,8 @@ def variable_list():
 
             elif elem['var_type'] == 'numeric':
                 query[var_name + "__gte"] = -1
+            elif elem['var_type'] == 'date':
+                query[var_name + "__gte"] = date(1,1,1)
             else:
                 query[var_name + "__gte"] = ""
 
