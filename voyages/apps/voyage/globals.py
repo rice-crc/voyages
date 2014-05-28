@@ -155,6 +155,46 @@ def unmangle_resistance(value, voyageid=None):
         return map(unmangle_resistance, value)
     return unicode(models.Resistance.objects.get(value=int(value)).label)
 
+def voyage_by_id(voyageid):
+    return models.Voyage.objects.get(voyage_id=voyageid)
+
+# Take a comma separated date and convert it to a string in the form of (mm/dd/yyyy), and replace unknowns with "?"
+def csd_to_str(csd):
+    if not csd:
+        return ''
+    vl = csd.split(',')
+    month = '??'
+    day = '??'
+    year = '????'
+    if vl[0] != '': month = str(vl[0]).zfill(2)
+    if vl[1] != '': day = str(vl[1]).zfill(2)
+    if vl[2] != '': year = str(vl[2]).zfill(4)
+    if not vl[0] or not vl[1] or not vl[2]:
+        print(csd)
+    return month + '/' + day + '/' + year
+
+# Returns the date as a string for display using the database fields
+def gd_voyage_began(value, voyageid):
+    # In production it should fail silently and just give the date based on the solr value
+    # For now it should error on no voyageid
+    vd = voyage_by_id(voyageid).voyage_dates.voyage_began
+    return csd_to_str(vd)
+def gd_slave_purchase_began(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.slave_purchase_began
+    return csd_to_str(vd)
+def gd_departed_africa(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.date_departed_africa
+    return csd_to_str(vd)
+def gd_first_dis_of_slaves(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.first_dis_of_slaves
+    return csd_to_str(vd)
+def gd_departure_last_landing(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.departure_last_place_of_landing
+    return csd_to_str(vd)
+def gd_voyage_completed(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.voyage_completed
+    return csd_to_str(vd)
+
 # Run against solr field values when displaying in results table
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
@@ -166,12 +206,12 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_sterling_cash': display_sterling_price,
                    'var_tonnage': unmangle_truncate,
                    'var_tonnage_mod': unmangle_truncate,
-                   'var_voyage_began': unmangle_date,
-                   'var_slave_purchase_began': unmangle_date,
-                   'var_date_departed_africa': unmangle_date,
-                   'var_first_dis_of_slaves': unmangle_date,
-                   'var_departure_last_place_of_landing': unmangle_date,
-                   'var_voyage_completed': unmangle_date}
+                   'var_voyage_began': gd_voyage_began,
+                   'var_slave_purchase_began': gd_slave_purchase_began,
+                   'var_date_departed_africa': gd_departed_africa,
+                   'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                   'var_departure_last_place_of_landing': gd_departure_last_landing,
+                   'var_voyage_completed': gd_voyage_completed}
 # Run against solr field values when creating an xls file
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
@@ -184,14 +224,15 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_captain': display_xls_multiple_names,
                        'var_owner': display_xls_multiple_names,
                        'var_sources': display_xls_sources,
-                       'var_voyage_began': unmangle_date,
-                       'var_slave_purchase_began': unmangle_date,
-                       'var_date_departed_africa': unmangle_date,
-                       'var_first_dis_of_slaves': unmangle_date,
-                       'var_departure_last_place_of_landing': unmangle_date,
-                       'var_voyage_completed': unmangle_date}
+                       'var_voyage_began': gd_voyage_began,
+                       'var_slave_purchase_began': gd_slave_purchase_began,
+                       'var_date_departed_africa': gd_departed_africa,
+                       'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                       'var_departure_last_place_of_landing': gd_departure_last_landing,
+                       'var_voyage_completed': gd_voyage_completed}
 # Run against solr field values when displaying values for a single voyage
-display_methods_details = {'var_sources': detail_display_sources}
+#display_methods_details = {'var_sources': detail_display_sources,
+#}
 # Used to convert a form value to a proper value for searching with
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
@@ -247,14 +288,15 @@ display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_male': unmangle_percent,
                             'var_imputed_percentage_child': unmangle_percent,
                             'var_imputed_mortality': unmangle_percent,
-                            'var_voyage_began': unmangle_date,
-                            'var_slave_purchase_began': unmangle_date,
-                            'var_date_departed_africa': unmangle_date,
-                            'var_first_dis_of_slaves': unmangle_date,
-                            'var_departure_last_place_of_landing': unmangle_date,
-                            'var_voyage_completed': unmangle_date,
+                            'var_voyage_began': gd_voyage_began,
+                            'var_slave_purchase_began': gd_slave_purchase_began,
+                            'var_date_departed_africa': gd_departed_africa,
+                            'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                            'var_departure_last_place_of_landing': gd_departure_last_landing,
+                            'var_voyage_completed': gd_voyage_completed,
                             'var_tonnage': unmangle_truncate,
-                            'var_tonnage_mod': unmangle_truncate}
+                            'var_tonnage_mod': unmangle_truncate,
+                            'var_sources': detail_display_sources}
 
 
 
