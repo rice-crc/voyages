@@ -171,7 +171,7 @@ def csd_to_str(csd):
     if vl[2] != '': year = str(vl[2]).zfill(4)
     if not vl[0] or not vl[1] or not vl[2]:
         print(csd)
-    return month + '/' + day + '/' + year
+    return year + '-' + month + '-' + day
 
 # Returns the date as a string for display using the database fields
 def gd_voyage_began(value, voyageid):
