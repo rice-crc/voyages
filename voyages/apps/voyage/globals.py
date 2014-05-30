@@ -569,9 +569,12 @@ def make_x_fun(xvar):
         vdict = {}
         for i in vls:
             if xvar in i and yvar in i:
-                vdict[i[xvar]] = vdict.get(i[xvar], []).append(i[yvar])
+                if i[yvar] != None:
+                    vdict[i[xvar]] = vdict.get(i[xvar], [])
+                    vdict[i[xvar]].append(i[yvar])
         dataset = [(i[0], yfun(i[1])) for i in vdict.items()]
         return dataset
+    return x_fun
 
 # Takes a searchqueryset and a y function definition (description, varname, reduce function) and returns a dataset (list of tuples) in the form (x,y)
 graphs_x_functions = [('Year arrived with slaves*', make_x_fun('var_imp_arrival_at_port_of_dis')),
