@@ -913,6 +913,13 @@ def search(request):
         elif submitVal == 'tab_graphs':
             tab = 'graphs'
             graphs_xy_select_form = GraphXYSelectionForm(request.POST)
+            if graphs_xy_select_form.is_valid():
+                xdef = globals.graphs_x_functions[int(graphs_xy_select_form.cleaned_data['xselect'])]
+                ydef = globals.graphs_y_functions[int(graphs_xy_select_form.cleaned_data['yselect'])]
+                xfun = xdef[1]
+                print(xfun(results, ydef))
+#                print(xdef)
+#                print(ydef)
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
