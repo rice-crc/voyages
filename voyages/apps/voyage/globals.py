@@ -169,8 +169,6 @@ def csd_to_str(csd):
     if vl[0] != '': month = str(vl[0]).zfill(2)
     if vl[1] != '': day = str(vl[1]).zfill(2)
     if vl[2] != '': year = str(vl[2]).zfill(4)
-    if not vl[0] or not vl[1] or not vl[2]:
-        print(csd)
     return year + '-' + month + '-' + day
 
 # Returns the date as a string for display using the database fields
@@ -599,6 +597,14 @@ double_functions = ['Sum of embarked/disembarked slaves', 'Average number of emb
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
 
 #all_place_list = structure_places_all(models.Place.objects.all())
+
+additional_var_dict = [
+    {'var_name': 'var_imp_principal_broad_region_disembark_idnum',
+     'var_type': 'numeric'},
+    {'var_name': 'var_imp_broad_region_voyage_begin_idnum',
+     'var_type': 'numeric'},
+    {'var_name': 'var_imputed_nationality_idnum',
+     'var_type': 'numeric'}]
 
 var_dict = [
     # Ship, Nation, Owners
