@@ -332,10 +332,10 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
         years.append([current_year, current_year + interval - 1])
         current_year += interval
     def year_labeler(years):
-        if years[0] + 1 == years[1]:
+        if years[0] == years[1]:
             return years[1]
         else:
-            return str(years[0] + 1) + '-' + str(years[1])
+            return str(years[0]) + '-' + str(years[1])
     return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range', year_labeler)
 
 # Returns filter definition (list of tuples of (label_list, query_dict)) 
