@@ -744,6 +744,50 @@ def search(request):
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
                 display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
                 omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
+            restrict_query = {}
+            # Get the variable name of the variable used to filter the rows so we can constrain the column totals to voyages with the row variable defined
+            table_row_var_name = ''
+            if len(table_row_query_def[1]) > 0:
+                # The query def is a triple with the 2nd element being a list
+                # that list is a list of tuples with the label and the query dict
+                # the query dict is a dictionary with 1 element which the key is the var name with a '__' and then the query type (e.g. "__exact")
+                table_row_var_name = table_row_query_def[1][0][1].keys()[0].split('__')[0]
+            table_row_var = search_var_dict(table_row_var_name)
+            if not table_row_var:
+                for var in globals.additional_var_dict:
+                    if var['var_name'] == table_row_var_name:
+                        table_row_var = var
+            if table_row_var:
+                if table_row_var['var_type'] == 'numeric':
+                    restrict_query[table_row_var_name + "__gte"] = -1
+                elif table_row_var['var_type'] == 'date':
+                    restrict_query[table_row_var_name + "__gte"] = date(1,1,1)
+                else:
+                    restrict_query[table_row_var_name + "__gte"] = ""
+            elif table_row_var_name != '':
+                restrict_query[table_row_var_name + "__gte"] = ""
+
+            # Get the variable name for the column
+            table_col_var_name = ''
+            if len(table_col_query_def[1]) > 0:
+                table_col_var_name = table_col_query_def[1][0].keys()[0].split('__')[0]
+            table_col_var = search_var_dict(table_col_var_name)
+            if not table_col_var:
+                for var in globals.additional_var_dict:
+                    if var['var_name'] == table_col_var_name:
+                        table_col_var = var
+            if table_col_var:
+                if table_col_var['var_type'] == 'numeric':
+                    restrict_query[table_col_var_name + "__gte"] = -1
+                elif table_col_var['var_type'] == 'date':
+                    restrict_query[table_col_var_name + "__gte"] = date(1,1,1)
+                else:
+                    restrict_query[table_col_var_name + "__gte"] = ""
+            elif table_col_var_name != '':
+                restrict_query[table_col_var_name + "__gte"] = ""
+
+            tableresults = results.filter(**restrict_query)
+
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
@@ -755,18 +799,18 @@ def search(request):
                 is_double_fun = True
 
             for idx, colquery in enumerate(table_col_query_def[1]):
-                colqueryset = results.filter(**colquery)
+                colqueryset = tableresults.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
                 else:
                     if is_double_fun:
-                        display_col_total = display_function(colqueryset, None, colqueryset, results)
+                        display_col_total = display_function(colqueryset, None, colqueryset, tableresults)
                         col_totals.append(display_col_total[0])
                         col_totals.append(display_col_total[1])
                     else:
-                        col_totals.append(display_function(colqueryset, None, colqueryset, results))
+                        col_totals.append(display_function(colqueryset, None, colqueryset, tableresults))
                     used_col_query_sets.append((colquery, colqueryset))
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
@@ -805,7 +849,7 @@ def search(request):
                 xls_row = []
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
-                rowqueryset = results.filter(**rowquery)
+                rowqueryset = tableresults.filter(**rowquery)
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
                 row_cell_values = []
@@ -815,7 +859,7 @@ def search(request):
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
                     if is_double_fun:
-                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, tableresults)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
                         if display_result[0] != None:
@@ -827,14 +871,14 @@ def search(request):
                         else:
                             xls_row.append('')
                     else:
-                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, tableresults)
                         row_cell_values.append(display_result)
                         if display_result != None:
                             xls_row.append(display_result)
                         else:
                             xls_row.append('')
                 cell_values.append(row_cell_values)
-                row_total = display_function(rowqueryset, rowqueryset, None, results)
+                row_total = display_function(rowqueryset, rowqueryset, None, tableresults)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
                 if is_double_fun:
                     if row_total[0] != None:
@@ -880,11 +924,11 @@ def search(request):
                 for i in rowlbl:
                     xls_table[idx+num_col_labels_before].insert(num_row_labels - len(rowlbl), i[0])
             if is_double_fun:
-                grand_total_value = display_function(results, None, None, results)
+                grand_total_value = display_function(tableresults, None, None, tableresults)
                 col_totals.append(grand_total_value[0])
                 col_totals.append(grand_total_value[1])
             else:
-                col_totals.append(display_function(results, None, None, results))
+                col_totals.append(display_function(tableresults, None, None, tableresults))
             xls_row = []
             for i in range(num_row_labels):
                 if i == 0:
@@ -1223,6 +1267,7 @@ def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
             return i
+    return None
 
 def perform_search(query_dict, date_filters):
     """
