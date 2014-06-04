@@ -1639,9 +1639,12 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     ws = wb.add_sheet("data")
     #TODO: add query to download
     if len(var_list.get('used_variable_names', [])) > 0:
-        ws.write(0,0,label=extract_query_for_download(query_dict, []))
-    else:
+        vartxt = "; ".join([i[0] + " " + i[1] for i in prettify_var_list(var_list)])
+        ws.write(0,0,label=vartxt)
+    elif current_page == -1:
         ws.write(0,0,label='All Records')
+    else:
+        ws.write(0,0,label='Current Page')
     for idx, column in enumerate(columns):
         ws.write(1,idx,label=get_spss_name(column[0]))
 
