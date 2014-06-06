@@ -32,7 +32,6 @@ def get_all_images(request):
 
             images.append(category_images)
 
-    #3/0
     images = sorted(images, key=lambda k: k["label_name"])
 
     return render(request, 'resources/images-index.html', {'images': images})
