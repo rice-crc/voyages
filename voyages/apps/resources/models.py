@@ -55,10 +55,29 @@ class ImageCategory(models.Model):
     class Meta:
         verbose_name = "Image Category"
         verbose_name_plural = "Image Categories"
-        ordering = ['value',]
+        ordering = ['value', ]
 
     def __unicode__(self):
         return self.label
+
+
+class AfricanName(models.Model):
+    """
+    Model stores information about African Name
+    """
+
+    slave_id = models.IntegerField("Slave id", blank=True, null=True)
+    name = models.CharField(max_length=100, default="")
+    age = models.IntegerField()
+    height = models.FloatField()
+    sex_age = models.IntegerField()
+
+    voyage_id = models.ForeignKey('Voyage', verbose_name="Voyage")
+
+    class Meta:
+        verbose_name = "African Name"
+        verbose_name_plural = "African Names"
+        ordering = ['slave_id', ]
 
 
 from .search_indexes import ImagesIndex
