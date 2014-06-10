@@ -1,0 +1,4666 @@
+[
+{
+    "pk": 61, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1, 
+        "name": "Soosoo"
+    }
+},
+{
+    "pk": 62, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 2, 
+        "name": "Foy"
+    }
+},
+{
+    "pk": 63, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 3, 
+        "name": "Bessy"
+    }
+},
+{
+    "pk": 64, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 4, 
+        "name": "Bambarra, Bambana"
+    }
+},
+{
+    "pk": 65, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 5, 
+        "name": "Timmanee"
+    }
+},
+{
+    "pk": 66, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 6, 
+        "name": "Bagga"
+    }
+},
+{
+    "pk": 67, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 7, 
+        "name": "Forma"
+    }
+},
+{
+    "pk": 68, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 8, 
+        "name": "Mandingo"
+    }
+},
+{
+    "pk": 69, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 9, 
+        "name": "Conia"
+    }
+},
+{
+    "pk": 70, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 10, 
+        "name": "Foulah"
+    }
+},
+{
+    "pk": 71, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 11, 
+        "name": "Limba"
+    }
+},
+{
+    "pk": 72, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 12, 
+        "name": "Kissry"
+    }
+},
+{
+    "pk": 73, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 13, 
+        "name": "Awansa"
+    }
+},
+{
+    "pk": 74, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 14, 
+        "name": "Bissao"
+    }
+},
+{
+    "pk": 75, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 15, 
+        "name": "Billola"
+    }
+},
+{
+    "pk": 76, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 16, 
+        "name": "Bujuka"
+    }
+},
+{
+    "pk": 77, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 17, 
+        "name": "Kukundy"
+    }
+},
+{
+    "pk": 78, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 18, 
+        "name": "Manyah"
+    }
+},
+{
+    "pk": 79, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 19, 
+        "name": "Cacheo"
+    }
+},
+{
+    "pk": 80, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 20, 
+        "name": "Bisago"
+    }
+},
+{
+    "pk": 81, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 21, 
+        "name": "Balamanga"
+    }
+},
+{
+    "pk": 82, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 22, 
+        "name": "Garboo"
+    }
+},
+{
+    "pk": 83, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 23, 
+        "name": "Bedorah"
+    }
+},
+{
+    "pk": 84, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 24, 
+        "name": "Balanlah"
+    }
+},
+{
+    "pk": 85, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 25, 
+        "name": "Tong"
+    }
+},
+{
+    "pk": 86, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 26, 
+        "name": "Bijogas"
+    }
+},
+{
+    "pk": 87, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 27, 
+        "name": "Naloo"
+    }
+},
+{
+    "pk": 88, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 28, 
+        "name": "Mombong"
+    }
+},
+{
+    "pk": 89, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 29, 
+        "name": "Balanta"
+    }
+},
+{
+    "pk": 90, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 30, 
+        "name": "Tellabone"
+    }
+},
+{
+    "pk": 91, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 31, 
+        "name": "Pepele"
+    }
+},
+{
+    "pk": 92, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 32, 
+        "name": "Tola"
+    }
+},
+{
+    "pk": 93, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 33, 
+        "name": "Malago"
+    }
+},
+{
+    "pk": 94, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 34, 
+        "name": "Footajalla"
+    }
+},
+{
+    "pk": 95, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 35, 
+        "name": "Carboo"
+    }
+},
+{
+    "pk": 96, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 36, 
+        "name": "Googa"
+    }
+},
+{
+    "pk": 97, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 37, 
+        "name": "Robah, Roban"
+    }
+},
+{
+    "pk": 98, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 38, 
+        "name": "Eboo, Hebo"
+    }
+},
+{
+    "pk": 99, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 39, 
+        "name": "Raboli"
+    }
+},
+{
+    "pk": 100, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 40, 
+        "name": "Jeboli"
+    }
+},
+{
+    "pk": 101, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 41, 
+        "name": "Boomali"
+    }
+},
+{
+    "pk": 102, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 42, 
+        "name": "Noro"
+    }
+},
+{
+    "pk": 103, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 43, 
+        "name": "Aragoni"
+    }
+},
+{
+    "pk": 104, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 44, 
+        "name": "Lagos"
+    }
+},
+{
+    "pk": 105, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 45, 
+        "name": "Restuli"
+    }
+},
+{
+    "pk": 106, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 46, 
+        "name": "Larney"
+    }
+},
+{
+    "pk": 107, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 47, 
+        "name": "Toro"
+    }
+},
+{
+    "pk": 108, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 48, 
+        "name": "Fulani"
+    }
+},
+{
+    "pk": 109, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 49, 
+        "name": "Agoobaji"
+    }
+},
+{
+    "pk": 110, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 50, 
+        "name": "Coomiba"
+    }
+},
+{
+    "pk": 111, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 51, 
+        "name": "Labardo"
+    }
+},
+{
+    "pk": 112, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 52, 
+        "name": "Lagebo"
+    }
+},
+{
+    "pk": 113, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 53, 
+        "name": "Allooala"
+    }
+},
+{
+    "pk": 114, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 54, 
+        "name": "Lacogebo"
+    }
+},
+{
+    "pk": 115, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 55, 
+        "name": "Hausa, Hoosa, Houssa"
+    }
+},
+{
+    "pk": 116, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 56, 
+        "name": "Ackoo, Acou, Accoo, "
+    }
+},
+{
+    "pk": 117, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 57, 
+        "name": "Aboomi"
+    }
+},
+{
+    "pk": 118, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 58, 
+        "name": "Bamica"
+    }
+},
+{
+    "pk": 119, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 59, 
+        "name": "Corsos"
+    }
+},
+{
+    "pk": 120, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 60, 
+        "name": "Lacoom"
+    }
+},
+{
+    "pk": 121, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 61, 
+        "name": "Targuohe"
+    }
+},
+{
+    "pk": 122, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 62, 
+        "name": "Loes"
+    }
+},
+{
+    "pk": 123, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 63, 
+        "name": "Najurt"
+    }
+},
+{
+    "pk": 124, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 64, 
+        "name": "Tabou"
+    }
+},
+{
+    "pk": 125, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 65, 
+        "name": "Loco"
+    }
+},
+{
+    "pk": 126, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 66, 
+        "name": "Cota"
+    }
+},
+{
+    "pk": 127, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 67, 
+        "name": "Nupez"
+    }
+},
+{
+    "pk": 128, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 68, 
+        "name": "Yata"
+    }
+},
+{
+    "pk": 129, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 69, 
+        "name": "Camjda"
+    }
+},
+{
+    "pk": 130, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 70, 
+        "name": "Aroli"
+    }
+},
+{
+    "pk": 131, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 71, 
+        "name": "Mania"
+    }
+},
+{
+    "pk": 132, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 72, 
+        "name": "Abassa"
+    }
+},
+{
+    "pk": 133, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 73, 
+        "name": "Lingeu"
+    }
+},
+{
+    "pk": 134, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 74, 
+        "name": "Latte"
+    }
+},
+{
+    "pk": 135, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 75, 
+        "name": "Rapeu"
+    }
+},
+{
+    "pk": 136, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 76, 
+        "name": "Apam"
+    }
+},
+{
+    "pk": 137, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 77, 
+        "name": "Egoya"
+    }
+},
+{
+    "pk": 138, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 78, 
+        "name": "Laban"
+    }
+},
+{
+    "pk": 139, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 79, 
+        "name": "Macooli"
+    }
+},
+{
+    "pk": 140, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 80, 
+        "name": "Yetsamez"
+    }
+},
+{
+    "pk": 141, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 81, 
+        "name": "Lumee"
+    }
+},
+{
+    "pk": 142, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 82, 
+        "name": "Leehibo"
+    }
+},
+{
+    "pk": 143, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 83, 
+        "name": "Camata"
+    }
+},
+{
+    "pk": 144, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 84, 
+        "name": "Leffai"
+    }
+},
+{
+    "pk": 145, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 85, 
+        "name": "Garnia"
+    }
+},
+{
+    "pk": 146, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 86, 
+        "name": "Necknee"
+    }
+},
+{
+    "pk": 147, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 87, 
+        "name": "Acooleu"
+    }
+},
+{
+    "pk": 148, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 88, 
+        "name": "Musafale"
+    }
+},
+{
+    "pk": 149, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 89, 
+        "name": "Dasagudi"
+    }
+},
+{
+    "pk": 150, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 90, 
+        "name": "Renkez"
+    }
+},
+{
+    "pk": 151, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 91, 
+        "name": "Tarquoh, Tarquoi, Ta"
+    }
+},
+{
+    "pk": 152, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 92, 
+        "name": "Cooso"
+    }
+},
+{
+    "pk": 153, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 93, 
+        "name": "Undam"
+    }
+},
+{
+    "pk": 154, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 94, 
+        "name": "Bamboy"
+    }
+},
+{
+    "pk": 155, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 95, 
+        "name": "Didia"
+    }
+},
+{
+    "pk": 156, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 96, 
+        "name": "Laako"
+    }
+},
+{
+    "pk": 157, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 97, 
+        "name": "Bumnanee"
+    }
+},
+{
+    "pk": 158, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 98, 
+        "name": "Tossa"
+    }
+},
+{
+    "pk": 159, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 99, 
+        "name": "Leebee"
+    }
+},
+{
+    "pk": 160, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 100, 
+        "name": "Yetta"
+    }
+},
+{
+    "pk": 161, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 101, 
+        "name": "Abou"
+    }
+},
+{
+    "pk": 162, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 102, 
+        "name": "Bola"
+    }
+},
+{
+    "pk": 163, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 103, 
+        "name": "Cuttoo"
+    }
+},
+{
+    "pk": 164, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 104, 
+        "name": "Tettar"
+    }
+},
+{
+    "pk": 165, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 105, 
+        "name": "Leegoon"
+    }
+},
+{
+    "pk": 166, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 106, 
+        "name": "Nagarny"
+    }
+},
+{
+    "pk": 167, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 107, 
+        "name": "Wana"
+    }
+},
+{
+    "pk": 168, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 108, 
+        "name": "Laguoh"
+    }
+},
+{
+    "pk": 169, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 109, 
+        "name": "Lama"
+    }
+},
+{
+    "pk": 170, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 110, 
+        "name": "Tappah"
+    }
+},
+{
+    "pk": 171, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 111, 
+        "name": "Nesaree"
+    }
+},
+{
+    "pk": 172, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 112, 
+        "name": "Lalla"
+    }
+},
+{
+    "pk": 173, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 113, 
+        "name": "Ejou"
+    }
+},
+{
+    "pk": 174, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 114, 
+        "name": "Labera"
+    }
+},
+{
+    "pk": 175, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 115, 
+        "name": "Lasa"
+    }
+},
+{
+    "pk": 176, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 116, 
+        "name": "Ebi"
+    }
+},
+{
+    "pk": 177, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 117, 
+        "name": "Ebarguoi"
+    }
+},
+{
+    "pk": 178, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 118, 
+        "name": "Moobooh"
+    }
+},
+{
+    "pk": 179, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 119, 
+        "name": "Obah, Aobah"
+    }
+},
+{
+    "pk": 180, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 120, 
+        "name": "Langolo"
+    }
+},
+{
+    "pk": 181, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 121, 
+        "name": "Doroh"
+    }
+},
+{
+    "pk": 182, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 122, 
+        "name": "Egasha"
+    }
+},
+{
+    "pk": 183, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 123, 
+        "name": "Abooa"
+    }
+},
+{
+    "pk": 184, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 124, 
+        "name": "Tradetown"
+    }
+},
+{
+    "pk": 185, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 125, 
+        "name": "Cromatee"
+    }
+},
+{
+    "pk": 186, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 126, 
+        "name": "Calabar"
+    }
+},
+{
+    "pk": 187, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 127, 
+        "name": "Cumbelly"
+    }
+},
+{
+    "pk": 188, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 128, 
+        "name": "Moko, Makol"
+    }
+},
+{
+    "pk": 189, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 129, 
+        "name": "Ais"
+    }
+},
+{
+    "pk": 190, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 130, 
+        "name": "Asoko"
+    }
+},
+{
+    "pk": 191, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 131, 
+        "name": "Alam"
+    }
+},
+{
+    "pk": 192, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 132, 
+        "name": "Atiam"
+    }
+},
+{
+    "pk": 193, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 133, 
+        "name": "Bommau"
+    }
+},
+{
+    "pk": 194, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 134, 
+        "name": "Egba"
+    }
+},
+{
+    "pk": 195, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 135, 
+        "name": "Mongaru"
+    }
+},
+{
+    "pk": 196, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 136, 
+        "name": "Acon, Acan"
+    }
+},
+{
+    "pk": 197, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 137, 
+        "name": "Duncama"
+    }
+},
+{
+    "pk": 198, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 138, 
+        "name": "Yapacode"
+    }
+},
+{
+    "pk": 199, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 139, 
+        "name": "Accouder"
+    }
+},
+{
+    "pk": 200, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 140, 
+        "name": "Gallangola"
+    }
+},
+{
+    "pk": 201, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 141, 
+        "name": "Ahourah, Iagon"
+    }
+},
+{
+    "pk": 202, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 142, 
+        "name": "Eengbroka"
+    }
+},
+{
+    "pk": 203, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 143, 
+        "name": "Papa"
+    }
+},
+{
+    "pk": 204, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 144, 
+        "name": "Garag, Geerah"
+    }
+},
+{
+    "pk": 205, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 145, 
+        "name": "Ahtop"
+    }
+},
+{
+    "pk": 206, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 146, 
+        "name": "Hbah, Bah"
+    }
+},
+{
+    "pk": 207, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 147, 
+        "name": "Telanarca"
+    }
+},
+{
+    "pk": 208, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 148, 
+        "name": "Goom"
+    }
+},
+{
+    "pk": 209, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 149, 
+        "name": "Adam"
+    }
+},
+{
+    "pk": 210, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 150, 
+        "name": "Alogah"
+    }
+},
+{
+    "pk": 211, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 151, 
+        "name": "Honton"
+    }
+},
+{
+    "pk": 212, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 152, 
+        "name": "Hesey"
+    }
+},
+{
+    "pk": 213, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 153, 
+        "name": "Manna"
+    }
+},
+{
+    "pk": 214, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 154, 
+        "name": "Henah"
+    }
+},
+{
+    "pk": 215, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 155, 
+        "name": "Buroree"
+    }
+},
+{
+    "pk": 216, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 156, 
+        "name": "Commee"
+    }
+},
+{
+    "pk": 217, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 157, 
+        "name": "Adorah"
+    }
+},
+{
+    "pk": 218, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 158, 
+        "name": "Hotna"
+    }
+},
+{
+    "pk": 219, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 159, 
+        "name": "Habonda"
+    }
+},
+{
+    "pk": 220, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 160, 
+        "name": "Habooka"
+    }
+},
+{
+    "pk": 221, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 161, 
+        "name": "Hobah"
+    }
+},
+{
+    "pk": 222, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 162, 
+        "name": "Hemsheir"
+    }
+},
+{
+    "pk": 223, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 163, 
+        "name": "Namah"
+    }
+},
+{
+    "pk": 224, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 164, 
+        "name": "Aboh"
+    }
+},
+{
+    "pk": 225, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 165, 
+        "name": "Bona"
+    }
+},
+{
+    "pk": 226, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 166, 
+        "name": "Nodeo"
+    }
+},
+{
+    "pk": 227, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 167, 
+        "name": "Asaquah, Asacah"
+    }
+},
+{
+    "pk": 228, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 168, 
+        "name": "Godea"
+    }
+},
+{
+    "pk": 229, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 169, 
+        "name": "Hechoo"
+    }
+},
+{
+    "pk": 230, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 170, 
+        "name": "Gunney"
+    }
+},
+{
+    "pk": 231, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 171, 
+        "name": "Barbah"
+    }
+},
+{
+    "pk": 232, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 172, 
+        "name": "Awargee"
+    }
+},
+{
+    "pk": 233, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 173, 
+        "name": "Batoo"
+    }
+},
+{
+    "pk": 234, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 174, 
+        "name": "Luhochorn"
+    }
+},
+{
+    "pk": 235, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 175, 
+        "name": "Lougee"
+    }
+},
+{
+    "pk": 236, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 176, 
+        "name": "Nuho"
+    }
+},
+{
+    "pk": 237, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 177, 
+        "name": "Baronoke"
+    }
+},
+{
+    "pk": 238, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 178, 
+        "name": "Terfelle"
+    }
+},
+{
+    "pk": 239, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 179, 
+        "name": "Hebarooh"
+    }
+},
+{
+    "pk": 240, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 180, 
+        "name": "Barramacko"
+    }
+},
+{
+    "pk": 241, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 181, 
+        "name": "Nahee"
+    }
+},
+{
+    "pk": 242, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 182, 
+        "name": "Abasee"
+    }
+},
+{
+    "pk": 243, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 183, 
+        "name": "Inlosah"
+    }
+},
+{
+    "pk": 244, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 184, 
+        "name": "Igana"
+    }
+},
+{
+    "pk": 245, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 185, 
+        "name": "Atloh"
+    }
+},
+{
+    "pk": 246, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 186, 
+        "name": "Gachoo"
+    }
+},
+{
+    "pk": 247, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 187, 
+        "name": "Saboo"
+    }
+},
+{
+    "pk": 248, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 188, 
+        "name": "Hidebrook"
+    }
+},
+{
+    "pk": 249, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 189, 
+        "name": "Attah"
+    }
+},
+{
+    "pk": 250, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 190, 
+        "name": "Geehor"
+    }
+},
+{
+    "pk": 251, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 191, 
+        "name": "Tabab"
+    }
+},
+{
+    "pk": 252, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 192, 
+        "name": "Lidy"
+    }
+},
+{
+    "pk": 253, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 193, 
+        "name": "Asau"
+    }
+},
+{
+    "pk": 254, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 194, 
+        "name": "Burribah"
+    }
+},
+{
+    "pk": 255, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 195, 
+        "name": "Comboly"
+    }
+},
+{
+    "pk": 256, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 196, 
+        "name": "Abang"
+    }
+},
+{
+    "pk": 257, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 197, 
+        "name": "Yala"
+    }
+},
+{
+    "pk": 258, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 198, 
+        "name": "Gamby"
+    }
+},
+{
+    "pk": 259, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 199, 
+        "name": "Arou"
+    }
+},
+{
+    "pk": 260, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 200, 
+        "name": "Balagou"
+    }
+},
+{
+    "pk": 261, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 201, 
+        "name": "Alagu"
+    }
+},
+{
+    "pk": 262, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 202, 
+        "name": "Goncan"
+    }
+},
+{
+    "pk": 263, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 203, 
+        "name": "Legabi"
+    }
+},
+{
+    "pk": 264, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 204, 
+        "name": "Assibicey"
+    }
+},
+{
+    "pk": 265, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 205, 
+        "name": "Labelay"
+    }
+},
+{
+    "pk": 266, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 206, 
+        "name": "Ofang"
+    }
+},
+{
+    "pk": 267, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 207, 
+        "name": "Oro"
+    }
+},
+{
+    "pk": 268, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 208, 
+        "name": "Besser"
+    }
+},
+{
+    "pk": 269, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 209, 
+        "name": "Larno"
+    }
+},
+{
+    "pk": 270, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 210, 
+        "name": "Hoha"
+    }
+},
+{
+    "pk": 271, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 211, 
+        "name": "Gachor"
+    }
+},
+{
+    "pk": 272, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 212, 
+        "name": "Hecos"
+    }
+},
+{
+    "pk": 273, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 213, 
+        "name": "Larbook"
+    }
+},
+{
+    "pk": 274, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 214, 
+        "name": "Baeho"
+    }
+},
+{
+    "pk": 275, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 215, 
+        "name": "Homee"
+    }
+},
+{
+    "pk": 276, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 216, 
+        "name": "Nacho"
+    }
+},
+{
+    "pk": 277, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 217, 
+        "name": "Asah"
+    }
+},
+{
+    "pk": 278, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 218, 
+        "name": "Bommay"
+    }
+},
+{
+    "pk": 279, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 219, 
+        "name": "Asacah"
+    }
+},
+{
+    "pk": 280, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 220, 
+        "name": "Illahruh"
+    }
+},
+{
+    "pk": 281, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 221, 
+        "name": "Bommassa"
+    }
+},
+{
+    "pk": 282, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 222, 
+        "name": "Hocannah"
+    }
+},
+{
+    "pk": 283, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 223, 
+        "name": "Long"
+    }
+},
+{
+    "pk": 284, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 224, 
+        "name": "Hecko"
+    }
+},
+{
+    "pk": 285, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 225, 
+        "name": "Kettoo"
+    }
+},
+{
+    "pk": 286, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 226, 
+        "name": "Udaroh"
+    }
+},
+{
+    "pk": 287, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 227, 
+        "name": "Dagtola"
+    }
+},
+{
+    "pk": 288, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 228, 
+        "name": "Assasiu"
+    }
+},
+{
+    "pk": 289, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 229, 
+        "name": "Colla"
+    }
+},
+{
+    "pk": 290, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 230, 
+        "name": "Bomfigo, Bomofigo"
+    }
+},
+{
+    "pk": 291, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 231, 
+        "name": "Sagon"
+    }
+},
+{
+    "pk": 292, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 232, 
+        "name": "Cadal"
+    }
+},
+{
+    "pk": 293, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 233, 
+        "name": "Massey"
+    }
+},
+{
+    "pk": 294, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 234, 
+        "name": "Laiday"
+    }
+},
+{
+    "pk": 295, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 236, 
+        "name": "Harwarsor"
+    }
+},
+{
+    "pk": 296, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 237, 
+        "name": "Hondah"
+    }
+},
+{
+    "pk": 297, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 238, 
+        "name": "Lauh"
+    }
+},
+{
+    "pk": 298, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 239, 
+        "name": "Godoo"
+    }
+},
+{
+    "pk": 299, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 240, 
+        "name": "Obah"
+    }
+},
+{
+    "pk": 300, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 241, 
+        "name": "Rodigees"
+    }
+},
+{
+    "pk": 301, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 242, 
+        "name": "Asan"
+    }
+},
+{
+    "pk": 302, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 243, 
+        "name": "Ofeerao, Oferoa"
+    }
+},
+{
+    "pk": 303, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 244, 
+        "name": "Acow"
+    }
+},
+{
+    "pk": 304, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 245, 
+        "name": "Belola"
+    }
+},
+{
+    "pk": 305, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 246, 
+        "name": "Mohu"
+    }
+},
+{
+    "pk": 306, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 247, 
+        "name": "Hecoo"
+    }
+},
+{
+    "pk": 307, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 248, 
+        "name": "Kuaboo"
+    }
+},
+{
+    "pk": 308, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 249, 
+        "name": "Neihooha"
+    }
+},
+{
+    "pk": 309, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 250, 
+        "name": "Heesemah"
+    }
+},
+{
+    "pk": 310, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 251, 
+        "name": "Higuha"
+    }
+},
+{
+    "pk": 311, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 252, 
+        "name": "Abuah"
+    }
+},
+{
+    "pk": 312, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 253, 
+        "name": "Husaomeeh"
+    }
+},
+{
+    "pk": 313, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 254, 
+        "name": "Jessa"
+    }
+},
+{
+    "pk": 314, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 255, 
+        "name": "Bam, Bami"
+    }
+},
+{
+    "pk": 315, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 256, 
+        "name": "Take"
+    }
+},
+{
+    "pk": 316, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 257, 
+        "name": "Iniha"
+    }
+},
+{
+    "pk": 317, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 258, 
+        "name": "Ogho"
+    }
+},
+{
+    "pk": 318, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 259, 
+        "name": "Landee"
+    }
+},
+{
+    "pk": 319, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 260, 
+        "name": "Addo"
+    }
+},
+{
+    "pk": 320, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 261, 
+        "name": "Hallah, Hullah"
+    }
+},
+{
+    "pk": 321, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 262, 
+        "name": "Himohee"
+    }
+},
+{
+    "pk": 322, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 263, 
+        "name": "Mahie"
+    }
+},
+{
+    "pk": 323, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 264, 
+        "name": "Hurmmony"
+    }
+},
+{
+    "pk": 324, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 265, 
+        "name": "Camo"
+    }
+},
+{
+    "pk": 325, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 266, 
+        "name": "Bomosso"
+    }
+},
+{
+    "pk": 326, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 267, 
+        "name": ""
+    }
+},
+{
+    "pk": 327, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 268, 
+        "name": "Aba"
+    }
+},
+{
+    "pk": 328, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 269, 
+        "name": "Cadah"
+    }
+},
+{
+    "pk": 329, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 270, 
+        "name": "Beriba, Beraba"
+    }
+},
+{
+    "pk": 330, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 271, 
+        "name": "Ecoo"
+    }
+},
+{
+    "pk": 331, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 272, 
+        "name": "Katowy"
+    }
+},
+{
+    "pk": 332, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 273, 
+        "name": "Eonity"
+    }
+},
+{
+    "pk": 333, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 274, 
+        "name": "Huemmy"
+    }
+},
+{
+    "pk": 334, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 275, 
+        "name": "Heguma"
+    }
+},
+{
+    "pk": 335, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 276, 
+        "name": "Boyboyhat"
+    }
+},
+{
+    "pk": 336, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 277, 
+        "name": "Heihohee"
+    }
+},
+{
+    "pk": 337, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 278, 
+        "name": "Acaiy"
+    }
+},
+{
+    "pk": 338, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 279, 
+        "name": "Kongaru"
+    }
+},
+{
+    "pk": 339, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 280, 
+        "name": "Bijuco"
+    }
+},
+{
+    "pk": 340, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 281, 
+        "name": "Lidibale"
+    }
+},
+{
+    "pk": 341, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 282, 
+        "name": "Lacobo"
+    }
+},
+{
+    "pk": 342, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 283, 
+        "name": "Unah"
+    }
+},
+{
+    "pk": 343, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 284, 
+        "name": "Crue and Tradetown"
+    }
+},
+{
+    "pk": 344, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 285, 
+        "name": "Achu"
+    }
+},
+{
+    "pk": 345, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 286, 
+        "name": "Heengaree"
+    }
+},
+{
+    "pk": 346, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 287, 
+        "name": "Unknown"
+    }
+},
+{
+    "pk": 347, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 998, 
+        "name": "Crue"
+    }
+},
+{
+    "pk": 348, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1001, 
+        "name": "Gang\u00e1 Longob\u00e1"
+    }
+},
+{
+    "pk": 349, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1002, 
+        "name": "Gang\u00e1 Fai"
+    }
+},
+{
+    "pk": 350, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1003, 
+        "name": "Gang\u00e1 Gor\u00e1"
+    }
+},
+{
+    "pk": 351, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1004, 
+        "name": "Gang\u00e1 Ber\u00e9"
+    }
+},
+{
+    "pk": 352, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1005, 
+        "name": "Gang\u00e1 Buch\u00e9"
+    }
+},
+{
+    "pk": 353, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1006, 
+        "name": "Gang\u00e1 Man\u00ed"
+    }
+},
+{
+    "pk": 354, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1007, 
+        "name": "Gang\u00e1 Bumi"
+    }
+},
+{
+    "pk": 355, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1008, 
+        "name": "Gang\u00e1 Quis\u00ed"
+    }
+},
+{
+    "pk": 356, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1009, 
+        "name": "Lucumi Arar\u00e1"
+    }
+},
+{
+    "pk": 357, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1010, 
+        "name": "Mina Fanti"
+    }
+},
+{
+    "pk": 358, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1011, 
+        "name": "Carabali induri"
+    }
+},
+{
+    "pk": 359, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1012, 
+        "name": "Lucumi Agus\u00e1"
+    }
+},
+{
+    "pk": 360, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1013, 
+        "name": "Lucumi Ay\u00f3"
+    }
+},
+{
+    "pk": 361, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1014, 
+        "name": "Arar\u00e1 Cuatro Ojos"
+    }
+},
+{
+    "pk": 362, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1015, 
+        "name": "Carabali Apap\u00e1"
+    }
+},
+{
+    "pk": 363, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1016, 
+        "name": "Carabali Br\u00edcamo"
+    }
+},
+{
+    "pk": 364, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1017, 
+        "name": "Carabali Elugo"
+    }
+},
+{
+    "pk": 365, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1018, 
+        "name": "Carabali Suamo"
+    }
+},
+{
+    "pk": 366, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1019, 
+        "name": "Carabali Osos\u00f3"
+    }
+},
+{
+    "pk": 367, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1020, 
+        "name": "Carabali Cicuato"
+    }
+},
+{
+    "pk": 368, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1021, 
+        "name": "Carabali Duni"
+    }
+},
+{
+    "pk": 369, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1022, 
+        "name": "Carabali Apapa"
+    }
+},
+{
+    "pk": 370, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1023, 
+        "name": "Carabali Ap\u00e1"
+    }
+},
+{
+    "pk": 371, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1024, 
+        "name": "Carabali Ibib\u00ed"
+    }
+},
+{
+    "pk": 372, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1025, 
+        "name": "Carabali Obane"
+    }
+},
+{
+    "pk": 373, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1026, 
+        "name": "Carabali Uqua"
+    }
+},
+{
+    "pk": 374, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1027, 
+        "name": "Carabali Or\u00fa"
+    }
+},
+{
+    "pk": 375, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1028, 
+        "name": "Musicongo"
+    }
+},
+{
+    "pk": 376, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1029, 
+        "name": "Mina"
+    }
+},
+{
+    "pk": 377, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1030, 
+        "name": "Lucumi"
+    }
+},
+{
+    "pk": 378, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1031, 
+        "name": "Lucumi Aguia"
+    }
+},
+{
+    "pk": 379, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1032, 
+        "name": "Mandinga Ful\u00e1"
+    }
+},
+{
+    "pk": 380, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1033, 
+        "name": "Lucumi Chamb\u00e1"
+    }
+},
+{
+    "pk": 381, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1034, 
+        "name": "Gang\u00e1"
+    }
+},
+{
+    "pk": 382, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1035, 
+        "name": "Mina Janti"
+    }
+},
+{
+    "pk": 383, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1036, 
+        "name": "Lucumi Tap\u00e1"
+    }
+},
+{
+    "pk": 384, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1037, 
+        "name": "Lucumi Ev\u00e1"
+    }
+},
+{
+    "pk": 385, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1038, 
+        "name": "Lucumi Mosi"
+    }
+},
+{
+    "pk": 386, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1039, 
+        "name": "Carabali Isuamo"
+    }
+},
+{
+    "pk": 387, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1040, 
+        "name": "Carabali Mogo"
+    }
+},
+{
+    "pk": 388, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1041, 
+        "name": "Carabali Doque"
+    }
+},
+{
+    "pk": 389, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1042, 
+        "name": "Carabali Vivi"
+    }
+},
+{
+    "pk": 390, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1043, 
+        "name": "Mandinga Sos\u00f3"
+    }
+},
+{
+    "pk": 391, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1044, 
+        "name": "Mandinga Quis\u00ed"
+    }
+},
+{
+    "pk": 392, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1045, 
+        "name": "Mandinga"
+    }
+},
+{
+    "pk": 393, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1046, 
+        "name": "Mandinga Cranco"
+    }
+},
+{
+    "pk": 394, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1047, 
+        "name": "Mandinga Comiaca"
+    }
+},
+{
+    "pk": 395, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1048, 
+        "name": "Mandinga B\u00e1mbara"
+    }
+},
+{
+    "pk": 396, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1049, 
+        "name": "Mandinga Temin\u00e9"
+    }
+},
+{
+    "pk": 397, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1050, 
+        "name": "Carabali Itepu"
+    }
+},
+{
+    "pk": 398, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1051, 
+        "name": "Carabali Bane"
+    }
+},
+{
+    "pk": 399, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1052, 
+        "name": "Lucumi Agusa"
+    }
+},
+{
+    "pk": 400, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1053, 
+        "name": "Lucumi Cacanda"
+    }
+},
+{
+    "pk": 401, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1054, 
+        "name": "Lucumi Ibra"
+    }
+},
+{
+    "pk": 402, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1055, 
+        "name": "Lucumi Opu"
+    }
+},
+{
+    "pk": 403, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1056, 
+        "name": "Lucumi Guar\u00ed"
+    }
+},
+{
+    "pk": 404, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1057, 
+        "name": "Lucumi Guar\u00ed"
+    }
+},
+{
+    "pk": 405, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1058, 
+        "name": "Lucumi Egru\u00e1"
+    }
+},
+{
+    "pk": 406, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1059, 
+        "name": "Lucumi Igara"
+    }
+},
+{
+    "pk": 407, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1060, 
+        "name": "Carabali Brican"
+    }
+},
+{
+    "pk": 408, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1061, 
+        "name": "Carabali Banfule"
+    }
+},
+{
+    "pk": 409, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1062, 
+        "name": "Carabali Isa"
+    }
+},
+{
+    "pk": 410, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1063, 
+        "name": "Carabali Bas\u00e1"
+    }
+},
+{
+    "pk": 411, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1064, 
+        "name": "Congo Musund\u00ed"
+    }
+},
+{
+    "pk": 412, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1065, 
+        "name": "Congo Bom\u00e1"
+    }
+},
+{
+    "pk": 413, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1066, 
+        "name": "Congo Moyombe"
+    }
+},
+{
+    "pk": 414, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1067, 
+        "name": "Congo Mondongo"
+    }
+},
+{
+    "pk": 415, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1068, 
+        "name": "Lucumi Llab\u00fa"
+    }
+},
+{
+    "pk": 416, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1069, 
+        "name": "Lucumi Dag\u00f1ame"
+    }
+},
+{
+    "pk": 417, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1070, 
+        "name": "Lucumi Ellico"
+    }
+},
+{
+    "pk": 418, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1071, 
+        "name": "Lucumi Bas\u00e1"
+    }
+},
+{
+    "pk": 419, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1072, 
+        "name": "Lucumi Ecumach\u00f3"
+    }
+},
+{
+    "pk": 420, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1073, 
+        "name": "Arar\u00e1 Mag\u00ed"
+    }
+},
+{
+    "pk": 421, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1075, 
+        "name": "Gang\u00e1 Con\u00f3"
+    }
+},
+{
+    "pk": 422, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1076, 
+        "name": "Gang\u00e1 Blumi"
+    }
+},
+{
+    "pk": 423, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1077, 
+        "name": "Gang\u00e1 Bahi"
+    }
+},
+{
+    "pk": 424, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1078, 
+        "name": "Gang\u00e1 Mani"
+    }
+},
+{
+    "pk": 425, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1079, 
+        "name": "Gang\u00e1 Fai"
+    }
+},
+{
+    "pk": 426, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1080, 
+        "name": "Carabali Ocu"
+    }
+},
+{
+    "pk": 427, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1081, 
+        "name": "Carabali Ungua"
+    }
+},
+{
+    "pk": 428, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1082, 
+        "name": "Carabali Ubanaca"
+    }
+},
+{
+    "pk": 429, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1083, 
+        "name": "Carabali Nenu"
+    }
+},
+{
+    "pk": 430, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1084, 
+        "name": "Carabali Asa"
+    }
+},
+{
+    "pk": 431, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1085, 
+        "name": "Carabali Orobio"
+    }
+},
+{
+    "pk": 432, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1086, 
+        "name": "Carabali Atane"
+    }
+},
+{
+    "pk": 433, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1087, 
+        "name": "Carabali Ugu"
+    }
+},
+{
+    "pk": 434, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1088, 
+        "name": "Carabali Achena"
+    }
+},
+{
+    "pk": 435, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1089, 
+        "name": "Carabali Ibo"
+    }
+},
+{
+    "pk": 436, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1090, 
+        "name": "Carabali Onecha"
+    }
+},
+{
+    "pk": 437, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1091, 
+        "name": "Carabali Eculasu"
+    }
+},
+{
+    "pk": 438, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1092, 
+        "name": "Carabali Niconecha"
+    }
+},
+{
+    "pk": 439, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1093, 
+        "name": "Carabali Cui\u00fca"
+    }
+},
+{
+    "pk": 440, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1094, 
+        "name": "Carabali Omuma"
+    }
+},
+{
+    "pk": 441, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1095, 
+        "name": "Aquese"
+    }
+},
+{
+    "pk": 442, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1096, 
+        "name": "Carabali Calabal"
+    }
+},
+{
+    "pk": 443, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1097, 
+        "name": "Carabali Esa"
+    }
+},
+{
+    "pk": 444, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1098, 
+        "name": "Carabali Ibibi"
+    }
+},
+{
+    "pk": 445, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1099, 
+        "name": "Carabali Ot\u00e1n"
+    }
+},
+{
+    "pk": 446, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1100, 
+        "name": "Carabali Ovende"
+    }
+},
+{
+    "pk": 447, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1101, 
+        "name": "Carabali Ag\u00f3"
+    }
+},
+{
+    "pk": 448, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1102, 
+        "name": "Carabali Vende"
+    }
+},
+{
+    "pk": 449, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1103, 
+        "name": "Carabali Esal\u00e1"
+    }
+},
+{
+    "pk": 450, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1104, 
+        "name": "Carabali Cun\u00e1cun\u00e1"
+    }
+},
+{
+    "pk": 451, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1105, 
+        "name": "Carabali Er\u00ed"
+    }
+},
+{
+    "pk": 452, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1106, 
+        "name": "Carabali Ed\u00fa"
+    }
+},
+{
+    "pk": 453, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1107, 
+        "name": "Carabali Cuach\u00fa"
+    }
+},
+{
+    "pk": 454, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1108, 
+        "name": "Carabali B\u00f3"
+    }
+},
+{
+    "pk": 455, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1109, 
+        "name": "Carabali Ey\u00f3"
+    }
+},
+{
+    "pk": 456, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1110, 
+        "name": "Carabali Ep\u00e1"
+    }
+},
+{
+    "pk": 457, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1112, 
+        "name": "Congo Danval"
+    }
+},
+{
+    "pk": 458, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1113, 
+        "name": "Congo Musicongo"
+    }
+},
+{
+    "pk": 459, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1114, 
+        "name": "Congo Totela"
+    }
+},
+{
+    "pk": 460, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1115, 
+        "name": "Congo Cutuide"
+    }
+},
+{
+    "pk": 461, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1116, 
+        "name": "Congo Bullonde"
+    }
+},
+{
+    "pk": 462, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1117, 
+        "name": "Congo Moboma"
+    }
+},
+{
+    "pk": 463, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1118, 
+        "name": "Congo Bandechendi"
+    }
+},
+{
+    "pk": 464, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1119, 
+        "name": "Congo Mucinga"
+    }
+},
+{
+    "pk": 465, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1120, 
+        "name": "Congo Niense"
+    }
+},
+{
+    "pk": 466, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1121, 
+        "name": "Congo Cocumbe"
+    }
+},
+{
+    "pk": 467, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1122, 
+        "name": "Congo Enlasa"
+    }
+},
+{
+    "pk": 468, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1123, 
+        "name": "Congo Mongoma"
+    }
+},
+{
+    "pk": 469, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1124, 
+        "name": "Congo Densuco"
+    }
+},
+{
+    "pk": 470, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1125, 
+        "name": "Congo Moache"
+    }
+},
+{
+    "pk": 471, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1126, 
+        "name": "Congo Sacala"
+    }
+},
+{
+    "pk": 472, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1127, 
+        "name": "Congo Chiongo"
+    }
+},
+{
+    "pk": 473, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1128, 
+        "name": "Congo Guaguana"
+    }
+},
+{
+    "pk": 474, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1129, 
+        "name": "Congo Monlaso"
+    }
+},
+{
+    "pk": 475, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1130, 
+        "name": "Congo Mopaso"
+    }
+},
+{
+    "pk": 476, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1131, 
+        "name": "Congo Lufo"
+    }
+},
+{
+    "pk": 477, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1132, 
+        "name": "Congo Mumba"
+    }
+},
+{
+    "pk": 478, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1133, 
+        "name": "Congo Bangola"
+    }
+},
+{
+    "pk": 479, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1134, 
+        "name": "Congo Decolo"
+    }
+},
+{
+    "pk": 480, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1135, 
+        "name": "Congo Antpaango"
+    }
+},
+{
+    "pk": 481, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1136, 
+        "name": "Congo Ensuso"
+    }
+},
+{
+    "pk": 482, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1137, 
+        "name": "Congo Moamba"
+    }
+},
+{
+    "pk": 483, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1138, 
+        "name": "Congo Esombe"
+    }
+},
+{
+    "pk": 484, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1139, 
+        "name": "Congo Camba"
+    }
+},
+{
+    "pk": 485, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1140, 
+        "name": "Congo Mocanda"
+    }
+},
+{
+    "pk": 486, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1141, 
+        "name": "Congo Chita"
+    }
+},
+{
+    "pk": 487, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1142, 
+        "name": "Congo Sol\u00f3n"
+    }
+},
+{
+    "pk": 488, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1143, 
+        "name": "Congo Damba"
+    }
+},
+{
+    "pk": 489, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1144, 
+        "name": "Congo Gimse"
+    }
+},
+{
+    "pk": 490, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1145, 
+        "name": "Congo Lano"
+    }
+},
+{
+    "pk": 491, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1146, 
+        "name": "Congo Bomgoma"
+    }
+},
+{
+    "pk": 492, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1147, 
+        "name": "Congo Cimgo"
+    }
+},
+{
+    "pk": 493, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1148, 
+        "name": "Congo Bimgo"
+    }
+},
+{
+    "pk": 494, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1149, 
+        "name": "Congo Pesa"
+    }
+},
+{
+    "pk": 495, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1150, 
+        "name": "Congo Ensadi"
+    }
+},
+{
+    "pk": 496, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1151, 
+        "name": "Congo Quiso"
+    }
+},
+{
+    "pk": 497, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1152, 
+        "name": "Congo Canga"
+    }
+},
+{
+    "pk": 498, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1153, 
+        "name": "Congo Ocama"
+    }
+},
+{
+    "pk": 499, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1154, 
+        "name": "Congo Cusa"
+    }
+},
+{
+    "pk": 500, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1155, 
+        "name": "Congo Matendi"
+    }
+},
+{
+    "pk": 501, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1156, 
+        "name": "Congo Bafo"
+    }
+},
+{
+    "pk": 502, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1157, 
+        "name": "Congo Lenida"
+    }
+},
+{
+    "pk": 503, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1158, 
+        "name": "Congo Sombo"
+    }
+},
+{
+    "pk": 504, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1159, 
+        "name": "Congo Mesara"
+    }
+},
+{
+    "pk": 505, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1160, 
+        "name": "Congo Magani\u00e9"
+    }
+},
+{
+    "pk": 506, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1161, 
+        "name": "Congo Of\u00f3"
+    }
+},
+{
+    "pk": 507, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1162, 
+        "name": "Congo Mudimba"
+    }
+},
+{
+    "pk": 508, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1163, 
+        "name": "Congo Untacala"
+    }
+},
+{
+    "pk": 509, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1164, 
+        "name": "Congo Cimchi"
+    }
+},
+{
+    "pk": 510, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1165, 
+        "name": "Congo Ench\u00ed"
+    }
+},
+{
+    "pk": 511, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1166, 
+        "name": "Congo Boco"
+    }
+},
+{
+    "pk": 512, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1167, 
+        "name": "Congo Timga"
+    }
+},
+{
+    "pk": 513, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1168, 
+        "name": "Congo Ruya"
+    }
+},
+{
+    "pk": 514, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1169, 
+        "name": "Congo Laba"
+    }
+},
+{
+    "pk": 515, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1170, 
+        "name": "Congo Simba"
+    }
+},
+{
+    "pk": 516, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1171, 
+        "name": "Congo Femba"
+    }
+},
+{
+    "pk": 517, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1172, 
+        "name": "Congo Baca"
+    }
+},
+{
+    "pk": 518, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1173, 
+        "name": "Congo Bamba"
+    }
+},
+{
+    "pk": 519, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1174, 
+        "name": "Congo Binda"
+    }
+},
+{
+    "pk": 520, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1175, 
+        "name": "Congo Cuno"
+    }
+},
+{
+    "pk": 521, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1176, 
+        "name": "Congo Suma"
+    }
+},
+{
+    "pk": 522, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1177, 
+        "name": "Congo Gumga"
+    }
+},
+{
+    "pk": 523, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1178, 
+        "name": "Congo Biabo"
+    }
+},
+{
+    "pk": 524, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1179, 
+        "name": "Congo Mesa"
+    }
+},
+{
+    "pk": 525, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1180, 
+        "name": "Congo Say"
+    }
+},
+{
+    "pk": 526, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1181, 
+        "name": "Congo Gongo"
+    }
+},
+{
+    "pk": 527, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1182, 
+        "name": "Congo Lombo"
+    }
+},
+{
+    "pk": 528, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1183, 
+        "name": "Congo Noca"
+    }
+},
+{
+    "pk": 529, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1184, 
+        "name": "Congo Sande"
+    }
+},
+{
+    "pk": 530, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1185, 
+        "name": "Congo Mongo"
+    }
+},
+{
+    "pk": 531, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1186, 
+        "name": "Congo Llanga"
+    }
+},
+{
+    "pk": 532, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1187, 
+        "name": "Congo Bimba"
+    }
+},
+{
+    "pk": 533, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1188, 
+        "name": "Congo Ganga"
+    }
+},
+{
+    "pk": 534, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1189, 
+        "name": "Congo Tando"
+    }
+},
+{
+    "pk": 535, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1190, 
+        "name": "Congo Lotala"
+    }
+},
+{
+    "pk": 536, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1191, 
+        "name": "Congo Ensumga"
+    }
+},
+{
+    "pk": 537, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1192, 
+        "name": "Congo Quindonga"
+    }
+},
+{
+    "pk": 538, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1193, 
+        "name": "Congo Ensuca"
+    }
+},
+{
+    "pk": 539, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1194, 
+        "name": "Congo Lumbi"
+    }
+},
+{
+    "pk": 540, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1195, 
+        "name": "Congo Lucut\u00ed"
+    }
+},
+{
+    "pk": 541, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1196, 
+        "name": "Congo Cansa"
+    }
+},
+{
+    "pk": 542, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1197, 
+        "name": "Congo Macara"
+    }
+},
+{
+    "pk": 543, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1198, 
+        "name": "Congo Melele"
+    }
+},
+{
+    "pk": 544, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1199, 
+        "name": "Congo Tibo"
+    }
+},
+{
+    "pk": 545, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1200, 
+        "name": "Congo Guel\u00e9"
+    }
+},
+{
+    "pk": 546, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1201, 
+        "name": "Congo Guembo"
+    }
+},
+{
+    "pk": 547, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1202, 
+        "name": "Congo Fula"
+    }
+},
+{
+    "pk": 548, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1203, 
+        "name": "Congo Cun\u00ed"
+    }
+},
+{
+    "pk": 549, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1204, 
+        "name": "Congo Lemba"
+    }
+},
+{
+    "pk": 550, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1205, 
+        "name": "Congo Buco"
+    }
+},
+{
+    "pk": 551, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1206, 
+        "name": "Congo Lonica"
+    }
+},
+{
+    "pk": 552, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1207, 
+        "name": "Congo Bencha"
+    }
+},
+{
+    "pk": 553, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1208, 
+        "name": "Congo Sucut\u00e9"
+    }
+},
+{
+    "pk": 554, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1209, 
+        "name": "Congo Ganda"
+    }
+},
+{
+    "pk": 555, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1210, 
+        "name": "Congo Lusanda"
+    }
+},
+{
+    "pk": 556, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1211, 
+        "name": "Congo Suca"
+    }
+},
+{
+    "pk": 557, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1212, 
+        "name": "Congo Quiama"
+    }
+},
+{
+    "pk": 558, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1213, 
+        "name": "Congo Bongo"
+    }
+},
+{
+    "pk": 559, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1214, 
+        "name": "Congo Luango"
+    }
+},
+{
+    "pk": 560, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1215, 
+        "name": "Congo Buere"
+    }
+},
+{
+    "pk": 561, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1216, 
+        "name": "Congo Cango"
+    }
+},
+{
+    "pk": 562, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1217, 
+        "name": "Congo Tamba"
+    }
+},
+{
+    "pk": 563, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1218, 
+        "name": "Congo Leque"
+    }
+},
+{
+    "pk": 564, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1219, 
+        "name": "Congo Biri"
+    }
+},
+{
+    "pk": 565, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1220, 
+        "name": "Congo Ausange"
+    }
+},
+{
+    "pk": 566, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1221, 
+        "name": "Congo Ca\u00ed"
+    }
+},
+{
+    "pk": 567, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1222, 
+        "name": "Congo Baco"
+    }
+},
+{
+    "pk": 568, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1223, 
+        "name": "Congo Sita"
+    }
+},
+{
+    "pk": 569, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1224, 
+        "name": "Congo Binga"
+    }
+},
+{
+    "pk": 570, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1225, 
+        "name": "Congo Jali"
+    }
+},
+{
+    "pk": 571, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1226, 
+        "name": "Congo Moyombe"
+    }
+},
+{
+    "pk": 572, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1227, 
+        "name": "Congo Mansa"
+    }
+},
+{
+    "pk": 573, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1228, 
+        "name": "Congo Febo"
+    }
+},
+{
+    "pk": 574, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1229, 
+        "name": "Congo Emagebo"
+    }
+},
+{
+    "pk": 575, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1230, 
+        "name": "Congo Bansa"
+    }
+},
+{
+    "pk": 576, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1231, 
+        "name": "Congo Buchimpe"
+    }
+},
+{
+    "pk": 577, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1232, 
+        "name": "Congo Queta"
+    }
+},
+{
+    "pk": 578, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1233, 
+        "name": "Congo Muema"
+    }
+},
+{
+    "pk": 579, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1234, 
+        "name": "Congo Somo"
+    }
+},
+{
+    "pk": 580, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1235, 
+        "name": "Congo Soso"
+    }
+},
+{
+    "pk": 581, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1236, 
+        "name": "Congo Mobonva"
+    }
+},
+{
+    "pk": 582, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1237, 
+        "name": "Congo Sese"
+    }
+},
+{
+    "pk": 583, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1238, 
+        "name": "Congo Sasa"
+    }
+},
+{
+    "pk": 584, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1239, 
+        "name": "Congo Cay"
+    }
+},
+{
+    "pk": 585, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1240, 
+        "name": "Congo Chocho"
+    }
+},
+{
+    "pk": 586, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1241, 
+        "name": "Congo Lusanga"
+    }
+},
+{
+    "pk": 587, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1242, 
+        "name": "Congo Cuma"
+    }
+},
+{
+    "pk": 588, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1243, 
+        "name": "Congo Cola"
+    }
+},
+{
+    "pk": 589, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1244, 
+        "name": "Congo Muedi"
+    }
+},
+{
+    "pk": 590, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1245, 
+        "name": "Congo Conche"
+    }
+},
+{
+    "pk": 591, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1246, 
+        "name": "Congo Fete"
+    }
+},
+{
+    "pk": 592, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1247, 
+        "name": "Mandinga"
+    }
+},
+{
+    "pk": 593, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1248, 
+        "name": "Congo"
+    }
+},
+{
+    "pk": 594, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1249, 
+        "name": "Lucumi Lay\u00ed"
+    }
+},
+{
+    "pk": 595, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1250, 
+        "name": "Lucumi Aiva"
+    }
+},
+{
+    "pk": 596, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1251, 
+        "name": "Lucumi Das\u00e1"
+    }
+},
+{
+    "pk": 597, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1252, 
+        "name": "Lucumi Ot\u00e1"
+    }
+},
+{
+    "pk": 598, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1253, 
+        "name": "Lucumi Yesa"
+    }
+},
+{
+    "pk": 599, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1254, 
+        "name": "Lucumi Sab\u00e9"
+    }
+},
+{
+    "pk": 600, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1255, 
+        "name": "Lucumi Vac\u00fao"
+    }
+},
+{
+    "pk": 601, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1256, 
+        "name": "Lucumi Ef\u00fa"
+    }
+},
+{
+    "pk": 602, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1257, 
+        "name": "Lucumi Llama"
+    }
+},
+{
+    "pk": 603, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1258, 
+        "name": "Lucumi Ecu\u00e1"
+    }
+},
+{
+    "pk": 604, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1259, 
+        "name": "Lucumi Bog\u00fa"
+    }
+},
+{
+    "pk": 605, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1260, 
+        "name": "Lucumi Pov\u00e9"
+    }
+},
+{
+    "pk": 606, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1261, 
+        "name": "Lucumi Chave"
+    }
+},
+{
+    "pk": 607, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1262, 
+        "name": "Lucumi Uci"
+    }
+},
+{
+    "pk": 608, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1263, 
+        "name": "Lucumi Yac\u00f3"
+    }
+},
+{
+    "pk": 609, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1264, 
+        "name": "Mina Pop\u00f3"
+    }
+},
+{
+    "pk": 610, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1265, 
+        "name": "Mina Lucumi"
+    }
+},
+{
+    "pk": 611, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1266, 
+        "name": "Congo Boma"
+    }
+},
+{
+    "pk": 612, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1267, 
+        "name": "Congo Moyoni"
+    }
+},
+{
+    "pk": 613, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1268, 
+        "name": "Congo Real"
+    }
+},
+{
+    "pk": 614, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1269, 
+        "name": "Congo Lavinda"
+    }
+},
+{
+    "pk": 615, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1270, 
+        "name": "Congo Borida"
+    }
+},
+{
+    "pk": 616, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1271, 
+        "name": "Congo Muyala"
+    }
+},
+{
+    "pk": 617, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1272, 
+        "name": "Congo Mulimba"
+    }
+},
+{
+    "pk": 618, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1273, 
+        "name": "Congo Musimba"
+    }
+},
+{
+    "pk": 619, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1274, 
+        "name": "Congo Manba"
+    }
+},
+{
+    "pk": 620, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1275, 
+        "name": "Carabali Camaron"
+    }
+},
+{
+    "pk": 621, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1276, 
+        "name": "Arar\u00e1"
+    }
+},
+{
+    "pk": 622, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1277, 
+        "name": "De Bisao"
+    }
+},
+{
+    "pk": 623, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1278, 
+        "name": "Mandinga Curang\u00f3"
+    }
+},
+{
+    "pk": 624, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1279, 
+        "name": "Mandinga Gora"
+    }
+},
+{
+    "pk": 625, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1280, 
+        "name": "Logo"
+    }
+},
+{
+    "pk": 626, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1281, 
+        "name": "Temino"
+    }
+},
+{
+    "pk": 627, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1282, 
+        "name": "Mandinga Limb\u00e1"
+    }
+},
+{
+    "pk": 628, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1283, 
+        "name": "Mendinga Toma"
+    }
+},
+{
+    "pk": 629, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1284, 
+        "name": "Arpongo"
+    }
+},
+{
+    "pk": 630, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1285, 
+        "name": "Mandinga Yer\u00e9"
+    }
+},
+{
+    "pk": 631, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1286, 
+        "name": "Mandinga Sangara"
+    }
+},
+{
+    "pk": 632, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1287, 
+        "name": "Mandinga Simine"
+    }
+},
+{
+    "pk": 633, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1288, 
+        "name": "Sierra Leona"
+    }
+},
+{
+    "pk": 634, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1289, 
+        "name": "Carabali Bony"
+    }
+},
+{
+    "pk": 635, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1290, 
+        "name": "Gang\u00e1 Ful\u00e1"
+    }
+},
+{
+    "pk": 636, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1291, 
+        "name": "Mandinga Loc\u00f3"
+    }
+},
+{
+    "pk": 637, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1292, 
+        "name": "Mandinga Var\u00e9"
+    }
+},
+{
+    "pk": 638, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1293, 
+        "name": "Mandinga Loco"
+    }
+},
+{
+    "pk": 639, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1294, 
+        "name": "Mandinga Bag\u00e1"
+    }
+},
+{
+    "pk": 640, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1295, 
+        "name": "Gang\u00e1 Toma"
+    }
+},
+{
+    "pk": 641, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1296, 
+        "name": "Carabali Ocoloba"
+    }
+},
+{
+    "pk": 642, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1297, 
+        "name": "Mandinga Ganga"
+    }
+},
+{
+    "pk": 643, 
+    "model": "resources.country", 
+    "fields": {
+        "country_id": 1298, 
+        "name": "Mandinga Con\u00f3"
+    }
+}
+]
