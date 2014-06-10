@@ -61,6 +61,33 @@ class ImageCategory(models.Model):
         return self.label
 
 
+class Country(models.Model):
+    """
+    Model stores countries with their codes
+    """
+
+    country_id = models.IntegerField("Country id", blank=True, null=True)
+    name = models.CharField(max_length=100, default="")
+
+    class Meta:
+        verbose_name = "Country"
+        ordering = ['country_id', ]
+
+
+class SexAge(models.Model):
+    """
+    Model stores Sex Age codes
+    """
+
+    sex_age_id = models.IntegerField("SexAge Id")
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = "Sex Age"
+        verbose_name_plural = "Sex Ages"
+        ordering = ['sex_age_id', ]
+
+
 class AfricanName(models.Model):
     """
     Model stores information about African Name
@@ -70,9 +97,12 @@ class AfricanName(models.Model):
     name = models.CharField(max_length=100, default="")
     age = models.IntegerField()
     height = models.FloatField()
-    sex_age = models.IntegerField()
+    majselpt = models.IntegerField(blank=True, null=True)
+    majbuypt = models.IntegerField(blank=True, null=True)
 
-    voyage_id = models.ForeignKey('Voyage', verbose_name="Voyage")
+    sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age")
+    country_id = models.ForeignKey(Country, verbose_name="Country")
+    voyage_id = models.ForeignKey(Voyage, verbose_name="Voyage")
 
     class Meta:
         verbose_name = "African Name"
