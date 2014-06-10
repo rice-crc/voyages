@@ -1,0 +1,50 @@
+[
+{
+    "pk": 61, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 1, 
+        "name": "Man"
+    }
+},
+{
+    "pk": 62, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 3, 
+        "name": "Male"
+    }
+},
+{
+    "pk": 63, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 4, 
+        "name": "Female"
+    }
+},
+{
+    "pk": 64, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 5, 
+        "name": "Woman"
+    }
+},
+{
+    "pk": 65, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 6, 
+        "name": "Girl"
+    }
+},
+{
+    "pk": 66, 
+    "model": "resources.sexage", 
+    "fields": {
+        "sex_age_id": 2, 
+        "name": "Boy"
+    }
+}
+]
