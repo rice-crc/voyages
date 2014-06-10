@@ -764,6 +764,8 @@ def search(request):
                     restrict_query[table_row_var_name + "__gte"] = date(1,1,1)
                 else:
                     restrict_query[table_row_var_name + "__gte"] = ""
+            elif table_row_var_name.endswith('_idnum'):
+                restrict_query[table_row_var_name + "__gte"] = "-1"
             elif table_row_var_name != '':
                 restrict_query[table_row_var_name + "__gte"] = ""
 
@@ -783,6 +785,8 @@ def search(request):
                     restrict_query[table_col_var_name + "__gte"] = date(1,1,1)
                 else:
                     restrict_query[table_col_var_name + "__gte"] = ""
+            elif table_col_var_name.endswith('_idnum'):
+                restrict_query[table_col_var_name + "__gte"] = "-1"
             elif table_col_var_name != '':
                 restrict_query[table_col_var_name + "__gte"] = ""
 
