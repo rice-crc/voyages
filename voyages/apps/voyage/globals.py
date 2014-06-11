@@ -361,7 +361,7 @@ def impute_nat_fun(lst):
     output = []
     for i in lst:
         mods = models.Nationality.objects.filter(value=i)
-        if mods.count() > 0:
+        if mods.count() > 0 and len(mods) > 0:
             output.append(mods[0])
     return output
 
