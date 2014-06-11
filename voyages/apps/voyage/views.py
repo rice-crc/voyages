@@ -952,7 +952,7 @@ def search(request):
                 ws = wb.active
                 for idx, i in enumerate(xls_table):
                     for idy, j in enumerate(i):
-                        ws.cell(row=idx+1,column=idy+1).value = unicode(j).encode('utf-8')
+                        ws.cell(row=idx+1,column=idy+1).value = j
                 wb.save(response)
                 return response
         elif submitVal == 'tab_graphs':
