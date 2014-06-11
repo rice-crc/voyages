@@ -357,8 +357,15 @@ def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label, lmbval=lambda
         result.append((label_list, {qdictkey: lmbval(i)}))
     return result
 
-imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
-                                        [3, 6, 7, 8, 9, 10, 15, 30])
+def impute_nat_fun(lst):
+    output = []
+    for i in lst:
+        mods = models.Nationality.objects.filter(value=i)
+        if mods.count() > 0:
+            output.append(mods[0])
+    return output
+
+imputed_nationality_possibilities = impute_nat_fun([3, 6, 7, 8, 9, 10, 15, 30])
 
 def make_regions_filter(varname):
     qdictkey = varname + '_idnum__exact'
