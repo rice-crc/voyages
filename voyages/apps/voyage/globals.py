@@ -424,7 +424,10 @@ def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: unicode(x), 
 
 def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
     uziped = zip(*get_each_from_table(table, qkey, lmblbl))
-    return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    if len(uziped) > 1:
+        return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    else:
+        return (filter_name, [], [])
 
 
 # Defines the options selectable for filtering the rows/columns of the table section
