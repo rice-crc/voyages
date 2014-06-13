@@ -994,8 +994,8 @@ def search(request):
         request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
-    result_display = prettify_results(pagins, globals.display_methods)
-    result_display = prettify_results(pagins, globals.display_methods)
+    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
+    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -1034,11 +1034,12 @@ def prettify_results(results, lookup_table):
     Uses the lookup_table which has the methods to prettify the variable based on the value and the voyage id
     The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
     """
+    # Results must be a list of dictionaries of variable name and value
     mangled = []
-    for i in results:
+    for i in results.all():
         idict = {}
-        voyageid = int(i.get_stored_fields()['var_voyage_id'])
-        for varname, varvalue in i.get_stored_fields().items():
+        voyageid = int(i['var_voyage_id'])
+        for varname, varvalue in i.items():
             if varvalue:
                 if varname in lookup_table:
                     idict[varname] = lookup_table[varname](varvalue, voyageid)
@@ -1634,8 +1635,11 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     if current_page != -1:
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
-        res = curpage.object_list
-    res = prettify_results(res, globals.display_methods_xls)
+        res = map(lambda x: x.get_stored_fields(), curpage.object_list)
+    else:
+        res = results.values(*[x['var_name'] for x in globals.var_dict])
+        
+    pres = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
@@ -1652,7 +1656,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     for idx, column in enumerate(columns):
         ws.write(1,idx,label=get_spss_name(column[0]))
 
-    for idx, item in enumerate(res):
+    for idx, item in enumerate(pres):
         #stored_fields = item.get_stored_fields()
         for idy, column in enumerate(columns):
             data = item[column[0]]
