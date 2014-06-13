@@ -683,6 +683,11 @@ def search(request):
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
             request.session['results_per_page_choice'] = results_per_page_form.cleaned_data['option']
+            request.session['results_per_page'] = results_per_page
+        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
+            results_per_page = request.session['results_per_page']
+            results_per_page_form.fields['option'].initial = request.session['results_per_page_choice']
+            results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['results_per_page_choice']})
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
