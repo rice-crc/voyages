@@ -1036,7 +1036,7 @@ def prettify_results(results, lookup_table):
     """
     # Results must be a list of dictionaries of variable name and value
     mangled = []
-    for i in results.all():
+    for i in results:
         idict = {}
         voyageid = int(i['var_voyage_id'])
         for varname, varvalue in i.items():
@@ -1637,7 +1637,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         curpage = paginator.page(current_page)
         res = map(lambda x: x.get_stored_fields(), curpage.object_list)
     else:
-        res = results.values(*[x['var_name'] for x in globals.var_dict])
+        res = results.values(*[x['var_name'] for x in globals.var_dict]).all()[0:results.count()]
         
     pres = prettify_results(res, globals.display_methods_xls)
 
