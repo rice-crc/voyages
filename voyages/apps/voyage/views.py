@@ -29,6 +29,8 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
+from matplotlib import pyplot
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -917,7 +919,18 @@ def search(request):
                 xdef = globals.graphs_x_functions[int(graphs_xy_select_form.cleaned_data['xselect'])]
                 ydef = globals.graphs_y_functions[int(graphs_xy_select_form.cleaned_data['yselect'])]
                 xfun = xdef[1]
-                print(xfun(results, ydef))
+                #pyplot.plot(range(10), range(10))
+                res = xfun(results,ydef)
+                print(res)
+                data = zip(*res)
+                pyplot.plot(*data)
+                pyplot.title("Hello, World!")
+                pyplot.show()
+#                canvas = FigureCanvasAgg(pyplot.figure())
+#                response = HttpResponse(content_type='image/png')
+#                canvas.print_png(response)
+#                return response
+                #print(xfun(results, ydef))
 #                print(xdef)
 #                print(ydef)
         elif  submitVal == 'tab_timeline':
