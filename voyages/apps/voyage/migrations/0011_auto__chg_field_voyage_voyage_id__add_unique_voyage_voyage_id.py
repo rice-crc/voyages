@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
 
         # Changing field 'Voyage.voyage_id'
-        db.alter_column(u'voyage_voyage', 'voyage_id', self.gf('django.db.models.fields.IntegerField')(default='', unique=True))
+        db.alter_column(u'voyage_voyage', 'voyage_id', self.gf('django.db.models.fields.IntegerField')(default=-1, unique=True))
         # Adding unique constraint on 'Voyage', fields ['voyage_id']
         db.create_unique(u'voyage_voyage', ['voyage_id'])
 

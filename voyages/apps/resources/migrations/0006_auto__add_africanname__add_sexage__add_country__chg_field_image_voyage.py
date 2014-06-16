@@ -11,34 +11,41 @@ class Migration(SchemaMigration):
         # Adding model 'AfricanName'
         db.create_table(u'resources_africanname', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slave_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=100)),
-            ('age', self.gf('django.db.models.fields.IntegerField')()),
-            ('height', self.gf('django.db.models.fields.FloatField')()),
-            ('majselpt', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('majbuypt', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('sex_age', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.SexAge'])),
-            ('country_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.Country'])),
-            ('voyage_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Voyage'])),
+            ('slave_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('height', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('source', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('date_arrived', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('ship_name', self.gf('django.db.models.fields.CharField')(max_length=70, null=True, blank=True)),
+            ('voyage_number', self.gf('django.db.models.fields.IntegerField')()),
+            ('sex_age', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.SexAge'], to_field='sex_age_id', null=True, blank=True)),
+            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.Country'], to_field='country_id', null=True, blank=True)),
+            ('disembarkation_port', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='disembarkation_port', null=True, to=orm['voyage.Place'])),
+            ('embarkation', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='embarkation_port', null=True, to=orm['voyage.Place'])),
+            ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Voyage'], to_field='voyage_id', null=True, blank=True)),
         ))
         db.send_create_signal(u'resources', ['AfricanName'])
 
         # Adding model 'SexAge'
         db.create_table(u'resources_sexage', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('sex_age_id', self.gf('django.db.models.fields.IntegerField')()),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('sex_age_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
         ))
         db.send_create_signal(u'resources', ['SexAge'])
 
         # Adding model 'Country'
         db.create_table(u'resources_country', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('country_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=100)),
+            ('country_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
         ))
         db.send_create_signal(u'resources', ['Country'])
 
+
+        # Changing field 'Image.voyage'
+        db.alter_column(u'resources_image', 'voyage_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Voyage'], to_field='voyage_id', null=True))
 
     def backwards(self, orm):
         # Deleting model 'AfricanName'
@@ -51,25 +58,32 @@ class Migration(SchemaMigration):
         db.delete_table(u'resources_country')
 
 
+        # Changing field 'Image.voyage'
+        db.alter_column(u'resources_image', 'voyage_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Voyage'], null=True))
+
     models = {
         u'resources.africanname': {
             'Meta': {'ordering': "['slave_id']", 'object_name': 'AfricanName'},
-            'age': ('django.db.models.fields.IntegerField', [], {}),
-            'country_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['resources.Country']"}),
-            'height': ('django.db.models.fields.FloatField', [], {}),
+            'age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['resources.Country']", 'to_field': "'country_id'", 'null': 'True', 'blank': 'True'}),
+            'date_arrived': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'disembarkation_port': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'disembarkation_port'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'embarkation': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'embarkation_port'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'height': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'majbuypt': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'majselpt': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'}),
-            'sex_age': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['resources.SexAge']"}),
-            'slave_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'voyage_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'sex_age': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['resources.SexAge']", 'to_field': "'sex_age_id'", 'null': 'True', 'blank': 'True'}),
+            'ship_name': ('django.db.models.fields.CharField', [], {'max_length': '70', 'null': 'True', 'blank': 'True'}),
+            'slave_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
+            'source': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']", 'to_field': "'voyage_id'", 'null': 'True', 'blank': 'True'}),
+            'voyage_number': ('django.db.models.fields.IntegerField', [], {})
         },
         u'resources.country': {
             'Meta': {'ordering': "['country_id']", 'object_name': 'Country'},
-            'country_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'country_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'resources.image': {
             'Meta': {'ordering': "['date']", 'object_name': 'Image'},
@@ -84,7 +98,7 @@ class Migration(SchemaMigration):
             'ready_to_go': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200'}),
-            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']", 'null': 'True', 'blank': 'True'})
+            'voyage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Voyage']", 'to_field': "'voyage_id'", 'null': 'True', 'blank': 'True'})
         },
         u'resources.imagecategory': {
             'Meta': {'ordering': "['value']", 'object_name': 'ImageCategory'},
@@ -96,8 +110,8 @@ class Migration(SchemaMigration):
         u'resources.sexage': {
             'Meta': {'ordering': "['sex_age_id']", 'object_name': 'SexAge'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'sex_age_id': ('django.db.models.fields.IntegerField', [], {})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'sex_age_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'})
         },
         u'voyage.broadregion': {
             'Meta': {'ordering': "['value']", 'object_name': 'BroadRegion'},
@@ -151,7 +165,7 @@ class Migration(SchemaMigration):
             'voyage_crew': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_crew'", 'null': 'True', 'to': u"orm['voyage.VoyageCrew']"}),
             'voyage_dates': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_dates'", 'null': 'True', 'to': u"orm['voyage.VoyageDates']"}),
             'voyage_groupings': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.VoyageGroupings']", 'null': 'True', 'blank': 'True'}),
-            'voyage_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'voyage_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             'voyage_in_cd_rom': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'max_length': '1'}),
             'voyage_itinerary': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_itinerary'", 'null': 'True', 'to': u"orm['voyage.VoyageItinerary']"}),
             'voyage_ship': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'voyage_ship'", 'null': 'True', 'to': u"orm['voyage.VoyageShip']"}),
