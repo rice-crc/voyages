@@ -21,8 +21,8 @@ class Migration(SchemaMigration):
             ('voyage_number', self.gf('django.db.models.fields.IntegerField')()),
             ('sex_age', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.SexAge'], to_field='sex_age_id', null=True, blank=True)),
             ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.Country'], to_field='country_id', null=True, blank=True)),
-            ('disembarkation_port', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='disembarkation_port', null=True, to=orm['voyage.Place'])),
-            ('embarkation', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='embarkation_port', null=True, to=orm['voyage.Place'])),
+            ('disembarkation_port', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='disembarkation_port', to_field='value', null=True, to=orm['voyage.Place'])),
+            ('embarkation', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='embarkation_port', to_field='value', null=True, to=orm['voyage.Place'])),
             ('voyage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voyage.Voyage'], to_field='voyage_id', null=True, blank=True)),
         ))
         db.send_create_signal(u'resources', ['AfricanName'])
@@ -67,8 +67,8 @@ class Migration(SchemaMigration):
             'age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['resources.Country']", 'to_field': "'country_id'", 'null': 'True', 'blank': 'True'}),
             'date_arrived': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'disembarkation_port': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'disembarkation_port'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
-            'embarkation': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'embarkation_port'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'disembarkation_port': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'disembarkation_port'", 'to_field': "'value'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
+            'embarkation': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'embarkation_port'", 'to_field': "'value'", 'null': 'True', 'to': u"orm['voyage.Place']"}),
             'height': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -135,7 +135,7 @@ class Migration(SchemaMigration):
             'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['voyage.Region']"}),
             'show_on_main_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'show_on_voyage_map': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'value': ('django.db.models.fields.IntegerField', [], {'max_length': '5'})
+            'value': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'max_length': '5'})
         },
         u'voyage.region': {
             'Meta': {'ordering': "['value']", 'object_name': 'Region'},
