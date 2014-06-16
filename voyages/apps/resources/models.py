@@ -1,6 +1,6 @@
 from django.db import models
-from os.path import basename, getsize
-from voyages.apps.voyage.models import Voyage
+from os.path import basename
+from voyages.apps.voyage.models import Voyage, Place
 from django.conf import settings
 
 
@@ -23,7 +23,7 @@ class Image(models.Model):
 
     # Category
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")
-    voyage = models.ForeignKey(Voyage, null=True, blank=True)
+    voyage = models.ForeignKey(Voyage, to_field='voyage_id', null=True, blank=True)
 
     class Meta:
         verbose_name = "Image"
@@ -66,8 +66,8 @@ class Country(models.Model):
     Model stores countries with their codes
     """
 
-    country_id = models.IntegerField("Country id", blank=True, null=True)
-    name = models.CharField(max_length=100, default="")
+    country_id = models.IntegerField("Country id", unique=True)
+    name = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "Country"
@@ -79,8 +79,8 @@ class SexAge(models.Model):
     Model stores Sex Age codes
     """
 
-    sex_age_id = models.IntegerField("SexAge Id")
-    name = models.CharField(max_length=50)
+    sex_age_id = models.IntegerField("SexAge Id", unique=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         verbose_name = "Sex Age"
@@ -93,16 +93,22 @@ class AfricanName(models.Model):
     Model stores information about African Name
     """
 
-    slave_id = models.IntegerField("Slave id", blank=True, null=True)
-    name = models.CharField(max_length=100, default="")
-    age = models.IntegerField()
-    height = models.FloatField()
-    majselpt = models.IntegerField(blank=True, null=True)
-    majbuypt = models.IntegerField(blank=True, null=True)
+    slave_id = models.IntegerField("Slave id", unique=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    height = models.FloatField(blank=True, null=True)
+    source = models.CharField(max_length=30, blank=True, null=True)
+    date_arrived = models.IntegerField(max_length=4, verbose_name="Arrival", blank=True, null=True)
+    ship_name = models.CharField(max_length=70, verbose_name="Ship Name", blank=True, null=True)
+    voyage_number = models.IntegerField()
 
-    sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age")
-    country_id = models.ForeignKey(Country, verbose_name="Country")
-    voyage_id = models.ForeignKey(Voyage, verbose_name="Voyage")
+    sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age", to_field='sex_age_id', blank=True, null=True)
+    country = models.ForeignKey(Country, verbose_name="Country", to_field='country_id', blank=True, null=True)
+    disembarkation_port = models.ForeignKey(Place, verbose_name="Disembarkation Port", to_field='value',
+                                            related_name="disembarkation_port", blank=True, null=True)
+    embarkation = models.ForeignKey(Place, verbose_name="Embarkation Port", to_field='value',
+                                    related_name="embarkation_port", blank=True, null=True)
+    voyage = models.ForeignKey(Voyage, verbose_name="Voyage", to_field='voyage_id', blank=True, null=True)
 
     class Meta:
         verbose_name = "African Name"
