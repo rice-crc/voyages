@@ -56,7 +56,7 @@ class Place(models.Model):
 
     place = models.CharField(max_length=70)
     region = models.ForeignKey('Region')
-    value = models.IntegerField("Numeric code", max_length=5)
+    value = models.IntegerField("Numeric code", unique=True, max_length=5)
     longitude = models.DecimalField("Longitude of point",
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
@@ -1261,7 +1261,7 @@ class Voyage(models.Model):
     objects = VoyageManager()
 
     #voyage_id = models.AutoField(primary_key=True)
-    voyage_id = models.IntegerField("Voyage ID (can be empty)", null=True, blank=True)
+    voyage_id = models.IntegerField("Voyage ID", unique=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",
                                            max_length=1, default=False, blank=True)
