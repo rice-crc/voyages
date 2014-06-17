@@ -71,7 +71,11 @@ class Country(models.Model):
 
     class Meta:
         verbose_name = "Country"
+        verbose_name_plural = "Countries"
         ordering = ['country_id', ]
+
+    def __unicode__(self):
+        return self.name
 
 
 class SexAge(models.Model):
@@ -86,6 +90,9 @@ class SexAge(models.Model):
         verbose_name = "Sex Age"
         verbose_name_plural = "Sex Ages"
         ordering = ['sex_age_id', ]
+
+    def __unicode__(self):
+        return self.name
 
 
 class AfricanName(models.Model):
@@ -106,7 +113,7 @@ class AfricanName(models.Model):
     country = models.ForeignKey(Country, verbose_name="Country", to_field='country_id', blank=True, null=True)
     disembarkation_port = models.ForeignKey(Place, verbose_name="Disembarkation Port", to_field='value',
                                             related_name="disembarkation_port", blank=True, null=True)
-    embarkation = models.ForeignKey(Place, verbose_name="Embarkation Port", to_field='value',
+    embarkation_port = models.ForeignKey(Place, verbose_name="Embarkation Port", to_field='value',
                                     related_name="embarkation_port", blank=True, null=True)
     voyage = models.ForeignKey(Voyage, verbose_name="Voyage", to_field='voyage_id', blank=True, null=True)
 
@@ -114,6 +121,9 @@ class AfricanName(models.Model):
         verbose_name = "African Name"
         verbose_name_plural = "African Names"
         ordering = ['slave_id', ]
+
+    def __unicode__(self):
+        return self.name
 
 
 from .search_indexes import ImagesIndex
