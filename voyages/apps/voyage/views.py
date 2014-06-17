@@ -29,8 +29,11 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
+import base64
+import StringIO
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -606,6 +609,7 @@ def search(request):
     num_row_labels = 1
     is_double_fun = False
     graphs_xy_select_form = None
+    inline_graph_png = None
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -920,12 +924,24 @@ def search(request):
                 ydef = globals.graphs_y_functions[int(graphs_xy_select_form.cleaned_data['yselect'])]
                 xfun = xdef[1]
                 #pyplot.plot(range(10), range(10))
+                #print(res)
+                fig = plt.figure(1)
+#                plt.plot(range(10), range(10))
                 res = xfun(results,ydef)
-                print(res)
                 data = zip(*res)
-                pyplot.plot(*data)
-                pyplot.title("Hello, World!")
-                pyplot.show()
+                plt.plot(*data)
+                plt.title("Hello, World!")
+#                plt.show()
+#                plt.show()
+#                fig.add_subplot(111)
+                print(type(fig))
+                print(dir(fig))
+                canv = FigureCanvasAgg(fig)
+                print(type(fig))
+                print(dir(fig))
+                figstr = StringIO.StringIO()
+                canv.print_png(figstr)
+                inline_graph_png = base64.b64encode(figstr.getvalue())
 #                canvas = FigureCanvasAgg(pyplot.figure())
 #                response = HttpResponse(content_type='image/png')
 #                canvas.print_png(response)
@@ -1003,7 +1019,8 @@ def search(request):
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
                    'is_double_fun': is_double_fun,
-                   'graphs_xy_select_form': graphs_xy_select_form})
+                   'graphs_xy_select_form': graphs_xy_select_form,
+                   'inline_graph_png': inline_graph_png})
 
 def prettify_results(results, lookup_table):
     """

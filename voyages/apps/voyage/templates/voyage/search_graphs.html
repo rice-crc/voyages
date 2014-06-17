@@ -10,16 +10,21 @@
         <tr>
           <td> <b> {{ field.label }}: </b> </td>
           <td> {% for i in field %} {{ i }} {% endfor %} </td>
-	</tr>
+		</tr>
       {% endfor %}
       <tr>
-	<td></td>
-	<td>
-	  <!-- Show button -->
-	  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs');" name="buttonShow" />
-	</td>
+	    <td></td>
+	    <td>
+	      <!-- Show button -->
+	      <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs');" name="buttonShow" />
+	    </td>
       </tr>
     </tbody>
   </table>
+  <div>
+	{% if inline_graph_png %}
+	  <img alt="embedded graph" src="data:image/png;base64,{{inline_graph_png}}"/>
+	{% endif %}
+  </div>
 </div>
 
