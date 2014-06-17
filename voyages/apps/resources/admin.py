@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import *
 from .forms import *
 
+
 class ImageAdmin(admin.ModelAdmin):
     list_filter = ['category']
     list_display = ['ready_to_go', 'title', 'file' ]
@@ -27,5 +28,39 @@ class ImageCategoryAdmin(admin.ModelAdmin):
         model = ImageCategory
 
 
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ['country_id', 'name']
+    list_display_links = ['name']
+    ordering = ['country_id']
+    search_fields = ['country_id', 'name']
+
+    class Meta:
+        model = Country
+
+
+class SexAgeAdmin(admin.ModelAdmin):
+    list_display = ['sex_age_id', 'name']
+    list_display_links = ['name']
+    ordering = ['sex_age_id']
+    search_fields = ['sex_age_id', 'name']
+
+    class Meta:
+        model = SexAge
+
+
+class AfricanNameAdmin(admin.ModelAdmin):
+    list_display = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number',
+                    'voyage', 'sex_age', 'country', 'disembarkation_port', 'embarkation_port']
+    list_display_links = ['name']
+    exclude = ['voyage']
+    ordering = ['slave_id']
+
+    class Meta:
+        model = AfricanName
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ImageCategory, ImageCategoryAdmin)
+admin.site.register(Country, CountryAdmin)
+admin.site.register(SexAge, SexAgeAdmin)
+admin.site.register(AfricanName, AfricanNameAdmin)
