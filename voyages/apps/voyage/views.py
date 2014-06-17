@@ -928,6 +928,8 @@ def search(request):
                 fig = plt.figure(1)
 #                plt.plot(range(10), range(10))
                 res = xfun(results,ydef)
+                res = sorted(res, key=lambda x: x[0])
+                print(res)
                 data = zip(*res)
                 plt.plot(*data)
                 plt.title("Hello, World!")

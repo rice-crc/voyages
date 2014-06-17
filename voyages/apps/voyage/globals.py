@@ -536,6 +536,7 @@ summing_fun = sum
 
 # Takes a searchqueryset and returns a number
 # (description, varname, function on varname values)
+# I don't think it uses the last function
 graphs_y_functions = [('Number of voyages', 'var_voyage_id', len, lambda x: x.count(),),
                       ('Average voyage length, home port to slaves landing (days)*', 'var_imp_length_home_to_disembark', averaging_fun, make_avg_fun('var_imp_length_home_to_disembark'),),
                       ('Average middle passage (days)*', 'var_length_middle_passage_days', averaging_fun, make_avg_fun('var_length_middle_passage_days'),),
@@ -573,6 +574,14 @@ def make_x_fun(xvar):
                     vdict[i[xvar]] = vdict.get(i[xvar], [])
                     vdict[i[xvar]].append(i[yvar])
         dataset = [(i[0], yfun(i[1])) for i in vdict.items()]
+        dataset = sorted(dataset, key=lambda x: x[0])
+        if len(dataset) > 0 and ( yfun == summing_fun or yfun == len ):
+            dictset = dict(dataset)
+            # Iterate from lowest to highest values of x axis and assign nonexistent to 0
+            for i in range(dataset[0][0], dataset[-1][0]):
+                if i not in dictset:
+                    dictset[i] = 0
+            dataset = dictset.items()
         return dataset
     return x_fun
 
@@ -591,7 +600,7 @@ graphs_x_functions = [('Year arrived with slaves*', make_x_fun('var_imp_arrival_
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
 
-#all_place_list = structure_places_all(models.Place.objects.all())
+all_place_list = structure_places_all(models.Place.objects.all())
 
 var_dict = [
     # Ship, Nation, Owners
@@ -644,8 +653,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())},
+     'choices': all_place_list},
     {'var_name': 'var_year_of_construction',
      'spss_name': 'yrcons',
      'var_full_name': 'Year constructed',
@@ -662,8 +671,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageShip.objects.values_list('registered_place').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageShip.objects.values_list('registered_place').distinct())},
+     'choices': all_place_list},
     {'var_name': 'var_registered_year',
      'spss_name': 'yrreg',
      'var_full_name': 'Year registered',
@@ -768,8 +777,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_port_voyage_begin').distinct()),
-#     'choices': all_place_list,
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_port_voyage_begin').distinct()),
+     'choices': all_place_list,
      "note": "Same as data variable in most cases, but derived from "
              "port of return for certain Brazilian voyages"},
 
@@ -781,8 +790,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_place_slave_purchase').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_place_slave_purchase').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_second_place_slave_purchase',
      'spss_name': 'plac2tra',
@@ -792,8 +801,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_place_slave_purchase').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_place_slave_purchase').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_third_place_slave_purchase',
      'spss_name': 'plac3tra',
@@ -803,8 +812,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_place_slave_purchase').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_place_slave_purchase').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_place_of_slave_purchase',
      'spss_name': 'mjbyptimp',
@@ -814,8 +823,8 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_place_of_slave_purchase').distinct()),
-#     'choices': all_place_list,
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_place_of_slave_purchase').distinct()),
+     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
     {'var_name': 'var_port_of_call_before_atl_crossing',
@@ -826,8 +835,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('port_of_call_before_atl_crossing').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('port_of_call_before_atl_crossing').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_first_landing_place',
      'spss_name': 'sla1port',
@@ -837,8 +846,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_landing_place').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_landing_place').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_second_landing_place',
      'spss_name': 'adpsale1',
@@ -848,8 +857,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_landing_place').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_landing_place').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_third_landing_place',
      'spss_name': 'adpsale2',
@@ -859,8 +868,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_landing_place').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_landing_place').distinct())},
+     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_port_slave_dis',
      'spss_name': 'mjslptimp',
@@ -870,8 +879,8 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_port_slave_dis').distinct()),
-#     'choices': all_place_list,
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_port_slave_dis').distinct()),
+     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
     {'var_name': 'var_place_voyage_ended',
@@ -882,8 +891,8 @@ var_dict = [
      "is_estimate": False,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('place_voyage_ended').distinct())},
-#     'choices': all_place_list},
+#     'choices': structure_places(models.VoyageItinerary.objects.values_list('place_voyage_ended').distinct())},
+     'choices': all_place_list},
 
     # Itinerary - region variables
     {'var_name': 'var_imp_region_voyage_begin',
