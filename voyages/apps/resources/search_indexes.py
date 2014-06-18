@@ -1,5 +1,5 @@
 from haystack import indexes
-from .models import Image
+from .models import Image, AfricanName
 
 
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
@@ -45,6 +45,53 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_voyage_year(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_dates.imp_voyage_began
+        else:
+            return None
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class AfricanNames(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    slave_id = indexes.IntegerField(model_attr="slave_id")
+    slave_name = indexes.CharField(model_attr="name", null=True)
+    slave_age = indexes.IntegerField(model_attr="age", null=True)
+    slave_height = indexes.FloatField(model_attr="height", null=True)
+    slave_source = indexes.CharField(model_attr="source", null=True)
+    slave_date_arrived = indexes.IntegerField(model_attr="date_arrived", null=True)
+    slave_ship_name = indexes.CharField(model_attr="ship_name", null=True)
+    slave_voyage_number = indexes.CharField(model_attr="voyage_number")
+    slave_sex_age = indexes.CharField()
+    slave_country = indexes.CharField()
+    slave_embarkation_port = indexes.CharField()
+    slave_disembarkation_port = indexes.CharField()
+
+    def get_model(self):
+        return AfricanName
+
+    def prepare_slave_sex_age(self, obj):
+        if obj.sex_age is not None:
+            return obj.sex_age.name
+        else:
+            return None
+
+    def prepare_slave_country(self, obj):
+        if obj.country is not None:
+            return obj.country.name
+        else:
+            return None
+
+    def prepare_slave_embarkation_port(self, obj):
+        if obj.embarkation_port is not None:
+            return obj.embarkation_port.place
+        else:
+            return None
+
+    def prepare_slave_disembarkation_port(self, obj):
+        if obj.disembarkation_port is not None:
+            return obj.disembarkation_port.place
         else:
             return None
 
