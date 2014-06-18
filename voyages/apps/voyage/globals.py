@@ -256,6 +256,17 @@ display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_tonnage': unmangle_truncate,
                             'var_tonnage_mod': unmangle_truncate}
 
+def graph_percent(ratio):
+    return ratio * 100
+
+graph_display_methods = {'var_imputed_percentage_men': graph_percent,
+                         'var_imputed_percentage_women': graph_percent,
+                         'var_imputed_percentage_boys': graph_percent,
+                         'var_imputed_percentage_girls': graph_percent,
+                         'var_imputed_percentage_male': graph_percent,
+                         'var_imputed_percentage_child': graph_percent,
+                         'var_imputed_mortality': graph_percent,}
+
 
 
 def formatYear(year, month=0):
@@ -413,9 +424,21 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
     return lambda queryset, rowset=None, colset=None, allset=None: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
+def make_sum_nopretty_fun(varname):
+    prettifier = graph_display_methods.get(varname, no_mangle)
+    return lambda queryset, rowset=None, colset=None, allset=None: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
 
 def make_avg_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
+    def avg_fun(queryset, rowset=None, colset=None, allset=None):
+        lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
+        if len(lst) == 0:
+            return None
+        else:
+            return prettifier(sum(lst)/len(lst))
+    return avg_fun
+def make_avg_nopretty_fun(varname):
+    prettifier = graph_display_methods.get(varname, no_mangle)
     def avg_fun(queryset, rowset=None, colset=None, allset=None):
         lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
         if len(lst) == 0:
@@ -538,26 +561,26 @@ summing_fun = sum
 # (description, varname, function on varname values)
 # I don't think it uses the last function
 graphs_y_functions = [('Number of voyages', 'var_voyage_id', len, lambda x: x.count(),),
-                      ('Average voyage length, home port to slaves landing (days)*', 'var_imp_length_home_to_disembark', averaging_fun, make_avg_fun('var_imp_length_home_to_disembark'),),
-                      ('Average middle passage (days)*', 'var_length_middle_passage_days', averaging_fun, make_avg_fun('var_length_middle_passage_days'),),
-                      ('Standardized tonnage*', 'var_tonnage_mod', averaging_fun, make_avg_fun('var_tonnage_mod')),
-                      ('Average crew at voyage outset', 'var_crew_voyage_outset', averaging_fun, make_avg_fun('var_crew_voyage_outset'),),
-                      ('Average crew at first landing of slaves', 'var_crew_first_landing', averaging_fun, make_avg_fun('var_crew_first_landing'),),
-                      ('Total crew at voyage outset', 'var_crew_voyage_outset', summing_fun, make_sum_fun('var_crew_voyage_outset'),),
-                      ('Total crew at first landing of slaves', 'var_crew_first_landing', summing_fun, make_sum_fun('var_crew_first_landing'),),
-                      ('Average number of slaves embarked', 'var_imp_total_num_slaves_purchased', averaging_fun, make_avg_fun('var_imp_total_num_slaves_purchased'),),
-                      ('Average number of slaves disembarked', 'var_imp_total_slaves_disembarked', averaging_fun, make_avg_fun('var_imp_total_slaves_disembarked')),
-                      ('Total number of slaves embarked', 'var_imp_total_num_slaves_purchased', summing_fun, make_sum_fun('var_imp_total_num_slaves_purchased'),),
-                      ('Total number of slaves disembarked', 'var_imp_total_slaves_disembarked', summing_fun, make_sum_fun('var_imp_total_slaves_disembarked'),),
-                      ('Percentage men*', 'var_imputed_percentage_men', averaging_fun, make_avg_fun('var_imputed_percentage_men'),),
-                      ('Percentage women*', 'var_imputed_percentage_women', averaging_fun, make_avg_fun('var_imputed_percentage_women'),),
-                      ('Percentage boys*', 'var_imputed_percentage_boys', averaging_fun, make_avg_fun('var_imputed_percentage_boys'),),
-                      ('Percentage girls*', 'var_imputed_percentage_girls', averaging_fun, make_avg_fun('var_imputed_percentage_girls'),),
-                      ('Percentage children*', 'var_imputed_percentage_child', averaging_fun, make_avg_fun('var_imputed_percentage_child'),),
-                      ('Percentage male*', 'var_imputed_percentage_male', averaging_fun, make_avg_fun('var_imputed_percentage_male'),),
-                      ('Sterling cash price in Jamaica*', 'var_imputed_sterling_cash', averaging_fun, make_avg_fun('var_imputed_sterling_cash'),),
+                      ('Average voyage length, home port to slaves landing (days)*', 'var_imp_length_home_to_disembark', averaging_fun, make_avg_nopretty_fun('var_imp_length_home_to_disembark'),),
+                      ('Average middle passage (days)*', 'var_length_middle_passage_days', averaging_fun, make_avg_nopretty_fun('var_length_middle_passage_days'),),
+                      ('Standardized tonnage*', 'var_tonnage_mod', averaging_fun, make_avg_nopretty_fun('var_tonnage_mod')),
+                      ('Average crew at voyage outset', 'var_crew_voyage_outset', averaging_fun, make_avg_nopretty_fun('var_crew_voyage_outset'),),
+                      ('Average crew at first landing of slaves', 'var_crew_first_landing', averaging_fun, make_avg_nopretty_fun('var_crew_first_landing'),),
+                      ('Total crew at voyage outset', 'var_crew_voyage_outset', summing_fun, make_sum_nopretty_fun('var_crew_voyage_outset'),),
+                      ('Total crew at first landing of slaves', 'var_crew_first_landing', summing_fun, make_sum_nopretty_fun('var_crew_first_landing'),),
+                      ('Average number of slaves embarked', 'var_imp_total_num_slaves_purchased', averaging_fun, make_avg_nopretty_fun('var_imp_total_num_slaves_purchased'),),
+                      ('Average number of slaves disembarked', 'var_imp_total_slaves_disembarked', averaging_fun, make_avg_nopretty_fun('var_imp_total_slaves_disembarked')),
+                      ('Total number of slaves embarked', 'var_imp_total_num_slaves_purchased', summing_fun, make_sum_nopretty_fun('var_imp_total_num_slaves_purchased'),),
+                      ('Total number of slaves disembarked', 'var_imp_total_slaves_disembarked', summing_fun, make_sum_nopretty_fun('var_imp_total_slaves_disembarked'),),
+                      ('Percentage men*', 'var_imputed_percentage_men', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_men'),),
+                      ('Percentage women*', 'var_imputed_percentage_women', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_women'),),
+                      ('Percentage boys*', 'var_imputed_percentage_boys', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_boys'),),
+                      ('Percentage girls*', 'var_imputed_percentage_girls', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_girls'),),
+                      ('Percentage children*', 'var_imputed_percentage_child', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_child'),),
+                      ('Percentage male*', 'var_imputed_percentage_male', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_male'),),
+                      ('Sterling cash price in Jamaica*', 'var_imputed_sterling_cash', averaging_fun, make_avg_nopretty_fun('var_imputed_sterling_cash'),),
                       ('Rate of resistance',),
-                      ('Percentage of slaves embarked who died during voyage*', 'var_imputed_mortality', averaging_fun, make_avg_fun('var_imputed_mortality'),),]
+                      ('Percentage of slaves embarked who died during voyage*', 'var_imputed_mortality', averaging_fun, make_avg_nopretty_fun('var_imputed_mortality'),),]
 
 
 # get dicts for x and y values, then make a dictionary of x values, put y values into a list for each x value
