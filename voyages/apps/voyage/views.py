@@ -675,6 +675,7 @@ def search(request):
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
+        request.session['graph_defs'] = []
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -916,21 +917,30 @@ def search(request):
                         ws.cell(row=idx,column=idy).value = unicode(j).encode('utf-8')
                 wb.save(response)
                 return response
-        elif submitVal == 'tab_graphs':
+        elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
             graphs_xy_select_form = GraphXYSelectionForm(request.POST)
             if graphs_xy_select_form.is_valid():
-                xdef = globals.graphs_x_functions[int(graphs_xy_select_form.cleaned_data['xselect'])]
-                ydef = globals.graphs_y_functions[int(graphs_xy_select_form.cleaned_data['yselect'])]
-                xfun = xdef[1]
-                fig = plt.figure(1)
-                res = xfun(results,ydef)
-                res = sorted(res, key=lambda x: x[0])
-                data = zip(*res)
-                plt.plot(*data)
-                plt.grid(True)
+                xind = int(graphs_xy_select_form.cleaned_data['xselect'])
+                yind = int(graphs_xy_select_form.cleaned_data['yselect'])
+                xdef = globals.graphs_x_functions[xind]
+                ydef = globals.graphs_y_functions[yind]
+                request.session['graph_defs'] = request.session.get('graph_defs', [])
+                if submitVal == 'tab_graphs_add':
+                    request.session['graph_defs'].append(yind)
+                elif submitVal == 'tab_graphs_show':
+                    request.session['graph_defs'] = [yind]
                 plt.xlabel(xdef[0])
                 plt.ylabel(ydef[0])
+                for yid in request.session['graph_defs']:
+                    ydef = globals.graphs_y_functions[yid]
+                    xfun = xdef[1]
+                    fig = plt.figure(1)
+                    res = xfun(results,ydef)
+                    res = sorted(res, key=lambda x: x[0])
+                    data = zip(*res)
+                    plt.plot(*data)
+                    plt.grid(True)
                 canv = FigureCanvasAgg(fig)
                 figstr = StringIO.StringIO()
                 canv.print_png(figstr)
