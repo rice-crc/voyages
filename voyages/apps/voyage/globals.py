@@ -561,38 +561,35 @@ graphs_y_functions = [('Number of voyages', 'var_voyage_id', len, lambda x: x.co
 
 
 # get dicts for x and y values, then make a dictionary of x values, put y values into a list for each x value
-def make_x_fun(xvar):
+def make_x_line_fun(xvar):
     def x_fun(sqs, ydef):
         yvar = ydef[1]
+        # function when going against a list, probably not needed, will be slower and will be needed only if the next if statement falls through
         yfun = ydef[2]
-        # Perhaps use values_list instead to use less memory?
-        vls = sqs.values(xvar, yvar)
-        vdict = {}
-        for i in vls:
-            if xvar in i and yvar in i:
-                if i[yvar] != None:
-                    vdict[i[xvar]] = vdict.get(i[xvar], [])
-                    vdict[i[xvar]].append(i[yvar])
-        dataset = [(i[0], yfun(i[1])) for i in vdict.items()]
+        yqsetfun = ydef[3]
+        xstats = sqs.stats(xvar).stats_results()
+        dataset = []
+        xfilter = xvar + "__exact"
+        if xstats and xstats[xvar]:
+            xmax = int(xstats[xvar]['max'])
+            xmin = int(xstats[xvar]['min'])
+            for x in range(xmin, xmax + 1):
+                fsqs = sqs.filter(**{xfilter: x})
+                yval = yqsetfun(fsqs)
+                if yval != None:
+                    dataset.append((x, yval))
         dataset = sorted(dataset, key=lambda x: x[0])
-        if len(dataset) > 0 and ( yfun == summing_fun or yfun == len ):
-            dictset = dict(dataset)
-            # Iterate from lowest to highest values of x axis and assign nonexistent to 0
-            for i in range(dataset[0][0], dataset[-1][0]):
-                if i not in dictset:
-                    dictset[i] = 0
-            dataset = dictset.items()
         return dataset
     return x_fun
 
 # Takes a searchqueryset and a y function definition (description, varname, reduce function) and returns a dataset (list of tuples) in the form (x,y)
-graphs_x_functions = [('Year arrived with slaves*', make_x_fun('var_imp_arrival_at_port_of_dis')),
-                      ('Voyage length, home port to slaves landing (days)*',),
-                      ('Middle passage (days)*',),
-                      ('Crew at voyage outset',),
-                      ('Crew at first landing of slaves',),
-                      ('Slaves embarked',),
-                      ('Slaves disembarked',),]
+graphs_x_functions = [('Year arrived with slaves*', make_x_line_fun('var_imp_arrival_at_port_of_dis')),
+                      ('Voyage length, home port to slaves landing (days)*', make_x_line_fun('var_imp_length_home_to_disembark')),
+                      ('Middle passage (days)*', make_x_line_fun('var_length_middle_passage_days')),
+                      ('Crew at voyage outset', make_x_line_fun('var_crew_voyage_outset')),
+                      ('Crew at first landing of slaves', make_x_line_fun('var_crew_first_landing')),
+                      ('Slaves embarked', make_x_line_fun('var_imp_total_num_slaves_purchased')),
+                      ('Slaves disembarked', make_x_line_fun('var_imp_total_slaves_disembarked')),]
 
 
 
