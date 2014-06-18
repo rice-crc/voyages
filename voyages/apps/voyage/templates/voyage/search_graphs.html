@@ -3,22 +3,33 @@
 <div>
   <h1>{% trans 'Custom Graphs' %}</h1>
 </div>
-<div >
+<div>
   <table>
     <tbody>
-      {% for field in graphs_xy_select_form %}
-        <tr>
-          <td> <b> {{ field.label }}: </b> </td>
-          <td> {% for i in field %} {{ i }} {% endfor %} </td>
-		</tr>
-      {% endfor %}
       <tr>
-	    <td></td>
-	    <td>
-	      <!-- Show button -->
-	      <input type="submit" value="{% trans 'Add Series' %}" onclick="submitWithValue('tab_graphs_add');" name="buttonAddSeries" />
-	      <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs_show');" name="buttonShow" />
-	    </td>
+	<td>
+	  <table>
+	    <tbody>
+	      {% for field in graphs_xy_select_form %}
+              <tr>
+		<td> <b> {{ field.label }}: </b> </td>
+		<td> {% for i in field %} {{ i }} {% endfor %} </td>
+	      </tr>
+	      {% endfor %}
+	      <tr>
+		<td></td>
+		<td>
+		  <!-- Show button -->
+		  <input type="submit" value="{% trans 'Add Series' %}" onclick="submitWithValue('tab_graphs_add');" name="buttonAddSeries" />
+		  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs_show');" name="buttonShow" />
+		</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</td>
+	<td>
+	  Hello, World!
+	</td>
       </tr>
     </tbody>
   </table>

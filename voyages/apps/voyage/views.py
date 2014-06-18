@@ -927,11 +927,15 @@ def search(request):
                 ydef = globals.graphs_y_functions[yind]
                 request.session['graph_defs'] = request.session.get('graph_defs', [])
                 if submitVal == 'tab_graphs_add':
-                    request.session['graph_defs'].append(yind)
+                    if len(request.session['graph_defs']) > 0 and request.session['graph_defs'][-1] != yind:
+                        request.session['graph_defs'].append(yind)
                 elif submitVal == 'tab_graphs_show':
                     request.session['graph_defs'] = [yind]
                 plt.xlabel(xdef[0])
-                plt.ylabel(ydef[0])
+                if len(request.session['graph_defs']) == 1:
+                    plt.ylabel(ydef[0])
+                else:
+                    plt.ylabel("Values")
                 for yid in request.session['graph_defs']:
                     ydef = globals.graphs_y_functions[yid]
                     xfun = xdef[1]
@@ -939,8 +943,9 @@ def search(request):
                     res = xfun(results,ydef)
                     res = sorted(res, key=lambda x: x[0])
                     data = zip(*res)
-                    plt.plot(*data)
+                    plt.plot(*data, label=ydef[0])
                     plt.grid(True)
+                plt.legend()
                 canv = FigureCanvasAgg(fig)
                 figstr = StringIO.StringIO()
                 canv.print_png(figstr)
