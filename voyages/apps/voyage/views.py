@@ -923,34 +923,17 @@ def search(request):
                 xdef = globals.graphs_x_functions[int(graphs_xy_select_form.cleaned_data['xselect'])]
                 ydef = globals.graphs_y_functions[int(graphs_xy_select_form.cleaned_data['yselect'])]
                 xfun = xdef[1]
-                #pyplot.plot(range(10), range(10))
-                #print(res)
                 fig = plt.figure(1)
-#                plt.plot(range(10), range(10))
                 res = xfun(results,ydef)
                 res = sorted(res, key=lambda x: x[0])
-                print(res)
                 data = zip(*res)
                 plt.plot(*data)
                 plt.title("Hello, World!")
-#                plt.show()
-#                plt.show()
-#                fig.add_subplot(111)
-                print(type(fig))
-                print(dir(fig))
                 canv = FigureCanvasAgg(fig)
-                print(type(fig))
-                print(dir(fig))
                 figstr = StringIO.StringIO()
                 canv.print_png(figstr)
                 inline_graph_png = base64.b64encode(figstr.getvalue())
-#                canvas = FigureCanvasAgg(pyplot.figure())
-#                response = HttpResponse(content_type='image/png')
-#                canvas.print_png(response)
-#                return response
-                #print(xfun(results, ydef))
-#                print(xdef)
-#                print(ydef)
+                fig.clf()
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
