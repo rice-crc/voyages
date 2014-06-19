@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load resources_extras %}
+
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+{% endblock %}
+
+{% block title %}African Names{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/names-left-menu.html" %}
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
