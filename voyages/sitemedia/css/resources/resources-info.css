@@ -11,12 +11,12 @@ h1 {
 }
 
 #center-content {
-    margin-left:260px;
+    margin-left:280px;
 	padding: 10px 8px 10px 8px;
 }
 
 #left-menu {
-    width: 240px;
+    width: 280px;
     float:left;
     border-right: 1px solid #165B31;
 	margin: 0px;
@@ -38,13 +38,14 @@ div.images-category {
 	width: 625px;
 	border-collapse: collapse;
 	border-bottom: 1px dotted #165B31;
+    margin-left: 20px;
 	margin-bottom: 10px; }
 
 div.images-category-name {
-	font-size: 14pt; }
+	font-size: 14pt;}
 
 div.images-category-link {
-	margin-top: -3px; }
+	margin-top: -3px;}
 
 div.images-category-link a {
 	text-decoration: none; }
