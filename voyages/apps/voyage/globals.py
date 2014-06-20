@@ -156,7 +156,12 @@ def unmangle_resistance(value, voyageid=None):
     return unicode(models.Resistance.objects.get(value=int(value)).label)
 
 def voyage_by_id(voyageid):
-    return models.Voyage.objects.get(voyage_id=voyageid)
+    fil = models.Voyage.objects.filter(voyage_id=voyageid)
+    if len(fil) < 1:
+        print("ERROR: Could not find voyage " + str(voyageid) + " in database, not displaying date")
+        return None
+    else:
+        return fil[0]
 
 # Take a comma separated date and convert it to a string in the form of (mm/dd/yyyy), and replace unknowns with "?"
 def csd_to_str(csd):
@@ -175,22 +180,52 @@ def csd_to_str(csd):
 def gd_voyage_began(value, voyageid):
     # In production it should fail silently and just give the date based on the solr value
     # For now it should error on no voyageid
-    vd = voyage_by_id(voyageid).voyage_dates.voyage_began
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.voyage_began
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 def gd_slave_purchase_began(value, voyageid):
-    vd = voyage_by_id(voyageid).voyage_dates.slave_purchase_began
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.slave_purchase_began
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 def gd_departed_africa(value, voyageid):
-    vd = voyage_by_id(voyageid).voyage_dates.date_departed_africa
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.date_departed_africa
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 def gd_first_dis_of_slaves(value, voyageid):
-    vd = voyage_by_id(voyageid).voyage_dates.first_dis_of_slaves
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.first_dis_of_slaves
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 def gd_departure_last_landing(value, voyageid):
-    vd = voyage_by_id(voyageid).voyage_dates.departure_last_place_of_landing
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.departure_last_place_of_landing
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 def gd_voyage_completed(value, voyageid):
-    vd = voyage_by_id(voyageid).voyage_dates.voyage_completed
+    vd = None
+    if value.day == 1:
+        vyg = voyage_by_id(voyageid)
+        if vyg: vd = vyg.voyage_dates.voyage_completed
+    else:
+        vd = ",".join([str(value.month), str(value.day), str(value.year)])
     return csd_to_str(vd)
 
 # Run against solr field values when displaying in results table
