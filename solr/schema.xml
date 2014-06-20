@@ -405,7 +405,7 @@
 
     <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_height" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_height" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_source" type="text_en" indexed="true" stored="true" multiValued="false" />
 
