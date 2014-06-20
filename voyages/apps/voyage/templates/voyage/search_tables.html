@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{% load humanize %}
+
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/qtip/jquery.qtip.min.css">
 
@@ -26,55 +28,55 @@
   </table>
 </div>
 <div>
-  <table class="grid">
+  <table class="vstable">
     <tbody>
 	{% for collbllist in col_labels_list %}
 	  <tr>
-	    {% if forloop.first %} <td colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels_before }}"/> {% endif %}
+	    {% if forloop.first %} <td class='vstable' colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels_before }}"/> {% endif %}
 	    {% for label_tuple in collbllist %}
 	      {% if label_tuple.1 > 0 %}
-	        <th class="grid-header-text" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	        <th class="grid-header-text vstableborder" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
 	      {% endif %}
 	    {% endfor %}
 	    {% if forloop.first %}
 	      {% if is_double_fun %}
-	        <th class="grid-header-text" rowspan="{{ num_col_labels_total }}", colspan="2"> {% trans 'Totals' %} </th>
+	        <th class="grid-header-text vstableborder" rowspan="{{ num_col_labels_total }}", colspan="2"> {% trans 'Totals' %} </th>
 	      {% else %}
-	        <th class="grid-header-text" rowspan="{{ num_col_labels_total }}"> {% trans 'Totals' %} </th>
+	        <th class="grid-header-text vstableborder" rowspan="{{ num_col_labels_total }}"> {% trans 'Totals' %} </th>
 	      {% endif %}
 	    {% endif %}
 	    {% if forloop.last and is_double_fun %}
-	      <th class="grid-header-text" rowspan="1"> {% trans 'Embarked' %} </th>
-	      <th class="grid-header-text" rowspan="1"> {% trans 'Disembarked' %} </th>
+	      <th class="grid-header-text vstableborder" rowspan="1"> {% trans 'Embarked' %} </th>
+	      <th class="grid-header-text vstableborder" rowspan="1"> {% trans 'Disembarked' %} </th>
 	    {% endif %}
 	  </tr>
 	{% endfor %}
       {% for row_tuple in row_list %}
         <tr class="grid-row-even grid-row-first">
 	  {% for label_tuple in row_tuple.0 %}
-	    <th class="grid-header-text" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	    <th class="grid-header-text vstableborder" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
 	  {% endfor %}
 	  {% for cell_value in row_tuple.1 %}
-	    <td> {% if cell_value != None %} {{ cell_value }} {% endif %} </td>
+	    <td class='vstable'> {% if cell_value != None %} {{ cell_value|intcomma }} {% endif %} </td>
 	  {% endfor %}
 	  {% if is_double_fun %}
-	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0 }} {% endif %} </b>
+	    <th class="vstable grid-total-text">
+	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0|intcomma }} {% endif %} </b>
 	    </th>
-	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1 }} {% endif %} </b>
+	    <th class="vstable grid-total-text">
+	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1|intcomma }} {% endif %} </b>
 	    </th>
 	  {% else %}
-	    <th class="grid-header-text">
-	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2 }} {% endif %} </b>
+	    <th class="grid-total-text vstable">
+	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2|intcomma }} {% endif %} </b>
 	    </th>
 	  {% endif %}
       {% endfor %}
       <tr class="grid-row-even grid-row-first">
-	<th class="grid-header-text" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
+	<th class="grid-header-text vstableborder" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
 	{% for total in col_totals %}
-	  <th class="grid-header-text">
-	    <b> {% if total != None %} {{ total }} {% endif %} </b>
+	  <th class="vstable grid-total-text">
+	    <b> {% if total != None %} {{ total|intcomma }} {% endif %} </b>
 	  </th>
 	{% endfor %}
     </tbody>
