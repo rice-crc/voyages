@@ -28,7 +28,19 @@
 	  </table>
 	</td>
 	<td>
-	  Hello, World!
+	  <table>
+	    <tbody>
+	      {% for field in graph_remove_plots_form %}
+	      <tr>
+		<td> {{ field }}
+		<b> {{ field.label }} </b> </td>
+	      </tr>
+	      {% endfor %}
+	      <tr>
+		<td> <input type="submit" value="{% trans 'Remove Selected' %}" onclick="submitWithValue('tab_graphs_remove')" name="buttonRemoveSeries" /></td>
+	      </tr>
+	    </tbody>
+	  </table>
 	</td>
       </tr>
     </tbody>

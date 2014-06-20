@@ -236,3 +236,17 @@ class GraphXYSelectionForm(forms.Form):
     xselect = forms.ChoiceField(label='X axis', choices=xchoices)
     yselect = forms.ChoiceField(label='Y axis', choices=ychoices)
 
+class GraphRemovePlotForm(forms.Form):
+    # Creates a list of boolean fields for each tuple in the list, (description, id)
+    def __init__(self, lst, *args, **kwargs):
+        super(GraphRemovePlotForm, self).__init__(*args, **kwargs)
+        for desc, i in lst:
+            self.fields[str(i)] = forms.BooleanField(label=desc, required=False, initial=False)
+    def get_to_del(self):
+        result = []
+        if self.is_valid():
+            for i, field in self.fields.items():
+                if self.cleaned_data[i]:
+                    result.append(int(i))
+        return result
+
