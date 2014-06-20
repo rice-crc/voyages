@@ -2374,8 +2374,8 @@
     "pk": 13930, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Newson,Minchin", 
-        "full_ref": "Newson, Linda, and Susie Minchin, \"Slave Mortality and African Origins: A View from Cartagena, Columbia, in the Seventeenth Century,\" <i>Slavery & Abolition</i>,\" 25 (2004): 18-43.", 
+        "short_ref": "Newson,Minchin2", 
+        "full_ref": "<p>Newson, Linda, and Susie Minchin, \"Slave Mortality and African Origins: A View from Cartagena, Columbia, in the Seventeenth Century,\" <em>Slavery &amp; Abolition</em>,\" 25 (2004): 18-43.</p>", 
         "source_type": 3
     }
 },
@@ -6163,8 +6163,8 @@
     "pk": 14351, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Gelp\u00ed Baiz", 
-        "full_ref": "Gelp\u00ed Baiz, Elsa, <i>Siglo en blanco: estudio de la econom\u00eda azucarera en Puerto Rico, siglo XVI (1540-1612)</i> (San Juan, 2000).", 
+        "short_ref": "Gelpi Baiz", 
+        "full_ref": "<p>Gelp&iacute; Baiz, Elsa, <em>Siglo en blanco: estudio de la econom&iacute;a azucarera en Puerto Rico, siglo XVI (1540-1612)</em> (San Juan, 2000).</p>", 
         "source_type": 3
     }
 },
@@ -6226,8 +6226,8 @@
     "pk": 14358, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Vila Vilar, 1974", 
-        "full_ref": "Vila Vilar, Enriqueta, <i>Historia de Puerto Rico, 1600-1650</i> (Seville, 1974).", 
+        "short_ref": "Vila Vilar, Cuadro 2", 
+        "full_ref": "<p>Vila Vilar, Enriqueta, <em>Historia de Puerto Rico, 1600-1650</em> (Seville, 1974).</p>", 
         "source_type": 3
     }
 },
@@ -6334,8 +6334,8 @@
     "pk": 14370, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Vila Vilar, 1977", 
-        "full_ref": "Vila Vilar, Enriqueta, <i>Hispanoam\u00e9rica y el comercio de esclavos: Los asientos portugueses</i> (Sevilla, 1977).", 
+        "short_ref": "Vila Vilar,", 
+        "full_ref": "<p>Vila Vilar, Enriqueta, <em>Hispanoam&eacute;rica y el comercio de esclavos: Los asientos portugueses</em> (Sevilla, 1977).</p>", 
         "source_type": 3
     }
 },
@@ -6750,6 +6750,699 @@
     "fields": {
         "short_ref": "Biblio Mejanes", 
         "full_ref": "Aix en Provence, Cit\u00e9 du livre-Biblioth\u00e8que M\u00e9janes", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14418, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Acton,1:240", 
+        "full_ref": "<p>Great Britain, High Court of Appeals for Prizes, &lt;i&gt;Reports of Cases argued and determined before the most noble and right honorable the Lords Commissioners of Appeals in prize causes&lt;/i&gt;:&lt;i&gt; from June 12, 1809, to August 15, 1810&lt;/i&gt;, by Thomas Harmon Acton, 2 vols. (Boston, 1853).</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14420, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "kma", 
+        "full_ref": "<p><em>Kingston Mercantile Advertizer</em></p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14421, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "smg", 
+        "full_ref": "<p><em>Savanna la Mar Gazette</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14422, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "The Slate", 
+        "full_ref": "<p>http://www.slate.com/articles/life/history_lesson/2013/06/george_w_bush_and_slavery_the_president_and_his_father_are_descendants_of.html</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14423, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Matos", 
+        "full_ref": "<p>Matos, Artur Teodoro de, &ldquo;O com&eacute;rcio na costa da Guin&eacute; dois s&eacute;culos depois do infante: as viagens de Louren&ccedil;o Fernandes de Lima,&rdquo; in Artur Teodoro de Matos and Jo&atilde;o Paulo Oliveira e Costa (eds.), <em>A Heran&ccedil;a do Infante</em> (Lisboa, 2011), pp. 267-304.</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14424, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Spalding,Miami", 
+        "full_ref": "<p>Edward Spalding Papers, University of Miami, http://merrick.library.miami.edu/cdm/compoundobject/collection/chc0184/id/2293/rec/40</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14425, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Fisher", 
+        "full_ref": "<p>Mel Fisher Maritime Museum, Key West, FL, Schimmel collection</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14426, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "AG", 
+        "full_ref": "<p><em>Antigua Gazette</em> (Caribbean Newspapers, 1718-1876)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14427, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Emerigon", 
+        "full_ref": "<p>Emerigon, Balthazard-Marie, <em>A treatise on insurances : translated from the French with an introduction and notes by Samuel Meredith</em> (London, 1850)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14428, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Thornton,SA", 
+        "full_ref": "<p>Thornton, John, <em>The Kongolese Saint Anthony: Dona Beatriz Kimpa Vita and the Antonian Movement, 1684-1706</em> (New York, 1998</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14429, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Bowser (1974)", 
+        "full_ref": "<p>Bowser, Frederick P., <em>The African Slave in Colonial Peru, 1524-1650</em> (Stanford, 1974)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14430, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Denman", 
+        "full_ref": "<p>Denman, Joseph, <em>Practical remarks on the slave trade and on the existing treaties with Portugal</em>, 2d ed. (London, 1839)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14431, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "dg", 
+        "full_ref": "<p><em>Demerara Gazette</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14432, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "DonganPapers", 
+        "full_ref": "<p>Christoph, Peter (ed.), The Dongan Papers, 1683-1688: <em>Files of the Provincial Secretary of New York During the Administration of Governor Thomas Dongan</em> [Historical Manuscripts Series, Vol 35] (New York 1996)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14433, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Fog's", 
+        "full_ref": "<p><em>Fog's Weekly Journal</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14434, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Freeman's Journal", 
+        "full_ref": "<p>Freeman's Journal (London)</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden;\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14435, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "BaggeAcctBook", 
+        "full_ref": "<p>John D. Rockefeller, Jr. Library, Colonial Williamsburg Foundation, Edmund Bagge Account Book</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14436, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Baldwin's", 
+        "full_ref": "<p>Baldwin's Weekly Journal (London)</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14437, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Hildebrand", 
+        "full_ref": "<p>Hildebrand, Ingeger, <em>Den svenska Kolonin St-Barthelemy och V&auml;stindiska Kompaniet fram till 1796</em> (Lund, 1951)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14438, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "LivRO,Heywood", 
+        "full_ref": "<p>Liverpool Record Office, Heywood Memorandum Book</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14439, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "James Stewart", 
+        "full_ref": "<p>Stewart, James, <em>Reports of cases argued and determined in the Court of Vice-admiralty at Halifax, in Nova Scotia</em> (London, 1814)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14440, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "JA,SpanishTown", 
+        "full_ref": "<p>Jamaica Archives and Records Department, Spanish Town</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14441, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "DH", 
+        "full_ref": "<p>Biblioteca Nacional de Cuba, <em>Diario de la Habana</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14442, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Lokken", 
+        "full_ref": "<p>Lokken, Paul, \"From the Kingdoms of Angola to Santiago de Guatemala: The Portuguese Asientos and Spanish Central America, 1595-1640,\" <em>Hispanic American Historical Review</em>, 93 (2013): 192</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14443, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MSA,PCM", 
+        "full_ref": "<p>Maryland State Archives,Proceedings of the Council of Maryland, 1696/7,1698</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14444, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Ortega", 
+        "full_ref": "<p>Ortega, Jos&eacute; \"Memory of the Middle Passage: Women, Kinship, and Freedom Suits in Cuba,\" <em>Slavery &amp; Abolition</em>, 35 (2014):</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14445, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "O'Malley", 
+        "full_ref": "<p>O'Malley, Gregory E., <em>Final Passages: The Intercolonial Slave Trade of British America, 1619-1807</em> (Chapel Hill, 2014)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14446, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Paesie", 
+        "full_ref": "<p>Paesie, Ruud, <em>Lorrendrayen op Africa: De illegale goederen- en slavenhandel op West-Afrika tijdens het achttiende-eeuwse handelsmonopolie van de West-Indische Compagnie, 1700-1734</em> (Middelburg, 2008)<br /><br /></p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">De illegale goederen- en slavenhandel op West-Afrika tijdens het achttiende-eeuwse handelsmonopolie van de West-Indische Compagnie, 1700-1734 (Middelburg, 2008)</div>\r\n</div>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14447, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Radburn", 
+        "full_ref": "<p>Radburn, Nicholas, \"William Davenport, the Slave Trade and Merchant Enterprise in Eighteenth Century Liverpool\"&nbsp;(MA thesis, Department of History, Victoria University, Wellington)</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">(MA thesis, Department of History, Victoria University, Wellington</div>\r\n</div>", 
+        "source_type": 4
+    }
+},
+{
+    "pk": 14448, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Report of St. Bartholomew", 
+        "full_ref": "<p><em>The Report of Saint Bartholomew </em>(Gustavia)</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14449, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Public Advertizer", 
+        "full_ref": "<p><em>Public Advertizer</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14450, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Norwich Gazette", 
+        "full_ref": "<p><em>Norwich Gazette</em> (Norwich)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14451, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Post Boy", 
+        "full_ref": "<p><em>Post Boy</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14452, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Post Man", 
+        "full_ref": "<p><em>Post Man</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14453, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Post ManandtheHistorical Account", 
+        "full_ref": "<p><em>Post Man and the Historical Account</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14454, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Proc. of Old Bailey", 
+        "full_ref": "<p>http://www.oldbaileyonline.org/</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14455, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "RIHS", 
+        "full_ref": "<p>Rhode Island Historical Society</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14456, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "RRNCW", 
+        "full_ref": "<p><em>Raleigh Register and North Carolina Weekly Register</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14457, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Studnicki-Gizbert", 
+        "full_ref": "<p>Studnicki-Gizbert, Daviken, Nation upon the Ocean Sea: Portugal's Atlantic Diaspora and the Crisis of the Spanish Empire, 1492-1640 (Oxford, 2007)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14458, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Walsh,II", 
+        "full_ref": "<p>Walsh, Robert, <em>Notices of Brazil in 1828 and 1829</em> (London, 1830)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14459, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Guerard", 
+        "full_ref": "<p>Guerard, George Cuthbert, <em>A History and Genealogy of the Huguenot Family of Guerard of South Carolina</em> (Tampa, 1931)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14460, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "FHL,Reel88789", 
+        "full_ref": "<p>Family History Library (Salt Lake City, Utah, USA), Reel 88789, Will of Surgeon John Williams</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14461, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "British Journal", 
+        "full_ref": "<p><em>British Journal </em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14462, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "BRO,P/Xch/D/23", 
+        "full_ref": "<p>Bristol Record Office</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14463, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Daily Advertiser", 
+        "full_ref": "<p><em>Daily Advertiser</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14464, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "DailyCourant", 
+        "full_ref": "<p><em>Daily Courant</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14465, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "DailyNationalIntelligencer", 
+        "full_ref": "<p><em>Daily National Intelligencer</em> (Washington, DC)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14466, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Sanderson", 
+        "full_ref": "<p>University of Liverpool Library (Liverpool, UK), notes of Frank Sanderson </p>", 
+        "source_type": 5
+    }
+},
+{
+    "pk": 14467, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Daily Post", 
+        "full_ref": "<p><em>Daily Post</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14468, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MassHistSoc", 
+        "full_ref": "<p>Massachusetts Historical Society, <em>Documents on Masschusetts History</em>, 8 vols. (Boston, 1874-95)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14469, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "RIJA,CCP", 
+        "full_ref": "<p>Rhode Island Judicial Archives, Pawtucket, RI; Newport Court of Common Pleas</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14470, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "ADG", 
+        "full_ref": "<p>Archives d&eacute;partementales de la Guadeloupe (Goubeyre)</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14471, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "ANC Database", 
+        "full_ref": "<p>Archivo Nacional de Cuba, Database, microfilm #</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14472, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "HarpersWeekly", 
+        "full_ref": "<p><em>Harper's Weekly</em></p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14473, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "LC", 
+        "full_ref": "<p><em>London Chronicle</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14474, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "LDPGA", 
+        "full_ref": "<p>London Daily Post and General Advertiser</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14475, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Lloyd's Evening Post", 
+        "full_ref": "<p><em>Lloyd's Evening Post&nbsp;</em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14476, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Lobo Cabrera", 
+        "full_ref": "<p>Lobo Cabrera, Manuel, <em>Gran Canaria e Indias durante los primeros Austrias. Documentos para su historia</em> (Canarias: Comisi&oacute;n de Canarias para la Conmemoraci&oacute;n del V Centenario del Descubrimiento de Am&eacute;rica, 1990)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14477, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "London Chronicle", 
+        "full_ref": "<p><em>London Chronicle</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14478, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Maria Paul, www.african-origins.org", 
+        "full_ref": "<p>African Origins: Portal to Africans Liberated from the Transatlantic Slave Trade (Emory University, 2009).&nbsp; URL: www.african-origins.org</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14479, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MMHGA", 
+        "full_ref": "<p><em>Harrop&rsquo;s Manchester Mercury and General Advertiser</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14480, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MorningHeraldandDailyAdvertiser", 
+        "full_ref": "<p><em>Morning Herald and Daily Advertiser</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14481, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "National Advocate", 
+        "full_ref": "<p><em>National Advocate</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14482, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "New London Summary", 
+        "full_ref": "<p><em>New London Summary </em>(New London, CT)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14483, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Robert Hibbert's diary", 
+        "full_ref": "<p><a href=\"http://www.georgehibbert.com/about.html\">http://www.georgehibbert.com/about.html</a> courtesy of Nick Hibbert Steele (Australia)</p>", 
+        "source_type": 5
+    }
+},
+{
+    "pk": 14484, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "StJamesChronicle", 
+        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14485, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "St.JamesChronicle", 
+        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14486, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "StJames'sChronicle", 
+        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14487, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "St.James'sChronicle/British Evening Post", 
+        "full_ref": "<p><em>St. James's Chronicle and British Evening Post</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14488, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "StJames'sChronicleortheBritishEvenPost", 
+        "full_ref": "<p><em>St, James's Chronicle or the British Evening Post&nbsp;</em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14489, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "St.James's Evening  Chronicle", 
+        "full_ref": "<p><em>St. James's Evening&nbsp; Chronicle&nbsp;</em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14490, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Sua Majestad,www.african-origins.org", 
+        "full_ref": "<p>African Origins: Portal to Africans Liberated from the Transatlantic Slave Trade (Emory University, 2009).&nbsp; URL: www.african-origins.org</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14491, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "WeeklyJamaicaCourant", 
+        "full_ref": "<p><em>Weekly Jamaica Courant&nbsp;</em>(Kingston)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14492, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Weekly Packet", 
+        "full_ref": "<p><em>Weekly Packet</em> (London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14493, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "World and Fashionable Advertiser", 
+        "full_ref": "<p><em>World and Fashionable Advertiser&nbsp;</em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14494, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "HL, Aspinal", 
+        "full_ref": "<p>Evidence of William Aspinal, in F. William Torrington (ed.), <em>House of Lords Sessional Papers, Session 1798-1799</em>, 3 vols. (Rahway, NJ, 1975)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14495, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "ANC,TC", 
+        "full_ref": "<p>Archivo Nacional de Cuba, Tribunal de Comercio</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
         "source_type": 1
     }
 }

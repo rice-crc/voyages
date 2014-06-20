@@ -155,6 +155,44 @@ def unmangle_resistance(value, voyageid=None):
         return map(unmangle_resistance, value)
     return unicode(models.Resistance.objects.get(value=int(value)).label)
 
+def voyage_by_id(voyageid):
+    return models.Voyage.objects.get(voyage_id=voyageid)
+
+# Take a comma separated date and convert it to a string in the form of (mm/dd/yyyy), and replace unknowns with "?"
+def csd_to_str(csd):
+    if not csd:
+        return ''
+    vl = csd.split(',')
+    month = '??'
+    day = '??'
+    year = '????'
+    if vl[0] != '': month = str(vl[0]).zfill(2)
+    if vl[1] != '': day = str(vl[1]).zfill(2)
+    if vl[2] != '': year = str(vl[2]).zfill(4)
+    return year + '-' + month + '-' + day
+
+# Returns the date as a string for display using the database fields
+def gd_voyage_began(value, voyageid):
+    # In production it should fail silently and just give the date based on the solr value
+    # For now it should error on no voyageid
+    vd = voyage_by_id(voyageid).voyage_dates.voyage_began
+    return csd_to_str(vd)
+def gd_slave_purchase_began(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.slave_purchase_began
+    return csd_to_str(vd)
+def gd_departed_africa(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.date_departed_africa
+    return csd_to_str(vd)
+def gd_first_dis_of_slaves(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.first_dis_of_slaves
+    return csd_to_str(vd)
+def gd_departure_last_landing(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.departure_last_place_of_landing
+    return csd_to_str(vd)
+def gd_voyage_completed(value, voyageid):
+    vd = voyage_by_id(voyageid).voyage_dates.voyage_completed
+    return csd_to_str(vd)
+
 # Run against solr field values when displaying in results table
 display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_percentage_women': display_percent,
@@ -166,12 +204,12 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_imputed_sterling_cash': display_sterling_price,
                    'var_tonnage': unmangle_truncate,
                    'var_tonnage_mod': unmangle_truncate,
-                   'var_voyage_began': unmangle_date,
-                   'var_slave_purchase_began': unmangle_date,
-                   'var_date_departed_africa': unmangle_date,
-                   'var_first_dis_of_slaves': unmangle_date,
-                   'var_departure_last_place_of_landing': unmangle_date,
-                   'var_voyage_completed': unmangle_date}
+                   'var_voyage_began': gd_voyage_began,
+                   'var_slave_purchase_began': gd_slave_purchase_began,
+                   'var_date_departed_africa': gd_departed_africa,
+                   'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                   'var_departure_last_place_of_landing': gd_departure_last_landing,
+                   'var_voyage_completed': gd_voyage_completed}
 # Run against solr field values when creating an xls file
 display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_imputed_percentage_women': display_percent,
@@ -184,14 +222,15 @@ display_methods_xls = {'var_imputed_percentage_men': display_percent,
                        'var_captain': display_xls_multiple_names,
                        'var_owner': display_xls_multiple_names,
                        'var_sources': display_xls_sources,
-                       'var_voyage_began': unmangle_date,
-                       'var_slave_purchase_began': unmangle_date,
-                       'var_date_departed_africa': unmangle_date,
-                       'var_first_dis_of_slaves': unmangle_date,
-                       'var_departure_last_place_of_landing': unmangle_date,
-                       'var_voyage_completed': unmangle_date}
+                       'var_voyage_began': gd_voyage_began,
+                       'var_slave_purchase_began': gd_slave_purchase_began,
+                       'var_date_departed_africa': gd_departed_africa,
+                       'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                       'var_departure_last_place_of_landing': gd_departure_last_landing,
+                       'var_voyage_completed': gd_voyage_completed}
 # Run against solr field values when displaying values for a single voyage
-display_methods_details = {'var_sources': detail_display_sources}
+#display_methods_details = {'var_sources': detail_display_sources,
+#}
 # Used to convert a form value to a proper value for searching with
 search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_women': mangle_percent,
@@ -247,14 +286,15 @@ display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_imputed_percentage_male': unmangle_percent,
                             'var_imputed_percentage_child': unmangle_percent,
                             'var_imputed_mortality': unmangle_percent,
-                            'var_voyage_began': unmangle_date,
-                            'var_slave_purchase_began': unmangle_date,
-                            'var_date_departed_africa': unmangle_date,
-                            'var_first_dis_of_slaves': unmangle_date,
-                            'var_departure_last_place_of_landing': unmangle_date,
-                            'var_voyage_completed': unmangle_date,
+                            'var_voyage_began': gd_voyage_began,
+                            'var_slave_purchase_began': gd_slave_purchase_began,
+                            'var_date_departed_africa': gd_departed_africa,
+                            'var_first_dis_of_slaves': gd_first_dis_of_slaves,
+                            'var_departure_last_place_of_landing': gd_departure_last_landing,
+                            'var_voyage_completed': gd_voyage_completed,
                             'var_tonnage': unmangle_truncate,
-                            'var_tonnage_mod': unmangle_truncate}
+                            'var_tonnage_mod': unmangle_truncate,
+                            'var_sources': detail_display_sources}
 
 def graph_percent(ratio):
     return ratio * 100
@@ -300,14 +340,14 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
     years = []
     while current_year <= last_year:
         # Range is exclusive of the start, and inclusive of the end, so a search for years 1800 to 1899 will need the range 1799-1899
-        years.append([current_year - 1, current_year + interval - 1])
+        years.append([current_year, current_year + interval - 1])
         current_year += interval
     def year_labeler(years):
-        if years[0] + 1 == years[1]:
+        if years[0] == years[1]:
             return years[1]
         else:
-            return str(years[0] + 1) + '-' + str(years[1])
-    return get_each_from_list(years, 'var_imp_voyage_began__range', year_labeler)
+            return str(years[0]) + '-' + str(years[1])
+    return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range', year_labeler)
 
 # Returns filter definition (list of tuples of (label_list, query_dict)) 
 def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
@@ -328,8 +368,15 @@ def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label, lmbval=lambda
         result.append((label_list, {qdictkey: lmbval(i)}))
     return result
 
-imputed_nationality_possibilities = map(lambda x: models.Nationality.objects.get(value=x),
-                                        [3, 6, 7, 8, 9, 10, 15, 30])
+def impute_nat_fun(lst):
+    output = []
+    for i in lst:
+        mods = models.Nationality.objects.filter(value=i)
+        if mods.count() > 0 and len(mods) > 0:
+            output.append(mods[0])
+    return output
+
+imputed_nationality_possibilities = impute_nat_fun([3, 6, 7, 8, 9, 10, 15, 30])
 
 def make_regions_filter(varname):
     qdictkey = varname + '_idnum__exact'
@@ -384,11 +431,17 @@ def make_places_col_filter(filter_name, varname):
 
 def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
     uziped = zip(*get_each_from_list(lst, qkey, lmblbl, lmbval))
-    return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    if len(uziped) > 1:
+        return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    else:
+        return (filter_name, [], [])
 
 def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
     uziped = zip(*get_each_from_table(table, qkey, lmblbl))
-    return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    if len(uziped) > 1:
+        return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+    else:
+        return (filter_name, [], [])
 
 
 # Defines the options selectable for filtering the rows/columns of the table section
@@ -423,29 +476,57 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 # Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
-    return lambda queryset, rowset=None, colset=None, allset=None: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
+    def sum_fun(queryset, rowset, colset, allset):
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(int(stats[varname]['sum']))
+        else:
+            return prettifier(0)
+        #return prettifier(sum([i[varname] for i in list(queryset.values(varname)) if varname in i and i[varname] != None]))
+    return sum_fun
+    
 def make_sum_nopretty_fun(varname):
     prettifier = graph_display_methods.get(varname, no_mangle)
-    return lambda queryset, rowset=None, colset=None, allset=None: prettifier(sum([i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]))
+    def sum_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(int(stats[varname]['sum']))
+        else:
+            return prettifier(0)
+    return sum_nopretty_fun
+
+#return lambda queryset, rowset, colset, allset: prettifier(sum([i[varname] for i in queryset.values() if varname in i and i[varname] != None]))
+
+def display_average(value):
+    if value != None:
+        return round(value, 1)
+    else:
+        return value
 
 def make_avg_fun(varname):
-    prettifier = display_methods.get(varname, no_mangle)
+    prettifier = display_methods.get(varname, display_average)
     def avg_fun(queryset, rowset=None, colset=None, allset=None):
-        lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(lst) == 0:
-            return None
+        #lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(stats[varname]['mean'])
         else:
-            return prettifier(sum(lst)/len(lst))
+            return None
+#        if len(lst) == 0:
+#            return None
+#        else:
+#            return prettifier(sum(lst)/len(lst))
     return avg_fun
+
 def make_avg_nopretty_fun(varname):
     prettifier = graph_display_methods.get(varname, no_mangle)
-    def avg_fun(queryset, rowset=None, colset=None, allset=None):
-        lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(lst) == 0:
-            return None
+    def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return prettifier(stats[varname]['mean'])
         else:
-            return prettifier(sum(lst)/len(lst))
-    return avg_fun
+            return None
+    return avg_nopretty_fun
 
 def make_row_tot_percent_fun(varname):
     def row_tot_fun(queryset, rowset, colset, allset):
@@ -454,10 +535,10 @@ def make_row_tot_percent_fun(varname):
                 return display_percent(1)
             else:
                 rowset = allset
-        rowlst = [i.get_stored_fields()[varname] for i in rowset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(qlst) > 0:
-            return display_percent(float(sum(qlst))/float(sum(rowlst)))
+        rowstats = rowset.stats(varname).stats_results()
+        qstats = queryset.stats(varname).stats_results()
+        if qstats and qstats[varname]:
+            return display_percent(float(qstats[varname]['sum'])/float(rowstats[varname]['sum']))
         else:
             return None
     return row_tot_fun
@@ -469,10 +550,10 @@ def make_col_tot_percent_fun(varname):
                 return display_percent(1)
             else:
                 colset = allset
-        collst = [i.get_stored_fields()[varname] for i in colset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        qlst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
-        if len(qlst) > 0:
-            return display_percent(float(sum(qlst))/float(sum(collst)))
+        colstats = colset.stats(varname).stats_results()
+        qstats = queryset.stats(varname).stats_results()
+        if qstats and qstats[varname]:
+            return display_percent(float(qstats[varname]['sum'])/float(colstats[varname]['sum']))
         else:
             return None
     return col_tot_fun
@@ -480,29 +561,51 @@ def make_col_tot_percent_fun(varname):
 # Makes a function that counts how many of the voyages have that particular value defined
 def make_num_fun(varname):
     def num_fun(queryset, rowset, colset, allset):
-        return len([None for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None])
+        stats = queryset.stats(varname).stats_results()
+        if stats and stats[varname]:
+            return stats[varname]['count']
+        else:
+            return 0
     return num_fun
 emb_name = 'var_imp_total_num_slaves_purchased'
 dis_name = 'var_imp_total_slaves_disembarked'
 def sum_emb_dis(queryset, rowset, colset, allset):
-    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
+    embs = 0
+    diss = 0
+    if statsemb[emb_name]:
+        embs = int(statsemb[emb_name]['sum'])
+    if statsdis[dis_name]:
+        diss = int(statsdis[dis_name]['sum'])
+    return (embs, diss)
+#    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
+#            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 def avg_emb_dis(queryset, rowset, colset, allset):
-    lste = [i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]
-    lstd = [i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]
-    avge = None
-    avgd = None
-    if len(lste) > 0:
-        avge = sum(lste) / len(lste)
-    if len(lstd) > 0:
-        avgd = sum(lstd) / len(lstd)
-    return (avge, avgd)
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
+    embs = None
+    diss = None
+    if statsemb[emb_name]:
+        embs = statsemb[emb_name]['mean']
+    if statsdis[dis_name]:
+        diss = statsdis[dis_name]['mean']
+    return (embs, diss)
 def num_emb_dis(queryset, rowset, colset, allset):
-    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+    statsemb = queryset.stats(emb_name).stats_results()
+    statsdis = queryset.stats(dis_name).stats_results()
+    embc = 0
+    disc = 0
+    if statsemb[emb_name]:
+        embc = statsemb[emb_name]['count']
+    if statsdis[dis_name]:
+        disc = statsdis[dis_name]['count']
+    return (embc, disc)
+#    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
+#            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
 
 # List of tuples that define a function for a cell value (label, mapping function)
-table_functions = [('Number of Voyages', lambda x, y, z: x.count(),),
+table_functions = [('Number of Voyages', lambda x, y, z, a: x.count(),),
                    ('Sum of embarked slaves', make_sum_fun('var_imp_total_num_slaves_purchased'),),
                    ('Average number of embarked slaves', make_avg_fun('var_imp_total_num_slaves_purchased'),),
                    ('Number of voyages - embarked slaves', make_num_fun('var_imp_total_num_slaves_purchased'),),
@@ -621,6 +724,14 @@ graphs_x_functions = [('Year arrived with slaves*', make_x_line_fun('var_imp_arr
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
 
 #all_place_list = structure_places_all(models.Place.objects.all())
+
+additional_var_dict = [
+    {'var_name': 'var_imp_principal_broad_region_disembark_idnum',
+     'var_type': 'numeric'},
+    {'var_name': 'var_imp_broad_region_voyage_begin_idnum',
+     'var_type': 'numeric'},
+    {'var_name': 'var_imputed_nationality_idnum',
+     'var_type': 'numeric'}]
 
 var_dict = [
     # Ship, Nation, Owners

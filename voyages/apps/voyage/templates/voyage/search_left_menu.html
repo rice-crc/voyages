@@ -340,7 +340,19 @@ function shortenURL(){
                     {% endfor %}
                 {% endif %}
             </div>
-            <input type="submit" onclick="submitWithValue('search');" value="{% trans 'Search' %}" name="buttonSearch"/>
+            <input type="submit" onclick="submitWithValue({% if tab == 'result' %}
+					                    'search'
+							  {% elif tab == 'tables' %}
+							    'tab_tables'
+							  {% elif tab == 'statistics' %}
+							    'tab_statistics'
+							  {% elif tab == 'graphs' %}
+							    'tab_graphs'
+							  {% elif tab == 'timeline' %}
+							    'tab_timeline'
+							  {% elif tab == 'maps' %}
+							    'tab_maps'
+							  {% endif %});" value="{% trans 'Search' %}" name="buttonSearch"/>
             <input type="reset" onclick="submitWithValue('reset');" value="{% trans 'New query' %}" name="buttonAgain"/>
 
         </div>

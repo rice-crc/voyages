@@ -1,3 +1,12 @@
+td.vstable {
+    text-align:right;
+}
+
+th.vstable {
+    text-align:right;
+    background-color: #EED083;
+}
+
 a {
 	color: #8A5D04; }
 	
@@ -6,3 +15,17 @@ a:hover {
 	
 div.licence {
 	border-color: #C09C42; }
+
+table.vstable {
+    background: white;
+    border-collapse: collapse;
+    border: 1px solid #895D03;
+}
+
+.vstable {
+    border: 1px solid #895D03;
+}
+
+.vstableborder {
+    border: 1px solid #895D03;
+}

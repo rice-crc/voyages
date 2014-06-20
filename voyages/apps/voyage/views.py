@@ -463,7 +463,7 @@ def prettify_var_list(varlist):
                 break
         if not is_real_var:
             # it is a month variable
-            varn = varname[:-7]
+            varn = varname[:-6]
             for var in globals.var_dict:
                 if varn == var['var_name']:
                     fullname = var['var_full_name']
@@ -551,9 +551,9 @@ def voyage_variables(request, voyage_id):
     voyagenum = int(voyage_id)
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
-    voyagevariables = {}
-    for vname, vvalue in voyage.get_stored_fields().items():
-        voyagevariables[vname] = globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
+    voyagevariables = voyage.get_stored_fields()
+    #for vname, vvalue in voyage.get_stored_fields().items():
+    #    voyagevariables[vname] = globals.display_methods_details.get(vname, globals.no_mangle)(vvalue, voyagenum)
     allvargroups = groupby(globals.var_dict, key=lambda x: x['var_category'])
     allvars = []
     for i in allvargroups:
@@ -564,7 +564,7 @@ def voyage_variables(request, voyage_id):
             val = unicode("")
             if voyagevariables[j['var_name']]:
                 mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.no_mangle)
-                val = unicode(mangle_method(voyagevariables[j['var_name']]))
+                val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
                 allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
@@ -692,6 +692,11 @@ def search(request):
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
             request.session['results_per_page_choice'] = results_per_page_form.cleaned_data['option']
+            request.session['results_per_page'] = results_per_page
+        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
+            results_per_page = request.session['results_per_page']
+            results_per_page_form.fields['option'].initial = request.session['results_per_page_choice']
+            results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['results_per_page_choice']})
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
@@ -736,14 +741,14 @@ def search(request):
             pst = {x: y for x,y in request.POST.items()}
             # Force the initial value
             if 'columns' not in pst:
-                pst['columns'] = '1'
+                pst['columns'] = '7'
             if 'cells' not in request.POST:
                 pst['cells'] = '1'
             if 'rows' not in request.POST:
                 pst['rows'] = '12'
             table_stats_form = TableSelectionForm(pst)
             table_row_query_def = globals.table_rows[12]
-            table_col_query_def = globals.table_columns[1]
+            table_col_query_def = globals.table_columns[7]
             display_function = globals.table_functions[1][1]
             display_fun_name = globals.table_functions[1][0]
             omit_empty = False
@@ -753,6 +758,54 @@ def search(request):
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
                 display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
                 omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
+            restrict_query = {}
+            # Get the variable name of the variable used to filter the rows so we can constrain the column totals to voyages with the row variable defined
+            table_row_var_name = ''
+            if len(table_row_query_def[1]) > 0:
+                # The query def is a triple with the 2nd element being a list
+                # that list is a list of tuples with the label and the query dict
+                # the query dict is a dictionary with 1 element which the key is the var name with a '__' and then the query type (e.g. "__exact")
+                table_row_var_name = table_row_query_def[1][0][1].keys()[0].split('__')[0]
+            table_row_var = search_var_dict(table_row_var_name)
+            if not table_row_var:
+                for var in globals.additional_var_dict:
+                    if var['var_name'] == table_row_var_name:
+                        table_row_var = var
+            if table_row_var:
+                if table_row_var['var_type'] == 'numeric':
+                    restrict_query[table_row_var_name + "__gte"] = -1
+                elif table_row_var['var_type'] == 'date':
+                    restrict_query[table_row_var_name + "__gte"] = date(1,1,1)
+                else:
+                    restrict_query[table_row_var_name + "__gte"] = ""
+            elif table_row_var_name.endswith('_idnum'):
+                restrict_query[table_row_var_name + "__gte"] = "-1"
+            elif table_row_var_name != '':
+                restrict_query[table_row_var_name + "__gte"] = ""
+
+            # Get the variable name for the column
+            table_col_var_name = ''
+            if len(table_col_query_def[1]) > 0:
+                table_col_var_name = table_col_query_def[1][0].keys()[0].split('__')[0]
+            table_col_var = search_var_dict(table_col_var_name)
+            if not table_col_var:
+                for var in globals.additional_var_dict:
+                    if var['var_name'] == table_col_var_name:
+                        table_col_var = var
+            if table_col_var:
+                if table_col_var['var_type'] == 'numeric':
+                    restrict_query[table_col_var_name + "__gte"] = -1
+                elif table_col_var['var_type'] == 'date':
+                    restrict_query[table_col_var_name + "__gte"] = date(1,1,1)
+                else:
+                    restrict_query[table_col_var_name + "__gte"] = ""
+            elif table_col_var_name.endswith('_idnum'):
+                restrict_query[table_col_var_name + "__gte"] = "-1"
+            elif table_col_var_name != '':
+                restrict_query[table_col_var_name + "__gte"] = ""
+
+            tableresults = results.filter(**restrict_query)
+
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
@@ -764,18 +817,18 @@ def search(request):
                 is_double_fun = True
 
             for idx, colquery in enumerate(table_col_query_def[1]):
-                colqueryset = results.filter(**colquery)
+                colqueryset = tableresults.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
                 else:
                     if is_double_fun:
-                        display_col_total = display_function(colqueryset, None, colqueryset, results)
+                        display_col_total = display_function(colqueryset, None, colqueryset, tableresults)
                         col_totals.append(display_col_total[0])
                         col_totals.append(display_col_total[1])
                     else:
-                        col_totals.append(display_function(colqueryset, None, colqueryset, results))
+                        col_totals.append(display_function(colqueryset, None, colqueryset, tableresults))
                     used_col_query_sets.append((colquery, colqueryset))
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
@@ -814,7 +867,7 @@ def search(request):
                 xls_row = []
                 rowlabels = rowstuff[0]
                 rowquery = rowstuff[1]
-                rowqueryset = results.filter(**rowquery)
+                rowqueryset = tableresults.filter(**rowquery)
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
                 row_cell_values = []
@@ -824,7 +877,7 @@ def search(request):
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
                     if is_double_fun:
-                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, tableresults)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
                         if display_result[0] != None:
@@ -836,14 +889,14 @@ def search(request):
                         else:
                             xls_row.append('')
                     else:
-                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, results)
+                        display_result = display_function(cell_queryset, rowqueryset, colqueryset, tableresults)
                         row_cell_values.append(display_result)
                         if display_result != None:
                             xls_row.append(display_result)
                         else:
                             xls_row.append('')
                 cell_values.append(row_cell_values)
-                row_total = display_function(rowqueryset, rowqueryset, None, results)
+                row_total = display_function(rowqueryset, rowqueryset, None, tableresults)
                 row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
                 if is_double_fun:
                     if row_total[0] != None:
@@ -861,8 +914,6 @@ def search(request):
                         xls_row.append('')
                 xls_table.append(xls_row)
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
-#            print(list(enumerate(xls_table)))
-#            print(remove_rows)
             for rownum in remove_rows:
                 xls_table.pop(rownum + num_col_labels_before)
                 row_counters = [0,0,0]
@@ -891,11 +942,11 @@ def search(request):
                 for i in rowlbl:
                     xls_table[idx+num_col_labels_before].insert(num_row_labels - len(rowlbl), i[0])
             if is_double_fun:
-                grand_total_value = display_function(results, None, None, results)
+                grand_total_value = display_function(tableresults, None, None, tableresults)
                 col_totals.append(grand_total_value[0])
                 col_totals.append(grand_total_value[1])
             else:
-                col_totals.append(display_function(results, None, None, results))
+                col_totals.append(display_function(tableresults, None, None, tableresults))
             xls_row = []
             for i in range(num_row_labels):
                 if i == 0:
@@ -915,7 +966,7 @@ def search(request):
                 ws = wb.active
                 for idx, i in enumerate(xls_table):
                     for idy, j in enumerate(i):
-                        ws.cell(row=idx,column=idy).value = unicode(j).encode('utf-8')
+                        ws.cell(row=idx+1,column=idy+1).value = j
                 wb.save(response)
                 return response
         elif submitVal and submitVal.startswith('tab_graphs'):
@@ -1001,8 +1052,8 @@ def search(request):
         request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
-    result_display = prettify_results(pagins, globals.display_methods)
-    result_display = prettify_results(pagins, globals.display_methods)
+    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
+    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -1044,11 +1095,12 @@ def prettify_results(results, lookup_table):
     Uses the lookup_table which has the methods to prettify the variable based on the value and the voyage id
     The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
     """
+    # Results must be a list of dictionaries of variable name and value
     mangled = []
     for i in results:
         idict = {}
-        voyageid = int(i.get_stored_fields()['var_voyage_id'])
-        for varname, varvalue in i.get_stored_fields().items():
+        voyageid = int(i['var_voyage_id'])
+        for varname, varvalue in i.items():
             if varvalue:
                 if varname in lookup_table:
                     idict[varname] = lookup_table[varname](varvalue, voyageid)
@@ -1281,6 +1333,7 @@ def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
             return i
+    return None
 
 def perform_search(query_dict, date_filters):
     """
@@ -1643,8 +1696,11 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     if current_page != -1:
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
-        res = curpage.object_list
-    res = prettify_results(res, globals.display_methods_xls)
+        res = map(lambda x: x.get_stored_fields(), curpage.object_list)
+    else:
+        res = results.values(*[x['var_name'] for x in globals.var_dict]).all()[0:results.count()]
+        
+    pres = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="data.xls"'
@@ -1652,13 +1708,16 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     ws = wb.add_sheet("data")
     #TODO: add query to download
     if len(var_list.get('used_variable_names', [])) > 0:
-        ws.write(0,0,label=extract_query_for_download(query_dict, []))
-    else:
+        vartxt = "; ".join([i[0] + " " + i[1] for i in prettify_var_list(var_list)])
+        ws.write(0,0,label=vartxt)
+    elif current_page == -1:
         ws.write(0,0,label='All Records')
+    else:
+        ws.write(0,0,label='Current Page')
     for idx, column in enumerate(columns):
         ws.write(1,idx,label=get_spss_name(column[0]))
 
-    for idx, item in enumerate(res):
+    for idx, item in enumerate(pres):
         #stored_fields = item.get_stored_fields()
         for idy, column in enumerate(columns):
             data = item[column[0]]
