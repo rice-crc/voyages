@@ -102,7 +102,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_outcome_ship_captured = indexes.CharField(null=True)
     var_outcome_owner = indexes.CharField(null=True)
     var_resistance = indexes.CharField(null=True)
-    
+
     var_outcome_voyage_idnum = indexes.IntegerField(null=True)
     var_outcome_slaves_idnum = indexes.IntegerField(null=True)
     var_outcome_ship_captured_idnum = indexes.IntegerField(null=True)
@@ -126,7 +126,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_imp_principal_port_slave_dis = indexes.NgramField(null=True)
     var_place_voyage_ended = indexes.CharField(null=True)
-    
+
     var_imp_port_voyage_begin_idnum = indexes.IntegerField(null=True)
     var_first_place_slave_purchase_idnum = indexes.IntegerField(null=True)
     var_second_place_slave_purchase_idnum = indexes.IntegerField(null=True)
@@ -167,7 +167,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_region_voyage_ended_idnum = indexes.IntegerField(null=True)
 
     # Broad Region variables
-    
+
     var_imp_principal_broad_region_disembark_idnum = indexes.IntegerField(null=True)
     var_imp_broad_region_voyage_begin_idnum = indexes.IntegerField(null=True)
 
@@ -285,7 +285,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-        
+
     def prepare_var_year_of_construction(self, obj):
         try:
             return obj.voyage_ship.year_of_construction

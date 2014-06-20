@@ -1,0 +1,12 @@
+{{ object.slave_id }}
+{{ object.name }}
+{{ object.age }}
+{{ object.height }}
+{{ object.source }}
+{{ object.date_arrived }}
+{{ object.ship_name }}
+{{ object.voyage_number }}
+{{ object.sex_age.name }}
+{{ object.country.name }}
+{{ object.embarkation_port.place }}
+{{ object.disembarkation_port.place }}
