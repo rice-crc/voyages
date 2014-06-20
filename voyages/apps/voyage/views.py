@@ -1033,6 +1033,7 @@ def search(request):
                    'num_row_labels': num_row_labels,
                    'is_double_fun': is_double_fun,})
 
+
 def prettify_results(results, lookup_table):
     """
     Returns a list of dictionaries keyed by variable name, prettifies the value so that it displays properly
@@ -1643,7 +1644,6 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         res = map(lambda x: x.get_stored_fields(), curpage.object_list)
     else:
         res = results.values(*[x['var_name'] for x in globals.var_dict]).all()[0:results.count()]
-        
     pres = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
