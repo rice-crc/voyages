@@ -54,8 +54,7 @@ class AfricanNameAdmin(admin.ModelAdmin):
     list_display_links = ['name']
     exclude = ['voyage']
     ordering = ['slave_id']
-    search_fields = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number',
-                     'sex_age', 'country', 'disembarkation_port', 'embarkation_port']
+    search_fields = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number']
 
     class Meta:
         model = AfricanName
