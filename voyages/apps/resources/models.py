@@ -2,6 +2,7 @@ from django.db import models
 from os.path import basename
 from voyages.apps.voyage.models import Voyage, Place
 from django.conf import settings
+from django.db.models.signals import post_save
 
 
 class Image(models.Model):
@@ -124,6 +125,11 @@ class AfricanName(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if Voyage.objects.filter(voyage_id=self.voyage_number).exists():
+            self.voyage = Voyage.objects.get(voyage_id=self.voyage_number)
+        super(AfricanName, self).save(*args, **kwargs)
 
 
 from .search_indexes import ImagesIndex
