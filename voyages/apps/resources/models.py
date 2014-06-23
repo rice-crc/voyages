@@ -111,7 +111,7 @@ class AfricanName(models.Model):
     voyage_number = models.IntegerField()
 
     sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age", to_field='sex_age_id', blank=True, null=True)
-    country = models.ForeignKey(Country, verbose_name="Country", to_field='country_id', blank=True, null=True)
+    country = models.ForeignKey(Country, verbose_name="Origin", to_field='country_id', blank=True, null=True)
     disembarkation_port = models.ForeignKey(Place, verbose_name="Disembarkation Port", to_field='value',
                                             related_name="disembarkation_port", blank=True, null=True)
     embarkation_port = models.ForeignKey(Place, verbose_name="Embarkation Port", to_field='value',
