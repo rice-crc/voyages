@@ -233,8 +233,8 @@ class GraphXYSelectionForm(forms.Form):
     lmbd = lambda x: (str(x[0]), x[1][0])
     xchoices = map(lmbd, enumerate(globals.graphs_x_functions))
     ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-    xselect = forms.ChoiceField(label='X axis', choices=xchoices)
-    yselect = forms.ChoiceField(label='Y axis', choices=ychoices)
+    xyxselect = forms.ChoiceField(label='X axis', choices=xchoices)
+    xyyselect = forms.ChoiceField(label='Y axis', choices=ychoices)
 
 class GraphRemovePlotForm(forms.Form):
     # Creates a list of boolean fields for each tuple in the list, (description, id)
@@ -249,4 +249,11 @@ class GraphRemovePlotForm(forms.Form):
                 if self.cleaned_data[i]:
                     result.append(int(i))
         return result
+
+class GraphBarSelectionForm(forms.Form):
+    lmbd = lambda x: (str(x[0]), x[1][0])
+    xchoices = map(lmbd, enumerate(globals.graphs_bar_x_functions))
+    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+    barxselect = forms.ChoiceField(label='X axis', choices=xchoices)
+    baryselect = forms.ChoiceField(label='Y axis', choices=ychoices)
 

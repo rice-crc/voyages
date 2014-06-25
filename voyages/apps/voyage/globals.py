@@ -763,6 +763,76 @@ graphs_x_functions = [('Year arrived with slaves*', make_x_line_fun('var_imp_arr
                       ('Slaves embarked', make_x_line_fun('var_imp_total_num_slaves_purchased')),
                       ('Slaves disembarked', make_x_line_fun('var_imp_total_slaves_disembarked')),]
 
+def get_year_bar_tuples(interval, first_year=mfirst_year, last_year=mlast_year):
+    start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
+    current_year = start_year
+    years = []
+    while current_year <= last_year:
+        # Range is exclusive of the start, and inclusive of the end, so a search for years 1800 to 1899 will need the range 1799-1899
+        years.append([current_year, current_year + interval - 1])
+        current_year += interval
+    def year_labeler(years):
+        if years[0] == years[1]:
+            return years[1]
+        else:
+            return str(years[0]) + '-' + str(years[1])
+    result = []
+    for i in years:
+        result.append((year_labeler(i), {'var_imp_arrival_at_port_of_dis__range': i}))
+    return result
+
+# Lst is a list of tuples of label, searchfilterdef
+# Returns a function that can be run with a searchqueryset and a ydef, and will return a dataset of tuples of x,y
+def make_x_bar_fun(varname, table=None, tablelblr=None, lst=None):
+    if table:
+        lst = []
+        for i in table.objects.all():
+            varfilt = varname + '_idnum__exact'
+            filt = {varfilt: i.value}
+            lbl = tablelblr(i)
+            lst.append((lbl, filt))
+    def x_fun(sqs, ydef):
+        dataset = []
+        for lbl,filt in lst:
+            fsqs = sqs.filter(**filt)
+            yval = ydef[3](fsqs)
+            dataset.append((lbl, yval))
+        return dataset
+    return x_fun
+        
+lbllblr = lambda x: x.label
+
+graphs_bar_x_functions = [('Flag*', make_x_bar_fun('var_imputed_nationality', table=models.Nationality, tablelblr=lbllblr)),
+                          ('Rig', make_x_bar_fun('var_rig_of_vessel', table=models.RigOfVessel, tablelblr=lbllblr)),
+"""                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),
+                          ('', make_x_bar_fun('')),"""
+                      ]
 
 
 
