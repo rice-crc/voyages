@@ -29,3 +29,259 @@ table.vstable {
 .vstableborder {
     border: 1px solid #895D03;
 }
+
+.database-graphs-tab-xy {
+    background-image: url('/static/images/voyage/database-graps-tab-xy.png');
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 54px;
+}
+
+.database-graphs-tab-bar {
+    background-image: url('/static/images/voyage/database-graps-tab-bar.png');
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 57px;
+}
+
+.database-graphs-tab-pie {
+    background-image: url('/static/images/voyage/database-graps-tab-pie.png');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 56px;
+}
+
+.database-graphs-tab-xy-selected {
+    background-image: url('/static/images/voyage/database-graps-tab-xy-selected.png');
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 54px;
+}
+
+.database-graphs-tab-bar-selected {
+    background-image: url('/static/images/voyage/database-graps-tab-bar-selected.png');
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 54px;
+}
+
+.database-graphs-tab-pie-selected {
+    background-image: url('/static/images/voyage/database-graps-tab-pie-selected.png');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    padding-bottom: 0px;
+    padding-left: 30px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 56px;
+}
+
+.tabs-selection-graphs {
+    background-image: url('/static/images/voyage/database-inner-graph-tabs-bg.png');
+    background-position: 0% 100%;
+    background-repeat: repeat-x;
+    border-collapse: separate;
+    display: block;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    margin-top: 5px;
+    width: 1566px;
+}
+
+.database-graphs-tabs {
+    border-collapse: separate;
+    display: block;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    width: 1566px;
+}
+
+.graphs-tabs-tab-first-filler {
+    border-collapse: separate;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    vertical-align: middle;
+    width: 10px;
+}
+
+.graphs-tabs-tab-left-selected {
+    background-image: url('/static/images/voyage/database-inner-tabs-selected-left.png');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 10px;
+}
+
+.graphs-tabs-tab-right-selected {
+    background-image: url('/static/images/voyage/database-inner-tabs-selected-right.png');
+    background-position: 100% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 10px;
+}
+
+.graphs-tabs-tab-left {
+    background-image: url('/static/images/voyage/database-inner-tabs-left.png');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 10px;
+}
+
+.graphs-tabs-tab-right {
+    background-image: url('/static/images/voyage/database-inner-tabs-right.png');
+    background-position: 100% 0%;
+    background-repeat: no-repeat;
+    border-collapse: separate;
+    cursor: pointer;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    vertical-align: middle;
+    width: 10px;
+}
+
+.graphs-tabs-tab-last-filler {
+    border-collapse: separate;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    vertical-align: middle;
+    width: 0px;
+}
+
+.database-graphs-frame {
+    border-bottom-color: rgb(238, 218, 162);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-collapse: separate;
+    border-left-color: rgb(238, 218, 162);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(238, 218, 162);
+    border-right-style: solid;
+    border-right-width: 1px;
+    display: block;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 622px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 15px;
+    width: 1544px;
+}
+
+.graphs-tabs-tab-filler {
+    border-collapse: separate;
+    display: table-cell;
+    font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
+    font-size: 11px;
+    height: 26px;
+    vertical-align: middle;
+    width: 5px;
+}

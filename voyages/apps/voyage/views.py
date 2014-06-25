@@ -609,6 +609,7 @@ def search(request):
     num_row_labels = 1
     is_double_fun = False
     graphs_xy_select_form = None
+    graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
     # If there is no requested page number, serve 1
@@ -971,50 +972,57 @@ def search(request):
                 return response
         elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
-            graphs_xy_select_form = GraphXYSelectionForm(request.POST, initial={'xselect': '0', 'yselect': '0'})
-            if graphs_xy_select_form.is_valid():
-                xind = int(graphs_xy_select_form.cleaned_data['xselect'])
-                yind = int(graphs_xy_select_form.cleaned_data['yselect'])
-                xdef = globals.graphs_x_functions[xind]
-                ydef = globals.graphs_y_functions[yind]
-                request.session['graph_defs'] = request.session.get('graph_defs', [])
-                if submitVal == 'tab_graphs_add':
-                    if (len(request.session['graph_defs']) > 0 and request.session['graph_defs'][-1] != yind) or len(request.session['graph_defs']) == 0:
-                        request.session['graph_defs'].append(yind)
-                elif submitVal == 'tab_graphs_show':
-                    request.session['graph_defs'] = [yind]
+            graphs_tab = 'tab_graphs_xy'
+            print(submitVal)
+            if submitVal.startswith('tab_graphs_xy'):
+                graphs_tab = 'tab_graphs_xy'
+                graphs_xy_select_form = GraphXYSelectionForm(request.POST, initial={'xselect': '0', 'yselect': '0'})
+                if graphs_xy_select_form.is_valid():
+                    xind = int(graphs_xy_select_form.cleaned_data['xselect'])
+                    yind = int(graphs_xy_select_form.cleaned_data['yselect'])
+                    xdef = globals.graphs_x_functions[xind]
+                    ydef = globals.graphs_y_functions[yind]
+                    request.session['graph_xy_defs'] = request.session.get('graph_xy_defs', [])
+                    if submitVal == 'tab_graphs_xy_add':
+                        if (len(request.session['graph_xy_defs']) > 0 and request.session['graph_xy_defs'][-1] != yind) or len(request.session['graph_xy_defs']) == 0:
+                            request.session['graph_xy_defs'].append(yind)
+                    elif submitVal == 'tab_graphs_xy_show':
+                        request.session['graph_xy_defs'] = [yind]
 
-                remove_plots_list = []
-                for idx, yid in enumerate(request.session['graph_defs']):
-                    ydef = globals.graphs_y_functions[yid]
-                    ydesc = ydef[0]
-                    remove_plots_list.append((ydesc, idx))
-                graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+                    remove_plots_list = []
+                    for idx, yid in enumerate(request.session['graph_xy_defs']):
+                        ydef = globals.graphs_y_functions[yid]
+                        ydesc = ydef[0]
+                        remove_plots_list.append((ydesc, idx))
+                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
 
-                if submitVal == 'tab_graphs_remove':
-                    for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
-                        request.session['graph_defs'].pop(i)
-                        graph_remove_plots_form.fields.pop(str(i))
-                plt.xlabel(xdef[0])
-                if len(request.session['graph_defs']) == 1:
-                    plt.ylabel(ydef[0])
-                else:
-                    plt.ylabel("Values")
-                fig = plt.figure(1)
-                for yid in request.session['graph_defs']:
-                    ydef = globals.graphs_y_functions[yid]
-                    xfun = xdef[1]
-                    res = xfun(results,ydef)
-                    res = sorted(res, key=lambda x: x[0])
-                    data = zip(*res)
-                    plt.plot(*data, label=ydef[0])
-                    plt.grid(True)
-                plt.legend()
-                canv = FigureCanvasAgg(fig)
-                figstr = StringIO.StringIO()
-                canv.print_png(figstr)
-                inline_graph_png = base64.b64encode(figstr.getvalue())
-                fig.clf()
+                    if submitVal == 'tab_graphs_xy_remove':
+                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
+                            request.session['graph_xy_defs'].pop(i)
+                            graph_remove_plots_form.fields.pop(str(i))
+                    plt.xlabel(xdef[0])
+                    if len(request.session['graph_xy_defs']) == 1:
+                        plt.ylabel(ydef[0])
+                    else:
+                        plt.ylabel("Values")
+                    fig = plt.figure(1)
+                    for yid in request.session['graph_xy_defs']:
+                        ydef = globals.graphs_y_functions[yid]
+                        xfun = xdef[1]
+                        res = xfun(results,ydef)
+                        res = sorted(res, key=lambda x: x[0])
+                        data = zip(*res)
+                        plt.plot(*data, label=ydef[0])
+                        plt.grid(True)
+                    plt.legend()
+                    canv = FigureCanvasAgg(fig)
+                    figstr = StringIO.StringIO()
+                    canv.print_png(figstr)
+                    inline_graph_png = base64.b64encode(figstr.getvalue())
+                    fig.clf()
+            elif submitVal.startswith('tab_graphs_bar'):
+                graphs_tab = 'tab_graphs_bar'
+                print("hello")
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
@@ -1087,7 +1095,9 @@ def search(request):
                    'is_double_fun': is_double_fun,
                    'graphs_xy_select_form': graphs_xy_select_form,
                    'inline_graph_png': inline_graph_png,
-                   'graph_remove_plots_form': graph_remove_plots_form})
+                   'graph_remove_plots_form': graph_remove_plots_form,
+                   'graphs_tab': graphs_tab
+               })
 
 
 def prettify_results(results, lookup_table):
