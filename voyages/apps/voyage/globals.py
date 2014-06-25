@@ -693,6 +693,17 @@ summing_fun = sum
 #            sm += i
 #    return sm
 
+def rate_of_resistance_fun(queryset):
+    qcount = queryset.count()
+    if qcount <= 0:
+        return None
+    varname = 'var_resistance'
+    # stats does not work with string fields, only numeric fields
+    #stats = queryset.stats(varname).stats_results()
+    rset = queryset.raw_search(varname + ': [* TO *]')
+    rcount = rset.count()
+    return (float(rcount)/float(qcount)) * 100
+
 # Graphs
 
 # Takes a searchqueryset and returns a number
@@ -717,7 +728,7 @@ graphs_y_functions = [('Number of voyages', 'var_voyage_id', len, lambda x: x.co
                       ('Percentage children*', 'var_imputed_percentage_child', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_child'),),
                       ('Percentage male*', 'var_imputed_percentage_male', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_male'),),
                       ('Sterling cash price in Jamaica*', 'var_imputed_sterling_cash', averaging_fun, make_avg_nopretty_fun('var_imputed_sterling_cash'),),
-                      ('Rate of resistance',),
+                      ('Rate of resistance', 'var_resistance', None, rate_of_resistance_fun),
                       ('Percentage of slaves embarked who died during voyage*', 'var_imputed_mortality', averaging_fun, make_avg_nopretty_fun('var_imputed_mortality'),),]
 
 
