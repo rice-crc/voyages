@@ -76,7 +76,7 @@ class Country(models.Model):
         ordering = ['country_id', ]
 
     def __unicode__(self):
-        return self.name
+        return str(self.country_id)
 
 
 class SexAge(models.Model):
@@ -101,20 +101,20 @@ class AfricanName(models.Model):
     Model stores information about African Name
     """
 
-    slave_id = models.IntegerField("Slave id", unique=True)
+    slave_id = models.IntegerField("African id", unique=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
-    height = models.FloatField(blank=True, null=True)
-    source = models.CharField(max_length=30, blank=True, null=True)
-    date_arrived = models.IntegerField(max_length=4, verbose_name="Arrival", blank=True, null=True)
+    height = models.FloatField(blank=True, null=True, verbose_name="Height in inches")
+    source = models.CharField(max_length=30, blank=True, null=True, verbose_name="Modern name")
+    date_arrived = models.IntegerField(max_length=4, verbose_name="Voyage year", blank=True, null=True)
     ship_name = models.CharField(max_length=70, verbose_name="Ship Name", blank=True, null=True)
-    voyage_number = models.IntegerField()
+    voyage_number = models.IntegerField(verbose_name="Voyage ID")
 
     sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age", to_field='sex_age_id', blank=True, null=True)
-    country = models.ForeignKey(Country, verbose_name="Origin", to_field='country_id', blank=True, null=True)
-    disembarkation_port = models.ForeignKey(Place, verbose_name="Disembarkation Port", to_field='value',
+    country = models.ForeignKey(Country, verbose_name="Country of Origin", to_field='country_id', blank=True, null=True)
+    disembarkation_port = models.ForeignKey(Place, verbose_name="Disembarkation", to_field='value',
                                             related_name="disembarkation_port", blank=True, null=True)
-    embarkation_port = models.ForeignKey(Place, verbose_name="Embarkation Port", to_field='value',
+    embarkation_port = models.ForeignKey(Place, verbose_name="Embarkation", to_field='value',
                                     related_name="embarkation_port", blank=True, null=True)
     voyage = models.ForeignKey(Voyage, verbose_name="Voyage", to_field='voyage_id', blank=True, null=True)
 
