@@ -250,7 +250,11 @@
         {% endif %}
         <td>{{ record.object.country.name }}</td>
         <td style="text-align: left">
-        <a onclick="document.forms['form'].elements['form:listingEstimates_click_id'].value = '2314'; document.forms['form'].submit(); return false;" href="#">{{ record.object.voyage_number }}</a>
+        {% if record.object.voyage %}
+          <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
+        {% else %}
+          {{ record.object.voyage_number }}
+        {% endif %}
         </td>
         <td>{{ record.object.ship_name }}</td>
         <td style="text-align: left">{{ record.object.date_arrived }}</td>
@@ -265,7 +269,7 @@
           <td></td>
         {% endif %}
         <td>
-        <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("Redirecting to African Origins");">GO</a>
+          <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("Redirecting to African Origins");">GO</a>
         </td>
         </tr>
 

@@ -6,6 +6,7 @@
 {{ object.date_arrived }}
 {{ object.ship_name }}
 {{ object.voyage_number }}
+{{ object.voyage }}
 {{ object.sex_age.name }}
 {{ object.country.name }}
 {{ object.embarkation_port.place }}
