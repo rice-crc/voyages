@@ -401,7 +401,7 @@
 
     <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_name" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
 
