@@ -1,0 +1,21 @@
+﻿var attr_selected_class = "attribute-selected";
+
+function submitWithValue(submitVal) {
+    $('#form').append("<input type='hidden' name='submitVal' value='" + submitVal + "' />");
+    $("#form").submit();
+    return false;
+}
+
+function retrieve_page(page_elem) {
+    /* Enable the button with desired page to be submitted */
+    $('#' + page_elem).prop('disabled', false);
+    submitWithValue('retrieve_page');
+    return false;
+}
+
+function sort_results(page_elem) {
+    /* Enable the button with desired page to be submitted */
+    $('#' + page_elem).prop('disabled', false);
+    submitWithValue('sort_results');
+    return false;
+}
