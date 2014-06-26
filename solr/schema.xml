@@ -415,6 +415,8 @@
 
     <field name="slave_voyage_number" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="slave_voyage" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="slave_sex_age" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_country" type="text_en" indexed="true" stored="true" multiValued="false" />
