@@ -63,6 +63,7 @@ class AfricanNames(indexes.SearchIndex, indexes.Indexable):
     slave_date_arrived = indexes.IntegerField(model_attr="date_arrived", null=True)
     slave_ship_name = indexes.CharField(model_attr="ship_name", null=True)
     slave_voyage_number = indexes.CharField(model_attr="voyage_number")
+    slave_voyage = indexes.CharField(model_attr="voyage", null=True)
     slave_sex_age = indexes.CharField()
     slave_country = indexes.CharField()
     slave_embarkation_port = indexes.CharField()
@@ -70,6 +71,12 @@ class AfricanNames(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return AfricanName
+
+    def prepare_slave_voyage(self, obj):
+        if obj.voyage is not None:
+            return obj.voyage.voyage_id
+        else:
+            return None
 
     def prepare_slave_sex_age(self, obj):
         if obj.sex_age is not None:
