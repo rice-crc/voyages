@@ -318,8 +318,6 @@ def get_all_slaves(request):
 
     try:
         sort_mode = request.session["sort_mode"]
-        if sort_mode is not None:
-            print "Retrieved sort_mode = " + sort_mode
     except KeyError:
         sort_mode = None
 
@@ -387,13 +385,6 @@ def get_all_slaves(request):
     pagins = paginator.page(current_page)
 
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, 20)
-
-    print paginator.count
-
-    if sort_column is not None:
-        print "sort_column = " + sort_column
-    if sort_mode is not None:
-        print "sort_mode = " + sort_mode
 
     return render(request, 'resources/names-index.html',
                   {'results': pagins,
