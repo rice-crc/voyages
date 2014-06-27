@@ -120,7 +120,7 @@ input.button-save:hover {
 	background-color: #B4D6CD;}
 	
 table.grid td a {
-	background-image: url(../images/resources-icon-arrow-right.png);
+	background-image: url(/static/images/resources/resources-icon-arrow-right.png);
 	background-repeat: no-repeat;
 	background-position: right center;
 	padding-right: 10px; }
