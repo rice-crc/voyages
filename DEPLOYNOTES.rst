@@ -35,7 +35,7 @@ correspondingly be installed into this environment.
 
 Install needed packages using system package manage (e.g. for Ubuntu)::
 
-  $ apt-get install libjpeg-dev libjpeg62 libjpeg62-dev zlib1g-dev
+  $ apt-get install libjpeg-dev libjpeg62 libjpeg62-dev zlib1g-dev libpng12-dev
 
 .. Note::
   Installation instructions and upgrade notes below assume that
