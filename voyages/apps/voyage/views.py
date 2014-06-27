@@ -32,6 +32,7 @@ from datetime import date
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
+from matplotlib import cm
 import base64
 import StringIO
 
@@ -1025,6 +1026,9 @@ def search(request):
                     canv.print_png(figstr)
                     inline_graph_png = base64.b64encode(figstr.getvalue())
                     fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
             elif submitVal.startswith('tab_graphs_bar'):
                 graphs_tab = 'tab_graphs_bar'
                 pst = {x: y for x, y in request.POST.items()}
@@ -1062,7 +1066,9 @@ def search(request):
                     else:
                         plt.ylabel("Values")
                     fig = plt.figure(1)
-                    for yid in request.session['graph_bar_defs']:
+                    width = 0.8/len(request.session['graph_bar_defs'])
+                    figwidth = 0
+                    for index, yid in enumerate(request.session['graph_bar_defs']):
                         ydef = globals.graphs_y_functions[yid]
                         xfun = xdef[1]
                         res = xfun(results,ydef)
@@ -1077,16 +1083,31 @@ def search(request):
                                 return 0.0
                             else:
                                 return x
-                        plt.bar(nums, map(dmap, data[1]))
-                        plt.xticks(nums, lbls)
-                        #plt.plot(*data, label=ydef[0])
+                        plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
+                        if len(lbls) > 20:
+                            figwidth = max(figwidth, len(lbls)*0.2)
+                            fig.set_size_inches(figwidth, 6)
+                        plt.xticks(nums, lbls, rotation='vertical', size='small')
                         plt.grid(True)
+                    figheight = 6
+                    errord = True
+                    while errord:
+                        errord = False
+                        try:
+                            plt.tight_layout()
+                        except ValueError:
+                            errord = True
+                            figheight += 4
+                            fig.set_size_inches(figwidth, figheight)
                     plt.legend()
                     canv = FigureCanvasAgg(fig)
                     figstr = StringIO.StringIO()
                     canv.print_png(figstr)
                     inline_graph_png = base64.b64encode(figstr.getvalue())
                     fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
