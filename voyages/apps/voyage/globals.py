@@ -783,7 +783,8 @@ def get_year_bar_tuples(interval, first_year=mfirst_year, last_year=mlast_year):
 
 # Lst is a list of tuples of label, searchfilterdef
 # Returns a function that can be run with a searchqueryset and a ydef, and will return a dataset of tuples of x,y
-def make_x_bar_fun(varname, table=None, tablelblr=None, lst=None):
+lbllblr = lambda x: x.label
+def make_x_bar_fun(varname, table=None, tablelblr=lbllblr, lst=None):
     if table:
         lst = []
         for i in table.objects.all():
@@ -800,39 +801,46 @@ def make_x_bar_fun(varname, table=None, tablelblr=None, lst=None):
         return dataset
     return x_fun
         
-lbllblr = lambda x: x.label
 
-graphs_bar_x_functions = [('Flag*', make_x_bar_fun('var_imputed_nationality', table=models.Nationality, tablelblr=lbllblr)),
+def make_x_bar_month_fun(varname):
+    output = []
+    for num, mon in list_months:
+        varkey = varname + "_idnum__exact"
+        output.append((mon, {varkey: int(num)}))
+    return make_x_bar_fun(varname, lst=output)
+
+# Convert a list of nationality objects into a list of tuples of (label, filterdef)
+imp_nat_pos_bar = map(lambda x: (x.label, {'var_imputed_nationality_idnum__exact': x.value}), imputed_nationality_possibilities)
+
+placelblr = lambda x: x.place
+regionlblr = lambda x: x.region
+
+
+graphs_bar_x_functions = [('Flag*', make_x_bar_fun('var_imputed_nationality', lst=imp_nat_pos_bar)),
                           ('Rig', make_x_bar_fun('var_rig_of_vessel', table=models.RigOfVessel, tablelblr=lbllblr)),
-"""                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),
-                          ('', make_x_bar_fun('')),"""
-                      ]
+                          ('Particular outcome of the voyage', make_x_bar_fun('var_outcome_voyage', table=models.ParticularOutcome, tablelblr=lbllblr)),
+                          ('Outcome for slaves*', make_x_bar_fun('var_outcome_slaves', table=models.SlavesOutcome, tablelblr=lbllblr)),
+                          ('Outcome for owner*', make_x_bar_fun('var_outcome_owner', table=models.OwnerOutcome)),
+                          ('Outcome if ship captured*', make_x_bar_fun('var_outcome_ship_captured', table=models.VesselCapturedOutcome)),
+                          ('African resistance', make_x_bar_fun('var_resistance', table=models.Resistance)),
+                          ('Place where voyage began*', make_x_bar_fun('var_imp_port_voyage_begin', table=models.Place, tablelblr=placelblr)), 
+                          ('Region where voyage began*', make_x_bar_fun('var_imp_region_voyage_begin', table=models.Region, tablelblr=regionlblr)),
+                          ('Principal place of slave purchase*', make_x_bar_fun('var_imp_principal_place_of_slave_purchase', table=models.Place, tablelblr=placelblr)),
+                          ('Principal region of slave purchase*', make_x_bar_fun('var_imp_principal_region_of_slave_purchase', table=models.Region, tablelblr=regionlblr)),
+                          ('Principal place of slave landing*', make_x_bar_fun('var_imp_principal_port_slave_dis', table=models.Place, tablelblr=placelblr)),
+                          ('Principal region of slave landing*', make_x_bar_fun('var_imp_principal_region_slave_dis', table=models.Region, tablelblr=regionlblr)),
+                          ('Broad region of slave landing*', make_x_bar_fun('var_imp_principal_broad_region_disembark', table=models.BroadRegion, tablelblr=lambda x: x.broad_region)),
+                          ('Place where voyage ended', make_x_bar_fun('var_place_voyage_ended', table=models.Place, tablelblr=placelblr)),
+                          ('Region where voyage ended', make_x_bar_fun('var_region_voyage_ended', table=models.Region, tablelblr=regionlblr)),
+                          ('Month voyage began', make_x_bar_month_fun('var_voyage_bagan')),
+                          ('Month trade began in Africa', make_x_bar_month_fun('var_slave_purchase_began')),
+                          ('Month vessel departed Africa', make_x_bar_month_fun('var_date_departed_africa')),
+                          ('Month vessel arrived with slaves', make_x_bar_month_fun('var_first_dis_of_slaves')),
+                          ('Month vessel departed for home port', make_x_bar_month_fun('var_departure_last_place_of_landing')),
+                          ('Month voyage completed', make_x_bar_month_fun('var_voyage_completed')),
+                          ('Year arrived with slaves (5 year periods)', get_year_bar_tuples(5)),
+                          ('Year arrived with slaves (10 year periods)', get_year_bar_tuples(10)),
+                          ('Year arrived with slaves (25 year periods)', get_year_bar_tuples(25)),]
 
 
 
@@ -1259,7 +1267,7 @@ var_dict = [
      "is_general": True},
     {'var_name': 'var_first_dis_of_slaves',
      'spss_name': 'date_land1',
-     'var_full_name': 'Date vessel arrived with slaves',
+     'var_full_name': 'Date vessel arriveds with slaves',
      'var_type': 'date',
      'var_category': 'Voyage Dates',
      "is_estimate": False,
