@@ -6,6 +6,9 @@ from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
 from .models import *
+from .forms import *
+
+from voyages.apps.voyage.views import prepare_paginator_variables
 
 
 def get_all_images(request):
@@ -295,3 +298,99 @@ def get_image_search_detail(request, page):
     image = request.session['results_images'][int(page)-1]
 
     return render(request, 'resources/image-search-detail-window.html',  {'image': image})
+
+
+def get_all_slaves(request):
+    """
+    Retrieve and return all slaves
+
+    :param request: Request to serve
+    :return: slaves to display
+    """
+
+    results_per_page_form = None
+    results_per_page = 20
+    current_page = 1
+    try:
+        sort_column = request.session["sort_column"]
+    except KeyError:
+        sort_column = None
+
+    try:
+        sort_mode = request.session["sort_mode"]
+    except KeyError:
+        sort_mode = None
+
+    # If there is no requested page number, serve 1
+    desired_page = request.POST.get('desired_page')
+    if desired_page:
+        current_page = desired_page
+
+    if request.method == "GET":
+        results_per_page_form = ResultsPerPageOptionForm()
+
+        if sort_column is not None:
+            if sort_mode is "1":
+                search_set = SearchQuerySet().models(AfricanName).order_by(sort_column)
+            if sort_mode is "2":
+                search_set = SearchQuerySet().models(AfricanName).order_by("-" + sort_column)
+
+        else:
+            search_set = SearchQuerySet().models(AfricanName).order_by('slave_id')
+    if request.method == "POST":
+        results_per_page_form = ResultsPerPageOptionForm(request.POST)
+        if results_per_page_form.is_valid():
+            results_per_page = results_per_page_form.cleaned_option()
+            request.session['slaves_per_page_choice'] = results_per_page_form.cleaned_data['option']
+            request.session['slaves_per_page'] = results_per_page
+        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
+            results_per_page = request.session['slaves_per_page']
+            results_per_page_form.fields['option'].initial = request.session['slaves_per_page_choice']
+            results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['slaves_per_page_choice']})
+
+        if request.POST.get("sort_column") is not None:
+
+            # If column sorting has changed, reset the mode
+            if request.POST.get("sort_column") != sort_column:
+                sort_mode = None
+            request.session["sort_column"] = request.POST.get("sort_column")
+            sort_column = request.POST.get("sort_column")
+
+            if sort_mode is None:
+                search_set = SearchQuerySet().models(AfricanName).order_by(request.POST.get("sort_column"))
+                request.session["sort_mode"] = "1"
+                sort_mode = "1"
+            elif sort_mode == "1":
+                search_set = SearchQuerySet().models(AfricanName).order_by("-" + request.POST.get("sort_column"))
+                request.session["sort_mode"] = "2"
+                sort_mode = "2"
+            elif sort_mode == "2":
+                search_set = SearchQuerySet().models(AfricanName).order_by("slave_id")
+                request.session["sort_mode"] = None
+                request.session["sort_column"] = None
+                sort_mode = None
+                sort_column = None
+
+        elif sort_column is not None:
+            if sort_mode == "1":
+                search_set = SearchQuerySet().models(AfricanName).order_by(sort_column)
+            if sort_mode == "2":
+                search_set = SearchQuerySet().models(AfricanName).order_by("-" + sort_column)
+
+        else:
+            search_set = SearchQuerySet().models(AfricanName).order_by('slave_id')
+
+    # Paginate results to pages
+    paginator = Paginator(search_set, results_per_page)
+    pagins = paginator.page(current_page)
+
+    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, 20)
+
+    return render(request, 'resources/names-index.html',
+                  {'results': pagins,
+                   'paginator_range': paginator_range,
+                   'pages_range': pages_range,
+                   'options_results_per_page_form': results_per_page_form,
+                   'sort_column': sort_column,
+                   'sort_mode': sort_mode})
+
