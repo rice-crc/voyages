@@ -779,7 +779,7 @@ def get_year_bar_tuples(interval, first_year=mfirst_year, last_year=mlast_year):
     result = []
     for i in years:
         result.append((year_labeler(i), {'var_imp_arrival_at_port_of_dis__range': i}))
-    return result
+    return make_x_bar_fun('var_imp_arrival_at_port_of_dis', lst=result)
 
 # Lst is a list of tuples of label, searchfilterdef
 # Returns a function that can be run with a searchqueryset and a ydef, and will return a dataset of tuples of x,y
@@ -805,7 +805,7 @@ def make_x_bar_fun(varname, table=None, tablelblr=lbllblr, lst=None):
 def make_x_bar_month_fun(varname):
     output = []
     for num, mon in list_months:
-        varkey = varname + "_idnum__exact"
+        varkey = varname + "_month__exact"
         output.append((mon, {varkey: int(num)}))
     return make_x_bar_fun(varname, lst=output)
 
