@@ -29,6 +29,12 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
+from matplotlib import cm
+import base64
+import StringIO
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -603,6 +609,11 @@ def search(request):
     num_col_labels_total = 1
     num_row_labels = 1
     is_double_fun = False
+    graphs_xy_select_form = None
+    graphs_bar_select_form = None
+    graphs_tab = None
+    graph_remove_plots_form = None
+    inline_graph_png = None
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -668,6 +679,7 @@ def search(request):
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
+        request.session['graph_defs'] = []
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -960,8 +972,183 @@ def search(request):
                         ws.cell(row=idx+1,column=idy+1).value = j
                 wb.save(response)
                 return response
-        elif submitVal == 'tab_graphs':
+        elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
+            graphs_tab = 'tab_graphs_xy'
+            if submitVal.startswith('tab_graphs_xy') or submitVal == 'tab_graphs':
+                graphs_tab = 'tab_graphs_xy'
+                pst = {x: y for x, y in request.POST.items()}
+                if 'xyxselect' not in pst:
+                    pst['xyxselect'] = '0'
+                if 'xyyselect' not in pst:
+                    pst['xyyselect'] = '0'
+                graphs_xy_select_form = GraphXYSelectionForm(pst, initial={'xyxselect': '0', 'xyyselect': '0'})
+                if graphs_xy_select_form.is_valid():
+                    xind = int(graphs_xy_select_form.cleaned_data['xyxselect'])
+                    yind = int(graphs_xy_select_form.cleaned_data['xyyselect'])
+                    xdef = globals.graphs_x_functions[xind]
+                    ydef = globals.graphs_y_functions[yind]
+                    request.session['graph_xy_defs'] = request.session.get('graph_xy_defs', [])
+                    if submitVal == 'tab_graphs_xy_add':
+                        if (len(request.session['graph_xy_defs']) > 0 and request.session['graph_xy_defs'][-1] != yind) or len(request.session['graph_xy_defs']) == 0:
+                            request.session['graph_xy_defs'].append(yind)
+                    elif submitVal == 'tab_graphs_xy_show':
+                        request.session['graph_xy_defs'] = [yind]
+
+                    remove_plots_list = []
+                    for idx, yid in enumerate(request.session['graph_xy_defs']):
+                        ydef = globals.graphs_y_functions[yid]
+                        ydesc = ydef[0]
+                        remove_plots_list.append((ydesc, idx))
+                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+
+                    if submitVal == 'tab_graphs_xy_remove':
+                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
+                            request.session['graph_xy_defs'].pop(i)
+                            graph_remove_plots_form.fields.pop(str(i))
+                    plt.xlabel(xdef[0])
+                    if len(request.session['graph_xy_defs']) == 1:
+                        plt.ylabel(ydef[0])
+                    else:
+                        plt.ylabel("Values")
+                    fig = plt.figure(1)
+                    for yid in request.session['graph_xy_defs']:
+                        ydef = globals.graphs_y_functions[yid]
+                        xfun = xdef[1]
+                        res = xfun(results,ydef)
+                        res = sorted(res, key=lambda x: x[0])
+                        data = zip(*res)
+                        plt.plot(*data, label=ydef[0])
+                        plt.grid(True)
+                    plt.legend()
+                    canv = FigureCanvasAgg(fig)
+                    figstr = StringIO.StringIO()
+                    canv.print_png(figstr)
+                    inline_graph_png = base64.b64encode(figstr.getvalue())
+                    fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
+            elif submitVal.startswith('tab_graphs_bar'):
+                graphs_tab = 'tab_graphs_bar'
+                pst = {x: y for x, y in request.POST.items()}
+                if 'barxselect' not in pst:
+                    pst['barxselect'] = '0'
+                if 'baryselect' not in pst:
+                    pst['baryselect'] = '0'
+                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
+                if graphs_bar_select_form.is_valid():
+                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
+                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
+                    xdef = globals.graphs_bar_x_functions[xind]
+                    ydef = globals.graphs_y_functions[yind]
+                    request.session['graph_bar_defs'] = request.session.get('graph_bar_defs', [])
+                    if submitVal == 'tab_graphs_bar_add':
+                        if (len(request.session['graph_bar_defs']) > 0 and request.session['graph_bar_defs'][-1] != yind) or len(request.session['graph_bar_defs']) == 0:
+                            request.session['graph_bar_defs'].append(yind)
+                    elif submitVal == 'tab_graphs_bar_show':
+                        request.session['graph_bar_defs'] = [yind]
+
+                    remove_plots_list = []
+                    for idx, yid in enumerate(request.session['graph_bar_defs']):
+                        ydef = globals.graphs_y_functions[yid]
+                        ydesc = ydef[0]
+                        remove_plots_list.append((ydesc, idx))
+                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+
+                    if submitVal == 'tab_graphs_bar_remove':
+                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
+                            request.session['graph_bar_defs'].pop(i)
+                            graph_remove_plots_form.fields.pop(str(i))
+                    plt.xlabel(xdef[0])
+                    if len(request.session['graph_bar_defs']) == 1:
+                        plt.ylabel(ydef[0])
+                    else:
+                        plt.ylabel("Values")
+                    fig = plt.figure(1)
+                    width = 0.8/len(request.session['graph_bar_defs'])
+                    figwidth = 0
+                    for index, yid in enumerate(request.session['graph_bar_defs']):
+                        ydef = globals.graphs_y_functions[yid]
+                        xfun = xdef[1]
+                        res = xfun(results,ydef)
+                        #res = sorted(res, key=lambda x: x[0])
+                        data = zip(*res)
+                        enum = enumerate(data[0])
+                        zenum = zip(*enum)
+                        nums = zenum[0]
+                        lbls = zenum[1]
+                        def dmap(x):
+                            if not x:
+                                return 0.0
+                            else:
+                                return x
+                        plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
+                        if len(lbls) > 20:
+                            figwidth = max(figwidth, len(lbls)*0.2)
+                            fig.set_size_inches(figwidth, 6)
+                        plt.xticks(nums, lbls, rotation='vertical', size='small')
+                        plt.grid(True)
+                    figheight = 6
+                    errord = True
+                    while errord:
+                        errord = False
+                        try:
+                            plt.tight_layout()
+                        except ValueError:
+                            errord = True
+                            figheight += 4
+                            fig.set_size_inches(figwidth, figheight)
+                    plt.legend()
+                    canv = FigureCanvasAgg(fig)
+                    figstr = StringIO.StringIO()
+                    canv.print_png(figstr)
+                    inline_graph_png = base64.b64encode(figstr.getvalue())
+                    fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
+            elif submitVal.startswith('tab_graphs_pie'):
+                graphs_tab = 'tab_graphs_pie'
+                pst = {x: y for x, y in request.POST.items()}
+                if 'barxselect' not in pst:
+                    pst['barxselect'] = '0'
+                if 'baryselect' not in pst:
+                    pst['baryselect'] = '0'
+                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
+                if graphs_bar_select_form.is_valid():
+                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
+                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
+                    xdef = globals.graphs_bar_x_functions[xind]
+                    ydef = globals.graphs_y_functions[yind]
+
+                    graph_remove_plots_form = GraphRemovePlotForm([(ydef[0], 0)], request.POST)
+
+                    fig = plt.figure(1)
+                    xfun = xdef[1]
+                    res = xfun(results,ydef)
+                    data = zip(*res)
+                    #enum = enumerate(data[0])
+                    #zenum = zip(*enum)
+                    #nums = zenum[0]
+                    #lbls = zenum[1]
+                    def dmap(x):
+                        if not x:
+                            return 0.0
+                        else:
+                            return x
+                    #plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
+                    plt.pie(data[1], labels=data[0])
+                    #plt.tight_layout()
+                    #plt.legend()
+                    canv = FigureCanvasAgg(fig)
+                    figstr = StringIO.StringIO()
+                    canv.print_png(figstr)
+                    inline_graph_png = base64.b64encode(figstr.getvalue())
+                    fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
@@ -1031,7 +1218,13 @@ def search(request):
                    'num_col_labels_before': num_col_labels_before, 
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
-                   'is_double_fun': is_double_fun,})
+                   'is_double_fun': is_double_fun,
+                   'graphs_xy_select_form': graphs_xy_select_form,
+                   'inline_graph_png': inline_graph_png,
+                   'graph_remove_plots_form': graph_remove_plots_form,
+                   'graphs_tab': graphs_tab,
+                   'graphs_bar_select_form': graphs_bar_select_form,
+               })
 
 
 def prettify_results(results, lookup_table):
