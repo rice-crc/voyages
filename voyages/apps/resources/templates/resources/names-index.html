@@ -223,7 +223,6 @@
   </th>
 </tr>
 
-
 {% for record in results %}
     {% if forloop.first %}
         <tr class="grid-row-even grid-row-first">
@@ -253,7 +252,9 @@
         {% if record.object.voyage %}
           <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
         {% else %}
-          {{ record.object.voyage_number }}
+          <a href="#" onclick="return alert('A transatlantic Voyage ID for this record does not yet exist, ' +
+           'although further research might uncover one. The link in the rightmost column of the African Names Database ' +
+            'table will take you to the matching entry in the African Origins database');">{{ record.object.voyage_number }}</a>
         {% endif %}
         </td>
         <td>{{ record.object.ship_name }}</td>

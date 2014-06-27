@@ -1,6 +1,4 @@
-﻿var attr_selected_class = "attribute-selected";
-
-function submitWithValue(submitVal) {
+﻿function submitWithValue(submitVal) {
     $('#form').append("<input type='hidden' name='submitVal' value='" + submitVal + "' />");
     $("#form").submit();
     return false;
