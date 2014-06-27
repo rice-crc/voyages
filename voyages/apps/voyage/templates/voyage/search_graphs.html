@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<div>
+  <h1>{% trans 'Custom Graphs' %}</h1>
+</div>
+
+<div class="databse-graphs-tabs">
+  <div class="tabs-selection-graphs">
+    <table border="0" cellspacing="0" cellpadding="0" class="tabs-selection-graphs">
+      <tbody>
+	<tr>
+	  <td class="graphs-tabs-tab-first-filler"></td>
+	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}"></td>
+	  <td class="database-graphs-tab-xy{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_xy');">
+	    XY Graphs
+	  </td>
+	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}"></td>
+	  <td class="graphs-tabs-tab-filler"></td>
+	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}"></td>
+	  <td class="database-graphs-tab-bar{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_bar');">
+	    Bar Graphs
+	  </td>
+	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}"></td>
+	  <td class="graphs-tabs-tab-filler"></td>
+	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}"></td>
+	  <td class="database-graphs-tab-pie{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_pie');">
+	    Pie Graphs
+	  </td>
+	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}"></td>
+	  <td class="graphs-tabs-tab-last-filler"></td>
+	</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="database-graphs-frame">
+  {% if graphs_tab == 'tab_graphs_xy' %}
+    {% include "voyage/search_xy_graphs.html" %}
+  {% elif graphs_tab == 'tab_graphs_bar' %}
+    {% include "voyage/search_bar_graphs.html" %}
+  {% elif graphs_tab == 'tab_graphs_pie' %}
+    {% include "voyage/search_pie_graphs.html" %}
+  {% endif %}
+</div class="database-graphs-frame">
