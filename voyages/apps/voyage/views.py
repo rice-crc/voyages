@@ -1108,6 +1108,47 @@ def search(request):
                     plt.clf()
                     plt.cla()
                     plt.close('all')
+            elif submitVal.startswith('tab_graphs_pie'):
+                graphs_tab = 'tab_graphs_pie'
+                pst = {x: y for x, y in request.POST.items()}
+                if 'barxselect' not in pst:
+                    pst['barxselect'] = '0'
+                if 'baryselect' not in pst:
+                    pst['baryselect'] = '0'
+                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
+                if graphs_bar_select_form.is_valid():
+                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
+                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
+                    xdef = globals.graphs_bar_x_functions[xind]
+                    ydef = globals.graphs_y_functions[yind]
+
+                    graph_remove_plots_form = GraphRemovePlotForm([(ydef[0], 0)], request.POST)
+
+                    fig = plt.figure(1)
+                    xfun = xdef[1]
+                    res = xfun(results,ydef)
+                    data = zip(*res)
+                    #enum = enumerate(data[0])
+                    #zenum = zip(*enum)
+                    #nums = zenum[0]
+                    #lbls = zenum[1]
+                    def dmap(x):
+                        if not x:
+                            return 0.0
+                        else:
+                            return x
+                    #plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
+                    plt.pie(data[1], labels=data[0])
+                    #plt.tight_layout()
+                    #plt.legend()
+                    canv = FigureCanvasAgg(fig)
+                    figstr = StringIO.StringIO()
+                    canv.print_png(figstr)
+                    inline_graph_png = base64.b64encode(figstr.getvalue())
+                    fig.clf()
+                    plt.clf()
+                    plt.cla()
+                    plt.close('all')
         elif  submitVal == 'tab_timeline':
             tab = 'timeline'
         elif submitVal == 'tab_maps':
