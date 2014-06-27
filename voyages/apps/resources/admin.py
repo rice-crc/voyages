@@ -50,10 +50,11 @@ class SexAgeAdmin(admin.ModelAdmin):
 
 class AfricanNameAdmin(admin.ModelAdmin):
     list_display = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number',
-                    'voyage', 'sex_age', 'country', 'disembarkation_port', 'embarkation_port']
-    list_display_links = ['name']
-    exclude = ['voyage']
+                    'sex_age', 'country', 'disembarkation_port', 'embarkation_port']
+    list_display_links = ['name', 'slave_id']
+    exclude = ['voyage', ]
     ordering = ['slave_id']
+    search_fields = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number']
 
     class Meta:
         model = AfricanName

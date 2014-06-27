@@ -13,14 +13,373 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
 {% endblock %}
 
+{% block jslist %}
+{#    <script type="text/javascript" src="{{ STATIC_URL }}scripts/qtip/jquery.qtip.min.js"></script>#}
+<script src="{{ STATIC_URL }}scripts/resources/resources-names.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block title %}African Names{% endblock %}
 
 {% block content %}
+<form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
+      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 
-<div id="left-menu" class="left-menu-box">
-	{% include "resources/names-left-menu.html" %}
+<table cellspacing="0" cellpadding="0" border="0" style="width: 100%">
+<tbody>
+<tr>
+<td class="td-side-panel">
+<div style="margin: 10px 10px 0px 10px;">
+{% include "resources/names-left-menu.html" %}
+</div>
+</td>
+
+<td class="td-main-panel">
+
+<div>
+<div>
+<table class="grid">
+<tbody>
+<tr>
+  <th>
+  {% ifequal sort_column "slave_id" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_id" value="slave_id" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_id');">ID</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_name" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_name" value="slave_name" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_name');">Name</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_age" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_age" value="slave_age" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_age');">Age</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_height" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_height" value="slave_height" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_height');">Height [in]</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_sex_age" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_sexage" value="slave_sex_age" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_sexage');">Sex/Age</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_country" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_origin" value="slave_country" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_origin');">Origin</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_voyage_number" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_voyage" value="slave_voyage_number" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_voyage');">Voyage ID</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_ship_name" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_shipname" value="slave_ship_name" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_shipname');">Ship name</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_date_arrived" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_arrival" value="slave_date_arrived" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_arrival');">Arrival</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_embarkation_port" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_embarkation" value="slave_embarkation_port" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_embarkation');">Embarkation</a>
+  </div>
+  </th>
+
+  <th>
+  {% ifequal sort_column "slave_disembarkation_port" %}
+    {% ifequal sort_mode "1" %}
+      <div class="grid-header-text grid-header-icon-asc">
+    {% endifequal %}
+    {% ifequal sort_mode "2" %}
+      <div class="grid-header-text grid-header-icon-desc">
+    {% endifequal %}
+  {% else %}
+    <div class="grid-header-text">
+  {% endifequal %}
+    <input type="hidden" id="sort_form_disembarkation" value="slave_disembarkation_port" name="sort_column" disabled="true">
+    <a href="#" onclick="sort_results('sort_form_disembarkation');">Disembarkation</a>
+  </div>
+  </th>
+
+  <th>
+  <div class="grid-header-text">
+    <a href="#">Go to African-Origins Record</a>
+  </div>
+  </th>
+</tr>
+
+{% for record in results %}
+    {% if forloop.first %}
+        <tr class="grid-row-even grid-row-first">
+    {% else %}
+        <tr class="grid-row-even">
+    {% endif %}
+
+    <td>{{ record.slave_id }}</td>
+        <td>{{ record.object.name }}</td>
+        {% if record.object.age  %}
+          <td style="text-align: left">{{ record.object.age }}</td>
+        {% else %}
+          <td style="text-align: left"></td>
+        {% endif %}
+        {% if record.object.height  %}
+          <td style="text-align: left">{{ record.object.height }}</td>
+        {% else %}
+          <td style="text-align: left"></td>
+        {% endif %}
+        {% if record.object.sex_age  %}
+          <td>{{ record.object.sex_age }}</td>
+        {% else %}
+          <td></td>
+        {% endif %}
+        <td>{{ record.object.country.name }}</td>
+        <td style="text-align: left">
+        {% if record.object.voyage %}
+          <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
+        {% else %}
+          <a href="#" onclick="return alert('A transatlantic Voyage ID for this record does not yet exist, ' +
+           'although further research might uncover one. The link in the rightmost column of the African Names Database ' +
+            'table will take you to the matching entry in the African Origins database');">{{ record.object.voyage_number }}</a>
+        {% endif %}
+        </td>
+        <td>{{ record.object.ship_name }}</td>
+        <td style="text-align: left">{{ record.object.date_arrived }}</td>
+        {% if record.object.embarkation_port %}
+          <td>{{ record.object.embarkation_port }}</td>
+        {% else %}
+          <td></td>
+        {% endif %}
+        {% if record.object.disembarkation_port %}
+          <td>{{ record.object.disembarkation_port }}</td>
+        {% else %}
+          <td></td>
+        {% endif %}
+        <td>
+          <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("Redirecting to African Origins");">GO</a>
+        </td>
+        </tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+
+<div class="pager">
+<table style="border-collapse: collapse; width: 100%;">
+<tbody>
+  <tr>
+  <td style="padding: 0px; text-align: left">
+  Showing {{ results.start_index }} - {{ results.end_index }} out of {{ results.paginator.count }}
+{{ options_results_per_page_form.option }} results per page
+
+  </td>
+
+  <td style="padding: 0px;">
+  <input type="hidden">
+  <table class="td-table-links">
+  <tbody>
+  <tr>
+  {# First, prev section #}
+  {% if results.number != 1 %}
+    <td class="pager-fast-back">
+      <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
+      <a href="#" onclick="retrieve_page('form_first_page');">« First</a>
+    </td>
+  {% else %}
+    <td class="pager-fast-back-no-click">
+      « First
+    </td>
+  {% endif %}
+
+  {% if results.has_previous %}
+    <td class="pager-back">
+      <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
+      <a href="#" onclick="retrieve_page('form_prev_page');">« Prev</a>
+    </td>
+  {% else %}
+    <td class="pager-back-no-click">
+      « Prev
+    </td>
+  {% endif %}
+
+  {# Paginator num pages #}
+  {% for i in paginator_range %}
+    {% if i == results.number %}
+      <td class="pager-number-active">
+        {{ i }}
+      </td>
+    {% else %}
+      <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
+      <td class="pager-number">
+        <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
+      </td>
+    {% endif %}
+  {% endfor %}
+
+  {% if results.has_next %}
+    <td class="pager-fast-forward">
+      <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
+      <a href="#" onclick="retrieve_page('form_next_page');">Next »</a>
+    </td>
+  {% else %}
+    <td class="pager-fast-forward-no-click">
+      Next »
+    </td>
+  {% endif %}
+  {% if results.has_next %}
+    <td class="pager-forward">
+        <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
+        <a href="#" onclick="retrieve_page('form_last_page');">Last »</a>
+    </td>
+  {% else %}
+    <td class="pager-forward-no-click">
+      Last »
+    </td>
+  {% endif %}
+
+</form>
+
+</tr>
+</tbody>
+</table>
+</td>
+</tbody>
+</table>
+</div>
 
 </div>
+
+    <div style="margin-top: 5px;">
+<input id="form:_idJsp186" class="button-save" type="submit" onclick="clear_form();" value="Download current view" name="form:_idJsp186">
+<input id="form:_idJsp188" class="button-save" type="submit" onclick="clear_form();" value="Download all results" name="form:_idJsp188">
+</div>
+
+</td>
+
+</tbody>
+</table>
+
+
+
+</div>
+
+
 
 {% endblock %}
 
