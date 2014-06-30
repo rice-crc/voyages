@@ -11,6 +11,7 @@
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
 
+{#    Upper table (Search for africans)#}
     <tr>
         <td class="box-set-upper-row-upper-left"></td>
         <td class="box-set-upper-row-upper-middle">
@@ -19,7 +20,7 @@
                 <tr>
                     <td class="box-label">Search for Africans</td>
                     <td>
-                        <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = ''; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button"></div>
                     </td>
                 </tr>
             </tbody>
@@ -27,7 +28,7 @@
         </td>
         <td class="box-set-upper-row-upper-right"></td>
     </tr>
-    <tr>
+    <tr class="row">
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
@@ -39,7 +40,7 @@
                 <tr>
                   <td class="slaves-query-variable-title">African name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp15" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp15">
+                    <input id="search_slave_name" type="text" style="width: 150px;" value="" name="search_slave_name">
                   </td>
                 </tr>
                 <tr>
@@ -193,10 +194,10 @@
         <tbody>
             <tr>
                 <td style="padding: 5px 0px 5px 0px;">
-                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="submitBoxBasic">
+                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="search" name="action">
                 </td>
                 <td style="padding: 5px 0px 5px 5px;">
-                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp119">
+                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="reset" name="action">
                 </td>
             </tr>
         </tbody>
@@ -207,7 +208,7 @@
         <div class="box-middle-row-right"></div>
     </td>
     </tr>
-    <tr>
+    <tr class="row">
         <td class="box-set-lower-row-upper-left"></td>
         <td class="box-set-lower-row-upper-middle"></td>
         <td class="box-set-lower-row-upper-right"></td>
@@ -218,6 +219,8 @@
 
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
+
+{#    Middle table (Place of Origin)#}
     <tr>
         <td class="box-set-upper-row-middle-left-collapsed"></td>
         <td class="box-set-upper-row-middle-middle-collapsed">
@@ -226,7 +229,7 @@
                 <tr>
                     <td class="box-label">Place of origin</td>
                     <td>
-                        <div class="box-button-collapsed" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = 'country'; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button-collapsed"></div>
                     </td>
                 </tr>
             </tbody>
@@ -234,6 +237,64 @@
         </td>
         <td class="box-set-upper-row-middle-right-collapsed"></td>
     </tr>
+    <tr class="row-collapsed">
+    <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+      <div id="form:_idJsp122" class="box-main-text">
+        <div class="slaves-query-section">
+          <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td class="lookup-checkbox-list-quicksearch-label">Quicksearch</td>
+              <td class="lookup-checkbox-list-quicksearch-input">
+                <input type="text" onkeyup="LookupCheckboxListGlobals.quickSearch('form:c', this)" name="">
+              </td>
+            </tr>
+          </tbody>
+          </table>
+
+          <div class="lookup-checkbox-list">
+          </div>
+
+          <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td>
+                <input type="button" onclick="LookupCheckboxListGlobals.selectAll('form:c')" value="Select all">
+              </td>
+              <td>
+                <input type="button" onclick="LookupCheckboxListGlobals.deselectAll('form:c')" value="Deselect all">
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <table style="border-collapse: collapse;">
+        <tbody>
+          <tr>
+            <td style="padding: 5px 0px 5px 0px;">
+              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="submitBoxCountry">
+            </td>
+            <td style="padding: 5px 0px 5px 5px;">
+              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp128">
+            </td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+    </td>
+    <td class="box-middle-row-right">
+        <div class="box-middle-row-right"></div>
+    </tr>
+    <tr class="row-collapsed">
+      <td class="box-set-lower-row-middle-left"></td>
+      <td class="box-set-lower-row-middle-middle"></td>
+      <td class="box-set-lower-row-middle-right"></td>
+    </tr>
+
 </tbody>
 </table>
 
@@ -247,7 +308,7 @@
                 <tr>
                     <td class="box-label">Embarkation and disembarkation </td>
                     <td>
-                        <div class="box-button-collapsed" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = 'places'; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button-collapsed"></div>
                     </td>
                 </tr>
             </tbody>
@@ -255,6 +316,113 @@
         </td>
         <td class="box-set-upper-row-bottom-right-collapsed"></td>
     </tr>
+    <tr class="row-collapsed">
+        <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+        </td>
+
+        <td class="box-middle-row-middle">
+          <div id="form:_idJsp132" class="box-main-text">
+            <div class="slaves-query-section">
+              <div style="margin-bottom: 5px;">Place of embarkation</div>
+
+              <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="lookup-checkbox-list-quicksearch-label">Quicksearch</td>
+                  <td class="lookup-checkbox-list-quicksearch-input">
+                    <input type="text" onkeyup="LookupCheckboxListGlobals.quickSearch('form:r', this)" name="">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+              <div class="lookup-checkbox-list">
+                <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                </tbody>
+                </table>
+              </div>
+
+              <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="button" onclick="LookupCheckboxListGlobals.selectAll('form:r')" value="Select all">
+                  </td>
+                  <td>
+                    <input type="button" onclick="LookupCheckboxListGlobals.deselectAll('form:r')" value="Deselect all">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+            </div>
+            <div class="slaves-query-section">
+              <table style="border-collapse: collapse;">
+              <tbody>
+                <tr>
+                  <td class="slaves-query-variable-title">Disembarkation</td>
+                  <td class="slaves-query-variable-controls">
+                    <table style="border-collapse: collapse;">
+                    <tbody>
+                      <tr>
+                        <td style="padding: 0px;">
+                          <input type="checkbox" onclick="SlavesSearch.searchFromPlacesBox(false)" value="true" checked="checked" name="form:_idJsp145">
+                        </td>
+                        <td style="padding: 0px;">Sierra Leone</td>
+                      </tr>
+                    </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class="slaves-query-variable-controls">
+                    <table style="border-collapse: collapse;">
+                    <tbody>
+                      <tr>
+                        <td style="padding: 0px;">
+                          <input type="checkbox" onclick="SlavesSearch.searchFromPlacesBox(false)" value="true" checked="checked" name="form:_idJsp154">
+                        </td>
+                        <td style="padding: 0px;">Havana</td>
+                      </tr>
+                    </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </div>
+
+            <table style="border-collapse: collapse;">
+            <tbody>
+              <tr>
+                <td style="padding: 5px 0px 5px 0px;">
+                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="submitBoxPlaces">
+                </td>
+                <td style="padding: 5px 0px 5px 5px;">
+                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp161">
+                </td>
+              </tr>
+            </tbody>
+            </table>
+
+          </div>
+
+        </td>
+        <td class="box-middle-row-right">
+          <div class="box-middle-row-right"></div>
+        </td>
+
+    </tr>
+
+    <tr class="row-collapsed">
+      <td class="box-set-lower-row-bottom-left"></td>
+      <td class="box-set-lower-row-bottom-middle"></td>
+      <td class="box-set-lower-row-bottom-right"></td>
+    </tr>
+
 </tbody>
 </table>
 </div>
@@ -272,7 +440,7 @@
       <tr>
       <td class="box-label">Current query</td>
       <td>
-        <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp164_state'].value = 'collapsed'; document.forms['form'].submit(); return false;"></div>
+        <div class="box-button"></div>
       </td>
       </tr>
     </tbody>
@@ -280,7 +448,7 @@
     </td>
     <td class="box-upper-row-right"></td>
   </tr>
-  <tr>
+  <tr class="row">
     <td class="box-middle-row-left">
     <div class="box-middle-row-left"></div>
     </td>
@@ -293,7 +461,7 @@
     <div class="box-middle-row-right"></div>
     </td>
   </tr>
-  <tr>
+  <tr class="row">
     <td class="box-lower-row-left"></td>
     <td class="box-lower-row-middle"></td>
     <td class="box-lower-row-right"></td>
