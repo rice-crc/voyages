@@ -28,7 +28,7 @@
         </td>
         <td class="box-set-upper-row-upper-right"></td>
     </tr>
-    <tr class="row">
+    <tr class="row-collapsed">
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
@@ -208,7 +208,7 @@
         <div class="box-middle-row-right"></div>
     </td>
     </tr>
-    <tr class="row">
+    <tr class="row-collapsed">
         <td class="box-set-lower-row-upper-left"></td>
         <td class="box-set-lower-row-upper-middle"></td>
         <td class="box-set-lower-row-upper-right"></td>
@@ -237,7 +237,7 @@
         </td>
         <td class="box-set-upper-row-middle-right-collapsed"></td>
     </tr>
-    <tr class="row-collapsed">
+    <tr class="row">
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
@@ -248,14 +248,29 @@
           <tbody>
             <tr>
               <td class="lookup-checkbox-list-quicksearch-label">Quicksearch</td>
-              <td class="lookup-checkbox-list-quicksearch-input">
-                <input type="text" onkeyup="LookupCheckboxListGlobals.quickSearch('form:c', this)" name="">
+              <td id="origin-lookup" class="lookup-checkbox-list-quicksearch-input">
+                <input id="query-text-origin" type="text" onkeyup="filter_edit_list()" name="">
               </td>
             </tr>
           </tbody>
           </table>
 
           <div class="lookup-checkbox-list">
+            <table cellspacing="0" cellpadding="0" border="0">
+            <tbody id="origin_list">
+              {% for record in origins %}
+                {% if record.country_name %}
+                  <tr>
+                    <td></td>
+                    <td>
+                      <input id="form:c_196" type="checkbox" name="form:c" onclick="LookupCheckboxListGlobals.itemToggled('form:c',this)" value="196">
+                    </td>
+                    <td class="lookup-checkbox-list-item-0">{{ record.country_name }}</td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+            </table>
           </div>
 
           <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
@@ -289,7 +304,7 @@
     <td class="box-middle-row-right">
         <div class="box-middle-row-right"></div>
     </tr>
-    <tr class="row-collapsed">
+    <tr class="row">
       <td class="box-set-lower-row-middle-left"></td>
       <td class="box-set-lower-row-middle-middle"></td>
       <td class="box-set-lower-row-middle-right"></td>
