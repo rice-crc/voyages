@@ -399,6 +399,10 @@
 
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="country_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="country_name" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_name" type="string" indexed="true" stored="true" multiValued="false" />

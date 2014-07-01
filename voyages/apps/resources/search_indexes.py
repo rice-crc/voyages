@@ -1,5 +1,5 @@
 from haystack import indexes
-from .models import Image, AfricanName
+from .models import Image, AfricanName, Country
 
 
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
@@ -53,7 +53,7 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 
-class AfricanNames(indexes.SearchIndex, indexes.Indexable):
+class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     slave_id = indexes.IntegerField(model_attr="slave_id")
     slave_name = indexes.CharField(model_attr="name", null=True)
@@ -101,6 +101,19 @@ class AfricanNames(indexes.SearchIndex, indexes.Indexable):
             return obj.disembarkation_port.place
         else:
             return None
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class CountryIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    country_id = indexes.IntegerField(model_attr="country_id")
+    country_name = indexes.CharField(model_attr="name")
+
+    def get_model(self):
+        return Country
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
