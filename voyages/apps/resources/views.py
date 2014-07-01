@@ -326,6 +326,9 @@ def get_all_slaves(request):
     if desired_page:
         current_page = desired_page
 
+    # Collect Origins
+    origins = SearchQuerySet().models(Country).order_by("country_name");
+
     if request.method == "GET":
         results_per_page_form = ResultsPerPageOptionForm()
 
@@ -386,11 +389,14 @@ def get_all_slaves(request):
 
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, 20)
 
+    print origins
+
     return render(request, 'resources/names-index.html',
                   {'results': pagins,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'options_results_per_page_form': results_per_page_form,
                    'sort_column': sort_column,
-                   'sort_mode': sort_mode})
+                   'sort_mode': sort_mode,
+                   'origins': origins})
 

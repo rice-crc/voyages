@@ -51,3 +51,22 @@ function expandRow(table, button){
         a.eq(2).removeClass('box-upper-row-right').addClass('box-upper-row-right-collapsed')
     }
 }
+
+function filter_edit_list() {
+    var text_to_search = $("#query-text-origin").val()
+    var items = $('#origin_list').children()
+
+    if (text_to_search == "") {
+        items.each(function( index ) {
+           $(this).removeClass("hidden");
+        });
+    } else {
+        items.each(function( index ) {
+            if ($(this).children().eq(2).text().toLowerCase().indexOf(text_to_search) >= 0) {
+                $(this).removeClass("hidden");
+            } else {
+                $(this).addClass("hidden");
+            }
+        });
+    }
+}
