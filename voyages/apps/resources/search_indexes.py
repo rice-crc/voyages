@@ -65,9 +65,9 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     slave_voyage_number = indexes.CharField(model_attr="voyage_number")
     slave_voyage = indexes.CharField(model_attr="voyage", null=True)
     slave_sex_age = indexes.CharField()
-    slave_country = indexes.CharField()
-    slave_embarkation_port = indexes.CharField()
-    slave_disembarkation_port = indexes.CharField()
+    slave_country = indexes.CharField(faceted=True)
+    slave_embarkation_port = indexes.CharField(faceted=True)
+    slave_disembarkation_port = indexes.CharField(faceted=True)
 
     def get_model(self):
         return AfricanName
