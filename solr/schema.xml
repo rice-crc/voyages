@@ -425,9 +425,15 @@
 
     <field name="slave_country" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="slave_country_exact" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="slave_embarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="slave_embarkation_port_exact" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="slave_disembarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_disembarkation_port_exact" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
