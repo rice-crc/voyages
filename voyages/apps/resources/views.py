@@ -9,6 +9,8 @@ from .models import *
 from .forms import *
 
 from voyages.apps.voyage.views import prepare_paginator_variables
+from voyages.apps.voyage.models import Region, BroadRegion
+from voyages.apps.voyage.globals import structure_places
 
 
 def get_all_images(request):
@@ -331,6 +333,32 @@ def get_all_slaves(request):
     countries_from_names = AfricanName.objects.exclude(country__isnull=True).values('country__name')
     countries = Country.objects.filter(name__in=countries_from_names).values('name').order_by('name')
 
+    # Collect places
+    places_from_embarkation = AfricanName.objects.exclude(embarkation_port__isnull=True).values('embarkation_port__place')
+    places_from_disembarkation = AfricanName.objects.exclude(disembarkation_port__isnull=True).values('disembarkation_port__place')
+    places = Place.objects.all()
+
+    used = []
+    places_separated_embarkation = []
+    places_separated_disembarkation = []
+
+    # For embarkation and disembarkation collect ids of places
+    for i in places_from_embarkation:
+        if i['embarkation_port__place'] not in used:
+            places_separated_embarkation.append((places.filter(place=i['embarkation_port__place']).values('id')[0]['id'],))
+            used.append(i['embarkation_port__place'])
+    used = []
+    for i in places_from_disembarkation:
+        if i['disembarkation_port__place'] not in used:
+            places_separated_disembarkation.append((places.filter(place=i['disembarkation_port__place']).values('id')[0]['id'],))
+            used.append(i['disembarkation_port__place'])
+
+    # Retrieve structured places
+    embarkation_list = structure_places(places_separated_embarkation)
+    disembarkation_list = structure_places(places_separated_disembarkation)
+
+    print "disembarkation_list = " + str(disembarkation_list)
+
     if request.method == "GET":
         results_per_page_form = ResultsPerPageOptionForm()
 
@@ -398,5 +426,7 @@ def get_all_slaves(request):
                    'options_results_per_page_form': results_per_page_form,
                    'sort_column': sort_column,
                    'sort_mode': sort_mode,
-                   'origins': countries})
+                   'origins': countries,
+                   'embarkation_list': embarkation_list,
+                   'disembarkation_list': disembarkation_list})
 
