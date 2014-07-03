@@ -345,6 +345,7 @@ def get_all_slaves(request):
     # For embarkation and disembarkation collect ids of places
     for i in places_from_embarkation:
         if i['embarkation_port__place'] not in used:
+            #print "For port = " + i['embarkation_port__place'].encode('utf-8') + ", id = " + str(places.filter(place=i['embarkation_port__place']).values('id')[0]['id'])
             places_separated_embarkation.append((places.filter(place=i['embarkation_port__place']).values('id')[0]['id'],))
             used.append(i['embarkation_port__place'])
     used = []
@@ -358,6 +359,7 @@ def get_all_slaves(request):
     disembarkation_list = structure_places(places_separated_disembarkation)
 
     print "disembarkation_list = " + str(disembarkation_list)
+    print "embarkation_list = " + str(embarkation_list)
 
     if request.method == "GET":
         results_per_page_form = ResultsPerPageOptionForm()
@@ -429,4 +431,3 @@ def get_all_slaves(request):
                    'origins': countries,
                    'embarkation_list': embarkation_list,
                    'disembarkation_list': disembarkation_list})
-
