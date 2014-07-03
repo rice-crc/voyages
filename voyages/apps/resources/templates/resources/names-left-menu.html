@@ -365,7 +365,56 @@
                       </td>
                       <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k }}</td>
                     </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <table cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                        {% for region, places in v.items %}
+                          {# Children of Broad Region (Regions) #}
+                          <tr>
+                            <td>
+                              <div class="lookup-checkbox-list-item-collapsed"></div>
+                            </td>
+                            <td>
+                              <input type="checkbox" name="form:r" value="60000:60100">
+                            </td>
+                            <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region }}</td>
+                            </td>
+                          </tr>
+                          {% if places %}
+                            <tr id="form:r_chld_60000:60200">
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <table cellspacing="0" cellpadding="0" border="0">
+                              <tbody>
+                              {% for place in places %}
+                                {# Children of Region (Ports) #}
+                                <tr>
+                                  <td></td>
+                                  <td>
+                                    <input type="checkbox" name="form:r" value="60000:60100:60104">
+                                  </td>
+                                  <td class="lookup-checkbox-list-item-2">{{ place }}</td>
+
+                                </tr>
+                              {% endfor %}
+                              </tbody>
+                              </table>
+                            </td>
+                            </tr>
+                          {% else %}
+                            <tr id="form:r_chld_60000:60200" style="display: none">
+                          {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                      </td>
+                    </tr>
                   {% endfor %}
+                  </td>
                 </tbody>
                 </table>
               </div>
