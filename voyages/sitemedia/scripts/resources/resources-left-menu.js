@@ -11,6 +11,11 @@ $(document).ready(function() {
             $(this).toggleClass("box-button-collapsed box-button");
         }
     })
+
+    $("div.lookup-checkbox-list-item-collapsed").click(function(ev){
+        var a = 4;
+        var b = $(this).parent().children();
+    })
 });
 
 function collapseRow(table, button){
@@ -69,4 +74,17 @@ function filter_edit_list() {
             }
         });
     }
+}
+
+function expandable_embarkation(div, id){
+    $(div).toggleClass("lookup-checkbox-list-item-collapsed lookup-checkbox-list-item-expanded");
+    var a = $(div).parent().parent().parent().find("#tr" + id + "_child");
+    if (a.css('display') == 'none'){
+        a.removeAttr('style');
+    } else{
+        a.css({ 'display': "none" });
+    }
+
+
+    return false;
 }
