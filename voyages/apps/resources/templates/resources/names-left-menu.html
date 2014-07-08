@@ -356,17 +356,17 @@
                 <table cellspacing="0" cellpadding="0" border="0">
                 <tbody>
                   {% for k, v in embarkation_list.items %}
-                    <tr id="tr{{ k.value }}">
+                    <tr id="tr_{{ k.value }}">
                       <td>
                         <div id="l_arrow_{{ k.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, {{ k.value }})"></div>
                       </td>
                       <td>
-                        <input type="checkbox" name="checkbox:{{ k.value }}" value="{{ k.value }}">
+                        <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
                       </td>
                       <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k }}</td>
                     </tr>
                     {% if v.items %}
-                    <tr id="tr{{ k.value }}_child" style="display: none">
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
                       <td></td>
                       <td></td>
                       <td>
@@ -374,18 +374,18 @@
                         <tbody>
                         {% for region, places in v.items %}
                           {# Children of Broad Region (Regions) #}
-                          <tr id="tr:{{ k.value }}:{{ region.value }}">
+                          <tr id="tr_{{ k.value }}_{{ region.value }}">
                             <td>
                               <div id="r_arrow_{{ region.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, '{{ k.value }}_{{ region.value }}')"></div>
                             </td>
                             <td>
-                              <input type="checkbox" name="checkbox:{{ k.value }}:{{ region.value }}" value="{{ k.value }}:{{ region.value }}">
+                              <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
                             </td>
                             <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region }}</td>
                             </td>
                           </tr>
                           {% if places %}
-                            <tr id="tr{{ k.value }}_{{ region.value }}_child" style="display: none">
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
                             <td></td>
                             <td></td>
                             <td>
@@ -393,10 +393,10 @@
                               <tbody>
                               {% for place in places %}
                                 {# Children of Region (Ports) #}
-                                <tr id="tr:{{ k.value }}:{{ region.value }}:{{ place.value }}">
+                                <tr id="tr_{{ k.value }}_{{ region.value }}_{{ place.value }}">
                                   <td></td>
                                   <td>
-                                    <input type="checkbox" name="checkbox:{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}">
+                                    <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
                                   </td>
                                   <td class="lookup-checkbox-list-item-2">{{ place }}</td>
                                 </tr>
@@ -406,14 +406,14 @@
                             </td>
                             </tr>
                           {% else %}
-                            <tr id="tr{{ k.value }}_{{ region.value }}_child" style="display: none">
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
                           {% endif %}
                         {% endfor %}
                         </tbody>
                         </table>
                       </td>
                     {% else %}
-                    <tr id="tr{{ k.value }}_child" style="display: none">
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
                     {% endif %}
                     </tr>
                   {% endfor %}

@@ -78,12 +78,61 @@ function filter_edit_list() {
 
 function expandable_embarkation(div, id){
     $(div).toggleClass("lookup-checkbox-list-item-collapsed lookup-checkbox-list-item-expanded");
-    var a = $(div).parent().parent().parent().find("#tr" + id + "_child");
+    var a = $(div).parent().parent().parent().find("#tr_" + id + "_child");
     if (a.css('display') == 'none'){
         a.removeAttr('style');
     } else{
         a.css({ 'display': "none" });
     }
+
+
+    return false;
+}
+
+function embarkation_choices(input, id){
+    var a = id;
+    var regex = new RegExp(/_/g);
+    var count = id.toString().match(regex);
+
+    if (count == null){
+        /* clicked on broad region */
+
+    } else if (count.length == 1){
+        /* Clicked on region */
+        /* Get parent of the entire table */
+        var par = $(input).parents().eq(8);
+
+        /* Get parent (broad region) of this region and marked it */
+        regex = new RegExp(/[0-9]+/g);
+        var region = a.toString().match(regex)[0];
+        $(par).find("#tr_" + region).children().eq(1).children().eq(0).prop("checked", true);
+
+        /* Get all children (Ports) and marked them */
+        var children_boxes = "checkbox_" + a + "_";
+        $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", true);
+    }
+    else{
+        /* Clicked on port */
+        /* Get parent of the entire table */
+        var par = $(input).parents().eq(10);
+
+        /* Get parent (region) and grandparent (broad region) of port */
+        regex = new RegExp(/[0-9]+/g);
+        var region = a.toString().match(regex)[0];
+        regex = new RegExp(/[0-9]+_[0-9]+/g);
+        var broad_region = a.toString().match(regex)[0];
+
+        /* Set them as marked */
+        $(par).find("#tr_" + region).children().eq(1).children().eq(0).prop("checked", true);
+        $(par).find("#tr_" + broad_region).children().eq(1).children().eq(0).prop("checked", true);
+    }
+
+    return false;
+
+
+}
+
+function mark_all_children(input, id){
 
 
     return false;
