@@ -94,42 +94,144 @@ function embarkation_choices(input, id){
     var regex = new RegExp(/_/g);
     var count = id.toString().match(regex);
 
-    if (count == null){
-        /* clicked on broad region */
+    if ($(input).prop('checked')){
+        if (count == null) {
+            /* clicked on broad region */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(5);
 
-    } else if (count.length == 1){
-        /* Clicked on region */
-        /* Get parent of the entire table */
-        var par = $(input).parents().eq(8);
+            /* Get all children (Ports) and mark them */
+            var children_boxes = "checkbox_" + a + "_";
+            $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", true);
 
-        /* Get parent (broad region) of this region and marked it */
-        regex = new RegExp(/[0-9]+/g);
-        var region = a.toString().match(regex)[0];
-        $(par).find("#tr_" + region).children().eq(1).children().eq(0).prop("checked", true);
+        } else if (count.length == 1){
+            /* Clicked on region */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(8);
 
-        /* Get all children (Ports) and marked them */
-        var children_boxes = "checkbox_" + a + "_";
-        $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", true);
+            /* Get parent (broad region) of this region and mark it */
+            regex = new RegExp(/[0-9]+/g);
+            var broad_region = a.toString().match(regex)[0];
+            $(par).find("#tr_" + broad_region).children().eq(1).children().eq(0).prop("checked", true);
+
+            /* Get all children (Ports) and mark them */
+            var children_boxes = "checkbox_" + a + "_";
+            $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", true);
+        }
+        else{
+            /* Clicked on port */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(10);
+
+            /* Get parent (region) and grandparent (broad region) of port */
+            regex = new RegExp(/[0-9]+/g);
+            var region = a.toString().match(regex)[0];
+            regex = new RegExp(/[0-9]+_[0-9]+/g);
+            var broad_region = a.toString().match(regex)[0];
+
+            /* Set them as marked */
+            $(par).find("#tr_" + region).children().eq(1).children().eq(0).prop("checked", true);
+            $(par).find("#tr_" + broad_region).children().eq(1).children().eq(0).prop("checked", true);
+        }
+    } else{
+        if (count == null){
+            /* clicked on broad region */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(5);
+
+            /* Get all children (Ports) and unmark them */
+            var children_boxes = "checkbox_" + a + "_";
+            $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", false);
+        } else if (count.length == 1){
+            /* Clicked on region */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(10);
+
+            /* Get parent (broad region) of this region */
+            regex = new RegExp(/[0-9]+/g);
+            var broad_region = a.toString().match(regex)[0];
+
+            /* Get all children (Ports) and unmark them */
+            var children_boxes = "checkbox_" + a + "_";
+            $(par).find("input[name^=" + children_boxes.toString() + "]").prop("checked", false);
+
+            /* Get all neighbors of region */
+            regex = new RegExp(/[0-9]+_/g);
+            var neighbors = "checkbox_" + a.toString().match(regex)[0];
+            var broad_region_all_children = $(par).find("input[name^=" + neighbors.toString() + "]")
+
+            /* Count how many of regions are still checked */
+            var count_checked = 0;
+            regex = new RegExp(/_/g);
+            broad_region_all_children.each(function( index ){
+                var name = $(this).val();
+                count = name.toString().match(regex).length;
+                if (count == 1 && $(this).prop('checked')){
+                    count_checked++;
+                }
+            })
+
+            if (count_checked == 0){
+                /* if no more regions checked, uncheck the broad region */
+                $(par).find("input[name^=checkbox_" + broad_region.toString() + "]").prop("checked", false);
+            }
+        } else{
+            /* Clicked on port */
+            /* Get parent of the entire table */
+            var par = $(input).parents().eq(10);
+
+            /* Get parent (region) id and grandparent (broad region) id of this port */
+            regex = new RegExp(/[0-9]+_[0-9]+/g);
+            var region = a.toString().match(regex)[0];
+            regex = new RegExp(/[0-9]+/g);
+            var broad_region = a.toString().match(regex)[0];
+
+            /* Get all neighbors of place */
+            regex = new RegExp(/[0-9]+_[0-9]+_/g);
+            var neighbors = "checkbox_" + a.toString().match(regex)[0];
+            var region_all_children = $(par).find("input[name^=" + neighbors.toString() + "]")
+
+            /* Count how many of regions are still checked */
+            var count_checked = 0;
+            regex = new RegExp(/_/g);
+            region_all_children.each(function( index ){
+                var name = $(this).val();
+                count = name.toString().match(regex).length;
+                if (count == 2 && $(this).prop('checked')){
+                    count_checked++;
+                }
+            })
+
+            if (count_checked == 0){
+                /* if no more regions checked, uncheck the broad region */
+                $(par).find("input[name^=checkbox_" + region.toString() + "]").prop("checked", false);
+
+                /* Check regions as well */
+                /* Get all neighbors of region */
+                regex = new RegExp(/[0-9]+_/g);
+                var neighbors = "checkbox_" + a.toString().match(regex)[0];
+                var broad_region_all_children = $(par).find("input[name^=" + neighbors.toString() + "]")
+
+                /* Count how many of regions are still checked */
+                count_checked = 0;
+                regex = new RegExp(/_/g);
+                broad_region_all_children.each(function( index ){
+                    var name = $(this).val();
+                    count = name.toString().match(regex).length;
+                    if (count == 1 && $(this).prop('checked')){
+                        count_checked++;
+                    }
+                })
+
+                if (count_checked == 0){
+                    /* if no more regions checked, uncheck the broad region */
+                    $(par).find("input[name^=checkbox_" + broad_region.toString() + "]").prop("checked", false);
+                }
+            }
+
+        }
     }
-    else{
-        /* Clicked on port */
-        /* Get parent of the entire table */
-        var par = $(input).parents().eq(10);
-
-        /* Get parent (region) and grandparent (broad region) of port */
-        regex = new RegExp(/[0-9]+/g);
-        var region = a.toString().match(regex)[0];
-        regex = new RegExp(/[0-9]+_[0-9]+/g);
-        var broad_region = a.toString().match(regex)[0];
-
-        /* Set them as marked */
-        $(par).find("#tr_" + region).children().eq(1).children().eq(0).prop("checked", true);
-        $(par).find("#tr_" + broad_region).children().eq(1).children().eq(0).prop("checked", true);
-    }
-
     return false;
-
-
 }
 
 function mark_all_children(input, id){
