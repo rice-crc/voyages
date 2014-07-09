@@ -234,8 +234,14 @@ function embarkation_choices(input, id){
     return false;
 }
 
-function mark_all_children(input, id){
-
-
+function selectAllPorts(action, item){
+    var par = $(item).parents().eq(5);
+    var b = par.find("input[name^=checkbox_]")
+    if (action == 1) {
+        var aaa = $(par).find("input[name^=checkbox_]")
+        $(par).find("input[name^=checkbox_]").prop("checked", true);
+    } else{
+        $(par).find("input[name^=checkbox]").prop("checked", false);
+    }
     return false;
 }

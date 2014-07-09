@@ -277,10 +277,10 @@
           <tbody>
             <tr>
               <td>
-                <input type="button" onclick="LookupCheckboxListGlobals.selectAll('form:c')" value="Select all">
+                <input type="button" onclick="selectAllPorts(1, this)" value="Select all">
               </td>
               <td>
-                <input type="button" onclick="LookupCheckboxListGlobals.deselectAll('form:c')" value="Deselect all">
+                <input type="button" onclick="selectAllPorts(-1, this)" value="Deselect all">
               </td>
             </tr>
           </tbody>
@@ -426,10 +426,10 @@
               <tbody>
                 <tr>
                   <td>
-                    <input type="button" onclick="LookupCheckboxListGlobals.selectAll('form:r')" value="Select all">
+                    <input type="button" onclick="selectAllPorts(1, this)" value="Select all">
                   </td>
                   <td>
-                    <input type="button" onclick="LookupCheckboxListGlobals.deselectAll('form:r')" value="Deselect all">
+                    <input type="button" onclick="selectAllPorts(-1, this)" value="Deselect all">
                   </td>
                 </tr>
               </tbody>
