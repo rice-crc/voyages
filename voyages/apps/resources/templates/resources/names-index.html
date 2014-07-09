@@ -247,7 +247,11 @@
         {% else %}
           <td></td>
         {% endif %}
-        <td>{{ record.object.country.name }}</td>
+        {% if record.object.country %}
+          <td>{{ record.object.country.name }}</td>
+        {% else %}
+          <td></td>
+        {% endif %}
         <td style="text-align: left">
         {% if record.object.voyage %}
           <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
