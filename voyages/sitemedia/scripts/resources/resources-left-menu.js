@@ -80,7 +80,7 @@ function filter_edit_list() {
 function filter_embarkation() {
     var text_to_search = $("#query-text-embarkation").val()
     var broad_regions = $('#embarkation_list').find("tr[id^=tr_]");
-    var trs_no_children = $('#embarkation_list').children().find("tr[id^=tr_]:not([id$=child])");
+    var trs_no_children = $('#embarkation_list').find("tr[id^=tr_]:not([id$=child])");
 
     if (text_to_search == "") {
         /* uncover broad regions and places, TODO: add places */
