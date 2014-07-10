@@ -67,6 +67,7 @@ function filter_edit_list() {
         });
     } else {
         items.each(function( index ) {
+
             if ($(this).children().eq(2).text().toLowerCase().indexOf(text_to_search) >= 0) {
                 $(this).removeClass("hidden");
             } else {
@@ -74,6 +75,138 @@ function filter_edit_list() {
             }
         });
     }
+}
+
+function filter_embarkation() {
+    var text_to_search = $("#query-text-embarkation").val()
+    var broad_regions = $('#embarkation_list').find("tr[id^=tr_]");
+    var trs_no_children = $('#embarkation_list').children().find("tr[id^=tr_]:not([id$=child])");
+
+    if (text_to_search == "") {
+        /* uncover broad regions and places, TODO: add places */
+        broad_regions.each(function( index ) {
+            if ($(this).attr('id').indexOf("child") < 0) {
+                $(this).removeClass("hidden");
+            }
+        });
+
+        /* collapse all regions/places */
+        trs_no_children.each(function( index ){
+            if ($(this).children().first().children().first().hasClass('lookup-checkbox-list-item-expanded')) {
+                var regex = new RegExp(/_/g);
+                var count = $(this).attr('id').toString().match(regex);
+                if (count.length == 1){
+                    regex = new RegExp(/[0-9]+/g);
+                    var id = $(this).attr('id').toString().match(regex);
+                    expandable_embarkation($(this).children().first().children().first(), id);
+                } else if (count.length == 2){
+                    regex = new RegExp(/[0-9]+_[0-9]+/g);
+                    var id = $(this).attr('id').toString().match(regex);
+                    expandable_embarkation($(this).children().first().children().first(), id);
+                }
+                var id = $(this).attr('id').toString().match(regex);
+
+            }
+        });
+    } else {
+        /* Iterate through all broad regions */
+        broad_regions.each(function( index ) {
+            var count_broad_regions;
+            var regex = new RegExp(/_/g);
+            var bregion_counter = $(this).attr('id').toString().match(regex);
+            if (bregion_counter.length == 2 && $(this).attr('id').indexOf("child") >= 0) {
+                /* For child, go deeper */
+                count_broad_regions = 0;
+                $(this).children().eq(2).children().first().children().first().children().each(function ( index ){
+                    /* Iterate through all regions in this broad region */
+                    if ($(this).attr('id').indexOf("child") >= 0) {
+                        var count_regions = 0;
+                        $(this).children().eq(2).children().first().children().first().children().each(function ( index ){
+                            /* Iterate through all places in this region */
+                            if ($(this).children().eq(2).text().toLowerCase().indexOf(text_to_search) >= 0) {
+                                $(this).removeClass("hidden");
+                                count_regions++;
+                            } else {
+                                $(this).addClass("hidden");
+                            }
+                        });
+
+                        if (count_regions > 0){
+                            unhide_parents($(this), "region");
+                        }
+
+                    } else {
+                        /* For region, check if needs to be hidden */
+                        var aaaa = $(this).children().eq(2).text();
+                        if ($(this).children().eq(2).text().toLowerCase().indexOf(text_to_search) >= 0) {
+                            $(this).removeClass("hidden");
+                            /* Un-hide parents (broad region) if necessary */
+                            count_broad_regions++;
+                            //unhide_parents($(this));
+                        } else {
+                            $(this).addClass("hidden");
+                        }
+                    }
+                });
+
+                if (count_broad_regions > 0){
+                    unhide_parents($(this), "broad_region");
+                }
+            } else if (bregion_counter.length == 1) {
+                /* For broad region, check if needs to be hidden */
+                if ($(this).text().toLowerCase().indexOf(text_to_search) >= 0) {
+                    $(this).removeClass("hidden");
+                } else {
+                    $(this).addClass("hidden");
+                }
+            }
+        });
+    }
+
+    return false;
+}
+
+function unhide_parents(obj, type){
+    var regex = new RegExp(/_/g);
+    var count = $(obj).attr('id').toString().match(regex);
+
+    if (type.toString() == "broad_region"){
+        /* Only broad region to un-hide */
+        var par = $(obj).parents().eq(5);
+        var regex = new RegExp(/[0-9]+/g);
+        var broad_region = $(obj).attr('id').toString().match(regex)[0];
+        var broad_region_elem = $(par).find("#tr_" + broad_region).removeClass("hidden");
+
+        /* expand broad region if necessary */
+        if (broad_region_elem.children().first().children().first().hasClass('lookup-checkbox-list-item-collapsed')) {
+            expandable_embarkation(broad_region_elem.children().first().children().first(), broad_region);
+        }
+    } else{
+        /* Region and broad region to un-hide */
+        var par = $(obj).parents().eq(7);
+
+        /* Get broad region, unhide and expand if necessary */
+        var regex = new RegExp(/[0-9]+/g);
+        var broad_region = $(obj).attr('id').toString().match(regex)[0];
+        var broad_region_elem = $(par).find("#tr_" + broad_region).removeClass("hidden");
+        if (broad_region_elem.children().first().children().first().hasClass('lookup-checkbox-list-item-collapsed')) {
+            expandable_embarkation(broad_region_elem.children().first().children().first(), broad_region);
+        }
+
+        /* Get region, unhide and expand if necessary */
+        regex = new RegExp(/[0-9]+_[0-9]+/g);
+        var region = $(obj).attr('id').toString().match(regex)[0];
+        var region_elem = $(par).find("#tr_" + region).removeClass("hidden");
+        var chard = region_elem.children().first().children().first();
+        if (region_elem.children().first().children().first().hasClass('lookup-checkbox-list-item-collapsed')) {
+            expandable_embarkation(region_elem.children().first().children().first(), region);
+        }
+
+        var xcz = $(par).find("#tr_" + region + "_child");
+        $(par).find("#tr_" + region + "_child").removeClass("hidden");
+    }
+
+    return false;
 }
 
 function expandable_embarkation(div, id){
