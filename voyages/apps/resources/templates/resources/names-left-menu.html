@@ -28,7 +28,7 @@
         </td>
         <td class="box-set-upper-row-upper-right"></td>
     </tr>
-    <tr class="row-collapsed">
+    <tr class="row">
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
@@ -40,19 +40,19 @@
                 <tr>
                   <td class="slaves-query-variable-title">African name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="search_slave_name" type="text" style="width: 150px;" value="" name="search_slave_name">
+                    <input id="search_slave_name" type="text" style="width: 150px;" value="" name="slave_name">
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Ship name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp20" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp20">
+                    <input id=search_slave_ship_name type="text" style="width: 150px;" value="" name="slave_ship_name">
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Voyage ID</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp25" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp25">
+                    <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="" name="slave_voyage_number">
                   </td>
                 </tr>
                 <tr>
@@ -66,11 +66,11 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp36" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp36">
+                          <input id="search_slave_start_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__gte">
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp40" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp40">
+                          <input id="search_slave_stop_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__lte">
                         </td>
                       </tr>
                       </tbody>
@@ -89,11 +89,11 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp51" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp51">
+                          <input id="search_slave_start_age" type="text" style="width: 40px;" value="" name="slave_age__gte">
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp55" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp55">
+                          <input id="search_slave_stop_age" type="text" style="width: 40px;" value="" name="slave_age__lte">
                         </td>
                       </tr>
                       </tbody>
@@ -112,11 +112,11 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp66" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp66">
+                          <input id="search_slave_start_height" type="text" style="width: 40px;" value="" name="slave_height__gte">
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp70" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp70">
+                          <input id="search_slave_stop_height" type="text" style="width: 40px;" value="" name="slave_height__lte">
                         </td>
                       </tr>
                 </tbody>
@@ -134,11 +134,11 @@
                     <tbody>
                     <tr>
                       <td style="padding: 0px;">
-                        <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp80">
+                        <input type="checkbox" value="true" checked="checked" name="sex_Boy">
                       </td>
                       <td style="padding: 0px; width: 40px;">boys</td>
                       <td style="padding: 0px;">
-                        <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp84">
+                        <input type="checkbox" value="true" checked="checked" name="sex_Girl">
                       </td>
                       <td style="padding: 0px;">girls</td>
                     </tr>
@@ -153,11 +153,11 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp93">
+                      <input type="checkbox" value="true" checked="checked" name="sex_Man">
                     </td>
                     <td style="padding: 0px; width: 40px;">men</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp97">
+                      <input type="checkbox" value="true" checked="checked" name="sex_Woman">
                     </td>
                     <td style="padding: 0px;">women</td>
                     </tr>
@@ -172,11 +172,11 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp106">
+                      <input type="checkbox" value="true" checked="checked" name="sex_Male">
                     </td>
                     <td style="padding: 0px; width: 40px;">males</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp110">
+                      <input type="checkbox" value="true" checked="checked" name="sex_Female">
                     </td>
                     <td style="padding: 0px">females</td>
                     </tr>
@@ -194,10 +194,10 @@
         <tbody>
             <tr>
                 <td style="padding: 5px 0px 5px 0px;">
-                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="search" name="action">
+                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="action">
                 </td>
                 <td style="padding: 5px 0px 5px 5px;">
-                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="reset" name="action">
+                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New Query" name="action">
                 </td>
             </tr>
         </tbody>
@@ -208,7 +208,7 @@
         <div class="box-middle-row-right"></div>
     </td>
     </tr>
-    <tr class="row-collapsed">
+    <tr class="row">
         <td class="box-set-lower-row-upper-left"></td>
         <td class="box-set-lower-row-upper-middle"></td>
         <td class="box-set-lower-row-upper-right"></td>
@@ -263,7 +263,7 @@
                   <tr>
                     <td></td>
                     <td>
-                      <input id="form:c_196" type="checkbox" name="form:c" onclick="LookupCheckboxListGlobals.itemToggled('form:c',this)" value="196">
+                      <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
                     </td>
                     <td class="lookup-checkbox-list-item-0">{{ record.name }}</td>
                   </tr>
@@ -291,10 +291,10 @@
         <tbody>
           <tr>
             <td style="padding: 5px 0px 5px 0px;">
-              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="submitBoxCountry">
+              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="action">
             </td>
             <td style="padding: 5px 0px 5px 5px;">
-              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp128">
+              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="action">
             </td>
           </tr>
         </tbody>
@@ -331,7 +331,7 @@
         </td>
         <td class="box-set-upper-row-bottom-right-collapsed"></td>
     </tr>
-    <tr class="row">
+    <tr class="row-collapsed">
         <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
         </td>
@@ -453,7 +453,7 @@
                       <tbody>
                         <tr>
                           <td style="padding: 0px;">
-                            <input type="checkbox" onclick="SlavesSearch.searchFromPlacesBox(false)" value="true" checked="checked" name="form:_idJsp145">
+                            <input type="checkbox" onclick="SlavesSearch.searchFromPlacesBox(false)" value="true" checked="checked" name="disembarkation_{{ place.value }}">
                           </td>
                           <td style="padding: 0px;">{{ place }}</td>
                         </tr>
@@ -472,10 +472,10 @@
             <tbody>
               <tr>
                 <td style="padding: 5px 0px 5px 0px;">
-                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="submitBoxPlaces">
+                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="action">
                 </td>
                 <td style="padding: 5px 0px 5px 5px;">
-                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp161">
+                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="action">
                 </td>
               </tr>
             </tbody>
@@ -490,7 +490,7 @@
 
     </tr>
 
-    <tr class="row">
+    <tr class="row-collapsed">
       <td class="box-set-lower-row-bottom-left"></td>
       <td class="box-set-lower-row-bottom-middle"></td>
       <td class="box-set-lower-row-bottom-right"></td>
@@ -507,7 +507,8 @@
   <tr>
     <td class="box-upper-row-left"></td>
     <td class="box-upper-row-middle">
-    <input type="hidden" value="expanded" name="form:_idJsp164_state">
+{#        TODO: Is this used? #}
+{#    <input type="hidden" value="expanded" name="form:_idJsp164_state">#}
     <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
     <tbody>
       <tr>

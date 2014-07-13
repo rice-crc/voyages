@@ -86,19 +86,19 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_slave_country(self, obj):
         if obj.country is not None:
-            return obj.country.name
+            return obj.country.country_id
         else:
             return None
 
     def prepare_slave_embarkation_port(self, obj):
         if obj.embarkation_port is not None:
-            return obj.embarkation_port.place
+            return obj.embarkation_port.value
         else:
             return None
 
     def prepare_slave_disembarkation_port(self, obj):
         if obj.disembarkation_port is not None:
-            return obj.disembarkation_port.place
+            return obj.disembarkation_port.value
         else:
             return None
 
