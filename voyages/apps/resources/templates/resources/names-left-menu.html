@@ -40,19 +40,31 @@
                 <tr>
                   <td class="slaves-query-variable-title">African name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="search_slave_name" type="text" style="width: 150px;" value="" name="slave_name">
+                    {% if "slave_name" in query_dict %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="{{ query_dict.slave_name }}" name="slave_name">
+                    {% else %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="" name="slave_name">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Ship name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id=search_slave_ship_name type="text" style="width: 150px;" value="" name="slave_ship_name">
+                    {% if "slave_ship_name" in query_dict %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="{{ query_dict.slave_ship_name }}" name="slave_ship_name">
+                    {% else %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="" name="slave_ship_name">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Voyage ID</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="" name="slave_voyage_number">
+                    {% if "slave_voyage_number" in query_dict %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="{{ query_dict.slave_voyage_number }}" name="slave_voyage_number">
+                    {% else %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="" name="slave_voyage_number">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
@@ -66,11 +78,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="search_slave_start_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__gte">
+                          {% if "slave_date_arrived__gte" in query_dict %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__gte }}" name="slave_date_arrived__gte">
+                          {% else %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="search_slave_stop_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__lte">
+                          {% if "slave_date_arrived__lte" in query_dict %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__lte }}" name="slave_date_arrived__lte">
+                          {% else %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__lte">
+                          {% endif %}
                         </td>
                       </tr>
                       </tbody>
@@ -89,11 +109,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="search_slave_start_age" type="text" style="width: 40px;" value="" name="slave_age__gte">
+                          {% if "slave_age__gte" in query_dict %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__gte }}" name="slave_age__gte">
+                          {% else %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="" name="slave_age__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="search_slave_stop_age" type="text" style="width: 40px;" value="" name="slave_age__lte">
+                          {% if "slave_age__lte" in query_dict %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__lte }}" name="slave_age__lte">
+                          {% else %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="" name="slave_age__lte">
+                          {% endif %}
                         </td>
                       </tr>
                       </tbody>
@@ -112,11 +140,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="search_slave_start_height" type="text" style="width: 40px;" value="" name="slave_height__gte">
+                          {% if "slave_height__gte" in query_dict %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__gte }}" name="slave_height__gte">
+                          {% else %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="" name="slave_height__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="search_slave_stop_height" type="text" style="width: 40px;" value="" name="slave_height__lte">
+                          {% if "slave_height__lte" in query_dict %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__lte }}" name="slave_height__lte">
+                          {% else %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="" name="slave_height__lte">
+                          {% endif %}
                         </td>
                       </tr>
                 </tbody>
@@ -134,11 +170,19 @@
                     <tbody>
                     <tr>
                       <td style="padding: 0px;">
-                        <input type="checkbox" value="true" checked="checked" name="sex_Boy">
+                        {% if "slave_sex_age__in" in query_dict and "Boy" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Boy">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Boy">
+                        {% endif %}
                       </td>
                       <td style="padding: 0px; width: 40px;">boys</td>
                       <td style="padding: 0px;">
-                        <input type="checkbox" value="true" checked="checked" name="sex_Girl">
+                        {% if "slave_sex_age__in" in query_dict and "Girl" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Girl">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Girl">
+                        {% endif %}
                       </td>
                       <td style="padding: 0px;">girls</td>
                     </tr>
@@ -153,11 +197,19 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" value="true" checked="checked" name="sex_Man">
+                      {% if "slave_sex_age__in" in query_dict and "Man" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Man">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Man">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px; width: 40px;">men</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" value="true" checked="checked" name="sex_Woman">
+                      {% if "slave_sex_age__in" in query_dict and "Woman" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Woman">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Woman">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px;">women</td>
                     </tr>
@@ -172,11 +224,19 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" value="true" checked="checked" name="sex_Male">
+                      {% if "slave_sex_age__in" in query_dict and "Male" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Male">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Male">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px; width: 40px;">males</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" value="true" checked="checked" name="sex_Female">
+                      {% if "slave_sex_age__in" in query_dict and "Female" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Female">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Female">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px">females</td>
                     </tr>
@@ -263,7 +323,11 @@
                   <tr>
                     <td></td>
                     <td>
-                      <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
+                      {% if "slave_country_exact__in" in query_dict and record.country_id in query_dict.slave_country_exact__in %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" checked="checked" name="origin_{{ record.country_id }}">
+                      {% else %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
+                      {% endif %}
                     </td>
                     <td class="lookup-checkbox-list-item-0">{{ record.name }}</td>
                   </tr>
@@ -361,7 +425,11 @@
                         <div id="l_arrow_{{ k.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, {{ k.value }})"></div>
                       </td>
                       <td>
-                        <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% if "slave_embarkation_port__in" in query_dict and k.value in query_dict.slave_embarkation_port__in %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" checked="checked" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% else %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% endif %}
                       </td>
                       <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k }}</td>
                     </tr>
@@ -379,7 +447,11 @@
                               <div id="r_arrow_{{ region.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, '{{ k.value }}_{{ region.value }}')"></div>
                             </td>
                             <td>
-                              <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% if "slave_embarkation_port__in" in query_dict and region.value in query_dict.slave_embarkation_port__in %}
+                                <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% else %}
+                                  <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% endif %}
                             </td>
                             <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region }}</td>
                             </td>
@@ -396,7 +468,11 @@
                                 <tr id="tr_{{ k.value }}_{{ region.value }}_{{ place.value }}">
                                   <td></td>
                                   <td>
-                                    <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% if "slave_embarkation_port__in" in query_dict and place.value in query_dict.slave_embarkation_port__in %}
+                                      <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% else %}
+                                      <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% endif %}
                                   </td>
                                   <td class="lookup-checkbox-list-item-2">{{ place }}</td>
                                 </tr>
@@ -453,7 +529,11 @@
                       <tbody>
                         <tr>
                           <td style="padding: 0px;">
-                            <input type="checkbox" onclick="SlavesSearch.searchFromPlacesBox(false)" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+                            {% if "slave_disembarkation_port__in" in query_dict and place.value not in query_dict.slave_disembarkation_port__in %}
+                              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
+                            {% else %}
+                              <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+                            {% endif %}
                           </td>
                           <td style="padding: 0px;">{{ place }}</td>
                         </tr>
