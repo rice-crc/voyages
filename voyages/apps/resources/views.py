@@ -313,15 +313,29 @@ def get_all_slaves(request):
     results_per_page_form = None
     results_per_page = 20
     current_page = 1
+    sort_string = ""
+
+    try:
+        results = request.session["results"]
+    except KeyError:
+        results = {}
+
+    try:
+        query_dict = request.session["names_query_dict"];
+    except KeyError:
+        query_dict = {}
+
     try:
         sort_column = request.session["sort_column"]
     except KeyError:
-        sort_column = None
+        sort_column = "slave_id"
+        request.session["sort_column"] = "slave_id"
 
     try:
         sort_mode = request.session["sort_mode"]
     except KeyError:
-        sort_mode = None
+        sort_mode = "1"
+        request.session["sort_mode"] = "1"
 
     # If there is no requested page number, serve 1
     desired_page = request.POST.get('desired_page')
@@ -358,83 +372,98 @@ def get_all_slaves(request):
     embarkation_list = structure_places(places_separated_embarkation)
     disembarkation_list = structure_places(places_separated_disembarkation)
 
-    print "disembarkation_list = " + str(disembarkation_list)
-    print "embarkation_list = " + str(embarkation_list)
-
     if request.method == "GET":
         results_per_page_form = ResultsPerPageOptionForm()
 
-        if sort_column is not None:
+        # If clicked column, sort and update session
+        if len(results) == 0:
             if sort_mode is "1":
-                search_set = SearchQuerySet().models(AfricanName).order_by(sort_column)
+                sort_string = sort_column
             if sort_mode is "2":
-                search_set = SearchQuerySet().models(AfricanName).order_by("-" + sort_column)
+                sort_string = "-" + sort_column
 
-        else:
-            search_set = SearchQuerySet().models(AfricanName).order_by('slave_id')
+            results = SearchQuerySet().models(AfricanName).order_by(sort_string)
+
+            request.session['results'] = results
+            request.session['sort_column'] = sort_column
+            request.session['sort_mode'] = sort_mode
+
     if request.method == "POST":
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
 
-        # Perform search if necessary
-        if request.POST.get("action") is not None and request.POST.get("action") == "Search":
+        if request.POST.get("action") is not None and request.POST.get("action") == "New Query":
+            results = SearchQuerySet().models(AfricanName).order_by("slave_id")
+            query_dict = {}
+            request.session['results'] = results
+            request.session['names_query_dict'] = {}
+            request.session['sort_column'] = "slave_id"
+            sort_column = "slave_id"
+            sort_mode = "1"
+            request.session['sort_mode'] = "1"
+            results_per_page = 20
+            request.session['slaves_per_page_choice'] = None
+            request.session['slaves_per_page'] = results_per_page
+            current_page = 1
+
+        elif request.POST.get("sort_column") is not None:
+            # If column sorting has changed, reset the mode
+            if request.session["sort_column"] != request.POST.get("sort_column"):
+                sort_mode = "2"
+            request.session["sort_column"] = request.POST.get("sort_column")
+            sort_column = request.POST.get("sort_column")
+
+            if sort_mode == "2":
+                sort_string = request.POST.get("sort_column")
+                request.session["sort_mode"] = "1"
+                sort_mode = "1"
+            else:
+                sort_string = "-" + request.POST.get("sort_column")
+                request.session["sort_mode"] = "2"
+                sort_mode = "2"
+
+            if sort_mode == "1":
+                sort_string = sort_column
+            if sort_mode == "2":
+                sort_string = "-" + sort_column
+
+            results = SearchQuerySet().filter(**query_dict).models(AfricanName).order_by(sort_string)
+            request.session['results'] = results
+
+        elif request.POST.get("action") is not None and request.POST.get("action") == "Search":
+            # Perform search if necessary
             query_dict = create_query_dict(request.POST)
-            print query_dict
-            search_set = SearchQuerySet().filter(**query_dict).models(AfricanName)
+            request.session['names_query_dict'] = query_dict
 
-            print "len of search = " + str(len(search_set))
+            if sort_mode == "1":
+                sort_string = sort_column
+            if sort_mode == "2":
+                sort_string = "-" + sort_column
 
-        else:
-            search_set = SearchQuerySet().models(AfricanName).order_by("slave_id")
+            if len(query_dict) > 0:
+                results = SearchQuerySet().filter(**query_dict).models(AfricanName).order_by(sort_string)
+            else:
+                results = SearchQuerySet().models(AfricanName).order_by(sort_string)
+            request.session['results'] = results
 
-        # if results_per_page_form.is_valid():
-        #     results_per_page = results_per_page_form.cleaned_option()
-        #     request.session['slaves_per_page_choice'] = results_per_page_form.cleaned_data['option']
-        #     request.session['slaves_per_page'] = results_per_page
-        # elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
-        #     results_per_page = request.session['slaves_per_page']
-        #     results_per_page_form.fields['option'].initial = request.session['slaves_per_page_choice']
-        #     results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['slaves_per_page_choice']})
-        #
-        # if request.POST.get("sort_column") is not None:
-        #
-        #     # If column sorting has changed, reset the mode
-        #     if request.POST.get("sort_column") != sort_column:
-        #         sort_mode = None
-        #     request.session["sort_column"] = request.POST.get("sort_column")
-        #     sort_column = request.POST.get("sort_column")
-        #
-        #     if sort_mode is None:
-        #         search_set = SearchQuerySet().models(AfricanName).order_by(request.POST.get("sort_column"))
-        #         request.session["sort_mode"] = "1"
-        #         sort_mode = "1"
-        #     elif sort_mode == "1":
-        #         search_set = SearchQuerySet().models(AfricanName).order_by("-" + request.POST.get("sort_column"))
-        #         request.session["sort_mode"] = "2"
-        #         sort_mode = "2"
-        #     elif sort_mode == "2":
-        #         search_set = SearchQuerySet().models(AfricanName).order_by("slave_id")
-        #         request.session["sort_mode"] = None
-        #         request.session["sort_column"] = None
-        #         sort_mode = None
-        #         sort_column = None
-        #
-        # elif sort_column is not None:
-        #     if sort_mode == "1":
-        #         search_set = SearchQuerySet().models(AfricanName).order_by(sort_column)
-        #     if sort_mode == "2":
-        #         search_set = SearchQuerySet().models(AfricanName).order_by("-" + sort_column)
-        #
-        # else:
-        #     search_set = SearchQuerySet().models(AfricanName).order_by('slave_id')
+        if results_per_page_form.is_valid():
+            results_per_page = results_per_page_form.cleaned_option()
+            request.session['slaves_per_page_choice'] = results_per_page_form.cleaned_data['option']
+            request.session['slaves_per_page'] = results_per_page
+        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
+            results_per_page = request.session['slaves_per_page']
+            results_per_page_form.fields['option'].initial = request.session['slaves_per_page_choice']
+            results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['slaves_per_page_choice']})
 
 
     # Paginate results to pages
-    paginator = Paginator(search_set, results_per_page)
+    paginator = Paginator(results, results_per_page)
     pagins = paginator.page(current_page)
 
+    print "sort_column = " + sort_column
+    print "sort_mode = " + sort_mode
     print request
 
-    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, 20)
+    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
 
     return render(request, 'resources/names-index.html',
                   {'results': pagins,
@@ -445,7 +474,8 @@ def get_all_slaves(request):
                    'sort_mode': sort_mode,
                    'origins': countries,
                    'embarkation_list': embarkation_list,
-                   'disembarkation_list': disembarkation_list})
+                   'disembarkation_list': disembarkation_list,
+                   'query_dict': query_dict})
 
 
 def create_query_dict(var_list):
@@ -453,6 +483,7 @@ def create_query_dict(var_list):
     sex_list = []
     origins = []
     embarkation = []
+    disembarkation = []
     for key, value in var_list.iteritems():
         if key in names_search_strict_text:
             if value != "":
@@ -463,14 +494,13 @@ def create_query_dict(var_list):
             if value != "":
                 sex_list.append(key.split("_")[1])
         elif key.startswith("origin_"):
-            origins.append(key.split("_")[1])
+            origins.append(long(key.split("_")[1]))
         elif key.startswith("checkbox_"):
-            embarkation.append(key.split("_")[-1])
+            embarkation.append(long(key.split("_")[-1]))
         elif key.startswith("disembarkation_"):
-            print key + " starts with disembarkation"
-            pass
+            disembarkation.append(long(key.split("_")[-1]))
 
-    if len(sex_list) > 0 and len(sex_list) < 6:
+    if len(sex_list) > 0:
         query_dict['slave_sex_age__in'] = sex_list
 
     if len(origins) > 0:
@@ -478,5 +508,8 @@ def create_query_dict(var_list):
 
     if len(embarkation) > 0:
         query_dict['slave_embarkation_port__in'] = embarkation
+
+    if len(disembarkation) > 0:
+        query_dict['slave_disembarkation_port__in'] = disembarkation
 
     return query_dict
