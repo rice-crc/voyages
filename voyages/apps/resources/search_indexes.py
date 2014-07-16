@@ -1,5 +1,5 @@
 from haystack import indexes
-from .models import Image, AfricanName
+from .models import Image, AfricanName, Country
 
 
 class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
@@ -53,7 +53,7 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 
-class AfricanNames(indexes.SearchIndex, indexes.Indexable):
+class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     slave_id = indexes.IntegerField(model_attr="slave_id")
     slave_name = indexes.CharField(model_attr="name", null=True)
@@ -65,9 +65,9 @@ class AfricanNames(indexes.SearchIndex, indexes.Indexable):
     slave_voyage_number = indexes.CharField(model_attr="voyage_number")
     slave_voyage = indexes.CharField(model_attr="voyage", null=True)
     slave_sex_age = indexes.CharField()
-    slave_country = indexes.CharField()
-    slave_embarkation_port = indexes.CharField()
-    slave_disembarkation_port = indexes.CharField()
+    slave_country = indexes.CharField(faceted=True)
+    slave_embarkation_port = indexes.CharField(faceted=True)
+    slave_disembarkation_port = indexes.CharField(faceted=True)
 
     def get_model(self):
         return AfricanName
@@ -86,21 +86,34 @@ class AfricanNames(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_slave_country(self, obj):
         if obj.country is not None:
-            return obj.country.name
+            return obj.country.country_id
         else:
             return None
 
     def prepare_slave_embarkation_port(self, obj):
         if obj.embarkation_port is not None:
-            return obj.embarkation_port.place
+            return obj.embarkation_port.value
         else:
             return None
 
     def prepare_slave_disembarkation_port(self, obj):
         if obj.disembarkation_port is not None:
-            return obj.disembarkation_port.place
+            return obj.disembarkation_port.value
         else:
             return None
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
+
+
+class CountryIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    country_id = indexes.IntegerField(model_attr="country_id")
+    country_name = indexes.CharField(model_attr="name")
+
+    def get_model(self):
+        return Country
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""

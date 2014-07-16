@@ -399,9 +399,13 @@
 
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="country_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="country_name" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_name" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -411,7 +415,7 @@
 
     <field name="slave_date_arrived" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_ship_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_voyage_number" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -419,11 +423,17 @@
 
     <field name="slave_sex_age" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_country" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_country" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_embarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_country_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_disembarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_embarkation_port" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_embarkation_port_exact" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_disembarkation_port" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_disembarkation_port_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
