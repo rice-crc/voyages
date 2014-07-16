@@ -11,6 +11,7 @@
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
 
+{#    Upper table (Search for africans)#}
     <tr>
         <td class="box-set-upper-row-upper-left"></td>
         <td class="box-set-upper-row-upper-middle">
@@ -19,7 +20,7 @@
                 <tr>
                     <td class="box-label">Search for Africans</td>
                     <td>
-                        <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = ''; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button"></div>
                     </td>
                 </tr>
             </tbody>
@@ -27,7 +28,7 @@
         </td>
         <td class="box-set-upper-row-upper-right"></td>
     </tr>
-    <tr>
+    <tr class="row">
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
@@ -39,19 +40,31 @@
                 <tr>
                   <td class="slaves-query-variable-title">African name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp15" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp15">
+                    {% if "slave_name" in query_dict %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="{{ query_dict.slave_name }}" name="slave_name">
+                    {% else %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="" name="slave_name">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Ship name</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp20" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp20">
+                    {% if "slave_ship_name" in query_dict %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="{{ query_dict.slave_ship_name }}" name="slave_ship_name">
+                    {% else %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="" name="slave_ship_name">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
                   <td class="slaves-query-variable-title">Voyage ID</td>
                   <td class="slaves-query-variable-controls">
-                    <input id="form:_idJsp25" type="text" style="width: 150px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp25">
+                    {% if "slave_voyage_number" in query_dict %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="{{ query_dict.slave_voyage_number }}" name="slave_voyage_number">
+                    {% else %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="" name="slave_voyage_number">
+                    {% endif %}
                   </td>
                 </tr>
                 <tr>
@@ -65,11 +78,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp36" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp36">
+                          {% if "slave_date_arrived__gte" in query_dict %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__gte }}" name="slave_date_arrived__gte">
+                          {% else %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp40" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp40">
+                          {% if "slave_date_arrived__lte" in query_dict %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__lte }}" name="slave_date_arrived__lte">
+                          {% else %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__lte">
+                          {% endif %}
                         </td>
                       </tr>
                       </tbody>
@@ -88,11 +109,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp51" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp51">
+                          {% if "slave_age__gte" in query_dict %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__gte }}" name="slave_age__gte">
+                          {% else %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="" name="slave_age__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp55" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp55">
+                          {% if "slave_age__lte" in query_dict %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__lte }}" name="slave_age__lte">
+                          {% else %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="" name="slave_age__lte">
+                          {% endif %}
                         </td>
                       </tr>
                       </tbody>
@@ -111,11 +140,19 @@
                       <tbody>
                       <tr>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp66" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp66">
+                          {% if "slave_height__gte" in query_dict %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__gte }}" name="slave_height__gte">
+                          {% else %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="" name="slave_height__gte">
+                          {% endif %}
                         </td>
                         <td style="padding: 0px 5px 0px 5px">-</td>
                         <td style="padding: 0px;">
-                          <input id="form:_idJsp70" type="text" style="width: 40px;" onkeyup="SlavesSearch.searchFromBasicBox(true)" value="" name="form:_idJsp70">
+                          {% if "slave_height__lte" in query_dict %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__lte }}" name="slave_height__lte">
+                          {% else %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="" name="slave_height__lte">
+                          {% endif %}
                         </td>
                       </tr>
                 </tbody>
@@ -133,11 +170,19 @@
                     <tbody>
                     <tr>
                       <td style="padding: 0px;">
-                        <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp80">
+                        {% if "slave_sex_age__in" in query_dict and "Boy" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Boy">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Boy">
+                        {% endif %}
                       </td>
                       <td style="padding: 0px; width: 40px;">boys</td>
                       <td style="padding: 0px;">
-                        <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp84">
+                        {% if "slave_sex_age__in" in query_dict and "Girl" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Girl">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Girl">
+                        {% endif %}
                       </td>
                       <td style="padding: 0px;">girls</td>
                     </tr>
@@ -152,11 +197,19 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp93">
+                      {% if "slave_sex_age__in" in query_dict and "Man" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Man">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Man">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px; width: 40px;">men</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp97">
+                      {% if "slave_sex_age__in" in query_dict and "Woman" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Woman">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Woman">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px;">women</td>
                     </tr>
@@ -171,11 +224,19 @@
                   <tbody>
                     <tr>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp106">
+                      {% if "slave_sex_age__in" in query_dict and "Male" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Male">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Male">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px; width: 40px;">males</td>
                     <td style="padding: 0px;">
-                      <input type="checkbox" onclick="SlavesSearch.searchFromBasicBox(false)" value="true" checked="checked" name="form:_idJsp110">
+                      {% if "slave_sex_age__in" in query_dict and "Female" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Female">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Female">
+                      {% endif %}
                     </td>
                     <td style="padding: 0px">females</td>
                     </tr>
@@ -193,10 +254,10 @@
         <tbody>
             <tr>
                 <td style="padding: 5px 0px 5px 0px;">
-                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="submitBoxBasic">
+                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="action">
                 </td>
                 <td style="padding: 5px 0px 5px 5px;">
-                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New query" name="form:_idJsp119">
+                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New Query" name="action">
                 </td>
             </tr>
         </tbody>
@@ -207,7 +268,7 @@
         <div class="box-middle-row-right"></div>
     </td>
     </tr>
-    <tr>
+    <tr class="row">
         <td class="box-set-lower-row-upper-left"></td>
         <td class="box-set-lower-row-upper-middle"></td>
         <td class="box-set-lower-row-upper-right"></td>
@@ -218,6 +279,8 @@
 
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
+
+{#    Middle table (Place of Origin)#}
     <tr>
         <td class="box-set-upper-row-middle-left-collapsed"></td>
         <td class="box-set-upper-row-middle-middle-collapsed">
@@ -226,7 +289,7 @@
                 <tr>
                     <td class="box-label">Place of origin</td>
                     <td>
-                        <div class="box-button-collapsed" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = 'country'; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button-collapsed"></div>
                     </td>
                 </tr>
             </tbody>
@@ -234,6 +297,83 @@
         </td>
         <td class="box-set-upper-row-middle-right-collapsed"></td>
     </tr>
+    <tr class="row-collapsed">
+    <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+      <div id="form:_idJsp122" class="box-main-text">
+        <div class="slaves-query-section">
+          <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td class="lookup-checkbox-list-quicksearch-label">Quicksearch</td>
+              <td id="origin-lookup" class="lookup-checkbox-list-quicksearch-input">
+                <input id="query-text-origin" type="text" onkeyup="filter_edit_list()" name="">
+              </td>
+            </tr>
+          </tbody>
+          </table>
+
+          <div class="lookup-checkbox-list">
+            <table cellspacing="0" cellpadding="0" border="0">
+            <tbody id="origin_list">
+              {% for record in origins %}
+{#                {% if record.country_name %}#}
+                  <tr>
+                    <td></td>
+                    <td>
+                      {% if "slave_country_exact__in" in query_dict and record.country_id in query_dict.slave_country_exact__in %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" checked="checked" name="origin_{{ record.country_id }}">
+                      {% else %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
+                      {% endif %}
+                    </td>
+                    <td class="lookup-checkbox-list-item-0">{{ record.name }}</td>
+                  </tr>
+{#                {% endif %}#}
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+
+          <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td>
+                <input type="button" onclick="selectAllPorts(1, this)" value="Select all">
+              </td>
+              <td>
+                <input type="button" onclick="selectAllPorts(-1, this)" value="Deselect all">
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <table style="border-collapse: collapse;">
+        <tbody>
+          <tr>
+            <td style="padding: 5px 0px 5px 0px;">
+              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="action">
+            </td>
+            <td style="padding: 5px 0px 5px 5px;">
+              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="action">
+            </td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+    </td>
+    <td class="box-middle-row-right">
+        <div class="box-middle-row-right"></div>
+    </tr>
+    <tr class="row-collapsed">
+      <td class="box-set-lower-row-middle-left"></td>
+      <td class="box-set-lower-row-middle-middle"></td>
+      <td class="box-set-lower-row-middle-right"></td>
+    </tr>
+
 </tbody>
 </table>
 
@@ -247,7 +387,7 @@
                 <tr>
                     <td class="box-label">Embarkation and disembarkation </td>
                     <td>
-                        <div class="box-button-collapsed" onclick="document.forms['form'].elements['form:_idJsp7_selected'].value = 'places'; document.forms['form'].submit(); return false;"></div>
+                        <div class="box-button-collapsed"></div>
                     </td>
                 </tr>
             </tbody>
@@ -255,6 +395,187 @@
         </td>
         <td class="box-set-upper-row-bottom-right-collapsed"></td>
     </tr>
+    <tr class="row-collapsed">
+        <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+        </td>
+
+        <td class="box-middle-row-middle">
+          <div id="idJsp132" class="box-main-text">
+            <div class="slaves-query-section">
+              <div style="margin-bottom: 5px;">Place of embarkation</div>
+
+              <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="lookup-checkbox-list-quicksearch-label">Quicksearch</td>
+                  <td class="lookup-checkbox-list-quicksearch-input">
+                    <input id="query-text-embarkation" type="text" onkeyup="filter_embarkation()" name="">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+              <div class="lookup-checkbox-list">
+                <table cellspacing="0" cellpadding="0" border="0">
+                <tbody id="embarkation_list">
+                  {% for k, v in embarkation_list.items %}
+                    <tr id="tr_{{ k.value }}">
+                      <td>
+                        <div id="l_arrow_{{ k.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, {{ k.value }})"></div>
+                      </td>
+                      <td>
+                        {% if "slave_embarkation_port__in" in query_dict and k.value in query_dict.slave_embarkation_port__in %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" checked="checked" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% else %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% endif %}
+                      </td>
+                      <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k }}</td>
+                    </tr>
+                    {% if v.items %}
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <table cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                        {% for region, places in v.items %}
+                          {# Children of Broad Region (Regions) #}
+                          <tr id="tr_{{ k.value }}_{{ region.value }}">
+                            <td>
+                              <div id="r_arrow_{{ region.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, '{{ k.value }}_{{ region.value }}')"></div>
+                            </td>
+                            <td>
+                              {% if "slave_embarkation_port__in" in query_dict and region.value in query_dict.slave_embarkation_port__in %}
+                                <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% else %}
+                                  <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% endif %}
+                            </td>
+                            <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region }}</td>
+                            </td>
+                          </tr>
+                          {% if places %}
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <table cellspacing="0" cellpadding="0" border="0">
+                              <tbody>
+                              {% for place in places %}
+                                {# Children of Region (Ports) #}
+                                <tr id="tr_{{ k.value }}_{{ region.value }}_{{ place.value }}">
+                                  <td></td>
+                                  <td>
+                                    {% if "slave_embarkation_port__in" in query_dict and place.value in query_dict.slave_embarkation_port__in %}
+                                      <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% else %}
+                                      <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% endif %}
+                                  </td>
+                                  <td class="lookup-checkbox-list-item-2">{{ place }}</td>
+                                </tr>
+                              {% endfor %}
+                              </tbody>
+                              </table>
+                            </td>
+                            </tr>
+                          {% else %}
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
+                          {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                      </td>
+                    {% else %}
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
+                    {% endif %}
+                    </tr>
+                  {% endfor %}
+                  </td>
+                </tbody>
+                </table>
+              </div>
+
+              <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="button" onclick="selectAllPorts(1, this)" value="Select all">
+                  </td>
+                  <td>
+                    <input type="button" onclick="selectAllPorts(-1, this)" value="Deselect all">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+            </div>
+            <div class="slaves-query-section">
+              <table style="border-collapse: collapse;">
+              <tbody>
+                {% for bregion, regions in disembarkation_list.items %}
+                {% for region, places in regions.items %}
+                {% for place in places %}
+                  <tr>
+                    {% if forloop.parentloop.parentloop.first and forloop.parentloop.first%}
+                      <td class="slaves-query-variable-title">Disembarkation</td>
+                    {% else %}
+                      <td></td>
+                    {% endif %}
+                    <td class="slaves-query-variable-controls">
+                      <table style="border-collapse: collapse;">
+                      <tbody>
+                        <tr>
+                          <td style="padding: 0px;">
+                            {% if "slave_disembarkation_port__in" in query_dict and place.value not in query_dict.slave_disembarkation_port__in %}
+                              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
+                            {% else %}
+                              <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+                            {% endif %}
+                          </td>
+                          <td style="padding: 0px;">{{ place }}</td>
+                        </tr>
+                      </tbody>
+                      </table>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+              </tbody>
+              </table>
+            </div>
+
+            <table style="border-collapse: collapse;">
+            <tbody>
+              <tr>
+                <td style="padding: 5px 0px 5px 0px;">
+                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="action">
+                </td>
+                <td style="padding: 5px 0px 5px 5px;">
+                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="action">
+                </td>
+              </tr>
+            </tbody>
+            </table>
+
+          </div>
+
+        </td>
+        <td class="box-middle-row-right">
+          <div class="box-middle-row-right"></div>
+        </td>
+
+    </tr>
+
+    <tr class="row-collapsed">
+      <td class="box-set-lower-row-bottom-left"></td>
+      <td class="box-set-lower-row-bottom-middle"></td>
+      <td class="box-set-lower-row-bottom-right"></td>
+    </tr>
+
 </tbody>
 </table>
 </div>
@@ -266,13 +587,14 @@
   <tr>
     <td class="box-upper-row-left"></td>
     <td class="box-upper-row-middle">
-    <input type="hidden" value="expanded" name="form:_idJsp164_state">
+{#        TODO: Is this used? #}
+{#    <input type="hidden" value="expanded" name="form:_idJsp164_state">#}
     <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
     <tbody>
       <tr>
       <td class="box-label">Current query</td>
       <td>
-        <div class="box-button" onclick="document.forms['form'].elements['form:_idJsp164_state'].value = 'collapsed'; document.forms['form'].submit(); return false;"></div>
+        <div class="box-button"></div>
       </td>
       </tr>
     </tbody>
@@ -280,7 +602,7 @@
     </td>
     <td class="box-upper-row-right"></td>
   </tr>
-  <tr>
+  <tr class="row">
     <td class="box-middle-row-left">
     <div class="box-middle-row-left"></div>
     </td>
@@ -293,7 +615,7 @@
     <div class="box-middle-row-right"></div>
     </td>
   </tr>
-  <tr>
+  <tr class="row">
     <td class="box-lower-row-left"></td>
     <td class="box-lower-row-middle"></td>
     <td class="box-lower-row-right"></td>

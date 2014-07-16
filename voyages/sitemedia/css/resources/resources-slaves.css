@@ -42,6 +42,13 @@ td.box-set-upper-row-bottom-middle-collapsed,
 td.box-set-upper-row-bottom-middle {	
 	width: 250px; }
 
+td.box-middle-row-middle-collapsed,
+td.box-middle-row-left-collapsed,
+td.box-middle-row-right-collapsed {
+    display: none;
+}
+
+
 
 	
 td.lookup-checkbox-list-quicksearch {
