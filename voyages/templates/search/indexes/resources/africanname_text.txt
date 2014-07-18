@@ -1,5 +1,6 @@
 {{ object.slave_id }}
 {{ object.name }}
+{{ object.name_sort }}
 {{ object.age }}
 {{ object.height }}
 {{ object.source }}
