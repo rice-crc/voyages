@@ -57,17 +57,22 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     slave_id = indexes.IntegerField(model_attr="slave_id")
     slave_name = indexes.CharField(model_attr="name", null=True)
+    slave_name_sort = indexes.CharField(model_attr="name", null=True)
     slave_age = indexes.IntegerField(model_attr="age", null=True)
     slave_height = indexes.FloatField(model_attr="height", null=True)
     slave_source = indexes.CharField(model_attr="source", null=True)
     slave_date_arrived = indexes.IntegerField(model_attr="date_arrived", null=True)
     slave_ship_name = indexes.CharField(model_attr="ship_name", null=True)
+    slave_ship_name_sort = indexes.CharField(model_attr="ship_name", null=True)
     slave_voyage_number = indexes.CharField(model_attr="voyage_number")
     slave_voyage = indexes.CharField(model_attr="voyage", null=True)
     slave_sex_age = indexes.CharField()
-    slave_country = indexes.CharField(faceted=True)
-    slave_embarkation_port = indexes.CharField(faceted=True)
-    slave_disembarkation_port = indexes.CharField(faceted=True)
+    slave_country = indexes.CharField(null=True)
+    slave_country_sort = indexes.CharField(null=True)
+    slave_embarkation_port = indexes.CharField(null=True)
+    slave_embarkation_port_sort = indexes.CharField(null=True)
+    slave_disembarkation_port = indexes.CharField(null=True)
+    slave_disembarkation_port_sort = indexes.CharField(null=True)
 
     def get_model(self):
         return AfricanName
@@ -90,15 +95,33 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
         else:
             return None
 
+    def prepare_slave_country_sort(self, obj):
+        if obj.country is not None:
+            return obj.country.name
+        else:
+            return None
+
     def prepare_slave_embarkation_port(self, obj):
         if obj.embarkation_port is not None:
             return obj.embarkation_port.value
         else:
             return None
 
+    def prepare_slave_embarkation_port_sort(self, obj):
+        if obj.embarkation_port is not None:
+            return obj.embarkation_port.place
+        else:
+            return None
+
     def prepare_slave_disembarkation_port(self, obj):
         if obj.disembarkation_port is not None:
             return obj.disembarkation_port.value
+        else:
+            return None
+
+    def prepare_slave_disembarkation_port_sort(self, obj):
+        if obj.disembarkation_port is not None:
+            return obj.disembarkation_port.place
         else:
             return None
 

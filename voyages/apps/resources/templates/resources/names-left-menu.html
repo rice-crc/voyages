@@ -20,7 +20,11 @@
                 <tr>
                     <td class="box-label">Search for Africans</td>
                     <td>
-                        <div class="box-button"></div>
+                        {% if opened_tabs.section_1 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
@@ -28,13 +32,17 @@
         </td>
         <td class="box-set-upper-row-upper-right"></td>
     </tr>
-    <tr class="row">
+    {% if opened_tabs.section_1 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
     <td class="box-middle-row-middle">
         <div id="form:_idJsp8" class="box-main-text">
-        <div class="slaves-query-section">
+        <div>
             <table style="border-collapse: collapse;">
             <tbody>
                 <tr>
@@ -250,25 +258,29 @@
             </tbody>
             </table>
         </div>
-        <table style="border-collapse: collapse;">
-        <tbody>
-            <tr>
-                <td style="padding: 5px 0px 5px 0px;">
-                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="action">
-                </td>
-                <td style="padding: 5px 0px 5px 5px;">
-                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New Query" name="action">
-                </td>
-            </tr>
-        </tbody>
-        </table>
+{#        <table style="border-collapse: collapse;">#}
+{#        <tbody>#}
+{#            <tr>#}
+{#                <td style="padding: 5px 0px 5px 0px;">#}
+{#                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#                </td>#}
+{#                <td style="padding: 5px 0px 5px 5px;">#}
+{#                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New Query" name="action">#}
+{#                </td>#}
+{#            </tr>#}
+{#        </tbody>#}
+{#        </table>#}
         </div>
     </td>
     <td class="box-middle-row-right">
         <div class="box-middle-row-right"></div>
     </td>
     </tr>
-    <tr class="row">
+    {% if opened_tabs.section_1 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
         <td class="box-set-lower-row-upper-left"></td>
         <td class="box-set-lower-row-upper-middle"></td>
         <td class="box-set-lower-row-upper-right"></td>
@@ -289,7 +301,11 @@
                 <tr>
                     <td class="box-label">Place of origin</td>
                     <td>
-                        <div class="box-button-collapsed"></div>
+                        {% if opened_tabs.section_2 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
@@ -297,13 +313,17 @@
         </td>
         <td class="box-set-upper-row-middle-right-collapsed"></td>
     </tr>
-    <tr class="row-collapsed">
+    {% if opened_tabs.section_2 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
     <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
     </td>
     <td class="box-middle-row-middle">
       <div id="form:_idJsp122" class="box-main-text">
-        <div class="slaves-query-section">
+        <div>
           <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
           <tbody>
             <tr>
@@ -351,24 +371,28 @@
           </table>
         </div>
 
-        <table style="border-collapse: collapse;">
-        <tbody>
-          <tr>
-            <td style="padding: 5px 0px 5px 0px;">
-              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="action">
-            </td>
-            <td style="padding: 5px 0px 5px 5px;">
-              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="action">
-            </td>
-          </tr>
-        </tbody>
-        </table>
+{#        <table style="border-collapse: collapse;">#}
+{#        <tbody>#}
+{#          <tr>#}
+{#            <td style="padding: 5px 0px 5px 0px;">#}
+{#              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#            </td>#}
+{#            <td style="padding: 5px 0px 5px 5px;">#}
+{#              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="action">#}
+{#            </td>#}
+{#          </tr>#}
+{#        </tbody>#}
+{#        </table>#}
       </div>
     </td>
     <td class="box-middle-row-right">
         <div class="box-middle-row-right"></div>
     </tr>
-    <tr class="row-collapsed">
+    {% if opened_tabs.section_2 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
       <td class="box-set-lower-row-middle-left"></td>
       <td class="box-set-lower-row-middle-middle"></td>
       <td class="box-set-lower-row-middle-right"></td>
@@ -380,29 +404,46 @@
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
     <tr>
+        {% if opened_tabs.section_3 == True %}
+        <td class="box-set-upper-row-bottom-left"></td>
+        <td class="box-set-upper-row-bottom-middle">
+        {% else %}
         <td class="box-set-upper-row-bottom-left-collapsed"></td>
         <td class="box-set-upper-row-bottom-middle-collapsed">
+        {% endif %}
             <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
                 <tr>
                     <td class="box-label">Embarkation and disembarkation </td>
                     <td>
-                        <div class="box-button-collapsed"></div>
+                        {% if opened_tabs.section_3 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
             </table>
         </td>
-        <td class="box-set-upper-row-bottom-right-collapsed"></td>
+        {% if opened_tabs.section_3 == True %}
+          <td class="box-set-upper-row-bottom-right"></td>
+        {% else %}
+          <td class="box-set-upper-row-bottom-right-collapsed"></td>
+        {% endif %}
     </tr>
-    <tr class="row-collapsed">
+    {% if opened_tabs.section_3 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
         <td class="box-middle-row-left">
         <div class="box-middle-row-left"></div>
         </td>
 
         <td class="box-middle-row-middle">
           <div id="idJsp132" class="box-main-text">
-            <div class="slaves-query-section">
+            <div>
               <div style="margin-bottom: 5px;">Place of embarkation</div>
 
               <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
@@ -512,7 +553,7 @@
               </table>
 
             </div>
-            <div class="slaves-query-section">
+            <div>
               <table style="border-collapse: collapse;">
               <tbody>
                 {% for bregion, regions in disembarkation_list.items %}
@@ -529,10 +570,10 @@
                       <tbody>
                         <tr>
                           <td style="padding: 0px;">
-                            {% if "slave_disembarkation_port__in" in query_dict and place.value not in query_dict.slave_disembarkation_port__in %}
-                              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
-                            {% else %}
+                            {% if "slave_disembarkation_port__in" in query_dict and place.value in query_dict.slave_disembarkation_port__in %}
                               <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+                            {% else %}
+                              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
                             {% endif %}
                           </td>
                           <td style="padding: 0px;">{{ place }}</td>
@@ -548,18 +589,18 @@
               </table>
             </div>
 
-            <table style="border-collapse: collapse;">
-            <tbody>
-              <tr>
-                <td style="padding: 5px 0px 5px 0px;">
-                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="action">
-                </td>
-                <td style="padding: 5px 0px 5px 5px;">
-                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="action">
-                </td>
-              </tr>
-            </tbody>
-            </table>
+{#            <table style="border-collapse: collapse;">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                <td style="padding: 5px 0px 5px 0px;">#}
+{#                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#                </td>#}
+{#                <td style="padding: 5px 0px 5px 5px;">#}
+{#                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="action">#}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#            </table>#}
 
           </div>
 
@@ -570,7 +611,11 @@
 
     </tr>
 
-    <tr class="row-collapsed">
+    {% if opened_tabs.section_3 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
       <td class="box-set-lower-row-bottom-left"></td>
       <td class="box-set-lower-row-bottom-middle"></td>
       <td class="box-set-lower-row-bottom-right"></td>
@@ -580,7 +625,12 @@
 </table>
 </div>
 
-<br/>
+<div style="display: block; width: 100%;position:relative;float:left;padding:10px 0 10px;">
+  	<div style="float: right;display: block;">
+        <input type="submit" id="submitBoxPlaces" value="Search" name="action">
+        <input type="submit" id="form:_idJsp161" value="New Query" name="action">
+  	</div>
+  </div>
 
 <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
 <tbody>
