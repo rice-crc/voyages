@@ -405,9 +405,9 @@
 
     <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_name" type="ngram" indexed="true" stored="true" multiValued="false">
+    <field name="slave_name" type="ngram" indexed="true" stored="true" multiValued="false"/>
 
-    <field name="slave_name_sort" type="string" indexed="true" stored="true" multiValued="false">
+    <field name="slave_name_sort" type="string" indexed="true" stored="true" multiValued="false"/>
 
     <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
 
