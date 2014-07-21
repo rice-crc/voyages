@@ -406,7 +406,7 @@ def get_all_slaves(request):
 
             results = SearchQuerySet().models(AfricanName).order_by(sort_string)
 
-            request.session['results'] = results
+            request.session['names_results'] = results
             request.session['sort_column'] = sort_column
             request.session['sort_mode'] = sort_mode
 
@@ -457,13 +457,14 @@ def get_all_slaves(request):
             else:
                 results = SearchQuerySet().models(AfricanName).order_by(sort_string)
 
-            request.session['results'] = results
+            request.session['names_results'] = results
             request.session["sort_column"] = sort_column
             request.session["sort_mode"] = sort_mode
 
         elif request.POST.get("action") is not None and request.POST.get("action") == "Search":
             # Encode and store query dict/opened tabs
             query_dict, opened_tabs = create_query_dict(request.POST)
+            print "query dict = " + str(query_dict)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
 
@@ -551,7 +552,7 @@ def create_query_dict(var_list):
         query_dict['slave_sex_age__in'] = sex_list
 
     if len(origins) > 0:
-        query_dict['slave_country_exact__in'] = origins
+        query_dict['slave_country__in'] = origins
 
     if len(embarkation) > 0:
         query_dict['slave_embarkation_port__in'] = embarkation
