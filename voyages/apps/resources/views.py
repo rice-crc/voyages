@@ -326,6 +326,11 @@ def get_all_slaves(request):
         results = {}
 
     try:
+        current_query = request.session["names_current_query"]
+    except KeyError:
+        current_query = {}
+
+    try:
         query_dict = request.session["names_query_dict"];
     except KeyError:
         query_dict = {}
@@ -417,8 +422,10 @@ def get_all_slaves(request):
             # Clicked "New Query", reset all session variables
             results = SearchQuerySet().models(AfricanName).order_by("slave_id")
             query_dict = {}
+            current_query = {}
             request.session['names_results'] = results
             request.session['names_query_dict'] = {}
+            request.session['names_current_query'] = {}
             request.session['sort_column'] = "slave_id"
             sort_column = "slave_id"
             sort_mode = "1"
@@ -462,11 +469,12 @@ def get_all_slaves(request):
             request.session["sort_mode"] = sort_mode
 
         elif request.POST.get("action") is not None and request.POST.get("action") == "Search":
-            # Encode and store query dict/opened tabs
-            query_dict, opened_tabs = create_query_dict(request.POST)
+            # Encode and store query dict/opened tabs/current query
+            query_dict, opened_tabs, current_query = create_query_dict(request.POST)
             print "query dict = " + str(query_dict)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
+            request.session['names_current_query'] = current_query
 
             # If any sorting option exist
             if sort_mode == "1":
@@ -499,6 +507,7 @@ def get_all_slaves(request):
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(current_page)
+    print current_query
 
     # Get ranges and number of pages
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
@@ -514,7 +523,8 @@ def get_all_slaves(request):
                    'embarkation_list': embarkation_list,
                    'disembarkation_list': disembarkation_list,
                    'query_dict': query_dict,
-                   'opened_tabs': opened_tabs})
+                   'opened_tabs': opened_tabs,
+                   'current_query': current_query})
 
 
 def create_query_dict(var_list):
@@ -522,8 +532,10 @@ def create_query_dict(var_list):
     sex_list = []
     origins = []
     embarkation = []
+    embarkation_cq = []
     disembarkation = []
     opened_tabs = {}
+    current_query = {}
 
     # Iterate and collect all options
     for key, value in var_list.iteritems():
@@ -531,8 +543,15 @@ def create_query_dict(var_list):
             if value != "":
                 query_dict[key] = value
                 opened_tabs['section_1'] = True
-        elif key in names_search_checkboxes:
-            pass
+
+                # Create appropriate entry in current query dict
+                if key == "slave_name":
+                    current_query['African name'] = value
+                elif key == "slave_ship_name":
+                    current_query['Ship name'] = value
+                elif key == "slave_voyage_number":
+                    current_query['slave_voyage_number'] = value
+
         elif key.startswith("sex_"):
             if value != "":
                 sex_list.append(key.split("_")[1])
@@ -542,6 +561,8 @@ def create_query_dict(var_list):
             opened_tabs['section_2'] = True
         elif key.startswith("checkbox_"):
             embarkation.append(long(key.split("_")[-1]))
+            if len(key.split("_")[-1]) == 4:
+                embarkation_cq.append(key.split("_")[-1])
             opened_tabs['section_3'] = True
         elif key.startswith("disembarkation_"):
             disembarkation.append(long(key.split("_")[-1]))
@@ -550,14 +571,47 @@ def create_query_dict(var_list):
     # Include them if any of these have been chosen
     if len(sex_list) > 0:
         query_dict['slave_sex_age__in'] = sex_list
+        if len(sex_list) < 6:
+            current_query['Sex/Age'] = " ".join(sex_list)
 
     if len(origins) > 0:
         query_dict['slave_country__in'] = origins
+        current_query['Place of origin'] = " ".join(origins)
 
     if len(embarkation) > 0:
         query_dict['slave_embarkation_port__in'] = embarkation
 
     if len(disembarkation) > 0:
         query_dict['slave_disembarkation_port__in'] = disembarkation
+        #current_query['Place of origin'] = " ".join()
 
-    return query_dict, opened_tabs
+    # include 'gte' 'lte' fields in current query
+    if "slave_date_arrived__gte" in query_dict and "slave_date_arrived__lte" in query_dict:
+        current_query['Time frame'] = query_dict["slave_date_arrived__gte"] + " - " + \
+                                      query_dict["slave_date_arrived__lte"]
+    elif "slave_date_arrived__gte" in query_dict:
+        current_query['Time frame'] = "from " + query_dict["slave_date_arrived__gte"]
+    elif "slave_date_arrived__lte" in query_dict:
+        current_query['Time frame'] = "up to " + query_dict["slave_date_arrived__lte"]
+
+    if "slave_age__gte" in query_dict and "slave_age__lte" in query_dict:
+        current_query['Age'] = query_dict["slave_age__gte"] + " - " + \
+                               query_dict["slave_age__lte"]
+    elif "slave_age__gte" in query_dict:
+        current_query['Age'] = "from " + query_dict["slave_age__gte"]
+    elif "slave_age__lte" in query_dict:
+        current_query['Age'] = "up to " + query_dict["slave_age__lte"]
+
+    if "slave_height__gte" in query_dict and "slave_height__lte" in query_dict:
+        current_query['Height'] = query_dict["slave_age__gte"] + " - " + \
+                               query_dict["slave_age__lte"]
+    elif "slave_height__gte" in query_dict:
+        current_query['Height'] = "from " + query_dict["slave_height__gte"]
+    elif "slave_height__lte" in query_dict:
+        current_query['Height'] = "up to " + query_dict["slave_height__lte"]
+
+    return query_dict, opened_tabs, current_query
+
+
+def get_embarkation_checked(embarkation_list, checked):
+    return None
