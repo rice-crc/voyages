@@ -659,11 +659,25 @@
     <td class="box-middle-row-middle">
     <div id="form:_idJsp164" class="box-main-text">
       <div class="query-summary">
-        <div class="query-summary-item">
-          <span class="query-summary-variable">African name</span>
-          :
-          <span id="_idJsp165_span_0" class="query-summary-value">by</span>
-        </div>
+        {% if current_query %}
+          {% for key, value in current_query.items %}
+            {% if forloop.last %}
+              <div class="query-summary-item-last">
+                <span class="query-summary-variable">{{ key }}</span>
+                :
+                <span class="query-summary-value">{{ value }}</span>
+              </div>
+            {% else %}
+              <div class="query-summary-item">
+                <span class="query-summary-variable">{{ key }}</span>
+                :
+                <span class="query-summary-value">{{ value }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="query-summary">There are currently no conditions in your query. The listing on the right shows all Africans in the database.</div>
+        {% endif %}
       </div>
     </div>
     </td>
