@@ -343,7 +343,7 @@
                   <tr>
                     <td></td>
                     <td>
-                      {% if "slave_country_exact__in" in query_dict and record.country_id in query_dict.slave_country_exact__in %}
+                      {% if "slave_country__in" in query_dict and record.country_id in query_dict.slave_country__in %}
                         <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" checked="checked" name="origin_{{ record.country_id }}">
                       {% else %}
                         <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
@@ -658,7 +658,13 @@
     </td>
     <td class="box-middle-row-middle">
     <div id="form:_idJsp164" class="box-main-text">
-      <div class="query-summary">There are currently no conditions in your query. The listing on the right shows all Africans in the database.</div>
+      <div class="query-summary">
+        <div class="query-summary-item">
+          <span class="query-summary-variable">African name</span>
+          :
+          <span id="_idJsp165_span_0" class="query-summary-value">by</span>
+        </div>
+      </div>
     </div>
     </td>
     <td class="box-middle-row-right">
