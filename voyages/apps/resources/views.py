@@ -470,7 +470,8 @@ def get_all_slaves(request):
 
         elif request.POST.get("action") is not None and request.POST.get("action") == "Search":
             # Encode and store query dict/opened tabs/current query
-            query_dict, opened_tabs, current_query = create_query_dict(request.POST)
+            query_dict, opened_tabs, current_query = create_query_dict(request.POST, embarkation_list,
+                                                                       disembarkation_list, countries)
             print "query dict = " + str(query_dict)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
@@ -527,7 +528,7 @@ def get_all_slaves(request):
                    'current_query': current_query})
 
 
-def create_query_dict(var_list):
+def create_query_dict(var_list, embarkation_list, disembarkation_list, countries):
     query_dict = {}
     sex_list = []
     origins = []
@@ -535,9 +536,10 @@ def create_query_dict(var_list):
     embarkation_cq = []
     disembarkation = []
     opened_tabs = {}
-    current_query = {}
+    current_query = SortedDict()
 
     # Iterate and collect all options
+    # Mark sections as True/False (collapsed/expanded)
     for key, value in var_list.iteritems():
         if key in names_search_strict_text:
             if value != "":
@@ -546,11 +548,11 @@ def create_query_dict(var_list):
 
                 # Create appropriate entry in current query dict
                 if key == "slave_name":
-                    current_query['African name'] = value
+                    fill_current_query_dict(current_query, "African name", value)
                 elif key == "slave_ship_name":
-                    current_query['Ship name'] = value
+                    fill_current_query_dict(current_query, "Ship name", value)
                 elif key == "slave_voyage_number":
-                    current_query['slave_voyage_number'] = value
+                    fill_current_query_dict(current_query, "Voyage ID", value)
 
         elif key.startswith("sex_"):
             if value != "":
@@ -568,50 +570,125 @@ def create_query_dict(var_list):
             disembarkation.append(long(key.split("_")[-1]))
             opened_tabs['section_3'] = True
 
-    # Include them if any of these have been chosen
+    # Include list-like fields if any of these have been chosen
     if len(sex_list) > 0:
         query_dict['slave_sex_age__in'] = sex_list
-        if len(sex_list) < 6:
-            current_query['Sex/Age'] = " ".join(sex_list)
+        fill_current_query_dict(current_query, "Sex/Age", " ".join(sex_list))
 
     if len(origins) > 0:
         query_dict['slave_country__in'] = origins
-        current_query['Place of origin'] = " ".join(origins)
+
+        # Collect names of checked origins and add to the current query
+        value = ""
+        for j in origins:
+            value += countries.filter(country_id=j).values('name')[0]['name'] + ", "
+        value = value.rstrip().rstrip(",")
+        fill_current_query_dict(current_query, "Place of origin", value)
 
     if len(embarkation) > 0:
         query_dict['slave_embarkation_port__in'] = embarkation
 
+        # Get list of checked embarkation and add to the current query
+        fill_current_query_dict(current_query, "Place of embarkation",
+                                get_embarkation_checked(embarkation_list, embarkation))
+
     if len(disembarkation) > 0:
         query_dict['slave_disembarkation_port__in'] = disembarkation
-        #current_query['Place of origin'] = " ".join()
+        value = ""
 
-    # include 'gte' 'lte' fields in current query
+        # Find names of checked disembarkation ports and add to the current query
+        for broad_region, region_list in disembarkation_list.iteritems():
+            for region, ports_list in region_list.iteritems():
+                for port in ports_list:
+                    if port.value in disembarkation:
+                        value += port.place + ", "
+
+        value = value.rstrip().rstrip(",")
+        fill_current_query_dict(current_query, "Place of disembarkation", value)
+
+    # Include 'gte' and 'lte' fields in current query
     if "slave_date_arrived__gte" in query_dict and "slave_date_arrived__lte" in query_dict:
-        current_query['Time frame'] = query_dict["slave_date_arrived__gte"] + " - " + \
-                                      query_dict["slave_date_arrived__lte"]
+        fill_current_query_dict(current_query, "Time frame", query_dict["slave_date_arrived__gte"] + " - " +
+                                query_dict["slave_date_arrived__lte"])
     elif "slave_date_arrived__gte" in query_dict:
-        current_query['Time frame'] = "from " + query_dict["slave_date_arrived__gte"]
+        fill_current_query_dict(current_query, "Time frame", "from " + query_dict["slave_date_arrived__gte"])
     elif "slave_date_arrived__lte" in query_dict:
-        current_query['Time frame'] = "up to " + query_dict["slave_date_arrived__lte"]
+        fill_current_query_dict(current_query, "Time frame", "up to " + query_dict["slave_date_arrived__lte"])
 
     if "slave_age__gte" in query_dict and "slave_age__lte" in query_dict:
-        current_query['Age'] = query_dict["slave_age__gte"] + " - " + \
-                               query_dict["slave_age__lte"]
+        fill_current_query_dict(current_query, "Age", query_dict["slave_age__gte"] + " - " +
+                                query_dict["slave_age__lte"])
     elif "slave_age__gte" in query_dict:
-        current_query['Age'] = "from " + query_dict["slave_age__gte"]
+        fill_current_query_dict(current_query, "Age", "from " + query_dict["slave_age__gte"])
     elif "slave_age__lte" in query_dict:
-        current_query['Age'] = "up to " + query_dict["slave_age__lte"]
+        fill_current_query_dict(current_query, "Age", "up to " + query_dict["slave_age__lte"])
 
     if "slave_height__gte" in query_dict and "slave_height__lte" in query_dict:
-        current_query['Height'] = query_dict["slave_age__gte"] + " - " + \
-                               query_dict["slave_age__lte"]
+        fill_current_query_dict(current_query, "Height (inches)", query_dict["slave_height__gte"] + " - " +
+                                query_dict["slave_height__lte"])
     elif "slave_height__gte" in query_dict:
-        current_query['Height'] = "from " + query_dict["slave_height__gte"]
+        fill_current_query_dict(current_query, "Height (inches)", "from " + query_dict["slave_height__gte"])
     elif "slave_height__lte" in query_dict:
-        current_query['Height'] = "up to " + query_dict["slave_height__lte"]
+        fill_current_query_dict(current_query, "Height (inches)", "up to " + query_dict["slave_height__lte"])
 
-    return query_dict, opened_tabs, current_query
+    return query_dict, opened_tabs, sorted(current_query.items())
 
 
 def get_embarkation_checked(embarkation_list, checked):
-    return None
+    emb_str = ""
+
+    # Iterate through broad regions and their children (regions)
+    for broad_region, region_list in embarkation_list.iteritems():
+        regions_to_add = []
+
+        # Iterate through regions and their children (ports)
+        for region, port_list in region_list.iteritems():
+            ports_to_add = []
+
+            # Iterate through ports in region and collect ports to add to the current query
+            for port in port_list:
+                if port.value in checked:
+                    ports_to_add.append(port.place)
+
+            # If all ports have been selected in region, the entire region is marked as "all ports"
+            # Otherwise, add ports to the string
+            if len(ports_to_add) == len(port_list):
+                regions_to_add.append(region.region + " - all ports selected")
+            else:
+                if len(ports_to_add) > 0:
+                    emb_str += ", ".join(ports_to_add) + ", "
+
+        # If all regions have been selected in the broad region,
+        # the entire broad region is marked as "all ports"
+        # Otherwise, add remaining entire regions to the string
+        if len(regions_to_add) == len(region_list):
+            emb_str += broad_region.broad_region + " - all ports selected, "
+        elif len(regions_to_add) > 0:
+                emb_str += ", ".join(regions_to_add) + ", "
+
+    return emb_str.rstrip().rstrip(",")
+
+
+def fill_current_query_dict(dict=None, key=None, value=None):
+    # Find a key and put the value
+    if key == "African name":
+        val = 1
+    elif key == "Ship name":
+        val = 2
+    elif key == "Voyage ID":
+        val = 3
+    elif key == "Time frame":
+        val = 4
+    elif key == "Age":
+        val = 5
+    elif key == "Height (inches)":
+        val = 6
+    elif key == "Sex/Age":
+        val = 7
+    elif key == "Place of origin":
+        val = 8
+    elif key == "Place of embarkation":
+        val = 9
+    elif key == "Place of disembarkation":
+        val = 10
+    dict[val] = {key: value}

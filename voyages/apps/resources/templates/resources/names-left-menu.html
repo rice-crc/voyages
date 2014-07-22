@@ -660,18 +660,22 @@
     <div id="form:_idJsp164" class="box-main-text">
       <div class="query-summary">
         {% if current_query %}
-          {% for key, value in current_query.items %}
-            {% if forloop.last %}
+          {% for val in current_query %}
+            {% if forloop.last and val.1 %}
               <div class="query-summary-item-last">
-                <span class="query-summary-variable">{{ key }}</span>
-                :
-                <span class="query-summary-value">{{ value }}</span>
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
               </div>
-            {% else %}
+            {% elif val.1 %}
               <div class="query-summary-item">
-                <span class="query-summary-variable">{{ key }}</span>
-                :
-                <span class="query-summary-value">{{ value }}</span>
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
               </div>
             {% endif %}
           {% endfor %}
