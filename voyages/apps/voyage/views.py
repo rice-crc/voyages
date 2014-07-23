@@ -747,13 +747,46 @@ def search(request):
             xls_table = []
             tab = 'tables'
             pst = {x: y for x,y in request.POST.items()}
-            # Force the initial value
-            if 'columns' not in pst:
+
+            # Try to retrieve sessions values
+            try:
+                tables_columns = request.session['voyages_tables_columns']
+            except KeyError:
+                tables_columns = None
+
+            try:
+                tables_rows = request.session['voyages_tables_rows']
+            except KeyError:
+                tables_rows = None
+
+            try:
+                tables_cells = request.session['voyages_tables_cells']
+            except KeyError:
+                tables_cells = None
+
+            # Collect settings (if possible retrieve from the session)
+            if 'columns' not in pst and tables_columns:
+                # Stored in session, retrieve
+                pst['columns'] = tables_columns
+            elif 'columns' not in pst:
+                # Not in session, set default
                 pst['columns'] = '7'
-            if 'cells' not in request.POST:
-                pst['cells'] = '1'
-            if 'rows' not in request.POST:
+
+            if 'rows' not in pst and tables_rows:
+                pst['rows'] = tables_rows
+            elif 'rows' not in pst:
                 pst['rows'] = '12'
+
+            if 'cells' not in pst and tables_cells:
+                pst['cells'] = tables_cells
+            elif 'cells' not in pst:
+                pst['cells'] = '1'
+
+            # Update sessions with updated values
+            request.session['voyages_tables_columns'] = pst['columns']
+            request.session['voyages_tables_rows'] = pst['rows']
+            request.session['voyages_tables_cells'] = pst['cells']
+
             table_stats_form = TableSelectionForm(pst)
             table_row_query_def = globals.table_rows[12]
             table_col_query_def = globals.table_columns[7]
@@ -812,7 +845,7 @@ def search(request):
             elif table_col_var_name.endswith('_idnum'):
                 restrict_query[table_col_var_name + "__gte"] = "-1"
             elif table_col_var_name != '':
-                restrict_query[table_col_var_name + "__gte"] = ""
+                restrict_query[table_col_var_name  + "__gte"] = ""
 
             tableresults = results.filter(**restrict_query)
 
@@ -873,6 +906,7 @@ def search(request):
                         xls_row.append('Total Disembarked')
                     else:
                         xls_row.append('Totals')
+
             for idx, rowstuff in enumerate(table_row_query_def[1]):
                 xls_row = []
                 rowlabels = rowstuff[0]
