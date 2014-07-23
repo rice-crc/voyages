@@ -735,10 +735,15 @@ def search(request):
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
         elif submitVal == 'tab_tables' or submitVal == 'xls_download_table':
-            # row_cell_values is what is displayed in the cells in the table, it is a list of triples which contain the row_label, the cell values, then the row total
-            # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port). Typically these will just be a list of lists with one entry that is the label tuple for that row/
-            # column labels is similar, but it is a list of column label lists, and will typically be a list of one element that is a list of the column label tuples
-            #  entries in the rowlabels/collabels matrix are tuples that contain the label and then the row/column span of that cell. Most of the time the row/column span will just be 1.
+            # row_cell_values is what is displayed in the cells in the table,
+            # it is a list of triples which contain the row_label, the cell values, then the row total
+            # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port).
+            # Typically these will just be a list of lists with one entry that is the label tuple for that row/
+            # column labels is similar, but it is a list of column label lists,
+            # and will typically be a list of one element that is a list of the column label tuples
+            # entries in the rowlabels/collabels matrix are tuples
+            # that contain the label and then the row/column span of that cell.
+            # Most of the time the row/column span will just be 1.
             xls_table = []
             tab = 'tables'
             pst = {x: y for x,y in request.POST.items()}
@@ -762,12 +767,14 @@ def search(request):
                 display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
                 omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
             restrict_query = {}
-            # Get the variable name of the variable used to filter the rows so we can constrain the column totals to voyages with the row variable defined
+            # Get the variable name of the variable used to filter the rows
+            # so we can constrain the column totals to voyages with the row variable defined
             table_row_var_name = ''
             if len(table_row_query_def[1]) > 0:
                 # The query def is a triple with the 2nd element being a list
                 # that list is a list of tuples with the label and the query dict
-                # the query dict is a dictionary with 1 element which the key is the var name with a '__' and then the query type (e.g. "__exact")
+                # the query dict is a dictionary with 1 element which the key is the var name with a '__'
+                # and then the query type (e.g. "__exact")
                 table_row_var_name = table_row_query_def[1][0][1].keys()[0].split('__')[0]
             table_row_var = search_var_dict(table_row_var_name)
             if not table_row_var:
@@ -778,7 +785,7 @@ def search(request):
                 if table_row_var['var_type'] == 'numeric':
                     restrict_query[table_row_var_name + "__gte"] = -1
                 elif table_row_var['var_type'] == 'date':
-                    restrict_query[table_row_var_name + "__gte"] = date(1,1,1)
+                    restrict_query[table_row_var_name + "__gte"] = date(1 , 1, 1)
                 else:
                     restrict_query[table_row_var_name + "__gte"] = ""
             elif table_row_var_name.endswith('_idnum'):
@@ -922,7 +929,8 @@ def search(request):
                 row_counters = [0,0,0]
                 count1 = 0
                 count2 = 0
-                row_list[rownum] = ([(i[0], i[1] - 1) for i in row_list[rownum][0]], row_list[rownum][1], row_list[rownum][2])
+                row_list[rownum] = ([(i[0], i[1] - 1) for i in row_list[rownum][0]],
+                                    row_list[rownum][1], row_list[rownum][2])
                 # Now find the rows with the headers for it and reduce those header counts by 1
                 for idx, rl in enumerate(row_list):
                     rowlbl = [i for i in rl[0]]
@@ -963,7 +971,8 @@ def search(request):
                     xls_row.append('')
             xls_table.append(xls_row)
             if 'xls_download_table' == submitVal:
-                response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response = HttpResponse(
+                    content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 response['Content-Disposition'] = 'attachment; filename="data.xlsx"'
                 wb = Workbook()
                 ws = wb.active
