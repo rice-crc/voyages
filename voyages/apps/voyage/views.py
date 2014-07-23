@@ -680,6 +680,9 @@ def search(request):
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
         request.session['graph_defs'] = []
+        request.session['voyages_tables_columns'] = None
+        request.session['voyages_tables_rows'] = None
+        request.session['voyages_tables_cells'] = None
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
