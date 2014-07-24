@@ -573,17 +573,28 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
     # Include list-like fields if any of these have been chosen
     if len(sex_list) > 0:
         query_dict['slave_sex_age__in'] = sex_list
-        fill_current_query_dict(current_query, "Sex/Age", " ".join(sex_list))
+        sex_list_str = ""
+        for i in sex_list:
+            if i == "Boy" or i == "Girl" or i == "Male" or i == "Female":
+                sex_list_str += i + "s "
+            elif i == "Man":
+                sex_list_str += "Men "
+            elif i == "Woman":
+                sex_list_str += "Women "
+        fill_current_query_dict(current_query, "Sex/Age", sex_list_str)
 
     if len(origins) > 0:
         query_dict['slave_country__in'] = origins
 
         # Collect names of checked origins and add to the current query
         value = ""
-        for j in origins:
-            value += countries.filter(country_id=j).values('name')[0]['name'] + ", "
-        value = value.rstrip().rstrip(",")
-        fill_current_query_dict(current_query, "Place of origin", value)
+        if len(origins) == len(countries):
+            fill_current_query_dict(current_query, "Place of origin", "all places selected")
+        else:
+            for j in origins:
+                value += countries.filter(country_id=j).values('name')[0]['name'] + ", "
+            value = value.rstrip().rstrip(",")
+            fill_current_query_dict(current_query, "Place of origin", value)
 
     if len(embarkation) > 0:
         query_dict['slave_embarkation_port__in'] = embarkation
