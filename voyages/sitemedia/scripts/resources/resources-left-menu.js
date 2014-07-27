@@ -58,8 +58,8 @@ function expandRow(table, button){
 }
 
 function filter_edit_list() {
-    var text_to_search = $("#query-text-origin").val()
-    var items = $('#origin_list').children()
+    var text_to_search = $("#query-text-origin").val().toLowerCase();
+    var items = $('#origin_list').children();
 
     if (text_to_search == "") {
         items.each(function( index ) {
@@ -78,7 +78,7 @@ function filter_edit_list() {
 }
 
 function filter_embarkation() {
-    var text_to_search = $("#query-text-embarkation").val()
+    var text_to_search = $("#query-text-embarkation").val().toLowerCase();
     var broad_regions = $('#embarkation_list').find("tr[id^=tr_]");
     var trs_no_children = $('#embarkation_list').find("tr[id^=tr_]:not([id$=child])");
 
