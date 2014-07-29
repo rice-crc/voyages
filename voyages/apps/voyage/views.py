@@ -17,7 +17,6 @@ import csv
 import re
 from .forms import *
 from haystack.query import SearchQuerySet
-from itertools import groupby
 import globals
 import bitly_api
 import requests
@@ -611,6 +610,7 @@ def search(request):
     is_double_fun = False
     graphs_xy_select_form = None
     graphs_bar_select_form = None
+    vv = {}
     graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
@@ -683,6 +683,7 @@ def search(request):
         request.session['voyages_tables_columns'] = None
         request.session['voyages_tables_rows'] = None
         request.session['voyages_tables_cells'] = None
+        request.session['voyages_tables_omit'] = None
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -737,7 +738,7 @@ def search(request):
         elif submitVal == 'tab_statistics':
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
-        elif submitVal == 'tab_tables' or submitVal == 'xls_download_table':
+        elif submitVal.startswith("tab_tables") or submitVal == 'xls_download_table':
             # row_cell_values is what is displayed in the cells in the table,
             # it is a list of triples which contain the row_label, the cell values, then the row total
             # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port).
@@ -749,7 +750,7 @@ def search(request):
             # Most of the time the row/column span will just be 1.
             xls_table = []
             tab = 'tables'
-            pst = {x: y for x,y in request.POST.items()}
+            pst = {x: y for x, y in request.POST.items()}
 
             # Try to retrieve sessions values
             try:
@@ -766,6 +767,11 @@ def search(request):
                 tables_cells = request.session['voyages_tables_cells']
             except KeyError:
                 tables_cells = None
+
+            try:
+                omit_empty = request.session['voyages_tables_omit']
+            except KeyError:
+                omit_empty = None
 
             # Collect settings (if possible retrieve from the session)
             if 'columns' not in pst and tables_columns:
@@ -785,6 +791,21 @@ def search(request):
             elif 'cells' not in pst:
                 pst['cells'] = '1'
 
+            print "submit val = " + str(request.POST['submitVal'])
+
+            if submitVal == "tab_tables_in":
+                print "first if"
+                if omit_empty is True and 'omit_empty' not in pst:
+                    omit_empty = False
+                elif not omit_empty and 'omit_empty' in pst:
+                    omit_empty = True
+            else:
+                if omit_empty is None:
+                    omit_empty = True
+
+            pst['omit_empty'] = omit_empty
+            request.session['voyages_tables_omit'] = omit_empty
+
             # Update sessions with updated values
             request.session['voyages_tables_columns'] = pst['columns']
             request.session['voyages_tables_rows'] = pst['rows']
@@ -795,13 +816,13 @@ def search(request):
             table_col_query_def = globals.table_columns[7]
             display_function = globals.table_functions[1][1]
             display_fun_name = globals.table_functions[1][0]
-            omit_empty = False
             if table_stats_form.is_valid():
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
                 display_fun_name = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][0]
-                omit_empty = table_stats_form.cleaned_data.get('omit_empty', False)
+                table_stats_form.omit_empty = omit_empty
+
             restrict_query = {}
             # Get the variable name of the variable used to filter the rows
             # so we can constrain the column totals to voyages with the row variable defined
@@ -1195,8 +1216,13 @@ def search(request):
                     plt.clf()
                     plt.cla()
                     plt.close('all')
-        elif  submitVal == 'tab_timeline':
+        elif submitVal == 'tab_timeline':
             tab = 'timeline'
+            #print "aaa"
+
+            #vv = SearchQuerySet().models(Voyage).facet('var_imp_voyage_began').facet_counts()
+
+            #vv = vv['fields']['var_imp_voyage_began']
         elif submitVal == 'tab_maps':
             tab = 'maps'
         elif submitVal == 'download_xls_current_page':
@@ -1270,7 +1296,8 @@ def search(request):
                    'graph_remove_plots_form': graph_remove_plots_form,
                    'graphs_tab': graphs_tab,
                    'graphs_bar_select_form': graphs_bar_select_form,
-               })
+                   'vv': vv
+                  })
 
 
 def prettify_results(results, lookup_table):

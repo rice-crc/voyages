@@ -227,7 +227,7 @@ class TableSelectionForm(forms.Form):
     cellchoices = map(lmbd, enumerate(globals.table_functions))
     cells = forms.ChoiceField(label='Cells', choices=cellchoices, initial=[cellchoices[1][1]])#globals.table_functions[1])
     cells.initial = [cellchoices[1][0]]
-    omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=False)
+    omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=True)
 
 class GraphXYSelectionForm(forms.Form):
     lmbd = lambda x: (str(x[0]), x[1][0])
