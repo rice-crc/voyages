@@ -250,6 +250,7 @@ class GraphRemovePlotForm(forms.Form):
                     result.append(int(i))
         return result
 
+
 class GraphBarSelectionForm(forms.Form):
     lmbd = lambda x: (str(x[0]), x[1][0])
     xchoices = map(lmbd, enumerate(globals.graphs_bar_x_functions))
@@ -257,3 +258,9 @@ class GraphBarSelectionForm(forms.Form):
     barxselect = forms.ChoiceField(label='X axis', choices=xchoices)
     baryselect = forms.ChoiceField(label='Y axis', choices=ychoices)
 
+
+class TimelineVariableForm(forms.Form):
+    var_choices = [(v[0], v[1]) for v in globals.voyage_timeline_variables]
+    print "chouces = " + str(var_choices)
+    variable_select = forms.ChoiceField(label='Timeline variable', choices=var_choices, initial=var_choices[0])
+    #lower_bound = forms.IntegerField(required=False)
