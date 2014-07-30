@@ -145,7 +145,8 @@ function setupleftmenu ()	{
 
 /* Update the text for next-previous link navigation */
 function updatelinktext() {
-	$(lm_load_to_target_seclect).resize();
+    // Dummy call? Was it the call to jquery-ba-resize?
+//	$(lm_load_to_target_seclect).resize();
 	
 	$(lm_sub_menu_cssclass + " div").removeClass(selectedClass);
 	$("#" + lm_currentid).addClass(selectedClass);
