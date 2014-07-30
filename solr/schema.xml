@@ -331,6 +331,8 @@
 
     <field name="var_imp_arrival_at_port_of_dis" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_arrival_at_port_of_dis_exact" type="long" indexed="true" stored="true" multiValued="false" /> 
+
     <field name="var_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
