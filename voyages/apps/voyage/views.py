@@ -690,9 +690,9 @@ def search(request):
         request.session['voyages_tables_rows'] = None
         request.session['voyages_tables_cells'] = None
         request.session['voyages_tables_omit'] = None
+        request.session['voyage_timeline_form_option'] = None
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
-        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
                                                            'frame_to_year': voyage_span_last_year})
         results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
@@ -1227,24 +1227,34 @@ def search(request):
             tab = 'timeline'
 
             timeline_form = TimelineVariableForm(request.POST)
+            try:
+                timeline_form_in_session = request.session['voyage_timeline_form_option']
+            except:
+                timeline_form_in_session = None
+
             if timeline_form.is_valid():
                 # If any choice passed, get chosen index and get selected tuple
                 timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
                 timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
+            elif timeline_form_in_session is not None:
+                timeline_form = timeline_form_in_session
+                timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
+                timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
             else:
-                timeline_selected_tuple = globals.voyage_timeline_variables[0]
+                timeline_form = TimelineVariableForm(initial={'variable_select': '15'})
+                timeline_selected_tuple = globals.voyage_timeline_variables[15]
+
+            request.session['voyage_timeline_form_option'] = timeline_form
 
             # Get set based on choice
-            timeline_data = timeline_selected_tuple[2](SearchQuerySet().models(Voyage).all(),
-                                            timeline_selected_tuple[3],
-                                            int(voyage_span_first_year),
-                                            int(voyage_span_last_year))
+            timeline_data = timeline_selected_tuple[2](results,
+                                                       timeline_selected_tuple[3],
+                                                       int(voyage_span_first_year),
+                                                       int(voyage_span_last_year))
 
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
                 timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
-
-            print "dict = " + str(timeline_chart_settings)
 
         elif submitVal == 'tab_maps':
             tab = 'maps'
