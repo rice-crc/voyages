@@ -1237,10 +1237,12 @@ def search(request):
                 timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
                 timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
             elif timeline_form_in_session is not None:
+                # If option is stored in the session
                 timeline_form = timeline_form_in_session
                 timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
                 timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
             else:
+                # Otherwise, it's the first time when timeline is loaded
                 timeline_form = TimelineVariableForm(initial={'variable_select': '15'})
                 timeline_selected_tuple = globals.voyage_timeline_variables[15]
 
@@ -1254,6 +1256,7 @@ def search(request):
 
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
+                # Include extra dict if exists
                 timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
 
         elif submitVal == 'tab_maps':
