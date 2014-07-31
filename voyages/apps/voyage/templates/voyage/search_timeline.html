@@ -2,19 +2,7 @@
 
 {% load humanize %}
 
-{#<script language="javascript" type="text/javascript" src="{{ STATIC_URL }}scripts/jquery.jqplot.min.js"></script>#}
-{#<script src="{{ STATIC_URL }}scripts/voyage/voyage-timeline.js" type="text/javascript"></script>#}
-{#<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/jqplot.categoryAxisRenderer.js"></script>#}
-{#<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/jqplot.barRenderer.js"></script>#}
-{#<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/jqplot.dateAxisRenderer.js"></script>#}
-{#<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/jqplot.cursor.js"></script>#}
-{#<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/jqplot.highlighter.js"></script>#}
-{#<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.jqplot.min.css" />#}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-search-graph.css">
-
-
-
-
 
 <h1>Timeline</h1>
 <div class="database-graph-options">
@@ -24,10 +12,10 @@
 <td style="padding: 0px 15px 0px 0px;">Display variable</td>
 <td style="padding: 0px 5px 0px 0px;">
 {% csrf_token %}
-    {{ timeline_form }}
+    {% for field in timeline_form %}{{ field }}{% endfor %}
 </td>
 <td style="padding: 0px 5px 0px 0px;">
-<input id="form:showStat" type="submit" onclick="clear_form();" value="Show" name="form:showStat">
+<input type="submit" value="{% trans 'Show' %}" name="timeline_button" style="margin-bottom: 0px; margin-top: 0px;" onclick="submitWithValue('tab_timeline');">
 </td>
 </tr>
 </tbody>
@@ -43,18 +31,43 @@ $(function () {
             maxPadding: 0.05
         },
 
+        yAxis: {
+            title: {
+                text: ''
+            }
+            {% if timeline_chart_settings.suffix %}
+            , labels: {
+                format: '{value}%'
+            }
+            {% endif %}
+        },
+
         chart: {
             type: 'column',
-            zoomType: 'x'
+            zoomType: 'x',
+            selectionMarkerFill: 'rgba(248, 243, 228, 0.75)'
         },
 
         series: [{
-            data: {{ vv }}
+            data: {{ timeline_data }},
+            name: "{{ timeline_chart_settings.name }}"
         }],
+
+        tooltip: {
+            shared: true,
+            useHTML: true,
+            headerFormat: '<small>{point.key}asdad</small><table>',
+            pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: right"><b>{point.y} EUR</b></td></tr>',
+            footerFormat: '</table>',
+            valueDecimals: 2
+        },
+
         plotOptions: {
                 column: {
                     pointPadding: 0.2,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    color: 'rgba(202, 32, 65, 1)'
                 }
         },
         tooltip: {
@@ -62,19 +75,27 @@ $(function () {
                 color: 'green',
                 dashStyle: 'solid'
             },
-            shared: true
+            shared: true,
+            useHTML: true,
+            headerFormat: '<small>{point.key}</small><table>',
+            pointFormat: '<tr><td>{series.name}: </td>' +
+            '<td style="text-align: right"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>'
+            {% if timeline_chart_settings.suffix %}, valueSuffix: '{{ timeline_chart_settings.suffix }}'{% endif %}
+        },
+        title: {
+            text: "{{ timeline_chart_settings.name }}"
         }
     });
 });
 
 </script>
 
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/highstock.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/exporting.js"></script>
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/highcharts.js"></script>
 
 
-<div id="form:eventLine_db" style="position: relative; width: 870px; height: 330px;">
-<div id="chartdiv" style="position: absolute; left: 70px; top: 35px; height: 250px; width: 800px;">
+<div id="form:eventLine_db" style="position: relative; width: 870px; height: 550px;">
+<div id="chartdiv" style="position: absolute; left: 40px; top: 20px; height: 350px; width: 800px;">
 
 
 
