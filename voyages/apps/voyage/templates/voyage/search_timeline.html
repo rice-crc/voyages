@@ -40,6 +40,15 @@ $(function () {
                 format: '{value}%'
             }
             {% endif %}
+            {% if timeline_chart_settings.min %}
+            , min: {{ timeline_chart_settings.min }}
+            {% endif %}
+            {% if timeline_chart_settings.max %}
+            , max: {{ timeline_chart_settings.max }}
+            {% endif %}
+            {% if timeline_chart_settings.tickInterval %}
+            , tickInterval: {{ timeline_chart_settings.tickInterval }}
+            {% endif %}
         },
 
         chart: {
@@ -53,19 +62,9 @@ $(function () {
             name: "{{ timeline_chart_settings.name }}"
         }],
 
-        tooltip: {
-            shared: true,
-            useHTML: true,
-            headerFormat: '<small>{point.key}asdad</small><table>',
-            pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
-            '<td style="text-align: right"><b>{point.y} EUR</b></td></tr>',
-            footerFormat: '</table>',
-            valueDecimals: 2
-        },
-
         plotOptions: {
                 column: {
-                    pointPadding: 0.2,
+                    groupPadding: 0.2,
                     borderWidth: 0,
                     color: 'rgba(202, 32, 65, 1)'
                 }

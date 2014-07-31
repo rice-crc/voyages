@@ -261,6 +261,4 @@ class GraphBarSelectionForm(forms.Form):
 
 class TimelineVariableForm(forms.Form):
     var_choices = [(v[0], v[1]) for v in globals.voyage_timeline_variables]
-    print "chouces = " + str(var_choices)
-    variable_select = forms.ChoiceField(label='Timeline variable', choices=var_choices, initial=var_choices[0])
-    #lower_bound = forms.IntegerField(required=False)
+    variable_select = forms.ChoiceField(label='Timeline variable', choices=var_choices, initial=var_choices[15])
