@@ -1236,7 +1236,7 @@ def search(request):
                 # If any choice passed, get chosen index and get selected tuple
                 timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
                 timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
-            elif timeline_form_in_session is not None:
+            elif timeline_form_in_session is not None and timeline_form_in_session.is_valid():
                 # If option is stored in the session
                 timeline_form = timeline_form_in_session
                 timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
