@@ -602,6 +602,7 @@ def search(request):
     prev_queries_open = False
     row_list = []
     table_stats_form = None
+
     col_totals = []
     extra_cols = 0
     num_col_labels_before = 1
@@ -610,10 +611,15 @@ def search(request):
     is_double_fun = False
     graphs_xy_select_form = None
     graphs_bar_select_form = None
-    vv = {}
     graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
+
+    # Timeline
+    timeline_data = []
+    timeline_form = None
+    timeline_chart_settings = {}
+
     # If there is no requested page number, serve 1
     current_page = 1
     desired_page = request.POST.get('desired_page')
@@ -886,6 +892,7 @@ def search(request):
             for idx, colquery in enumerate(table_col_query_def[1]):
                 colqueryset = tableresults.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
+
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
@@ -1218,11 +1225,27 @@ def search(request):
                     plt.close('all')
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
-            #print "aaa"
 
-            #vv = SearchQuerySet().models(Voyage).facet('var_imp_voyage_began').facet_counts()
+            timeline_form = TimelineVariableForm(request.POST)
+            if timeline_form.is_valid():
+                # If any choice passed, get chosen index and get selected tuple
+                timeline_selected_var_index = int(timeline_form.cleaned_data['variable_select'])
+                timeline_selected_tuple = globals.voyage_timeline_variables[timeline_selected_var_index]
+            else:
+                timeline_selected_tuple = globals.voyage_timeline_variables[0]
 
-            #vv = vv['fields']['var_imp_voyage_began']
+            # Get set based on choice
+            timeline_data = timeline_selected_tuple[2](SearchQuerySet().models(Voyage).all(),
+                                            timeline_selected_tuple[3],
+                                            int(voyage_span_first_year),
+                                            int(voyage_span_last_year))
+
+            timeline_chart_settings['name'] = timeline_selected_tuple[1]
+            if len(timeline_selected_tuple) > 4:
+                timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
+
+            print "dict = " + str(timeline_chart_settings)
+
         elif submitVal == 'tab_maps':
             tab = 'maps'
         elif submitVal == 'download_xls_current_page':
@@ -1296,7 +1319,9 @@ def search(request):
                    'graph_remove_plots_form': graph_remove_plots_form,
                    'graphs_tab': graphs_tab,
                    'graphs_bar_select_form': graphs_bar_select_form,
-                   'vv': vv
+                   'timeline_data': timeline_data,
+                   'timeline_form': timeline_form,
+                   'timeline_chart_settings': timeline_chart_settings
                   })
 
 

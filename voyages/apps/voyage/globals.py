@@ -512,6 +512,7 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
     def sum_fun(queryset, rowset, colset, allset):
+        print
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
@@ -1695,4 +1696,160 @@ methodology_items = [
     {'number': 22,
      'name': "Notes",
      'page': "methodology-22"},
+]
+
+
+# Timeline part
+def get_average_set_timeline(query_dict, var_name, start_year, stop_year):
+    """Calculate average of var and create a list divided by years
+
+    :param query_dict: Query dictionary, on which based on
+    calculation will be performed
+    :param var_name: Appropriate name of solr variable
+    :return: list of values [['year', 'value'],]
+    """
+
+    timeline_list = []
+
+    for i in range(start_year, stop_year):
+        # For each year, get stats on var_name
+        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
+
+        # If results available, store mean, otherwise store 0
+        if value[var_name] is not None:
+            timeline_list.append([i, round(value[var_name]['mean'], 1)])
+        else:
+            timeline_list.append([i, 0])
+
+    # Sort based on years and return
+    timeline_list.sort(key=lambda tup: tup[0])
+    return timeline_list
+
+
+def get_sum_set_timeline(query_dict, var_name, start_year, stop_year):
+    """Calculate sum of var and create a list divided by years
+
+    :param query_dict: Query dictionary, on which based on
+    calculation will be performed
+    :param var_name: Appropriate name of solr variable
+    :return: list of values [['year', 'value'],]
+    """
+
+    timeline_list = []
+
+    for i in range(start_year, stop_year):
+        # For each year, get stats on var_name
+        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
+
+        # If results available, store sum, otherwise store 0
+        if value[var_name] is not None:
+            timeline_list.append([i, round(value[var_name]['sum'], 1)])
+        else:
+            timeline_list.append([i, 0])
+
+    # Sort based on years and return
+    timeline_list.sort(key=lambda tup: tup[0])
+    return timeline_list
+
+
+def get_exist_set_timeline(query_dict, var_name, start_year, stop_year):
+    """Calculate exist/nonexist ratio of var and create a list divided by years
+
+    :param query_dict: Query dictionary, on which based on
+    calculation will be performed
+    :param var_name: Appropriate name of solr variable
+    :return: list of values [['year', 'value'],]
+    """
+
+    timeline_list = []
+
+    for i in range(start_year, stop_year):
+        # For each year, get stats on var_name
+        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name)
+        value_result = value.stats_results()
+
+        # If results available, calculate not_null/all and get percent of this (*100)
+        if value_result[var_name] is not None:
+            timeline_list.append([i, round((float(value_result[var_name]['count'])/float(len(value))*100), 1)])
+        else:
+            timeline_list.append([i, 0])
+
+    # Sort based on years and return
+    timeline_list.sort(key=lambda tup: tup[0])
+    return timeline_list
+
+
+def get_percentage_set_timeline(query_dict, var_name, start_year, stop_year):
+    """Calculate mean of var (in percent scale) and create a list divided by years
+
+    :param query_dict: Query dictionary, on which based on
+    calculation will be performed
+    :param var_name: Appropriate name of solr variable
+    :return: list of values [['year', 'value'],]
+    """
+
+    timeline_list = []
+
+    for i in range(start_year, stop_year):
+        # For each year, get stats on var_name
+        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
+
+        # If results available, get mean and present as percent (*100)
+        if value[var_name] is not None:
+            timeline_list.append([i, round(value[var_name]['mean']*100, 1)])
+        else:
+            timeline_list.append([i, 0])
+
+    # Sort based on years and return
+    timeline_list.sort(key=lambda tup: tup[0])
+    return timeline_list
+
+
+def get_simple_set_timeline(query_dict, var_name, start_year=None, stop_year=None):
+    """Create a list of values divided by years
+
+    :param query_dict: Query dictionary, on which based on
+    calculation will be performed
+    :param var_name: Appropriate name of solr variable
+    :return: list of values [['year', 'value'],]
+    """
+
+    # Facet on var_name, minimum 1 and limit 500 (first year is 1514, last 1866,
+    # so '500' is fine
+    timeline_list = query_dict.facet(var_name, mincount=1, limit=500).facet_counts()
+
+    # Create list of lists, where inner list is in form of: [year, value]
+    timeline_list = [[int(v[0]), v[1]] for v in timeline_list['fields'][var_name]]
+
+    # Sort based on years and return
+    timeline_list.sort(key=lambda tup: tup[0])
+    return timeline_list
+
+# List of options and settings for timeline in form of:
+# (index, name, function_to_get_set, variable in solr, [extra_dict])
+voyage_timeline_variables = [
+    ('0',  "Number of voyages", get_simple_set_timeline, 'var_imp_arrival_at_port_of_dis'),
+    ('1',  'Average tonnage', get_average_set_timeline, 'var_tonnage'),
+    ('2',  'Average tonnage (standarized)', get_average_set_timeline, 'var_tonnage_mod'),
+    ('3',  'Average number of guns', get_average_set_timeline, 'var_guns_mounted'),
+    ('4',  'Rate of resistance', get_exist_set_timeline, 'var_resistance_idnum', {"suffix": "%"}),
+    ('5',  'Average duration of voyage from home port to disembarkation (days)',
+     get_average_set_timeline, "var_imp_length_home_to_disembark"),
+    ('6',  'Average duration of middle passage (days)', get_average_set_timeline, 'var_length_middle_passage_days'),
+    ('7',  'Average crew at outset', get_average_set_timeline, 'var_crew_voyage_outset'),
+    ('8',  'Average crew at first landing of slaves', get_average_set_timeline, 'var_crew_first_landing'),
+    ('9',  'Number of crew deaths', get_sum_set_timeline, 'var_crew_died_complete_voyage'),
+    ('10', 'Average crew deaths', get_average_set_timeline, 'var_crew_died_complete_voyage'),
+    ('11', 'Intended number of purchases', get_sum_set_timeline, 'var_num_slaves_intended_first_port'),
+    ('12', 'Average intended purchases', get_average_set_timeline, 'var_num_slaves_intended_first_port'),
+    ('13', 'Total number of captives embarked', get_sum_set_timeline, 'var_imp_total_num_slaves_purchased'),
+    ('14', 'Average number of captives embarked', get_average_set_timeline, 'var_imp_total_num_slaves_purchased'),
+    ('15', 'Total number of captives disembarked', get_sum_set_timeline, 'var_imp_total_slaves_disembarked'),
+    ('16', 'Average number of captives disembarked', get_average_set_timeline, 'var_imp_total_slaves_disembarked'),
+    ('17', 'Percentage men (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_men',
+     {"suffix": "%"}),
+    ('18', 'Percentage women (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_women',
+     {"suffix": "%"}),
+    ('19', 'Percentage boys (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_boys',
+     {"suffix": "%"})
 ]

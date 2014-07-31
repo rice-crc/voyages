@@ -179,7 +179,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage dates
     # Month field is used for filtering by month
-    var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True)
+    var_imp_arrival_at_port_of_dis = indexes.IntegerField(null=True, faceted=True)
     var_voyage_began = indexes.DateField(null=True)
     var_voyage_began_month = indexes.IntegerField(null=True)
     var_slave_purchase_began = indexes.DateField(null=True)
