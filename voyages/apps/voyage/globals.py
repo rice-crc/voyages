@@ -512,7 +512,6 @@ table_columns = [get_each_from_list_col('Flag*', imputed_nationality_possibiliti
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
     def sum_fun(queryset, rowset, colset, allset):
-        print
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
