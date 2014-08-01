@@ -1714,11 +1714,9 @@ def get_average_set_timeline(query_dict, var_name, start_year, stop_year):
         # For each year, get stats on var_name
         value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
 
-        # If results available, store mean, otherwise store 0
+        # If results available, store mean
         if value[var_name] is not None:
             timeline_list.append([i, round(value[var_name]['mean'], 1)])
-        else:
-            timeline_list.append([i, 0])
 
     # Sort based on years and return
     timeline_list.sort(key=lambda tup: tup[0])
@@ -1740,11 +1738,9 @@ def get_sum_set_timeline(query_dict, var_name, start_year, stop_year):
         # For each year, get stats on var_name
         value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
 
-        # If results available, store sum, otherwise store 0
+        # If results available, store sum
         if value[var_name] is not None:
             timeline_list.append([i, round(value[var_name]['sum'], 1)])
-        else:
-            timeline_list.append([i, 0])
 
     # Sort based on years and return
     timeline_list.sort(key=lambda tup: tup[0])
@@ -1770,8 +1766,6 @@ def get_exist_set_timeline(query_dict, var_name, start_year, stop_year):
         # If results available, calculate not_null/all and get percent of this (*100)
         if value_result[var_name] is not None:
             timeline_list.append([i, round((float(value_result[var_name]['count'])/float(len(value))*100), 1)])
-        else:
-            timeline_list.append([i, 0])
 
     # Sort based on years and return
     timeline_list.sort(key=lambda tup: tup[0])
@@ -1796,8 +1790,6 @@ def get_percentage_set_timeline(query_dict, var_name, start_year, stop_year):
         # If results available, get mean and present as percent (*100)
         if value[var_name] is not None:
             timeline_list.append([i, round(value[var_name]['mean']*100, 1)])
-        else:
-            timeline_list.append([i, 0])
 
     # Sort based on years and return
     timeline_list.sort(key=lambda tup: tup[0])
@@ -1834,7 +1826,7 @@ voyage_timeline_variables = [
     ('4',  'Rate of resistance', get_exist_set_timeline, 'var_resistance_idnum',
      {"suffix": "%", 'tickInterval': 10, 'min': 0, 'max': 100}),
     ('5',  'Average duration of voyage from home port to disembarkation (days)',
-     get_average_set_timeline, "var_imp_length_home_to_disembark"),
+     get_average_set_timeline, "var_imp_length_home_to_disembark", {"no_numeric_symbol:" : True}),
     ('6',  'Average duration of middle passage (days)', get_average_set_timeline, 'var_length_middle_passage_days'),
     ('7',  'Average crew at outset', get_average_set_timeline, 'var_crew_voyage_outset'),
     ('8',  'Average crew at first landing of slaves', get_average_set_timeline, 'var_crew_first_landing'),
@@ -1851,5 +1843,13 @@ voyage_timeline_variables = [
     ('18', 'Percentage women (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_women',
      {"suffix": "%"}),
     ('19', 'Percentage boys (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_boys',
-     {"suffix": "%"})
+     {"suffix": "%"}),
+    ('20', 'Percentage girls (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_girls',
+     {"suffix": "%"}),
+    ('21', 'Percentage female (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_female',
+     {"suffix": "%"}),
+    ('22', 'Percentage male (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_male',
+     {"suffix": "%", "max": 100}),
+    ('23', 'Percentage mortality (among captives)', get_percentage_set_timeline, 'var_imputed_mortality',
+     {"suffix": "%", "max": 100})
 ]

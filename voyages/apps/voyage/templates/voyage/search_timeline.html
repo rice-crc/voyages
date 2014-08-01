@@ -23,12 +23,21 @@
 </div>
 
 <script type="text/javascript">
+var chart;
 
 $(function () {
-    $('#chartdiv').highcharts({
+    chart = $('#chartdiv').highcharts({
         xAxis: {
             minPadding: 0.05,
             maxPadding: 0.05
+        },
+
+        lang: {
+            decimalPoint: '.',
+            thousandsSep: ','
+            {% if timeline_chart_settings.no_numeric_symbol %}
+            , numericSymbols: null
+            {% endif %}
         },
 
         yAxis: {
@@ -60,7 +69,11 @@ $(function () {
                     y: -30
                 }
             },
-            selectionMarkerFill: 'rgba(248, 243, 228, 0.75)'
+            selectionMarkerFill: 'rgba(248, 243, 228, 0.75)',
+            style: {
+	            fontFamily: 'Arial,Helvetica,Bitstream Vera Sans,Sans,sans-serif',
+	            fontSize: '12px'
+            }
         },
 
         series: [{
@@ -80,13 +93,15 @@ $(function () {
                 color: 'green',
                 dashStyle: 'solid'
             },
+            formatter: function() {
+                if (this.y > -1) return this.x + '<br/>' + this.points[0].series.name + ': <b>' +
+                        this.y.toLocaleString() {% if timeline_chart_settings.suffix %} + '{{ timeline_chart_settings.suffix }}'{% endif %} + "</b>";
+                else {
+                    return this.x + '<br/>' + this.points[0].series.name + ': ';
+                }
+            },
             shared: true,
-            useHTML: true,
-            headerFormat: '<small>{point.key}</small><table>',
-            pointFormat: '<tr><td>{series.name}: </td>' +
-            '<td style="text-align: right"><b>{point.y}</b></td></tr>',
-            footerFormat: '</table>'
-            {% if timeline_chart_settings.suffix %}, valueSuffix: '{{ timeline_chart_settings.suffix }}'{% endif %}
+            useHTML: true
         },
         title: {
             text: "{{ timeline_chart_settings.name }}"
