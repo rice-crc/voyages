@@ -1055,8 +1055,9 @@ def search(request):
                 return response
 
             # If empty, check if any columns need to be removed
-            if omit_empty:
-                remove_empty_columns(0, row_list, collabels, col_totals)
+            # TODO: Temporarily commented (waiting for David's response.
+            #if omit_empty:
+            #    remove_empty_columns(0, row_list, collabels, col_totals)
 
         elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
