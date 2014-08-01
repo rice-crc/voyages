@@ -822,6 +822,7 @@ def search(request):
             display_function = globals.table_functions[1][1]
             display_fun_name = globals.table_functions[1][0]
             if table_stats_form.is_valid():
+                # If form is valid, collect all necessary settings: column, row and cell variables
                 table_row_query_def = globals.table_rows[int(table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = globals.table_columns[int(table_stats_form.cleaned_data['columns'])]
                 display_function = globals.table_functions[int(table_stats_form.cleaned_data['cells'])][1]
