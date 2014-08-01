@@ -800,7 +800,6 @@ def search(request):
             print "submit val = " + str(request.POST['submitVal'])
 
             if submitVal == "tab_tables_in":
-                print "first if"
                 if omit_empty is True and 'omit_empty' not in pst:
                     omit_empty = False
                 elif not omit_empty and 'omit_empty' in pst:
@@ -882,7 +881,13 @@ def search(request):
             extra_cols = table_row_query_def[2]
             cell_values = []
             used_col_query_sets = []
-            collabels = [[j for j in i] for i in table_col_query_def[2]]
+
+            # Transform tuples to lists
+            listed_cols = [map(list, k) for k in table_col_query_def[2]]
+
+            # Create column labels
+            collabels = [[j for j in i] for i in listed_cols]
+
             num_col_labels_total = len(collabels)
             num_row_labels = extra_cols + 1
             remove_cols = []
@@ -909,15 +914,15 @@ def search(request):
                     idy=0
                     for idc, colstuff in enumerate(collbllist):
                         if col >= idy and col < idy + colstuff[1]:
-                            collabels[idt][idc] = (colstuff[0], colstuff[1] - 1)
+                            collabels[idt][idc] = [colstuff[0], colstuff[1] - 1]
                         idy += colstuff[1]
             remove_rows = []
             if is_double_fun:
-                collabels = [[(j, k*2) for j, k in i] for i in collabels]
+                collabels = [[[j, k*2] for j, k in i] for i in collabels]
                 lastcol = []
                 for i in collabels[-1]:
-                    lastcol.append(('Embarked', i[1]/2))
-                    lastcol.append(('Disembarked', i[1]/2))
+                    lastcol.append(['Embarked', i[1]/2])
+                    lastcol.append(['Disembarked', i[1]/2])
                 collabels.append(lastcol)
             num_col_labels_before = len(collabels)
             xls_row = []
@@ -951,6 +956,7 @@ def search(request):
                     cell_queryset = rowqueryset
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
+
                     if is_double_fun:
                         display_result = display_function(cell_queryset, rowqueryset, colqueryset, tableresults)
                         row_cell_values.append(display_result[0])
@@ -972,7 +978,7 @@ def search(request):
                             xls_row.append('')
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None, tableresults)
-                row_list.append(([(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,))
+                row_list.append([[(i[0], i[1]) for i in rowlabels], row_cell_values, row_total,])
                 if is_double_fun:
                     if row_total[0] != None:
                         xls_row.append(row_total[0])
@@ -1046,6 +1052,11 @@ def search(request):
                         ws.cell(row=idx+1,column=idy+1).value = j
                 wb.save(response)
                 return response
+
+            # If empty, check if any columns need to be removed
+            if omit_empty:
+                remove_empty_columns(0, row_list, collabels, col_totals)
+
         elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
             graphs_tab = 'tab_graphs_xy'
@@ -2118,3 +2129,74 @@ def extract_query_for_download(query_dict, date_filter):
         query_arr.append(query_str)
 
     return " AND ".join(query_arr)
+
+
+def remove_empty_columns(index, row_list, collabels, col_totals):
+    finish = True
+
+    # Check if any has to be removed
+    for i in range(index, len(col_totals)-1):
+        if col_totals[i] == 0:
+            index = i
+            finish = False
+            break
+
+    # If not, finish
+    if finish:
+        return
+
+    # Remove column in row_list (values)
+    for i in row_list:
+        del i[1][index]
+
+    # Remove total column
+    del col_totals[index]
+
+    # Remove port and any parents if needed
+    # Port
+    current_index = 1
+    for ind, value in enumerate(collabels[-1]):
+        if value[1] == 1 and current_index == index+1:
+            del collabels[-1][ind]
+            break
+        elif value[1] == 1:
+            current_index += 1
+
+    # If there is more (parents), check then and remove if necessary
+    # Start from first parent and go to grandparents if necessary
+    depth = len(collabels) - 2
+
+    # As long as parent exists
+    while depth > -1:
+        current_list = collabels[depth]
+
+        # val - keep adding values of parents
+        # count_items - counting how many items (parents) already checked
+        val = 1
+        count_items = 0
+
+        for i, value in enumerate(current_list):
+            # Check only items that are displayed (>1)
+            if value[1] > 0:
+                # Increment counter of items
+                count_items += 1
+
+                # If wanted index is in between of the current val and less than val+next, found
+                if current_index >= val and current_index < val + value[1]:
+
+                    # Decrement current parent value
+                    value[1] -= 1
+
+                    # If 0, remove it
+                    if value[1] == 0:
+                        del collabels[depth][i]
+                        depth -= 1
+                    else:
+                        depth -= 1
+
+                    # Go to the next parents if needed
+                    break
+                else:
+                    val += value[1]
+
+    remove_empty_columns(index+1, row_list, collabels, col_totals)
