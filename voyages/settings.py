@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'voyages.apps.about',
     'voyages.apps.contribute',
     'voyages.apps.help',
+    'voyages.apps.static_content',
 )
 
 
