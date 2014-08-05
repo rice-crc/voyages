@@ -135,14 +135,10 @@
 		<!-- The welcome text next to the map -->
 		<td valign="top">
 		<div id="welcome-text">
-			<h1>{% blocktrans %}The Trans-Atlantic Slave Trade Database has
-				information on more than 35,000 slaving voyages{% endblocktrans %}
+			<h1>{{ objs.0.title|safe }}
 			</h1>
 			<p>
-				{% blocktrans %}that forcibly embarked over 10 million Africans for transport to the
-				 Americas between the sixteenth and nineteenth centuries. It offers 
-				researchers, students and the general public a chance to rediscover the 
-				reality of one of the largest forced movements of peoples in world history.{% endblocktrans %}</p>
+				{{ objs.0.description|safe }}</p>
 		</div>
 	
 		<!-- Featured section -->
@@ -151,37 +147,30 @@
 				<td class="featured-section-image"><a href="{% url 'voyage:search' %}"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'voyage:search' %}">{% trans 'Search the Voyages Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'voyage:search' %}">{{ objs.1.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{% blocktrans %}Look for particular voyages in this database of documented slaving
-					expeditions.  Create listings, tables, charts, and maps using
-					information from the database.{% endblocktrans %}
+					{{ objs.1.description|safe }}
 				</div></td>
 			</tr>
 			<tr>
 				<td class="featured-section-image"><a href="{% url 'assessment:estimates' %}"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'assessment:estimates' %}">{% trans 'Examine Estimates of the Slave Trade' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'assessment:estimates' %}">{{ objs.2.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{% blocktrans %}Slaves on documented voyages represent four-fifths of the number
-					who were actually transported.  Use the interactive estimates page
-					to analyze the full volume and multiple routes of the slave trade.{% endblocktrans %}
+					{{ objs.2.description|safe }}
 				</div></td>
 			</tr>
 			<tr>
 				<td class="featured-section-image"><a href="{% url 'about:origins' %}"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'about:origins' %}">{% trans 'Explore the African Names Database' %} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'about:origins' %}">{{ objs.3.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{% blocktrans %}This database identifies 91,491 Africans taken from captured
-                    slave ships or from African trading sites. It displays the
-                    African name, age, gender, origin, country, and places of
-                    embarkation and disembarkation of each individual.{% endblocktrans %}
+					{{ objs.3.description|safe }}
 				</div></td>
 			</tr>
 		</table>
