@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %} Voyages Database {% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-index.css">
+{% endblock %}
+
+{% block content %}
+<div id="index-intro-band">
+
+	<div id="index-intro-title">
+		{{ objs.0.title }}
+	</div>
+
+	<div id="index-intro-text">
+		{{ objs.0.description }}
+	</div>
+</div>
+
+<div id="section-titles">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-title"><a href="{% url 'voyage:guide' %}">{{ objs.1.title }}</a></td>
+			<td class="section-title"><a href="{% url 'voyage:search' %}">{{ objs.2.title }}</a></td>
+			<td class="section-title"><a href="{% url 'voyage:download' %}">{{ objs.3.title }}</a></td>
+			<td class="section-title"><a href="{% url 'voyage:submission-login' %}">{{ objs.4.title }}</a></td>
+		</tr>
+	</table>
+</div>
+
+<div id="section-descs">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-desc"> {{ objs.1.description }} </td>
+			<td class="section-desc"> {{ objs.2.description }} </td>
+			<td class="section-desc"> {{ objs.3.description }} </td>
+			<td class="section-desc"> {{ objs.4.description }} </td>
+		</tr>
+	</table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

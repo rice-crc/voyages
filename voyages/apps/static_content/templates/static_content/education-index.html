@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+<!-- The landing page of the Education section -->
+{% load i18n %}
+{% block title %}{% trans "Educational Materials" %}{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education-index.css">
+{% endblock %}
+
+{% block content %}
+<div id="index-intro-band">
+
+	<div id="index-intro-title">
+		{{ objs.0.title|safe }}
+	</div>
+
+	<div id="index-intro-text">
+		{{ objs.0.description|safe }}
+	</div>
+
+</div>
+
+<div id="section-titles">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-title"><a href="{% url 'education:lesson-plans' %}">{{ objs.1.title|safe }}</a></td>
+			<td class="section-title"><a href="{% url 'education:web-resources' %}">{{ objs.2.title|safe }}</a></td>
+		</tr>
+	</table>
+</div>
+
+<div id="section-descs">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+
+			<td class="section-desc">{{ objs.1.description|safe }}</td>
+
+			<td class="section-desc">{{ objs.2.description|safe }}</td>
+
+		</tr>
+	</table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
