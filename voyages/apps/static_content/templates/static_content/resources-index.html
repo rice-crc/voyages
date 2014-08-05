@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% comment %}Corresponds to the landing page of the Resources section {% endcomment %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Resources" %}{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-index.css">
+{% endblock %}
+
+{% block content %}
+<div id="index-intro-band">
+
+	<div id="index-intro-title">
+		{{ objs.0.title }}
+	</div>
+
+	<div id="index-intro-text">
+		{{ objs.0.description }}
+	</div>
+
+</div>
+
+<div id="section-titles">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-title"><a href="{% url 'resources:images' %}">{{ objs.1.title|safe }}</a></td>
+			<td class="section-title"><a href="{% url 'resources:origins' %}">{{ objs.2.title|safe }}</a></td>
+		</tr>
+	</table>
+</div>
+
+<div id="section-descs">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+
+			<td class="section-desc">{{ objs.1.description|safe }}</td>
+
+			<td class="section-desc">{{ objs.2.description|safe }}</td>
+
+		</tr>
+	</table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
