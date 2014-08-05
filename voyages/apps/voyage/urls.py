@@ -13,7 +13,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^$', TemplateView.as_view(template_name='voyage/index.html'), name='index'),
+    url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Voyage'}, name='index'),
     url(r'^understanding-db$', TemplateView.as_view(template_name='voyage/understanding_base.html'), name='guide'),
     url(r'^understanding-db/(?P<name>.*)', 'voyages.apps.voyage.views.understanding_page' , name='understanding-page'),
 

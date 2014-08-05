@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^$', TemplateView.as_view(template_name='assessment/index.html'), name='index'),
+    url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Assessment'}, name='index'),
     url(r'^essays$', TemplateView.as_view(template_name='assessment/c01_base.html'), name='essays'),
     
     url(r'^c01_s03_cover$', TemplateView.as_view(template_name='assessment/c01_s03_cover.html'), name='essays-grandio'),

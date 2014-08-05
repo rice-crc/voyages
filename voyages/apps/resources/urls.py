@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='resources/index.html'),
+    url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Resources'},
         name='index'),
     #handle all cases for now
     url(r'^images/$', 'voyages.apps.resources.views.get_all_images',

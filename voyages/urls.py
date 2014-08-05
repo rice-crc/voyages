@@ -15,8 +15,8 @@ from sitemap import StaticSitemap, ViewSitemap
 
 urlpatterns = patterns('',
     # Homepage:
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
-    
+    #url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url(r'^$', include('voyages.apps.static_content.urls', namespace='static_content')),
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),
     url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='assessment')),
