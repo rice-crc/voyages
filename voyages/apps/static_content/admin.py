@@ -9,7 +9,13 @@ class ContentGroupAdmin(admin.ModelAdmin):
 class ContentPageAdmin(admin.ModelAdmin):
     fields = ["title", "description", "order", "group"]
     list_display = ["title", "order", "group"]
+    readonly_fields = ["order", "group"]
     search_fields = ["group__name"]
 
-admin.site.register(ContentGroup, ContentGroupAdmin)
+    # Lock adding new items
+    def has_add_permission(self, request):
+        return False
+
+# Group remains closed in the admin
+# admin.site.register(ContentGroup, ContentGroupAdmin)
 admin.site.register(ContentPage, ContentPageAdmin)
