@@ -19,6 +19,7 @@ class ExportRegion(models.Model):
     """
     Class represents Export region entity.
     """
+
     region_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Export region name")
     order_num = models.IntegerField()
@@ -32,6 +33,7 @@ class ImportArea(models.Model):
     """
     Class represents Import area entity.
     """
+
     area_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Import area name")
     order_num = models.IntegerField()
@@ -45,6 +47,7 @@ class ImportRegion(models.Model):
     """
     Class represents Import region entity.
     """
+
     region_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Import region name")
     order_num = models.IntegerField()
@@ -52,3 +55,16 @@ class ImportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+
+
+class Estimate(models.Model):
+    """
+    Class represents Estimate entity
+    """
+
+    estimate_id = models.IntegerField(unique=True)
+    year = models.IntegerField(max_length=4)
+    embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
+    disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
+    embarked_slaves = models.FloatField(null=True, blank=True)
+    disembarked_slaves = models.FloatField(null=True, blank=True)
