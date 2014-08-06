@@ -44,6 +44,7 @@ class Migration(SchemaMigration):
             ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
             ('show_at_zoom', self.gf('django.db.models.fields.IntegerField')()),
             ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('import_area', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.ImportArea'])),
         ))
         db.send_create_signal(u'assessment', ['ImportRegion'])
 
@@ -69,6 +70,7 @@ class Migration(SchemaMigration):
             ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
             ('show_at_zoom', self.gf('django.db.models.fields.IntegerField')()),
             ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('export_area', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.ExportArea'])),
         ))
         db.send_create_signal(u'assessment', ['ExportRegion'])
 
@@ -114,6 +116,7 @@ class Migration(SchemaMigration):
         },
         u'assessment.exportregion': {
             'Meta': {'object_name': 'ExportRegion'},
+            'export_area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['assessment.ExportArea']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
@@ -137,6 +140,7 @@ class Migration(SchemaMigration):
         u'assessment.importregion': {
             'Meta': {'object_name': 'ImportRegion'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'import_area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['assessment.ImportArea']"}),
             'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
