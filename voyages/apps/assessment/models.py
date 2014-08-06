@@ -27,6 +27,7 @@ class ExportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+    export_area = models.ForeignKey(ExportArea)
 
 
 class ImportArea(models.Model):
@@ -55,6 +56,7 @@ class ImportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+    import_area = models.ForeignKey(ImportArea)
 
 
 class Estimate(models.Model):
