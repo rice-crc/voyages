@@ -1821,7 +1821,7 @@ def get_simple_set_timeline(query_dict, var_name, start_year=None, stop_year=Non
 voyage_timeline_variables = [
     ('0',  "Number of voyages", get_simple_set_timeline, 'var_imp_arrival_at_port_of_dis'),
     ('1',  'Average tonnage', get_average_set_timeline, 'var_tonnage'),
-    ('2',  'Average tonnage (standarized)', get_average_set_timeline, 'var_tonnage_mod'),
+    ('2',  'Average tonnage (standardized)', get_average_set_timeline, 'var_tonnage_mod'),
     ('3',  'Average number of guns', get_average_set_timeline, 'var_guns_mounted'),
     ('4',  'Rate of resistance', get_exist_set_timeline, 'var_resistance_idnum',
      {"suffix": "%", 'tickInterval': 10, 'min': 0, 'max': 100}),
@@ -1850,6 +1850,10 @@ voyage_timeline_variables = [
      {"suffix": "%"}),
     ('22', 'Percentage male (among captives)', get_percentage_set_timeline, 'var_imputed_percentage_male',
      {"suffix": "%", "max": 100}),
-    ('23', 'Percentage mortality (among captives)', get_percentage_set_timeline, 'var_imputed_mortality',
+    ('23', 'Average price (standardized)', get_average_set_timeline, 'var_imputed_sterling_cash',
+     {"suffix": "%"}),
+    ('24', 'Number of slave deaths', get_sum_set_timeline, 'var_imputed_death_middle_passage'),
+    ('25', 'Average slave deaths', get_average_set_timeline, 'var_imputed_death_middle_passage'),
+    ('26', 'Average percentage of slaves embarked who died during the voyage', get_percentage_set_timeline, 'var_imputed_mortality',
      {"suffix": "%", "max": 100})
 ]
