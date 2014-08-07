@@ -59,12 +59,19 @@ class ImportRegion(models.Model):
     import_area = models.ForeignKey(ImportArea)
 
 
+class Nation(models.Model):
+    nation_id = models.IntegerField(unique=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    order_num = models.IntegerField()
+
+
 class Estimate(models.Model):
     """
     Class represents Estimate entity
     """
 
     estimate_id = models.IntegerField(unique=True)
+    nation = models.ForeignKey(Nation)
     year = models.IntegerField(max_length=4)
     embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
     disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)

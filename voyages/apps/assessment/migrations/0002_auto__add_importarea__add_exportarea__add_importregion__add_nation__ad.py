@@ -8,19 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ExportArea'
-        db.create_table(u'assessment_exportarea', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('area_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('order_num', self.gf('django.db.models.fields.IntegerField')()),
-            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('show_at_zoom', self.gf('django.db.models.fields.IntegerField')()),
-            ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'assessment', ['ExportArea'])
-
         # Adding model 'ImportArea'
         db.create_table(u'assessment_importarea', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -33,6 +20,19 @@ class Migration(SchemaMigration):
             ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'assessment', ['ImportArea'])
+
+        # Adding model 'ExportArea'
+        db.create_table(u'assessment_exportarea', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('area_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('order_num', self.gf('django.db.models.fields.IntegerField')()),
+            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
+            ('show_at_zoom', self.gf('django.db.models.fields.IntegerField')()),
+            ('show_on_map', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal(u'assessment', ['ExportArea'])
 
         # Adding model 'ImportRegion'
         db.create_table(u'assessment_importregion', (
@@ -48,10 +48,20 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'assessment', ['ImportRegion'])
 
+        # Adding model 'Nation'
+        db.create_table(u'assessment_nation', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('nation_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('order_num', self.gf('django.db.models.fields.IntegerField')()),
+        ))
+        db.send_create_signal(u'assessment', ['Nation'])
+
         # Adding model 'Estimate'
         db.create_table(u'assessment_estimate', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('estimate_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
+            ('nation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.Nation'])),
             ('year', self.gf('django.db.models.fields.IntegerField')(max_length=4)),
             ('embarkation_region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.ExportRegion'], null=True, blank=True)),
             ('disembarkation_region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.ImportRegion'], null=True, blank=True)),
@@ -76,14 +86,17 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'ExportArea'
-        db.delete_table(u'assessment_exportarea')
-
         # Deleting model 'ImportArea'
         db.delete_table(u'assessment_importarea')
 
+        # Deleting model 'ExportArea'
+        db.delete_table(u'assessment_exportarea')
+
         # Deleting model 'ImportRegion'
         db.delete_table(u'assessment_importregion')
+
+        # Deleting model 'Nation'
+        db.delete_table(u'assessment_nation')
 
         # Deleting model 'Estimate'
         db.delete_table(u'assessment_estimate')
@@ -101,6 +114,7 @@ class Migration(SchemaMigration):
             'embarked_slaves': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'estimate_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'nation': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['assessment.Nation']"}),
             'year': ('django.db.models.fields.IntegerField', [], {'max_length': '4'})
         },
         u'assessment.exportarea': {
@@ -148,6 +162,13 @@ class Migration(SchemaMigration):
             'region_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             'show_at_zoom': ('django.db.models.fields.IntegerField', [], {}),
             'show_on_map': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        u'assessment.nation': {
+            'Meta': {'object_name': 'Nation'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'nation_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
+            'order_num': ('django.db.models.fields.IntegerField', [], {})
         }
     }
 
