@@ -14,6 +14,9 @@ class ExportArea(models.Model):
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
 
+    def __unicode__(self):
+        return self.name
+
 
 class ExportRegion(models.Model):
     """
@@ -29,6 +32,9 @@ class ExportRegion(models.Model):
     show_on_map = models.BooleanField()
     export_area = models.ForeignKey(ExportArea)
 
+    def __unicode__(self):
+        return self.name
+
 
 class ImportArea(models.Model):
     """
@@ -42,6 +48,9 @@ class ImportArea(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
 
 
 class ImportRegion(models.Model):
@@ -58,11 +67,17 @@ class ImportRegion(models.Model):
     show_on_map = models.BooleanField()
     import_area = models.ForeignKey(ImportArea)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Nation(models.Model):
     nation_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     order_num = models.IntegerField()
+
+    def __unicode__(self):
+        return self.name
 
 
 class Estimate(models.Model):
@@ -77,3 +92,6 @@ class Estimate(models.Model):
     disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
     embarked_slaves = models.FloatField(null=True, blank=True)
     disembarked_slaves = models.FloatField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.estimate_id
