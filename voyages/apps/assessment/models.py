@@ -6,7 +6,6 @@ class ExportArea(models.Model):
     Class represents Export area entity.
     """
 
-    area_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Export area name")
     order_num = models.IntegerField()
     latitude = models.FloatField(null=True, blank=True)
@@ -23,7 +22,6 @@ class ExportRegion(models.Model):
     Class represents Export region entity.
     """
 
-    region_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Export region name")
     order_num = models.IntegerField()
     latitude = models.FloatField(null=True, blank=True)
@@ -41,7 +39,6 @@ class ImportArea(models.Model):
     Class represents Import area entity.
     """
 
-    area_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Import area name")
     order_num = models.IntegerField()
     latitude = models.FloatField(null=True, blank=True)
@@ -58,7 +55,6 @@ class ImportRegion(models.Model):
     Class represents Import region entity.
     """
 
-    region_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, verbose_name="Import region name")
     order_num = models.IntegerField()
     latitude = models.FloatField(null=True, blank=True)
@@ -72,7 +68,6 @@ class ImportRegion(models.Model):
 
 
 class Nation(models.Model):
-    nation_id = models.IntegerField(unique=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     order_num = models.IntegerField()
 
@@ -85,7 +80,6 @@ class Estimate(models.Model):
     Class represents Estimate entity
     """
 
-    estimate_id = models.IntegerField(unique=True)
     nation = models.ForeignKey(Nation)
     year = models.IntegerField(max_length=4)
     embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)

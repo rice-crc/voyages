@@ -11,7 +11,6 @@ class Migration(SchemaMigration):
         # Adding model 'ImportArea'
         db.create_table(u'assessment_importarea', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('area_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('order_num', self.gf('django.db.models.fields.IntegerField')()),
             ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
@@ -24,7 +23,6 @@ class Migration(SchemaMigration):
         # Adding model 'ExportArea'
         db.create_table(u'assessment_exportarea', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('area_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('order_num', self.gf('django.db.models.fields.IntegerField')()),
             ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
@@ -37,7 +35,6 @@ class Migration(SchemaMigration):
         # Adding model 'ImportRegion'
         db.create_table(u'assessment_importregion', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('region_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('order_num', self.gf('django.db.models.fields.IntegerField')()),
             ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
@@ -51,7 +48,6 @@ class Migration(SchemaMigration):
         # Adding model 'Nation'
         db.create_table(u'assessment_nation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nation_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
             ('order_num', self.gf('django.db.models.fields.IntegerField')()),
         ))
@@ -60,7 +56,6 @@ class Migration(SchemaMigration):
         # Adding model 'Estimate'
         db.create_table(u'assessment_estimate', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('estimate_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('nation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.Nation'])),
             ('year', self.gf('django.db.models.fields.IntegerField')(max_length=4)),
             ('embarkation_region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['assessment.ExportRegion'], null=True, blank=True)),
@@ -73,7 +68,6 @@ class Migration(SchemaMigration):
         # Adding model 'ExportRegion'
         db.create_table(u'assessment_exportregion', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('region_id', self.gf('django.db.models.fields.IntegerField')(unique=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('order_num', self.gf('django.db.models.fields.IntegerField')()),
             ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
@@ -112,14 +106,12 @@ class Migration(SchemaMigration):
             'disembarked_slaves': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'embarkation_region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['assessment.ExportRegion']", 'null': 'True', 'blank': 'True'}),
             'embarked_slaves': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'estimate_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'nation': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['assessment.Nation']"}),
             'year': ('django.db.models.fields.IntegerField', [], {'max_length': '4'})
         },
         u'assessment.exportarea': {
             'Meta': {'object_name': 'ExportArea'},
-            'area_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
@@ -136,13 +128,11 @@ class Migration(SchemaMigration):
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'order_num': ('django.db.models.fields.IntegerField', [], {}),
-            'region_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             'show_at_zoom': ('django.db.models.fields.IntegerField', [], {}),
             'show_on_map': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         u'assessment.importarea': {
             'Meta': {'object_name': 'ImportArea'},
-            'area_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
@@ -159,7 +149,6 @@ class Migration(SchemaMigration):
             'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'order_num': ('django.db.models.fields.IntegerField', [], {}),
-            'region_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             'show_at_zoom': ('django.db.models.fields.IntegerField', [], {}),
             'show_on_map': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
@@ -167,7 +156,6 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Nation'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'nation_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True'}),
             'order_num': ('django.db.models.fields.IntegerField', [], {})
         }
     }
