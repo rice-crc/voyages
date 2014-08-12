@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block csslist %}
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css">
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-estimates.css">
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css">
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+{% endblock %}
+
+{% block jslist %}
+
+{% endblock %}
+
+{% block title %}Estimates{% endblock %}
+
+{% block content %}
+<form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
+      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
+
+<table cellspacing="0" cellpadding="0" border="0" style="width: 100%">
+<tbody>
+  <tr>
+    <td class="td-side-panel">
+      {% include "assessment/estimates-left-menu.html" %}
+    </td>
+    <td class="td-main-panel">
+
+    </td>
+  </tr>
+</tbody>
+
+</table>
+
+</form>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

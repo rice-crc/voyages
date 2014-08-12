@@ -19,6 +19,6 @@ urlpatterns += patterns('',
     
     url(r'intro-maps$', TemplateView.as_view(template_name='assessment/intro-maps.html'), name='intro-maps'),
     
-    url(r'^estimates$', TemplateView.as_view(template_name='under_constr.html'), name='estimates'),
+    url(r'^estimates$', 'voyages.apps.assessment.views.get_estimates', name='estimates'),
 
 )
