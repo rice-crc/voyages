@@ -744,7 +744,7 @@ def search(request):
         elif submitVal == 'tab_statistics':
             tab = 'statistics'
             result_data['summary_statistics'] = retrieve_summary_stats(results)
-        elif submitVal.startswith("tab_tables") or submitVal == 'xls_download_table':
+        elif (submitVal is not None and submitVal.startswith("tab_tables")) or submitVal == 'xls_download_table':
             # row_cell_values is what is displayed in the cells in the table,
             # it is a list of triples which contain the row_label, the cell values, then the row total
             # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port).
