@@ -20,4 +20,9 @@ def get_page(request, chapternum, sectionnum, pagenum):
         loader.get_template(templatename)
         return render(request, templatename, {"pagepath" : pagepath})
     except TemplateDoesNotExist:
-        raise Http404                          
+        raise Http404
+
+
+def get_estimates(request):
+
+    return render(request, 'assessment/estimates.html')
