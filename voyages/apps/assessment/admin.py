@@ -3,41 +3,41 @@ from .models import *
 
 
 class ExportAreaAdmin(admin.ModelAdmin):
-    fields = ["area_id", "name", "order_num", "latitude", "longitude",
+    fields = ["name", "order_num", "latitude", "longitude",
               "show_at_zoom", "show_on_map"]
 
-    list_display = ["area_id", "name", "order_num", "latitude", "longitude",
+    list_display = ["name", "order_num", "latitude", "longitude",
                     "show_at_zoom", "show_on_map"]
 
 
 class ExportRegionAdmin(admin.ModelAdmin):
-    fields = ["region_id", "name", "order_num", "latitude", "longitude",
+    fields = ["name", "order_num", "latitude", "longitude",
               "show_at_zoom", "export_area", "show_on_map"]
-    list_display = ["region_id", "name", "order_num", "latitude", "longitude",
+    list_display = ["name", "order_num", "latitude", "longitude",
                     "show_at_zoom", "export_area", "show_on_map"]
 
 
 class ImportAreaAdmin(admin.ModelAdmin):
-    fields = ["area_id", "name", "order_num", "latitude", "longitude",
+    fields = ["name", "order_num", "latitude", "longitude",
               "show_at_zoom", "show_on_map"]
-    list_display = ["area_id", "name", "order_num", "latitude", "longitude",
+    list_display = ["name", "order_num", "latitude", "longitude",
                     "show_at_zoom", "show_on_map"]
 
 
 class ImportRegionAdmin(admin.ModelAdmin):
-    fields = ["region_id", "name", "order_num", "latitude", "longitude",
+    fields = ["name", "order_num", "latitude", "longitude",
               "show_at_zoom", "import_area", "show_on_map"]
-    list_display = ["region_id", "name", "order_num", "latitude", "longitude",
+    list_display = ["name", "order_num", "latitude", "longitude",
                     "show_at_zoom", "import_area", "show_on_map"]
 
 
 class NationAdmin(admin.ModelAdmin):
-    fields = ["nation_id", "name", "order_num"]
-    list_display = ["nation_id", "name", "order_num"]
+    fields = ["name", "order_num"]
+    list_display = ["name", "order_num"]
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    fields = ["estimate_id", "year", "nation", "embarkation_region", "disembarkation_region",
+    fields = ["year", "nation", "embarkation_region", "disembarkation_region",
               "embarked_slaves", "disembarked_slaves"]
 
 
