@@ -447,6 +447,38 @@
 
     <field name="slave_disembarkation_port_sort" type="string" indexed="true" stored="true" multiValued="false" />
 
+    <!-- Assessment section -->
+
+    <field name="name" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="order_num" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="latitude" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="longitude" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="year" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="show_at_zoom" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="show_on_map" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="export_area" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="import_area" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="embarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="disembarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="nation" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="embarkation_region" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="disembarkation_region" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <!-- Voyage section -->
+
     <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_imp_principal_port_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />

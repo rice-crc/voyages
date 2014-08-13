@@ -2,6 +2,7 @@
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
+from haystack.query import SearchQuerySet
 
                               
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -24,5 +25,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
 
 def get_estimates(request):
+
+    a = SearchQuerySet().models()
 
     return render(request, 'assessment/estimates.html')
