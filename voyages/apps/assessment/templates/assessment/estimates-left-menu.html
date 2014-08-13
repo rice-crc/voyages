@@ -1,5 +1,7 @@
 {% load i18n %}
 
+<script src="{{ STATIC_URL }}scripts/assessment/assessment-left-menu.js" type="text/javascript"></script>
+
 <div style="margin: 10px 10px 0px 10px;">
   <div>
     <input type="hidden" value="time-frame" name="form:_idJsp6_selected">
@@ -70,17 +72,6 @@
       </tr>
     </tbody>
     </table>
-
-
-
-
-
-
-
-
-
-
-
 
     <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
     <tbody>
@@ -189,30 +180,138 @@
     </tbody>
     </table>
 
+    <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+      <tr>
+        <td class="box-set-upper-row-bottom-left"></td>
+        <td class="box-set-upper-row-bottom-middle">
+          <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td class="box-label">Embarkation/Disembarkation</td>
+              <td>
+                <div class="box-button"></div>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </td>
+        <td class="box-set-upper-row-bottom-right"></td>
+      </tr>
+      <tr>
+        <td class="box-middle-row-left">
+          <div class="box-middle-row-left"></div>
+        </td>
+        <td class="box-middle-row-middle">
+          <div id="form:_idJsp34" class="box-main-text">
 
+            <div class="region-list">
+              <div class="region-title">Embarkation regions</div>
+              <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr id="form:expReg_item_A900" class="checkbox-list-item-0-active">
+                  <td class="checkbox-list-checkbox-0" style="position: relative;">
+                    <input type="checkbox" checked="checked" value="A900" name="form:expReg">
+                  </td>
+                  <td class="checkbox-list-label-0-expandable">
+                    <label for="form:expReg_checkbox_A900">Africa</label>
+                  </td>
+                  <td>
+                    <div class="checkbox-list-popup" style="position: absolute;">
+                      <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        <tr class="checkbox-list-item-1-active" >
+                          <td class="checkbox-list-checkbox-1">
+                            <input id="form:impReg_checkbox_R201" type="checkbox" checked="checked" value="R201">
+                          </td>
+                          <td class="checkbox-list-label-1">
+                            <label for="form:impReg_checkbox_R201">Northern U.S.</label>
+                          </td>
+                        </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </div>
+            <div class="region-list">
+            </div>
+            <div></div>
 
+          </div>
+        </td>
+        <td class="box-middle-row-right">
+          <div class="box-middle-row-right"></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="box-set-lower-row-bottom-left"></td>
+        <td class="box-set-lower-row-bottom-middle"></td>
+        <td class="box-set-lower-row-bottom-right"></td>
+      </tr>
+    </tbody>
+    </table>
 
+  </div>
 
+  <br>
 
+  <table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+  <tbody>
+    <tr>
+      <td class="box-upper-row-left"></td>
+      <td class="box-upper-row-middle">
+        <input type="hidden" value="expanded" name="form:_idJsp45_state">
+        <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+          <tr>
+            <td class="box-label">Current query</td>
+            <td>
+              <div class="box-button"></div>
+            </td>
+          </tr>
+        </tbody>
+        </table>
+      </td>
+      <td class="box-upper-row-right"></td>
+    </tr>
+    <tr>
+      <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+      </td>
+      <td class="box-middle-row-middle">
+        <div id="form:_idJsp45" class="box-main-text">
+          <div>
+            <div style="font-weight: bold;">Selected national carriers:</div>
+            <i>all</i>
+          </div>
+          <div style="margin-top: 5px;">
+            <div style="font-weight: bold;">Selected embarkation regions:</div>
+            <i>all</i>
+          </div>
+          <div style="margin-top: 5px;">
+            <div style="font-weight: bold;">Selected disembarkation regions:</div>
+            <i>all</i>
+          </div>
+          <div style="margin-top: 5px;">
+            <input id="form:buttonPermlink" type="submit" value="Create a link" name="form:buttonPermlink">
+          </div>
+        </div>
+      </td>
+      <td class="box-middle-row-right">
+        <div class="box-middle-row-right"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="box-lower-row-left"></td>
+      <td class="box-lower-row-middle"></td>
+      <td class="box-lower-row-right"></td>
+    </tr>
+  </tbody>
+  </table>
 
-
-
-
-
-
-
-
-
-
-
-  <table class="box-main-table" cellspacing="0" cellpadding="0" border="0"></table>
-
-</div>
-
-
-
-    <br><br>
-    <table class="box-main-table" cellspacing="0" cellpadding="0" border="0"></table>
-    <p style="font-style: italic;margin: 10px 10px 0px 10px;"></p>
+  <p style="font-style: italic;margin: 10px 10px 0px 10px;">For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have not been rounded. When users cite any number, they are advised to round it to the nearest hundred.</p>
 
 </div>
