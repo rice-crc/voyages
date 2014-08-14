@@ -46,8 +46,25 @@ function regionClick(clicked_input){
     return false;
 }
 
+function labelClick(clicked_label, mode){
+    var input = $(clicked_label).parents().eq(1).children().eq(0).children().eq(0);
+    if ($(input).prop("checked")){
+        $(input).prop("checked", false);
+    } else {
+        $(input).prop("checked", true);
+    }
+
+    if (mode == 0){
+        areaClick(input)
+    } else {
+        regionClick(input);
+    }
+
+    return false;
+}
+
 function areaClick(clicked_input){
-    var area_parent = $(clicked_input).parents().eq(2);
+    var area_parent = $(clicked_input).parents().eq(1);
     if ($(clicked_input).prop('checked')){
         /* Check all children */
         $(area_parent).find("input[name^=region-button-]").prop("checked", true);
