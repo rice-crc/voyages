@@ -222,15 +222,15 @@
                   <!-- Check if item is expendable and use proper class -->
                   {% if region_list|length == 1 and region_list.0.0 == area.name %}
                     <td class="checkbox-list-label-0">
-                      <label>{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
                     </td>
                   {% elif region_list %}
                     <td class="checkbox-list-label-0-expandable">
-                      <label>{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
                     </td>
                   {% else %}
                     <td class="checkbox-list-label-0">
-                      <label>{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
                     </td>
                   {% endif %}
 
@@ -248,7 +248,7 @@
                             <input name="region-button-{{ region.1 }}" type="checkbox" checked="checked" value="{{ region.1 }}" onclick="regionClick(this)">
                           </td>
                           <td class="checkbox-list-label-0">
-                            <label>{{ region.0 }}</label>
+                            <label onclick="labelClick(this, 1)">{{ region.0 }}</label>
                           </td>
                         </tr>
                         {% endfor %}
