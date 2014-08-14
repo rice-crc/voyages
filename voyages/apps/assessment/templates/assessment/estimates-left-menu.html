@@ -267,10 +267,10 @@
               <tbody>
                 <tr>
                   <td class="checkbox-list-select-all">
-                    <input type="button" value="Select all">
+                    <input type="button" value="Select all" onclick="allClicked(this, 1)">
                   </td>
                   <td class="checkbox-list-deselect-all">
-                    <input type="button" value="Deselect all">
+                    <input type="button" value="Deselect all" onclick="allClicked(this, 0)">
                   </td>
                 </tr>
               </tbody>
@@ -336,18 +336,18 @@
               <tbody>
                 <tr>
                   <td class="checkbox-list-select-all">
-                    <input type="button" value="Select all">
+                    <input type="button" value="Select all" onclick="allClicked(this, 1)">
                   </td>
                   <td class="checkbox-list-deselect-all">
-                    <input type="button" value="Deselect all">
+                    <input type="button" value="Deselect all" onclick="allClicked(this, 0)">
                   </td>
                 </tr>
               </tbody>
               </table>
             </div>
             <div>
-              <input id="form:_idJsp42" type="submit" onclick="clear_form();" value="Change selection" name="form:_idJsp42">
-              <input id="form:_idJsp44" type="submit" onclick="clear_form();" value="Reset to default" name="form:_idJsp44">
+              <input type="submit" value="Change selection">
+              <input type="submit" value="Reset to default">
             </div>
 
           </div>
