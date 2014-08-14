@@ -207,30 +207,50 @@
 
             <div class="region-list">
               <div class="region-title">Embarkation regions</div>
+
+              <!-- Embkarkation menu -->
               <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
               <tbody>
-                <tr id="form:expReg_item_A900" class="checkbox-list-item-0-active">
+                {% for area, region_list in export_regions.items %}
+                <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
                   <td class="checkbox-list-checkbox-0" style="position: relative;">
-                    <input type="checkbox" checked="checked" value="A900" name="form:expReg">
+                    <input type="checkbox" checked="checked" value="{{ area.pk }}" name="area-button-{{ area.pk }}">
                   </td>
                   <td class="checkbox-list-label-0-expandable">
-                    <label for="form:expReg_checkbox_A900">Africa</label>
+                    <label>{{ area.name }}</label>
                   </td>
                   <td>
-                    <div class="checkbox-list-popup" style="position: absolute;">
+                    <div class="checkbox-list-popup" style="position: absolute; display: none">
                       <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
                       <tbody>
-                        <tr class="checkbox-list-item-1-active" >
-                          <td class="checkbox-list-checkbox-1">
+                        {%  for region in region_list %}
+                        <tr class="checkbox-list-item-0" >
+                          <td class="checkbox-list-checkbox-0">
                             <input id="form:impReg_checkbox_R201" type="checkbox" checked="checked" value="R201">
                           </td>
-                          <td class="checkbox-list-label-1">
-                            <label for="form:impReg_checkbox_R201">Northern U.S.</label>
+                          <td class="checkbox-list-label-0">
+                            <label for="form:impReg_checkbox_R201">{{ region.0 }}</label>
                           </td>
                         </tr>
+                        {% endfor %}
                       </tbody>
                       </table>
                     </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              </table>
+
+              <!-- Select/Deselect all buttons -->
+              <table class="checkbox-list-select-deselect-all" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="checkbox-list-select-all">
+                    <input type="button" value="Select all">
+                  </td>
+                  <td class="checkbox-list-deselect-all">
+                    <input type="button" value="Deselect all">
                   </td>
                 </tr>
               </tbody>
