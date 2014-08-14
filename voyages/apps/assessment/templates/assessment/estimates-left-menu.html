@@ -213,12 +213,31 @@
               <tbody>
                 {% for area, region_list in export_regions.items %}
                 <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
+
+                  <!-- Checkbox on the left of label -->
                   <td class="checkbox-list-checkbox-0" style="position: relative;">
                     <input type="checkbox" checked="checked" value="{{ area.pk }}" name="area-button-{{ area.pk }}">
                   </td>
-                  <td class="checkbox-list-label-0-expandable">
-                    <label>{{ area.name }}</label>
-                  </td>
+
+                  <!-- Check if item is expendable and use proper class -->
+                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                    <td class="checkbox-list-label-0">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% elif region_list %}
+                    <td class="checkbox-list-label-0-expandable">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% else %}
+                    <td class="checkbox-list-label-0">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% endif %}
+
+                  <!-- Check if item is expendable, if so, third td exists -->
+                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% elif not region_list %}
+                  {% else %}
                   <td>
                     <div class="checkbox-list-popup" style="position: absolute; display: none">
                       <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
@@ -237,6 +256,7 @@
                       </table>
                     </div>
                   </td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
               </tbody>
@@ -256,9 +276,79 @@
               </tbody>
               </table>
             </div>
+
             <div class="region-list">
+              <!-- Disembarkation menu -->
+              <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                {% for area, region_list in import_regions.items %}
+                <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
+
+                  <!-- Checkbox on the left of label -->
+                  <td class="checkbox-list-checkbox-0" style="position: relative;">
+                    <input type="checkbox" checked="checked" value="{{ area.pk }}" name="area-button-{{ area.pk }}">
+                  </td>
+
+                  <!-- Check if item is expendable and use proper class -->
+                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                    <td class="checkbox-list-label-0">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% elif region_list %}
+                    <td class="checkbox-list-label-0-expandable">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% else %}
+                    <td class="checkbox-list-label-0">
+                      <label>{{ area.name }}</label>
+                    </td>
+                  {% endif %}
+
+                  <!-- Check if item is expendable, if so, third td exists -->
+                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% elif not region_list %}
+                  {% else %}
+                  <td>
+                    <div class="checkbox-list-popup" style="position: absolute; display: none">
+                      <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        {%  for region in region_list %}
+                        <tr class="checkbox-list-item-0" >
+                          <td class="checkbox-list-checkbox-0">
+                            <input id="form:impReg_checkbox_R201" type="checkbox" checked="checked" value="R201">
+                          </td>
+                          <td class="checkbox-list-label-0">
+                            <label for="form:impReg_checkbox_R201">{{ region.0 }}</label>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                      </table>
+                    </div>
+                  </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+              </table>
+              <!-- Select/Deselect all buttons -->
+              <table class="checkbox-list-select-deselect-all" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="checkbox-list-select-all">
+                    <input type="button" value="Select all">
+                  </td>
+                  <td class="checkbox-list-deselect-all">
+                    <input type="button" value="Deselect all">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
             </div>
-            <div></div>
+            <div>
+              <input id="form:_idJsp42" type="submit" onclick="clear_form();" value="Change selection" name="form:_idJsp42">
+              <input id="form:_idJsp44" type="submit" onclick="clear_form();" value="Reset to default" name="form:_idJsp44">
+            </div>
 
           </div>
         </td>

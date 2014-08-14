@@ -4,6 +4,7 @@ from django.template import TemplateDoesNotExist, Context, loader, RequestContex
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from .models import *
+import collections
 
                               
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -40,5 +41,5 @@ def get_estimates(request):
         import_regions[i] = [[a.name, a.pk] for a in b]
 
     return render(request, 'assessment/estimates.html',
-        {'export_regions': export_regions,
-         'import_regions': import_regions})
+        {'export_regions': collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0].name)),
+         'import_regions': collections.OrderedDict(sorted(import_regions.items(), key=lambda x: x[0].name))})
