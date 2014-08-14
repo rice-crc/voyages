@@ -3,6 +3,7 @@ from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
+from .models import *
 
                               
 def get_page(request, chapternum, sectionnum, pagenum):
@@ -26,6 +27,18 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
 def get_estimates(request):
 
-    a = SearchQuerySet().models()
+    export_regions = {}
+    a = SearchQuerySet().models(ExportArea)
+    for i in a:
+        b = SearchQuerySet().models(ExportRegion).filter(export_area__exact=i.name)
+        export_regions[i] = [[a.name, a.pk] for a in b]
 
-    return render(request, 'assessment/estimates.html')
+    import_regions = {}
+    a = SearchQuerySet().models(ImportArea)
+    for i in a:
+        b = SearchQuerySet().models(ImportRegion).filter(import_area__exact=i.name)
+        import_regions[i] = [[a.name, a.pk] for a in b]
+
+    return render(request, 'assessment/estimates.html',
+        {'export_regions': export_regions,
+         'import_regions': import_regions})
