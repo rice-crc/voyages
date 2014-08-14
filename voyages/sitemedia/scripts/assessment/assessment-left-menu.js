@@ -20,22 +20,28 @@ $(document).ready(function() {
             }
         }
     );
-
-//    $("tr .checkbox-list-item-1").hover(
-//        function() {
-//            $(this).toggleClass("checkbox-list-item-1 checkbox-list-item-1-active");
-//            $(this).children().eq(2).children().show();
-//        }, function() {
-//            $(this).toggleClass("checkbox-list-item-1-active checkbox-list-item-1");
-//            $(this).children().eq(2).children().hide();
-//        }
-//    );
 });
 
 function regionClick(clicked_input){
-    /* Uncheck parent (area) input) */
     var area_parent = $(clicked_input).parents().eq(6);
-    $(area_parent).find("input[name^=area-button-]").prop("checked", false);
+
+    if ($(clicked_input).prop('checked')) {
+        /* Check if all regions checked, and check area if so */
+        var allChecked = true;
+        $(area_parent).find("input[name^=region-button-]").each(function( index ){
+            if (! $(this).prop("checked")){
+                allChecked = false;
+                return;
+            }
+        });
+        if (allChecked){
+            $(area_parent).find("input[name^=area-button-]").prop("checked", true);
+        }
+    } else {
+        /* Uncheck parent (area) input) */
+        $(area_parent).find("input[name^=area-button-]").prop("checked", false);
+    }
+
 
     return false;
 }
