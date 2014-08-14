@@ -58,3 +58,16 @@ function areaClick(clicked_input){
 
     return false;
 }
+
+function allClicked(clicked_button, action){
+    var div_parent = $(clicked_button).parents().eq(4);
+    if (action == 1){
+        $(div_parent).find("input[name^=area-button-]").prop("checked", true);
+        $(div_parent).find("input[name^=region-button-]").prop("checked", true);
+    } else {
+        $(div_parent).find("input[name^=area-button-]").prop("checked", false);
+        $(div_parent).find("input[name^=region-button-]").prop("checked", false);
+    }
+
+    return false;
+}
