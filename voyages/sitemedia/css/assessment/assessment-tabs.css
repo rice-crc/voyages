@@ -1,24 +1,55 @@
+td.tabs-tab-left-selected, td.tabs-tab-left {
+    background-position: left top;
+    background-repeat: no-repeat;
+    height: 32px;
+    overflow: hidden;
+    width: 10px;
+}
+td.tabs-tab-middle-selected, td.tabs-tab-middle {
+    background-repeat: repeat-x;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: center;
+    vertical-align: bottom;
+}
+td.tabs-tab-middle, td.tabs-tab-left, td.tabs-tab-right {
+    cursor: pointer;
+}
+td.tabs-tab-right-selected, td.tabs-tab-right {
+    background-position: right top;
+    background-repeat: no-repeat;
+    height: 32px;
+    overflow: hidden;
+    width: 10px;
+}
+td.tabs-tab-filler {
+    width: 5px;
+}
+td.tabs-tab-first-filler {
+    width: 10px;
+}
+
 div.tabs-body {
 	border: 1px solid #8A5D04; }
 
 td.tabs-tab-left {
-	background-image: url(../images/assessment-tabs-normal-left.png); }
-	
+	background-image: url(/static/images/assessment/assessment-tabs-normal-left.png); }
+
 td.tabs-tab-middle {
-	background-image: url(../images/assessment-tabs-normal-center.png); }
+	background-image: url(/static/images/assessment/assessment-tabs-normal-center.png); }
 
 td.tabs-tab-right {
-	background-image: url(../images/assessment-tabs-normal-right.png); }
+	background-image: url(/static/images/assessment/assessment-tabs-normal-right.png); }
 
 td.tabs-tab-left-selected {
-	background-image: url(../images/assessment-tabs-selected-left.png); }
+	background-image: url(/static/images/assessment/assessment-tabs-selected-left.png); }
 
 td.tabs-tab-middle-selected {
-	background-image: url(../images/assessment-tabs-selected-center.png); }
-	
+	background-image: url(/static/images/assessment/assessment-tabs-selected-center.png); }
+
 td.tabs-tab-right-selected {
-	background-image: url(../images/assessment-tabs-selected-right.png); }
+	background-image: url(/static/images/assessment/assessment-tabs-selected-right.png); }
 
 div.tabs-selection {
-	background-image: url(../images/assessment-tabs-bg.png);
+	background-image: url(/static/images/assessment/assessment-tabs-bg.png);
 	background-repeat: repeat-x; }

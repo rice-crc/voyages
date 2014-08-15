@@ -7,6 +7,7 @@
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/">
 {% endblock %}
 
 {% block jslist %}
@@ -26,12 +27,54 @@
       {% include "assessment/estimates-left-menu.html" %}
     </td>
     <td class="td-main-panel">
-
+      <div class="tabs-selection">
+        <table class="tabs-selection" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+          <tr>
+            <td class="tabs-tab-first-filler"></td>
+            <td class="tabs-tab-left-selected"></td>
+            <td class="tabs-tab-middle-selected" onclick="document.forms['form'].elements['form:mainPanelSection_selected_tab'].value = 'table'; document.forms['form'].submit(); return false;">Tables</td>
+            <td class="tabs-tab-right-selected"></td>
+            <td class="tabs-tab-filler"></td>
+            <td class="tabs-tab-left"></td>
+            <td class="tabs-tab-middle" onclick="document.forms['form'].elements['form:mainPanelSection_selected_tab'].value = 'timeline'; document.forms['form'].submit(); return false;">Timeline</td>
+            <td class="tabs-tab-right"></td>
+            <td class="tabs-tab-filler"></td>
+            <td class="tabs-tab-left"></td>
+            <td class="tabs-tab-middle" onclick="document.forms['form'].elements['form:mainPanelSection_selected_tab'].value = 'map'; document.forms['form'].submit(); return false;">Maps</td>
+            <td class="tabs-tab-right"></td>
+            <td class="tabs-tab-last-filler"></td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="results-panel">
+        <h1>Table</h1>
+        <div class="estimates-table-options">
+          <table style="border-collapse: collapse;">
+          <tbody>
+            {% for field in table_form %}
+              <tr>
+                <td> <b> {{ field.label }}: </b> </td>
+                <td> {% for i in field %} {{ i }} {% endfor %} </td>
+	          </tr>
+            {% endfor %}
+            <tr>
+	          <td></td>
+	          <td>
+	            <!-- Show button -->
+	            <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_tables_in');" name="buttonShow" />
+	          </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
     </td>
   </tr>
 </tbody>
-
 </table>
+
 
 </form>
 {% endblock %}

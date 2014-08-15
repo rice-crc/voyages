@@ -41,3 +41,7 @@ div.menu-popup-submenu-item {
     padding: 2px 10px;
     white-space: nowrap;
 }
+
+.short_field_white {
+    width: 43px;
+}
