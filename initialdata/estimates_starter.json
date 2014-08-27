@@ -71,7 +71,7 @@
     "pk": 1, 
     "model": "assessment.exportregion", 
     "fields": {
-        "name": "Senegambia and  off-shore Atlantic", 
+        "name": "Senegambia and off-shore Atlantic", 
         "longitude": -18.43, 
         "show_at_zoom": 20, 
         "latitude": 14.14, 
