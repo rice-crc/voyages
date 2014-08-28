@@ -463,9 +463,9 @@
 
     <field name="show_on_map" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="export_area" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="export_area" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="import_area" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="import_area" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="embarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
 
@@ -473,9 +473,11 @@
 
     <field name="nation" type="string" indexed="true" stored="true" multiValued="false" />
 
-    <field name="embarkation_region" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="embarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="disembarkation_region" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="broad_disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <!-- Voyage section -->
 
