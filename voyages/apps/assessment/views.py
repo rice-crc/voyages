@@ -55,19 +55,19 @@ def get_estimates(request):
                                               'frame_to_year': globals.last_year})
 
     results = SearchQuerySet().models(Estimate)
-    column_query_set = globals.table_columns[0][2]
-    column_variable_name = globals.table_columns[0][1]
+    column_query_set = globals.table_columns[3][2]
+    column_variable_name = globals.table_columns[3][1]
     column_sums = []
 
     print "column_query_set = " + str(column_query_set)
 
-    row_query_set = globals.table_rows[2][2]
-    row_variable_name = globals.table_rows[2][1]
-    rows_sums = []
+    row_query_set = globals.table_rows[0][2]
+    row_variable_name = globals.table_rows[0][1]
 
     print "row_query_set = " + str(row_query_set)
 
     columns_before_titles = 1
+    rows_before_titles = 1
     row_list = []
 
     # Perform query
@@ -84,6 +84,9 @@ def get_estimates(request):
     if row_variable_name == "disembarkation_region":
         area_ranges = create_area_ranges(row_query_set[0])
         columns_before_titles = 2
+
+    if column_variable_name == "disembarkation_region":
+        rows_before_titles = 2
 
     # Iterate through rows
     row_total = 0
@@ -136,6 +139,7 @@ def get_estimates(request):
          'row_list': row_list,
          'col_sums': column_sums,
          'columns_before_titles': columns_before_titles,
+         'rows_before_titles': rows_before_titles,
          'table_form': form})
 
 

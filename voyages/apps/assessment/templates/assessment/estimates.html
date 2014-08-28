@@ -74,15 +74,20 @@
         {# table #}
         <div class="estimates-table">
           <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
-            <tr>
-            <td colspan="{{ columns_before_titles }}"/>
+
             {% for col_label in col_labels %}
-              {% for col_label_tuple in col_label %}
-                <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
-              {% endfor %}
+              <tr>
+                {% if forloop.first %}
+                  <td rowspan="{{ rows_before_titles }}" colspan="{{ columns_before_titles }}"/>
+                {% endif %}
+                {% for col_label_tuple in col_label %}
+                  <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
+                {% endfor %}
+                {% if forloop.first %}
+                  <td class="tbl-label" rowspan="{{ rows_before_titles }}">Totals</td>
+                {% endif %}
+              </tr>
             {% endfor %}
-            <td class="tbl-label">Totals</td>
-            </tr>
             {% for row_item in row_list %}
               <tr>
 	            {% for label_tuple in row_item.0 %}
