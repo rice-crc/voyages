@@ -4,9 +4,10 @@ import globals
 
 
 class EstimateSelectionForm(forms.Form):
-    lambda_fun = lambda x: (str(x[0]), x[1])
+    lambda_fun = lambda x: (str(x[0]), x[1][0])
 
     row_choices = map(lambda_fun, enumerate(globals.table_rows))
+    print row_choices
     rows = forms.ChoiceField(label='Rows', choices=row_choices, initial=[row_choices[7][1]])
     rows.initial = row_choices[7][0]
 

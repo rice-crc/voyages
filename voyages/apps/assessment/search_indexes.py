@@ -85,6 +85,7 @@ class EstimateIndex(indexes.SearchIndex, indexes.Indexable):
     nation = indexes.CharField()
     embarkation_region = indexes.CharField()
     disembarkation_region = indexes.CharField()
+    broad_disembarkation_region = indexes.CharField()
 
     def get_model(self):
         return Estimate
@@ -104,5 +105,11 @@ class EstimateIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_disembarkation_region(self, obj):
         if obj.disembarkation_region:
             return obj.disembarkation_region.name
+        else:
+            return None
+
+    def prepare_broad_disembarkation_region(self, obj):
+        if obj.disembarkation_region and obj.disembarkation_region.import_area:
+            return obj.disembarkation_region.import_area.name
         else:
             return None

@@ -88,4 +88,4 @@ class Estimate(models.Model):
     disembarked_slaves = models.FloatField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.estimate_id
+        return str(self.id)
