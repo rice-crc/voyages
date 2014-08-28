@@ -600,7 +600,7 @@
         "show_at_zoom": 999, 
         "latitude": 18.2, 
         "order_num": 25, 
-        "import_area": 5, 
+        "import_area": 6, 
         "show_on_map": true
     }
 },
