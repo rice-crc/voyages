@@ -69,6 +69,43 @@
           </tbody>
           </table>
         </div>
+
+
+        {# table #}
+        <div class="estimates-table">
+          <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+            <td colspan="{{ columns_before_titles }}"/>
+            {% for col_label in col_labels %}
+              {% for col_label_tuple in col_label %}
+                <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
+              {% endfor %}
+            {% endfor %}
+            <td class="tbl-label">Totals</td>
+            </tr>
+            {% for row_item in row_list %}
+              <tr>
+	            {% for label_tuple in row_item.0 %}
+	              <td class="tbl-label" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	            {% endfor %}
+                {% for value in row_item.1 %}
+	              <td> {{ value }} </th>
+	            {% endfor %}
+                <td class="tbl-total"> {{ row_item.2 }} </th>
+              </tr>
+            {% endfor %}
+            <tr>
+              <td class="tbl-label" colspan="{{ columns_before_titles }}">Totals</td>
+              {% for column in col_sums %}
+                <td class="tbl-total">{{ column }}</td>
+              {% endfor %}
+            </tr>
+          </table>
+        </div>
+
+
+
+
       </div>
     </td>
   </tr>
