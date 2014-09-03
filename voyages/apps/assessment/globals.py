@@ -2,78 +2,171 @@ from haystack.query import SearchQuerySet
 from .models import *
 
 
-def get_flags():
+def get_flags(search_configuration=None, mode=None):
+    if search_configuration is None:
+        nations = [(k.name, 1) for k in SearchQuerySet().models(Nation)]
+        return [nations, ]
+
     a = SearchQuerySet().models(Nation)
-    nations = [(k.name, 1) for k in a]
+    nations = []
+
+    for i in a:
+        if "checkbox_nation_" + i.pk in search_configuration["post"]:
+            nations.append([i.name, ])
+
     return [nations, ]
 
 
-def get_broad_regions(area):
-    areas_from_query = SearchQuerySet().models(area)
-    areas = [(k.name, 1) for k in areas_from_query]
+def get_flag_labels(search_configuration):
+    a = SearchQuerySet().models(Nation)
+    nations = []
+
+    for i in a:
+        if "checkbox_nation_" + i.pk in search_configuration["post"]:
+            nations.append([i.name, i.pk, 1])
+        else:
+            nations.append([i.name, i.pk, 0])
+
+    return nations
+
+
+def get_broad_regions(search_configuration=None, mode=None):
+    areas_from_query = SearchQuerySet().models(ImportArea)
+
+    if search_configuration is not None:
+        areas = [[k.name, 1] for k in areas_from_query if "darea-button-" + k.pk in search_configuration["post"]]
+    else:
+        areas = [[k.name, 1] for k in areas_from_query]
     print "areas = " + str(areas)
 
     return [areas, ]
 
 
-def get_regions(region, area, mode="export"):
+def get_regions(search_configuration=None, mode=None):
     return_areas = []
     return_regions = []
-    areas = SearchQuerySet().models(area)
+    areas = SearchQuerySet().models(ImportArea)
 
     # For each area, retrieve list of regions and add to the list with an appropriate length
     for local_area in areas:
 
         # Retrieve regions
-        if mode == "export":
-            local_regions = SearchQuerySet().models(region).filter(export_area__exact=local_area.name)
-        else:
-            local_regions = SearchQuerySet().models(region).filter(import_area__exact=local_area.name)
+        local_regions = SearchQuerySet().models(ImportRegion).filter(import_area__exact=local_area.name)
 
-        if len(local_regions) == 0:
+        if search_configuration is not None:
+            if len(local_regions) == 1 and "darea-button-" + local_area.pk in search_configuration["post"]:
+                local_regions_filtered = local_regions
+            else:
+                local_regions_filtered = [k for k in local_regions if "dregion-button-" + k.pk in search_configuration["post"]]
+        else:
+            local_regions_filtered = local_regions
+
+        if len(local_regions_filtered) == 0:
             continue
+
         # Add the area
-        return_areas.append((local_area.name, len(local_regions)))
+        return_areas.append([local_area.name, len(local_regions_filtered)])
 
         # Add regions of this area to the list
-        return_regions.extend((k.name, 1) for k in local_regions)
+        return_regions.extend([k.name, 1] for k in local_regions_filtered)
 
     return [return_areas, return_regions]
 
 
-def get_embarkation_regions():
+def update_regions_labels(regions, search_configuration, area_prefix, region_prefix):
+    new_regions = {}
+
+    print "for area_prefix = " + area_prefix + ", dict = " + str(regions)
+
+    for area, regions in regions.iteritems():
+        new_region_list = []
+        count_checked = 0
+        for region in regions:
+            if search_configuration is None:
+                new_region_list.append([region, 1])
+                count_checked += 1
+            elif region_prefix + region[1] in search_configuration["post"] or \
+                (len(regions) == 1 and area_prefix + area.pk in search_configuration["post"]):
+                new_region_list.append([region, 1])
+                count_checked += 1
+            else:
+                new_region_list.append([region, 0])
+
+        if search_configuration is None or (count_checked > 0 and len(regions) == count_checked):
+            new_regions[(area, 1)] = new_region_list
+        else:
+            new_regions[(area, 0)] = new_region_list
+
+    return new_regions
+
+
+def get_embarkation_regions(search_configuration=None, mode=None):
     areas = SearchQuerySet().models(ExportRegion)
 
-    return_areas = [(k.name, 1) for k in areas]
+    if search_configuration is not None:
+        return_areas = [[k.name, 1] if "eregion-button-" + k.pk in search_configuration["post"] else [k.name, 0] for k in areas if "eregion-button-" + k.pk in search_configuration["post"]]
+    else:
+        return_areas = [[k.name, 1] for k in areas]
 
     return [return_areas, ]
 
 
-table_rows = [("Flag", "nation", get_flags()),
-              ("Embarkation regions", "embarkation_region", get_embarkation_regions()),
-              ("Broad disembarkation regions", "broad_disembarkation_region", get_broad_regions(ImportArea)),
-              ("Specific disembarkation regions", "disembarkation_region", get_regions(ImportRegion, ImportArea, "import")),
-              ("Individual years", ),
-              ("5-year periods", ),
-              ("10-year periods", ),
-              ("25-year periods", ),
-              ("50-year periods", ),
-              ("100-year periods", )]
+def get_incremented_year_tuples(search_configuration, mode):
+    if mode == 4:
+        interval = 1
+    elif mode == 5:
+        interval = 5
+    elif mode == 6:
+        interval = 10
+    elif mode == 7:
+        interval = 25
+    elif mode == 8:
+        interval = 50
+    elif mode == 9:
+        interval = 100
 
-table_columns = [("Flag", "nation", get_flags()),
-                 ("Embarkation regions", "embarkation_region", get_embarkation_regions()),
-                 ("Broad disembarkation regions", "broad_disembarkation_region", get_broad_regions(ImportArea)),
-                 ("Specific disembarkation regions", "disembarkation_region",
-                  get_regions(ImportRegion, ImportArea, "import"))]
+    first_year = search_configuration["year"]["year_from"]
+    last_year = search_configuration["year"]["year_to"]
+
+    if interval > 1:
+        start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
+    else:
+        start_year = (int(first_year) - (int(first_year) % int(interval)))
+    current_year = start_year
+    years = []
+    while current_year <= last_year:
+        if current_year + interval > last_year:
+            right_year = last_year
+        else:
+            right_year = current_year + interval - 1
+        years.append([current_year, right_year])
+        current_year += interval
+
+    return [years, ]
+
+
+table_rows = [("Flag", "nation__exact", get_flags),
+              ("Embarkation regions", "embarkation_region__exact", get_embarkation_regions),
+              ("Broad disembarkation regions", "broad_disembarkation_region__exact", get_broad_regions),
+              ("Specific disembarkation regions", "disembarkation_region__exact", get_regions),
+              ("Individual years", "year__in", get_incremented_year_tuples),
+              ("5-year periods", "year__in", get_incremented_year_tuples),
+              ("10-year periods", "year__in", get_incremented_year_tuples),
+              ("25-year periods", "year__in", get_incremented_year_tuples),
+              ("50-year periods", "year__in", get_incremented_year_tuples),
+              ("100-year periods", "year__in", get_incremented_year_tuples)]
+
+table_columns = [("Flag", "nation__exact", get_flags),
+                 ("Embarkation regions", "embarkation_region__exact", get_embarkation_regions),
+                 ("Broad disembarkation regions", "broad_disembarkation_region__exact", get_broad_regions),
+                 ("Specific disembarkation regions", "disembarkation_region__exact",
+                  get_regions)]
 
 table_cells = [("Embarked/Disembarked", ),
                ("Only embarked", ),
                ("Only disembarked", )]
 
-
-
-
 # These two have to be replaced with context processor call
 # on database/solr
-first_year = 1501
-last_year = 1866
+default_first_year = 1501
+default_last_year = 1866

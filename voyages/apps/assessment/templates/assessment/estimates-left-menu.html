@@ -52,13 +52,11 @@
             </tbody>
             </table>
             <div style="padding: 5px 0px 0px 0px; font-style: italic;">
-              The full extent of time covered by estimates is 1501 – 1866 (
-              <a id="form:_idJsp21" href="#">restore it</a>
-              ).
+              The full extent of time covered by estimates is 1501 – 1866.
             </div>
             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #9EDEE0;">
-              <input id="form:_idJsp25" type="submit" value="Change selection" name="form:_idJsp25">
-              <input id="form:_idJsp27" type="submit" value="Reset to default" name="form:_idJsp27">
+              <input id="submit_year" type="submit" value="Change selection" name="submit_year">
+              <input id="submit_year" type="submit" value="Reset to default" name="submit_year">
             </div>
           </div>
         </td>
@@ -102,68 +100,28 @@
               <input type="hidden" value="" name="form:nations_expanded_values">
                 <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
                 <tbody>
-                  <tr>
-                    <td class="checkbox-list-checkbox-0">
-                      <input id="form:nations_checkbox_1" type="checkbox" checked="checked" value="1" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                      <label for="form:nations_checkbox_1">Spain / Uruguay</label>
-                    </td>
-                    </tr>
+                  {% for nation in nations %}
                     <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_2" type="checkbox" checked="checked" value="2" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_2">Portugal / Brazil</label>
-                    </td>
+                      {% ifequal nation.2 1 %}
+                      <td class="checkbox-list-checkbox-0">
+                        <input id="form:nations_checkbox_1" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
+                      </td>
+                      {% else %}
+                        <td class="checkbox-list-checkbox-0">
+                          <input id="form:nations_checkbox_1" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
+                        </td>
+                      {% endifequal %}
+                      <td class="checkbox-list-label-0">
+                        <label for="form:nations_checkbox_1">{{ nation.0 }}</label>
+                      </td>
                     </tr>
-                    <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_3" type="checkbox" checked="checked" value="3" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_3">Great Britain</label>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_4" type="checkbox" checked="checked" value="4" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_4">Netherlands</label>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_5" type="checkbox" checked="checked" value="5" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_5">U.S.A.</label>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_6" type="checkbox" checked="checked" value="6" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_6">France</label>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td class="checkbox-list-checkbox-0">
-                    <input id="form:nations_checkbox_7" type="checkbox" checked="checked" value="7" name="form:nations">
-                    </td>
-                    <td class="checkbox-list-label-0">
-                    <label for="form:nations_checkbox_7">Denmark / Baltic</label>
-                    </td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
                 </table>
 
               <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #9EDEE0;">
-                <input id="form:_idJsp31" type="submit" onclick="clear_form();" value="Change selection" name="form:_idJsp31">
-                <input id="form:_idJsp33" type="submit" onclick="clear_form();" value="Reset to default" name="form:_idJsp33">
+                <input id="submit_nation" type="submit" onclick="clear_form();" value="Change selection" name="submit_nation">
+                <input id="submit_nation" type="submit" onclick="clear_form();" value="Reset to default" name="submit_nation">
               </div>
             </div>
           </div>
@@ -213,31 +171,35 @@
               <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
               <tbody>
                 {% for area, region_list in export_regions.items %}
-                <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
+                <tr id="row-{{ area.0.pk }}" class="checkbox-list-item-0">
 
                   <!-- Checkbox on the left of label -->
                   <td class="checkbox-list-checkbox-0" style="position: relative;">
-                    <input type="checkbox" checked="checked" value="{{ area.pk }}" name="area-button-{{ area.pk }}" onclick="areaClick(this)">
+                    {% ifequal area.1 1 %}
+                      <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                    {% else %}
+                      <input type="checkbox" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                    {% endifequal %}
                   </td>
 
                   <!-- Check if item is expendable and use proper class -->
-                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% elif region_list %}
                     <td class="checkbox-list-label-0-expandable">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% else %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% endif %}
 
                   <!-- Check if item is expendable, if so, third td exists -->
                   <td>
-                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                   {% elif not region_list %}
                   {% else %}
                     <div class="checkbox-list-popup" style="position: absolute; display: none">
@@ -246,10 +208,14 @@
                         {%  for region in region_list %}
                         <tr class="checkbox-list-item-0" >
                           <td class="checkbox-list-checkbox-0">
-                            <input name="region-button-{{ region.1 }}" type="checkbox" checked="checked" value="{{ region.1 }}" onclick="regionClick(this)">
+                            {% ifequal region.1 1 %}
+                              <input name="eregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
+                            {% else %}
+                              <input name="eregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
+                            {% endifequal %}
                           </td>
                           <td class="checkbox-list-label-0">
-                            <label onclick="labelClick(this, 1)">{{ region.0 }}</label>
+                            <label onclick="labelClick(this, 1)">{{ region.0.0 }}</label>
                           </td>
                         </tr>
                         {% endfor %}
@@ -287,27 +253,31 @@
 
                   <!-- Checkbox on the left of label -->
                   <td class="checkbox-list-checkbox-0" style="position: relative;">
-                    <input type="checkbox" checked="checked" value="{{ area.pk }}" name="area-button-{{ area.pk }}" onclick="areaClick(this)">
+                    {% ifequal area.1 1 %}
+                      <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                    {% else %}
+                      <input type="checkbox" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                    {% endifequal %}
                   </td>
 
                   <!-- Check if item is expendable and use proper class -->
-                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% elif region_list %}
                     <td class="checkbox-list-label-0-expandable">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% else %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
                     </td>
                   {% endif %}
 
                   <!-- Check if item is expendable, if so, third td exists -->
                   <td>
-                  {% if region_list|length == 1 and region_list.0.0 == area.name %}
+                  {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                   {% elif not region_list %}
                   {% else %}
                     <div class="checkbox-list-popup" style="position: absolute; display: none">
@@ -316,10 +286,14 @@
                         {%  for region in region_list %}
                         <tr class="checkbox-list-item-0" >
                           <td class="checkbox-list-checkbox-0">
-                            <input name="region-button-{{ region.1 }}" type="checkbox" checked="checked" value="{{ region.1 }}" onclick="regionClick(this)">
+                            {% ifequal region.1 1 %}
+                              <input name="dregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                            {% else %}
+                              <input name="dregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                            {% endifequal %}
                           </td>
                           <td class="checkbox-list-label-0">
-                            <label onclick="labelClick(this, 1)">{{ region.0 }}</label>
+                            <label onclick="labelClick(this, 1)">{{ region.0.0 }}</label>
                           </td>
                         </tr>
                         {% endfor %}
@@ -347,8 +321,8 @@
               </table>
             </div>
             <div>
-              <input type="submit" value="Change selection">
-              <input type="submit" value="Reset to default">
+              <input type="submit" value="Change selection" name="submit_regions">
+              <input type="submit" value="Reset to default" name="submit_regions">
             </div>
 
           </div>
