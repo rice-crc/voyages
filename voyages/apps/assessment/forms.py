@@ -8,12 +8,12 @@ class EstimateSelectionForm(forms.Form):
 
     row_choices = map(lambda_fun, enumerate(globals.table_rows))
     print row_choices
-    rows = forms.ChoiceField(label='Rows', choices=row_choices, initial=[row_choices[7][1]])
-    rows.initial = row_choices[7][0]
+    rows = forms.ChoiceField(label='Rows', choices=row_choices, initial=[row_choices[0][1]])
+    rows.initial = row_choices[0][0]
 
     col_choices = map(lambda_fun, enumerate(globals.table_columns))
-    columns = forms.ChoiceField(label='Columns', choices=col_choices, initial=[col_choices[0][1]])
-    columns.initial = col_choices[0][0]
+    columns = forms.ChoiceField(label='Columns', choices=col_choices, initial=[col_choices[1][1]])
+    columns.initial = col_choices[1][0]
 
     cell_choices = map(lambda_fun, enumerate(globals.table_cells))
     cells = forms.ChoiceField(label='Cells', choices=cell_choices, initial=[cell_choices[1][1]])

@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+
+{% load humanize %}
+
 {% load i18n %}
+
+{% load assessment_extras %}
 
 {% block csslist %}
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css">
@@ -17,7 +22,7 @@
 {% block title %}Estimates{% endblock %}
 
 {% block content %}
-<form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
+<form id="form" name="form" method="post" action="{% url 'assessment:estimates' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 
 <table cellspacing="0" cellpadding="0" border="0" style="width: 100%">
@@ -63,7 +68,7 @@
 	          <td></td>
 	          <td>
 	            <!-- Show button -->
-	            <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_tables_in');" name="buttonShow" />
+	            <input type="submit" value="{% trans 'Show' %}" name="buttonShow" />
 	          </td>
             </tr>
           </tbody>
@@ -81,35 +86,73 @@
                   <td rowspan="{{ rows_before_titles }}" colspan="{{ columns_before_titles }}"/>
                 {% endif %}
                 {% for col_label_tuple in col_label %}
-                  <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
+                  {% ifequal cell_mode 0 %}
+                    <td class="tbl-label" colspan="{{ col_label_tuple.1|multiply }}">{{ col_label_tuple.0 }}</td>
+                  {% else %}
+                    <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
+                  {% endifequal %}
                 {% endfor %}
                 {% if forloop.first %}
-                  <td class="tbl-label" rowspan="{{ rows_before_titles }}">Totals</td>
+                  {% ifequal cell_mode 0 %}
+                    {# If this is spanned to emb/disemb #}
+                    {% ifequal rows_before_titles 3 %}
+                      {# If rowspan was 3, it will be 2 (one more for emb/disemb) #}
+                      <td class="tbl-label" rowspan="2" colspan="2">Totals</td>
+                    {% endifequal %}
+                    {% ifequal rows_before_titles 2 %}
+                      {# If rowspan was 2, it will be 1 (one more for emb/disemb) #}
+                      <td class="tbl-label" rowspan="1" colspan="2">Totals</td>
+                    {% endifequal %}
+                  {% else %}
+                    {# Otherwise, regular rowspan #}
+                    <td class="tbl-label" rowspan="{{ rows_before_titles }}">Totals</td>
+                  {% endifequal %}
                 {% endif %}
               </tr>
             {% endfor %}
+            {% ifequal cell_mode 0 %}
+              <tr>
+                {% for i in extra_range %}
+                  {% if forloop.counter|divisibleby:2 %}
+                    <td class="tbl-label">Disembarked</td>
+                  {% else %}
+                    <td class="tbl-label">Embarked</td>
+                  {% endif %}
+                {% endfor %}
+                {# Add two more for total column #}
+                <td class="tbl-label">Embarked</td>
+                <td class="tbl-label">Dismbarked</td>
+              </tr>
+            {% endifequal %}
             {% for row_item in row_list %}
               <tr>
 	            {% for label_tuple in row_item.0 %}
-	              <td class="tbl-label" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+                  {% ifequal years_rows False %}
+	                <td class="tbl-label" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+                  {% else %}
+                    <td class="tbl-label"> {{ label_tuple.0 }} - {{ label_tuple.1 }} </th>
+                  {% endifequal %}
 	            {% endfor %}
                 {% for value in row_item.1 %}
-	              <td> {{ value }} </th>
+	              <td> {{ value|intcomma }} </th>
 	            {% endfor %}
-                <td class="tbl-total"> {{ row_item.2 }} </th>
+                {# row sum section #}
+                {% ifequal cell_mode 0 %}
+                  <td class="tbl-total"> {{ row_item.2.0|intcomma }} </th>
+                  <td class="tbl-total"> {{ row_item.2.1|intcomma }} </th>
+                {% else %}
+                  <td class="tbl-total"> {{ row_item.2|intcomma }} </th>
+                {% endifequal %}
               </tr>
             {% endfor %}
             <tr>
               <td class="tbl-label" colspan="{{ columns_before_titles }}">Totals</td>
               {% for column in col_sums %}
-                <td class="tbl-total">{{ column }}</td>
+                <td class="tbl-total">{{ column|intcomma }}</td>
               {% endfor %}
             </tr>
           </table>
         </div>
-
-
-
 
       </div>
     </td>
