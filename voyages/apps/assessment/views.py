@@ -76,25 +76,39 @@ def get_estimates(request):
 
         search_configuration["post"] = request.POST
 
-        nations = globals.get_flag_labels(search_configuration)
-        export_regions = globals.update_regions_labels(export_regions, search_configuration,
-                                                                   "earea-button-", "eregion-button-")
-        import_regions = globals.update_regions_labels(import_regions, search_configuration,
-                                                       "darea-button-", "dregion-button-")
+        if "submit_nation" in request.POST and request.POST["submit_nation"] == "Reset to default":
+            nations, query["nation__in"] = globals.get_flag_labels(None)
+        else:
+            nations, query["nation__in"] = globals.get_flag_labels(search_configuration)
 
-        if "submit_year" in request.POST and request.POST["submit_year"] == "Reset to default":
-            year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
-                                                  'frame_to_year': globals.default_last_year})
+        if "submit_regions" in request.POST and request.POST["submit_regions"] == "Reset to default":
+            export_regions, query["embarkation_region__in"] = globals.update_regions_labels(export_regions, None,
+                                                                   "earea-button-", "eregion-button-")
+            import_regions, query["disembarkation_region__in"] = globals.update_regions_labels(import_regions, None,
+                                                       "darea-button-", "dregion-button-")
+        else:
+            export_regions, query["embarkation_region__in"] = globals.update_regions_labels(export_regions, search_configuration,
+                                                                   "earea-button-", "eregion-button-")
+            import_regions, query["disembarkation_region__in"] = globals.update_regions_labels(import_regions, search_configuration,
+                                                       "darea-button-", "dregion-button-")
 
         if year_form.is_valid():
             query["year__gte"] = year_form.cleaned_data["frame_from_year"]
             query["year__lte"] = year_form.cleaned_data["frame_to_year"]
             search_configuration["year"]["year_from"] = year_form.cleaned_data["frame_from_year"]
             search_configuration["year"]["year_to"] = year_form.cleaned_data["frame_to_year"]
-            request.session["estimate_year_from"] = year_form.cleaned_data["frame_from_year"]
-            request.session["estimate_year_to"] = year_form.cleaned_data["frame_to_year"]
+
+        if "submit_year" in request.POST and request.POST["submit_year"] == "Reset to default":
+            print "reseting year"
+            query["year__gte"] = globals.default_first_year
+            query["year__lte"] = globals.default_last_year
+            search_configuration["year"]["year_from"] = globals.default_first_year
+            search_configuration["year"]["year_to"] = globals.default_last_year
+            year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
+                                                  'frame_to_year': globals.default_last_year})
 
         # Perform a query
+        print "performing query = " + str(query)
         results = SearchQuerySet().models(Estimate).filter(**query)
 
         # If form is valid, set passed preferences
@@ -113,9 +127,9 @@ def get_estimates(request):
         # Prepare data
         nations = [[k.name, k.pk, 1] for k in SearchQuerySet().models(Nation)]
 
-        export_regions = globals.update_regions_labels(export_regions, None,
+        export_regions, x  = globals.update_regions_labels(export_regions, None,
                                                                    "earea-button-", "eregion-button-")
-        import_regions = globals.update_regions_labels(import_regions, None,
+        import_regions, x = globals.update_regions_labels(import_regions, None,
                                                        "darea-button-", "dregion-button-")
 
         results = SearchQuerySet().models(Estimate)
@@ -230,8 +244,6 @@ def get_estimates(request):
         column_sums.append(row_total)
     print "row_list = " + str(row_list)
     print "sum = " + str(column_sums)
-
-    # 3/0
 
     return render(request, 'assessment/estimates.html',
         {'first_year': first_year,
