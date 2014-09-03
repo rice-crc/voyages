@@ -22,24 +22,24 @@ $(document).ready(function() {
     );
 });
 
-function regionClick(clicked_input){
+function regionClick(clicked_input, area_prefix, region_prefix){
     var area_parent = $(clicked_input).parents().eq(6);
 
     if ($(clicked_input).prop('checked')) {
         /* Check if all regions checked, and check area if so */
         var allChecked = true;
-        $(area_parent).find("input[name^=region-button-]").each(function( index ){
+        $(area_parent).find("input[name^=" + region_prefix + "]").each(function( index ){
             if (! $(this).prop("checked")){
                 allChecked = false;
                 return;
             }
         });
         if (allChecked){
-            $(area_parent).find("input[name^=area-button-]").prop("checked", true);
+            $(area_parent).find("input[name^=" + area_prefix + "]").prop("checked", true);
         }
     } else {
         /* Uncheck parent (area) input) */
-        $(area_parent).find("input[name^=area-button-]").prop("checked", false);
+        $(area_parent).find("input[name^=" + area_prefix + "]").prop("checked", false);
     }
 
 
@@ -67,10 +67,12 @@ function areaClick(clicked_input){
     var area_parent = $(clicked_input).parents().eq(1);
     if ($(clicked_input).prop('checked')){
         /* Check all children */
-        $(area_parent).find("input[name^=region-button-]").prop("checked", true);
+        $(area_parent).find("input[name^=dregion-button-]").prop("checked", true);
+        $(area_parent).find("input[name^=bregion-button-]").prop("checked", true);
     } else {
         /* Uncheck all children */
-        $(area_parent).find("input[name^=region-button-]").prop("checked", false);
+        $(area_parent).find("input[name^=dregion-button-]").prop("checked", false);
+        $(area_parent).find("input[name^=bregion-button-]").prop("checked", false);
     }
 
     return false;
@@ -79,11 +81,15 @@ function areaClick(clicked_input){
 function allClicked(clicked_button, action){
     var div_parent = $(clicked_button).parents().eq(4);
     if (action == 1){
-        $(div_parent).find("input[name^=area-button-]").prop("checked", true);
-        $(div_parent).find("input[name^=region-button-]").prop("checked", true);
+        $(div_parent).find("input[name^=darea-button-]").prop("checked", true);
+        $(div_parent).find("input[name^=barea-button-]").prop("checked", true);
+        $(div_parent).find("input[name^=dregion-button-]").prop("checked", true);
+        $(div_parent).find("input[name^=bregion-button-]").prop("checked", true);
     } else {
-        $(div_parent).find("input[name^=area-button-]").prop("checked", false);
-        $(div_parent).find("input[name^=region-button-]").prop("checked", false);
+        $(div_parent).find("input[name^=darea-button-]").prop("checked", false);
+        $(div_parent).find("input[name^=earea-button-]").prop("checked", false);
+        $(div_parent).find("input[name^=dregion-button-]").prop("checked", false);
+        $(div_parent).find("input[name^=bregion-button-]").prop("checked", false);
     }
 
     return false;
