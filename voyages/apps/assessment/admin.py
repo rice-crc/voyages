@@ -39,6 +39,7 @@ class NationAdmin(admin.ModelAdmin):
 class EstimateAdmin(admin.ModelAdmin):
     fields = ["year", "nation", "embarkation_region", "disembarkation_region",
               "embarked_slaves", "disembarked_slaves"]
+    list_display = ["id", "year", "nation", "embarkation_region", "disembarkation_region", "embarked_slaves", "disembarked_slaves"]
 
 
 admin.site.register(ExportArea, ExportAreaAdmin)
