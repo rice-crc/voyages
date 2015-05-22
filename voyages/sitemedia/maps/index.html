@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Voyages - Mock map</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<link rel="stylesheet" href="css/MarkerCluster.css" />
+	<link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+	<link rel="stylesheet" href="css/leaflet.css" />
+    <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+	<style>
+		body {
+			background-color: gray;
+			padding: 0;
+			margin: 0;
+		}
+		
+		html, body {
+			height: 100%;
+		}
+		
+		input, label, .control {
+			position: relative;
+			vertical-align: middle;
+			margin: 5px;
+		}
+		
+		#container {
+			display: table;
+			width: 100%;
+			height: 100%;
+		}
+		
+		#container > div {
+			display: table-row;
+			height: 0;
+		}
+		
+		#container > div.fill {
+			height: auto;
+		}
+		
+		#container > div > div {
+			display: table-cell;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<!-- START TOOL section -->
+		<div class="header">
+			<div id="controls" style="margin: 5px;">
+				<select id="departure" class="control">
+					<option value>Select origin</option>
+					<option value="luanda">Luanda</option>
+					<option value="mozambique">Mozambique</option>
+					<option value="both">Both</option>
+				</select>
+				<select id="mapId" style="width: 80px;" class="control">
+					<option value>Select historical map</option>
+					<option value="1650" selected>1650</option>
+					<option value="1750">1750</option>
+					<option value="1850">1850</option>
+				</select>
+				<input type="checkbox" id="showMarkersChecker"></input> <label for="showMarkersChecker">Show Markers</label> | 
+				<label>Path opacity: </label>
+				<div class="control" id="slider" style="display: inline-block; width: 200px;"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				| <label>Tools: </label>
+				<select id="tools" class="control">
+					<option value selected>Select tool</option>
+					<option value="coord">Coordinate picker</option>
+					<option value="del">Marker delete</option>
+				</select>
+				<button onclick="downloadNodes();" class="control">
+					Download node coordinates
+				</button>
+				<button onclick="deleteAllMarkers();" class="control">
+					Delete all markers
+				</button>
+				<!-- END TOOL section -->
+			</div>
+		</div>
+		<!-- Search box for locations -->
+		<div style="z-index: 2; position: absolute; height: 0px; width: 0px">
+			<div style="position: absolute; top: 5px; left: 50px">
+				<input id="searchBox" type="text" style="font-size:large; width: 250px;"></input>
+			</div>
+		</div>
+		<div id="mapHolder" class="fill">
+			<div id="map" style="height: 100%"></div>
+		</div>
+	</div>
+	<script src="js/leaflet.js"></script>
+	<script src="js/leaflet.markercluster-src.js"></script>
+	<script src="js/leaflet.polylineDecorator.js"></script>
+	<script src="js/routeNodes.js"></script>
+	<script src="js/voyagesMap.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script>
+		voyagesMap.init('1650', routeNodes);
+		
+		// START OF TOOL section: remove when finished.
+		var TOOL_PICKER = "coord";
+		var TOOL_DELETE = "del";
+		
+		function deleteAllMarkers() {
+			routeNodes = [ ];
+			voyagesMap.clear();
+		}
+	
+		function getSelectedTool() {
+			return $( '#tools' ).find(':selected').val();
+		}
+		
+		function downloadNodes() {
+			var out = "var routeNodes = [\r\n";
+			for (var i = 0; i < routeNodes.length; ++i) {
+				out += "\tnew L.LatLng(" + routeNodes[i].lat + ", " + routeNodes[i].lng + "),\r\n";
+			}
+			out += "];"
+			var pom = document.createElement('a');
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(out));
+			pom.setAttribute('download', 'routeNodes.js');
+			pom.style.display = 'none';
+			document.body.appendChild(pom);
+			pom.click();
+			document.body.removeChild(pom);
+		}
+		
+		voyagesMap._map.on('click', function(e) {
+			var tool = getSelectedTool();
+			if (tool == 'coord') {
+				var index = routeNodes.length;
+				routeNodes.push(e.latlng);
+				console.log(e.latlng);
+				addMarker(index);
+			}
+		});
+		
+		function addMarker(k) {
+			var marker = L.marker(routeNodes[k], {
+				draggable: true,
+			}).addTo(voyagesMap);
+			marker.nodeIndex = k;
+			routeNodes[k].marker = marker;
+			marker.on('click', function() {
+				var nodeIndex = this.nodeIndex;
+				if (getSelectedTool() == TOOL_DELETE && routeNodes.length > 0 && nodeIndex >= 0) {
+					// Pop last item from array.
+					var lastItem = routeNodes.splice(-1, 1)[0];
+					// Replace deleted item with last node.
+					if (nodeIndex < routeNodes.length) {
+						routeNodes[nodeIndex] = lastItem;
+						lastItem.marker.nodeIndex = nodeIndex;
+					}
+					this.nodeIndex = -1;
+					voyagesMap.removeLayer(this);
+					voyagesMap.removeLayer(this.circle);
+				}
+			});
+			var circle = L.circle(routeNodes[k], 300000, {
+				opacity: 0,
+				fillColor: 'red',
+				fillOpacity: 0.2,
+			}).addTo(voyagesMap);
+			marker.circle = circle;
+			marker.on('drag', function() {
+				routeNodes[this.nodeIndex] = this.getLatLng();
+				circle.setLatLng(this.getLatLng());
+			});
+			return marker;
+		}
+		// END OF TOOL section.
+	</script>
+	
+	<script>
+		$( document ).ready(function() {
+			$( "#slider" ).slider({
+				value: 100,
+				min: 10,
+				max: 100,
+				step: 10,
+				slide: function( event, ui ) {
+					voyagesMap.setPathOpacity(ui.value / 100);
+				}
+			});
+			$( document ).keypress(function(e) {
+				if (e.which == 13) {
+					voyagesMap.clear();
+					// Supporting Tools - remove when finished.
+					if ($( "#showMarkersChecker" ).prop( "checked" )) {
+						for (var k = 0; k < routeNodes.length; ++k) {
+							addMarker(k);
+						}
+					}
+					voyagesMap.draw();
+				}
+			});
+		
+			$( '#departure' ).change(function() {
+				voyagesMap.clearNetwork();
+				var selection = $( document ).find(':selected').val();
+				// Fetch JSON data from server.
+				$.ajax({
+					url: "mock_server/map_server.php?id=" + selection,
+					context: voyagesMap
+				}).done(voyagesMap.setJsonNetworkFlow);
+			});
+			
+			$( '#mapId' ).change(function() {
+				var id = $( this ).val();
+				if (id) {
+					voyagesMap.loadBaseMap(id);
+				}
+			});
+			
+			var geocoder = new google.maps.Geocoder();;
+			
+			$( '#searchBox' ).keypress(function(e) {
+				if (e.which == 13) {
+					geocoder.geocode( { address: $( '#searchBox' ).val() }, function(results, status) {
+						if (status == google.maps.GeocoderStatus.OK) {
+							for (var i = 0; i < results.length; ++i) {								
+								var loc = results[i].geometry.location;
+								var latLng = new L.LatLng(loc.A, loc.F);
+								if (voyagesMap.getBounds().contains(latLng)) {
+									L.marker(latLng).addTo(voyagesMap);
+								}
+								if (results.length == 1) {
+									console.log('pan');
+									voyagesMap._map.panTo(latLng);
+								}
+							}
+						} else {
+							alert('Search was not successful for the following reason: ' + status);
+						}
+					});
+				}
+			});
+		});
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
+</body>
+</html>

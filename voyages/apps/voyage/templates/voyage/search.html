@@ -19,12 +19,12 @@
 {% endblock %}
 
 {% block content %}
-<form id="form" name="form" method="post" action="{% url 'voyage:search' %}"
+<form id="form" name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 <!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
-<div id="col_container">
-  <div id="center_column" class="column">
-	<table class="query_window">
+<div id="col_container" style="height: 100%;">
+  <div id="center_column" class="column" style="height: 100%;">
+	<table class="query_window" style="height: 100%;">
 	  <tr>
 		<td id="center-content">
 		  {% block center-content %}

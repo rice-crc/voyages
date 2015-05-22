@@ -30,12 +30,18 @@
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>{% block title %}Title of the page{% endblock %}</title>
-
+    <style>
+        #main-content-container > div {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>
+    <div style="display: table; height:100%; width:100%;">
 	{% block top_bar %}
-	<table class="top-bar">
+	<table class="top-bar" style="display: table-row;height: 0;">
 		<tr>
 			{% comment %} Website logo {% endcomment %}
 			<td style="width:240px;">
@@ -55,7 +61,7 @@
 	
 	{% comment %} Secondary menu containing breadcrumb links and help links {% endcomment %}
 	{% block secondary_bar %}
-	<div id="secondarybar">
+	<div id="secondarybar" style="display: table-row;height: 0;">
 		{% include "secondarybar.html" %} 
 	</div>
 	{% endblock %}
@@ -64,14 +70,15 @@
 	
 	{% comment %} Actual content of the page - two nested divs 
 		because of different background vs. text spanning {% endcomment %}
-    <div id="main-content">
-    <div id="main-content-container">
+    <div id="main-content" style="display: table-row;height: 100%;">
+    <div id="main-content-container" style="display: table-cell;">
     {% block content %}{% endblock %}
     
     </div>
 	</div>
 	{% comment %} Page footer {% endcomment %}
 	{% block footer %}{% endblock %}
+    </div>
 	
 	{% comment %} Google Analytics code {% endcomment %}
 	{% include "googlecode.html" %}

@@ -529,8 +529,15 @@ def voyage_map(request, voyage_id):
     Displays the map for a voyage
     """
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    year_completed = int(voyage.var_imp_voyage_began)
+    map_year = 1750
+    if year_completed > 1800:
+        map_year = 1850
+    elif year_completed <= 1700:
+        map_year = 1650
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
+                   'map_year': map_year,
                    'voyage_id': voyage_id,
                    'voyage': voyage})
 
@@ -619,6 +626,11 @@ def search(request):
     timeline_data = []
     timeline_form = None
     timeline_chart_settings = {}
+
+    # Map
+    map_ports = {}
+    map_flows = {}
+    map_year = 1750
 
     # If there is no requested page number, serve 1
     current_page = 1
@@ -1274,6 +1286,37 @@ def search(request):
 
         elif submitVal == 'tab_maps':
             tab = 'maps'
+            map_ports = {}
+            map_flows = {}
+            frame_from_year = int(request.POST.get('frame_from_year'))
+            frame_to_year = int(request.POST.get('frame_to_year'))
+            if frame_from_year > 1800:
+                map_year = 1850
+            elif frame_to_year <= 1700:
+                map_year = 1650
+            else:
+                map_year = 1750
+            def add_port(place):
+                if place is not None:
+                    map_ports[place.place] = (place.latitude, place.longitude)
+                return place is not None
+            def add_flow(source, destination, embarked, disembarked):
+                if embarked is not None and disembarked is not None and add_port(source) and add_port(destination):
+                    flow_key = source.place + '_' + destination.place
+                    if flow_key in map_flows:
+                        embarked += map_flows[flow_key][2]
+                        disembarked += map_flows[flow_key][3]
+                    map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
+            results = results.load_all()
+            for result in results:
+                voyage = result.object
+                itinerary = voyage.voyage_itinerary
+                numbers = voyage.voyage_slaves_numbers
+                add_flow(
+                    itinerary.first_place_slave_purchase,
+                    itinerary.first_landing_place,
+                    numbers.total_num_slaves_dep_last_slaving_port or numbers.imp_total_num_slaves_embarked,
+                    numbers.total_num_slaves_arr_first_port_embark or numbers.imp_total_num_slaves_disembarked)
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
@@ -1307,7 +1350,6 @@ def search(request):
         request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
-    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
     result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
@@ -1347,7 +1389,10 @@ def search(request):
                    'graphs_bar_select_form': graphs_bar_select_form,
                    'timeline_data': timeline_data,
                    'timeline_form': timeline_form,
-                   'timeline_chart_settings': timeline_chart_settings
+                   'timeline_chart_settings': timeline_chart_settings,
+                   'map_ports': map_ports,
+                   'map_flows': map_flows,
+                   'map_year': map_year
                   })
 
 
