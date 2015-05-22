@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+<div style="display:table-row; height:100%">
+    <div id="map" style="width:100%; height:100%"></div>
+</div>
+<script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.markercluster-src.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
+<script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
+<script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+    voyagesMap.
+        init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
+        setMaxPathWidth(10).
+        setPathOpacity(0.75);
+    var ports = {
+        {% for port_name, latlng in map_ports.items %}
+            "{{ port_name }}": new L.LatLng({{ latlng.0 }}, {{ latlng.1 }}),
+        {% endfor %}
+    };
+    var flows = [
+        {% for flow in map_flows.values %}
+            new Flow(ports['{{ flow.0 }}'], ports['{{ flow.1 }}'], {{ flow.2 }}, {{ flow.3 }}),
+        {% endfor %}
+    ];
+    voyagesMap.setNetworkFlow(ports, flows);
+</script>

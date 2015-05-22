@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="search-main-panel">
+<div class="search-main-panel" style="display: table; height: 100%; width: 100%;">
     <div class="tabs-selection">
         <ul>
             <li>
@@ -60,7 +60,7 @@
         </ul>
     </div>
 
-    <div class="search-panel">
+    <div class="search-panel" style="display: table; height: 100%; width: 100%;">
         {% if no_result == True %}
             {% include "voyage/search_no_result.html" %}
         {% elif tab == 'statistics' %}

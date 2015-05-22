@@ -1,7 +1,7 @@
 {% load i18n %}
 
-<div class="search-main-panel">
-  <div class="tabs-selection">
+<div class="search-main-panel" style="display: table; height: 100%; width: 100%;">
+  <div class="tabs-selection" style="display: table-row; height: 0px;">
     <ul>
       <li>
 	<a href="/voyage/search?submit_val=restore_prev_query&prev_query_num=0" id="tab_back_to_list" class="tab-back-to-list tab-menu-item">{% trans "Back to the list of voyages" %}</a>
@@ -29,13 +29,53 @@
       </li>
     </ul>
   </div>
-  <div class="search-panel">
-    <div class="detail-title">
-      Voyage {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
-    </div>
+  <div class="search-panel" style="display:table-row; height:100%; width: 100%;">
+      <div style="display:table; height: 100%; width: 100%">
+        <div class="detail-title" style="display:table-row; height:0%">
+            <div style="margin: 10px">
+                Voyage {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+            </div>
+        </div>
 
-    {% if tab == 'variables' %}
-      {% include "voyage/voyage_variables.html" %}
-    {% endif %}
+        {% if tab == 'variables' %}
+          {% include "voyage/voyage_variables.html" %}
+        {% endif %}
+
+        {% if tab == 'map' %}
+            {% with itinerary=voyage.object.voyage_itinerary numbers=voyage.object.voyage_slaves_numbers %}
+            <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+            <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+            <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+            <div style="display:table-row; height:100%">
+                <div id="map" style="width: 100%;height: 100%;position: relative;"></div>
+            </div>
+            <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+            <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster-src.js"></script>
+            <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
+            <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
+            <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
+            <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+            <script>
+                {% with source=itinerary.first_place_slave_purchase destination=itinerary.first_landing_place %}
+                voyagesMap.
+                    init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
+                    setMaxPathWidth(10).
+                    setPathOpacity(0.75);
+                var ports = {
+                    "{{ source.place }}": new L.LatLng({{ source.latitude }}, {{ source.longitude }}),
+                    "{{ destination.place }}": new L.LatLng({{ destination.latitude }}, {{ destination.longitude }}),
+                };
+                var flows = [
+                    new Flow(ports["{{ source.place }}"],
+                        ports["{{ destination.place }}"],
+                        {{ numbers.total_num_slaves_dep_last_slaving_port }} || {{ numbers.imp_total_num_slaves_embarked }} || 0,
+                        {{ numbers.total_num_slaves_arr_first_port_embark }} || {{ numbers.imp_total_num_slaves_disembarked }} || 0)
+                ];
+                voyagesMap.setNetworkFlow(ports, flows);
+                {% endwith %}
+            </script>
+          {% endwith %}
+        {% endif %}
+      </div>
   </div>
 </div>

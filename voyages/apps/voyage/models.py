@@ -1248,6 +1248,15 @@ class VoyageManager(models.Manager):
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
 
+    # Ensure that we load some related members thus
+    # avoiding hitting the DB multiple times.
+    def get_query_set(self):
+        return super(VoyageManager, self).get_query_set().select_related(
+            'voyage_itinerary',
+            'voyage_itinerary__first_place_slave_purchase',
+            'voyage_itinerary__first_landing_place',
+            'voyage_slaves_numbers')
+
 
 class Voyage(models.Model):
     """
