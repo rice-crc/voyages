@@ -80,6 +80,48 @@ function LocationIndex() {
 	};
 };
 
+/*!
+ *  A point in the global with a name.
+ *  @param name - the name of the point.
+ *  @param latLng - global position.
+ *  @param nodeType - a string identifying the type of the node (e.g. port, region, broad region).
+ */
+function NamedPoint(name, latLng, nodeType) {
+	this.name = name;
+	this.latLng = latLng;
+	this.nodeType = nodeType;
+}
+
+/*!
+ *  A port with parent region and grandparent broad region.
+ *  @param namedPoint - the point corresponding to the port
+ *  @param region - a NamedPoint corresponding to the region
+ *                  this port belongs to.
+ *  @param broad - a NamedPoint corresponding to the broad
+ *                 region this port belongs to.
+ */
+function Port(namedPoint, region, broad) {
+	namedPoint.nodeType = 'port';
+	if (region) region.nodeType = 'region';
+	if (broad) broad.nodeType = 'broadregion';
+	this.namedPoint = namedPoint;
+	this.region = region;
+	this.broad = broad;
+
+	/*!
+	 *  Retrieves the NamedPoint at the given zoom level.
+	 */
+	this.getNamedPoint = function(level) {
+		var result = null;
+		if (level == 0) {
+			result = this.broad;
+		} else if (level == 1) {
+			result = this.region;
+		}
+		return result || this.namedPoint;
+	}
+}
+
 var _mapBoundaries = new L.LatLngBounds(
 	new L.LatLng(-59.517932, -111.936579),
 	new L.LatLng(63.9, 60.9)
@@ -95,9 +137,10 @@ var Nothing = null;
  */
 var voyagesMap = {
 	// "Private" members
+	_arrowOpacity: 1.0,
 	_bounds: _mapBoundaries,
 	_graphics: [ ],
-	_icon: null,
+	_icons: null,
 	_map: L.map('map', {
 		attributionControl: false,
 		maxBounds: _mapBoundaries,
@@ -157,6 +200,11 @@ var voyagesMap = {
 	},
 
 	/*!
+	 *  Gets the opacity for path arrows.
+	 */
+	getArrowOpacity: function() { return this._arrowOpacity; },
+
+	/*!
 	 *  Gets the map boundaries.
 	 */
 	getBounds: function() { return this._bounds; },
@@ -179,13 +227,18 @@ var voyagesMap = {
 	 * @param {String} baseMapId - the id of the map being loaded
 	 * @param {Array} routeNodes - an array of LatLng's that are
 	 *        used to route network flows.
-	 * @param {L.Icon} markerIcon - the icon that will be shown
-	 *        for every port in the network.
+	 * @param markerIcon - object indexing {L.Icon} - each nodeType used
+	 *                     in this map should have a corresponding icon.
 	 */
-	init: function(baseMapId, mapTilePrefix, routeNodes, markerIcon) {
+	init: function(baseMapId, mapTilePrefix, routeNodes, markerIcons) {
 		this.clear();
 		this.loadBaseMap(baseMapId, mapTilePrefix);
-		this._icon = markerIcon || L.icon({ iconUrl: mapTilePrefix + 'js/images/marker-icon-redcircle.png', iconAnchor: [6, 6] });;
+		var filePrefix = mapTilePrefix + 'js/images/marker-icon-';
+		this._icons = markerIcons || {
+    		    "port" : L.icon({ iconUrl: filePrefix + 'port.png', iconAnchor: [6, 6] }),
+    		    "region" : L.icon({ iconUrl: filePrefix + 'region.png', iconAnchor: [6, 6] }),
+    		    "broadregion" : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
+            };
 		this._routeNodes = routeNodes;
 		return this;
 	},
@@ -221,31 +274,14 @@ var voyagesMap = {
 		this._graphics.remove(layer);
 		return layer;
 	},
-	
+
 	/*!
-	 * Parse the given JSON string and invoke
-	 * setNetworkFlow with the parsed elements.
-	 * @param {String} json - the JSON data describing the
-	 *        collection of ports and flows between them.
+	 *  Sets the opacity of flow paths.
 	 */
-	setJsonNetworkFlow: function(json) {
-		this.clearNetwork();
-		try {
-			var data = JSON.parse(json);
-			var ports = { };
-			var flows = [ ];
-			for (var key in data.ports) {
-				var coord = data.ports[key];
-				ports[key] = new L.LatLng(coord[0], coord[1]);
-			}
-			for (var i = 0; i < data.flows.length; ++i) {
-				var flow = data.flows[i];
-				flows.push(new Flow(ports[flow[0]], ports[flow[1]], flow[2], flow[3]));
-			};
-			this.setNetworkFlow(ports, flows);
-		} catch (err) {
-			console.log(err);
-		}
+	setArrowOpacity: function(opacity) {
+		if (opacity < 0 || opacity > 1) opacity = 1.0;
+		this._arrowOpacity = opacity;
+		this.draw();
 		return this;
 	},
 
@@ -266,51 +302,50 @@ var voyagesMap = {
 	 */
 	setNetworkFlow: function(ports, flows) {
 		this.clearNetwork();
-		var clusters = new L.markerClusterGroup({
-			chunkedLoading: true,
-			removeOutsideVisibleBounds: false
-		});
-		var markers = { };
-		var names = { };
-		for (var name in ports) {
-			var marker = new L.Marker(ports[name], { icon: this._icon, title: 'Port ' + name });
-			var key = this._latLngEncode(ports[name]);
-			markers[key] = marker;
-			names[key] = name;
-			clusters.addLayer(marker);
-		}
-		var self = this;
 		var cache = { };
+		var self = this;
+		var namedPointToMarker = function(markers, np) {
+			var marker = new L.Marker(np.latLng, {
+			    icon: self._icons[np.nodeType],
+			    title: np.name
+            });
+            markers[self._latLngEncode(np.latLng)] = marker;
+            return marker;
+		};
 		var generateClusterFlow = function() {
-			self.clearNetwork();
-			self.addLayer(clusters);
-			self._networkLayers.push(clusters);
-			var zoom = self._map.getZoom();
-		    if (!cache[zoom]) {
+			var level = self.zoomToDetailLevel(self._map.getZoom());
+		    if (!cache[level]) {
 		        // Since this is potentially costly, we cache the
-		        // cluster flow according to zoom levels for reuse.
+		        // cluster flow according to detail levels for reuse.
                 var locations = new LocationIndex();
                 var clusterFlow = [ ];
+                var markers = { };
                 for (var i = 0; i < flows.length; ++i) {
                     var flow = flows[i];
-                    var sourceKey = self._latLngEncode(flow.source);
-                    var destinationKey = self._latLngEncode(flow.destination);
-                    var source = clusters.getVisibleParent(markers[sourceKey]);
-                    var destination = clusters.getVisibleParent(markers[destinationKey]);
-                    source = source ? source.getLatLng() : flow.source;
-                    destination = destination ? destination.getLatLng() : flow.destination;
-                    locations.add(source, names[sourceKey]);
-                    locations.add(destination, names[destinationKey]);
-                    clusterFlow.push(new Flow(source, destination, flow.volume, flow.netVolume));
+                    var source = ports[flow.source].getNamedPoint(level);
+                    var destination = ports[flow.destination].getNamedPoint(level);
+                    namedPointToMarker(markers, source);
+                    namedPointToMarker(markers, destination);
+                    locations.add(source.latLng, source.name);
+                    locations.add(destination.latLng, destination.name);
+                    clusterFlow.push(new Flow(source.latLng, destination.latLng, flow.volume, flow.netVolume));
                 }
                 var network = self._totalNetworkFlow(clusterFlow);
-                cache[zoom] = function() { self._internalDraw(network, locations.names()); };
+                cache[level] = function() {
+                    self._internalDraw(network, locations.names());
+                    for (var key in markers) {
+                        var marker = markers[key];
+                        self.addLayer(marker);
+                        self._networkLayers.push(marker);
+                    }
+                };
 			}
-			cache[zoom]();
+            self.clearNetwork();
+            cache[level]();
 		};
 		this.draw = generateClusterFlow;
 		this.draw();
-		clusters.on('animationend', this.draw);
+		this._map.on('zoomend', this.draw);
 		return this;
 	},
 
@@ -322,6 +357,17 @@ var voyagesMap = {
 		this._pathOpacity = opacity;
 		this.draw();
 		return this;
+	},
+
+	/*!
+	 *  Translates a zoom level to a map detail level.
+	 *  This is used to determine how to group nodes according
+	 *  to their hierarchy.
+	 */
+	zoomToDetailLevel: function(zoom) {
+	    if (zoom <= 3) return 0;
+	    if (zoom <= 6) return 1;
+	    return 2;
 	},
 
 	// Private Methods.
@@ -445,6 +491,7 @@ var voyagesMap = {
 	},
 
 	_internalDraw: function(network, locations) {
+	    var arrowOpacity = this._arrowOpacity || 1.0;
 		var pathOpacity = this._pathOpacity || 1.0;
 		var pathColor = this._pathColor;
 		var result = [ ];
@@ -498,7 +545,7 @@ var voyagesMap = {
 					pathOptions: {
 						stroke: false,
 						weight: 2,
-						fillOpacity: pathOpacity,
+						fillOpacity: arrowOpacity,
 						color: pathColor
 					}
 				});
@@ -542,74 +589,59 @@ var voyagesMap = {
 	_routeFinder: function(start, end) {
 		implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
 		routeNodes = this._routeNodes;
-		var heuristicFn = function(a) {
-			return a.point.distanceTo(end) + a.pathLength;
-		};
 		var openSet = [ { "point": start, "pathLength": 0, "parent": null, "isOpen": true } ];
 		var availableNodes = [ ];
+		var distanceToEnd = [ ]; // Cache distance from nodes to endpoint.
 		for (var i = 0; i < routeNodes.length; ++i) {
-			availableNodes.push( { "point": routeNodes[i], "pathLength": null, "parent": null, "isOpen": false } );
+		    distanceToEnd[i] = routeNodes[i].distanceTo(end);
+			availableNodes.push( { "key": i, "point": routeNodes[i], "pathLength": null, "parent": null, "isOpen": false } );
 		}
-		availableNodes.push( { "point": end, "pathLength": null, "parent": null, "isOpen": false } );
+		distanceToEnd[routeNodes.length] = 0;
+		availableNodes.push( { "key": routeNodes.length, "point": end, "pathLength": null, "parent": null, "isOpen": false } );
+		var heuristicFn = function(a) {
+			return distanceToEnd[a.key] + a.pathLength;
+		};
 		var solution = null;
+		var PENALTY_MULTIPLIER = 10;
 		while (openSet.length > 0) {
-			// Adjacent nodes.
-			var current = openSet[0];
+			// Pick open node with smallest heuristic (estimate) for distance to target.
+			var minIndex = 0;
+			for (var i = 1; i < openSet.length; ++i) {
+			    if (heuristicFn(openSet[i]) < heuristicFn(openSet[minIndex])) minIndex = i;
+			}
+			var current = openSet[minIndex];
 			if (current.point == end) {
 				solution = current;
 				break;
 			}
+			// Remove from open set.
 			current.isOpen = false;
+			openSet.splice(minIndex, 1);
 			var index = availableNodes.indexOf(current);
 			if (index >= 0) {
 				availableNodes.splice(index, 1);
 			}
-			openSet.splice(0, 1);
-			availableNodes.sort(function(a, b) {
-				return a.point.distanceTo(current.point) - b.point.distanceTo(current.point);
-			});
-			var expanded = false;
+            // The distance below is the maximum an available node could be away from the end and still get selected.
+            var largestAcceptableDistance = PENALTY_MULTIPLIER * distanceToEnd[current.key] + current.pathLength;
 			for (var i = 0; i < availableNodes.length; ++i) {
-				var point = availableNodes[i].point;
-				var dist = point.distanceTo(current.point);
+                var node = availableNodes[i];
+                if (distanceToEnd[node.key] >= largestAcceptableDistance) continue;
+				var dist = node.point.distanceTo(current.point);
 				// If the node is not an implicit neighbor we penalize its
 				// distance. This ensures that long jumps are still available
 				// if we need them, but they will be kept as short as possible.
-				if (dist > implicitNeighborhoodRange) dist *= 10;
-				if (!availableNodes[i].isOpen ||
-						availableNodes[i].pathLength > dist + current.pathLength) {
+				if (dist > implicitNeighborhoodRange) dist *= PENALTY_MULTIPLIER;
+				if (!node.isOpen || node.pathLength > dist + current.pathLength) {
                     // Either the node is not on the open set or
                     // we found a shorter path from the start.
-					var node = availableNodes[i];
 					node.pathLength = dist + current.pathLength;
 					node.parent = current;
 					if (!node.isOpen) {
 						node.isOpen = true;
 						openSet.push(node);
 					}
-					expanded = true;
 				}
 			}
-			if (!expanded) {
-				// Must find a long jump that gets us closer to the goal.;
-				for (var i = 0; !expanded && i < availableNodes.length; ++i) {
-					var point = availableNodes[i].point;
-					var dist = 10 * point.distanceTo(current.point);
-					if (!availableNodes[i].isOpen || availableNodes[i].pathLength > dist + current.pathLength) {
-						var node = availableNodes[i];
-						node.pathLength = dist + current.pathLength;
-						node.parent = current;
-						if (!node.isOpen) {
-							node.isOpen = true;
-							openSet.push(node);
-						}
-						expanded = true;
-					}
-				}
-			}
-			openSet.sort(function(a, b) {
-				return heuristicFn(a) - heuristicFn(b);
-			});
 		}
 		// Collect coordinates of the optimized path.
 		var result = [ ];
@@ -660,7 +692,13 @@ var voyagesMap = {
 			var route = this._routeFinder(flow.source, flow.destination);
 			for (var j = 0; j < route.length; ++j) {
 				var label = this._latLngEncode(route[j]);
-				var incidence = { "index": j, "routeIndex": i, "route": route, "volume": flow.volume, "netVolume": flow.netVolume };
+				var incidence = {
+				    "index": j,
+				    "routeIndex": i,
+				    "route": route,
+				    "volume": flow.volume,
+				    "netVolume": flow.netVolume
+                };
 				if (!usedNodes.hasOwnProperty(label)) {
 					usedNodes[label] = { "incidences": [ incidence ], "links": [ ] };
 				} else {
@@ -685,7 +723,13 @@ var voyagesMap = {
 					var terminal = (index == route.length - 2);
 					var link = null;
 					if (!usedLinks.hasOwnProperty(linkLabel)) {
-						link = new Flow(route[index], route[index + 1], theIncidence.volume, theIncidence.netVolume, initial, terminal);
+						link = new Flow(
+						    route[index],
+						    route[index + 1],
+						    theIncidence.volume,
+						    theIncidence.netVolume,
+						    initial,
+						    terminal);
 						link.routes = [ theIncidence.routeIndex ];
 						usedLinks[linkLabel] = link;
 					} else {
@@ -729,7 +773,16 @@ var voyagesMap = {
 				merge.push(link.destination);
 			}
 			if (merge.length > 2) {
-				result.push(new Flow(merge[0], merge[merge.length - 1], link.volume, link.netVolume, usedLinks[label].initial, link.terminal, merge));
+				result.push(
+				    new Flow(
+                        merge[0],
+                        merge[merge.length - 1],
+                        link.volume,
+                        link.netVolume,
+                        usedLinks[label].initial,
+                        link.terminal, merge
+                    )
+                );
 			} else {
 				result.push(link);
 			}

@@ -12,6 +12,12 @@ class BroadRegion(models.Model):
     """
 
     broad_region = models.CharField("Broad region (Area) name", max_length=70)
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
     value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
 
@@ -32,6 +38,12 @@ class Region(models.Model):
 
     region = models.CharField("Specific region (country or colony)",
                                                max_length=70)
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
     broad_region = models.ForeignKey('BroadRegion')
     value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
@@ -1245,6 +1257,19 @@ class VoyageSourcesConnection(models.Model):
 # Voyage (main) model
 # for parsing natural key
 class VoyageManager(models.Manager):
+    _all = {}
+    _has_loaded = False
+    import threading
+    _lock = threading.Lock()
+
+    @classmethod
+    def cache(cls):
+        with cls._lock:
+            if not cls._has_loaded:
+                cls._has_loaded = True
+                cls._all = {v.pk: v for v in Voyage.objects.all()}
+        return cls._all
+
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
 
@@ -1252,9 +1277,8 @@ class VoyageManager(models.Manager):
     # avoiding hitting the DB multiple times.
     def get_query_set(self):
         return super(VoyageManager, self).get_query_set().select_related(
-            'voyage_itinerary',
-            'voyage_itinerary__first_place_slave_purchase',
-            'voyage_itinerary__first_landing_place',
+            'voyage_itinerary__principal_place_of_slave_purchase__region__broad_region',
+            'voyage_itinerary__principal_port_of_slave_dis__region__broad_region',
             'voyage_slaves_numbers')
 
 

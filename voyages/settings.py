@@ -166,6 +166,7 @@ LOGIN_URL = '/contribute/login/'
 LOGIN_REDIRECT_URL = LOGIN_URL
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
+HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
 
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"

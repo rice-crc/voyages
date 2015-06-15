@@ -4,6 +4,7 @@ from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
 from django.shortcuts import render
 from django.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.encoding import iri_to_uri
 from django.contrib.admin.views.decorators import staff_member_required
@@ -1286,8 +1287,6 @@ def search(request):
 
         elif submitVal == 'tab_maps':
             tab = 'maps'
-            map_ports = {}
-            map_flows = {}
             frame_from_year = int(request.POST.get('frame_from_year'))
             frame_to_year = int(request.POST.get('frame_to_year'))
             if frame_from_year > 1800:
@@ -1296,10 +1295,15 @@ def search(request):
                 map_year = 1650
             else:
                 map_year = 1750
+        elif submitVal == 'map_ajax':
+            map_ports = {}
+            map_flows = {}
+
             def add_port(place):
                 if place is not None:
-                    map_ports[place.place] = (place.latitude, place.longitude)
+                    map_ports[place.place] = (place.latitude, place.longitude, place.region, place.region.broad_region)
                 return place is not None
+
             def add_flow(source, destination, embarked, disembarked):
                 if embarked is not None and disembarked is not None and add_port(source) and add_port(destination):
                     flow_key = source.place + '_' + destination.place
@@ -1307,16 +1311,22 @@ def search(request):
                         embarked += map_flows[flow_key][2]
                         disembarked += map_flows[flow_key][3]
                     map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
-            results = results.load_all()
-            for result in results:
-                voyage = result.object
+
+            all_voyages = VoyageManager.cache()
+            for pkey in results.values_list('pk', flat=True):
+                voyage = all_voyages[int(pkey)]
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
                 add_flow(
-                    itinerary.first_place_slave_purchase,
-                    itinerary.first_landing_place,
-                    numbers.total_num_slaves_dep_last_slaving_port or numbers.imp_total_num_slaves_embarked,
-                    numbers.total_num_slaves_arr_first_port_embark or numbers.imp_total_num_slaves_disembarked)
+                    itinerary.principal_place_of_slave_purchase,
+                    itinerary.principal_port_of_slave_dis,
+                    numbers.imp_total_num_slaves_embarked,
+                    numbers.imp_total_num_slaves_disembarked)
+            return render(request, "voyage/search_maps.datatemplate",
+                          {
+                              'map_ports': map_ports,
+                              'map_flows': map_flows
+                          }, content_type='text/javascript')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
@@ -1390,8 +1400,6 @@ def search(request):
                    'timeline_data': timeline_data,
                    'timeline_form': timeline_form,
                    'timeline_chart_settings': timeline_chart_settings,
-                   'map_ports': map_ports,
-                   'map_flows': map_flows,
                    'map_year': map_year
                   })
 
@@ -1650,8 +1658,7 @@ def perform_search(query_dict, date_filters):
     :return:
     """
     # Initially sort by voyage_id
-    # TODO: change this to have Voyage before filter
-    results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+    results = SearchQuerySet().models(Voyage).filter(**query_dict).order_by('var_voyage_id')
     # Date filters
     return date_filter_query(date_filters, results)
 

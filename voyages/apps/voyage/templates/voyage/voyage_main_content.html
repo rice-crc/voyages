@@ -47,29 +47,35 @@
             <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
             <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
             <div style="display:table-row; height:100%">
-                <div id="map" style="width: 100%;height: 100%;position: relative;"></div>
+                <div id="map" style="width: 100%;height: 100%;position: relative; min-height: 500px;"></div>
             </div>
             <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
-            <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster-src.js"></script>
             <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
             <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
             <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
             <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
             <script>
-                {% with source=itinerary.first_place_slave_purchase destination=itinerary.first_landing_place %}
+                {% with source=itinerary.principal_place_of_slave_purchase destination=itinerary.principal_port_of_slave_dis %}
                 voyagesMap.
                     init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
                     setMaxPathWidth(10).
                     setPathOpacity(0.75);
                 var ports = {
-                    "{{ source.place }}": new L.LatLng({{ source.latitude }}, {{ source.longitude }}),
-                    "{{ destination.place }}": new L.LatLng({{ destination.latitude }}, {{ destination.longitude }}),
+                    "{{ source.place }}": new Port(
+                        new NamedPoint("{{ source.place }}", new L.LatLng({{ source.latitude }}, {{ source.longitude }})),
+                        null,
+                        null),
+                    "{{ destination.place }}": new Port(
+                        new NamedPoint("{{ destination.place }}", new L.LatLng({{ destination.latitude }}, {{ destination.longitude }})),
+                        null,
+                        null)
                 };
                 var flows = [
-                    new Flow(ports["{{ source.place }}"],
-                        ports["{{ destination.place }}"],
-                        {{ numbers.total_num_slaves_dep_last_slaving_port }} || {{ numbers.imp_total_num_slaves_embarked }} || 0,
-                        {{ numbers.total_num_slaves_arr_first_port_embark }} || {{ numbers.imp_total_num_slaves_disembarked }} || 0)
+                    new Flow(
+                        "{{ source.place }}",
+                        "{{ destination.place }}",
+                        {{ numbers.imp_total_num_slaves_embarked }} || 0,
+                        {{ numbers.imp_total_num_slaves_disembarked }} || 0)
                 ];
                 voyagesMap.setNetworkFlow(ports, flows);
                 {% endwith %}
