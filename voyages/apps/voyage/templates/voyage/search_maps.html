@@ -1,29 +1,53 @@
+{% load i18n %}
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
 <div style="display:table-row; height:100%">
-    <div id="map" style="width:100%; height:100%"></div>
+    <div id="map" style="width:100%; height:100%; min-height: 500px;"></div>
+</div>
+<div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
+    <h1>{% trans 'Loading map voyages...' %}</h1>
 </div>
 <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
-<script src="{{ STATIC_URL }}maps/js/leaflet.markercluster-src.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
 <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
 <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script>
     voyagesMap.
         init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
-        setMaxPathWidth(10).
+        setMaxPathWidth(20).
         setPathOpacity(0.75);
-    var ports = {
-        {% for port_name, latlng in map_ports.items %}
-            "{{ port_name }}": new L.LatLng({{ latlng.0 }}, {{ latlng.1 }}),
-        {% endfor %}
-    };
-    var flows = [
-        {% for flow in map_flows.values %}
-            new Flow(ports['{{ flow.0 }}'], ports['{{ flow.1 }}'], {{ flow.2 }}, {{ flow.3 }}),
-        {% endfor %}
-    ];
-    voyagesMap.setNetworkFlow(ports, flows);
+    $( document ).ready(function() {
+        var animate = true;
+        $.ajax({
+             type: "POST",
+             url: $("#form").attr('action'),
+             data: $("#form").serialize() + '&submitVal=map_ajax',
+             success: function(data) {
+                eval(data);
+                voyagesMap.setNetworkFlow(ports, flows);
+             },
+             error: function(jqXHR, textStatus, errorThrown) {
+                alert('Failed to load map data!');
+             },
+             beforeSend:function(){
+                animate = true;
+                var target = 0.25;
+                $("#loading").show();
+                loop = function() {
+                    $('#loading').animate({
+                        opacity: target,
+                    }, 600, 'linear', function() {
+                        target = target < 1 ? 1 : 0.25;
+                        if (animate) loop();
+                    });
+                };
+                loop();
+             },
+             complete:function(){
+                animate = false;
+                $("#loading").hide();
+             }
+        });
+    });
 </script>
