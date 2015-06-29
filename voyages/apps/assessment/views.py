@@ -26,9 +26,135 @@ def get_page(request, chapternum, sectionnum, pagenum):
     except TemplateDoesNotExist:
         raise Http404
 
-
 def get_estimates(request):
+    tab = None
+    if request.method == "POST" and "selected_tab" in request.POST:
+        tab = request.POST["selected_tab"]
+    if tab == "map":
+        return get_estimates_map(request)
+    if tab == "timeline":
+        return get_estimates_timeline(request)
+    return get_estimates_table(request)
 
+def get_estimates_map(request):
+    data = {'tab_selected': 'map'}
+    results = get_estimates_common(request, data)
+    data['map_year'] = globals.get_map_year(data['query']["year__gte"], data['query']["year__lte"])
+    # Group estimates by embarkation and disembarkation geocodes.
+    regions = {}
+    flows = {}
+    cache = EstimateManager.cache()
+    for result in results:
+        result = cache[result.pk]
+        dregion = result.disembarkation_region.name
+        eregion = result.embarkation_region.name
+        regions[dregion] = (result.disembarkation_region.latitude, result.disembarkation_region.longitude)
+        regions[eregion] = (result.embarkation_region.latitude, result.embarkation_region.longitude)
+        key = eregion + "_" + dregion
+        item = (eregion, dregion,  0, 0)
+        if key in flows:
+            item = flows[key]
+        flows[key] = (eregion, dregion, item[2] + result.embarked_slaves, item[3] + result.disembarked_slaves)
+    data['regions'] = regions
+    data['flows'] = flows
+    return render(request, 'assessment/estimates.html', data)
+
+def get_estimates_timeline(request):
+    data = {'tab_selected': 'timeline'}
+    results = get_estimates_common(request, data)
+    # Group estimates by year and sum embarked and disembarked for year.
+    # The following dict has keys corresponding to years and entries
+    # formed by tuples (embarked_count, disembarked_count)
+    timeline = {}
+    for result in results:
+        item = (0, 0)
+        if result.year in timeline:
+            item = timeline[result.year]
+        timeline[result.year] = (item[0] + result.embarked_slaves, item[1] + result.disembarked_slaves)
+    data['timeline'] = timeline
+    return render(request, 'assessment/estimates.html', data)
+
+def get_estimates_common(request, data):
+    """ Append common page content to the argument data
+    :param request:  web request
+    :param data: A dict that contains page render data.
+    :return: the results of the search query
+    """
+    post = None
+    if request.method == "POST":
+        post = request.POST
+
+    query = {}
+
+    def is_checked(prefix, element):
+        """
+        Helper function that checks post data (if any) to see if
+        the checkbox corresponding to the given element is checked.
+        :param prefix: the prefix used by the view to identify the
+        model of the element.
+        :param element: the model object whose check state is needed.
+        :return: 1 if the checkbox is checked, 0 otherwise
+        """
+        if post is not None and prefix + str(element.pk) not in post:
+            return 0
+        else:
+            return 1
+
+    data['nations'] = [[x.name, x.pk, is_checked("checkbox_nation_", x)] for x in Nation.objects.all()]
+
+    export_regions = {}
+    areas = ExportArea.objects.all()
+    for area in areas:
+        regions = ExportRegion.objects.filter(export_area__pk=area.pk)
+        children = [[[x.name, x.pk], is_checked("eregion-button-", x)] for x in regions]
+        checked = is_checked("earea-button-", area)
+        export_regions[(area, checked)] = children
+
+    import_regions = {}
+    areas = ImportArea.objects.all()
+    for area in areas:
+        regions = ImportRegion.objects.filter(import_area__pk=area.pk)
+        children = [[[x.name, x.pk], is_checked("dregion-button-", x)] for x in regions]
+        checked = is_checked("darea-button-", area)
+        import_regions[(area, checked)] = children
+
+    data['export_regions'] = collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0][0].name))
+    data['import_regions'] = collections.OrderedDict(sorted(import_regions.items(), key=lambda x: x[0][0].name))
+
+    def query_region(query_key, regions_dict):
+        """
+        Obtain a list of the names of selected regions in the regions_dict
+        :param query_key: The key used when inserting this list on the query
+        dict
+        :param regions_dict: A dictionary with keys given by Area and whose
+        values are lists of the regions in that area in the format
+        [[name, pk], checked]
+        :return:
+        """
+        from itertools import chain
+        # Flatten the regions so that we may generate the corresponding query term.
+        flat = chain.from_iterable(regions_dict.values())
+        query[query_key] = [region[0][0] for region in flat if region[1] == 1]
+
+    query_region("embarkation_region__in", export_regions)
+    query_region("disembarkation_region__in", import_regions)
+
+    year_form = None
+    if post is not None:
+        year_form = EstimateYearForm(request.POST)
+    if year_form is None or not year_form.is_valid():
+        year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
+            'frame_to_year': globals.default_last_year})
+
+    data['year_form'] = year_form
+
+    query["year__gte"] = year_form.cleaned_data["frame_from_year"]
+    query["year__lte"] = year_form.cleaned_data["frame_to_year"]
+    data['query'] = query
+
+    return SearchQuerySet().models(Estimate).filter(**query).load_all()
+
+def get_estimates_table(request):
     first_year = None
     last_year = None
     years_rows = False
@@ -37,6 +163,7 @@ def get_estimates(request):
     query = {}
     search_configuration = {"year": {}}
 
+    # Try to retrieve years
     if "estimate_year_from" in request.session:
         search_configuration["year"]["year_from"] = request.session["estimate_year_from"]
     if "estimate_year_to" in request.session:
@@ -45,18 +172,17 @@ def get_estimates(request):
     if "estimate_query" in request.session:
         query = request.session["query"]
 
-    # Try to retrieve years
     export_regions = {}
     a = SearchQuerySet().models(ExportArea)
     for i in a:
         b = SearchQuerySet().models(ExportRegion).filter(export_area__exact=i.name)
-        export_regions[i] = [[a.name, a.pk] for a in b]
+        export_regions[i] = [[x.name, x.pk] for x in b]
 
     import_regions = {}
     a = SearchQuerySet().models(ImportArea)
     for i in a:
         b = SearchQuerySet().models(ImportRegion).filter(import_area__exact=i.name)
-        import_regions[i] = [[a.name, a.pk] for a in b]
+        import_regions[i] = [[x.name, x.pk] for x in b]
 
     # Default settings for columns and rows
     column_query_set = globals.table_columns[1][2]()
@@ -260,7 +386,8 @@ def get_estimates(request):
          'rows_before_titles': rows_before_titles,
          'cell_mode': cell_mode,
          'extra_range': extra_range,
-         'table_form': estimate_selection_form})
+         'table_form': estimate_selection_form,
+         'tab_selected': 'table'})
 
 
 def create_area_ranges(areas):

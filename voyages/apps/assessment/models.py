@@ -89,3 +89,24 @@ class Estimate(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+class EstimateManager(models.Manager):
+    _all = {}
+    _has_loaded = False
+    import threading
+    _lock = threading.Lock()
+
+    @classmethod
+    def cache(cls):
+        with cls._lock:
+            if not cls._has_loaded:
+                cls._has_loaded = True
+                cls._all = {v.pk: v for v in Estimate.objects.all()}
+        return cls._all
+
+    # Ensure that we load some related members thus
+    # avoiding hitting the DB multiple times.
+    def get_query_set(self):
+        return super(EstimateManager, self).get_query_set().select_related(
+            'embarkation_region',
+            'disembarkation_region')

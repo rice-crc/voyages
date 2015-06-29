@@ -104,15 +104,15 @@
                     <tr>
                       {% ifequal nation.2 1 %}
                       <td class="checkbox-list-checkbox-0">
-                        <input id="form:nations_checkbox_1" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
+                        <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
                       </td>
                       {% else %}
                         <td class="checkbox-list-checkbox-0">
-                          <input id="form:nations_checkbox_1" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
+                          <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
                         </td>
                       {% endifequal %}
                       <td class="checkbox-list-label-0">
-                        <label for="form:nations_checkbox_1">{{ nation.0 }}</label>
+                        <label for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0 }}</label>
                       </td>
                     </tr>
                   {% endfor %}
@@ -370,15 +370,37 @@
         <div id="form:_idJsp45" class="box-main-text">
           <div>
             <div style="font-weight: bold;">Selected national carriers:</div>
-            <i>all</i>
+            <i>
+              {% for nation in nations %}
+                {% ifequal nation.2 1 %}
+                  {{ nation.0 }}<br/>
+                {% endifequal %}
+              {% endfor %}
+            </i>
           </div>
           <div style="margin-top: 5px;">
             <div style="font-weight: bold;">Selected embarkation regions:</div>
-            <i>all</i>
+            <i>
+              {% for region_list in export_regions.values %}
+                {% for region in region_list %}
+                  {% ifequal region.1 1 %}
+                    {{ region.0.0 }}<br/>
+                  {% endifequal %}
+                {% endfor %}
+              {% endfor %}
+            </i>
           </div>
           <div style="margin-top: 5px;">
             <div style="font-weight: bold;">Selected disembarkation regions:</div>
-            <i>all</i>
+            <i>
+              {% for region_list in import_regions.values %}
+                {% for region in region_list %}
+                  {% ifequal region.1 1 %}
+                    {{ region.0.0 }}<br/>
+                  {% endifequal %}
+                {% endfor %}
+              {% endfor %}
+            </i>
           </div>
           <div style="margin-top: 5px;">
             <input id="form:buttonPermlink" type="submit" value="Create a link" name="form:buttonPermlink">

@@ -29,9 +29,12 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
+from voyages.apps.assessment.globals import get_map_year
 from matplotlib import cm
 import base64
 import StringIO
@@ -531,11 +534,7 @@ def voyage_map(request, voyage_id):
     """
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
     year_completed = int(voyage.var_imp_voyage_began)
-    map_year = 1750
-    if year_completed > 1800:
-        map_year = 1850
-    elif year_completed <= 1700:
-        map_year = 1650
+    map_year = get_map_year(year_completed, year_completed)
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
                    'map_year': map_year,
@@ -629,8 +628,6 @@ def search(request):
     timeline_chart_settings = {}
 
     # Map
-    map_ports = {}
-    map_flows = {}
     map_year = 1750
 
     # If there is no requested page number, serve 1
@@ -1165,8 +1162,11 @@ def search(request):
                         plt.ylabel(ydef[0])
                     else:
                         plt.ylabel("Values")
-                    fig = plt.figure(1)
-                    width = 0.8/len(request.session['graph_bar_defs'])
+                    fig = plt.figure(figsize=(13, 5))
+                    width = 0.8
+                    divisor = len(request.session['graph_bar_defs'])
+                    if divisor > 0:
+                        width /= divisor
                     figwidth = 0
                     for index, yid in enumerate(request.session['graph_bar_defs']):
                         ydef = globals.graphs_y_functions[yid]
@@ -1224,7 +1224,7 @@ def search(request):
 
                     graph_remove_plots_form = GraphRemovePlotForm([(ydef[0], 0)], request.POST)
 
-                    fig = plt.figure(1)
+                    fig = plt.figure(figsize=(13, 8))
                     xfun = xdef[1]
                     res = xfun(results,ydef)
                     data = zip(*res)
@@ -1238,7 +1238,13 @@ def search(request):
                         else:
                             return x
                     #plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
-                    plt.pie(data[1], labels=data[0])
+                    #plt.pie(data[1], labels=data[0])
+                    patches, texts = plt.pie(data[1], radius=0.5)
+                    # Sort labels by percentage.
+                    total_sum = sum(data[1])
+                    labels = [u"{0} - {1:1.2f} %".format(i,100.0 * j / total_sum) for i,j in zip(data[0], data[1])]
+                    patches, labels, dummy = zip(*sorted(zip(patches, labels, data[1]), key=lambda x: x[2], reverse=True))
+                    plt.legend(patches, labels, loc='left center', bbox_to_anchor=(0.25, 1.1), fontsize=8)
                     #plt.tight_layout()
                     #plt.legend()
                     canv = FigureCanvasAgg(fig)
@@ -1289,12 +1295,7 @@ def search(request):
             tab = 'maps'
             frame_from_year = int(request.POST.get('frame_from_year'))
             frame_to_year = int(request.POST.get('frame_to_year'))
-            if frame_from_year > 1800:
-                map_year = 1850
-            elif frame_to_year <= 1700:
-                map_year = 1650
-            else:
-                map_year = 1750
+            map_year = get_map_year(frame_from_year, frame_to_year)
         elif submitVal == 'map_ajax':
             map_ports = {}
             map_flows = {}
@@ -1313,13 +1314,13 @@ def search(request):
                     map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
 
             all_voyages = VoyageManager.cache()
-            for pkey in results.values_list('pk', flat=True):
-                voyage = all_voyages[int(pkey)]
+            for pk in results.values_list('pk', flat=True):
+                voyage = all_voyages[int(pk)]
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
                 add_flow(
-                    itinerary.principal_place_of_slave_purchase,
-                    itinerary.principal_port_of_slave_dis,
+                    itinerary.imp_principal_place_of_slave_purchase,
+                    itinerary.imp_principal_port_slave_dis,
                     numbers.imp_total_num_slaves_embarked,
                     numbers.imp_total_num_slaves_disembarked)
             return render(request, "voyage/search_maps.datatemplate",
