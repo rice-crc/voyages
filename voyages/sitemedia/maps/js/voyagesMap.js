@@ -137,6 +137,7 @@ var Nothing = null;
  */
 var voyagesMap = {
 	// "Private" members
+	__cache: { },
 	_arrowOpacity: 1.0,
 	_bounds: _mapBoundaries,
 	_graphics: [ ],
@@ -174,6 +175,7 @@ var voyagesMap = {
 			this._map.removeLayer(this._graphics[i]);
 		}
 		this._graphics = [ ];
+		this.__cache = { };
 	},
 
 	/*!
@@ -314,7 +316,7 @@ var voyagesMap = {
 		};
 		var generateClusterFlow = function() {
 			var level = self.zoomToDetailLevel(self._map.getZoom());
-		    if (!cache[level]) {
+		    if (!self.__cache[level]) {
 		        // Since this is potentially costly, we cache the
 		        // cluster flow according to detail levels for reuse.
                 var locations = new LocationIndex();
@@ -331,7 +333,7 @@ var voyagesMap = {
                     clusterFlow.push(new Flow(source.latLng, destination.latLng, flow.volume, flow.netVolume));
                 }
                 var network = self._totalNetworkFlow(clusterFlow);
-                cache[level] = function() {
+                self.__cache[level] = function() {
                     self._internalDraw(network, locations.names());
                     for (var key in markers) {
                         var marker = markers[key];
@@ -341,7 +343,7 @@ var voyagesMap = {
                 };
 			}
             self.clearNetwork();
-            cache[level]();
+            self.__cache[level]();
 		};
 		this.draw = generateClusterFlow;
 		this.draw();
@@ -630,7 +632,7 @@ var voyagesMap = {
 				// If the node is not an implicit neighbor we penalize its
 				// distance. This ensures that long jumps are still available
 				// if we need them, but they will be kept as short as possible.
-				if (dist > implicitNeighborhoodRange) dist *= PENALTY_MULTIPLIER;
+				if (dist > implicitNeighborhoodRange) dist += (dist - implicitNeighborhoodRange) * PENALTY_MULTIPLIER;
 				if (!node.isOpen || node.pathLength > dist + current.pathLength) {
                     // Either the node is not on the open set or
                     // we found a shorter path from the start.

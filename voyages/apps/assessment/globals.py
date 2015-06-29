@@ -187,3 +187,19 @@ table_cells = [("Embarked/Disembarked", ),
 # on database/solr
 default_first_year = 1501
 default_last_year = 1866
+
+def get_map_year(frame_from_year, frame_to_year):
+    """
+    Determine which base map should be loaded depending on the query's year range.
+    :param frame_from_year: begin year.
+    :param frame_to_year: end year.
+    :return: one of four possible base map identifiers.
+    """
+    if frame_from_year >= 1808:
+        return '1850'
+    elif frame_from_year >= 1642 and frame_to_year <= 1807:
+        return '1750'
+    elif frame_to_year <= 1641:
+        return '1650'
+    else:
+        return 'all'

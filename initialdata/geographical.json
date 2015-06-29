@@ -760,8 +760,8 @@
         "region": "Senegambia and offshore Atlantic", 
         "value": 60100, 
         "broad_region": 1, 
-        "longitude": "-17.9300000", 
-        "latitude": "14.1400000", 
+        "longitude": "18.3543890", 
+        "latitude": "14.4810280", 
         "show_on_map": true
     }
 },
@@ -773,8 +773,8 @@
         "region": "Windward Coast", 
         "value": 60300, 
         "broad_region": 1, 
-        "longitude": "-8.9200000", 
-        "latitude": "4.0000000", 
+        "longitude": "-8.8911320", 
+        "latitude": "3.7700520", 
         "show_on_map": true
     }
 },
@@ -786,8 +786,8 @@
         "region": "Sierra Leone", 
         "value": 60200, 
         "broad_region": 1, 
-        "longitude": "-13.6700000", 
-        "latitude": "8.1000000", 
+        "longitude": "-14.3183780", 
+        "latitude": "7.8215500", 
         "show_on_map": true
     }
 },
@@ -799,8 +799,8 @@
         "region": "Gold Coast", 
         "value": 60400, 
         "broad_region": 1, 
-        "longitude": "-1.9300000", 
-        "latitude": "3.8600000", 
+        "longitude": "-1.6841010", 
+        "latitude": "4.0002350", 
         "show_on_map": true
     }
 },
@@ -812,8 +812,8 @@
         "region": "Bight of Benin", 
         "value": 60500, 
         "broad_region": 1, 
-        "longitude": "2.3300000", 
-        "latitude": "5.2700000", 
+        "longitude": "3.1169250", 
+        "latitude": "4.8764970", 
         "show_on_map": true
     }
 },
@@ -825,8 +825,8 @@
         "region": "Bight of Biafra and Gulf of Guinea islands", 
         "value": 60600, 
         "broad_region": 1, 
-        "longitude": "8.3100000", 
-        "latitude": "4.1700000", 
+        "longitude": "9.0934870", 
+        "latitude": "3.6933110", 
         "show_on_map": true
     }
 },
@@ -838,8 +838,8 @@
         "region": "West Central Africa and St. Helena", 
         "value": 60700, 
         "broad_region": 1, 
-        "longitude": "11.1900000", 
-        "latitude": "-7.7100000", 
+        "longitude": "10.9227110", 
+        "latitude": "-8.3973170", 
         "show_on_map": true
     }
 },
@@ -851,8 +851,8 @@
         "region": "Southeast Africa and Indian Ocean islands", 
         "value": 60800, 
         "broad_region": 1, 
-        "longitude": "39.5100000", 
-        "latitude": "-17.1400000", 
+        "longitude": "42.0799370", 
+        "latitude": "-27.7914010", 
         "show_on_map": true
     }
 },

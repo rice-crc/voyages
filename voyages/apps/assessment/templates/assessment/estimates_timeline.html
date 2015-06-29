@@ -1,0 +1,94 @@
+{% load i18n %}
+<style type="text/css">
+
+svg {
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+</style>
+<div id="graphContainer"></div>
+<div id="mouseOverInfo" style="margin:20px"></div>
+<script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
+<script type="text/javascript">
+var data = [
+{% for year, r in timeline.items %}
+    { x: {{ year }}, y0: {{ r.1 }}, y1: {{ r.0 }} },
+{% endfor %}
+];
+var stack = d3.layout.stack(),
+    layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0 }; }); })),
+    yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
+
+var margin = {top: 40, right: 10, bottom: 20, left: 10},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .domain(data.map(function(d) { return d.x; }))
+    .rangeRoundBands([0, width], .08);
+
+var y = d3.scale.linear()
+    .domain([0, yStackMax])
+    .range([height, 0]);
+
+var color = ["#aad", "#556"];
+
+var tickHelper = Math.min(20, Math.round(data.length / 10));
+var xAxis = d3.svg.axis()
+    .scale(x)
+	.tickValues(x.domain().filter(function(d, i) { return !(i % tickHelper); }))
+    .tickSize(2)
+    .tickPadding(2)
+    .orient("bottom");
+
+var svg = d3.select("#graphContainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var layer = svg.selectAll(".layer")
+    .data(layers)
+    .enter().append("g")
+    .attr("class", "layer")
+    .style("fill", function(d, i) { return color[i]; });
+
+function mouseover(d) {
+	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
+	    "<br /><strong>Embarked:</strong> " + Math.round(d.embarked) +
+	    "<br /><strong>Disembarked:</strong> " + Math.round(d.disembarked));
+	d3.select(this)
+	  .style("fill-opacity", 1);
+}
+
+function mouseout(d) {
+	d3.select(this)
+	  .style("fill-opacity", 0.5);
+}
+
+var rect = layer.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter()
+	.append("rect")
+    .attr("x", function(d) { return x(d.x); })
+    .attr("y", height)
+    .attr("width", x.rangeBand())
+    .attr("height", 0)
+    .on('mouseover', mouseover)
+	.on('mouseout', mouseout);
+
+rect.transition()
+    .attr("y", function(d) { return y(d.y); })
+    .attr("height", function(d) { return y(0) - y(d.y); })
+	.style("fill-opacity", 0.5);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+</script>
