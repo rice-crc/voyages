@@ -2,104 +2,187 @@
 {% load assessment_extras %}
 {% load humanize %}
 <div class="results-panel">
-<h1>Table</h1>
-<div class="estimates-table-options">
-  <table style="border-collapse: collapse;">
-  <tbody>
-    {% for field in table_form %}
-      <tr>
-        <td> <b> {{ field.label }}: </b> </td>
-        <td> {% for i in field %} {{ i }} {% endfor %} </td>
-      </tr>
-    {% endfor %}
-    <tr>
-      <td></td>
-      <td>
-        <!-- Show button -->
-        <input type="submit" value="{% trans 'Show' %}" name="buttonShow" />
-      </td>
-    </tr>
-  </tbody>
-  </table>
-</div>
+    <h1>Table</h1>
 
+    <div class="estimates-table-options">
+        <table style="border-collapse: collapse;">
+            <tbody>
+            {% for field in table_form %}
+            <tr>
+                <td><b> {{ field.label }}: </b></td>
+                <td> {% for i in field %} {{ i }} {% endfor %}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td>
+                    <!-- Show button -->
+                    <input type="submit" value="{% trans 'Show' %}" name="buttonShow"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-{# table #}
-<div class="estimates-table">
-  <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+    <div id="main-table-wrapper" class="estimates-table" style="min-width: 320px; position:relative;min-height:500px;">
+        <div id="inner-main-table_wrapper" style="position:absolute;right:0px;left:0px;top:0px;background-color:white;">
+            <table class="simple-table" id="estimates-table" cellspacing="0" cellpadding="0" border="0" width="99.9%">
+                <thead>
+                    {% for header_row in header_rows %}
+                    <tr name="header">
+                        {% if forloop.first %}
+                        <td class="tbl-label col_header" rowspan="{{ header_rows_len }}"></td>
+                        {% endif %}
+                        {% for header_cell in header_row %}
+                        <td class="tbl-label col_header" name="header" colspan="{{ header_cell.1 }}">{{ header_cell.0 }}</td>
+                        {% endfor %}
+                        {% if forloop.first %}
+                        <td class="tbl-label col_header" name="header" rowspan="{{ totals_header_rows_len }}"
+                            colspan="{{ totals_header_cols_span }}">Totals
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        {% if forloop.last == False %}
+                            <tr>
+                                {% for cell in row %}
+                                    {% if forloop.first %}
+                                        <td class="tbl-label row_header" name="header">{{ cell }}</td>
+                                    {% else %}
+                                        <td>{{ cell|intcomma }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% with row=rows|last %}
+                        <tr>
+                            {% for cell in row %}
+                                {% if forloop.first %}
+                                    <td class="tbl-label row_header" name="header">{{ cell }}</td>
+                                {% else %}
+                                    <td>{{ cell|intcomma }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endwith %}
+                </tfoot>
+            </table>
+            <p>
+                <input type="submit" name="download" value="{% trans 'Download table' %}"/>
+            </p>
+        </div>
+    </div>
+    <script src="{{ STATIC_URL }}scripts/assessment/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}scripts/assessment/dataTables.fixedColumns.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        {% for i in totals_header_cols_span|get_range %}
+            $('#estimates-table tr td:nth-last-child({{ i|add:"1" }})').filter("[name!='header']").addClass('tbl-total');
+        {% endfor %}
+        $('#estimates-table tfoot tr:last-child').attr('name', 'header');
+        $('#estimates-table tfoot tr:last-child').children().filter("[name!='header']").addClass('tbl-total');
+        $('#estimates-table tr').filter("[name!='header']").hover(function() {
+            $(this).addClass('highlight-row');
+        }, function() {
+            $(this).removeClass('highlight-row');
+        });
+        $('#estimates-table tr td').filter("[name!='header']").hover(function() {
+            var index = $(this).prevAll().length;
+            $('#estimates-table tr').find(':nth-child(' + (index + 1) + ')').filter("[name!='header']").addClass('highlight-col');
+        }, function() {
+            var index = $(this).prevAll().length;
+            $('#estimates-table tr').find(':nth-child(' + (index + 1) + ')').filter("[name!='header']").removeClass('highlight-col');
+        });
+        var table = $('#estimates-table').dataTable({
+            "scrollX": true,
+            "bFilter": false,
+        });
+        new $.fn.dataTable.FixedColumns( table );
+        $('#main-table_wrapper').height($('#inner-main-table_wrapper').height());
+    </script>
 
-    {% for col_label in col_labels %}
-      <tr>
-        {% if forloop.first %}
-          <td rowspan="{{ rows_before_titles }}" colspan="{{ columns_before_titles }}"/>
-        {% endif %}
-        {% for col_label_tuple in col_label %}
-          {% ifequal cell_mode 0 %}
-            <td class="tbl-label" colspan="{{ col_label_tuple.1|multiply }}">{{ col_label_tuple.0 }}</td>
-          {% else %}
-            <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
-          {% endifequal %}
+    <!--
+    {# table #}
+    <div class="estimates-table">
+      <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+
+        {% for col_label in col_labels %}
+          <tr>
+            {% if forloop.first %}
+              <td rowspan="{{ rows_before_titles }}" colspan="{{ columns_before_titles }}"/>
+            {% endif %}
+            {% for col_label_tuple in col_label %}
+              {% ifequal cell_mode 0 %}
+                <td class="tbl-label" colspan="{{ col_label_tuple.1|multiply }}">{{ col_label_tuple.0 }}</td>
+              {% else %}
+                <td class="tbl-label" colspan="{{ col_label_tuple.1 }}">{{ col_label_tuple.0 }}</td>
+              {% endifequal %}
+            {% endfor %}
+            {% if forloop.first %}
+              {% ifequal cell_mode 0 %}
+                {# If this is spanned to emb/disemb #}
+                {% ifequal rows_before_titles 3 %}
+                  {# If rowspan was 3, it will be 2 (one more for emb/disemb) #}
+                  <td class="tbl-label" rowspan="2" colspan="2">Totals</td>
+                {% endifequal %}
+                {% ifequal rows_before_titles 2 %}
+                  {# If rowspan was 2, it will be 1 (one more for emb/disemb) #}
+                  <td class="tbl-label" rowspan="1" colspan="2">Totals</td>
+                {% endifequal %}
+              {% else %}
+                {# Otherwise, regular rowspan #}
+                <td class="tbl-label" rowspan="{{ rows_before_titles }}">Totals</td>
+              {% endifequal %}
+            {% endif %}
+          </tr>
         {% endfor %}
-        {% if forloop.first %}
-          {% ifequal cell_mode 0 %}
-            {# If this is spanned to emb/disemb #}
-            {% ifequal rows_before_titles 3 %}
-              {# If rowspan was 3, it will be 2 (one more for emb/disemb) #}
-              <td class="tbl-label" rowspan="2" colspan="2">Totals</td>
-            {% endifequal %}
-            {% ifequal rows_before_titles 2 %}
-              {# If rowspan was 2, it will be 1 (one more for emb/disemb) #}
-              <td class="tbl-label" rowspan="1" colspan="2">Totals</td>
-            {% endifequal %}
-          {% else %}
-            {# Otherwise, regular rowspan #}
-            <td class="tbl-label" rowspan="{{ rows_before_titles }}">Totals</td>
-          {% endifequal %}
-        {% endif %}
-      </tr>
-    {% endfor %}
-    {% ifequal cell_mode 0 %}
-      <tr>
-        {% for i in extra_range %}
-          {% if forloop.counter|divisibleby:2 %}
-            <td class="tbl-label">Disembarked</td>
-          {% else %}
-            <td class="tbl-label">Embarked</td>
-          {% endif %}
-        {% endfor %}
-        {# Add two more for total column #}
-        <td class="tbl-label">Embarked</td>
-        <td class="tbl-label">Dismbarked</td>
-      </tr>
-    {% endifequal %}
-    {% for row_item in row_list %}
-      <tr>
-        {% for label_tuple in row_item.0 %}
-          {% ifequal years_rows False %}
-            <td class="tbl-label" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
-          {% else %}
-            <td class="tbl-label"> {{ label_tuple.0 }} - {{ label_tuple.1 }} </th>
-          {% endifequal %}
-        {% endfor %}
-        {% for value in row_item.1 %}
-          <td> {{ value|intcomma }} </th>
-        {% endfor %}
-        {# row sum section #}
         {% ifequal cell_mode 0 %}
-          <td class="tbl-total"> {{ row_item.2.0|intcomma }} </th>
-          <td class="tbl-total"> {{ row_item.2.1|intcomma }} </th>
-        {% else %}
-          <td class="tbl-total"> {{ row_item.2|intcomma }} </th>
+          <tr>
+            {% for i in extra_range %}
+              {% if forloop.counter|divisibleby:2 %}
+                <td class="tbl-label">Disembarked</td>
+              {% else %}
+                <td class="tbl-label">Embarked</td>
+              {% endif %}
+            {% endfor %}
+            {# Add two more for total column #}
+            <td class="tbl-label">Embarked</td>
+            <td class="tbl-label">Dismbarked</td>
+          </tr>
         {% endifequal %}
-      </tr>
-    {% endfor %}
-    <tr>
-      <td class="tbl-label" colspan="{{ columns_before_titles }}">Totals</td>
-      {% for column in col_sums %}
-        <td class="tbl-total">{{ column|intcomma }}</td>
-      {% endfor %}
-    </tr>
-  </table>
-</div>
-
+        {% for row_item in row_list %}
+          <tr>
+            {% for label_tuple in row_item.0 %}
+              {% ifequal years_rows False %}
+                <td class="tbl-label" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+              {% else %}
+                <td class="tbl-label"> {{ label_tuple.0 }} - {{ label_tuple.1 }} </th>
+              {% endifequal %}
+            {% endfor %}
+            {% for value in row_item.1 %}
+              <td> {{ value|intcomma }} </th>
+            {% endfor %}
+            {# row sum section #}
+            {% ifequal cell_mode 0 %}
+              <td class="tbl-total"> {{ row_item.2.0|intcomma }} </th>
+              <td class="tbl-total"> {{ row_item.2.1|intcomma }} </th>
+            {% else %}
+              <td class="tbl-total"> {{ row_item.2|intcomma }} </th>
+            {% endifequal %}
+          </tr>
+        {% endfor %}
+        <tr>
+          <td class="tbl-label" colspan="{{ columns_before_titles }}">Totals</td>
+          {% for column in col_sums %}
+            <td class="tbl-total">{{ column|intcomma }}</td>
+          {% endfor %}
+        </tr>
+      </table>
+    </div>
+    -->
 </div>

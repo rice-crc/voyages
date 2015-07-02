@@ -1,18 +1,34 @@
 {% load i18n %}
 <style type="text/css">
+    svg {
+      font-family: "Helvetica Neue", Helvetica;
+    }
 
-svg {
-  font-family: "Helvetica Neue", Helvetica;
-}
+    svg text {
+        fill: gray;
+    }
 
-.line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-}
+    .axis path {
+        fill: none;
+        stroke: none;
+    }
+    .axis line {
+        fill: none;
+        stroke: gray;
+        stroke-width: 0.35px;
+    }
+
+    .vertical_line {
+        stroke: darkgreen;
+        stroke-width: 1px;
+        stroke-dasharray: 1 1;
+    }
 </style>
 <div id="graphContainer"></div>
 <div id="mouseOverInfo" style="margin:20px"></div>
+<p style="margin-left:20px;">
+    <input type="submit" name="download" value="{% trans 'Download table' %}"/>
+</p>
 <script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
 <script type="text/javascript">
 var data = [
@@ -36,15 +52,23 @@ var y = d3.scale.linear()
     .domain([0, yStackMax])
     .range([height, 0]);
 
-var color = ["#aad", "#556"];
+var color = ["#aad", "#008CA5"];
 
 var tickHelper = Math.min(20, Math.round(data.length / 10));
 var xAxis = d3.svg.axis()
     .scale(x)
 	.tickValues(x.domain().filter(function(d, i) { return !(i % tickHelper); }))
-    .tickSize(2)
+    .tickSize(10)
     .tickPadding(2)
     .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .tickValues([25000, 50000, 75000, 100000, 125000])
+    .tickFormat(yTickFormat)
+    .tickPadding(5)
+    .tickSize(-width + margin.right + margin.left)
+    .orient("left");
 
 var svg = d3.select("#graphContainer").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -58,17 +82,12 @@ var layer = svg.selectAll(".layer")
     .attr("class", "layer")
     .style("fill", function(d, i) { return color[i]; });
 
+var lastMouseOver = null;
+
 function mouseover(d) {
 	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
-	    "<br /><strong>Embarked:</strong> " + Math.round(d.embarked) +
-	    "<br /><strong>Disembarked:</strong> " + Math.round(d.disembarked));
-	d3.select(this)
-	  .style("fill-opacity", 1);
-}
-
-function mouseout(d) {
-	d3.select(this)
-	  .style("fill-opacity", 0.5);
+	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1) +
+	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0));
 }
 
 var rect = layer.selectAll("rect")
@@ -79,16 +98,70 @@ var rect = layer.selectAll("rect")
     .attr("y", height)
     .attr("width", x.rangeBand())
     .attr("height", 0)
-    .on('mouseover', mouseover)
-	.on('mouseout', mouseout);
+    .on('mouseover', mouseover);
 
 rect.transition()
     .attr("y", function(d) { return y(d.y); })
     .attr("height", function(d) { return y(0) - y(d.y); })
-	.style("fill-opacity", 0.5);
+	.style("fill-opacity", 0.55);
 
 svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
+
+var gy = svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (margin.left + 25) + ",0)")
+    .call(yAxis);
+
+gy.selectAll("g").filter(function(d) { return d; })
+    .classed("minor", true);
+
+var vertical = svg
+    .append("g")
+    .attr("class", "vertical_highlight")
+    .style("opacity", 0.0);
+
+vertical.append("line")
+    .attr("class", "vertical_line")
+    .attr("y2", height);
+
+var circle0 = vertical
+    .append("circle")
+    .attr("r", 5)
+    .style("fill", color[1]);
+var circle1 = vertical
+    .append("circle")
+    .attr("r", 5)
+    .style("fill", color[1]);
+
+d3.select("#graphContainer")
+    .on("mousemove", function(){
+        var mouseX = d3.mouse(this)[0] - margin.left - 2;
+        var index = d3.bisectLeft(x.range(), mouseX);
+        if (index == 0) {
+            index = d3.bisectRight(x.range(), mouseX) - 1;
+        }
+        if (index < 0 || index >= data.length) {
+            if (vertical.timeoutfn == null) {
+                vertical.timeoutfn = function() {
+                    vertical.style("opacity", 0.0);
+                    vertical.timeoutfn = null;
+                };
+                setTimeout(vertical.timeoutfn, 3000);
+            }
+        } else {
+            mouseover(data[index]);
+            vertical.style("opacity", 1.0);
+            vertical.attr("transform", "translate(" + (1 + x(data[index].x)) + ",0)");
+            circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
+            circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
+        }
+    });
+
+function yTickFormat(d) {
+    formatNumber = d3.format("d");
+    return formatNumber(d/1000) + "k";
+}
 </script>

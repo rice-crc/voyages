@@ -3,7 +3,6 @@ from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
-from .models import *
 from .forms import *
 import collections
 
@@ -37,6 +36,11 @@ def get_estimates(request):
     return get_estimates_table(request)
 
 def get_estimates_map(request):
+    """
+    Generates a Map page containing the routes and traffic flow.
+    :param request: The web request that specifies search criteria.
+    :return: The web page.
+    """
     data = {'tab_selected': 'map'}
     results = get_estimates_common(request, data)
     data['map_year'] = globals.get_map_year(data['query']["year__gte"], data['query']["year__lte"])
@@ -60,19 +64,226 @@ def get_estimates_map(request):
     return render(request, 'assessment/estimates.html', data)
 
 def get_estimates_timeline(request):
+    """
+    Generates a Time-line page with total traffic volume per year.
+    :param request: The web request that specifies search criteria.
+    :return: The web page.
+    """
     data = {'tab_selected': 'timeline'}
     results = get_estimates_common(request, data)
     # Group estimates by year and sum embarked and disembarked for year.
     # The following dict has keys corresponding to years and entries
     # formed by tuples (embarked_count, disembarked_count)
     timeline = {}
+    cache = EstimateManager.cache()
     for result in results:
+        result = cache[result.pk]
         item = (0, 0)
         if result.year in timeline:
             item = timeline[result.year]
         timeline[result.year] = (item[0] + result.embarked_slaves, item[1] + result.disembarked_slaves)
     data['timeline'] = timeline
-    return render(request, 'assessment/estimates.html', data)
+
+    post = data['post']
+    if post is None or "download" not in post:
+        return render(request, 'assessment/estimates.html', data)
+    else:
+        return download_xls([[('Year', 1), ('Embarked Slaves', 1), ('Disembarked Slaves', 1)]],
+                            [[k, t[0], t[1]] for k, t in timeline.iteritems()])
+
+def get_estimates_table(request):
+    """
+    Generate tabular data summarizing the estimates.
+    :param request: The web request containing search data and tabular layout
+    :return: The rendered page.
+    """
+    data = {'tab_selected': 'table'}
+    results = get_estimates_common(request, data)
+
+    # Helper function that groups years according to a given modulus.
+    # For instance, year_mod(1501, 5) = year_mod(1502, 5) = ... = year_mod(1505, 5).
+    def year_mod(year, mod):
+        year -= 1
+        return mod, (year - (year % mod)) / mod
+
+    # key_functions dictionary specifies grouping functions.
+    key_functions = {
+        '0': lambda e: e.nation,
+        '1': lambda e: e.embarkation_region,
+        '2': lambda e: e.disembarkation_region.import_area,
+        '3': lambda e: e.disembarkation_region,
+        '4': lambda e: e.year,
+        '5': lambda e: year_mod(e.year, 5),
+        '6': lambda e: year_mod(e.year, 10),
+        '7': lambda e: year_mod(e.year, 25),
+        '8': lambda e: year_mod(e.year, 50),
+        '9': lambda e: year_mod(e.year, 100),
+    }
+
+    # Select key functions based on post data.
+    row_key_index = '5'
+    col_key_index = '2'
+    cell_key_index = '0'
+    estimate_selection_form = None
+    post = data['post']
+    if post is not None:
+        estimate_selection_form = EstimateSelectionForm(post)
+        if "rows" in post and post["rows"] in key_functions:
+            row_key_index = post["rows"]
+        if "columns" in post and post["columns"] in key_functions:
+            col_key_index = post["columns"]
+        if "cells" in post:
+            cell_key_index = post["cells"]
+    row_key_function = key_functions[row_key_index]
+    col_key_function = key_functions[col_key_index]
+
+    if estimate_selection_form is None or not estimate_selection_form.is_valid():
+        estimate_selection_form = EstimateSelectionForm(initial={
+            'rows': row_key_index,
+            'columns': col_key_index,
+            'cells': cell_key_index})
+    data['table_form'] = estimate_selection_form
+
+    # Aggregate results according to the row and column keys.
+    # Each result is a pair (tuple) containing total embarked and total disembarked.
+    table_dict = {}
+    cache = EstimateManager.cache()
+    for result in results:
+        result = cache[result.pk]
+        key = (row_key_function(result), col_key_function(result))
+        cell = (0, 0)
+        if key in table_dict:
+            cell = table_dict[key]
+        cell = (cell[0] + result.embarked_slaves, cell[1] + result.disembarked_slaves)
+        table_dict[key] = cell
+
+    def header_with_name(x):
+        return x.name
+
+    def header_year_range(x):
+        return str(x[0] * x[1] + 1) + '-' + str(x[0] * (1 + x[1]))
+
+    # header_functions specifies how the row/column headers are generated.
+    header_functions = {
+        '0': header_with_name,
+        '1': header_with_name,
+        '2': header_with_name,
+        '3': header_with_name,
+        '4': lambda x: x,
+        '5': header_year_range,
+        '6': header_year_range,
+        '7': header_year_range,
+        '8': header_year_range,
+        '9': header_year_range
+    }
+
+    row_header_function = header_functions[row_key_index]
+    col_header_function = header_functions[col_key_index]
+
+    # Order columns and rows by their respective headers.
+    row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_header_function)
+    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=col_header_function)
+
+    # How many cells a single piece of data spans
+    # (1 for either embarked or disembarked only and 2 for both).
+    cell_span = 2 if cell_key_index == '0' else 1
+
+    # Header rows are encoded as an array of pairs (tuples), where each
+    # pair consists of the header's label and column span.
+    header_rows = []
+    if col_key_index == '3':
+        # Reorder columns by disembarkation area and then group by so that we create a new
+        # header row which groups disembarkation regions by their major area.
+        keyfunc = lambda region: region.import_area.name
+        column_set = sorted(column_set, key=keyfunc)
+        from itertools import groupby
+        header_rows.append([(k, cell_span * sum(1 for x in g)) for k, g in groupby(column_set, keyfunc)])
+
+    header_rows.append([(col_header_function(x), cell_span) for x in column_set])
+
+    cell_display_list = []
+    if cell_key_index == '0':
+        # Use list comprehensions to repeat the pair of cells
+        # Embarked, Disembarked for each column in column_set.
+        helper = ['Embarked', 'Disembarked']
+        header_rows.append([(s, 1) for i in range(1 + len(column_set)) for s in helper])
+        cell_display_list = [0, 1]
+    elif cell_key_index == '1':
+        cell_display_list = [0]
+    elif cell_key_index == '2':
+        cell_display_list = [1]
+
+    data['header_rows'] = header_rows
+    data['header_rows_len'] = len(header_rows)
+    data['totals_header_rows_len'] = len(header_rows) - (1 if cell_key_index == '0' else 0)
+    data['totals_header_cols_span'] = len(cell_display_list)
+
+    # Generate tabular data from table_dict filling any missing entries with (0, 0).
+    # At this point each entry of the table is a pair (embarked_count, disembarked_count).
+    full_data_set = [[table_dict[(r, c)] if (r, c) in table_dict else (0, 0) for c in column_set]
+                     for r in row_set]
+    # Round numbers to integers.
+    full_data_set = [[tuple(int(round(pair[i])) for i in range(2)) for pair in r] for r in full_data_set]
+    # Append row totals (last column).
+    full_data_set = [r + [tuple(sum([x[i] for x in r]) for i in range(2))] for r in full_data_set]
+    # Append column totals (last row).
+    full_data_set.append([tuple(sum([full_data_set[i][j][k] for i in range(len(row_set))]) for k in range(2))
+                         for j in range(1 + len(column_set))])
+    # Transform pairs(embarked_count, disembarked_count) by projecting their values
+    # into single integers using the cell_display_list to determine which numbers
+    # (embarked, disembarked, or both) should appear in the final table.
+    full_data_set = [[pair[i] for pair in r for i in cell_display_list]
+                     for r in full_data_set]
+    # Append row headers (AKA first column).
+    row_headers = [row_header_function(r) for r in row_set] + ['Totals']
+    full_data_set = [[row_headers[i]] + full_data_set[i] for i in range(len(full_data_set))]
+
+    data['rows'] = full_data_set
+
+    if post is None or "download" not in post:
+        return render(request, 'assessment/estimates.html', data)
+    else:
+        return download_xls(header_rows, full_data_set)
+
+def download_xls(header_rows, data_set):
+    """
+    Generates an XLS file with the given data.
+    :param header_rows: The header rows, specified as an array of pairs (header label, column span)
+    :param data_set: Tabular data in the format [[r_1c_1, r_1c_2, ..., r_1c_N], ..., [r_Mc_1, r_Mc_2, ..., r_Mc_N]]
+    :return: An HttpResponse containing the XLS file.
+    """
+    import xlwt
+    from django.http import HttpResponse
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=data.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet("Data")
+
+    header_style = xlwt.XFStyle()
+    number_style = xlwt.XFStyle()
+    number_style.alignment.horz = number_style.alignment.HORZ_RIGHT
+
+    # Write headers.
+    row_index = 0
+    for row in header_rows:
+        col_index = 0
+        for pair in row:
+            ws.write(row_index, col_index, pair[0], header_style)
+            if pair[1] > 1:
+                ws.merge(row_index, row_index, col_index, col_index + pair[1] - 1)
+            col_index += pair[1]
+        row_index += 1
+
+    # Write tabular data.
+    for row in data_set:
+        col_index = 0
+        for cell in row:
+            ws.write(row_index, col_index, cell, number_style if col_index > 0 else header_style)
+            col_index += 1
+        row_index += 1
+
+    wb.save(response)
+    return response
 
 def get_estimates_common(request, data):
     """ Append common page content to the argument data
@@ -86,36 +297,44 @@ def get_estimates_common(request, data):
 
     query = {}
 
-    def is_checked(prefix, element):
+    def is_checked(prefix, element, reset):
         """
         Helper function that checks post data (if any) to see if
         the checkbox corresponding to the given element is checked.
         :param prefix: the prefix used by the view to identify the
         model of the element.
         :param element: the model object whose check state is needed.
+        :param reset: the POST parameter name that may flag a full reset of the
+        checkboxes. If this parameter is set to a "Reset to default" value,
+        then the result of this function will be 1.
         :return: 1 if the checkbox is checked, 0 otherwise
         """
-        if post is not None and prefix + str(element.pk) not in post:
+        if post is not None and prefix + str(element.pk) not in post and \
+                (reset not in post or post[reset] != "Reset to default"):
             return 0
         else:
             return 1
 
-    data['nations'] = [[x.name, x.pk, is_checked("checkbox_nation_", x)] for x in Nation.objects.all()]
+    data['nations'] = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")] for x in Nation.objects.all()]
 
     export_regions = {}
     areas = ExportArea.objects.all()
     for area in areas:
         regions = ExportRegion.objects.filter(export_area__pk=area.pk)
-        children = [[[x.name, x.pk], is_checked("eregion-button-", x)] for x in regions]
-        checked = is_checked("earea-button-", area)
+        children = [[[x.name, x.pk], is_checked("eregion-button-", x, "submit_regions")] for x in regions]
+        checked = is_checked("earea-button-", area, "submit_regions")
+        if len(regions) == 1:
+            children[0][1] = checked
         export_regions[(area, checked)] = children
 
     import_regions = {}
     areas = ImportArea.objects.all()
     for area in areas:
         regions = ImportRegion.objects.filter(import_area__pk=area.pk)
-        children = [[[x.name, x.pk], is_checked("dregion-button-", x)] for x in regions]
-        checked = is_checked("darea-button-", area)
+        children = [[[x.name, x.pk], is_checked("dregion-button-", x, "submit_regions")] for x in regions]
+        checked = is_checked("darea-button-", area, "submit_regions")
+        if len(regions) == 1:
+            children[0][1] = checked
         import_regions[(area, checked)] = children
 
     data['export_regions'] = collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0][0].name))
@@ -140,262 +359,21 @@ def get_estimates_common(request, data):
     query_region("disembarkation_region__in", import_regions)
 
     year_form = None
-    if post is not None:
+    # Ensure that GET requests or Reset POST requests yield a fresh copy of the form with default values.
+    if post is not None and not ("submit_year" in post and post["submit_year"] == "Reset to default"):
         year_form = EstimateYearForm(request.POST)
-    if year_form is None or not year_form.is_valid():
+
+    if year_form is not None and year_form.is_valid():
+        query["year__gte"] = year_form.cleaned_data["frame_from_year"]
+        query["year__lte"] = year_form.cleaned_data["frame_to_year"]
+    else:
         year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
             'frame_to_year': globals.default_last_year})
+        query["year__gte"] = globals.default_first_year
+        query["year__lte"] = globals.default_last_year
 
     data['year_form'] = year_form
-
-    query["year__gte"] = year_form.cleaned_data["frame_from_year"]
-    query["year__lte"] = year_form.cleaned_data["frame_to_year"]
     data['query'] = query
+    data['post'] = post
 
     return SearchQuerySet().models(Estimate).filter(**query).load_all()
-
-def get_estimates_table(request):
-    first_year = None
-    last_year = None
-    years_rows = False
-    extra_range = None
-    nations = None
-    query = {}
-    search_configuration = {"year": {}}
-
-    # Try to retrieve years
-    if "estimate_year_from" in request.session:
-        search_configuration["year"]["year_from"] = request.session["estimate_year_from"]
-    if "estimate_year_to" in request.session:
-        search_configuration["year"]["year_to"] = request.session["estimate_year_to"]
-
-    if "estimate_query" in request.session:
-        query = request.session["query"]
-
-    export_regions = {}
-    a = SearchQuerySet().models(ExportArea)
-    for i in a:
-        b = SearchQuerySet().models(ExportRegion).filter(export_area__exact=i.name)
-        export_regions[i] = [[x.name, x.pk] for x in b]
-
-    import_regions = {}
-    a = SearchQuerySet().models(ImportArea)
-    for i in a:
-        b = SearchQuerySet().models(ImportRegion).filter(import_area__exact=i.name)
-        import_regions[i] = [[x.name, x.pk] for x in b]
-
-    # Default settings for columns and rows
-    column_query_set = globals.table_columns[1][2]()
-    column_variable_name = globals.table_columns[1][1]
-    row_query_set = globals.table_rows[0][2]()
-    row_variable_name = globals.table_rows[0][1]
-    cell_mode = 1
-
-    column_sums = []
-    columns_before_titles = 1
-    rows_before_titles = 1
-    row_list = []
-
-    if request.method == "POST":
-        estimate_selection_form = EstimateSelectionForm(request.POST)
-        year_form = EstimateYearForm(request.POST)
-
-        search_configuration["post"] = request.POST
-
-        if "submit_nation" in request.POST and request.POST["submit_nation"] == "Reset to default":
-            nations, query["nation__in"] = globals.get_flag_labels(None)
-        else:
-            nations, query["nation__in"] = globals.get_flag_labels(search_configuration)
-
-        if "submit_regions" in request.POST and request.POST["submit_regions"] == "Reset to default":
-            export_regions, query["embarkation_region__in"] = globals.update_regions_labels(export_regions, None,
-                                                                   "earea-button-", "eregion-button-")
-            import_regions, query["disembarkation_region__in"] = globals.update_regions_labels(import_regions, None,
-                                                       "darea-button-", "dregion-button-")
-        else:
-            export_regions, query["embarkation_region__in"] = globals.update_regions_labels(export_regions, search_configuration,
-                                                                   "earea-button-", "eregion-button-")
-            import_regions, query["disembarkation_region__in"] = globals.update_regions_labels(import_regions, search_configuration,
-                                                       "darea-button-", "dregion-button-")
-
-        if year_form.is_valid():
-            query["year__gte"] = year_form.cleaned_data["frame_from_year"]
-            query["year__lte"] = year_form.cleaned_data["frame_to_year"]
-            search_configuration["year"]["year_from"] = year_form.cleaned_data["frame_from_year"]
-            search_configuration["year"]["year_to"] = year_form.cleaned_data["frame_to_year"]
-
-        if "submit_year" in request.POST and request.POST["submit_year"] == "Reset to default":
-            print "reseting year"
-            query["year__gte"] = globals.default_first_year
-            query["year__lte"] = globals.default_last_year
-            search_configuration["year"]["year_from"] = globals.default_first_year
-            search_configuration["year"]["year_to"] = globals.default_last_year
-            year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
-                                                  'frame_to_year': globals.default_last_year})
-
-        # Perform a query
-        print "performing query = " + str(query)
-        results = SearchQuerySet().models(Estimate).filter(**query)
-
-        # If form is valid, set passed preferences
-        if estimate_selection_form.is_valid():
-            column_query_set = globals.table_columns[int(estimate_selection_form.cleaned_data['columns'])][2](
-                search_configuration, int(estimate_selection_form.cleaned_data['columns'])
-            )
-            column_variable_name = globals.table_columns[int(estimate_selection_form.cleaned_data['columns'])][1]
-            row_query_set = globals.table_rows[int(estimate_selection_form.cleaned_data['rows'])][2](
-                search_configuration, int(estimate_selection_form.cleaned_data['rows'])
-            )
-            row_variable_name = globals.table_rows[int(estimate_selection_form.cleaned_data['rows'])][1]
-            cell_mode = int(estimate_selection_form.cleaned_data['cells'])
-
-    else:
-        # Prepare data
-        nations = [[k.name, k.pk, 1] for k in SearchQuerySet().models(Nation)]
-
-        export_regions, x  = globals.update_regions_labels(export_regions, None,
-                                                                   "earea-button-", "eregion-button-")
-        import_regions, x = globals.update_regions_labels(import_regions, None,
-                                                       "darea-button-", "dregion-button-")
-
-        results = SearchQuerySet().models(Estimate)
-        estimate_selection_form = EstimateSelectionForm()
-        year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
-                                              'frame_to_year': globals.default_last_year})
-
-    if cell_mode == 0:
-        extra_range = range(len(column_query_set[-1])*2)
-        rows_before_titles += 1
-
-    # Iterate through columns and collect sums. TODO: Omit if necessary (omit checked).
-    # There is -1, since always last item is the item with most granular choices
-    # col_query_item is in form of: ('City name', 1), where 1 is number of child (span)
-    for col_query_item in column_query_set[-1]:
-        query_dict = {column_variable_name: col_query_item[0]}
-        column_results = results.filter(**query_dict)
-        if cell_mode == 0:
-            sum_values_embarked = sum([int(item.embarked_slaves) for item in column_results])
-            sum_values_disembarked = sum([int(item.disembarked_slaves) for item in column_results])
-            column_sums.append(sum_values_embarked)
-            column_sums.append(sum_values_disembarked)
-        elif cell_mode == 1:
-            sum_values = sum([int(item.embarked_slaves) for item in column_results])
-            column_sums.append(sum_values)
-        else:
-            sum_values = sum([int(item.disembarked_slaves) for item in column_results])
-            column_sums.append(sum_values)
-
-
-    # If row is disembarkation region, it will be spanned
-    if row_variable_name == "disembarkation_region__exact":
-        area_ranges = create_area_ranges(row_query_set[0])
-        columns_before_titles = 2
-
-    # The same for columns
-    if column_variable_name == "disembarkation_region__exact":
-        rows_before_titles += 1
-
-    # All variables with "__in" are year variables, so they are never spanned (setting for template)
-    if row_variable_name.endswith("__in"):
-        years_rows = True
-
-    # Counter for counting row total value and counting row number
-    if cell_mode == 0:
-        row_total = [0, 0]
-    else:
-        row_total = 0
-    row_counter = 1
-
-    # Iterate through rows
-    for row_query_item in row_query_set[-1]:
-        # if row_query_item[1] != 1:
-        #     print "CONTINUE"
-        #     continue
-
-        if years_rows:
-            # If this is year, include entire list (form: [1501, 1502])
-            row_query_dict = {row_variable_name: row_query_item}
-        else:
-            # Otherwise, include only name
-            row_query_dict = {row_variable_name: row_query_item[0]}
-
-        #print "row_query_dict = " + str(row_query_dict)
-
-        row_results = results.filter(**row_query_dict)
-        #print "for row = " + str(row_query_item[0])
-
-        row_list_item = []
-        row_values_list = []
-
-        # If this is a disembarkation region and first item in area, include area
-        if row_variable_name == "disembarkation_region__exact" and row_counter in area_ranges:
-            index = area_ranges.index(row_counter)
-            row_list_item.append([row_query_set[0][index], row_query_item, ])
-        else:
-            row_list_item.append([row_query_item, ])
-
-        row_counter += 1
-
-        # Iterate through columns
-        for col_query_item in column_query_set[-1]:
-            column_query_dict = {column_variable_name: col_query_item[0]}
-            column_results = row_results.filter(**column_query_dict)
-
-            if cell_mode == 0:
-                row_values_list.append(sum([int(c.embarked_slaves) for c in column_results]))
-                row_values_list.append(sum([int(c.disembarked_slaves) for c in column_results]))
-            elif cell_mode == 1:
-                row_values_list.append(sum([int(c.embarked_slaves) for c in column_results]))
-            else:
-                row_values_list.append(sum([int(c.disembarked_slaves) for c in column_results]))
-            #print "sum for " + str(col_query_item[0]) + " = " + str(sum([int(c.embarked_slaves) for c in b]))
-
-        row_list_item.append(row_values_list)
-        if cell_mode == 0:
-            row_sum_emb = sum(row_values_list[0::2])
-            row_sum_dis = sum(row_values_list[1::2])
-            row_sum = [row_sum_emb, row_sum_dis]
-            row_total[0] += row_sum_emb
-            row_total[1] += row_sum_dis
-        else:
-            row_sum = sum(row_values_list)
-            row_total += row_sum
-        row_list_item.append(row_sum)
-        row_list.append(row_list_item)
-
-    print "at the end, column query set = " + str(column_query_set)
-    if cell_mode == 0:
-        column_sums.extend(row_total)
-    else:
-        column_sums.append(row_total)
-    print "row_list = " + str(row_list)
-    print "sum = " + str(column_sums)
-
-    return render(request, 'assessment/estimates.html',
-        {'first_year': first_year,
-         'last_year': last_year,
-         'years_rows': years_rows,
-         'year_form': year_form,
-         'export_regions': collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0][0].name)),
-         'import_regions': collections.OrderedDict(sorted(import_regions.items(), key=lambda x: x[0][0].name)),
-         'nations': nations,
-         'col_labels': column_query_set,
-         'row_list': row_list,
-         'col_sums': column_sums,
-         'columns_before_titles': columns_before_titles,
-         'rows_before_titles': rows_before_titles,
-         'cell_mode': cell_mode,
-         'extra_range': extra_range,
-         'table_form': estimate_selection_form,
-         'tab_selected': 'table'})
-
-
-def create_area_ranges(areas):
-    values = []
-    values.append(areas[0][1])
-    for i, area in enumerate(areas):
-        if i > 0:
-            values.append(sum([k[1] for k in areas[0:i]]) + 1)
-
-    print "values = " + str(values)
-    return values

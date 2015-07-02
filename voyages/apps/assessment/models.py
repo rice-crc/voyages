@@ -108,5 +108,5 @@ class EstimateManager(models.Manager):
     # avoiding hitting the DB multiple times.
     def get_query_set(self):
         return super(EstimateManager, self).get_query_set().select_related(
-            'embarkation_region',
-            'disembarkation_region')
+            'embarkation_region__export_area',
+            'disembarkation_region__import_area')
