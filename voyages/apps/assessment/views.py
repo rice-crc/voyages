@@ -121,28 +121,32 @@ def get_estimates_table(request):
     }
 
     # Select key functions based on post data.
-    row_key_index = '5'
-    col_key_index = '2'
-    cell_key_index = '0'
+    row_key_index = '7'
+    col_key_index = '0'
+    cell_key_index = '1'
     estimate_selection_form = None
     post = data['post']
+
+    # Fetch EstimateSelectionForm either from Post (if any), from Session (if any) or a default form.
     if post is not None:
         estimate_selection_form = EstimateSelectionForm(post)
-        if "rows" in post and post["rows"] in key_functions:
-            row_key_index = post["rows"]
-        if "columns" in post and post["columns"] in key_functions:
-            col_key_index = post["columns"]
-        if "cells" in post:
-            cell_key_index = post["cells"]
-    row_key_function = key_functions[row_key_index]
-    col_key_function = key_functions[col_key_index]
-
-    if estimate_selection_form is None or not estimate_selection_form.is_valid():
+    if (estimate_selection_form is None or not estimate_selection_form.is_valid()) \
+            and "estimate_selection_form" in request.session:
+        estimate_selection_form = request.session["estimate_selection_form"]
+    if estimate_selection_form is not None and estimate_selection_form.is_valid():
+        cell_key_index = estimate_selection_form.cleaned_data["cells"]
+        col_key_index = estimate_selection_form.cleaned_data["columns"]
+        row_key_index = estimate_selection_form.cleaned_data["rows"]
+    else:
         estimate_selection_form = EstimateSelectionForm(initial={
             'rows': row_key_index,
             'columns': col_key_index,
             'cells': cell_key_index})
+    row_key_function = key_functions[row_key_index]
+    col_key_function = key_functions[col_key_index]
     data['table_form'] = estimate_selection_form
+    # Save form to session so that if the user navigates elsewhere and then returns, the form is unchanged.
+    request.session["estimate_selection_form"] = estimate_selection_form
 
     # Aggregate results according to the row and column keys.
     # Each result is a pair (tuple) containing total embarked and total disembarked.
@@ -182,7 +186,11 @@ def get_estimates_table(request):
 
     # Order columns and rows by their respective headers.
     row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_header_function)
-    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=col_header_function)
+    column_set = set([k[1] for k in table_dict.keys()])
+    if col_key_index == '0':
+        column_set = list(column_set)
+    else:
+        column_set = sorted(column_set, key=col_header_function)
 
     # How many cells a single piece of data spans
     # (1 for either embarked or disembarked only and 2 for both).
@@ -243,9 +251,10 @@ def get_estimates_table(request):
     if post is None or "download" not in post:
         return render(request, 'assessment/estimates.html', data)
     else:
-        return download_xls(header_rows, full_data_set)
+        header_rows[-1].append(("Totals", 1))
+        return download_xls(header_rows, full_data_set, 1)
 
-def download_xls(header_rows, data_set):
+def download_xls(header_rows, data_set, header_col_offset=0):
     """
     Generates an XLS file with the given data.
     :param header_rows: The header rows, specified as an array of pairs (header label, column span)
@@ -266,7 +275,7 @@ def download_xls(header_rows, data_set):
     # Write headers.
     row_index = 0
     for row in header_rows:
-        col_index = 0
+        col_index = header_col_offset
         for pair in row:
             ws.write(row_index, col_index, pair[0], header_style)
             if pair[1] > 1:
@@ -294,6 +303,8 @@ def get_estimates_common(request, data):
     post = None
     if request.method == "POST":
         post = request.POST
+    elif request.GET.get("act_as_post") is not None:
+        post = request.GET
 
     query = {}
 
@@ -310,12 +321,16 @@ def get_estimates_common(request, data):
         :return: 1 if the checkbox is checked, 0 otherwise
         """
         if post is not None and prefix + str(element.pk) not in post and \
-                (reset not in post or post[reset] != "Reset to default"):
+                post.get(reset) != "Reset to default":
             return 0
         else:
             return 1
 
-    data['nations'] = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")] for x in Nation.objects.all()]
+    # Check which Flags (nations) are selected and include the selection in the query.
+    nations = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")] for x in Nation.objects.all()]
+    data['nations'] = nations
+    query["nation__in"] = [nation[0] for nation in nations if nation[2] == 1]
+    data['all_nations_selected'] = len(nations) == len(query["nation__in"])
 
     export_regions = {}
     areas = ExportArea.objects.all()
@@ -340,7 +355,7 @@ def get_estimates_common(request, data):
     data['export_regions'] = collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0][0].name))
     data['import_regions'] = collections.OrderedDict(sorted(import_regions.items(), key=lambda x: x[0][0].name))
 
-    def query_region(query_key, regions_dict):
+    def query_region(query_key, regions_dict, all_selected_key):
         """
         Obtain a list of the names of selected regions in the regions_dict
         :param query_key: The key used when inserting this list on the query
@@ -348,20 +363,23 @@ def get_estimates_common(request, data):
         :param regions_dict: A dictionary with keys given by Area and whose
         values are lists of the regions in that area in the format
         [[name, pk], checked]
+        :param all_selected_key: The key to set a boolean value which indicates
+        whether all regions are selected.
         :return:
         """
         from itertools import chain
         # Flatten the regions so that we may generate the corresponding query term.
-        flat = chain.from_iterable(regions_dict.values())
+        flat = list(chain.from_iterable(regions_dict.values()))
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]
+        data[all_selected_key] = len(flat) == len(query[query_key])
 
-    query_region("embarkation_region__in", export_regions)
-    query_region("disembarkation_region__in", import_regions)
+    query_region("embarkation_region__in", export_regions, "all_embarkations_selected")
+    query_region("disembarkation_region__in", import_regions, "all_disembarkations_selected")
 
     year_form = None
     # Ensure that GET requests or Reset POST requests yield a fresh copy of the form with default values.
-    if post is not None and not ("submit_year" in post and post["submit_year"] == "Reset to default"):
-        year_form = EstimateYearForm(request.POST)
+    if post is not None and not post.get("submit_year") == "Reset to default":
+        year_form = EstimateYearForm(post)
 
     if year_form is not None and year_form.is_valid():
         query["year__gte"] = year_form.cleaned_data["frame_from_year"]
