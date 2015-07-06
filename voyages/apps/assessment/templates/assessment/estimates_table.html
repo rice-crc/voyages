@@ -26,7 +26,7 @@
 
     <div id="main-table-wrapper" class="estimates-table" style="min-width: 320px; position:relative;min-height:500px;">
         <div id="inner-main-table_wrapper" style="position:absolute;right:0px;left:0px;top:0px;background-color:white;">
-            <table class="simple-table" id="estimates-table" cellspacing="0" cellpadding="0" border="0" width="99.9%">
+            <table class="simple-table" id="estimates-table" cellspacing="0" cellpadding="0" border="0">
                 <thead>
                     {% for header_row in header_rows %}
                     <tr name="header">
@@ -101,6 +101,7 @@
         var table = $('#estimates-table').dataTable({
             "scrollX": true,
             "bFilter": false,
+            "bPaginate": {{ rows|length }} > 100,
         });
         new $.fn.dataTable.FixedColumns( table );
         $('#main-table_wrapper').height($('#inner-main-table_wrapper').height());

@@ -36,11 +36,14 @@ var data = [
     { x: {{ year }}, y0: {{ r.1 }}, y1: {{ r.0 }} },
 {% endfor %}
 ];
+
+data = data.sort(function(a, b) { return a.x - b.x; });
+
 var stack = d3.layout.stack(),
     layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0 }; }); })),
     yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
 
-var margin = {top: 40, right: 10, bottom: 20, left: 10},
+var margin = {top: 40, right: 10, bottom: 20, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -52,7 +55,7 @@ var y = d3.scale.linear()
     .domain([0, yStackMax])
     .range([height, 0]);
 
-var color = ["#aad", "#008CA5"];
+var color = ["004D71", "#009FBC", "rgb(30, 98, 127)"];
 
 var tickHelper = Math.min(20, Math.round(data.length / 10));
 var xAxis = d3.svg.axis()
@@ -64,7 +67,7 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)
-    .tickValues([25000, 50000, 75000, 100000, 125000])
+    .ticks(5)
     .tickFormat(yTickFormat)
     .tickPadding(5)
     .tickSize(-width + margin.right + margin.left)
@@ -112,7 +115,7 @@ svg.append("g")
 
 var gy = svg.append("g")
     .attr("class", "y axis")
-    .attr("transform", "translate(" + (margin.left + 25) + ",0)")
+    //.attr("transform", "translate(" + (margin.left + 25) + ",0)")
     .call(yAxis);
 
 gy.selectAll("g").filter(function(d) { return d; })
@@ -130,38 +133,50 @@ vertical.append("line")
 var circle0 = vertical
     .append("circle")
     .attr("r", 5)
-    .style("fill", color[1]);
+    .style("fill", color[2]);
 var circle1 = vertical
     .append("circle")
     .attr("r", 5)
-    .style("fill", color[1]);
+    .style("fill", color[2]);
 
 d3.select("#graphContainer")
     .on("mousemove", function(){
-        var mouseX = d3.mouse(this)[0] - margin.left - 2;
+        var mouseX = d3.mouse(this)[0] - margin.left - x.rangeBand();
         var index = d3.bisectLeft(x.range(), mouseX);
         if (index == 0) {
             index = d3.bisectRight(x.range(), mouseX) - 1;
         }
-        if (index < 0 || index >= data.length) {
-            if (vertical.timeoutfn == null) {
-                vertical.timeoutfn = function() {
+        var out = false;
+        if (index < 0) {
+            index = 0;
+            out = true;
+        } else if (index >= data.length) {
+            index = data.length - 1;
+            out = true;
+        }
+        mouseover(data[index]);
+        vertical.style("opacity", 1.0);
+        vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(data[index].x)) + ",0)");
+        circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
+        circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
+        if (out && vertical.timeoutfn == null) {
+            vertical.timeoutfn = function() {
+                if (vertical.timeoutfn != null) {
                     vertical.style("opacity", 0.0);
                     vertical.timeoutfn = null;
-                };
-                setTimeout(vertical.timeoutfn, 3000);
-            }
-        } else {
-            mouseover(data[index]);
-            vertical.style("opacity", 1.0);
-            vertical.attr("transform", "translate(" + (1 + x(data[index].x)) + ",0)");
-            circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
-            circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
+                }
+            };
+            setTimeout(vertical.timeoutfn, 3000);
+        } else if (!out) {
+            vertical.timeoutfn = null;
         }
     });
 
 function yTickFormat(d) {
     formatNumber = d3.format("d");
-    return formatNumber(d/1000) + "k";
+    if (d >= 2000) {
+        return formatNumber(d/1000) + "k";
+    }
+    return d;
 }
 </script>
