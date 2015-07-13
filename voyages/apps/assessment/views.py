@@ -71,6 +71,8 @@ def get_estimates_timeline(request):
     """
     data = {'tab_selected': 'timeline'}
     results = get_estimates_common(request, data)
+    data['show_events'] = data['all_nations_selected'] and data['all_embarkations_selected'] and\
+                          data['all_disembarkations_selected']
     # Group estimates by year and sum embarked and disembarked for year.
     # The following dict has keys corresponding to years and entries
     # formed by tuples (embarked_count, disembarked_count)
@@ -82,14 +84,21 @@ def get_estimates_timeline(request):
         if result.year in timeline:
             item = timeline[result.year]
         timeline[result.year] = (item[0] + result.embarked_slaves, item[1] + result.disembarked_slaves)
+
+    query = data['query']
+    data['min_year'] = query['year__gte'] if query['year__gte'] > globals.default_first_year\
+        else globals.default_first_year - 1
+    data['max_year'] = query['year__lte'] if query['year__lte'] < globals.default_last_year\
+        else globals.default_last_year + 1
     data['timeline'] = timeline
 
     post = data['post']
     if post is None or "download" not in post:
         return render(request, 'assessment/estimates.html', data)
     else:
-        return download_xls([[('Year', 1), ('Embarked Slaves', 1), ('Disembarked Slaves', 1)]],
-                            [[k, t[0], t[1]] for k, t in timeline.iteritems()])
+        rows = [[k, int(round(t[0])), int(round(t[1]))] for k, t in timeline.iteritems()]
+        rows = sorted(rows, key=lambda a: a[0])
+        return download_xls([[('Year', 1), ('Embarked Slaves', 1), ('Disembarked Slaves', 1)]], rows)
 
 def get_estimates_table(request):
     """
@@ -124,6 +133,7 @@ def get_estimates_table(request):
     row_key_index = '7'
     col_key_index = '0'
     cell_key_index = '1'
+    include_empty = False;
     estimate_selection_form = None
     post = data['post']
 
@@ -137,6 +147,7 @@ def get_estimates_table(request):
         cell_key_index = estimate_selection_form.cleaned_data["cells"]
         col_key_index = estimate_selection_form.cleaned_data["columns"]
         row_key_index = estimate_selection_form.cleaned_data["rows"]
+        include_empty = estimate_selection_form.cleaned_data["include_empty"]
     else:
         estimate_selection_form = EstimateSelectionForm(initial={
             'rows': row_key_index,
@@ -152,6 +163,31 @@ def get_estimates_table(request):
     # Each result is a pair (tuple) containing total embarked and total disembarked.
     table_dict = {}
     cache = EstimateManager.cache()
+    if include_empty:
+        # Force loading entire rows or columns which have zero value.
+        # This is done by projecting the entire set of data on each key function
+        # and forming the Cartesian product of the two.
+        query = data['query']
+        year_filter = lambda e: query['year__gte'] <= e.year <= query['year__lte']
+        filter_functions = {
+            '0': lambda e: e.nation.name in query['nation__in'],
+            '1': lambda e: e.embarkation_region.name in query['embarkation_region__in'],
+            '2': lambda e: e.disembarkation_region.name in query['disembarkation_region__in'],
+            '3': lambda e: e.disembarkation_region.name in query['disembarkation_region__in'],
+            '4': year_filter,
+            '5': year_filter,
+            '6': year_filter,
+            '7': year_filter,
+            '8': year_filter,
+            '9': year_filter,
+        }
+        row_filter = filter_functions[row_key_index]
+        col_filter = filter_functions[col_key_index]
+        estimates = cache.values()
+        all_row_keys = set([row_key_function(e) for e in estimates if row_filter(e)])
+        all_col_keys = set([col_key_function(e) for e in estimates if col_filter(e)])
+        table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
+
     for result in results:
         result = cache[result.pk]
         key = (row_key_function(result), col_key_function(result))
@@ -305,6 +341,13 @@ def get_estimates_common(request, data):
         post = request.POST
     elif request.GET.get("act_as_post") is not None:
         post = request.GET
+
+    if post is None:
+        # If the user had made queries before during this session, recover the state here.
+        post = request.session.get("estimates_post_data")
+    else:
+        # Store the POST data for possible use later in this session.
+        request.session["estimates_post_data"] = post
 
     query = {}
 

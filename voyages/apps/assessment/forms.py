@@ -18,7 +18,7 @@ class EstimateSelectionForm(forms.Form):
     cell_choices = map(lambda_fun, enumerate(globals.table_cells))
     cells = forms.ChoiceField(label='Cells', choices=cell_choices, initial=[cell_choices[1][1]])
     cells.initial = cell_choices[1][0]
-    omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=True)
+    include_empty = forms.BooleanField(label='Include empty', required=False, initial=False)
 
 
 class EstimateYearForm(forms.Form):

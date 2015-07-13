@@ -90,7 +90,18 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 /***********************************
 * table
 ***********************************/
-	
+
+.estimates-table-form li {
+    list-style:none;
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 7px;
+}
+
+ul.estimates-table-form {
+    padding-left:0;
+}
+
 div.results-panel {
 	padding: 10px;}
 	
@@ -130,6 +141,7 @@ div.estimates-table table.simple-table td.simple-table-col-label {
 
 .col_header {
 	white-space: nowrap;
+	min-width: 70px;
 }
 
 .paginate_button {
