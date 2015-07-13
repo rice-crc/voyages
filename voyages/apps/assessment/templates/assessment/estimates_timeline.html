@@ -8,10 +8,7 @@
         fill: gray;
     }
 
-    .axis path {
-        fill: none;
-        stroke: none;
-    }
+    .axis path,
     .axis line {
         fill: none;
         stroke: gray;
@@ -24,11 +21,14 @@
         stroke-dasharray: 1 1;
     }
 </style>
+<div class="results-panel">
+<h1>Timeline: Number of Captives Embarked and Disembarked per Year</h1>
 <div id="graphContainer"></div>
-<div id="mouseOverInfo" style="margin:20px"></div>
+<div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
 <p style="margin-left:20px;">
-    <input type="submit" name="download" value="{% trans 'Download table' %}"/>
+    <input type="submit" name="download" value="{% trans 'Download timeline data' %}"/>
 </p>
+</div>
 <script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
 <script type="text/javascript">
 var data = [
@@ -43,34 +43,55 @@ var stack = d3.layout.stack(),
     layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0 }; }); })),
     yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
 
-var margin = {top: 40, right: 10, bottom: 20, left: 40},
+var margin = {top: 20, right: 10, bottom: 40, left: 40},
     width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 400 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
-    .domain(data.map(function(d) { return d.x; }))
+    .domain(d3.range({{ min_year }}, {{ max_year|add:"1" }}))
     .rangeRoundBands([0, width], .08);
 
 var y = d3.scale.linear()
     .domain([0, yStackMax])
     .range([height, 0]);
 
-var color = ["004D71", "#009FBC", "rgb(30, 98, 127)"];
+var color = ["#004D71", "#009FBC", "rgb(30, 98, 127)"];
 
-var tickHelper = Math.min(20, Math.round(data.length / 10));
+var tickSet = [];
+var firstOrdinal = x.domain()[0];
+var lastOrdinal = x.domain()[x.domain().length - 1];
+var modulus = 10;
+if (lastOrdinal > firstOrdinal + 200) {
+    modulus = 50;
+} else if (lastOrdinal > firstOrdinal + 100) {
+    modulus = 25;
+} else if (lastOrdinal > firstOrdinal + 50) {
+    modulus = 10;
+} else if (lastOrdinal > firstOrdinal + 25) {
+    modulus = 5;
+} else {
+    modulus = 1;
+}
+var t = firstOrdinal;
+if (firstOrdinal % modulus) {
+    t += modulus - (firstOrdinal % modulus);
+}
+for (; t <= lastOrdinal; t += modulus) {
+    tickSet.push(t);
+}
 var xAxis = d3.svg.axis()
     .scale(x)
-	.tickValues(x.domain().filter(function(d, i) { return !(i % tickHelper); }))
-    .tickSize(10)
-    .tickPadding(2)
-    .orient("bottom");
+	.tickValues(tickSet)
+    .tickSize(-height)
+    .tickPadding(5)
+    .orient("top");
 
 var yAxis = d3.svg.axis()
     .scale(y)
     .ticks(5)
     .tickFormat(yTickFormat)
     .tickPadding(5)
-    .tickSize(-width + margin.right + margin.left)
+    .tickSize(-width)
     .orient("left");
 
 var svg = d3.select("#graphContainer").append("svg")
@@ -88,9 +109,13 @@ var layer = svg.selectAll(".layer")
 var lastMouseOver = null;
 
 function mouseover(d) {
+    var historical = '';
+    if (events && events[d.x.toString()]) {
+        historical = "<br /><strong>Historical event:</strong> " + events[d.x.toString()];
+    }
 	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
-	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1) +
-	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0));
+	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1).toLocaleString('en') +
+	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0).toLocaleString('en') + historical);
 }
 
 var rect = layer.selectAll("rect")
@@ -110,12 +135,11 @@ rect.transition()
 
 svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
+    //.attr("transform", "translate(0," + height + ")")
     .call(xAxis);
 
 var gy = svg.append("g")
     .attr("class", "y axis")
-    //.attr("transform", "translate(" + (margin.left + 25) + ",0)")
     .call(yAxis);
 
 gy.selectAll("g").filter(function(d) { return d; })
@@ -139,6 +163,31 @@ var circle1 = vertical
     .attr("r", 5)
     .style("fill", color[2]);
 
+var legend = svg.append("g")
+  .attr("class", "legend");
+
+var legendWidth = 95;
+legend.selectAll('rect')
+      .data(layers)
+      .enter()
+      .append('rect')
+      .attr("width", 14)
+      .attr("height", 14)
+      .attr('y', margin.top + height + 5)
+      .attr('x', function(d, i) { return i * legendWidth; })
+      .style('fill', function(d, i) { return i == 0 ? "rgb(115, 202, 218)" : "rgb(52, 158, 183)"; })
+      .style('stroke', 'black');
+
+legend.selectAll('text')
+      .data(layers)
+      .enter()
+      .append('text')
+      .attr('y', margin.top + height + 16)
+      .attr('x', function(d, i) { return 20 + i * legendWidth; })
+      .style('stroke', 'black')
+      .style('stroke-width', '0.3')
+      .text(function(d, i) { return i != 0 ? 'Disembarked' : 'Embarked'; });
+
 d3.select("#graphContainer")
     .on("mousemove", function(){
         var mouseX = d3.mouse(this)[0] - margin.left - x.rangeBand();
@@ -146,31 +195,120 @@ d3.select("#graphContainer")
         if (index == 0) {
             index = d3.bisectRight(x.range(), mouseX) - 1;
         }
-        var out = false;
-        if (index < 0) {
-            index = 0;
-            out = true;
-        } else if (index >= data.length) {
-            index = data.length - 1;
-            out = true;
-        }
-        mouseover(data[index]);
-        vertical.style("opacity", 1.0);
-        vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(data[index].x)) + ",0)");
-        circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
-        circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
-        if (out && vertical.timeoutfn == null) {
-            vertical.timeoutfn = function() {
-                if (vertical.timeoutfn != null) {
-                    vertical.style("opacity", 0.0);
-                    vertical.timeoutfn = null;
-                }
-            };
-            setTimeout(vertical.timeoutfn, 3000);
-        } else if (!out) {
-            vertical.timeoutfn = null;
-        }
+        changeHoveredBar(index);
     });
+
+function changeHoveredBar(index) {
+    var out = false;
+    if (index < 0) {
+        index = 0;
+        out = true;
+    } else if (index >= data.length) {
+        index = data.length - 1;
+        out = true;
+    }
+    mouseover(data[index]);
+    vertical.style("opacity", 1.0);
+    vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(data[index].x)) + ",0)");
+    circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
+    circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
+    if (out && vertical.timeoutfn == null) {
+        vertical.timeoutfn = function() {
+            if (vertical.timeoutfn != null) {
+                vertical.style("opacity", 0.0);
+                vertical.timeoutfn = null;
+            }
+        };
+        setTimeout(vertical.timeoutfn, 3000);
+    } else if (!out) {
+        vertical.timeoutfn = null;
+    }
+}
+
+var events = null;
+
+{% if show_events %}
+    events = {
+        '1525': 'First slave voyage direct from Africa to the Americas',
+        '1560': 'Continuous slave trade from Brazil begins',
+        '1641': 'Sugar exports from Eastern Caribbean begin',
+        '1655': 'English capture Jamaica',
+        '1695': 'Gold discovered in Minas Gerais (Brazil)',
+        '1697': 'French obtain St Domingue in Treaty of Rywsick',
+        '1756': 'Seven years war begins',
+        '1776': 'American Revolutionary War begins',
+        '1789': 'Bourbon reforms open Spanish colonial ports to slaves',
+        '1791': 'St Domingue revolution begins',
+        '1808': 'Abolition of British and US slave trades takes effect',
+        '1830': 'Anglo-Brazilian anti-slave trade treaty',
+        '1850': 'Brazil suppresses slave trade',
+        '1867': 'Last transatlantic slave voyage arrives in Americas'
+    };
+    firstOrdinal = x.domain()[0];
+    lastOrdinal = x.domain()[x.domain().length - 1];
+    var filteredEvents = [];
+    for (var year in events) {
+        var text = events[year];
+        year = parseInt(year);
+        if (year >= firstOrdinal && year <= lastOrdinal) {
+            // Find index in data vector. We could use a binary search here, but since this is done only once...
+            data_index = -1;
+            for (var i = 0; i < data.length; ++i) {
+                if (data[i].x == year) {
+                    data_index = i;
+                    break;
+                }
+            }
+            filteredEvents.push({
+                'counter': 1 + filteredEvents.length,
+                'year': year,
+                'label': text,
+                'index': data_index
+            });
+        }
+    }
+
+    var boxSize = 18;
+    var historicalEvents = svg.append("g")
+        .attr("class", "event");
+    historicalEvents.selectAll('g')
+        .data(filteredEvents)
+        .enter()
+        .append('g');
+    historicalEvents.selectAll('g')
+        .append('rect')
+        .attr("width", boxSize)
+        .attr("height", boxSize)
+        .attr('y', margin.top + height - boxSize - 1)
+        .attr('x', function(d) { return x(d.year) - (boxSize - x.rangeBand()) / 2; })
+        .style('fill', color[2])
+        .style('stroke', 'black');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y', margin.top + height - (boxSize / 2))
+        .attr('x', function(d) { return x(d.year) + x.rangeBand() / 2; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.counter; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('fill', 'white');
+    historicalEvents.selectAll('g')
+        .on("mousemove", function(d) {
+            d3.select(this).selectAll('rect').style('fill', '#CA4223');
+            if (d.index >= 0) {
+                changeHoveredBar(d.index);
+            } else {
+                vertical.style("opacity", 0.0);
+                mouseover({ 'x': d.year, 'y1': 0, 'y0': 0 });
+            }
+            d3.event.stopPropagation();
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).selectAll('rect').style('fill', color[2]);
+        });
+{% endif %}
 
 function yTickFormat(d) {
     formatNumber = d3.format("d");
