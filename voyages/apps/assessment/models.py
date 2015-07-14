@@ -90,10 +90,12 @@ class Estimate(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+
 class EstimateManager(models.Manager):
     _all = {}
     _has_loaded = False
     import threading
+
     _lock = threading.Lock()
 
     @classmethod

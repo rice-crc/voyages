@@ -330,6 +330,35 @@ def download_xls(header_rows, data_set, header_col_offset=0):
     wb.save(response)
     return response
 
+def get_permanent_link(request):
+    if request.method != "POST":
+        raise django.http.Http405
+    from voyages.apps.common.models import SavedQuery
+    saved_query = SavedQuery()
+    saved_query.query = request.POST.urlencode()
+    saved_query.save()
+    link = ('https://' if request.is_secure() else 'http://') + request.get_host() + '/a/' + saved_query.id
+    from django.http import HttpResponse
+    return HttpResponse(link, mimetype='text/plain')
+
+def restore_permalink(request, link_id):
+    """
+    :param request: web request
+    :param link_id: the id of the permanent link
+    :return: a Redirect to the Estimates page after setting the session POST data to match the permalink
+    or an Http404 error if the link is not found.
+    """
+    from voyages.apps.common.models import SavedQuery
+    try:
+        permalink = SavedQuery.objects.get(pk=link_id)
+        # Save the query in the session and redirect.
+        request.session["estimates_post_data"] = permalink.get_post()
+        from django.http import HttpResponseRedirect
+        from django.core.urlresolvers import reverse
+        return HttpResponseRedirect(reverse('assessment:estimates'))
+    except SavedQuery.DoesNotExist:
+        raise Http404
+
 def get_estimates_common(request, data):
     """ Append common page content to the argument data
     :param request:  web request
@@ -428,6 +457,9 @@ def get_estimates_common(request, data):
         query["year__gte"] = year_form.cleaned_data["frame_from_year"]
         query["year__lte"] = year_form.cleaned_data["frame_to_year"]
     else:
+        if year_form is not None:
+            import logging
+            logging.getLogger('voyages').error(year_form.errors)
         year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
             'frame_to_year': globals.default_last_year})
         query["year__gte"] = globals.default_first_year
