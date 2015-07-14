@@ -416,7 +416,6 @@
             </i>
           </div>
           <div style="margin-top: 5px;">
-            <!-- <input id="form:buttonPermlink" type="submit" value="Create a link" name="form:buttonPermlink"><br/> -->
             <button onclick="return createLink();">Create a link</button> <br/>
             <button onclick="return resetAll();">New query</button>
           </div>
@@ -439,7 +438,7 @@
     <h1>URL link has been created</h1>
     <hr />
     <p>To reactivate the current query in the future, copy the following URL and then paste it into the address bar:</p>
-    <textarea id="url_string" style="width:500px;height:250px;"></textarea>
+    <textarea contenteditable="true" id="url_string" style="width:500px;"></textarea>
   </div>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -447,21 +446,22 @@
   <script type="text/javascript">
     $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "Link created" });
     function createLink() {
-      var urlTextArea = $('#url_string');
-      urlTextArea.val(('https:' == document.location.protocol ? 'https://' : 'http://') +
-        "{{ request.get_host }}" +
-         $('form').attr('action') +
-         '?' + $('form').serialize() + "&act_as_post=1");
-      urlTextArea.focus(function(e) {
-        e.target.select();
-        jQuery(e.target).one('mouseup', function(e) {
-          e.preventDefault();
+      $.post('permalink', $('form').serialize(), function(link) {
+        var urlTextArea = $('#url_string');
+        urlTextArea.val(link);
+        urlTextArea.focus(function(e) {
+          e.target.select();
+          try {
+            document.execCommand('copy');
+          } catch (e) {
+            console.log('Unable to copy to clipboard using document.execCommand');
+          }
+          jQuery(e.target).one('mouseup', function(e) {
+            e.preventDefault();
+          });
         });
+        $("#dialog").dialog('open');
       });
-      $("#dialog").dialog('open');
-      try {
-        document.execCommand('copy');
-      } catch (e) { }
       return false;
     }
 

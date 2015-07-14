@@ -25,6 +25,7 @@
 <h1>Timeline: Number of Captives Embarked and Disembarked per Year</h1>
 <div id="graphContainer"></div>
 <div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
+<div id="historicalEventsContainer"></div>
 <p style="margin-left:20px;">
     <input type="submit" name="download" value="{% trans 'Download timeline data' %}"/>
 </p>
@@ -46,6 +47,8 @@ var stack = d3.layout.stack(),
 var margin = {top: 20, right: 10, bottom: 40, left: 40},
     width = 960 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
+
+$('#mouseOverInfo').css('margin-left', margin.left);
 
 var x = d3.scale.ordinal()
     .domain(d3.range({{ min_year }}, {{ max_year|add:"1" }}))
@@ -112,6 +115,8 @@ function mouseover(d) {
     var historical = '';
     if (events && events[d.x.toString()]) {
         historical = "<br /><strong>Historical event:</strong> " + events[d.x.toString()];
+    } else {
+        historical = "<br />&nbsp;";
     }
 	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
 	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1).toLocaleString('en') +
@@ -247,35 +252,41 @@ var events = null;
     firstOrdinal = x.domain()[0];
     lastOrdinal = x.domain()[x.domain().length - 1];
     var filteredEvents = [];
+    var allEvents = [];
     for (var year in events) {
         var text = events[year];
         year = parseInt(year);
-        if (year >= firstOrdinal && year <= lastOrdinal) {
+        var data_index = -1;
+        var included = year >= firstOrdinal && year <= lastOrdinal;
+        if (included) {
             // Find index in data vector. We could use a binary search here, but since this is done only once...
-            data_index = -1;
             for (var i = 0; i < data.length; ++i) {
                 if (data[i].x == year) {
                     data_index = i;
                     break;
                 }
             }
-            filteredEvents.push({
-                'counter': 1 + filteredEvents.length,
-                'year': year,
-                'label': text,
-                'index': data_index
-            });
+        }
+        var element = {
+            'counter': 1 + allEvents.length,
+            'year': year,
+            'label': text,
+            'index': data_index
+        }
+        allEvents.push(element);
+        if (included) {
+            filteredEvents.push(element);
         }
     }
 
-    var boxSize = 18;
-    var historicalEvents = svg.append("g")
+    var boxSize = 19;
+    var historicalMarkers = svg.append("g")
         .attr("class", "event");
-    historicalEvents.selectAll('g')
+    historicalMarkers.selectAll('g')
         .data(filteredEvents)
         .enter()
         .append('g');
-    historicalEvents.selectAll('g')
+    historicalMarkers.selectAll('g')
         .append('rect')
         .attr("width", boxSize)
         .attr("height", boxSize)
@@ -283,7 +294,7 @@ var events = null;
         .attr('x', function(d) { return x(d.year) - (boxSize - x.rangeBand()) / 2; })
         .style('fill', color[2])
         .style('stroke', 'black');
-    historicalEvents.selectAll('g')
+    historicalMarkers.selectAll('g')
         .append('text')
         .attr("width", boxSize)
         .attr("text-anchor", "middle")
@@ -294,9 +305,11 @@ var events = null;
         .style('cursor', 'default')
         .style('font-size', '10pt')
         .style('fill', 'white');
-    historicalEvents.selectAll('g')
+    historicalMarkers.selectAll('g')
         .on("mousemove", function(d) {
-            d3.select(this).selectAll('rect').style('fill', '#CA4223');
+            var highlightColor = '#CA4223';
+            d3.select(this).selectAll('rect').style('fill', highlightColor);
+            colorHistoricalEvent(d, highlightColor);
             if (d.index >= 0) {
                 changeHoveredBar(d.index);
             } else {
@@ -307,7 +320,73 @@ var events = null;
         })
         .on("mouseout", function(d) {
             d3.select(this).selectAll('rect').style('fill', color[2]);
+            colorHistoricalEvent(d, color[2]);
         });
+
+    function colorHistoricalEvent(d, color) {
+        var ev = historicalEvents.
+            selectAll('g').
+            filter(function(d2, i) { return d2.year == d.year; });
+        ev.selectAll('rect').style('fill', color);
+    }
+
+    // List ALL historical events in another D3 graph.
+    var svgHistorical = d3.select("#historicalEventsContainer")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height - 110)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + ",0");
+    var historicalEvents = svgHistorical.append("g")
+        .attr("class", "event");
+    historicalEvents.selectAll('g')
+        .data(allEvents)
+        .enter()
+        .append('g');
+    var columnLength = Math.ceil(allEvents.length / 2);
+    var xCoord = function(d) { return margin.left + Math.floor((d.counter - 1) / columnLength) * 390; };
+    var yCoord = function(d) { return margin.top / 3 + ((d.counter - 1) % columnLength) * 25; };
+    historicalEvents.selectAll('g')
+        .append('rect')
+        .attr("width", boxSize)
+        .attr("height", boxSize)
+        .attr('y', yCoord)
+        .attr('x', xCoord)
+        .style('fill', color[2])
+        .style('stroke', 'black');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + boxSize / 2; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.counter; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('fill', 'white');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + 2.3 * boxSize; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.year; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('font-weight', 'bold')
+        .style('fill', 'black');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + 4 * boxSize; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.label; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('fill', 'black');
 {% endif %}
 
 function yTickFormat(d) {
