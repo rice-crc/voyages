@@ -11,7 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'SavedQuery'
         db.create_table(u'common_savedquery', (
             ('id', self.gf('django.db.models.fields.CharField')(max_length=8, primary_key=True)),
-            ('query', self.gf('django.db.models.fields.TextField')(unique=True)),
+            ('hash', self.gf('django.db.models.fields.CharField')(default='', max_length=255, db_index=True)),
+            ('query', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal(u'common', ['SavedQuery'])
 
@@ -24,8 +25,9 @@ class Migration(SchemaMigration):
     models = {
         u'common.savedquery': {
             'Meta': {'object_name': 'SavedQuery'},
+            'hash': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'db_index': 'True'}),
             'id': ('django.db.models.fields.CharField', [], {'max_length': '8', 'primary_key': 'True'}),
-            'query': ('django.db.models.fields.TextField', [], {'unique': 'True'})
+            'query': ('django.db.models.fields.TextField', [], {})
         }
     }
 
