@@ -10,8 +10,10 @@ class SavedQuery(models.Model):
 
     # This is the short sequence of characters that will be used when repeating the query.
     id = models.CharField(max_length=ID_LENGTH, primary_key=True)
+    # A hash string so that the query can be quickly located.
+    hash = models.CharField(max_length=255, db_index=True, default='')
     # The actual query string.
-    query = models.TextField(unique=True)
+    query = models.TextField()
 
     def get_post(self):
         """
@@ -23,7 +25,10 @@ class SavedQuery(models.Model):
         return {name: value for name, value in parse_qsl(self.query, keep_blank_values=True)}
 
     def save(self, *args, **kwargs):
-        pre_existing = list(SavedQuery.objects.filter(query=self.query))
+        import hashlib
+        hash_object = hashlib.sha1(self.query)
+        self.hash = hash_object.hexdigest()
+        pre_existing = list(SavedQuery.objects.filter(hash=self.hash).filter(query=self.query))
         if len(pre_existing) > 0:
             self.id = pre_existing[0].id
         else:
