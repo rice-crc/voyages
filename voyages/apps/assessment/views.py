@@ -4,6 +4,7 @@ from django.template import TemplateDoesNotExist, Context, loader, RequestContex
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from .forms import *
+from voyages.apps.common.export import download_xls
 import collections
 
                               
@@ -27,8 +28,8 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
 def get_estimates(request):
     tab = None
-    if request.method == "POST" and "selected_tab" in request.POST:
-        tab = request.POST["selected_tab"]
+    if request.method == "POST":
+        tab = request.POST.get("selected_tab")
     if tab == "map":
         return get_estimates_map(request)
     if tab == "timeline":
@@ -67,7 +68,7 @@ def get_estimates_timeline(request):
     """
     Generates a Time-line page with total traffic volume per year.
     :param request: The web request that specifies search criteria.
-    :return: The web page.
+    :return: The web page or an XLS spreadsheet with timeline data.
     """
     data = {'tab_selected': 'timeline'}
     results = get_estimates_common(request, data)
@@ -104,14 +105,19 @@ def get_estimates_table(request):
     """
     Generate tabular data summarizing the estimates.
     :param request: The web request containing search data and tabular layout
-    :return: The rendered page.
+    :return: The rendered page or an XLS spreadsheet containing table data.
     """
     data = {'tab_selected': 'table'}
     results = get_estimates_common(request, data)
 
-    # Helper function that groups years according to a given modulus.
-    # For instance, year_mod(1501, 5) = year_mod(1502, 5) = ... = year_mod(1505, 5).
     def year_mod(year, mod):
+        """
+        Helper function that groups years according to a given modulus.
+        For instance, year_mod(1501, 5) = year_mod(1502, 5) = ... = year_mod(1505, 5).
+        :param year: The year.
+        :param mod: The length of each year interval.
+        :return: A pair (mod, index of year interval).
+        """
         year -= 1
         return mod, (year - (year % mod)) / mod
 
@@ -129,7 +135,7 @@ def get_estimates_table(request):
         '9': lambda e: year_mod(e.year, 100),
     }
 
-    # Select key functions based on post data.
+    # Select key functions based on post data or use default values if this is the initial GET request.
     row_key_index = '7'
     col_key_index = '0'
     cell_key_index = '1'
@@ -143,6 +149,8 @@ def get_estimates_table(request):
     if (estimate_selection_form is None or not estimate_selection_form.is_valid()) \
             and "estimate_selection_form" in request.session:
         estimate_selection_form = request.session["estimate_selection_form"]
+    if post is not None and post.get("table_options") == "Reset to default":
+        estimate_selection_form = None
     if estimate_selection_form is not None and estimate_selection_form.is_valid():
         cell_key_index = estimate_selection_form.cleaned_data["cells"]
         col_key_index = estimate_selection_form.cleaned_data["columns"]
@@ -188,8 +196,8 @@ def get_estimates_table(request):
         all_col_keys = set([col_key_function(e) for e in estimates if col_filter(e)])
         table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
 
-    for result in results:
-        result = cache[result.pk]
+    for pk in results.values_list('pk', flat=True).load_all():
+        result = cache[int(pk)]
         key = (row_key_function(result), col_key_function(result))
         cell = (0, 0)
         if key in table_dict:
@@ -222,11 +230,7 @@ def get_estimates_table(request):
 
     # Order columns and rows by their respective headers.
     row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_header_function)
-    column_set = set([k[1] for k in table_dict.keys()])
-    if col_key_index == '0':
-        column_set = list(column_set)
-    else:
-        column_set = sorted(column_set, key=col_header_function)
+    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=lambda x: x.order_num)
 
     # How many cells a single piece of data spans
     # (1 for either embarked or disembarked only and 2 for both).
@@ -238,10 +242,10 @@ def get_estimates_table(request):
     if col_key_index == '3':
         # Reorder columns by disembarkation area and then group by so that we create a new
         # header row which groups disembarkation regions by their major area.
-        keyfunc = lambda region: region.import_area.name
-        column_set = sorted(column_set, key=keyfunc)
+        key_map = lambda region: region.import_area.name
+        column_set = sorted(column_set, key=lambda region: region.import_area.order_num)
         from itertools import groupby
-        header_rows.append([(k, cell_span * sum(1 for x in g)) for k, g in groupby(column_set, keyfunc)])
+        header_rows.append([(k, cell_span * sum(1 for x in g)) for k, g in groupby(column_set, key_map)])
 
     header_rows.append([(col_header_function(x), cell_span) for x in column_set])
 
@@ -290,74 +294,27 @@ def get_estimates_table(request):
         header_rows[-1].append(("Totals", 1))
         return download_xls(header_rows, full_data_set, 1)
 
-def download_xls(header_rows, data_set, header_col_offset=0):
-    """
-    Generates an XLS file with the given data.
-    :param header_rows: The header rows, specified as an array of pairs (header label, column span)
-    :param data_set: Tabular data in the format [[r_1c_1, r_1c_2, ..., r_1c_N], ..., [r_Mc_1, r_Mc_2, ..., r_Mc_N]]
-    :return: An HttpResponse containing the XLS file.
-    """
-    import xlwt
-    from django.http import HttpResponse
-    response = HttpResponse(mimetype='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=data.xls'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet("Data")
-
-    header_style = xlwt.XFStyle()
-    number_style = xlwt.XFStyle()
-    number_style.alignment.horz = number_style.alignment.HORZ_RIGHT
-
-    # Write headers.
-    row_index = 0
-    for row in header_rows:
-        col_index = header_col_offset
-        for pair in row:
-            ws.write(row_index, col_index, pair[0], header_style)
-            if pair[1] > 1:
-                ws.merge(row_index, row_index, col_index, col_index + pair[1] - 1)
-            col_index += pair[1]
-        row_index += 1
-
-    # Write tabular data.
-    for row in data_set:
-        col_index = 0
-        for cell in row:
-            ws.write(row_index, col_index, cell, number_style if col_index > 0 else header_style)
-            col_index += 1
-        row_index += 1
-
-    wb.save(response)
-    return response
-
 def get_permanent_link(request):
-    if request.method != "POST":
-        raise django.http.Http405
+    """
+    Obtain a permanent link for the current search query.
+    :param request: The request containing the search query.
+    :return: A permanent URL link for that exact query.
+    """
     from voyages.apps.common.models import SavedQuery
     saved_query = SavedQuery()
-    saved_query.query = request.POST.urlencode()
-    saved_query.save()
-    link = ('https://' if request.is_secure() else 'http://') + request.get_host() + '/a/' + saved_query.id
-    from django.http import HttpResponse
-    return HttpResponse(link, mimetype='text/plain')
+    return saved_query.get_link(request, 'restore_e_permalink')
 
 def restore_permalink(request, link_id):
     """
+    Fetch the query corresponding to the link id and redirect to the
+    search results of that query.
     :param request: web request
     :param link_id: the id of the permanent link
     :return: a Redirect to the Estimates page after setting the session POST data to match the permalink
     or an Http404 error if the link is not found.
     """
     from voyages.apps.common.models import SavedQuery
-    try:
-        permalink = SavedQuery.objects.get(pk=link_id)
-        # Save the query in the session and redirect.
-        request.session["estimates_post_data"] = permalink.get_post()
-        from django.http import HttpResponseRedirect
-        from django.core.urlresolvers import reverse
-        return HttpResponseRedirect(reverse('assessment:estimates'))
-    except SavedQuery.DoesNotExist:
-        raise Http404
+    return SavedQuery.restore_link(link_id, request.session, 'estimates_post_data', 'assessment:estimates')
 
 def get_estimates_common(request, data):
     """ Append common page content to the argument data
@@ -371,6 +328,7 @@ def get_estimates_common(request, data):
     elif request.GET.get("act_as_post") is not None:
         post = request.GET
 
+    request.session.set_expiry(20 * 60)
     if post is None:
         # If the user had made queries before during this session, recover the state here.
         post = request.session.get("estimates_post_data")

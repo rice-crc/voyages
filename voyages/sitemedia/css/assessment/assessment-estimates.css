@@ -91,6 +91,33 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 * table
 ***********************************/
 
+.DTFC_LeftFootWrapper {
+	display: none;
+}
+
+.dataTables_paginate {
+	margin-top: 30px;
+}
+
+.row_header, .col_header {
+	min-width: 75px;
+}
+
+.dataTables_info {
+	display: none;
+}
+
+.DTFC_LeftBodyLiner {
+	overflow-x: hidden !important;
+	overflow-y: hidden !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+#inner-main-table_wrapper {
+	border: 1px solid #115676;
+}
+
 .estimates-table-form li {
     list-style:none;
     display: inline-block;
@@ -109,12 +136,7 @@ div.estimates-table-options {
 	margin-top: -5px;
 	margin-bottom: 10px;
 	background-color: #E9F7F8;
-	border: 1px solid #115676;
 	padding: 5px 10px 5px 10px;	}
-
-div.estimates-table {
-	border: 1px solid #115676;
-}
 
 div.estimates-table table.simple-table {
 	border-top: 1px solid #115676
@@ -141,7 +163,6 @@ div.estimates-table table.simple-table td.simple-table-col-label {
 
 .col_header {
 	white-space: nowrap;
-	min-width: 70px;
 }
 
 .paginate_button {
@@ -339,7 +360,7 @@ div.event-line-grid-major,
 div.event-line-grid-minor {
 	background-color: #A9E1E2;
 	background-color: #A9E1E2; }
-	
+
 /***********************************
 * listing
 ***********************************/

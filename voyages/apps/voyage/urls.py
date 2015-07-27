@@ -21,6 +21,8 @@ urlpatterns += patterns('',
     #url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),
     url(r'^search', 'voyages.apps.voyage.views.search', name='search'),
 
+    url(r'^permalink', 'voyages.apps.voyage.views.get_permanent_link', name='permanent-link'),
+
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
     
     url(r'^voyage$', TemplateView.as_view(template_name='under_constr.html'), name='voyage'),

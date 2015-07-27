@@ -254,7 +254,7 @@ var voyagesMap = {
 		if (this._mapLayer) this._map.removeLayer(this._mapLayer);
         var options = {
             minZoom: 2,
-            maxZoom: 7,
+            maxZoom: 8,
             opacity: 1.0,
             id: mapId,
             tms: false,

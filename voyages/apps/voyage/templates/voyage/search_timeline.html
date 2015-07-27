@@ -108,7 +108,6 @@ $(function () {
         }
     });
 });
-
 </script>
 
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}scripts/highcharts.js"></script>
@@ -121,3 +120,6 @@ $(function () {
 
 </div>
 </div>
+<p>
+<input type="submit" name="download" value="{% trans 'Download timeline data' %}" onclick="submitWithValue('tab_timeline');" />
+</p>

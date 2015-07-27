@@ -36,6 +36,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
 from voyages.apps.assessment.globals import get_map_year
 from matplotlib import cm
+from voyages.apps.common.export import download_xls
 import base64
 import StringIO
 
@@ -618,6 +619,7 @@ def search(request):
     is_double_fun = False
     graphs_xy_select_form = None
     graphs_bar_select_form = None
+    graph_data = None
     graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
@@ -629,6 +631,12 @@ def search(request):
 
     # Map
     map_year = 1750
+
+    # Check if we are restoring POST data from session,
+    # which is what would happen when accessing a permalink.
+    if 'voyages_post_data' in request.session:
+        request.method = 'POST'
+        request.POST = request.session.pop('voyages_post_data')
 
     # If there is no requested page number, serve 1
     current_page = 1
@@ -1126,135 +1134,52 @@ def search(request):
                     plt.clf()
                     plt.cla()
                     plt.close('all')
-            elif submitVal.startswith('tab_graphs_bar'):
-                graphs_tab = 'tab_graphs_bar'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'barxselect' not in pst:
-                    pst['barxselect'] = '0'
-                if 'baryselect' not in pst:
-                    pst['baryselect'] = '0'
-                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
+            elif submitVal.startswith('tab_graphs_'):
+                graphs_tab = submitVal[:len('tab_graphs_???')]
+                session_defs_key = graphs_tab + '_defs'
+                # Default value for x-axis or session stored value (if any).
+                xind = request.session.get(session_defs_key + '_x_ind', 0)
+                yind = request.session.get(session_defs_key + '_y_ind', 0)
+                # Handle adding a y-function or simply changing the x-function.
+                graphs_bar_select_form = GraphBarSelectionForm(request.POST, prefix=graphs_tab)
                 if graphs_bar_select_form.is_valid():
+                    # Form is valid and we should use the xy-axes specified by it.
                     xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
                     yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
-                    xdef = globals.graphs_bar_x_functions[xind]
+                else:
+                    graphs_bar_select_form = GraphBarSelectionForm(prefix=graphs_tab,
+                                                                   initial={'barxselect': xind, 'baryselect': yind})
+                # Recall y-axes stored in session (if any).
+                y_axes = set(request.session.get(session_defs_key, []))
+                if submitVal.endswith('_add') and yind not in y_axes:
+                    y_axes.add(yind)
+                if submitVal.endswith('_show') or graphs_tab == 'tab_graphs_pie':
+                    y_axes = set([yind])
+
+                # Create form allowing the user to remove selected y-functions.
+                remove_plots_list = []
+                for yid in y_axes:
+                    ydef = globals.graphs_y_functions[yid]
+                    ydesc = ydef[0]
+                    remove_plots_list.append((ydesc, yid))
+                graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+
+                # Handle removing a y-function.
+                if submitVal.endswith('_remove'):
+                    for yid in graph_remove_plots_form.get_to_del():
+                        y_axes.remove(yid)
+                        graph_remove_plots_form.fields.pop(str(yid))
+                request.session[session_defs_key] = y_axes
+                request.session[session_defs_key + '_x_ind'] = xind
+                request.session[session_defs_key + '_y_ind'] = yind
+
+                # Fetch graph data and pass it to the View template.
+                xdef = globals.graphs_bar_x_functions[xind]
+                xfun = xdef[1]
+                graph_data = {}
+                for yind in y_axes:
                     ydef = globals.graphs_y_functions[yind]
-                    request.session['graph_bar_defs'] = request.session.get('graph_bar_defs', [])
-                    if submitVal == 'tab_graphs_bar_add':
-                        if (len(request.session['graph_bar_defs']) > 0 and request.session['graph_bar_defs'][-1] != yind) or len(request.session['graph_bar_defs']) == 0:
-                            request.session['graph_bar_defs'].append(yind)
-                    elif submitVal == 'tab_graphs_bar_show':
-                        request.session['graph_bar_defs'] = [yind]
-
-                    remove_plots_list = []
-                    for idx, yid in enumerate(request.session['graph_bar_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        ydesc = ydef[0]
-                        remove_plots_list.append((ydesc, idx))
-                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
-
-                    if submitVal == 'tab_graphs_bar_remove':
-                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
-                            request.session['graph_bar_defs'].pop(i)
-                            graph_remove_plots_form.fields.pop(str(i))
-                    plt.xlabel(xdef[0])
-                    if len(request.session['graph_bar_defs']) == 1:
-                        plt.ylabel(ydef[0])
-                    else:
-                        plt.ylabel("Values")
-                    fig = plt.figure(figsize=(13, 5))
-                    width = 0.8
-                    divisor = len(request.session['graph_bar_defs'])
-                    if divisor > 0:
-                        width /= divisor
-                    figwidth = 0
-                    for index, yid in enumerate(request.session['graph_bar_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        xfun = xdef[1]
-                        res = xfun(results,ydef)
-                        #res = sorted(res, key=lambda x: x[0])
-                        data = zip(*res)
-                        enum = enumerate(data[0])
-                        zenum = zip(*enum)
-                        nums = zenum[0]
-                        lbls = zenum[1]
-                        def dmap(x):
-                            if not x:
-                                return 0.0
-                            else:
-                                return x
-                        plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
-                        if len(lbls) > 20:
-                            figwidth = max(figwidth, len(lbls)*0.2)
-                            fig.set_size_inches(figwidth, 6)
-                        plt.xticks(nums, lbls, rotation='vertical', size='small')
-                        plt.grid(True)
-                    figheight = 6
-                    errord = True
-                    while errord:
-                        errord = False
-                        try:
-                            plt.tight_layout()
-                        except ValueError:
-                            errord = True
-                            figheight += 4
-                            fig.set_size_inches(figwidth, figheight)
-                    plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
-            elif submitVal.startswith('tab_graphs_pie'):
-                graphs_tab = 'tab_graphs_pie'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'barxselect' not in pst:
-                    pst['barxselect'] = '0'
-                if 'baryselect' not in pst:
-                    pst['baryselect'] = '0'
-                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
-                if graphs_bar_select_form.is_valid():
-                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
-                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
-                    xdef = globals.graphs_bar_x_functions[xind]
-                    ydef = globals.graphs_y_functions[yind]
-
-                    graph_remove_plots_form = GraphRemovePlotForm([(ydef[0], 0)], request.POST)
-
-                    fig = plt.figure(figsize=(13, 8))
-                    xfun = xdef[1]
-                    res = xfun(results,ydef)
-                    data = zip(*res)
-                    #enum = enumerate(data[0])
-                    #zenum = zip(*enum)
-                    #nums = zenum[0]
-                    #lbls = zenum[1]
-                    def dmap(x):
-                        if not x:
-                            return 0.0
-                        else:
-                            return x
-                    #plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
-                    #plt.pie(data[1], labels=data[0])
-                    patches, texts = plt.pie(data[1], radius=0.5)
-                    # Sort labels by percentage.
-                    total_sum = sum(data[1])
-                    labels = [u"{0} - {1:1.2f} %".format(i,100.0 * j / total_sum) for i,j in zip(data[0], data[1])]
-                    patches, labels, dummy = zip(*sorted(zip(patches, labels, data[1]), key=lambda x: x[2], reverse=True))
-                    plt.legend(patches, labels, loc='left center', bbox_to_anchor=(0.25, 1.1), fontsize=8)
-                    #plt.tight_layout()
-                    #plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
+                    graph_data[ydef[0]] = xfun(results, ydef)
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1286,6 +1211,9 @@ def search(request):
                                                        int(voyage_span_first_year),
                                                        int(voyage_span_last_year))
 
+            if request.POST is not None and "download" in request.POST:
+                return download_xls([[("Year", 1), (timeline_selected_tuple[1], 1)]], timeline_data)
+
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
                 # Include extra dict if exists
@@ -1314,7 +1242,7 @@ def search(request):
                     map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
 
             all_voyages = VoyageManager.cache()
-            for pk in results.values_list('pk', flat=True):
+            for pk in results.values_list('pk', flat=True).load_all():
                 voyage = all_voyages[int(pk)]
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
@@ -1398,6 +1326,7 @@ def search(request):
                    'graph_remove_plots_form': graph_remove_plots_form,
                    'graphs_tab': graphs_tab,
                    'graphs_bar_select_form': graphs_bar_select_form,
+                   'graph_data': graph_data,
                    'timeline_data': timeline_data,
                    'timeline_form': timeline_form,
                    'timeline_chart_settings': timeline_chart_settings,
@@ -2255,3 +2184,33 @@ def remove_empty_columns(index, row_list, collabels, col_totals):
                     val += value[1]
 
     remove_empty_columns(index+1, row_list, collabels, col_totals)
+
+def get_permanent_link(request):
+    """
+    Obtain a permanent link for the current search query.
+    :param request: The request containing the search quer
+    :param request: The request containing the search query.
+    :return: A permanent URL link for that exact query.
+    """
+    from voyages.apps.common.models import SavedQuery
+    saved_query = SavedQuery()
+    return saved_query.get_link(request, 'restore_v_permalink')
+
+def restore_permalink(request, link_id):
+    """
+    Fetch the query corresponding to the link id and redirect to the
+    search results of that query.
+    :param request: web request
+    :param link_id: the id of the permanent link
+    :return: a Redirect to the Voyages search page after setting the session POST data to match the permalink
+    or an Http404 error if the link is not found.
+    """
+    from voyages.apps.common.models import SavedQuery
+    return SavedQuery.restore_link(link_id, request.session, 'voyages_post_data', 'voyage:search')
+
+def debug_permalink(request, link_id):
+    from voyages.apps.common.models import SavedQuery
+    from django.shortcuts import get_object_or_404
+    from django.http import HttpResponse
+    permalink = get_object_or_404(SavedQuery, pk=link_id)
+    return HttpResponse(permalink.query, mimetype='text/plain')
