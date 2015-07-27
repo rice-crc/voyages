@@ -832,7 +832,7 @@ graphs_bar_x_functions = [('Flag*', make_x_bar_fun('var_imputed_nationality', ls
                           ('Broad region of slave landing*', make_x_bar_fun('var_imp_principal_broad_region_disembark', table=models.BroadRegion, tablelblr=lambda x: x.broad_region)),
                           ('Place where voyage ended', make_x_bar_fun('var_place_voyage_ended', table=models.Place, tablelblr=placelblr)),
                           ('Region where voyage ended', make_x_bar_fun('var_region_voyage_ended', table=models.Region, tablelblr=regionlblr)),
-                          ('Month voyage began', make_x_bar_month_fun('var_voyage_bagan')),
+                          ('Month voyage began', make_x_bar_month_fun('var_voyage_began')),
                           ('Month trade began in Africa', make_x_bar_month_fun('var_slave_purchase_began')),
                           ('Month vessel departed Africa', make_x_bar_month_fun('var_date_departed_africa')),
                           ('Month vessel arrived with slaves', make_x_bar_month_fun('var_first_dis_of_slaves')),

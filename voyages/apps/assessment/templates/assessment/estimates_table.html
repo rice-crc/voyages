@@ -5,24 +5,6 @@
     <h1>Table</h1>
 
     <div class="estimates-table-options">
-        <!--
-        <table style="border-collapse: collapse;">
-            <tbody>
-            {% for field in table_form %}
-            <tr>
-                <td><b> {{ field.label }}: </b></td>
-                <td> {% for i in field %} {{ i }} {% endfor %}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="{% trans 'Show' %}" name="buttonShow"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        -->
         <ul class="estimates-table-form">
             {{ table_form.as_ul }}
         </ul>
@@ -80,7 +62,7 @@
                     {% endwith %}
                 </tfoot>
             </table>
-            <p>
+            <p style="margin-top: 30px;">
                 <input type="submit" name="download" value="{% trans 'Download table' %}"/>
             </p>
         </div>
@@ -105,6 +87,14 @@
             var index = $(this).prevAll().length;
             $('#estimates-table tr').find(':nth-child(' + (index + 1) + ')').filter("[name!='header']").removeClass('highlight-col');
         });
+        var sizeHelper = function() {
+            console.log('hello');
+            var h = $('#inner-main-table_wrapper').height();
+            $(".DTFC_LeftBodyWrapper").get(0).style.height = h + "px";
+            var wrapper = $('#main-table-wrapper');
+            wrapper.get(0).style.height = (h + 60) + "px";
+            console.log('done');
+        };
         var table = $('#estimates-table').dataTable({
             "autoWidth": false,
             "scrollX": true,
@@ -112,6 +102,6 @@
             "bPaginate": {{ rows|length }} > 100,
         });
         new $.fn.dataTable.FixedColumns( table );
-        $('#main-table_wrapper').height($('#inner-main-table_wrapper').height());
+        //setTimeout(sizeHelper, 2000);
     </script>
 </div>

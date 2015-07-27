@@ -773,13 +773,17 @@ FixedColumns.prototype = /** @lends FixedColumns.prototype */{
 		{
 			oGrid.left.wrapper.style.width = iLeftWidth+"px";
 			oGrid.left.wrapper.style.height = "1px";
-			oGrid.left.body.style.height = iBodyHeight+"px";
+			oGrid.left.body.style.height = iFullHeight+"px";
 			if ( oGrid.left.foot ) {
 				oGrid.left.foot.style.top = (oOverflow.x ? oOverflow.bar : 0)+"px"; // shift footer for scrollbar
 			}
 
 			scrollbarAdjust( oGrid.left.liner, iLeftWidth );
-			oGrid.left.liner.style.height = iBodyHeight+"px";
+			oGrid.left.liner.style.height = iFullHeight+"px";
+			var container = $('#main-table-wrapper');
+			if (container) {
+				container.get(0).style.height = (iFullHeight + 75) +"px";
+			}
 		}
 
 		if ( this.s.iRightColumns > 0 )

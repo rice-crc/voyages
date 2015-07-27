@@ -13,12 +13,15 @@ admin.autodiscover()
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
 from sitemap import StaticSitemap, ViewSitemap
 
+
 urlpatterns = patterns('',
     # Homepage:
     #url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
     url(r'^$', include('voyages.apps.static_content.urls', namespace='static_content')),
     # Short permalink
-    url(r'^a/(?P<link_id>\w+)$', 'voyages.apps.assessment.views.restore_permalink', name='restore permalink'),
+    url(r'^estimates/(?P<link_id>\w+)$', 'voyages.apps.assessment.views.restore_permalink', name='restore_e_permalink'),
+    url(r'^voyages/(?P<link_id>\w+)$', 'voyages.apps.voyage.views.restore_permalink', name='restore_v_permalink'),
+
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),
     url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='assessment')),
@@ -34,7 +37,6 @@ urlpatterns = patterns('',
     # password rest urls
     url(r'^password/', include('password_reset.urls')),
 )
-
 # XML generated sitemap
 sitemaps = {
     'staticpages' : StaticSitemap(urlpatterns),

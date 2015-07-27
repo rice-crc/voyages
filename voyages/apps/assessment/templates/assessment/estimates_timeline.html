@@ -109,8 +109,6 @@ var layer = svg.selectAll(".layer")
     .attr("class", "layer")
     .style("fill", function(d, i) { return color[i]; });
 
-var lastMouseOver = null;
-
 function mouseover(d) {
     var historical = '';
     if (events && events[d.x.toString()]) {

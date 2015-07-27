@@ -433,7 +433,7 @@
   </tbody>
   </table>
 
-  <p style="font-style: italic;margin: 10px 10px 0px 10px;">For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded. When users cite any number, they are advised to round it to the nearest hundred.</p>
+  <p style="font-style: italic;margin: 10px 10px 0px 10px;">For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred.</p>
   <div id="dialog" title="Dialog Title" style="display:none;">
     <h1>URL link has been created</h1>
     <hr />
@@ -476,6 +476,7 @@
       helper('submit_year');
       helper('submit_nation');
       helper('submit_regions');
+      helper('table_options');
       $('form').submit();
       return false;
     }
