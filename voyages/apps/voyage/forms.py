@@ -229,13 +229,6 @@ class TableSelectionForm(forms.Form):
     cells.initial = [cellchoices[1][0]]
     omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=True)
 
-class GraphXYSelectionForm(forms.Form):
-    lmbd = lambda x: (str(x[0]), x[1][0])
-    xchoices = map(lmbd, enumerate(globals.graphs_x_functions))
-    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-    xyxselect = forms.ChoiceField(label='X axis', choices=xchoices)
-    xyyselect = forms.ChoiceField(label='Y axis', choices=ychoices)
-
 class GraphRemovePlotForm(forms.Form):
     # Creates a list of boolean fields for each tuple in the list, (description, id)
     def __init__(self, lst, *args, **kwargs):
@@ -251,12 +244,19 @@ class GraphRemovePlotForm(forms.Form):
         return result
 
 
-class GraphBarSelectionForm(forms.Form):
-    lmbd = lambda x: (str(x[0]), x[1][0])
-    xchoices = map(lmbd, enumerate(globals.graphs_bar_x_functions))
-    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-    barxselect = forms.ChoiceField(label='X axis', choices=xchoices)
-    baryselect = forms.ChoiceField(label='Y axis', choices=ychoices)
+class GraphSelectionForm(forms.Form):
+    def __init__(self,
+                 xfunctions=globals.graphs_bar_x_functions,
+                 xfield_label='X axis',
+                 yfield_label='Y axis',
+                 *args,
+                 **kwargs):
+        super(forms.Form, self).__init__(*args, **kwargs)
+        lmbd = lambda x: (str(x[0]), x[1][0])
+        self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
+        self.ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+        self.fields['xselect'] = forms.ChoiceField(label=xfield_label, choices=self.xchoices)
+        self.fields['yselect'] = forms.ChoiceField(label=yfield_label, choices=self.ychoices)
 
 
 class TimelineVariableForm(forms.Form):

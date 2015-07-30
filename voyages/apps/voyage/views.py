@@ -29,16 +29,18 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
-import matplotlib
-matplotlib.use('Agg')
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.figure import Figure
 from voyages.apps.assessment.globals import get_map_year
-from matplotlib import cm
 from voyages.apps.common.export import download_xls
-import base64
-import StringIO
+
+# Here we enumerate all fields that should be cleared
+# from the session if a reset is required.
+reset_fields = ['voyages_tables_columns', 'voyages_tables_rows',
+               'voyages_tables_cells', 'voyages_tables_omit',
+               'voyage_timeline_form_option', 'selected_graphs_tab',
+               'tab_graphs_bar_defs', 'tab_graphs_lin_defs', 'tab_graphs_pie_defs',
+               'tab_graphs_bar_defs_x_ind', 'tab_graphs_bar_defs_y_ind',
+               'tab_graphs_lin_defs_x_ind', 'tab_graphs_lin_defs_y_ind',
+               'tab_graphs_pie_defs_x_ind', 'tab_graphs_pie_defs_y_ind',]
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -617,8 +619,7 @@ def search(request):
     num_col_labels_total = 1
     num_row_labels = 1
     is_double_fun = False
-    graphs_xy_select_form = None
-    graphs_bar_select_form = None
+    graphs_select_form = None
     graph_data = None
     graphs_tab = None
     graph_remove_plots_form = None
@@ -703,12 +704,9 @@ def search(request):
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
-        request.session['graph_defs'] = []
-        request.session['voyages_tables_columns'] = None
-        request.session['voyages_tables_rows'] = None
-        request.session['voyages_tables_cells'] = None
-        request.session['voyages_tables_omit'] = None
-        request.session['voyage_timeline_form_option'] = None
+        # Clear session keys.
+        for key in reset_fields:
+            request.session.pop(key, None)
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
@@ -1079,107 +1077,63 @@ def search(request):
 
         elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
-            graphs_tab = 'tab_graphs_xy'
-            if submitVal.startswith('tab_graphs_xy') or submitVal == 'tab_graphs':
-                graphs_tab = 'tab_graphs_xy'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'xyxselect' not in pst:
-                    pst['xyxselect'] = '0'
-                if 'xyyselect' not in pst:
-                    pst['xyyselect'] = '0'
-                graphs_xy_select_form = GraphXYSelectionForm(pst, initial={'xyxselect': '0', 'xyyselect': '0'})
-                if graphs_xy_select_form.is_valid():
-                    xind = int(graphs_xy_select_form.cleaned_data['xyxselect'])
-                    yind = int(graphs_xy_select_form.cleaned_data['xyyselect'])
-                    xdef = globals.graphs_x_functions[xind]
-                    ydef = globals.graphs_y_functions[yind]
-                    request.session['graph_xy_defs'] = request.session.get('graph_xy_defs', [])
-                    if submitVal == 'tab_graphs_xy_add':
-                        if (len(request.session['graph_xy_defs']) > 0 and request.session['graph_xy_defs'][-1] != yind) or len(request.session['graph_xy_defs']) == 0:
-                            request.session['graph_xy_defs'].append(yind)
-                    elif submitVal == 'tab_graphs_xy_show':
-                        request.session['graph_xy_defs'] = [yind]
+            # Each tab name is encoded by 3 characters (lin, bar, pie)
+            # representing the types of graphs supported.
+            graphs_tab = submitVal[:len('tab_graphs_???')]
+            if graphs_tab not in ['tab_graphs_lin', 'tab_graphs_bar', 'tab_graphs_pie']:
+                graphs_tab = request.session.get('selected_graphs_tab', 'tab_graphs_lin')
+            request.session['selected_graphs_tab'] = graphs_tab
+            session_defs_key = graphs_tab + '_defs'
+            # Default value for x-axis or session stored value (if any).
+            xind = request.session.get(session_defs_key + '_x_ind', 0)
+            yind = request.session.get(session_defs_key + '_y_ind', 0)
+            # Handle adding a y-function or simply changing the x-function.
+            xfuns = globals.graphs_x_functions if graphs_tab == 'tab_graphs_lin' else \
+                globals.graphs_bar_x_functions
+            graphs_form_params = {'data': request.POST, 'prefix': graphs_tab, 'xfunctions': xfuns}
+            if graphs_tab == 'tab_graphs_pie':
+                graphs_form_params['xfield_label'] = 'Slices'
+                graphs_form_params['yfield_label'] = 'Values'
+            graphs_select_form = GraphSelectionForm(**graphs_form_params)
+            if graphs_select_form.is_valid():
+                # Form is valid and we should use the xy-axes specified by it.
+                xind = int(graphs_select_form.cleaned_data['xselect'])
+                yind = int(graphs_select_form.cleaned_data['yselect'])
+            else:
+                graphs_form_params.pop('data', None)
+                graphs_form_params['initial'] = {'xselect': xind, 'yselect': yind}
+                graphs_select_form = GraphSelectionForm(**graphs_form_params)
+            # Recall y-axes stored in session (if any).
+            y_axes = set(request.session.get(session_defs_key, [yind]))
+            if submitVal.endswith('_add') and yind not in y_axes:
+                y_axes.add(yind)
+            if submitVal.endswith('_show') or graphs_tab == 'tab_graphs_pie':
+                y_axes = set([yind])
 
-                    remove_plots_list = []
-                    for idx, yid in enumerate(request.session['graph_xy_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        ydesc = ydef[0]
-                        remove_plots_list.append((ydesc, idx))
-                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+            # Create form allowing the user to remove selected y-functions.
+            remove_plots_list = []
+            for yid in y_axes:
+                ydef = globals.graphs_y_functions[yid]
+                ydesc = ydef[0]
+                remove_plots_list.append((ydesc, yid))
+            graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
 
-                    if submitVal == 'tab_graphs_xy_remove':
-                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
-                            request.session['graph_xy_defs'].pop(i)
-                            graph_remove_plots_form.fields.pop(str(i))
-                    plt.xlabel(xdef[0])
-                    if len(request.session['graph_xy_defs']) == 1:
-                        plt.ylabel(ydef[0])
-                    else:
-                        plt.ylabel("Values")
-                    fig = plt.figure(1)
-                    for yid in request.session['graph_xy_defs']:
-                        ydef = globals.graphs_y_functions[yid]
-                        xfun = xdef[1]
-                        res = xfun(results,ydef)
-                        res = sorted(res, key=lambda x: x[0])
-                        data = zip(*res)
-                        plt.plot(*data, label=ydef[0])
-                        plt.grid(True)
-                    plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
-            elif submitVal.startswith('tab_graphs_'):
-                graphs_tab = submitVal[:len('tab_graphs_???')]
-                session_defs_key = graphs_tab + '_defs'
-                # Default value for x-axis or session stored value (if any).
-                xind = request.session.get(session_defs_key + '_x_ind', 0)
-                yind = request.session.get(session_defs_key + '_y_ind', 0)
-                # Handle adding a y-function or simply changing the x-function.
-                graphs_bar_select_form = GraphBarSelectionForm(request.POST, prefix=graphs_tab)
-                if graphs_bar_select_form.is_valid():
-                    # Form is valid and we should use the xy-axes specified by it.
-                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
-                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
-                else:
-                    graphs_bar_select_form = GraphBarSelectionForm(prefix=graphs_tab,
-                                                                   initial={'barxselect': xind, 'baryselect': yind})
-                # Recall y-axes stored in session (if any).
-                y_axes = set(request.session.get(session_defs_key, []))
-                if submitVal.endswith('_add') and yind not in y_axes:
-                    y_axes.add(yind)
-                if submitVal.endswith('_show') or graphs_tab == 'tab_graphs_pie':
-                    y_axes = set([yind])
+            # Handle removing a y-function.
+            if submitVal.endswith('_remove'):
+                for yid in graph_remove_plots_form.get_to_del():
+                    y_axes.remove(yid)
+                    graph_remove_plots_form.fields.pop(str(yid))
+            request.session[session_defs_key] = y_axes
+            request.session[session_defs_key + '_x_ind'] = xind
+            request.session[session_defs_key + '_y_ind'] = yind
 
-                # Create form allowing the user to remove selected y-functions.
-                remove_plots_list = []
-                for yid in y_axes:
-                    ydef = globals.graphs_y_functions[yid]
-                    ydesc = ydef[0]
-                    remove_plots_list.append((ydesc, yid))
-                graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
-
-                # Handle removing a y-function.
-                if submitVal.endswith('_remove'):
-                    for yid in graph_remove_plots_form.get_to_del():
-                        y_axes.remove(yid)
-                        graph_remove_plots_form.fields.pop(str(yid))
-                request.session[session_defs_key] = y_axes
-                request.session[session_defs_key + '_x_ind'] = xind
-                request.session[session_defs_key + '_y_ind'] = yind
-
-                # Fetch graph data and pass it to the View template.
-                xdef = globals.graphs_bar_x_functions[xind]
-                xfun = xdef[1]
-                graph_data = {}
-                for yind in y_axes:
-                    ydef = globals.graphs_y_functions[yind]
-                    graph_data[ydef[0]] = xfun(results, ydef)
+            # Fetch graph data and pass it to the View template.
+            xdef = xfuns[xind]
+            xfun = xdef[1]
+            graph_data = {}
+            for yind in y_axes:
+                ydef = globals.graphs_y_functions[yind]
+                graph_data[ydef[0]] = xfun(results, ydef)
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1321,11 +1275,10 @@ def search(request):
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
                    'is_double_fun': is_double_fun,
-                   'graphs_xy_select_form': graphs_xy_select_form,
                    'inline_graph_png': inline_graph_png,
                    'graph_remove_plots_form': graph_remove_plots_form,
                    'graphs_tab': graphs_tab,
-                   'graphs_bar_select_form': graphs_bar_select_form,
+                   'graphs_select_form': graphs_select_form,
                    'graph_data': graph_data,
                    'timeline_data': timeline_data,
                    'timeline_form': timeline_form,

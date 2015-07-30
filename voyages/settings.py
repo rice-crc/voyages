@@ -171,6 +171,8 @@ HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 import sys
 
 # import localsettings
