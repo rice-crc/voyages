@@ -163,6 +163,7 @@ div.estimates-table table.simple-table td.simple-table-col-label {
 
 .col_header {
 	white-space: nowrap;
+	height: 25px;
 }
 
 .paginate_button {

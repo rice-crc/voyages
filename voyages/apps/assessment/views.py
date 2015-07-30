@@ -88,10 +88,12 @@ def get_estimates_timeline(request):
 
     query = data['query']
     data['min_year'] = query['year__gte'] if query['year__gte'] > globals.default_first_year\
-        else globals.default_first_year - 1
+        else globals.default_first_year
     data['max_year'] = query['year__lte'] if query['year__lte'] < globals.default_last_year\
-        else globals.default_last_year + 1
+        else globals.default_last_year
     data['timeline'] = timeline
+    data['min_year'] -= 1
+    data['max_year'] += 1
 
     post = data['post']
     if post is None or "download" not in post:
@@ -229,8 +231,10 @@ def get_estimates_table(request):
     col_header_function = header_functions[col_key_index]
 
     # Order columns and rows by their respective headers.
-    row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_header_function)
-    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=lambda x: x.order_num)
+    default_sort_fun = lambda x: x.order_num
+    row_sort_fun = default_sort_fun if int(row_key_index) < 4 else row_header_function
+    row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_sort_fun)
+    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=default_sort_fun)
 
     # How many cells a single piece of data spans
     # (1 for either embarked or disembarked only and 2 for both).
@@ -325,10 +329,18 @@ def get_estimates_common(request, data):
     post = None
     if request.method == "POST":
         post = request.POST
-    elif request.GET.get("act_as_post") is not None:
-        post = request.GET
 
-    request.session.set_expiry(20 * 60)
+    # Ensure timeout for session manually.
+    # We could have used set_expiry but then we do not get sessions
+    # to automatically expire when browser closes.
+    last_access = request.session.get('estimates_last_access_time', 0.0)
+    import time
+    current_time = time.time()
+    if last_access < (current_time - (20 * 60.0)):
+        request.session.pop("estimates_post_data", None)
+    request.session['estimates_last_access_time'] = current_time
+
+    # Get post from session if this is not a POST request.
     if post is None:
         # If the user had made queries before during this session, recover the state here.
         post = request.session.get("estimates_post_data")

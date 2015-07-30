@@ -93,15 +93,14 @@
             $(".DTFC_LeftBodyWrapper").get(0).style.height = h + "px";
             var wrapper = $('#main-table-wrapper');
             wrapper.get(0).style.height = (h + 60) + "px";
-            console.log('done');
         };
         var table = $('#estimates-table').dataTable({
-            "autoWidth": false,
+            "aaSorting": [],
+            "bAutoWidth": false,
             "scrollX": true,
             "bFilter": false,
             "bPaginate": {{ rows|length }} > 100,
         });
         new $.fn.dataTable.FixedColumns( table );
-        //setTimeout(sizeHelper, 2000);
     </script>
 </div>
