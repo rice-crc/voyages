@@ -98,6 +98,9 @@
 			.scale(x)
 			.orient("bottom")
     		.tickSize(-height);
+		{% if graph_xfun_index == 0 %}
+			xAxis = xAxis.tickFormat(function(d, i) { return d.toString(); });
+		{% endif %}
 		var yAxis = d3.svg.axis()
 			.scale(y)
 			.orient("left")
