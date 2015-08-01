@@ -44,10 +44,13 @@
         {% if tab == 'map' %}
             {% with itinerary=voyage.object.voyage_itinerary numbers=voyage.object.voyage_slaves_numbers %}
             <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+            <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+            <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
             <div style="display:table-row; height:100%">
                 <div id="map" style="width: 100%;height: 100%;position: relative; min-height: 500px;"></div>
             </div>
             <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+            <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
             <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
             <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
             <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>

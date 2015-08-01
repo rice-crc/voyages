@@ -50,6 +50,13 @@ function Flow(source, destination, volume, netVolume, initial, terminal, path) {
 	this.initial = initial || false;
 	this.terminal = terminal || false;
 	this.path = path || [ source, destination ];
+
+	if (source == null) {
+		console.log('source should not be null!');
+	}
+	if (destination == null) {
+		console.log('destination should not be null!');
+	}
 }
 
 /*!
@@ -57,6 +64,8 @@ function Flow(source, destination, volume, netVolume, initial, terminal, path) {
  *  identifying what they are.
  */
 function LocationIndex() {
+	this.locationType = 'port';
+
 	this.add = function(loc, label) {
 		var key = voyagesMap._latLngEncode(loc);
 		if (!this.hasOwnProperty(key)) {
@@ -71,9 +80,10 @@ function LocationIndex() {
 		for (var key in this) {
 			var col = this[key];
 			if (col.length == 1) {
-				result[key] = "port: " + col[0];
+				result[key] = "<strong>" + this.locationType + ":</strong> " + col[0];
 			} else {
-				result[key] = "ports: " + Array.prototype.join.call(col, ", ");
+				result[key] = "<strong>" + this.locationType + "s:</strong> " +
+					'<ul><li>' + Array.prototype.join.call(col, "</li><li>") + '</li></ul>';
 			}
 		}
 		return result;
@@ -305,45 +315,93 @@ var voyagesMap = {
 	setNetworkFlow: function(ports, flows) {
 		this.clearNetwork();
 		var cache = { };
+		var locationTypes = [ 'broad region', 'region', 'port' ];
 		var self = this;
-		var namedPointToMarker = function(markers, np) {
-			var marker = new L.Marker(np.latLng, {
-			    icon: self._icons[np.nodeType],
-			    title: np.name
-            });
-            markers[self._latLngEncode(np.latLng)] = marker;
-            return marker;
-		};
 		var generateClusterFlow = function() {
-			var level = self.zoomToDetailLevel(self._map.getZoom());
-		    if (!self.__cache[level]) {
+			var zoomLevel = self._map.getZoom();
+		    if (!self.__cache[zoomLevel]) {
 		        // Since this is potentially costly, we cache the
 		        // cluster flow according to detail levels for reuse.
+		        var markers = [ ];
+		        var uniqueMarkerCodes = { };
+				var namedPointToMarker = function(np) {
+					var code = self._latLngEncode(np.latLng);
+					if (!uniqueMarkerCodes.hasOwnProperty(code)) {
+						var marker = new L.Marker(np.latLng, {
+							icon: self._icons[np.nodeType],
+							title: np.name
+						});
+						markers.push(marker);
+						uniqueMarkerCodes[code] = marker;
+						return marker;
+					} else {
+						return uniqueMarkerCodes[code];
+					}
+				};
+				var detailLevel = self.zoomToDetailLevel(zoomLevel);
                 var locations = new LocationIndex();
-                var clusterFlow = [ ];
-                var markers = { };
+                locations.locationType = locationTypes[detailLevel];
+                var auxFlowData = [ ];
                 for (var i = 0; i < flows.length; ++i) {
                     var flow = flows[i];
-                    var source = ports[flow.source].getNamedPoint(level);
-                    var destination = ports[flow.destination].getNamedPoint(level);
-                    namedPointToMarker(markers, source);
-                    namedPointToMarker(markers, destination);
+                    var source = ports[flow.source].getNamedPoint(detailLevel);
+                    var destination = ports[flow.destination].getNamedPoint(detailLevel);
+                    var markerSource = namedPointToMarker(source);
+                    var markerDest = namedPointToMarker(destination);
+                    markerSource.name = source.name;
+                    markerDest.name = destination.name;
                     locations.add(source.latLng, source.name);
                     locations.add(destination.latLng, destination.name);
-                    clusterFlow.push(new Flow(source.latLng, destination.latLng, flow.volume, flow.netVolume));
+                    auxFlowData.push({ s: markerSource, d: markerDest, f: flow });
                 }
-                var network = self._totalNetworkFlow(clusterFlow);
-                self.__cache[level] = function() {
+                // Create cluster group object and add markers in bulk.
+                // TODO: custom cluster marker with list of ports/regions inside.
+		        var clusterGroup = L.markerClusterGroup({/*
+					iconCreateFunction: function (cluster) {
+						var markers = cluster.getAllChildMarkers();
+						var names = '';
+						for (var i = 0; i < markers.length; i++) {
+							names += markers[i] + '<br/>';
+						}
+						return L.divIcon({
+							html: '<span title="' + names + '">' + markers.length + '</span>',
+							className: 'cluster',
+							iconSize: L.point(40, 40)
+						});
+					},*/
+					disableClusteringAtZoom: 8,
+				});
+				clusterGroup.addLayers(markers);
+				// Compute cluster flow and network.
+                var extractLatLng = function(p) {
+					var pos = clusterGroup.getVisibleParent(p);
+					if (pos && pos != p) {
+						var clusterPos = pos.getLatLng();
+						locations.add(clusterPos, p.name);
+						return clusterPos;
+					}
+                    return p.getLatLng();
+                };
+				self.addLayer(clusterGroup);
+				self._networkLayers.push(clusterGroup);
+				var clusterFlow = [ ];
+				for (var i = 0; i < auxFlowData.length; ++i) {
+					var x = auxFlowData[i];
+					var source = extractLatLng(x.s);
+					var destination = extractLatLng(x.d);
+					if (source.lat == destination.lat && source.lng == destination.lng) continue;
+					var flow = new Flow(source, destination, x.f.volume, x.f.netVolume);
+					clusterFlow.push(flow);
+				}
+				var network = self._totalNetworkFlow(clusterFlow);
+                self.__cache[zoomLevel] = function() {
+					self.addLayer(clusterGroup);
+					self._networkLayers.push(clusterGroup);
                     self._internalDraw(network, locations.names());
-                    for (var key in markers) {
-                        var marker = markers[key];
-                        self.addLayer(marker);
-                        self._networkLayers.push(marker);
-                    }
                 };
 			}
             self.clearNetwork();
-            self.__cache[level]();
+            self.__cache[zoomLevel]();
 		};
 		this.draw = generateClusterFlow;
 		this.draw();
@@ -521,9 +579,12 @@ var voyagesMap = {
 			var popup = null;
 			var sourceName = locations[this._latLngEncode(flow.path[0])];
 			var destinationName = locations[this._latLngEncode(flow.path[flow.path.length - 1])];
-			var numbersInfo = 'Embarked: ' + flow.volume + '. Disembarked: ' + flow.netVolume + '.';
+			var numbersInfo = '<br /><strong>Embarked: </strong>' +
+			 	flow.volume.toLocaleString() +
+			 	'. <strong>Disembarked: </strong>' +
+			 	flow.netVolume.toLocaleString() + '.';
 			if (flow.initial) {
-				popup = 'Source ' + sourceName + '<br>Outbound traffic. ' + numbersInfo;
+				popup = '<strong>Source </strong>' + sourceName + '<br /><strong>Outbound traffic.</strong>' + numbersInfo;
 			}
 			if (flow.terminal) {
 				// Trim polyline and apply arrow symbol to a virtual 
@@ -556,7 +617,8 @@ var voyagesMap = {
 				arrowHead.setPatterns([
 					{ offset: '100%', repeat: 0, symbol: arrowSymbol}
 				]);
-				popup = 'Destination ' + destinationName + '<br>Inbound traffic. ' + numbersInfo;
+				popup = '<strong>Destination </strong>' + destinationName +
+				 '<br /><strong>Inbound traffic.</strong>' + numbersInfo;
 			}
 			if (flow.terminal || flow.initial) {
 				line.on('mouseover', function() {
@@ -567,7 +629,8 @@ var voyagesMap = {
 				});
 			}
 			if (flow.initial && flow.terminal) {
-				popup = 'Traffic from ' + sourceName + ' to ' + destinationName + '. ' + numbersInfo;
+				popup = '<strong>Traffic from </strong>' + sourceName + ' <strong>to</strong> ' +
+					destinationName + '.<br />' + numbersInfo;
 			}
 			if (popup) {
 				line.bindPopup(popup);

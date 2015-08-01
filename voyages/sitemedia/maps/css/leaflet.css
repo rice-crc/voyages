@@ -386,6 +386,7 @@
 .leaflet-popup {
 	position: absolute;
 	text-align: center;
+	opacity: 0.75 !important;
 	}
 .leaflet-popup-content-wrapper {
 	padding: 1px;

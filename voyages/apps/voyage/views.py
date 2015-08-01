@@ -621,6 +621,7 @@ def search(request):
     is_double_fun = False
     graphs_select_form = None
     graph_data = None
+    graph_xfun_index = None
     graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
@@ -1107,7 +1108,7 @@ def search(request):
             y_axes = set(request.session.get(session_defs_key, [yind]))
             if submitVal.endswith('_add') and yind not in y_axes:
                 y_axes.add(yind)
-            if submitVal.endswith('_show') or graphs_tab == 'tab_graphs_pie':
+            if (submitVal.endswith('_show') and len(y_axes) == 0) or graphs_tab == 'tab_graphs_pie':
                 y_axes = set([yind])
 
             # Create form allowing the user to remove selected y-functions.
@@ -1128,12 +1129,14 @@ def search(request):
             request.session[session_defs_key + '_y_ind'] = yind
 
             # Fetch graph data and pass it to the View template.
+            graph_xfun_index = xind
             xdef = xfuns[xind]
             xfun = xdef[1]
             graph_data = {}
             for yind in y_axes:
                 ydef = globals.graphs_y_functions[yind]
-                graph_data[ydef[0]] = xfun(results, ydef)
+                dataset = [t for t in xfun(results, ydef) if t[1] is not None and t[1] != 0]
+                graph_data[ydef[0]] = dataset
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1277,6 +1280,7 @@ def search(request):
                    'is_double_fun': is_double_fun,
                    'inline_graph_png': inline_graph_png,
                    'graph_remove_plots_form': graph_remove_plots_form,
+                   'graph_xfun_index': graph_xfun_index,
                    'graphs_tab': graphs_tab,
                    'graphs_select_form': graphs_select_form,
                    'graph_data': graph_data,
