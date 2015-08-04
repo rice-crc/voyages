@@ -1,8 +1,10 @@
-def download_xls(header_rows, data_set, header_col_offset=0):
+def download_xls(header_rows, data_set, row_header_columns=[]):
     """
     Generates an XLS file with the given data.
     :param header_rows: An array of header rows, with each row being an array of pairs (header label, column span)
     :param data_set: Tabular data in the format [[r_1c_1, r_1c_2, ..., r_1c_N], ..., [r_Mc_1, r_Mc_2, ..., r_Mc_N]]
+    :param row_header_columns: a collection of columns that form the row headers, each cell being a pair
+                               (value, rowspan)
     :return: An HttpResponse containing the XLS file.
     """
     import xlwt
@@ -19,7 +21,7 @@ def download_xls(header_rows, data_set, header_col_offset=0):
     # Write headers.
     row_index = 0
     for row in header_rows:
-        col_index = header_col_offset
+        col_index = len(row_header_columns)
         for pair in row:
             ws.write(row_index, col_index, pair[0], header_style)
             if pair[1] > 1:
@@ -27,11 +29,27 @@ def download_xls(header_rows, data_set, header_col_offset=0):
             col_index += pair[1]
         row_index += 1
 
+    # Helper to keep track of header row column indices.
+    row_header_data = []
+    for rhc in row_header_columns:
+        sparse_column = {}
+        row_header_index = row_index
+        for cell in rhc:
+            sparse_column[row_header_index] = cell
+            row_header_index += cell[1]
+        row_header_data.append(sparse_column)
     # Write tabular data.
     for row in data_set:
         col_index = 0
+        for rhd in row_header_data:
+            if row_index in rhd:
+                pair = rhd[row_index]
+                ws.write(row_index, col_index, pair[0], header_style)
+                if pair[1] > 1:
+                    ws.merge(row_index, row_index + pair[1] - 1, col_index, col_index)
+            col_index += 1
         for cell in row:
-            ws.write(row_index, col_index, cell, number_style if col_index > 0 else header_style)
+            ws.write(row_index, col_index, cell, number_style)
             col_index += 1
         row_index += 1
 

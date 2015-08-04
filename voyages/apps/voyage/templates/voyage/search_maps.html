@@ -20,6 +20,10 @@
         setPathOpacity(0.75);
     $( document ).ready(function() {
         var animate = true;
+        var onCompleted = function(){
+                animate = false;
+                $("#loading").hide();
+             };
         $.ajax({
              type: "POST",
              url: $("#form").attr('action'),
@@ -29,7 +33,8 @@
                 voyagesMap.setNetworkFlow(ports, flows);
              },
              error: function(jqXHR, textStatus, errorThrown) {
-                alert('Failed to load map data!');
+                onCompleted();
+                console.log('Failed to load map data!');
              },
              beforeSend:function(){
                 animate = true;
@@ -45,10 +50,7 @@
                 };
                 loop();
              },
-             complete:function(){
-                animate = false;
-                $("#loading").hide();
-             }
+             complete: onCompleted
         });
     });
 </script>

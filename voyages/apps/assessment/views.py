@@ -240,18 +240,36 @@ def get_estimates_table(request):
     # (1 for either embarked or disembarked only and 2 for both).
     cell_span = 2 if cell_key_index == '0' else 1
 
+    def specific_region_grouping(original_set, header_list, span_multiplier=1):
+        """
+        Helper function that allows grouping column or row headers when the headers
+        are composed of Area and Region.
+        :param original_set - the original set of columns or rows.
+        :param header_list - the list of (row or column) headers that will be appended by area headers.
+        :param span_multiplier - a multiplicity factor for the columnspan or rowspan of each cell.
+        :return: original_set sorted according to area.
+        """
+        key_map = lambda region: region.import_area.name
+        modified_set = sorted(original_set, key=lambda region: region.import_area.order_num)
+        from itertools import groupby
+        header_list.append([(k, span_multiplier * sum(1 for x in g)) for k, g in groupby(modified_set, key_map)])
+        return modified_set
+
     # Header rows are encoded as an array of pairs (tuples), where each
     # pair consists of the header's label and column span.
     header_rows = []
     if col_key_index == '3':
-        # Reorder columns by disembarkation area and then group by so that we create a new
-        # header row which groups disembarkation regions by their major area.
-        key_map = lambda region: region.import_area.name
-        column_set = sorted(column_set, key=lambda region: region.import_area.order_num)
-        from itertools import groupby
-        header_rows.append([(k, cell_span * sum(1 for x in g)) for k, g in groupby(column_set, key_map)])
-
+        column_set = specific_region_grouping(column_set, header_rows, cell_span)
+        header_rows[0].append(('', cell_span))
     header_rows.append([(col_header_function(x), cell_span) for x in column_set])
+    header_rows[-1].append(('Totals', cell_span))
+
+    # Generate row headers (left-most columns).
+    row_headers = []
+    if row_key_index == '3':
+        row_set = specific_region_grouping(row_set, row_headers)
+        row_headers[0].append(('', 1))
+    row_headers.append([(row_header_function(r), 1) for r in row_set] + [('Totals', 1)])
 
     cell_display_list = []
     if cell_key_index == '0':
@@ -286,17 +304,24 @@ def get_estimates_table(request):
     # (embarked, disembarked, or both) should appear in the final table.
     full_data_set = [[pair[i] for pair in r for i in cell_display_list]
                      for r in full_data_set]
-    # Append row headers (AKA first column).
-    row_headers = [row_header_function(r) for r in row_set] + ['Totals']
-    full_data_set = [[row_headers[i]] + full_data_set[i] for i in range(len(full_data_set))]
 
     data['rows'] = full_data_set
 
     if post is None or "download" not in post:
+        # Alter row_headers so that it is simpler to use in the template.
+        tmp = [[None for x in row_headers] for r in full_data_set]
+        col_number = 0
+        for row_header_col in row_headers:
+            row_number = 0
+            for cell in row_header_col:
+                tmp[row_number][col_number] = cell
+                row_number += cell[1]
+            col_number += 1
+        data['row_headers'] = tmp
+        data['row_headers_count'] = len(row_headers)
         return render(request, 'assessment/estimates.html', data)
     else:
-        header_rows[-1].append(("Totals", 1))
-        return download_xls(header_rows, full_data_set, 1)
+        return download_xls(header_rows, full_data_set, row_headers)
 
 def get_permanent_link(request):
     """

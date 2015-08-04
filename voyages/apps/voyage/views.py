@@ -1093,7 +1093,7 @@ def search(request):
                 globals.graphs_bar_x_functions
             graphs_form_params = {'data': request.POST, 'prefix': graphs_tab, 'xfunctions': xfuns}
             if graphs_tab == 'tab_graphs_pie':
-                graphs_form_params['xfield_label'] = 'Slices'
+                graphs_form_params['xfield_label'] = 'Sectors'
                 graphs_form_params['yfield_label'] = 'Values'
             graphs_select_form = GraphSelectionForm(**graphs_form_params)
             if graphs_select_form.is_valid():

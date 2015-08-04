@@ -14,53 +14,42 @@
     </div>
 
     <div id="main-table-wrapper" class="estimates-table" style="min-width: 320px; position:relative;min-height:500px;">
-        <div id="inner-main-table_wrapper" style="position:absolute;right:0px;left:0px;top:0px;background-color:white;">
+        <div id="inner-main-table_wrapper">
             <table class="simple-table" id="estimates-table" cellspacing="0" cellpadding="0" border="0">
                 <thead>
                     {% for header_row in header_rows %}
                     <tr name="header">
                         {% if forloop.first %}
-                        <td class="tbl-label col_header" rowspan="{{ header_rows_len }}"></td>
+                        <td class="tbl-label col_header" rowspan="{{ header_rows_len }}" colspan="{{ row_headers_count }}"></td>
                         {% endif %}
                         {% for header_cell in header_row %}
                         <td class="tbl-label col_header" name="header" colspan="{{ header_cell.1 }}">{{ header_cell.0 }}</td>
                         {% endfor %}
-                        {% if forloop.first %}
-                        <td class="tbl-label col_header" name="header" rowspan="{{ totals_header_rows_len }}"
-                            colspan="{{ totals_header_cols_span }}">Totals
-                        </td>
-                        {% endif %}
                     </tr>
                     {% endfor %}
                 </thead>
                 <tbody>
                     {% for row in rows %}
-                        {% if forloop.last == False %}
-                            <tr>
-                                {% for cell in row %}
-                                    {% if forloop.first %}
-                                        <td class="tbl-label row_header" name="header">{{ cell }}</td>
-                                    {% else %}
-                                        <td>{{ cell|intcomma }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                        {% if forloop.last %}
                 </tbody>
                 <tfoot>
-                    {% with row=rows|last %}
+                        {% endif %}
                         <tr>
+                            {% with row_header=row_headers|get_item:forloop.counter0 %}
+                                {% for cell in row_header %}
+                                    {% if cell %}
+                                        <td class="tbl-label row_header" name="header" rowspan="{{ cell.1 }}">{{ cell.0 }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
                             {% for cell in row %}
-                                {% if forloop.first %}
-                                    <td class="tbl-label row_header" name="header">{{ cell }}</td>
-                                {% else %}
-                                    <td>{{ cell|intcomma }}</td>
-                                {% endif %}
+                                <td>{{ cell|intcomma }}</td>
                             {% endfor %}
                         </tr>
-                    {% endwith %}
+                        {% if forloop.last %}
                 </tfoot>
+                        {% endif %}
+                    {% endfor %}
             </table>
             <p style="margin-top: 30px;">
                 <input type="submit" name="download" value="{% trans 'Download table' %}"/>
@@ -69,6 +58,7 @@
     </div>
     <script src="{{ STATIC_URL }}scripts/assessment/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+    /*
         {% for i in totals_header_cols_span|get_range %}
             $('#estimates-table tr td:nth-last-child({{ i|add:"1" }})').filter("[name!='header']").addClass('tbl-total');
         {% endfor %}
@@ -100,5 +90,6 @@
             "bFilter": false,
             "bPaginate": {{ rows|length }} > 100,
         });
+        */
     </script>
 </div>

@@ -355,20 +355,21 @@ var voyagesMap = {
                     auxFlowData.push({ s: markerSource, d: markerDest, f: flow });
                 }
                 // Create cluster group object and add markers in bulk.
-                // TODO: custom cluster marker with list of ports/regions inside.
-		        var clusterGroup = L.markerClusterGroup({/*
+		        var clusterGroup = L.markerClusterGroup({
 					iconCreateFunction: function (cluster) {
 						var markers = cluster.getAllChildMarkers();
-						var names = '';
+						var names = locations.locationType[0].toUpperCase() + locations.locationType.slice(1) + 's ';//'<ul>';
 						for (var i = 0; i < markers.length; i++) {
-							names += markers[i] + '<br/>';
+							names += (i > 0 ? ', ' : '') + markers[i].name;//'<li>' + markers[i].name + '</li>';
 						}
+						//names += '</ul>';
 						return L.divIcon({
-							html: '<span title="' + names + '">' + markers.length + '</span>',
-							className: 'cluster',
+							html: '<div title="' + names + '"><span>' + markers.length + '</span></div>',
+							className: 'leaflet-marker-icon marker-cluster ' +
+								'leaflet-zoom-animated leaflet-clickable cluster-detail' + detailLevel,
 							iconSize: L.point(40, 40)
 						});
-					},*/
+					},
 					disableClusteringAtZoom: 8,
 				});
 				clusterGroup.addLayers(markers);
