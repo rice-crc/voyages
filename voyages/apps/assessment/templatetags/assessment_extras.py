@@ -26,3 +26,14 @@ def get_range(value):
     Instead of 3 one may use the variable set in the views
     """
     return range(value)
+
+
+@register.filter
+def get_item(collection, index):
+    """
+    Filter - returns collection[index].
+    :param lst: the list or dictionary.
+    :param index: the index to access.
+    :return: collection[index].
+    """
+    return collection[index]

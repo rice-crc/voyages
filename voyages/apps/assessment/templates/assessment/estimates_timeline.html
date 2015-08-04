@@ -58,6 +58,9 @@ var stack = d3.layout.stack(),
     layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0, y1: d.y1, y0: d.y0 }; }); })),
     yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
 
+// Swap layers so that embarked stays below in the SVG.
+layers = [layers[1], layers[0]];
+
 var margin = {top: 20, right: 10, bottom: 40, left: 40},
     width = 960 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
@@ -71,12 +74,11 @@ var x = d3.scale.ordinal()
 var xShift = -x({{ min_year }});
 
 var y = d3.scale.linear()
-    .domain([0, yStackMax])
+    .domain([0, yStackMax * 1.1])
     .range([height, 0]);
 
-//var color = ["#004D71", "#009FBC", "rgb(30, 98, 127)"];
-var color = ["#004D71", "#054450", "rgb(30, 98, 127)"];
-
+//var color = ["#004D71", "#054450", "rgb(30, 98, 127)"];
+var color = ["#AFEEEE", "#008080", "rgb(30, 98, 127)"];
 
 var tickSet = [];
 var firstOrdinal = x.domain()[0];
@@ -152,8 +154,7 @@ var rect = layer.selectAll("rect")
 
 rect.transition()
     .attr("y", function(d) { return y(d.y); })
-    .attr("height", function(d) { return y(0) - y(d.y); })
-	.style("fill-opacity", 0.5);
+    .attr("height", function(d) { return y(0) - y(d.y); });
 
 var gx = svg.append("g")
     .attr("class", "x axis")
@@ -195,7 +196,7 @@ legend.selectAll('rect')
       .attr("height", 14)
       .attr('y', margin.top + height + 5)
       .attr('x', function(d, i) { return i * legendWidth; })
-      .style('fill', function(d, i) { return i == 0 ? "#81A1A7" : "#417483"; })
+      .style('fill', function(d, i) { return color[i]; })
       .style('stroke', 'black');
 
 legend.selectAll('text')
