@@ -329,8 +329,15 @@ var voyagesMap = {
 					if (!uniqueMarkerCodes.hasOwnProperty(code)) {
 						var marker = new L.Marker(np.latLng, {
 							icon: self._icons[np.nodeType],
-							title: np.name
+							title: np.name + ' (click for details)'
 						});
+						marker.code = code;
+						marker.outFlowEmbarked = 0;
+						marker.outFlowDisembarked = 0;
+						marker.inFlowEmbarked = 0;
+						marker.inFlowDisembarked = 0;
+						marker.namedPoint = np;
+						marker.name = np.name;
 						markers.push(marker);
 						uniqueMarkerCodes[code] = marker;
 						return marker;
@@ -352,26 +359,80 @@ var voyagesMap = {
                     markerDest.name = destination.name;
                     locations.add(source.latLng, source.name);
                     locations.add(destination.latLng, destination.name);
+                    // Aggregate marker flows.
+                    markerSource.outFlowEmbarked += flow.volume;
+                    markerSource.outFlowDisembarked += flow.netVolume;
+                    markerDest.inFlowEmbarked += flow.volume;
+                    markerDest.inFlowDisembarked += flow.netVolume;
                     auxFlowData.push({ s: markerSource, d: markerDest, f: flow });
                 }
-                // Create cluster group object and add markers in bulk.
+                // Helper function that will create a table with node flow data.
+                var buildAggregateTable = function(rows, totals, footer) {
+                	if (footer) {
+                		footer = '<tfoot>' + footer + '</tfoot>'
+                	}
+                	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
+                	 	'<table class="map_node_aggregate_table">' +
+                		'<thead><tr><th rowspan="2">' + locations.locationType.toUpperCase() +
+                		'</th><th colspan="2" class="inFlow">Inbound</th><th colspan="2" class="outFlow">Outbound</th></tr>' +
+                		'<tr><th class="inFlow">Embarked</th><th class="inFlow">Disembarked</th><th class="outFlow">Embarked</th><th class="outFlow">Disembarked</th></tr></thead>' +
+                		'<tbody><tr>' + rows.join('</tr><tr>') + '</tr></tbody>' + (footer || '') + '</table></div>';
+					// See if we should omit inFlow or outFLow columns.
+					if (totals.inFlowEmbarked == 0 && totals.inFlowDisembarked == 0) {
+						table = table.replace(/inFlow/g, 'zero_value');
+					}
+					if (totals.outFlowEmbarked == 0 && totals.outFlowDisembarked == 0) {
+						table = table.replace(/outFlow/g, 'zero_value');
+					}
+                	return table;
+                }
+                var nodeAggregateInfo = function(marker) {
+                	return '<td><strong>' + marker.name + '</strong></td><td class="number inFlow">' +
+						marker.inFlowEmbarked.toLocaleString() + '</td><td class="number inFlow">' +
+						marker.inFlowDisembarked.toLocaleString() + '</td><td class="number outFlow">' +
+						marker.outFlowEmbarked.toLocaleString() + '</td><td class="number outFlow">' +
+						marker.outFlowDisembarked.toLocaleString() + '</td>';
+                };
+                var popupOptions = { maxWidth: '640px' };
+                for (var code in uniqueMarkerCodes) {
+                	var marker = uniqueMarkerCodes[code];
+                	marker.bindPopup(buildAggregateTable([ nodeAggregateInfo(marker) ], marker), popupOptions);
+                }
+                // Create cluster group object and associated popups.
 		        var clusterGroup = L.markerClusterGroup({
 					iconCreateFunction: function (cluster) {
 						var markers = cluster.getAllChildMarkers();
-						var names = locations.locationType[0].toUpperCase() + locations.locationType.slice(1) + 's ';//'<ul>';
-						for (var i = 0; i < markers.length; i++) {
-							names += (i > 0 ? ', ' : '') + markers[i].name;//'<li>' + markers[i].name + '</li>';
+						markers.sort(function(a, b) {
+							if (a.name < b.name)
+								return -1;
+							if (a.name > b.name)
+								return 1;
+							return 0;
+						});
+						var title = markers.length + ' ' + locations.locationType + 's (click for details)';
+						// Set the popup here.
+						var rows = [ ];
+						var totals = { name: 'Totals', inFlowEmbarked: 0, inFlowDisembarked: 0, outFlowEmbarked: 0, outFlowDisembarked: 0 };
+						for (var i = 0; i < markers.length; ++i) {
+							var marker = markers[i];
+							rows.push(nodeAggregateInfo(marker));
+							totals.inFlowEmbarked += marker.inFlowEmbarked;
+							totals.inFlowDisembarked += marker.inFlowDisembarked;
+							totals.outFlowEmbarked += marker.outFlowEmbarked;
+							totals.outFlowDisembarked += marker.outFlowDisembarked;
 						}
-						//names += '</ul>';
+						cluster.bindPopup(buildAggregateTable(rows, totals, nodeAggregateInfo(totals)), popupOptions);
 						return L.divIcon({
-							html: '<div title="' + names + '"><span>' + markers.length + '</span></div>',
+							html: '<div title="' + title + '"><span>' + markers.length + '</span></div>',
 							className: 'leaflet-marker-icon marker-cluster ' +
 								'leaflet-zoom-animated leaflet-clickable cluster-detail' + detailLevel,
 							iconSize: L.point(40, 40)
 						});
 					},
 					disableClusteringAtZoom: 8,
+					zoomToBoundsOnClick: false,
 				});
+				// Add all markers in bulk.
 				clusterGroup.addLayers(markers);
 				// Compute cluster flow and network.
                 var extractLatLng = function(p) {

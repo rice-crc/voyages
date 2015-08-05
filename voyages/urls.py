@@ -34,6 +34,9 @@ urlpatterns = patterns('',
     (r'^search/', include('haystack.urls', namespace='search')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
 
+    # Handle language changes
+    url(r'^setlanguage/(?P<lang_code>\w+)$', 'voyages.apps.common.views.set_language', name='set_lang'),
+
     # password rest urls
     url(r'^password/', include('password_reset.urls')),
 )

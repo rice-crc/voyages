@@ -2,7 +2,7 @@
 <!--  Contains the navigation menu in a nested-unordered-list hierarchy 
 	- links are managed by the navigation_topbar.js menu -->
 <ul id="toplinks">
-	<li id="block01">
+	<li id="block01" class="nav_block">
 		<!--Top is the main link  -->
 		<a href="{% url 'voyage:index' %}" id="voyage">{% trans "Voyages Database" %}</a>
 		<div class="linkbox">
@@ -24,7 +24,7 @@
 		</div>
 	</li>
 
-	<li id="block02">
+	<li id="block02" class="nav_block">
 		<a href="{% url 'assessment:index' %}" id="assessment">{% trans "Assessing the Slave Trade" %}</a>
 		<div class="linkbox">
 			<ul>
@@ -42,7 +42,7 @@
 		</div>
 	</li>
 
-	<li id="block03">
+	<li id="block03" class="nav_block">
 		<a href="{% url 'resources:index' %}" id="resources">{% trans "Resources" %}</a>
 		<div class="linkbox">
 			<ul>
@@ -56,7 +56,7 @@
 		</div>
 	</li>
 
-	<li id="block04">
+	<li id="block04" class="nav_block">
 		<a href="{% url 'education:index' %}" id="education">{% trans "Educational Materials" %}</a>
 		<div class="linkbox">
 			<ul>
@@ -71,7 +71,7 @@
 		</div>
 	</li>
 
-	<li id="block05">
+	<li id="block05" class="nav_block">
 		<a href="{% url 'about:index' %}" id="about">{% trans "About the Project" %}</a>
 		<div class="linkbox">
 			<ul>
@@ -96,4 +96,27 @@
 			</ul>
 		</div>
 	</li>
+
+	<li id="block06" class="nav_block">
+		<a href="#" id="language">{% trans "Language" %}</a>
+		<div class="linkbox">
+			<ul>
+				{% get_current_language as LANGUAGE_CODE %}
+				{% for lang in LANGUAGES %}
+					<li><a class="language_link" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang.1 }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</li>
 </ul>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.language_link').click(function(e) {
+			e.preventDefault();
+			$.ajax($(this).attr('href'))
+				.done(function() {
+					window.location.reload();
+				});
+		});
+	});
+</script>

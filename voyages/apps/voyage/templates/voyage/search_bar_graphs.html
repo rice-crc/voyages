@@ -60,6 +60,8 @@
 	<div id="graphContainer"></div>
 	<script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
 	<script type="text/javascript">
+	{% load l10n %}
+	{% localize off %}
 		var None = 0;
 		var series = {
 		{% for yid, series in graph_data.items %}
@@ -193,6 +195,7 @@
             .attr("y", function(d) { return y(d.value); })
             .attr("height", function(d) { return height - y(d.value); })
             .style("fill", function(d) { return color(d.series); });
+	{% endlocalize %}
 	</script>
   </div>
 </div>

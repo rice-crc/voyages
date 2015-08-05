@@ -142,15 +142,12 @@ INSTALLED_APPS = (
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
-gettext = lambda s: s
-
 LANGUAGE_CODE='en'
+from django.utils.translation import ugettext_lazy as _
 
 LANGUAGES = (
-    ('en', gettext('English')),
-    ('de', gettext('German')),
-    ('fr', gettext('French')),
-    ('es', gettext('Spanish')),
+    ('en', _('English')),
+    ('pt', _('Portuguese')),
 )
 DEFAULT_LANGUAGE = 0
 
