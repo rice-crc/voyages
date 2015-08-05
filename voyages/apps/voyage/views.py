@@ -677,8 +677,9 @@ def search(request):
                 results_per_page_form.fields['option'].initial = request.session.get('results_per_page_choice', '1')
                 results_per_page = dict(results_per_page_form.fields['option'].choices)[request.session.get('results_per_page_choice', '1')]
             qprev = request.session.get('previous_queries', [])
-            var_list = qprev[qnum]
-            qprev.remove(qprev[qnum])
+            if 0 <= qnum < len(qprev):
+                var_list = qprev[qnum]
+                qprev.remove(qprev[qnum])
             request.session['previous_queries'] = qprev
             prev_queries_open = True
         else:
@@ -697,8 +698,8 @@ def search(request):
             form_list.append(form)
         for idx in sorted(to_remove_numbers, reverse=True):
             del form_list[idx]
-        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list['time_span_from_year'],
-                                                           'frame_to_year': var_list['time_span_to_year']})
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list.get('time_span_from_year', voyage_span_first_year),
+                                                           'frame_to_year': var_list.get('time_span_to_year', voyage_span_last_year)})
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None)
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)

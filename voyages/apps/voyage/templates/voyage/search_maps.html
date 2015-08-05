@@ -29,6 +29,7 @@
              url: $("#form").attr('action'),
              data: $("#form").serialize() + '&submitVal=map_ajax',
              success: function(data) {
+                onCompleted();
                 eval(data);
                 voyagesMap.setNetworkFlow(ports, flows);
              },

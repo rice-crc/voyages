@@ -181,3 +181,29 @@ div.left-menu-subtitle {
 html, body {
     height: 100%;
 }
+
+.map_node_aggregate_table {
+	border-collapse: collapse;
+}
+
+.map_node_aggregate_table tr th {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tr td {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tfoot tr td {
+	font-weight: bold;
+}
+
+.map_node_aggregate_table td.number {
+	text-align: right;
+}
+
+.zero_value {
+	display: none;
+}

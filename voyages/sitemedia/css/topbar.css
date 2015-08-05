@@ -46,7 +46,7 @@ html > body #main_nav ul {
 }
 
 #toplinks {
-	width: 700px;
+	width: 780px;
 }
 
 /* Set the lists in horizontal order  */
@@ -73,7 +73,8 @@ html > body #main_nav ul {
 
 /* Link settings for main link */
 #toplinks a {
-	padding: 3px 0 3px 0;
+	padding: 8px;
+	padding-bottom: 18px;
 	color: #fff;
 	display: block;
 	
@@ -111,7 +112,7 @@ html > body #main_nav ul {
 	text-decoration: underline;
 }
 
-#block01 a, #block02 a,#block03 a, #block04 a, #block05 a {
+.nav_block a {
 	font-size: 11pt;
 	font-family: "Times New Roman",Times,FreeSerif,serif;
 	margin-top: 12px;
@@ -148,7 +149,7 @@ html > body #main_nav ul {
 	left: auto;
 }
 
-/* Width of each navigation block */
+/* Width of each navigation block
 #block01, #block05 {
 	
 	width: 18%;
@@ -165,8 +166,8 @@ html > body #main_nav ul {
 #block04 {
 	width: 22%;
 }
-
-#block01 ul li a, #block02 ul li a, #block03 ul li a, #block04 ul li a, #block05 ul li a {
+ */
+.nav_block ul li a {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 8pt;
 	width: 100%;

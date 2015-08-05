@@ -24,6 +24,10 @@
         init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
         setMaxPathWidth(20).
         setPathOpacity(0.75);
+    voyagesMap.zoomToDetailLevel = function(zoom) {
+	    if (zoom <= 6) return 1;
+	    return 2;
+	},
     voyagesMap.setNetworkFlow(ports, flows);
 
     var resizeMap = function() {
