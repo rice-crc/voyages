@@ -239,10 +239,12 @@ var voyagesMap = {
 	 * @param {String} baseMapId - the id of the map being loaded
 	 * @param {Array} routeNodes - an array of LatLng's that are
 	 *        used to route network flows.
-	 * @param markerIcon - object indexing {L.Icon} - each nodeType used
-	 *                     in this map should have a corresponding icon.
+	 * @param {Array} links - an array of links, namely objects having
+	 *                        start/end (indices in routeNodes), and length.
+	 * @param markerIcons - object indexing {L.Icon} - each nodeType used
+	 *                      in this map should have a corresponding icon.
 	 */
-	init: function(baseMapId, mapTilePrefix, routeNodes, markerIcons) {
+	init: function(baseMapId, mapTilePrefix, routeNodes, links, markerIcons) {
 		this.clear();
 		this.loadBaseMap(baseMapId, mapTilePrefix);
 		var filePrefix = mapTilePrefix + 'js/images/marker-icon-';
@@ -252,6 +254,21 @@ var voyagesMap = {
     		    "broadregion" : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
             };
 		this._routeNodes = routeNodes;
+		if (!links) {
+			// Generate implicit links.
+			links = [ ];
+			implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
+			for (var i = 0; i < routeNodes.length; ++i) {
+				for (var j = i + 1; j < routeNodes.length; ++j) {
+					var dist = routeNodes[i].distanceTo(routeNodes[j]);
+					if (dist < implicitNeighborhoodRange) {
+						links.push({ start: i, end: j, length: dist });
+						links.push({ start: j, end: i, length: dist });
+					}
+				}
+			}
+		}
+		this._processLinks(links);
 		return this;
 	},
 
@@ -707,6 +724,20 @@ var voyagesMap = {
 		return latLng.lat + "_" + latLng.lng;
 	},
 
+	/*! Process links and create an array _outLinks on each route node
+	 *  that can be used to access the links coming out of the node.
+	 */
+	_processLinks: function(links) {
+		for (var i = 0; i < this._routeNodes.length; ++i) {
+			this._routeNodes[i]._outLinks = [ ];
+		}
+		for (var i = 0; i < links.length; ++i) {
+			var link = links[i];
+			var start = this._routeNodes[link.start];
+			start._outLinks.push(link);
+		}
+	},
+
 	/*! An implementation of the A* algorithm for path search.
 	 * @param {LatLng} start - the starting point
 	 * @param {LatLng} end - the end point
@@ -714,65 +745,99 @@ var voyagesMap = {
 	 * @returns {Array} An array of LatLng points which is a path from start to end.
 	 */
 	_routeFinder: function(start, end) {
-		implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
-		routeNodes = this._routeNodes;
-		var openSet = [ { "point": start, "pathLength": 0, "parent": null, "isOpen": true } ];
-		var availableNodes = [ ];
-		var distanceToEnd = [ ]; // Cache distance from nodes to endpoint.
-		for (var i = 0; i < routeNodes.length; ++i) {
-		    distanceToEnd[i] = routeNodes[i].distanceTo(end);
-			availableNodes.push( { "key": i, "point": routeNodes[i], "pathLength": null, "parent": null, "isOpen": false } );
-		}
-		distanceToEnd[routeNodes.length] = 0;
-		availableNodes.push( { "key": routeNodes.length, "point": end, "pathLength": null, "parent": null, "isOpen": false } );
-		var heuristicFn = function(a) {
-			return distanceToEnd[a.key] + a.pathLength;
+		// A penalty factor for making a connection between
+		// two nodes that are NOT connected by a link.
+		var PENALTY_MULTIPLIER = 100;
+		// Since the start of the path may not match a route node exactly,
+		// we consider an implicit neighborhood of the start position based
+		// on distance.
+		var implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
+		var penalizedDist = function(dist) {
+			if (dist > implicitNeighborhoodRange) {
+				dist += (dist - implicitNeighborhoodRange) * PENALTY_MULTIPLIER;
+			}
+			return dist;
 		};
-		var solution = null;
-		var PENALTY_MULTIPLIER = 10;
-		while (openSet.length > 0) {
-			// Pick open node with smallest heuristic (estimate) for distance to target.
+		routeNodes = this._routeNodes;
+		var nodes = [ ];
+		var addNode = function(point) {
+		    var item = {
+		    	key: nodes.length,
+		    	point: point,
+		    	pathLength: null,
+		    	parent: null,
+		    	isOpen: false,
+		    	distanceToEnd: point.distanceTo(end)
+			};
+			nodes.push(item);
+			return item;
+		};
+		// Clone start and add simulated links to route nodes.
+		start = new L.LatLng(start.lat, start.lng);
+		start._outLinks = [ ];
+		for (var i = 0; i < routeNodes.length; ++i) {
+			var node = addNode(routeNodes[i]);
+			start._outLinks.push({ start: -1, end: node.key, length: penalizedDist(node.point.distanceTo(start)) });
+		}
+		// The open set represents all nodes that can be reached from
+		// the start position but for which there may be still a shorter
+		// path connecting it to the start. Therefore a node may not be
+		// open for two reasons: either we still have not found a path
+		// from the start point, or we already found the shortest path.
+		var openSet = [ ];
+		// Helper function to update the open set once new paths are found.
+		// Returns true if the new path is shorter than what was previously know (if any).
+		var foundPathToNode = function(current, node, dist) {
+			var result = !node.isOpen || node.pathLength > dist + current.pathLength;
+			if (result) {
+				// Either the node is not on the open set or
+				// we found a shorter path from the start.
+				node.pathLength = dist + current.pathLength;
+				node.parent = current;
+				if (!node.isOpen) {
+					node.isOpen = true;
+					openSet.push(node);
+				}
+			}
+			return result;
+		}
+		var endNode = addNode(end);
+		// Create fast access indices.
+		var isAvailableIndex = [ ];
+		for (var i = 0; i < nodes.length; ++i) {
+			isAvailableIndex.push(true);
+		}
+		// An admissible heuristic is crucial to the correctness of the A* algorithm.
+		var heuristicFn = function(a) {
+			return a.distanceToEnd + a.pathLength;
+		};
+		// Pop the open node with smallest heuristic (estimate) for distance to target.
+		var popOpen = function() {
 			var minIndex = 0;
 			for (var i = 1; i < openSet.length; ++i) {
 			    if (heuristicFn(openSet[i]) < heuristicFn(openSet[minIndex])) minIndex = i;
 			}
-			var current = openSet[minIndex];
-			if (current.point == end) {
-				solution = current;
-				break;
-			}
-			// Remove from open set.
-			current.isOpen = false;
+			var p = openSet[minIndex];
 			openSet.splice(minIndex, 1);
-			var index = availableNodes.indexOf(current);
-			if (index >= 0) {
-				availableNodes.splice(index, 1);
-			}
-            // The distance below is the maximum an available node could be away from the end and still get selected.
-            var largestAcceptableDistance = PENALTY_MULTIPLIER * distanceToEnd[current.key] + current.pathLength;
-			for (var i = 0; i < availableNodes.length; ++i) {
-                var node = availableNodes[i];
-                if (distanceToEnd[node.key] >= largestAcceptableDistance) continue;
-				var dist = node.point.distanceTo(current.point);
-				// If the node is not an implicit neighbor we penalize its
-				// distance. This ensures that long jumps are still available
-				// if we need them, but they will be kept as short as possible.
-				if (dist > implicitNeighborhoodRange) dist += (dist - implicitNeighborhoodRange) * PENALTY_MULTIPLIER;
-				if (!node.isOpen || node.pathLength > dist + current.pathLength) {
-                    // Either the node is not on the open set or
-                    // we found a shorter path from the start.
-					node.pathLength = dist + current.pathLength;
-					node.parent = current;
-					if (!node.isOpen) {
-						node.isOpen = true;
-						openSet.push(node);
-					}
+			p.isOpen = false;
+			isAvailableIndex[p.key] = false;
+			return p;
+		};
+		var current = addNode(start);
+		for (; current.distanceToEnd > 0; current = popOpen()) {
+			var outLinks = current.point._outLinks || [ ];
+			for (var i = 0; i < outLinks.length; ++i) {
+				var link = outLinks[i];
+				if (isAvailableIndex[link.end]) {
+					foundPathToNode(current, nodes[link.end], link.length);
 				}
 			}
+			// Append a penalized direct path to end.
+			foundPathToNode(current, endNode, penalizedDist(current.distanceToEnd));
 		}
 		// Collect coordinates of the optimized path.
 		var result = [ ];
-		var iterator = solution;
+		var iterator = current;
 		while (iterator) {
 			result.unshift(iterator.point);
 			iterator = iterator.parent;

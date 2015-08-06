@@ -587,6 +587,8 @@ def voyage_variables(request, voyage_id):
                    'tab': 'variables',
                    'voyage_id': voyage_id})
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 @gzip_page
 def search(request):
     """
