@@ -15,32 +15,32 @@
 			padding: 0;
 			margin: 0;
 		}
-		
+
 		html, body {
 			height: 100%;
 		}
-		
+
 		input, label, .control {
 			position: relative;
 			vertical-align: middle;
 			margin: 5px;
 		}
-		
+
 		#container {
 			display: table;
 			width: 100%;
 			height: 100%;
 		}
-		
+
 		#container > div {
 			display: table-row;
 			height: 0;
 		}
-		
+
 		#container > div.fill {
 			height: auto;
 		}
-		
+
 		#container > div > div {
 			display: table-cell;
 		}
@@ -51,19 +51,14 @@
 		<!-- START TOOL section -->
 		<div class="header">
 			<div id="controls" style="margin: 5px;">
-				<select id="departure" class="control">
-					<option value>Select origin</option>
-					<option value="luanda">Luanda</option>
-					<option value="mozambique">Mozambique</option>
-					<option value="both">Both</option>
-				</select>
+                <button id="loadFlows">Load Flows</button>
 				<select id="mapId" style="width: 80px;" class="control">
 					<option value>Select historical map</option>
 					<option value="1650" selected>1650</option>
 					<option value="1750">1750</option>
 					<option value="1850">1850</option>
 				</select>
-				<input type="checkbox" id="showMarkersChecker"></input> <label for="showMarkersChecker">Show Markers</label> | 
+				<input type="checkbox" id="showMarkersChecker"></input> <label for="showMarkersChecker">Show Markers</label> |
 				<label>Path opacity: </label>
 				<div class="control" id="slider" style="display: inline-block; width: 200px;"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				| <label>Tools: </label>
@@ -92,16 +87,20 @@
 		</div>
 	</div>
 	<script src="js/leaflet.js"></script>
-	<script src="js/leaflet.markercluster-src.js"></script>
+	<script src="js/leaflet.markercluster.js"></script>
 	<script src="js/leaflet.polylineDecorator.js"></script>
 	<script src="js/routeNodes.js"></script>
 	<script src="js/voyagesMap.js"></script>
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script>
-		voyagesMap.init('1650', routeNodes);
-		
-		// START OF TOOL section: remove when finished.
+	    var queryParams = 'frame_from_year=1514&frame_to_year=1866&basic_list_expanded=true&var_voyage_id-is_shown_field=&var_voyage_id-var_name_field=var_voyage_id&var_voyage_id-options=4&var_voyage_id-lower_bound=&var_voyage_id-upper_bound=&var_voyage_id-threshold=&var_voyage_in_cd_rom-is_shown_field=&var_voyage_in_cd_rom-var_name_field=var_voyage_in_cd_rom&var_ship_name-is_shown_field=&var_ship_name-var_name_field=var_ship_name&var_ship_name-text_search=&var_nationality-is_shown_field=&var_nationality-var_name_field=var_nationality&tmp=&var_imputed_nationality-is_shown_field=&var_imputed_nationality-var_name_field=var_imputed_nationality&tmp=&var_vessel_construction_place-is_shown_field=&var_vessel_construction_place-var_name_field=var_vessel_construction_place&var_year_of_construction-is_shown_field=&var_year_of_construction-var_name_field=var_year_of_construction&var_year_of_construction-options=4&var_year_of_construction-lower_bound=&var_year_of_construction-upper_bound=&var_year_of_construction-threshold=&var_registered_place-is_shown_field=&var_registered_place-var_name_field=var_registered_place&var_registered_year-is_shown_field=&var_registered_year-var_name_field=var_registered_year&var_registered_year-options=4&var_registered_year-lower_bound=&var_registered_year-upper_bound=&var_registered_year-threshold=&var_rig_of_vessel-is_shown_field=&var_rig_of_vessel-var_name_field=var_rig_of_vessel&tmp=&var_tonnage-is_shown_field=&var_tonnage-var_name_field=var_tonnage&var_tonnage-options=4&var_tonnage-lower_bound=&var_tonnage-upper_bound=&var_tonnage-threshold=&var_tonnage_mod-is_shown_field=&var_tonnage_mod-var_name_field=var_tonnage_mod&var_tonnage_mod-options=4&var_tonnage_mod-lower_bound=&var_tonnage_mod-upper_bound=&var_tonnage_mod-threshold=&var_guns_mounted-is_shown_field=&var_guns_mounted-var_name_field=var_guns_mounted&var_guns_mounted-options=4&var_guns_mounted-lower_bound=&var_guns_mounted-upper_bound=&var_guns_mounted-threshold=&var_owner-is_shown_field=&var_owner-var_name_field=var_owner&var_owner-text_search=&var_outcome_voyage-is_shown_field=&var_outcome_voyage-var_name_field=var_outcome_voyage&tmp=&var_outcome_slaves-is_shown_field=&var_outcome_slaves-var_name_field=var_outcome_slaves&tmp=&var_outcome_ship_captured-is_shown_field=&var_outcome_ship_captured-var_name_field=var_outcome_ship_captured&tmp=&var_outcome_owner-is_shown_field=&var_outcome_owner-var_name_field=var_outcome_owner&tmp=&var_resistance-is_shown_field=&var_resistance-var_name_field=var_resistance&tmp=&var_imp_port_voyage_begin-is_shown_field=&var_imp_port_voyage_begin-var_name_field=var_imp_port_voyage_begin&var_first_place_slave_purchase-is_shown_field=&var_first_place_slave_purchase-var_name_field=var_first_place_slave_purchase&var_second_place_slave_purchase-is_shown_field=&var_second_place_slave_purchase-var_name_field=var_second_place_slave_purchase&var_third_place_slave_purchase-is_shown_field=&var_third_place_slave_purchase-var_name_field=var_third_place_slave_purchase&var_imp_principal_place_of_slave_purchase-is_shown_field=&var_imp_principal_place_of_slave_purchase-var_name_field=var_imp_principal_place_of_slave_purchase&var_port_of_call_before_atl_crossing-is_shown_field=&var_port_of_call_before_atl_crossing-var_name_field=var_port_of_call_before_atl_crossing&var_first_landing_place-is_shown_field=&var_first_landing_place-var_name_field=var_first_landing_place&var_second_landing_place-is_shown_field=&var_second_landing_place-var_name_field=var_second_landing_place&var_third_landing_place-is_shown_field=&var_third_landing_place-var_name_field=var_third_landing_place&var_imp_principal_port_slave_dis-is_shown_field=&var_imp_principal_port_slave_dis-var_name_field=var_imp_principal_port_slave_dis&var_place_voyage_ended-is_shown_field=&var_place_voyage_ended-var_name_field=var_place_voyage_ended&var_imp_arrival_at_port_of_dis-is_shown_field=&var_imp_arrival_at_port_of_dis-var_name_field=var_imp_arrival_at_port_of_dis&var_imp_arrival_at_port_of_dis-options=4&var_imp_arrival_at_port_of_dis-lower_bound=&var_imp_arrival_at_port_of_dis-upper_bound=&var_imp_arrival_at_port_of_dis-threshold=&var_voyage_began-is_shown_field=&var_voyage_began-var_name_field=var_voyage_began&var_voyage_began-options=1&var_voyage_began-from_month=01&var_voyage_began-from_year=1514&var_voyage_began-to_month=12&var_voyage_began-to_year=1866&var_voyage_began-threshold_month=MM&var_voyage_began-threshold_year=YYYY&var_voyage_began-months=01&var_voyage_began-months=02&var_voyage_began-months=03&var_voyage_began-months=04&var_voyage_began-months=05&var_voyage_began-months=06&var_voyage_began-months=07&var_voyage_began-months=08&var_voyage_began-months=09&var_voyage_began-months=10&var_voyage_began-months=11&var_voyage_began-months=12&var_slave_purchase_began-is_shown_field=&var_slave_purchase_began-var_name_field=var_slave_purchase_began&var_slave_purchase_began-options=1&var_slave_purchase_began-from_month=01&var_slave_purchase_began-from_year=1514&var_slave_purchase_began-to_month=12&var_slave_purchase_began-to_year=1866&var_slave_purchase_began-threshold_month=MM&var_slave_purchase_began-threshold_year=YYYY&var_slave_purchase_began-months=01&var_slave_purchase_began-months=02&var_slave_purchase_began-months=03&var_slave_purchase_began-months=04&var_slave_purchase_began-months=05&var_slave_purchase_began-months=06&var_slave_purchase_began-months=07&var_slave_purchase_began-months=08&var_slave_purchase_began-months=09&var_slave_purchase_began-months=10&var_slave_purchase_began-months=11&var_slave_purchase_began-months=12&var_date_departed_africa-is_shown_field=&var_date_departed_africa-var_name_field=var_date_departed_africa&var_date_departed_africa-options=1&var_date_departed_africa-from_month=01&var_date_departed_africa-from_year=1514&var_date_departed_africa-to_month=12&var_date_departed_africa-to_year=1866&var_date_departed_africa-threshold_month=MM&var_date_departed_africa-threshold_year=YYYY&var_date_departed_africa-months=01&var_date_departed_africa-months=02&var_date_departed_africa-months=03&var_date_departed_africa-months=04&var_date_departed_africa-months=05&var_date_departed_africa-months=06&var_date_departed_africa-months=07&var_date_departed_africa-months=08&var_date_departed_africa-months=09&var_date_departed_africa-months=10&var_date_departed_africa-months=11&var_date_departed_africa-months=12&var_first_dis_of_slaves-is_shown_field=&var_first_dis_of_slaves-var_name_field=var_first_dis_of_slaves&var_first_dis_of_slaves-options=1&var_first_dis_of_slaves-from_month=01&var_first_dis_of_slaves-from_year=1514&var_first_dis_of_slaves-to_month=12&var_first_dis_of_slaves-to_year=1866&var_first_dis_of_slaves-threshold_month=MM&var_first_dis_of_slaves-threshold_year=YYYY&var_first_dis_of_slaves-months=01&var_first_dis_of_slaves-months=02&var_first_dis_of_slaves-months=03&var_first_dis_of_slaves-months=04&var_first_dis_of_slaves-months=05&var_first_dis_of_slaves-months=06&var_first_dis_of_slaves-months=07&var_first_dis_of_slaves-months=08&var_first_dis_of_slaves-months=09&var_first_dis_of_slaves-months=10&var_first_dis_of_slaves-months=11&var_first_dis_of_slaves-months=12&var_departure_last_place_of_landing-is_shown_field=&var_departure_last_place_of_landing-var_name_field=var_departure_last_place_of_landing&var_departure_last_place_of_landing-options=1&var_departure_last_place_of_landing-from_month=01&var_departure_last_place_of_landing-from_year=1514&var_departure_last_place_of_landing-to_month=12&var_departure_last_place_of_landing-to_year=1866&var_departure_last_place_of_landing-threshold_month=MM&var_departure_last_place_of_landing-threshold_year=YYYY&var_departure_last_place_of_landing-months=01&var_departure_last_place_of_landing-months=02&var_departure_last_place_of_landing-months=03&var_departure_last_place_of_landing-months=04&var_departure_last_place_of_landing-months=05&var_departure_last_place_of_landing-months=06&var_departure_last_place_of_landing-months=07&var_departure_last_place_of_landing-months=08&var_departure_last_place_of_landing-months=09&var_departure_last_place_of_landing-months=10&var_departure_last_place_of_landing-months=11&var_departure_last_place_of_landing-months=12&var_voyage_completed-is_shown_field=&var_voyage_completed-var_name_field=var_voyage_completed&var_voyage_completed-options=1&var_voyage_completed-from_month=01&var_voyage_completed-from_year=1514&var_voyage_completed-to_month=12&var_voyage_completed-to_year=1866&var_voyage_completed-threshold_month=MM&var_voyage_completed-threshold_year=YYYY&var_voyage_completed-months=01&var_voyage_completed-months=02&var_voyage_completed-months=03&var_voyage_completed-months=04&var_voyage_completed-months=05&var_voyage_completed-months=06&var_voyage_completed-months=07&var_voyage_completed-months=08&var_voyage_completed-months=09&var_voyage_completed-months=10&var_voyage_completed-months=11&var_voyage_completed-months=12&var_imp_length_home_to_disembark-is_shown_field=&var_imp_length_home_to_disembark-var_name_field=var_imp_length_home_to_disembark&var_imp_length_home_to_disembark-options=4&var_imp_length_home_to_disembark-lower_bound=&var_imp_length_home_to_disembark-upper_bound=&var_imp_length_home_to_disembark-threshold=&var_length_middle_passage_days-is_shown_field=&var_length_middle_passage_days-var_name_field=var_length_middle_passage_days&var_length_middle_passage_days-options=4&var_length_middle_passage_days-lower_bound=&var_length_middle_passage_days-upper_bound=&var_length_middle_passage_days-threshold=&var_captain-is_shown_field=&var_captain-var_name_field=var_captain&var_captain-text_search=&var_crew_voyage_outset-is_shown_field=&var_crew_voyage_outset-var_name_field=var_crew_voyage_outset&var_crew_voyage_outset-options=4&var_crew_voyage_outset-lower_bound=&var_crew_voyage_outset-upper_bound=&var_crew_voyage_outset-threshold=&var_crew_first_landing-is_shown_field=&var_crew_first_landing-var_name_field=var_crew_first_landing&var_crew_first_landing-options=4&var_crew_first_landing-lower_bound=&var_crew_first_landing-upper_bound=&var_crew_first_landing-threshold=&var_crew_died_complete_voyage-is_shown_field=&var_crew_died_complete_voyage-var_name_field=var_crew_died_complete_voyage&var_crew_died_complete_voyage-options=4&var_crew_died_complete_voyage-lower_bound=&var_crew_died_complete_voyage-upper_bound=&var_crew_died_complete_voyage-threshold=&var_num_slaves_intended_first_port-is_shown_field=&var_num_slaves_intended_first_port-var_name_field=var_num_slaves_intended_first_port&var_num_slaves_intended_first_port-options=4&var_num_slaves_intended_first_port-lower_bound=&var_num_slaves_intended_first_port-upper_bound=&var_num_slaves_intended_first_port-threshold=&var_num_slaves_carried_first_port-is_shown_field=&var_num_slaves_carried_first_port-var_name_field=var_num_slaves_carried_first_port&var_num_slaves_carried_first_port-options=4&var_num_slaves_carried_first_port-lower_bound=&var_num_slaves_carried_first_port-upper_bound=&var_num_slaves_carried_first_port-threshold=&var_num_slaves_carried_second_port-is_shown_field=&var_num_slaves_carried_second_port-var_name_field=var_num_slaves_carried_second_port&var_num_slaves_carried_second_port-options=4&var_num_slaves_carried_second_port-lower_bound=&var_num_slaves_carried_second_port-upper_bound=&var_num_slaves_carried_second_port-threshold=&var_num_slaves_carried_third_port-is_shown_field=&var_num_slaves_carried_third_port-var_name_field=var_num_slaves_carried_third_port&var_num_slaves_carried_third_port-options=4&var_num_slaves_carried_third_port-lower_bound=&var_num_slaves_carried_third_port-upper_bound=&var_num_slaves_carried_third_port-threshold=&var_total_num_slaves_purchased-is_shown_field=&var_total_num_slaves_purchased-var_name_field=var_total_num_slaves_purchased&var_total_num_slaves_purchased-options=4&var_total_num_slaves_purchased-lower_bound=&var_total_num_slaves_purchased-upper_bound=&var_total_num_slaves_purchased-threshold=&var_imp_total_num_slaves_purchased-is_shown_field=&var_imp_total_num_slaves_purchased-var_name_field=var_imp_total_num_slaves_purchased&var_imp_total_num_slaves_purchased-options=4&var_imp_total_num_slaves_purchased-lower_bound=&var_imp_total_num_slaves_purchased-upper_bound=&var_imp_total_num_slaves_purchased-threshold=&var_total_num_slaves_arr_first_port_embark-is_shown_field=&var_total_num_slaves_arr_first_port_embark-var_name_field=var_total_num_slaves_arr_first_port_embark&var_total_num_slaves_arr_first_port_embark-options=4&var_total_num_slaves_arr_first_port_embark-lower_bound=&var_total_num_slaves_arr_first_port_embark-upper_bound=&var_total_num_slaves_arr_first_port_embark-threshold=&var_num_slaves_disembark_first_place-is_shown_field=&var_num_slaves_disembark_first_place-var_name_field=var_num_slaves_disembark_first_place&var_num_slaves_disembark_first_place-options=4&var_num_slaves_disembark_first_place-lower_bound=&var_num_slaves_disembark_first_place-upper_bound=&var_num_slaves_disembark_first_place-threshold=&var_num_slaves_disembark_second_place-is_shown_field=&var_num_slaves_disembark_second_place-var_name_field=var_num_slaves_disembark_second_place&var_num_slaves_disembark_second_place-options=4&var_num_slaves_disembark_second_place-lower_bound=&var_num_slaves_disembark_second_place-upper_bound=&var_num_slaves_disembark_second_place-threshold=&var_num_slaves_disembark_third_place-is_shown_field=&var_num_slaves_disembark_third_place-var_name_field=var_num_slaves_disembark_third_place&var_num_slaves_disembark_third_place-options=4&var_num_slaves_disembark_third_place-lower_bound=&var_num_slaves_disembark_third_place-upper_bound=&var_num_slaves_disembark_third_place-threshold=&var_imp_total_slaves_disembarked-is_shown_field=&var_imp_total_slaves_disembarked-var_name_field=var_imp_total_slaves_disembarked&var_imp_total_slaves_disembarked-options=4&var_imp_total_slaves_disembarked-lower_bound=&var_imp_total_slaves_disembarked-upper_bound=&var_imp_total_slaves_disembarked-threshold=&var_imputed_percentage_men-is_shown_field=&var_imputed_percentage_men-var_name_field=var_imputed_percentage_men&var_imputed_percentage_men-options=4&var_imputed_percentage_men-lower_bound=&var_imputed_percentage_men-upper_bound=&var_imputed_percentage_men-threshold=&var_imputed_percentage_women-is_shown_field=&var_imputed_percentage_women-var_name_field=var_imputed_percentage_women&var_imputed_percentage_women-options=4&var_imputed_percentage_women-lower_bound=&var_imputed_percentage_women-upper_bound=&var_imputed_percentage_women-threshold=&var_imputed_percentage_boys-is_shown_field=&var_imputed_percentage_boys-var_name_field=var_imputed_percentage_boys&var_imputed_percentage_boys-options=4&var_imputed_percentage_boys-lower_bound=&var_imputed_percentage_boys-upper_bound=&var_imputed_percentage_boys-threshold=&var_imputed_percentage_girls-is_shown_field=&var_imputed_percentage_girls-var_name_field=var_imputed_percentage_girls&var_imputed_percentage_girls-options=4&var_imputed_percentage_girls-lower_bound=&var_imputed_percentage_girls-upper_bound=&var_imputed_percentage_girls-threshold=&var_imputed_percentage_male-is_shown_field=&var_imputed_percentage_male-var_name_field=var_imputed_percentage_male&var_imputed_percentage_male-options=4&var_imputed_percentage_male-lower_bound=&var_imputed_percentage_male-upper_bound=&var_imputed_percentage_male-threshold=&var_imputed_percentage_child-is_shown_field=&var_imputed_percentage_child-var_name_field=var_imputed_percentage_child&var_imputed_percentage_child-options=4&var_imputed_percentage_child-lower_bound=&var_imputed_percentage_child-upper_bound=&var_imputed_percentage_child-threshold=&var_imputed_sterling_cash-is_shown_field=&var_imputed_sterling_cash-var_name_field=var_imputed_sterling_cash&var_imputed_sterling_cash-options=4&var_imputed_sterling_cash-lower_bound=&var_imputed_sterling_cash-upper_bound=&var_imputed_sterling_cash-threshold=&var_imputed_death_middle_passage-is_shown_field=&var_imputed_death_middle_passage-var_name_field=var_imputed_death_middle_passage&var_imputed_death_middle_passage-options=4&var_imputed_death_middle_passage-lower_bound=&var_imputed_death_middle_passage-upper_bound=&var_imputed_death_middle_passage-threshold=&var_imputed_mortality-is_shown_field=&var_imputed_mortality-var_name_field=var_imputed_mortality&var_imputed_mortality-options=4&var_imputed_mortality-lower_bound=&var_imputed_mortality-upper_bound=&var_imputed_mortality-threshold=&var_sources-is_shown_field=&var_sources-var_name_field=var_sources&var_sources-text_search=&submitVal=map_ajax';
+
+		var reload = function() {
+			voyagesMap.init($('#mapId').val() || '1650', '/static/maps/', routeNodes);
+		};
+		reload();
+
 		var TOOL_PICKER = "coord";
 		var TOOL_DELETE = "del";
 		
@@ -174,8 +173,10 @@
 		}
 		// END OF TOOL section.
 	</script>
-	
+
 	<script>
+		var cachedFlows = null;
+		var cachedPorts = null;
 		$( document ).ready(function() {
 			$( "#slider" ).slider({
 				value: 100,
@@ -186,27 +187,36 @@
 					voyagesMap.setPathOpacity(ui.value / 100);
 				}
 			});
+
 			$( document ).keypress(function(e) {
 				if (e.which == 13) {
 					voyagesMap.clear();
-					// Supporting Tools - remove when finished.
+					reload();
 					if ($( "#showMarkersChecker" ).prop( "checked" )) {
 						for (var k = 0; k < routeNodes.length; ++k) {
 							addMarker(k);
 						}
 					}
-					voyagesMap.draw();
+					if (cachedPorts && cachedFlows) voyagesMap.setNetworkFlow(cachedPorts, cachedFlows);
 				}
 			});
 		
-			$( '#departure' ).change(function() {
+			$( '#loadFlows' ).click(function() {
 				voyagesMap.clearNetwork();
-				var selection = $( document ).find(':selected').val();
-				// Fetch JSON data from server.
-				$.ajax({
-					url: "mock_server/map_server.php?id=" + selection,
-					context: voyagesMap
-				}).done(voyagesMap.setJsonNetworkFlow);
+                $.ajax({
+                     type: "POST",
+                     url: '/voyage/search',
+                     data: queryParams,
+                     success: function(data) {
+                        eval(data);
+                        cachedPorts = ports;
+                        cachedFlows = flows;
+                        voyagesMap.setNetworkFlow(ports, flows);
+                     },
+                     error: function(jqXHR, textStatus, errorThrown) {
+                        console.log('Failed to load map data!');
+                     }
+                });
 			});
 			
 			$( '#mapId' ).change(function() {
