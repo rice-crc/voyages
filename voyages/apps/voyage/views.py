@@ -1194,23 +1194,48 @@ def search(request):
                 return place is not None
 
             def add_flow(source, destination, embarked, disembarked):
-                if embarked is not None and disembarked is not None and add_port(source) and add_port(destination):
+                result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
+                if result:
                     flow_key = source.place + '_' + destination.place
                     if flow_key in map_flows:
                         embarked += map_flows[flow_key][2]
                         disembarked += map_flows[flow_key][3]
                     map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
+                return result
 
             all_voyages = VoyageManager.cache()
+            missed_embarked = 0
+            missed_disembarked = 0
             for pk in results.values_list('pk', flat=True).load_all():
                 voyage = all_voyages[int(pk)]
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
+                embarked = numbers.imp_total_num_slaves_embarked
+                disembarked = numbers.imp_total_num_slaves_disembarked
+                source = itinerary.imp_principal_place_of_slave_purchase
+                destination = itinerary.imp_principal_port_slave_dis
+                if source is None:
+                    source = Place()
+                    source.place = 'Missing source'
+                    source.latitude = 34
+                    source.longitude = 45
+                    source.region = Region()
+                    source.region.region = source.place
+                    source.region.latitude = source.latitude
+                    source.region.longitude = -source.longitude
+                    source.region.broad_region = BroadRegion()
+                    source.region.broad_region.broad_region = source.place
+                    source.region.broad_region.latitude = source.latitude
+                    source.region.broad_region.longitude = -source.longitude
                 add_flow(
-                    itinerary.imp_principal_place_of_slave_purchase,
-                    itinerary.imp_principal_port_slave_dis,
-                    numbers.imp_total_num_slaves_embarked,
-                    numbers.imp_total_num_slaves_disembarked)
+                    source,
+                    destination,
+                    embarked,
+                    disembarked)
+            if missed_embarked > 0 or missed_disembarked > 0:
+                import logging
+                logging.getLogger('voyages').info('Missing flow: (' + str(missed_embarked) +
+                                                  ', ' + str(missed_disembarked) + ')')
             return render(request, "voyage/search_maps.datatemplate",
                           {
                               'map_ports': map_ports,

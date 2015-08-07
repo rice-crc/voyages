@@ -101,7 +101,7 @@
 		 	.domain(seriesNames)
 		 	.rangeRoundBands([0, x0.rangeBand()]);
 		var y = d3.scale.linear()
-		    .domain([0, maxValue])
+		    .domain([0, maxValue * 1.1])
 		    .range([height, 0]);
 		var color = d3.scale.category10();
 		var xAxis = d3.svg.axis()
@@ -126,8 +126,9 @@
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", function(d) {
-                return "rotate(-65)"
-                });
+                return "rotate(-45)"
+                })
+            .call(wrap);
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis)
@@ -195,6 +196,34 @@
             .attr("y", function(d) { return y(d.value); })
             .attr("height", function(d) { return height - y(d.value); })
             .style("fill", function(d) { return color(d.series); });
+
+		function wrap(text) {
+		    var w = margin.bottom - 10;
+			text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > w) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", 0)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+			});
+		}
 	{% endlocalize %}
 	</script>
   </div>

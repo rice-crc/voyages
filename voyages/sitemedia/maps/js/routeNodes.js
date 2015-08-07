@@ -97,3 +97,5 @@ var routeNodes = [
 	new L.LatLng(55.229023057406344, -14.765625),
 	new L.LatLng(-32.175612478499325, 3.515625),
 ];
+
+var links = [ ];
