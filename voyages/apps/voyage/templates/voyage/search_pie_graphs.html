@@ -88,6 +88,8 @@
 			.innerRadius(radius * 0.9);
 
 		var pie = d3.layout.pie()
+			.startAngle(-0.1 * Math.PI)
+			.endAngle(1.9 * Math.PI)
 			.value(function(d) { return d.value; });
 		var svg = d3.select("#graphContainer")
 			.append("svg")

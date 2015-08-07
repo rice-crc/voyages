@@ -254,7 +254,7 @@ var voyagesMap = {
     		    "broadregion" : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
             };
 		this._routeNodes = routeNodes;
-		if (!links) {
+		if (!links || links.length == 0) {
 			// Generate implicit links.
 			links = [ ];
 			implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
@@ -734,6 +734,8 @@ var voyagesMap = {
 		for (var i = 0; i < links.length; ++i) {
 			var link = links[i];
 			var start = this._routeNodes[link.start];
+			var end = this._routeNodes[link.end];
+			link.length = start.distanceTo(end);
 			start._outLinks.push(link);
 		}
 	},
@@ -748,15 +750,8 @@ var voyagesMap = {
 		// A penalty factor for making a connection between
 		// two nodes that are NOT connected by a link.
 		var PENALTY_MULTIPLIER = 100;
-		// Since the start of the path may not match a route node exactly,
-		// we consider an implicit neighborhood of the start position based
-		// on distance.
-		var implicitNeighborhoodRange = this._implicitNeighborhoodRange() || 600000;
 		var penalizedDist = function(dist) {
-			if (dist > implicitNeighborhoodRange) {
-				dist += (dist - implicitNeighborhoodRange) * PENALTY_MULTIPLIER;
-			}
-			return dist;
+			return dist * dist * PENALTY_MULTIPLIER;
 		};
 		routeNodes = this._routeNodes;
 		var nodes = [ ];
@@ -824,7 +819,7 @@ var voyagesMap = {
 			return p;
 		};
 		var current = addNode(start);
-		for (; current.distanceToEnd > 0; current = popOpen()) {
+		for (; current != endNode; current = popOpen()) {
 			var outLinks = current.point._outLinks || [ ];
 			for (var i = 0; i < outLinks.length; ++i) {
 				var link = outLinks[i];
