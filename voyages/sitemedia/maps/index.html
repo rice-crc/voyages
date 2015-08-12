@@ -101,6 +101,17 @@
 		var TOOL_ADDLINK = "addlink";
 		var TOOL_DELLINK = "dellink";
 
+		var normalIcon = L.Icon.Default;
+		var selectedIcon = new L.icon({
+			iconUrl: '/static/maps/js/images/marker-icon-2x_selected.png',
+			iconSize: normalIcon.iconSize,
+			iconAnchor: normalIcon.iconAnchor,
+			popupAnchor: normalIcon.popupAnchor,
+			shadowUrl: '/static/maps/js/images/marker-shadow.png',
+			shadowSize: normalIcon.shadowSize,
+			shadowAnchor: normalIcon.shadowAnchor
+		});
+
 		// A function that yields a sequential id everytime it is called.
 		var uid = (function() {
 			var lastId = 0;
@@ -200,7 +211,9 @@
 					if (first) {
 						toolData.firstLinkMarker = undefined;
 						addLink(first.id, this.id);
+						first.setIcon(normalIcon);
 					} else {
+						this.setIcon(selectedIcon);
 						toolData.firstLinkMarker = this;
 					}
 				}

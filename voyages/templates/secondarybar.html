@@ -20,31 +20,11 @@
 			<td class="secondary-bar-help-links">
 			<table border="0" cellspacing="0" cellpadding="0" class="secondary-bar-help-links">
 				<tr>
-					<td class="secondary-bar-help-link"><a href="{% url 'help:sitemap' %}" id="sitemap">Sitemap</a></td>
-					<td class="secondary-bar-help-link"><a href="{% url 'help:faqs' %}" id="faqs">FAQs</a></td>
-					<td class="secondary-bar-help-link"><a href="{% url 'help:demos' %}" id="demos">Demos</a></td>
-					<td class="secondary-bar-help-link"><a href="{% url 'help:glossary' %}" id="glossary">Glossary </a></td>
-					<td class="secondary-bar-help-link"><a href="{% url 'help:legal' %}" id="legal">Legal </a></td>
-					
-					<!-- Language feature currently disabled 
-					<td class="secondary-bar-help-link"><a>Current Language:</a> </td>
-					<td class="secondary-bar-language-active">
-						<form action="/i18n/setlang/" method="post">
-						{% csrf_token %}
-						<input name="next" type="hidden" value="{{ redirect_to }}" />
-						<select name="language" onchange="$(this).parent('form').submit();">
-						{% get_language_info_list for LANGUAGES as languages %}
-						{% for language in languages %}
-						{% if language.code == lang.code %}
-						    <option value="{{ language.code }}" selected="selected">  {{ language.name_local }} ({{ language.code }})</option>
-						{% else %}
-						    <option value="{{ language.code }}">  {{ language.name_local }} ({{ language.code }})</option>
-						{% endif %}
-						{% endfor %}
-						</select>
-						</form>
-					</td>
-					-->
+					<td class="secondary-bar-help-link"><a href="{% url 'help:sitemap' %}" id="sitemap">{% trans 'Sitemap' %}</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url 'help:faqs' %}" id="faqs">{% trans 'FAQs' %}</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url 'help:demos' %}" id="demos">{% trans 'Demos' %}</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url 'help:glossary' %}" id="glossary">{% trans 'Glossary' %}</a></td>
+					<td class="secondary-bar-help-link"><a href="{% url 'help:legal' %}" id="legal">{% trans 'Legal' %}</a></td>
 				</tr>
 			</table>
 			</td>

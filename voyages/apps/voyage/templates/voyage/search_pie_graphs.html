@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 
 <div>
   <table style="border-collapse: collapse; width: 100%;"1>
@@ -67,7 +68,7 @@
 			var label = "{{ yid }}";
 			var data = [
 			{% for datum in series %}
-				{ label: "{{ datum.0 }}", value: round2({{ datum.1 }}) },
+				{ label: "{{ datum.0|trans_log }}", value: round2({{ datum.1 }}) },
 			{% endfor %}
 			];
 		{% endfor %}
@@ -87,9 +88,10 @@
 			.outerRadius(radius * 0.9)
 			.innerRadius(radius * 0.9);
 
+		var angleShift = Math.min(-0.1, -Math.min(0.25, data[data.length - 1].value / sum));
 		var pie = d3.layout.pie()
-			.startAngle(-0.1 * Math.PI)
-			.endAngle(1.9 * Math.PI)
+			.startAngle(angleShift * Math.PI)
+			.endAngle((2 + angleShift) * Math.PI)
 			.value(function(d) { return d.value; });
 		var svg = d3.select("#graphContainer")
 			.append("svg")
@@ -127,12 +129,12 @@
 			var x = Math.sin(d.endAngle - d.startAngle);
 			return Math.min(0.5, Math.pow(x, 1.5) * 15);
 		};
-		var fmt = d3.format(",g");
+		{% get_current_language as LANGUAGE_CODE %}
 		text.enter()
 			.append("text")
 			.style('opacity', opacityFn)
 			.attr("dy", ".35em")
-			.text(function(d) { return key(d) + " = " + fmt(d.value); });
+			.text(function(d) { return key(d) + " = " + d.value.toLocaleString("{{ LANGUAGE_CODE }}"); });
 
 		function midAngle(d){
 			return d.startAngle + (d.endAngle - d.startAngle)/2;

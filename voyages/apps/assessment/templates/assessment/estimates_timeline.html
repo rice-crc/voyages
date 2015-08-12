@@ -131,6 +131,8 @@ var layer = svg.selectAll(".layer")
     .attr("transform", "translate(" + xShift + ", 0)")
     .style("fill", function(d, i) { return color[i]; });
 
+{% get_current_language as LANGUAGE_CODE %}
+
 function mouseover(d) {
     var historical = '';
     if (events && events[d.x.toString()]) {
@@ -139,8 +141,8 @@ function mouseover(d) {
         historical = "<br />&nbsp;";
     }
 	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
-	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1).toLocaleString('en') +
-	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0).toLocaleString('en') + historical);
+	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
+	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
 }
 
 var rect = layer.selectAll("rect")

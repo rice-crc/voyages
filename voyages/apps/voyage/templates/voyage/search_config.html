@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 
 <h1>{% trans 'List of voyages' %}</h1>
 
@@ -13,7 +14,7 @@
         <select id="configure_group" onchange="config_change_group(this.value);" style="width: 300px;" size="1"
                 name="configure_group">
             {% for variable in general_var_all_list %}
-                <option value="config_group_{{ forloop.counter0 }}">{{ variable.grouper }}</option>
+                <option value="config_group_{{ forloop.counter0 }}">{{ variable.grouper|trans_log }}</option>
             {% endfor %}
         </select>
 </div>
@@ -23,7 +24,7 @@
         <tbody>
         <tr>
             <td class="voyage_config_all_list">
-                <div style="font-weight: normal; margin-bottom: 5px;">Available variables</div>
+                <div style="font-weight: normal; margin-bottom: 5px;">{% trans 'Available variables' %}</div>
 
                 {% for variable in general_var_all_list %}
                     <select style="width: 300px" size="10" multiple="multiple"
@@ -31,7 +32,7 @@
                             name="config_group_{{ forloop.counter0 }}"
                              id="config_group_{{ forloop.counter0 }}">
                          {% for item in variable.list %}
-                            <option value="{{ item.var_name }}">{{ item.var_full_name }}</option>
+                            <option value="{{ item.var_name }}">{{ item.var_full_name|trans_log }}</option>
                         {% endfor %}
                     </select>
                 {% endfor %}
@@ -51,7 +52,7 @@
                 <select style="width: 300px" size="10" multiple="multiple" name="configure_visibleAttributes"
                         id="configure_visibleAttributes">
                     {% for item in request.session.result_columns %}
-                        <option value="{{ item.0 }}">{{ item.1 }}</option>
+                        <option value="{{ item.0 }}">{{ item.1|trans_log }}</option>
                     {% endfor %}
                 </select>
             </td>
@@ -73,7 +74,7 @@
 </div>
 
 <div>
-    <input type="submit" onclick="applyConfig();" value="Apply configuration">
-    <input type="submit" onclick="submitWithValue('cancelConfig');" value="Cancel">
-    <input type="submit" onclick="submitWithValue('restoreConfig');" value="Restore default columns">
+    <input type="submit" onclick="applyConfig();" value="{% trans 'Apply configuration' %}">
+    <input type="submit" onclick="submitWithValue('cancelConfig');" value="{% trans 'Cancel' %}">
+    <input type="submit" onclick="submitWithValue('restoreConfig');" value="{% trans 'Restore default columns' %}">
 </div>

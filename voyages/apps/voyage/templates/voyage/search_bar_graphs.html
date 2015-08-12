@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load voyage_extras %}
+
 <style>
 .axis path,
 .axis line {
@@ -67,7 +69,7 @@
 		{% for yid, series in graph_data.items %}
 			"{{ yid }}": [
 			{% for datum in series %}
-				{ label: "{{ datum.0 }}", value: {{ datum.1 }} },
+				{ label: "{{ datum.0|trans_log }}", value: {{ datum.1 }} },
 			{% endfor %}
 			],
 		{% endfor %}

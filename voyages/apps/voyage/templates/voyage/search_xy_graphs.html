@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load voyage_extras %}
+
 <style>
 .axis path,
 .axis line {
@@ -126,7 +128,7 @@
             .attr("y", 0)
             .attr("dy", "-1em")
             .style("text-anchor", "end")
-            .text("Value");
+            .text("{% trans 'Value' %}");
 
         var legend = svg.selectAll(".legend")
             .data(seriesNames)

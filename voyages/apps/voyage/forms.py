@@ -3,6 +3,7 @@ import autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
+from templatetags.voyage_extras import trans_log as _
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
@@ -125,7 +126,6 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     class Meta:
         model = VoyageSources
 
-
 class SimpleTextForm(VoyageBaseForm):
     """
     Simple one field form to perform text search
@@ -140,7 +140,7 @@ class SimpleNumericSearchForm(VoyageBaseForm):
     Simple numeric search form
     """
     type_str = "numeric"
-    OPERATORS = (('1', 'Between'), ('2', 'At most'), ('3', 'At least'), ('4', 'Is equal to'))
+    OPERATORS = (('1', _('Between')), ('2', _('At most')), ('3', _('At least')), ('4', _('Is equal to')))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
     threshold = forms.IntegerField(required=False, widget=forms.TextInput(
@@ -155,7 +155,7 @@ class SimpleDateSearchForm(VoyageBaseForm):
     """
     type_str = "date"
     list_months = globals.list_months
-    OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
+    OPERATORS = (('1', _('Between')), ('2', _('Before')), ('3', _('After')), ('4', _('In')))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
     from_month = forms.CharField(required=False, initial="01", widget=forms.TextInput(
@@ -188,7 +188,7 @@ class SimplePlaceSearchForm(VoyageBaseForm):
     nested_choices = []
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
-    BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
+    BOOLEAN_CHOICES = (('1', _('Yes')), ('2', _('No')))
     type_str = "boolean"
     choice_field = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
@@ -255,10 +255,10 @@ class GraphSelectionForm(forms.Form):
         lmbd = lambda x: (str(x[0]), x[1][0])
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
         self.ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-        self.fields['xselect'] = forms.ChoiceField(label=xfield_label, choices=self.xchoices)
-        self.fields['yselect'] = forms.ChoiceField(label=yfield_label, choices=self.ychoices)
+        self.fields['xselect'] = forms.ChoiceField(label=_(xfield_label), choices=self.xchoices)
+        self.fields['yselect'] = forms.ChoiceField(label=_(yfield_label), choices=self.ychoices)
 
 
 class TimelineVariableForm(forms.Form):
     var_choices = [(v[0], v[1]) for v in globals.voyage_timeline_variables]
-    variable_select = forms.ChoiceField(label='Timeline variable', choices=var_choices, initial=var_choices[23])
+    variable_select = forms.ChoiceField(label=_('Timeline variable'), choices=var_choices, initial=var_choices[23])
