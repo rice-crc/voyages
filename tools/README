@@ -1,0 +1,14 @@
+# This folder should contain auxiliary development tools.
+# Each script/program under this folder should be documented in this README file.
+
+==================================================================================
+extract_trans.sh
+==================================================================================
+Performs a sweep of the translation log and produces a PO file for translation.
+
+USAGE:
+sh extract_trans.sh path/to/trans.log path/to/output
+NOTE: the .po extension is automatically added
+
+The produced PO file can be then merged with the localized versions for
+translation using msgcat (details are given after running this script).

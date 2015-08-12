@@ -2,14 +2,15 @@
 
 {% load humanize %}
 
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-search-graph.css">
+{% get_current_language as LANGUAGE_CODE %}
 
-<h1>Timeline</h1>
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-search-graph.css">
+<h1>{% trans 'Timeline' %}</h1>
 <div class="database-graph-options">
 <table style="border-collapse: collapse;">
 <tbody>
 <tr>
-<td style="padding: 0px 15px 0px 0px;">Display variable</td>
+<td style="padding: 0px 15px 0px 0px;">{% trans 'Display variable' %}</td>
 <td style="padding: 0px 5px 0px 0px;">
 {% csrf_token %}
     {% for field in timeline_form %}{{ field }}{% endfor %}
@@ -95,7 +96,7 @@ $(function () {
             },
             formatter: function() {
                 if (this.y > -1) return this.x + '<br/>' + this.points[0].series.name + ': <b>' +
-                        this.y.toLocaleString() {% if timeline_chart_settings.suffix %} + '{{ timeline_chart_settings.suffix }}'{% endif %} + "</b>";
+                        this.y.toLocaleString('{{ LANGUAGE_CODE }}') {% if timeline_chart_settings.suffix %} + '{{ timeline_chart_settings.suffix }}'{% endif %} + "</b>";
                 else {
                     return this.x + '<br/>' + this.points[0].series.name + ': ';
                 }

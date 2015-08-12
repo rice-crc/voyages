@@ -14,7 +14,7 @@
                 <h1>{% trans 'List of voyages' %}</h1>
             </td>
             <td style="text-align: right;">
-                <a href="#" onclick="submitWithValue('configColumn');">Configure columns of the table></a>
+                <a href="#" onclick="submitWithValue('configColumn');">{% trans 'Configure columns of the table' %}></a>
             </td>
         </tr>
     </tbody>
@@ -27,7 +27,7 @@
             {% for item in request.session.result_columns %}
                 <th>
                 <div class="{% if forloop.first %}grid-first-column grid-header-icon-asc grid-header-text{% elif item.2 %}grid-header-text-left{% else %}grid-header-text{% endif %}">
-                    <a href="#">{{  item.1 }}</a>
+                    <a href="#">{{ item.1|trans_log }}</a>
                 </div>
                 </th>
 
@@ -38,6 +38,7 @@
         {% for i in result_display %}
             <tr class="grid-row-even grid-row-first" onclick="document.location = '/voyage/{{ i| getattribute:"var_voyage_id" }}/variables'"">
                 {% for item in request.session.result_columns %}
+                    <!-- Field: {{ item.0 }} -->
                     <td>{% if item.0 == 'var_sources' %}
                             {{ i| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
                         {% else  %}
@@ -55,12 +56,12 @@
         <tr>
 
             <td style="padding: 0px; text-align: left">
-	      Showing {{ results.start_index }} - {{ results.end_index }} out of {{ results.paginator.count }}, display
+	      {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}, {% trans 'display' %}
                 <form style="display: inline-block" action="{% url 'voyage:search' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ options_results_per_page_form.option }}
                 </form>
-                        results per page.
+                        {% trans 'results per page' %}.
             </td>
 
             <td style="padding: 0px;">
@@ -71,22 +72,22 @@
                         {% if results.number != 1 %}
                             <td class="pager-fast-back">
                                     <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-                                    <a href="#" onclick="retrieve_page('form_first_page');">« First</a>
+                                    <a href="#" onclick="retrieve_page('form_first_page');">« {% trans 'First' %}</a>
                             </td>
                         {% else %}
                             <td class="pager-fast-back-no-click">
-                                « First
+                                « {% trans 'First' %}
                             </td>
                         {% endif %}
 
                         {% if results.has_previous %}
                             <td class="pager-back">
                                     <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-                                    <a href="#" onclick="retrieve_page('form_prev_page');">« Prev</a>
+                                    <a href="#" onclick="retrieve_page('form_prev_page');">« {% trans 'Prev' %}</a>
                             </td>
                         {% else %}
                             <td class="pager-back-no-click">
-                                « Prev
+                                « {% trans 'Prev' %}
                             </td>
                         {% endif %}
 
@@ -107,21 +108,21 @@
                         {% if results.has_next %}
                             <td class="pager-fast-forward">
                                     <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-                                    <a href="#" onclick="retrieve_page('form_next_page');">Next »</a>
+                                    <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next' %} »</a>
                             </td>
                         {% else %}
                             <td class="pager-fast-forward-no-click">
-                                Next »
+                                {% trans 'Next »
                             </td>
                         {% endif %}
                         {% if results.has_next %}
                             <td class="pager-forward">
                                     <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-                                    <a href="#" onclick="retrieve_page('form_last_page');">Last »</a>
+                                    <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last' %} »</a>
                             </td>
                         {% else %}
                             <td class="pager-forward-no-click">
-                                Last »
+                                {% trans 'Last' %} »
                             </td>
                         {% endif %}
                     </tr>

@@ -90,7 +90,8 @@ table.secondary-bar {
 }
 
 .secondary-bar-help-links {
-	width: 220px;
+	/*width: 220px;*/
+	white-space: nowrap;
 }
 
 /* Breadcrumb section */

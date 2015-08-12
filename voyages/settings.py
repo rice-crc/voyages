@@ -125,6 +125,9 @@ INSTALLED_APPS = (
     # used to index django models
     'haystack',
 
+    # used to highlight translated strings to easily find which translations are missing
+    'i18n_helper',
+
     # password reset app
     'password_reset',
 
@@ -139,6 +142,7 @@ INSTALLED_APPS = (
     'voyages.apps.static_content',
 )
 
+I18N_HELPER_DEBUG = False
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 

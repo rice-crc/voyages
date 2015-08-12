@@ -31,6 +31,7 @@ from django.views.decorators.gzip import gzip_page
 from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
+from templatetags.voyage_extras import trans_log as _
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -1352,30 +1353,30 @@ def getChoices(varname):
         for nation in Nationality.objects.all():
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
-            choices.append((nation.value, nation.label))
+            choices.append((nation.value, _(nation.label)))
     elif varname in ['var_imputed_nationality']:
         for nation in Nationality.objects.all():
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
-                choices.append((nation.value, nation.label))
+                choices.append((nation.value, _(nation.label)))
     elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_slaves']:
         for outcome in SlavesOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_ship_captured']:
         for outcome in VesselCapturedOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname == 'var_rig_of_vessel':
         for rig in RigOfVessel.objects.all():
-            choices.append((rig.value, rig.label))
+            choices.append((rig.value, _(rig.label)))
     return choices
 
 def putOtherLast(lst):
