@@ -3,11 +3,11 @@ import autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
-from templatetags.voyage_extras import trans_log as _
+from voyages.apps.common.filters import trans_log as _
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
-    downloadfile = forms.FileField(label='Select your file')
+    downloadfile = forms.FileField(label=_('Select your file'))
 
 
     
@@ -195,9 +195,9 @@ class SimpleSelectBooleanForm(VoyageBaseForm):
         choices=BOOLEAN_CHOICES)
 
 class TimeFrameSpanSearchForm(forms.Form):
-    frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
+    frame_from_year = forms.IntegerField(label=_('From'), widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
-    frame_to_year = forms.IntegerField(label="To", widget=forms.TextInput(
+    frame_to_year = forms.IntegerField(label=_('To'), widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
 
 

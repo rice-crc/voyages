@@ -35,8 +35,8 @@ function shortenURL(){
         </div>
 
         <div class="box-mid-end">
-            From {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
-            To {{ time_frame_search_form.frame_to_year }}
+            {% trans 'From' %} {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
+            {% trans 'To' %} {{ time_frame_search_form.frame_to_year }}
             <br />
             <span class="italic">
                 {% trans 'The full extent of time from the first to the last voyage is ' %}
@@ -188,8 +188,8 @@ function shortenURL(){
                                 <div class="query-select-initial" >
                                     <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
                                     </div>
-                                <br /><input type="button" onclick="expandChoices('{{ varname_wrapper }}');"
-                                             value="Select" class="display_inline">
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
                                 </div>
 
                                 <div class="query-select-full hidden">
@@ -204,13 +204,13 @@ function shortenURL(){
 
 
                                     <div style="margin-top: 5px;">
-                                        <input type="button" class="collapseCheckBoxButton"
+                                        <button type="button" class="collapseCheckBoxButton"
                                                onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'var-checkbox')"
-                                               value="{% trans 'OK' %}" class="display_inline">
-                                        <input type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
-                                               value="{% trans 'Select all' %}" class="display_inline">
-                                        <input type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
-                                               value="{% trans 'Deselect all' %}" class="display_inline">
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
                                     </div>
                                 </div>
                             </div>
@@ -219,8 +219,8 @@ function shortenURL(){
                                 <div class="query-select-initial" >
                                     <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
                                     </div>
-                                <br /><input type="button" onclick="expandChoices('{{ varname_wrapper }}');"
-                                             value="Select" class="display_inline">
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
                                 </div>
 
                                 <div class="query-select-full hidden">
@@ -283,14 +283,14 @@ function shortenURL(){
                                         {% endif %}
                                     </div>
                                     <div style="margin-top: 5px;">
-                                        <input type="button"
+                                        <button type="button"
                                                class="place_collapse_button"
                                                onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'checkbox-layer2')"
-                                               value="{% trans 'OK' %}" class="display_inline">
-                                        <input type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
-                                               value="{% trans 'Select all' %}" class="display_inline">
-                                        <input type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
-                                               value="{% trans 'Deselect all' %}" class="display_inline">
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
                                     </div>
                                 </div>
                             </div>
@@ -341,7 +341,7 @@ function shortenURL(){
                     {% endfor %}
                 {% endif %}
             </div>
-            <input type="submit" onclick="submitWithValue({% if tab == 'result' %}
+            <button type="submit" onclick="submitWithValue({% if tab == 'result' %}
 					                    'search'
 							  {% elif tab == 'tables' %}
 							    'tab_tables'
@@ -353,9 +353,8 @@ function shortenURL(){
 							    'tab_timeline'
 							  {% elif tab == 'maps' %}
 							    'tab_maps'
-							  {% endif %});" value="{% trans 'Search' %}" name="buttonSearch"/>
-            <input type="reset" onclick="submitWithValue('reset');" value="{% trans 'New query' %}" name="buttonAgain"/>
-
+							  {% endif %});" value="Search" name="buttonSearch">{% trans 'Search' %}</button>
+            <button type="reset" onclick="submitWithValue('reset');" value="New query" name="buttonAgain">{% trans 'New query' %}</button>
         </div>
     </div>
 

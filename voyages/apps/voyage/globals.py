@@ -6,7 +6,7 @@ import lxml.html
 from django.db.models import Max, Min
 import re
 from datetime import date
-from templatetags.voyage_extras import trans_log as _
+from voyages.apps.common.filters import trans_log as _
 
 session_expire_minutes = 60
 
@@ -346,7 +346,15 @@ display_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                             'var_voyage_completed': gd_voyage_completed,
                             'var_tonnage': unmangle_truncate,
                             'var_tonnage_mod': unmangle_truncate,
-                            'var_sources': detail_display_sources}
+                            'var_sources': detail_display_sources,
+                            'var_voyage_in_cd_rom': trans_adapter(display_yesno),
+                            'var_nationality': trans_adapter(),
+                            'var_imputed_nationality': trans_adapter(),
+                            'var_outcome_voyage': trans_adapter(),
+                            'var_outcome_slaves': trans_adapter(),
+                            'var_outcome_ship_captured': trans_adapter(),
+                            'var_outcome_owner': trans_adapter(),
+                            }
 
 def graph_percent(ratio):
     return ratio * 100

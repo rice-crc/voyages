@@ -1,5 +1,6 @@
 from haystack.query import SearchQuerySet
 from .models import *
+from voyages.apps.common.filters import trans_log as _
 
 
 def get_flags(search_configuration=None, mode=None):
@@ -162,26 +163,26 @@ def get_incremented_year_tuples(search_configuration, mode):
     return [years, ]
 
 
-table_rows = [("Flag", "nation__exact", get_flags),
-              ("Embarkation regions", "embarkation_region__exact", get_embarkation_regions),
-              ("Broad disembarkation regions", "broad_disembarkation_region__exact", get_broad_regions),
-              ("Specific disembarkation regions", "disembarkation_region__exact", get_regions),
-              ("Individual years", "year__in", get_incremented_year_tuples),
-              ("5-year periods", "year__in", get_incremented_year_tuples),
-              ("10-year periods", "year__in", get_incremented_year_tuples),
-              ("25-year periods", "year__in", get_incremented_year_tuples),
-              ("50-year periods", "year__in", get_incremented_year_tuples),
-              ("100-year periods", "year__in", get_incremented_year_tuples)]
+table_rows = [(_("Flag"), "nation__exact", get_flags),
+              (_("Embarkation regions"), "embarkation_region__exact", get_embarkation_regions),
+              (_("Broad disembarkation regions"), "broad_disembarkation_region__exact", get_broad_regions),
+              (_("Specific disembarkation regions"), "disembarkation_region__exact", get_regions),
+              (_("Individual years"), "year__in", get_incremented_year_tuples),
+              (_("5-year periods"), "year__in", get_incremented_year_tuples),
+              (_("10-year periods"), "year__in", get_incremented_year_tuples),
+              (_("25-year periods"), "year__in", get_incremented_year_tuples),
+              (_("50-year periods"), "year__in", get_incremented_year_tuples),
+              (_("100-year periods"), "year__in", get_incremented_year_tuples)]
 
-table_columns = [("Flag", "nation__exact", get_flags),
-                 ("Embarkation regions", "embarkation_region__exact", get_embarkation_regions),
-                 ("Broad disembarkation regions", "broad_disembarkation_region__exact", get_broad_regions),
-                 ("Specific disembarkation regions", "disembarkation_region__exact",
+table_columns = [(_("Flag"), "nation__exact", get_flags),
+                 (_("Embarkation regions"), "embarkation_region__exact", get_embarkation_regions),
+                 (_("Broad disembarkation regions"), "broad_disembarkation_region__exact", get_broad_regions),
+                 (_("Specific disembarkation regions"), "disembarkation_region__exact",
                   get_regions)]
 
-table_cells = [("Embarked/Disembarked", ),
-               ("Only embarked", ),
-               ("Only disembarked", )]
+table_cells = [(_("Embarked/Disembarked"), ),
+               (_("Only embarked"), ),
+               (_("Only disembarked"), )]
 
 # These two have to be replaced with context processor call
 # on database/solr

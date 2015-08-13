@@ -16,7 +16,7 @@
     {% for field in timeline_form %}{{ field }}{% endfor %}
 </td>
 <td style="padding: 0px 5px 0px 0px;">
-<input type="submit" value="{% trans 'Show' %}" name="timeline_button" style="margin-bottom: 0px; margin-top: 0px;" onclick="submitWithValue('tab_timeline');">
+<button type="submit" value="Show" name="timeline_button" style="margin-bottom: 0px; margin-top: 0px;" onclick="submitWithValue('tab_timeline');">{% trans 'Show' %}</button>
 </td>
 </tr>
 </tbody>
@@ -122,5 +122,5 @@ $(function () {
 </div>
 </div>
 <p>
-<input type="submit" name="download" value="{% trans 'Download timeline data' %}" onclick="submitWithValue('tab_timeline');" />
+<button type="submit" name="download" value="Download timeline data" onclick="submitWithValue('tab_timeline');">{% trans 'Download timeline data' %}</button>
 </p>

@@ -18,7 +18,7 @@
 
 {% endblock %}
 
-{% block title %}Estimates{% endblock %}
+{% block title %}{% trans 'Estimates' %}{% endblock %}
 
 {% block content %}
 <form id="form" name="form" method="post" action="{% url 'assessment:estimates' %}"
@@ -37,15 +37,15 @@
           <tr>
             <td class="tabs-tab-first-filler"></td>
             <td class="{% if tab_selected == 'table' %}tabs-tab-left-selected{% else %}tabs-tab-left{% endif %}"></td>
-            <td class="{% if tab_selected == 'table' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'table'; document.forms['form'].submit(); return false;">Tables</td>
+            <td class="{% if tab_selected == 'table' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'table'; document.forms['form'].submit(); return false;">{% trans 'Tables' %}</td>
             <td class="{% if tab_selected == 'table' %}tabs-tab-right-selected{% else %}tabs-tab-right{% endif %}"></td>
             <td class="tabs-tab-filler"></td>
             <td class="{% if tab_selected == 'timeline' %}tabs-tab-left-selected{% else %}tabs-tab-left{% endif %}"></td>
-            <td class="{% if tab_selected == 'timeline' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'timeline'; document.forms['form'].submit(); return false;">Timeline</td>
+            <td class="{% if tab_selected == 'timeline' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'timeline'; document.forms['form'].submit(); return false;">{% trans 'Timeline' %}</td>
             <td class="{% if tab_selected == 'timeline' %}tabs-tab-right-selected{% else %}tabs-tab-right{% endif %}"></td>
             <td class="tabs-tab-filler"></td>
             <td class="{% if tab_selected == 'map' %}tabs-tab-left-selected{% else %}tabs-tab-left{% endif %}"></td>
-            <td class="{% if tab_selected == 'map' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'map'; document.forms['form'].submit(); return false;">Maps</td>
+            <td class="{% if tab_selected == 'map' %}tabs-tab-middle-selected{% else %}tabs-tab-middle{% endif %}" onclick="document.forms['form'].elements['selected_tab'].value = 'map'; document.forms['form'].submit(); return false;">{% trans 'Maps' %}</td>
             <td class="{% if tab_selected == 'map' %}tabs-tab-right-selected{% else %}tabs-tab-right{% endif %}"></td>
             <td class="tabs-tab-last-filler"></td>
           </tr>

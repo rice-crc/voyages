@@ -31,8 +31,8 @@
 		<td></td>
 		<td>
 		  <!-- Show button -->
-		  <input type="submit" value="{% trans 'Add Series' %}" onclick="submitWithValue('tab_graphs_bar_add');" name="buttonAddSeries" />
-		  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs_bar_show');" name="buttonShow" />
+		  <button type="submit" value="Add Series" onclick="submitWithValue('tab_graphs_bar_add');" name="buttonAddSeries">{% trans 'Add Series' %}</button>
+		  <button type="submit" value="Show" onclick="submitWithValue('tab_graphs_bar_show');" name="buttonShow">{% trans 'Show' %}</button>
 		</td>
 	      </tr>
 	    </tbody>
@@ -49,7 +49,9 @@
 	      </tr>
 	      {% endfor %}
 	      <tr>
-		<td> <input type="submit" value="{% trans 'Remove Selected' %}" onclick="submitWithValue('tab_graphs_bar_remove')" name="buttonRemoveSeries" /></td>
+		<td>
+            <button type="submit" value="Remove Selected" onclick="submitWithValue('tab_graphs_bar_remove')" name="buttonRemoveSeries">{% trans 'Remove Selected' %}</button>
+              </td>
 	      </tr>
 	    </tbody>
 	  </table>

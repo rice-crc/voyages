@@ -1,3 +1,4 @@
+{% load l10n %}
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
@@ -10,6 +11,7 @@
 <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
 <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
 <script type="text/javascript">
+{% localize off %}
     var ports = {
         {% for place_name, data in regions.items %}
             "{{ place_name }}": new Port(new NamedPoint("{{ place_name }}", new L.LatLng({{ data.0 }}, {{ data.1 }}))),
@@ -41,4 +43,5 @@
     };
     $(document).ready(resizeMap);
     $(window).resize(resizeMap);
+{% endlocalize %}
 </script>
