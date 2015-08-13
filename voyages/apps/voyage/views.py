@@ -578,9 +578,9 @@ def voyage_variables(request, voyage_id):
                 val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
-                allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
+                allvars.append(((len(glist), unicode(group)), unicode(j['var_full_name']), val, j['var_name']))
             else:
-                allvars.append(((None,None,),unicode(j['var_full_name']),val))
+                allvars.append(((None, None), unicode(j['var_full_name']), val, j['var_name']))
 
     return render(request, "voyage/voyage_info.html",
                   {'voyage_variables': allvars,

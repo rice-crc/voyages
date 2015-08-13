@@ -1,6 +1,8 @@
 from django import template
+from voyages.apps.common.filters import trans_log
 
 register = template.Library()
+register.filter('trans_log', trans_log)
 
 @register.filter
 def multiply(number, *args, **kwargs):

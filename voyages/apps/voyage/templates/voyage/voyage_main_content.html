@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load l10n %}
 
 <div class="search-main-panel" style="display: table; height: 100%; width: 100%;">
   <div class="tabs-selection" style="display: table-row; height: 0px;">
@@ -33,7 +34,7 @@
       <div style="display:table; height: 100%; width: 100%">
         <div class="detail-title" style="display:table-row; height:0%">
             <div style="margin: 10px">
-                Voyage {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+                {% trans 'Voyage' %} {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
             </div>
         </div>
 
@@ -56,32 +57,34 @@
             <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
             <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
             <script>
-                {% with source=itinerary.imp_principal_place_of_slave_purchase destination=itinerary.imp_principal_port_slave_dis %}
-                voyagesMap.
-                    init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
-                    setMaxPathWidth(10).
-                    setPathOpacity(0.75);
-                var ports = {
-                    "{{ source.place }}": new Port(
-                        new NamedPoint("{{ source.place }}", new L.LatLng({{ source.latitude }}, {{ source.longitude }})),
-                        null,
-                        null),
-                    "{{ destination.place }}": new Port(
-                        new NamedPoint("{{ destination.place }}", new L.LatLng({{ destination.latitude }}, {{ destination.longitude }})),
-                        null,
-                        null)
-                };
-                var flows = [
-                    new Flow(
-                        "{{ source.place }}",
-                        "{{ destination.place }}",
-                        {{ numbers.imp_total_num_slaves_embarked }} || 0,
-                        {{ numbers.imp_total_num_slaves_disembarked }} || 0)
-                ];
-                voyagesMap.setNetworkFlow(ports, flows);
-                {% endwith %}
+                {% localize off %}
+                    {% with source=itinerary.imp_principal_place_of_slave_purchase destination=itinerary.imp_principal_port_slave_dis %}
+                        voyagesMap.
+                            init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
+                            setMaxPathWidth(10).
+                            setPathOpacity(0.75);
+                        var ports = {
+                            "{{ source.place }}": new Port(
+                                new NamedPoint("{{ source.place }}", new L.LatLng({{ source.latitude }}, {{ source.longitude }})),
+                                null,
+                                null),
+                            "{{ destination.place }}": new Port(
+                                new NamedPoint("{{ destination.place }}", new L.LatLng({{ destination.latitude }}, {{ destination.longitude }})),
+                                null,
+                                null)
+                        };
+                        var flows = [
+                            new Flow(
+                                "{{ source.place }}",
+                                "{{ destination.place }}",
+                                {{ numbers.imp_total_num_slaves_embarked }} || 0,
+                                {{ numbers.imp_total_num_slaves_disembarked }} || 0)
+                        ];
+                        voyagesMap.setNetworkFlow(ports, flows);
+                    {% endwith %}
+                {% endlocalize %}
             </script>
-          {% endwith %}
+            {% endwith %}
         {% endif %}
       </div>
   </div>

@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load l10n %}
+
 <style type="text/css">
     .g_main {
         cursor:pointer;
@@ -31,16 +33,17 @@
     }
 </style>
 <div class="results-panel">
-<h1>Timeline: Number of Captives Embarked and Disembarked per Year</h1>
+<h1>{% trans 'Timeline: Number of Captives Embarked and Disembarked per Year' %}</h1>
 <div id="graphContainer"></div>
 <div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
 <div id="historicalEventsContainer"></div>
 <p style="margin-left:20px;">
-    <input type="submit" name="download" value="{% trans 'Download timeline data' %}"/>
+    <button type="submit" name="download" value="Download timeline data">{% trans 'Download timeline data' %}</button>
 </p>
 </div>
 <script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
 <script type="text/javascript">
+{% localize off %}
 var data = [
 {% for year, r in timeline.items %}
     { x: {{ year }}, y0: {{ r.1 }}, y1: {{ r.0 }} },
@@ -136,13 +139,13 @@ var layer = svg.selectAll(".layer")
 function mouseover(d) {
     var historical = '';
     if (events && events[d.x.toString()]) {
-        historical = "<br /><strong>Historical event:</strong> " + events[d.x.toString()];
+        historical = "<br /><strong>{% trans 'Historical event' %}:</strong> " + events[d.x.toString()];
     } else {
         historical = "<br />&nbsp;";
     }
-	$( '#mouseOverInfo' ).html("<strong>Year:</strong> " + d.x +
-	    "<br /><strong>Embarked:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
-	    "<br /><strong>Disembarked:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
+	$( '#mouseOverInfo' ).html("<strong>{% trans 'Year' %}:</strong> " + d.x +
+	    "<br /><strong>{% trans 'Embarked' %}:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
+	    "<br /><strong>{% trans 'Disembarked' %}:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
 }
 
 var rect = layer.selectAll("rect")
@@ -209,7 +212,7 @@ legend.selectAll('text')
       .attr('x', function(d, i) { return 20 + i * legendWidth; })
       .style('stroke', 'black')
       .style('stroke-width', '0.3')
-      .text(function(d, i) { return i != 0 ? 'Disembarked' : 'Embarked'; });
+      .text(function(d, i) { return i != 0 ? "{% trans 'Disembarked' %}" : "{% trans 'Embarked' %}"; });
 
 //d3.select("#graphContainer")
 svg.on("mousemove", function(){
@@ -245,20 +248,20 @@ var events = null;
 
 {% if show_events %}
     events = {
-        '1525': 'First slave voyage direct from Africa to the Americas',
-        '1560': 'Continuous slave trade from Brazil begins',
-        '1641': 'Sugar exports from Eastern Caribbean begin',
-        '1655': 'English capture Jamaica',
-        '1695': 'Gold discovered in Minas Gerais (Brazil)',
-        '1697': 'French obtain St Domingue in Treaty of Rywsick',
-        '1756': 'Seven years war begins',
-        '1776': 'American Revolutionary War begins',
-        '1789': 'Bourbon reforms open Spanish colonial ports to slaves',
-        '1791': 'St Domingue revolution begins',
-        '1808': 'Abolition of British and US slave trades takes effect',
-        '1830': 'Anglo-Brazilian anti-slave trade treaty',
-        '1850': 'Brazil suppresses slave trade',
-        '1866': 'Last reported transatlantic slave voyage arrives in Americas'
+        '1525': "{% trans 'First slave voyage direct from Africa to the Americas' %}",
+        '1560': "{% trans 'Continuous slave trade from Brazil begins' %}",
+        '1641': "{% trans 'Sugar exports from Eastern Caribbean begin' %}",
+        '1655': "{% trans 'English capture Jamaica' %}",
+        '1695': "{% trans 'Gold discovered in Minas Gerais (Brazil)' %}",
+        '1697': "{% trans 'French obtain St Domingue in Treaty of Rywsick' %}",
+        '1756': "{% trans 'Seven years war begins' %}",
+        '1776': "{% trans 'American Revolutionary War begins' %}",
+        '1789': "{% trans 'Bourbon reforms open Spanish colonial ports to slaves' %}",
+        '1791': "{% trans 'St Domingue revolution begins' %}",
+        '1808': "{% trans 'Abolition of British and US slave trades takes effect' %}",
+        '1830': "{% trans 'Anglo-Brazilian anti-slave trade treaty' %}",
+        '1850': "{% trans 'Brazil suppresses slave trade' %}",
+        '1866': "{% trans 'Last reported transatlantic slave voyage arrives in Americas' %}"
     };
     firstOrdinal = x.domain()[0];
     lastOrdinal = x.domain()[x.domain().length - 1];
@@ -407,4 +410,5 @@ function yTickFormat(d) {
     }
     return d;
 }
+{% endlocalize %}
 </script>

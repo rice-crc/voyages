@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load assessment_extras %}
 
 <script src="{{ STATIC_URL }}scripts/assessment/assessment-left-menu.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
@@ -16,7 +17,7 @@
           <tbody>
             <tr>
               <td class="box-label">
-                Time frame
+                {% trans 'Time frame' %}
               </td>
               <td>
                 <div class="box-button"></div>
@@ -37,13 +38,13 @@
             <tbody>
               <tr>
                 <td style="padding: 0px 10px 0px 0px">
-                  Show data only from
+                  {% trans 'Show data only from' %}
                 </td>
                 <td style="padding: 0px 10px 0px 0px;">
                   {{ year_form.frame_from_year }}
                 </td>
                 <td style="padding: 0px 10px 0px 0px;">
-                  to
+                  {% trans 'to' %}
                 </td>
                 <td style="padding: 0px;">
                 {{ year_form.frame_to_year }}
@@ -52,11 +53,11 @@
             </tbody>
             </table>
             <div style="padding: 5px 0px 0px 0px; font-style: italic;">
-              The full extent of time covered by estimates is 1501 – 1866.
+              {% trans 'The full extent of time covered by estimates is 1501 – 1866.' %}
             </div>
             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #9EDEE0;">
-              <input id="submit_year" type="submit" value="Change selection" name="submit_year">
-              <input id="submit_year" type="submit" value="Reset to default" name="submit_year">
+              <button type="submit" name="submit_year" value="Change selection">{% trans 'Change selection' %}</button>
+              <button type="submit" name="submit_year" value="Reset to default">{% trans 'Reset to default' %}</button>
             </div>
           </div>
         </td>
@@ -80,7 +81,7 @@
           <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
           <tbody>
             <tr>
-              <td class="box-label">Flag</td>
+              <td class="box-label">{% trans 'Flag' %}</td>
               <td>
                 <div class="box-button-collapsed"></div>
               </td>
@@ -112,7 +113,7 @@
                         </td>
                       {% endifequal %}
                       <td class="checkbox-list-label-0">
-                        <label for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0 }}</label>
+                        <label for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
                       </td>
                     </tr>
                   {% endfor %}
@@ -120,8 +121,8 @@
                 </table>
 
               <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #9EDEE0;">
-                <input id="submit_nation" type="submit" onclick="clear_form();" value="Change selection" name="submit_nation">
-                <input id="submit_nation" type="submit" onclick="clear_form();" value="Reset to default" name="submit_nation">
+                <button type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Change selection' %}</button>
+                <button type="submit" name="submit_nation" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset to default' %}</button>
               </div>
             </div>
           </div>
@@ -147,7 +148,7 @@
           <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
           <tbody>
             <tr>
-              <td class="box-label">Embarkation/Disembarkation</td>
+              <td class="box-label">{% trans 'Embarkation/Disembarkation' %}</td>
               <td>
                 <div class="box-button-collapsed"></div>
               </td>
@@ -165,7 +166,7 @@
           <div id="form:_idJsp34" class="box-main-text">
 
             <div class="region-list">
-              <div class="region-title">Embarkation regions</div>
+              <div class="region-title">{% trans 'Embarkation regions' %}</div>
 
               <!-- Embkarkation menu -->
               <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
@@ -185,15 +186,15 @@
                   <!-- Check if item is expendable and use proper class -->
                   {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% elif region_list %}
                     <td class="checkbox-list-label-0-expandable">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% else %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% endif %}
 
@@ -215,7 +216,7 @@
                             {% endifequal %}
                           </td>
                           <td class="checkbox-list-label-0">
-                            <label onclick="labelClick(this, 1)">{{ region.0.0 }}</label>
+                            <label onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
                           </td>
                         </tr>
                         {% endfor %}
@@ -234,10 +235,10 @@
               <tbody>
                 <tr>
                   <td class="checkbox-list-select-all">
-                    <input type="button" value="Select all" onclick="allClicked(this, 1)">
+                    <button value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select all' %}</button>
                   </td>
                   <td class="checkbox-list-deselect-all">
-                    <input type="button" value="Deselect all" onclick="allClicked(this, 0)">
+                    <button value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect all' %}</button>
                   </td>
                 </tr>
               </tbody>
@@ -264,15 +265,15 @@
                   <!-- Check if item is expendable and use proper class -->
                   {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% elif region_list %}
                     <td class="checkbox-list-label-0-expandable">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% else %}
                     <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 0)">{{ area.0.name }}</label>
+                      <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
                     </td>
                   {% endif %}
 
@@ -294,7 +295,7 @@
                             {% endifequal %}
                           </td>
                           <td class="checkbox-list-label-0">
-                            <label onclick="labelClick(this, 1)">{{ region.0.0 }}</label>
+                            <label onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
                           </td>
                         </tr>
                         {% endfor %}
@@ -312,18 +313,18 @@
               <tbody>
                 <tr>
                   <td class="checkbox-list-select-all">
-                    <input type="button" value="Select all" onclick="allClicked(this, 1)">
+                    <button value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select all' %}</button>
                   </td>
                   <td class="checkbox-list-deselect-all">
-                    <input type="button" value="Deselect all" onclick="allClicked(this, 0)">
+                    <button value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect all' %}</button>
                   </td>
                 </tr>
               </tbody>
               </table>
             </div>
             <div>
-              <input type="submit" value="Change selection" name="submit_regions">
-              <input type="submit" value="Reset to default" name="submit_regions">
+              <button type="submit" value="Change selection" name="submit_regions">{% trans 'Change selection' %}</button>
+              <button type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset to default' %}</button>
             </div>
 
           </div>
@@ -353,7 +354,7 @@
         <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
         <tbody>
           <tr>
-            <td class="box-label">Current query</td>
+            <td class="box-label">{% trans 'Current query' %}</td>
             <td>
               <div class="box-button"></div>
             </td>
@@ -370,29 +371,29 @@
       <td class="box-middle-row-middle">
         <div id="form:_idJsp45" class="box-main-text">
           <div>
-            <div style="font-weight: bold;">Selected national carriers:</div>
+            <div style="font-weight: bold;">{% trans 'Selected national carriers:' %}</div>
             <i>
               {% if all_nations_selected %}
-                all
+                {% trans 'all' %}
               {% else %}
                 {% for nation in nations %}
                   {% ifequal nation.2 1 %}
-                    {{ nation.0 }}<br/>
+                    {{ nation.0|trans_log }}<br/>
                   {% endifequal %}
                 {% endfor %}
               {% endif %}
             </i>
           </div>
           <div style="margin-top: 5px;">
-            <div style="font-weight: bold;">Selected embarkation regions:</div>
+            <div style="font-weight: bold;">{% trans 'Selected embarkation regions:' %}</div>
             <i>
               {% if all_embarkations_selected %}
-                all
+                {% trans 'all' %}
               {% else %}
                 {% for region_list in export_regions.values %}
                   {% for region in region_list %}
                     {% ifequal region.1 1 %}
-                      {{ region.0.0 }}<br/>
+                      {{ region.0.0|trans_log }}<br/>
                     {% endifequal %}
                   {% endfor %}
                 {% endfor %}
@@ -400,15 +401,15 @@
             </i>
           </div>
           <div style="margin-top: 5px;">
-            <div style="font-weight: bold;">Selected disembarkation regions:</div>
+            <div style="font-weight: bold;">{% trans 'Selected disembarkation regions:' %}</div>
             <i>
               {% if all_disembarkations_selected %}
-                all
+                {% trans 'all' %}
               {% else %}
                 {% for region_list in import_regions.values %}
                   {% for region in region_list %}
                     {% ifequal region.1 1 %}
-                      {{ region.0.0 }}<br/>
+                      {{ region.0.0|trans_log }}<br/>
                     {% endifequal %}
                   {% endfor %}
                 {% endfor %}
@@ -416,8 +417,8 @@
             </i>
           </div>
           <div style="margin-top: 5px;">
-            <button onclick="return createLink();">Create a link</button> <br/>
-            <button onclick="return resetAll();">New query</button>
+            <button onclick="return createLink();">{% trans 'Create a link' %}</button> <br/>
+            <button onclick="return resetAll();">{% trans 'New query' %}</button>
           </div>
         </div>
       </td>
@@ -433,18 +434,18 @@
   </tbody>
   </table>
 
-  <p style="font-style: italic;margin: 10px 10px 0px 10px;">For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred.</p>
+  <p style="font-style: italic;margin: 10px 10px 0px 10px;">{% trans 'For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred.' %}</p>
   <div id="dialog" title="Dialog Title" style="display:none;">
-    <h1>URL link has been created</h1>
+    <h1>{% trans 'URL link has been created' %}</h1>
     <hr />
-    <p>To reactivate the current query in the future, copy the following URL and then paste it into the address bar:</p>
+    <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
     <textarea contenteditable="true" id="url_string" style="width:500px;"></textarea>
   </div>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <script type="text/javascript">
-    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "Link created" });
+    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
     function createLink() {
       $.post('permalink', $('form').serialize(), function(link) {
         var urlTextArea = $('#url_string');
