@@ -455,7 +455,7 @@ def prettify_var_list(varlist):
     qdict = create_query_dict(varlist)
     # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
     if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-        output.append(('Time frame:', unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
+        output.append((_('Time frame:'), unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         is_real_var = False
@@ -479,9 +479,9 @@ def prettify_var_list(varlist):
             month_dict = {}
             for monnum, monval in globals.list_months:
                 month_dict[int(monnum)] = monval
-            output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
+            output.append((fullname + _(" month:"), ', '.join([month_dict[int(i)] for i in vvar])))
             continue
-        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
+        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.default_prettifier(varname))
         tvar = unmangle_method(vvar)
         value = unicode(tvar)
         if isinstance(tvar, (list, tuple)):
@@ -491,42 +491,42 @@ def prettify_var_list(varlist):
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
+                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar[1].month == 1:
                         tod = date(vvar[1].year - 1, 12, vvar[1].day)
                     else:
                         tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
-                    value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
+                    value = _('between ') + unicode(unmangle_method(vvar[0])) + _(' and ') + unicode(unmangle_method(tod))
                 else:
-                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
+                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
-                    value = 'in ' + unicode(unmangle_method(vvar[0]))
+                    value = _('in ') + unicode(unmangle_method(vvar[0]))
                 else:
-                    value = 'equal to ' + unicode(tvar)
+                    value = _('equal to ') + unicode(tvar)
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'before ' + unicode(tvar)
+                    value = _('before ') + unicode(tvar)
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar.month == 1:
                         tod = date(vvar.year - 1, 12, vvar.day)
                     else:
                         tod = date(vvar.year, vvar.month - 1, vvar.day)
-                    value = 'before ' + unicode(unmangle_method(tod))
+                    value = _('before ') + unicode(unmangle_method(tod))
                 else:
-                    value = 'at most ' + unicode(tvar)
+                    value = _('at most ') + unicode(tvar)
             elif opt == '3':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'after ' + unicode(tvar)
+                    value = _('after ') + unicode(tvar)
                 elif varname in globals.list_date_fields:
-                    value = 'after ' + unicode(tvar)
+                    value = _('after ') + unicode(tvar)
                 else:
-                    value = 'at least ' + unicode(tvar)
+                    value = _('at least ') + unicode(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
@@ -574,7 +574,7 @@ def voyage_variables(request, voyage_id):
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:
-                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.no_mangle)
+                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.default_prettifier(j['var_name']))
                 val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
@@ -1333,10 +1333,8 @@ def prettify_results(results, lookup_table):
         voyageid = int(i['var_voyage_id'])
         for varname, varvalue in i.items():
             if varvalue:
-                if varname in lookup_table:
-                    idict[varname] = lookup_table[varname](varvalue, voyageid)
-                else:
-                    idict[varname] = varvalue
+                prettify_varvalue = lookup_table.get(varname, globals.default_prettifier(varname))
+                idict[varname] = prettify_varvalue(varvalue, voyageid)
             else:
                 idict[varname] = None
         mangled.append(idict)

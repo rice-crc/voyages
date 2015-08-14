@@ -6,11 +6,11 @@ var maxIdx = elem.length - 1;
 
 function writebreadcrumb() {
 	if (maxIdx == 3 && elem[maxIdx] == "") {
-		return "<div class='breadcrumb'>Home</div>";
+		return "<div class='breadcrumb'>" + gettext("Home") + "</div>";
 	}
 	
 	/* Parse the link to the home page */
-	path = "<div class='breadcrumb'><a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + "Home"  + "</a>";
+	path = "<div class='breadcrumb'><a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + gettext("Home")  + "</a>";
 
 	/* For landing pages of each section */
 	if ((maxIdx == 3 && elem[3] != "") || (maxIdx == 4 && elem[maxIdx] == "index.html")
@@ -28,11 +28,11 @@ function writebreadcrumb() {
 		}		
 		
 		if (elem[3] == "voyage" && (elem[4] == "understanding-db")) {
-			path += seperatorst + "Understanding the Database";
+			path += seperatorst + gettext("Understanding the Database");
         } else if (elem[3] == "voyage" && (elem[4] == "source")) {
-            path += seperatorst + "Understanding the Database";
+            path += seperatorst + gettext("Understanding the Database");
 		} else if (elem[3] == "assessment" && (elem[4] == "essays")) {
-			path += seperatorst + "Essays";
+			path += seperatorst + gettext("Essays");
         } else if (elem[3] == "resources" && (elem[4] == "images")) {
 		}else {
 			/* Add successive elements and seperators */

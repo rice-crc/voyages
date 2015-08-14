@@ -129,11 +129,11 @@ def no_mangle(value, voyageid=None):
 def unmangle_place(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_place, value)
-    return unicode(models.Place.objects.get(value=int(value)).place)
+    return unicode(_(models.Place.objects.get(value=int(value)).place))
 def unmangle_nationality(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_nationality, value)
-    return unicode(models.Nationality.objects.get(value=int(value)).label)
+    return unicode(_(models.Nationality.objects.get(value=int(value)).label))
 def unmangle_rig(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_rig, value)
@@ -141,23 +141,23 @@ def unmangle_rig(value, voyageid=None):
 def unmangle_outcome_particular(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_outcome_particular, value)
-    return unicode(models.ParticularOutcome.objects.get(value=int(value)).label)
+    return unicode(_(models.ParticularOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_slaves(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_outcome_slaves, value)
-    return unicode(models.SlavesOutcome.objects.get(value=int(value)).label)
+    return unicode(_(models.SlavesOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_owner(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_outcome_owner, value)
-    return unicode(models.OwnerOutcome.objects.get(value=int(value)).label)
+    return unicode(_(models.OwnerOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_ship(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_outcome_ship, value)
-    return unicode(models.VesselCapturedOutcome.objects.get(value=int(value)).label)
+    return unicode(_(models.VesselCapturedOutcome.objects.get(value=int(value)).label))
 def unmangle_resistance(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return map(unmangle_resistance, value)
-    return unicode(models.Resistance.objects.get(value=int(value)).label)
+    return unicode(_(models.Resistance.objects.get(value=int(value)).label))
 
 def voyage_by_id(voyageid):
     fil = models.Voyage.objects.filter(voyage_id=voyageid)
@@ -180,14 +180,27 @@ def csd_to_str(csd):
     if vl[2] != '': year = str(vl[2]).zfill(4)
     return year + '-' + month + '-' + day
 
-def id_func(value, voyageid):
+def id_func(value, voyageid=None):
     return value
 
 def trans_adapter(func=id_func):
-    def adapted(value, voyageid):
+    def adapted(value, voyageid=None):
         result = func(value, voyageid)
         return _(result)
     return adapted
+
+def default_prettifier(varname):
+    """
+    The default prettifier function simply applies the translation for fields
+    that contain translatable names such as Port/Place/Region names as well as
+    voyage outcomes.
+    :param varname: the variable name.
+    :return: a function that receives value, voyageid and outputs a converted value.
+    """
+    if 'nation' in varname or 'port' in varname or 'place' in varname or 'region' in varname or\
+                    'outcome' in varname or 'resistance' in varname:
+        return trans_adapter()
+    return id_func
 
 # Returns the date as a string for display using the database fields
 def gd_voyage_began(value, voyageid):
@@ -258,7 +271,6 @@ display_methods = {'var_imputed_percentage_men': display_percent,
                    'var_first_dis_of_slaves': gd_first_dis_of_slaves,
                    'var_departure_last_place_of_landing': gd_departure_last_landing,
                    'var_voyage_completed': gd_voyage_completed,
-                   'var_imp_principal_region_of_slave_purchase': trans_adapter(),
                    'var_voyage_in_cd_rom': trans_adapter(display_yesno)
                    }
 # Run against solr field values when creating an xls file
@@ -291,7 +303,7 @@ search_mangle_methods = {'var_imputed_percentage_men': mangle_percent,
                          'var_imputed_percentage_male': mangle_percent,
                          'var_imputed_percentage_child': mangle_percent,
                          'var_imputed_mortality': mangle_percent,
-                         'var_sources': mangle_source} 
+                         'var_sources': mangle_source}
 #Used for display of previous queries
 parameter_unmangle_methods = {'var_imputed_percentage_men': unmangle_percent,
                               'var_imputed_percentage_women': unmangle_percent,
@@ -409,7 +421,7 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
             return str(years[0]) + '-' + str(years[1])
     return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range', year_labeler)
 
-# Returns filter definition (list of tuples of (label_list, query_dict)) 
+# Returns filter definition (list of tuples of (label_list, query_dict))
 def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
     result = []
     for i in lst:
@@ -544,7 +556,7 @@ def make_sum_fun(varname):
             return prettifier(0)
         #return prettifier(sum([i[varname] for i in list(queryset.values(varname)) if varname in i and i[varname] != None]))
     return sum_fun
-    
+
 def make_sum_nopretty_fun(varname):
     prettifier = graph_display_methods.get(varname, no_mangle)
     def sum_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
@@ -825,7 +837,7 @@ def make_x_bar_fun(varname, table=None, tablelblr=lbllblr, lst=None):
             dataset.append((lbl, yval))
         return dataset
     return x_fun
-        
+
 
 def make_x_bar_month_fun(varname):
     output = []
@@ -848,7 +860,7 @@ graphs_bar_x_functions = [(_('Flag*'), make_x_bar_fun(_('var_imputed_nationality
                           (_('Outcome for owner*'), make_x_bar_fun(_('var_outcome_owner'), table=models.OwnerOutcome)),
                           (_('Outcome if ship captured*'), make_x_bar_fun(_('var_outcome_ship_captured'), table=models.VesselCapturedOutcome)),
                           (_('African resistance'), make_x_bar_fun(_('var_resistance'), table=models.Resistance)),
-                          (_('Place where voyage began*'), make_x_bar_fun(_('var_imp_port_voyage_begin'), table=models.Place, tablelblr=placelblr)), 
+                          (_('Place where voyage began*'), make_x_bar_fun(_('var_imp_port_voyage_begin'), table=models.Place, tablelblr=placelblr)),
                           (_('Region where voyage began*'), make_x_bar_fun(_('var_imp_region_voyage_begin'), table=models.Region, tablelblr=regionlblr)),
                           (_('Principal place of slave purchase*'), make_x_bar_fun(_('var_imp_principal_place_of_slave_purchase'), table=models.Place, tablelblr=placelblr)),
                           (_('Principal region of slave purchase*'), make_x_bar_fun(_('var_imp_principal_region_of_slave_purchase'), table=models.Region, tablelblr=regionlblr)),

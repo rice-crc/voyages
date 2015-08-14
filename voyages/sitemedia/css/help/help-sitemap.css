@@ -1,6 +1,8 @@
 /* Sitemap section */
 
-
+.language_menu {
+	display: none;
+}
 
 div#sitemap-content {
 	margin-top: 20px;

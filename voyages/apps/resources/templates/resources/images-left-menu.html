@@ -64,7 +64,7 @@
                     </table>
                 </div>
                 <div class="images-query-box">
-                    Category
+                    {% trans 'Category' %}
                     <div style="margin: 5px 0px 0px 0px;">
                         <input type="hidden" value="">
                         <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
@@ -85,9 +85,9 @@
                                             {% spaceless %}
                                             <span class="images-count">({{ images_set.number_of_images }}
                                                 {% if images_set.number_of_images == 1 %}
-                                                    image)
+                                                    {% trans 'image' %})
                                                 {% else %}
-                                                    images)
+                                                    {% trans 'images' %})
                                                 {% endif %}
                                             </span>
                                             {% endspaceless %}
@@ -104,13 +104,13 @@
                     <table>
                         <tr>
                             <td>
-                                <input type="submit" value="Submit" >
+                                <button type="submit" value="Submit">{% trans 'Submit' %}</button>
             </form>
                             </td>
                             <td>
                                 <form action="{% url 'resources:images' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <input type="submit" value="Start again">
+                                    <button type="submit" value="Start again">{% trans 'Start again' %}</button>
                                 </form>
                             </td>
                         </tr>

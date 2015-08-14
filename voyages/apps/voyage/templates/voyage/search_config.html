@@ -47,7 +47,7 @@
                            value="&lt;" ></div>
             </td>
             <td>
-                <div style="font-weight: normal; margin-bottom: 5px;">Selected columns</div>
+                <div style="font-weight: normal; margin-bottom: 5px;">{% trans 'Selected columns' %}</div>
 
                 <select style="width: 300px" size="10" multiple="multiple" name="configure_visibleAttributes"
                         id="configure_visibleAttributes">
@@ -58,13 +58,13 @@
             </td>
             <td>
                 <div style="margin-bottom: 5px;" class="select_move_up_down">
-                    <input type="submit" style="width: 80px"
+                    <button type="submit" style="width: 80px"
                            onclick="move_var('up');return false;"
-                           value="Move up"></div>
+                           value="Move up">{% trans 'Move up' %}</button></div>
                 <div>
-                    <input type="submit" style="width: 80px"
+                    <button type="submit" style="width: 80px"
                            onclick="move_var('down');return false;"
-                            value="Move down"></div>
+                            value="Move down">{% trans 'Move down' %}</button></div>
             </td>
         </tr>
         </tbody>
@@ -74,7 +74,7 @@
 </div>
 
 <div>
-    <input type="submit" onclick="applyConfig();" value="{% trans 'Apply configuration' %}">
-    <input type="submit" onclick="submitWithValue('cancelConfig');" value="{% trans 'Cancel' %}">
-    <input type="submit" onclick="submitWithValue('restoreConfig');" value="{% trans 'Restore default columns' %}">
+    <button type="submit" onclick="applyConfig();" value="Apply configuration">{% trans 'Apply configuration' %}</button>
+    <button type="submit" onclick="submitWithValue('cancelConfig');" value="Cancel">{% trans 'Cancel' %}</button>
+    <button type="submit" onclick="submitWithValue('restoreConfig');" value="Restore default columns">{% trans 'Restore default columns' %}</button>
 </div>

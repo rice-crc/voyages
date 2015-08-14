@@ -1,4 +1,4 @@
-sed -e 's/.*trans::\(.*\)$/gettext("\1");/' $1 | sort -u > /tmp/trans_log.c
+sed -e 's/\"/\\\"/g' $1 | sed -e 's/.*trans::\(.*\)$/gettext("\1");/' | sort -u > /tmp/trans_log.c
 xgettext --from-code=UTF-8 /tmp/trans_log.c -d $2
 # rm -f /tmp/trans_log.c
 sed -i.bak $2.po -e 's/CHARSET/UTF-8/'
