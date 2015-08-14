@@ -1,7 +1,9 @@
 from django import template
 from django.template.defaultfilters import stringfilter
+from voyages.apps.common.filters import trans_log
 
 register = template.Library()
+register.filter('trans_log', trans_log)
 
 @register.filter
 @stringfilter

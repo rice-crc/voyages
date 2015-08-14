@@ -7,32 +7,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Voyages\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-30 10:32-0300\n"
+"POT-Creation-Date: 2015-08-14 11:56-0300\n"
 "PO-Revision-Date: 2015-08-11 17:29-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: settings.py:150
+#: settings.py:154
 msgid "English"
 msgstr "Inglês"
 
-#: settings.py:151
-msgid "German"
-msgstr "Alemão"
-
-#: settings.py:152
-msgid "French"
-msgstr "Francês"
-
-#: settings.py:153
-msgid "Spanish"
-msgstr "Espanhol"
+#: settings.py:155
+msgid "Portuguese"
+msgstr ""
 
 #: apps/about/templates/about/acknowledgements.html:5
 #: apps/about/templates/about/acknowledgements.html:13
@@ -75,14 +67,16 @@ msgstr ""
 "“We the People”."
 
 #: apps/about/templates/about/acknowledgements.html:49
-msgid "W.E.B. Du Bois Institute for African and African American Research"
+#, fuzzy
+msgid "Hutchins Center for African and African American Research"
 msgstr "W.E.B. Du Bois Institute for African and African American Research"
 
 #: apps/about/templates/about/acknowledgements.html:53
+#, fuzzy
 msgid ""
 "Through fellowships to scholars, sponsorship of a range\n"
 "\t\t\t\tof cultural and educational events and projects, and affiliation\n"
-"\t\t\t\twith other outreach programs, the W.E.B. Du Bois Institute for\n"
+"\t\t\t\twith other outreach programs, the Hutchins Center for\n"
 "\t\t\t\tAfrican and African American Research advances study and\n"
 "\t\t\t\tunderstanding of the African diasporic experience. The Institute\n"
 "\t\t\t\tsponsored the development of the Trans-Atlantic Slave Trade\n"
@@ -784,6 +778,7 @@ msgstr ""
 "próprias pesquisas."
 
 #: apps/about/templates/about/left-menu.html:6
+#: apps/education/templates/education/educationbase.html:5
 #: apps/static_content/templates/static_content/about-index.html:4
 #: templates/topbar.html:75
 msgid "About the Project"
@@ -800,6 +795,10 @@ msgstr "Equipe do projeto"
 #: apps/about/templates/about/origins.html:10 templates/topbar.html:91
 msgid "African Origins Project"
 msgstr "Projeto Origens Africanas"
+
+#: apps/about/templates/about/origins.html:11
+msgid "Explore the site"
+msgstr ""
 
 #: apps/about/templates/about/origins.html:13
 #, python-format
@@ -940,6 +939,89 @@ msgstr "CONSELHO EXECUTIVO"
 msgid "ADVISORY BOARD"
 msgstr "CONSELHO CONSULTIVO"
 
+#: apps/assessment/forms.py:12
+msgid "Rows"
+msgstr ""
+
+#: apps/assessment/forms.py:16
+msgid "Columns"
+msgstr ""
+
+#: apps/assessment/forms.py:20
+msgid "Cells"
+msgstr ""
+
+#: apps/assessment/forms.py:22
+msgid "Include empty"
+msgstr ""
+
+#: apps/assessment/forms.py:26 apps/voyage/forms.py:198
+#: apps/voyage/templates/voyage/search_left_menu.html:38
+msgid "From"
+msgstr ""
+
+#: apps/assessment/forms.py:28 apps/voyage/forms.py:200
+#: apps/voyage/templates/voyage/search_left_menu.html:39
+msgid "To"
+msgstr ""
+
+#: apps/assessment/globals.py:166 apps/assessment/globals.py:177
+#: apps/assessment/templates/assessment/estimates-left-menu.html:84
+msgid "Flag"
+msgstr ""
+
+#: apps/assessment/globals.py:167 apps/assessment/globals.py:178
+#: apps/assessment/templates/assessment/estimates-left-menu.html:169
+msgid "Embarkation regions"
+msgstr ""
+
+#: apps/assessment/globals.py:168 apps/assessment/globals.py:179
+msgid "Broad disembarkation regions"
+msgstr ""
+
+#: apps/assessment/globals.py:169 apps/assessment/globals.py:180
+msgid "Specific disembarkation regions"
+msgstr ""
+
+#: apps/assessment/globals.py:170
+msgid "Individual years"
+msgstr ""
+
+#: apps/assessment/globals.py:171 apps/voyage/globals.py:521
+msgid "5-year periods"
+msgstr ""
+
+#: apps/assessment/globals.py:172 apps/voyage/globals.py:522
+msgid "10-year periods"
+msgstr ""
+
+#: apps/assessment/globals.py:173 apps/voyage/globals.py:523
+msgid "25-year periods"
+msgstr ""
+
+#: apps/assessment/globals.py:174 apps/voyage/globals.py:524
+msgid "50-year periods"
+msgstr ""
+
+#: apps/assessment/globals.py:175 apps/voyage/globals.py:525
+msgid "100-year periods"
+msgstr ""
+
+#: apps/assessment/globals.py:183
+#, fuzzy
+msgid "Embarked/Disembarked"
+msgstr "Desembarcados"
+
+#: apps/assessment/globals.py:184
+#, fuzzy
+msgid "Only embarked"
+msgstr "Desembarcados"
+
+#: apps/assessment/globals.py:185
+#, fuzzy
+msgid "Only disembarked"
+msgstr "Desembarcados"
+
 #: apps/assessment/templates/assessment/c01_base.html:6
 #: apps/assessment/templates/assessment/c01_left_menu.html:10
 #: apps/assessment/templates/assessment/c01_s01_generic.html:4
@@ -947,7 +1029,7 @@ msgid "A Brief Overview of the Trans-Atlantic Slave Trade"
 msgstr "Um breve resumo do tráfico transatlântico de escravos"
 
 #: apps/assessment/templates/assessment/c01_left_menu.html:5
-#: templates/topbar.html:32
+#: apps/help/templates/help/page_legal.html:243 templates/topbar.html:32
 msgid "Essays"
 msgstr "Ensaios"
 
@@ -4544,27 +4626,244 @@ msgstr ""
 "importantes entre o mundo europeu das altas finanças e o tráfico de escravos "
 "transatlântico no século XVIII e no início do século XIX."
 
+#: apps/assessment/templates/assessment/estimates-left-menu.html:20
+#: apps/resources/templates/resources/images-left-menu.html:47
+msgid "Time frame"
+msgstr "Intervalo de tempo"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:41
+#, fuzzy
+msgid "Show data only from"
+msgstr "Exibir detalhe"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:47
+msgid "to"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:56
+#, fuzzy
+msgid "The full extent of time covered by estimates is 1501 – 1866."
+msgstr "A extensão total de tempo da primeira à última viagem é "
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:59
+#: apps/assessment/templates/assessment/estimates-left-menu.html:124
+#: apps/assessment/templates/assessment/estimates-left-menu.html:326
+#, fuzzy
+msgid "Change selection"
+msgstr "nada selecionado"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:60
+#: apps/assessment/templates/assessment/estimates-left-menu.html:125
+#: apps/assessment/templates/assessment/estimates-left-menu.html:327
+msgid "Reset to default"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:151
+#, fuzzy
+msgid "Embarkation/Disembarkation"
+msgstr "Regiões de embarque e desembarque"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:238
+#: apps/assessment/templates/assessment/estimates-left-menu.html:316
+#: apps/voyage/templates/voyage/search_left_menu.html:211
+#: apps/voyage/templates/voyage/search_left_menu.html:291
+msgid "Select all"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:241
+#: apps/assessment/templates/assessment/estimates-left-menu.html:319
+#: apps/voyage/templates/voyage/search_left_menu.html:213
+#: apps/voyage/templates/voyage/search_left_menu.html:293
+msgid "Deselect all"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:357
+#: apps/voyage/templates/voyage/search_left_menu.html:136
+msgid "Current query"
+msgstr "Consulta Atual"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:374
+#, fuzzy
+msgid "Selected national carriers:"
+msgstr "Nações transportadoras"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:377
+#: apps/assessment/templates/assessment/estimates-left-menu.html:391
+#: apps/assessment/templates/assessment/estimates-left-menu.html:407
+msgid "all"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:388
+msgid "Selected embarkation regions:"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:404
+msgid "Selected disembarkation regions:"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:420
+#: apps/voyage/templates/voyage/search_left_menu.html:367
+msgid "Create a link"
+msgstr "Criar um link"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:421
+#: apps/voyage/templates/voyage/search_left_menu.html:357
+msgid "New query"
+msgstr "Nova consulta"
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:437
+msgid ""
+"For purposes of calculation, estimates of embarked and disembarked slaves in "
+"tables, the timeline, and maps have been rounded to integers. When users "
+"cite any number, they are advised to round it to the nearest hundred."
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:439
+msgid "URL link has been created"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:441
+msgid ""
+"To reactivate the current query in the future, copy the following URL and "
+"then paste it into the address bar:"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates-left-menu.html:448
+msgid "Link created"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates.html:21
+#: templates/topbar.html:35
+msgid "Estimates"
+msgstr "Estimativas"
+
+#: apps/assessment/templates/assessment/estimates.html:40
+#: apps/voyage/templates/voyage/search_main_content.html:26
+#: apps/voyage/templates/voyage/search_main_content.html:30
+msgid "Tables"
+msgstr "Tabelas"
+
+#: apps/assessment/templates/assessment/estimates.html:44
+#: apps/voyage/templates/voyage/search_main_content.html:44
+#: apps/voyage/templates/voyage/search_main_content.html:48
+#: apps/voyage/templates/voyage/search_timeline.html:8
+msgid "Timeline"
+msgstr "Linha do tempo"
+
+#: apps/assessment/templates/assessment/estimates.html:48
+#: apps/voyage/templates/voyage/search_main_content.html:53
+#: apps/voyage/templates/voyage/search_main_content.html:57
+msgid "Maps"
+msgstr "Mapas"
+
+#: apps/assessment/templates/assessment/estimates_table.html:5
+#: apps/voyage/templates/voyage/search_tables.html:10
+msgid "Table"
+msgstr "Tabela"
+
 #: apps/assessment/templates/assessment/estimates_table.html:12
-#: apps/voyage/templates/voyage/search_bar_graphs.html:33
-#: apps/voyage/templates/voyage/search_pie_graphs.html:22
-#: apps/voyage/templates/voyage/search_tables.html:24
-#: apps/voyage/templates/voyage/search_timeline.html:18
-#: apps/voyage/templates/voyage/search_xy_graphs.html:33
+#: apps/voyage/templates/voyage/search_bar_graphs.html:35
+#: apps/voyage/templates/voyage/search_pie_graphs.html:23
+#: apps/voyage/templates/voyage/search_tables.html:25
+#: apps/voyage/templates/voyage/search_timeline.html:19
+#: apps/voyage/templates/voyage/search_xy_graphs.html:35
 msgid "Show"
 msgstr "Exibir"
 
-#: apps/assessment/templates/assessment/estimates_table.html:66
+#: apps/assessment/templates/assessment/estimates_table.html:55
 msgid "Download table"
 msgstr "Baixar tabela"
 
-#: apps/assessment/templates/assessment/estimates_timeline.html:30
-#: apps/voyage/templates/voyage/search_timeline.html:124
+#: apps/assessment/templates/assessment/estimates_timeline.html:36
+msgid "Timeline: Number of Captives Embarked and Disembarked per Year"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:41
+#: apps/voyage/templates/voyage/search_timeline.html:125
 msgid "Download timeline data"
 msgstr "Baixar linha do tempo"
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:142
+#, fuzzy
+msgid "Historical event"
+msgstr "Dados históricos"
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:146
+msgid "Year"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:147
+#: apps/assessment/templates/assessment/estimates_timeline.html:215
+#: apps/voyage/templates/voyage/search_tables.html:50
+msgid "Embarked"
+msgstr "Embarcados"
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:148
+#: apps/assessment/templates/assessment/estimates_timeline.html:215
+#: apps/voyage/templates/voyage/search_tables.html:51
+msgid "Disembarked"
+msgstr "Desembarcados"
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:251
+msgid "First slave voyage direct from Africa to the Americas"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:252
+msgid "Continuous slave trade from Brazil begins"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:253
+msgid "Sugar exports from Eastern Caribbean begin"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:254
+msgid "English capture Jamaica"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:255
+msgid "Gold discovered in Minas Gerais (Brazil)"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:256
+msgid "French obtain St Domingue in Treaty of Rywsick"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:257
+msgid "Seven years war begins"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:258
+msgid "American Revolutionary War begins"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:259
+msgid "Bourbon reforms open Spanish colonial ports to slaves"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:260
+msgid "St Domingue revolution begins"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:261
+msgid "Abolition of British and US slave trades takes effect"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:262
+msgid "Anglo-Brazilian anti-slave trade treaty"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:263
+msgid "Brazil suppresses slave trade"
+msgstr ""
+
+#: apps/assessment/templates/assessment/estimates_timeline.html:264
+msgid "Last reported transatlantic slave voyage arrives in Americas"
+msgstr ""
 
 #: apps/assessment/templates/assessment/intro-maps.html:5
 #: apps/assessment/templates/assessment/intro-maps.html:21
 #: apps/assessment/templates/assessment/intro-maps.html:59
+#: apps/help/templates/help/page_legal.html:215
 #: apps/static_content/templates/static_content/index.html:191
 #: templates/topbar.html:38
 msgid "Introductory Maps"
@@ -5125,6 +5424,7 @@ msgid "Lesson Plans"
 msgstr "Planos de Aula"
 
 #: apps/education/templates/education/left-menu.html:12
+#: apps/education/templates/flatpages/web-resources.html:6
 #: templates/topbar.html:67
 msgid "Web Resources"
 msgstr "Recursos da Web"
@@ -5192,6 +5492,7 @@ msgid "Description"
 msgstr "Descrição"
 
 #: apps/help/models.py:27
+#: apps/resources/templates/resources/images-left-menu.html:67
 msgid "Category"
 msgstr "Categoria"
 
@@ -5205,26 +5506,28 @@ msgstr "Resposta"
 
 #: apps/help/templates/help/helpbase.html:37
 #: apps/help/templates/help/page_sitemap.html:12
+#: templates/secondarybar.html:23
 msgid "Sitemap"
 msgstr "Mapa do site"
 
 #: apps/help/templates/help/helpbase.html:40
-#: apps/help/templates/help/page_faqs.html:13
+#: apps/help/templates/help/page_faqs.html:14 templates/secondarybar.html:24
 msgid "FAQs"
 msgstr "Perguntas frequentes"
 
 #: apps/help/templates/help/helpbase.html:43
-#: apps/help/templates/help/page_demos.html:12
+#: apps/help/templates/help/page_demos.html:12 templates/secondarybar.html:25
 msgid "Demos"
 msgstr "Demonstrações"
 
 #: apps/help/templates/help/helpbase.html:46
-#: apps/help/templates/help/page_glossary.html:9
+#: apps/help/templates/help/page_glossary.html:10
+#: templates/secondarybar.html:26
 msgid "Glossary"
 msgstr "Glossário"
 
 #: apps/help/templates/help/helpbase.html:49
-#: apps/help/templates/help/page_legal.html:8
+#: apps/help/templates/help/page_legal.html:8 templates/secondarybar.html:27
 msgid "Legal"
 msgstr "Questões legais"
 
@@ -5236,11 +5539,16 @@ msgstr ""
 "Este vídeo apresenta uma introdução às principais seções do site e mostra "
 "como navegar nelas."
 
-#: apps/help/templates/help/page_faqs.html:64
+#: apps/help/templates/help/page_faqs.html:69
 msgid "No Results"
 msgstr "Nenhum Resultado"
 
-#: apps/help/templates/help/page_glossary.html:48
+#: apps/help/templates/help/page_glossary.html:40
+#: apps/voyage/templates/voyage/search_left_menu.html:356
+msgid "Search"
+msgstr "Pesquisar"
+
+#: apps/help/templates/help/page_glossary.html:49
 #: apps/voyage/templates/voyage/search_no_result.html:6
 msgid "No results"
 msgstr "Nenhum resultado"
@@ -5422,6 +5730,21 @@ msgstr "EXEMPLO DE CITAÇÃO"
 msgid "NOTES"
 msgstr "OBSERVAÇÕES"
 
+#: apps/help/templates/help/page_legal.html:107
+msgid "CODE"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:108
+msgid ""
+"<a href=\"http://www.gnu.org/licenses/gpl.html\" target=\"_blank\">GNU "
+"General Public License, v. 3</a> or later"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:109
+#: apps/help/templates/help/page_legal.html:338
+msgid "Not applicable."
+msgstr ""
+
 #: apps/help/templates/help/page_legal.html:110
 msgid ""
 "Code for this site may be found at <a href=\"https://github.com/emory-"
@@ -5435,15 +5758,94 @@ msgstr ""
 "disponibilizado em apoio aos esforços de programação de código aberto. "
 "Visite o website do GNU para mais informações sobre os limites desta licença."
 
+#: apps/help/templates/help/page_legal.html:116
+msgid "DATA"
+msgstr ""
+
 #: apps/help/templates/help/page_legal.html:119
 msgid "Historical data"
 msgstr "Dados históricos"
 
-#: apps/help/templates/help/page_legal.html:173
+#: apps/help/templates/help/page_legal.html:120
+msgid "Public domain (use restrictions do not apply)."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:123
+#: apps/help/templates/help/page_legal.html:158
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\t[name of specific database used].\n"
+"\t\t\t[latest publication year of data, indicated on the Downloads page of "
+"the site].\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t[website URL or permanent link created from data search]\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:133
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example:</span>\n"
+"\t\t\tVoyages Database.\n"
+"\t\t\t2009.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t<a href=\"http://www.slavevoyages.org\" target=\"_blank\">http://www."
+"slavevoyages.org</a>\n"
+"\t\t\t(accessed January 1, 2010).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:143
+msgid ""
+"Data drawn from historical documents is\n"
+"\t\tpublic domain and therefore not restricted. Imputed data\n"
+"\t\t(indicated with an asterisk, *, in the Voyages Database, and all\n"
+"\t\tdata in the Estimates Database) is licensed through a Creative\n"
+"\t\tCommons license. Visit the Creative Commons website for more\n"
+"\t\tinformation on the limits of this license.\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:154
+#, fuzzy
+msgid "Imputed data"
+msgstr "Variáveis Imputadas"
+
+#: apps/help/templates/help/page_legal.html:155
+msgid ""
+"<a href=\"http://creativecommons.org/licenses/by-nc/3.0/us\" target=\"_blank"
+"\">Creative Commons Attribution-Noncommercial 3.0 United States License</a>."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:168
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example:</span>\n"
+"\t\t\tEstimates Database.\n"
+"\t\t\t2009.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:175
+#: apps/help/templates/help/page_legal.html:204
+#: apps/help/templates/help/page_legal.html:236
+#: apps/help/templates/help/page_legal.html:266
+#: apps/help/templates/help/page_legal.html:331
+msgid "(accessed January 1, 2010)."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:180
+msgid "IMAGES"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:183
 msgid "Digitized objects"
 msgstr "Objetos digitalizados"
 
-#: apps/help/templates/help/page_legal.html:174
+#: apps/help/templates/help/page_legal.html:184
 msgid ""
 "For permission questions or requests, contact the institution that provided "
 "the digital copy and/or holds the original."
@@ -5451,7 +5853,211 @@ msgstr ""
 "Em caso de dúvidas a respeito de permissão ou pedidos de permissão, entre em "
 "contato com a instituição que forneceu a cópia digital e/ou detém o original."
 
-#: apps/help/templates/help/page_legal.html:315
+#: apps/help/templates/help/page_legal.html:187
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\t[title provided for digitized image in the Images section].\n"
+"\t\t\tJPEG.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t[URL for Voyages Images Database]\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:197
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example:</span>\n"
+"\t\t\tWest and West-Central Africa, c. 1660.\n"
+"\t\t\tJPEG.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:207
+msgid ""
+"Contact <a href=\"mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;"
+"o&#114;&#121;&#46;&#101;d&#117;\">the <em>Voyages</em> website "
+"administrator</a> with questions or requests\n"
+"\t\tabout re-using images contained within the Voyages Database or\n"
+"\t\tthe Estimates Database (graphs, maps, timeline). The <em>Voyages</em> "
+"logo is only available for approved publicity for the <em>Voyages</em> "
+"site.\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:216
+#, fuzzy
+msgid "Contact Yale University Press."
+msgstr "Yale University Press"
+
+#: apps/help/templates/help/page_legal.html:219
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\t[title of map].\n"
+"\t\t\tJPEG.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t[URL for Introductory Maps section of Voyages website]\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:229
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example:</span>\n"
+"\t\t\tMap 4: Wind and ocean currents of the Atlantic basins.\n"
+"\t\t\tJPEG.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:240
+msgid "TEXT"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:244
+msgid "Contact individual author for permission to republish."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:247
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\t[author of essay].\n"
+"\t\t\t[publication date of essay].\n"
+"\t\t\t[title of essay].\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t[URL to first page of essay in Essays section]\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:258
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example 1:</span>\n"
+"\t\t\tBehrendt, Stephen D.\n"
+"\t\t\t2008.\n"
+"\t\t\tSeasonality in the trans-Atlantic slave trade.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:269
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example 2:</span>\n"
+"\t\t\tEltis, David, and Paul F. Lachance.\n"
+"\t\t\t2009.\n"
+"\t\t\tEstimates of the size and direction of the trans-Atlantic slave "
+"trade.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:279
+msgid ""
+"As with any information or object reused or republished\n"
+"\t\tin another context, original author or copyright should be\n"
+"\t\tappropriately credited."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:286
+#, fuzzy
+msgid "Lesson plans"
+msgstr "Planos de Aula"
+
+#: apps/help/templates/help/page_legal.html:287
+#, fuzzy
+msgid ""
+"Curriculum and instruction only. Not for commercial republication. Contact "
+"individual authors for additional permissions."
+msgstr ""
+"Estes materiais foram criados para fins de currículo e instrução e não se "
+"destinam a republicação comercial. Entre em contato com os autores "
+"individuais para obter permissões adicionais."
+
+#: apps/help/templates/help/page_legal.html:290
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\t[author of lesson plan].\n"
+"\t\t\t[title of lesson plan].\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t[URL to PDF version of lesson plan]\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:303
+msgid "Other text"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:304
+msgid ""
+"PDF documents, glossary, FAQs, site text, and other text on the site not "
+"attributed to an individual is covered by a <a href=\"http://creativecommons."
+"org/licenses/by-nc/3.0/us\" target=\"_blank\">Creative Commons Attribution-"
+"Noncommercial 3.0 United States License</a>."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:308
+msgid "VIDEO"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:309
+msgid ""
+"<a href=\"http://creativecommons.org/licenses/by-nc/3.0/us\" target=\"_blank"
+"\">Creative Commons Attribution-Noncommercial 3.0 United States License</a>"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:312
+msgid ""
+"\n"
+"\t\t\t<span class=\"format\">Format:</span>\n"
+"\t\t\tDemos:\n"
+"\t\t\t[title of demonstration video].\n"
+"\t\t\tQuickTime movie.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t<a href=\"http://www.slavevoyages.org\" target=\"_blank\">http://www."
+"slavevoyages.org</a>\n"
+"\t\t\t(accessed Month, Day, Year).\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:323
+msgid ""
+"\n"
+"\t\t\t<span class=\"example\">Example:</span>\n"
+"\t\t\tDemos:\n"
+"\t\t\tVoyages site overview.\n"
+"\t\t\tQuickTime movie.\n"
+"\t\t\t<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>\n"
+"\t\t\t"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:336
+msgid "[Link to Website]"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:337
+msgid "Open Access"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:339
+msgid ""
+"Voyages</em> is an open access website. No permission or\n"
+"\t\tlicense agreement is needed to create a link to this site."
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:344
+msgid "Licenses"
+msgstr ""
+
+#: apps/help/templates/help/page_legal.html:347
 msgid ""
 "<em>Voyages: The Trans-Atlantic Slave Trade Database</em> by\n"
 "\tEmory University is licensed under a\n"
@@ -5483,7 +6089,7 @@ msgstr ""
 "sobre os tipos de conteúdo no site Viagens e para as permissões necessárias "
 "para reutilização."
 
-#: apps/help/templates/help/page_legal.html:327
+#: apps/help/templates/help/page_legal.html:359
 msgid ""
 "<em>Voyages: The Trans-Atlantic Slave Trade Database</em>\n"
 "\twas constructed using open source software components. In honor of\n"
@@ -5508,6 +6114,17 @@ msgstr ""
 "disponíveis gratuitamente através do <a href=\"https://github.com/emory-"
 "libraries/voyages\" target=\"_blank\">GitHub</a>."
 
+#: apps/resources/templates/resources/images-index.html:14
+#: apps/voyage/templates/voyage/voyage_main_content.html:26
+#: apps/voyage/templates/voyage/voyage_main_content.html:28
+#: templates/topbar.html:50
+msgid "Images"
+msgstr "Imagens"
+
+#: apps/resources/templates/resources/images-index.html:27
+msgid "See all images ..."
+msgstr ""
+
 #: apps/resources/templates/resources/images-left-menu.html:15
 msgid "Search for images"
 msgstr "Pesquisar por imagem"
@@ -5516,9 +6133,23 @@ msgstr "Pesquisar por imagem"
 msgid "Keyword"
 msgstr "Palavra-chave"
 
-#: apps/resources/templates/resources/images-left-menu.html:47
-msgid "Time frame"
-msgstr "Intervalo de tempo"
+#: apps/resources/templates/resources/images-left-menu.html:88
+#, fuzzy
+msgid "image"
+msgstr "Imagens"
+
+#: apps/resources/templates/resources/images-left-menu.html:90
+#, fuzzy
+msgid "images"
+msgstr "Imagens"
+
+#: apps/resources/templates/resources/images-left-menu.html:107
+msgid "Submit"
+msgstr ""
+
+#: apps/resources/templates/resources/images-left-menu.html:113
+msgid "Start again"
+msgstr ""
 
 #: apps/static_content/templates/static_content/assessment-index.html:4
 #: templates/topbar.html:28
@@ -5709,6 +6340,584 @@ msgstr "Linha do Tempo e Cronologia"
 msgid "Resources"
 msgstr "Recursos"
 
+#: apps/voyage/forms.py:10
+#, fuzzy
+msgid "Select your file"
+msgstr "Selecionar período de tempo"
+
+#: apps/voyage/forms.py:143 apps/voyage/forms.py:158
+msgid "Between"
+msgstr ""
+
+#: apps/voyage/forms.py:143
+msgid "At most"
+msgstr ""
+
+#: apps/voyage/forms.py:143
+msgid "At least"
+msgstr ""
+
+#: apps/voyage/forms.py:143
+msgid "Is equal to"
+msgstr ""
+
+#: apps/voyage/forms.py:158
+msgid "Before"
+msgstr ""
+
+#: apps/voyage/forms.py:158
+msgid "After"
+msgstr ""
+
+#: apps/voyage/forms.py:158
+msgid "In"
+msgstr ""
+
+#: apps/voyage/forms.py:191
+msgid "Yes"
+msgstr ""
+
+#: apps/voyage/forms.py:191
+msgid "No"
+msgstr ""
+
+#: apps/voyage/forms.py:264
+#, fuzzy
+msgid "Timeline variable"
+msgstr "Variáveis Gerais"
+
+#: apps/voyage/globals.py:511 apps/voyage/globals.py:527
+#: apps/voyage/globals.py:844
+msgid "Flag*"
+msgstr ""
+
+#: apps/voyage/globals.py:512 apps/voyage/globals.py:528
+msgid "Broad region where voyage began"
+msgstr ""
+
+#: apps/voyage/globals.py:513 apps/voyage/globals.py:529
+msgid "Region where voyage began"
+msgstr ""
+
+#: apps/voyage/globals.py:514 apps/voyage/globals.py:530
+msgid "Port where voyage began"
+msgstr ""
+
+#: apps/voyage/globals.py:515 apps/voyage/globals.py:531
+msgid "Embarkation Regions"
+msgstr ""
+
+#: apps/voyage/globals.py:516 apps/voyage/globals.py:532
+msgid "Embarkation Ports"
+msgstr ""
+
+#: apps/voyage/globals.py:517 apps/voyage/globals.py:533
+#, fuzzy
+msgid "Specific regions of disembarkation"
+msgstr "Regiões de embarque e desembarque"
+
+#: apps/voyage/globals.py:518 apps/voyage/globals.py:534
+#, fuzzy
+msgid "Broad regions of disembarkation"
+msgstr "Regiões de embarque e desembarque"
+
+#: apps/voyage/globals.py:519 apps/voyage/globals.py:535
+msgid "Disembarkation Ports"
+msgstr ""
+
+#: apps/voyage/globals.py:520
+msgid "Individual Years"
+msgstr ""
+
+#: apps/voyage/globals.py:668
+#: apps/voyage/templates/voyage/methodology-15.html:36
+msgid "Number of Voyages"
+msgstr "Número de Viagens"
+
+#: apps/voyage/globals.py:669
+msgid "Sum of embarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:670
+msgid "Average number of embarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:671
+#, fuzzy
+msgid "Number of voyages - embarked slaves"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:672
+msgid "Percent of embarked slaves (row total)"
+msgstr ""
+
+#: apps/voyage/globals.py:673
+msgid "Percent of embarked slaves (column total)"
+msgstr ""
+
+#: apps/voyage/globals.py:674
+msgid "Sum of disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:675
+msgid "Average number of disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:676
+#, fuzzy
+msgid "Number of voyages - disembarked slaves"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:677
+msgid "Percent of disembarked slaves (row total)"
+msgstr ""
+
+#: apps/voyage/globals.py:678
+msgid "Percent of disembarked slaves (column total)"
+msgstr ""
+
+#: apps/voyage/globals.py:679 apps/voyage/globals.py:695
+msgid "Sum of embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:680 apps/voyage/globals.py:695
+msgid "Average number of embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:681 apps/voyage/globals.py:695
+msgid "Number of voyages - embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:682
+msgid "Average percentage male"
+msgstr ""
+
+#: apps/voyage/globals.py:683
+#, fuzzy
+msgid "Number of voyages - percentage male"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:684
+msgid "Average percentage children"
+msgstr ""
+
+#: apps/voyage/globals.py:685
+#, fuzzy
+msgid "Number of voyages - percentage children"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:686
+msgid "Average percentage of slaves embarked who died during voyage"
+msgstr ""
+
+#: apps/voyage/globals.py:687
+msgid ""
+"Number of voyages - percentage of slaves embarked who died during voyage"
+msgstr ""
+
+#: apps/voyage/globals.py:688
+msgid "Average middle passage (days)"
+msgstr ""
+
+#: apps/voyage/globals.py:689
+#, fuzzy
+msgid "Number of voyages - middle passage (days)"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:690
+msgid "Average standarized tonnage"
+msgstr ""
+
+#: apps/voyage/globals.py:691
+#, fuzzy
+msgid "Number of voyages - standarized tonnage"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:692
+msgid "Sterling cash price in Jamaica"
+msgstr ""
+
+#: apps/voyage/globals.py:693
+msgid "Number of voyages - sterling cash price in Jamaica"
+msgstr ""
+
+#: apps/voyage/globals.py:737 apps/voyage/globals.py:1847
+#, fuzzy
+msgid "Number of voyages"
+msgstr "Número de Viagens"
+
+#: apps/voyage/globals.py:738
+msgid "Average voyage length, home port to slaves landing (days)*"
+msgstr ""
+
+#: apps/voyage/globals.py:739
+msgid "Average middle passage (days)*"
+msgstr ""
+
+#: apps/voyage/globals.py:740
+#, fuzzy
+msgid "Standardized tonnage*"
+msgstr "Desvio Padrão"
+
+#: apps/voyage/globals.py:741
+msgid "Average crew at voyage outset"
+msgstr ""
+
+#: apps/voyage/globals.py:742 apps/voyage/globals.py:1857
+msgid "Average crew at first landing of slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:743
+msgid "Total crew at voyage outset"
+msgstr ""
+
+#: apps/voyage/globals.py:744
+msgid "Total crew at first landing of slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:745
+msgid "Average number of slaves embarked"
+msgstr ""
+
+#: apps/voyage/globals.py:746
+#, fuzzy
+msgid "Average number of slaves disembarked"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:747
+msgid "Total number of slaves embarked"
+msgstr ""
+
+#: apps/voyage/globals.py:748
+#, fuzzy
+msgid "Total number of slaves disembarked"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:749
+msgid "Percentage men*"
+msgstr ""
+
+#: apps/voyage/globals.py:750
+msgid "Percentage women*"
+msgstr ""
+
+#: apps/voyage/globals.py:751
+msgid "Percentage boys*"
+msgstr ""
+
+#: apps/voyage/globals.py:752
+msgid "Percentage girls*"
+msgstr ""
+
+#: apps/voyage/globals.py:753
+msgid "Percentage children*"
+msgstr ""
+
+#: apps/voyage/globals.py:754
+msgid "Percentage male*"
+msgstr ""
+
+#: apps/voyage/globals.py:755 apps/voyage/globals.py:1878
+msgid "Sterling cash price in Jamaica*"
+msgstr ""
+
+#: apps/voyage/globals.py:756 apps/voyage/globals.py:1851
+msgid "Rate of resistance"
+msgstr ""
+
+#: apps/voyage/globals.py:757
+msgid "Percentage of slaves embarked who died during voyage*"
+msgstr ""
+
+#: apps/voyage/globals.py:783
+msgid "Year arrived with slaves*"
+msgstr ""
+
+#: apps/voyage/globals.py:784
+msgid "Voyage length, home port to slaves landing (days)*"
+msgstr ""
+
+#: apps/voyage/globals.py:785
+#, fuzzy
+msgid "Middle passage (days)*"
+msgstr "A travessia do Atlântico"
+
+#: apps/voyage/globals.py:786
+msgid "Crew at voyage outset"
+msgstr ""
+
+#: apps/voyage/globals.py:787
+msgid "Crew at first landing of slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:788
+#, fuzzy
+msgid "Slaves embarked"
+msgstr "Desembarcados"
+
+#: apps/voyage/globals.py:789
+#, fuzzy
+msgid "Slaves disembarked"
+msgstr "Desembarcados"
+
+#: apps/voyage/globals.py:844
+msgid "var_imputed_nationality"
+msgstr ""
+
+#: apps/voyage/globals.py:845
+msgid "Rig"
+msgstr ""
+
+#: apps/voyage/globals.py:845
+msgid "var_rig_of_vessel"
+msgstr ""
+
+#: apps/voyage/globals.py:846
+msgid "Particular outcome of the voyage"
+msgstr ""
+
+#: apps/voyage/globals.py:846
+msgid "var_outcome_voyage"
+msgstr ""
+
+#: apps/voyage/globals.py:847
+msgid "Outcome for slaves*"
+msgstr ""
+
+#: apps/voyage/globals.py:847
+msgid "var_outcome_slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:848
+msgid "Outcome for owner*"
+msgstr ""
+
+#: apps/voyage/globals.py:848
+msgid "var_outcome_owner"
+msgstr ""
+
+#: apps/voyage/globals.py:849
+msgid "Outcome if ship captured*"
+msgstr ""
+
+#: apps/voyage/globals.py:849
+msgid "var_outcome_ship_captured"
+msgstr ""
+
+#: apps/voyage/globals.py:850
+#, fuzzy
+msgid "African resistance"
+msgstr "Agência e resistência africanas"
+
+#: apps/voyage/globals.py:850
+msgid "var_resistance"
+msgstr ""
+
+#: apps/voyage/globals.py:851
+msgid "Place where voyage began*"
+msgstr ""
+
+#: apps/voyage/globals.py:851
+msgid "var_imp_port_voyage_begin"
+msgstr ""
+
+#: apps/voyage/globals.py:852
+msgid "Region where voyage began*"
+msgstr ""
+
+#: apps/voyage/globals.py:852
+msgid "var_imp_region_voyage_begin"
+msgstr ""
+
+#: apps/voyage/globals.py:853
+msgid "Principal place of slave purchase*"
+msgstr ""
+
+#: apps/voyage/globals.py:853
+msgid "var_imp_principal_place_of_slave_purchase"
+msgstr ""
+
+#: apps/voyage/globals.py:854
+msgid "Principal region of slave purchase*"
+msgstr ""
+
+#: apps/voyage/globals.py:854
+msgid "var_imp_principal_region_of_slave_purchase"
+msgstr ""
+
+#: apps/voyage/globals.py:855
+msgid "Principal place of slave landing*"
+msgstr ""
+
+#: apps/voyage/globals.py:855
+msgid "var_imp_principal_port_slave_dis"
+msgstr ""
+
+#: apps/voyage/globals.py:856
+msgid "Principal region of slave landing*"
+msgstr ""
+
+#: apps/voyage/globals.py:856
+msgid "var_imp_principal_region_slave_dis"
+msgstr ""
+
+#: apps/voyage/globals.py:857
+msgid "Broad region of slave landing*"
+msgstr ""
+
+#: apps/voyage/globals.py:857
+msgid "var_imp_principal_broad_region_disembark"
+msgstr ""
+
+#: apps/voyage/globals.py:858
+msgid "Place where voyage ended"
+msgstr ""
+
+#: apps/voyage/globals.py:858
+msgid "var_place_voyage_ended"
+msgstr ""
+
+#: apps/voyage/globals.py:859
+msgid "Region where voyage ended"
+msgstr ""
+
+#: apps/voyage/globals.py:859
+msgid "var_region_voyage_ended"
+msgstr ""
+
+#: apps/voyage/globals.py:860
+msgid "Month voyage began"
+msgstr ""
+
+#: apps/voyage/globals.py:861
+msgid "Month trade began in Africa"
+msgstr ""
+
+#: apps/voyage/globals.py:862
+msgid "Month vessel departed Africa"
+msgstr ""
+
+#: apps/voyage/globals.py:863
+msgid "Month vessel arrived with slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:864
+msgid "Month vessel departed for home port"
+msgstr ""
+
+#: apps/voyage/globals.py:865
+msgid "Month voyage completed"
+msgstr ""
+
+#: apps/voyage/globals.py:866
+msgid "Year arrived with slaves (5 year periods)"
+msgstr ""
+
+#: apps/voyage/globals.py:867
+msgid "Year arrived with slaves (10 year periods)"
+msgstr ""
+
+#: apps/voyage/globals.py:868
+msgid "Year arrived with slaves (25 year periods)"
+msgstr ""
+
+#: apps/voyage/globals.py:1848
+msgid "Average tonnage"
+msgstr ""
+
+#: apps/voyage/globals.py:1849
+msgid "Average tonnage (standardized)"
+msgstr ""
+
+#: apps/voyage/globals.py:1850
+msgid "Average number of guns"
+msgstr ""
+
+#: apps/voyage/globals.py:1853
+msgid "Average duration of voyage from home port to disembarkation (days)"
+msgstr ""
+
+#: apps/voyage/globals.py:1855
+msgid "Average duration of middle passage (days)"
+msgstr ""
+
+#: apps/voyage/globals.py:1856
+msgid "Average crew at outset"
+msgstr ""
+
+#: apps/voyage/globals.py:1858
+#, fuzzy
+msgid "Number of crew deaths"
+msgstr "Número de Viagens"
+
+#: apps/voyage/globals.py:1859
+msgid "Average crew deaths"
+msgstr ""
+
+#: apps/voyage/globals.py:1860
+msgid "Intended number of purchases"
+msgstr ""
+
+#: apps/voyage/globals.py:1861
+msgid "Average intended purchases"
+msgstr ""
+
+#: apps/voyage/globals.py:1862
+#, fuzzy
+msgid "Total number of captives embarked"
+msgstr "Número de africanos embarcados relatado"
+
+#: apps/voyage/globals.py:1863
+msgid "Average number of captives embarked"
+msgstr ""
+
+#: apps/voyage/globals.py:1864
+#, fuzzy
+msgid "Total number of captives disembarked"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:1865
+#, fuzzy
+msgid "Average number of captives disembarked"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:1866
+msgid "Percentage men (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1868
+msgid "Percentage women (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1870
+msgid "Percentage boys (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1872
+msgid "Percentage girls (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1874
+msgid "Percentage female (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1876
+msgid "Percentage male (among captives)"
+msgstr ""
+
+#: apps/voyage/globals.py:1880
+#, fuzzy
+msgid "Number of slave deaths"
+msgstr "Número de Viagens"
+
+#: apps/voyage/globals.py:1881
+msgid "Average slave deaths"
+msgstr ""
+
+#: apps/voyage/globals.py:1882
+msgid "Average percentage of slaves embarked who died during the voyage"
+msgstr ""
+
 #: apps/voyage/models.py:1226
 msgid "Short reference"
 msgstr "Referência abreviada"
@@ -5720,6 +6929,10 @@ msgstr "Referência completa"
 #: apps/voyage/models.py:1253
 msgid "Text reference(citation)"
 msgstr "Referência do texto (citação)"
+
+#: apps/voyage/templates/flatpages/download.html:6 templates/topbar.html:17
+msgid "Downloads"
+msgstr "Downloads"
 
 #: apps/voyage/templates/voyage/guide.html:3
 msgid "A Guide to Understanding and Using the Voyages Database and Website"
@@ -6627,10 +7840,6 @@ msgstr "Mortes/Embarcados (%%)"
 #: apps/voyage/templates/voyage/methodology-15.html:35
 msgid "Standard Deviation"
 msgstr "Desvio Padrão"
-
-#: apps/voyage/templates/voyage/methodology-15.html:36
-msgid "Number of Voyages"
-msgstr "Número de Viagens"
 
 #: apps/voyage/templates/voyage/methodology-15.html:40
 msgid "Senegambia"
@@ -9146,98 +10355,135 @@ msgstr ""
 msgid "Search The Voyages Database"
 msgstr "Pesquise a Base de Dados Viagens"
 
-#: apps/voyage/templates/voyage/search_bar_graphs.html:19
-#: apps/voyage/templates/voyage/search_pie_graphs.html:8
-#: apps/voyage/templates/voyage/search_xy_graphs.html:19
+#: apps/voyage/templates/voyage/search_bar_graphs.html:21
+#: apps/voyage/templates/voyage/search_pie_graphs.html:9
+#: apps/voyage/templates/voyage/search_xy_graphs.html:21
 msgid "Chart setup"
 msgstr "Configuração de gráfico"
 
-#: apps/voyage/templates/voyage/search_bar_graphs.html:32
-#: apps/voyage/templates/voyage/search_pie_graphs.html:21
-#: apps/voyage/templates/voyage/search_xy_graphs.html:32
+#: apps/voyage/templates/voyage/search_bar_graphs.html:34
+#: apps/voyage/templates/voyage/search_pie_graphs.html:22
+#: apps/voyage/templates/voyage/search_xy_graphs.html:34
 msgid "Add Series"
 msgstr "Adicionar séries"
 
-#: apps/voyage/templates/voyage/search_bar_graphs.html:40
-#: apps/voyage/templates/voyage/search_pie_graphs.html:29
-#: apps/voyage/templates/voyage/search_xy_graphs.html:40
+#: apps/voyage/templates/voyage/search_bar_graphs.html:42
+#: apps/voyage/templates/voyage/search_pie_graphs.html:30
+#: apps/voyage/templates/voyage/search_xy_graphs.html:42
 msgid "Current series"
 msgstr "Séries atuais"
 
-#: apps/voyage/templates/voyage/search_bar_graphs.html:50
-#: apps/voyage/templates/voyage/search_pie_graphs.html:39
-#: apps/voyage/templates/voyage/search_xy_graphs.html:50
+#: apps/voyage/templates/voyage/search_bar_graphs.html:53
+#: apps/voyage/templates/voyage/search_pie_graphs.html:41
+#: apps/voyage/templates/voyage/search_xy_graphs.html:53
 msgid "Remove Selected"
 msgstr "Remover Seleção"
 
-#: apps/voyage/templates/voyage/search_bar_graphs.html:59
-#: apps/voyage/templates/voyage/search_pie_graphs.html:48
-#: apps/voyage/templates/voyage/search_xy_graphs.html:59
+#: apps/voyage/templates/voyage/search_bar_graphs.html:63
+#: apps/voyage/templates/voyage/search_pie_graphs.html:51
+#: apps/voyage/templates/voyage/search_xy_graphs.html:63
 msgid "Graph"
 msgstr "Gráfico"
 
-#: apps/voyage/templates/voyage/search_config.html:3
+#: apps/voyage/templates/voyage/search_config.html:4
 #: apps/voyage/templates/voyage/search_results.html:14
 msgid "List of voyages"
 msgstr "Lista de viagens"
 
-#: apps/voyage/templates/voyage/search_config.html:5
+#: apps/voyage/templates/voyage/search_config.html:6
 msgid "Configure columns"
 msgstr "Configurar colunas"
 
-#: apps/voyage/templates/voyage/search_config.html:11
+#: apps/voyage/templates/voyage/search_config.html:12
 msgid "Choose group of variables"
 msgstr "Escolha o grupo de variáveis"
 
-#: apps/voyage/templates/voyage/search_graphs.html:4
+#: apps/voyage/templates/voyage/search_config.html:27
+#, fuzzy
+msgid "Available variables"
+msgstr "Variáveis básicas"
+
+#: apps/voyage/templates/voyage/search_config.html:77
+msgid "Apply configuration"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_config.html:78
+msgid "Cancel"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_config.html:79
+msgid "Restore default columns"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_graphs.html:5
 msgid "Custom Graphs"
 msgstr "Gráficos personalizados"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:31
+#: apps/voyage/templates/voyage/search_graphs.html:16
+#, fuzzy
+msgid "XY Graphs"
+msgstr "Gráfico"
+
+#: apps/voyage/templates/voyage/search_graphs.html:22
+#, fuzzy
+msgid "Bar Graphs"
+msgstr "Gráfico"
+
+#: apps/voyage/templates/voyage/search_graphs.html:28
+#, fuzzy
+msgid "Doughnut Graphs"
+msgstr "Gráficos personalizados"
+
+#: apps/voyage/templates/voyage/search_left_menu.html:32
 msgid "Select time frame"
 msgstr "Selecionar período de tempo"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:41
+#: apps/voyage/templates/voyage/search_left_menu.html:42
 msgid "The full extent of time from the first to the last voyage is "
 msgstr "A extensão total de tempo da primeira à última viagem é "
 
-#: apps/voyage/templates/voyage/search_left_menu.html:46
+#: apps/voyage/templates/voyage/search_left_menu.html:47
 msgid "(restore it)"
 msgstr "(restaurar)"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:62
+#: apps/voyage/templates/voyage/search_left_menu.html:63
 msgid "Basic variables"
 msgstr "Variáveis básicas"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:101
+#: apps/voyage/templates/voyage/search_left_menu.html:87
+#: apps/voyage/templates/voyage/search_left_menu.html:123
+#, fuzzy
+msgid "variable"
+msgstr "Variáveis básicas"
+
+#: apps/voyage/templates/voyage/search_left_menu.html:89
+#, fuzzy
+msgid "variables"
+msgstr "Variáveis básicas"
+
+#: apps/voyage/templates/voyage/search_left_menu.html:102
 msgid "General variables"
 msgstr "Variáveis Gerais"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:135
-msgid "Current query"
-msgstr "Consulta Atual"
-
-#: apps/voyage/templates/voyage/search_left_menu.html:188
-#: apps/voyage/templates/voyage/search_left_menu.html:219
+#: apps/voyage/templates/voyage/search_left_menu.html:189
+#: apps/voyage/templates/voyage/search_left_menu.html:220
 msgid "nothing selected"
 msgstr "nada selecionado"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:195
-#: apps/voyage/templates/voyage/search_left_menu.html:226
+#: apps/voyage/templates/voyage/search_left_menu.html:192
+#: apps/voyage/templates/voyage/search_left_menu.html:223
+msgid "Select"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_left_menu.html:196
+#: apps/voyage/templates/voyage/search_left_menu.html:227
 msgid "Quicksearch"
 msgstr "Pesquisa rápida"
 
-#: apps/voyage/templates/voyage/search_left_menu.html:355
-msgid "Search"
-msgstr "Pesquisar"
-
-#: apps/voyage/templates/voyage/search_left_menu.html:356
-msgid "New query"
-msgstr "Nova consulta"
-
-#: apps/voyage/templates/voyage/search_left_menu.html:367
-msgid "Create a link"
-msgstr "Criar um link"
+#: apps/voyage/templates/voyage/search_left_menu.html:209
+#: apps/voyage/templates/voyage/search_left_menu.html:289
+msgid "OK"
+msgstr ""
 
 #: apps/voyage/templates/voyage/search_left_menu.html:373
 msgid ""
@@ -9249,9 +10495,22 @@ msgstr ""
 "Use este botão para obter um URL que servirá como um link para a consulta "
 "atual. Para reativar a consulta no futuro, cole o URL na barra de endereço."
 
+#: apps/voyage/templates/voyage/search_left_menu.html:375
+msgid "Click Here"
+msgstr ""
+
 #: apps/voyage/templates/voyage/search_left_menu.html:385
 msgid "Previous query"
 msgstr "Consulta anterior"
+
+#: apps/voyage/templates/voyage/search_left_menu.html:396
+msgid "Delete"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_left_menu.html:400
+#, fuzzy
+msgid "Restore"
+msgstr "(restaurar)"
 
 #: apps/voyage/templates/voyage/search_main_content.html:8
 #: apps/voyage/templates/voyage/search_main_content.html:12
@@ -9263,27 +10522,12 @@ msgstr "Resultados"
 msgid "Summary statistics"
 msgstr "Estatísticas resumidas"
 
-#: apps/voyage/templates/voyage/search_main_content.html:26
-#: apps/voyage/templates/voyage/search_main_content.html:30
-msgid "Tables"
-msgstr "Tabelas"
-
 #: apps/voyage/templates/voyage/search_main_content.html:35
 #: apps/voyage/templates/voyage/search_main_content.html:39
 msgid "Custom graphs"
 msgstr "Gráficos personalizados"
 
-#: apps/voyage/templates/voyage/search_main_content.html:44
-#: apps/voyage/templates/voyage/search_main_content.html:48
-msgid "Timeline"
-msgstr "Linha do tempo"
-
-#: apps/voyage/templates/voyage/search_main_content.html:53
-#: apps/voyage/templates/voyage/search_main_content.html:57
-msgid "Maps"
-msgstr "Mapas"
-
-#: apps/voyage/templates/voyage/search_maps.html:7
+#: apps/voyage/templates/voyage/search_maps.html:9
 msgid "Loading map voyages..."
 msgstr "Carregando mapa de viagens…"
 
@@ -9302,6 +10546,47 @@ msgstr ""
 "consulta no menu à esquerda e tente novamente. Se desejar, pode excluir a "
 "consulta atual e começar novamente.\n"
 
+#: apps/voyage/templates/voyage/search_results.html:17
+#, fuzzy
+msgid "Configure columns of the table"
+msgstr "Configurar colunas"
+
+#: apps/voyage/templates/voyage/search_results.html:58
+#, fuzzy
+msgid "Showing"
+msgstr "Exibir"
+
+#: apps/voyage/templates/voyage/search_results.html:58
+msgid "out of"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:58
+msgid "display"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:63
+msgid "results per page"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:74
+#: apps/voyage/templates/voyage/search_results.html:78
+msgid "First"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:85
+#: apps/voyage/templates/voyage/search_results.html:89
+msgid "Prev"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:110
+msgid "Next"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_results.html:120
+#: apps/voyage/templates/voyage/search_results.html:124
+msgid "Last"
+msgstr ""
+
 #: apps/voyage/templates/voyage/search_results.html:136
 msgid "Download current view"
 msgstr "Baixar visão atual\t"
@@ -9310,35 +10595,32 @@ msgstr "Baixar visão atual\t"
 msgid "Download all results"
 msgstr "Baixar resultados"
 
-#: apps/voyage/templates/voyage/search_statistics.html:7
+#: apps/voyage/templates/voyage/search_statistics.html:8
 msgid "Summary Statistics"
 msgstr "Estatísticas Resumidas"
 
-#: apps/voyage/templates/voyage/search_statistics.html:32
+#: apps/voyage/templates/voyage/search_statistics.html:38
 msgid "Download table view"
 msgstr "Baixar dados da tabela"
 
-#: apps/voyage/templates/voyage/search_tables.html:9
-msgid "Table"
-msgstr "Tabela"
-
-#: apps/voyage/templates/voyage/search_tables.html:43
-#: apps/voyage/templates/voyage/search_tables.html:45
-#: apps/voyage/templates/voyage/search_tables.html:76
+#: apps/voyage/templates/voyage/search_tables.html:44
+#: apps/voyage/templates/voyage/search_tables.html:46
+#: apps/voyage/templates/voyage/search_tables.html:77
 msgid "Totals"
 msgstr "Totais"
 
-#: apps/voyage/templates/voyage/search_tables.html:49
-msgid "Embarked"
-msgstr "Embarcados"
-
-#: apps/voyage/templates/voyage/search_tables.html:50
-msgid "Disembarked"
-msgstr "Desembarcados"
-
-#: apps/voyage/templates/voyage/search_tables.html:87
+#: apps/voyage/templates/voyage/search_tables.html:88
 msgid "Download table data"
 msgstr "Baixar dados da tabela"
+
+#: apps/voyage/templates/voyage/search_timeline.html:13
+#, fuzzy
+msgid "Display variable"
+msgstr "Variáveis de dados"
+
+#: apps/voyage/templates/voyage/search_xy_graphs.html:133
+msgid "Value"
+msgstr ""
 
 #: apps/voyage/templates/voyage/understanding_left_menu.html:5
 #: templates/topbar.html:11
@@ -9437,28 +10719,27 @@ msgstr ""
 msgid "Voyage Information"
 msgstr "Informação da Viagem"
 
-#: apps/voyage/templates/voyage/voyage_main_content.html:7
+#: apps/voyage/templates/voyage/voyage_main_content.html:8
 msgid "Back to the list of voyages"
 msgstr "De volta à lista de viagens"
 
-#: apps/voyage/templates/voyage/voyage_main_content.html:11
+#: apps/voyage/templates/voyage/voyage_main_content.html:12
 msgid "Voyage Variables"
 msgstr "Variáveis da Viagem"
 
-#: apps/voyage/templates/voyage/voyage_main_content.html:13
+#: apps/voyage/templates/voyage/voyage_main_content.html:14
 msgid "Voyage variables"
 msgstr "Variáveis da viagem"
 
-#: apps/voyage/templates/voyage/voyage_main_content.html:18
-#: apps/voyage/templates/voyage/voyage_main_content.html:20
+#: apps/voyage/templates/voyage/voyage_main_content.html:19
+#: apps/voyage/templates/voyage/voyage_main_content.html:21
 msgid "Map"
 msgstr "Mapa"
 
-#: apps/voyage/templates/voyage/voyage_main_content.html:25
-#: apps/voyage/templates/voyage/voyage_main_content.html:27
-#: templates/topbar.html:50
-msgid "Images"
-msgstr "Imagens"
+#: apps/voyage/templates/voyage/voyage_main_content.html:37
+#, fuzzy
+msgid "Voyage"
+msgstr "Admin da Viagem"
 
 #: templates/404.html:4 templates/404.html.py:8 templates/404_plain.html:3
 msgid "Page not found"
@@ -9467,6 +10748,14 @@ msgstr "Página não encontrada"
 #: templates/404.html:10 templates/404_plain.html:5
 msgid "We're sorry, but the requested page could not be found."
 msgstr "Desculpe, mas a página requisitada não foi encontrada."
+
+#: templates/footer.html:5
+msgid ""
+"Copyright 2013 Emory University. Software licensed under <a href=\"http://"
+"www.gnu.org/licenses/gpl.html\">GNU General Public License 3.0</a> or later "
+"version. Some content licensed under <a href=\"http://creativecommons.org/"
+"licenses/by-nc/3.0/us/\">Creative Commons Attribution-Non-Commercial 3.0</a>."
+msgstr ""
 
 #: templates/raw_under_constr.html:3 templates/under_constr.html:4
 #: templates/under_constr.html.py:8
@@ -9485,17 +10774,13 @@ msgstr "Banco de Dados Viagens"
 msgid "Search the Voyages Database"
 msgstr "Consulte o Banco de Dados Viagens"
 
-#: templates/topbar.html:17
-msgid "Downloads"
-msgstr "Downloads"
-
-#: templates/topbar.html:35
-msgid "Estimates"
-msgstr "Estimativas"
-
 #: templates/topbar.html:53
 msgid "African Names Database"
 msgstr "Banco de Dados Nomes Africanos"
+
+#: templates/topbar.html:101
+msgid "Language"
+msgstr ""
 
 #: templates/under_constr.html:10
 msgid "Please come back later"
@@ -9562,3 +10847,12 @@ msgstr "Senha (novamente)"
 #: templates/registration/password_change_form.html:56
 msgid "Change my password"
 msgstr "Altere minha senha"
+
+#~ msgid "German"
+#~ msgstr "Alemão"
+
+#~ msgid "French"
+#~ msgstr "Francês"
+
+#~ msgid "Spanish"
+#~ msgstr "Espanhol"

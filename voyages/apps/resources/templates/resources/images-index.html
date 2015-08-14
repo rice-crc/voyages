@@ -11,7 +11,7 @@
 
 {% endblock %}
 
-{% block title %}Images{% endblock %}
+{% block title %}{% trans 'Images' %}{% endblock %}
 
 {% block content %}
 
@@ -23,8 +23,8 @@
     {%  for images_set in images %}
         {% if images_set.images %}
             <div class="images-category">
-                <div class="images-category-name">{{ images_set.label_name }}</div>
-                <div class="images-category-link"><a href="{%  url 'resources:images-category' images_set.label_name|spaces_to_underscores %}">See all images ...</a></div>
+                <div class="images-category-name">{{ images_set.label_name|trans_log }}</div>
+                <div class="images-category-link"><a href="{%  url 'resources:images-category' images_set.label_name|spaces_to_underscores %}">{% trans 'See all images ...' %}</a></div>
             </div>
             <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
             <tbody>
@@ -51,7 +51,7 @@
                             {% if key == "title" %}
                             <div class="gallery-image-label">
                             <a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
-                                {{ value }}
+                                {{ value|trans_log }}
                             </a>
                             </div>
                             {% endif %}

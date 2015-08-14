@@ -1,6 +1,7 @@
 {% extends "help/helpbase.html" %}
 {% load i18n %}
 {% load highlight %}
+{% load voyage_extras %}
 
 {% block csslist %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-faqs.css" />
@@ -30,7 +31,7 @@
 		<ul class="faq-toc">
 			{% for category_item in faq_list %}
 			<li class="faq-category">
-				<a href="#faq{{ category_item.qorder }}">{{ category_item.text }}</a>
+				<a href="#faq{{ category_item.qorder }}">{{ category_item.text|trans_log }}</a>
 			</li>
 			{% endfor %}
 		</ul>
@@ -39,22 +40,26 @@
 		{% for category_item in faq_list %}
 		<a name="faq{{ category_item.qorder }}" id="faq{{ category_item.qorder }}"></a>
 		<div class="faq-category">
-			{{ category_item.text }}
+			{{ category_item.text|trans_log }}
 		</div>
 		<div class="faq">
 			{% for q_item in category_item.questions %}
 			<div class="faq-question">
-				{% if current_query %}
-					{% highlight q_item.question with current_query  %}
-				{% else %}
-					{{ q_item.question }}
-				{% endif %}
+				{% with the_question=q_item.question|trans_log %}
+					{% if current_query %}
+						{% highlight the_question with current_query %}
+					{% else %}
+						{{ the_question }}
+					{% endif %}
+				{% endwith %}
 			</div>
-			{% if current_query %}
-					{% highlight q_item.answer with current_query %}
-				{% else %}
-					{{ q_item.answer|safe }}
-				{% endif %}
+				{% with the_answer=q_item.answer|trans_log %}
+					{% if current_query %}
+						{% highlight the_answer with current_query %}
+					{% else %}
+						{{ the_answer|safe }}
+					{% endif %}
+				{% endwith %}
 			{% endfor %}
 		</div>
 		{% endfor %}

@@ -1,12 +1,12 @@
 /* List of possible elem[3] extracted from current href 
  * Names of the major sections used by breadcrumb.js to display the section name */
 var majorSectionName = {
-	"voyage" : "Voyages Database",
-	"assessment" : " Assessing the Slave Trade",
-	"resources" : "Resources",
-	"education" : "Educational Materials",
-	"about" : "About the Project",
-	"contribute" : "Contribute"
+	"voyage" : gettext("Voyages Database"),
+	"assessment" : gettext("Assessing the Slave Trade"),
+	"resources" : gettext("Resources"),
+	"education" : gettext("Educational Materials"),
+	"about" : gettext("About the Project"),
+	"contribute" : gettext("Contribute")
 }
 
 /* Call breadcrumb handler in breadcrumb.js to update the breadcrumb section

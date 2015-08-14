@@ -10,6 +10,9 @@
 
 	{% block csslist %}
 	{% endblock %}
+
+	{% comment %}I18n of javascript text{% endcomment %}
+	<script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 	
 	{% comment %}Basic common javascript source files {% endcomment %}
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

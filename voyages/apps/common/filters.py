@@ -5,8 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 import logging
 import re
 
+logger = logging.getLogger('trans')
 register = template.Library()
-re_has_alpha_chars = re.compile('[\d\-]*[a-zA-Z\.]{2,}')
+re_has_alpha_chars = re.compile('.*[a-zA-Z\.]{2,}')
 
 @register.filter
 def trans_log(val):
@@ -20,9 +21,10 @@ def trans_log(val):
     translation is found.
     """
     if not isinstance(val, basestring):
+        logger.warn('trans_log received non-string: ' + unicode(val))
         return val
     # Heuristically check whether this looks like a string that should be translated.
-    if len(val) == 0 or val[0] == '<' or not re_has_alpha_chars.match(val):
+    if len(val) == 0 or not re_has_alpha_chars.match(val):
         return val
     if val.startswith('var_'):
         return val
@@ -35,5 +37,5 @@ def trans_log(val):
         log = True
         result = result[:-7] + '[T]</div>'
     if log:
-        logging.getLogger('trans').info(val)
+        logger.info(val.replace('\n', ' ').replace('\r', ''))
     return mark_safe(result)

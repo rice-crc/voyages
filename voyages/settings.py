@@ -126,7 +126,7 @@ INSTALLED_APPS = (
     'haystack',
 
     # used to highlight translated strings to easily find which translations are missing
-    'i18n_helper',
+    #'i18n_helper',
 
     # password reset app
     'password_reset',
@@ -142,7 +142,7 @@ INSTALLED_APPS = (
     'voyages.apps.static_content',
 )
 
-I18N_HELPER_DEBUG = True
+I18N_HELPER_DEBUG = False
 I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"

@@ -13,6 +13,9 @@ admin.autodiscover()
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
 from sitemap import StaticSitemap, ViewSitemap
 
+js_info_dict = {
+    'packages': ('voyages',),
+}
 
 urlpatterns = patterns('',
     # Homepage:
@@ -39,6 +42,9 @@ urlpatterns = patterns('',
 
     # password rest urls
     url(r'^password/', include('password_reset.urls')),
+
+    # Translation support for javascript code.
+    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
 # XML generated sitemap
 sitemaps = {

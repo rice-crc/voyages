@@ -346,7 +346,7 @@ var voyagesMap = {
 					if (!uniqueMarkerCodes.hasOwnProperty(code)) {
 						var marker = new L.Marker(np.latLng, {
 							icon: self._icons[np.nodeType],
-							title: np.name + ' (click for details)'
+							title: np.name + ' (' +  gettext('click for details') + ')'
 						});
 						marker.code = code;
 						marker.outFlowEmbarked = 0;
@@ -390,10 +390,13 @@ var voyagesMap = {
                 	}
                 	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
                 	 	'<table class="map_node_aggregate_table">' +
-                		'<thead><tr><th rowspan="2">' + locations.locationType.toUpperCase() +
-                		'</th><th colspan="2" class="inFlow">Inbound</th><th colspan="2" class="outFlow">Outbound</th></tr>' +
-                		'<tr><th class="inFlow">Embarked</th><th class="inFlow">Disembarked</th><th class="outFlow">Embarked</th><th class="outFlow">Disembarked</th></tr></thead>' +
-                		'<tbody><tr>' + rows.join('</tr><tr>') + '</tr></tbody>' + (footer || '') + '</table></div>';
+                		'<thead><tr><th rowspan="2">' + gettext(locations.locationType).toUpperCase() +
+                		'</th><th colspan="2" class="inFlow">' + gettext('Inbound') +
+                		'</th><th colspan="2" class="outFlow">' + gettext('Outbound') + '</th></tr>' +
+                		'<tr><th class="inFlow">' + gettext('Embarked') + '</th><th class="inFlow">' +
+                		gettext('Disembarked') + '</th><th class="outFlow">' +
+                		gettext('Embarked') + '</th><th class="outFlow">' + gettext('Disembarked') +
+                		'</th></tr></thead><tbody><tr>' + rows.join('</tr><tr>') + '</tr></tbody>' + (footer || '') + '</table></div>';
 					// See if we should omit inFlow or outFLow columns.
 					if (totals.inFlowEmbarked == 0 && totals.inFlowDisembarked == 0) {
 						table = table.replace(/inFlow/g, 'zero_value');
@@ -426,10 +429,10 @@ var voyagesMap = {
 								return 1;
 							return 0;
 						});
-						var title = markers.length + ' ' + locations.locationType + 's (click for details)';
+						var title = markers.length + ' ' + locations.locationType + 's (' + gettext('click for details') + ')';
 						// Set the popup here.
 						var rows = [ ];
-						var totals = { name: 'Totals', inFlowEmbarked: 0, inFlowDisembarked: 0, outFlowEmbarked: 0, outFlowDisembarked: 0 };
+						var totals = { name: gettext('Totals'), inFlowEmbarked: 0, inFlowDisembarked: 0, outFlowEmbarked: 0, outFlowDisembarked: 0 };
 						for (var i = 0; i < markers.length; ++i) {
 							var marker = markers[i];
 							rows.push(nodeAggregateInfo(marker));
@@ -658,12 +661,13 @@ var voyagesMap = {
 			var popup = null;
 			var sourceName = locations[this._latLngEncode(flow.path[0])];
 			var destinationName = locations[this._latLngEncode(flow.path[flow.path.length - 1])];
-			var numbersInfo = '<br /><strong>Embarked: </strong>' +
+			var numbersInfo = '<br /><strong>' + gettext('Embarked') + ': </strong>' +
 			 	flow.volume.toLocaleString() +
-			 	'. <strong>Disembarked: </strong>' +
+			 	'. <strong>' + gettext('Disembarked') + ': </strong>' +
 			 	flow.netVolume.toLocaleString() + '.';
 			if (flow.initial) {
-				popup = '<strong>Source </strong>' + sourceName + '<br /><strong>Outbound traffic.</strong>' + numbersInfo;
+				popup = '<strong>' + gettext('Source') + ' </strong>' + sourceName + '<br /><strong>' +
+					gettext('Outbound traffic') + '.</strong>' + numbersInfo;
 			}
 			if (flow.terminal) {
 				// Trim polyline and apply arrow symbol to a virtual 
@@ -696,8 +700,8 @@ var voyagesMap = {
 				arrowHead.setPatterns([
 					{ offset: '100%', repeat: 0, symbol: arrowSymbol}
 				]);
-				popup = '<strong>Destination </strong>' + destinationName +
-				 '<br /><strong>Inbound traffic.</strong>' + numbersInfo;
+				popup = '<strong>' + gettext('Destination') + ' </strong>' + destinationName +
+				 '<br /><strong>' + gettext('Inbound traffic') + '.</strong>' + numbersInfo;
 			}
 			if (flow.terminal || flow.initial) {
 				line.on('mouseover', function() {
@@ -708,7 +712,8 @@ var voyagesMap = {
 				});
 			}
 			if (flow.initial && flow.terminal) {
-				popup = '<strong>Traffic from </strong>' + sourceName + ' <strong>to</strong> ' +
+				popup = '<strong>' + gettext('Traffic from') + ' </strong>' + sourceName +
+					' <strong>' + gettext('to') + '</strong> ' +
 					destinationName + '.<br />' + numbersInfo;
 			}
 			if (popup) {
