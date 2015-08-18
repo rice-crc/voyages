@@ -294,6 +294,13 @@ var voyagesMap = {
 	},
 
 	/*!
+	 *  Specify a function that will run every time the network is drawn.
+	 *  For instance, when the zoom level changes.
+	 */
+	postDraw: function() {
+	},
+
+	/*!
 	 *	Wrap the corresponding addLayer method of
 	 * _map and allows us to keep track of which
 	 *  layers have been added to the map.
@@ -484,6 +491,9 @@ var voyagesMap = {
 			}
             self.clearNetwork();
             self.__cache[zoomLevel]();
+            if (self.postDraw) {
+            	self.postDraw();
+            }
 		};
 		this.draw = generateClusterFlow;
 		this.draw();
