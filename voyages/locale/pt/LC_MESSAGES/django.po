@@ -3,20 +3,25 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Voyages\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-14 11:56-0300\n"
-"PO-Revision-Date: 2015-08-11 17:29-0300\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: pt_BR\n"
+"POT-Creation-Date: 2015-08-17 16:08-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  django.po (Voyages)  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
+"#-#-#-#-#  django02.po (Voyages)  #-#-#-#-#\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: settings.py:154
 msgid "English"
@@ -968,7 +973,7 @@ msgstr ""
 #: apps/assessment/globals.py:166 apps/assessment/globals.py:177
 #: apps/assessment/templates/assessment/estimates-left-menu.html:84
 msgid "Flag"
-msgstr ""
+msgstr "Bandeira"
 
 #: apps/assessment/globals.py:167 apps/assessment/globals.py:178
 #: apps/assessment/templates/assessment/estimates-left-menu.html:169
@@ -987,23 +992,23 @@ msgstr ""
 msgid "Individual years"
 msgstr ""
 
-#: apps/assessment/globals.py:171 apps/voyage/globals.py:521
+#: apps/assessment/globals.py:171 apps/voyage/globals.py:533
 msgid "5-year periods"
 msgstr ""
 
-#: apps/assessment/globals.py:172 apps/voyage/globals.py:522
+#: apps/assessment/globals.py:172 apps/voyage/globals.py:534
 msgid "10-year periods"
 msgstr ""
 
-#: apps/assessment/globals.py:173 apps/voyage/globals.py:523
+#: apps/assessment/globals.py:173 apps/voyage/globals.py:535
 msgid "25-year periods"
 msgstr ""
 
-#: apps/assessment/globals.py:174 apps/voyage/globals.py:524
+#: apps/assessment/globals.py:174 apps/voyage/globals.py:536
 msgid "50-year periods"
 msgstr ""
 
-#: apps/assessment/globals.py:175 apps/voyage/globals.py:525
+#: apps/assessment/globals.py:175 apps/voyage/globals.py:537
 msgid "100-year periods"
 msgstr ""
 
@@ -6347,574 +6352,571 @@ msgstr "Selecionar período de tempo"
 
 #: apps/voyage/forms.py:143 apps/voyage/forms.py:158
 msgid "Between"
-msgstr ""
+msgstr "Entre"
 
 #: apps/voyage/forms.py:143
 msgid "At most"
-msgstr ""
+msgstr "Ao máximo"
 
 #: apps/voyage/forms.py:143
 msgid "At least"
-msgstr ""
+msgstr "Ao menos"
 
 #: apps/voyage/forms.py:143
 msgid "Is equal to"
-msgstr ""
+msgstr "É igual a"
 
 #: apps/voyage/forms.py:158
 msgid "Before"
-msgstr ""
+msgstr "Antes"
 
 #: apps/voyage/forms.py:158
 msgid "After"
-msgstr ""
+msgstr "Após"
 
 #: apps/voyage/forms.py:158
 msgid "In"
-msgstr ""
+msgstr "In"
 
 #: apps/voyage/forms.py:191
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: apps/voyage/forms.py:191
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: apps/voyage/forms.py:264
 #, fuzzy
 msgid "Timeline variable"
 msgstr "Variáveis Gerais"
 
-#: apps/voyage/globals.py:511 apps/voyage/globals.py:527
-#: apps/voyage/globals.py:844
+#: apps/voyage/globals.py:523 apps/voyage/globals.py:539
+#: apps/voyage/globals.py:856
 msgid "Flag*"
-msgstr ""
+msgstr "Bandeira*"
 
-#: apps/voyage/globals.py:512 apps/voyage/globals.py:528
+#: apps/voyage/globals.py:524 apps/voyage/globals.py:540
 msgid "Broad region where voyage began"
 msgstr ""
 
-#: apps/voyage/globals.py:513 apps/voyage/globals.py:529
+#: apps/voyage/globals.py:525 apps/voyage/globals.py:541
 msgid "Region where voyage began"
 msgstr ""
 
-#: apps/voyage/globals.py:514 apps/voyage/globals.py:530
+#: apps/voyage/globals.py:526 apps/voyage/globals.py:542
 msgid "Port where voyage began"
 msgstr ""
 
-#: apps/voyage/globals.py:515 apps/voyage/globals.py:531
+#: apps/voyage/globals.py:527 apps/voyage/globals.py:543
 msgid "Embarkation Regions"
 msgstr ""
 
-#: apps/voyage/globals.py:516 apps/voyage/globals.py:532
+#: apps/voyage/globals.py:528 apps/voyage/globals.py:544
 msgid "Embarkation Ports"
 msgstr ""
 
-#: apps/voyage/globals.py:517 apps/voyage/globals.py:533
+#: apps/voyage/globals.py:529 apps/voyage/globals.py:545
 #, fuzzy
 msgid "Specific regions of disembarkation"
 msgstr "Regiões de embarque e desembarque"
 
-#: apps/voyage/globals.py:518 apps/voyage/globals.py:534
+#: apps/voyage/globals.py:530 apps/voyage/globals.py:546
 #, fuzzy
 msgid "Broad regions of disembarkation"
 msgstr "Regiões de embarque e desembarque"
 
-#: apps/voyage/globals.py:519 apps/voyage/globals.py:535
+#: apps/voyage/globals.py:531 apps/voyage/globals.py:547
 msgid "Disembarkation Ports"
 msgstr ""
 
-#: apps/voyage/globals.py:520
+#: apps/voyage/globals.py:532
 msgid "Individual Years"
 msgstr ""
 
-#: apps/voyage/globals.py:668
+#: apps/voyage/globals.py:680
 #: apps/voyage/templates/voyage/methodology-15.html:36
 msgid "Number of Voyages"
 msgstr "Número de Viagens"
 
-#: apps/voyage/globals.py:669
+#: apps/voyage/globals.py:681
 msgid "Sum of embarked slaves"
 msgstr ""
 
-#: apps/voyage/globals.py:670
-msgid "Average number of embarked slaves"
-msgstr ""
-
-#: apps/voyage/globals.py:671
-#, fuzzy
-msgid "Number of voyages - embarked slaves"
-msgstr "Número de viagens negreiras no conjunto de dados"
-
-#: apps/voyage/globals.py:672
-msgid "Percent of embarked slaves (row total)"
-msgstr ""
-
-#: apps/voyage/globals.py:673
-msgid "Percent of embarked slaves (column total)"
-msgstr ""
-
-#: apps/voyage/globals.py:674
-msgid "Sum of disembarked slaves"
-msgstr ""
-
-#: apps/voyage/globals.py:675
-msgid "Average number of disembarked slaves"
-msgstr ""
-
-#: apps/voyage/globals.py:676
-#, fuzzy
-msgid "Number of voyages - disembarked slaves"
-msgstr "Números de africanos desembarcados relatados"
-
-#: apps/voyage/globals.py:677
-msgid "Percent of disembarked slaves (row total)"
-msgstr ""
-
-#: apps/voyage/globals.py:678
-msgid "Percent of disembarked slaves (column total)"
-msgstr ""
-
-#: apps/voyage/globals.py:679 apps/voyage/globals.py:695
-msgid "Sum of embarked/disembarked slaves"
-msgstr ""
-
-#: apps/voyage/globals.py:680 apps/voyage/globals.py:695
-msgid "Average number of embarked/disembarked slaves"
-msgstr ""
-
-#: apps/voyage/globals.py:681 apps/voyage/globals.py:695
-msgid "Number of voyages - embarked/disembarked slaves"
-msgstr ""
-
 #: apps/voyage/globals.py:682
-msgid "Average percentage male"
+msgid "Average number of embarked slaves"
 msgstr ""
 
 #: apps/voyage/globals.py:683
 #, fuzzy
-msgid "Number of voyages - percentage male"
+msgid "Number of voyages - embarked slaves"
 msgstr "Número de viagens negreiras no conjunto de dados"
 
 #: apps/voyage/globals.py:684
-msgid "Average percentage children"
+msgid "Percent of embarked slaves (row total)"
 msgstr ""
 
 #: apps/voyage/globals.py:685
+msgid "Percent of embarked slaves (column total)"
+msgstr ""
+
+#: apps/voyage/globals.py:686
+msgid "Sum of disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:687
+msgid "Average number of disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:688
+#, fuzzy
+msgid "Number of voyages - disembarked slaves"
+msgstr "Números de africanos desembarcados relatados"
+
+#: apps/voyage/globals.py:689
+msgid "Percent of disembarked slaves (row total)"
+msgstr ""
+
+#: apps/voyage/globals.py:690
+msgid "Percent of disembarked slaves (column total)"
+msgstr ""
+
+#: apps/voyage/globals.py:691 apps/voyage/globals.py:707
+msgid "Sum of embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:692 apps/voyage/globals.py:707
+msgid "Average number of embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:693 apps/voyage/globals.py:707
+msgid "Number of voyages - embarked/disembarked slaves"
+msgstr ""
+
+#: apps/voyage/globals.py:694
+msgid "Average percentage male"
+msgstr ""
+
+#: apps/voyage/globals.py:695
+#, fuzzy
+msgid "Number of voyages - percentage male"
+msgstr "Número de viagens negreiras no conjunto de dados"
+
+#: apps/voyage/globals.py:696
+msgid "Average percentage children"
+msgstr ""
+
+#: apps/voyage/globals.py:697
 #, fuzzy
 msgid "Number of voyages - percentage children"
 msgstr "Número de viagens negreiras no conjunto de dados"
 
-#: apps/voyage/globals.py:686
+#: apps/voyage/globals.py:698
 msgid "Average percentage of slaves embarked who died during voyage"
 msgstr ""
 
-#: apps/voyage/globals.py:687
+#: apps/voyage/globals.py:699
 msgid ""
 "Number of voyages - percentage of slaves embarked who died during voyage"
 msgstr ""
 
-#: apps/voyage/globals.py:688
+#: apps/voyage/globals.py:700
 msgid "Average middle passage (days)"
 msgstr ""
 
-#: apps/voyage/globals.py:689
+#: apps/voyage/globals.py:701
 #, fuzzy
 msgid "Number of voyages - middle passage (days)"
 msgstr "Número de viagens negreiras no conjunto de dados"
 
-#: apps/voyage/globals.py:690
+#: apps/voyage/globals.py:702
 msgid "Average standarized tonnage"
 msgstr ""
 
-#: apps/voyage/globals.py:691
+#: apps/voyage/globals.py:703
 #, fuzzy
 msgid "Number of voyages - standarized tonnage"
 msgstr "Número de viagens negreiras no conjunto de dados"
 
-#: apps/voyage/globals.py:692
+#: apps/voyage/globals.py:704
 msgid "Sterling cash price in Jamaica"
 msgstr ""
 
-#: apps/voyage/globals.py:693
+#: apps/voyage/globals.py:705
 msgid "Number of voyages - sterling cash price in Jamaica"
 msgstr ""
 
-#: apps/voyage/globals.py:737 apps/voyage/globals.py:1847
+#: apps/voyage/globals.py:749 apps/voyage/globals.py:1859
 #, fuzzy
 msgid "Number of voyages"
 msgstr "Número de Viagens"
 
-#: apps/voyage/globals.py:738
+#: apps/voyage/globals.py:750
 msgid "Average voyage length, home port to slaves landing (days)*"
 msgstr ""
 
-#: apps/voyage/globals.py:739
+#: apps/voyage/globals.py:751
 msgid "Average middle passage (days)*"
 msgstr ""
 
-#: apps/voyage/globals.py:740
-#, fuzzy
+#: apps/voyage/globals.py:752
 msgid "Standardized tonnage*"
-msgstr "Desvio Padrão"
+msgstr "Tonelagem padronizada*"
 
-#: apps/voyage/globals.py:741
+#: apps/voyage/globals.py:753
 msgid "Average crew at voyage outset"
 msgstr ""
 
-#: apps/voyage/globals.py:742 apps/voyage/globals.py:1857
+#: apps/voyage/globals.py:754 apps/voyage/globals.py:1869
 msgid "Average crew at first landing of slaves"
 msgstr ""
 
-#: apps/voyage/globals.py:743
+#: apps/voyage/globals.py:755
 msgid "Total crew at voyage outset"
 msgstr ""
 
-#: apps/voyage/globals.py:744
+#: apps/voyage/globals.py:756
 msgid "Total crew at first landing of slaves"
 msgstr ""
 
-#: apps/voyage/globals.py:745
+#: apps/voyage/globals.py:757
 msgid "Average number of slaves embarked"
 msgstr ""
 
-#: apps/voyage/globals.py:746
+#: apps/voyage/globals.py:758
 #, fuzzy
 msgid "Average number of slaves disembarked"
 msgstr "Números de africanos desembarcados relatados"
 
-#: apps/voyage/globals.py:747
+#: apps/voyage/globals.py:759
 msgid "Total number of slaves embarked"
 msgstr ""
 
-#: apps/voyage/globals.py:748
+#: apps/voyage/globals.py:760
 #, fuzzy
 msgid "Total number of slaves disembarked"
 msgstr "Números de africanos desembarcados relatados"
 
-#: apps/voyage/globals.py:749
+#: apps/voyage/globals.py:761
 msgid "Percentage men*"
-msgstr ""
+msgstr "Percentagem de homens*"
 
-#: apps/voyage/globals.py:750
+#: apps/voyage/globals.py:762
 msgid "Percentage women*"
-msgstr ""
+msgstr "Percentagem de mulheres*"
 
-#: apps/voyage/globals.py:751
+#: apps/voyage/globals.py:763
 msgid "Percentage boys*"
-msgstr ""
+msgstr "Percentagem de meninos*"
 
-#: apps/voyage/globals.py:752
+#: apps/voyage/globals.py:764
 msgid "Percentage girls*"
-msgstr ""
+msgstr "Percentagem de meninas*"
 
-#: apps/voyage/globals.py:753
+#: apps/voyage/globals.py:765
 msgid "Percentage children*"
-msgstr ""
+msgstr "Percentagem de de crianças*"
 
-#: apps/voyage/globals.py:754
+#: apps/voyage/globals.py:766
 msgid "Percentage male*"
-msgstr ""
+msgstr "Percentagem de machos*"
 
-#: apps/voyage/globals.py:755 apps/voyage/globals.py:1878
+#: apps/voyage/globals.py:767 apps/voyage/globals.py:1890
 msgid "Sterling cash price in Jamaica*"
-msgstr ""
+msgstr "Preço em esterlinas à vista na Jamaica*"
 
-#: apps/voyage/globals.py:756 apps/voyage/globals.py:1851
+#: apps/voyage/globals.py:768 apps/voyage/globals.py:1863
 msgid "Rate of resistance"
 msgstr ""
 
-#: apps/voyage/globals.py:757
+#: apps/voyage/globals.py:769
 msgid "Percentage of slaves embarked who died during voyage*"
 msgstr ""
 
-#: apps/voyage/globals.py:783
+#: apps/voyage/globals.py:795
 msgid "Year arrived with slaves*"
-msgstr ""
+msgstr "Ano da chegada ao porto de desembarque*"
 
-#: apps/voyage/globals.py:784
+#: apps/voyage/globals.py:796
 msgid "Voyage length, home port to slaves landing (days)*"
 msgstr ""
 
-#: apps/voyage/globals.py:785
-#, fuzzy
+#: apps/voyage/globals.py:797
 msgid "Middle passage (days)*"
-msgstr "A travessia do Atlântico"
+msgstr "Duração da viagem (dias)*"
 
-#: apps/voyage/globals.py:786
+#: apps/voyage/globals.py:798
 msgid "Crew at voyage outset"
-msgstr ""
+msgstr "Tripulação ao início da viagem"
 
-#: apps/voyage/globals.py:787
+#: apps/voyage/globals.py:799
 msgid "Crew at first landing of slaves"
-msgstr ""
+msgstr "Tripulação ao primeiro desembarque de escravos"
 
-#: apps/voyage/globals.py:788
+#: apps/voyage/globals.py:800
 #, fuzzy
 msgid "Slaves embarked"
 msgstr "Desembarcados"
 
-#: apps/voyage/globals.py:789
+#: apps/voyage/globals.py:801
 #, fuzzy
 msgid "Slaves disembarked"
 msgstr "Desembarcados"
 
-#: apps/voyage/globals.py:844
+#: apps/voyage/globals.py:856
 msgid "var_imputed_nationality"
 msgstr ""
 
-#: apps/voyage/globals.py:845
+#: apps/voyage/globals.py:857
 msgid "Rig"
-msgstr ""
+msgstr "Armação"
 
-#: apps/voyage/globals.py:845
+#: apps/voyage/globals.py:857
 msgid "var_rig_of_vessel"
 msgstr ""
 
-#: apps/voyage/globals.py:846
+#: apps/voyage/globals.py:858
 msgid "Particular outcome of the voyage"
 msgstr ""
 
-#: apps/voyage/globals.py:846
+#: apps/voyage/globals.py:858
 msgid "var_outcome_voyage"
 msgstr ""
 
-#: apps/voyage/globals.py:847
+#: apps/voyage/globals.py:859
 msgid "Outcome for slaves*"
 msgstr ""
 
-#: apps/voyage/globals.py:847
+#: apps/voyage/globals.py:859
 msgid "var_outcome_slaves"
 msgstr ""
 
-#: apps/voyage/globals.py:848
+#: apps/voyage/globals.py:860
 msgid "Outcome for owner*"
 msgstr ""
 
-#: apps/voyage/globals.py:848
+#: apps/voyage/globals.py:860
 msgid "var_outcome_owner"
 msgstr ""
 
-#: apps/voyage/globals.py:849
+#: apps/voyage/globals.py:861
 msgid "Outcome if ship captured*"
 msgstr ""
 
-#: apps/voyage/globals.py:849
+#: apps/voyage/globals.py:861
 msgid "var_outcome_ship_captured"
 msgstr ""
 
-#: apps/voyage/globals.py:850
-#, fuzzy
+#: apps/voyage/globals.py:862
 msgid "African resistance"
-msgstr "Agência e resistência africanas"
+msgstr "Resistência africana"
 
-#: apps/voyage/globals.py:850
+#: apps/voyage/globals.py:862
 msgid "var_resistance"
 msgstr ""
 
-#: apps/voyage/globals.py:851
+#: apps/voyage/globals.py:863
 msgid "Place where voyage began*"
-msgstr ""
+msgstr "Porto onde a viagem começou*"
 
-#: apps/voyage/globals.py:851
+#: apps/voyage/globals.py:863
 msgid "var_imp_port_voyage_begin"
 msgstr ""
 
-#: apps/voyage/globals.py:852
+#: apps/voyage/globals.py:864
 msgid "Region where voyage began*"
 msgstr ""
 
-#: apps/voyage/globals.py:852
+#: apps/voyage/globals.py:864
 msgid "var_imp_region_voyage_begin"
 msgstr ""
 
-#: apps/voyage/globals.py:853
+#: apps/voyage/globals.py:865
 msgid "Principal place of slave purchase*"
-msgstr ""
+msgstr "Principal lugar de aquisição de escravos*"
 
-#: apps/voyage/globals.py:853
+#: apps/voyage/globals.py:865
 msgid "var_imp_principal_place_of_slave_purchase"
 msgstr ""
 
-#: apps/voyage/globals.py:854
+#: apps/voyage/globals.py:866
 msgid "Principal region of slave purchase*"
 msgstr ""
 
-#: apps/voyage/globals.py:854
+#: apps/voyage/globals.py:866
 msgid "var_imp_principal_region_of_slave_purchase"
 msgstr ""
 
-#: apps/voyage/globals.py:855
+#: apps/voyage/globals.py:867
 msgid "Principal place of slave landing*"
-msgstr ""
+msgstr "Principal lugar de desembarque de escravos*"
 
-#: apps/voyage/globals.py:855
+#: apps/voyage/globals.py:867
 msgid "var_imp_principal_port_slave_dis"
 msgstr ""
 
-#: apps/voyage/globals.py:856
+#: apps/voyage/globals.py:868
 msgid "Principal region of slave landing*"
 msgstr ""
 
-#: apps/voyage/globals.py:856
+#: apps/voyage/globals.py:868
 msgid "var_imp_principal_region_slave_dis"
 msgstr ""
 
-#: apps/voyage/globals.py:857
+#: apps/voyage/globals.py:869
 msgid "Broad region of slave landing*"
 msgstr ""
 
-#: apps/voyage/globals.py:857
+#: apps/voyage/globals.py:869
 msgid "var_imp_principal_broad_region_disembark"
 msgstr ""
 
-#: apps/voyage/globals.py:858
+#: apps/voyage/globals.py:870
 msgid "Place where voyage ended"
-msgstr ""
+msgstr "Porto onde a viagem terminou"
 
-#: apps/voyage/globals.py:858
+#: apps/voyage/globals.py:870
 msgid "var_place_voyage_ended"
 msgstr ""
 
-#: apps/voyage/globals.py:859
+#: apps/voyage/globals.py:871
 msgid "Region where voyage ended"
 msgstr ""
 
-#: apps/voyage/globals.py:859
+#: apps/voyage/globals.py:871
 msgid "var_region_voyage_ended"
 msgstr ""
 
-#: apps/voyage/globals.py:860
+#: apps/voyage/globals.py:872
 msgid "Month voyage began"
 msgstr ""
 
-#: apps/voyage/globals.py:861
+#: apps/voyage/globals.py:873
 msgid "Month trade began in Africa"
 msgstr ""
 
-#: apps/voyage/globals.py:862
+#: apps/voyage/globals.py:874
 msgid "Month vessel departed Africa"
 msgstr ""
 
-#: apps/voyage/globals.py:863
+#: apps/voyage/globals.py:875
 msgid "Month vessel arrived with slaves"
 msgstr ""
 
-#: apps/voyage/globals.py:864
+#: apps/voyage/globals.py:876
 msgid "Month vessel departed for home port"
 msgstr ""
 
-#: apps/voyage/globals.py:865
+#: apps/voyage/globals.py:877
 msgid "Month voyage completed"
 msgstr ""
 
-#: apps/voyage/globals.py:866
+#: apps/voyage/globals.py:878
 msgid "Year arrived with slaves (5 year periods)"
 msgstr ""
 
-#: apps/voyage/globals.py:867
+#: apps/voyage/globals.py:879
 msgid "Year arrived with slaves (10 year periods)"
 msgstr ""
 
-#: apps/voyage/globals.py:868
+#: apps/voyage/globals.py:880
 msgid "Year arrived with slaves (25 year periods)"
 msgstr ""
 
-#: apps/voyage/globals.py:1848
+#: apps/voyage/globals.py:1860
 msgid "Average tonnage"
 msgstr ""
 
-#: apps/voyage/globals.py:1849
+#: apps/voyage/globals.py:1861
 msgid "Average tonnage (standardized)"
 msgstr ""
 
-#: apps/voyage/globals.py:1850
+#: apps/voyage/globals.py:1862
 msgid "Average number of guns"
 msgstr ""
 
-#: apps/voyage/globals.py:1853
+#: apps/voyage/globals.py:1865
 msgid "Average duration of voyage from home port to disembarkation (days)"
 msgstr ""
 
-#: apps/voyage/globals.py:1855
+#: apps/voyage/globals.py:1867
 msgid "Average duration of middle passage (days)"
 msgstr ""
 
-#: apps/voyage/globals.py:1856
+#: apps/voyage/globals.py:1868
 msgid "Average crew at outset"
 msgstr ""
 
-#: apps/voyage/globals.py:1858
+#: apps/voyage/globals.py:1870
 #, fuzzy
 msgid "Number of crew deaths"
 msgstr "Número de Viagens"
 
-#: apps/voyage/globals.py:1859
+#: apps/voyage/globals.py:1871
 msgid "Average crew deaths"
 msgstr ""
 
-#: apps/voyage/globals.py:1860
+#: apps/voyage/globals.py:1872
 msgid "Intended number of purchases"
 msgstr ""
 
-#: apps/voyage/globals.py:1861
+#: apps/voyage/globals.py:1873
 msgid "Average intended purchases"
 msgstr ""
 
-#: apps/voyage/globals.py:1862
+#: apps/voyage/globals.py:1874
 #, fuzzy
 msgid "Total number of captives embarked"
 msgstr "Número de africanos embarcados relatado"
 
-#: apps/voyage/globals.py:1863
+#: apps/voyage/globals.py:1875
 msgid "Average number of captives embarked"
 msgstr ""
 
-#: apps/voyage/globals.py:1864
+#: apps/voyage/globals.py:1876
 #, fuzzy
 msgid "Total number of captives disembarked"
 msgstr "Números de africanos desembarcados relatados"
 
-#: apps/voyage/globals.py:1865
+#: apps/voyage/globals.py:1877
 #, fuzzy
 msgid "Average number of captives disembarked"
 msgstr "Números de africanos desembarcados relatados"
 
-#: apps/voyage/globals.py:1866
+#: apps/voyage/globals.py:1878
 msgid "Percentage men (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1868
+#: apps/voyage/globals.py:1880
 msgid "Percentage women (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1870
+#: apps/voyage/globals.py:1882
 msgid "Percentage boys (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1872
+#: apps/voyage/globals.py:1884
 msgid "Percentage girls (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1874
+#: apps/voyage/globals.py:1886
 msgid "Percentage female (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1876
+#: apps/voyage/globals.py:1888
 msgid "Percentage male (among captives)"
 msgstr ""
 
-#: apps/voyage/globals.py:1880
+#: apps/voyage/globals.py:1892
 #, fuzzy
 msgid "Number of slave deaths"
 msgstr "Número de Viagens"
 
-#: apps/voyage/globals.py:1881
+#: apps/voyage/globals.py:1893
 msgid "Average slave deaths"
 msgstr ""
 
-#: apps/voyage/globals.py:1882
+#: apps/voyage/globals.py:1894
 msgid "Average percentage of slaves embarked who died during the voyage"
 msgstr ""
 
@@ -6929,6 +6931,53 @@ msgstr "Referência completa"
 #: apps/voyage/models.py:1253
 msgid "Text reference(citation)"
 msgstr "Referência do texto (citação)"
+
+#: apps/voyage/views.py:458
+msgid "Time frame:"
+msgstr "Intervalo de tempo:"
+
+#: apps/voyage/views.py:482
+msgid " month:"
+msgstr ""
+
+#: apps/voyage/views.py:494 apps/voyage/views.py:501 apps/voyage/views.py:503
+#, fuzzy
+msgid "between "
+msgstr "Entre"
+
+#: apps/voyage/views.py:494 apps/voyage/views.py:501 apps/voyage/views.py:503
+msgid " and "
+msgstr ""
+
+#: apps/voyage/views.py:506
+#, fuzzy
+msgid "in "
+msgstr "Entrar"
+
+#: apps/voyage/views.py:508
+#, fuzzy
+msgid "equal to "
+msgstr "É igual a"
+
+#: apps/voyage/views.py:513 apps/voyage/views.py:520
+#, fuzzy
+msgid "before "
+msgstr "Antes"
+
+#: apps/voyage/views.py:522
+#, fuzzy
+msgid "at most "
+msgstr "Ao máximo"
+
+#: apps/voyage/views.py:525 apps/voyage/views.py:527
+#, fuzzy
+msgid "after "
+msgstr "Após"
+
+#: apps/voyage/views.py:529
+#, fuzzy
+msgid "at least "
+msgstr "Ao menos"
 
 #: apps/voyage/templates/flatpages/download.html:6 templates/topbar.html:17
 msgid "Downloads"
@@ -10403,6 +10452,18 @@ msgstr "Escolha o grupo de variáveis"
 msgid "Available variables"
 msgstr "Variáveis básicas"
 
+#: apps/voyage/templates/voyage/search_config.html:50
+msgid "Selected columns"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_config.html:63
+msgid "Move up"
+msgstr ""
+
+#: apps/voyage/templates/voyage/search_config.html:67
+msgid "Move down"
+msgstr ""
+
 #: apps/voyage/templates/voyage/search_config.html:77
 msgid "Apply configuration"
 msgstr ""
@@ -10856,3 +10917,3650 @@ msgstr "Altere minha senha"
 
 #~ msgid "Spanish"
 #~ msgstr "Espanhol"
+
+#~ msgid "W.E.B. Du Bois Institute for African and African American Research"
+#~ msgstr "W.E.B. Du Bois Institute for African and African American Research"
+
+#~ msgid ""
+#~ "Through fellowships to scholars, sponsorship of a range\n"
+#~ "\t\t\t\tof cultural and educational events and projects, and affiliation\n"
+#~ "\t\t\t\twith other outreach programs, the W.E.B. Du Bois Institute for\n"
+#~ "\t\t\t\tAfrican and African American Research advances study and\n"
+#~ "\t\t\t\tunderstanding of the African diasporic experience. The Institute\n"
+#~ "\t\t\t\tsponsored the development of the Trans-Atlantic Slave Trade\n"
+#~ "\t\t\t\tdatabase (published as a CD-ROM in 1999 by Cambridge University\n"
+#~ "\t\t\t\tPress), and has contributed funding for the dataset of the "
+#~ "Voyages\n"
+#~ "\t\t\t\tdatabase."
+#~ msgstr ""
+#~ "Através de bolsas de estudos para estudiosos, de patrocínio a uma série "
+#~ "de eventos e projetos culturais e educacionais, e da filiação a outros "
+#~ "programas de extensão, o W.E.B. Du Bois Institute for African and African "
+#~ "American Research promove o estudo e a compreensão da experiência da "
+#~ "diáspora africana. Patrocinou o desenvolvimento da base de dados do "
+#~ "Tráfico de Escravos Transatlântico (publicado como CD-ROM em 1999 pela "
+#~ "Cambridge University Press) e tem contribuído com financiamento para o "
+#~ "conjunto de dados do banco de dados Viagens."
+
+#~ msgid "???"
+#~ msgstr "???"
+
+#~ msgid "Abandoned and/or sold off Africa"
+#~ msgstr "Abandonado e/ou vendido ao largo da costa africana"
+
+#~ msgid "Abandoned in Europe after completing voyage"
+#~ msgstr "Abandonado na Europa após completar viagem"
+
+#~ msgid "Abandoned or condemned for unseaworthiness in the Americas"
+#~ msgstr "Abandonado ou condenado por inavegabilidade nas Américas"
+
+#~ msgid "Accra"
+#~ msgstr "Accra"
+
+#~ msgid "African"
+#~ msgstr "Africano/a"
+
+#~ msgid "Africa., port unspecified"
+#~ msgstr "África, porto não especificado"
+
+#~ msgid "Aghway"
+#~ msgstr "Aghway"
+
+#~ msgid "Agora"
+#~ msgstr "Agora"
+
+#~ msgid "Airth"
+#~ msgstr "Airth"
+
+#~ msgid "Alagoas province"
+#~ msgstr "Província de Alagoas"
+
+#~ msgid "Alampo"
+#~ msgstr "Alampo"
+
+#~ msgid "Albreda"
+#~ msgstr "Albreda"
+
+#~ msgid "Alecuba"
+#~ msgstr "Alecuba"
+
+#~ msgid "Alicante"
+#~ msgstr "Alicante"
+
+#~ msgid "Amazonia"
+#~ msgstr "Amazônia"
+
+#~ msgid "Ambona"
+#~ msgstr "Ambona"
+
+#~ msgid "Ambriz"
+#~ msgstr "Ambriz"
+
+#~ msgid "Amelia Island"
+#~ msgstr "Ilha Amélia"
+
+#~ msgid "Americas"
+#~ msgstr "Américas"
+
+#~ msgid "Americas, port unspecified"
+#~ msgstr "Américas, porto não especificado"
+
+#~ msgid "Amesbury"
+#~ msgstr "Amesbury"
+
+#~ msgid "Amokou"
+#~ msgstr "Amokou"
+
+#~ msgid "Amsterdam"
+#~ msgstr "Amsterdão"
+
+#~ msgid "Andony"
+#~ msgstr "Andony"
+
+#~ msgid "Angola (possibly New Calabar)"
+#~ msgstr "Angola (possivelmente Novo Calabar)"
+
+#~ msgid "Angola to Ardra"
+#~ msgstr "Angola a Ardra"
+
+#~ msgid "Anguilla"
+#~ msgstr "Anguilha"
+
+#~ msgid "Anguilla, port unspecified"
+#~ msgstr "Anguilha, porto não especificado"
+
+#~ msgid "Annapolis"
+#~ msgstr "Annapolis"
+
+#~ msgid "Annobon"
+#~ msgstr "Ano-Bom"
+
+#~ msgid "Annotta Bay"
+#~ msgstr "Baía Annotta"
+
+#~ msgid "Anomabu"
+#~ msgstr "Anomabu"
+
+#~ msgid "Anomabu and Apam"
+#~ msgstr "Anomabu e Apam"
+
+#~ msgid "Antigua"
+#~ msgstr "Antígua"
+
+#~ msgid "Antigua, port unspecified"
+#~ msgstr "Antígua, porto não especificado"
+
+#~ msgid "Antonia"
+#~ msgstr "Antonia"
+
+#~ msgid "Antwerp"
+#~ msgstr "Antuérpia"
+
+#~ msgid "Apammin"
+#~ msgstr "Apammin"
+
+#~ msgid "Apollonia"
+#~ msgstr "Apollonia"
+
+#~ msgid "Arcahaie"
+#~ msgstr "Arcahaie"
+
+#~ msgid "Ardra"
+#~ msgstr "Ardra"
+
+#~ msgid "Argentina"
+#~ msgstr "Argentina"
+
+#~ msgid "Arguim"
+#~ msgstr "Arguim"
+
+#~ msgid "Arrested by Brazil or given up to the Brazilian government"
+#~ msgstr "Apresado por Brasil ou cedido ao governo brasileiro"
+
+#~ msgid "Arrived in Africa, subsequent fate unknown"
+#~ msgstr "Chegou à África, destino subsequente desconhecido"
+
+#~ msgid "Arrived in Brazil and refused permission to disembark"
+#~ msgstr "Chegou ao Brasil e não teve permissão de desembarcar"
+
+#~ msgid "Aruba"
+#~ msgstr "Aruba"
+
+#~ msgid "Arundel"
+#~ msgstr "Arundel"
+
+#~ msgid "Asia e Africa"
+#~ msgstr "Ásia e África"
+
+#~ msgid "Asia e Africa, port unspecified"
+#~ msgstr "Ásia e África, porto não especificado"
+
+#~ msgid "Axim"
+#~ msgstr "Axim"
+
+#~ msgid "Azores"
+#~ msgstr "Açores"
+
+#~ msgid "Badagry"
+#~ msgstr "Badagry"
+
+#~ msgid "Bahamas"
+#~ msgstr "Bahamas"
+
+#~ msgid "Bahamas, port unspecified"
+#~ msgstr "Bahamas, porto não especificado"
+
+#~ msgid "Bahia"
+#~ msgstr "Bahia"
+
+#~ msgid "Bahia Honda"
+#~ msgstr "Bahia Honda"
+
+#~ msgid "Bahia, port unspecified"
+#~ msgstr "Bahia, porto não especificado"
+
+#~ msgid "Baía de Botafogo"
+#~ msgstr "Baía de Botafogo"
+
+#~ msgid "Baía de Sepetiba"
+#~ msgstr "Baía de Sepetiba"
+
+#~ msgid "Balandra"
+#~ msgstr "Balandra"
+
+#~ msgid "Baltimore"
+#~ msgstr "Baltimore"
+
+#~ msgid "Banana Islands"
+#~ msgstr "Ilhas Banana"
+
+#~ msgid "Bance Island (Ben's Island)"
+#~ msgstr "Ilha Bance (Ben’s Island)"
+
+#~ msgid "Banes"
+#~ msgstr "Banes"
+
+#~ msgid "Barabalemo"
+#~ msgstr "Barabalemo"
+
+#~ msgid "Barbados"
+#~ msgstr "Barbados"
+
+#~ msgid "Barbados and Jamaica"
+#~ msgstr "Barbados e Jamaica"
+
+#~ msgid "Barbados, port unspecified"
+#~ msgstr "Barbados, porto não especificado"
+
+#~ msgid "Barca"
+#~ msgstr "Barca"
+
+#~ msgid "Barcelona"
+#~ msgstr "Barcelona"
+
+#~ msgid "Barmouth"
+#~ msgstr "Barmouth"
+
+#~ msgid "Barqua"
+#~ msgstr "Barqua"
+
+#~ msgid "Barque"
+#~ msgstr "Barque"
+
+#~ msgid "Barque (Dutch)"
+#~ msgstr "Barque (Holandês)"
+
+#~ msgid "Bassa"
+#~ msgstr "Bassa"
+
+#~ msgid "Basse Indres"
+#~ msgstr "Basse Indres"
+
+#~ msgid "Basse-Terre"
+#~ msgstr "Basse-Terre"
+
+#~ msgid "Batabanó  "
+#~ msgstr "Batabanó"
+
+#~ msgid "Batelão"
+#~ msgstr "Batelão"
+
+#~ msgid "Bath"
+#~ msgstr "Bath"
+
+#~ msgid "Batoa"
+#~ msgstr "Batoa"
+
+#~ msgid "Bayonne"
+#~ msgstr "Bayonne"
+
+#~ msgid "Beaufort"
+#~ msgstr "Beaufort"
+
+#~ msgid "Belgium"
+#~ msgstr "Bélgica"
+
+#~ msgid "Belgium, port unspecified"
+#~ msgstr "Bélgica, porto não especificado"
+
+#~ msgid "Bengal"
+#~ msgstr "Bengala"
+
+#~ msgid "Bengo"
+#~ msgstr "Bengo"
+
+#~ msgid "Benguela"
+#~ msgstr "Benguela"
+
+#~ msgid "Benin"
+#~ msgstr "Benim"
+
+#~ msgid "Berbice"
+#~ msgstr "Berbice"
+
+#~ msgid "Bergantim"
+#~ msgstr "Bergantim"
+
+#~ msgid "Bergen"
+#~ msgstr "Bergen"
+
+#~ msgid "Berlin"
+#~ msgstr "Berlin"
+
+#~ msgid "Bermuda"
+#~ msgstr "Bermuda"
+
+#~ msgid "Bertie County"
+#~ msgstr "Condado de Bertie"
+
+#~ msgid "Berwick"
+#~ msgstr "Berwick"
+
+#~ msgid "Biddeford"
+#~ msgstr "Biddeford"
+
+#~ msgid "Bideford"
+#~ msgstr "Bideford"
+
+#~ msgid "Bight of Benin, port unspecified"
+#~ msgstr "Golfo do Benim, porto não especificado"
+
+#~ msgid "Bight of Biafra and Gulf of Guinea islands"
+#~ msgstr "Golfo de Biafra e ilhas do golfo da Guiné"
+
+#~ msgid "Bight of Biafra and Gulf of Guinea Islands, port unspecified"
+#~ msgstr "Golfo de Biafra e ilhas do golfo da Guiné, porto não especificado"
+
+#~ msgid "Bights"
+#~ msgstr "Golfos"
+
+#~ msgid "Bilbao"
+#~ msgstr "Bilbau"
+
+#~ msgid "Bilbay"
+#~ msgstr "Bilbay"
+
+#~ msgid "Billd"
+#~ msgstr "Billd"
+
+#~ msgid "Biloxi"
+#~ msgstr "Biloxi"
+
+#~ msgid "Bimbia"
+#~ msgstr "Bimbia"
+
+#~ msgid "Birkenhead"
+#~ msgstr "Birkenhead"
+
+#~ msgid "Bissagos"
+#~ msgstr "Bijagós"
+
+#~ msgid "Bissau"
+#~ msgstr "Bissau"
+
+#~ msgid "Black River"
+#~ msgstr "Rio Black"
+
+#~ msgid "Boary"
+#~ msgstr "Boary"
+
+#~ msgid "Boat"
+#~ msgstr "Boat"
+
+#~ msgid "Bomara"
+#~ msgstr "Bomara"
+
+#~ msgid "Bonaire"
+#~ msgstr "Bonaire"
+
+#~ msgid "Bonny"
+#~ msgstr "Bonny"
+
+#~ msgid "Borburata"
+#~ msgstr "Borburata"
+
+#~ msgid "Bordeaux"
+#~ msgstr "Bordeaux"
+
+#~ msgid "Borrowstounness"
+#~ msgstr "Borrowstounness"
+
+#~ msgid "Boston"
+#~ msgstr "Boston"
+
+#~ msgid "Bought at least one slave in Africa - subsequent fate unknown"
+#~ msgstr ""
+#~ "Comprou ao menos um escravo na África - destino subsequente desconhecido"
+
+#~ msgid "Boutry"
+#~ msgstr "Boutry"
+
+#~ msgid "Brazil, region unspecified"
+#~ msgstr "Brasil, região não especificada"
+
+#~ msgid "Brest"
+#~ msgstr "Brest"
+
+#~ msgid "Bridgeport"
+#~ msgstr "Bridgeport"
+
+#~ msgid "Brig"
+#~ msgstr "Brig"
+
+#~ msgid "Brigantine"
+#~ msgstr "Brigantine"
+
+#~ msgid "Brigue-escuna"
+#~ msgstr "Brigue-escuna"
+
+#~ msgid "Brik"
+#~ msgstr "Brik"
+
+#~ msgid "Bristol"
+#~ msgstr "Bristol"
+
+#~ msgid "Bristol (RI)"
+#~ msgstr "Bristol (RI)"
+
+#~ msgid "British"
+#~ msgstr "Britânico"
+
+#~ msgid "British Americas"
+#~ msgstr "Américas britânicas"
+
+#~ msgid "British Americas, port unspecified"
+#~ msgstr "Américas britânicas, porto não especificado"
+
+#~ msgid "British Caribbean, colony unspecified"
+#~ msgstr "Caribe britânico, colônia não especificada"
+
+#~ msgid "British Guiana"
+#~ msgstr "Guiana Inglesa"
+
+#~ msgid "British Leewards"
+#~ msgstr "Ilhas de Sotavento Britânicas"
+
+#~ msgid "British plantations"
+#~ msgstr "Plantations inglesas"
+
+#~ msgid "Brixham"
+#~ msgstr "Brixham"
+
+#~ msgid "Broadstairs"
+#~ msgstr "Broadstairs"
+
+#~ msgid "Brookhaven"
+#~ msgstr "Brookhaven"
+
+#~ msgid "Buenos Aires"
+#~ msgstr "Buenos Aires"
+
+#~ msgid "Bundy"
+#~ msgstr "Bundy"
+
+#~ msgid "Buque"
+#~ msgstr "Buque"
+
+#~ msgid "Cabanas"
+#~ msgstr "Cabanas"
+
+#~ msgid "Cabinda"
+#~ msgstr "Cabinda"
+
+#~ msgid "Cabo de Búzios"
+#~ msgstr "Cabo de Búzios"
+
+#~ msgid "Cabo Frio"
+#~ msgstr "Cabo Frio"
+
+#~ msgid "Cacandia"
+#~ msgstr "Cacandia"
+
+#~ msgid "Cacheu"
+#~ msgstr "Cacheu"
+
+#~ msgid "Cadiz"
+#~ msgstr "Cádis"
+
+#~ msgid "Caibarien"
+#~ msgstr "Caibarien"
+
+#~ msgid "Calabar"
+#~ msgstr "Calabar"
+
+#~ msgid "Calais"
+#~ msgstr "Calais"
+
+#~ msgid "Calcutta"
+#~ msgstr "Calcutá"
+
+#~ msgid "Camaret"
+#~ msgstr "Camaret"
+
+#~ msgid "Camden"
+#~ msgstr "Camden"
+
+#~ msgid "Cameroons"
+#~ msgstr "Camarões"
+
+#~ msgid "Cameroons River"
+#~ msgstr "Rio Camarões"
+
+#~ msgid "Campeche"
+#~ msgstr "Campeche"
+
+#~ msgid "Campos"
+#~ msgstr "Campos"
+
+#~ msgid "Canada"
+#~ msgstr "Canadá"
+
+#~ msgid "Cananéia"
+#~ msgstr "Cananéia"
+
+#~ msgid "Canary Islands"
+#~ msgstr "Ilhas Canárias"
+
+#~ msgid "Canasí"
+#~ msgstr "Canasí"
+
+#~ msgid "Cape Baxos"
+#~ msgstr "Cape Baxos"
+
+#~ msgid "Cape Coast Castle"
+#~ msgstr "Castelo de Cabo Corso"
+
+#~ msgid "Cape Lahou"
+#~ msgstr "Cabo Lahou"
+
+#~ msgid "Cape Logas (location undetermined)"
+#~ msgstr "Cabo Logas (localização não determinada)"
+
+#~ msgid "Cape Mole"
+#~ msgstr "Cabo Mole"
+
+#~ msgid "Cape Mount (Cape Grand Mount)"
+#~ msgstr "Cabo do Monte (Cabo Grand Mount)"
+
+#~ msgid "Cape of Good Hope"
+#~ msgstr "Cabo da Boa Esperança"
+
+#~ msgid "Cape Padroon"
+#~ msgstr "Cabo Padrão"
+
+#~ msgid "Cape Petit Mount"
+#~ msgstr "Cabo Petit Mount"
+
+#~ msgid "Cape Verde Islands"
+#~ msgstr "Ilhas do Cabo Verde"
+
+#~ msgid "Cap Français"
+#~ msgstr "Cabo Français"
+
+#~ msgid "Cap Lopez"
+#~ msgstr "Cabo Lopez"
+
+#~ msgid "Cap Lopez And Cabo Santa Catarina"
+#~ msgstr "Cabo Lopes e Cabo Santa Catarina"
+
+#~ msgid "Captain and Crew"
+#~ msgstr "Capitão e Tripulação"
+
+#~ msgid "Captain's name"
+#~ msgstr "Nome do capitão"
+
+#~ msgid "Captor unspecified"
+#~ msgstr "Captor não especificado"
+
+#~ msgid "Captured and recaptured after disembarking slaves"
+#~ msgstr "Capturado e recapturado depois de desembarque de escravos"
+
+#~ msgid "Captured and released without court proceedings"
+#~ msgstr "Capturado e liberado sem julgamento"
+
+#~ msgid ""
+#~ "Captured before disembarking slaves; vessel recaptured or released "
+#~ "subsequently"
+#~ msgstr ""
+#~ "Capturado antes de desembarque de escravos; navio recapturado ou solto "
+#~ "subsequentemente"
+
+#~ msgid "Captured by Algerian pirates"
+#~ msgstr "Capturado por piratas argelinos"
+
+#~ msgid "Captured by Argentinian privateers after embarkation of slaves"
+#~ msgstr "Capturado por corsários argentinos depois de embarque de escravos"
+
+#~ msgid "Captured by British - after disembarkation"
+#~ msgstr "Capturado por britânicos - depois do desembarque"
+
+#~ msgid "Captured by British - after embarkation of slaves"
+#~ msgstr "Capturado por britânicos - depois do embarque de escravos"
+
+#~ msgid "Captured by British - before slaves embarked"
+#~ msgstr "Capturado por britânicos - antes de embarque de escravos"
+
+#~ msgid "Captured by British, released"
+#~ msgstr "Capturado por britânicos, liberado"
+
+#~ msgid "Captured by British - unspecified"
+#~ msgstr "Capturado por britânicos - não especificado"
+
+#~ msgid "Captured by Cie du Senegal"
+#~ msgstr "Capturado pela Cia do Senegal"
+
+#~ msgid "Captured by crew, did not land slaves in the Americas"
+#~ msgstr "Capturado por tripulação, não desembarcou escravos nas Américas"
+
+#~ msgid "Captured by crew: fate unknown"
+#~ msgstr "Capturado por tripulação: destino desconhecido"
+
+#~ msgid "Captured by Dutch - after disembarkation"
+#~ msgstr "Capturado por holandeses - depois do desembarque"
+
+#~ msgid "Captured by Dutch - after embarkation of slaves"
+#~ msgstr "Capturado por holandeses - depois do embarque de escravos"
+
+#~ msgid "Captured by Dutch - before slaves embarked"
+#~ msgstr "Capturado por holandeses - antes do embarque dos escravos"
+
+#~ msgid "Captured by Dutch, slaves turned loose in Africa"
+#~ msgstr "Capturado por holandeses, escravos soltos na África"
+
+#~ msgid "Captured by Dutch, slaves turned loose in Brazil"
+#~ msgstr "Capturado por holandeses, escravos soltos no Brasil"
+
+#~ msgid "Captured by Dutch - unspecified"
+#~ msgstr "Capturado por holandeses - não especificado"
+
+#~ msgid "Captured by English, slaves turned loose on Spanish Main"
+#~ msgstr ""
+#~ "Capturado por ingleses, escravos soltos na América continental espanhola"
+
+#~ msgid ""
+#~ "Captured by first by the British and then by the Dutch after slaves "
+#~ "embarked"
+#~ msgstr ""
+#~ "Capturado primeiro por britânicos e depois por holandeses após embarque "
+#~ "de escravos"
+
+#~ msgid "Captured by pirates after slaves embarked, ship and slaves burned."
+#~ msgstr ""
+#~ "Capturado por piratas após embarque de escravos, navio e escravos "
+#~ "queimados."
+
+#~ msgid "captured by pirates and burned"
+#~ msgstr "Capturado por piratas e queimado"
+
+#~ msgid "Captured by pirates or privateers - after disembarkation"
+#~ msgstr "Capturados por piratas ou corsários - depois do desembarque"
+
+#~ msgid "Captured by pirates or privateers - after embarkation of slaves"
+#~ msgstr ""
+#~ "Capturados por piratas ou corsários - depois do embarque de escravos"
+
+#~ msgid "Captured by pirates or privateers - before slaves embarked"
+#~ msgstr "Capturados por piratas ou corsários - antes do embarque de escravos"
+
+#~ msgid "Captured by pirates or privateers - unspecified"
+#~ msgstr "Capturados por piratas ou corsários - não especificado"
+
+#~ msgid "Captured by pirates - slaves sold in Americas from another ship"
+#~ msgstr ""
+#~ "Capturado por piratas – escravos vendidos nas Américas em outro navio"
+
+#~ msgid "Captured by Portuguese - after embarkation of slaves"
+#~ msgstr "Capturado por portugueses - depois do embarque de escravos"
+
+#~ msgid "Captured by Portuguese - Americas after disembarkation"
+#~ msgstr "Capturado por portugueses - Américas depois do desembarque"
+
+#~ msgid "Captured by Portuguese and Dutch"
+#~ msgstr "Capturado por portugueses e holandeses"
+
+#~ msgid "Captured by Portuguese - before slaves embarked"
+#~ msgstr "Capturado por portugueses - antes do embarque de escravos"
+
+#~ msgid "Captured by Portuguese - unspecified"
+#~ msgstr "Capturado por portugueses - não especificado"
+
+#~ msgid "Captured by slaves, recaptured and landed slaves in the Americas"
+#~ msgstr ""
+#~ "Capturado por escravos, recapturado e desembarcou escravos nas Américas"
+
+#~ msgid ""
+#~ "Captured by slaves, recaptured and landed slaves in the Americas, lost"
+#~ msgstr ""
+#~ "Capturado por escravos, recapturado e desembarcou escravos nas Américas, "
+#~ "perdido"
+
+#~ msgid "Captured by slaves: ship did not reach the Americas"
+#~ msgstr "Capturado por escravos: navio não chegou às Américas"
+
+#~ msgid "Captured by slaves, unknown outcome"
+#~ msgstr "Capturado por escravos, resultado desconhecido"
+
+#~ msgid "Captured by Spanish - after disembarkation"
+#~ msgstr "Capturado por espanhóis - depois do desembarque"
+
+#~ msgid "Captured by Spanish - after embarkation of slaves"
+#~ msgstr "Capturado por espanhóis - depois do embarque de escravos"
+
+#~ msgid "Captured by Spanish - before slaves embarked"
+#~ msgstr "Capturado por espanhóis - antes do embarque de escravos"
+
+#~ msgid "Captured by Spanish - unspecified"
+#~ msgstr "Capturado por espanhóis - não especificado"
+
+#~ msgid "Captured by the Barbary Powers before embarking slaves"
+#~ msgstr "Capturado pelos estados da Barbária antes do embarque de escravos"
+
+#~ msgid "Captured by the British, retaken by original crew, completed voyage"
+#~ msgstr ""
+#~ "Capturado por britânicos, retomado por tripulação original, completou "
+#~ "viagem"
+
+#~ msgid "Captured by the crew, no slaves taken, crew sold gold in Europe"
+#~ msgstr ""
+#~ "Capturado pela tripulação, nenhum escravo tomado, tripulação vendou ouro "
+#~ "na Europa"
+
+#~ msgid "Captured by the crew, slaves sold in Africa"
+#~ msgstr "Capturado pela tripulação, escravos vendidos na África"
+
+#~ msgid "Captured by the Dominican Republic"
+#~ msgstr "Capturado pela República Dominicana"
+
+#~ msgid "Captured by the French - after embarkation of slaves"
+#~ msgstr "Capturado por franceses - depois do embarque de escravos"
+
+#~ msgid "Captured by the French - after slaves disembarked"
+#~ msgstr "Capturado por franceses - depois do desembarque de escravos"
+
+#~ msgid "Captured by the French - before slaves embarked"
+#~ msgstr "Capturado por franceses - antes do embarque de escravos"
+
+#~ msgid "Captured by the French - unspecified"
+#~ msgstr "Capturado por franceses - não especificado"
+
+#~ msgid "Captured by the Swedes"
+#~ msgstr "Capturado pelos suecos"
+
+#~ msgid "Captured by Turks"
+#~ msgstr "Capturado por turcos"
+
+#~ msgid "Captured by United States after slaves disembarked"
+#~ msgstr "Capturado por EUA depois do desembarque de escravos"
+
+#~ msgid "Captured by United States before slaves embarked"
+#~ msgstr "Capturado por franceses - antes do embarque de escravos"
+
+#~ msgid "Captured by United States, slave presence unspecified"
+#~ msgstr "Capturado por EUA, presença de escravos não especificada"
+
+#~ msgid "Captured by United States with slaves"
+#~ msgstr "Capturado por EUA com escravos"
+
+#~ msgid "captured by Venezuelans before disembarkation of slaves"
+#~ msgstr "Capturado por venezuelanos antes do desembarque de escravos"
+
+#~ msgid "Captured by WIC"
+#~ msgstr "Capturado pela CIO"
+
+#~ msgid "Captured interloper"
+#~ msgstr "Capturado intermediário"
+
+#~ msgid "Captured - unspecified"
+#~ msgstr "Capturado - não especificado"
+
+#~ msgid "Captured unspecified after embarkation of slaves"
+#~ msgstr "Capturado não especificado depois do embarque de escravos"
+
+#~ msgid "Captured unspecified after slaves disembarked"
+#~ msgstr "Capturado não especificado depois do desembarque de escravos"
+
+#~ msgid "Captured unspecified before slaves embarked"
+#~ msgstr "Capturado não especificado antes de embarque de escravos"
+
+#~ msgid "Caracas"
+#~ msgstr "Caracas"
+
+#~ msgid "Caravela"
+#~ msgstr "Caravela"
+
+#~ msgid "Cardenas"
+#~ msgstr "Cárdenas"
+
+#~ msgid "Caribbean"
+#~ msgstr "Caribe"
+
+#~ msgid "Caribbean (colony unspecified)"
+#~ msgstr "Caribe (colônia não especificada)"
+
+#~ msgid "Carolinas"
+#~ msgstr "Carolinas"
+
+#~ msgid "Cartagena"
+#~ msgstr "Cartagena"
+
+#~ msgid "Casamance"
+#~ msgstr "Casamance"
+
+#~ msgid "Casnasonis (location undetermined)"
+#~ msgstr "Casnasonis (localização indeterminada)"
+
+#~ msgid "Catuamo and Maria Farinha"
+#~ msgstr "Catuamo e Maria Farinha"
+
+#~ msgid "Cawsand"
+#~ msgstr "Cawsand"
+
+#~ msgid "Cayenne"
+#~ msgstr "Caiena"
+
+#~ msgid "Cayes (Les)"
+#~ msgstr "Cayes (Les)"
+
+#~ msgid "C.C. Castle and Windward"
+#~ msgstr "Castelo de Cabo Corso e Costa do Barlavento"
+
+#~ msgid "Cess"
+#~ msgstr "Cess"
+
+#~ msgid "Chalupa"
+#~ msgstr "Chalupa"
+
+#~ msgid "Chama"
+#~ msgstr "Chama"
+
+#~ msgid "Charleston"
+#~ msgstr "Charleston"
+
+#~ msgid "Charlestown"
+#~ msgstr "Charlestown"
+
+#~ msgid "Charrauinha"
+#~ msgstr "Charruinha"
+
+#~ msgid "Charrua"
+#~ msgstr "Charrua"
+
+#~ msgid "Charrua de guerra"
+#~ msgstr "Charrua de guerra"
+
+#~ msgid "Chatham"
+#~ msgstr "Chatham"
+
+#~ msgid "Chepstow"
+#~ msgstr "Chepstow"
+
+#~ msgid "Chester"
+#~ msgstr "Chester"
+
+#~ msgid "Chowan river"
+#~ msgstr "Rio Chowan"
+
+#~ msgid "Christiansborg"
+#~ msgstr "Christiansborg"
+
+#~ msgid "Cienfuegos"
+#~ msgstr "Cienfuegos"
+
+#~ msgid "Coanza River"
+#~ msgstr "Rio Quanza"
+
+#~ msgid "Codes without labels"
+#~ msgstr "Códigos sem etiquetas"
+
+#~ msgid "Cohasset"
+#~ msgstr "Cohasset"
+
+#~ msgid "Colchester"
+#~ msgstr "Colchester"
+
+#~ msgid "Colonia de Sacramento"
+#~ msgstr "Colônia do Sacramento"
+
+#~ msgid "Completed voyage after slaves removed for salvage"
+#~ msgstr ""
+#~ "Completou viagem depois que escravos foram removidos para recuperação"
+
+#~ msgid "Condemned - after embarkation of slaves"
+#~ msgstr "Condenado - depois do embarque de escravos"
+
+#~ msgid "Condemned - Americas after disembarkation"
+#~ msgstr "Condenado - Américas depois do desembarque"
+
+#~ msgid "Condemned at Goree by the British"
+#~ msgstr "Condenado em Goreia por britânicos"
+
+#~ msgid "Condemned - before slaves embarked"
+#~ msgstr "Condenado - antes do embarque de escravos"
+
+#~ msgid "Condemned in Africa with slaves, slaves transshipped/sold"
+#~ msgstr "Condenado na África com escravos, escravos baldeados/vendidos"
+
+#~ msgid "Condemned in the Americas by British after slaves disembarked"
+#~ msgstr ""
+#~ "Condenado nas Américas por britânicos depois do desembarque de escravos"
+
+#~ msgid "Condemned in the Americas by British before slaves disembarked"
+#~ msgstr ""
+#~ "Condenado nas Américas por britânicos antes do desembarque de escravos"
+
+#~ msgid "Condemned - unspecified"
+#~ msgstr "Condenado - não especificado"
+
+#~ msgid "Congo North"
+#~ msgstr "Congo Norte"
+
+#~ msgid "Congo River"
+#~ msgstr "Rio Congo"
+
+#~ msgid "Connecticut"
+#~ msgstr "Connecticut"
+
+#~ msgid "Connecticut, port unspecified"
+#~ msgstr "Connecticut, porto não especificado"
+
+#~ msgid "Conway"
+#~ msgstr "Conway"
+
+#~ msgid "Copacabana"
+#~ msgstr "Copacabana"
+
+#~ msgid "Copenhagen"
+#~ msgstr "Copenhague"
+
+#~ msgid "Corisco"
+#~ msgstr "Corisco"
+
+#~ msgid "Cork"
+#~ msgstr "Cork"
+
+#~ msgid "Corsario"
+#~ msgstr "Corsário"
+
+#~ msgid "Costa da Mina"
+#~ msgstr "Costa da Mina"
+
+#~ msgid "Costa de Africa (mainland coast around S Tome/Principe)"
+#~ msgstr "Costa da África (costa continental próximo a São Tomé/Príncipe)"
+
+#~ msgid "Costa Leste Occidental"
+#~ msgstr "Costa Leste Ocidental"
+
+#~ msgid "Côte de Malaguette (runs through to Cape Palmas on Windward Coast)"
+#~ msgstr "Costa da Malagueta (de Cabo Palmas à Costa do Barlavento)"
+
+#~ msgid "Court of Mixed Commission, Cape of Good Hope, condemned"
+#~ msgstr "Tribunal de Comissão Mista, Cabo da Boa Esperança, condenado"
+
+#~ msgid "Court of Mixed Commission, Cape of Good Hope, restored"
+#~ msgstr "Tribunal de Comissão Mista, Cabo da Boa Esperança, reintegrado"
+
+#~ msgid "Court of Mixed Commission, Havana, condemned"
+#~ msgstr "Tribunal de Comissão Mista, Havana, condenado"
+
+#~ msgid "Court of Mixed Commission, Havana, restored"
+#~ msgstr "Tribunal de Comissão Mista, Havana, reintegrado"
+
+#~ msgid "Court of Mixed Commission, Luanda, condemned"
+#~ msgstr "Tribunal de Comissão Mista, Luanda, condenado"
+
+#~ msgid "Court of Mixed Commission, Luanda, restored"
+#~ msgstr "Tribunal de Comissão Mista, Luanda, reintegrado"
+
+#~ msgid "Court of Mixed Commission, Rio de Janeiro, condemned"
+#~ msgstr "Tribunal de Comissão Mista, Rio de Janeiro, condenado"
+
+#~ msgid "Court of Mixed Commission, Rio de Janeiro, restored"
+#~ msgstr "Tribunal de Comissão Mista, Rio de Janeiro, reintegrado"
+
+#~ msgid "Court of Mixed Commission, Sierra Leone, condemned"
+#~ msgstr "Tribunal de Comissão Mista, Serra Leoa, condenado"
+
+#~ msgid "Court of Mixed Commission, Sierra Leone, restored"
+#~ msgstr "Tribunal de Comissão Mista, Serra Leoa, reintegrado"
+
+#~ msgid "Cowes"
+#~ msgstr "Cowes"
+
+#~ msgid "Crew action"
+#~ msgstr "Ação da tripulação"
+
+#~ msgid "Crew deaths during voyage"
+#~ msgstr "Mortes de tripulação durante a viagem"
+
+#~ msgid "Crew mutiny; slaves landed in the Americas"
+#~ msgstr "Tripulação amotinada; escravos desembarcados nas Américas"
+
+#~ msgid "Cronstadt"
+#~ msgstr "Cronstadt"
+
+#~ msgid "Cuba"
+#~ msgstr "Cuba"
+
+#~ msgid "Cuba, port unspecified"
+#~ msgstr "Cuba, porto não especificado"
+
+#~ msgid "Cuba, south coast"
+#~ msgstr "Cuba, costa medirional"
+
+#~ msgid "Cuba, west coast"
+#~ msgstr "Cuba, costa ocidental"
+
+#~ msgid "Cul-de-Sac"
+#~ msgstr "Cul-de-Sac"
+
+#~ msgid "Cumana"
+#~ msgstr "Cumana"
+
+#~ msgid "Cumingsberg"
+#~ msgstr "Cumingsberg"
+
+#~ msgid "Curaçao"
+#~ msgstr "Curaçao"
+
+#~ msgid "Curveta"
+#~ msgstr "Curveta"
+
+#~ msgid ""
+#~ "Cut off by Africans from shore. Recaptured and landed slaves in Americas"
+#~ msgstr ""
+#~ "Interceptado por africanos na costa. Recapturado e desembarcou escravos "
+#~ "nas Américas"
+
+#~ msgid "Cut off by Africans from shore, ship did not reach the Americas"
+#~ msgstr "Interceptado por africanos na costa, navio não chegou às Américas"
+
+#~ msgid "Cut-off (meaning unclear)"
+#~ msgstr "Interceptado (significado obscuro)"
+
+#~ msgid "Cutter"
+#~ msgstr "Cutter"
+
+#~ msgid "Danish Gold Coast"
+#~ msgstr "Costa do Ouro dinamarquesa"
+
+#~ msgid "Danish West Indies"
+#~ msgstr "Índias Ocidentais dinamarquesas"
+
+#~ msgid "Danish West Indies, colony unspecified"
+#~ msgstr "Índias Ocidentais dinamarquesas, colônia não especificada"
+
+#~ msgid "Dartmouth"
+#~ msgstr "Dartmouth"
+
+#~ msgid "Date trade began in Africa"
+#~ msgstr "Data em que o comércio começou na África"
+
+#~ msgid "Date vessel arriveds with slaves"
+#~ msgstr "Data em que o navio chegou com escravos"
+
+#~ msgid "Date vessel departed Africa"
+#~ msgstr "Data em que o navio partiu da África"
+
+#~ msgid "Date vessel departed for homeport"
+#~ msgstr "Data em que o navio partiu do porto de origem"
+
+#~ msgid "Date voyage began"
+#~ msgstr "Data em que a viagem começou"
+
+#~ msgid "Date voyage completed"
+#~ msgstr "Data em que a viagem terminou"
+
+#~ msgid "Delagoa"
+#~ msgstr "Delagoa"
+
+#~ msgid "Delaware"
+#~ msgstr "Delaware"
+
+#~ msgid "Delaware, port unspecified"
+#~ msgstr "Delaware, porto não especificado"
+
+#~ msgid "Delaware River"
+#~ msgstr "Rio Delaware"
+
+#~ msgid "Delivered slaves for original owners"
+#~ msgstr "Entregou escravos aos donos originais"
+
+#~ msgid "Dembia"
+#~ msgstr "Dembia"
+
+#~ msgid "Demerara"
+#~ msgstr "Demerara"
+
+#~ msgid "Denmark"
+#~ msgstr "Dinamarca"
+
+#~ msgid "Denmark / Baltic"
+#~ msgstr "Dinamarca / Báltico"
+
+#~ msgid "Denmark, port unspecified"
+#~ msgstr "Dinamarca, porto não especificado"
+
+#~ msgid "Deptford"
+#~ msgstr "Deptford"
+
+#~ msgid "Destroyed, lost or sold as result of slave rebellion"
+#~ msgstr ""
+#~ "Destruído, perdido ou vendido como resultado de rebelião de escravos"
+
+#~ msgid "Destroyed - unspecified"
+#~ msgstr "Destruído - não especificado"
+
+#~ msgid "Detained and condemned in the United States after slaves disembarked"
+#~ msgstr "Detido e condenado nos EUA depois do desembarque de escravos"
+
+#~ msgid "Dieppe"
+#~ msgstr "Dieppe"
+
+#~ msgid "Dighton"
+#~ msgstr "Dighton"
+
+#~ msgid "Dinard"
+#~ msgstr "Dinard"
+
+#~ msgid "ditto Arquivos Angola, II, vol 25, pp. 432-33."
+#~ msgstr "dito Arquivos Angola, II, vol 25, pp. 432-33."
+
+#~ msgid "Dixcove"
+#~ msgstr "Dixcove"
+
+#~ msgid "Dogger"
+#~ msgstr "Dogger"
+
+#~ msgid "Dois Rios"
+#~ msgstr "Dois Rios"
+
+#~ msgid "Dominica"
+#~ msgstr "Dominica"
+
+#~ msgid "Dominica, port unspecified"
+#~ msgstr "Dominica, porto não especificado"
+
+#~ msgid "Dordrecht"
+#~ msgstr "Dordrecht"
+
+#~ msgid "Dover"
+#~ msgstr "Dover"
+
+#~ msgid "Driven off the African Coast with slaves on board"
+#~ msgstr "Expulso da costa africana com escravos a bordo"
+
+#~ msgid "Driven or run on shore in the Americas: no court proceedings"
+#~ msgstr "Expulso ou batido na costa nas Américas: sem resultados de corte"
+
+#~ msgid "Drouin"
+#~ msgstr "Drouin"
+
+#~ msgid "Dublin"
+#~ msgstr "Dublin"
+
+#~ msgid "Dundee"
+#~ msgstr "Dundee"
+
+#~ msgid "Dungarvan"
+#~ msgstr "Dungarvan"
+
+#~ msgid "Dunkerque"
+#~ msgstr "Dunkerque"
+
+#~ msgid "Dutch Caribbean"
+#~ msgstr "Caribe holandês"
+
+#~ msgid "Dutch Caribbean, colony unspecified"
+#~ msgstr "Caribe holandês, colônia não especificada"
+
+#~ msgid "Dutch Guianas"
+#~ msgstr "Guianas holandesas"
+
+#~ msgid "Dutch Guianas, colony unspecified"
+#~ msgstr "Guianas holandesas, colônia não especificada"
+
+#~ msgid "Duxbury"
+#~ msgstr "Duxbury"
+
+#~ msgid "Eastern New Jersey"
+#~ msgstr "New Jersey oriental"
+
+#~ msgid "East Indies"
+#~ msgstr "Índias Orientais"
+
+#~ msgid "East Indies, port unspecified"
+#~ msgstr "Índias Orientais, porto não especificado"
+
+#~ msgid ""
+#~ "Either shipwrecked or captured by pirates before slaves taken on board"
+#~ msgstr ""
+#~ "Ou naufragado ou capturado por piratas antes de trazer escravos a bordo"
+
+#~ msgid "Elbe"
+#~ msgstr "Elbe"
+
+#~ msgid "Elizabeth River"
+#~ msgstr "Rio Elizabeth"
+
+#~ msgid "Elmina"
+#~ msgstr "Elmina"
+
+#~ msgid "Elsineur"
+#~ msgstr "Elsineur"
+
+#~ msgid "Emden"
+#~ msgstr "Emden"
+
+#~ msgid "England"
+#~ msgstr "Inglaterra"
+
+#~ msgid "England, port unspecified"
+#~ msgstr "Inglaterra, porto não especificado"
+
+#~ msgid "Enkhuizen"
+#~ msgstr "Enkhuizen"
+
+#~ msgid "Epe"
+#~ msgstr "Epe"
+
+#~ msgid "Escaller"
+#~ msgstr "Escaller"
+
+#~ msgid "Essequibo"
+#~ msgstr "Essequibo"
+
+#~ msgid "Estuary of River Guane"
+#~ msgstr "Estuário do Rio Guane"
+
+#~ msgid "Eva"
+#~ msgstr "Eva"
+
+#~ msgid "Exeter"
+#~ msgstr "Exeter"
+
+#~ msgid "Falmouth (Eng.)"
+#~ msgstr "Falmouth (Ingl.)"
+
+#~ msgid "Falmouth (Jam.)"
+#~ msgstr "Falmouth (Jam.)"
+
+#~ msgid "Faluxo"
+#~ msgstr "Faluxo"
+
+#~ msgid "Felucca"
+#~ msgstr "Felucca"
+
+#~ msgid "Fernando Po"
+#~ msgstr "Fernando Po"
+
+#~ msgid "Filibote"
+#~ msgstr "Filibote"
+
+#~ msgid "First place of slave landing"
+#~ msgstr "Primeiro lugar de desembarque de escravos"
+
+#~ msgid "First place of slave purchase"
+#~ msgstr "Primeiro lugar de aquisição de escravos"
+
+#~ msgid "Flanders"
+#~ msgstr "Flandres"
+
+#~ msgid "Florida"
+#~ msgstr "Flórida"
+
+#~ msgid "Florida, port unspecified"
+#~ msgstr "Flórida, porto não especificado"
+
+#~ msgid "Fluit"
+#~ msgstr "Fluit"
+
+#~ msgid "Fockey"
+#~ msgstr "Fockey"
+
+#~ msgid "Folkstone"
+#~ msgstr "Folkstone"
+
+#~ msgid "Forke"
+#~ msgstr "Forke"
+
+#~ msgid "Formosa"
+#~ msgstr "Formosa"
+
+#~ msgid "Fort Dauphin"
+#~ msgstr "Fort Dauphin"
+
+#~ msgid "Fort-Royale"
+#~ msgstr "Fort-Royale"
+
+#~ msgid "Fragatihna"
+#~ msgstr "Fragatinha"
+
+#~ msgid "France"
+#~ msgstr "França"
+
+#~ msgid "France, port unspecified"
+#~ msgstr "França, porto não especificado"
+
+#~ msgid "Freeport"
+#~ msgstr "Freeport"
+
+#~ msgid "Freetown"
+#~ msgstr "Freetown"
+
+#~ msgid "Freetown (Mass.)"
+#~ msgstr "Freetown (Mass.)"
+
+#~ msgid "Fregat"
+#~ msgstr "Fregat"
+
+#~ msgid "Fregata"
+#~ msgstr "Fragata"
+
+#~ msgid "French Africa (Goree or Senegal)"
+#~ msgstr "África francesa (Goreia ou Senegal)"
+
+#~ msgid "French Caribbean, colony unspecified"
+#~ msgstr "Caribe francês, colônia não especificada"
+
+#~ msgid "French Guiana"
+#~ msgstr "Guiana Francesa"
+
+#~ msgid "French proceedings initiated in Africa, acquittal"
+#~ msgstr "Processo francês iniciado na África, absolvido"
+
+#~ msgid "French proceedings initiated in Africa, condemned"
+#~ msgstr "Processo francês iniciado na África, condenado"
+
+#~ msgid "French proceedings initiated in Africa, unknown outcome"
+#~ msgstr "Processo francês iniciado na África, resultado desconhecido"
+
+#~ msgid "French proceedings initiated in Cayenne, acquittal"
+#~ msgstr "Processo francês iniciado em Caiena, absolvido"
+
+#~ msgid "French proceedings initiated in Cayenne, condemned"
+#~ msgstr "Processo francês iniciado em Caiena, condenado"
+
+#~ msgid "French proceedings initiated in Cayenne, unknown outcome"
+#~ msgstr "Processo francês iniciado em Caiena, resultado desconhecido"
+
+#~ msgid "French proceedings initiated in France, acquittal"
+#~ msgstr "Processo francês iniciado na França, absolvido"
+
+#~ msgid "French proceedings initiated in France, condemned"
+#~ msgstr "Processo francês iniciado na França, condenado"
+
+#~ msgid "French proceedings initiated in France, unknown outcome"
+#~ msgstr "Processo francês iniciado na França, resultado desconhecido"
+
+#~ msgid "French proceedings initiated in Guadaloupe, acquittal"
+#~ msgstr "Processo francês iniciado em Guadalupe, absolvido"
+
+#~ msgid "French proceedings initiated in Guadaloupe, condemned"
+#~ msgstr "Processo francês iniciado em Guadalupe, condenado"
+
+#~ msgid "French proceedings initiated in Guadaloupe, unknown outcome"
+#~ msgstr "Processo francês iniciado em Guadalupe, resultado desconhecido"
+
+#~ msgid "French proceedings initiated in Martinique, acquittal"
+#~ msgstr "Processo francês iniciado na Martinica, absolvido"
+
+#~ msgid "French proceedings initiated in Martinique, condemned"
+#~ msgstr "Processo francês iniciado na Martinica, condenado"
+
+#~ msgid "French proceedings initiated in Martinique, unknown outcome"
+#~ msgstr "Processo francês iniciado na Martinica, resultado desconhecido"
+
+#~ msgid "French proceedings, initiated in unknown location, acquittal"
+#~ msgstr "Processo francês, iniciado em lugar desconhecido, absolvido"
+
+#~ msgid "French proceedings, initiated in unknown location, condemned"
+#~ msgstr "Processo francês, iniciado em lugar desconhecido, condenado"
+
+#~ msgid "French proceedings, initiated in unknown location, unknown outcome"
+#~ msgstr ""
+#~ "Processo francês, iniciado em lugar desconhecido, resultado desconhecido"
+
+#~ msgid "Frodsham"
+#~ msgstr "Frodsham"
+
+#~ msgid "Gabon"
+#~ msgstr "Gabão"
+
+#~ msgid "Gainsborough"
+#~ msgstr "Gainsborough"
+
+#~ msgid "Galam"
+#~ msgstr "Galam"
+
+#~ msgid "Galeão"
+#~ msgstr "Galeão"
+
+#~ msgid "Galera"
+#~ msgstr "Galera"
+
+#~ msgid "Galeta"
+#~ msgstr "Galeta"
+
+#~ msgid "Galjoot"
+#~ msgstr "Galjoot"
+
+#~ msgid "Gallinhas"
+#~ msgstr "Gallinhas"
+
+#~ msgid "Galliot"
+#~ msgstr "Galliot"
+
+#~ msgid "Galway"
+#~ msgstr "Galway"
+
+#~ msgid "Gambia"
+#~ msgstr "Gambia"
+
+#~ msgid "Genoa"
+#~ msgstr "Gênova"
+
+#~ msgid "Georgetown"
+#~ msgstr "Georgetown"
+
+#~ msgid "Georgia"
+#~ msgstr "Geórgia"
+
+#~ msgid "Georgia, port unspecified"
+#~ msgstr "Geórgia, porto não especificado"
+
+#~ msgid "Gibraltar"
+#~ msgstr "Gibraltar"
+
+#~ msgid "Given up to the Mexican Government, Vera Cruz"
+#~ msgstr "Cedido ao governo mexicano, Vera Cruz"
+
+#~ msgid "Given up to the United States government"
+#~ msgstr "Cedido ao governo dos EUA"
+
+#~ msgid "Glasgow"
+#~ msgstr "Glasgow"
+
+#~ msgid "Goa"
+#~ msgstr "Goa"
+
+#~ msgid "Gold Coast + Bight of Benin + Bight of Biafra"
+#~ msgstr "Costa do Ouro + Golfo do Benim + Golfo de Biafra"
+
+#~ msgid "Gold Coast east of Kormantine"
+#~ msgstr "Costa do Ouro a leste de Kormantine"
+
+#~ msgid "Gold Coast, Fr. definition"
+#~ msgstr "Costa do Ouro, definição fr."
+
+#~ msgid "Gold Coast from Kormatine to Accra"
+#~ msgstr "Costa do Ouro, de Kormantine a Accra"
+
+#~ msgid "Gold Coast, port unspecified"
+#~ msgstr "Costa do Ouro, porto não especificado"
+
+#~ msgid "Gorée"
+#~ msgstr "Goreia"
+
+#~ msgid "Gothenberg"
+#~ msgstr "Gothenberg"
+
+#~ msgid "Grand Bassa"
+#~ msgstr "Grand Bassa"
+
+#~ msgid "Grand Bassam"
+#~ msgstr "Grand Bassam"
+
+#~ msgid "Grand Cess"
+#~ msgstr "Grand Cess"
+
+#~ msgid "Grand Junk"
+#~ msgstr "Grand Junk"
+
+#~ msgid "Grand Mesurado"
+#~ msgstr "Grand Mesurado"
+
+#~ msgid "Grand Popo"
+#~ msgstr "Grand Popo"
+
+#~ msgid "Grand Sestos"
+#~ msgstr "Grand Sestos"
+
+#~ msgid "Great Britain"
+#~ msgstr "Grã-Bretanha"
+
+#~ msgid "Great Britain, port unspecified"
+#~ msgstr "Grã-Bretanha, porto não especificado"
+
+#~ msgid "Greenock"
+#~ msgstr "Greenock"
+
+#~ msgid "Greenwich"
+#~ msgstr "Greenwich"
+
+#~ msgid "Grenada"
+#~ msgstr "Grenada"
+
+#~ msgid "Grenada Point"
+#~ msgstr "Grenada Point"
+
+#~ msgid "Grenada, port unspecified"
+#~ msgstr "Grenada, porto não especificado"
+
+#~ msgid "Groningen"
+#~ msgstr "Groningen"
+
+#~ msgid "Guadaloupe"
+#~ msgstr "Guadalupe"
+
+#~ msgid "Guadeloupe, port unspecified"
+#~ msgstr "Guadalupe, porto não especificado"
+
+#~ msgid "Guanimar"
+#~ msgstr "Guanimar"
+
+#~ msgid "Guatemala"
+#~ msgstr "Guatemala"
+
+#~ msgid "Guernsey"
+#~ msgstr "Guernsey"
+
+#~ msgid "Guiana"
+#~ msgstr "Guiana"
+
+#~ msgid "Guildford"
+#~ msgstr "Guildford"
+
+#~ msgid "Gulf coast"
+#~ msgstr "Costa do Golfo"
+
+#~ msgid "Gulf of Guinea islands"
+#~ msgstr "Ilhas do Golfo da Guiné"
+
+#~ msgid "Guns mounted"
+#~ msgstr "Armas montadas"
+
+#~ msgid "Gustavia, St. Bartholomew"
+#~ msgstr "Gustavia, S. Bartolomeu"
+
+#~ msgid "Haddam"
+#~ msgstr "Haddam"
+
+#~ msgid "Haitians"
+#~ msgstr "Haitianos"
+
+#~ msgid "Halifax"
+#~ msgstr "Halifax"
+
+#~ msgid "Hamburg"
+#~ msgstr "Hamburgo"
+
+#~ msgid "Hamilton (Bermuda)"
+#~ msgstr "Hamilton (Bermuda)"
+
+#~ msgid "Hampton"
+#~ msgstr "Hampton"
+
+#~ msgid "Hanse Towns, Brandenburg"
+#~ msgstr "Cidades hanseáticas, Brandemburgo"
+
+#~ msgid "Hartford"
+#~ msgstr "Hartford"
+
+#~ msgid "Harwich"
+#~ msgstr "Hartford"
+
+#~ msgid "Havana"
+#~ msgstr "Havana"
+
+#~ msgid "Hay"
+#~ msgstr "Hay"
+
+#~ msgid "Hekboot"
+#~ msgstr "Hekboot"
+
+#~ msgid "Hellevoetsluis"
+#~ msgstr "Hellevoetsluis"
+
+#~ msgid "High Court of Admiralty, condemned"
+#~ msgstr "Tribunal Superior do Almirantado, condenado"
+
+#~ msgid "High Court of Admiralty, restored"
+#~ msgstr "Tribunal Superior do Almirantado, reintegrado"
+
+#~ msgid "Hingham"
+#~ msgstr "Hingham"
+
+#~ msgid "Hispaniola"
+#~ msgstr "Hispaniola"
+
+#~ msgid "Hispaniola, unspecified"
+#~ msgstr "Hispaniola, porto não especificado"
+
+#~ msgid "Hoeker"
+#~ msgstr "Hoeker"
+
+#~ msgid "Honduras"
+#~ msgstr "Honduras"
+
+#~ msgid "Honduras, port unspecified"
+#~ msgstr "Honduras,  porto não especificado"
+
+#~ msgid "Honfleur"
+#~ msgstr "Honfleur"
+
+#~ msgid "Hull"
+#~ msgstr "Hull"
+
+#~ msgid "Husum"
+#~ msgstr "Husum"
+
+#~ msgid "Hyate (iate)"
+#~ msgstr "Hyate (iate)"
+
+#~ msgid "Hyde County"
+#~ msgstr "Condado de Hyde "
+
+#~ msgid "Ibo"
+#~ msgstr "Ibo"
+
+#~ msgid "Ife"
+#~ msgstr "Ifé"
+
+#~ msgid "Île à Vache"
+#~ msgstr "Île à Vache"
+
+#~ msgid "Ile de Batz"
+#~ msgstr "Ile de Batz"
+
+#~ msgid "Ile de France"
+#~ msgstr "Ile de France"
+
+#~ msgid "Iles de Los"
+#~ msgstr "Iles de Los"
+
+#~ msgid "Iles Plantain"
+#~ msgstr "Iles Plantain"
+
+#~ msgid "Ilfracombe"
+#~ msgstr "Ilfracombe"
+
+#~ msgid "Ilha das Palmas"
+#~ msgstr "Ilha das Palmas"
+
+#~ msgid "Ilha de Itamaric "
+#~ msgstr "Ilha de Itamaricá"
+
+#~ msgid "Ilha de Lobes"
+#~ msgstr "Ilha de Lobes"
+
+#~ msgid "Ilha de Marambaia"
+#~ msgstr "Ilha da Marambaia"
+
+#~ msgid "Ilha de Paquetá "
+#~ msgstr "Ilha de Paquetá "
+
+#~ msgid "Ilha Grande"
+#~ msgstr "Ilha Grande"
+
+#~ msgid "Ilho do Fayal"
+#~ msgstr "Ilha do Faial"
+
+#~ msgid "India"
+#~ msgstr "Índia"
+
+#~ msgid "Inhambane"
+#~ msgstr "Inhambane"
+
+#~ msgid "Insurrection planned, but thwarted"
+#~ msgstr "Insurreição planejada, mas impedida"
+
+#~ msgid "Ipswich"
+#~ msgstr "Ipswich"
+
+#~ msgid "Ireland"
+#~ msgstr "Irlanda"
+
+#~ msgid "Ireland, port unspecified"
+#~ msgstr "Irlanda, porto não especificado"
+
+#~ msgid "Iron Point"
+#~ msgstr "Iron Point"
+
+#~ msgid "Isabela"
+#~ msgstr "Isabela"
+
+#~ msgid "Isla de Pinas"
+#~ msgstr "Isla de Pinas"
+
+#~ msgid "Isle of Wight"
+#~ msgstr "Isle of Wight"
+
+#~ msgid "Italy"
+#~ msgstr "Itália"
+
+#~ msgid "Ivory Coast"
+#~ msgstr "Costa do Marfim"
+
+#~ msgid "Jacmel"
+#~ msgstr "Jacmel"
+
+#~ msgid "Jacquin"
+#~ msgstr "Jacquin"
+
+#~ msgid "Jamaica"
+#~ msgstr "Jamaica"
+
+#~ msgid "Jamaica, port unspecified"
+#~ msgstr "Jamaica, porto não especificado"
+
+#~ msgid "James Fort"
+#~ msgstr "James Fort"
+
+#~ msgid "Jérémie"
+#~ msgstr "Jérémie"
+
+#~ msgid "Jersey"
+#~ msgstr "Jersey"
+
+#~ msgid "Joal, or Saloum River"
+#~ msgstr "Joal, ou Rio Saloum"
+
+#~ msgid "Johanna Island"
+#~ msgstr "Ilha Johanna"
+
+#~ msgid "Kacongo"
+#~ msgstr "Kacongo"
+
+#~ msgid "Kendal"
+#~ msgstr "Kendal"
+
+#~ msgid "Keta"
+#~ msgstr "Keta"
+
+#~ msgid "Ketch"
+#~ msgstr "Ketch"
+
+#~ msgid "Key West"
+#~ msgstr "Key West"
+
+#~ msgid "Kilongo"
+#~ msgstr "Kilongo"
+
+#~ msgid "Kilwa"
+#~ msgstr "Kilwa"
+
+#~ msgid "Kings Harbour"
+#~ msgstr "Kings Harbour"
+
+#~ msgid "King's Lynn"
+#~ msgstr "King's Lynn"
+
+#~ msgid "Kingston"
+#~ msgstr "Kingston"
+
+#~ msgid "Kingston (Demerera)"
+#~ msgstr "Kingston (Demerera)"
+
+#~ msgid "Kingston (Mass.)"
+#~ msgstr "Kingston (Mass.)"
+
+#~ msgid "Kinsale"
+#~ msgstr "Kinsale"
+
+#~ msgid "Kormantine"
+#~ msgstr "Kormantine"
+
+#~ msgid "La Balise"
+#~ msgstr "La Balise"
+
+#~ msgid "La Coruña"
+#~ msgstr "La Coruña"
+
+#~ msgid "Lagoo"
+#~ msgstr "Lagoo"
+
+#~ msgid "Lagos"
+#~ msgstr "Lagos"
+
+#~ msgid "Lagos, Onim"
+#~ msgstr "Lagos, Onim"
+
+#~ msgid "Lagos, Vice-Admiralty Court, condemned"
+#~ msgstr "Lagos, Tribunal de Vice-Almirantado, condenado"
+
+#~ msgid "La Guaira"
+#~ msgstr "La Guaira"
+
+#~ msgid "Laid up (disarmed) or broken up in Africa"
+#~ msgstr "Desarmado ou desmontado na África"
+
+#~ msgid "Laid up (disarmed) or broken up in the Americas"
+#~ msgstr "Desarmado ou desmontado nas Américas"
+
+#~ msgid "Lamo River"
+#~ msgstr "Rio Lamo"
+
+#~ msgid "Lancaster"
+#~ msgstr "Lancaster"
+
+#~ msgid "Lancha"
+#~ msgstr "Lancha"
+
+#~ msgid "Largo, Fifeshire"
+#~ msgstr "Largo, Fifeshire"
+
+#~ msgid "La Rochelle"
+#~ msgstr "La Rochelle"
+
+#~ msgid "Laud"
+#~ msgstr "Laud"
+
+#~ msgid "Launch"
+#~ msgstr "Launch"
+
+#~ msgid "Lay"
+#~ msgstr "Lay"
+
+#~ msgid "Left coast with trading cargo intact"
+#~ msgstr "Deixou a costa com carga comercial intacta"
+
+#~ msgid "Left home port, no further record"
+#~ msgstr "Deixou porto de origem, sem mais registro"
+
+#~ msgid "Legas"
+#~ msgstr "Legas"
+
+#~ msgid "Le Havre"
+#~ msgstr "Le Havre"
+
+#~ msgid "Leith"
+#~ msgstr "Leith"
+
+#~ msgid "Léogane"
+#~ msgstr "Léogane"
+
+#~ msgid "Les Sables"
+#~ msgstr "Les Sables"
+
+#~ msgid "Liberia"
+#~ msgstr "Libéria"
+
+#~ msgid "Lima"
+#~ msgstr "Lima"
+
+#~ msgid "Limerick"
+#~ msgstr "Limerick"
+
+#~ msgid "Lindale"
+#~ msgstr "Lindale"
+
+#~ msgid "Lisbon"
+#~ msgstr "Lisboa"
+
+#~ msgid "Little Bassa"
+#~ msgstr "Little Bassa"
+
+#~ msgid "Little Compton"
+#~ msgstr "Little Compton"
+
+#~ msgid "Little Junk"
+#~ msgstr "Little Junk"
+
+#~ msgid "Little Popo"
+#~ msgstr "Popo Pequeno"
+
+#~ msgid "Liverpool"
+#~ msgstr "Liverpool"
+
+#~ msgid "Liverpool River"
+#~ msgstr "Rio Liverpool"
+
+#~ msgid "Loango"
+#~ msgstr "Loango"
+
+#~ msgid "London"
+#~ msgstr "Londres"
+
+#~ msgid "Londonderry"
+#~ msgstr "Londonderry"
+
+#~ msgid "Long Island"
+#~ msgstr "Long Island"
+
+#~ msgid "Looted by Dutch at Elmina"
+#~ msgstr "Saqueado por holandeses em Elmina"
+
+#~ msgid "looted by pirates, voyage continued"
+#~ msgstr "Saqueado por piratas, a viagem continuou"
+
+#~ msgid "Lorient"
+#~ msgstr "Lorient"
+
+#~ msgid "Lost before reaching Americas: slaves reached port in other ships"
+#~ msgstr ""
+#~ "Perdido antes de chegar às Américas: escravos alcançaram o porto em "
+#~ "outros navios"
+
+#~ msgid "Lough Neagh"
+#~ msgstr "Lough Neagh"
+
+#~ msgid "Louisiana"
+#~ msgstr "Luisiana"
+
+#~ msgid "Lourenço Marques"
+#~ msgstr "Lourenço Marques"
+
+#~ msgid "Lower James River"
+#~ msgstr "Baixio Rio James"
+
+#~ msgid "Luanda"
+#~ msgstr "Luanda"
+
+#~ msgid "Lucea"
+#~ msgstr "Lucea"
+
+#~ msgid "Lugger"
+#~ msgstr "Lugger"
+
+#~ msgid "Lyme"
+#~ msgstr "Lyme"
+
+#~ msgid "Macaé"
+#~ msgstr "Macaé"
+
+#~ msgid "Maceió"
+#~ msgstr "Maceió"
+
+#~ msgid "Madagascar"
+#~ msgstr "Madagascar"
+
+#~ msgid "Madeira"
+#~ msgstr "Madeira"
+
+#~ msgid "Magari, Manzanillo"
+#~ msgstr "Magari, Manzanillo"
+
+#~ msgid "Mahone Bay"
+#~ msgstr "Baía Mahone"
+
+#~ msgid "Maine"
+#~ msgstr "Maine"
+
+#~ msgid "Mainland North America"
+#~ msgstr "América Setentrional Continental"
+
+#~ msgid "Maldonado"
+#~ msgstr "Maldonado"
+
+#~ msgid "Malembo"
+#~ msgstr "Malembo"
+
+#~ msgid "Mangaratiba"
+#~ msgstr "Mangaratiba"
+
+#~ msgid "Mano"
+#~ msgstr "Mano"
+
+#~ msgid "Maranhão"
+#~ msgstr "Maranhão"
+
+#~ msgid "Marblehead"
+#~ msgstr "Marblehead"
+
+#~ msgid "Marcus Hook"
+#~ msgstr "Marcus Hook"
+
+#~ msgid "Margarita"
+#~ msgstr "Margarita"
+
+#~ msgid "Maricá"
+#~ msgstr "Maricá"
+
+#~ msgid "Marie-Galante"
+#~ msgstr "Marie-Galante"
+
+#~ msgid "Mariel"
+#~ msgstr "Mariel"
+
+#~ msgid "Marseilles"
+#~ msgstr "Marselha"
+
+#~ msgid "Marshfield"
+#~ msgstr "Marshfield"
+
+#~ msgid "Martha Brae"
+#~ msgstr "Martha Brae"
+
+#~ msgid "Martinique"
+#~ msgstr "Martinica"
+
+#~ msgid "Martinique, port unspecified"
+#~ msgstr "Martinica, porto não especificado"
+
+#~ msgid "Maryland"
+#~ msgstr "Maryland"
+
+#~ msgid "Maryland, port unspecified"
+#~ msgstr "Maryland, porto não especificado"
+
+#~ msgid "Maryport"
+#~ msgstr "Maryport"
+
+#~ msgid "Mascarene Islands"
+#~ msgstr "Ilhas Mascarenhas"
+
+#~ msgid "Massachusetts"
+#~ msgstr "Massachusetts"
+
+#~ msgid "Massachusetts Bay"
+#~ msgstr "Baía Massachusetts"
+
+#~ msgid "Massachusetts, port unspecified"
+#~ msgstr "Massachusetts, porto não especificado"
+
+#~ msgid "Massa (location undetermined)"
+#~ msgstr "Massa (localização indeterminada)"
+
+#~ msgid "Matanzas"
+#~ msgstr "Matanzas"
+
+#~ msgid "Matanzas province, north"
+#~ msgstr "Província de Matanzas, norte"
+
+#~ msgid "Matanzas province, south"
+#~ msgstr "Província de Matanzas, sul"
+
+#~ msgid "Mauratan"
+#~ msgstr "Mauratan"
+
+#~ msgid "Mauritius (Ile de France)"
+#~ msgstr "Maurício (Ile de France)"
+
+#~ msgid "Mayumba"
+#~ msgstr "Mayumba"
+
+#~ msgid "Maze"
+#~ msgstr "Maze"
+
+#~ msgid "Mediterranean"
+#~ msgstr "Mediterrâneo"
+
+#~ msgid "Mediterranean coast (France)"
+#~ msgstr "Costa mediterrânea (França)"
+
+#~ msgid "Mediterranean, port unspecified"
+#~ msgstr "Mediterrâneo, porto não especificado"
+
+#~ msgid "Metrueba"
+#~ msgstr "Metrueba"
+
+#~ msgid "Mexico"
+#~ msgstr "México"
+
+#~ msgid "Middelburg"
+#~ msgstr "Middelburg"
+
+#~ msgid "Middletown"
+#~ msgstr "Middletown"
+
+#~ msgid "Milford Haven"
+#~ msgstr "Milford Haven"
+
+#~ msgid "Milwell"
+#~ msgstr "Milwell"
+
+#~ msgid "Mindin"
+#~ msgstr "Mindin"
+
+#~ msgid "Mississippi"
+#~ msgstr "Mississippi"
+
+#~ msgid "Mobile"
+#~ msgstr "Mobile"
+
+#~ msgid "Mocambo"
+#~ msgstr "Mocambo"
+
+#~ msgid "Moerdijk"
+#~ msgstr "Moerdijk"
+
+#~ msgid "Môle Saint Nicolas"
+#~ msgstr "Môle Saint Nicolas"
+
+#~ msgid "Momboza or Zanzibar"
+#~ msgstr "Momboza ou Zanzibar"
+
+#~ msgid "Monte Christi"
+#~ msgstr "Monte Christi"
+
+#~ msgid "Montego Bay"
+#~ msgstr "Baía Montego"
+
+#~ msgid "Montevideo"
+#~ msgstr "Montevidéu"
+
+#~ msgid "Montrose"
+#~ msgstr "Montrose"
+
+#~ msgid "Montserrat"
+#~ msgstr "Montserrat"
+
+#~ msgid "Montserrat, port unspecified"
+#~ msgstr "Montserrat, porto não especificado"
+
+#~ msgid "Morant Bay"
+#~ msgstr "Baía Morant"
+
+#~ msgid "Morlaix"
+#~ msgstr "Morlaix"
+
+#~ msgid "Morondova"
+#~ msgstr "Morondova"
+
+#~ msgid "Mortality rate*"
+#~ msgstr "Taxa de mortalidade*"
+
+#~ msgid "Mosquito Shore"
+#~ msgstr "Costa dos Mosquitos"
+
+#~ msgid "Mouree"
+#~ msgstr "Mouree"
+
+#~ msgid "Mozambique"
+#~ msgstr "Moçambique"
+
+#~ msgid "Mpinda"
+#~ msgstr "Mpinda"
+
+#~ msgid "Nantes"
+#~ msgstr "Nantes"
+
+#~ msgid "Não"
+#~ msgstr "Não"
+
+#~ msgid "Naples"
+#~ msgstr "Nápoles"
+
+#~ msgid "Nassau"
+#~ msgstr "Nassau"
+
+#~ msgid "Natural hazard"
+#~ msgstr "Desastres naturais"
+
+#~ msgid "Nau caravela"
+#~ msgstr "Nau caravela"
+
+#~ msgid "Nau-Caravela"
+#~ msgstr "Nau-Caravela"
+
+#~ msgid "Navio mercante"
+#~ msgstr "Navio mercante"
+
+#~ msgid "Netherlands"
+#~ msgstr "Países Baixos"
+
+#~ msgid "Netherlands, port unspecified"
+#~ msgstr "Países Baixos, não especificado"
+
+#~ msgid "Nevis"
+#~ msgstr "Nevis"
+
+#~ msgid "Nevis, port unspecified"
+#~ msgstr "Nevis, não especificado"
+
+#~ msgid "New Bedford"
+#~ msgstr "New Bedford"
+
+#~ msgid "New Brunswick"
+#~ msgstr "New Brunswick"
+
+#~ msgid "Newbury"
+#~ msgstr "Newbury"
+
+#~ msgid "New Calabar"
+#~ msgstr "Novo Calabar"
+
+#~ msgid "Newcastle (Nevis)"
+#~ msgstr "Newcastle (Nevis)"
+
+#~ msgid "Newcastle upon Tyne"
+#~ msgstr "Newcastle upon Tyne"
+
+#~ msgid "New England"
+#~ msgstr "Nova Inglaterra"
+
+#~ msgid "Newfoundland"
+#~ msgstr "Terra Nova"
+
+#~ msgid "New Hampshire"
+#~ msgstr "New Hampshire"
+
+#~ msgid "New Hampshire, port unspecified"
+#~ msgstr "New Hampshire, porto não especificado"
+
+#~ msgid "New Haven"
+#~ msgstr "New Haven"
+
+#~ msgid "New Jersey"
+#~ msgstr "Nova Jersey"
+
+#~ msgid "New Jersey, port unspecified"
+#~ msgstr "Nova Jersey, porto não especificado"
+
+#~ msgid "New London"
+#~ msgstr "Nova Londres"
+
+#~ msgid "Newnham"
+#~ msgstr "Newnham"
+
+#~ msgid "New Orleans"
+#~ msgstr "Nova Orleans"
+
+#~ msgid "Newport"
+#~ msgstr "Newport"
+
+#~ msgid "Newport and Boston"
+#~ msgstr "Newport e Boston"
+
+#~ msgid "Newport and Salem"
+#~ msgstr "Newport e Salém"
+
+#~ msgid "New Providence"
+#~ msgstr "New Providence"
+
+#~ msgid "New Shoreham"
+#~ msgstr "New Shoreham"
+
+#~ msgid "New Spain"
+#~ msgstr "Nova Espanha"
+
+#~ msgid "New York"
+#~ msgstr "Nova Iorque"
+
+#~ msgid "Ningo"
+#~ msgstr "Ningo"
+
+#~ msgid "No information on slaves"
+#~ msgstr "Sem informações sobre escravos"
+
+#~ msgid "Non-British"
+#~ msgstr "Não-Britânico"
+
+#~ msgid "Non-geographical"
+#~ msgstr "Não-geográfico"
+
+#~ msgid "Norfolk"
+#~ msgstr "Norfolk"
+
+#~ msgid "Northampton County"
+#~ msgstr "Condado de Northampton"
+
+#~ msgid "North Carolina"
+#~ msgstr "Carolina do Norte"
+
+#~ msgid "North Carolina, port unspecified"
+#~ msgstr "Carolina do Norte, porto não especificado"
+
+#~ msgid "Northern Germany"
+#~ msgstr "Alemanha setentrional"
+
+#~ msgid "North Hampton"
+#~ msgstr "Hampton do Norte"
+
+#~ msgid "North Kingston"
+#~ msgstr "Kingston do Norte"
+
+#~ msgid "North Potomac"
+#~ msgstr "Potomac do Norte"
+
+#~ msgid "North Shields"
+#~ msgstr "Shields do Norte"
+
+#~ msgid "Norway"
+#~ msgstr "Noruega"
+
+#~ msgid "Norwich"
+#~ msgstr "Norwich"
+
+#~ msgid "No slaves embarked"
+#~ msgstr "Nenhum escravo embarcado"
+
+#~ msgid "Not captured"
+#~ msgstr "Não capturado"
+
+#~ msgid "Nova Redonda"
+#~ msgstr "Novo Redondo"
+
+#~ msgid "Nova Scotia"
+#~ msgstr "Nova Escócia"
+
+#~ msgid "Nova Zeelandia (Wild Coast)"
+#~ msgstr "Nova Zelândia"
+
+#~ msgid "Nuevitas"
+#~ msgstr "Nuevitas"
+
+#~ msgid "Number of slaves arriving at first place of landing"
+#~ msgstr "Número de escravos chegados no primeiro porto de desembarque"
+
+#~ msgid "Number of slaves disembarked at first place of landing"
+#~ msgstr "Número de escravos desembarcados no primeiro porto de desembarque"
+
+#~ msgid "Number of slaves disembarked at second place of landing"
+#~ msgstr "Número de escravos desembarcados no segundo porto de desembarque"
+
+#~ msgid "Number of slaves disembarked at third place of landing"
+#~ msgstr "Número de escravos desembarcados no terceiro porto de desembarque"
+
+#~ msgid "Number of slaves intended at first place of purchase"
+#~ msgstr "Número de escravos pretendidos no primeiro porto de aquisição"
+
+#~ msgid "Ocoa"
+#~ msgstr "Ocoa"
+
+#~ msgid "Odessa"
+#~ msgstr "Odessa"
+
+#~ msgid "Oerê"
+#~ msgstr "Oerê"
+
+#~ msgid "Oporto"
+#~ msgstr "Porto"
+
+#~ msgid "Original goal thwarted (human agency)"
+#~ msgstr "Meta original frustrada (agência humana)"
+
+#~ msgid "Original goal thwarted (natural hazard)"
+#~ msgstr "Meta original frustrada (desastre natural)"
+
+#~ msgid "Orinoko"
+#~ msgstr "Orinoko"
+
+#~ msgid "Other"
+#~ msgstr "Outro"
+
+#~ msgid "Other Africa"
+#~ msgstr "Outro África"
+
+#~ msgid "Other Brazil"
+#~ msgstr "Outro Brasil"
+
+#~ msgid "Other British Caribbean"
+#~ msgstr "Outro Caribe britânico"
+
+#~ msgid "Other Caribbean"
+#~ msgstr "Outro Caribe"
+
+#~ msgid "Other French Caribbean"
+#~ msgstr "Outro Caribe francês"
+
+#~ msgid "Other North America"
+#~ msgstr "Outro América do Norte"
+
+#~ msgid "Other Spanish Caribbean"
+#~ msgstr "Outro Caribe espanhol"
+
+#~ msgid "Other (specify in note)"
+#~ msgstr "Outro (especificar em nota)"
+
+#~ msgid "Outcome of voyage for owner*"
+#~ msgstr "Resultado da viagem para o dono*"
+
+#~ msgid "Outcome of voyage for slaves*"
+#~ msgstr "Resultado da viagem para os escravos*"
+
+#~ msgid "Outcome of voyage if ship captured*"
+#~ msgstr "Resultado da viagem se navio capturado*"
+
+#~ msgid "Oxford"
+#~ msgstr "Oxford"
+
+#~ msgid "Oyapock"
+#~ msgstr "Oiapoque"
+
+#~ msgid "Padstowe"
+#~ msgstr "Padstowe"
+
+#~ msgid "Pailebot"
+#~ msgstr "Pailebot"
+
+#~ msgid "Paimboeuf"
+#~ msgstr "Paimboeuf"
+
+#~ msgid "Palla"
+#~ msgstr "Palla"
+
+#~ msgid "Pamunkey"
+#~ msgstr "Pamunkey"
+
+#~ msgid "Pangaio"
+#~ msgstr "Pangaio"
+
+#~ msgid "Paquete"
+#~ msgstr "Paquete"
+
+#~ msgid "Pará"
+#~ msgstr "Pará"
+
+#~ msgid "Paraíba"
+#~ msgstr "Paraíba"
+
+#~ msgid "Paramaribo"
+#~ msgstr "Paramaribo"
+
+#~ msgid "Paranaguá"
+#~ msgstr "Paranaguá"
+
+#~ msgid "Parati"
+#~ msgstr "Parati"
+
+#~ msgid "Parkgate"
+#~ msgstr "Parkgate"
+
+#~ msgid "Particular outcome of voyage"
+#~ msgstr "Resultado particular da viagem"
+
+#~ msgid "Patacho"
+#~ msgstr "Patacho"
+
+#~ msgid "Patuxent"
+#~ msgstr "Patuxent"
+
+#~ msgid "Penido"
+#~ msgstr "Penedo"
+
+#~ msgid "Pennsylvania"
+#~ msgstr "Pensilvânia"
+
+#~ msgid "Pennsylvania, port unspecified"
+#~ msgstr "Pensilvânia, porto não especificado"
+
+#~ msgid "Penque"
+#~ msgstr "Penque"
+
+#~ msgid "Pensacola"
+#~ msgstr "Pensacola"
+
+#~ msgid "Pernambuco"
+#~ msgstr "Pernambuco"
+
+#~ msgid "Pernambuco, port unspecified"
+#~ msgstr "Pernambuco, porto não especificado"
+
+#~ msgid "Perth Amboy"
+#~ msgstr "Perth Amboy"
+
+#~ msgid "Peru"
+#~ msgstr "Peru"
+
+#~ msgid "Petit Cess"
+#~ msgstr "Petit Cess"
+
+#~ msgid "Petit-Goâve"
+#~ msgstr "Petit-Goâve"
+
+#~ msgid "Petit Mesurado"
+#~ msgstr "Petit Mesurado"
+
+#~ msgid "Philadelphia"
+#~ msgstr "Filadélfia"
+
+#~ msgid "Piel of Foulney"
+#~ msgstr "Piel of Foulney"
+
+#~ msgid "Pillau"
+#~ msgstr "Pillau"
+
+#~ msgid "Pilot boat"
+#~ msgstr "Pilot boat"
+
+#~ msgid "Pinas"
+#~ msgstr "Pinas"
+
+#~ msgid "Pink"
+#~ msgstr "Pink"
+
+#~ msgid "Pinnace"
+#~ msgstr "Pinnace"
+
+#~ msgid "pirate/privateer action"
+#~ msgstr "ação de pirata/corsário"
+
+#~ msgid "Piscataqua"
+#~ msgstr "Piscataqua"
+
+#~ msgid "Place constructed"
+#~ msgstr "Porto de construção"
+
+#~ msgid "Place registered"
+#~ msgstr "Porto de registro"
+
+#~ msgid "Places of call before Atlantic crossing"
+#~ msgstr "Portos de escala antes da travessia atlântica"
+
+#~ msgid "Place where voyage began*:"
+#~ msgstr "Porto onde a viagem começou*:"
+
+#~ msgid "Plymouth"
+#~ msgstr "Plymouth"
+
+#~ msgid "Point Askaig"
+#~ msgstr "Point Askaig"
+
+#~ msgid "Pointe-à-Pitre"
+#~ msgstr "Pointe-à-Pitre"
+
+#~ msgid "Polacca schooner"
+#~ msgstr "Polacca schooner"
+
+#~ msgid "Pollaca"
+#~ msgstr "Pollaca"
+
+#~ msgid "Ponta Negro"
+#~ msgstr "Ponta Negro"
+
+#~ msgid "Poole"
+#~ msgstr "Poole"
+
+#~ msgid "Popo"
+#~ msgstr "Popo"
+
+#~ msgid "Port-au-Prince"
+#~ msgstr "Port-au-Prince"
+
+#~ msgid "Port Dauphin"
+#~ msgstr "Port Dauphin"
+
+#~ msgid "Port-de-Paix"
+#~ msgstr "Port-de-Paix"
+
+#~ msgid "Portland"
+#~ msgstr "Portland"
+
+#~ msgid "Port Louis"
+#~ msgstr "Port Louis"
+
+#~ msgid "Port-Louis"
+#~ msgstr "Port-Louis"
+
+#~ msgid "Port Maria"
+#~ msgstr "Port Maria"
+
+#~ msgid "Portobelo"
+#~ msgstr "Portobelo"
+
+#~ msgid "Porto de Galinhas"
+#~ msgstr "Porto de Galinhas"
+
+#~ msgid "Porto Novo"
+#~ msgstr "Porto Novo"
+
+#~ msgid "Pôrto Seguro"
+#~ msgstr "Porto Seguro"
+
+#~ msgid "Port Royal"
+#~ msgstr "Port Royal"
+
+#~ msgid "Portsery"
+#~ msgstr "Portsery"
+
+#~ msgid "Portsmouth"
+#~ msgstr "Portsmouth"
+
+#~ msgid "Portsmouth (NH)"
+#~ msgstr "Portsmouth (NH)"
+
+#~ msgid "Portudal"
+#~ msgstr "Portudal"
+
+#~ msgid "Portugal"
+#~ msgstr "Portugal"
+
+#~ msgid "Portugal / Brazil"
+#~ msgstr "Portugal / Brasil"
+
+#~ msgid "Portugal, port unspecified"
+#~ msgstr "Portugal, porto não especificado"
+
+#~ msgid "Portuguese Guinea"
+#~ msgstr "Guiné portuguesa"
+
+#~ msgid "Potomac river"
+#~ msgstr "Rio Potomac"
+
+#~ msgid "Poulton"
+#~ msgstr "Poulton"
+
+#~ msgid "Pressed into government service"
+#~ msgstr "Pressionado ao serviço do governo"
+
+#~ msgid "Preston"
+#~ msgstr "Preston"
+
+#~ msgid "Princes Island"
+#~ msgstr "Ilha do Príncipe"
+
+#~ msgid "Princes Island and Elmina"
+#~ msgstr "Ilha do Príncipe e Elmina"
+
+#~ msgid "Prize (taken from Dutch)"
+#~ msgstr "Presa (tomada aos holandeses)"
+
+#~ msgid "Prize (taken from French)"
+#~ msgstr "Presa (tomada aos franceses)"
+
+#~ msgid "Prize (taken from Spanish)"
+#~ msgstr "Presa (tomada aos espanhóis)"
+
+#~ msgid "Prize (unknown place)"
+#~ msgstr "Presa (lugar desconhecido)"
+
+#~ msgid "Prospect"
+#~ msgstr "Prospecto"
+
+#~ msgid "Providence"
+#~ msgstr "Providence"
+
+#~ msgid "Puerto de Plata"
+#~ msgstr "Puerto de Plata"
+
+#~ msgid "Puerto Padre"
+#~ msgstr "Puerto Padre"
+
+#~ msgid "Puerto Rico"
+#~ msgstr "Puerto Rico"
+
+#~ msgid "Puerto Rico, port unspecified"
+#~ msgstr "Puerto Rico, porto não especificado"
+
+#~ msgid "Quaqua"
+#~ msgstr "Quaqua"
+
+#~ msgid "Quebec"
+#~ msgstr "Quebec"
+
+#~ msgid "Quicombo"
+#~ msgstr "Quicombo"
+
+#~ msgid "Quilimane"
+#~ msgstr "Quilimane"
+
+#~ msgid "Quimper"
+#~ msgstr "Quimper"
+
+#~ msgid "Quirimba"
+#~ msgstr "Quirimba"
+
+#~ msgid "Ramsgate"
+#~ msgstr "Ramsgate"
+
+#~ msgid "Rappahannock"
+#~ msgstr "Rappahannock"
+
+#~ msgid "Ravenglass"
+#~ msgstr "Ravenglass"
+
+#~ msgid "Returned direct to Africa after bringing slaves to the Americas"
+#~ msgstr "Voltou diretamente para África após trazer escravos para Américas"
+
+#~ msgid "Returned to Europe or Americas without obtaining slaves"
+#~ msgstr "Voltou para Europa ou Américas sem obter escravos"
+
+#~ msgid "Rhode Island"
+#~ msgstr "Rhode Island"
+
+#~ msgid "Rhode Island, port unspecified"
+#~ msgstr "Rhode Island, porto não especificado"
+
+#~ msgid "Richmond"
+#~ msgstr "Richmond"
+
+#~ msgid "Ringsend"
+#~ msgstr "Ringsend"
+
+#~ msgid "Rio Assini"
+#~ msgstr "Rio Assini"
+
+#~ msgid "Rio Dande (N of Luanda)"
+#~ msgstr "Rio Dande (Norte de Luanda)"
+
+#~ msgid "Rio de Janeiro"
+#~ msgstr "Rio de Janeiro"
+
+#~ msgid "Rio de Janeiro province"
+#~ msgstr "Província do Rio de Janeiro"
+
+#~ msgid "Rio de Janeiro, Sao Paulo, Santa Catarina"
+#~ msgstr "Rio de Janeiro, São Paulo, Santa Catarina"
+
+#~ msgid "Rio de la Hacha"
+#~ msgstr "Rio de la Hacha"
+
+#~ msgid "Rio de la Plata"
+#~ msgstr "Rio da Prata"
+
+#~ msgid "Rio de la Plata, port unspecified"
+#~ msgstr "Rio da Prata, porto não especificado"
+
+#~ msgid "Rio Forcados"
+#~ msgstr "Rio Forcados"
+
+#~ msgid "Rio Grande"
+#~ msgstr "Rio Grande"
+
+#~ msgid "Rio Grande do Norte"
+#~ msgstr "Rio Grande do Norte"
+
+#~ msgid "Rio Grande do Sul Province"
+#~ msgstr "Província do Rio Grande do Sul"
+
+#~ msgid "Rio Nazareth"
+#~ msgstr "Rio Nazaré"
+
+#~ msgid "Rio Nun"
+#~ msgstr "Rio Nun"
+
+#~ msgid "Rio Nunez"
+#~ msgstr "Rio Nunez"
+
+#~ msgid "Rio Pongo"
+#~ msgstr "Rio Pongo"
+
+#~ msgid "Rio Real"
+#~ msgstr "Rio Real"
+
+#~ msgid "Rio São Francisco"
+#~ msgstr "Rio São Francisco"
+
+#~ msgid "Rio São Jeso"
+#~ msgstr "Rio São Jeso"
+
+#~ msgid "Rio Zaire"
+#~ msgstr "Rio Zaire"
+
+#~ msgid "River Brass"
+#~ msgstr "Rio Brass"
+
+#~ msgid "River del Rey"
+#~ msgstr "Rio del Rei"
+
+#~ msgid "River Kissey"
+#~ msgstr "Rio Kissey"
+
+#~ msgid "River Thames"
+#~ msgstr "Rio Tâmisa"
+
+#~ msgid "Roanoke"
+#~ msgstr "Roanoke"
+
+#~ msgid "Robbinston"
+#~ msgstr "Robbinston"
+
+#~ msgid "Rochefort"
+#~ msgstr "Rochefort"
+
+#~ msgid "Rochester"
+#~ msgstr "Rochester"
+
+#~ msgid "Rockland"
+#~ msgstr "Rockland"
+
+#~ msgid "Rock Sestos"
+#~ msgstr "Rock Sestos"
+
+#~ msgid "Ross"
+#~ msgstr "Ross"
+
+#~ msgid "Rotherhithe"
+#~ msgstr "Rotherhithe"
+
+#~ msgid "Rotterdam"
+#~ msgstr "Roterdão"
+
+#~ msgid "Russia"
+#~ msgstr "Rússia"
+
+#~ msgid "Rye"
+#~ msgstr "Rye"
+
+#~ msgid "Sag Harbor"
+#~ msgstr "Sag Harbor"
+
+#~ msgid "Sagua"
+#~ msgstr "Sagua"
+
+#~ msgid "Saint Ann's Bay"
+#~ msgstr "Baía de Santana"
+
+#~ msgid "Saint-Brieuc"
+#~ msgstr "Saint-Brieuc"
+
+#~ msgid "Saint-Domingue"
+#~ msgstr "Saint-Domingue"
+
+#~ msgid "Saint-Domingue, port unspecified"
+#~ msgstr "Saint-Domingue, porto não especificado"
+
+#~ msgid "Saint John (Antigua)"
+#~ msgstr "Saint John (Antígua)"
+
+#~ msgid "Saint-Louis"
+#~ msgstr "Saint-Louis"
+
+#~ msgid "Saint-Malo"
+#~ msgstr "Saint-Malo"
+
+#~ msgid "Saint-Marc"
+#~ msgstr "Saint-Marc"
+
+#~ msgid "Saint-Nazaire"
+#~ msgstr "Saint-Nazaire"
+
+#~ msgid "Saint-Pierre"
+#~ msgstr "Saint-Pierre"
+
+#~ msgid "Saint-Tropez"
+#~ msgstr "Saint-Tropez"
+
+#~ msgid "Salem"
+#~ msgstr "Salém"
+
+#~ msgid "Salinas"
+#~ msgstr "Salinas"
+
+#~ msgid "Salisbury"
+#~ msgstr "Salisbury"
+
+#~ msgid "Saltcoats"
+#~ msgstr "Saltcoats"
+
+#~ msgid "Samana"
+#~ msgstr "Samana"
+
+#~ msgid "San Juan"
+#~ msgstr "San Juan"
+
+#~ msgid "San Juan de los Remedios"
+#~ msgstr "San Juan de los Remedios"
+
+#~ msgid "San Lucar"
+#~ msgstr "San Lucar"
+
+#~ msgid "Santa Catarina"
+#~ msgstr "Santa Catarina"
+
+#~ msgid "Santa Marta"
+#~ msgstr "Santa Marta"
+
+#~ msgid "Santander"
+#~ msgstr "Santander"
+
+#~ msgid "Santiago de Cuba"
+#~ msgstr "Santiago de Cuba"
+
+#~ msgid "Santo Domingo (port)"
+#~ msgstr "Santo Domingo (porto)"
+
+#~ msgid "Santos"
+#~ msgstr "Santos"
+
+#~ msgid "Santo Tomas"
+#~ msgstr "Santo Tomás"
+
+#~ msgid "São Sebastião"
+#~ msgstr "São Sebastião"
+
+#~ msgid "São Tomé"
+#~ msgstr "São Tomé"
+
+#~ msgid "São Tomé or Princes Island"
+#~ msgstr "São Tomé ou Ilha do Príncipe"
+
+#~ msgid "Sardinia"
+#~ msgstr "Sardenha"
+
+#~ msgid "Sassandra"
+#~ msgstr "Sassandra"
+
+#~ msgid "Savannah"
+#~ msgstr "Savannah"
+
+#~ msgid "Savanna la Mar"
+#~ msgstr "Savanna la Mar"
+
+#~ msgid "Scarborough"
+#~ msgstr "Scarborough"
+
+#~ msgid "Scarcies"
+#~ msgstr "Scarcies"
+
+#~ msgid "Schooner"
+#~ msgstr "Schooner"
+
+#~ msgid "Schooner-brig"
+#~ msgstr "Schooner-brig"
+
+#~ msgid "Scituate"
+#~ msgstr "Scituate"
+
+#~ msgid "Scotland"
+#~ msgstr "Escócia"
+
+#~ msgid "Scotland, port unspecified"
+#~ msgstr "Escócia, porto não especificado"
+
+#~ msgid "Second place of slave landing"
+#~ msgstr "Segundo lugar de desembarque de escravos"
+
+#~ msgid "Second place of slave purchase"
+#~ msgstr "Segundo lugar de aquisição de escravos"
+
+#~ msgid "Sekondi"
+#~ msgstr "Sekondi"
+
+#~ msgid "Senegambia and offshore Atlantic"
+#~ msgstr "Senegâmbia e Costa Atlântica"
+
+#~ msgid "Senegambia and offshore Atlantic, port unspecified"
+#~ msgstr "Senegâmbia e Costa Atlântica, porto não especificado"
+
+#~ msgid "Senegambia or Sierra Leone"
+#~ msgstr "Senegâmbia ou Serra Leoa"
+
+#~ msgid "Sète"
+#~ msgstr "Sète"
+
+#~ msgid "Settra Kru"
+#~ msgstr "Settra Kru"
+
+#~ msgid "Setubal"
+#~ msgstr "Setúbal"
+
+#~ msgid "Seville"
+#~ msgstr "Sevilha"
+
+#~ msgid "Shalp"
+#~ msgstr "Shalp"
+
+#~ msgid "Sheepscutt River"
+#~ msgstr "Rio Sheepscutt"
+
+#~ msgid "Sheerness"
+#~ msgstr "Sheerness"
+
+#~ msgid "Sherbro"
+#~ msgstr "Sherbro"
+
+#~ msgid "Shields"
+#~ msgstr "Shields"
+
+#~ msgid "Ship"
+#~ msgstr "Navio"
+
+#~ msgid "Ship and cargo captured by Africans and ship released"
+#~ msgstr "Navio e carregamento capturados por africanos e navio liberado"
+
+#~ msgid "Ship and slaves sold in Africa"
+#~ msgstr "Navio e escravos vendidos na África"
+
+#~ msgid "Ship captured by Haitian navy and slaves released in Haiti"
+#~ msgstr "Navio capturado por marinha haitiana e escravos soltos no Haiti"
+
+#~ msgid "Ship, nation, owners"
+#~ msgstr "Navio, nação, proprietários"
+
+#~ msgid ""
+#~ "Ship returned direct to home port after selling slaves to another vessel"
+#~ msgstr ""
+#~ "Navio voltou diretamente para porto de origem depois de vender escravos a "
+#~ "outro navio"
+
+#~ msgid "Shipwrecked or destroyed, after disembarkation"
+#~ msgstr "Naufragado ou destruído, depois do desembarque"
+
+#~ msgid ""
+#~ "Shipwrecked or destroyed, after embarkation of slaves or during slaving"
+#~ msgstr ""
+#~ "Naufragado ou destruído, depois do embarque de escravos ou durante o "
+#~ "tráfico"
+
+#~ msgid "Shipwrecked or destroyed, before slaves embarked"
+#~ msgstr "Naufragado ou destruído, antes do embarque de escravos"
+
+#~ msgid "Shipwrecked or destroyed - unspecified"
+#~ msgstr "Naufragado ou destruído - não especificado"
+
+#~ msgid "Shoreham"
+#~ msgstr "Shoreham"
+
+#~ msgid "Sidmouth"
+#~ msgstr "Sidmouth"
+
+#~ msgid "Sierra Leone estuary"
+#~ msgstr "Estuário de Serra Leoa"
+
+#~ msgid "Sierra Leone, port unspecified"
+#~ msgstr "Serra Leoa, porto não especificado"
+
+#~ msgid "Siraboom"
+#~ msgstr "Siraboom"
+
+#~ msgid "Slave (characteristics)"
+#~ msgstr "Escravos (características)"
+
+#~ msgid "Slave deaths during middle passage*"
+#~ msgstr "Mortes de escravos durante a travessia do Atlântico*"
+
+#~ msgid "Slave insurrection"
+#~ msgstr "Insurreição de escravos"
+
+#~ msgid "Slave (numbers)"
+#~ msgstr "Escravos (números)"
+
+#~ msgid ""
+#~ "Slaves are removed by the Dutch and vessel allowed to continue, "
+#~ "subsequent fate unknown"
+#~ msgstr ""
+#~ "Escravos retirados por holandeses e navio teve permitida a continuação da "
+#~ "viagem, destino subsequente desconhecido"
+
+#~ msgid "Slaves carried from first port of purchase"
+#~ msgstr "Escravos trazidos do primeiro porto de aquisição"
+
+#~ msgid "Slaves carried from second port of purchase"
+#~ msgstr "Escravos trazidos do segundo porto de aquisição"
+
+#~ msgid "Slaves carried from third port of purchase"
+#~ msgstr "Escravos trazidos do terceiro porto de aquisição"
+
+#~ msgid "Slaves disembarked in Africa/Europe"
+#~ msgstr "Escravos desembarcados na África/Europa"
+
+#~ msgid "Slaves disembarked in Americas"
+#~ msgstr "Escravos desembarcados nas Américas"
+
+#~ msgid "Slaves embarked but not disembarked in Europe or America"
+#~ msgstr ""
+#~ "Escravos embarcados mas não desembarcados nem na Europa nem na América"
+
+#~ msgid "Slaves embarked, transhipped or no further record"
+#~ msgstr "Escravos embarcados, transportados ou sem outro registro"
+
+#~ msgid "Slaves perished with ship"
+#~ msgstr "Escravos pereceram com navio"
+
+#~ msgid "Sloop"
+#~ msgstr "Sloop"
+
+#~ msgid "Smack"
+#~ msgstr "Smack"
+
+#~ msgid "Snauw"
+#~ msgstr "Snauw"
+
+#~ msgid "Sofala"
+#~ msgstr "Sofala"
+
+#~ msgid "Sold"
+#~ msgstr "Vendido"
+
+#~ msgid "Sold at sea to another vessel"
+#~ msgstr "Vendido no mar a outro navio"
+
+#~ msgid "Sold in the Americas after disembarking slaves"
+#~ msgstr "Vendido nas Américas depois de desembarque de escravos"
+
+#~ msgid "Sold in the Americas - not known whether ship brought slaves"
+#~ msgstr "Vendido nas Américas – não se sabe se navio trouxe escravos"
+
+#~ msgid "Sold prematurely in Europe after disembarking slaves in the Americas"
+#~ msgstr ""
+#~ "Vendido prematuramente in Europa depois de desembarque de escravos nas "
+#~ "Américas"
+
+#~ msgid "Sold slaves in Africa"
+#~ msgstr "Vendeu escravos na África"
+
+#~ msgid "Sold slaves in Americas - subsequent fate unknown"
+#~ msgstr "Vendeu escravos nas Américas – destino subsequente desconhecido"
+
+#~ msgid "Sold slaves in Europe - subsequent fate unknown"
+#~ msgstr "Vendeu escravos na Europa - destino subsequente desconhecido"
+
+#~ msgid "Some slaves removed by pirates/privateers"
+#~ msgstr "Alguns escravos removidos por piratas/corsários"
+
+#~ msgid "Source"
+#~ msgstr "Fonte"
+
+#~ msgid "Southampton"
+#~ msgstr "Southampton"
+
+#~ msgid "South Carolina"
+#~ msgstr "Carolina do Sul"
+
+#~ msgid "South Carolina, port unspecified"
+#~ msgstr "Carolina do Sul, porto não especificado"
+
+#~ msgid "Southeast Africa and Indian Ocean islands"
+#~ msgstr "Sudeste Africano e Ilhas do Oceano Índico"
+
+#~ msgid "Southeast Africa and Indian Ocean islands, port unspecified"
+#~ msgstr "Sudeste Africano e Ilhas do Oceano Índico, porto não especificado"
+
+#~ msgid "Southeast Brazil"
+#~ msgstr "Sudeste do Brasil"
+
+#~ msgid "Southeast Brazil, port unspecified"
+#~ msgstr "Sudeste do Brasil, porto não especificado"
+
+#~ msgid "South Potomac"
+#~ msgstr "Potomac do Sul"
+
+#~ msgid "Soyo"
+#~ msgstr "Soyo"
+
+#~ msgid "Spain"
+#~ msgstr "Espanha"
+
+#~ msgid "Spain, port unspecified"
+#~ msgstr "Espanha, porto não especificado"
+
+#~ msgid "Spain / Uruguay"
+#~ msgstr "Espanha / Uruguay"
+
+#~ msgid "Spanish American Mainland"
+#~ msgstr "América espanhola continental"
+
+#~ msgid "Spanish Americas"
+#~ msgstr "América espanhola"
+
+#~ msgid "Spanish Americas, port unspecified"
+#~ msgstr "América espanhola, porto não especificado"
+
+#~ msgid "Spanish Caribbean, unspecified"
+#~ msgstr "Caribe espanhol, não especificado"
+
+#~ msgid "Spanish Circum-Caribbean"
+#~ msgstr "Circum-Caribe espanhol"
+
+#~ msgid "Spanish Circum-Caribbean,unspecified"
+#~ msgstr "Circum-Caribe espanhol, não especificado"
+
+#~ msgid "Spanish Town"
+#~ msgstr "Spanish Town"
+
+#~ msgid "Stabroek"
+#~ msgstr "Stabroek"
+
+#~ msgid "St. Augustine"
+#~ msgstr "St. Augustine"
+
+#~ msgid "St. Barthélemy, port unspecified"
+#~ msgstr "St. Barthélemy, porto não especificado"
+
+#~ msgid "St. Barthélemy (Sweden)"
+#~ msgstr "St. Barthélemy (Suécia)"
+
+#~ msgid "St. Croix"
+#~ msgstr "St. Croix"
+
+#~ msgid "Steamer"
+#~ msgstr "Steamer"
+
+#~ msgid "St. Eustatius"
+#~ msgstr "St. Eustatius"
+
+#~ msgid "St. Helena"
+#~ msgstr "Santa Helena"
+
+#~ msgid "St. John"
+#~ msgstr "St. John"
+
+#~ msgid "St. Kitts"
+#~ msgstr "St. Kitts"
+
+#~ msgid "St. Kitts, port unspecified"
+#~ msgstr "St. Kitts, porto não especificado"
+
+#~ msgid "St. Lawrence"
+#~ msgstr "St. Lawrence"
+
+#~ msgid "St. Lucia"
+#~ msgstr "St. Lucia"
+
+#~ msgid "St. Lucia, port unspecified"
+#~ msgstr "St. Lucia, porto não especificado"
+
+#~ msgid "St. Maarten"
+#~ msgstr "St. Maarten"
+
+#~ msgid "St. Mary's Island"
+#~ msgstr "Ilha de St. Mary"
+
+#~ msgid "Stockton"
+#~ msgstr "Stockton"
+
+#~ msgid "Stockwithe"
+#~ msgstr "Stockwithe"
+
+#~ msgid "St. Paul"
+#~ msgstr "St. Paul"
+
+#~ msgid "Strangford"
+#~ msgstr "Strangford"
+
+#~ msgid "St. Thomas"
+#~ msgstr "St. Thomas"
+
+#~ msgid "St. Vincent"
+#~ msgstr "St. Vincent"
+
+#~ msgid "St. Vincent, port unspecified"
+#~ msgstr "St. Vincent, porto não especificado"
+
+#~ msgid "Sugary (Siekere)"
+#~ msgstr "Sugary (Siekere)"
+
+#~ msgid "Sumaca"
+#~ msgstr "Sumaca"
+
+#~ msgid "Sunbury"
+#~ msgstr "Sunbury"
+
+#~ msgid "Sunderland"
+#~ msgstr "Sunderland"
+
+#~ msgid "Suriname"
+#~ msgstr "Suriname"
+
+#~ msgid "Swansea"
+#~ msgstr "Swansea"
+
+#~ msgid "Sweden"
+#~ msgstr "Suécia"
+
+#~ msgid "Sweden, port unspecified"
+#~ msgstr "Suécia, porto não especificado"
+
+#~ msgid "Tabou"
+#~ msgstr "Tabou"
+
+#~ msgid "Taipu"
+#~ msgstr "Taipu"
+
+#~ msgid "Taken by Africans"
+#~ msgstr "Tomado por africanos"
+
+#~ msgid "Taken by slaves, recaptured, then ship lost"
+#~ msgstr "Tomado por escravos, recapturado, então perdido"
+
+#~ msgid "Taken by slaves, vessel recaptured, unknown outcome"
+#~ msgstr "Tomado por escravos, navio recapturado, resultado desconhecido"
+
+#~ msgid "Taken, retaken and salvaged before reaching African trade site"
+#~ msgstr ""
+#~ "Tomado, retomado e recuperado antes de chegar a local de tráfico na África"
+
+#~ msgid "Taken to Genoa and given up to Sardinian authorities"
+#~ msgstr "Levado a Gênova e cedido a autoridades sardas"
+
+#~ msgid "Talaveira"
+#~ msgstr "Talaveira"
+
+#~ msgid "Talbot County"
+#~ msgstr "Condado de Talbot"
+
+#~ msgid "Tantumquerry"
+#~ msgstr "Tantumquerry"
+
+#~ msgid "Teignmouth"
+#~ msgstr "Teignmouth"
+
+#~ msgid ""
+#~ "Temporarily detained by the Dutch: Voyage allowed to continue with slaves"
+#~ msgstr ""
+#~ "Temporariamente detido pelos holandeses: Permitida a continuação da "
+#~ "viagem com escravos"
+
+#~ msgid "Tenerife"
+#~ msgstr "Tenerife"
+
+#~ msgid "Texel"
+#~ msgstr "Texel"
+
+#~ msgid "Third place of slave landing"
+#~ msgstr "Terceiro lugar de desembarque de escravos"
+
+#~ msgid "Third place of slave purchase"
+#~ msgstr "Terceiro lugar de aquisição de escravos"
+
+#~ msgid "Three or more slaves jumping overboard, missing, or escaped"
+#~ msgstr "Três ou mais escravos pularam do navio, desapareceram ou fugiram"
+
+#~ msgid "Timbeys"
+#~ msgstr "Timbeys"
+
+#~ msgid "Tiverton"
+#~ msgstr "Tiverton"
+
+#~ msgid "Tobago"
+#~ msgstr "Tobago"
+
+#~ msgid "Tobago, port unspecified"
+#~ msgstr "Tobago, porto não especificado"
+
+#~ msgid ""
+#~ " to be completed after Curto consulted on Arquivos Angola, II, vol 25, "
+#~ "pp.189-91."
+#~ msgstr ""
+#~ "a ser completado depois que o Curto consultar os Arquivos de Angola, II, "
+#~ "vol 25, pp. 189-91."
+
+#~ msgid "Tonsberg"
+#~ msgstr "Tonsberg"
+
+#~ msgid "Topsham"
+#~ msgstr "Topsham"
+
+#~ msgid "Torbay"
+#~ msgstr "Torbay"
+
+#~ msgid "Tortola"
+#~ msgstr "Tortola"
+
+#~ msgid "Tortola, port unspecified"
+#~ msgstr "Tortola, porto não especificado"
+
+#~ msgid "Tortuga"
+#~ msgstr "Tortuga"
+
+#~ msgid "Total slaves disembarked*"
+#~ msgstr "Total de escravos desembarcados*"
+
+#~ msgid "Total slaves embarked"
+#~ msgstr "Total de escravos embarcados"
+
+#~ msgid "Total slaves embarked*"
+#~ msgstr "Total de escravos embarcados*"
+
+#~ msgid "Touau-Toro (location undetermined)"
+#~ msgstr "Touau-Toro (localização indeterminada)"
+
+#~ msgid "Trade Town"
+#~ msgstr "Trade Town"
+
+#~ msgid "Trieste"
+#~ msgstr "Trieste"
+
+#~ msgid "Trinidad"
+#~ msgstr "Trinidad"
+
+#~ msgid "Trinidad de Cuba"
+#~ msgstr "Trinidad de Cuba"
+
+#~ msgid "Trinidad, port unspecified"
+#~ msgstr "Trinidad, porto não especificado"
+
+#~ msgid "Trujillo"
+#~ msgstr "Trujillo"
+
+#~ msgid "Tulia"
+#~ msgstr "Tulia"
+
+#~ msgid "Turk's Island"
+#~ msgstr "Ilha de Turk"
+
+#~ msgid "Tybee Island"
+#~ msgstr "Ilha Tybee"
+
+#~ msgid "Ubatuba"
+#~ msgstr "Ubatuba"
+
+#~ msgid "Unknown outcome"
+#~ msgstr "Resultado desconhecido"
+
+#~ msgid "Upper James River"
+#~ msgstr "Alto Rio James"
+
+#~ msgid "Urca"
+#~ msgstr "Urca"
+
+#~ msgid "Uruguay"
+#~ msgstr "Uruguai"
+
+#~ msgid "US"
+#~ msgstr "EUA"
+
+#~ msgid "U.S.A."
+#~ msgstr "EUA"
+
+#~ msgid "USA, location unspecified"
+#~ msgstr "EUA, localização não especificada"
+
+#~ msgid "Vannes"
+#~ msgstr "Vannes"
+
+#~ msgid "Vasca"
+#~ msgstr "Vasca"
+
+#~ msgid "Venezuela"
+#~ msgstr "Venezuela"
+
+#~ msgid "Veracruz"
+#~ msgstr "Veracruz"
+
+#~ msgid "Vessel"
+#~ msgstr "Embarcação"
+
+#~ msgid "Vessel attacked from shore"
+#~ msgstr "Embarcação atacada da costa"
+
+#~ msgid "Vessel driven back into Portdep by British and voyage aborted"
+#~ msgstr ""
+#~ "Navio obrigado a retornar a porto de origem pelos ingleses e viagem "
+#~ "abortada"
+
+#~ msgid "Vessel name"
+#~ msgstr "Nome da embarcação"
+
+#~ msgid "Vessel owners"
+#~ msgstr "Proprietários da embarcação"
+
+#~ msgid "Vessel's boats attacked from shore"
+#~ msgstr "Botes da embarcação atacados da costa"
+
+#~ msgid "Vice-Admiralty Court, Antigua, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Antígua, condenado"
+
+#~ msgid "Vice-Admiralty Court, Bahamas, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Bahamas, condenado"
+
+#~ msgid " Vice-Admiralty Court, Bahamas, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Bahamas, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, Barbados, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Barbados, condenado"
+
+#~ msgid "Vice-Admiralty Court, Barbados, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Barbados, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, British Guiana, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Guiana Inglesa, condenado"
+
+#~ msgid "Vice-Admiralty Court, British Guiana, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Guiana Inglesa, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, Cape of Good Hope, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Cabo da Boa Esperança, condenado"
+
+#~ msgid "Vice-Admiralty Court, Cape of Good Hope, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Cabo da Boa Esperança, reintegrado"
+
+#~ msgid "Vice Admiralty Court, Dominica, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Dominica, condenado"
+
+#~ msgid "Vice-Admiralty Court, Halifax, Condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Halifax, condenado"
+
+#~ msgid "Vice-Admiralty Court, Jamaica, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Jamaica, condenado"
+
+#~ msgid "Vice-Admiralty Court, Jamaica, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Jamaica, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, Mauritius, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Maurício, condenado"
+
+#~ msgid "Vice-Admiralty Court, Mauritius, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Maurício, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, Sierra Leone, condemned    ,"
+#~ msgstr "Tribunal do Vice-Almirantado, Serra Leoa, condenado"
+
+#~ msgid "Vice-Admiralty Court, Sierra Leone, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Serra Leoa, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, St.Helena,  condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Santa Helena, condenado"
+
+#~ msgid "Vice-Admiralty Court, St. Helena, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Santa Helena, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, Tortola, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, Tortola, condenado"
+
+#~ msgid "Vice-Admiralty Court, Tortola, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, Tortola, reintegrado"
+
+#~ msgid "Vice-Admiralty Court, unspecified, condemned"
+#~ msgstr "Tribunal do Vice-Almirantado, não especificado, condenado"
+
+#~ msgid "Vice-Admiralty Court, unspecified, restored"
+#~ msgstr "Tribunal do Vice-Almirantado, não especificado, reintegrado"
+
+#~ msgid "Vigo"
+#~ msgstr "Vigo"
+
+#~ msgid "Virginia"
+#~ msgstr "Virgínia"
+
+#~ msgid "Virginia, port unspecified"
+#~ msgstr "Virgínia, porto não especificado"
+
+#~ msgid "Vitória"
+#~ msgstr "Vitória"
+
+#~ msgid "Vlissingen"
+#~ msgstr "Vlissingen"
+
+#~ msgid "Voyage completed as intended"
+#~ msgstr "Viagem completada conforme o pretendido"
+
+#~ msgid "Voyage Dates"
+#~ msgstr "Datas da viagem"
+
+#~ msgid "Voyage identification number"
+#~ msgstr "Número de identificação da viagem"
+
+#~ msgid "Voyage in 1999 CD-ROM"
+#~ msgstr "Viagem no CD-ROM de 1999"
+
+#~ msgid "Voyage Itinerary"
+#~ msgstr "Itinerário da viagem"
+
+#~ msgid "Voyage length, homeport to slaves landing (days)*"
+#~ msgstr ""
+#~ "Duração da viagem, do porto de origem ao de desembarque de escravos "
+#~ "(dias)*"
+
+#~ msgid "Voyage Outcome"
+#~ msgstr "Resultado da Viagem"
+
+#~ msgid "Wales"
+#~ msgstr "Gales"
+
+#~ msgid "Warren"
+#~ msgstr "Warren"
+
+#~ msgid "Waterford"
+#~ msgstr "Waterford"
+
+#~ msgid "West Central Africa and St. Helena"
+#~ msgstr "África Centro-Ocidental e Santa Helena"
+
+#~ msgid "West Central Africa and St. Helena, port unspecified"
+#~ msgstr "África Centro-Ocidental e Santa Helena, porto não especificado"
+
+#~ msgid "West Indies (colony unspecified)"
+#~ msgstr "Índias Ocidentais (colônia não especificada)"
+
+#~ msgid "West of Cape Apolonia"
+#~ msgstr "Oeste de Cabo Apolônia"
+
+#~ msgid "Wexford"
+#~ msgstr "Wexford"
+
+#~ msgid "Weymouth"
+#~ msgstr "Weymouth"
+
+#~ msgid "Whaler"
+#~ msgstr "Whaler"
+
+#~ msgid "Wharton"
+#~ msgstr "Wharton"
+
+#~ msgid "Whitby"
+#~ msgstr "Whitby"
+
+#~ msgid "Whitehaven"
+#~ msgstr "Whitehaven"
+
+#~ msgid "Whydah"
+#~ msgstr "Ajudá"
+
+#~ msgid "Wiamba"
+#~ msgstr "Wiamba"
+
+#~ msgid "Williamsburg"
+#~ msgstr "Williamsburg"
+
+#~ msgid "Windward Coast (Nunez - Assini)"
+#~ msgstr "Costa do Barlavento (Nunez-Assini)"
+
+#~ msgid "Windward Coast, port unspecified"
+#~ msgstr "Costa do Barlavento, porto não especificado"
+
+#~ msgid "Windward + Ivory + Gold + Benin"
+#~ msgstr "Barlavento + Marfim + Ouro + Benim"
+
+#~ msgid "Wiscasset"
+#~ msgstr "Wiscasset"
+
+#~ msgid "Workington"
+#~ msgstr "Workington"
+
+#~ msgid "wreck"
+#~ msgstr "naufrágio"
+
+#~ msgid "Wye River"
+#~ msgstr "Rio Wye"
+
+#~ msgid "xixorro"
+#~ msgstr "xixorro"
+
+#~ msgid "Yacht"
+#~ msgstr "Yacht"
+
+#~ msgid "Yaght"
+#~ msgstr "Yaght"
+
+#~ msgid "Yarmouth"
+#~ msgstr "Yarmouth"
+
+#~ msgid "Year constructed"
+#~ msgstr "Ano de construção"
+
+#~ msgid "Year registered"
+#~ msgstr "Ano de registro"
+
+#~ msgid "York River"
+#~ msgstr "Rio York"
+
+#~ msgid "Youghal"
+#~ msgstr "Youghal"
+
+#~ msgid "Zaandam"
+#~ msgstr "Zaandam"
+
+#~ msgid "Zanzibar"
+#~ msgstr "Zanzibar"
+
+#~ msgid "Zeeland"
+#~ msgstr "Zeeland"
+
+#~ msgid "Zion Hill"
+#~ msgstr "Zion Hill"
+
+#~ msgid "Zuider Zee"
+#~ msgstr "Zuider Zee"

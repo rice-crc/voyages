@@ -3,10 +3,10 @@
     "pk": 1, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "17.0743430", 
+        "latitude": "0.054033", 
         "show_on_map": true, 
         "value": 60000, 
-        "longitude": "13.1337040", 
+        "longitude": "9.343897", 
         "broad_region": "Africa"
     }
 },
@@ -14,32 +14,32 @@
     "pk": 2, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "32.0000000", 
+        "latitude": "33.875649", 
         "show_on_map": true, 
         "value": 20000, 
-        "longitude": "-86.0000000", 
-        "broad_region": "Mainland North America"
+        "longitude": "-78.444029", 
+        "broad_region": "North America"
     }
 },
 {
     "pk": 3, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "11.0000000", 
+        "latitude": "14.501708", 
         "show_on_map": true, 
         "value": 40000, 
-        "longitude": "-89.0000000", 
-        "broad_region": "Spanish American Mainland"
+        "longitude": "-83.572635", 
+        "broad_region": "Spanish Circum-Caribbean"
     }
 },
 {
     "pk": 4, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "14.8000000", 
+        "latitude": "14.501708", 
         "show_on_map": true, 
         "value": 30000, 
-        "longitude": "-57.0000000", 
+        "longitude": "-66.237461", 
         "broad_region": "Caribbean"
     }
 },
@@ -47,10 +47,10 @@
     "pk": 5, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "46.0000000", 
+        "latitude": "37.213255", 
         "show_on_map": true, 
         "value": 10000, 
-        "longitude": "7.0000000", 
+        "longitude": "-8.561913", 
         "broad_region": "Europe"
     }
 },
@@ -58,10 +58,10 @@
     "pk": 6, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "-12.0000000", 
+        "latitude": "-18.864582", 
         "show_on_map": true, 
         "value": 50000, 
-        "longitude": "-46.0000000", 
+        "longitude": "-39.75489", 
         "broad_region": "Brazil"
     }
 },
@@ -1163,8 +1163,8 @@
         "region": "Other Africa", 
         "value": 60900, 
         "broad_region": 1, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
+        "longitude": "9.343897", 
+        "latitude": "0.054033", 
         "show_on_map": false
     }
 },
@@ -10976,10 +10976,10 @@
     "fields": {
         "show_on_main_map": false, 
         "region": 84, 
-        "longitude": "0E-7", 
+        "longitude": "9.343897", 
         "place": "Africa., port unspecified", 
         "value": 60999, 
-        "latitude": "0E-7", 
+        "latitude": "0.054033", 
         "show_on_voyage_map": false
     }
 },

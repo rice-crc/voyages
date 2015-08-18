@@ -21,7 +21,6 @@ def trans_log(val):
     translation is found.
     """
     if not isinstance(val, basestring):
-        logger.warn('trans_log received non-string: ' + unicode(val))
         return val
     # Heuristically check whether this looks like a string that should be translated.
     if len(val) == 0 or not re_has_alpha_chars.match(val):
