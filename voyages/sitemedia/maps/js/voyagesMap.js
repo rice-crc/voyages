@@ -746,8 +746,10 @@ var voyagesMap = {
 		for (var i = 0; i < this._routeNodes.length; ++i) {
 			this._routeNodes[i]._outLinks = [ ];
 		}
+		var nodeCount = this._routeNodes.length;
 		for (var i = 0; i < links.length; ++i) {
 			var link = links[i];
+			if (link.start >= nodeCount || link.start < 0 || link.end >= nodeCount || link.end < 0) continue;
 			var start = this._routeNodes[link.start];
 			var end = this._routeNodes[link.end];
 			link.length = start.distanceTo(end);

@@ -16,7 +16,7 @@
  limitations under the License.
 -->
 
-<schema name="default" version="1.4">
+<schema name="default" version="1.5">
   <types>
     <fieldtype name="string"  class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
@@ -30,6 +30,10 @@
     <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0"/>
     <fieldType name="long" class="solr.TrieLongField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0"/>
     <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0"/>
+    <fieldType name="sint" class="solr.SortableIntField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sfloat" class="solr.SortableFloatField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true"/>
 
     <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
     <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
@@ -61,25 +65,12 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="source_field" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-	<tokenizer class="solr.KeywordTokenizerFactory"/>
-	<filter class="solr.ASCIIFoldingFilterFactory"/>
-	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
-      </analyzer>
-      <analyzer type="query">
-	<tokenizer class="solr.KeywordTokenizerFactory"/>
-	<filter class="solr.ASCIIFoldingFilterFactory"/>
-	<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="([,\s])" replacement="" />
-      </analyzer>
-    </fieldType>
-	
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory"
                 ignoreCase="true"
-                words="stopwords_en.txt"
+                words="lang/stopwords_en.txt"
                 enablePositionIncrements="true"
                 />
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -89,14 +80,13 @@
           <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
         <filter class="solr.PorterStemFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory"
                 ignoreCase="true"
-                words="stopwords_en.txt"
+                words="lang/stopwords_en.txt"
                 enablePositionIncrements="true"
                 />
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -106,7 +96,6 @@
           <filter class="solr.EnglishMinimalStemFilterFactory"/>
         -->
         <filter class="solr.PorterStemFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
     </fieldType>
 
@@ -120,13 +109,11 @@
       <analyzer type="index">
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.NGramFilterFactory" minGramSize="1" maxGramSize="15" />
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
+        <filter class="solr.NGramFilterFactory" minGramSize="3" maxGramSize="15" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
     </fieldType>
 
@@ -150,6 +137,7 @@
     <field name="id" type="string" indexed="true" stored="true" multiValued="false" required="true"/>
     <field name="django_ct" type="string" indexed="true" stored="true" multiValued="false"/>
     <field name="django_id" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="_version_" type="long" indexed="true" stored ="true"/>
 
     <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
     <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
@@ -163,7 +151,11 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
+    <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imp_port_voyage_begin" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_region_of_slave_purchase_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -175,7 +167,11 @@
 
     <field name="var_imputed_percentage_male_exact" type="float" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_voyage_began_month" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_outcome_owner" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_crew_first_landing" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -189,61 +185,107 @@
 
     <field name="var_imp_region_voyage_begin" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_broad_region_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_port_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_second_region_slave_emb" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_in_cd_rom" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="var_first_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_length_middle_passage_days_exact" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imputed_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_resistance_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_second_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_place_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_women" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_total_slaves_disembarked" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imputed_nationality_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_ship_captured_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_first_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_third_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_carried_second_port" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_owner_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_nationality" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_voyage_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_slaves_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_mortality" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_third_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_broad_region_disembark_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_outcome_ship_captured" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_purchased_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_vessel_construction_place_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_length_middle_passage_days" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imputed_nationality_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_slave_purchase_began" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_slave_purchase_began_month" type="long" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_registered_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_date_departed_africa" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_date_departed_africa_month" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_ship_name_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_region_of_slave_purchase_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_departure_last_place_of_landing" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_tonnage" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_vessel_construction_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_region_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_slave_purchase_began_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_long_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_length_middle_passage_days_exact" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_principal_region_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_first_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_principal_place_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_rig_of_vessel_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_port_of_call_before_atl_crossing_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_region_of_slave_purchase_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_total_num_slaves_arr_first_port_embark" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_outcome_slaves" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_second_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_carried_first_port" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -251,7 +293,9 @@
 
     <field name="var_first_dis_of_slaves" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_first_dis_of_slaves_month" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_voyage_began" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_third_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_female" type="float" indexed="true" stored="true" multiValued="false" />
 
@@ -259,49 +303,83 @@
 
     <field name="var_second_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_registered_place_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_vessel_construction_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_total_slaves_disembarked_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_owner" type="ngram" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_date_departed_africa_month" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_captain_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_first_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_death_middle_passage" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_voyage_completed_month" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_vessel_construction_place_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_second_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_male" type="float" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_third_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_nationality_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_rig_of_vessel_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_voyage_completed" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_completed_month" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="var_imp_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_rig_of_vessel_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_rig_of_vessel" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_first_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imputed_percentage_child_exact" type="float" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_sources" type="source_field" indexed="true" stored="true" multiValued="true" />
+    <field name="var_sources" type="text_en" indexed="true" stored="true" multiValued="true" />
+
+    <field name="var_imp_principal_region_of_slave_purchase_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_ship_name_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_first_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_disembark_second_place" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_voyage_began" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_place_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_voyage_began" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_voyage_began_month" type="long" indexed="true" stored="true" multiValued="false" />
-
     <field name="var_voyage_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_voyage_in_cd_rom" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_captain_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_vessel_construction_place_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_place_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_region_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_total_num_slaves_purchased_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_place_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_region_voyage_ended" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imputed_percentage_boys" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_first_dis_of_slaves_month" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_resistance" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -311,11 +389,13 @@
 
     <field name="var_captain" type="ngram" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_num_slaves_intended_first_port" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="var_imp_total_num_slaves_purchased" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_carried_third_port" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_principal_region_of_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_second_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_registered_year" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -327,19 +407,31 @@
 
     <field name="var_imputed_nationality" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_imp_principal_place_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_tonnage_mod" type="float" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_arrival_at_port_of_dis" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imp_arrival_at_port_of_dis_exact" type="long" indexed="true" stored="true" multiValued="false" /> 
+    <field name="var_owner_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_vessel_construction_place_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_principal_region_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_imputed_sterling_cash" type="float" indexed="true" stored="true" multiValued="false" />
+    <field name="var_third_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_port_of_call_before_atl_crossing" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_num_slaves_intended_first_port" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_registered_place_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_imp_arrival_at_port_of_dis_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_disembark_first_place" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -349,15 +441,93 @@
 
     <field name="var_imp_principal_port_slave_dis" type="ngram" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_nationality_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_outcome_owner_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_place_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_region_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_first_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="short_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="group_id" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="full_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="group_name" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="full_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="broad_disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="nation" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="disembarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="embarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="year" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="embarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="latitude" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="order_num" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="show_at_zoom" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="longitude" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="show_on_map" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="export_area" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="import_area" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_date_arrived" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_height" type="float" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_country_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_disembarkation_port_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_source" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_sex_age" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_name_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_embarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_embarkation_port_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_voyage" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_voyage_number" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_ship_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_ship_name_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_disembarkation_port" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="slave_country" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="country_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="country_id" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -401,119 +571,6 @@
 
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="country_id" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="country_name" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_id" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_name" type="ngram" indexed="true" stored="true" multiValued="false"/>
-
-    <field name="slave_name_sort" type="string" indexed="true" stored="true" multiValued="false"/>
-
-    <field name="slave_age" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_height" type="float" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_source" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_date_arrived" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_ship_name_sort" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_voyage_number" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_voyage" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_sex_age" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_country" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_country_exact" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_country_sort" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_embarkation_port" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_embarkation_port_sort" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_embarkation_port_exact" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_disembarkation_port" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_disembarkation_port_exact" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="slave_disembarkation_port_sort" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <!-- Assessment section -->
-
-    <field name="name" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="order_num" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="latitude" type="float" indexed="true" stored="true" multiValued="false" />
-
-    <field name="longitude" type="float" indexed="true" stored="true" multiValued="false" />
-
-    <field name="year" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="show_at_zoom" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="show_on_map" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="export_area" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="import_area" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="embarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
-
-    <field name="disembarked_slaves" type="float" indexed="true" stored="true" multiValued="false" />
-
-    <field name="nation" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="embarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="broad_disembarkation_region" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <!-- Voyage section -->
-
-    <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_principal_port_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_first_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_first_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_first_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_second_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_third_landing_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imputed_nationality_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_resistance_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_third_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_registered_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_outcome_ship_captured_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_second_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_outcome_voyage_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_outcome_slaves_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_rig_of_vessel_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_second_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_second_landing_region_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_principal_place_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_vessel_construction_place_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_principal_region_slave_dis_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_principal_region_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_first_region_slave_emb_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_port_of_call_before_atl_crossing_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_region_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_outcome_owner_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_third_place_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_place_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_region_voyage_ended_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_principal_broad_region_disembark_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-    <field name="var_imp_broad_region_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
-	
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->

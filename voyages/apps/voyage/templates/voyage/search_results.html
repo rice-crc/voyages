@@ -26,8 +26,8 @@
         <tr>
             {% for item in request.session.result_columns %}
                 <th>
-                <div class="{% if forloop.first %}grid-first-column grid-header-icon-asc grid-header-text{% elif item.2 %}grid-header-text-left{% else %}grid-header-text{% endif %}">
-                    <a href="#">{{ item.1|trans_log }}</a>
+                <div class="{% if item.0 == order_by_field %}grid-header-icon-{{ sort_direction }} {% endif %}{% if forloop.first %}grid-first-column grid-header-text {% elif item.2 %}grid-header-text-left{% else %}grid-header-text{% endif %}">
+                    <a href="#" onclick="sortColumn('{{ item.0 }}', {% if item.0 == order_by_field %}'{{ sort_direction }}'{% else %}'desc'{% endif %}); return false;">{{ item.1|trans_log }}</a>
                 </div>
                 </th>
 
@@ -144,4 +144,13 @@
         </tbody>
     </table>
 </div>
-
+<script type="text/javascript">
+    function sortColumn(name, direction) {
+        var form = $('#form')
+        form.append('<input type="hidden" name="order_by_field" value="' + name + '" /> ');
+        // Invert direction:
+        direction = direction == 'asc' ? 'desc' : 'asc';
+        form.append('<input type="hidden" name="sort_direction" value="' + direction + '" /> ');
+        form.submit();
+    }
+</script>
