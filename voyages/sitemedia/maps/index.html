@@ -50,8 +50,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <script type="text/javascript" src="/jsi18n/"></script>
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -219,7 +219,9 @@
                     <li><strong>Link</strong>: when selected, allows the creation of new links. First click on
                         the source node marker, which will be highlighted, then, click on the destination
                         node marker and a straight red line with an arrow head at the destination will appear
-                        on the map.</li>
+                        on the map. If you click on the wrong first node by accident you may cancel your
+						selection by clicking again the same node.
+					</li>
                     <li><strong>Delete link</strong>: when selected, any click on a link (red line with arrow head)
                         will cause the link to be deleted.</li>
                     <li><strong>Delete all</strong>: deletes the entire network (save your work first!).</li>
@@ -300,11 +302,13 @@
 		}
 
 		var loadMap = function() {
+			uidToArrayIndex = { };
+			toolData.undoActions = [ ];
+			toolData.links = [ ];
 			voyagesMap.init(baseMap || '1650', '/static/maps/', network.routeNodes, network.links);
 			for (var k = 0; k < network.routeNodes.length; ++k) {
 				addMarker(k);
 			}
-			toolData.links = [ ];
 			for (var k = 0; k < network.links.length; ++k) {
 				var link = network.links[k];
 				addLink(network.routeNodes[link.start].marker.id, network.routeNodes[link.end].marker.id);
@@ -374,9 +378,8 @@
 			uidToArrayIndex[marker.id] = k;
 			network.routeNodes[k].marker = marker;
 			marker.on('click', function() {
-				var nodeIndex = uidToArrayIndex[this.id];
 				var selectedTool = getSelectedTool();
-				if (selectedTool == TOOL_DELETE && network.routeNodes.length > 0 && nodeIndex >= 0) {
+				if (selectedTool == TOOL_DELETE) {
 					removeMarker(this, true);
 				} else if (selectedTool == TOOL_ADDLINK) {
 					var first = toolData.firstLinkMarker;
@@ -480,6 +483,16 @@
 			return arrowHead;
 		}
 
+		function deleteToolDataLink(link) {
+			for (var i = toolData.links.length - 1; i >= 0; --i) {
+				var ln = toolData.links[i];
+				if (ln.idStart == link.idStart && ln.idEnd == link.idEnd) {
+					toolData.links.splice(i, 1);
+					ln.clear();
+				}
+			}
+		};
+
 		function lockEdit(locked) {
 		    toolData.locked = locked;
             for (var i = 0; i < network.routeNodes.length; ++i) {
@@ -497,7 +510,7 @@
 			var latLng = marker.getLatLng();
 			network.routeNodes[nodeIndex].lat = latLng.lat;
 			network.routeNodes[nodeIndex].lng = latLng.lng;
-			// Update links connecting to marker's node.
+			// Update links adjacent to marker's node.
 			for (var i = 0; i < marker.inLinks.length; ++i) {
 				marker.inLinks[i].changeLine(null, latLng);
 			}
@@ -517,9 +530,15 @@
 		function redoLinks() {
 			// Convert drawn links to the voyageMaps link array.
 			links = [ ];
+			var nodeCount = network.routeNodes.length;
 			for (var i = 0; i < toolData.links.length; ++i) {
 				var link = toolData.links[i];
-				links.push({ start: uidToArrayIndex[link.idStart], end: uidToArrayIndex[link.idEnd] });
+				var netLink = { start: uidToArrayIndex[link.idStart], end: uidToArrayIndex[link.idEnd] };
+				if (netLink.start >= 0 && netLink.end >= 0 && netLink.start < nodeCount && netLink.end < nodeCount) {
+					links.push(netLink);
+				} else {
+					console.log('WARNING: Invalid link!');
+				}
 			}
 			network.links = links;
 		}
@@ -541,8 +560,7 @@
 			}
         	link.nodeStart.marker.outLinks.remove(link);
 			link.nodeEnd.marker.inLinks.remove(link);
-			toolData.links.remove(link);
-			link.clear();
+			deleteToolDataLink(link);
 		}
         
         function removeMarker(marker, canUndo) {
@@ -571,27 +589,23 @@
 					}
 				});
 			}
-        	var nodeIndex = uidToArrayIndex[this.id];
+			// Delete incident links.
+			for (var i = 0; i < marker.inLinks.length; ++i) {
+				deleteToolDataLink(marker.inLinks[i]);
+			}
+			for (var i = 0; i < marker.outLinks.length; ++i) {
+				deleteToolDataLink(marker.outLinks[i]);
+			}
+        	var nodeIndex = uidToArrayIndex[marker.id];
 			// Pop last item from array.
 			var lastItem = network.routeNodes.splice(-1, 1)[0];
 			// Replace deleted item with last node.
-			if (nodeIndex < network.routeNodes.length) {
+			if (nodeIndex >= 0 && nodeIndex < network.routeNodes.length) {
 				network.routeNodes[nodeIndex] = lastItem;
 				uidToArrayIndex[lastItem.marker.id] = nodeIndex;
 			}
 			uidToArrayIndex[marker.id] = -1;
 			voyagesMap.removeLayer(marker);
-			// Delete incident links.
-			var deleteLink = function(link) {
-				toolData.links.remove(link);
-				link.clear();
-			};
-			for (var i = 0; i < marker.inLinks.length; ++i) {
-				deleteLink(marker.inLinks[i]);
-			}
-			for (var i = 0; i < marker.outLinks.length; ++i) {
-				deleteLink(marker.outLinks[i]);
-			}
 		}
 
         function undo() {

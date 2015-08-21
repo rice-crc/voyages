@@ -2,7 +2,9 @@ from __future__ import division
 from haystack import indexes
 from .models import *
 from datetime import date
-
+from django.utils import translation
+from django.utils.translation import ugettext as _
+import re
 
 def getMonth(value):
     return str(value.split(",")[0]).zfill(2)
@@ -65,6 +67,32 @@ class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_group_name(self, obj):
         return obj.source_type.group_name
 
+class TranslatedTextField(indexes.SearchField):
+    field_type = 'string'
+
+    # Regular expression that extracts name and language code from the index declaration.
+    re_translated_fieldname = re.compile('(.*)_lang_([a-z]{2})$')
+
+    def __init__(self, **kwargs):
+        kwargs['faceted'] = True
+        self.language_code = None
+        super(TranslatedTextField, self).__init__(**kwargs)
+
+    def set_instance_name(self, instance_name):
+        super(TranslatedTextField, self).set_instance_name(instance_name)
+        if instance_name is not None:
+            m = self.re_translated_fieldname.search(instance_name)
+            if m is None:
+                raise Exception('Invalid index field name for TranslatedTextField')
+            self.language_code = m.group(2)
+
+    def prepare(self, obj):
+        original = super(TranslatedTextField, self).prepare(obj)
+        if original is None:
+            return None
+        with translation.override(self.language_code):
+            from unidecode import unidecode
+            return unidecode(_(unicode(original)))
 
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
@@ -75,20 +103,29 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     var_imp_voyage_began = indexes.IntegerField(null=True)
 
-    var_voyage_id = indexes.IntegerField(null=True)
-    var_voyage_in_cd_rom = indexes.BooleanField(model_attr="voyage_in_cd_rom", null=True)
-    var_ship_name = indexes.NgramField(null=True)
-    var_nationality = indexes.CharField(null=True)
-    var_imputed_nationality = indexes.CharField(null=True)
-    var_vessel_construction_place = indexes.CharField(null=True)
-    var_year_of_construction = indexes.IntegerField(null=True)
-    var_registered_place = indexes.CharField(null=True)
-    var_registered_year = indexes.IntegerField(null=True)
-    var_rig_of_vessel = indexes.CharField(null=True)
-    var_tonnage = indexes.FloatField(null=True, faceted=True)
-    var_tonnage_mod = indexes.FloatField(null=True)
-    var_guns_mounted = indexes.IntegerField(null=True)
+    var_voyage_id = indexes.IntegerField(null=True, model_attr='voyage_id')
+    var_voyage_in_cd_rom = indexes.BooleanField(null=True, model_attr="voyage_in_cd_rom")
+    var_ship_name = indexes.NgramField(null=True, model_attr='voyage_ship__ship_name')
+    var_ship_name_plaintext = indexes.CharField(null=True, faceted=True, indexed=True, model_attr='voyage_ship__ship_name')
+    var_nationality = indexes.CharField(null=True, model_attr='voyage_ship__nationality_ship__label')
+    var_nationality_plaintext = indexes.CharField(null=True, faceted=True, model_attr='voyage_ship__nationality_ship__label')
+    var_imputed_nationality = indexes.CharField(null=True, model_attr='voyage_ship__imputed_nationality__label')
+    var_imputed_nationality_plaintext = indexes.CharField(null=True, faceted=True, model_attr='voyage_ship__imputed_nationality__label')
+    var_vessel_construction_place = indexes.CharField(null=True, model_attr='voyage_ship__vessel_construction_place__place')
+    var_vessel_construction_place_lang_en = TranslatedTextField(null=True, model_attr='voyage_ship__vessel_construction_place__place')
+    var_vessel_construction_place_lang_pt = TranslatedTextField(null=True, model_attr='voyage_ship__vessel_construction_place__place')
+    var_year_of_construction = indexes.IntegerField(null=True, model_attr='voyage_ship__year_of_construction')
+    var_registered_place = indexes.CharField(null=True, model_attr='voyage_ship__registered_place__place')
+    var_registered_place_lang_en = TranslatedTextField(null=True, model_attr='voyage_ship__registered_place__place')
+    var_registered_place_lang_pt = TranslatedTextField(null=True, model_attr='voyage_ship__registered_place__place')
+    var_registered_year = indexes.IntegerField(null=True, model_attr='voyage_ship__registered_year')
+    var_rig_of_vessel = indexes.CharField(null=True, model_attr='voyage_ship__rig_of_vessel__label')
+    var_rig_of_vessel_plaintext = indexes.CharField(null=True, faceted=True, model_attr='voyage_ship__rig_of_vessel__label')
+    var_tonnage = indexes.FloatField(null=True, faceted=True, model_attr='voyage_ship__tonnage')
+    var_tonnage_mod = indexes.FloatField(null=True, model_attr='voyage_ship__tonnage_mod')
+    var_guns_mounted = indexes.IntegerField(null=True, model_attr='voyage_ship__guns_mounted')
     var_owner = indexes.NgramField(null=True)
+    var_owner_plaintext = indexes.CharField(null=True, faceted=True)
 
     var_nationality_idnum = indexes.IntegerField(null=True)
     var_imputed_nationality_idnum = indexes.IntegerField(null=True)
@@ -146,7 +183,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_second_region_slave_emb = indexes.CharField(null=True)
     var_third_region_slave_emb = indexes.CharField(null=True)
 
-    var_imp_principal_region_of_slave_purchase = indexes.CharField(null=True)
+    var_imp_principal_region_of_slave_purchase = indexes.CharField(null=True, model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+    var_imp_principal_region_of_slave_purchase_lang_en = TranslatedTextField(null=True, model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+    var_imp_principal_region_of_slave_purchase_lang_pt = TranslatedTextField(null=True, model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
 
     var_first_landing_region = indexes.CharField(null=True)
     var_second_landing_region = indexes.CharField(null=True)
@@ -173,6 +212,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage captain and crew
     var_captain = indexes.NgramField(null=True)
+    var_captain_plaintext = indexes.CharField(null=True, faceted=True, indexed=True)
     var_crew_voyage_outset = indexes.IntegerField(null=True)
     var_crew_first_landing = indexes.IntegerField(null=True)
     var_crew_died_complete_voyage = indexes.IntegerField(null=True)
@@ -233,12 +273,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
-    def prepare_var_voyage_id(self, obj):
-        try:
-            print obj.pk
-            return obj.voyage_id
-        except AttributeError:
-            return None
+    # NOTE (ddellam):  most of these prepare* methods are not needed and
+    # could be replaced by properly filling out the model_attr parameter when
+    # creating the index above.
+    # TODO: get rid of prepare methods that do not do anything other than fetching a model field.
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
@@ -252,60 +290,27 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_nationality(self, obj):
-        try:
-            return obj.voyage_ship.nationality_ship.label
-        except AttributeError:
-            return None
     def prepare_var_nationality_idnum(self, obj):
         try:
             return obj.voyage_ship.nationality_ship.value
         except AttributeError:
             return None
 
-    def prepare_var_imputed_nationality(self, obj):
-        try:
-            return obj.voyage_ship.imputed_nationality.label
-        except AttributeError:
-            return None
     def prepare_var_imputed_nationality_idnum(self, obj):
         try:
             return obj.voyage_ship.imputed_nationality.value
         except AttributeError:
             return None
 
-    def prepare_var_vessel_construction_place(self, obj):
-        try:
-            return obj.voyage_ship.vessel_construction_place.place
-        except AttributeError:
-            return None
     def prepare_var_vessel_construction_place_idnum(self, obj):
         try:
             return obj.voyage_ship.vessel_construction_place.value
         except AttributeError:
             return None
 
-
-    def prepare_var_year_of_construction(self, obj):
-        try:
-            return obj.voyage_ship.year_of_construction
-        except AttributeError:
-            return None
-
-    def prepare_var_registered_place(self, obj):
-        try:
-            return obj.voyage_ship.registered_place.place
-        except AttributeError:
-            return None
     def prepare_var_registered_place_idnum(self, obj):
         try:
             return obj.voyage_ship.registered_place.value
-        except AttributeError:
-            return None
-
-    def prepare_var_registered_year(self, obj):
-        try:
-            return obj.voyage_ship.registered_year
         except AttributeError:
             return None
 
@@ -320,30 +325,15 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_tonnage(self, obj):
-        try:
-            return obj.voyage_ship.tonnage
-        except AttributeError:
-            return None
-
-    def prepare_var_tonnage_mod(self, obj):
-        try:
-            return obj.voyage_ship.tonnage_mod
-        except AttributeError:
-            return None
-
-    def prepare_var_guns_mounted(self, obj):
-        try:
-            return obj.voyage_ship.guns_mounted
-        except AttributeError:
-            return None
-
     def prepare_var_owner(self, obj):
         try:
             return '<br/> '.join(
                 [connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)])
         except AttributeError:
             return None
+
+    def prepare_var_owner_plaintext(self, obj):
+        return self.prepare_var_owner(obj)
 
     def prepare_var_outcome_voyage(self, obj):
         try:
@@ -603,11 +593,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         except AttributeError:
             return None
 
-    def prepare_var_imp_principal_region_of_slave_purchase(self, obj):
-        try:
-            return obj.voyage_itinerary.imp_principal_region_of_slave_purchase.region
-        except AttributeError:
-            return None
     def prepare_var_imp_principal_region_of_slave_purchase_idnum(self, obj):
         try:
             return obj.voyage_itinerary.imp_principal_region_of_slave_purchase.value
@@ -937,6 +922,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_captain(self, obj):
         return '<br/> '.join(
             [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)])
+
+    def prepare_var_captain_plaintext(self, obj):
+        return self.prepare_var_captain(obj)
 
     def prepare_var_crew_voyage_outset(self, obj):
         try:

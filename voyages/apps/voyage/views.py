@@ -634,6 +634,9 @@ def search(request):
     timeline_form = None
     timeline_chart_settings = {}
 
+    order_by_field = request.session.get('voyages_order_by_field', 'var_voyage_id')
+    sort_direction = request.session.get('voyages_sort_direction', 'asc')
+
     # Map
     map_year = 1750
 
@@ -704,7 +707,7 @@ def search(request):
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list.get('time_span_from_year', voyage_span_first_year),
                                                            'frame_to_year': var_list.get('time_span_to_year', voyage_span_last_year)})
         query_dict = create_query_dict(var_list)
-        results = perform_search(query_dict, None)
+        results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
@@ -748,7 +751,12 @@ def search(request):
                 request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
-        results = perform_search(query_dict, None)
+
+        order_by_field = request.POST.get('order_by_field', order_by_field)
+        sort_direction = request.POST.get('sort_direction', sort_direction)
+        request.session['voyages_order_by_field'] = order_by_field
+        request.session['voyages_sort_direction'] = sort_direction
+        results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
         
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -1285,6 +1293,8 @@ def search(request):
                    'all_var_list': globals.var_dict,
                    'results': pagins,
                    'result_data': result_data,
+                   'order_by_field': order_by_field,
+                   'sort_direction': sort_direction,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'curpage': pagins,
@@ -1564,15 +1574,22 @@ def search_var_dict(var_name):
             return i
     return None
 
-def perform_search(query_dict, date_filters):
+def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sort_direction='asc', lang='en'):
     """
     Perform the actual query towards SOLR
     :param query_dict:
     :param date_filters:
     :return:
     """
-    # Initially sort by voyage_id
-    results = SearchQuerySet().models(Voyage).filter(**query_dict).order_by('var_voyage_id')
+    plain_text_suffix_list = ['var_ship_name', 'var_captain', 'var_nationality']
+    translated_field_list = ['var_imp_principal_region_of_slave_purchase']
+    if order_by_field in plain_text_suffix_list:
+        order_by_field += '_plaintext_exact'
+    elif order_by_field in translated_field_list:
+        order_by_field += '_lang_' + lang + '_exact'
+    if sort_direction == 'desc':
+        order_by_field = '-' + order_by_field
+    results = SearchQuerySet().models(Voyage).filter(**query_dict).order_by(order_by_field)
     # Date filters
     return date_filter_query(date_filters, results)
 
@@ -1979,7 +1996,7 @@ def csv_stats_download(request):
         else:
             date_filters = []
 
-        results = perform_search(query_dict, date_filters)
+        results = perform_search(query_dict, date_filters, lang=request.LANGUAGE_CODE)
 
         if len(results) == 0:
             no_result = True
