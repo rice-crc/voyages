@@ -23,7 +23,7 @@
         {% endfor %}
     ];
     voyagesMap.
-        init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
+        init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes, links).
         setMaxPathWidth(20).
         setPathOpacity(0.75);
     voyagesMap.zoomToDetailLevel = function(zoom) {

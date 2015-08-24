@@ -60,7 +60,7 @@
                 {% localize off %}
                     {% with source=itinerary.imp_principal_place_of_slave_purchase destination=itinerary.imp_principal_port_slave_dis %}
                         voyagesMap.
-                            init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes).
+                            init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes, links).
                             setMaxPathWidth(10).
                             setPathOpacity(0.75);
                         var ports = {

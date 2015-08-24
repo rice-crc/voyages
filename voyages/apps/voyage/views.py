@@ -1226,16 +1226,16 @@ def search(request):
                 if source is None:
                     source = Place()
                     source.place = 'Missing source'
-                    source.latitude = 34
-                    source.longitude = 45
+                    source.latitude = 0.05
+                    source.longitude = 9.34
                     source.region = Region()
                     source.region.region = source.place
                     source.region.latitude = source.latitude
-                    source.region.longitude = -source.longitude
+                    source.region.longitude = source.longitude
                     source.region.broad_region = BroadRegion()
                     source.region.broad_region.broad_region = source.place
                     source.region.broad_region.latitude = source.latitude
-                    source.region.broad_region.longitude = -source.longitude
+                    source.region.broad_region.longitude = source.longitude
                 add_flow(
                     source,
                     destination,
@@ -1574,6 +1574,14 @@ def search_var_dict(var_name):
             return i
     return None
 
+# Automatically fetch fields that should be sorted differently, either
+# by using a translated version or a plain text version of tokenized fields.
+from search_indexes import VoyageIndex
+index = VoyageIndex()
+plain_text_suffix_list = [f for f in index.fields.keys() if f.endswith('plain_text')]
+translate_suffix = '_lang_en'
+translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys() if f.endswith(translate_suffix)]
+
 def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sort_direction='asc', lang='en'):
     """
     Perform the actual query towards SOLR
@@ -1581,8 +1589,6 @@ def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sor
     :param date_filters:
     :return:
     """
-    plain_text_suffix_list = ['var_ship_name', 'var_captain', 'var_nationality']
-    translated_field_list = ['var_imp_principal_region_of_slave_purchase']
     if order_by_field in plain_text_suffix_list:
         order_by_field += '_plaintext_exact'
     elif order_by_field in translated_field_list:

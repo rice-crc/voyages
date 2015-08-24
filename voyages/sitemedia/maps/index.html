@@ -138,6 +138,10 @@
                     <input type="radio" name="tools" value="coord" autocomplete="off">
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                 </button>
+                <button class="btn btn-primary" title="Split link">
+                    <input type="radio" name="tools" value="split" autocomplete="off">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
                 <button class="btn btn-danger" title="Delete marker">
                     <input type="radio" name="tools" value="del" autocomplete="off">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -213,6 +217,8 @@
                     <li><strong>Drag</strong>: allow moving existing nodes by mouse dragging.</li>
                     <li><strong>Marker</strong>: when selected, any map click on an empty area will create a new
                         node at the clicked position.</li>
+                    <li><strong>Split</strong>: when selected, selecting a link causes that link to be split
+						into two, with a new intermediary node added. This is useful for refining existing paths.</li>
                     <li><strong>Delete marker</strong>: when selected, any click over an existing node marker will
                         cause the node to be deleted from the network. Any links incident to the node will be
                         deleted as well.</li>
@@ -245,7 +251,7 @@
         </div>
     </div>
 </div>
-<script src="js/leaflet.js"></script>
+<script src="js/leaflet-src.js"></script>
 <script src="js/leaflet.markercluster.js"></script>
 <script src="js/leaflet.polylineDecorator.js"></script>
 <script src="js/routeNodes.js"></script>
@@ -257,6 +263,7 @@
 		var TOOL_DELETE = "del";
 		var TOOL_ADDLINK = "addlink";
 		var TOOL_DELLINK = "dellink";
+		var TOOL_SPLITLINK = "split";
 
 		var normalIcon = new L.Icon.Default();
 		var selectedIcon = new L.icon({
@@ -359,12 +366,7 @@
 		voyagesMap._map.on('click', function(e) {
 			var tool = getSelectedTool();
 			if (tool == 'coord') {
-				var index = network.routeNodes.length;
-				network.routeNodes.push(e.latlng);
-				var marker = addMarker(index);
-				toolData.undoActions.push(function() {
-					removeMarker(marker, false);
-				});
+				addRouteNode(e.latLng, true);
 			}
 		});
 		
@@ -437,15 +439,15 @@
 						voyagesMap.addLayer(this.arrow);
 					},
 					clear: function() {
-						voyagesMap.removeLayer(this.arrow);
 						voyagesMap.removeLayer(this.polyLine);
+						voyagesMap.removeLayer(this.arrow);
 					},
 					changeLine: function(first, second) {
+						voyagesMap.removeLayer(this.arrow);
 						var points = this.polyLine.getLatLngs();
 						points[0] = first || points[0];
 						points[1] = second || points[1];
 						this.polyLine.setLatLngs(points);
-						voyagesMap.removeLayer(this.arrow);
 						this.arrow = addArrowHead(this.polyLine);
 						voyagesMap.addLayer(this.arrow);
 					}
@@ -455,8 +457,11 @@
 				nodeStart.marker.outLinks.push(line.link);
 				toolData.links.push(line.link);
 				line.on('click', function() {
-					if (getSelectedTool() == TOOL_DELLINK) {
+					var tool = getSelectedTool();
+					if (tool == TOOL_DELLINK) {
 						removeLink(this.link, true);
+					} else if (tool == TOOL_SPLITLINK) {
+						splitLink(this.link);
 					}
 				});
 				return line.link;
@@ -481,6 +486,17 @@
 				{ offset: '100%', repeat: 0, symbol: arrowSymbol}
 			]);
 			return arrowHead;
+		}
+
+		function addRouteNode(latLng, canUndo) {
+			var index = network.routeNodes.length;
+			network.routeNodes.push(latLng);
+			var marker = addMarker(index);
+			if (canUndo) {
+				toolData.undoActions.push(function() {
+					removeMarker(marker, false);
+				});
+			}
 		}
 
 		function deleteToolDataLink(link) {
@@ -608,6 +624,22 @@
 			voyagesMap.removeLayer(marker);
 		}
 
+		function splitLink(link) {
+			var a = network.routeNodes[uidToArrayIndex[link.idStart]];
+			var b = network.routeNodes[uidToArrayIndex[link.idEnd]];
+			var mid = new L.LatLng((a.lat + b.lat) / 2, (a.lng + b.lng) / 2);
+			removeLink(link, true);
+			addRouteNode(mid, true);
+			var firstHalf = addLink(link.idStart, mid.marker.id);
+			var secondHalf = addLink(mid.marker.id, link.idEnd);
+			if (firstHalf && secondHalf) {
+				toolData.undoActions.push(function() {
+					removeLink(firstHalf, false);
+					removeLink(secondHalf, false);
+				});
+			}
+		}
+
         function undo() {
         	if (toolData.undoActions.length > 0) {
         		var action = toolData.undoActions.pop();
@@ -697,6 +729,5 @@
 		});
 
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
 </body>
 </html>
