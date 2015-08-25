@@ -320,15 +320,15 @@
 				var link = network.links[k];
 				addLink(network.routeNodes[link.start].marker.id, network.routeNodes[link.end].marker.id);
 			}
+			voyagesMap.postDraw = function() {
+				for (var i = 0; i < toolData.links.length; ++i) {
+					toolData.links[i].polyLine.bringToFront();
+				}
+			};
 		};
 
 		loadMap();
 		lockEdit(true);
-		voyagesMap.postDraw = function() {
-            for (var i = 0; i < toolData.links.length; ++i) {
-                toolData.links[i].polyLine.bringToFront();
-            }
-		};
 		
 		function deleteAllMarkers() {
 			if (!confirm('Confirm deletion of ALL nodes and links? This operation cannot be undone!')) return;
@@ -366,7 +366,7 @@
 		voyagesMap._map.on('click', function(e) {
 			var tool = getSelectedTool();
 			if (tool == 'coord') {
-				addRouteNode(e.latLng, true);
+				addRouteNode(e.latlng, true);
 			}
 		});
 		
@@ -489,6 +489,7 @@
 		}
 
 		function addRouteNode(latLng, canUndo) {
+			if (!latLng) return;
 			var index = network.routeNodes.length;
 			network.routeNodes.push(latLng);
 			var marker = addMarker(index);

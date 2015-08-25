@@ -1279,7 +1279,8 @@ class VoyageManager(models.Manager):
         return super(VoyageManager, self).get_query_set().select_related(
             'voyage_itinerary__principal_place_of_slave_purchase__region__broad_region',
             'voyage_itinerary__principal_port_of_slave_dis__region__broad_region',
-            'voyage_slaves_numbers')
+            'voyage_slaves_numbers',
+            'voyage_dates')
 
 
 class Voyage(models.Model):

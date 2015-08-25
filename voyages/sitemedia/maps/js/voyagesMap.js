@@ -186,6 +186,9 @@ var voyagesMap = {
 		}
 		this._graphics = [ ];
 		this.__cache = { };
+		var noOp =function() {};
+		this._setDrawMethod(noOp);
+		this.postDraw = noOp;
 	},
 
 	/*!
@@ -495,9 +498,8 @@ var voyagesMap = {
             	self.postDraw();
             }
 		};
-		this.draw = generateClusterFlow;
+		this._setDrawMethod(generateClusterFlow)
 		this.draw();
-		this._map.on('zoomend', this.draw);
 		return this;
 	},
 
@@ -857,7 +859,17 @@ var voyagesMap = {
 		return result;
 	},
 
+	_setDrawMethod: function(fn) {
+		if (this.draw) {
+			this._map.off('zoomend', this.draw);
+		}
+		this.draw = fn;
+		this._map.on('zoomend', fn);
+	},
+
 	_smoothPolyline: function(points) {
+		return points;
+		/*
 		var coords = [ ];
 		for (var i = 0; i < points.length; ++i) {
 			coords.push(points[i].lng);
@@ -870,6 +882,7 @@ var voyagesMap = {
 			result.push(new L.LatLng(smooth[k + 1], smooth[k]));
 		}
 		return result;
+		*/
 	},
 
 	/*! A method that computes the total network flow.

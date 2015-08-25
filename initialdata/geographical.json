@@ -575,11 +575,11 @@
     "model": "voyage.region", 
     "fields": {
         "show_on_main_map": true, 
-        "region": "Dutch Guianas", 
+        "region": "Other Dutch Caribbean",
         "value": 32200, 
         "broad_region": 4, 
-        "longitude": "-56.0700000", 
-        "latitude": "5.2700000", 
+        "longitude": "-55.16667",
+        "latitude": "5.83333",
         "show_on_map": true
     }
 },
@@ -1059,9 +1059,9 @@
         "region": "Other North America", 
         "value": 21900, 
         "broad_region": 2, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
-        "show_on_map": false
+        "longitude": "-78.444029",
+        "latitude": "33.875649",
+        "show_on_map": true
     }
 },
 {
@@ -1098,9 +1098,9 @@
         "region": "Other British Caribbean", 
         "value": 35500, 
         "broad_region": 4, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
-        "show_on_map": false
+        "longitude": "-76.8",
+        "latitude": "18",
+        "show_on_map": true
     }
 },
 {
@@ -1111,9 +1111,9 @@
         "region": "Other French Caribbean", 
         "value": 36500, 
         "broad_region": 4, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
-        "show_on_map": false
+        "longitude": "-72.20417",
+        "latitude": "19.75778",
+        "show_on_map": true
     }
 },
 {
@@ -1150,9 +1150,9 @@
         "region": "Other Brazil", 
         "value": 50500, 
         "broad_region": 6, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
-        "show_on_map": false
+        "longitude": "-39.75489",
+        "latitude": "-18.864582",
+        "show_on_map": true
     }
 },
 {
@@ -1252,11 +1252,11 @@
     "fields": {
         "show_on_main_map": true, 
         "region": "Other Spanish Caribbean", 
-        "value": 31400, 
-        "broad_region": 4, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
-        "show_on_map": false
+        "value": 31400,
+        "broad_region": 4,
+        "longitude": "-82.36417",
+        "latitude": "23.13194",
+        "show_on_map": true
     }
 },
 {
