@@ -1188,8 +1188,8 @@ def search(request):
                 # Include extra dict if exists
                 timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
 
-        elif submitVal == 'tab_maps':
-            tab = 'maps'
+        elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
+            tab = submitVal[4:]
             frame_from_year = int(request.POST.get('frame_from_year'))
             frame_to_year = int(request.POST.get('frame_to_year'))
             map_year = get_map_year(frame_from_year, frame_to_year)
@@ -1198,9 +1198,11 @@ def search(request):
             map_flows = {}
 
             def add_port(place):
-                if place is not None:
+                result = place is not None and place.show_on_voyage_map and \
+                    place.region.show_on_map and place.region.broad_region.show_on_map
+                if result:
                     map_ports[place.place] = (place.latitude, place.longitude, place.region, place.region.broad_region)
-                return place is not None
+                return result
 
             def add_flow(source, destination, embarked, disembarked):
                 result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
@@ -1223,9 +1225,9 @@ def search(request):
                 disembarked = numbers.imp_total_num_slaves_disembarked
                 source = itinerary.imp_principal_place_of_slave_purchase
                 destination = itinerary.imp_principal_port_slave_dis
-                if source is None:
+                if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
                     source = Place()
-                    source.place = 'Missing source'
+                    source.place = _('Missing source')
                     source.latitude = 0.05
                     source.longitude = 9.34
                     source.region = Region()
@@ -1250,6 +1252,33 @@ def search(request):
                               'map_ports': map_ports,
                               'map_flows': map_flows
                           }, content_type='text/javascript')
+        elif submitVal == 'animation_ajax':
+            all_voyages = VoyageManager.cache()
+            result = []
+            for pk in results.values_list('pk', flat=True).load_all():
+                voyage = all_voyages[int(pk)]
+                itinerary = voyage.voyage_itinerary
+                numbers = voyage.voyage_slaves_numbers
+                embarked = numbers.imp_total_num_slaves_embarked
+                disembarked = numbers.imp_total_num_slaves_disembarked
+                source = itinerary.imp_principal_place_of_slave_purchase
+                destination = itinerary.imp_principal_port_slave_dis
+                dates = voyage.voyage_dates
+                year = dates.get_date_year(dates.voyage_began)
+                if source is not None and destination is not None and source.show_on_voyage_map and \
+                        destination.show_on_voyage_map and year is not None and \
+                        embarked is not None and embarked > 0 and disembarked is not None:
+                    result.append('{ "voyage_id": ' + str(pk) +
+                                  ', "source_name": "' + _(source.place) +
+                                  '", "source_lat": ' + str(source.latitude) +
+                                  ', "source_lng": ' + str(source.longitude) +
+                                  ', "destination_name": "' + _(destination.place) +
+                                  '", "destination_lat": ' + str(destination.latitude) +
+                                  ', "destination_lng": ' + str(destination.longitude) +
+                                  ', "embarked": ' + str(embarked) +
+                                  ', "disembarked": ' + str(disembarked) +
+                                  ', "year": ' + str(year) + " }")
+            return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:

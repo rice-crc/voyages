@@ -145,6 +145,9 @@ INSTALLED_APPS = (
 I18N_HELPER_DEBUG = False
 I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
 
+# Indicates whether the map path flows should include paths with missing source.
+MAP_MISSING_SOURCE_ENABLED = True
+
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
 LANGUAGE_CODE='en'
