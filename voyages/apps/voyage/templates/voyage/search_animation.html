@@ -8,71 +8,165 @@
 <div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
     <h1>{% trans 'Loading map voyages...' %}</h1>
 </div>
+<div id="timeControls" style="position:absolute; left:50%; top:50px; transform: translate(-50%, 0); display:none;">
+    <h1 id="yearLabel"></h1>
+    <div class="control" id="slider" style="width: 200px;"></div>
+    <button type="button" id="pauseBtn">{% trans 'Pause' %}</button>
+    <button type="button" id="playBtn" style="display:none;">{% trans 'Play' %}</button>
+</div>
+<div id="tooltip" style="position:absolute; foreground: white; font-size: large; left:50%; top:100%; transform: translate(-50%, -150%); display:none; background: rgba(0, 0, 0, 0.6);">
+</div>
 <script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
 <script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
 <script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
     voyagesMap.init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes, links);
     // SVG + leaflet integration.
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
-    svg.attr("width", 10000).attr("height", 5000);
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-    g.append("text")
-        .attr("class", "yearLabel")
-        .attr("x", 0)
-        .attr("y", 0)
-        .style("text-anchor", "end")
+    // Set SVG size and position within map.
+    function positionSvg() {
+        var bounds = map.getBounds();
+        var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
+        var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+        svg.attr("width", bottomRight.x - topLeft.x)
+           .attr("height", bottomRight.y - topLeft.y)
+           .style("left", topLeft.x + "px")
+           .style("top", topLeft.y + "px");
+        g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
+        if (isPaused) {
+            // TODO: reposition existing items from the animation.
+            g.selectAll(".voyageCircle").each(function() {
+                var latLng = $(this).data("latLng");
+                if (latLng) {
+                    var point = map.latLngToLayerPoint(latLng);
+                    d3.select(this).attr("transform", "translate(" + point.x + "," + point.y + ")");
+                }
+            });
+        }
+    }
+    map.on("zoomend", positionSvg);
+
+    var tooltip = $("#tooltip");
+
+    var animationIndex = 0;
+    var isPaused = false;
+    var pendingTransitions = 0;
+    var years = [];
+    var yearStep = function() {};
 
     function animation(data) {
+        $("#timeControls").show();
         // Sort by year, break ties by id.
-        var years = d3.nest()
+        years = d3.nest()
             .key(function(d) { return d.year; })
             .sortKeys(d3.ascending)
             .sortValues(function(a, b) { return a.voyage_id - b.voyage_id; })
             .entries(data);
-        var i = 0;
-        var yearStep = function() {
-            var year = years[i].key;
-            var yearData = years[i].values;
-            g.selectAll(".yearLabel")
-                .text(year);
+        $( "#slider" ).slider({
+            value: 0,
+            min: 0,
+            max: years.length - 1,
+            step: 1,
+            slide: function( event, ui ) {
+                changePausedState(true);
+                g.selectAll(".voyageCircle").transition().duration(0);
+                g.selectAll(".voyageCircle").remove();
+                animationIndex = ui.value;
+                changePausedState(false);
+                yearStep();
+            }
+        });
+        yearStep = function() {
+            if (animationIndex >= years.length || animationIndex < 0 || isPaused) return;
+            $( "#slider" ).slider('value', animationIndex);
+            positionSvg();
+            var year = years[animationIndex].key;
+            var yearData = years[animationIndex].values;
+            $("#yearLabel").text(year);
             var counter = 0;
-            g.selectAll(".voyageCircle")
+            var selection = g.selectAll(".voyageCircle")
                 .data(yearData)
                 .enter()
                 .append("circle")
                 .classed("voyageCircle", true)
                 .attr("r", 5)
                 .style("fill", "red")
-                .transition()
-                .duration(2000)
-                .attrTween("transform", tween)
-                .each("end", function() {
-                    d3.select(this).remove();
-                });
-            if (++i < years.length) {
-                window.setTimeout(yearStep, 3000);
-            }
+                .attr("T", 0)
+                .on("mouseover", function() {
+                    var d = this.__data__;
+                    tooltip.html("{% trans 'Voyage id' %}: " + d.voyage_id + "<br /> {% trans 'Source port' %}: " +
+                        d.source_name + "<br /> {% trans 'Destination port' %}: " +
+                        d.destination_name);
+                    tooltip.show();
+                })
+                .on("mouseout", function() { tooltip.hide(); });
+            applyTransition(selection, 0);
         };
-
         yearStep();
     }
 
-    function tween(d, i, a) {
-        var interpolate = d3.geo.interpolate([d.source_lat, d.source_lng], [d.destination_lat, d.destination_lng]);
+    function applyTransition(selection, startTime) {
+        if (animationIndex >= years.length || animationIndex < 0 || isPaused) return;
+        var duration = 1500 * (1 - startTime);
+        var yearData = years[animationIndex].values;
+        pendingTransitions = 0;
+        selection.transition()
+            .duration(duration)
+            .ease("linear")
+            .attr("T", 1)
+            .attrTween("transform", function(d, i, a) {
+                return tween(d, i, a, yearData.length, startTime, this);
+            })
+            .each("start", function() {
+                ++pendingTransitions;
+            })
+            .each("end", function() {
+                --pendingTransitions;
+                d3.select(this).remove();
+            });
+    }
+
+    function changePausedState(state) {
+        isPaused = state;
+        if (isPaused) {
+            $("#pauseBtn").hide();
+            $("#playBtn").show();
+        } else {
+            $("#pauseBtn").show();
+            $("#playBtn").hide();
+        }
+    }
+
+    function tick() {
+        if (pendingTransitions == 0 && !isPaused) {
+            if (++animationIndex < years.length) {
+                yearStep();
+            }
+        }
+    }
+
+    function tween(d, i, a, count, startTime, dom) {
         return function(t) {
-            var x = i / 5;
+            startTime = parseFloat(startTime);
+            t = startTime + t * (1 - startTime);
+            var x = i / (2 * count);
             if (t > x) {
                 t = (t - x)/(1 - x);
             } else {
                 t = 0;
             }
-            var latlng = interpolate(t);
-            var point = map.latLngToLayerPoint(new L.LatLng(latlng[0], latlng[1]));
+            var s = 1 - t
+            var lat = t * d.destination_lat + s * d.source_lat;
+            var lng = t * d.destination_lng + s * d.source_lng;
+            var latLng = new L.LatLng(lat, lng);
+            $(dom).data("latLng", latLng);
+            var point = map.latLngToLayerPoint(latLng);
             return "translate(" + point.x + "," + point.y + ")";
         };
     }
@@ -108,5 +202,20 @@
              },
              complete: onCompleted
         });
+        $("#pauseBtn").click(function(e) {
+            changePausedState(true);
+            g.selectAll(".voyageCircle").transition().duration(0);
+            e.preventDefault();
+        });
+        $("#playBtn").click(function(e) {
+            changePausedState(false);
+            var selection = g.selectAll(".voyageCircle");
+            if (selection) {
+                var startTime = selection.attr("T");
+                applyTransition(selection, startTime);
+            }
+            e.preventDefault();
+        });
+        window.setInterval(tick, 1000);
     });
 </script>
