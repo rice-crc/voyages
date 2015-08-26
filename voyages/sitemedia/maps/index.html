@@ -123,7 +123,7 @@
                 <button class="btn btn-primary" title="Recompute flow paths" onclick="reload();">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-primary active" title="Prevent editing when toggled">
+                <button id="lockBtn" class="btn btn-primary active" title="Prevent editing when toggled">
                     <input type="radio" name="tools" value="lock" autocomplete="off">
                     <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                 </button>
@@ -265,7 +265,8 @@
 		var TOOL_DELLINK = "dellink";
 		var TOOL_SPLITLINK = "split";
 
-		var normalIcon = new L.Icon.Default();
+
+		var normalIcon = new L.Icon.Default({ className: 'toolMarkerIcon' });
 		var selectedIcon = new L.icon({
 			iconUrl: '/static/maps/js/images/marker-icon-2x_selected.png',
 			iconSize: normalIcon.iconSize,
@@ -273,7 +274,8 @@
 			popupAnchor: normalIcon.popupAnchor,
 			shadowUrl: '/static/maps/js/images/marker-shadow.png',
 			shadowSize: normalIcon.shadowSize,
-			shadowAnchor: normalIcon.shadowAnchor
+			shadowAnchor: normalIcon.shadowAnchor,
+			className: 'toolMarkerIcon'
 		});
 
 		// A function that yields a sequential id everytime it is called.
@@ -372,6 +374,7 @@
 		
 		function addMarker(k) {
 			var marker = L.marker(network.routeNodes[k], {
+				icon: normalIcon,
 				draggable: true,
 			}).addTo(voyagesMap);
 			marker.id = uid();
@@ -510,8 +513,21 @@
 			}
 		};
 
+		function markerCss(opacity) {
+			return '.toolMarkerIcon { opacity: ' + opacity + '; }';
+		}
+
+		function linkCss(opacity) {
+			return '.link_arrowhead, .link_polyline { opacity: ' + opacity + '; }';
+		}
+
 		function lockEdit(locked) {
 		    toolData.locked = locked;
+		    if (locked) {
+		    	$("#tools > button").removeClass("active");
+		    	$("input:radio[name=tools]").filter('[value=lock]').prop("checked", true);
+		    	$("#lockBtn").addClass("active");
+			}
             for (var i = 0; i < network.routeNodes.length; ++i) {
                 var d = network.routeNodes[i].marker.dragging;
                 if (locked) {
@@ -579,6 +595,15 @@
 			link.nodeEnd.marker.inLinks.remove(link);
 			deleteToolDataLink(link);
 		}
+
+		function refreshLayersOpacity() {
+			var opacity = $( "#showMarkersChecker" ).prop("checked") ? 1 : 0;
+			var style = markerCss(opacity);
+			opacity = $( "#showLinksChecker" ).prop("checked") ? 0.5 : 0;
+			style += "\n" + linkCss(opacity);
+			$('#linkCssClass').text(style);
+			toolChanged();
+		}
         
         function removeMarker(marker, canUndo) {
 			if (canUndo) {
@@ -641,6 +666,20 @@
 			}
 		}
 
+		function toolChanged() {
+			var selected = getSelectedTool();
+			var locked = (selected == "lock");
+			if (locked != toolData.locked) {
+				lockEdit(locked);
+			}
+			var shouldLock = !locked && (!$( "#showMarkersChecker" ).prop("checked") ||
+				(!$( "#showLinksChecker" ).prop("checked") &&
+				(selected == TOOL_ADDLINK || selected == TOOL_DELLINK || selected == TOOL_SPLITLINK)));
+			if (shouldLock) {
+				lockEdit(true);
+			}
+		}
+
         function undo() {
         	if (toolData.undoActions.length > 0) {
         		var action = toolData.undoActions.pop();
@@ -650,7 +689,9 @@
 
 		var cachedFlows = null;
 		var cachedPorts = null;
+
 		$( document ).ready(function() {
+			$('head').append('<style id="linkCssClass" type="text/css">' + markerCss(1.0) + "\n" + linkCss(0.5) + '</style>');
 			adjustSizes();
 		    $( "#uploadNetworkButton" ).click(function(e) {
 		        e.preventDefault();
@@ -669,17 +710,8 @@
                 reader.readAsText(file);
 		    });
 
-		    $( "#showMarkersChecker" ).change(function() {
-		        var opacity = this.checked ? 1 : 0;
-		        $( ".leaflet-marker-icon" ).css('opacity', opacity);
-		        $( ".leaflet-marker-shadow" ).css('opacity', opacity);
-		    });
-
-		    $( "#showLinksChecker" ).change(function() {
-		        var opacity = this.checked ? 1 : 0;
-		        $( ".link_arrowhead" ).css('opacity', opacity);
-		        $( ".link_polyline" ).css('opacity', opacity);
-		    });
+		    $( "#showMarkersChecker" ).change(refreshLayersOpacity);
+		    $( "#showLinksChecker" ).change(refreshLayersOpacity);
 
 			$( "#slider" ).slider({
 				value: 100,
@@ -692,12 +724,7 @@
 				}
 			});
 
-			$( "input:radio[name=tools]" ).change(function() {
-			    var locked = (getSelectedTool() == "lock");
-			    if (locked != toolData.locked) {
-                    lockEdit(locked);
-                }
-			});
+			$( "input:radio[name=tools]" ).change(toolChanged);
 
 			$( document ).keypress(function(e) {
 				if (e.which == 13) {
@@ -728,7 +755,6 @@
                 });
 			});
 		});
-
 </script>
 </body>
 </html>

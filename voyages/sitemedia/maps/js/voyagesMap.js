@@ -180,15 +180,15 @@ var voyagesMap = {
 	 *  Clear all graphics on top of map.
 	 */
 	clear: function() {
-		this.clearNetwork();
+		voyagesMap.clearNetwork();
 		for (var i = 0; i < this._graphics.length; ++i) {
-			this._map.removeLayer(this._graphics[i]);
+			voyagesMap._map.removeLayer(this._graphics[i]);
 		}
-		this._graphics = [ ];
-		this.__cache = { };
-		var noOp =function() {};
-		this._setDrawMethod(noOp);
-		this.postDraw = noOp;
+		voyagesMap._graphics = [ ];
+		voyagesMap.__cache = { };
+		var noOp = function() {};
+		voyagesMap.draw = noOp;
+		voyagesMap.postDraw = noOp;
 	},
 
 	/*!
@@ -248,15 +248,15 @@ var voyagesMap = {
 	 *                      in this map should have a corresponding icon.
 	 */
 	init: function(baseMapId, mapTilePrefix, routeNodes, links, markerIcons) {
-		this.clear();
-		this.loadBaseMap(baseMapId, mapTilePrefix);
+		voyagesMap.clear();
+		voyagesMap.loadBaseMap(baseMapId, mapTilePrefix);
 		var filePrefix = mapTilePrefix + 'js/images/marker-icon-';
-		this._icons = markerIcons || {
+		voyagesMap._icons = markerIcons || {
     		    "port" : L.icon({ iconUrl: filePrefix + 'port.png', iconAnchor: [6, 6] }),
     		    "region" : L.icon({ iconUrl: filePrefix + 'region.png', iconAnchor: [6, 6] }),
     		    "broadregion" : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
             };
-		this._routeNodes = routeNodes;
+		voyagesMap._routeNodes = routeNodes;
 		if (!links || links.length == 0) {
 			// Generate implicit links.
 			links = [ ];
@@ -271,8 +271,10 @@ var voyagesMap = {
 				}
 			}
 		}
-		this._processLinks(links);
-		return this;
+		voyagesMap._processLinks(links);
+		voyagesMap._map.off('zoomend', voyagesMap._runDraw);
+		voyagesMap._map.on('zoomend', voyagesMap._runDraw);
+		return voyagesMap;
 	},
 
 	/*!
@@ -486,20 +488,17 @@ var voyagesMap = {
 					clusterFlow.push(flow);
 				}
 				var network = self._totalNetworkFlow(clusterFlow);
-                self.__cache[zoomLevel] = function() {
-					self.addLayer(clusterGroup);
-					self._networkLayers.push(clusterGroup);
-                    self._internalDraw(network, locations.names());
+                voyagesMap.__cache[zoomLevel] = function() {
+					voyagesMap.addLayer(clusterGroup);
+					voyagesMap._networkLayers.push(clusterGroup);
+                    voyagesMap._internalDraw(network, locations.names());
                 };
 			}
             self.clearNetwork();
-            self.__cache[zoomLevel]();
-            if (self.postDraw) {
-            	self.postDraw();
-            }
+            voyagesMap.__cache[zoomLevel]();
 		};
-		this._setDrawMethod(generateClusterFlow)
-		this.draw();
+		this.draw = generateClusterFlow;
+		this._runDraw();
 		return this;
 	},
 
@@ -667,7 +666,8 @@ var voyagesMap = {
 		};
 		for (var i = 0; i < network.length; ++i) {
 			var flow = network[i];
-			var path = this._smoothPolyline(flow.path);
+			var path = flow.path.slice(0);
+			path = this._smoothPolyline(path);
 			var lWeight = 3.0 + flow.volume * widthScale;
 			var line = polyLineBuilder(path, lWeight);
 			var popup = null;
@@ -859,12 +859,13 @@ var voyagesMap = {
 		return result;
 	},
 
-	_setDrawMethod: function(fn) {
-		if (this.draw) {
-			this._map.off('zoomend', this.draw);
+	_runDraw: function() {
+		if (voyagesMap.draw) {
+			voyagesMap.draw();
 		}
-		this.draw = fn;
-		this._map.on('zoomend', fn);
+		if (voyagesMap.postDraw) {
+			voyagesMap.postDraw();
+		}
 	},
 
 	_smoothPolyline: function(points) {
