@@ -73,9 +73,10 @@ class TranslatedTextField(indexes.SearchField):
     # Regular expression that extracts name and language code from the index declaration.
     re_translated_fieldname = re.compile('(.*)_lang_([a-z]{2})$')
 
-    def __init__(self, **kwargs):
+    def __init__(self, unidecode=True, **kwargs):
         kwargs['faceted'] = True
         self.language_code = None
+        self.unidecode = unidecode
         super(TranslatedTextField, self).__init__(**kwargs)
 
     def set_instance_name(self, instance_name):
@@ -91,8 +92,11 @@ class TranslatedTextField(indexes.SearchField):
         if original is None:
             return None
         with translation.override(self.language_code):
+            translated = _(unicode(original))
+            if not self.unidecode:
+                return translated
             from unidecode import unidecode
-            return unidecode(_(unicode(original)))
+            return unidecode(translated)
 
 class RelatedModelIndexMixin(object):
     def __init__(self, related_model, *args, **kwargs):
@@ -331,6 +335,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Sources
     var_sources = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_sources_plaintext = indexes.CharField(null=True, faceted=True, indexed=True)
     var_short_ref = indexes.MultiValueField()
     var_long_ref = indexes.CharField(null=True)
 
@@ -508,3 +513,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 fr = connection.source.full_ref
             result.append(connection.text_ref + "<>" + fr)
         return result
+
+    def prepare_var_sources_plaintext(self, obj):
+        return ", ".join(self.prepare_var_sources(obj))

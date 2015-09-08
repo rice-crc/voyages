@@ -71,7 +71,7 @@
                 {% for t_key, t_value in k.items %}
                     {% if t_key == "term" %}
                         <td class="glossary-term">
-                            {% with term_value=t_value|trans_log %}
+                            {% with term_value=t_value %}
                                 {% if results %}
                                     {% highlight term_value with query %}
                                 {% else %}
@@ -82,7 +82,7 @@
                     {% endif %}
                     {% if t_key == "description" %}
                         <td class="glossary-description">
-                            {% with description_value=t_value|trans_log %}
+                            {% with description_value=t_value %}
                                 {% if results %}
                                     {% highlight description_value with query %}
                                 {% else %}

@@ -3,48 +3,33 @@ from django.utils.datastructures import SortedDict
 from .models import Glossary, Faq
 from haystack.query import SearchQuerySet
 from haystack.forms import HighlightedSearchForm
+from unidecode import unidecode
 import string
 
-def _sort_glossary(qresult):
+def _sort_glossary(qresult, lang):
     """
     Sort the result into categories and questions from response returned by the backend engine
     """
     glossary_content = []
     letters = []
     letters_found = SortedDict()
+    field = 'glossary_term_lang_' + lang
 
     for i in string.ascii_uppercase:
         letters.append(i)
         letters_found[i] = 0
 
-    if qresult:
+    if len(qresult) > 0:
         # Process results
-        prev_letter = None
-        groupedList = []
-
-        for search_result_obj in qresult:
-            current_item = search_result_obj.get_stored_fields()
-
-            if prev_letter is None:
-                # Update the first letter
-                prev_letter = current_item['glossary_term'][0]
-            else:
-                if prev_letter != current_item['glossary_term'][0]:
-                    # Starts a new group of terms
-                    # Add the previous group to glossary_content
-                    glossary_content.append({'letter': prev_letter, 'terms': groupedList})
-                    letters_found[prev_letter] = 1
-
-                    prev_letter = current_item['glossary_term'][0]
-                    groupedList = []
-
-            # Add the question to the grouped list
-            groupedList.append(
-                {'term': current_item['glossary_term'], 'description': current_item['glossary_description']})
-
-        # Add the last result group
-        letters_found[prev_letter] = 1
-        glossary_content.append({'letter': prev_letter, 'terms': groupedList})
+        from itertools import groupby
+        items = [o.get_stored_fields() for o in qresult]
+        items = sorted(items, key=lambda x: unidecode(x[field]))
+        for k, g in groupby(items, key=lambda x: unidecode(x[field])[0]):
+            letters_found[k] = 1
+            glossary_content.append({'letter': k,
+                                     'terms': [{'term': item[field],
+                                               'description': item['glossary_description_lang_' + lang]}
+                                               for item in g]})
 
     return letters, letters_found, glossary_content
 
@@ -59,6 +44,9 @@ def glossary_page(request):
     """
 
     query = ""
+    lang = request.LANGUAGE_CODE
+    field = 'glossary_term_lang_' + lang
+    results = SearchQuerySet().models(Glossary)
 
     if request.method == 'POST':
         form = HighlightedSearchForm(request.POST)
@@ -66,15 +54,14 @@ def glossary_page(request):
         if form.is_valid():
             # Perform the query
             query = form.cleaned_data['q']
-            results = SearchQuerySet().filter(content=query).models(Glossary).order_by('glossary_term_exact')
+            results = results.filter(content=query)
         else:
             form = HighlightedSearchForm()
-            results = SearchQuerySet().models(Glossary).order_by('glossary_term_exact')
     else:
         form = HighlightedSearchForm()
-        results = SearchQuerySet().models(Glossary).order_by('glossary_term_exact')
+    results = results.order_by(field)
 
-    letters, letters_found, glossary_content = _sort_glossary(results)
+    letters, letters_found, glossary_content = _sort_glossary(results, lang)
 
     try:
         glossary_content = sorted(glossary_content, key=lambda k: k['letter'])
@@ -84,44 +71,31 @@ def glossary_page(request):
     return render(request, 'help/page_glossary.html',
                               {'glossary': glossary_content,
                                'letters': letters, 'form': form,
-                               'letters_found': letters_found, 'results': results,
+                               'letters_found': letters_found,
+                               'results': results,
                                'query': query})
 
 
-def _sort_faq(qresult):
+def _sort_faq(qresult, lang):
     """
     Sort the result into categories and questions from response returned by the backend engine
     """
     faq_list = []
     count = 0
+    category_field = 'faq_category_desc_lang_' + lang
+    question_field = 'faq_question_lang_' + lang
+    answer_field = 'faq_answer_lang_' + lang
 
-    if qresult and len(qresult) > 0:
+    if len(qresult) > 0:
         # Process results
-        prev_obj = None
-        groupedList = []
-
-        for search_result_obj in qresult:
-            current_item = search_result_obj.get_stored_fields()
-            if prev_obj is None:
-                prev_obj = current_item
-            else:
-                if prev_obj['faq_category_desc'] == current_item['faq_category_desc']:
-                # Questions belong to the same category
-                    prev_obj = current_item
-                else:
-                    # Starts a new group of question (different category)
-                    # Add the previous group to faq_list
-                    faq_list.append(
-                        {'qorder': count, 'text': prev_obj['faq_category_desc'], 'questions': groupedList})
-                    count += 1
-                    prev_obj = current_item
-                    groupedList = []
-                    # Add the question to the grouped list
-            groupedList.append({'question': current_item['faq_question'], 'answer': current_item['faq_answer']})
-            # Add the last result group
-        faq_list.append({'qorder': count,
-                         'text': prev_obj['faq_category_desc'],
-                         'questions': groupedList})
+        from itertools import groupby
+        items = [o.get_stored_fields() for o in qresult]
+        for k, g in groupby(items, key=lambda x: unidecode(x[category_field])):
+            questions = [{'question': item[question_field], 'answer': item[answer_field]} for item in g]
+            count += 1
+            faq_list.append({'qorder': count,
+                             'text': k,
+                             'questions': questions})
     return faq_list
 
 
@@ -151,7 +125,7 @@ def get_faqs(request):
         form = HighlightedSearchForm()
         query_result = SearchQuerySet().models(Faq).order_by('faq_category_order', 'faq_question_order')
 
-    faq_list = _sort_faq(query_result)
+    faq_list = _sort_faq(query_result, request.LANGUAGE_CODE)
 
     return render(request, 'help/page_faqs.html',
                               {'form': form, "faq_list": faq_list, 'current_query': current_query})

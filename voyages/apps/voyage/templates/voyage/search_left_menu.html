@@ -410,16 +410,16 @@ function shortenURL(){
 </div>
 
 <div id="dialog" title="Dialog Title" style="display:none;">
-    <h1>URL link has been created</h1>
+    <h1>{% trans 'URL link has been created' %}</h1>
     <hr />
-    <p>To reactivate the current query in the future, copy the following URL and then paste it into the address bar:</p>
+    <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
     <textarea contenteditable="true" id="url_string" style="width:500px;"></textarea>
 </div>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
-    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "Link created" });
+    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
     function createLink() {
       $.post('permalink', $('form').serialize(), function(link) {
         var urlTextArea = $('#url_string');

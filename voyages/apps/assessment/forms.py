@@ -1,5 +1,5 @@
 from django import forms
-from voyages.apps.common.filters import trans_log as _
+from django.utils.translation import ugettext_lazy as _
 from .models import *
 import globals
 

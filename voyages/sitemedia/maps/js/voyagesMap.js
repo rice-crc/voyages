@@ -64,7 +64,7 @@ function Flow(source, destination, volume, netVolume, initial, terminal, path) {
  *  identifying what they are.
  */
 function LocationIndex() {
-	this.locationType = 'port';
+	this.locationType = PORT_LABEL;
 
 	this.add = function(loc, label) {
 		var key = voyagesMap._latLngEncode(loc);
@@ -140,6 +140,10 @@ var _mapBoundaries = new L.LatLngBounds(
 // Helpful definitions when using Django templates.
 var None = null;
 var Nothing = null;
+
+var PORT_LABEL = gettext('port');
+var REGION_LABEL = gettext('region');
+var BROAD_REGION_LABEL = gettext('broad region');
 
 /*!
  *  A singleton that organizes all interactive
@@ -252,9 +256,9 @@ var voyagesMap = {
 		voyagesMap.loadBaseMap(baseMapId, mapTilePrefix);
 		var filePrefix = mapTilePrefix + 'js/images/marker-icon-';
 		voyagesMap._icons = markerIcons || {
-    		    "port" : L.icon({ iconUrl: filePrefix + 'port.png', iconAnchor: [6, 6] }),
-    		    "region" : L.icon({ iconUrl: filePrefix + 'region.png', iconAnchor: [6, 6] }),
-    		    "broadregion" : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
+    		    'port' : L.icon({ iconUrl: filePrefix + 'port.png', iconAnchor: [6, 6] }),
+    		    'region' : L.icon({ iconUrl: filePrefix + 'region.png', iconAnchor: [6, 6] }),
+    		    'broadregion' : L.icon({ iconUrl: filePrefix + 'broadregion.png', iconAnchor: [6, 6] }),
             };
 		voyagesMap._routeNodes = routeNodes;
 		if (!links || links.length == 0) {
@@ -344,7 +348,7 @@ var voyagesMap = {
 	setNetworkFlow: function(ports, flows) {
 		this.clearNetwork();
 		var cache = { };
-		var locationTypes = [ 'broad region', 'region', 'port' ];
+		var locationTypes = [ BROAD_REGION_LABEL, REGION_LABEL, PORT_LABEL ];
 		var self = this;
 		var generateClusterFlow = function() {
 			var zoomLevel = self._map.getZoom();
@@ -402,7 +406,7 @@ var voyagesMap = {
                 	}
                 	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
                 	 	'<table class="map_node_aggregate_table">' +
-                		'<thead><tr><th rowspan="2">' + gettext(locations.locationType).toUpperCase() +
+                		'<thead><tr><th rowspan="2">' + locations.locationType.toUpperCase() +
                 		'</th><th colspan="2" class="inFlow">' + gettext('Inbound') +
                 		'</th><th colspan="2" class="outFlow">' + gettext('Outbound') + '</th></tr>' +
                 		'<tr><th class="inFlow">' + gettext('Embarked') + '</th><th class="inFlow">' +

@@ -6,7 +6,7 @@ import lxml.html
 from django.db.models import Max, Min
 import re
 from datetime import date
-from voyages.apps.common.filters import trans_log as _
+from django.utils.translation import ugettext_lazy as _
 
 session_expire_minutes = 60
 
@@ -186,7 +186,9 @@ def id_func(value, voyageid=None):
 def trans_adapter(func=id_func):
     def adapted(value, voyageid=None):
         result = func(value, voyageid)
-        return _(result)
+        if isinstance(result, basestring):
+            return _(result)
+        return result;
     return adapted
 
 def default_prettifier(varname):
@@ -197,8 +199,12 @@ def default_prettifier(varname):
     :param varname: the variable name.
     :return: a function that receives value, voyageid and outputs a converted value.
     """
-    if 'nation' in varname or 'port' in varname or 'place' in varname or 'region' in varname or\
-                    'outcome' in varname or 'resistance' in varname:
+    if 'idnum' not in varname and ('nation' in varname or
+                                   'port' in varname or
+                                   'place' in varname or
+                                   'region' in varname or
+                                   'outcome' in varname or
+                                   'resistance' in varname):
         return trans_adapter()
     return id_func
 

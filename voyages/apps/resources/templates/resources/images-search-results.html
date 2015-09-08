@@ -9,7 +9,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
 {% endblock %}
 
-{% block title %}Images Search{% endblock %}
+{% block title %}{% trans 'Images Search' %}{% endblock %}
 
 {% block content %}
 
@@ -22,15 +22,15 @@
     {% if not query %}
         {% if enabled_categories|length == 1 %}
             {% for i in enabled_categories %}
-                <div class="images-query-title">Images of {{ i }}</div>
+                <div class="images-query-title">{% trans 'Images of ' %}{{ i }}</div>
             {% endfor %}
         {% elif enabled_categories|length == 4 %}
-            <div class="images-query-title">All images</div>
+            <div class="images-query-title">{% trans 'All images' %}</div>
         {% else %}
-            <div class="images-query-title">Search results</div>
+            <div class="images-query-title">{% trans 'Search results' %}</div>
         {% endif %}
     {% else %}
-        <div class="images-query-title">Search results</div>
+        <div class="images-query-title">{% trans 'Search results' %}</div>
     {% endif %}
 
     <div class="image-navigation">
@@ -38,10 +38,10 @@
         <tbody>
             <tr>
                 <td style="padding: 0px 10px 0px 0px;">
-                    <a href="{% url 'resources:images' %}">Back to start</a>
+                    <a href="{% url 'resources:images' %}">{% trans 'Back to start' %}</a>
                 </td>
                 <td style="padding: 0px">
-                    {{ results|length }} images
+                    {{ results|length }} {% trans 'images' %}
                 </td>
             </tr>
         </tbody>
@@ -56,17 +56,17 @@
                 {% endifequal %}
                 <td class="gallery-image">
                     <a href="{% url 'resources:images-search-detail' forloop.counter %}">
-                        {% thumbnail result.file "100x100" as im %}
-                            <div class="gallery-image">
-                            <img src="{{ im.url }}" width="100" height="100"/>
+                        <div class="gallery-image">
+                            {% thumbnail result.file "100x100" as im %}
+                                <img src="{{ im.url }}" width="100" height="100" />
                             {% empty %}
-                                <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100">
-                            </div>
-                        {% endthumbnail %}
+                                <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100" />
+                            {% endthumbnail %}
+                        </div>
                     </a>
                     <div class="gallery-image-text">
                         <div class="gallery-image-label">
-                            {{ result.title }}
+                            {{ result.title|trans_log }}
                         </div>
                         {% if result.date %}
                             <div class="gallery-image-description">

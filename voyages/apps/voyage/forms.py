@@ -3,7 +3,7 @@ import autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
-from voyages.apps.common.filters import trans_log as _
+from django.utils.translation import ugettext_lazy as _
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""

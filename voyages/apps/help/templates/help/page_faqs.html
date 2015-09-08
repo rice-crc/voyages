@@ -31,7 +31,7 @@
 		<ul class="faq-toc">
 			{% for category_item in faq_list %}
 			<li class="faq-category">
-				<a href="#faq{{ category_item.qorder }}">{{ category_item.text|trans_log }}</a>
+				<a href="#faq{{ category_item.qorder }}">{{ category_item.text }}</a>
 			</li>
 			{% endfor %}
 		</ul>
@@ -40,12 +40,12 @@
 		{% for category_item in faq_list %}
 		<a name="faq{{ category_item.qorder }}" id="faq{{ category_item.qorder }}"></a>
 		<div class="faq-category">
-			{{ category_item.text|trans_log }}
+			{{ category_item.text }}
 		</div>
 		<div class="faq">
 			{% for q_item in category_item.questions %}
 			<div class="faq-question">
-				{% with the_question=q_item.question|trans_log %}
+				{% with the_question=q_item.question %}
 					{% if current_query %}
 						{% highlight the_question with current_query %}
 					{% else %}
@@ -53,7 +53,7 @@
 					{% endif %}
 				{% endwith %}
 			</div>
-				{% with the_answer=q_item.answer|trans_log %}
+				{% with the_answer=q_item.answer %}
 					{% if current_query %}
 						{% highlight the_answer with current_query %}
 					{% else %}

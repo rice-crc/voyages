@@ -1,7 +1,9 @@
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django import template
+from django.template.loader import add_to_builtins
 from django.utils.translation import ugettext_lazy as _
+
 import logging
 import re
 
@@ -31,10 +33,11 @@ def trans_log(val):
     log = False
     if result == val:
         log = True
-        result += '[T]'
-    elif settings.I18N_HELPER_DEBUG:
+    if settings.I18N_HELPER_DEBUG:
         log = True
         result = result[:-7] + '[T]</div>'
     if log:
         logger.info(val.replace('\n', ' ').replace('\r', ''))
     return mark_safe(result)
+
+add_to_builtins('voyages.apps.common.filters')

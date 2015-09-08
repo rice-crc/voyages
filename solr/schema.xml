@@ -381,7 +381,7 @@
 
     <field name="var_imp_region_voyage_begin_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_second_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_third_region_slave_emb_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_registered_place_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -439,11 +439,15 @@
 
     <field name="var_rig_of_vessel_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_third_place_slave_purchase_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_rig_of_vessel" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_principal_region_of_slave_purchase_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_landing_region_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_sources_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -577,7 +581,7 @@
 
     <field name="var_first_region_slave_emb_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_third_region_slave_emb_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="var_second_place_slave_purchase" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_principal_region_of_slave_purchase_idnum" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -635,7 +639,7 @@
 
     <field name="var_imp_principal_port_slave_dis_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="var_third_place_slave_purchase_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="var_sources_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_region_slave_emb_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
@@ -755,19 +759,59 @@
 
     <field name="imgtext" type="ngram" indexed="true" stored="true" multiValued="false" />
 
+    <field name="faq_answer_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_answer_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_question_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_answer_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_category_desc_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_category_desc_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_question_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_category_desc" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_answer_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
     <field name="faq_question_order" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="faq_category_order" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="faq_category_desc" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="faq_question_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_category_desc_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_category_desc_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="faq_question_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="faq_question" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="faq_answer" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="glossary_term" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="glossary_term_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_description_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_term_lang_en_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_description_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="glossary_term_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_term_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_description_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_term" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_term_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="glossary_description_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="glossary_description" type="text_en" indexed="true" stored="true" multiValued="false" />
 

@@ -358,7 +358,7 @@ var events = null;
         .enter()
         .append('g');
     var columnLength = Math.ceil(allEvents.length / 2);
-    var xCoord = function(d) { return margin.left + Math.floor((d.counter - 1) / columnLength) * 390; };
+    var xCoord = function(d) { return Math.floor((d.counter - 1) / columnLength) * 390; };
     var yCoord = function(d) { return margin.top / 3 + ((d.counter - 1) % columnLength) * 25; };
     historicalEvents.selectAll('g')
         .append('rect')
@@ -395,11 +395,11 @@ var events = null;
         .append('text')
         .attr("width", boxSize)
         .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
-        .attr('x', function(d) { return xCoord(d) + 4 * boxSize; })
+        .attr('x', function(d) { return xCoord(d) + 3.5 * boxSize; })
         .attr("dominant-baseline", "central")
         .text(function(d) { return d.label; })
         .style('cursor', 'default')
-        .style('font-size', '10pt')
+        .style('font-size', '9pt')
         .style('fill', 'black');
 {% endif %}
 
