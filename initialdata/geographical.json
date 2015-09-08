@@ -3,10 +3,10 @@
     "pk": 1, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "0.054033", 
+        "latitude": "0.0540330", 
         "show_on_map": true, 
         "value": 60000, 
-        "longitude": "9.343897", 
+        "longitude": "9.3438970", 
         "broad_region": "Africa"
     }
 },
@@ -14,21 +14,21 @@
     "pk": 2, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "33.875649", 
+        "latitude": "33.8756490", 
         "show_on_map": true, 
         "value": 20000, 
-        "longitude": "-78.444029", 
-        "broad_region": "North America"
+        "longitude": "-78.4440290", 
+        "broad_region": "Mainland North America"
     }
 },
 {
     "pk": 3, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "14.501708", 
+        "latitude": "13.2127390", 
         "show_on_map": true, 
         "value": 40000, 
-        "longitude": "-83.572635", 
+        "longitude": "-83.5726350", 
         "broad_region": "Spanish Circum-Caribbean"
     }
 },
@@ -36,10 +36,10 @@
     "pk": 4, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "14.501708", 
+        "latitude": "14.5017080", 
         "show_on_map": true, 
         "value": 30000, 
-        "longitude": "-66.237461", 
+        "longitude": "-66.2374610", 
         "broad_region": "Caribbean"
     }
 },
@@ -47,10 +47,10 @@
     "pk": 5, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "37.213255", 
+        "latitude": "37.2132550", 
         "show_on_map": true, 
         "value": 10000, 
-        "longitude": "-8.561913", 
+        "longitude": "-8.5619130", 
         "broad_region": "Europe"
     }
 },
@@ -58,10 +58,10 @@
     "pk": 6, 
     "model": "voyage.broadregion", 
     "fields": {
-        "latitude": "-18.864582", 
+        "latitude": "-18.8645820", 
         "show_on_map": true, 
         "value": 50000, 
-        "longitude": "-39.75489", 
+        "longitude": "-39.7548900", 
         "broad_region": "Brazil"
     }
 },
@@ -84,8 +84,8 @@
         "region": "Spain", 
         "value": 10100, 
         "broad_region": 5, 
-        "longitude": "-4.2175650", 
-        "latitude": "40.3558440", 
+        "longitude": "-6.8628570", 
+        "latitude": "37.2007820", 
         "show_on_map": true
     }
 },
@@ -97,8 +97,8 @@
         "region": "Portugal", 
         "value": 10200, 
         "broad_region": 5, 
-        "longitude": "-8.4143000", 
-        "latitude": "39.5576120", 
+        "longitude": "-8.8385450", 
+        "latitude": "40.0467450", 
         "show_on_map": true
     }
 },
@@ -124,7 +124,7 @@
         "value": 10700, 
         "broad_region": 5, 
         "longitude": "1.7068500", 
-        "latitude": "46.3497050", 
+        "latitude": "45.7457240", 
         "show_on_map": true
     }
 },
@@ -228,7 +228,7 @@
         "value": 31300, 
         "broad_region": 4, 
         "longitude": "-79.1276860", 
-        "latitude": "21.9477600", 
+        "latitude": "23.1156130", 
         "show_on_map": true
     }
 },
@@ -422,8 +422,8 @@
         "region": "British Guiana", 
         "value": 35300, 
         "broad_region": 4, 
-        "longitude": "-59.9182040", 
-        "latitude": "7.1865660", 
+        "longitude": "-57.9589370", 
+        "latitude": "7.6155310", 
         "show_on_map": true
     }
 },
@@ -461,8 +461,8 @@
         "region": "French Guiana", 
         "value": 36300, 
         "broad_region": 4, 
-        "longitude": "-53.4845690", 
-        "latitude": "4.7219400", 
+        "longitude": "-53.6122390", 
+        "latitude": "5.8612940", 
         "show_on_map": true
     }
 },
@@ -500,8 +500,8 @@
         "region": "Amazonia", 
         "value": 50100, 
         "broad_region": 6, 
-        "longitude": "-46.5800000", 
-        "latitude": "-1.6900000", 
+        "longitude": "-43.2354490", 
+        "latitude": "-0.9332300", 
         "show_on_map": true
     }
 },
@@ -539,8 +539,8 @@
         "region": "Southeast Brazil", 
         "value": 50400, 
         "broad_region": 6, 
-        "longitude": "-47.6218120", 
-        "latitude": "-22.3475640", 
+        "longitude": "-42.2560210", 
+        "latitude": "-23.4889400", 
         "show_on_map": true
     }
 },
@@ -575,11 +575,11 @@
     "model": "voyage.region", 
     "fields": {
         "show_on_main_map": true, 
-        "region": "Other Dutch Caribbean",
+        "region": "Dutch Guianas", 
         "value": 32200, 
         "broad_region": 4, 
-        "longitude": "-55.16667",
-        "latitude": "5.83333",
+        "longitude": "-55.2511240", 
+        "latitude": "6.6752480", 
         "show_on_map": true
     }
 },
@@ -591,8 +591,8 @@
         "region": "Dutch Caribbean", 
         "value": 32100, 
         "broad_region": 4, 
-        "longitude": "-69.3900000", 
-        "latitude": "12.5900000", 
+        "longitude": "-65.7813460", 
+        "latitude": "14.7518460", 
         "show_on_map": true
     }
 },
@@ -708,8 +708,8 @@
         "region": "Florida", 
         "value": 21500, 
         "broad_region": 2, 
-        "longitude": "-81.5600000", 
-        "latitude": "27.5300000", 
+        "longitude": "-80.5223960", 
+        "latitude": "28.0853680", 
         "show_on_map": true
     }
 },
@@ -760,8 +760,8 @@
         "region": "Senegambia and offshore Atlantic", 
         "value": 60100, 
         "broad_region": 1, 
-        "longitude": "18.3543890", 
-        "latitude": "14.4810280", 
+        "longitude": "-17.9300000", 
+        "latitude": "14.1400000", 
         "show_on_map": true
     }
 },
@@ -773,8 +773,8 @@
         "region": "Windward Coast", 
         "value": 60300, 
         "broad_region": 1, 
-        "longitude": "-8.8911320", 
-        "latitude": "3.7700520", 
+        "longitude": "-8.9200000", 
+        "latitude": "4.0000000", 
         "show_on_map": true
     }
 },
@@ -786,8 +786,8 @@
         "region": "Sierra Leone", 
         "value": 60200, 
         "broad_region": 1, 
-        "longitude": "-14.3183780", 
-        "latitude": "7.8215500", 
+        "longitude": "-13.6700000", 
+        "latitude": "8.1000000", 
         "show_on_map": true
     }
 },
@@ -799,8 +799,8 @@
         "region": "Gold Coast", 
         "value": 60400, 
         "broad_region": 1, 
-        "longitude": "-1.6841010", 
-        "latitude": "4.0002350", 
+        "longitude": "-1.9300000", 
+        "latitude": "3.8600000", 
         "show_on_map": true
     }
 },
@@ -812,8 +812,8 @@
         "region": "Bight of Benin", 
         "value": 60500, 
         "broad_region": 1, 
-        "longitude": "3.1169250", 
-        "latitude": "4.8764970", 
+        "longitude": "2.3300000", 
+        "latitude": "5.2700000", 
         "show_on_map": true
     }
 },
@@ -825,8 +825,8 @@
         "region": "Bight of Biafra and Gulf of Guinea islands", 
         "value": 60600, 
         "broad_region": 1, 
-        "longitude": "9.0934870", 
-        "latitude": "3.6933110", 
+        "longitude": "8.3100000", 
+        "latitude": "4.1700000", 
         "show_on_map": true
     }
 },
@@ -838,8 +838,8 @@
         "region": "West Central Africa and St. Helena", 
         "value": 60700, 
         "broad_region": 1, 
-        "longitude": "10.9227110", 
-        "latitude": "-8.3973170", 
+        "longitude": "11.1900000", 
+        "latitude": "-7.7100000", 
         "show_on_map": true
     }
 },
@@ -851,8 +851,8 @@
         "region": "Southeast Africa and Indian Ocean islands", 
         "value": 60800, 
         "broad_region": 1, 
-        "longitude": "42.0799370", 
-        "latitude": "-27.7914010", 
+        "longitude": "39.5100000", 
+        "latitude": "-17.1400000", 
         "show_on_map": true
     }
 },
@@ -1059,9 +1059,9 @@
         "region": "Other North America", 
         "value": 21900, 
         "broad_region": 2, 
-        "longitude": "-78.444029",
-        "latitude": "33.875649",
-        "show_on_map": true
+        "longitude": "-78.4440290", 
+        "latitude": "33.8756490", 
+        "show_on_map": false
     }
 },
 {
@@ -1072,8 +1072,8 @@
         "region": "Other Dutch Americas", 
         "value": 32300, 
         "broad_region": 4, 
-        "longitude": "0E-7", 
-        "latitude": "0E-7", 
+        "longitude": "-55.1666700", 
+        "latitude": "5.8333300", 
         "show_on_map": false
     }
 },
@@ -1098,9 +1098,9 @@
         "region": "Other British Caribbean", 
         "value": 35500, 
         "broad_region": 4, 
-        "longitude": "-76.8",
-        "latitude": "18",
-        "show_on_map": true
+        "longitude": "-76.8000000", 
+        "latitude": "18.0000000", 
+        "show_on_map": false
     }
 },
 {
@@ -1111,9 +1111,9 @@
         "region": "Other French Caribbean", 
         "value": 36500, 
         "broad_region": 4, 
-        "longitude": "-72.20417",
-        "latitude": "19.75778",
-        "show_on_map": true
+        "longitude": "-72.2041700", 
+        "latitude": "19.7577800", 
+        "show_on_map": false
     }
 },
 {
@@ -1150,8 +1150,8 @@
         "region": "Other Brazil", 
         "value": 50500, 
         "broad_region": 6, 
-        "longitude": "-39.75489",
-        "latitude": "-18.864582",
+        "longitude": "-39.7548900", 
+        "latitude": "-18.8645820", 
         "show_on_map": true
     }
 },
@@ -1163,9 +1163,9 @@
         "region": "Other Africa", 
         "value": 60900, 
         "broad_region": 1, 
-        "longitude": "9.343897", 
-        "latitude": "0.054033", 
-        "show_on_map": false
+        "longitude": "9.3438970", 
+        "latitude": "0.0540330", 
+        "show_on_map": true
     }
 },
 {
@@ -1252,11 +1252,11 @@
     "fields": {
         "show_on_main_map": true, 
         "region": "Other Spanish Caribbean", 
-        "value": 31400,
-        "broad_region": 4,
-        "longitude": "-82.36417",
-        "latitude": "23.13194",
-        "show_on_map": true
+        "value": 31400, 
+        "broad_region": 4, 
+        "longitude": "-82.3641700", 
+        "latitude": "23.1319400", 
+        "show_on_map": false
     }
 },
 {
@@ -1267,8 +1267,8 @@
         "region": "Spanish Circum-Caribbean", 
         "value": 41200, 
         "broad_region": 3, 
-        "longitude": "-84.2438180", 
-        "latitude": "14.0408140", 
+        "longitude": "-75.6339320", 
+        "latitude": "15.6411170", 
         "show_on_map": true
     }
 },
@@ -4983,7 +4983,7 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 50, 
-        "longitude": "-90.0750000", 
+        "longitude": "90.0666670", 
         "place": "New Orleans", 
         "value": 21601, 
         "latitude": "29.9544400", 
@@ -6023,10 +6023,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 27, 
-        "longitude": "-58.3700000", 
+        "longitude": "-58.1687110", 
         "place": "Demerara", 
         "value": 35304, 
-        "latitude": "6.7200000", 
+        "latitude": "6.8102040", 
         "show_on_voyage_map": true
     }
 },
@@ -6595,10 +6595,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 32, 
-        "longitude": "-58.6725000", 
+        "longitude": "-58.3808460", 
         "place": "Buenos Aires", 
         "value": 42001, 
-        "latitude": "-34.5875000", 
+        "latitude": "-34.5746250", 
         "show_on_voyage_map": true
     }
 },
@@ -6715,7 +6715,7 @@
         "longitude": "-39.2641800", 
         "place": "P\u00f4rto Seguro", 
         "value": 50201, 
-        "latitude": "-16.6717900", 
+        "latitude": "-16.4441670", 
         "show_on_voyage_map": true
     }
 },
@@ -7730,6 +7730,19 @@
         "place": "Little Junk", 
         "value": 60319, 
         "latitude": "6.1901300", 
+        "show_on_voyage_map": true
+    }
+},
+{
+    "pk": 498, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": true, 
+        "region": 54, 
+        "longitude": "-11.2833300", 
+        "place": "Mano", 
+        "value": 60320, 
+        "latitude": "6.9833300", 
         "show_on_voyage_map": true
     }
 },
@@ -8831,10 +8844,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 60, 
-        "longitude": "46.6987700", 
+        "longitude": "43.9544970", 
         "place": "Madagascar", 
         "value": 60811, 
-        "latitude": "-19.1911000", 
+        "latitude": "-24.7892440", 
         "show_on_voyage_map": true
     }
 },
@@ -9286,10 +9299,10 @@
     "fields": {
         "show_on_main_map": false, 
         "region": 92, 
-        "longitude": "-99.1600000", 
+        "longitude": "-87.6097570", 
         "place": "New Spain", 
         "value": 41201, 
-        "latitude": "19.4100000", 
+        "latitude": "18.9832080", 
         "show_on_voyage_map": true
     }
 },
@@ -10467,12 +10480,12 @@
     "pk": 709, 
     "model": "voyage.place", 
     "fields": {
-        "show_on_main_map": false, 
+        "show_on_main_map": true, 
         "region": 60, 
-        "longitude": "0E-7", 
+        "longitude": "39.5100000", 
         "place": "Southeast Africa and Indian Ocean islands, port unspecified", 
         "value": 60899, 
-        "latitude": "0E-7", 
+        "latitude": "-17.1400000", 
         "show_on_voyage_map": true
     }
 },
@@ -10807,10 +10820,10 @@
     "fields": {
         "show_on_main_map": false, 
         "region": 12, 
-        "longitude": "-78.9208700", 
+        "longitude": "-79.2219910", 
         "place": "Cuba, port unspecified", 
         "value": 31399, 
-        "latitude": "21.7715700", 
+        "latitude": "22.3991500", 
         "show_on_voyage_map": true
     }
 },
@@ -10974,13 +10987,13 @@
     "pk": 748, 
     "model": "voyage.place", 
     "fields": {
-        "show_on_main_map": false, 
+        "show_on_main_map": true, 
         "region": 84, 
-        "longitude": "9.343897", 
+        "longitude": "9.3438970", 
         "place": "Africa., port unspecified", 
         "value": 60999, 
-        "latitude": "0.054033", 
-        "show_on_voyage_map": false
+        "latitude": "0.0540330", 
+        "show_on_voyage_map": true
     }
 },
 {
@@ -12047,6 +12060,32 @@
         "value": 31328, 
         "latitude": "0E-7", 
         "show_on_voyage_map": false
+    }
+},
+{
+    "pk": 831, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": true, 
+        "region": 92, 
+        "longitude": "-79.4703100", 
+        "place": "Nombre de Dios", 
+        "value": 41219, 
+        "latitude": "9.5828900", 
+        "show_on_voyage_map": true
+    }
+},
+{
+    "pk": 832, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": false, 
+        "region": 8, 
+        "longitude": "-70.8666670", 
+        "place": "Newburyport", 
+        "value": 20424, 
+        "latitude": "42.8000000", 
+        "show_on_voyage_map": true
     }
 }
 ]

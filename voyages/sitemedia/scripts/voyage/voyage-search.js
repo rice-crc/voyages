@@ -174,7 +174,7 @@ function collapseCheckBoxes(elem_id, boxclassname) {
         }
     });
     if (selectedItems.length == 0) {
-        $("#" + elem_id + " .query-select-selected-text").text("[nothing selected]");
+        $("#" + elem_id + " .query-select-selected-text").text(gettext("[nothing selected]"));
     } else {
         $("#" + elem_id + " .query-select-selected-text").text(formatArray(selectedItems));
     }

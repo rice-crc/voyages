@@ -1,6 +1,6 @@
 from haystack.query import SearchQuerySet
 from .models import *
-from voyages.apps.common.filters import trans_log as _
+from django.utils.translation import ugettext_lazy as _
 
 
 def get_flags(search_configuration=None, mode=None):

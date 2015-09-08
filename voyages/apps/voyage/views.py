@@ -31,7 +31,8 @@ from django.views.decorators.gzip import gzip_page
 from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
-from templatetags.voyage_extras import trans_log as _
+from django.utils.translation import ugettext as _
+from django.utils.functional import allow_lazy
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -483,9 +484,10 @@ def prettify_var_list(varlist):
             continue
         unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.default_prettifier(varname))
         tvar = unmangle_method(vvar)
-        value = unicode(tvar)
         if isinstance(tvar, (list, tuple)):
             value = unicode(u', '.join(map(unicode, tvar)))
+        else:
+            value = tvar
         prefix = ''
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
@@ -638,7 +640,7 @@ def search(request):
     sort_direction = request.session.get('voyages_sort_direction', 'asc')
 
     # Map
-    map_year = 1750
+    map_year = '1750'
 
     # Check if we are restoring POST data from session,
     # which is what would happen when accessing a permalink.
@@ -1190,8 +1192,8 @@ def search(request):
 
         elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
             tab = submitVal[4:]
-            frame_from_year = int(request.POST.get('frame_from_year'))
-            frame_to_year = int(request.POST.get('frame_to_year'))
+            frame_from_year = int(request.POST.get('frame_from_year', voyage_span_first_year))
+            frame_to_year = int(request.POST.get('frame_to_year', voyage_span_last_year))
             map_year = get_map_year(frame_from_year, frame_to_year)
         elif submitVal == 'map_ajax':
             map_ports = {}
@@ -1607,7 +1609,8 @@ def search_var_dict(var_name):
 # by using a translated version or a plain text version of tokenized fields.
 from search_indexes import VoyageIndex
 index = VoyageIndex()
-plain_text_suffix_list = [f for f in index.fields.keys() if f.endswith('plain_text')]
+plain_text_suffix = '_plaintext'
+plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in index.fields.keys() if f.endswith(plain_text_suffix)]
 translate_suffix = '_lang_en'
 translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys() if f.endswith(translate_suffix)]
 

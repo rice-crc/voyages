@@ -37,11 +37,11 @@
                             {% thumbnail value "100x100" as im %}
                                 <a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
                                     <img src="{{ im.url }}" width="100" height="100">
+                                </a>
                                 {% empty %}
                                     <a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
                                     <img src="{{ MEDIA_URL }}{{ value }}" width="100" height="100">
                                     </a>
-                                </a>
                             {% endthumbnail %}
                         </div>
                         {% endif %}
@@ -56,7 +56,7 @@
                             </div>
                             {% endif %}
                             {% if key == "year" and value != 0 %}
-                            <div class="gallery-image-description">({{ value }})</div>
+                            <div class="gallery-image-description">({{ value|trans_log }})</div>
                             {% endif %}
                     {% endfor %}
                     </div>

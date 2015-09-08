@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+{% load i18n %}
 {% load resources_extras %}
 {% load static %}
 
@@ -13,7 +14,7 @@
 <body id="image-expanded">
 
 <div class="image-expanded-title">
-		{{ image.title }}
+		{{ image.title|trans_log }}
 	</div>
 
 <div class="image-expanded-container">

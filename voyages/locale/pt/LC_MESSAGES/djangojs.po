@@ -1,0 +1,121 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-02 17:47-0300\n"
+"PO-Revision-Date: 2015-09-02 17:42-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: sitemedia/maps/js/voyagesMap.js:144
+msgid "port"
+msgstr "porto"
+
+#: sitemedia/maps/js/voyagesMap.js:145
+msgid "region"
+msgstr "região"
+
+#: sitemedia/maps/js/voyagesMap.js:146
+msgid "broad region"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:365 sitemedia/maps/js/voyagesMap.js.c:448
+msgid "click for details"
+msgstr "clique para ver detalhes"
+
+#: sitemedia/maps/js/voyagesMap.js:410
+msgid "Inbound"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:411
+msgid "Outbound"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:412 sitemedia/maps/js/voyagesMap.js.c:414
+#: sitemedia/maps/js/voyagesMap.js:680
+msgid "Embarked"
+msgstr "Embarcados"
+
+#: sitemedia/maps/js/voyagesMap.js:413 sitemedia/maps/js/voyagesMap.js.c:414
+#: sitemedia/maps/js/voyagesMap.js:682
+msgid "Disembarked"
+msgstr "Desembarcados"
+
+#: sitemedia/maps/js/voyagesMap.js:451
+msgid "Totals"
+msgstr "Totais"
+
+#: sitemedia/maps/js/voyagesMap.js:685
+msgid "Source"
+msgstr "Origem"
+
+#: sitemedia/maps/js/voyagesMap.js:686
+msgid "Outbound traffic"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:719
+msgid "Destination"
+msgstr "Destino"
+
+#: sitemedia/maps/js/voyagesMap.js:720
+msgid "Inbound traffic"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:731
+msgid "Traffic from"
+msgstr ""
+
+#: sitemedia/maps/js/voyagesMap.js:732
+msgid "to"
+msgstr "para"
+
+#: sitemedia/scripts/breadcrumb.js:9 sitemedia/scripts/breadcrumb.js.c:13
+msgid "Home"
+msgstr ""
+
+#: sitemedia/scripts/breadcrumb.js:31 sitemedia/scripts/breadcrumb.js.c:33
+msgid "Understanding the Database"
+msgstr ""
+
+#: sitemedia/scripts/breadcrumb.js:35
+msgid "Essays"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:4
+msgid "Voyages Database"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:5
+msgid "Assessing the Slave Trade"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:6
+msgid "Resources"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:7
+msgid "Educational Materials"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:8
+msgid "About the Project"
+msgstr ""
+
+#: sitemedia/scripts/navigation_topbar.js:9
+msgid "Contribute"
+msgstr ""
+
+#: sitemedia/scripts/voyage/voyage-search.js:177
+msgid "[nothing selected]"
+msgstr ""

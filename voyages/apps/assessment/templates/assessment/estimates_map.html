@@ -14,7 +14,7 @@
 {% localize off %}
     var ports = {
         {% for place_name, data in regions.items %}
-            "{{ place_name }}": new Port(new NamedPoint("{{ place_name }}", new L.LatLng({{ data.0 }}, {{ data.1 }}))),
+            "{{ place_name }}": new Port(new NamedPoint("{{ place_name|trans_log }}", new L.LatLng({{ data.0 }}, {{ data.1 }}))),
         {% endfor %}
     };
     var flows = [
