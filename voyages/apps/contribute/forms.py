@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from voyages.apps.contribute.models import *
 from voyages.extratools import AdvancedEditor
-from django.utils.translation import ugettext_lazy as __
+from django.utils.translation import ugettext as _
 
 class AdminFaqAdminForm(forms.ModelForm):
     """

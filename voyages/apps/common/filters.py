@@ -2,7 +2,7 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 from django import template
 from django.template.loader import add_to_builtins
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 import logging
 import re
@@ -25,11 +25,15 @@ def trans_log(val):
     if not isinstance(val, basestring):
         return val
     # Heuristically check whether this looks like a string that should be translated.
-    if len(val) == 0 or not re_has_alpha_chars.match(val):
-        return val
-    if val.startswith('var_'):
-        return val
-    result = _(val)
+    if len(val) > 0 and re_has_alpha_chars.match(val) and not val.startswith('var_'):
+        result = _(val)
+    else:
+        result = val
+    if result == val:
+        without_line_break = val.replace('\n', ' ').replace('\r', ' ')
+        tmp = _(without_line_break)
+        if tmp != without_line_break:
+            result = tmp
     log = False
     if result == val:
         log = True
@@ -37,7 +41,7 @@ def trans_log(val):
         log = True
         result = result[:-7] + '[T]</div>'
     if log:
-        logger.info(val.replace('\n', ' ').replace('\r', ''))
+        logger.info(val.replace('\n', ' ').replace('\r', ' '))
     return mark_safe(result)
 
 add_to_builtins('voyages.apps.common.filters')
