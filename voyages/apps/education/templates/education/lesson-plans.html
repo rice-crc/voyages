@@ -3,6 +3,7 @@
 {% comment %} Display lesson plan items from the database {% endcomment %}
 
 {% load i18n %}
+{% load voyage_extras %}
 {% block title %}{% trans "Lesson Plans" %}{% endblock %}
 
 {% block jslist %}
@@ -36,7 +37,7 @@
 {% if lesson_plans %}
 {% for lesson_item in lesson_plans %}
 	<div class="lesson-plan-title">
-		{{ lesson_item.lesson.text }} 
+		{{ lesson_item.lesson.text|trans_log }}
 		
 		{% if lesson_item.download %}
 		{% for download_item in lesson_item.download %}
@@ -58,13 +59,13 @@
 			{% trans "Author" %}: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author|safe }}</span>
 		</div>
 		<div class="lesson-plan-grade-level">
-			{% trans "Grade Level" %}: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level|safe }}</span>
+			{% trans "Grade Level" %}: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level|trans_log|safe }}</span>
 		</div>
 		<div class="lesson-plan-course">
-			{% trans "Course" %}: <span class="lesson-plan-course">{{ lesson_item.lesson.course|safe }}</span>
+			{% trans "Course" %}: <span class="lesson-plan-course">{{ lesson_item.lesson.course|trans_log|safe }}</span>
 		</div>
 		<div class="lesson-plan-keywords">
-			{% trans "Key Words" %}:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words|safe }}</span>
+			{% trans "Key Words" %}:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words|trans_log|safe }}</span>
 		</div>
 		<div class="lesson-plan-standards-title">
 			{% trans "Standards" %}
@@ -74,10 +75,10 @@
 		<ul class="lesson-plan-standards">
 			{% for standard_type in lesson_item.standard %}
 			<li>
-				<span class="lesson-plan-standards-name">{{ standard_type.type|safe }}</span>
+				<span class="lesson-plan-standards-name">{{ standard_type.type|trans_log|safe }}</span>
 				<ul class="lesson-plan-standards-listing">
 					{% for standard_item in standard_type.text %}
-						<li>{{ standard_item.text|safe }}</li>
+						<li>{{ standard_item.text|trans_log|safe }}</li>
 					{% endfor %}
 				</ul>
 			</li>
@@ -88,7 +89,7 @@
 			{% trans "Abstract" %}
 		</div>
 		<div class="lesson-plan-abstract">
-			{{ lesson_item.lesson.abstract|safe }}
+			{{ lesson_item.lesson.abstract|trans_log|safe }}
 		</div>
 	</div>
 {% endfor %}

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 17:47-0300\n"
-"PO-Revision-Date: 2015-09-02 17:42-0300\n"
+"POT-Creation-Date: 2015-09-14 17:04-0300\n"
+"PO-Revision-Date: 2015-09-14 09:20-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -28,7 +28,7 @@ msgstr "região"
 
 #: sitemedia/maps/js/voyagesMap.js:146
 msgid "broad region"
-msgstr ""
+msgstr "grande região"
 
 #: sitemedia/maps/js/voyagesMap.js:365 sitemedia/maps/js/voyagesMap.js.c:448
 msgid "click for details"
@@ -36,11 +36,11 @@ msgstr "clique para ver detalhes"
 
 #: sitemedia/maps/js/voyagesMap.js:410
 msgid "Inbound"
-msgstr ""
+msgstr "Entrada"
 
 #: sitemedia/maps/js/voyagesMap.js:411
 msgid "Outbound"
-msgstr ""
+msgstr "Saída"
 
 #: sitemedia/maps/js/voyagesMap.js:412 sitemedia/maps/js/voyagesMap.js.c:414
 #: sitemedia/maps/js/voyagesMap.js:680
@@ -62,7 +62,7 @@ msgstr "Origem"
 
 #: sitemedia/maps/js/voyagesMap.js:686
 msgid "Outbound traffic"
-msgstr ""
+msgstr "Tráfico saindo"
 
 #: sitemedia/maps/js/voyagesMap.js:719
 msgid "Destination"
@@ -70,11 +70,11 @@ msgstr "Destino"
 
 #: sitemedia/maps/js/voyagesMap.js:720
 msgid "Inbound traffic"
-msgstr ""
+msgstr "Tráfico entrando"
 
 #: sitemedia/maps/js/voyagesMap.js:731
 msgid "Traffic from"
-msgstr ""
+msgstr "Tráfico originado em"
 
 #: sitemedia/maps/js/voyagesMap.js:732
 msgid "to"
@@ -82,40 +82,40 @@ msgstr "para"
 
 #: sitemedia/scripts/breadcrumb.js:9 sitemedia/scripts/breadcrumb.js.c:13
 msgid "Home"
-msgstr ""
+msgstr "Página inicial"
 
 #: sitemedia/scripts/breadcrumb.js:31 sitemedia/scripts/breadcrumb.js.c:33
 msgid "Understanding the Database"
-msgstr ""
+msgstr "Entendendo a base de dados"
 
 #: sitemedia/scripts/breadcrumb.js:35
 msgid "Essays"
-msgstr ""
+msgstr "Ensaios"
 
 #: sitemedia/scripts/navigation_topbar.js:4
 msgid "Voyages Database"
-msgstr ""
+msgstr "Banco de Dados Viagens"
 
 #: sitemedia/scripts/navigation_topbar.js:5
 msgid "Assessing the Slave Trade"
-msgstr ""
+msgstr "Análises do Tráfico de Escravos"
 
 #: sitemedia/scripts/navigation_topbar.js:6
 msgid "Resources"
-msgstr ""
+msgstr "Recursos"
 
 #: sitemedia/scripts/navigation_topbar.js:7
 msgid "Educational Materials"
-msgstr ""
+msgstr "Materiais educacionais"
 
 #: sitemedia/scripts/navigation_topbar.js:8
 msgid "About the Project"
-msgstr ""
+msgstr "Sobre o projeto"
 
 #: sitemedia/scripts/navigation_topbar.js:9
 msgid "Contribute"
-msgstr ""
+msgstr "Contribua"
 
 #: sitemedia/scripts/voyage/voyage-search.js:177
 msgid "[nothing selected]"
-msgstr ""
+msgstr "[nada selecionado]"

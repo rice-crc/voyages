@@ -14,7 +14,7 @@
 {% block center-content %}
 {{ block.super }}
 
-{{ flatpage.content|parse_blocks }}
+{{ flatpage.content|trans_log|parse_blocks }}
 
 {% endblock %}
 
