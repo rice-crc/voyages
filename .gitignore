@@ -4,5 +4,5 @@ dist/
 test-results/
 localsettings.py
 *~
-voyages/documents/cache/*
+documents/cache/*
 .idea

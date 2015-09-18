@@ -35,9 +35,7 @@ def trans_log(val):
         if tmp != without_line_break:
             result = tmp
     log = False
-    if result == val:
-        log = True
-    if settings.I18N_HELPER_DEBUG:
+    if result == val and settings.I18N_HELPER_DEBUG:
         log = True
         result = result[:-7] + '[T]</div>'
     if log:

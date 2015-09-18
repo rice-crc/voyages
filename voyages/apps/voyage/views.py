@@ -32,7 +32,6 @@ from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
-from django.utils.functional import allow_lazy
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -64,7 +63,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
         raise Http404
 
 
-def understanding_page(request, name):
+def understanding_page(request, name='guide'):
     dictionary = {}
 
     if "methodology" in name:
@@ -91,9 +90,9 @@ def understanding_page(request, name):
         dictionary['var_list_stats'] = variable_list()
         dictionary['page'] = 'voyage/variable-list.html'
     else:
-        page = "voyage/" + name + ".html"
         dictionary['page'] = 'voyage/' + name + ".html"
         dictionary['title'] = 'Guide'
+    dictionary['title'] = _(dictionary['title'])
 
     return render(request, 'voyage/understanding_base.html', dictionary)
 
