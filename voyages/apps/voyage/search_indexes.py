@@ -92,7 +92,7 @@ class TranslatedTextField(indexes.SearchField):
         if original is None:
             return None
         with translation.override(self.language_code):
-            translated = _(unicode(original))
+            translated = _(unicode(original).replace('\n', '').replace('\r', ''))
             if not self.unidecode:
                 return translated
             from unidecode import unidecode

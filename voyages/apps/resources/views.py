@@ -138,22 +138,32 @@ def images_search(request):
     query = ''
     time_start = ''
     time_end = ''
+    post = request.POST
+    enable_checkboxes = False
+
+    if request.method == 'GET' and request.GET.get('q') is not None:
+        request.method = 'POST'
+        enable_checkboxes = True
+        post = {'q': request.GET['q'],
+                'time_start': request.GET.get('time_start', ''),
+                'time_end': request.GET.get('time_end', '')}
 
     if request.method == 'POST':
 
         # Check if session have to be deleted
-        if request.POST.get('clear_form'):
+        if post.get('clear_form'):
             request.session.flush()
             pass
 
         # New search, clear data stored in session
         request.session['results_images'] = None
-        form = SearchForm(request.POST)
+        form = SearchForm(post)
+        restart = post.get('restart') is not None
 
         if form.is_valid():
             images = []
             categories_to_search = []
-            query = form.cleaned_data['q']
+            query = form.cleaned_data['q'] if not restart else ''
 
             # Get categories to search and get left menu data
             for i in ImageCategory.objects.filter(visible_on_website=True):
@@ -164,15 +174,15 @@ def images_search(request):
                 search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label,
                                                                    ready_to_go=True).order_by('date')
                 category_images["number_of_images"] = len(search_set)
-                if request.POST.get("checkbox" + str(i.value)):
+                if restart or enable_checkboxes or post.get("checkbox" + str(i.value)):
                     categories_to_search.append(i.label)
 
                 images.append(category_images)
 
             images = sorted(images, key=lambda k: k["label_name"])
 
-            time_start = request.POST.get('time_start')
-            time_end = request.POST.get('time_end')
+            time_start = post.get('time_start') if not restart else ''
+            time_end = post.get('time_end') if not restart else ''
 
             # Options if query is provided
             if query != "":

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 {% load humanize %}
 
 <h1>{% trans "Variable list" %}</h1>
@@ -17,26 +18,26 @@
 <table border="0" cellspacing="0" cellpadding="0" class="simple-table">
     {% for group in var_list_stats %}
     <tr>
-        <td class="header-group" colspan="7">{{ group.var_category }}</td>
+        <td class="header-group" colspan="7">{{ group.var_category|trans_log }}</td>
     </tr>
     <tr>
-        <td class="header">Variables</td>
+        <td class="header">{% trans 'Variables' %}</td>
         <td class="header">SPSS</td>
-        <td class="header">Voyages</td>
-        <td class="header">Estimates</td>
-        <td class="header">Basic</td>
-        <td class="header">General</td>
-        <td class="header">Note</td>
+        <td class="header">{% trans 'Voyages' %}</td>
+        <td class="header">{% trans 'Estimates' %}</td>
+        <td class="header">{% trans 'Basic' %}</td>
+        <td class="header">{% trans 'General' %}</td>
+        <td class="header">{% trans 'Note' %}</td>
     </tr>
         {% for variable in group.variables %}
         <tr class="{% cycle 'odd_row' 'even_row' %}">
-            <td class="">{{ variable.var_full_name }}</td>
+            <td class="">{{ variable.var_full_name|trans_log }}</td>
             <td class="">{{ variable.spss_name }}</td>
             <td class="number">{{ variable.num_voyages|intcomma }}</td>
             <td class="check">{% if variable.is_estimate == True %}&bull;{% endif %}</td>
             <td class="check">{% if variable.is_basic == True %}&bull;{% endif %}</td>
             <td class="check">{% if variable.is_general == True %}&bull;{% endif %}</td>
-            <td class="">{% if variable.note %}{{ variable.note }}{% endif %}</td>
+            <td class="">{% if variable.note %}{{ variable.note|trans_log }}{% endif %}</td>
         </tr>
 
         {% endfor %}

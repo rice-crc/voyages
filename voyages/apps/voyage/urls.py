@@ -14,8 +14,8 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Voyage'}, name='index'),
-    url(r'^understanding-db$', TemplateView.as_view(template_name='voyage/understanding_base.html'), name='guide'),
-    url(r'^understanding-db/(?P<name>.*)', 'voyages.apps.voyage.views.understanding_page' , name='understanding-page'),
+    url(r'^understanding-db$', 'voyages.apps.voyage.views.understanding_page', name='guide'),
+    url(r'^understanding-db/(?P<name>.*)', 'voyages.apps.voyage.views.understanding_page', name='understanding-page'),
 
     url(r'^c01_s01_cover$', TemplateView.as_view(template_name='voyage/guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),

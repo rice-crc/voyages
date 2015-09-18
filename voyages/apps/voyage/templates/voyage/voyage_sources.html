@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load voyage_extras %}
 
-{% block title %}Sources (bibliography){% endblock %}
+{% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
 
 {% block content %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
@@ -36,9 +36,9 @@
         </td>
         <td class="simple-box-22">
         {% if category == "documentary_sources" %}
-            <h1>Documentary Sources</h1>
+            <h1>{% trans 'Documentary Sources' %}</h1>
         {% else %}
-            <h1>{{ category|translate_source_name }}</h1>
+            <h1>{{ category|translate_source_name|trans_log }}</h1>
         {% endif %}
             <div class="switch-layout">
                 <table cellspacing="0" cellpadding="0" border="0">
@@ -46,16 +46,16 @@
                     <tr>
                         <td class="switch-layout-second-link">
                             {% if sort_method == "full_ref" %}
-                                <a class="active" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">Sort by long reference</a>
+                                <a class="active" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
                             {% else %}
-                                <a class="" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">Sort by long reference</a>
+                                <a class="" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
                             {% endif %}
                         </td>
                         <td class="switch-layout-second-link">
                             {% if sort_method == "short_ref" %}
-                                <a class="active" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">Sort by short reference</a>
+                                <a class="active" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
                             {% else %}
-                                <a class="" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">Sort by short reference</a>
+                                <a class="" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -70,9 +70,9 @@
                     <tr>
                     {# Print country name #}
                     {% if forloop.first %}
-                        <td class="sources-country-first" colspan="3">{{ country_dict.country }}</td>
+                        <td class="sources-country-first" colspan="3">{{ country_dict.country|trans_log }}</td>
                     {% else %}
-                        <td class="sources-country" colspan="3">{{ country_dict.country }}</td>
+                        <td class="sources-country" colspan="3">{{ country_dict.country|trans_log }}</td>
                     {% endif %}
                     </tr>
                     {# For all cities in country #}

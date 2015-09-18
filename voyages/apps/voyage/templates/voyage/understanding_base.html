@@ -26,10 +26,10 @@
 		<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
 			<tr>
                 {% if left %}
-                    <td class="method-prev"><a href="{{ left.page }}">{{ left.name }}</a></td>
+                    <td class="method-prev"><a href="{{ left.page }}">{{ left.name|trans_log }}</a></td>
                 {% endif %}
                 {% if right %}
-				    <td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name }}</a></td>
+				    <td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name|trans_log }}</a></td>
                 {% endif %}
 			</tr>
 		</table>
