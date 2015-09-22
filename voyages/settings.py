@@ -164,7 +164,7 @@ TEST_OUTPUT_DIR = 'test-results'
 
 # disable south tests and migrations when running tests
 # - without these settings, test fail on loading initial fixtured data
-SKIP_SOUTH_TESTS = True
+SKIP_SOUTH_TESTS = False
 SOUTH_TESTS_MIGRATE = False
 
 LOGIN_URL = '/contribute/login/'
