@@ -1280,7 +1280,8 @@ class VoyageManager(models.Manager):
             'voyage_itinerary__principal_place_of_slave_purchase__region__broad_region',
             'voyage_itinerary__principal_port_of_slave_dis__region__broad_region',
             'voyage_slaves_numbers',
-            'voyage_dates')
+            'voyage_dates',
+            'voyage_ship')
 
 
 class Voyage(models.Model):
