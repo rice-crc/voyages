@@ -1255,6 +1255,7 @@ def search(request):
                           }, content_type='text/javascript')
         elif submitVal == 'animation_ajax':
             all_voyages = VoyageManager.cache()
+            nations = {n.id: _(n.label) for n in Nationality.objects.all()}
             result = []
             for pk in results.values_list('pk', flat=True).load_all():
                 voyage = all_voyages[int(pk)]
@@ -1266,19 +1267,29 @@ def search(request):
                 destination = itinerary.imp_principal_port_slave_dis
                 dates = voyage.voyage_dates
                 year = dates.get_date_year(dates.voyage_began)
+                ship = voyage.voyage_ship
                 if source is not None and destination is not None and source.show_on_voyage_map and \
                         destination.show_on_voyage_map and year is not None and \
                         embarked is not None and embarked > 0 and disembarked is not None:
-                    result.append('{ "voyage_id": ' + str(pk) +
-                                  ', "source_name": "' + _(source.place) +
-                                  '", "source_lat": ' + str(source.latitude) +
+                    flag_id = ship.imputed_nationality.id if ship.imputed_nationality is not None else 0
+                    flag = nations.get(flag_id)
+                    if flag is None:
+                        flag = ''
+                    result.append('{ "voyage_id": ' + str(voyage.voyage_id) +
+                                  ', "source_name": "' + _(source.place) + '"' +
+                                  ', "source_lat": ' + str(source.latitude) +
                                   ', "source_lng": ' + str(source.longitude) +
-                                  ', "destination_name": "' + _(destination.place) +
-                                  '", "destination_lat": ' + str(destination.latitude) +
+                                  ', "destination_name": "' + _(destination.place) + '"' +
+                                  ', "destination_lat": ' + str(destination.latitude) +
                                   ', "destination_lng": ' + str(destination.longitude) +
                                   ', "embarked": ' + str(embarked) +
                                   ', "disembarked": ' + str(disembarked) +
-                                  ', "year": ' + str(year) + " }")
+                                  ', "year": ' + str(year) +
+                                  ', "ship_ton": ' + (str(ship.tonnage) if ship.tonnage is not None else '0') +
+                                  ', "ship_nationality_id": ' + str(flag_id) +
+                                  ', "ship_nationality_name": "' + flag + '"'
+                                  ', "ship_name": "' + (unicode(ship.ship_name) if ship.ship_name is not None else '') + '"'
+                                  ' }')
             return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
