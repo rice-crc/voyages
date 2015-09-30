@@ -124,6 +124,13 @@ def download_file(request):
 
     return render(request, templatename, {'form': form, 'uploaded_files': uploaded_files_info})
 
+def download_flatpage(request):
+    from django.contrib.flatpages.models import FlatPage
+    flatpage = FlatPage.objects.get(pk=1)
+    from datetime import date
+    return render(request,
+                  'flatpages/download.html',
+                  {'flatpage': flatpage, 'num_voyages': Voyage.objects.count(), 'year': str(date.today().year)})
 
 def handle_uploaded_file(f):
     """

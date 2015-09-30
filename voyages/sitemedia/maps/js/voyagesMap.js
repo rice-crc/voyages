@@ -80,9 +80,9 @@ function LocationIndex() {
 		for (var key in this) {
 			var col = this[key];
 			if (col.length == 1) {
-				result[key] = "<strong>" + this.locationType + ":</strong> " + col[0];
+				result[key] = "<strong>" + this.locationType.singular + ":</strong> " + col[0];
 			} else {
-				result[key] = "<strong>" + this.locationType + "s:</strong> " +
+				result[key] = "<strong>" + this.locationType.plural + ":</strong> " +
 					'<ul><li>' + Array.prototype.join.call(col, "</li><li>") + '</li></ul>';
 			}
 		}
@@ -141,9 +141,9 @@ var _mapBoundaries = new L.LatLngBounds(
 var None = null;
 var Nothing = null;
 
-var PORT_LABEL = gettext('port');
-var REGION_LABEL = gettext('region');
-var BROAD_REGION_LABEL = gettext('broad region');
+var PORT_LABEL = { singular: gettext('port'), plural: gettext('ports') };
+var REGION_LABEL = { singular: gettext('region'), plural: gettext('regions') };
+var BROAD_REGION_LABEL = { singular: gettext('broad region'), plural: gettext('broad regions') };
 
 /*!
  *  A singleton that organizes all interactive
@@ -406,7 +406,7 @@ var voyagesMap = {
                 	}
                 	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
                 	 	'<table class="map_node_aggregate_table">' +
-                		'<thead><tr><th rowspan="2">' + locations.locationType.toUpperCase() +
+                		'<thead><tr><th rowspan="2">' + locations.locationType.singular.toUpperCase() +
                 		'</th><th colspan="2" class="inFlow">' + gettext('Inbound') +
                 		'</th><th colspan="2" class="outFlow">' + gettext('Outbound') + '</th></tr>' +
                 		'<tr><th class="inFlow">' + gettext('Embarked') + '</th><th class="inFlow">' +
@@ -445,7 +445,7 @@ var voyagesMap = {
 								return 1;
 							return 0;
 						});
-						var title = markers.length + ' ' + locations.locationType + 's (' + gettext('click for details') + ')';
+						var title = markers.length + ' ' + locations.locationType.plural + ' (' + gettext('click for details') + ')';
 						// Set the popup here.
 						var rows = [ ];
 						var totals = { name: gettext('Totals'), inFlowEmbarked: 0, inFlowDisembarked: 0, outFlowEmbarked: 0, outFlowDisembarked: 0 };

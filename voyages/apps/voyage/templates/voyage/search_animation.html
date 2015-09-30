@@ -76,6 +76,7 @@
     var pendingTransitions = 0;
     var years = [];
     var yearStep = function() {};
+    var pendingStep = false;
 
     function animation(data) {
         $("#timeControls").show();
@@ -96,88 +97,106 @@
                 g.selectAll(".animation_voyage_group").remove();
                 animationIndex = ui.value;
                 changePausedState(false);
-                yearStep();
+                if (!pendingStep) {
+                    pendingStep = true;
+                    window.setTimeout(yearStep, 500);
+                }
             }
         });
         yearStep = function() {
-            if (animationIndex >= years.length || animationIndex < 0 || isPaused) return;
-            $( "#slider" ).slider('value', animationIndex);
-            positionSvg();
-            var year = years[animationIndex].key;
-            var yearData = years[animationIndex].values;
-            $("#yearLabel").text(year);
-            var counter = 0;
-            var selection = g.selectAll(".animation_voyage_group")
-                .data(yearData)
-                .enter()
-                .append("g")
-                .classed("animation_voyage_group", true);
-            selection
-                .append("circle")
-                .classed("animation_voyage_outer_circle", true)
-                .attr("r", 10)
-                .style("opacity", 0)
-                .on("mouseover", function() {
-                    $(this).animate({ opacity: 1 }, 300);
-                })
-                .on("mouseout", function() {
-                    if (!d3.select(this).classed("selected")) {
-                        $(this).animate({ opacity: 0 }, 300);
-                    }
-                })
-                .on("click", function() {
-                    closeToolTip();
-                    d3.select(this).classed("selected", true);
-                    var d = this.__data__;
-                    var path = [
-                        L.latLng(d.source_lat, d.source_lng),
-                        L.latLng(d.destination_lat, d.destination_lng)
-                    ];
-                    selectedRoute = L.geodesic([path], {
-                        weight: 3,
-                        color: "red",
-                        className: "animation_selected_route"
+            if (animationIndex >= years.length || animationIndex < 0 || isPaused) {
+                changePausedState(true);
+                return;
+            }
+            try {
+                pendingStep = false;
+                $( "#slider" ).slider('value', animationIndex);
+                positionSvg();
+                var year = years[animationIndex].key;
+                var yearData = years[animationIndex].values;
+                $("#yearLabel").text(year);
+                var counter = 0;
+                var selection = g.selectAll(".animation_voyage_group")
+                    .data(yearData)
+                    .enter()
+                    .append("g")
+                    .classed("animation_voyage_group", true);
+                selection
+                    .append("circle")
+                    .classed("animation_voyage_outer_circle", true)
+                    .attr("r", 10)
+                    .style("opacity", 0)
+                    .on("mouseover", function() {
+                        $(this).animate({ opacity: 1 }, 300);
+                    })
+                    .on("mouseout", function() {
+                        if (!d3.select(this).classed("selected")) {
+                            $(this).animate({ opacity: 0 }, 300);
+                        }
+                    })
+                    .on("click", function() {
+                        closeToolTip();
+                        d3.select(this).classed("selected", true);
+                        var d = this.__data__;
+                        var path = [
+                            L.latLng(d.source_lat, d.source_lng),
+                            L.latLng(d.destination_lat, d.destination_lng)
+                        ];
+                        selectedRoute = L.geodesic([path], {
+                            weight: 3,
+                            color: "red",
+                            className: "animation_selected_route"
+                        });
+                        voyagesMap.addLayer(selectedRoute);
+                        // Set tooltip content.
+                        var content = $("#tooltip_content");
+                        content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
+                        var template = "";
+                        if (d.ship_name != "") {
+                            template += '<h1>' + d.ship_name + "</h1>";
+                        }
+                        if (d.ship_nationality_name != "") {
+                            template += "<h2>" + d.ship_nationality_name + "</h2>";
+                        }
+                        if (d.ship_ton) {
+                            template += "<p>{% trans 'This {ton}-ton ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
+                            template = template.replace("{ton}", d.ship_ton);
+                        } else {
+                            template += "<p>{% trans 'This ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
+                        }
+                        template = template.replace("{source}", d.source_name)
+                            .replace("{destination}", d.destination_name)
+                            .replace("{embarked}", d.embarked)
+                            .replace("{disembarked}", d.disembarked);
+                        content.html(template + '<span class="animation_tooltip_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
+                            "{% trans 'More info' %} »</a></span>");
+                        // Position and show tooltip.
+                        tooltip.show();
+                        var rCirc = this.getBoundingClientRect();
+                        var rSvg = document.getElementById('map').getBoundingClientRect();
+                        var tooltip_width = tooltip.width();
+                        var tooltip_height = tooltip.height();
+                        var top = rCirc.bottom - rSvg.top + 50;
+                        if (top + tooltip_height + 120 > rSvg.bottom) {
+                            top -= tooltip_height + 100;
+                            console.log(top + tooltip_height);
+                            console.log(rSvg);
+                        }
+                        tooltip.animate({
+                            left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltip_width / 2 - 20) + "px",
+                            top: top + "px",
+                            opacity: 0.9
+                        }, 800);
                     });
-                    voyagesMap.addLayer(selectedRoute);
-                    // Set tooltip content.
-                    var content = $("#tooltip_content");
-                    content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
-                    var template = "";
-                    if (d.ship_name != "") {
-                        template += '<h1>' + d.ship_name + "</h1>";
-                    }
-                    if (d.ship_nationality_name != "") {
-                        template += "<h2>" + d.ship_nationality_name + "</h2>";
-                    }
-                    if (d.ship_ton) {
-                        template += "<p>{% trans 'This {ton}-ton ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
-                        template = template.replace("{ton}", d.ship_ton);
-                    } else {
-                        template += "<p>{% trans 'This ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
-                    }
-                    template = template.replace("{source}", d.source_name)
-                        .replace("{destination}", d.destination_name)
-                        .replace("{embarked}", d.embarked)
-                        .replace("{disembarked}", d.disembarked);
-                    content.html(template + '<span class="animation_tooltip_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
-                        "{% trans 'More info' %} »</a></span>");
-                    // Position and show tooltip.
-                    tooltip.show();
-                    var rCirc = this.getBoundingClientRect();
-                    var rSvg = document.getElementById('map').getBoundingClientRect();
-                    var tooltip_width = tooltip.width();
-                    tooltip.animate({
-                        left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltip_width / 2 - 20) + "px",
-                        top: (rCirc.bottom - rSvg.top + 50) + "px",
-                        opacity: 0.9
-                    }, 800);
-                });
-            selection
-                .append("circle")
-                .classed("animation_voyage_inner_circle", true)
-                .attr("r", 2)
-                .attr("T", 0);
-            applyTransition(selection, 0);
+                selection
+                    .append("circle")
+                    .classed("animation_voyage_inner_circle", true)
+                    .attr("r", 2)
+                    .attr("T", 0);
+                applyTransition(selection, 0);
+            } catch (e) {
+                console.log(e);
+            }
         };
         yearStep();
     }
@@ -237,6 +256,10 @@
                 t = 0;
             }
             var lngLat = geodesic.interpolate(t);
+            if (isNaN(lngLat[0]) || isNaN(lngLat[1])) {
+                console.log('here');
+                return "";
+            }
             var latLng = L.latLng(lngLat[1], lngLat[0]);
             $(dom).data("latLng", latLng);
             var point = map.latLngToLayerPoint(latLng);

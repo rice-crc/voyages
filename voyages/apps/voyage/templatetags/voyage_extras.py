@@ -13,7 +13,7 @@ def parse_blocks(value):
     """ use the django template loader and response object to spit 
     out rendered content
     """
-    t = Template(trans_log(value))
+    t = Template(value)
     c = Context({ 'MEDIA_URL': settings.MEDIA_URL })
     return t.render(c)
 
@@ -45,3 +45,11 @@ def translate_source_name(label_name):
 @stringfilter
 def create_page_name(name, number):
     return str(name + "-" + str(number))
+
+@register.filter
+def replace(text, args):
+    tmp = args.split('/')
+    search_val = tmp[1]
+    replace_val = tmp[2]
+    import re
+    return re.sub(search_val, replace_val, text)
