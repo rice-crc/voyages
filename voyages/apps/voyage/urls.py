@@ -32,8 +32,5 @@ urlpatterns += patterns('',
 
     url(r'^csv_stats_download', 'voyages.apps.voyage.views.csv_stats_download', name='csv_stats_download'),
     url(r'^shorten_search_url', 'voyages.apps.voyage.views.shorten_search_url', name='shorten_search_url'),
-)
-
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^download$', 'flatpage', {'url': '/voyage/download/'}, name='download'),
+    url(r'^download$', 'voyages.apps.voyage.views.download_flatpage', name='download'),
 )
