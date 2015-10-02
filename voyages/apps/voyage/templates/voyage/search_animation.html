@@ -77,6 +77,7 @@
     var years = [];
     var yearStep = function() {};
     var pendingStep = false;
+    var animationTime = 0;
 
     function animation(data) {
         $("#timeControls").show();
@@ -116,6 +117,7 @@
                 var yearData = years[animationIndex].values;
                 $("#yearLabel").text(year);
                 var counter = 0;
+                animationTime = 0;
                 var selection = g.selectAll(".animation_voyage_group")
                     .data(yearData)
                     .enter()
@@ -192,7 +194,6 @@
                     .append("circle")
                     .classed("animation_voyage_inner_circle", true)
                     .attr("r", 2)
-                    .attr("T", 0);
                 applyTransition(selection, 0);
             } catch (e) {
                 console.log(e);
@@ -209,7 +210,6 @@
         selection.transition()
             .duration(duration)
             .ease("linear")
-            .attr("T", 1)
             .attrTween("transform", function(d, i, a) {
                 return tween(d, i, a, yearData.length, startTime, this);
             })
@@ -249,6 +249,9 @@
         return function(t) {
             startTime = parseFloat(startTime);
             t = startTime + t * (1 - startTime);
+            if (t > animationTime) {
+                animationTime = t;
+            }
             var x = i / (2 * count);
             if (t > x) {
                 t = (t - x)/(1 - x);
@@ -304,11 +307,11 @@
             e.preventDefault();
         });
         $("#playBtn").click(function(e) {
+            console.log(animationTime);
             changePausedState(false);
             var selection = g.selectAll(".animation_voyage_group");
             if (selection) {
-                var startTime = selection.attr("T");
-                applyTransition(selection, startTime);
+                applyTransition(selection, animationTime);
             }
             e.preventDefault();
         });

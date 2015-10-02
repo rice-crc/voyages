@@ -473,7 +473,7 @@
                           <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
                         {% endif %}
                       </td>
-                      <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k }}</td>
+                      <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k.broad_region|trans_log }}</td>
                     </tr>
                     {% if v.items %}
                     <tr id="tr_{{ k.value }}_child" style="display: none">
@@ -495,7 +495,7 @@
                                   <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
                               {% endif %}
                             </td>
-                            <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region|trans_log }}</td>
+                            <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region.region|trans_log }}</td>
                             </td>
                           </tr>
                           {% if places %}

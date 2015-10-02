@@ -22,10 +22,10 @@ def trans_log(val):
     :return: The translated value or the original val if no suitable
     translation is found.
     """
-    if not isinstance(val, basestring):
+    if not isinstance(val, basestring) or len(val) == 0:
         return val
     # Heuristically check whether this looks like a string that should be translated.
-    if len(val) > 0 and re_has_alpha_chars.match(val) and not val.startswith('var_'):
+    if re_has_alpha_chars.match(val) and not val.startswith('var_'):
         result = _(val)
     else:
         result = val
