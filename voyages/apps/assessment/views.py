@@ -199,13 +199,14 @@ def get_estimates_table(request):
         table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
 
     for pk in results.values_list('pk', flat=True).load_all():
-        result = cache[int(pk)]
-        key = (row_key_function(result), col_key_function(result))
-        cell = (0, 0)
-        if key in table_dict:
-            cell = table_dict[key]
-        cell = (cell[0] + result.embarked_slaves, cell[1] + result.disembarked_slaves)
-        table_dict[key] = cell
+        result = cache.get(int(pk))
+        if result is not None:
+            key = (row_key_function(result), col_key_function(result))
+            cell = (0, 0)
+            if key in table_dict:
+                cell = table_dict[key]
+            cell = (cell[0] + result.embarked_slaves, cell[1] + result.disembarked_slaves)
+            table_dict[key] = cell
 
     def header_with_name(x):
         return x.name

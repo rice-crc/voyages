@@ -80,10 +80,9 @@ function LocationIndex() {
 		for (var key in this) {
 			var col = this[key];
 			if (col.length == 1) {
-				result[key] = "<strong>" + this.locationType.singular + ":</strong> " + col[0];
+				result[key] = col[0];
 			} else {
-				result[key] = "<strong>" + this.locationType.plural + ":</strong> " +
-					'<ul><li>' + Array.prototype.join.call(col, "</li><li>") + '</li></ul>';
+				result[key] = '<ul><li>' + Array.prototype.join.call(col, "</li><li>") + '</li></ul>';
 			}
 		}
 		return result;
@@ -682,8 +681,8 @@ var voyagesMap = {
 			 	'. <strong>' + gettext('Disembarked') + ': </strong>' +
 			 	flow.netVolume.toLocaleString() + '.';
 			if (flow.initial) {
-				popup = '<strong>' + gettext('Source') + ' </strong>' + sourceName + '<br /><strong>' +
-					gettext('Outbound traffic') + '.</strong>' + numbersInfo;
+				popup = '<strong>' + gettext('Place or region of embarkation:') + ' </strong>' +
+				 	sourceName + numbersInfo;
 			}
 			if (flow.terminal) {
 				// Trim polyline and apply arrow symbol to a virtual 
@@ -716,8 +715,8 @@ var voyagesMap = {
 				arrowHead.setPatterns([
 					{ offset: '100%', repeat: 0, symbol: arrowSymbol}
 				]);
-				popup = '<strong>' + gettext('Destination') + ' </strong>' + destinationName +
-				 '<br /><strong>' + gettext('Inbound traffic') + '.</strong>' + numbersInfo;
+				popup = '<strong>' + gettext('Place or region of disembarkation:') + ' </strong>' +
+				 destinationName + numbersInfo;
 			}
 			if (flow.terminal || flow.initial) {
 				line.on('mouseover', function() {
@@ -728,8 +727,8 @@ var voyagesMap = {
 				});
 			}
 			if (flow.initial && flow.terminal) {
-				popup = '<strong>' + gettext('Traffic from') + ' </strong>' + sourceName +
-					' <strong>' + gettext('to') + '</strong> ' +
+				popup = '<strong>' + gettext('Place or region of embarkation:') + ' </strong>' + sourceName +
+					' <strong><br />' + gettext('Place or region of disembarkation:') + '</strong> ' +
 					destinationName + '.<br />' + numbersInfo;
 			}
 			if (popup) {

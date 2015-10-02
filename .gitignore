@@ -6,3 +6,4 @@ localsettings.py
 *~
 documents/cache/*
 .idea
+*.log

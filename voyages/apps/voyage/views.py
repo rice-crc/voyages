@@ -1226,7 +1226,9 @@ def search(request):
             missed_embarked = 0
             missed_disembarked = 0
             for pk in results.values_list('pk', flat=True).load_all():
-                voyage = all_voyages[int(pk)]
+                voyage = all_voyages.get(int(pk))
+                if voyage is None:
+                    continue
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
                 embarked = numbers.imp_total_num_slaves_embarked
@@ -1265,7 +1267,9 @@ def search(request):
             nations = {n.id: _(n.label) for n in Nationality.objects.all()}
             result = []
             for pk in results.values_list('pk', flat=True).load_all():
-                voyage = all_voyages[int(pk)]
+                voyage = all_voyages.get(int(pk))
+                if voyage is None:
+                    continue
                 itinerary = voyage.voyage_itinerary
                 numbers = voyage.voyage_slaves_numbers
                 embarked = numbers.imp_total_num_slaves_embarked
