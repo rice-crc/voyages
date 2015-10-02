@@ -18,7 +18,7 @@
 <script src="{{ STATIC_URL }}scripts/resources/resources-names.js" type="text/javascript"></script>
 {% endblock %}
 
-{% block title %}African Names{% endblock %}
+{% block title %}{% trans 'African Names' %}{% endblock %}
 
 {% block content %}
 <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
@@ -52,7 +52,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_id" value="slave_id" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_id');">ID</a>
+    <a href="#" onclick="sort_results('sort_form_id');">{% trans 'ID' %}</a>
   </div>
   </th>
 
@@ -68,7 +68,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_name" value="slave_name" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_name');">Name</a>
+    <a href="#" onclick="sort_results('sort_form_name');">{% trans 'Name' %}</a>
   </div>
   </th>
 
@@ -84,7 +84,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_age" value="slave_age" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_age');">Age</a>
+    <a href="#" onclick="sort_results('sort_form_age');">{% trans 'Age' %}</a>
   </div>
   </th>
 
@@ -100,7 +100,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_height" value="slave_height" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_height');">Height [in]</a>
+    <a href="#" onclick="sort_results('sort_form_height');">{% trans 'Height [in]' %}</a>
   </div>
   </th>
 
@@ -116,7 +116,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_sexage" value="slave_sex_age" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_sexage');">Sex/Age</a>
+    <a href="#" onclick="sort_results('sort_form_sexage');">{% trans 'Sex/Age' %}</a>
   </div>
   </th>
 
@@ -132,7 +132,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_origin" value="slave_country" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_origin');">Origin</a>
+    <a href="#" onclick="sort_results('sort_form_origin');">{% trans 'Origin' %}</a>
   </div>
   </th>
 
@@ -148,7 +148,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_voyage" value="slave_voyage_number" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_voyage');">Voyage ID</a>
+    <a href="#" onclick="sort_results('sort_form_voyage');">{% trans 'Voyage ID' %}</a>
   </div>
   </th>
 
@@ -164,7 +164,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_shipname" value="slave_ship_name" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_shipname');">Ship name</a>
+    <a href="#" onclick="sort_results('sort_form_shipname');">{% trans 'Ship name' %}</a>
   </div>
   </th>
 
@@ -180,7 +180,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_arrival" value="slave_date_arrived" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_arrival');">Arrival</a>
+    <a href="#" onclick="sort_results('sort_form_arrival');">{% trans 'Arrival' %}</a>
   </div>
   </th>
 
@@ -196,7 +196,7 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_embarkation" value="slave_embarkation_port" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_embarkation');">Embarkation</a>
+    <a href="#" onclick="sort_results('sort_form_embarkation');">{% trans 'Embarkation' %}</a>
   </div>
   </th>
 
@@ -212,13 +212,13 @@
     <div class="grid-header-text">
   {% endifequal %}
     <input type="hidden" id="sort_form_disembarkation" value="slave_disembarkation_port" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_disembarkation');">Disembarkation</a>
+    <a href="#" onclick="sort_results('sort_form_disembarkation');">{% trans 'Disembarkation' %}</a>
   </div>
   </th>
 
   <th>
   <div class="grid-header-text">
-    <a href="#">Go to African-Origins Record</a>
+    <a href="#">{% trans 'Go to African-Origins Record' %}</a>
   </div>
   </th>
 </tr>
@@ -256,9 +256,7 @@
         {% if record.object.voyage %}
           <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
         {% else %}
-          <a href="#" onclick="return alert('A transatlantic Voyage ID for this record does not yet exist, ' +
-           'although further research might uncover one. The link in the rightmost column of the African Names Database ' +
-            'table will take you to the matching entry in the African Origins database.');">{{ record.object.voyage_number }}</a>
+          <a href="#" onclick="return alert('{% trans 'A transatlantic Voyage ID for this record does not yet exist, although further research might uncover one. The link in the rightmost column of the African Names Database table will take you to the matching entry in the African Origins database.' %}');">{{ record.object.voyage_number }}</a>
         {% endif %}
         </td>
         <td>{{ record.object.ship_name }}</td>
@@ -274,7 +272,7 @@
           <td></td>
         {% endif %}
         <td>
-          <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("Redirecting to African Origins");">GO</a>
+          <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
         </td>
         </tr>
 
@@ -289,8 +287,8 @@
 <tbody>
   <tr>
   <td style="padding: 0px; text-align: left">
-  Showing {{ results.start_index }} - {{ results.end_index }} out of {{ results.paginator.count }}
-{{ options_results_per_page_form.option }} results per page
+  {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
+{{ options_results_per_page_form.option }} {% trans 'results per page' %}
 
   </td>
 
@@ -303,22 +301,22 @@
   {% if results.number != 1 %}
     <td class="pager-fast-back">
       <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-      <a href="#" onclick="retrieve_page('form_first_page');">« First</a>
+      <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
     </td>
   {% else %}
     <td class="pager-fast-back-no-click">
-      « First
+      {% trans '« First' %}
     </td>
   {% endif %}
 
   {% if results.has_previous %}
     <td class="pager-back">
       <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-      <a href="#" onclick="retrieve_page('form_prev_page');">« Prev</a>
+      <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
     </td>
   {% else %}
     <td class="pager-back-no-click">
-      « Prev
+      {% trans '« Prev' %}
     </td>
   {% endif %}
 
@@ -339,21 +337,21 @@
   {% if results.has_next %}
     <td class="pager-fast-forward">
       <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-      <a href="#" onclick="retrieve_page('form_next_page');">Next »</a>
+      <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
     </td>
   {% else %}
     <td class="pager-fast-forward-no-click">
-      Next »
+      {% trans 'Next »' %}
     </td>
   {% endif %}
   {% if results.has_next %}
     <td class="pager-forward">
         <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-        <a href="#" onclick="retrieve_page('form_last_page');">Last »</a>
+        <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
     </td>
   {% else %}
     <td class="pager-forward-no-click">
-      Last »
+      {% trans 'Last »' %}
     </td>
   {% endif %}
 
@@ -370,8 +368,8 @@
 </div>
 
     <div style="margin-top: 5px;">
-<input id="form:_idJsp186" class="button-save" type="submit" onclick="clear_form();" value="Download current view" name="form:_idJsp186">
-<input id="form:_idJsp188" class="button-save" type="submit" onclick="clear_form();" value="Download all results" name="form:_idJsp188">
+<button id="form:_idJsp186" class="button-save" type="submit" onclick="clear_form();" value="Download current view" name="form:_idJsp186">{% trans 'Download current view' %}</button>
+<button id="form:_idJsp188" class="button-save" type="submit" onclick="clear_form();" value="Download all results" name="form:_idJsp188">{% trans 'Download all results' %}</button>
 </div>
 
 </td>

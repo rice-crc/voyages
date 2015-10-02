@@ -10,7 +10,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
 {% endblock %}
 
-{% block title %}Image Detail{% endblock %}
+{% block title %}{% trans 'Image Detail' %}{% endblock %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
 
 <div class="image-title">
     {% for i in images %}
-        {{ i.title }}
+        {{ i.title|trans_log }}
     {% endfor %}
 </div>
 <div class="image-navigation">
@@ -33,30 +33,30 @@
             {% if not query %}
                 {% if enabled_categories|length == 1 %}
                     {% for i in enabled_categories %}
-                        <a href="{% url 'resources:get_images_category' i %}">Images of {{ i }}</a>
+                        <a href="{% url 'resources:get_images_category' i %}">{% trans 'Images of ' %}{{ i|trans_log }}</a>
                     {% endfor %}
                 {% elif enabled_categories|length == 4 %}
-                    <a href="{% url 'resources:images-search' %}">All images</a>
+                    <a href="{% url 'resources:images-search' %}">{% trans 'All images' %}</a>
                 {% else %}
-                    <a href="{% url 'resources:images-search' %}">Search results</a>
+                    <a href="{% url 'resources:images-search' %}">{% trans 'Search results' %}</a>
                 {% endif %}
             {% else %}
-                <a href="{% url 'resources:images-search' %}">Search results</a>
+                <a href="{% url 'resources:images-search' %}">{% trans 'Search results' %}</a>
             {% endif %}
         </td>
         <td style="padding: 0px 0px 0px 0px;">
             {% if results.has_previous %}
-                <a href={{ results.previous_page_number }}>Previous</a>
+                <a href={{ results.previous_page_number }}>{% trans 'Previous' %}</a>
             {% else %}
-                Previous
+                {% trans 'Previous' %}
             {% endif %}
         </td>
         <td style="padding: 0px 10px 0px 10px"> {{ results.number }} / {{ results.paginator.num_pages }}  </td>
         <td style="padding: 0px;">
             {% if results.has_next %}
-                <a href={{ results.next_page_number }}>Next</a>
+                <a href={{ results.next_page_number }}>{% trans 'Next' %}</a>
             {% else %}
-                Next
+                {% trans 'Next' %}
             {% endif %}
         </td>
     </tr>
@@ -78,7 +78,7 @@
         </td>
         <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
             <div class="image-description">
-                {{ i.description }}
+                {{ i.description|trans_log }}
             </div>
             <table class="image-detail-info">
                 <tbody>
@@ -86,7 +86,7 @@
                     <tr>
                         <td>
                             <div class="image-detail-info-label">
-                                Year:
+                                {% trans 'Year:' %}
                             </div>
                         </td>
                         <td>
@@ -97,7 +97,7 @@
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
-                            Source:
+                            {% trans 'Source:' %}
                         </div>
                     </td>
                     <td>
@@ -108,7 +108,7 @@
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
-                            Language:
+                            {% trans 'Language:' %}
                         </div>
                     </td>
                     <td>
@@ -120,13 +120,13 @@
             </table>
             {% if i.voyage_vessel_name %}
                 <div class="image-detail-voyages-title">
-                    Related voyages
+                    {% trans 'Related voyages' %}
                 </div>
                 <table class="image-detail-voyages">
                     <tbody>
                     <tr>
                         <td>
-                            Voyage ID =
+                            {% trans 'Voyage ID' %} =
                             {{ i.voyage_id }} - {{ i.voyage_vessel_name }}, {{ i.voyage_imp_voyage_began|get_year_value }}
                         </td>
                     </tr>

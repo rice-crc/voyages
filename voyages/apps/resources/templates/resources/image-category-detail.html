@@ -10,7 +10,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
 {% endblock %}
 
-{% block title %}Image Detail{% endblock %}
+{% block title %}{% trans 'Image Detail' %}{% endblock %}
 
 {% block content %}
 
@@ -21,28 +21,28 @@
 <div id="center-content">
 
 <div class="image-title">
-    {{ pagins.0.title }}
+    {{ pagins.0.title|trans_log }}
 </div>
 <div class="image-navigation">
     <table class="image-navigation">
     <tbody>
     <tr>
         <td style="padding: 0px 10px 0px 0px;">
-        <a href="{% url 'resources:images-category' category|spaces_to_underscores %}">Images of {{ category }}</a>
+        <a href="{% url 'resources:images-category' category|spaces_to_underscores %}">{% trans 'Images of ' %}{{ category|trans_log }}</a>
         </td>
         <td style="padding: 0px 0px 0px 0px;">
             {% if pagins.has_previous %}
-                <a href={{ pagins.previous_page_number }}>Previous</a>
+                <a href={{ pagins.previous_page_number }}>{% trans 'Previous' %}</a>
             {% else %}
-                Previous
+                {% trans 'Previous' %}
             {% endif %}
         </td>
         <td style="padding: 0px 10px 0px 10px"> {{ pagins.number }} / {{ pagins.paginator.num_pages }}  </td>
         <td style="padding: 0px;">
             {% if pagins.has_next %}
-                <a href={{ pagins.next_page_number }}>Next</a>
+                <a href={{ pagins.next_page_number }}>{% trans 'Next' %}</a>
             {% else %}
-                Next
+                {% trans 'Next' %}
             {% endif %}
         </td>
     </tr>
@@ -64,7 +64,7 @@
         </td>
         <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
             <div class="image-description">
-                {{ pagins.0.description }}
+                {{ pagins.0.description|trans_log }}
             </div>
             <table class="image-detail-info">
                 <tbody>
@@ -72,7 +72,7 @@
                     <tr>
                         <td>
                             <div class="image-detail-info-label">
-                                Year:
+                                {% trans 'Year' %}:
                             </div>
                         </td>
                         <td>
@@ -83,7 +83,7 @@
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
-                            Source:
+                            {% trans 'Source:' %}
                         </div>
                     </td>
                     <td>
@@ -94,11 +94,11 @@
                 <tr>
                     <td>
                         <div class="image-detail-info-label">
-                            Language:
+                            {% trans 'Language:' %}
                         </div>
                     </td>
                     <td>
-                        {{ pagins.0.language|decode_language }}
+                        {{ pagins.0.language|decode_language|trans_log }}
                     </td>
                 </tr>
                 {% endif %}
@@ -106,13 +106,13 @@
             </table>
             {% if pagins.0.voyage_id %}
                 <div class="image-detail-voyages-title">
-                    Related voyages
+                    {% trans 'Related voyages' %}
                 </div>
                 <table class="image-detail-voyages">
                     <tbody>
                     <tr>
                         <td>
-                            Voyage ID =
+                            {% trans 'Voyage ID' %} =
                             {{ pagins.0.voyage_id }} - {{ pagins.0.voyage_vessel_name }}, {{ pagins.0.voyage_imp_voyage_began|get_year_value }}
                         </td>
                     </tr>

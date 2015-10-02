@@ -60,9 +60,9 @@
     "model": "assessment.exportarea", 
     "fields": {
         "name": "Africa", 
-        "longitude": 13.133704, 
+        "longitude": 9.3438970,
         "show_at_zoom": 999, 
-        "latitude": 17.074343, 
+        "latitude": 0.0540330,
         "order_num": 1, 
         "show_on_map": true
     }
@@ -272,9 +272,9 @@
     "model": "assessment.importarea", 
     "fields": {
         "name": "Africa", 
-        "longitude": 13.133704, 
+        "longitude": 9.3438970,
         "show_at_zoom": 999, 
-        "latitude": 17.074343, 
+        "latitude": 0.0540330,
         "order_num": 9, 
         "show_on_map": true
     }
@@ -739,9 +739,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "Africa", 
-        "longitude": 13.133704, 
+        "longitude": 9.3438970,
         "show_at_zoom": 999, 
-        "latitude": 17.074343, 
+        "latitude": 0.0540330,
         "order_num": 36, 
         "import_area": 9, 
         "show_on_map": true

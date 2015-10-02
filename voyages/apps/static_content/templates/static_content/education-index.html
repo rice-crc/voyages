@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load voyage_extras %}
 
 <!-- The landing page of the Education section -->
 {% load i18n %}
@@ -14,11 +15,11 @@
 <div id="index-intro-band">
 
 	<div id="index-intro-title">
-		{{ objs.0.title|safe }}
+		{{ objs.0.title|trans_log }}
 	</div>
 
 	<div id="index-intro-text">
-		{{ objs.0.description|safe }}
+		{{ objs.0.description|trans_log }}
 	</div>
 
 </div>
@@ -26,8 +27,8 @@
 <div id="section-titles">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="section-title"><a href="{% url 'education:lesson-plans' %}">{{ objs.1.title|safe }}</a></td>
-			<td class="section-title"><a href="{% url 'education:web-resources' %}">{{ objs.2.title|safe }}</a></td>
+			<td class="section-title"><a href="{% url 'education:lesson-plans' %}">{{ objs.1.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'education:web-resources' %}">{{ objs.2.title|trans_log }}</a></td>
 		</tr>
 	</table>
 </div>
@@ -36,9 +37,9 @@
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 
-			<td class="section-desc">{{ objs.1.description|safe }}</td>
+			<td class="section-desc">{{ objs.1.description|trans_log }}</td>
 
-			<td class="section-desc">{{ objs.2.description|safe }}</td>
+			<td class="section-desc">{{ objs.2.description|trans_log }}</td>
 
 		</tr>
 	</table>

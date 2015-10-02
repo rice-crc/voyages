@@ -16,5 +16,4 @@ xlwt
 unidecode
 django-password-reset
 openpyxl>=1.9
-matplotlib
 

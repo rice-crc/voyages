@@ -104,126 +104,147 @@
 		<th>{% trans "NOTES" %}</th>
 	</tr>
 	<tr>
-		<td class="content">CODE</td>
-		<td class="restrictions"><a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU General Public License, v. 3</a> or later</td>
-		<td class="citations">Not applicable.</td>
+		<td class="content">{% trans 'CODE' %}</td>
+		<td class="restrictions">{% trans '<a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU General Public License, v. 3</a> or later' %}</td>
+		<td class="citations">{% trans 'Not applicable.' %}</td>
 		<td class="notes">{% blocktrans %}Code for this site may be found at <a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>,
 		and is made available to support open
 		source programming efforts. Visit the GNU website for more
 		information on the limits of this license."{% endblocktrans %}</td>
 	</tr>
 	<tr>
-		<td class="content" rowspan="2">DATA</td>
+		<td class="content" rowspan="2">{% trans 'DATA' %}</td>
 		<td class="restrictions">
 		<div class="asset">
 			{% trans "Historical data" %}
-		</div> Public domain (use restrictions do not apply). </td>
+		</div> {% trans 'Public domain (use restrictions do not apply).' %} </td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[name of specific database used].
 			[latest publication year of data, indicated on the Downloads page of the site].
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[website URL or permanent link created from data search]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example:</span>
 			Voyages Database.
 			2009.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			<a href="http://www.slavevoyages.org" target="_blank">http://www.slavevoyages.org</a>
 			(accessed January 1, 2010).
+			{% endblocktrans %}
 		</div></td>
-		<td class="notes" rowspan="2">Data drawn from historical documents is
+		<td class="notes" rowspan="2">
+			{% blocktrans %}Data drawn from historical documents is
 		public domain and therefore not restricted. Imputed data
 		(indicated with an asterisk, *, in the Voyages Database, and all
 		data in the Estimates Database) is licensed through a Creative
 		Commons license. Visit the Creative Commons website for more
-		information on the limits of this license.</td>
+		information on the limits of this license.
+			{% endblocktrans %}</td>
 	</tr>
 	<tr>
 		<td class="restrictions">
 		<div class="asset">
-			Imputed data
-		</div><a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>. </td>
+			{% trans 'Imputed data' %}
+		</div>{% trans '<a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>.' %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[name of specific database used].
 			[latest publication year of data, indicated on the Downloads page of the site].
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[website URL or permanent link created from data search]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example:</span>
 			Estimates Database.
 			2009.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="{% url 'assessment:estimates' %}?yearFrom=1501&amp;yearTo=1866&amp;flag=2" target="_blank">http://www.slavevoyages.org/assessment/estimates.html?yearFrom=1501&amp;yearTo=1866&amp;flag=2</a>
-			(accessed January 1, 2010).
+			{% trans '(accessed January 1, 2010).' %}
 		</div></td>
 
 	</tr>
 	<tr>
-		<td class="content" rowspan="2">IMAGES</td>
+		<td class="content" rowspan="2">{% trans 'IMAGES' %}</td>
 		<td class="restrictions">
 		<div class="asset">
 			{% trans "Digitized objects" %}
 		</div> {% trans "For permission questions or requests, contact the institution that provided the digital copy and/or holds the original." %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[title provided for digitized image in the Images section].
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[URL for Voyages Images Database]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example:</span>
 			West and West-Central Africa, c. 1660.
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="{% url 'resources:images' %}" target="_blank">http://www.slavevoyages.org/resources/images.html</a>
-			(accessed January 1, 2010).
+			{% trans '(accessed January 1, 2010).' %}
 		</div></td>
-		<td class="notes" rowspan="2">Contact <a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;">the <em>Voyages</em> website administrator</a> with questions or requests
+		<td class="notes" rowspan="2">
+			{% blocktrans %}Contact <a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;">the <em>Voyages</em> website administrator</a> with questions or requests
 		about re-using images contained within the Voyages Database or
-		the Estimates Database (graphs, maps, timeline). The <em>Voyages</em> logo is only available for approved publicity for the <em>Voyages</em> site.</td>
+		the Estimates Database (graphs, maps, timeline). The <em>Voyages</em> logo is only available for approved publicity for the <em>Voyages</em> site.
+			{% endblocktrans %}</td>
 	</tr>
 	<tr>
 		<td class="restrictions">
 		<div class="asset">
-			Introductory Maps
-		</div> Contact Yale University Press. </td>
+			{% trans 'Introductory Maps' %}
+		</div>{% trans 'Contact Yale University Press.' %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[title of map].
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[URL for Introductory Maps section of Voyages website]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example:</span>
 			Map 4: Wind and ocean currents of the Atlantic basins.
 			JPEG.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="{% url 'assessment:intro-maps' %}" target="_blank">http://www.slavevoyages.org/tast/assessment/intro-maps.faces</a>
-			(accessed January 1, 2010).
+			{% trans '(accessed January 1, 2010).' %}
 		</div></td>
 	</tr>
 	<tr>
-		<td class="content" rowspan="3">TEXT</td>
+		<td class="content" rowspan="3">{% trans 'TEXT' %}</td>
 		<td class="restrictions">
 		<div class="asset">
-			Essays
-		</div> Contact individual author for permission to republish. </td>
+			{% trans 'Essays' %}
+		</div>{% trans 'Contact individual author for permission to republish.' %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[author of essay].
 			[publication date of essay].
@@ -231,56 +252,64 @@
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[URL to first page of essay in Essays section]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example 1:</span>
 			Behrendt, Stephen D.
 			2008.
 			Seasonality in the trans-Atlantic slave trade.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="{% url 'assessment:essays' %}" target="_blank">http://www.slavevoyages.org/tast/assessment/essays.html</a>
-			(accessed January 1, 2010).
-		</div>
+			{% trans '(accessed January 1, 2010).' %}
+			</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example 2:</span>
 			Eltis, David, and Paul F. Lachance.
 			2009.
 			Estimates of the size and direction of the trans-Atlantic slave trade.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="{{ STATIC_URL }}/download/estimates-method.pdf" target="_blank">hhttp://www.slavevoyages.org/static/download/estimates-method.pdf</a>
 			(accessed January 1, 2010).
 		</div></td>
-		<td rowspan="3">As with any information or object reused or republished
+		<td rowspan="3">{% blocktrans %}As with any information or object reused or republished
 		in another context, original author or copyright should be
-		appropriately credited.</td>
+		appropriately credited.{% endblocktrans %}</td>
 	</tr>
 	<tr>
 		<td class="restrictions">
 		<div class="asset">
-			Lesson plans
-		</div> Curriculum and instruction only. Not for commercial republication. Contact individual authors for additional permissions. </td>
+			{% trans 'Lesson plans' %}
+		</div>{% trans 'Curriculum and instruction only. Not for commercial republication. Contact individual authors for additional permissions.' %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			[author of lesson plan].
 			[title of lesson plan].
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			[URL to PDF version of lesson plan]
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div></td>
 	</tr>
 	<tr>
 		<td class="restrictions">
 		<div class="asset">
-			Other text
-		</div> PDF documents, glossary, FAQs, site text, and other text on the site not attributed to an individual is covered by a <a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>. </td>
+			{% trans 'Other text' %}
+		</div>{% blocktrans %}PDF documents, glossary, FAQs, site text, and other text on the site not attributed to an individual is covered by a <a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>.{% endblocktrans %}</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<td class="content">VIDEO</td>
-		<td class="notes"><a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a></td>
+		<td class="content">{% trans 'VIDEO' %}</td>
+		<td class="notes">{% blocktrans %}<a href="http://creativecommons.org/licenses/by-nc/3.0/us" target="_blank">Creative Commons Attribution-Noncommercial 3.0 United States License</a>{% endblocktrans %}</td>
 		<td class="citations">
 		<div class="format">
+			{% blocktrans %}
 			<span class="format">Format:</span>
 			Demos:
 			[title of demonstration video].
@@ -288,28 +317,31 @@
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
 			<a href="http://www.slavevoyages.org" target="_blank">http://www.slavevoyages.org</a>
 			(accessed Month, Day, Year).
+			{% endblocktrans %}
 		</div>
 		<div class="example">
+			{% blocktrans %}
 			<span class="example">Example:</span>
 			Demos:
 			Voyages site overview.
 			QuickTime movie.
 			<i>Voyages: The Trans-Atlantic Slave Trade Database.</i>
+			{% endblocktrans %}
 			<a href="http://www.slavevoyages.org" target="_blank">http://www.slavevoyages.org</a>
-			(accessed January, 1, 2010).
+			{% trans '(accessed January 1, 2010).' %}
 		</div></td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<td class="content">[Link to Website]</td>
-		<td class="notes">Open Access</td>
-		<td class="citations">Not applicable.</td>
-		<td><em>Voyages</em> is an open access website. No permission or
-		license agreement is needed to create a link to this site.</td>
+		<td class="content">{% trans '[Link to Website]' %}</td>
+		<td class="notes">{% trans 'Open Access' %}</td>
+		<td class="citations">{% trans 'Not applicable.' %}</td>
+		<td>{% blocktrans %}Voyages</em> is an open access website. No permission or
+		license agreement is needed to create a link to this site.{% endblocktrans %}</td>
 	</tr>
 </table>
 
-<h2>Licenses</h2>
+<h2>{% trans 'Licenses' %}</h2>
 
 <p>
 	{% blocktrans %}<em>Voyages: The Trans-Atlantic Slave Trade Database</em> by

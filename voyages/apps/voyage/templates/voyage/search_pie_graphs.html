@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 
 <div>
   <table style="border-collapse: collapse; width: 100%;"1>
@@ -8,7 +9,7 @@
 	  <div style="margin-bottom: 5px; padding: 2px 10px 2px 5px; background-color: #F2E3B8; font-weight: bold;">{% trans 'Chart setup' %}</div>
 	  <table>
 	    <tbody>
-	      {% for field in graphs_bar_select_form %}
+	      {% for field in graphs_select_form %}
               <tr>
 		<td> <b> {{ field.label }}: </b> </td>
 		<td> {% for i in field %} {{ i }} {% endfor %} </td>
@@ -18,8 +19,8 @@
 		<td></td>
 		<td>
 		  <!-- Show button -->
-		  <input type="submit" value="{% trans 'Add Series' %}" onclick="submitWithValue('tab_graphs_pie_add');" name="buttonAddSeries" />
-		  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs_pie_show');" name="buttonShow" />
+		  <button type="submit" value="Add Series" onclick="submitWithValue('tab_graphs_pie_add');" name="buttonAddSeries">{% trans 'Add Series' %}</button>
+		  <button type="submit" value="Show" onclick="submitWithValue('tab_graphs_pie_show');" name="buttonShow">{% trans 'Show' %}</button>
 		</td>
 	      </tr>
 	    </tbody>
@@ -36,7 +37,9 @@
 	      </tr>
 	      {% endfor %}
 	      <tr>
-		<td> <input type="submit" value="{% trans 'Remove Selected' %}" onclick="submitWithValue('tab_graphs_pie_remove')" name="buttonRemoveSeries" /></td>
+		<td>
+			<button type="submit" value="Remove Selected" onclick="submitWithValue('tab_graphs_pie_remove')" name="buttonRemoveSeries">{% trans 'Remove Selected' %}</button>
+		</td>
 	      </tr>
 	    </tbody>
 	  </table>
@@ -46,9 +49,149 @@
   </table>
   <div>
     <div style="padding: 2px 10px 2px 5px; background-color: #F2E3B8; font-weight: bold; margin-top: 10px;">{% trans 'Graph' %}</div>
-    {% if inline_graph_png %}
-      <img alt="embedded graph" src="data:image/png;base64,{{inline_graph_png}}"/>
-    {% endif %}
+	<div id="graphContainer"></div>
+	<style>
+		polyline{
+			opacity: .3;
+			stroke: black;
+			stroke-width: 2px;
+			fill: none;
+		}
+	</style>
+	<script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
+	<script type="text/javascript">
+	{% load l10n %}
+	{% localize off %}
+		var None = 0;
+		function round2(num) {
+			return Math.round(num * 100) / 100;
+		}
+		{% for yid, series in graph_data.items %}
+			var label = "{{ yid }}";
+			var data = [
+			{% for datum in series %}
+				{ label: "{{ datum.0|trans_log }}", value: round2({{ datum.1 }}) },
+			{% endfor %}
+			];
+		{% endfor %}
+		data.sort(function(a, b) { return a.value - b.value; });
+		var sum = d3.sum(data, function(d) { return d.value; });
+		var margin = {top: 20, right: 10, bottom: 50, left: 20},
+			width = 960 - margin.left - margin.right,
+			height = 460 - margin.top - margin.bottom;
+		var color = d3.scale.category20c();
+		var radius = Math.min(width, height) / 2 - margin.top;
+
+		var arc = d3.svg.arc()
+			.outerRadius(radius * 0.8)
+			.innerRadius(radius * 0.4);
+
+		var outerArc = d3.svg.arc()
+			.outerRadius(radius * 0.9)
+			.innerRadius(radius * 0.9);
+
+		var angleShift = Math.min(-0.1, -Math.min(0.25, data[data.length - 1].value / sum));
+		var pie = d3.layout.pie()
+			.startAngle(angleShift * Math.PI)
+			.endAngle((2 + angleShift) * Math.PI)
+			.value(function(d) { return d.value; });
+		var svg = d3.select("#graphContainer")
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.attr("transform", "translate(" + (margin.left + width / 2) + "," + (margin.top + height / 2) + ")");
+
+		svg.append("text")
+			.attr("left", margin.left + width / 2)
+     		.attr("text-anchor", "middle")
+     		.attr("y", 10 - height / 2)
+     		.attr("font-size", 20)
+			.text(label);
+
+		var g = svg.selectAll(".arc")
+			.data(pie(data))
+			.enter().append("g")
+			.attr("class", "arc");
+
+		var key = function(d) { return d.data.label; };
+		g.append("path")
+			.attr("d", arc)
+			.style("fill", function(d) { return color(key(d)); });
+
+		svg.append("g")
+			.attr("class", "labels");
+		svg.append("g")
+			.attr("class", "lines");
+		// Text labels.
+		var text = svg.select(".labels").selectAll("text")
+				.data(pie(data), key);
+
+		var opacityFn = function(d) {
+			var x = Math.sin(d.endAngle - d.startAngle);
+			return Math.min(0.5, Math.pow(x, 1.5) * 15);
+		};
+		{% get_current_language as LANGUAGE_CODE %}
+		text.enter()
+			.append("text")
+			.style('opacity', opacityFn)
+			.attr("dy", ".35em")
+			.text(function(d) { return key(d) + " = " + d.value.toLocaleString("{{ LANGUAGE_CODE }}"); });
+
+		function midAngle(d){
+			return d.startAngle + (d.endAngle - d.startAngle)/2;
+		}
+
+		text.transition().duration(1000)
+			.attrTween("transform", function(d) {
+				this._current = this._current || d;
+				var interpolate = d3.interpolate(this._current, d);
+				this._current = interpolate(0);
+				return function(t) {
+					var d2 = interpolate(t);
+					var pos = outerArc.centroid(d2);
+					pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+					return "translate("+ pos +")";
+				};
+			})
+			.styleTween("text-anchor", function(d){
+				this._current = this._current || d;
+				var interpolate = d3.interpolate(this._current, d);
+				this._current = interpolate(0);
+				return function(t) {
+					var d2 = interpolate(t);
+					return midAngle(d2) < Math.PI ? "start":"end";
+				};
+			});
+
+		text.exit()
+			.remove();
+
+		// Polylines to labels.
+		var polyline = svg.select(".lines").selectAll("polyline")
+			.data(pie(data), key);
+
+		polyline.enter()
+			.append("polyline");
+
+		polyline.transition().duration(1000)
+			.style('opacity', opacityFn)
+			.attrTween("points", function(d){
+				this._current = this._current || d;
+				var interpolate = d3.interpolate(this._current, d);
+				this._current = interpolate(0);
+				return function(t) {
+					var d2 = interpolate(t);
+					var pos = outerArc.centroid(d2);
+					pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+					return [arc.centroid(d2), outerArc.centroid(d2), pos];
+				};
+			});
+
+		polyline.exit()
+			.remove();
+	{% endlocalize %}
+	</script>
   </div>
 </div>
 

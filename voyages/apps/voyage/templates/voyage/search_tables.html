@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 
 {% load humanize %}
 
@@ -13,7 +14,7 @@
     <tbody>
       {% for field in table_stats_form %}
         <tr>
-          <td> <b> {{ field.label }}: </b> </td>
+          <td> <b> {{ field.label|trans_log }}: </b> </td>
           <td> {% for i in field %} {{ i }} {% endfor %} </td>
 	</tr>
       {% endfor %}
@@ -21,7 +22,7 @@
 	<td></td>
 	<td>
 	  <!-- Show button -->
-	  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_tables_in');" name="buttonShow" />
+	  <button type="submit" value="Show" onclick="submitWithValue('tab_tables_in');" name="buttonShow">{% trans 'Show' %}</button>
 	</td>
       </tr>
     </tbody>
@@ -35,7 +36,7 @@
 	    {% if forloop.first %} <td class='vstable' colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels_before }}"/> {% endif %}
 	    {% for label_tuple in collbllist %}
 	      {% if label_tuple.1 > 0 %}
-	        <th class="grid-header-text vstableborder" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	        <th class="grid-header-text vstableborder" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0|trans_log }} </th>
 	      {% endif %}
 	    {% endfor %}
 	    {% if forloop.first %}
@@ -54,7 +55,7 @@
       {% for row_tuple in row_list %}
         <tr class="grid-row-even grid-row-first">
 	  {% for label_tuple in row_tuple.0 %}
-	    <th class="grid-header-text vstableborder" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0 }} </th>
+	    <th class="grid-header-text vstableborder" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0|trans_log }} </th>
 	  {% endfor %}
 	  {% for cell_value in row_tuple.1 %}
 	    <td class='vstable'> {% if cell_value != None %} {{ cell_value|intcomma }} {% endif %} </td>

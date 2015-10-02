@@ -90,7 +90,8 @@ table.secondary-bar {
 }
 
 .secondary-bar-help-links {
-	width: 220px;
+	/*width: 220px;*/
+	white-space: nowrap;
 }
 
 /* Breadcrumb section */
@@ -176,4 +177,34 @@ div.left-menu-subtitle {
 	width: 950px;
 	margin: 0;
 	padding:0;	
+}
+
+html, body {
+    height: 100%;
+}
+
+.map_node_aggregate_table {
+	border-collapse: collapse;
+}
+
+.map_node_aggregate_table tr th {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tr td {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tfoot tr td {
+	font-weight: bold;
+}
+
+.map_node_aggregate_table td.number {
+	text-align: right;
+}
+
+.zero_value {
+	display: none;
 }

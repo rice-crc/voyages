@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load i18n %}
+{% load voyage_extras %}
+
 <!-- Page title here -->
 {% block title %}{% trans "Trans-Atlantic Slave Trade" %}{% endblock %}
 
@@ -135,10 +137,10 @@
 		<!-- The welcome text next to the map -->
 		<td valign="top">
 		<div id="welcome-text">
-			<h1>{{ objs.0.title|safe }}
+			<h1>{{ objs.0.title|trans_log }}
 			</h1>
 			<p>
-				{{ objs.0.description|safe }}</p>
+				{{ objs.0.description|trans_log }}</p>
 		</div>
 	
 		<!-- Featured section -->
@@ -147,30 +149,30 @@
 				<td class="featured-section-image"><a href="{% url 'voyage:search' %}"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'voyage:search' %}">{{ objs.1.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'voyage:search' %}">{{ objs.1.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{{ objs.1.description|safe }}
+					{{ objs.1.description|trans_log }}
 				</div></td>
 			</tr>
 			<tr>
 				<td class="featured-section-image"><a href="{% url 'assessment:estimates' %}"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'assessment:estimates' %}">{{ objs.2.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'assessment:estimates' %}">{{ objs.2.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{{ objs.2.description|safe }}
+					{{ objs.2.description|trans_log }}
 				</div></td>
 			</tr>
 			<tr>
 				<td class="featured-section-image"><a href="{% url 'about:origins' %}"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
 				<td class="featured-section-text">
 				<div class="featured-section-caption">
-					<a href="{% url 'about:origins' %}">{{ objs.3.title|safe }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
+					<a href="{% url 'about:origins' %}">{{ objs.3.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
 				</div>
 				<div class="featured-section-description">
-					{{ objs.3.description|safe }}
+					{{ objs.3.description|trans_log }}
 				</div></td>
 			</tr>
 		</table>

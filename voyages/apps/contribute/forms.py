@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from voyages.apps.contribute.models import *
 from voyages.extratools import AdvancedEditor
+from django.utils.translation import ugettext as _
 
 class AdminFaqAdminForm(forms.ModelForm):
     """
@@ -18,4 +19,4 @@ class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].label = "Username or Email"
+        self.fields['username'].label = _("Username or Email")

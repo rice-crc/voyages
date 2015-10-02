@@ -1,0 +1,320 @@
+{% load i18n %}
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+<div style="display:table-row; height:100%">
+    <div id="map" style="width:100%; height:100%; min-height: 500px;"></div>
+</div>
+<div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
+    <h1>{% trans 'Loading map voyages...' %}</h1>
+</div>
+<div id="timeControls" class="animation_voyage_controls" style="display:none;">
+    <h1 class="animation_voyage_year_label" id="yearLabel"></h1>
+    <div class="control animation_voyage_year_slider" id="slider" style="width: 200px;"></div>
+    <button class="animation_voyage_pause_button" type="button" id="pauseBtn">{% trans 'Pause' %}</button>
+    <button class="animation_voyage_play_button" type="button" id="playBtn" style="display:none;">{% trans 'Play' %}</button>
+</div>
+<div id="tooltip" class="animation_voyage_info" style="display:none; opacity: 0;">
+    <div id="tooltip_content"></div>
+    <div class="animation_tooltip_close_button" onclick="return closeToolTip();">x</div>
+</div>
+<script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
+<script src="{{ STATIC_URL }}maps/js/arc.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.geodesic.min.js"></script>
+<script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
+<script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+    voyagesMap.init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes, links);
+    voyagesMap.addLayer(L.polyline(L.latLng(0, 0), L.latLng(0, 0)));
+
+    var selectedRoute = null;
+    function closeToolTip() {
+        $('#tooltip').hide();
+        svg.selectAll('.selected')
+            .style('opacity', 0)
+            .classed('selected', false);
+        if (selectedRoute) {
+            voyagesMap.removeLayer(selectedRoute);
+            selectedRoute = null;
+        }
+    }
+
+    // SVG + leaflet integration.
+    var map = voyagesMap._map;
+    var svg = d3.select(map.getPanes().overlayPane).append("svg");
+    var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    // Set SVG size and position within map.
+    function positionSvg() {
+        var bounds = map.getBounds();
+        var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
+        var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+        svg.attr("width", bottomRight.x - topLeft.x)
+           .attr("height", bottomRight.y - topLeft.y)
+           .style("left", topLeft.x + "px")
+           .style("top", topLeft.y + "px");
+        g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
+        if (isPaused) {
+            g.selectAll(".animation_voyage_group").each(function() {
+                var latLng = $(this).data("latLng");
+                if (latLng) {
+                    var point = map.latLngToLayerPoint(latLng);
+                    d3.select(this).attr("transform", "translate(" + point.x + "," + point.y + ")");
+                }
+            });
+        }
+    }
+    map.on("zoomend", positionSvg);
+
+    var tooltip = $("#tooltip");
+
+    var animationIndex = 0;
+    var isPaused = false;
+    var pendingTransitions = 0;
+    var years = [];
+    var yearStep = function() {};
+    var pendingStep = false;
+    var animationTime = 0;
+
+    function animation(data) {
+        $("#timeControls").show();
+        // Sort by year, break ties by id.
+        years = d3.nest()
+            .key(function(d) { return d.year; })
+            .sortKeys(d3.ascending)
+            .sortValues(function(a, b) { return a.voyage_id - b.voyage_id; })
+            .entries(data);
+        $( "#slider" ).slider({
+            value: 0,
+            min: 0,
+            max: years.length - 1,
+            step: 1,
+            slide: function( event, ui ) {
+                changePausedState(true);
+                g.selectAll(".animation_voyage_group").transition().duration(0);
+                g.selectAll(".animation_voyage_group").remove();
+                animationIndex = ui.value;
+                changePausedState(false);
+                if (!pendingStep) {
+                    pendingStep = true;
+                    window.setTimeout(yearStep, 500);
+                }
+            }
+        });
+        yearStep = function() {
+            if (animationIndex >= years.length || animationIndex < 0 || isPaused) {
+                changePausedState(true);
+                return;
+            }
+            try {
+                pendingStep = false;
+                $( "#slider" ).slider('value', animationIndex);
+                positionSvg();
+                var year = years[animationIndex].key;
+                var yearData = years[animationIndex].values;
+                $("#yearLabel").text(year);
+                var counter = 0;
+                animationTime = 0;
+                var selection = g.selectAll(".animation_voyage_group")
+                    .data(yearData)
+                    .enter()
+                    .append("g")
+                    .classed("animation_voyage_group", true);
+                selection
+                    .append("circle")
+                    .classed("animation_voyage_outer_circle", true)
+                    .attr("r", 10)
+                    .style("opacity", 0)
+                    .on("mouseover", function() {
+                        $(this).animate({ opacity: 1 }, 300);
+                    })
+                    .on("mouseout", function() {
+                        if (!d3.select(this).classed("selected")) {
+                            $(this).animate({ opacity: 0 }, 300);
+                        }
+                    })
+                    .on("click", function() {
+                        closeToolTip();
+                        d3.select(this).classed("selected", true);
+                        var d = this.__data__;
+                        var path = [
+                            L.latLng(d.source_lat, d.source_lng),
+                            L.latLng(d.destination_lat, d.destination_lng)
+                        ];
+                        selectedRoute = L.geodesic([path], {
+                            weight: 3,
+                            color: "red",
+                            className: "animation_selected_route"
+                        });
+                        voyagesMap.addLayer(selectedRoute);
+                        // Set tooltip content.
+                        var content = $("#tooltip_content");
+                        content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
+                        var template = "";
+                        if (d.ship_name != "") {
+                            template += '<h1>' + d.ship_name + "</h1>";
+                        }
+                        if (d.ship_nationality_name != "") {
+                            template += "<h2>" + d.ship_nationality_name + "</h2>";
+                        }
+                        if (d.ship_ton) {
+                            template += "<p>{% trans 'This {ton}-ton ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
+                            template = template.replace("{ton}", d.ship_ton);
+                        } else {
+                            template += "<p>{% trans 'This ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
+                        }
+                        template = template.replace("{source}", d.source_name)
+                            .replace("{destination}", d.destination_name)
+                            .replace("{embarked}", d.embarked)
+                            .replace("{disembarked}", d.disembarked);
+                        content.html(template + '<span class="animation_tooltip_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
+                            "{% trans 'More info' %} »</a></span>");
+                        // Position and show tooltip.
+                        tooltip.show();
+                        var rCirc = this.getBoundingClientRect();
+                        var rSvg = document.getElementById('map').getBoundingClientRect();
+                        var tooltip_width = tooltip.width();
+                        var tooltip_height = tooltip.height();
+                        var top = rCirc.bottom - rSvg.top + 50;
+                        if (top + tooltip_height + 120 > rSvg.bottom) {
+                            top -= tooltip_height + 100;
+                            console.log(top + tooltip_height);
+                            console.log(rSvg);
+                        }
+                        tooltip.animate({
+                            left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltip_width / 2 - 20) + "px",
+                            top: top + "px",
+                            opacity: 0.9
+                        }, 800);
+                    });
+                selection
+                    .append("circle")
+                    .classed("animation_voyage_inner_circle", true)
+                    .attr("r", 2)
+                applyTransition(selection, 0);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        yearStep();
+    }
+
+    function applyTransition(selection, startTime) {
+        if (animationIndex >= years.length || animationIndex < 0 || isPaused) return;
+        var duration = 1500 * (1 - startTime);
+        var yearData = years[animationIndex].values;
+        pendingTransitions = 0;
+        selection.transition()
+            .duration(duration)
+            .ease("linear")
+            .attrTween("transform", function(d, i, a) {
+                return tween(d, i, a, yearData.length, startTime, this);
+            })
+            .each("start", function() {
+                ++pendingTransitions;
+            })
+            .each("end", function() {
+                --pendingTransitions;
+                d3.select(this).remove();
+            });
+    }
+
+    function changePausedState(state) {
+        isPaused = state;
+        if (isPaused) {
+            $("#pauseBtn").hide();
+            $("#playBtn").show();
+        } else {
+            closeToolTip();
+            $("#pauseBtn").show();
+            $("#playBtn").hide();
+        }
+    }
+
+    function tick() {
+        if (pendingTransitions == 0 && !isPaused) {
+            if (++animationIndex < years.length) {
+                yearStep();
+            }
+        }
+    }
+
+    function tween(d, i, a, count, startTime, dom) {
+        var geodesic = new GreatCircle(
+            { x: d.source_lng, y: d.source_lat },
+            { x: d.destination_lng, y: d.destination_lat });
+        return function(t) {
+            startTime = parseFloat(startTime);
+            t = startTime + t * (1 - startTime);
+            if (t > animationTime) {
+                animationTime = t;
+            }
+            var x = i / (2 * count);
+            if (t > x) {
+                t = (t - x)/(1 - x);
+            } else {
+                t = 0;
+            }
+            var lngLat = geodesic.interpolate(t);
+            if (isNaN(lngLat[0]) || isNaN(lngLat[1])) {
+                console.log('here');
+                return "";
+            }
+            var latLng = L.latLng(lngLat[1], lngLat[0]);
+            $(dom).data("latLng", latLng);
+            var point = map.latLngToLayerPoint(latLng);
+            return "translate(" + point.x + "," + point.y + ")";
+        };
+    }
+
+    $( document ).ready(function() {
+        var animate = true;
+        var onCompleted = function(){
+                animate = false;
+                $("#loading").hide();
+             };
+        $.ajax({
+             type: "POST",
+             url: $("#form").attr('action'),
+             data: $("#form").serialize() + '&submitVal=animation_ajax',
+             success: animation,
+             error: function(jqXHR, textStatus, errorThrown) {
+                onCompleted();
+                console.log('Failed to load voyages!');
+             },
+             beforeSend:function(){
+                animate = true;
+                var target = 0.25;
+                $("#loading").show();
+                loop = function() {
+                    $('#loading').animate({
+                        opacity: target,
+                    }, 600, 'linear', function() {
+                        target = target < 1 ? 1 : 0.25;
+                        if (animate) loop();
+                    });
+                };
+                loop();
+             },
+             complete: onCompleted
+        });
+        $("#pauseBtn").click(function(e) {
+            changePausedState(true);
+            g.selectAll(".animation_voyage_group").transition().duration(0);
+            e.preventDefault();
+        });
+        $("#playBtn").click(function(e) {
+            console.log(animationTime);
+            changePausedState(false);
+            var selection = g.selectAll(".animation_voyage_group");
+            if (selection) {
+                applyTransition(selection, animationTime);
+            }
+            e.preventDefault();
+        });
+        window.setInterval(tick, 1000);
+    });
+</script>

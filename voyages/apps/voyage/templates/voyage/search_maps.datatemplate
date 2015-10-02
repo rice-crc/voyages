@@ -1,0 +1,18 @@
+{% load voyage_extras %}
+{% load l10n %}
+
+{% localize off %}
+var ports = {
+    {% for port_name, data in map_ports.items %}
+        "{{ port_name }}": new Port(
+            new NamedPoint("{{ port_name|trans_log }}", new L.LatLng({{ data.0 }}, {{ data.1 }})),
+            new NamedPoint("{{ data.2.region|trans_log }}", new L.LatLng({{ data.2.latitude }}, {{ data.2.longitude }})),
+            new NamedPoint("{{ data.3.broad_region|trans_log }}", new L.LatLng({{ data.3.latitude }}, {{ data.3.longitude }}))),
+    {% endfor %}
+};
+var flows = [
+    {% for flow in map_flows.values %}
+        new Flow('{{ flow.0 }}', '{{ flow.1 }}', {{ flow.2 }}, {{ flow.3 }}),
+    {% endfor %}
+];
+{% endlocalize %}

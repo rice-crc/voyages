@@ -1,0 +1,135 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-02 10:23-0300\n"
+"PO-Revision-Date: 2015-10-02 10:24-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: sitemedia/maps/js/voyagesMap.js:143
+msgid "port"
+msgstr "porto"
+
+#: sitemedia/maps/js/voyagesMap.js:143
+msgid "ports"
+msgstr "portos"
+
+#: sitemedia/maps/js/voyagesMap.js:144
+msgid "region"
+msgstr "região"
+
+#: sitemedia/maps/js/voyagesMap.js:144
+msgid "regions"
+msgstr "regiões"
+
+#: sitemedia/maps/js/voyagesMap.js:145
+msgid "broad region"
+msgstr "grande região"
+
+#: sitemedia/maps/js/voyagesMap.js:145
+msgid "broad regions"
+msgstr "grande regiões"
+
+#: sitemedia/maps/js/voyagesMap.js:364 sitemedia/maps/js/voyagesMap.js.c:447
+msgid "click for details"
+msgstr "clique para ver detalhes"
+
+#: sitemedia/maps/js/voyagesMap.js:409
+msgid "Inbound"
+msgstr "Entrada"
+
+#: sitemedia/maps/js/voyagesMap.js:410
+msgid "Outbound"
+msgstr "Saída"
+
+#: sitemedia/maps/js/voyagesMap.js:411 sitemedia/maps/js/voyagesMap.js.c:413
+#: sitemedia/maps/js/voyagesMap.js:679
+msgid "Embarked"
+msgstr "Embarcados"
+
+#: sitemedia/maps/js/voyagesMap.js:412 sitemedia/maps/js/voyagesMap.js.c:413
+#: sitemedia/maps/js/voyagesMap.js:681
+msgid "Disembarked"
+msgstr "Desembarcados"
+
+#: sitemedia/maps/js/voyagesMap.js:450
+msgid "Totals"
+msgstr "Totais"
+
+#: sitemedia/maps/js/voyagesMap.js:684 sitemedia/maps/js/voyagesMap.js.c:730
+msgid "Place or region of embarkation:"
+msgstr "Porto ou região de embarque:"
+
+#: sitemedia/maps/js/voyagesMap.js:718 sitemedia/maps/js/voyagesMap.js.c:731
+msgid "Place or region of disembarkation:"
+msgstr "Porto ou região de desembarque:"
+
+#: sitemedia/scripts/breadcrumb.js:9 sitemedia/scripts/breadcrumb.js.c:13
+msgid "Home"
+msgstr "Página inicial"
+
+#: sitemedia/scripts/breadcrumb.js:31 sitemedia/scripts/breadcrumb.js.c:33
+msgid "Understanding the Database"
+msgstr "Entendendo a base de dados"
+
+#: sitemedia/scripts/breadcrumb.js:35
+msgid "Essays"
+msgstr "Ensaios"
+
+#: sitemedia/scripts/navigation_topbar.js:4
+msgid "Voyages Database"
+msgstr "Banco de Dados Viagens"
+
+#: sitemedia/scripts/navigation_topbar.js:5
+msgid "Assessing the Slave Trade"
+msgstr "Análises do Tráfico de Escravos"
+
+#: sitemedia/scripts/navigation_topbar.js:6
+msgid "Resources"
+msgstr "Recursos"
+
+#: sitemedia/scripts/navigation_topbar.js:7
+msgid "Educational Materials"
+msgstr "Materiais educacionais"
+
+#: sitemedia/scripts/navigation_topbar.js:8
+msgid "About the Project"
+msgstr "Sobre o projeto"
+
+#: sitemedia/scripts/navigation_topbar.js:9
+msgid "Contribute"
+msgstr "Contribua"
+
+#: sitemedia/scripts/voyage/voyage-search.js:177
+msgid "[nothing selected]"
+msgstr "[nada selecionado]"
+
+#~ msgid "Source"
+#~ msgstr "Origem"
+
+#~ msgid "Outbound traffic"
+#~ msgstr "Tráfico saindo"
+
+#~ msgid "Destination"
+#~ msgstr "Destino"
+
+#~ msgid "Inbound traffic"
+#~ msgstr "Tráfico entrando"
+
+#~ msgid "Traffic from"
+#~ msgstr "Tráfico originado em"
+
+#~ msgid "to"
+#~ msgstr "para"

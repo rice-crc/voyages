@@ -47,7 +47,7 @@
     "fields": {
         "order": -1, 
         "group": 1, 
-        "description": "The Trans-Atlantic Slave Trade Database comprises nearly 35,000 individual slaving expeditions between 1514 and 1866. Records of the voyages have been found in archives and libraries throughout the Atlantic world. They provide information about vessels, enslaved peoples, slave traders and owners, and trading routes. A variable (Source) cites the records for each voyage in the database. Other variables enable users to search for information about a particular voyage or group of voyages. The website provides full interactive capability to analyze the data and report results in the form of statistical tables, graphs, maps, or on a timeline. ", 
+        "description": "The Trans-Atlantic Slave Trade Database comprises more than 35,000 individual slaving expeditions between 1514 and 1866. Records of the voyages have been found in archives and libraries throughout the Atlantic world. They provide information about vessels, enslaved peoples, slave traders and owners, and trading routes. A variable (Source) cites the records for each voyage in the database. Other variables enable users to search for information about a particular voyage or group of voyages. The website provides full interactive capability to analyze the data and report results in the form of statistical tables, graphs, maps, or on a timeline. ", 
         "title": "The Voyages Database "
     }
 },
@@ -97,7 +97,7 @@
     "fields": {
         "order": -1, 
         "group": 2, 
-        "description": "This section of the Voyages website is organized around three ways historians and researchers have used the Trans-Atlantic Slave Trade Database to interpret the slave trade: essays, quantitative analysis, and maps. Interactive features of the \u201cEstimates\u201d sub-section enable users to raise their own questions about the full volume of the slave trade by year, national carrier, and routes of slaving expeditions, and obtain answers in the form of tables, a timeline, or maps. ", 
+        "description": "This section of the Voyages website is organized around the three ways historians and researchers have used the Trans-Atlantic Slave Trade Database to interpret the slave trade: essays, quantitative analysis, and maps. Interactive features of the \u201cEstimates\u201d sub-section enable users to raise their own questions about the full volume of the slave trade by year, national carrier, and routes of slaving expeditions, and obtain answers in the form of tables, a timeline, or maps. ", 
         "title": "Assessing the Slave Trade "
     }
 },
@@ -147,7 +147,7 @@
     "fields": {
         "order": 0, 
         "group": 6, 
-        "description": "Look for particular voyages in this database of documented slaving expeditions. Create listings, tables, charts, and maps using information from the database.", 
+        "description": "Look for particular voyages in this database of documented slaving expeditions. Create listings, tables, and maps that draw on the database.", 
         "title": "Search the Voyages Database"
     }
 },
@@ -157,7 +157,7 @@
     "fields": {
         "order": 1, 
         "group": 6, 
-        "description": "Slaves on documented voyages represent four-fifths of the number who were actually transported. Use the interactive estimates page to analyze the full volume and multiple routes of the slave trade.", 
+        "description": "Slaves on documented voyages represent four-fifths of the number who were actually transported. Use the interactive estimates page to analyze our estimate of the full volume of the slave trade.", 
         "title": "Examine Estimates of the Slave Trade"
     }
 },
@@ -177,7 +177,7 @@
     "fields": {
         "order": -1, 
         "group": 3, 
-        "description": "This section of the Voyages website provides resources for putting information in the databases into historical context. The materials presently consist of a database of images contemporary to the slave trade and a database of names of Africans rescued from slave vessels in the nineteenth century, during the period of suppression.", 
+        "description": "This section of the Voyages website provides resources for putting information in the databases into historical context. The materials presently comprise a database of images contemporary to the slave trade and a database of names of Africans intercepted on slave vessels after 1807 - during the period of attempted suppression.", 
         "title": "Resources"
     }
 },
@@ -187,7 +187,7 @@
     "fields": {
         "order": 0, 
         "group": 3, 
-        "description": "Representations of the trans-Atlantic slave trade, an activity that lasted for centuries, changed over time. With permission from various archives and libraries, selected images enable one to picture people, places, artifacts and vessels of the slave trade era. Links are provided to relevant voyages in the Voyages Database.", 
+        "description": "Representations of the trans-Atlantic slave trade, an activity that lasted for centuries, changed over time. With permission from various archives and libraries, selected images enable users to view people, places, artifacts and vessels. Links are provided to relevant voyages in the Voyages Database.", 
         "title": "Images"
     }
 },
@@ -237,7 +237,7 @@
     "fields": {
         "order": -1, 
         "group": 5, 
-        "description": "The Trans-Atlantic Slave Trade Database is the culmination of several decades of independent and collaborative research by scholars drawing upon data in libraries and archives around the Atlantic world. The Voyages website itself is the product of two years of development by a multi-disciplinary team of historians, librarians, curriculum specialists, cartographers, computer programmers, and web designers, in consultation with scholars of the slave trade from universities in Europe, Africa, South America, and North America. The National Endowment for the Humanities is the principal sponsor of the project, and it is an Emory University Digital Library Research Initiative.", 
+        "description": "The Trans-Atlantic Slave Trade Database is the culmination of several decades of independent and collaborative research by scholars drawing upon data in libraries and archives around the Atlantic world. The Voyages website itself is the product of two years of development by a multi-disciplinary team of historians, librarians, curriculum specialists, cartographers, computer programmers, and web designers, in consultation with scholars of the slave trade from universities in Europe, Africa, South America, and North America. The National Endowment for the Humanities was the principal sponsor of this Emory University Digital Library Research initiative. The W.E.B. Du Bois Institute of Harvard University and the Wilberforce Institute for the Study of Slavery and Emancipation of the University of Hull have also supported its development.", 
         "title": "About the Project"
     }
 },

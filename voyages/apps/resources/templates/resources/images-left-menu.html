@@ -64,7 +64,7 @@
                     </table>
                 </div>
                 <div class="images-query-box">
-                    Category
+                    {% trans 'Category' %}
                     <div style="margin: 5px 0px 0px 0px;">
                         <input type="hidden" value="">
                         <table class="checkbox-list-table-0" cellspacing="0" cellpadding="0" border="0">
@@ -85,9 +85,9 @@
                                             {% spaceless %}
                                             <span class="images-count">({{ images_set.number_of_images }}
                                                 {% if images_set.number_of_images == 1 %}
-                                                    image)
+                                                    {% trans 'image' %})
                                                 {% else %}
-                                                    images)
+                                                    {% trans 'images' %})
                                                 {% endif %}
                                             </span>
                                             {% endspaceless %}
@@ -104,18 +104,15 @@
                     <table>
                         <tr>
                             <td>
-                                <input type="submit" value="Submit" >
-            </form>
+                                <button type="submit" value="Submit">{% trans 'Submit' %}</button>
                             </td>
                             <td>
-                                <form action="{% url 'resources:images' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="submit" value="Start again">
-                                </form>
+                                <button type="submit" value="Start again" name="restart">{% trans 'Start again' %}</button>
                             </td>
                         </tr>
                     </table>
                 </div>
+            </form>
             </div>
         </td>
         <td class="box-middle-row-right">

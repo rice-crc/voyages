@@ -1,0 +1,414 @@
+{% load i18n %}
+{% load l10n %}
+
+<style type="text/css">
+    .g_main {
+        cursor:pointer;
+        pointer-events: all;
+    }
+
+    svg {
+      font-family: "Helvetica Neue", Helvetica;
+    }
+
+    svg text {
+        fill: gray;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: gray;
+        stroke-width: 0.35px;
+    }
+
+    .x path {
+        stroke: transparent;
+    }
+
+    .vertical_line {
+        stroke: darkgreen;
+        stroke-width: 1px;
+        stroke-dasharray: 1 1;
+    }
+</style>
+<div class="results-panel">
+<h1>{% trans 'Timeline: Number of Captives Embarked and Disembarked per Year' %}</h1>
+<div id="graphContainer"></div>
+<div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
+<div id="historicalEventsContainer"></div>
+<p style="margin-left:20px;">
+    <button type="submit" name="download" value="Download timeline data">{% trans 'Download timeline data' %}</button>
+</p>
+</div>
+<script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
+<script type="text/javascript">
+{% localize off %}
+var data = [
+{% for year, r in timeline.items %}
+    { x: {{ year }}, y0: {{ r.1 }}, y1: {{ r.0 }} },
+{% endfor %}
+];
+
+data = data.sort(function(a, b) { return a.x - b.x; });
+
+var indexByYear = {};
+for (var i = 0; i < data.length; ++i) {
+    indexByYear[data[i].x] = i;
+}
+
+var stack = d3.layout.stack(),
+    layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0, y1: d.y1, y0: d.y0 }; }); })),
+    yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
+
+// Swap layers so that embarked stays below in the SVG.
+layers = [layers[1], layers[0]];
+
+var margin = {top: 20, right: 10, bottom: 40, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+$('#mouseOverInfo').css('margin-left', margin.left);
+
+var x = d3.scale.ordinal()
+    .domain(d3.range({{ min_year }}, {{ max_year|add:"1" }}))
+    .rangeRoundBands([0, width]);
+
+var xShift = -x({{ min_year }});
+
+var y = d3.scale.linear()
+    .domain([0, yStackMax * 1.1])
+    .range([height, 0]);
+
+//var color = ["#004D71", "#054450", "rgb(30, 98, 127)"];
+var color = ["#AFEEEE", "#008080", "rgb(30, 98, 127)"];
+
+var tickSet = [];
+var firstOrdinal = x.domain()[0];
+var lastOrdinal = x.domain()[x.domain().length - 1];
+var modulus = 10;
+if (lastOrdinal > firstOrdinal + 200) {
+    modulus = 50;
+} else if (lastOrdinal > firstOrdinal + 100) {
+    modulus = 25;
+} else if (lastOrdinal > firstOrdinal + 50) {
+    modulus = 10;
+} else if (lastOrdinal > firstOrdinal + 25) {
+    modulus = 5;
+} else {
+    modulus = 1;
+}
+var t = firstOrdinal;
+if (firstOrdinal % modulus) {
+    t += modulus - (firstOrdinal % modulus);
+}
+for (; t <= lastOrdinal; t += modulus) {
+    tickSet.push(t);
+}
+var xAxis = d3.svg.axis()
+    .scale(x)
+	.tickValues(tickSet)
+    .tickSize(-height)
+    .tickPadding(5)
+    .orient("top");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .ticks(5)
+    .tickFormat(yTickFormat)
+    .tickPadding(5)
+    .tickSize(-width)
+    .orient("left");
+
+var svg = d3.select("#graphContainer").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("class", "g_main")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var layer = svg.selectAll(".layer")
+    .data(layers)
+    .enter().append("g")
+    .attr("class", "layer")
+    .attr("transform", "translate(" + xShift + ", 0)")
+    .style("fill", function(d, i) { return color[i]; });
+
+{% get_current_language as LANGUAGE_CODE %}
+
+function mouseover(d) {
+    var historical = '';
+    if (events && events[d.x.toString()]) {
+        historical = "<br /><strong>{% trans 'Historical event' %}:</strong> " + events[d.x.toString()];
+    } else {
+        historical = "<br />&nbsp;";
+    }
+	$( '#mouseOverInfo' ).html("<strong>{% trans 'Year' %}:</strong> " + d.x +
+	    "<br /><strong>{% trans 'Embarked' %}:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
+	    "<br /><strong>{% trans 'Disembarked' %}:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
+}
+
+var rect = layer.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter()
+	.append("rect")
+    .attr("x", function(d) { return x(d.x); })
+    .attr("y", height)
+    .attr("width", x.rangeBand())
+    .attr("height", 0);
+
+rect.transition()
+    .attr("y", function(d) { return y(d.y); })
+    .attr("height", function(d) { return y(0) - y(d.y); });
+
+var gx = svg.append("g")
+    .attr("class", "x axis")
+    //.attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(" + xShift + ", 0)")
+    .call(xAxis);
+
+var gy = svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+var vertical = svg
+    .append("g")
+    .attr("class", "vertical_highlight")
+    .style("opacity", 0.0);
+
+vertical.append("line")
+    .attr("class", "vertical_line")
+    .attr("y2", height);
+
+var circle0 = vertical
+    .append("circle")
+    .attr("r", 5)
+    .style("fill", color[2]);
+var circle1 = vertical
+    .append("circle")
+    .attr("r", 5)
+    .style("fill", color[2]);
+
+var legend = svg.append("g")
+  .attr("class", "legend");
+
+var legendWidth = 95;
+legend.selectAll('rect')
+      .data(layers)
+      .enter()
+      .append('rect')
+      .attr("width", 14)
+      .attr("height", 14)
+      .attr('y', margin.top + height + 5)
+      .attr('x', function(d, i) { return i * legendWidth; })
+      .style('fill', function(d, i) { return color[i]; })
+      .style('stroke', 'black');
+
+legend.selectAll('text')
+      .data(layers)
+      .enter()
+      .append('text')
+      .attr('y', margin.top + height + 16)
+      .attr('x', function(d, i) { return 20 + i * legendWidth; })
+      .style('stroke', 'black')
+      .style('stroke-width', '0.3')
+      .text(function(d, i) { return i != 0 ? "{% trans 'Disembarked' %}" : "{% trans 'Embarked' %}"; });
+
+//d3.select("#graphContainer")
+svg.on("mousemove", function(){
+        var mouseX = d3.mouse(this)[0] - xShift;
+        var year = d3.bisectLeft(x.range(), mouseX) + {{ min_year }} - 1;
+        var index = indexByYear[year];
+        changeHoveredBar(index);
+    });
+
+function changeHoveredBar(index) {
+    var out = index === undefined;
+    if (!out) {
+        mouseover(data[index]);
+        vertical.style("opacity", 1.0);
+        vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(data[index].x) + xShift) + ",0)");
+        circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
+        circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
+    }
+    if (out && vertical.timeoutfn == null) {
+        vertical.timeoutfn = function() {
+            if (vertical.timeoutfn != null) {
+                vertical.style("opacity", 0.0);
+                vertical.timeoutfn = null;
+            }
+        };
+        setTimeout(vertical.timeoutfn, 3000);
+    } else if (!out) {
+        vertical.timeoutfn = null;
+    }
+}
+
+var events = null;
+
+{% if show_events %}
+    events = {
+        '1525': "{% trans 'First slave voyage direct from Africa to the Americas' %}",
+        '1560': "{% trans 'Continuous slave trade from Brazil begins' %}",
+        '1641': "{% trans 'Sugar exports from Eastern Caribbean begin' %}",
+        '1655': "{% trans 'English capture Jamaica' %}",
+        '1695': "{% trans 'Gold discovered in Minas Gerais (Brazil)' %}",
+        '1697': "{% trans 'French obtain St Domingue in Treaty of Rywsick' %}",
+        '1756': "{% trans 'Seven years war begins' %}",
+        '1776': "{% trans 'American Revolutionary War begins' %}",
+        '1789': "{% trans 'Bourbon reforms open Spanish colonial ports to slaves' %}",
+        '1791': "{% trans 'St Domingue revolution begins' %}",
+        '1808': "{% trans 'Abolition of British and US slave trades takes effect' %}",
+        '1830': "{% trans 'Anglo-Brazilian anti-slave trade treaty' %}",
+        '1850': "{% trans 'Brazil suppresses slave trade' %}",
+        '1866': "{% trans 'Last reported transatlantic slave voyage arrives in Americas' %}"
+    };
+    firstOrdinal = x.domain()[0];
+    lastOrdinal = x.domain()[x.domain().length - 1];
+    var filteredEvents = [];
+    var allEvents = [];
+    for (var year in events) {
+        var text = events[year];
+        year = parseInt(year);
+        var data_index = -1;
+        var included = year >= firstOrdinal && year <= lastOrdinal;
+        if (included) {
+            // Find index in data vector. We could use a binary search here, but since this is done only once...
+            for (var i = 0; i < data.length; ++i) {
+                if (data[i].x == year) {
+                    data_index = i;
+                    break;
+                }
+            }
+        }
+        var element = {
+            'counter': 1 + allEvents.length,
+            'year': year,
+            'label': text,
+            'index': data_index
+        }
+        allEvents.push(element);
+        if (included) {
+            filteredEvents.push(element);
+        }
+    }
+
+    var boxSize = 19;
+    var historicalMarkers = svg.append("g")
+        .attr("class", "event");
+    historicalMarkers.selectAll('g')
+        .data(filteredEvents)
+        .enter()
+        .append('g');
+    historicalMarkers.selectAll('g')
+        .append('rect')
+        .attr("width", boxSize)
+        .attr("height", boxSize)
+        .attr('y', margin.top + height - boxSize - 1)
+        .attr('x', function(d) { return x(d.year) + xShift - (boxSize - x.rangeBand()) / 2; })
+        .style('fill', color[2])
+        .style('stroke', 'black');
+    historicalMarkers.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y', margin.top + height - (boxSize / 2))
+        .attr('x', function(d) { return x(d.year) + xShift + x.rangeBand() / 2; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.counter; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('fill', 'white');
+    historicalMarkers.selectAll('g')
+        .on("mousemove", function(d) {
+            var highlightColor = '#CA4223';
+            d3.select(this).selectAll('rect').style('fill', highlightColor);
+            colorHistoricalEvent(d, highlightColor);
+            if (d.index >= 0) {
+                changeHoveredBar(d.index);
+            } else {
+                vertical.style("opacity", 0.0);
+                mouseover({ 'x': d.year, 'y1': 0, 'y0': 0 });
+            }
+            d3.event.stopPropagation();
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).selectAll('rect').style('fill', color[2]);
+            colorHistoricalEvent(d, color[2]);
+        });
+
+    function colorHistoricalEvent(d, color) {
+        var ev = historicalEvents.
+            selectAll('g').
+            filter(function(d2, i) { return d2.year == d.year; });
+        ev.selectAll('rect').style('fill', color);
+    }
+
+    // List ALL historical events in another D3 graph.
+    var svgHistorical = d3.select("#historicalEventsContainer")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height - 110)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + ",0)");
+    var historicalEvents = svgHistorical.append("g")
+        .attr("class", "event");
+    historicalEvents.selectAll('g')
+        .data(allEvents)
+        .enter()
+        .append('g');
+    var columnLength = Math.ceil(allEvents.length / 2);
+    var xCoord = function(d) { return Math.floor((d.counter - 1) / columnLength) * 390; };
+    var yCoord = function(d) { return margin.top / 3 + ((d.counter - 1) % columnLength) * 25; };
+    historicalEvents.selectAll('g')
+        .append('rect')
+        .attr("width", boxSize)
+        .attr("height", boxSize)
+        .attr('y', yCoord)
+        .attr('x', xCoord)
+        .style('fill', color[2])
+        .style('stroke', 'black');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + boxSize / 2; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.counter; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('fill', 'white');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr("text-anchor", "middle")
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + 2.3 * boxSize; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.year; })
+        .style('cursor', 'default')
+        .style('font-size', '10pt')
+        .style('font-weight', 'bold')
+        .style('fill', 'black');
+    historicalEvents.selectAll('g')
+        .append('text')
+        .attr("width", boxSize)
+        .attr('y',  function(d) { return yCoord(d) + 1 + boxSize / 2; })
+        .attr('x', function(d) { return xCoord(d) + 3.5 * boxSize; })
+        .attr("dominant-baseline", "central")
+        .text(function(d) { return d.label; })
+        .style('cursor', 'default')
+        .style('font-size', '9pt')
+        .style('fill', 'black');
+{% endif %}
+
+function yTickFormat(d) {
+    formatNumber = d3.format("d");
+    if (d >= 2000) {
+        return formatNumber(d/1000) + "k";
+    }
+    return d;
+}
+{% endlocalize %}
+</script>
