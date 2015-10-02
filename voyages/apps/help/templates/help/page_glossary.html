@@ -1,6 +1,7 @@
 {% extends "help/helpbase.html" %}
 {% load i18n %}
 {% load highlight %}
+{% load voyage_extras %}
 
 {% block csslist %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
@@ -36,7 +37,7 @@
 		{% for field in form %}
 		{{ field }}
 		{% endfor %}
-		<input type="submit" value="Search">
+		<button type="submit" value="Search">{% trans 'Search' %}</button>
     	</form>
     </td>
     </tr>
@@ -70,20 +71,24 @@
                 {% for t_key, t_value in k.items %}
                     {% if t_key == "term" %}
                         <td class="glossary-term">
-                            {% if results %}
-                                {% highlight t_value with query %}
-                            {% else %}
-                                {{ t_value|safe }}
-                            {% endif %}
+                            {% with term_value=t_value %}
+                                {% if results %}
+                                    {% highlight term_value with query %}
+                                {% else %}
+                                    {{ term_value|safe }}
+                                {% endif %}
+                            {% endwith %}
                         </td>
                     {% endif %}
                     {% if t_key == "description" %}
                         <td class="glossary-description">
-                            {% if results %}
-                                {% highlight t_value with query %}
-                            {% else %}
-                                {{ t_value|safe }}
-                            {% endif %}
+                            {% with description_value=t_value %}
+                                {% if results %}
+                                    {% highlight description_value with query %}
+                                {% else %}
+                                    {{ description_value|safe }}
+                                {% endif %}
+                            {% endwith %}
                         </td>
                     {% endif %}
                 {% endfor %}

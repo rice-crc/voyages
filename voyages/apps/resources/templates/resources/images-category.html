@@ -9,7 +9,7 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
 {% endblock %}
 
-{% block title %}Category Images{% endblock %}
+{% block title %}{% trans 'Category Images' %}{% endblock %}
 
 {% block content %}
 
@@ -20,19 +20,19 @@
 <div id="center-content">
 
     <div class="images-query-title">
-        Images of {{ category }}
+        {% trans 'Images of ' %}{{ category|trans_log }}
     </div>
     <div class="image-navigation">
         <table class="image-navigation">
         <tbody>
             <tr>
                 <td style="padding: 0px 10px 0px 0px;">
-                    <a href="{% url 'resources:images' %}">Back to start</a>
+                    <a href="{% url 'resources:images' %}">{% trans 'Back to start' %}</a>
                 </td>
                 <td style="padding: 0px">
                     {% for i in images %}
                         {% if i.label_name == category %}
-                            {{ i.images|length }} images
+                            {{ i.images|length }} {% trans 'images' %}
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -59,7 +59,7 @@
                             {% endthumbnail %}
                             <div class="gallery-image-text">
                                 <div class="gallery-image-label">
-                                    <a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}">{{ image.title }}</a>
+                                    <a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}">{{ image.title|trans_log }}</a>
                                 </div>
                                 <div class="gallery-image-description">
                                     ({{ image.year }})

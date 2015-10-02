@@ -125,6 +125,9 @@ INSTALLED_APPS = (
     # used to index django models
     'haystack',
 
+    # used to highlight translated strings to easily find which translations are missing
+    #'i18n_helper',
+
     # password reset app
     'password_reset',
 
@@ -139,18 +142,20 @@ INSTALLED_APPS = (
     'voyages.apps.static_content',
 )
 
+I18N_HELPER_DEBUG = False
+I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
+
+# Indicates whether the map path flows should include paths with missing source.
+MAP_MISSING_SOURCE_ENABLED = True
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 
-gettext = lambda s: s
-
 LANGUAGE_CODE='en'
+from django.utils.translation import ugettext_lazy as _
 
 LANGUAGES = (
-    ('en', gettext('English')),
-    ('de', gettext('German')),
-    ('fr', gettext('French')),
-    ('es', gettext('Spanish')),
+    ('en', _('English')),
+    ('pt', _('Portuguese')),
 )
 DEFAULT_LANGUAGE = 0
 
@@ -159,16 +164,19 @@ TEST_OUTPUT_DIR = 'test-results'
 
 # disable south tests and migrations when running tests
 # - without these settings, test fail on loading initial fixtured data
-SKIP_SOUTH_TESTS = True
+SKIP_SOUTH_TESTS = False
 SOUTH_TESTS_MIGRATE = False
 
 LOGIN_URL = '/contribute/login/'
 LOGIN_REDIRECT_URL = LOGIN_URL
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
+HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
 
 # Default empty string
 TEMPLATE_STRING_IF_INVALID = "Nothing"
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 import sys
 

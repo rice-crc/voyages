@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 
 <div>
   <h1>{% trans 'Custom Graphs' %}</h1>
@@ -10,21 +11,21 @@
       <tbody>
 	<tr>
 	  <td class="graphs-tabs-tab-first-filler"></td>
-	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}"></td>
-	  <td class="database-graphs-tab-xy{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_xy');">
-	    XY Graphs
+	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_lin' %}-selected{% endif %}"></td>
+	  <td class="database-graphs-tab-xy{% if graphs_tab == 'tab_graphs_lin' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_lin');">
+	    {% trans 'XY Graphs' %}
 	  </td>
-	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_xy' %}-selected{% endif %}"></td>
+	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_lin' %}-selected{% endif %}"></td>
 	  <td class="graphs-tabs-tab-filler"></td>
 	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}"></td>
 	  <td class="database-graphs-tab-bar{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_bar');">
-	    Bar Graphs
+	    {% trans 'Bar Graphs' %}
 	  </td>
 	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_bar' %}-selected{% endif %}"></td>
 	  <td class="graphs-tabs-tab-filler"></td>
 	  <td class="graphs-tabs-tab-left{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}"></td>
 	  <td class="database-graphs-tab-pie{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}" onclick="submitWithValue('tab_graphs_pie');">
-	    Pie Graphs
+	    {% trans 'Doughnut Graphs' %}
 	  </td>
 	  <td class="graphs-tabs-tab-right{% if graphs_tab == 'tab_graphs_pie' %}-selected{% endif %}"></td>
 	  <td class="graphs-tabs-tab-last-filler"></td>
@@ -34,7 +35,7 @@
   </div>
 </div>
 <div class="database-graphs-frame">
-  {% if graphs_tab == 'tab_graphs_xy' %}
+  {% if graphs_tab == 'tab_graphs_lin' %}
     {% include "voyage/search_xy_graphs.html" %}
   {% elif graphs_tab == 'tab_graphs_bar' %}
     {% include "voyage/search_bar_graphs.html" %}

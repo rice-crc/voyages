@@ -14,12 +14,14 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Voyage'}, name='index'),
-    url(r'^understanding-db$', TemplateView.as_view(template_name='voyage/understanding_base.html'), name='guide'),
-    url(r'^understanding-db/(?P<name>.*)', 'voyages.apps.voyage.views.understanding_page' , name='understanding-page'),
+    url(r'^understanding-db$', 'voyages.apps.voyage.views.understanding_page', name='guide'),
+    url(r'^understanding-db/(?P<name>.*)', 'voyages.apps.voyage.views.understanding_page', name='understanding-page'),
 
     url(r'^c01_s01_cover$', TemplateView.as_view(template_name='voyage/guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),
     url(r'^search', 'voyages.apps.voyage.views.search', name='search'),
+
+    url(r'^permalink', 'voyages.apps.voyage.views.get_permanent_link', name='permanent-link'),
 
     url(r'^contribute$', RedirectView.as_view(url='/contribute'), name='submission-login'),
     
@@ -30,8 +32,5 @@ urlpatterns += patterns('',
 
     url(r'^csv_stats_download', 'voyages.apps.voyage.views.csv_stats_download', name='csv_stats_download'),
     url(r'^shorten_search_url', 'voyages.apps.voyage.views.shorten_search_url', name='shorten_search_url'),
-)
-
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^download$', 'flatpage', {'url': '/voyage/download/'}, name='download'),
+    url(r'^download$', 'voyages.apps.voyage.views.download_flatpage', name='download'),
 )

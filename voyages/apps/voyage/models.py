@@ -11,7 +11,13 @@ class BroadRegion(models.Model):
     Broad Regions (continents).
     """
 
-    broad_region = models.CharField("Broad region (Area) name", max_length=70)
+    broad_region = models.CharField("Broad region (Area) name", max_length=255)
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
     value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
 
@@ -31,7 +37,13 @@ class Region(models.Model):
     """
 
     region = models.CharField("Specific region (country or colony)",
-                                               max_length=70)
+                                               max_length=255)
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=True, blank=True)
     broad_region = models.ForeignKey('BroadRegion')
     value = models.IntegerField("Numeric code", max_length=5)
     show_on_map = models.BooleanField(default=True)
@@ -54,7 +66,7 @@ class Place(models.Model):
     related to: :class:`voyages.apps.voyage.modles.Region`
     """
 
-    place = models.CharField(max_length=70)
+    place = models.CharField(max_length=255)
     region = models.ForeignKey('Region')
     value = models.IntegerField("Numeric code", unique=True, max_length=5)
     longitude = models.DecimalField("Longitude of point",
@@ -96,7 +108,7 @@ class Nationality(models.Model):
     """
     Nationality of ships.
     """
-    label = models.CharField(max_length=70)
+    label = models.CharField(max_length=255)
     value = models.IntegerField(max_length=2)
 
     class Meta:
@@ -111,7 +123,7 @@ class TonType(models.Model):
     """
     Types of tonnage.
     """
-    label = models.CharField(max_length=70)
+    label = models.CharField(max_length=255)
     value = models.IntegerField(max_length=2)
 
     class Meta:
@@ -150,7 +162,7 @@ class VoyageShip(models.Model):
     """
 
     # Data variables
-    ship_name = models.CharField("Name of vessel", max_length=70,
+    ship_name = models.CharField("Name of vessel", max_length=255,
                                  null=True, blank=True)
     nationality_ship = models.ForeignKey('Nationality',
                                          related_name="nationality_ship",
@@ -210,7 +222,7 @@ class VoyageShipOwner(models.Model):
     Owner name.
     Represents first_owner, second_owner, ...
     """
-    name = models.CharField(max_length=70)
+    name = models.CharField(max_length=255)
 
     def __unicode__(self):
         return self.name
@@ -293,7 +305,7 @@ class Resistance(models.Model):
     """
     Resistance labels
     """
-    label = models.CharField("Resistance label", max_length=70)
+    label = models.CharField("Resistance label", max_length=255)
     value = models.IntegerField("Code of resistance", max_length=1)
 
     def __unicode__(self):
@@ -673,7 +685,7 @@ class VoyageCaptain(models.Model):
     """
     Voyage Captain and Crew.
     """
-    name = models.CharField("Captain's name", max_length=70)
+    name = models.CharField("Captain's name", max_length=255)
 
     def __unicode__(self):
         return self.name
@@ -1212,10 +1224,10 @@ class VoyageSources(models.Model):
     """
 
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=100, null=True, blank=True)
+                                 max_length=255, null=True, blank=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
-                                max_length=1000, null=True, blank=True)
+                                max_length=2550, null=True, blank=True)
     source_type = models.ForeignKey('VoyageSourcesType', null=True)
 
     class Meta:
@@ -1239,14 +1251,37 @@ class VoyageSourcesConnection(models.Model):
     group = models.ForeignKey('Voyage', related_name="group")
     source_order = models.IntegerField(max_length=2)
     text_ref = models.CharField(_('Text reference(citation)'),
-                                max_length=100, null=True, blank=True)
+                                max_length=255, null=True, blank=True)
 
 
 # Voyage (main) model
 # for parsing natural key
 class VoyageManager(models.Manager):
+    _all = {}
+    _has_loaded = False
+    import threading
+    _lock = threading.Lock()
+
+    @classmethod
+    def cache(cls):
+        with cls._lock:
+            if not cls._has_loaded:
+                cls._has_loaded = True
+                cls._all = {v.pk: v for v in Voyage.objects.all()}
+        return cls._all
+
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
+
+    # Ensure that we load some related members thus
+    # avoiding hitting the DB multiple times.
+    def get_query_set(self):
+        return super(VoyageManager, self).get_query_set().select_related(
+            'voyage_itinerary__principal_place_of_slave_purchase__region__broad_region',
+            'voyage_itinerary__principal_port_of_slave_dis__region__broad_region',
+            'voyage_slaves_numbers',
+            'voyage_dates',
+            'voyage_ship')
 
 
 class Voyage(models.Model):

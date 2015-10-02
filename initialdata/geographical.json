@@ -3,8 +3,10 @@
     "pk": 1, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "0.0540330", 
         "show_on_map": true, 
         "value": 60000, 
+        "longitude": "9.3438970", 
         "broad_region": "Africa"
     }
 },
@@ -12,8 +14,10 @@
     "pk": 2, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "33.8756490", 
         "show_on_map": true, 
         "value": 20000, 
+        "longitude": "-78.4440290", 
         "broad_region": "Mainland North America"
     }
 },
@@ -21,17 +25,21 @@
     "pk": 3, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "13.2127390", 
         "show_on_map": true, 
         "value": 40000, 
-        "broad_region": "Spanish American Mainland"
+        "longitude": "-83.5726350", 
+        "broad_region": "Spanish Circum-Caribbean"
     }
 },
 {
     "pk": 4, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "14.5017080", 
         "show_on_map": true, 
         "value": 30000, 
+        "longitude": "-66.2374610", 
         "broad_region": "Caribbean"
     }
 },
@@ -39,8 +47,10 @@
     "pk": 5, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "37.2132550", 
         "show_on_map": true, 
         "value": 10000, 
+        "longitude": "-8.5619130", 
         "broad_region": "Europe"
     }
 },
@@ -48,8 +58,10 @@
     "pk": 6, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "-18.8645820", 
         "show_on_map": true, 
         "value": 50000, 
+        "longitude": "-39.7548900", 
         "broad_region": "Brazil"
     }
 },
@@ -57,8 +69,10 @@
     "pk": 7, 
     "model": "voyage.broadregion", 
     "fields": {
+        "latitude": "0E-7", 
         "show_on_map": false, 
         "value": 80000, 
+        "longitude": "0E-7", 
         "broad_region": "Other"
     }
 },
@@ -66,1012 +80,1196 @@
     "pk": 1, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Spain", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Spain", 
         "value": 10100, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "-6.8628570", 
+        "latitude": "37.2007820", 
+        "show_on_map": true
     }
 },
 {
     "pk": 2, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Portugal", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Portugal", 
         "value": 10200, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "-8.8385450", 
+        "latitude": "40.0467450", 
+        "show_on_map": true
     }
 },
 {
     "pk": 3, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Great Britain", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Great Britain", 
         "value": 10300, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "-61.4952980", 
+        "latitude": "16.2641420", 
+        "show_on_map": true
     }
 },
 {
     "pk": 4, 
     "model": "voyage.region", 
     "fields": {
-        "region": "France", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "France", 
         "value": 10700, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "1.7068500", 
+        "latitude": "45.7457240", 
+        "show_on_map": true
     }
 },
 {
     "pk": 5, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Netherlands", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Netherlands", 
         "value": 10800, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "5.9690100", 
+        "latitude": "53.0069120", 
+        "show_on_map": true
     }
 },
 {
     "pk": 6, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Denmark", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Denmark", 
         "value": 10900, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "9.3267340", 
+        "latitude": "56.2535070", 
+        "show_on_map": true
     }
 },
 {
     "pk": 7, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Rhode Island", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Rhode Island", 
         "value": 20100, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-71.4665160", 
+        "latitude": "41.3847930", 
+        "show_on_map": true
     }
 },
 {
     "pk": 8, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Massachusetts", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Massachusetts", 
         "value": 20400, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-70.7246890", 
+        "latitude": "42.1794530", 
+        "show_on_map": true
     }
 },
 {
     "pk": 9, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Connecticut", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Connecticut", 
         "value": 20500, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-72.6138220", 
+        "latitude": "41.3586650", 
+        "show_on_map": true
     }
 },
 {
     "pk": 10, 
     "model": "voyage.region", 
     "fields": {
-        "region": "New York", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "New York", 
         "value": 20600, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-74.0111170", 
+        "latitude": "40.7030680", 
+        "show_on_map": true
     }
 },
 {
     "pk": 11, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Puerto Rico", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Puerto Rico", 
         "value": 31200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-66.0705080", 
+        "latitude": "18.4209590", 
+        "show_on_map": true
     }
 },
 {
     "pk": 12, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Cuba", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Cuba", 
         "value": 31300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-79.1276860", 
+        "latitude": "23.1156130", 
+        "show_on_map": true
     }
 },
 {
     "pk": 13, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Tortola", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Tortola", 
         "value": 33200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-64.7150640", 
+        "latitude": "18.3473250", 
+        "show_on_map": true
     }
 },
 {
     "pk": 14, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Antigua", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Antigua", 
         "value": 33400, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.7847410", 
+        "latitude": "17.0674530", 
+        "show_on_map": true
     }
 },
 {
     "pk": 15, 
     "model": "voyage.region", 
     "fields": {
-        "region": "St. Kitts", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "St. Kitts", 
         "value": 33500, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-62.7166670", 
+        "latitude": "17.3000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 16, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Nevis", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Nevis", 
         "value": 33600, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-62.5892230", 
+        "latitude": "17.1510050", 
+        "show_on_map": true
     }
 },
 {
     "pk": 17, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Montserrat", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Montserrat", 
         "value": 33700, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-62.2166670", 
+        "latitude": "16.7000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 18, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Dominica", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Dominica", 
         "value": 33800, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.4000000", 
+        "latitude": "15.3000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 19, 
     "model": "voyage.region", 
     "fields": {
-        "region": "St. Lucia", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "St. Lucia", 
         "value": 34100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.0000000", 
+        "latitude": "14.0000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 20, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Barbados", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Barbados", 
         "value": 34200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-59.6166670", 
+        "latitude": "13.1000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 21, 
     "model": "voyage.region", 
     "fields": {
-        "region": "St. Vincent", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "St. Vincent", 
         "value": 34300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.1866030", 
+        "latitude": "13.2013090", 
+        "show_on_map": true
     }
 },
 {
     "pk": 22, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Grenada", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Grenada", 
         "value": 34400, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.7500000", 
+        "latitude": "12.0500000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 23, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Trinidad", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Trinidad", 
         "value": 34500, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.5166670", 
+        "latitude": "10.6500000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 24, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Tobago", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Tobago", 
         "value": 34600, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-60.6639370", 
+        "latitude": "11.2317940", 
+        "show_on_map": true
     }
 },
 {
     "pk": 25, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Jamaica", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Jamaica", 
         "value": 35100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-76.5227780", 
+        "latitude": "17.8812630", 
+        "show_on_map": true
     }
 },
 {
     "pk": 26, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Bahamas", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Bahamas", 
         "value": 35200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-74.3036050", 
+        "latitude": "22.7839370", 
+        "show_on_map": true
     }
 },
 {
     "pk": 27, 
     "model": "voyage.region", 
     "fields": {
-        "region": "British Guiana", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "British Guiana", 
         "value": 35300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-57.9589370", 
+        "latitude": "7.6155310", 
+        "show_on_map": true
     }
 },
 {
     "pk": 28, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Martinique", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Martinique", 
         "value": 36100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.0833330", 
+        "latitude": "14.6000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 29, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Guadaloupe", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Guadaloupe", 
         "value": 36200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-61.7166700", 
+        "latitude": "16.0000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 30, 
     "model": "voyage.region", 
     "fields": {
-        "region": "French Guiana", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "French Guiana", 
         "value": 36300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-53.6122390", 
+        "latitude": "5.8612940", 
+        "show_on_map": true
     }
 },
 {
     "pk": 31, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Saint-Domingue", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Saint-Domingue", 
         "value": 36400, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-72.3400000", 
+        "latitude": "18.5400000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 32, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Rio de la Plata", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Rio de la Plata", 
         "value": 42000, 
-        "broad_region": 3
+        "broad_region": 3, 
+        "longitude": "-58.4982550", 
+        "latitude": "-33.3326050", 
+        "show_on_map": true
     }
 },
 {
     "pk": 33, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Amazonia", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Amazonia", 
         "value": 50100, 
-        "broad_region": 6
+        "broad_region": 6, 
+        "longitude": "-43.2354490", 
+        "latitude": "-0.9332300", 
+        "show_on_map": true
     }
 },
 {
     "pk": 34, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Bahia", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Bahia", 
         "value": 50200, 
-        "broad_region": 6
+        "broad_region": 6, 
+        "longitude": "-38.5166670", 
+        "latitude": "-12.9833330", 
+        "show_on_map": true
     }
 },
 {
     "pk": 35, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Pernambuco", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Pernambuco", 
         "value": 50300, 
-        "broad_region": 6
+        "broad_region": 6, 
+        "longitude": "-34.9000000", 
+        "latitude": "-8.0500000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 36, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Southeast Brazil", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Southeast Brazil", 
         "value": 50400, 
-        "broad_region": 6
+        "broad_region": 6, 
+        "longitude": "-42.2560210", 
+        "latitude": "-23.4889400", 
+        "show_on_map": true
     }
 },
 {
     "pk": 37, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Spanish Americas", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Spanish Americas", 
         "value": 80400, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "-75.6112610", 
+        "latitude": "7.4707010", 
+        "show_on_map": true
     }
 },
 {
     "pk": 38, 
     "model": "voyage.region", 
     "fields": {
-        "region": "British Americas", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "British Americas", 
         "value": 80500, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "-78.9725620", 
+        "latitude": "38.8428400", 
+        "show_on_map": true
     }
 },
 {
     "pk": 39, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Dutch Guianas", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Dutch Guianas", 
         "value": 32200, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-55.2511240", 
+        "latitude": "6.6752480", 
+        "show_on_map": true
     }
 },
 {
     "pk": 40, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Dutch Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Dutch Caribbean", 
         "value": 32100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-65.7813460", 
+        "latitude": "14.7518460", 
+        "show_on_map": true
     }
 },
 {
     "pk": 41, 
     "model": "voyage.region", 
     "fields": {
-        "region": "New Hampshire", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "New Hampshire", 
         "value": 20300, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-70.5800000", 
+        "latitude": "43.3600000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 42, 
     "model": "voyage.region", 
     "fields": {
-        "region": "New Jersey", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "New Jersey", 
         "value": 20800, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-74.1800000", 
+        "latitude": "40.3000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 43, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Pennsylvania", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Pennsylvania", 
         "value": 20900, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-74.8000000", 
+        "latitude": "39.7100000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 44, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Maryland", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Maryland", 
         "value": 21000, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-76.0300000", 
+        "latitude": "39.5700000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 45, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Virginia", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Virginia", 
         "value": 21100, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-76.3000000", 
+        "latitude": "36.9000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 46, 
     "model": "voyage.region", 
     "fields": {
-        "region": "North Carolina", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "North Carolina", 
         "value": 21200, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-76.5500000", 
+        "latitude": "35.2500000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 47, 
     "model": "voyage.region", 
     "fields": {
-        "region": "South Carolina", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "South Carolina", 
         "value": 21300, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-79.5400000", 
+        "latitude": "33.1000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 48, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Georgia", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Georgia", 
         "value": 21400, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-81.1700000", 
+        "latitude": "31.6900000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 49, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Florida", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Florida", 
         "value": 21500, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-80.5223960", 
+        "latitude": "28.0853680", 
+        "show_on_map": true
     }
 },
 {
     "pk": 50, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Gulf coast", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Gulf coast", 
         "value": 21600, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-89.5600000", 
+        "latitude": "29.8000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 51, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Honduras", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Honduras", 
         "value": 35400, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-86.3000000", 
+        "latitude": "15.7900000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 52, 
     "model": "voyage.region", 
     "fields": {
-        "region": "St. Barth\u00e9lemy (Sweden)", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "St. Barth\u00e9lemy (Sweden)", 
         "value": 38100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-62.8500000", 
+        "latitude": "17.9000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 53, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Senegambia and offshore Atlantic", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Senegambia and offshore Atlantic", 
         "value": 60100, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "-17.9300000", 
+        "latitude": "14.1400000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 54, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Windward Coast", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Windward Coast", 
         "value": 60300, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "-8.9200000", 
+        "latitude": "4.0000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 55, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Sierra Leone", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Sierra Leone", 
         "value": 60200, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "-13.6700000", 
+        "latitude": "8.1000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 56, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Gold Coast", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Gold Coast", 
         "value": 60400, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "-1.9300000", 
+        "latitude": "3.8600000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 57, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Bight of Benin", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Bight of Benin", 
         "value": 60500, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "2.3300000", 
+        "latitude": "5.2700000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 58, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Bight of Biafra and Gulf of Guinea islands", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Bight of Biafra and Gulf of Guinea islands", 
         "value": 60600, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "8.3100000", 
+        "latitude": "4.1700000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 59, 
     "model": "voyage.region", 
     "fields": {
-        "region": "West Central Africa and St. Helena", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "West Central Africa and St. Helena", 
         "value": 60700, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "11.1900000", 
+        "latitude": "-7.7100000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 60, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Southeast Africa and Indian Ocean islands", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Southeast Africa and Indian Ocean islands", 
         "value": 60800, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "39.5100000", 
+        "latitude": "-17.1400000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 61, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Danish West Indies", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Danish West Indies", 
         "value": 37000, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-64.9000000", 
+        "latitude": "18.0000000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 62, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Americas", 
         "show_on_main_map": false, 
-        "show_on_map": true, 
+        "region": "Americas", 
         "value": 80200, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "-65.9008350", 
+        "latitude": "1.6195470", 
+        "show_on_map": true
     }
 },
 {
     "pk": 63, 
     "model": "voyage.region", 
     "fields": {
-        "region": "England", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "England", 
         "value": 10400, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 64, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Scotland", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Scotland", 
         "value": 10500, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 65, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Ireland", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Ireland", 
         "value": 10600, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 66, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Northern Germany", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Northern Germany", 
         "value": 11000, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 67, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Belgium", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Belgium", 
         "value": 11100, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 68, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Norway", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Norway", 
         "value": 11200, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 69, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Sweden", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Sweden", 
         "value": 11300, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 70, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Italy", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Italy", 
         "value": 11400, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 71, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Russia", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Russia", 
         "value": 11500, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 72, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Mediterranean", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Mediterranean", 
         "value": 11600, 
-        "broad_region": 5
+        "broad_region": 5, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 73, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Maine", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Maine", 
         "value": 20200, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 74, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Delaware", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Delaware", 
         "value": 20700, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 75, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Canada", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Canada", 
         "value": 21700, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 76, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other North America", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other North America", 
         "value": 21900, 
-        "broad_region": 2
+        "broad_region": 2, 
+        "longitude": "-78.4440290", 
+        "latitude": "33.8756490", 
+        "show_on_map": false
     }
 },
 {
     "pk": 77, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other Dutch Americas", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other Dutch Americas", 
         "value": 32300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-55.1666700", 
+        "latitude": "5.8333300", 
+        "show_on_map": false
     }
 },
 {
     "pk": 78, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Anguilla", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Anguilla", 
         "value": 33300, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 79, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other British Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other British Caribbean", 
         "value": 35500, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-76.8000000", 
+        "latitude": "18.0000000", 
+        "show_on_map": false
     }
 },
 {
     "pk": 80, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other French Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other French Caribbean", 
         "value": 36500, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-72.2041700", 
+        "latitude": "19.7577800", 
+        "show_on_map": false
     }
 },
 {
     "pk": 81, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other Caribbean", 
         "value": 39000, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 82, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Peru", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Peru", 
         "value": 43000, 
-        "broad_region": 3
+        "broad_region": 3, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 83, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other Brazil", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other Brazil", 
         "value": 50500, 
-        "broad_region": 6
+        "broad_region": 6, 
+        "longitude": "-39.7548900", 
+        "latitude": "-18.8645820", 
+        "show_on_map": true
     }
 },
 {
     "pk": 84, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other Africa", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other Africa", 
         "value": 60900, 
-        "broad_region": 1
+        "broad_region": 1, 
+        "longitude": "9.3438970", 
+        "latitude": "0.0540330", 
+        "show_on_map": true
     }
 },
 {
     "pk": 85, 
     "model": "voyage.region", 
     "fields": {
-        "region": "East Indies", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "East Indies", 
         "value": 80100, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 86, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Asia e Africa", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Asia e Africa", 
         "value": 80300, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 87, 
     "model": "voyage.region", 
     "fields": {
-        "region": "India", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "India", 
         "value": 80600, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 88, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Non-geographical", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Non-geographical", 
         "value": 80700, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 89, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Codes without labels", 
         "show_on_main_map": false, 
-        "show_on_map": false, 
+        "region": "Codes without labels", 
         "value": 99800, 
-        "broad_region": 7
+        "broad_region": 7, 
+        "longitude": "0E-7", 
+        "latitude": "0E-7", 
+        "show_on_map": false
     }
 },
 {
     "pk": 90, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Hispaniola", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Hispaniola", 
         "value": 31100, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-69.3500000", 
+        "latitude": "18.3500000", 
+        "show_on_map": true
     }
 },
 {
     "pk": 91, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Other Spanish Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": false, 
+        "region": "Other Spanish Caribbean", 
         "value": 31400, 
-        "broad_region": 4
+        "broad_region": 4, 
+        "longitude": "-82.3641700", 
+        "latitude": "23.1319400", 
+        "show_on_map": false
     }
 },
 {
     "pk": 92, 
     "model": "voyage.region", 
     "fields": {
-        "region": "Spanish Circum-Caribbean", 
         "show_on_main_map": true, 
-        "show_on_map": true, 
+        "region": "Spanish Circum-Caribbean", 
         "value": 41200, 
-        "broad_region": 3
+        "broad_region": 3, 
+        "longitude": "-75.6339320", 
+        "latitude": "15.6411170", 
+        "show_on_map": true
     }
 },
 {
@@ -4785,7 +4983,7 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 50, 
-        "longitude": "-90.0750000", 
+        "longitude": "90.0666670", 
         "place": "New Orleans", 
         "value": 21601, 
         "latitude": "29.9544400", 
@@ -5825,10 +6023,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 27, 
-        "longitude": "-58.3700000", 
+        "longitude": "-58.1687110", 
         "place": "Demerara", 
         "value": 35304, 
-        "latitude": "6.7200000", 
+        "latitude": "6.8102040", 
         "show_on_voyage_map": true
     }
 },
@@ -6397,10 +6595,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 32, 
-        "longitude": "-58.6725000", 
+        "longitude": "-58.3808460", 
         "place": "Buenos Aires", 
         "value": 42001, 
-        "latitude": "-34.5875000", 
+        "latitude": "-34.5746250", 
         "show_on_voyage_map": true
     }
 },
@@ -6517,7 +6715,7 @@
         "longitude": "-39.2641800", 
         "place": "P\u00f4rto Seguro", 
         "value": 50201, 
-        "latitude": "-16.6717900", 
+        "latitude": "-16.4441670", 
         "show_on_voyage_map": true
     }
 },
@@ -7532,6 +7730,19 @@
         "place": "Little Junk", 
         "value": 60319, 
         "latitude": "6.1901300", 
+        "show_on_voyage_map": true
+    }
+},
+{
+    "pk": 498, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": true, 
+        "region": 54, 
+        "longitude": "-11.2833300", 
+        "place": "Mano", 
+        "value": 60320, 
+        "latitude": "6.9833300", 
         "show_on_voyage_map": true
     }
 },
@@ -8633,10 +8844,10 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 60, 
-        "longitude": "46.6987700", 
+        "longitude": "43.9544970", 
         "place": "Madagascar", 
         "value": 60811, 
-        "latitude": "-19.1911000", 
+        "latitude": "-24.7892440", 
         "show_on_voyage_map": true
     }
 },
@@ -9088,10 +9299,10 @@
     "fields": {
         "show_on_main_map": false, 
         "region": 92, 
-        "longitude": "-99.1600000", 
+        "longitude": "-87.6097570", 
         "place": "New Spain", 
         "value": 41201, 
-        "latitude": "19.4100000", 
+        "latitude": "18.9832080", 
         "show_on_voyage_map": true
     }
 },
@@ -10269,12 +10480,12 @@
     "pk": 709, 
     "model": "voyage.place", 
     "fields": {
-        "show_on_main_map": false, 
+        "show_on_main_map": true, 
         "region": 60, 
-        "longitude": "0E-7", 
+        "longitude": "39.5100000", 
         "place": "Southeast Africa and Indian Ocean islands, port unspecified", 
         "value": 60899, 
-        "latitude": "0E-7", 
+        "latitude": "-17.1400000", 
         "show_on_voyage_map": true
     }
 },
@@ -10609,10 +10820,10 @@
     "fields": {
         "show_on_main_map": false, 
         "region": 12, 
-        "longitude": "-78.9208700", 
+        "longitude": "-79.2219910", 
         "place": "Cuba, port unspecified", 
         "value": 31399, 
-        "latitude": "21.7715700", 
+        "latitude": "22.3991500", 
         "show_on_voyage_map": true
     }
 },
@@ -10776,13 +10987,13 @@
     "pk": 748, 
     "model": "voyage.place", 
     "fields": {
-        "show_on_main_map": false, 
+        "show_on_main_map": true, 
         "region": 84, 
-        "longitude": "0E-7", 
+        "longitude": "9.3438970", 
         "place": "Africa., port unspecified", 
         "value": 60999, 
-        "latitude": "0E-7", 
-        "show_on_voyage_map": false
+        "latitude": "0.0540330", 
+        "show_on_voyage_map": true
     }
 },
 {
@@ -11849,6 +12060,32 @@
         "value": 31328, 
         "latitude": "0E-7", 
         "show_on_voyage_map": false
+    }
+},
+{
+    "pk": 831, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": true, 
+        "region": 92, 
+        "longitude": "-79.4703100", 
+        "place": "Nombre de Dios", 
+        "value": 41219, 
+        "latitude": "9.5828900", 
+        "show_on_voyage_map": true
+    }
+},
+{
+    "pk": 832, 
+    "model": "voyage.place", 
+    "fields": {
+        "show_on_main_map": false, 
+        "region": 8, 
+        "longitude": "-70.8666670", 
+        "place": "Newburyport", 
+        "value": 20424, 
+        "latitude": "42.8000000", 
+        "show_on_voyage_map": true
     }
 }
 ]

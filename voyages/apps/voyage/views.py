@@ -4,6 +4,7 @@ from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
 from django.shortcuts import render
 from django.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.encoding import iri_to_uri
 from django.contrib.admin.views.decorators import staff_member_required
@@ -28,12 +29,19 @@ import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
 from datetime import date
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.figure import Figure
-from matplotlib import cm
-import base64
-import StringIO
+from voyages.apps.assessment.globals import get_map_year
+from voyages.apps.common.export import download_xls
+from django.utils.translation import ugettext as _
+
+# Here we enumerate all fields that should be cleared
+# from the session if a reset is required.
+reset_fields = ['voyages_tables_columns', 'voyages_tables_rows',
+               'voyages_tables_cells', 'voyages_tables_omit',
+               'voyage_timeline_form_option', 'selected_graphs_tab',
+               'tab_graphs_bar_defs', 'tab_graphs_lin_defs', 'tab_graphs_pie_defs',
+               'tab_graphs_bar_defs_x_ind', 'tab_graphs_bar_defs_y_ind',
+               'tab_graphs_lin_defs_x_ind', 'tab_graphs_lin_defs_y_ind',
+               'tab_graphs_pie_defs_x_ind', 'tab_graphs_pie_defs_y_ind',]
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -55,7 +63,7 @@ def get_page(request, chapternum, sectionnum, pagenum):
         raise Http404
 
 
-def understanding_page(request, name):
+def understanding_page(request, name='guide'):
     dictionary = {}
 
     if "methodology" in name:
@@ -82,9 +90,9 @@ def understanding_page(request, name):
         dictionary['var_list_stats'] = variable_list()
         dictionary['page'] = 'voyage/variable-list.html'
     else:
-        page = "voyage/" + name + ".html"
         dictionary['page'] = 'voyage/' + name + ".html"
         dictionary['title'] = 'Guide'
+    dictionary['title'] = _(dictionary['title'])
 
     return render(request, 'voyage/understanding_base.html', dictionary)
 
@@ -116,6 +124,13 @@ def download_file(request):
 
     return render(request, templatename, {'form': form, 'uploaded_files': uploaded_files_info})
 
+def download_flatpage(request):
+    from django.contrib.flatpages.models import FlatPage
+    flatpage = FlatPage.objects.get(pk=1)
+    from datetime import date
+    return render(request,
+                  'flatpages/download.html',
+                  {'flatpage': flatpage, 'num_voyages': Voyage.objects.count(), 'year': str(date.today().year)})
 
 def handle_uploaded_file(f):
     """
@@ -447,7 +462,7 @@ def prettify_var_list(varlist):
     qdict = create_query_dict(varlist)
     # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
     if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-        output.append(('Time frame:', unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
+        output.append((_('Time frame:'), unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
     for kvar, vvar in qdict.items():
         varname = kvar.split('__')[0]
         is_real_var = False
@@ -471,54 +486,55 @@ def prettify_var_list(varlist):
             month_dict = {}
             for monnum, monval in globals.list_months:
                 month_dict[int(monnum)] = monval
-            output.append((fullname + " month:", ', '.join([month_dict[int(i)] for i in vvar])))
+            output.append((fullname + _(" month:"), ', '.join([month_dict[int(i)] for i in vvar])))
             continue
-        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.no_mangle)
+        unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.default_prettifier(varname))
         tvar = unmangle_method(vvar)
-        value = unicode(tvar)
         if isinstance(tvar, (list, tuple)):
             value = unicode(u', '.join(map(unicode, tvar)))
+        else:
+            value = tvar
         prefix = ''
         if (varname + '_options') in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
+                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar[1].month == 1:
                         tod = date(vvar[1].year - 1, 12, vvar[1].day)
                     else:
                         tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
-                    value = 'between ' + unicode(unmangle_method(vvar[0])) + ' and ' + unicode(unmangle_method(tod))
+                    value = _('between ') + unicode(unmangle_method(vvar[0])) + _(' and ') + unicode(unmangle_method(tod))
                 else:
-                    value = 'between ' + unicode(tvar[0]) + ' and ' + unicode(tvar[1])
+                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
-                    value = 'in ' + unicode(unmangle_method(vvar[0]))
+                    value = _('in ') + unicode(unmangle_method(vvar[0]))
                 else:
-                    value = 'equal to ' + unicode(tvar)
+                    value = _('equal to ') + unicode(tvar)
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'before ' + unicode(tvar)
+                    value = _('before ') + unicode(tvar)
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar.month == 1:
                         tod = date(vvar.year - 1, 12, vvar.day)
                     else:
                         tod = date(vvar.year, vvar.month - 1, vvar.day)
-                    value = 'before ' + unicode(unmangle_method(tod))
+                    value = _('before ') + unicode(unmangle_method(tod))
                 else:
-                    value = 'at most ' + unicode(tvar)
+                    value = _('at most ') + unicode(tvar)
             elif opt == '3':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = 'after ' + unicode(tvar)
+                    value = _('after ') + unicode(tvar)
                 elif varname in globals.list_date_fields:
-                    value = 'after ' + unicode(tvar)
+                    value = _('after ') + unicode(tvar)
                 else:
-                    value = 'at least ' + unicode(tvar)
+                    value = _('at least ') + unicode(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
@@ -529,8 +545,11 @@ def voyage_map(request, voyage_id):
     Displays the map for a voyage
     """
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    year_completed = int(voyage.var_imp_voyage_began)
+    map_year = get_map_year(year_completed, year_completed)
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
+                   'map_year': map_year,
                    'voyage_id': voyage_id,
                    'voyage': voyage})
 
@@ -563,13 +582,13 @@ def voyage_variables(request, voyage_id):
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:
-                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.no_mangle)
+                mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.default_prettifier(j['var_name']))
                 val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
-                allvars.append(((len(glist),unicode(group)),unicode(j['var_full_name']),val))
+                allvars.append(((len(glist), unicode(group)), unicode(j['var_full_name']), val, j['var_name']))
             else:
-                allvars.append(((None,None,),unicode(j['var_full_name']),val))
+                allvars.append(((None, None), unicode(j['var_full_name']), val, j['var_name']))
 
     return render(request, "voyage/voyage_info.html",
                   {'voyage_variables': allvars,
@@ -577,6 +596,8 @@ def voyage_variables(request, voyage_id):
                    'tab': 'variables',
                    'voyage_id': voyage_id})
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 @gzip_page
 def search(request):
     """
@@ -609,8 +630,9 @@ def search(request):
     num_col_labels_total = 1
     num_row_labels = 1
     is_double_fun = False
-    graphs_xy_select_form = None
-    graphs_bar_select_form = None
+    graphs_select_form = None
+    graph_data = None
+    graph_xfun_index = None
     graphs_tab = None
     graph_remove_plots_form = None
     inline_graph_png = None
@@ -619,6 +641,18 @@ def search(request):
     timeline_data = []
     timeline_form = None
     timeline_chart_settings = {}
+
+    order_by_field = request.session.get('voyages_order_by_field', 'var_voyage_id')
+    sort_direction = request.session.get('voyages_sort_direction', 'asc')
+
+    # Map
+    map_year = '1750'
+
+    # Check if we are restoring POST data from session,
+    # which is what would happen when accessing a permalink.
+    if 'voyages_post_data' in request.session:
+        request.method = 'POST'
+        request.POST = request.session.pop('voyages_post_data')
 
     # If there is no requested page number, serve 1
     current_page = 1
@@ -657,8 +691,9 @@ def search(request):
                 results_per_page_form.fields['option'].initial = request.session.get('results_per_page_choice', '1')
                 results_per_page = dict(results_per_page_form.fields['option'].choices)[request.session.get('results_per_page_choice', '1')]
             qprev = request.session.get('previous_queries', [])
-            var_list = qprev[qnum]
-            qprev.remove(qprev[qnum])
+            if 0 <= qnum < len(qprev):
+                var_list = qprev[qnum]
+                qprev.remove(qprev[qnum])
             request.session['previous_queries'] = qprev
             prev_queries_open = True
         else:
@@ -677,20 +712,17 @@ def search(request):
             form_list.append(form)
         for idx in sorted(to_remove_numbers, reverse=True):
             del form_list[idx]
-        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list['time_span_from_year'],
-                                                           'frame_to_year': var_list['time_span_to_year']})
+        time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': var_list.get('time_span_from_year', voyage_span_first_year),
+                                                           'frame_to_year': var_list.get('time_span_to_year', voyage_span_last_year)})
         query_dict = create_query_dict(var_list)
-        results = perform_search(query_dict, None)
+        results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
-        request.session['graph_defs'] = []
-        request.session['voyages_tables_columns'] = None
-        request.session['voyages_tables_rows'] = None
-        request.session['voyages_tables_cells'] = None
-        request.session['voyages_tables_omit'] = None
-        request.session['voyage_timeline_form_option'] = None
+        # Clear session keys.
+        for key in reset_fields:
+            request.session.pop(key, None)
         results_per_page_form = ResultsPerPageOptionForm()
         form_list = create_query_forms()
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
@@ -727,7 +759,12 @@ def search(request):
                 request.session['previous_queries'] = [var_list] + request.session['previous_queries']
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
         query_dict = create_query_dict(var_list)
-        results = perform_search(query_dict, None)
+
+        order_by_field = request.POST.get('order_by_field', order_by_field)
+        sort_direction = request.POST.get('sort_direction', sort_direction)
+        request.session['voyages_order_by_field'] = order_by_field
+        request.session['voyages_sort_direction'] = sort_direction
+        results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
         
         if submitVal == 'configColumn':
             tab = 'config_column'
@@ -1061,181 +1098,65 @@ def search(request):
 
         elif submitVal and submitVal.startswith('tab_graphs'):
             tab = 'graphs'
-            graphs_tab = 'tab_graphs_xy'
-            if submitVal.startswith('tab_graphs_xy') or submitVal == 'tab_graphs':
-                graphs_tab = 'tab_graphs_xy'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'xyxselect' not in pst:
-                    pst['xyxselect'] = '0'
-                if 'xyyselect' not in pst:
-                    pst['xyyselect'] = '0'
-                graphs_xy_select_form = GraphXYSelectionForm(pst, initial={'xyxselect': '0', 'xyyselect': '0'})
-                if graphs_xy_select_form.is_valid():
-                    xind = int(graphs_xy_select_form.cleaned_data['xyxselect'])
-                    yind = int(graphs_xy_select_form.cleaned_data['xyyselect'])
-                    xdef = globals.graphs_x_functions[xind]
-                    ydef = globals.graphs_y_functions[yind]
-                    request.session['graph_xy_defs'] = request.session.get('graph_xy_defs', [])
-                    if submitVal == 'tab_graphs_xy_add':
-                        if (len(request.session['graph_xy_defs']) > 0 and request.session['graph_xy_defs'][-1] != yind) or len(request.session['graph_xy_defs']) == 0:
-                            request.session['graph_xy_defs'].append(yind)
-                    elif submitVal == 'tab_graphs_xy_show':
-                        request.session['graph_xy_defs'] = [yind]
+            # Each tab name is encoded by 3 characters (lin, bar, pie)
+            # representing the types of graphs supported.
+            graphs_tab = submitVal[:len('tab_graphs_???')]
+            if graphs_tab not in ['tab_graphs_lin', 'tab_graphs_bar', 'tab_graphs_pie']:
+                graphs_tab = request.session.get('selected_graphs_tab', 'tab_graphs_lin')
+            request.session['selected_graphs_tab'] = graphs_tab
+            session_defs_key = graphs_tab + '_defs'
+            # Default value for x-axis or session stored value (if any).
+            xind = request.session.get(session_defs_key + '_x_ind', 0)
+            yind = request.session.get(session_defs_key + '_y_ind', 0)
+            # Handle adding a y-function or simply changing the x-function.
+            xfuns = globals.graphs_x_functions if graphs_tab == 'tab_graphs_lin' else \
+                globals.graphs_bar_x_functions
+            graphs_form_params = {'data': request.POST, 'prefix': graphs_tab, 'xfunctions': xfuns}
+            if graphs_tab == 'tab_graphs_pie':
+                graphs_form_params['xfield_label'] = 'Sectors'
+                graphs_form_params['yfield_label'] = 'Values'
+            graphs_select_form = GraphSelectionForm(**graphs_form_params)
+            if graphs_select_form.is_valid():
+                # Form is valid and we should use the xy-axes specified by it.
+                xind = int(graphs_select_form.cleaned_data['xselect'])
+                yind = int(graphs_select_form.cleaned_data['yselect'])
+            else:
+                graphs_form_params.pop('data', None)
+                graphs_form_params['initial'] = {'xselect': xind, 'yselect': yind}
+                graphs_select_form = GraphSelectionForm(**graphs_form_params)
+            # Recall y-axes stored in session (if any).
+            y_axes = set(request.session.get(session_defs_key, [yind]))
+            if submitVal.endswith('_add') and yind not in y_axes:
+                y_axes.add(yind)
+            if (submitVal.endswith('_show') and len(y_axes) == 0) or graphs_tab == 'tab_graphs_pie':
+                y_axes = set([yind])
 
-                    remove_plots_list = []
-                    for idx, yid in enumerate(request.session['graph_xy_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        ydesc = ydef[0]
-                        remove_plots_list.append((ydesc, idx))
-                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
+            # Create form allowing the user to remove selected y-functions.
+            remove_plots_list = []
+            for yid in y_axes:
+                ydef = globals.graphs_y_functions[yid]
+                ydesc = ydef[0]
+                remove_plots_list.append((ydesc, yid))
+            graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
 
-                    if submitVal == 'tab_graphs_xy_remove':
-                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
-                            request.session['graph_xy_defs'].pop(i)
-                            graph_remove_plots_form.fields.pop(str(i))
-                    plt.xlabel(xdef[0])
-                    if len(request.session['graph_xy_defs']) == 1:
-                        plt.ylabel(ydef[0])
-                    else:
-                        plt.ylabel("Values")
-                    fig = plt.figure(1)
-                    for yid in request.session['graph_xy_defs']:
-                        ydef = globals.graphs_y_functions[yid]
-                        xfun = xdef[1]
-                        res = xfun(results,ydef)
-                        res = sorted(res, key=lambda x: x[0])
-                        data = zip(*res)
-                        plt.plot(*data, label=ydef[0])
-                        plt.grid(True)
-                    plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
-            elif submitVal.startswith('tab_graphs_bar'):
-                graphs_tab = 'tab_graphs_bar'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'barxselect' not in pst:
-                    pst['barxselect'] = '0'
-                if 'baryselect' not in pst:
-                    pst['baryselect'] = '0'
-                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
-                if graphs_bar_select_form.is_valid():
-                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
-                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
-                    xdef = globals.graphs_bar_x_functions[xind]
-                    ydef = globals.graphs_y_functions[yind]
-                    request.session['graph_bar_defs'] = request.session.get('graph_bar_defs', [])
-                    if submitVal == 'tab_graphs_bar_add':
-                        if (len(request.session['graph_bar_defs']) > 0 and request.session['graph_bar_defs'][-1] != yind) or len(request.session['graph_bar_defs']) == 0:
-                            request.session['graph_bar_defs'].append(yind)
-                    elif submitVal == 'tab_graphs_bar_show':
-                        request.session['graph_bar_defs'] = [yind]
+            # Handle removing a y-function.
+            if submitVal.endswith('_remove'):
+                for yid in graph_remove_plots_form.get_to_del():
+                    y_axes.remove(yid)
+                    graph_remove_plots_form.fields.pop(str(yid))
+            request.session[session_defs_key] = y_axes
+            request.session[session_defs_key + '_x_ind'] = xind
+            request.session[session_defs_key + '_y_ind'] = yind
 
-                    remove_plots_list = []
-                    for idx, yid in enumerate(request.session['graph_bar_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        ydesc = ydef[0]
-                        remove_plots_list.append((ydesc, idx))
-                    graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
-
-                    if submitVal == 'tab_graphs_bar_remove':
-                        for i in reversed(sorted(graph_remove_plots_form.get_to_del())):
-                            request.session['graph_bar_defs'].pop(i)
-                            graph_remove_plots_form.fields.pop(str(i))
-                    plt.xlabel(xdef[0])
-                    if len(request.session['graph_bar_defs']) == 1:
-                        plt.ylabel(ydef[0])
-                    else:
-                        plt.ylabel("Values")
-                    fig = plt.figure(1)
-                    width = 0.8/len(request.session['graph_bar_defs'])
-                    figwidth = 0
-                    for index, yid in enumerate(request.session['graph_bar_defs']):
-                        ydef = globals.graphs_y_functions[yid]
-                        xfun = xdef[1]
-                        res = xfun(results,ydef)
-                        #res = sorted(res, key=lambda x: x[0])
-                        data = zip(*res)
-                        enum = enumerate(data[0])
-                        zenum = zip(*enum)
-                        nums = zenum[0]
-                        lbls = zenum[1]
-                        def dmap(x):
-                            if not x:
-                                return 0.0
-                            else:
-                                return x
-                        plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
-                        if len(lbls) > 20:
-                            figwidth = max(figwidth, len(lbls)*0.2)
-                            fig.set_size_inches(figwidth, 6)
-                        plt.xticks(nums, lbls, rotation='vertical', size='small')
-                        plt.grid(True)
-                    figheight = 6
-                    errord = True
-                    while errord:
-                        errord = False
-                        try:
-                            plt.tight_layout()
-                        except ValueError:
-                            errord = True
-                            figheight += 4
-                            fig.set_size_inches(figwidth, figheight)
-                    plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
-            elif submitVal.startswith('tab_graphs_pie'):
-                graphs_tab = 'tab_graphs_pie'
-                pst = {x: y for x, y in request.POST.items()}
-                if 'barxselect' not in pst:
-                    pst['barxselect'] = '0'
-                if 'baryselect' not in pst:
-                    pst['baryselect'] = '0'
-                graphs_bar_select_form = GraphBarSelectionForm(pst, initial={'barxselect': '0', 'baryselect': '0'})
-                if graphs_bar_select_form.is_valid():
-                    xind = int(graphs_bar_select_form.cleaned_data['barxselect'])
-                    yind = int(graphs_bar_select_form.cleaned_data['baryselect'])
-                    xdef = globals.graphs_bar_x_functions[xind]
-                    ydef = globals.graphs_y_functions[yind]
-
-                    graph_remove_plots_form = GraphRemovePlotForm([(ydef[0], 0)], request.POST)
-
-                    fig = plt.figure(1)
-                    xfun = xdef[1]
-                    res = xfun(results,ydef)
-                    data = zip(*res)
-                    #enum = enumerate(data[0])
-                    #zenum = zip(*enum)
-                    #nums = zenum[0]
-                    #lbls = zenum[1]
-                    def dmap(x):
-                        if not x:
-                            return 0.0
-                        else:
-                            return x
-                    #plt.bar(map(lambda x: x+(width*index), nums), map(dmap, data[1]), width=width, color=cm.jet(index*width/0.8), label=ydef[0])
-                    plt.pie(data[1], labels=data[0])
-                    #plt.tight_layout()
-                    #plt.legend()
-                    canv = FigureCanvasAgg(fig)
-                    figstr = StringIO.StringIO()
-                    canv.print_png(figstr)
-                    inline_graph_png = base64.b64encode(figstr.getvalue())
-                    fig.clf()
-                    plt.clf()
-                    plt.cla()
-                    plt.close('all')
+            # Fetch graph data and pass it to the View template.
+            graph_xfun_index = xind
+            xdef = xfuns[xind]
+            xfun = xdef[1]
+            graph_data = {}
+            for yind in y_axes:
+                ydef = globals.graphs_y_functions[yind]
+                dataset = [t for t in xfun(results, ydef) if t[1] is not None and t[1] != 0]
+                graph_data[ydef[0]] = dataset
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1267,13 +1188,120 @@ def search(request):
                                                        int(voyage_span_first_year),
                                                        int(voyage_span_last_year))
 
+            if request.POST is not None and "download" in request.POST:
+                return download_xls([[("Year", 1), (timeline_selected_tuple[1], 1)]], timeline_data)
+
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
                 # Include extra dict if exists
                 timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
 
-        elif submitVal == 'tab_maps':
-            tab = 'maps'
+        elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
+            tab = submitVal[4:]
+            frame_from_year = int(request.POST.get('frame_from_year', voyage_span_first_year))
+            frame_to_year = int(request.POST.get('frame_to_year', voyage_span_last_year))
+            map_year = get_map_year(frame_from_year, frame_to_year)
+        elif submitVal == 'map_ajax':
+            map_ports = {}
+            map_flows = {}
+
+            def add_port(place):
+                result = place is not None and place.show_on_voyage_map and \
+                    place.region.show_on_map and place.region.broad_region.show_on_map
+                if result:
+                    map_ports[place.place] = (place.latitude, place.longitude, place.region, place.region.broad_region)
+                return result
+
+            def add_flow(source, destination, embarked, disembarked):
+                result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
+                if result:
+                    flow_key = source.place + '_' + destination.place
+                    if flow_key in map_flows:
+                        embarked += map_flows[flow_key][2]
+                        disembarked += map_flows[flow_key][3]
+                    map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
+                return result
+
+            all_voyages = VoyageManager.cache()
+            missed_embarked = 0
+            missed_disembarked = 0
+            for pk in results.values_list('pk', flat=True).load_all():
+                voyage = all_voyages.get(int(pk))
+                if voyage is None:
+                    continue
+                itinerary = voyage.voyage_itinerary
+                numbers = voyage.voyage_slaves_numbers
+                embarked = numbers.imp_total_num_slaves_embarked
+                disembarked = numbers.imp_total_num_slaves_disembarked
+                source = itinerary.imp_principal_place_of_slave_purchase
+                destination = itinerary.imp_principal_port_slave_dis
+                if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
+                    source = Place()
+                    source.place = _('Missing source')
+                    source.latitude = 0.05
+                    source.longitude = 9.34
+                    source.region = Region()
+                    source.region.region = source.place
+                    source.region.latitude = source.latitude
+                    source.region.longitude = source.longitude
+                    source.region.broad_region = BroadRegion()
+                    source.region.broad_region.broad_region = source.place
+                    source.region.broad_region.latitude = source.latitude
+                    source.region.broad_region.longitude = source.longitude
+                add_flow(
+                    source,
+                    destination,
+                    embarked,
+                    disembarked)
+            if missed_embarked > 0 or missed_disembarked > 0:
+                import logging
+                logging.getLogger('voyages').info('Missing flow: (' + str(missed_embarked) +
+                                                  ', ' + str(missed_disembarked) + ')')
+            return render(request, "voyage/search_maps.datatemplate",
+                          {
+                              'map_ports': map_ports,
+                              'map_flows': map_flows
+                          }, content_type='text/javascript')
+        elif submitVal == 'animation_ajax':
+            all_voyages = VoyageManager.cache()
+            nations = {n.id: _(n.label) for n in Nationality.objects.all()}
+            result = []
+            for pk in results.values_list('pk', flat=True).load_all():
+                voyage = all_voyages.get(int(pk))
+                if voyage is None:
+                    continue
+                itinerary = voyage.voyage_itinerary
+                numbers = voyage.voyage_slaves_numbers
+                embarked = numbers.imp_total_num_slaves_embarked
+                disembarked = numbers.imp_total_num_slaves_disembarked
+                source = itinerary.imp_principal_place_of_slave_purchase
+                destination = itinerary.imp_principal_port_slave_dis
+                dates = voyage.voyage_dates
+                year = dates.get_date_year(dates.voyage_began)
+                ship = voyage.voyage_ship
+                if source is not None and destination is not None and source.show_on_voyage_map and \
+                        destination.show_on_voyage_map and year is not None and \
+                        embarked is not None and embarked > 0 and disembarked is not None:
+                    flag_id = ship.imputed_nationality.id if ship.imputed_nationality is not None else 0
+                    flag = nations.get(flag_id)
+                    if flag is None:
+                        flag = ''
+                    result.append('{ "voyage_id": ' + str(voyage.voyage_id) +
+                                  ', "source_name": "' + _(source.place) + '"' +
+                                  ', "source_lat": ' + str(source.latitude) +
+                                  ', "source_lng": ' + str(source.longitude) +
+                                  ', "destination_name": "' + _(destination.place) + '"' +
+                                  ', "destination_lat": ' + str(destination.latitude) +
+                                  ', "destination_lng": ' + str(destination.longitude) +
+                                  ', "embarked": ' + str(embarked) +
+                                  ', "disembarked": ' + str(disembarked) +
+                                  ', "year": ' + str(year) +
+                                  ', "ship_ton": ' + (str(ship.tonnage) if ship.tonnage is not None else '0') +
+                                  ', "ship_nationality_id": ' + str(flag_id) +
+                                  ', "ship_nationality_name": "' + flag + '"'
+                                  ', "ship_name": "' + (unicode(ship.ship_name) if ship.ship_name is not None else '') + '"'
+                                  ' }')
+            return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
@@ -1308,7 +1336,6 @@ def search(request):
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
     result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
-    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -1318,6 +1345,8 @@ def search(request):
                    'all_var_list': globals.var_dict,
                    'results': pagins,
                    'result_data': result_data,
+                   'order_by_field': order_by_field,
+                   'sort_direction': sort_direction,
                    'paginator_range': paginator_range,
                    'pages_range': pages_range,
                    'curpage': pagins,
@@ -1340,14 +1369,16 @@ def search(request):
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
                    'is_double_fun': is_double_fun,
-                   'graphs_xy_select_form': graphs_xy_select_form,
                    'inline_graph_png': inline_graph_png,
                    'graph_remove_plots_form': graph_remove_plots_form,
+                   'graph_xfun_index': graph_xfun_index,
                    'graphs_tab': graphs_tab,
-                   'graphs_bar_select_form': graphs_bar_select_form,
+                   'graphs_select_form': graphs_select_form,
+                   'graph_data': graph_data,
                    'timeline_data': timeline_data,
                    'timeline_form': timeline_form,
-                   'timeline_chart_settings': timeline_chart_settings
+                   'timeline_chart_settings': timeline_chart_settings,
+                   'map_year': map_year
                   })
 
 
@@ -1364,10 +1395,8 @@ def prettify_results(results, lookup_table):
         voyageid = int(i['var_voyage_id'])
         for varname, varvalue in i.items():
             if varvalue:
-                if varname in lookup_table:
-                    idict[varname] = lookup_table[varname](varvalue, voyageid)
-                else:
-                    idict[varname] = varvalue
+                prettify_varvalue = lookup_table.get(varname, globals.default_prettifier(varname))
+                idict[varname] = prettify_varvalue(varvalue, voyageid)
             else:
                 idict[varname] = None
         mangled.append(idict)
@@ -1384,30 +1413,30 @@ def getChoices(varname):
         for nation in Nationality.objects.all():
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
-            choices.append((nation.value, nation.label))
+            choices.append((nation.value, _(nation.label)))
     elif varname in ['var_imputed_nationality']:
         for nation in Nationality.objects.all():
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
-                choices.append((nation.value, nation.label))
+                choices.append((nation.value, _(nation.label)))
     elif varname in ['var_outcome_voyage']:
         for outcome in ParticularOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_slaves']:
         for outcome in SlavesOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_owner']:
         for outcome in OwnerOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_resistance']:
         for outcome in Resistance.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_ship_captured']:
         for outcome in VesselCapturedOutcome.objects.all():
-            choices.append((outcome.value, outcome.label))
+            choices.append((outcome.value, _(outcome.label)))
     elif varname == 'var_rig_of_vessel':
         for rig in RigOfVessel.objects.all():
-            choices.append((rig.value, rig.label))
+            choices.append((rig.value, _(rig.label)))
     return choices
 
 def putOtherLast(lst):
@@ -1597,16 +1626,29 @@ def search_var_dict(var_name):
             return i
     return None
 
-def perform_search(query_dict, date_filters):
+# Automatically fetch fields that should be sorted differently, either
+# by using a translated version or a plain text version of tokenized fields.
+from search_indexes import VoyageIndex
+index = VoyageIndex()
+plain_text_suffix = '_plaintext'
+plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in index.fields.keys() if f.endswith(plain_text_suffix)]
+translate_suffix = '_lang_en'
+translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys() if f.endswith(translate_suffix)]
+
+def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sort_direction='asc', lang='en'):
     """
     Perform the actual query towards SOLR
     :param query_dict:
     :param date_filters:
     :return:
     """
-    # Initially sort by voyage_id
-    # TODO: change this to have Voyage before filter
-    results = SearchQuerySet().filter(**query_dict).models(Voyage).order_by('var_voyage_id')
+    if order_by_field in plain_text_suffix_list:
+        order_by_field += '_plaintext_exact'
+    elif order_by_field in translated_field_list:
+        order_by_field += '_lang_' + lang + '_exact'
+    if sort_direction == 'desc':
+        order_by_field = '-' + order_by_field
+    results = SearchQuerySet().models(Voyage).filter(**query_dict).order_by(order_by_field)
     # Date filters
     return date_filter_query(date_filters, results)
 
@@ -2013,7 +2055,7 @@ def csv_stats_download(request):
         else:
             date_filters = []
 
-        results = perform_search(query_dict, date_filters)
+        results = perform_search(query_dict, date_filters, lang=request.LANGUAGE_CODE)
 
         if len(results) == 0:
             no_result = True
@@ -2202,3 +2244,33 @@ def remove_empty_columns(index, row_list, collabels, col_totals):
                     val += value[1]
 
     remove_empty_columns(index+1, row_list, collabels, col_totals)
+
+def get_permanent_link(request):
+    """
+    Obtain a permanent link for the current search query.
+    :param request: The request containing the search quer
+    :param request: The request containing the search query.
+    :return: A permanent URL link for that exact query.
+    """
+    from voyages.apps.common.models import SavedQuery
+    saved_query = SavedQuery()
+    return saved_query.get_link(request, 'restore_v_permalink')
+
+def restore_permalink(request, link_id):
+    """
+    Fetch the query corresponding to the link id and redirect to the
+    search results of that query.
+    :param request: web request
+    :param link_id: the id of the permanent link
+    :return: a Redirect to the Voyages search page after setting the session POST data to match the permalink
+    or an Http404 error if the link is not found.
+    """
+    from voyages.apps.common.models import SavedQuery
+    return SavedQuery.restore_link(link_id, request.session, 'voyages_post_data', 'voyage:search')
+
+def debug_permalink(request, link_id):
+    from voyages.apps.common.models import SavedQuery
+    from django.shortcuts import get_object_or_404
+    from django.http import HttpResponse
+    permalink = get_object_or_404(SavedQuery, pk=link_id)
+    return HttpResponse(permalink.query, mimetype='text/plain')

@@ -21,4 +21,6 @@ urlpatterns += patterns('',
     
     url(r'^estimates$', 'voyages.apps.assessment.views.get_estimates', name='estimates'),
 
+    url(r'^permalink', 'voyages.apps.assessment.views.get_permanent_link', name='permanent-link'),
+
 )

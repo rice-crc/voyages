@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load voyage_extras %}
 <!-- Left menu for Understanding the Database -->
 
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup.css">
@@ -34,8 +35,8 @@ function shortenURL(){
         </div>
 
         <div class="box-mid-end">
-            From {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
-            To {{ time_frame_search_form.frame_to_year }}
+            {% trans 'From' %} {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
+            {% trans 'To' %} {{ time_frame_search_form.frame_to_year }}
             <br />
             <span class="italic">
                 {% trans 'The full extent of time from the first to the last voyage is ' %}
@@ -75,17 +76,17 @@ function shortenURL(){
                         {% for item in variable.list %}
                           {% if item.is_basic == True %}
                                <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
-                                {{ item.var_full_name }}
+                                {{ item.var_full_name|trans_log }}
                                </div>
                           {% endif %}
                         {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} {% spaceless %}
+                    <span class="bold">{{ variable.grouper|trans_log }}</span> ({{ variable.list|length }} {% spaceless %}
                     {% if variable.list|length == 1 %}
-                        variable)
+                        {% trans 'variable' %})
                     {% else %}
-                        variables)
+                        {% trans 'variables' %})
                     {% endif %}
                     {% endspaceless %}
                 </div>
@@ -113,13 +114,13 @@ function shortenURL(){
                         {% for item in variable.list %}
                           {% if item.is_general == True %}
                                <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
-                                {{ item.var_full_name }}
+                                {{ item.var_full_name|trans_log }}
                                </div>
                           {% endif %}
                         {% endfor %}
                         </div>
                     </div>
-                    <span class="bold">{{ variable.grouper }}</span> ({{ variable.list|length }} variable{{ variable.list|pluralize }})
+                    <span class="bold">{{ variable.grouper|trans_log }}</span> ({{ variable.list|length }} {% trans 'variable' %}{{ variable.list|pluralize }})
                 </div>
                 {% endfor %}
             </div>
@@ -146,7 +147,7 @@ function shortenURL(){
 		    {% with varname_wrapper="select_"|add:item.var_name %}
                     <div class="sidebox" id="search_form_box_{{ item.var_name }}">
                         <!-- Search box header -->
-                        <span class="query-builder-label" id="header_{{ item.var_name }}">{{ item.var_full_name }}</span>
+                        <span class="query-builder-label" id="header_{{ item.var_name }}">{{ item.var_full_name|trans_log }}</span>
 
                         <span class="query-builder-button close-button">
                             <img src="{{ STATIC_URL }}images/voyage/icon-remove.png"
@@ -187,8 +188,8 @@ function shortenURL(){
                                 <div class="query-select-initial" >
                                     <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
                                     </div>
-                                <br /><input type="button" onclick="expandChoices('{{ varname_wrapper }}');"
-                                             value="Select" class="display_inline">
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
                                 </div>
 
                                 <div class="query-select-full hidden">
@@ -198,18 +199,18 @@ function shortenURL(){
                                            name="tmp" style="width: 200px;" />
 
                                     <div class="query-builder-edit-list">
-				      {{ item.form.choice_field }}
+				                        {{ item.form.choice_field }}
                                     </div>
 
 
                                     <div style="margin-top: 5px;">
-                                        <input type="button" class="collapseCheckBoxButton"
+                                        <button type="button" class="collapseCheckBoxButton"
                                                onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'var-checkbox')"
-                                               value="OK" class="display_inline">
-                                        <input type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
-                                               value="Select all" class="display_inline">
-                                        <input type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
-                                               value="Deselect all" class="display_inline">
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
                                     </div>
                                 </div>
                             </div>
@@ -218,8 +219,8 @@ function shortenURL(){
                                 <div class="query-select-initial" >
                                     <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
                                     </div>
-                                <br /><input type="button" onclick="expandChoices('{{ varname_wrapper }}');"
-                                             value="Select" class="display_inline">
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
                                 </div>
 
                                 <div class="query-select-full hidden">
@@ -242,7 +243,7 @@ function shortenURL(){
                                                                class="var-checkbox checkbox-layer0" type="checkbox"
                                                                {% if item_layer0.is_selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
-                                                        <span class="text-label">{{ item_layer0.text }}</span>
+                                                        <span class="text-label">{{ item_layer0.text|trans_log }}</span>
                                                     </label>
                                                     <ul class="hidden">
                                                     {% for item_layer1 in item_layer0.choices %}
@@ -256,7 +257,7 @@ function shortenURL(){
                                                                value="{{ item_layer1.text }}"
                                                                {% if item_layer1.is_selected == True %} checked="checked" {% endif %}
                                                                onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
-                                                            <span class="text-label">{{ item_layer1.text }}</span>
+                                                            <span class="text-label">{{ item_layer1.text|trans_log }}</span>
                                                         </label>
                                                         <ul class="hidden">
                                                             {% for item_layer2 in item_layer1.choices %}
@@ -269,7 +270,7 @@ function shortenURL(){
 									   
                                                                            value="{{ item_layer2.value }}"
                                                                             onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
-                                                                    <span class="text-label">{{ item_layer2.text }}</span>
+                                                                    <span class="text-label">{{ item_layer2.text|trans_log }}</span>
                                                                     </label>
                                                                 </li>
                                                             {% endfor %}
@@ -282,14 +283,14 @@ function shortenURL(){
                                         {% endif %}
                                     </div>
                                     <div style="margin-top: 5px;">
-                                        <input type="button"
+                                        <button type="button"
                                                class="place_collapse_button"
                                                onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'checkbox-layer2')"
-                                               value="OK" class="display_inline">
-                                        <input type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
-                                               value="Select all" class="display_inline">
-                                        <input type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
-                                               value="Deselect all" class="display_inline">
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
                                     </div>
                                 </div>
                             </div>
@@ -340,7 +341,7 @@ function shortenURL(){
                     {% endfor %}
                 {% endif %}
             </div>
-            <input type="submit" onclick="submitWithValue({% if tab == 'result' %}
+            <button type="submit" onclick="submitWithValue({% if tab == 'result' %}
 					                    'search'
 							  {% elif tab == 'tables' %}
 							    'tab_tables'
@@ -352,9 +353,8 @@ function shortenURL(){
 							    'tab_timeline'
 							  {% elif tab == 'maps' %}
 							    'tab_maps'
-							  {% endif %});" value="{% trans 'Search' %}" name="buttonSearch"/>
-            <input type="reset" onclick="submitWithValue('reset');" value="{% trans 'New query' %}" name="buttonAgain"/>
-
+							  {% endif %});" value="Search" name="buttonSearch">{% trans 'Search' %}</button>
+            <button type="reset" onclick="submitWithValue('reset');" value="New query" name="buttonAgain">{% trans 'New query' %}</button>
         </div>
     </div>
 
@@ -372,24 +372,7 @@ function shortenURL(){
         <div class="box-mid-end">
             <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
                 To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
-            <div class="blackout"></div>
-            <div class="msgbox">
-                <div class="permlink-info">
-                    <div class="permlink-title">
-                        URL has been created
-                    </div>
-                    <div class="permlink-desc">
-                        To reactivate the current database query in the future, copy the following URL and then paste it into the address bar:
-                    </div>
-                    <div class="permlink-link">
-                        <textarea id="permlink-text-link" wrap="virtual" rows="4">{{ url_to_copy }}</textarea>
-                    </div>
-                    <div class="permlink-close">
-                        <input class="permlink-close-button" type="submit" value="OK, Close This">
-                    </div>
-                </div>
-            </div>
-            <input type="button" id="link-button" value="Click Here"/>
+            <button onclick="return createLink();">{% trans 'Click Here' %}</button>
         </div>
     </div>
 
@@ -406,15 +389,15 @@ function shortenURL(){
             {% for num, query in previous_queries %}
 	        <div id="prev_query_{{ num }}" class="side-query-box">
 	            {% for variabletext, values in query %}
-	                {{ variabletext }} <b> {{ values }} </b><br/>
+	                {{ variabletext|trans_log }} <b> {{ values }} </b><br/>
 	            {% endfor %}
 		    <button type="button" class="side-query-box-button" onclick="delete_prev_query({{ num }})" >
 		         <img src="{{ STATIC_URL }}images/voyage/icon-remove-query.png" width="12" height="12" border="0" padding="0"/>
-			 Delete
+			 {% trans 'Delete' %}
 		    </button>
 		    <button type="button" class="side-query-box-button" onclick="restore_prev_query({{ num }})" >
 		         <img src="{{ STATIC_URL }}images/voyage/icon-restore-query.png" width="12" height="12" border="0" padding="0" />
-			 Restore
+			 {% trans 'Restore' %}
 		    </button>
 		</div>
 		<br/>
@@ -425,3 +408,35 @@ function shortenURL(){
     </div>
 
 </div>
+
+<div id="dialog" title="Dialog Title" style="display:none;">
+    <h1>{% trans 'URL link has been created' %}</h1>
+    <hr />
+    <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
+    <textarea contenteditable="true" id="url_string" style="width:500px;"></textarea>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
+    function createLink() {
+      $.post('permalink', $('form').serialize(), function(link) {
+        var urlTextArea = $('#url_string');
+        urlTextArea.val(link);
+        urlTextArea.focus(function(e) {
+          e.target.select();
+          try {
+            document.execCommand('copy');
+          } catch (e) {
+            console.log('Unable to copy to clipboard using document.execCommand');
+          }
+          jQuery(e.target).one('mouseup', function(e) {
+            e.preventDefault();
+          });
+        });
+        $("#dialog").dialog('open');
+      });
+      return false;
+    }
+</script>

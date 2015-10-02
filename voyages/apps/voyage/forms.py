@@ -3,10 +3,11 @@ import autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
+from django.utils.translation import ugettext_lazy as _
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
-    downloadfile = forms.FileField(label='Select your file')
+    downloadfile = forms.FileField(label=_('Select your file'))
 
 
     
@@ -125,7 +126,6 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     class Meta:
         model = VoyageSources
 
-
 class SimpleTextForm(VoyageBaseForm):
     """
     Simple one field form to perform text search
@@ -140,7 +140,7 @@ class SimpleNumericSearchForm(VoyageBaseForm):
     Simple numeric search form
     """
     type_str = "numeric"
-    OPERATORS = (('1', 'Between'), ('2', 'At most'), ('3', 'At least'), ('4', 'Is equal to'))
+    OPERATORS = (('1', _('Between')), ('2', _('At most')), ('3', _('At least')), ('4', _('Is equal to')))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
     threshold = forms.IntegerField(required=False, widget=forms.TextInput(
@@ -155,7 +155,7 @@ class SimpleDateSearchForm(VoyageBaseForm):
     """
     type_str = "date"
     list_months = globals.list_months
-    OPERATORS = (('1', 'Between'), ('2', 'Before'), ('3', 'After'), ('4', 'In'))
+    OPERATORS = (('1', _('Between')), ('2', _('Before')), ('3', _('After')), ('4', _('In')))
     options = forms.ChoiceField(choices=OPERATORS,
                                 widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
     from_month = forms.CharField(required=False, initial="01", widget=forms.TextInput(
@@ -188,16 +188,16 @@ class SimplePlaceSearchForm(VoyageBaseForm):
     nested_choices = []
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
-    BOOLEAN_CHOICES = (('1', 'Yes'), ('2', 'No'))
+    BOOLEAN_CHOICES = (('1', _('Yes')), ('2', _('No')))
     type_str = "boolean"
     choice_field = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
         choices=BOOLEAN_CHOICES)
 
 class TimeFrameSpanSearchForm(forms.Form):
-    frame_from_year = forms.IntegerField(label="From", widget=forms.TextInput(
+    frame_from_year = forms.IntegerField(label=_('From'), widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
-    frame_to_year = forms.IntegerField(label="To", widget=forms.TextInput(
+    frame_to_year = forms.IntegerField(label=_('To'), widget=forms.TextInput(
         attrs={'class': "short_field_white"}))
 
 
@@ -229,13 +229,6 @@ class TableSelectionForm(forms.Form):
     cells.initial = [cellchoices[1][0]]
     omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=True)
 
-class GraphXYSelectionForm(forms.Form):
-    lmbd = lambda x: (str(x[0]), x[1][0])
-    xchoices = map(lmbd, enumerate(globals.graphs_x_functions))
-    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-    xyxselect = forms.ChoiceField(label='X axis', choices=xchoices)
-    xyyselect = forms.ChoiceField(label='Y axis', choices=ychoices)
-
 class GraphRemovePlotForm(forms.Form):
     # Creates a list of boolean fields for each tuple in the list, (description, id)
     def __init__(self, lst, *args, **kwargs):
@@ -251,14 +244,21 @@ class GraphRemovePlotForm(forms.Form):
         return result
 
 
-class GraphBarSelectionForm(forms.Form):
-    lmbd = lambda x: (str(x[0]), x[1][0])
-    xchoices = map(lmbd, enumerate(globals.graphs_bar_x_functions))
-    ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
-    barxselect = forms.ChoiceField(label='X axis', choices=xchoices)
-    baryselect = forms.ChoiceField(label='Y axis', choices=ychoices)
+class GraphSelectionForm(forms.Form):
+    def __init__(self,
+                 xfunctions=globals.graphs_bar_x_functions,
+                 xfield_label='X axis',
+                 yfield_label='Y axis',
+                 *args,
+                 **kwargs):
+        super(forms.Form, self).__init__(*args, **kwargs)
+        lmbd = lambda x: (str(x[0]), x[1][0])
+        self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
+        self.ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+        self.fields['xselect'] = forms.ChoiceField(label=_(xfield_label), choices=self.xchoices)
+        self.fields['yselect'] = forms.ChoiceField(label=_(yfield_label), choices=self.ychoices)
 
 
 class TimelineVariableForm(forms.Form):
     var_choices = [(v[0], v[1]) for v in globals.voyage_timeline_variables]
-    variable_select = forms.ChoiceField(label='Timeline variable', choices=var_choices, initial=var_choices[23])
+    variable_select = forms.ChoiceField(label=_('Timeline variable'), choices=var_choices, initial=var_choices[23])

@@ -1,5 +1,18 @@
 {% load i18n %}
+{% load voyage_extras %}
 
+<style>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+</style>
 <div>
   <table style="border-collapse: collapse; width: 100%;"1>
     <tbody>
@@ -8,7 +21,7 @@
 	  <div style="margin-bottom: 5px; padding: 2px 10px 2px 5px; background-color: #F2E3B8; font-weight: bold;">{% trans 'Chart setup' %}</div>
 	  <table>
 	    <tbody>
-	      {% for field in graphs_bar_select_form %}
+	      {% for field in graphs_select_form %}
               <tr>
 		<td> <b> {{ field.label }}: </b> </td>
 		<td> {% for i in field %} {{ i }} {% endfor %} </td>
@@ -18,8 +31,8 @@
 		<td></td>
 		<td>
 		  <!-- Show button -->
-		  <input type="submit" value="{% trans 'Add Series' %}" onclick="submitWithValue('tab_graphs_bar_add');" name="buttonAddSeries" />
-		  <input type="submit" value="{% trans 'Show' %}" onclick="submitWithValue('tab_graphs_bar_show');" name="buttonShow" />
+		  <button type="submit" value="Add Series" onclick="submitWithValue('tab_graphs_bar_add');" name="buttonAddSeries">{% trans 'Add Series' %}</button>
+		  <button type="submit" value="Show" onclick="submitWithValue('tab_graphs_bar_show');" name="buttonShow">{% trans 'Show' %}</button>
 		</td>
 	      </tr>
 	    </tbody>
@@ -36,7 +49,9 @@
 	      </tr>
 	      {% endfor %}
 	      <tr>
-		<td> <input type="submit" value="{% trans 'Remove Selected' %}" onclick="submitWithValue('tab_graphs_bar_remove')" name="buttonRemoveSeries" /></td>
+		<td>
+            <button type="submit" value="Remove Selected" onclick="submitWithValue('tab_graphs_bar_remove')" name="buttonRemoveSeries">{% trans 'Remove Selected' %}</button>
+              </td>
 	      </tr>
 	    </tbody>
 	  </table>
@@ -46,9 +61,175 @@
   </table>
   <div>
     <div style="padding: 2px 10px 2px 5px; background-color: #F2E3B8; font-weight: bold; margin-top: 10px;">{% trans 'Graph' %}</div>
-    {% if inline_graph_png %}
-      <img alt="embedded graph" src="data:image/png;base64,{{inline_graph_png}}"/>
-    {% endif %}
+	<div id="graphContainer"></div>
+	<script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
+	<script type="text/javascript">
+	{% load l10n %}
+	{% localize off %}
+		var None = 0;
+		var series = {
+		{% for yid, series in graph_data.items %}
+			"{{ yid }}": [
+			{% for datum in series %}
+				{ label: "{{ datum.0|trans_log }}", value: {{ datum.1 }} },
+			{% endfor %}
+			],
+		{% endfor %}
+		};
+		// Compute ordinal scales.
+		var labels = [];
+		var seriesNames = [];
+		var maxValue = 0;
+		for (var yid in series) {
+			seriesNames.push(yid);
+			var items = series[yid];
+			for (var i = 0; i < items.length; ++i) {
+				labels.push(items[i].label);
+				if (items[i].value > maxValue) maxValue = items[i].value;
+			}
+		}
+		labels = d3.set(labels).values();
+
+		// Create D3js graph. This graph has two X-axes,
+		// x0 represents the labels on the data items, while
+		// x1 represents the name of the series. This is
+		// used in a way that all the data items across different
+		// series sharing the same label are grouped together.
+		var margin = {top: 90 + 20 * (seriesNames.length - 2), right: 10, bottom: 110, left: 80},
+			width = 960 - margin.left - margin.right,
+			height = 460 - margin.top - margin.bottom;
+		var x0 = d3.scale.ordinal()
+			.domain(labels)
+			.rangeRoundBands([0, width], .08);
+		var x1 = d3.scale.ordinal()
+		 	.domain(seriesNames)
+		 	.rangeRoundBands([0, x0.rangeBand()]);
+		var y = d3.scale.linear()
+		    .domain([0, maxValue * 1.1])
+		    .range([height, 0]);
+		var color = d3.scale.category10();
+		var xAxis = d3.svg.axis()
+			.scale(x0)
+			.orient("bottom");
+		var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left");
+		var svg = d3.select("#graphContainer")
+			.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		  	.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		// X axis with rotated labels.
+		svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-45)"
+                })
+            .call(wrap);
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("dy", "-1em")
+            .style("text-anchor", "end")
+            .text("Value");
+
+        var legend = svg.selectAll(".legend")
+            .data(seriesNames)
+            .enter()
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) { return "translate(0," + (i * 20 - margin.top + 30) + ")"; });
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) { return d; });
+
+        // Add label groups.
+        var gLabels = svg.selectAll(".label")
+            .data(labels)
+            .enter()
+            .append("g")
+            .attr("class", "g")
+            .attr("transform", function(d) { return "translate(" + x0(d) + ",0)"; });
+        gLabels
+            .append("line")
+            .attr("x1", 0)
+            .attr("x2", x0.rangeBand())
+            .attr("y1", height)
+            .attr("y2", height)
+      		.style('stroke-width', 0.5)
+      		.style('stroke', 'black');
+        // Add bars to all label groups.
+        gLabels.selectAll("rect")
+            .data(function(d) {
+                // Filter by label.
+                var res = [];
+                for (var yid in series) {
+                    var items = series[yid];
+                    for (var i = 0; i < items.length; ++i) {
+                        if (d == items[i].label) {
+                            res.push({ series: yid, value: items[i].value });
+                        }
+                    }
+                }
+                return res;
+            })
+            .enter()
+            .append("rect")
+            .attr("width", x1.rangeBand())
+            .attr("x", function(d) { return x1(d.series); })
+            .attr("y", function(d) { return y(d.value); })
+            .attr("height", function(d) { return height - y(d.value); })
+            .style("fill", function(d) { return color(d.series); });
+
+		function wrap(text) {
+		    var w = margin.bottom - 10;
+			text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > w) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", 0)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+			});
+		}
+	{% endlocalize %}
+	</script>
   </div>
 </div>
 
