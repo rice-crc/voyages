@@ -1,0 +1,442 @@
+{% load i18n %}
+{% load voyage_extras %}
+<!-- Left menu for Understanding the Database -->
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/popup-permlink.css">
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#link-button').click(shortenURL);
+});
+/* Get bitly shortened search url */
+function shortenURL(){
+  var long_url_var = $("#permlink-text-link").text();
+  $.get( "{% url 'voyage:shorten_search_url' %}",
+    { long_url: long_url_var},
+    function ( data ) {
+      $("#permlink-text-link").text(data.url);
+      strtBlackout();
+    });
+}
+</script>
+
+<div class="search-side-panel">
+
+    <div class="box-main-table box-expanded">
+        <div class="box-header">
+            <div class="box-button" onclick="">
+                &nbsp;
+            </div>
+            <div class="box-text-label">
+                {% trans 'Select time frame' %}
+            </div>
+
+        </div>
+
+        <div class="box-mid-end">
+            {% trans 'From' %} {{ time_frame_search_form.frame_from_year }}&nbsp;&nbsp;
+            {% trans 'To' %} {{ time_frame_search_form.frame_to_year }}
+            <br />
+            <span class="italic">
+                {% trans 'The full extent of time from the first to the last voyage is ' %}
+                {{ voyage_span_first_year }}-{{ voyage_span_last_year }}
+                <a id="restore_form"
+                   onclick="set_elem('id_frame_from_year', {{ voyage_span_first_year }});
+                        set_elem('id_frame_to_year', {{ voyage_span_last_year }});"
+                   href="">{%  trans '(restore it)' %}</a>.
+            </span>
+        </div>
+
+
+    </div>
+    <div>
+        <input type="hidden" name="basic_list_expanded" value="true"
+                {% if basic_list_contracted %}disabled="true"{% endif %} />
+
+        <div class="{% if basic_list_contracted %}box-collapsed{% else %}box-expanded{% endif %}">
+            <div class="box-header-head">
+                <div class="box-button" onclick="">
+
+                </div>
+                <div class="box-text-label">
+                    {% trans 'Basic variables' %}
+                </div>
+
+            </div>
+
+            <div class="box-mid">
+                {% regroup basic_variables by var_category as basic_var_all_list %}
+
+                {% for variable in basic_var_all_list %}
+                <div class="menu-popup-item-main">
+                    <div class="menu-popup-submenu-frame hidden">
+                        <div class="menu-popup-submenu">
+
+                        {% for item in variable.list %}
+                          {% if item.is_basic == True %}
+                               <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
+                                {{ item.var_full_name|trans_log }}
+                               </div>
+                          {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <span class="bold">{{ variable.grouper|trans_log }}</span> ({{ variable.list|length }} {% spaceless %}
+                    {% if variable.list|length == 1 %}
+                        {% trans 'variable' %})
+                    {% else %}
+                        {% trans 'variables' %})
+                    {% endif %}
+                    {% endspaceless %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="box-main-table-tail {% if basic_list_contracted %}box-expanded{% else %}box-collapsed{% endif %}">
+             <div class="box-header-tail">
+                <div class="box-button">
+                    &nbsp;
+                </div>
+                <div class="box-text-label">
+                    {% trans 'General variables' %}
+                </div>
+
+            </div>
+
+            <div class="box-mid-end">
+                {% regroup general_variables by var_category as general_var_all_list %}
+
+                {% for variable in general_var_all_list %}
+                <div class="menu-popup-item-main">
+                    <div class="menu-popup-submenu-frame hidden">
+                        <div class="menu-popup-submenu">
+                        {% for item in variable.list %}
+                          {% if item.is_general == True %}
+                               <div class="menu-popup-submenu-item" name="{{ item.var_name }}">
+                                {{ item.var_full_name|trans_log }}
+                               </div>
+                          {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <span class="bold">{{ variable.grouper|trans_log }}</span> ({{ variable.list|length }} {% trans 'variable' %}{{ variable.list|pluralize }})
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="box-main-table box-expanded">
+         <div class="box-header">
+            <div class="box-button">
+                &nbsp;
+            </div>
+            <div class="box-text-label">
+                {% trans 'Current query' %}
+            </div>
+        </div>
+
+        <div class="box-mid-end">
+	    <div class="query-builder" id="search_form_show">
+	    </div>
+            <div class="hidden" id="search_form_hide">
+                {%  if form_list %}
+                    {% for item in form_list %}
+		    <!-- item has var_name, var_full_namel, and form -->
+		    {% with varname_wrapper="select_"|add:item.var_name %}
+                    <div class="sidebox" id="search_form_box_{{ item.var_name }}">
+                        <!-- Search box header -->
+                        <span class="query-builder-label" id="header_{{ item.var_name }}">{{ item.var_full_name|trans_log }}</span>
+
+                        <span class="query-builder-button close-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-remove.png"
+                                 onclick="delete_box('header_{{ item.var_name }}', '{{ item.var_name }}');" />
+                        </span>
+
+                        <span class="query-builder-button move-down-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-down.png"
+                                 onclick="move_box_down('header_{{ item.var_name }}');" />
+                        </span>
+
+                        <span class="query-builder-button move-up-button">
+                            <img src="{{ STATIC_URL }}images/voyage/icon-move-up.png"
+                                 onclick="move_box_up('header_{{ item.var_name }}');" />
+                        </span>
+			
+			{% for field in item.form.hidden_fields %}
+			    {{ field.as_widget }}
+			{% endfor %}
+
+
+                        {% if item.form.type_str == "plain_text" %}
+                            {% for field in item.form.visible_fields %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
+
+                        {% elif item.form.type_str == "numeric" %}
+                            {{ item.form.options }}
+                            <span class="range_field between_field hidden">
+                            {{ item.form.lower_bound }} - {{ item.form.upper_bound }}
+                            </span>
+                            <span class="range_field threshold_field">
+                            {{ item.form.threshold }}
+                            </span>
+
+                        {% elif item.form.type_str == "select" %}
+                            <div id="{{ varname_wrapper }}">
+                                <div class="query-select-initial" >
+                                    <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
+                                    </div>
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
+                                </div>
+
+                                <div class="query-select-full hidden">
+                                    {% trans 'Quicksearch' %}
+                                        <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
+                                           onkeyup="filter_edit_list('{{ varname_wrapper }}');"
+                                           name="tmp" style="width: 200px;" />
+
+                                    <div class="query-builder-edit-list">
+				                        {{ item.form.choice_field }}
+                                    </div>
+
+
+                                    <div style="margin-top: 5px;">
+                                        <button type="button" class="collapseCheckBoxButton"
+                                               onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'var-checkbox')"
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elif item.form.type_str == "select_three_layers" %}
+                            <div id="{{ varname_wrapper }}">
+                                <div class="query-select-initial" >
+                                    <div class="query-select-selected-text">[{% trans 'nothing selected' %}]
+                                    </div>
+                                <br /><button type="button" onclick="expandChoices('{{ varname_wrapper }}');"
+                                             value="Select" class="display_inline">{% trans 'Select' %}</button>
+                                </div>
+
+                                <div class="query-select-full hidden">
+                                    {% trans 'Quicksearch' %}
+                                        <input class="quick-query-builder-text" type="text" autocomplete="off" value=""
+                                           onkeyup="filter_hierarchical_list('{{ varname_wrapper }}');"
+                                           name="" style="width: 200px;" />
+
+                                    <div class="query-builder-edit-list-expandable">
+                                        {% if item.nested_choices %}
+                                            <ul>
+                                            {% for item_layer0 in item.nested_choices %}
+                                                <li>
+                                                    <div class="query-builder-list-item-collapsed"
+                                                         onclick="expandOrCollapse('{{ item_layer0.id }}')" >&nbsp;</div>
+                                                    <label for="{{ item_layer0.id }}">
+                                                        <input id="{{ item_layer0.id }}"
+                                                               name="{{ item.var_name }}_selected_areas"
+                                                               value="{{ item_layer0.text }}"
+                                                               class="var-checkbox checkbox-layer0" type="checkbox"
+                                                               {% if item_layer0.is_selected == True %} checked="checked" {% endif %}
+                                                               onclick="click_select_checkbox('{{ item_layer0.id }}', null, true);" >
+                                                        <span class="text-label">{{ item_layer0.text|trans_log }}</span>
+                                                    </label>
+                                                    <ul class="hidden">
+                                                    {% for item_layer1 in item_layer0.choices %}
+                                                        <li class="select-collapsed">
+                                                        <div class="query-builder-list-item-collapsed"
+                                                             onclick="expandOrCollapse('{{ item_layer1.id }}')" >&nbsp;</div>
+                                                        <label for="{{ item_layer1.id }}">
+                                                        <input id="{{ item_layer1.id }}"
+                                                               class="var-checkbox checkbox-layer1" type="checkbox"
+                                                               name="{{ item.var_name }}_selected_regs"
+                                                               value="{{ item_layer1.text }}"
+                                                               {% if item_layer1.is_selected == True %} checked="checked" {% endif %}
+                                                               onclick="click_select_checkbox('{{ item_layer1.id }}', '{{ item_layer0.id }}', true);" >
+                                                            <span class="text-label">{{ item_layer1.text|trans_log }}</span>
+                                                        </label>
+                                                        <ul class="hidden">
+                                                            {% for item_layer2 in item_layer1.choices %}
+                                                                <li>
+                                                                    <label for="{{ item_layer2.id }}">
+                                                                    <input id="{{ item_layer2.id }}"
+                                                                           class="var-checkbox checkbox-layer2" type="checkbox"
+                                                                           name="{{ item.var_name }}-choice_field"
+                                                                            {% if item_layer2.value in item.selected_choices %} checked="checked" {% endif %}
+									   
+                                                                           value="{{ item_layer2.value }}"
+                                                                            onclick="click_select_checkbox('{{ item_layer2.id }}', '{{ item_layer1.id }}', false);">
+                                                                    <span class="text-label">{{ item_layer2.text|trans_log }}</span>
+                                                                    </label>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endfor %}
+                                                    </ul>
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                    <div style="margin-top: 5px;">
+                                        <button type="button"
+                                               class="place_collapse_button"
+                                               onclick="collapseCheckBoxes('{{ varname_wrapper }}', 'checkbox-layer2')"
+                                               value="OK" class="display_inline">{% trans 'OK' %}</button>
+                                        <button type="button" onclick="checkAllBoxes('{{ varname_wrapper }}');"
+                                               value="Select all" class="display_inline">{% trans 'Select all' %}</button>
+                                        <button type="button" onclick="uncheckAllBoxes('{{ varname_wrapper }}');"
+                                               value="Deselect all" class="display_inline">{% trans 'Deselect all' %}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        {% elif item.form.type_str == "date" %}
+                            {{ item.form.options }}
+                            <span class="date_field_wrapper between_field">
+                            {{ item.form.from_month }} / {{ item.form.from_year }} -
+                            {{ item.form.to_month }} / {{ item.form.to_year }}
+                            </span>
+                            <span class="date_field_wrapper threshold_field hidden">
+                            {{ item.form.threshold_month }} - {{ item.form.threshold_year }}
+                            </span>
+			    <br>
+			    <table cellspacing="0" cellpadding="0" border="0" class="query-builder-range-months">
+			      <tbody>
+				{% for choice in item.form.list_months %}
+				  <td>
+				    <input name="{{ item.var_name }}-months" type="checkbox" value="{{ choice.0 }}" {% if choice.0 in item.form.months.value %} checked {% endif %}>{{ choice.1 }}</input>
+				  </td>
+				{% endfor %}
+			      </tbody>
+			    </table>
+
+                            <div class="month-list">
+                                {% for month in item.list_months %}
+                                <span {% if month.1 in item.list_deselected %}
+                                                class="month-untoggled"
+                                      {% else %}
+                                                class="month-toggled"
+                                      {% endif %} >
+                                    {{ month.0 }}
+                                    <input type="hidden"
+                                           {% if month.1 not in item.list_deselected %}disabled="disabled"{% endif %}
+                                           name="{{ item.deselected_months }}" value="{{ month.1 }}" /></span>
+                                {% endfor %}
+                            </div>
+
+                        {% elif item.form.type_str == "boolean" %}
+                            {% for field in item.form.visible_fields %}
+                                <span class="simple-field">{{ field }}</span>
+                            {% endfor %}
+
+                        {% endif %}
+                        </div>
+		    {% endwith %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="submit" onclick="submitWithValue({% if tab == 'result' %}
+					                    'search'
+							  {% elif tab == 'tables' %}
+							    'tab_tables'
+							  {% elif tab == 'statistics' %}
+							    'tab_statistics'
+							  {% elif tab == 'graphs' %}
+							    'tab_graphs'
+							  {% elif tab == 'timeline' %}
+							    'tab_timeline'
+							  {% elif tab == 'maps' %}
+							    'tab_maps'
+							  {% endif %});" value="Search" name="buttonSearch">{% trans 'Search' %}</button>
+            <button type="reset" onclick="submitWithValue('reset');" value="New query" name="buttonAgain">{% trans 'New query' %}</button>
+        </div>
+    </div>
+
+    <div class="box-main-table box-expanded">
+         <div class="box-header">
+            <div class="box-button">
+                &nbsp;
+            </div>
+            <div class="box-text-label">
+                {% trans 'Create a link' %}
+            </div>
+
+        </div>
+
+        <div class="box-mid-end">
+            <p>{% blocktrans %}Use this button to obtain a URL that will serve as a link to the current query.
+                To reactivate the query in the future, paste the URL into the address bar.{% endblocktrans %}</p>
+            <button onclick="return createLink();">{% trans 'Click Here' %}</button>
+        </div>
+    </div>
+
+    <div class="box-main-table {% if prev_queries_open %}box-expanded{% else %}box-collapsed{% endif %}">
+         <div class="box-header ">
+            <div class="box-button">
+                &nbsp;
+            </div>
+            <div class="box-text-label">
+                {% trans 'Previous query' %}
+            </div>
+        </div>
+        <div class="box-mid-end">
+            {% for num, query in previous_queries %}
+	        <div id="prev_query_{{ num }}" class="side-query-box">
+	            {% for variabletext, values in query %}
+	                {{ variabletext|trans_log }} <b> {{ values }} </b><br/>
+	            {% endfor %}
+		    <button type="button" class="side-query-box-button" onclick="delete_prev_query({{ num }})" >
+		         <img src="{{ STATIC_URL }}images/voyage/icon-remove-query.png" width="12" height="12" border="0" padding="0"/>
+			 {% trans 'Delete' %}
+		    </button>
+		    <button type="button" class="side-query-box-button" onclick="restore_prev_query({{ num }})" >
+		         <img src="{{ STATIC_URL }}images/voyage/icon-restore-query.png" width="12" height="12" border="0" padding="0" />
+			 {% trans 'Restore' %}
+		    </button>
+		</div>
+		<br/>
+	    {% endfor %}
+	    <br/>
+
+        </div>
+    </div>
+
+</div>
+
+<div id="dialog" title="Dialog Title" style="display:none;">
+    <h1>{% trans 'URL link has been created' %}</h1>
+    <hr />
+    <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
+    <textarea contenteditable="true" id="url_string" style="width:500px;"></textarea>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
+    function createLink() {
+      $.post('permalink', $('form').serialize(), function(link) {
+        var urlTextArea = $('#url_string');
+        urlTextArea.val(link);
+        urlTextArea.focus(function(e) {
+          e.target.select();
+          try {
+            document.execCommand('copy');
+          } catch (e) {
+            console.log('Unable to copy to clipboard using document.execCommand');
+          }
+          jQuery(e.target).one('mouseup', function(e) {
+            e.preventDefault();
+          });
+        });
+        $("#dialog").dialog('open');
+      });
+      return false;
+    }
+</script>

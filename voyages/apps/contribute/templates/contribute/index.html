@@ -1,0 +1,24 @@
+{% extends "contribute/login_base.html" %}
+{% load i18n %}
+
+<!-- The landing page when users log in via contribute login -->
+
+{% block title %}{% trans "User Home" %}{% endblock %}
+
+{% block center-content %}
+<div class="white-board">
+	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
+	<ul>
+		{% if request.user.is_staff %}
+		<!-- Is enabled only if the user is a staff member -->
+		<li>
+			<h3><a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
+		</li>
+		{% endif %}
+
+		<li>
+			Contribute Coming Soon.
+		</li>
+	</ul>
+</div>
+{% endblock %}

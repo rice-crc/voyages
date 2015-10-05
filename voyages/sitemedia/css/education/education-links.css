@@ -1,0 +1,33 @@
+div.link-title {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #E3EAF4;
+}
+
+div.link-main-title {
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+div.link-sub-title {
+}
+
+table.link-info {
+	margin-left: 40px;
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+table.link-info td {
+	line-height: 160%;
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+td.link-info-label {
+	text-align: right;
+	color: #7995BE;
+}
+
+td.link-info {
+}

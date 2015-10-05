@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+{% load i18n %}
+{% load resources_extras %}
+{% load static %}
+
+<html lang="en">
+<head>
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-images-expanded.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/images-commons.css">
+
+<body id="image-expanded">
+
+<div class="image-expanded-title">
+		{{ image.title|trans_log }}
+	</div>
+
+<div class="image-expanded-container">
+    <img src="{{ MEDIA_URL }}/{{ image.file }}"/>
+
+</div>
+<br>
+
+{% include "footer.html" %}

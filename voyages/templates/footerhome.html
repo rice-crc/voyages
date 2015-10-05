@@ -1,0 +1,52 @@
+{% load i18n %}
+{% comment %}Custom footer for the home page {% endcomment %}
+<div class="footer">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td colspan="5">
+			<div class="footer-section">
+				Sponsors
+			</div></td>
+			<td colspan="4">
+			<div class="footer-section">
+				Partners
+			</div></td>
+		</tr>
+		<tr>
+			<td><a href="http://www.emory.edu" class="footer-link"><img src="{{ STATIC_URL }}images/footer/emory-logo-index.png" width="82" height="32" border="0" alt="Emory" /></a></td>
+			<td style="padding-right: 5px;"><a href="http://www.neh.gov"><img src="{{ STATIC_URL }}images/footer/neh-logo.png" width="32" height="32" border="0" alt="NEH" /></a></td>
+			<td><a href="http://www.neh.gov" class="footer-link">National Endowment
+			<br>
+			for the Humanities</a></td>
+			<td style="padding-right: 5px;"><a href="http://www.fas.harvard.edu/~du_bois"><img src="{{ STATIC_URL }}images/footer/DBI-logo.png" width="32" height="32" border="0" alt="DBI" /></a></td>
+			<td><a href="http://www.fas.harvard.edu/~du_bois" class="footer-link">Hutchins Center for African and African American Research
+			<br>
+			(Harvard University)</a></td>
+			<td><a href="http://web.library.emory.edu" class="footer-link">Emory University
+			<br>
+			Libraries (USA)</a></td>
+			<td><a href="http://www.hull.ac.uk" class="footer-link">The University
+			<br>
+			of Hull (UK)</a></td>
+			<td><a href="http://www.ufrj.br" class="footer-link">Universidade Federal do
+			<br>
+			Rio de Janeiro (Brazil)</a></td>
+			<td style="padding-right: 0px;"><a href="http://www.vuw.ac.nz" class="footer-link">Victoria University of
+			<br>
+			Wellington (New Zealand)</a></td>
+		</tr>
+	</table>
+</div>
+<div class="license-index">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td style="padding-right: 10px;"><a href="http://www.gnu.org/copyleft/gpl.html"><img src="{{ STATIC_URL }}images/footer/gplv3-88x31.png" border="0" alt="GNU General Public License, version 3" width="88" height="31"></a></td>
+			<td style="padding-right: 10px;"><a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/us/88x31.png"></a></td>
+			<td style="width: 700px;">{% trans 'Copyright 2013 Emory University. Software licensed under <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License 3.0</a> or later version. Some content licensed under <a href="http://creativecommons.org/licenses/by-nc/3.0/us/">Creative Commons Attribution-Non-Commercial 3.0</a>.' %}</td>
+		</tr>
+		<tr>
+			<td>Version {{ RELEASE_VERSION }}</td>
+		</tr>
+
+	</table>
+</div>

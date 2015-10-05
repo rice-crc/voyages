@@ -14,7 +14,6 @@ class Migration(SchemaMigration):
         pass
 
     models = {
-        
     }
 
     complete_apps = ['resources']

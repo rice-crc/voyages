@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+<!-- The basic template for any page in the Assessment section -->
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-info.css">
+{% endblock %}
+
+
+{% block content %}
+
+{% block left-menu %}
+<div id="essays-left-menu" class="left-menu-box">
+	
+</div>
+{% endblock %}
+
+
+<div id="center-content">
+{% block center-content %}
+{% endblock %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

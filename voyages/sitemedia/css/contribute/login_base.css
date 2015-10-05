@@ -1,0 +1,25 @@
+/* User top-right toolbar to log out/change password */
+.userlogtool {
+	clear: both;
+	margin: 0;
+	width: 100%;
+	background-color: #05768A;
+    font-size: 9pt;
+    padding: 3px 20px 3px 5px;
+    float: right;
+    text-align: right;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+.userlogtool, .userlogtool a, .userlogtool a:hover {
+    color: #FFFFFF;
+}
+
+.userlogtool a {
+	text-decoration: none;
+}
+
+.userlogtool a:hover {
+	text-decoration: underline;
+}
+

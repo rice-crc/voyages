@@ -1,0 +1,13 @@
+<!-- The left side menu of the Education section -->
+
+{% load i18n %}
+<div class="left-menu-title">
+	<h3>{% trans "Educational Materials" %}</h3>
+</div>
+
+<div class="secondary-menu-item-0"id="history">
+	<a href="{% url 'education:lesson-plans' %}">{% trans "Lesson Plans" %}</a>
+</div>
+<div class="secondary-menu-item-0" id="team">
+	<a href="{% url 'education:web-resources' %}">{% trans "Web Resources" %}</a>
+</div>

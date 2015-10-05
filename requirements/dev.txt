@@ -1,0 +1,9 @@
+-r common.txt
+
+fabric
+sphinx
+coverage
+unittest-xml-reporting
+unittest2
+django-cities-light
+xlrd

@@ -1,0 +1,47 @@
+body {
+	background-position: 0px 60px;
+	background: #FFFFFF url("/static/images/assessment/assessment-bg.png") repeat-x;
+}
+
+	
+a {
+	color: #05768A; }
+	
+div.licence {
+	border-color: #73C5E9; }	
+
+#left-menu, #center-content {
+	display: block;
+	float: left;
+	margin: 8px 0px 15px 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: #73C5E9 1px solid;
+	background-color: #FFFFFF;
+	padding: 10px;
+}
+
+div.menu-popup-submenu-frame {
+    top: -10px;
+    left: -10px;
+    position: relative;
+    z-index: 1;
+}
+
+div.menu-popup-submenu {
+    border: 1px solid #895d03;
+    display: block;
+    position: absolute;
+}
+
+div.menu-popup-submenu-item {
+    background-color: White;
+    color: Black;
+    cursor: pointer;
+    padding: 2px 10px;
+    white-space: nowrap;
+}
+
+.short_field_white {
+    width: 43px;
+}

@@ -1,0 +1,68 @@
+body {
+	background-position: 0px 60px;
+	background: #FFFFFF url("/static/images/about/about-bg.png") repeat-x;;
+}
+
+a {
+	color: #77AADD;
+}
+
+div.licence {
+	border-color: #98A1A9;
+}
+
+#left-menu, #center-content {
+	display: block;
+	float: left;
+	margin: 5px 0px 15px 10px;
+	padding: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px #97A0A8 solid;
+	background-color: #FFFFFF;
+}
+
+/* Set the width of the left-menu */
+#left-menu {
+	width: 190px;
+}
+
+/* Set the width of the main content */
+#center-content {
+	width: 650px;
+}
+
+p {
+	line-height: 160%;
+}
+
+div.left-menu-box a {
+	display: block;
+	color: Black;
+	text-decoration: none;
+}
+
+div.left-menu-box a:hover {
+	background-color: #E0F5F5;
+}
+
+div.secondary-menu-item-0 a {
+	background-image: url('/static/images/voyage/secondary-menu-symbol-0.png');
+	background-repeat: no-repeat;
+	background-position: 2px 4px;
+	padding-left: 15px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px dotted #B8E7E8;
+}
+
+div.secondary-menu-item-1 a {
+	color: #05768A;
+	background-image: url('/static/images/voyage/secondary-menu-symbol-1.png');
+	background-repeat: no-repeat;
+	background-position: 17px 4px;
+	padding-left: 35px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px dotted #B8E7E8;
+}

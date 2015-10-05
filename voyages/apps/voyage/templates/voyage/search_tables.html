@@ -1,0 +1,89 @@
+{% load i18n %}
+{% load voyage_extras %}
+
+{% load humanize %}
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-table.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/qtip/jquery.qtip.min.css">
+
+<div>
+  <h1>{% trans 'Table' %}</h1>
+</div>
+<div class="database-table-options">
+  <table>
+    <tbody>
+      {% for field in table_stats_form %}
+        <tr>
+          <td> <b> {{ field.label|trans_log }}: </b> </td>
+          <td> {% for i in field %} {{ i }} {% endfor %} </td>
+	</tr>
+      {% endfor %}
+      <tr>
+	<td></td>
+	<td>
+	  <!-- Show button -->
+	  <button type="submit" value="Show" onclick="submitWithValue('tab_tables_in');" name="buttonShow">{% trans 'Show' %}</button>
+	</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <table class="vstable">
+    <tbody>
+	{% for collbllist in col_labels_list %}
+	  <tr>
+	    {% if forloop.first %} <td class='vstable' colspan="{{ num_row_labels }}" rowspan="{{ num_col_labels_before }}"/> {% endif %}
+	    {% for label_tuple in collbllist %}
+	      {% if label_tuple.1 > 0 %}
+	        <th class="grid-header-text vstableborder" colspan="{{ label_tuple.1 }}"> {{ label_tuple.0|trans_log }} </th>
+	      {% endif %}
+	    {% endfor %}
+	    {% if forloop.first %}
+	      {% if is_double_fun %}
+	        <th class="grid-header-text vstableborder" rowspan="{{ num_col_labels_total }}", colspan="2"> {% trans 'Totals' %} </th>
+	      {% else %}
+	        <th class="grid-header-text vstableborder" rowspan="{{ num_col_labels_total }}"> {% trans 'Totals' %} </th>
+	      {% endif %}
+	    {% endif %}
+	    {% if forloop.last and is_double_fun %}
+	      <th class="grid-header-text vstableborder" rowspan="1"> {% trans 'Embarked' %} </th>
+	      <th class="grid-header-text vstableborder" rowspan="1"> {% trans 'Disembarked' %} </th>
+	    {% endif %}
+	  </tr>
+	{% endfor %}
+      {% for row_tuple in row_list %}
+        <tr class="grid-row-even grid-row-first">
+	  {% for label_tuple in row_tuple.0 %}
+	    <th class="grid-header-text vstableborder" rowspan="{{ label_tuple.1 }}"> {{ label_tuple.0|trans_log }} </th>
+	  {% endfor %}
+	  {% for cell_value in row_tuple.1 %}
+	    <td class='vstable'> {% if cell_value != None %} {{ cell_value|intcomma }} {% endif %} </td>
+	  {% endfor %}
+	  {% if is_double_fun %}
+	    <th class="vstable grid-total-text">
+	      <b> {% if row_tuple.2.0 != None %} {{ row_tuple.2.0|intcomma }} {% endif %} </b>
+	    </th>
+	    <th class="vstable grid-total-text">
+	      <b> {% if row_tuple.2.1 != None %} {{ row_tuple.2.1|intcomma }} {% endif %} </b>
+	    </th>
+	  {% else %}
+	    <th class="grid-total-text vstable">
+	      <b> {% if row_tuple.2 != None %} {{ row_tuple.2|intcomma }} {% endif %} </b>
+	    </th>
+	  {% endif %}
+      {% endfor %}
+      <tr class="grid-row-even grid-row-first">
+	<th class="grid-header-text vstableborder" colspan="{{ num_row_labels }}"> {% trans 'Totals' %} </th>
+	{% for total in col_totals %}
+	  <th class="vstable grid-total-text">
+	    <b> {% if total != None %} {{ total|intcomma }} {% endif %} </b>
+	  </th>
+	{% endfor %}
+    </tbody>
+  </table>
+</div>
+<br/>
+<div class="download_button">
+  <a href="#" onclick="getxlsTable();">{% trans 'Download table data' %}</a>
+</div>

@@ -1,0 +1,68 @@
+{% extends "voyage/voyagebase.html" %}
+
+<!-- The basic template of the Contribute login section (guideline and login)-->
+
+{% load i18n %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
+{% if request.user.is_authenticated %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/contribute/login_base.css">
+{% endif %}
+{% endblock %}
+
+{% block title %}{% trans "Contribute" %}{% endblock %}
+
+{% block additional_sec_bar %}
+{% if request.user.is_authenticated %}
+
+	<div class="userlogtool secondarybar">
+		<div>
+			{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+			{% block userlinks %}
+			{% url 'django-admindocs-docroot' as docsroot %}
+			{% if docsroot %}
+			<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+			{% endif %}
+			<a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a> |
+			<a href="{% url 'contribute:password-change' %}">{% trans 'Change Password' %}</a> |
+			<a href="{% url 'contribute:logout' %}">{% trans 'Log out' %}</a>
+			{% endblock %}
+		</div>
+	</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="left-menu" class="left-menu-box" style="height: auto;">
+	<div class="left-menu-title">
+		<h3>{% trans 'CONTRIBUTE' %}</h3>
+	</div>
+
+	<div class="secondary-menu-item-0">
+		<a href="{% url 'contribute:guidelines' %}">{% trans 'Guidelines for Contributors' %}</a>
+	</div>
+
+	{% if request.user.is_authenticated %}
+	<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a></div>
+	{% endif %}
+	
+	<div class="secondary-menu-item-0">
+		{% if request.user.is_authenticated %}
+		<a href="{% url 'contribute:logout' %}">{% trans 'Log out' %}</a>
+		{% else %}
+		<a href="{% url 'contribute:login' %}">{% trans 'Sign In' %}</a>
+
+		{% endif %}
+	</div>
+</div>
+
+<div id="center-content" style="height: auto;">
+
+	<div id="center-content-inner">
+		{% block center-content %}
+		{% endblock %}
+	</div>
+</div>
+{% endblock %}
+

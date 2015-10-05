@@ -1,0 +1,40 @@
+div.tabs-body {
+	border: 1px solid #8A5D04; }
+
+td.tabs-tab-left {
+	background-image: url(../images/database-tabs-normal-left.png); }
+	
+td.tabs-tab-middle {
+	background-image: url(../images/database-tabs-normal-center.png); }
+
+td.tabs-tab-middle:hover {
+	color: #895D03; }
+
+td.tabs-tab-right {
+	background-image: url(../images/database-tabs-normal-right.png); }
+
+td.tabs-tab-left-selected {
+	background-image: url(../images/database-tabs-selected-left.png); }
+
+td.tabs-tab-middle-selected {
+	background-image: url(../images/database-tabs-selected-center.png); }
+	
+td.tabs-tab-right-selected {
+	background-image: url(../images/database-tabs-selected-right.png); }
+
+div.tabs-selection {
+	background-image: url(../images/database-tabs-bg.png);
+	background-repeat: repeat-x; }
+	
+td.back-to-list {
+	text-align: center;
+	vertical-align: bottom;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 22px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	background-image: url(../images/database-tabs-back-arrow.png); }
+	
+td.back-to-list:hover {
+	color: #895D03; }

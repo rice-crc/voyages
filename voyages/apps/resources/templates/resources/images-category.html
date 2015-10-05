@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load resources_extras %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
+{% endblock %}
+
+{% block title %}{% trans 'Category Images' %}{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/images-left-menu.html" %}
+</div>
+
+<div id="center-content">
+
+    <div class="images-query-title">
+        {% trans 'Images of ' %}{{ category|trans_log }}
+    </div>
+    <div class="image-navigation">
+        <table class="image-navigation">
+        <tbody>
+            <tr>
+                <td style="padding: 0px 10px 0px 0px;">
+                    <a href="{% url 'resources:images' %}">{% trans 'Back to start' %}</a>
+                </td>
+                <td style="padding: 0px">
+                    {% for i in images %}
+                        {% if i.label_name == category %}
+                            {{ i.images|length }} {% trans 'images' %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+        <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            {% for i in images %}
+                {% if i.label_name == category %}
+                    {% for image in i.images %}
+                        {% ifequal forloop.counter0|modulo:5 0 %}
+                            <tr>
+                        {% endifequal %}
+                        <td class="gallery-image">
+                            {% thumbnail image.file "100x100" as im %}
+                                <div class="gallery-image">
+                                    <a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ im.url }}" width="100" height="100"/></a>
+                                    {% empty %}
+                                        <a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ MEDIA_URL }}{{ image.file }}" width="100" height="100"/></a>
+                                </div>
+                            {% endthumbnail %}
+                            <div class="gallery-image-text">
+                                <div class="gallery-image-label">
+                                    <a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}">{{ image.title|trans_log }}</a>
+                                </div>
+                                <div class="gallery-image-description">
+                                    ({{ image.year }})
+                                </div>
+                            </div>
+                        </td>
+                        {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table>
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,108 @@
+body {
+	background-color: #E2F2F5;
+	margin: 0;
+	font-family: Arial, Helvetica, Bitstream Vera Sans, Sans, sans-serif;
+	font-size: 8pt;
+}
+
+a {
+	color: #008CA5;
+}
+
+table.top-bar {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #008CA5;
+	display: block;
+	border-bottom: 3px #B5DEE6 solid;
+}
+
+.top-bar tr, .top-bar td {
+	border-collapse: collapse;
+	border-style: none;
+}
+
+.top-bar-logo {
+	width: 20%;
+}
+.top-bar-logo, .top-bar-logo img {
+	padding: 0;
+	margin: 0;
+	display: block;
+}
+
+.top-bar-menu-wrapper {
+	width: 78%;
+	text-align: right;
+}
+
+.top-bar-menu {
+	overflow: hidden;
+	margin: 30px 0 0 0;
+	height: 30px;
+}
+
+.top-bar-menu ul {
+	float: right;
+}
+
+.top-bar-menu ul li {
+	display: inline;
+}
+
+.top-bar-menu-item {
+	padding: 6px 12px 6px 12px;
+	margin: 6px 0px 0px 2px;
+	color: #FFFFFF;
+	font-size: 8pt;
+	width: 120%;
+	text-decoration: none;
+	background-color: #40A9BE;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+}
+
+.top-bar-menu-selected {
+	color: #008CA5;
+	background-color: #B5DEE6;
+}
+
+div#help-section-title {
+    clear: both;
+	background-color: #B5DEE6;
+	height: 45px;
+	display: block;
+	color: #FFFFFF;
+	margin: 0px;
+	padding: 0 0 2px 10px;
+	font-weight: 500;
+	font-size: 30pt;
+	font-family: "Times New Roman", Times, serif;
+}
+
+#main-content {
+	padding: 3px 15px 10px 15px;
+	margin: 0px;
+}
+
+/* top bar */
+
+div.faq-search {
+	padding: 3px 0px 3px 25px;
+	background-color: White;
+}
+
+input.faq-search-box {
+	width: 100px;
+	background-color: White;
+}
+
+/* body */
+
+body, html {
+}
+
+.highlighted {
+	background-color: #FFFFAA;
+}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+<!-- The basic template for pages in the Education section -->
+{% load i18n %}
+{% block title %}{% trans 'About the Project' %}{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/education/education-info.css">
+
+{% block pagecsslist %}
+{% endblock %}
+
+{% endblock %}
+
+{% block content %}
+
+{% block left-menu %}
+<div id="left-menu" class="left-menu-box">
+	{% include "education/left-menu.html" %}
+</div>
+
+{% endblock %}
+
+<div id="center-content">
+
+	<div id="center-content-inner">
+		{% block center-content %}
+
+		{% endblock %}
+	</div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
+

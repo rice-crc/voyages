@@ -1,0 +1,700 @@
+{% load i18n %}
+{% load resources_extras %}
+<!-- Left menu for Images in Resources -->
+{# TODO: Number of images hardcoded, has to be changed! #}
+{% block csslist %}
+
+{% endblock %}
+<script src="{{ STATIC_URL }}scripts/resources/resources-left-menu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
+
+<div>
+<table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+
+{#    Upper table (Search for africans)#}
+    <tr>
+        <td class="box-set-upper-row-upper-left"></td>
+        <td class="box-set-upper-row-upper-middle">
+            <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <td class="box-label">{% trans 'Search for Africans' %}</td>
+                    <td>
+                        {% if opened_tabs.section_1 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </td>
+        <td class="box-set-upper-row-upper-right"></td>
+    </tr>
+    {% if opened_tabs.section_1 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+    <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+        <div id="form:_idJsp8" class="box-main-text">
+        <div>
+            <table style="border-collapse: collapse;">
+            <tbody>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'African name' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    {% if "slave_name" in query_dict %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="{{ query_dict.slave_name }}" name="slave_name">
+                    {% else %}
+                      <input id="search_slave_name" type="text" style="width: 150px;" value="" name="slave_name">
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Ship name' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    {% if "slave_ship_name" in query_dict %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="{{ query_dict.slave_ship_name }}" name="slave_ship_name">
+                    {% else %}
+                      <input id=search_slave_ship_name type="text" style="width: 150px;" value="" name="slave_ship_name">
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Voyage ID' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    {% if "slave_voyage_number" in query_dict %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="{{ query_dict.slave_voyage_number }}" name="slave_voyage_number">
+                    {% else %}
+                      <input id="search_slave_voyage_number" type="text" style="width: 150px;" value="" name="slave_voyage_number">
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                    <td class="slaves-query-spacer"></td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Time frame' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    <div class="slaves-query-variable-controls">
+                      <table style="border-collapse: collapse;">
+                      <tbody>
+                      <tr>
+                        <td style="padding: 0px;">
+                          {% if "slave_date_arrived__gte" in query_dict %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__gte }}" name="slave_date_arrived__gte">
+                          {% else %}
+                            <input id="search_slave_start_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__gte">
+                          {% endif %}
+                        </td>
+                        <td style="padding: 0px 5px 0px 5px">-</td>
+                        <td style="padding: 0px;">
+                          {% if "slave_date_arrived__lte" in query_dict %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="{{ query_dict.slave_date_arrived__lte }}" name="slave_date_arrived__lte">
+                          {% else %}
+                            <input id="search_slave_stop_date" type="text" style="width: 40px;" value="" name="slave_date_arrived__lte">
+                          {% endif %}
+                        </td>
+                      </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-spacer"></td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Age' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    <div class="slaves-query-variable-controls">
+                      <table style="border-collapse: collapse;">
+                      <tbody>
+                      <tr>
+                        <td style="padding: 0px;">
+                          {% if "slave_age__gte" in query_dict %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__gte }}" name="slave_age__gte">
+                          {% else %}
+                            <input id="search_slave_start_age" type="text" style="width: 40px;" value="" name="slave_age__gte">
+                          {% endif %}
+                        </td>
+                        <td style="padding: 0px 5px 0px 5px">-</td>
+                        <td style="padding: 0px;">
+                          {% if "slave_age__lte" in query_dict %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="{{ query_dict.slave_age__lte }}" name="slave_age__lte">
+                          {% else %}
+                            <input id="search_slave_stop_age" type="text" style="width: 40px;" value="" name="slave_age__lte">
+                          {% endif %}
+                        </td>
+                      </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-spacer"></td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Height (inches)' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    <div class="slaves-query-variable-controls">
+                      <table style="border-collapse: collapse;">
+                      <tbody>
+                      <tr>
+                        <td style="padding: 0px;">
+                          {% if "slave_height__gte" in query_dict %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__gte }}" name="slave_height__gte">
+                          {% else %}
+                            <input id="search_slave_start_height" type="text" style="width: 40px;" value="" name="slave_height__gte">
+                          {% endif %}
+                        </td>
+                        <td style="padding: 0px 5px 0px 5px">-</td>
+                        <td style="padding: 0px;">
+                          {% if "slave_height__lte" in query_dict %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="{{ query_dict.slave_height__lte }}" name="slave_height__lte">
+                          {% else %}
+                            <input id="search_slave_stop_height" type="text" style="width: 40px;" value="" name="slave_height__lte">
+                          {% endif %}
+                        </td>
+                      </tr>
+                </tbody>
+                </table>
+                </div>
+                </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-spacer"></td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-variable-title">{% trans 'Sex/Age' %}</td>
+                  <td class="slaves-query-variable-controls">
+                    <table style="border-collapse: collapse;">
+                    <tbody>
+                    <tr>
+                      <td style="padding: 0px;">
+                        {% if "slave_sex_age__in" in query_dict and "Boy" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Boy">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Boy">
+                        {% endif %}
+                      </td>
+                      <td style="padding: 0px; width: 40px;">{% trans 'boys' %}</td>
+                      <td style="padding: 0px;">
+                        {% if "slave_sex_age__in" in query_dict and "Girl" in query_dict.slave_sex_age__in %}
+                          <input type="checkbox" value="true" checked="checked" name="sex_Girl">
+                        {% else %}
+                          <input type="checkbox" value="true" name="sex_Girl">
+                        {% endif %}
+                      </td>
+                      <td style="padding: 0px;">{% trans 'girls' %}</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class="slaves-query-variable-controls">
+                  <table style="border-collapse: collapse;">
+                  <tbody>
+                    <tr>
+                    <td style="padding: 0px;">
+                      {% if "slave_sex_age__in" in query_dict and "Man" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Man">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Man">
+                      {% endif %}
+                    </td>
+                    <td style="padding: 0px; width: 40px;">{% trans 'men' %}</td>
+                    <td style="padding: 0px;">
+                      {% if "slave_sex_age__in" in query_dict and "Woman" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Woman">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Woman">
+                      {% endif %}
+                    </td>
+                    <td style="padding: 0px;">{% trans 'women' %}</td>
+                    </tr>
+                  </tbody>
+                  </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class="slaves-query-variable-controls">
+                  <table style="border-collapse: collapse;">
+                  <tbody>
+                    <tr>
+                    <td style="padding: 0px;">
+                      {% if "slave_sex_age__in" in query_dict and "Male" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Male">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Male">
+                      {% endif %}
+                    </td>
+                    <td style="padding: 0px; width: 40px;">{% trans 'males' %}</td>
+                    <td style="padding: 0px;">
+                      {% if "slave_sex_age__in" in query_dict and "Female" in query_dict.slave_sex_age__in %}
+                        <input type="checkbox" value="true" checked="checked" name="sex_Female">
+                      {% else %}
+                        <input type="checkbox" value="true" name="sex_Female">
+                      {% endif %}
+                    </td>
+                    <td style="padding: 0px">{% trans 'females' %}</td>
+                    </tr>
+                  </tbody>
+                  </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slaves-query-spacer" style="height: 5px;"></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+{#        <table style="border-collapse: collapse;">#}
+{#        <tbody>#}
+{#            <tr>#}
+{#                <td style="padding: 5px 0px 5px 0px;">#}
+{#                    <input id="submitBoxBasic" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#                </td>#}
+{#                <td style="padding: 5px 0px 5px 5px;">#}
+{#                    <input id="form:_idJsp119" type="submit" onclick="clear_form();" value="New Query" name="action">#}
+{#                </td>#}
+{#            </tr>#}
+{#        </tbody>#}
+{#        </table>#}
+        </div>
+    </td>
+    <td class="box-middle-row-right">
+        <div class="box-middle-row-right"></div>
+    </td>
+    </tr>
+    {% if opened_tabs.section_1 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+        <td class="box-set-lower-row-upper-left"></td>
+        <td class="box-set-lower-row-upper-middle"></td>
+        <td class="box-set-lower-row-upper-right"></td>
+    </tr>
+
+</tbody>
+</table>
+
+<table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+
+{#    Middle table (Place of Origin)#}
+    <tr>
+        <td class="box-set-upper-row-middle-left-collapsed"></td>
+        <td class="box-set-upper-row-middle-middle-collapsed">
+            <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <td class="box-label">{% trans 'Place of origin' %}</td>
+                    <td>
+                        {% if opened_tabs.section_2 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </td>
+        <td class="box-set-upper-row-middle-right-collapsed"></td>
+    </tr>
+    {% if opened_tabs.section_2 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+    <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+      <div id="form:_idJsp122" class="box-main-text">
+        <div>
+          <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td class="lookup-checkbox-list-quicksearch-label">{% trans 'Quicksearch' %}</td>
+              <td id="origin-lookup" class="lookup-checkbox-list-quicksearch-input">
+                <input id="query-text-origin" type="text" onkeyup="filter_edit_list()" name="">
+              </td>
+            </tr>
+          </tbody>
+          </table>
+
+          <div class="lookup-checkbox-list">
+            <table cellspacing="0" cellpadding="0" border="0">
+            <tbody id="origin_list">
+              {% for record in origins %}
+{#                {% if record.country_name %}#}
+                  <tr>
+                    <td></td>
+                    <td>
+                      {% if "slave_country__in" in query_dict and record.country_id in query_dict.slave_country__in %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" checked="checked" name="origin_{{ record.country_id }}">
+                      {% else %}
+                        <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
+                      {% endif %}
+                    </td>
+                    <td class="lookup-checkbox-list-item-0">{{ record.name }}</td>
+                  </tr>
+{#                {% endif %}#}
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+
+          <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td>
+                  <button type="button" onclick="selectAllPorts(1, this, 1)" value="Select all">{% trans 'Select all' %}</button>
+              </td>
+              <td>
+                <button type="button" onclick="selectAllPorts(-1, this, 1)" value="Deselect all">{% trans 'Deselect all' %}</button>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+{#        <table style="border-collapse: collapse;">#}
+{#        <tbody>#}
+{#          <tr>#}
+{#            <td style="padding: 5px 0px 5px 0px;">#}
+{#              <input id="submitBoxCountry" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#            </td>#}
+{#            <td style="padding: 5px 0px 5px 5px;">#}
+{#              <input id="form:_idJsp128" type="submit" onclick="clear_form();" value="New query" name="action">#}
+{#            </td>#}
+{#          </tr>#}
+{#        </tbody>#}
+{#        </table>#}
+      </div>
+    </td>
+    <td class="box-middle-row-right">
+        <div class="box-middle-row-right"></div>
+    </tr>
+    {% if opened_tabs.section_2 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+      <td class="box-set-lower-row-middle-left"></td>
+      <td class="box-set-lower-row-middle-middle"></td>
+      <td class="box-set-lower-row-middle-right"></td>
+    </tr>
+
+</tbody>
+</table>
+
+<table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+    <tr>
+        {% if opened_tabs.section_3 == True %}
+        <td class="box-set-upper-row-bottom-left"></td>
+        <td class="box-set-upper-row-bottom-middle">
+        {% else %}
+        <td class="box-set-upper-row-bottom-left-collapsed"></td>
+        <td class="box-set-upper-row-bottom-middle-collapsed">
+        {% endif %}
+            <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <td class="box-label">{% trans 'Embarkation and disembarkation' %}</td>
+                    <td>
+                        {% if opened_tabs.section_3 == True %}
+                          <div class="box-button"></div>
+                        {% else %}
+                          <div class="box-button-collapsed"></div>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </td>
+        {% if opened_tabs.section_3 == True %}
+          <td class="box-set-upper-row-bottom-right"></td>
+        {% else %}
+          <td class="box-set-upper-row-bottom-right-collapsed"></td>
+        {% endif %}
+    </tr>
+    {% if opened_tabs.section_3 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+        <td class="box-middle-row-left">
+        <div class="box-middle-row-left"></div>
+        </td>
+
+        <td class="box-middle-row-middle">
+          <div id="idJsp132" class="box-main-text">
+            <div>
+              <div style="margin-bottom: 5px;">{% trans 'Place of embarkation' %}</div>
+
+              <table class="lookup-checkbox-list-quicksearch" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="lookup-checkbox-list-quicksearch-label">{% trans 'Quicksearch' %}</td>
+                  <td class="lookup-checkbox-list-quicksearch-input">
+                    <input id="query-text-embarkation" type="text" onkeyup="filter_embarkation()" name="">
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+              <div class="lookup-checkbox-list">
+                <table cellspacing="0" cellpadding="0" border="0">
+                <tbody id="embarkation_list">
+                  {% for k, v in embarkation_list.items %}
+                    <tr id="tr_{{ k.value }}">
+                      <td>
+                        <div id="l_arrow_{{ k.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, {{ k.value }})"></div>
+                      </td>
+                      <td>
+                        {% if "slave_embarkation_port__in" in query_dict and k.value in query_dict.slave_embarkation_port__in %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" checked="checked" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% else %}
+                          <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
+                        {% endif %}
+                      </td>
+                      <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k.broad_region|trans_log }}</td>
+                    </tr>
+                    {% if v.items %}
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <table cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                        {% for region, places in v.items %}
+                          {# Children of Broad Region (Regions) #}
+                          <tr id="tr_{{ k.value }}_{{ region.value }}">
+                            <td>
+                              <div id="r_arrow_{{ region.value }}" class="lookup-checkbox-list-item-collapsed" onclick="expandable_embarkation(this, '{{ k.value }}_{{ region.value }}')"></div>
+                            </td>
+                            <td>
+                              {% if "slave_embarkation_port__in" in query_dict and region.value in query_dict.slave_embarkation_port__in %}
+                                <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% else %}
+                                  <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}" value="{{ k.value }}_{{ region.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}')">
+                              {% endif %}
+                            </td>
+                            <td class="lookup-checkbox-list-item-1 query-builder-list-item-with-children">{{ region.region|trans_log }}</td>
+                            </td>
+                          </tr>
+                          {% if places %}
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <table cellspacing="0" cellpadding="0" border="0">
+                              <tbody>
+                              {% for place in places %}
+                                {# Children of Region (Ports) #}
+                                <tr id="tr_{{ k.value }}_{{ region.value }}_{{ place.value }}">
+                                  <td></td>
+                                  <td>
+                                    {% if "slave_embarkation_port__in" in query_dict and place.value in query_dict.slave_embarkation_port__in %}
+                                      <input type="checkbox" checked="checked" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% else %}
+                                      <input type="checkbox" name="checkbox_{{ k.value }}_{{ region.value }}_{{ place.value }}" value="{{ k.value }}_{{ region.value }}_{{ place.value }}" onclick="embarkation_choices(this, '{{ k.value }}_{{ region.value }}_{{ place.value }}')">
+                                    {% endif %}
+                                  </td>
+                                  <td class="lookup-checkbox-list-item-2">{{ place|trans_log }}</td>
+                                </tr>
+                              {% endfor %}
+                              </tbody>
+                              </table>
+                            </td>
+                            </tr>
+                          {% else %}
+                            <tr id="tr_{{ k.value }}_{{ region.value }}_child" style="display: none">
+                          {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                      </td>
+                    {% else %}
+                    <tr id="tr_{{ k.value }}_child" style="display: none">
+                    {% endif %}
+                    </tr>
+                  {% endfor %}
+                  </td>
+                </tbody>
+                </table>
+              </div>
+
+              <table class="lookup-checkbox-list-buttons" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td>
+                    <button type="button" onclick="selectAllPorts(1, this, 0)" value="Select all">{% trans 'Select all' %}</button>
+
+                  </td>
+                  <td>
+                    <button type="button" onclick="selectAllPorts(-1, this, 0)" value="Deselect all">{% trans 'Deselect all' %}</button>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+
+            </div>
+            <div>
+              <table style="border-collapse: collapse;">
+              <tbody>
+                {% for bregion, regions in disembarkation_list.items %}
+                {% for region, places in regions.items %}
+                {% for place in places %}
+                  <tr>
+                    {% if forloop.parentloop.parentloop.first and forloop.parentloop.first%}
+                      <td class="slaves-query-variable-title">{% trans 'Disembarkation' %}</td>
+                    {% else %}
+                      <td></td>
+                    {% endif %}
+                    <td class="slaves-query-variable-controls">
+                      <table style="border-collapse: collapse;">
+                      <tbody>
+                        <tr>
+                          <td style="padding: 0px;">
+                            {% if "slave_disembarkation_port__in" in query_dict and place.value in query_dict.slave_disembarkation_port__in %}
+                              <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+                            {% else %}
+                              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
+                            {% endif %}
+                          </td>
+                          <td style="padding: 0px;">{{ place|trans_log }}</td>
+                        </tr>
+                      </tbody>
+                      </table>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+              </tbody>
+              </table>
+            </div>
+
+{#            <table style="border-collapse: collapse;">#}
+{#            <tbody>#}
+{#              <tr>#}
+{#                <td style="padding: 5px 0px 5px 0px;">#}
+{#                  <input id="submitBoxPlaces" type="submit" onclick="clear_form();" value="Search" name="action">#}
+{#                </td>#}
+{#                <td style="padding: 5px 0px 5px 5px;">#}
+{#                  <input id="form:_idJsp161" type="submit" onclick="clear_form();" value="New query" name="action">#}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#            </table>#}
+
+          </div>
+
+        </td>
+        <td class="box-middle-row-right">
+          <div class="box-middle-row-right"></div>
+        </td>
+
+    </tr>
+
+    {% if opened_tabs.section_3 == True %}
+      <tr class="row">
+    {% else %}
+      <tr class="row-collapsed">
+    {% endif %}
+      <td class="box-set-lower-row-bottom-left"></td>
+      <td class="box-set-lower-row-bottom-middle"></td>
+      <td class="box-set-lower-row-bottom-right"></td>
+    </tr>
+
+</tbody>
+</table>
+</div>
+
+<div style="display: block; width: 100%;position:relative;float:left;padding:10px 0 10px;">
+  	<div style="float: right;display: block;">
+        <button type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
+        <button type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'New Query' %}</button>
+  	</div>
+  </div>
+
+<table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+  <tr>
+    <td class="box-upper-row-left"></td>
+    <td class="box-upper-row-middle">
+{#        TODO: Is this used? #}
+{#    <input type="hidden" value="expanded" name="form:_idJsp164_state">#}
+    <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+      <tr>
+      <td class="box-label">{% trans 'Current query' %}</td>
+      <td>
+        <div class="box-button"></div>
+      </td>
+      </tr>
+    </tbody>
+    </table>
+    </td>
+    <td class="box-upper-row-right"></td>
+  </tr>
+  <tr class="row">
+    <td class="box-middle-row-left">
+    <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+    <div id="form:_idJsp164" class="box-main-text">
+      <div class="query-summary">
+        {% if current_query %}
+          {% for val in current_query %}
+            {% if forloop.last and val.1 %}
+              <div class="query-summary-item-last">
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
+              </div>
+            {% elif val.1 %}
+              <div class="query-summary-item">
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
+        {% endif %}
+      </div>
+    </div>
+    </td>
+    <td class="box-middle-row-right">
+    <div class="box-middle-row-right"></div>
+    </td>
+  </tr>
+  <tr class="row">
+    <td class="box-lower-row-left"></td>
+    <td class="box-lower-row-middle"></td>
+    <td class="box-lower-row-right"></td>
+  </tr>
+</tbody>
+</table>

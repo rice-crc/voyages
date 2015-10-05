@@ -1,0 +1,31 @@
+div.permlink-title {
+	padding-bottom: 3px;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	font-weight: bold;
+	font-size: 12pt;
+	border-bottom: 1px solid #CCCCCC; }
+
+div.permlink-link {
+	margin-left: 9px;
+	margin-right: 9px;
+	margin-top: 10px;
+	margin-bottom: 10px; }
+	
+div.permlink-link textarea {
+	width: 100%;
+	border: 1px solid #CCCCCC;
+	background-color: #EEEEEE;
+	font-weight: bold; }
+
+div.permlink-desc {
+	margin-left: 10px;
+	margin-right: 10px; }
+
+div.permlink-close {
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-top: 5px; }

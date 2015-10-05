@@ -1,0 +1,7 @@
+{{ object.name }}
+{{ object.year }}
+{{ object.embarkation_region }}
+{{ object.disembarkation_region }}
+{{ object.broad_disembarkation_region }}
+{{ object.embarked_slaves }}
+{{ object.disembarked_slaves }}

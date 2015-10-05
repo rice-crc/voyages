@@ -1,0 +1,301 @@
+{% extends "voyage/voyagebase.html" %}
+
+{% load i18n %}
+{% load voyage_extras %}
+
+{% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
+
+{% block content %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css">
+
+<div id="left-menu" class="left-menu-box">
+	{% include "voyage/understanding_left_menu.html" %}
+</div>
+
+<div id="center-content">
+	{% block center-content %}
+    <div id="center-content-inner">
+
+<table class="simple-box" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+    <tr>
+        <td class="simple-box-11">
+            <div></div>
+        </td>
+        <td class="simple-box-12">
+            <div></div>
+        </td>
+        <td class="simple-box-13">
+            <div></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="simple-box-21">
+            <div></div>
+        </td>
+        <td class="simple-box-22">
+        {% if category == "documentary_sources" %}
+            <h1>{% trans 'Documentary Sources' %}</h1>
+        {% else %}
+            <h1>{{ category|translate_source_name|trans_log }}</h1>
+        {% endif %}
+            <div class="switch-layout">
+                <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td class="switch-layout-second-link">
+                            {% if sort_method == "full_ref" %}
+                                <a class="active" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
+                            {% else %}
+                                <a class="" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
+                            {% endif %}
+                        </td>
+                        <td class="switch-layout-second-link">
+                            {% if sort_method == "short_ref" %}
+                                <a class="active" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
+                            {% else %}
+                                <a class="" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        {% if category == "documentary_sources" %}
+            <div id="sources">
+                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                {% for country_dict in results %}
+                    <tr>
+                    {# Print country name #}
+                    {% if forloop.first %}
+                        <td class="sources-country-first" colspan="3">{{ country_dict.country|trans_log }}</td>
+                    {% else %}
+                        <td class="sources-country" colspan="3">{{ country_dict.country|trans_log }}</td>
+                    {% endif %}
+                    </tr>
+                    {# For all cities in country #}
+                    {% for city in country_dict.cities_list %}
+                        {# If first city, use *-first classes #}
+                        <tr>
+                        {% if forloop.first %}
+                            <td class="sources-city-first" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                            {% if sort_method == "short_ref" %}
+                                {% if city.city_groups_dict.0.short_ref != None %}
+                                    <td class="source-id-first">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                {% else %}
+                                    <td class="source-id-first"></td>
+                                {% endif %}
+                                <td class="source-name-first">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                            {% else %}
+                                <td class="source-name-first">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                                {% if city.city_groups_dict.0.short_ref != None %}
+                                    <td class="source-id-first">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                {% else %}
+                                    <td class="source-id-first"></td>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <td class="sources-city" rowspan="{{ city.number_of_rows }}">{{ city.city_name }}</td>
+                            {% if sort_method == "short_ref" %}
+                                {% if city.city_groups_dict.0.mark == 0 %}
+                                    {% if city.city_groups_dict.0.short_ref != None %}
+                                        <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                    {% else %}
+                                        <td class="source-id-even"></td>
+                                    {% endif %}
+                                    <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                                {% else %}
+                                    {% if city.city_groups_dict.0.short_ref != None %}
+                                        <td class="source-id-odd">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                    {% else %}
+                                        <td class="source-id-odd"></td>
+                                    {% endif %}
+                                    <td class="source-name-odd">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                                {% endif %}
+                            {% else %}
+                                {% if city.city_groups_dict.0.mark == 0 %}
+                                    <td class="source-name-even">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                                    {% if city.city_groups_dict.0.short_ref != None %}
+                                        <td class="source-id-even">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                    {% else %}
+                                        <td class="source-id-even"></td>
+                                    {% endif %}
+                                {% else %}
+                                    <td class="source-name-odd">{{ city.city_groups_dict.0.group_name|safe }}</td>
+                                    {% if city.city_groups_dict.0.short_ref != None %}
+                                        <td class="source-id-odd">{{ city.city_groups_dict.0.short_ref|safe }}</td>
+                                    {% else %}
+                                        <td class="source-id-odd"></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        </tr>
+                        {# Print all groups for each city #}
+                        {% for group in city.city_groups_dict %}
+                            {% if not forloop.first %}
+                                <tr>
+                                    {% if sort_method == "short_ref" %}
+                                        {% if group.mark == 0 %}
+                                            <td class="source-id-even">{{ group.short_ref|safe }}</td>
+                                            <td class="source-name-even">{{ group.group_name|safe }}</td>
+                                        {% else %}
+                                            <td class="source-id-odd">{{ group.short_ref|safe }}</td>
+                                            <td class="source-name-odd">{{ group.group_name|safe }}</td>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if group.mark == 0 %}
+                                            <td class="source-name-even">{{ group.group_name|safe }}</td>
+                                            <td class="source-id-even">{{ group.short_ref|safe }}</td>
+
+                                        {% else %}
+                                            <td class="source-name-odd">{{ group.group_name|safe }}</td>
+                                            <td class="source-id-odd">{{ group.short_ref|safe }}</td>
+                                        {% endif %}
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                            {% for source in group.sources %}
+                                <tr>
+                                    {% if sort_method == "short_ref" %}
+                                        {% if source.mark == 0 %}
+                                            {% if source.short_ref != None %}
+                                                <td class="source-id-even">{{ source.short_ref|safe }}</td>
+                                            {% else %}
+                                                <td class="source-id-even"></td>
+                                            {% endif %}
+                                            <td class="source-name-even">{{ source.full_ref|safe }}</td>
+                                        {% else %}
+                                            {% if source.short_ref != None %}
+                                                <td class="source-id-odd">{{ source.short_ref|safe }}</td>
+                                            {% else %}
+                                                <td class="source-id-odd"></td>
+                                            {% endif %}
+                                            <td class="source-name-odd">{{ source.full_ref|safe }}</td>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if source.mark == 0 %}
+                                            <td class="source-name-even">{{ source.full_ref|safe }}</td>
+                                            {% if source.short_ref != None %}
+                                                <td class="source-id-even">{{ source.short_ref|safe }}</td>
+                                            {% else %}
+                                                <td class="source-id-even"></td>
+                                            {% endif %}
+                                        {% else %}
+                                            <td class="source-name-odd">{{ source.full_ref|safe }}</td>
+                                            {% if source.short_ref != None %}
+                                                <td class="source-id-odd">{{ source.short_ref|safe }}</td>
+                                            {% else %}
+                                                <td class="source-id-odd"></td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        {% elif sorted_letters %}
+            <div id="sources">
+                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    {% for i in results %}
+                        {% if forloop.first %}
+                            <tr>
+                                <td class="sources-letter-first" colspan="2">
+                                    <span>{{ i.letter }}</span>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="sources-letter" colspan="2">
+                                    <span>{{ i.letter }}</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                            {% for j in i.items %}
+                                <tr>
+                                {% if forloop.counter0|divisibleby:2 == 0 %}
+                                    {% if sort_method == "short_ref" %}
+                                        <td class="source-id-odd">{{ j.short_ref|safe }}</td>
+                                        <td class="source-name-odd">
+                                            {{ j.full_ref|safe }}
+                                        </td>
+                                    {% else %}
+                                        <td class="source-name-odd">
+                                            {{ j.full_ref|safe }}
+                                        </td>
+                                        <td class="source-id-odd">{{ j.short_ref|safe }}</td>
+                                    {% endif %}
+                                {% else %}
+                                    {% if sort_method == "short_ref" %}
+                                        <td class="source-id-even">{{ j.short_ref|safe }}</td>
+                                        <td class="source-name-even">
+                                            {{ j.full_ref|safe }}
+                                        </td>
+                                    {% else %}
+                                        <td class="source-name-even">
+                                            {{ j.full_ref|safe }}
+                                        </td>
+                                        <td class="source-id-even">{{ j.short_ref|safe }}</td>
+                                    {% endif %}
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div id="sources">
+                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    {% for i in results %}
+                        <tr>
+                        {% if forloop.counter0|divisibleby:2 == 0 %}
+                            {% if sort_method == "short_ref" %}
+                                <td class="source-id-odd">{{ i.short_ref|safe }}</td>
+                                <td class="source-name-odd">
+                                    {{ i.full_ref|safe }}
+                                </td>
+                            {% else %}
+                                <td class="source-name-odd">
+                                    {{ i.full_ref|safe }}
+                                </td>
+                                <td class="source-id-odd">{{ i.short_ref|safe }}</td>
+                            {% endif %}
+                        {% else %}
+                            {% if sort_method == "short_ref" %}
+                                <td class="source-id-even">{{ i.short_ref|safe }}</td>
+                                <td class="source-name-even">
+                                    {{ i.full_ref|safe }}
+                                </td>
+                            {% else %}
+                                <td class="source-name-even">
+                                    {{ i.full_ref|safe }}
+                                </td>
+                                <td class="source-id-even">{{ i.short_ref|safe }}</td>
+                            {% endif %}
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        {% endif %}
+        </td>
+    </tr>
+    <tr></tr>
+</tbody>
+</table>
+
+		</div>
+
+    {% endblock %}
+</div>
+{% endblock %}

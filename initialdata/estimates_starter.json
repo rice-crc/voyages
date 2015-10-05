@@ -1,0 +1,750 @@
+[
+{
+    "pk": 1, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 1, 
+        "name": "Spain / Uruguay"
+    }
+},
+{
+    "pk": 2, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 2, 
+        "name": "Portugal / Brazil"
+    }
+},
+{
+    "pk": 3, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 3, 
+        "name": "Great Britain"
+    }
+},
+{
+    "pk": 4, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 4, 
+        "name": "Netherlands"
+    }
+},
+{
+    "pk": 5, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 5, 
+        "name": "U.S.A."
+    }
+},
+{
+    "pk": 6, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 6, 
+        "name": "France"
+    }
+},
+{
+    "pk": 7, 
+    "model": "assessment.nation", 
+    "fields": {
+        "order_num": 7, 
+        "name": "Denmark / Baltic"
+    }
+},
+{
+    "pk": 1, 
+    "model": "assessment.exportarea", 
+    "fields": {
+        "name": "Africa", 
+        "longitude": 9.3438970,
+        "show_at_zoom": 999, 
+        "latitude": 0.0540330,
+        "order_num": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 1, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Senegambia and off-shore Atlantic", 
+        "longitude": -18.43, 
+        "show_at_zoom": 20, 
+        "latitude": 14.14, 
+        "order_num": 1, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 2, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Sierra Leone", 
+        "longitude": -15.0, 
+        "show_at_zoom": 20, 
+        "latitude": 8.1, 
+        "order_num": 2, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 3, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Windward Coast", 
+        "longitude": -8.12, 
+        "show_at_zoom": 20, 
+        "latitude": 3.0, 
+        "order_num": 3, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 4, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Gold Coast", 
+        "longitude": -1.93, 
+        "show_at_zoom": 20, 
+        "latitude": 3.0, 
+        "order_num": 4, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 5, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Bight of Benin", 
+        "longitude": 2.43, 
+        "show_at_zoom": 20, 
+        "latitude": 4.0, 
+        "order_num": 5, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 6, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "Bight of Biafra", 
+        "longitude": 9.0, 
+        "show_at_zoom": 20, 
+        "latitude": 2.47, 
+        "order_num": 6, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 7, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "West Central Africa and St. Helena", 
+        "longitude": 11.19, 
+        "show_at_zoom": 20, 
+        "latitude": -10.71, 
+        "order_num": 7, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 8, 
+    "model": "assessment.exportregion", 
+    "fields": {
+        "name": "South-east Africa and Indian ocean islands", 
+        "longitude": 39.51, 
+        "show_at_zoom": 20, 
+        "latitude": -18.14, 
+        "order_num": 8, 
+        "export_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 1, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Europe", 
+        "longitude": 5.769177, 
+        "show_at_zoom": 999, 
+        "latitude": 49.054028, 
+        "order_num": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 2, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Mainland North America", 
+        "longitude": -86.0, 
+        "show_at_zoom": 999, 
+        "latitude": 32.0, 
+        "order_num": 2, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 3, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "British Caribbean", 
+        "longitude": -61.0, 
+        "show_at_zoom": 999, 
+        "latitude": 14.8, 
+        "order_num": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 4, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "French Caribbean", 
+        "longitude": -55.0, 
+        "show_at_zoom": 999, 
+        "latitude": 14.8, 
+        "order_num": 4, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 5, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Dutch Americas", 
+        "longitude": -58.0, 
+        "show_at_zoom": 999, 
+        "latitude": 14.8, 
+        "order_num": 5, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 6, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Danish West Indies", 
+        "longitude": -52.0, 
+        "show_at_zoom": 999, 
+        "latitude": 14.8, 
+        "order_num": 6, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 7, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Spanish Americas", 
+        "longitude": -89.0, 
+        "show_at_zoom": 999, 
+        "latitude": 11.0, 
+        "order_num": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 8, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Brazil", 
+        "longitude": -46.0, 
+        "show_at_zoom": 999, 
+        "latitude": -13.0, 
+        "order_num": 8, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 9, 
+    "model": "assessment.importarea", 
+    "fields": {
+        "name": "Africa", 
+        "longitude": 9.3438970,
+        "show_at_zoom": 999, 
+        "latitude": 0.0540330,
+        "order_num": 9, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 1, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Europe", 
+        "longitude": 5.549, 
+        "show_at_zoom": 999, 
+        "latitude": 46.08, 
+        "order_num": 1, 
+        "import_area": 1, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 2, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Northern U.S.", 
+        "longitude": -72.38, 
+        "show_at_zoom": 999, 
+        "latitude": 41.28, 
+        "order_num": 2, 
+        "import_area": 2, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 3, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Chesapeake", 
+        "longitude": -76.3380517942, 
+        "show_at_zoom": 999, 
+        "latitude": 37.8069634228, 
+        "order_num": 3, 
+        "import_area": 2, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 4, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Carolinas / Georgia", 
+        "longitude": -79.986255, 
+        "show_at_zoom": 999, 
+        "latitude": 32.789295, 
+        "order_num": 4, 
+        "import_area": 2, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 5, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Gulf states", 
+        "longitude": -90.075, 
+        "show_at_zoom": 999, 
+        "latitude": 29.95, 
+        "order_num": 5, 
+        "import_area": 2, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 6, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "U.S.A. unspecified", 
+        "longitude": -79.856945, 
+        "show_at_zoom": 999, 
+        "latitude": 36.473013, 
+        "order_num": 6, 
+        "import_area": 2, 
+        "show_on_map": false
+    }
+},
+{
+    "pk": 7, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Jamaica", 
+        "longitude": -76.522778, 
+        "show_at_zoom": 999, 
+        "latitude": 17.881263, 
+        "order_num": 7, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 8, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Barbados", 
+        "longitude": -59.616667, 
+        "show_at_zoom": 999, 
+        "latitude": 13.1, 
+        "order_num": 8, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 9, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Antigua", 
+        "longitude": -61.784741, 
+        "show_at_zoom": 999, 
+        "latitude": 17.067453, 
+        "order_num": 9, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 10, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "St. Kitts", 
+        "longitude": -62.716667, 
+        "show_at_zoom": 999, 
+        "latitude": 17.3, 
+        "order_num": 10, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 11, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Grenada", 
+        "longitude": -61.75, 
+        "show_at_zoom": 999, 
+        "latitude": 12.05, 
+        "order_num": 11, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 12, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Dominica", 
+        "longitude": -61.4, 
+        "show_at_zoom": 999, 
+        "latitude": 15.3, 
+        "order_num": 12, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 13, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "British Guiana", 
+        "longitude": -58.37, 
+        "show_at_zoom": 999, 
+        "latitude": 6.72, 
+        "order_num": 13, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 14, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "St. Vincent", 
+        "longitude": -61.186603, 
+        "show_at_zoom": 999, 
+        "latitude": 13.201309, 
+        "order_num": 14, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 15, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Montserrat / Nevis", 
+        "longitude": -62.187819, 
+        "show_at_zoom": 999, 
+        "latitude": 16.758562, 
+        "order_num": 15, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 16, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Trinidad / Tobago", 
+        "longitude": -61.51667, 
+        "show_at_zoom": 999, 
+        "latitude": 10.65, 
+        "order_num": 16, 
+        "import_area": 3, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 17, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Other British Caribbean", 
+        "longitude": -61.409056, 
+        "show_at_zoom": 999, 
+        "latitude": 15.561201, 
+        "order_num": 17, 
+        "import_area": 3, 
+        "show_on_map": false
+    }
+},
+{
+    "pk": 18, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Saint-Domingue", 
+        "longitude": -72.204167, 
+        "show_at_zoom": 999, 
+        "latitude": 19.757778, 
+        "order_num": 18, 
+        "import_area": 4, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 19, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Martinique", 
+        "longitude": -61.083333, 
+        "show_at_zoom": 999, 
+        "latitude": 14.6, 
+        "order_num": 19, 
+        "import_area": 4, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 20, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Guadeloupe", 
+        "longitude": -61.71667, 
+        "show_at_zoom": 999, 
+        "latitude": 16.0, 
+        "order_num": 20, 
+        "import_area": 4, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 21, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "French Guiana", 
+        "longitude": -52.333333, 
+        "show_at_zoom": 999, 
+        "latitude": 4.933333, 
+        "order_num": 21, 
+        "import_area": 4, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 22, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "French Caribbean unspecified", 
+        "longitude": -60.909743, 
+        "show_at_zoom": 999, 
+        "latitude": 14.523769, 
+        "order_num": 22, 
+        "import_area": 4, 
+        "show_on_map": false
+    }
+},
+{
+    "pk": 23, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Dutch Caribbean", 
+        "longitude": -68.916667, 
+        "show_at_zoom": 999, 
+        "latitude": 12.1, 
+        "order_num": 23, 
+        "import_area": 5, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 24, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Dutch Guianas", 
+        "longitude": -55.67599, 
+        "show_at_zoom": 999, 
+        "latitude": 5.958594, 
+        "order_num": 24, 
+        "import_area": 5, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 25, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Danish West Indies", 
+        "longitude": -64.55, 
+        "show_at_zoom": 999, 
+        "latitude": 18.2, 
+        "order_num": 25, 
+        "import_area": 6, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 26, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Cuba", 
+        "longitude": -82.364167, 
+        "show_at_zoom": 999, 
+        "latitude": 23.131944, 
+        "order_num": 26, 
+        "import_area": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 27, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Puerto Rico", 
+        "longitude": -66.04, 
+        "show_at_zoom": 999, 
+        "latitude": 18.27, 
+        "order_num": 27, 
+        "import_area": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 28, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Spanish Circum-Caribbean", 
+        "longitude": -75.5144, 
+        "show_at_zoom": 999, 
+        "latitude": 10.39972, 
+        "order_num": 28, 
+        "import_area": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 29, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Rio de la Plata", 
+        "longitude": -58.6725, 
+        "show_at_zoom": 999, 
+        "latitude": -34.5875, 
+        "order_num": 29, 
+        "import_area": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 30, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Other Spanish Americas", 
+        "longitude": -69.9, 
+        "show_at_zoom": 999, 
+        "latitude": 18.4667, 
+        "order_num": 30, 
+        "import_area": 7, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 31, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Amazonia", 
+        "longitude": -44.266667, 
+        "show_at_zoom": 999, 
+        "latitude": -2.51667, 
+        "order_num": 31, 
+        "import_area": 8, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 32, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Bahia", 
+        "longitude": -38.51083, 
+        "show_at_zoom": 999, 
+        "latitude": -12.97111, 
+        "order_num": 32, 
+        "import_area": 8, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 33, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Pernambuco", 
+        "longitude": -34.9, 
+        "show_at_zoom": 999, 
+        "latitude": -8.05, 
+        "order_num": 33, 
+        "import_area": 8, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 34, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "South-east Brazil", 
+        "longitude": -43.233333, 
+        "show_at_zoom": 999, 
+        "latitude": -22.9, 
+        "order_num": 34, 
+        "import_area": 8, 
+        "show_on_map": true
+    }
+},
+{
+    "pk": 35, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Brazil unspecified", 
+        "longitude": -47.220155, 
+        "show_at_zoom": 999, 
+        "latitude": -9.712085, 
+        "order_num": 35, 
+        "import_area": 8, 
+        "show_on_map": false
+    }
+},
+{
+    "pk": 36, 
+    "model": "assessment.importregion", 
+    "fields": {
+        "name": "Africa", 
+        "longitude": 9.3438970,
+        "show_at_zoom": 999, 
+        "latitude": 0.0540330,
+        "order_num": 36, 
+        "import_area": 9, 
+        "show_on_map": true
+    }
+}
+]
