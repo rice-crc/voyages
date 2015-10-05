@@ -1,0 +1,70 @@
+{% load i18n %}
+
+<script type="text/javascript">
+	function popitup(url) {
+	newwindow=window.open(url,'name','height=502,width=500,resizable, scrollbars, location=0');
+	if (window.focus) {newwindow.focus()}
+	return false;
+	}
+</script>
+
+<h2>{% trans "Trans-Atlantic pathways and harvest cycles" %}</h2>
+
+<p>
+	{% blocktrans %}African and Atlantic coastal markets exhibited varying
+	seasonal patterns in the numbers of slaves exported and imported.
+	In the most seasonal slaving markets in the Atlantic
+	world—Senegambia in Africa and the Chesapeake in the
+	Americas—rainfall and temperature constraints reduced the number of
+	“in crop months” and narrowed merchants’ trading windows.
+	Comparatively few enslaved Africans shipped from northwest Africa
+	between rainy July and November; Virginia and Maryland planters
+	purchased most of their new agricultural workers between April and
+	October. In Upper Guinea markets, most captains began sailing the
+	Middle Passage in the North Atlantic spring, a time of the year
+	that would place them in American markets in the North Atlantic
+	summer. Strong links between Upper Guinea and the
+	Carolinas-Chesapeake occurred because trans-Atlantic agricultural
+	cycles meshed.{% endblocktrans %}
+</p>
+
+<p>
+	{% blocktrans %}Captain Robert Doegood’s voyage on the <i>Arthur</i> in 1677-78
+	reached slaving markets in Africa and the Americas at the end of
+	in-crop seasons, making this voyage atypical of those sailing from
+	the Bight of Biafra to the West Indies. In the century prior to the
+	American Revolution, British vessels departing Biafran ports in
+	March or April often attempted to reach the in-season summer North
+	American slaving markets rather than risk uncertain demand in
+	out-of-crop Caribbean colonies. After May, with each passing month
+	they decided increasingly to sell slaves in the British West
+	Indies. Northern planters infrequently purchased enslaved Africans
+	shipped from the Bight of Biafra’s fall provisioning-slaving season
+	(Figure 3).{% endblocktrans %}
+</p>
+
+<span class="center">
+	<a href="{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-3.png" 
+		onclick="return popitup('{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-3.png')" >
+		<img src="{{ STATIC_URL }}images/assessment/essays-images/essays-seasonality-fig-3.png" width="500"/></a>
+</span>
+
+<p>
+	{% blocktrans %}French and Portuguese slave traders also shifted
+	agricultural workers between trans-Atlantic harvest cycles. Cap
+	Français, the largest French West Indian port and the principal
+	disembarkation center for French slaving vessels in northern St.
+	Domingue, has the island’s rainiest October-February winter; the
+	greatest number of enslaved Africans, correspondingly, arrived in
+	the dry April-June quarter. In southern St. Domingue, the dry season
+	occurs earlier, in December-February, the harvesting months and
+	time of increased planter demand for labor. Whereas northern St.
+	Domingue drew upon Senegal’s January-April provisioning-slaving
+	season, French planters in the south purchased comparatively more
+	Africans shipped overseas during the September-December
+	provisioning-slaving seasons in the Bight of Biafra. In the late
+	1700s, the Portuguese resettled trading posts in coastal
+	Guinea-Bissau, a staple rice region with a marked November-April
+	provisioning-slaving season. Captains purchased enslaved Africans
+	during these months to work in the May-July Maranhão rice season.{% endblocktrans %}
+</p>

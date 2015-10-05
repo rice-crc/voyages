@@ -1,0 +1,163 @@
+
+/* Set the width of the left-menu */
+#left-menu {
+	width: 300px;
+}
+
+/* Set the width of the main content */
+#center-content {
+	width: 550px;
+}
+
+p {
+	line-height: 160%;
+}
+
+
+
+div.left-menu-box a {
+	display: block;
+	color: Black;
+	text-decoration: none;
+}
+
+div.left-menu-box a:hover {
+	background-color: #C5EBEB;
+}
+
+
+div.secondary-menu-item-0 a {
+	background-image: url('/static/images/voyage/secondary-menu-symbol-0.png');
+	background-repeat: no-repeat;
+	background-position: 2px 4px;
+	padding-left: 15px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px dotted #B8E7E8;
+}
+
+div.secondary-menu-item-1 a {
+	color: #05768A;
+	background-image: url('/static/images/voyage/secondary-menu-symbol-1.png');
+	background-repeat: no-repeat;
+	background-position: 17px 4px;
+	padding-left: 35px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px dotted #B8E7E8;
+}
+
+.assessment_selected {
+	background-color: #C5EBEB;
+}
+
+div.essay-info {
+	xborder-top: 1px solid Black;
+	border-bottom: 1px solid Black;
+	padding-bottom: 10px;
+}
+
+div.essay-info span.essay-author {
+	font-weight: bold;
+}
+
+div.essay-info span.essay-date {
+	font-style: italic;
+}
+
+/* essays landing page */
+ul.essays-list {
+	padding: 0px 0px 0px 20px;
+	margin: 10px 0px 0px 0px;
+}
+
+ul.essays-list li {
+	padding: 0px 0px 0px 0px;
+	margin: 0px;
+}
+
+ul.essays-list div.essay-title {
+	font-weight: bold;
+}
+
+ul.essays-list div.essay-info {
+	border-style: none;
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px 0px 10px 0px;
+}
+
+ul.essays-list span.essay-author {
+	font-weight: normal;
+	font-style: italic;
+}
+
+ul.essays-list span.essay-date {
+	font-style: normal;
+}
+
+/* prev/next */
+
+table.essay-prev-next {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+td.essay-prev {
+	padding-left: 5px;
+	text-align: left;
+}
+
+td.essay-next {
+	padding-right: 5px;
+	text-align: right;
+}
+
+table.essay-prev-next td.essay-prev a {
+	background-image: url('/static/images/assessment/assessment-icon-arrow-left.png');
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 10px;
+	text-decoration: none;
+}
+
+table.essay-prev-next td.essay-next a {
+	background-image: url('/static/images/assessment/assessment-icon-arrow-right.png');
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 10px;
+	text-decoration: none;
+}
+
+table.essay-prev-next td.essay-prev a:hover, table.essay-prev-next td.essay-next a:hover {
+	text-decoration: underline;
+}
+
+div.essay-image-right {
+	float: right;
+	margin: 13px 0px 5px 10px;
+	border: 1px solid Black;
+}
+
+div.essay-image-left {
+	float: left;
+	margin: 13px 10px 5px 0px;
+	border: 1px solid Black;
+}
+
+div.essay-image-left div.caption, div.essay-image-right div.caption {
+	background-color: #444444;
+	color: White;
+	text-align: center;
+	padding: 2px 5px 1px 5px;
+}
+
+div.essay-note {
+	xborder-top: 1px solid Black;
+	border-bottom: 1px solid Black;
+	padding-bottom: 10px;
+}
+
+p.note {
+	font-size: smaller;
+}

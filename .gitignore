@@ -1,1 +1,9 @@
 *.pyc
+build/
+dist/
+test-results/
+localsettings.py
+*~
+documents/cache/*
+.idea
+*.log

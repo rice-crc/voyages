@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load voyage_extras %}
+
+<div style="margin-right: 10px;">
+  <table class="detail" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+      {% for lblmain, lbllabel, lbldata, var_name in voyage_variables %}
+        <tr>
+          <!-- {{ var_name }} -->
+	  {% if None != lblmain.0 %}
+	    <td class="detail-label-main" rowspan="{{ lblmain.0 }}">{{ lblmain.1|trans_log }}</td>
+	  {% endif %}
+	  <td class="detail-label">{{ lbllabel|trans_log }}</td>
+	  <td class="detail-data">{{ lbldata | safe }}</td>
+	</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

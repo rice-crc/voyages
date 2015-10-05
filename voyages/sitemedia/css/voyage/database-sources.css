@@ -1,0 +1,104 @@
+table.simple-table {
+	width: 100%;
+	border-collapse: collapse; }
+	
+td.sources-letter,
+td.sources-letter-first {
+	border-bottom: 1px solid Black;
+	padding-bottom: 5px; }	
+
+td.sources-letter {
+	padding-top: 15px; }
+	
+td.sources-letter span, 
+td.sources-letter-first span {
+	padding: 2px 5px 2px 5px;
+	background-color: Black;
+	color: White;
+	font-weight: bold;
+	font-size: 12pt; }
+
+td.sources-country,
+td.sources-country-first {
+	font-weight: bold;
+	font-size: 12pt;
+	border-bottom: 1px solid Black;
+	padding-bottom: 5px; }
+	
+td.sources-country {
+	padding-top: 15px; }
+	
+td.sources-city-first,
+td.sources-city {
+	vertical-align: top;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	font-weight: bold;
+    text-align: left;
+}
+	
+td.sources-city {
+	border-top: 1px solid #DDCA9D; }	
+
+td.source-id-odd,
+td.source-id-even,
+td.source-id-first,
+td.source-id-first {
+	vertical-align: top;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 15px;
+	font-weight: bold; }
+
+td.source-name-odd, 
+td.source-name-even, 
+td.source-name-first, 
+td.source-name-first {
+	vertical-align: top;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px; }
+	
+td.source-id-first,
+td.source-name-first {
+	border-bottom: 1px solid #DDCA9D;
+	background-color: #FFF8CE; }
+
+td.source-id-even,
+td.source-name-even {
+	border-top: 1px solid #DDCA9D;
+	border-bottom: 1px solid #DDCA9D;
+	background-color: #FFF8CE; }
+	
+div.switch-layout {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #C8AF77; }
+
+div.switch-layout table {
+	margin-left: auto;
+	margin-right: 0px; }
+
+div.switch-layout a {
+	display: block;
+	color: Black;
+	padding: 2px 5px 2px 5px;
+	border-color: #C8AF77;
+	border-style: solid;
+	border-width: 1px 1px 0px 1px;
+	text-decoration: none;
+	background-color: #FFF8CE; }
+	
+div.switch-layout a.active {
+	color: White;
+ 	background-color: #C8AF77; }
+
+td.switch-layout-first-link {
+	}
+	
+td.switch-layout-second-link {
+	padding-right: 10px;
+	padding-left: 5px; }
+	

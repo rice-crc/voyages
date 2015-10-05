@@ -1,34 +1,7 @@
 # Django settings for voyages project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'DB',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SITE_ID = 1
 
@@ -43,20 +16,16 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
-
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/documents/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -67,6 +36,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+     os.path.join(BASE_DIR, 'sitemedia'),
 )
 
 # List of finder classes that know how to find static files in
@@ -74,11 +44,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+   # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'rq(3&amp;+ha%c2v3m06+*ww%5md1(xb5=th-$!^jhlu1mkn+5a!#@'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -87,12 +54,36 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    # defaults
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+    # version
+    'voyages.version_context',
+    "voyages.apps.voyage.context_processors.voyage_span",
+    )
+
+AUTHENTICATION_BACKENDS = (
+    'voyages.apps.contribute.backends.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -106,6 +97,11 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
 )
 
 INSTALLED_APPS = (
@@ -115,11 +111,26 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+
+    #Flatpages apps
+    'django.contrib.flatpages',
+
+    'django.contrib.admindocs',
+    'django.contrib.humanize',
+    'autocomplete_light',
+    'sorl.thumbnail',
     'south',
+
+    # used to index django models
+    'haystack',
+
+    # used to highlight translated strings to easily find which translations are missing
+    #'i18n_helper',
+
+    # password reset app
+    'password_reset',
+
     'voyages.apps.common',
     'voyages.apps.voyage',
     'voyages.apps.assessment',
@@ -127,33 +138,69 @@ INSTALLED_APPS = (
     'voyages.apps.education',
     'voyages.apps.about',
     'voyages.apps.contribute',
+    'voyages.apps.help',
+    'voyages.apps.static_content',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
+I18N_HELPER_DEBUG = False
+I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
+
+# Indicates whether the map path flows should include paths with missing source.
+MAP_MISSING_SOURCE_ENABLED = True
+
+SESSION_ENGINE = "django.contrib.sessions.backends.file"
+
+LANGUAGE_CODE='en'
+from django.utils.translation import ugettext_lazy as _
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('pt', _('Portuguese')),
+)
+DEFAULT_LANGUAGE = 0
+
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_DIR = 'test-results'
+
+# disable south tests and migrations when running tests
+# - without these settings, test fail on loading initial fixtured data
+SKIP_SOUTH_TESTS = False
+SOUTH_TESTS_MIGRATE = False
+
+LOGIN_URL = '/contribute/login/'
+LOGIN_REDIRECT_URL = LOGIN_URL
+
+HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
+HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
+
+# Default empty string
+TEMPLATE_STRING_IF_INVALID = "Nothing"
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+import sys
+
+# import localsettings
+# This will override any previously set value
+try:
+    from localsettings import *
+except ImportError:
+    print >>sys.stderr, '''Settings not defined. Please configure a version
+        of localsettings.py for this site. See localsettings.py.dist for
+        setup details.'''
+
+
+# Modify HAYSTACK config for fixture loading durring tests
+# It is not possible to use override_settings decorator 
+# because HAYSTACK triggers an update on save() when fixtures are loaded
+# turns out fixtures are loaded before decorators are applied.
+
+try:
+    if 'test' in sys.argv:
+        HAYSTACK_CONNECTIONS = {'default' : {'ENGINE' : 'haystack.backends.simple_backend.SimpleEngine'}}
+        HAYSTACK_SIGNAL_PROCESSOR = ''
+        del HAYSTACK_SIGNAL_PROCESSOR
+except Exception as e:
+    print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
+
+del sys

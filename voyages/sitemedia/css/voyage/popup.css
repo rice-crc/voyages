@@ -1,0 +1,36 @@
+.blackout {
+    background-color:#000;
+    opacity:.7;
+    height:100%;
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:100;
+    display:none;
+    cursor:pointer;
+}
+
+.msgbox {
+    background-color: White;
+    border: 5px solid #333333;
+    color:#000;
+    position: fixed;
+    left: 250px;
+    top: 159.5px;
+    width: 420px;
+    height: 200px;
+    z-index:101;
+    display:none;
+    margin-left: 20%;
+}
+
+.close-link-box {
+    background-color:#CC0000;
+    color:#FFFFFF;
+    padding:8px;
+    float:right;
+    border-radius:3px;
+    cursor:pointer;
+    text-transform:uppercase;
+}

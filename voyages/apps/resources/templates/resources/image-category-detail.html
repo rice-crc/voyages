@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load resources_extras %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/gallery.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
+{% endblock %}
+
+{% block title %}{% trans 'Image Detail' %}{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/images-left-menu.html" %}
+</div>
+
+<div id="center-content">
+
+<div class="image-title">
+    {{ pagins.0.title|trans_log }}
+</div>
+<div class="image-navigation">
+    <table class="image-navigation">
+    <tbody>
+    <tr>
+        <td style="padding: 0px 10px 0px 0px;">
+        <a href="{% url 'resources:images-category' category|spaces_to_underscores %}">{% trans 'Images of ' %}{{ category|trans_log }}</a>
+        </td>
+        <td style="padding: 0px 0px 0px 0px;">
+            {% if pagins.has_previous %}
+                <a href={{ pagins.previous_page_number }}>{% trans 'Previous' %}</a>
+            {% else %}
+                {% trans 'Previous' %}
+            {% endif %}
+        </td>
+        <td style="padding: 0px 10px 0px 10px"> {{ pagins.number }} / {{ pagins.paginator.num_pages }}  </td>
+        <td style="padding: 0px;">
+            {% if pagins.has_next %}
+                <a href={{ pagins.next_page_number }}>{% trans 'Next' %}</a>
+            {% else %}
+                {% trans 'Next' %}
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+
+    <table style="border-collapse: collapse;">
+    <tbody>
+    <tr>
+        <td class="image-detail-link">
+            <a href="{% url 'resources:image-detail' category|spaces_to_underscores pagins.number %}">
+                {% thumbnail pagins.0.file "400" as im %}
+                    <img src="{{ im.url }}">
+                    {% empty %}
+                        <img src="{{ MEDIA_URL }}{{ pagins.0.file }}" width="100" height="100">
+                {% endthumbnail %}
+            </a>
+        </td>
+        <td style="padding: 0px 10px 0px 10px; vertical-align: top;">
+            <div class="image-description">
+                {{ pagins.0.description|trans_log }}
+            </div>
+            <table class="image-detail-info">
+                <tbody>
+                {% if pagins.0.date %}
+                    <tr>
+                        <td>
+                            <div class="image-detail-info-label">
+                                {% trans 'Year' %}:
+                            </div>
+                        </td>
+                        <td>
+                            {{ pagins.0.date }}
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            {% trans 'Source:' %}
+                        </div>
+                    </td>
+                    <td>
+                        {{ pagins.0.source }}
+                    </td>
+                </tr>
+                {% if pagins.0.language %}
+                <tr>
+                    <td>
+                        <div class="image-detail-info-label">
+                            {% trans 'Language:' %}
+                        </div>
+                    </td>
+                    <td>
+                        {{ pagins.0.language|decode_language|trans_log }}
+                    </td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+            {% if pagins.0.voyage_id %}
+                <div class="image-detail-voyages-title">
+                    {% trans 'Related voyages' %}
+                </div>
+                <table class="image-detail-voyages">
+                    <tbody>
+                    <tr>
+                        <td>
+                            {% trans 'Voyage ID' %} =
+                            {{ pagins.0.voyage_id }} - {{ pagins.0.voyage_vessel_name }}, {{ pagins.0.voyage_imp_voyage_began|get_year_value }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

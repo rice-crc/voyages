@@ -1,8 +1,0 @@
--r common.txt
-
-fabric
-sphinx
-coverage
-unittest-xml-reporting
-unittest2
-#nose

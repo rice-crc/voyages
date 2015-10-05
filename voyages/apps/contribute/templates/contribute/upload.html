@@ -1,0 +1,38 @@
+{% extends "contribute/contribute_base.html" %}
+{% load i18n %} 
+
+{% block title %}{% trans "Voyage Upload Page" %}{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Voyage File Upload' %}</h2>
+
+	<h3>{% trans 'Current files:' %}</h3>
+    <!-- List of uploaded files -->
+    {% if documents %}
+        <ul>
+        {% for document in documents %}
+            <li><a href="{{ 'document.userfile.url' }}">{{ document.userfile.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files available.</p>
+    {% endif %}
+
+	<h3>{% trans 'Upload new file' %}</h3>
+
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url 'contribute:uploadlist' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form.non_field_errors }}</p>
+            <p>{{ form.userfile.label_tag }} {{ form.userfile.help_text }}</p>
+            <p> File path:
+                {{ form.userfile.errors }}
+                {{ form.userfile }}
+           </p>
+           <p>
+              File title:  {{ form.filetitle }}
+            </p>
+            <p><input type="submit" value="Upload" /></p>
+        </form>
+
+{% endblock %}

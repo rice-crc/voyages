@@ -1,0 +1,144 @@
+#main-content {
+    padding: 0;
+}
+
+
+/* top bar */
+
+div.glossary-letters-and-search {
+	background-color: White; 
+}
+
+table.glossary-letters-and-search {
+	width: 100%;
+    height: 23pt; 
+    overflow: auto}
+
+td.glossary-letters-and-search {
+    padding-left: 20px;
+}
+
+table.glossary-letters {
+	width: 100%; }
+
+
+/* letters */
+
+table.glossary-selector-letters {
+	height: 30px;
+	margin-left: 20px;
+	border-collapse: collapse; }
+
+td.glossary-selector-letter {
+    padding-left: 0;
+    padding-right: 0; }
+
+td.glossary-selector-letter:hover a{
+    background-color: #008CA5;
+    color: White
+}
+
+td a {
+	color: #000000;
+}
+
+td a:hover {
+    background-color: #008CA5;
+    color: White; }
+
+a.glossary-selector-letter {
+    text-decoration: none;
+}
+
+a.glossary-selector-letter:hover {
+    text-decoration: none;
+    background-color: #008CA5;
+    color: White
+}
+
+div.glossary-selector-letter {
+	cursor: default;
+	padding: 2px 3px 2px 3px;
+	font-weight: bold; }
+
+div.glossary-selector-letter:hover {
+	background-color: #008CA5;
+	color: White; }
+
+div.glossary-selector-letter-dimmed {
+    cursor: default;
+    padding: 2px 3px 2px 3px;
+    font-weight: bold;
+    color: #E2F2F5; }
+
+/* glossary */
+
+div.glossary-terms {
+	position: fixed;
+	top: 140px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+    position: fixed;
+	overflow: auto; }
+
+table.glossary-terms {
+	margin-top: 10px;
+	margin-right: 15px; }
+
+td.glossary-term {
+	vertical-align: top;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 10px;
+	color: Black;
+	font-weight: bold;
+	border-bottom: 1px solid #B5DEE6; }
+
+td.glossary-description {
+	vertical-align: top;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #B5DEE6; }
+
+td.glossary-letter {
+	padding-left: 10px;
+	padding-bottom: 5px;
+	width: 50px;
+	vertical-align: top; }
+
+div.glossary-letter {
+	width: 36px;
+	height: 36px;
+	text-align: center;
+	color: White;
+	line-height: 36px;
+	font-weight: bold;
+	font-size: 14pt;
+	background-image: url(/static/images/help/glossary-letter.png);
+	background-repeat: no-repeat; } 
+	
+div.glossary-counts {
+	width: 36px;
+	text-align: center; }
+
+div#glossary-title {
+	padding: 10px 0px 10px 10px;
+	font-size: 16pt; }
+	
+span.search-keyword {
+	padding: 0px 2px 0px 2px;
+	background-color: #FFFFAA; }
+
+input {
+	font-size: 9pt;
+}
+
+#id_q {
+	width: 130px;
+}
+
+#search-box-wrapper {
+	text-align: right;
+	padding-right: 5px;
+}

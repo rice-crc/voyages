@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load resources_extras %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/../../../../sitemedia/css/expandable-box.css">
+{% endblock %}
+
+{% block title %}{% trans 'Images Search' %}{% endblock %}
+
+{% block content %}
+
+<div id="left-menu" class="left-menu-box">
+	{% include "resources/images-left-menu.html" %}
+</div>
+
+<div id="center-content">
+
+    {% if not query %}
+        {% if enabled_categories|length == 1 %}
+            {% for i in enabled_categories %}
+                <div class="images-query-title">{% trans 'Images of ' %}{{ i }}</div>
+            {% endfor %}
+        {% elif enabled_categories|length == 4 %}
+            <div class="images-query-title">{% trans 'All images' %}</div>
+        {% else %}
+            <div class="images-query-title">{% trans 'Search results' %}</div>
+        {% endif %}
+    {% else %}
+        <div class="images-query-title">{% trans 'Search results' %}</div>
+    {% endif %}
+
+    <div class="image-navigation">
+        <table class="image-navigation">
+        <tbody>
+            <tr>
+                <td style="padding: 0px 10px 0px 0px;">
+                    <a href="{% url 'resources:images' %}">{% trans 'Back to start' %}</a>
+                </td>
+                <td style="padding: 0px">
+                    {{ results|length }} {% trans 'images' %}
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <table class="gallery-table" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            {% for result in results %}
+                {% ifequal forloop.counter0|modulo:5 0 %}
+                    <tr>
+                {% endifequal %}
+                <td class="gallery-image">
+                    <a href="{% url 'resources:images-search-detail' forloop.counter %}">
+                        <div class="gallery-image">
+                            {% thumbnail result.file "100x100" as im %}
+                                <img src="{{ im.url }}" width="100" height="100" />
+                            {% empty %}
+                                <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100" />
+                            {% endthumbnail %}
+                        </div>
+                    </a>
+                    <div class="gallery-image-text">
+                        <div class="gallery-image-label">
+                            {{ result.title|trans_log }}
+                        </div>
+                        {% if result.date %}
+                            <div class="gallery-image-description">
+                                ({{ result.date }})
+                            </div>
+                        {% endif %}
+                     </div>
+                </td>
+                {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

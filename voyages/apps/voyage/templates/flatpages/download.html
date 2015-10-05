@@ -1,0 +1,28 @@
+{% extends "voyage/voyagebase.html" %}                                                                                                                                                                                                                                                                                        
+
+{% load i18n %}
+{% load humanize %}
+{% load voyage_extras %}
+
+{% block title %}{% trans 'Downloads' %}{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/setup_left_menu.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/link_open_handler.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+{% with num_voyages|intcomma as nvoyages %}
+    {% with "/{num_voyages}/"|add:nvoyages as num_replace %}
+        {% with "/{db_year}/"|add:year as year_replace %}
+            {% with flatpage.content|trans_log as content %}
+                {{ content|replace:num_replace|replace:year_replace|parse_blocks }}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
+{% endwith %}
+
+{% endblock %}
+

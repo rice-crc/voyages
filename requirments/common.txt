@@ -1,4 +1,0 @@
-Django
-mysql-python 
-sunburnt
-south

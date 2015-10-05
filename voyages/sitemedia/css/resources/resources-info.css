@@ -1,0 +1,230 @@
+body {
+	background-position: 0px 60px;
+	background-image: url('/static/images/resources/resources-bg.png');
+	background-repeat: repeat-x;
+	background-color: #FFFFFF;
+}
+
+h1 {
+	padding: 0px;
+	margin: 0px 0px 10px 0px;
+}
+
+#center-content {
+    margin-left:280px;
+	padding: 10px 8px 10px 8px;
+}
+
+#left-menu {
+    width: 280px;
+    float:left;
+    border-right: 1px solid #165B31;
+	margin: 0px;
+	padding: 10px 8px 10px 8px;
+}
+
+div.images-nav-path {
+	margin-bottom: 2px; }
+
+#main-content-container {
+    width: 100%;
+	margin: 0;
+	padding:0;
+}
+
+/* images homepage */
+
+div.images-category {
+	width: 625px;
+	border-collapse: collapse;
+	border-bottom: 1px dotted #165B31;
+    margin-left: 20px;
+	margin-bottom: 10px; }
+
+div.images-category-name {
+	font-size: 14pt;}
+
+div.images-category-link {
+	margin-top: -3px;}
+
+div.images-category-link a {
+	text-decoration: none; }
+
+div.images-category-sample {
+	margin-bottom: 20px; }
+
+td.td-main-panel {
+	vertical-align: top;
+	padding: 10px;}
+
+td.td-side-panel {
+	width: 280px;
+	vertical-align: top;
+	border-right: 1px solid #165B31;}
+
+div.images-category-sample, td.gallery-image,
+div.images-category-sample, td.gallery-image-selected,
+div.images-gallery-query, td.gallery-image,
+div.images-gallery-query, td.gallery-image-selected {
+	vertical-align: top;
+	width: 160px; }
+
+div.images-category-sample, div.gallery-image,
+div.images-gallery-query, div.gallery-image {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100px; }
+
+div.images-category-sample, div.gallery-image img,
+div.images-gallery-query, div.gallery-image img {
+	cursor: pointer;
+	border: 1px solid #165B31; }
+
+div.images-category-sample, div.gallery-image-text,
+div.images-gallery-query, div.gallery-image-text {
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px; }
+
+div.images-category-sample, div.gallery-image-label,
+div.images-gallery-query, div.gallery-image-label {
+	margin-top: 3px;
+	text-align: center; }
+
+div.images-category-sample, div.gallery-image-description,
+div.images-gallery-query, div.gallery-image-description {
+	text-align: center; }
+
+/* left column */
+
+div.images-query-box {
+	border-bottom: 1px solid #B4D6CD;
+	margin-bottom: 10px;
+	padding-bottom: 10px; }
+
+div.images-query-search-button {
+    display: inline;
+	}
+
+span.images-count {
+	color: #BBBBBB; }
+
+/* query */
+
+div.images-query-title {
+	font-size: 14pt;
+	padding-bottom: 0px;
+	margin-bottom: 0px; }
+
+/* navigation */
+
+div.image-navigation {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	border-bottom: 1px dotted #165B31;
+	border-top: 1px dotted #165B31; }
+
+table.image-navigation {
+	border-collapse: collapse; }
+
+table.image-navigation a {
+	color: Black;
+	text-decoration: none;
+	display: block;
+	padding-top: 2px;
+	padding-bottom: 2px; }
+
+table.image-navigation a:hover {
+	text-decoration: underline; }
+
+a.link-back-to-list {
+	padding-left: 15px;
+	padding-right: 5px;
+	background-image: url(../images/resources-icon-arrow-up.png);
+	background-repeat: no-repeat;
+	background-position: left center; }
+
+a.link-prev-image {
+	padding-left: 10px;
+	padding-right: 5px;
+	background-image: url(../images/resources-icon-arrow-left.png);
+	background-repeat: no-repeat;
+	background-position: left center; }
+
+a.link-next-image {
+	padding-left: 5px;
+	padding-right: 10px;
+	background-image: url(../images/resources-icon-arrow-right.png);
+	background-repeat: no-repeat;
+	background-position: right center; }
+
+/* detail */
+
+div.image-title {
+	font-size: 14pt;
+	padding-bottom: 0px;
+	margin-bottom: 0px; }
+
+div.images-gallery-detail {
+	margin-bottom: 5px; }
+
+div.images-gallery-detail td.gallery-image-selected div.gallery-image {
+	background-repeat: no-repeat;
+	background-position: center 80px;
+	background-image: url(../images/resources-icon-arrow-up.png);
+	padding-bottom: 8px;
+	margin-right: 5px; }
+
+div.images-gallery-detail div.gallery-image {
+	padding-bottom: 8px;
+	margin-right: 5px; }
+
+div.images-gallery-detail td.gallery-image div.gallery-image img,
+div.images-gallery-detail td.gallery-image-selected div.gallery-image img {
+	cursor: pointer;
+	border: 1px solid #165B31; }
+
+a.link-images {
+	}
+
+img.image-detail {
+	cursor: pointer;
+	border: 1px solid #165B31; }
+
+div.image-description {
+	margin-top: 0px; }
+
+table.image-detail-info {
+	margin-top: 15px;
+	border-collapse: collapse; }
+
+table.image-detail-info td {
+	vertical-align: top;
+	border-top: 1px solid #165B31;
+	border-bottom: 1px solid #165B31;
+	padding: 5px 0px 5px 0px; }
+
+div.image-detail-info-label {
+	margin-right: 10px;
+	font-style: italic; }
+
+div.image-detail-voyages-title {
+	margin-top: 20px;
+	font-weight: bold;
+	margin-bottom: 5px; }
+
+table.image-detail-voyages {
+	border-collapse: collapse; }
+
+table.image-detail-voyages td {
+	border-top: 1px solid #165B31;
+	border-bottom: 1px solid #165B31;
+	padding: 5px 0px 5px 0px; }
+
+div.images-query {
+	border-bottom: 1px solid #165B31;
+	margin-bottom: 15px; }
+
+div.images-query a {
+	text-decoration: none; }
+

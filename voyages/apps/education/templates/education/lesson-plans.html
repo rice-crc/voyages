@@ -1,0 +1,98 @@
+{% extends "education/educationbase.html" %}
+
+{% comment %} Display lesson plan items from the database {% endcomment %}
+
+{% load i18n %}
+{% load voyage_extras %}
+{% block title %}{% trans "Lesson Plans" %}{% endblock %}
+
+{% block jslist %}
+<script src="{{ STATIC_URL }}scripts/link_open_handler.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block pagecsslist %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" />
+{% endblock %}
+
+{% block center-content %}
+
+<h1>{% trans "Lesson Plans" %}</h1>
+
+<p>
+	{% blocktrans %}In order to present the trans-Atlantic slave trade database to a broader audience, particularly
+	a grade 6-12 audience, a dedicated team of teachers and curriculum developers from around the United
+	States developed lesson plans that explore the database.  Utilizing the various resources of the website,
+	these lessons plans allow students to engage the history and legacy of the Atlantic slave trade in diverse
+	and meaningful ways.  The lessons are all aligned with national standards in history (National Center for
+	History in the Schools), social studies (National Council for the Social Studies), and geography (National
+	Council for Geography Education) and range in both their grade levels and activities. The lessons also
+	suggest readings for more information about the Slave Trade.{% endblocktrans %}
+</p>
+
+<p>
+	{% blocktrans %}These materials were created for purposes of curriculum and instruction and are not intended for commercial
+	republication. Please contact individual authors for additional permissions.{% endblocktrans %}
+</p>
+
+{% if lesson_plans %}
+{% for lesson_item in lesson_plans %}
+	<div class="lesson-plan-title">
+		{{ lesson_item.lesson.text|trans_log }}
+		
+		{% if lesson_item.download %}
+		{% for download_item in lesson_item.download %}
+			<span class="download">
+				{% if "ppt" in download_item.file.name  %}
+				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT, 
+				{% else %}
+				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF, 
+				{% endif %}
+				
+				{{ download_item.file.size|filesizeformat }})
+			</span>
+		{% endfor %}
+		{% endif %}
+	</div>
+	
+	<div  class="lesson-plan-detail">
+		<div class="lesson-plan-author">
+			{% trans "Author" %}: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author|safe }}</span>
+		</div>
+		<div class="lesson-plan-grade-level">
+			{% trans "Grade Level" %}: <span class="lesson-plan-grade-level">{{ lesson_item.lesson.grade_level|trans_log|safe }}</span>
+		</div>
+		<div class="lesson-plan-course">
+			{% trans "Course" %}: <span class="lesson-plan-course">{{ lesson_item.lesson.course|trans_log|safe }}</span>
+		</div>
+		<div class="lesson-plan-keywords">
+			{% trans "Key Words" %}:<span class="lesson-plan-keywords">{{ lesson_item.lesson.key_words|trans_log|safe }}</span>
+		</div>
+		<div class="lesson-plan-standards-title">
+			{% trans "Standards" %}
+		</div>
+		
+		{% if lesson_item.standard %}
+		<ul class="lesson-plan-standards">
+			{% for standard_type in lesson_item.standard %}
+			<li>
+				<span class="lesson-plan-standards-name">{{ standard_type.type|trans_log|safe }}</span>
+				<ul class="lesson-plan-standards-listing">
+					{% for standard_item in standard_type.text %}
+						<li>{{ standard_item.text|trans_log|safe }}</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		<div class="lesson-plan-abstract-title">
+			{% trans "Abstract" %}
+		</div>
+		<div class="lesson-plan-abstract">
+			{{ lesson_item.lesson.abstract|trans_log|safe }}
+		</div>
+	</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,6 @@
+{{ object.name }}
+{{ object.order_num }}
+{{ object.latitude }}
+{{ object.longitude }}
+{{ object.show_at_zoom }}
+{{ object.show_on_map }}

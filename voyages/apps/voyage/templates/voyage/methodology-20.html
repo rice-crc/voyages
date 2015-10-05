@@ -1,0 +1,33 @@
+{% load i18n %}
+<h2>{% trans "Resistance and Price of Slaves" %}</h2>
+
+<p>
+	{% blocktrans %}Finally, we consider two variables that will attract more attention than most. First, we use the data variable
+	“African resistance” (RESISTANCE) to compute a “Rate of Resistance” variable which is available only on the time
+	line and in Custom Graphs. This is simply the number of vessels experiencing some recorded act of resistance
+	divided by the total number of vessels in a given year and expressed as a percentage. The second is the “Sterling
+	cash price (of slaves) in Jamaica” variable (JAMCASPR), which may be used to track the price paid for slaves in
+	the Americas as they were sold from the vessel. The Voyages Database contains prices for those on board 959 voyages.
+	The full derivation of these data is described elsewhere, but a summary description is appropriate here.
+	<span class="superscript">(23)</span> Prices for human beings in the Americas were subject to as many
+	influences as were prices in any other market. Key factors included the characteristics of the person being
+	sold, the distance between slave markets in the Americas and Africa and the price of the captive in Africa.
+	This variable attempts to adjust for several of these factors so that the underlying price trends become
+	apparent to the user of Voyages. In most cases the data are taken from the slave traders’ accounts and
+	correspondence. Our first goal was to ensure that we recorded a single category of captive – what was
+	frequently referred to at the time as “a prime male”.<span class="superscript">(24)</span> Second, we adjusted
+	that price for the price differential between the market in which the slave was actually sold and the price in
+	Jamaica. Thus, if the captive was sold in one of the eastern Caribbean islands we would make a small adjustment
+	upwards to reflect the ten extra days sailing time it would take to reach Jamaica. Third, we converted all
+	prices into pounds sterling. What we did not do was to express the price in constant pounds (adjusted for
+	inflation) – in other words, in real terms. This variable is thus based on archival data, but the adjustments
+	we have made in the interests of making it intelligible for users have the effect of converting this into an
+	imputed variable.{% endblocktrans %}
+</p>
+
+<p>
+	{% blocktrans %}The above discussion is not exhaustive in the sense that we not have touched on and explained every single
+	variable in either the Voyages interface or the two databases offered for downloading. Many of the variables
+	need no more explanation than is available on the Variable List page and readers are referred to this page
+	for any missing explanations in the preceding pages.{% endblocktrans %}
+</p>

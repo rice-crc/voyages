@@ -1,0 +1,22 @@
+{% extends "contribute/login_base.html" %}
+{% load i18n %}
+
+<!-- Corresponds to the Voyage:Guideline page-->
+
+{% block center-content %}
+
+<h1>{% trans "Guidelines for Contributors" %}</h1>
+
+<p>
+	{% trans "The guide is provided as a PDF file to allow users to reference it in a separate window or to download and print it." %}
+</p>
+
+<p>
+	<ul>
+		<li>
+			<a href="{{ MEDIA_URL }}download/GuideContributors.pdf" target="blank">GuideContributors.pdf</a>
+		</li>
+	</ul>
+</p>
+
+{% endblock %}
