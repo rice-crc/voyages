@@ -95,10 +95,11 @@ function LocationIndex() {
  *  @param latLng - global position.
  *  @param nodeType - a string identifying the type of the node (e.g. port, region, broad region).
  */
-function NamedPoint(name, latLng, nodeType) {
+function NamedPoint(name, latLng, nodeType, id) {
 	this.name = name;
 	this.latLng = latLng;
 	this.nodeType = nodeType;
+	this.id = id || 0;
 }
 
 /*!
@@ -383,14 +384,18 @@ var voyagesMap = {
                 var auxFlowData = [ ];
                 for (var i = 0; i < flows.length; ++i) {
                     var flow = flows[i];
-                    var source = ports[flow.source].getNamedPoint(detailLevel);
-                    var destination = ports[flow.destination].getNamedPoint(detailLevel);
+                    var sourcePort = ports[flow.source];
+                    var destinationPort = ports[flow.destination];
+                    var source = sourcePort.getNamedPoint(detailLevel);
+                    var destination = destinationPort.getNamedPoint(detailLevel);
                     var markerSource = namedPointToMarker(source);
                     var markerDest = namedPointToMarker(destination);
                     markerSource.name = source.name;
                     markerDest.name = destination.name;
                     locations.add(source.latLng, source.name);
                     locations.add(destination.latLng, destination.name);
+                    markerSource.broadRegion = sourcePort.broad;
+                    markerDest.broadRegion = destinationPort.broad;
                     // Aggregate marker flows.
                     markerSource.outFlowEmbarked += flow.volume;
                     markerSource.outFlowDisembarked += flow.netVolume;
@@ -403,16 +408,20 @@ var voyagesMap = {
                 	if (footer) {
                 		footer = '<tfoot>' + footer + '</tfoot>'
                 	}
+                	var inboundHeader = gettext('Africans arriving from Africa');
+                	if (totals.broadRegion.id <= 1) {
+                	    inboundHeader = gettext('Africans returning to Africa');
+                	}
                 	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
                 	 	'<table class="map_node_aggregate_table">' +
                 		'<thead><tr><th rowspan="2">' + locations.locationType.singular.toUpperCase() +
-                		'</th><th colspan="2" class="inFlow">' + gettext('Inbound') +
-                		'</th><th colspan="2" class="outFlow">' + gettext('Outbound') + '</th></tr>' +
+                		'</th><th colspan="2" class="inFlow">' + inboundHeader +
+                		'</th><th colspan="2" class="outFlow">' + gettext('Africans carried off') + '</th></tr>' +
                 		'<tr><th class="inFlow">' + gettext('Embarked') + '</th><th class="inFlow">' +
                 		gettext('Disembarked') + '</th><th class="outFlow">' +
                 		gettext('Embarked') + '</th><th class="outFlow">' + gettext('Disembarked') +
                 		'</th></tr></thead><tbody><tr>' + rows.join('</tr><tr>') + '</tr></tbody>' + (footer || '') + '</table></div>';
-					// See if we should omit inFlow or outFLow columns.
+					// See if we should omit inFlow or outFlow columns.
 					if (totals.inFlowEmbarked == 0 && totals.inFlowDisembarked == 0) {
 						table = table.replace(/inFlow/g, 'zero_value');
 					}
@@ -451,6 +460,7 @@ var voyagesMap = {
 						for (var i = 0; i < markers.length; ++i) {
 							var marker = markers[i];
 							rows.push(nodeAggregateInfo(marker));
+							totals.broadRegion = marker.broadRegion;
 							totals.inFlowEmbarked += marker.inFlowEmbarked;
 							totals.inFlowDisembarked += marker.inFlowDisembarked;
 							totals.outFlowEmbarked += marker.outFlowEmbarked;
@@ -691,7 +701,10 @@ var voyagesMap = {
 				// with thick lines that ruin the arrow head tip.
 				var arrowSize = Math.min(maxWidth * 3, 4 * lWeight);
 				var finalPoint = path[path.length - 1];
-				path = this._trimPolyline(path, arrowSize - lWeight / 2);
+				var aux = 0;
+				while ((aux = this._trimPolyline(path, arrowSize - lWeight / 2) / 2) < arrowSize) {
+					arrowSize = aux;
+				}
 				line = polyLineBuilder(path, lWeight);
 				var virtualPath = path.slice(0);
 				virtualPath.splice(-1);
@@ -872,21 +885,49 @@ var voyagesMap = {
 	},
 
 	_smoothPolyline: function(points) {
-		return points;
-		/*
+		// Helper functions to computes the angle
+		// formed by 3 points.
+		var self = this;
+		var atan = function(x, y) {
+			var theta = Math.atan2(x, y);
+			return theta < 0 ? 2 * Math.PI + theta : theta;
+		};
+		var angle = function(p1, p2, p3) {
+			var zoom = self._map.getZoom();
+			var q1 = self._map.project(p1, zoom);
+			var q2 = self._map.project(p2, zoom);
+			var q3 = self._map.project(p3, zoom);
+			var theta1 = atan(q1.x - q2.x, q1.y - q2.y);
+			var theta2 = atan(q3.x - q2.x, q3.y - q2.y);
+			return Math.abs(theta1 - theta2);
+		};
+		var removeSharpEnd = function(i) {
+			var result = false;
+			var theta = angle(points[i - 1], points[i], points[i + 1]);
+			if (theta < Math.PI * 2 / 3) {
+				points.splice(i, 1);
+				result = true;
+			}
+			return result;
+		};
+		if (points.length > 2) {
+			removeSharpEnd(1);
+		}
+		if (points.length > 2) {
+			removeSharpEnd(points.length - 2);
+		}
 		var coords = [ ];
 		for (var i = 0; i < points.length; ++i) {
 			coords.push(points[i].lng);
 			coords.push(points[i].lat);
 		}
 		// Interpolate points for a smooth path.
-		var smooth = this._getCurvePoints(coords, 0.4, 20, false);
+		var smooth = this._getCurvePoints(coords, 0.3, 20, false);
 		var result = [ ];
 		for (var k = 0; k < smooth.length; k += 2) {
 			result.push(new L.LatLng(smooth[k + 1], smooth[k]));
 		}
 		return result;
-		*/
 	},
 
 	/*! A method that computes the total network flow.
@@ -1020,6 +1061,7 @@ var voyagesMap = {
 	 *
 	 *  @param {Array} latLngs - array of L.LatLng objects defining the polyline.
 	 *  @param {Integer} pixels - how many pixels to trim.
+	 *  @returns {Integer} distance between end-points of polyline in pixels.
 	 */
 	_trimPolyline: function(latLngs, pixels) {
 		var n = latLngs.length;
@@ -1032,15 +1074,21 @@ var voyagesMap = {
 			lastInsideRange = i;
 		}
 		// Edge case: the entire polyline falls within the pixel range.
-		if (lastInsideRange == 0) return latLngs;
-		var ptA = this._map.project(latLngs[lastInsideRange - 1], zoom);
-		var ratio = pixels / ptA.distanceTo(lastPoint);
-		var ptB = L.point(
-			ptA.x * ratio + lastPoint.x * (1 - ratio),
-			ptA.y * ratio + lastPoint.y * (1 - ratio)
-		);
-		latLngs.splice(lastInsideRange);
-		latLngs.push(this._map.unproject(ptB, zoom));
-		return latLngs;
+		if (lastInsideRange == 0) {
+			latLngs = [ latLngs[0], latLngs[n - 1]];
+			n = 2;
+			lastPoint = this._map.project(latLngs[n - 1], zoom);
+		} else {
+			var ptA = this._map.project(latLngs[lastInsideRange - 1], zoom);
+			var ratio = pixels / ptA.distanceTo(lastPoint);
+			var ptB = L.point(
+				ptA.x * ratio + lastPoint.x * (1 - ratio),
+				ptA.y * ratio + lastPoint.y * (1 - ratio)
+			);
+			latLngs.splice(lastInsideRange);
+			latLngs.push(this._map.unproject(ptB, zoom));
+		}
+		var point = this._map.project(latLngs[0], zoom);
+		return point.distanceTo(lastPoint);
 	}
 };

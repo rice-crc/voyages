@@ -596,6 +596,11 @@ def voyage_variables(request, voyage_id):
                    'tab': 'variables',
                    'voyage_id': voyage_id})
 
+def reload_cache(request):
+    VoyageManager.invalidate_cache()
+    VoyageManager.cache()
+    return HttpResponse("Voyages cache reloaded")
+
 from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 @gzip_page
@@ -1237,7 +1242,7 @@ def search(request):
                 destination = itinerary.imp_principal_port_slave_dis
                 if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
                     source = Place()
-                    source.place = _('Missing source')
+                    source.place = _('Africa, port unspecified')
                     source.latitude = 0.05
                     source.longitude = 9.34
                     source.region = Region()

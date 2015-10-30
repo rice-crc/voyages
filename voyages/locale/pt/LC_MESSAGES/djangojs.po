@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-02 10:23-0300\n"
-"PO-Revision-Date: 2015-10-02 10:24-0300\n"
+"POT-Creation-Date: 2015-10-28 15:30-0200\n"
+"PO-Revision-Date: 2015-10-30 09:56-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -18,61 +18,65 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: sitemedia/maps/js/voyagesMap.js:143
+#: sitemedia/maps/js/voyagesMap.js:144
 msgid "port"
 msgstr "porto"
 
-#: sitemedia/maps/js/voyagesMap.js:143
+#: sitemedia/maps/js/voyagesMap.js:144
 msgid "ports"
 msgstr "portos"
 
-#: sitemedia/maps/js/voyagesMap.js:144
+#: sitemedia/maps/js/voyagesMap.js:145
 msgid "region"
 msgstr "região"
 
-#: sitemedia/maps/js/voyagesMap.js:144
+#: sitemedia/maps/js/voyagesMap.js:145
 msgid "regions"
 msgstr "regiões"
 
-#: sitemedia/maps/js/voyagesMap.js:145
+#: sitemedia/maps/js/voyagesMap.js:146
 msgid "broad region"
 msgstr "grande região"
 
-#: sitemedia/maps/js/voyagesMap.js:145
+#: sitemedia/maps/js/voyagesMap.js:146
 msgid "broad regions"
 msgstr "grande regiões"
 
-#: sitemedia/maps/js/voyagesMap.js:364 sitemedia/maps/js/voyagesMap.js.c:447
+#: sitemedia/maps/js/voyagesMap.js:365 sitemedia/maps/js/voyagesMap.js.c:456
 msgid "click for details"
 msgstr "clique para ver detalhes"
 
-#: sitemedia/maps/js/voyagesMap.js:409
-msgid "Inbound"
-msgstr "Entrada"
+#: sitemedia/maps/js/voyagesMap.js:411
+msgid "Africans arriving from Africa"
+msgstr "Africanos chegando da África"
 
-#: sitemedia/maps/js/voyagesMap.js:410
-msgid "Outbound"
-msgstr "Saída"
+#: sitemedia/maps/js/voyagesMap.js:413
+msgid "Africans returning to Africa"
+msgstr "Africanos retornando à África"
 
-#: sitemedia/maps/js/voyagesMap.js:411 sitemedia/maps/js/voyagesMap.js.c:413
-#: sitemedia/maps/js/voyagesMap.js:679
+#: sitemedia/maps/js/voyagesMap.js:419
+msgid "Africans carried off"
+msgstr "Africanos transportados de"
+
+#: sitemedia/maps/js/voyagesMap.js:420 sitemedia/maps/js/voyagesMap.js.c:422
+#: sitemedia/maps/js/voyagesMap.js:689
 msgid "Embarked"
 msgstr "Embarcados"
 
-#: sitemedia/maps/js/voyagesMap.js:412 sitemedia/maps/js/voyagesMap.js.c:413
-#: sitemedia/maps/js/voyagesMap.js:681
+#: sitemedia/maps/js/voyagesMap.js:421 sitemedia/maps/js/voyagesMap.js.c:422
+#: sitemedia/maps/js/voyagesMap.js:691
 msgid "Disembarked"
 msgstr "Desembarcados"
 
-#: sitemedia/maps/js/voyagesMap.js:450
+#: sitemedia/maps/js/voyagesMap.js:459
 msgid "Totals"
 msgstr "Totais"
 
-#: sitemedia/maps/js/voyagesMap.js:684 sitemedia/maps/js/voyagesMap.js.c:730
+#: sitemedia/maps/js/voyagesMap.js:694 sitemedia/maps/js/voyagesMap.js.c:740
 msgid "Place or region of embarkation:"
 msgstr "Porto ou região de embarque:"
 
-#: sitemedia/maps/js/voyagesMap.js:718 sitemedia/maps/js/voyagesMap.js.c:731
+#: sitemedia/maps/js/voyagesMap.js:728 sitemedia/maps/js/voyagesMap.js.c:741
 msgid "Place or region of disembarkation:"
 msgstr "Porto ou região de desembarque:"
 
@@ -115,6 +119,12 @@ msgstr "Contribua"
 #: sitemedia/scripts/voyage/voyage-search.js:177
 msgid "[nothing selected]"
 msgstr "[nada selecionado]"
+
+#~ msgid "Inbound"
+#~ msgstr "Entrada"
+
+#~ msgid "Outbound"
+#~ msgstr "Saída"
 
 #~ msgid "Source"
 #~ msgstr "Origem"

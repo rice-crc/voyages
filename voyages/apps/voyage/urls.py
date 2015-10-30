@@ -19,6 +19,8 @@ urlpatterns += patterns('',
 
     url(r'^c01_s01_cover$', TemplateView.as_view(template_name='voyage/guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover$', 'voyages.apps.voyage.views.variable_list', name='variables'),
+    url(r'^reload-cache', 'voyages.apps.voyage.views.reload_cache', name='reload_cache'),
+
     url(r'^search', 'voyages.apps.voyage.views.search', name='search'),
 
     url(r'^permalink', 'voyages.apps.voyage.views.get_permanent_link', name='permanent-link'),
