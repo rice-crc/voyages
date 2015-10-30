@@ -409,7 +409,7 @@ var voyagesMap = {
                 		footer = '<tfoot>' + footer + '</tfoot>'
                 	}
                 	var inboundHeader = gettext('Africans arriving from Africa');
-                	if (totals.broadRegion.id <= 1) {
+                	if (totals.broadRegion && (totals.broadRegion.id <= 1 || totals.broadRegion.name == "Africa")) {
                 	    inboundHeader = gettext('Africans returning to Africa');
                 	}
                 	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +

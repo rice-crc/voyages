@@ -53,8 +53,8 @@ def get_estimates_map(request):
         result = cache[result.pk]
         dregion = result.disembarkation_region.name
         eregion = result.embarkation_region.name
-        regions[dregion] = (result.disembarkation_region.latitude, result.disembarkation_region.longitude)
-        regions[eregion] = (result.embarkation_region.latitude, result.embarkation_region.longitude)
+        regions[dregion] = (result.disembarkation_region.latitude, result.disembarkation_region.longitude, result.disembarkation_region.import_area)
+        regions[eregion] = (result.embarkation_region.latitude, result.embarkation_region.longitude, result.embarkation_region.export_area)
         key = eregion + "_" + dregion
         item = (eregion, dregion,  0, 0)
         if key in flows:
