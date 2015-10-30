@@ -1266,9 +1266,15 @@ class VoyageManager(models.Manager):
     def cache(cls):
         with cls._lock:
             if not cls._has_loaded:
-                cls._has_loaded = True
                 cls._all = {v.pk: v for v in Voyage.objects.all()}
+                cls._has_loaded = True
         return cls._all
+
+    @classmethod
+    def invalidate_cache(cls):
+        with cls._lock:
+            cls._has_loaded = False
+            cls._all = {}
 
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
