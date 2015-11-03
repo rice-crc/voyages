@@ -115,7 +115,6 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 }
 
 #inner-main-table_wrapper {
-	border: 1px solid #115676;
 }
 
 .estimates-table-form li {
@@ -139,7 +138,7 @@ div.estimates-table-options {
 	padding: 5px 10px 5px 10px;	}
 
 div.estimates-table table.simple-table {
-	border-top: 1px solid #115676
+	border: 1px solid #115676
 }
 	
 div.estimates-table table.simple-table td {
@@ -162,7 +161,6 @@ div.estimates-table table.simple-table td.simple-table-col-label {
 	text-align: left; }
 
 .col_header {
-	white-space: nowrap;
 	height: 25px;
 }
 
