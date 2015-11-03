@@ -60,9 +60,9 @@
     "model": "assessment.exportarea", 
     "fields": {
         "name": "Africa", 
-        "longitude": 9.3438970,
+        "longitude": 9.3438970, 
         "show_at_zoom": 999, 
-        "latitude": 0.0540330,
+        "latitude": 0.0540330, 
         "order_num": 1, 
         "show_on_map": true
     }
@@ -176,9 +176,9 @@
     "model": "assessment.importarea", 
     "fields": {
         "name": "Europe", 
-        "longitude": 5.769177, 
+        "longitude": -8.5619130, 
         "show_at_zoom": 999, 
-        "latitude": 49.054028, 
+        "latitude": 37.2132550, 
         "order_num": 1, 
         "show_on_map": true
     }
@@ -260,9 +260,9 @@
     "model": "assessment.importarea", 
     "fields": {
         "name": "Brazil", 
-        "longitude": -46.0, 
+        "longitude": -39.7548900, 
         "show_at_zoom": 999, 
-        "latitude": -13.0, 
+        "latitude": -18.8645820, 
         "order_num": 8, 
         "show_on_map": true
     }
@@ -272,9 +272,9 @@
     "model": "assessment.importarea", 
     "fields": {
         "name": "Africa", 
-        "longitude": 9.3438970,
+        "longitude": 9.3438970, 
         "show_at_zoom": 999, 
-        "latitude": 0.0540330,
+        "latitude": 0.0540330, 
         "order_num": 9, 
         "show_on_map": true
     }
@@ -284,9 +284,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "Europe", 
-        "longitude": 5.549, 
+        "longitude": -8.5619130, 
         "show_at_zoom": 999, 
-        "latitude": 46.08, 
+        "latitude": 37.2132550, 
         "order_num": 1, 
         "import_area": 1, 
         "show_on_map": true
@@ -297,9 +297,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "Northern U.S.", 
-        "longitude": -72.38, 
+        "longitude": -76.605009, 
         "show_at_zoom": 999, 
-        "latitude": 41.28, 
+        "latitude": 34.526364, 
         "order_num": 2, 
         "import_area": 2, 
         "show_on_map": true
@@ -349,9 +349,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "U.S.A. unspecified", 
-        "longitude": -79.856945, 
+        "longitude": -79.9355400,
         "show_at_zoom": 999, 
-        "latitude": 36.473013, 
+        "latitude": 32.7809600,
         "order_num": 6, 
         "import_area": 2, 
         "show_on_map": false
@@ -726,9 +726,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "Brazil unspecified", 
-        "longitude": -47.220155, 
+        "longitude": -39.7548900, 
         "show_at_zoom": 999, 
-        "latitude": -9.712085, 
+        "latitude": -18.8645820, 
         "order_num": 35, 
         "import_area": 8, 
         "show_on_map": false
@@ -739,9 +739,9 @@
     "model": "assessment.importregion", 
     "fields": {
         "name": "Africa", 
-        "longitude": 9.3438970,
+        "longitude": 9.3438970, 
         "show_at_zoom": 999, 
-        "latitude": 0.0540330,
+        "latitude": 0.0540330, 
         "order_num": 36, 
         "import_area": 9, 
         "show_on_map": true

@@ -702,8 +702,10 @@ var voyagesMap = {
 				var arrowSize = Math.min(maxWidth * 3, 4 * lWeight);
 				var finalPoint = path[path.length - 1];
 				var aux = 0;
+				var copy = path.slice(0);
 				while ((aux = this._trimPolyline(path, arrowSize - lWeight / 2) / 2) < arrowSize) {
 					arrowSize = aux;
+					path = copy;
 				}
 				line = polyLineBuilder(path, lWeight);
 				var virtualPath = path.slice(0);
