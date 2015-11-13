@@ -1283,8 +1283,8 @@ class VoyageManager(models.Manager):
     # avoiding hitting the DB multiple times.
     def get_query_set(self):
         return super(VoyageManager, self).get_query_set().select_related(
-            'voyage_itinerary__principal_place_of_slave_purchase__region__broad_region',
-            'voyage_itinerary__principal_port_of_slave_dis__region__broad_region',
+            'voyage_itinerary__imp_principal_place_of_slave_purchase__region__broad_region',
+            'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
             'voyage_slaves_numbers',
             'voyage_dates',
             'voyage_ship')
