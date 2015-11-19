@@ -97,13 +97,15 @@
 		</div>
 	</li>
 
+	{% get_current_language as LANGUAGE_CODE %}
 	<li id="block06" class="nav_block language_menu">
 		<a href="#" id="language">{% trans "Language" %}</a>
+		<div class="language_menu_{{ LANGUAGE_CODE }}"></div>
 		<div class="linkbox">
 			<ul>
-				{% get_current_language as LANGUAGE_CODE %}
 				{% for lang in LANGUAGES %}
-					<li><a class="language_link" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang.1 }}</a></li>
+					{% get_language_info for lang.0 as lang_info %}
+					<li><a class="language_link language_link_{{ lang.0 }}" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang_info.name_local }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
