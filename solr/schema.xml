@@ -717,11 +717,11 @@
 
     <field name="slave_voyage" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_voyage_number" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="slave_ship_name" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="slave_ship_name" type="ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="slave_ship_name_sort" type="text_en" indexed="true" stored="true" multiValued="false" />
 

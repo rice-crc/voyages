@@ -1287,7 +1287,7 @@ class VoyageManager(models.Manager):
             'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
             'voyage_slaves_numbers',
             'voyage_dates',
-            'voyage_ship')
+            'voyage_ship__imputed_nationality')
 
 
 class Voyage(models.Model):

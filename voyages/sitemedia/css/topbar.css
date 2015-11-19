@@ -46,7 +46,7 @@ html > body #main_nav ul {
 }
 
 #toplinks {
-	width: 780px;
+	width: 840px;
 }
 
 /* Set the lists in horizontal order  */
@@ -56,11 +56,11 @@ html > body #main_nav ul {
 
 /* Main link menu background color */
 #main_nav ul li a:hover, #main_nav li.active a:hover, #main_nav li.active {
-	background: #005B6F;
+	background-color: #005B6F;
 }
 
 .hovered a{
-	background: #005B6F;
+	background-color: #005B6F;
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 }
@@ -76,7 +76,7 @@ html > body #main_nav ul {
 	padding: 8px;
 	padding-bottom: 18px;
 	color: #fff;
-	display: block;
+	display: inline-block;
 	
 	margin: 0;
 	overflow: hidden;
@@ -172,4 +172,24 @@ html > body #main_nav ul {
     font-size: 8pt;
 	width: 100%;
 	margin: 0px 0px 0px 0px;
+}
+
+.language_menu_pt {
+	background-image: url("/static/images/flags/Portugal.png");
+	background-position: 50% 10%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;
+	width: 40px;
+	height: 40px;
+	float: right;
+}
+
+.language_menu_en {
+	background-image: url("/static/images/flags/United-Kingdom.png");
+	background-position: 50% 10%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;
+	width: 40px;
+	height: 40px;
+	float: right;
 }
