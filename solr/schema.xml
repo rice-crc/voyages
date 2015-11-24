@@ -605,6 +605,8 @@
 
     <field name="var_second_landing_place" type="text_en" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_sources_plaintext_search" type="ngram" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_third_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_num_slaves_intended_first_port" type="long" indexed="true" stored="true" multiValued="false" />

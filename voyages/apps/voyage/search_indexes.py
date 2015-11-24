@@ -5,6 +5,7 @@ from datetime import date
 from django.utils import translation
 from django.utils.translation import ugettext as _
 import re
+import unidecode
 
 def getMonth(value):
     return str(value.split(",")[0]).zfill(2)
@@ -336,6 +337,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Sources
     var_sources = indexes.MultiValueField(indexed=True, stored=True, null=True)
     var_sources_plaintext = indexes.CharField(null=True, faceted=True, indexed=True)
+    var_sources_plaintext_search = indexes.NgramField(null=True, faceted=False, indexed=True)
     var_short_ref = indexes.MultiValueField()
     var_long_ref = indexes.CharField(null=True)
 
@@ -516,3 +518,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_sources_plaintext(self, obj):
         return ", ".join(self.prepare_var_sources(obj))
+
+    def prepare_var_sources_plaintext_search(self, obj):
+        import globals
+        mangle_method = globals.search_mangle_methods.get('var_sources', globals.no_mangle)
+        return mangle_method(unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))

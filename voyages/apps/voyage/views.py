@@ -386,7 +386,7 @@ def create_query_dict(var_list):
     for varname in vs:
         mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
         if varname == 'var_sources':
-            query_dict[varname + "__startswith"] = mangle_method(var_list[varname + '_text_search'])
+            query_dict["var_sources_plaintext_search__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_text_fields:
             query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
         elif varname in globals.list_select_fields:
@@ -467,12 +467,9 @@ def prettify_var_list(varlist):
         varname = kvar.split('__')[0]
         is_real_var = False
         fullname = ''
+        accepted_suffixes = varname.endswith(('_idnum', '_plaintext_search'))
         for var in globals.var_dict:
-            if varname == var['var_name']:
-                fullname = var['var_full_name']
-                is_real_var = True
-                break
-            elif varname[-6:] == '_idnum' and varname[:-6] == var['var_name']:
+            if varname == var['var_name'] or (accepted_suffixes and varname.startswith(var['var_name'])):
                 fullname = var['var_full_name']
                 is_real_var = True
                 break
