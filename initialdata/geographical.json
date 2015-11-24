@@ -29,7 +29,7 @@
         "show_on_map": true, 
         "value": 40000, 
         "longitude": "-83.5726350", 
-        "broad_region": "Spanish Circum-Caribbean"
+        "broad_region": "Spanish Mainland Americas"
     }
 },
 {
@@ -4983,7 +4983,7 @@
     "fields": {
         "show_on_main_map": true, 
         "region": 50, 
-        "longitude": "90.0666670", 
+        "longitude": "-90.0666670", 
         "place": "New Orleans", 
         "value": 21601, 
         "latitude": "29.9544400", 
