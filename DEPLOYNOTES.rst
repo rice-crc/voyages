@@ -118,6 +118,7 @@ Run these commands to load all the data fixtures except images.json::
   $ python manage.py loaddata initialdata/sources.json
   $ python manage.py loaddata initialdata/resource_countries.json
   $ python manage.py loaddata initialdata/african_names.json
+  $ python manage.py loaddata initialdata/sites.json
 
 Sync voyage data from legacy system
 

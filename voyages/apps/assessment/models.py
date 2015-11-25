@@ -81,7 +81,7 @@ class Estimate(models.Model):
     """
 
     nation = models.ForeignKey(Nation)
-    year = models.IntegerField(max_length=4)
+    year = models.IntegerField()
     embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
     disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
     embarked_slaves = models.FloatField(null=True, blank=True)

@@ -1,13 +1,12 @@
-Django>=1.5,<1.6
+Django
 lxml
 mysql-python
-south
 hurry.filesize
 django-haystack
 pysolr
 wsgiref
 mock
-django-autocomplete-light==1.4.7
+django-autocomplete-light
 sorl-thumbnail 
 pillow
 bitly_api
@@ -16,4 +15,5 @@ xlwt
 unidecode
 django-password-reset
 openpyxl>=1.9
+django-allauth
 

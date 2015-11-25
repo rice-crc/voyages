@@ -29,91 +29,91 @@ class VoyageBaseForm(forms.Form):
 
 # Voyage
 # Ship, Nation, Owners
-class VoyageShipForm(forms.ModelForm):
+class VoyageShipForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Ship (this is inline).
     """
     class Meta:
         model = VoyageShip
-        widgets = autocomplete_light.get_widgets_dict(VoyageShip)
+        fields = '__all__'
 
 
-class VoyageShipOwnerConnectionForm(forms.ModelForm):
+class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Ship Owner Outcome (this is inline).
     """
     class Meta:
         model = VoyageShipOwnerConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageShipOwnerConnection)
+        fields = '__all__'
 
 
 # Voyage Outcome
-class VoyageOutcomeForm(forms.ModelForm):
+class VoyageOutcomeForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Outcome (this is inline).
     """
     class Meta:
         model = VoyageOutcome
-        widgets = autocomplete_light.get_widgets_dict(VoyageOutcome)
+        fields = '__all__'
 
 
 # Voyage Itinerary
-class VoyageItineraryForm(forms.ModelForm):
+class VoyageItineraryForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Itinerary (this is inline).
     """
     class Meta:
         model = VoyageItinerary
-        widgets = autocomplete_light.get_widgets_dict(VoyageItinerary)
+        fields = '__all__'
 
 
 # Voyage Dates
-class VoyageDatesForm(forms.ModelForm):
+class VoyageDatesForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Dates (this is inline).
     """
     class Meta:
         model = VoyageDates
-        widgets = autocomplete_light.get_widgets_dict(VoyageDates)
+        fields = '__all__'
 
 
 # Voyage Captain and Crew
-class VoyageCaptainConnectionForm(forms.ModelForm):
+class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Captain Connection (this is inline).
     """
     class Meta:
         model = VoyageCaptainConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageCaptainConnection)
+        fields = '__all__'
 
 
-class VoyageCrewForm(forms.ModelForm):
+class VoyageCrewForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Crew (this is inline).
     """
     class Meta:
         model = VoyageCrew
-        widgets = autocomplete_light.get_widgets_dict(VoyageCrew)
+        fields = '__all__'
 
 
 # Voyage Slaves (numbers + characteristics)
-class VoyageSlavesNumbersForm(forms.ModelForm):
+class VoyageSlavesNumbersForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
     class Meta:
         model = VoyageSlavesNumbers
-        widgets = autocomplete_light.get_widgets_dict(VoyageSlavesNumbers)
+        fields = '__all__'
 
 
 # Voyage Sources
-class VoyageSourcesConnectionForm(forms.ModelForm):
+class VoyageSourcesConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
     class Meta:
         model = VoyageSourcesConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageSourcesConnection)
+        fields = '__all__'
 
 
 class VoyagesSourcesAdminForm(forms.ModelForm):
@@ -124,6 +124,7 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class': 'tinymcetextarea'}))
 
     class Meta:
+        fields = '__all__'
         model = VoyageSources
 
 class SimpleTextForm(VoyageBaseForm):

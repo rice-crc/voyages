@@ -47,31 +47,12 @@ STATICFILES_FINDERS = (
    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    # defaults
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    "django.core.context_processors.request",
-    # version
-    'voyages.version_context',
-    "voyages.apps.voyage.context_processors.voyage_span",
-    )
-
 AUTHENTICATION_BACKENDS = (
     'voyages.apps.contribute.backends.EmailOrUsernameModelBackend',
-    'django.contrib.auth.backends.ModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 
@@ -93,18 +74,43 @@ ROOT_URLCONF = 'voyages.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'voyages.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # defaults
+                "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.media",
+                "django.core.context_processors.static",
+                "django.core.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                "django.core.context_processors.request",
+                # version
+                'voyages.version_context',
+                "voyages.apps.voyage.context_processors.voyage_span",
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
+            ],
+            'string_if_invalid': 'Nothing',
+            'debug': True,
+        },
+    },
+]
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
 
 INSTALLED_APPS = (
+    'autocomplete_light',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -113,14 +119,18 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
+
     #Flatpages apps
     'django.contrib.flatpages',
 
     'django.contrib.admindocs',
     'django.contrib.humanize',
-    'autocomplete_light',
     'sorl.thumbnail',
-    'south',
 
     # used to index django models
     'haystack',
@@ -149,6 +159,7 @@ I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-
 MAP_MISSING_SOURCE_ENABLED = True
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 LANGUAGE_CODE='en'
 from django.utils.translation import ugettext_lazy as _
@@ -162,19 +173,11 @@ DEFAULT_LANGUAGE = 0
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'
 
-# disable south tests and migrations when running tests
-# - without these settings, test fail on loading initial fixtured data
-SKIP_SOUTH_TESTS = False
-SOUTH_TESTS_MIGRATE = False
-
 LOGIN_URL = '/contribute/login/'
-LOGIN_REDIRECT_URL = LOGIN_URL
+LOGIN_REDIRECT_URL = '/contribute/'
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
-
-# Default empty string
-TEMPLATE_STRING_IF_INVALID = "Nothing"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 

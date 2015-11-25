@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django import template
-from django.template.loader import add_to_builtins
+from django.template.base import add_to_builtins
 from django.utils.translation import ugettext as _
 
 import logging
