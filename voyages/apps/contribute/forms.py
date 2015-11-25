@@ -13,6 +13,7 @@ class AdminFaqAdminForm(forms.ModelForm):
 
     class Meta:
         model = AdminFaq
+        fields = '__all__'
 
 class LoginForm(AuthenticationForm):
     x = 1

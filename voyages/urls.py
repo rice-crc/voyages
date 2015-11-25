@@ -45,6 +45,8 @@ urlpatterns = patterns('',
 
     # Translation support for javascript code.
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+
+    url(r'^accounts/', include('allauth.urls')),
 )
 # XML generated sitemap
 sitemaps = {
@@ -63,7 +65,7 @@ urlpatterns += patterns('',
 
     # Admin documentation
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    
+
     # Admin management  
     url(r'^admin/', include(admin.site.urls)),
 )

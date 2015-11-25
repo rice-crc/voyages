@@ -42,6 +42,10 @@
 	to access the Contribute section (below).{% endblocktrans %}
 </p>
 
+{% if user.is_authenticated %}
+	{% trans "You are already signed in." %}
+{% else %}
+
 <h2>{% trans "Sign in" %}</h2>
 
 <p>
@@ -73,6 +77,9 @@
                 </td>
             </tr>
 		</table>
+		<a id="google_login" href="/accounts/google/login" class="btn btn-success">
+        	{% trans 'Sign in with Google' %}
+      	</a>
 		<input type="hidden" name="next" value="{% url 'contribute:index' %}" />
 	</form>
 </div>
@@ -83,5 +90,6 @@
 <p>
     {% blocktrans %}If you have forgotten your password click <a href="{{ password_reset_url }}">Forgotten Password</a>.{% endblocktrans %}
 </p>
+{% endif %}
 
 {% endblock %}

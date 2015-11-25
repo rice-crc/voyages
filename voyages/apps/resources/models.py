@@ -18,9 +18,9 @@ class Image(models.Model):
     source = models.CharField(max_length=500, null=True, blank=True)
 
     ready_to_go = models.BooleanField(default=False)
-    order_num = models.IntegerField('Code value', null=True, blank=True, max_length=2)
+    order_num = models.IntegerField('Code value', null=True, blank=True)
 
-    date = models.IntegerField('Date(Year YYYY)', max_length=4, null=True, blank=True)
+    date = models.IntegerField('Date(Year YYYY)', null=True, blank=True)
 
     # Category
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")
@@ -106,7 +106,7 @@ class AfricanName(models.Model):
     age = models.IntegerField(blank=True, null=True)
     height = models.FloatField(blank=True, null=True, verbose_name="Height in inches")
     source = models.CharField(max_length=30, blank=True, null=True, verbose_name="Modern name")
-    date_arrived = models.IntegerField(max_length=4, verbose_name="Voyage year", blank=True, null=True)
+    date_arrived = models.IntegerField(verbose_name="Voyage year", blank=True, null=True)
     ship_name = models.CharField(max_length=70, verbose_name="Ship Name", blank=True, null=True)
     voyage_number = models.IntegerField(verbose_name="Voyage ID")
 
