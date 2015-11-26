@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class AdminFaq(models.Model):
     """
@@ -18,3 +19,12 @@ class AdminFaq(models.Model):
         verbose_name_plural = 'Frequently Asked Question For Admins'
         #app_label = "AdminHelp"
         db_table = "contribute_adminfaq"
+
+class UserProfile(models.Model):
+    """
+    This model stores additional information related to users of the site.
+    """
+
+    user = models.OneToOneField(User)
+    institution = models.TextField(max_length=255)
+    new_material_and_sources = models.TextField(max_length=1000)

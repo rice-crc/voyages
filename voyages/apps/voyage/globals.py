@@ -1670,7 +1670,6 @@ summary_statistics = [
      'has_total' : False, 'is_percentage' : False},
 ]
 
-methodology_items = SortedDict()
 methodology_items = [
     {'number': 1,
      'name': "Introduction",

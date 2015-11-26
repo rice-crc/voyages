@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.views.generic.edit import FormView
+from voyages.apps.contribute.forms import SignUpForm
 
 def index(request):
     """

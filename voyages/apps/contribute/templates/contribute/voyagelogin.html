@@ -8,7 +8,7 @@
 
 {% url 'voyage:guide' as voyage_guide_url %}
 {% url 'contribute:guidelines' as contribute_guidelines_url %}
-{% url 'contribute:newuser' as contribute_newuser_url %}
+{% url 'account_signup' as contribute_newuser_url %}
 {% url 'password_reset_recover'  as password_reset_url %}
 
 <p>
@@ -77,11 +77,13 @@
                 </td>
             </tr>
 		</table>
-		<a id="google_login" href="/accounts/google/login" class="btn btn-success">
-        	{% trans 'Sign in with Google' %}
-      	</a>
 		<input type="hidden" name="next" value="{% url 'contribute:index' %}" />
 	</form>
+		<form action="/accounts/google/login">
+			<button type="submit" class="google_login_btn">
+				<img src="{{ STATIC_URL}}images/contribute/google_logo.png" width="16px" height="16px" /> {% trans 'Sign in with Google' %}
+			</button>
+      	</form>
 </div>
 
 <p>

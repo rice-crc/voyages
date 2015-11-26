@@ -278,6 +278,11 @@ Mark text to be translated in template:
 
   See more information on https://docs.djangoproject.com/en/1.6/topics/i18n/translation/
 
+Captchas
+------------------------------------------------
+
+apt-get -y install libz-dev libjpeg-dev libfreetype6-dev python-dev
+
 Extra tools: (residing in voyages/extratools.py)
 ------------------------------------------------
 Custom highlighter::
