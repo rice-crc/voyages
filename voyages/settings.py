@@ -119,11 +119,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
+    'captcha',
 
     #Flatpages apps
     'django.contrib.flatpages',
@@ -150,6 +146,12 @@ INSTALLED_APPS = (
     'voyages.apps.contribute',
     'voyages.apps.help',
     'voyages.apps.static_content',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 )
 
 I18N_HELPER_DEBUG = False
@@ -161,7 +163,14 @@ MAP_MISSING_SOURCE_ENABLED = True
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-LANGUAGE_CODE='en'
+ACCOUNT_SIGNUP_FORM_CLASS = 'voyages.apps.contribute.forms.SignUpForm'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LANGUAGE_CODE = 'en'
+
 from django.utils.translation import ugettext_lazy as _
 
 LANGUAGES = (
