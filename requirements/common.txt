@@ -2,7 +2,6 @@ Django
 lxml
 mysql-python
 hurry.filesize
-django-haystack
 pysolr
 wsgiref
 mock
