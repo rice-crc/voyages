@@ -14,4 +14,4 @@ def index(request):
     if request.user.is_authenticated():
         return render(request, "contribute/index.html")
     else:
-        return HttpResponseRedirect(reverse('contribute:login'))
+        return HttpResponseRedirect(reverse('account_login'))
