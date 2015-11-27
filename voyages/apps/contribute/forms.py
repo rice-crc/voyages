@@ -29,7 +29,9 @@ class SignUpForm(forms.Form):
     last_name = forms.CharField(max_length=30, label=_('Last name'))
     institution = forms.CharField(max_length=255, label=_('Institution'), required=False)
     new_material_and_sources = forms.CharField(max_length=1000, label=_('Brief description of new material and sources'), required=False)
-
+    terms = forms.CharField(widget=forms.Textarea, required=False, label=_('Terms and conditions'),
+                            initial=_('All the legal stuff goes here'))
+    agree_to_terms = forms.BooleanField(required=True, label=_('Agree to the terms and conditions above'))
     captcha = CaptchaField()
 
     # This init method will reorder the fields so that
@@ -39,14 +41,17 @@ class SignUpForm(forms.Form):
         key_order = [
             'first_name',
             'last_name',
-            'email',
             'institution',
             'new_material_and_sources',
+            'email',
             'password1',
             'password2',
-            'captcha'
+            'captcha',
+            'terms',
+            'agree_to_terms',
         ]
         self.fields = OrderedDict(sorted(self.fields.items(), key=lambda k: key_order.index(k[0]) if k[0] in key_order else 1000))
+        self.fields['terms'].widget.attrs['readonly'] = True
 
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
