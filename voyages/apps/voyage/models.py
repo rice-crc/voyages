@@ -781,7 +781,7 @@ class VoyageSlavesNumbers(models.Model):
     slave_deaths_between_africa_america = models.IntegerField \
             ("Slaves death between Africa and Americas (SLADVOY)",
              null=True, blank=True)
-    slave_deaths_between_africa_america = models.IntegerField \
+    slave_deaths_between_arrival_and_sale = models.IntegerField \
             ("Slaves death before arrival and sale (SLADAMER)",
              null=True, blank=True)
     num_slaves_intended_first_port = models.IntegerField \
