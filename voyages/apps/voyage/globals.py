@@ -397,14 +397,16 @@ def formatYear(year, month=0):
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
 def calculate_maxmin_years():
+    def_first = 1514
+    def_last = 1866
     if models.VoyageDates.objects.count() > 1:
         voyage_span_first_year = models.VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
         voyage_span_last_year = models.VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
     else:
-        voyage_span_first_year = 1514
-        voyage_span_last_year = 1866
+        voyage_span_first_year = def_first
+        voyage_span_last_year = def_last
 
-    return voyage_span_first_year, voyage_span_last_year
+    return voyage_span_first_year or def_first, voyage_span_last_year or def_last
 
 sfirst_year, slast_year = calculate_maxmin_years()
 mfirst_year = int(sfirst_year)
