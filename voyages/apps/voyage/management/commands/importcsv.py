@@ -3,7 +3,6 @@ from voyages.apps.voyage.models import *
 import unicodecsv
 
 class Command(BaseCommand):
-    args = '<csv_file>'
     help = 'Imports a CSV file with the full data-set and converts the data to the Django models. The user can ' \
            'decide to apply the results to the DB or generate .json files that can be imported into DBs with ' \
            'the loaddata command.'
@@ -534,7 +533,7 @@ class Command(BaseCommand):
                                         'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}'
             sql = update_query_template.format(
                 '`' if target_db == 'mysql' else '"',
-                Voyage._mkilleta.db_table,
+                Voyage._meta.db_table,
                 related_model._meta.db_table,
                 fk_on_related,
                 fk_on_voyages

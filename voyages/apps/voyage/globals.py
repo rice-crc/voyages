@@ -1312,7 +1312,7 @@ var_dict = [
      "is_general": True},
     {'var_name': 'var_first_dis_of_slaves',
      'spss_name': 'date_land1',
-     'var_full_name': 'Date vessel arriveds with slaves',
+     'var_full_name': 'Date vessel arrived with slaves',
      'var_type': 'date',
      'var_category': 'Voyage Dates',
      "is_estimate": False,
