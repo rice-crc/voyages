@@ -119,6 +119,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
+    'django_extensions',
+
     'captcha',
 
     #Flatpages apps
