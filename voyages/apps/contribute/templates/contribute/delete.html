@@ -1,0 +1,106 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+
+<h1>{% trans "Delete contribution" %}</h1>
+
+<p>
+    {% trans "Please select a voyage and explain the reasons why it should be removed from the database." %}
+</p>
+
+<div>
+    <label for="voyage_id_input">{% trans "Voyage ID" %}:</label>
+    <input type="number" id="voyage_id_input">
+    <button id="lookup_btn" onclick="lookUp();">{% trans "Look up" %}</button>
+</div>
+
+<p></p>
+
+<table id="results_table" style="display: none;">
+    <thead>
+    <tr>
+        <th>{% trans "Voyage ID" %}</th>
+        <th>{% trans "Captain" %}</th>
+        <th>{% trans "Ship" %}</th>
+        <th>{% trans "Year arrived in the Americas" %}</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for voyage in voyage_selection %}
+            <tr id="row_{{ voyage.voyage_id }}">
+                <td>{{ voyage.voyage_id }}</td>
+                <td>{{ voyage.captain }}</td>
+                <td>{{ voyage.ship }}</td>
+                <td>{{ voyage.year_arrived }}</td>
+                <td><a href="#" onclick="removeSelection({{ voyage.voyage_id }});">x</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p></p>
+
+<div>
+    <form action="{% url 'contribute:delete' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="delete_ids" id="delete_ids_hidden">
+        {{ form.delete_ids.errors }}
+        <div>
+            <label for="notes_input">{% trans "Please tell us why the voyage(s) above should be removed:" %}</label><br/>
+            <textarea id="notes_input" name="notes"></textarea>
+            {{ form.notes.errors }}
+        </div>
+    </form>
+    <p>
+        <button id="confirm_btn" onclick="submitForm();">{% trans "Submit" %}</button>
+    </p>
+</div>
+<script type="text/javascript">
+    var delete_ids = [
+        {% for voyage in voyage_selection %}
+            {{ voyage.voyage_id }},
+        {% endfor %}
+    ];
+    if (delete_ids.length > 0) $('#results_table').show();
+
+    function lookUp() {
+        var lookUpId = parseInt($('#voyage_id_input').val());
+        if (delete_ids.indexOf(lookUpId) != -1) {
+            alert('{% trans "Voyage already added to selection" %}');
+            return;
+        }
+        $.post(
+            "{% url 'contribute:voyage_ajax' %}",
+            { "voyage_id": lookUpId },
+            function(data) {
+                if (data.hasOwnProperty('error')) {
+                    alert(data.error);
+                } else {
+                    delete_ids.push(lookUpId);
+                    $('#results_table > tbody:last-child').append('<tr id="row_' + data.voyage_id + '"><td>' +
+                        data.voyage_id +
+                        '</td><td>' + data.captain + '</td>' +
+                        '</td><td>' + data.ship + '</td>' +
+                        '</td><td>' + data.year_arrived + '</td>' +
+                        '<td><a href="#" onclick="removeSelection(' + data.voyage_id + ');">x</a></td></tr>');
+                    $('#results_table').show();
+                    $('#voyage_id_input').val('');
+                }
+            });
+    }
+
+    function removeSelection(id) {
+        var index = delete_ids.indexOf(id);
+        if (index >= 0) {
+            delete_ids.splice(index, 1);
+        }
+        $('#row_' + id).remove();
+        if (delete_ids.length == 0) $('#results_table').hide();
+    }
+
+    function submitForm() {
+        $('#delete_ids_hidden').val(delete_ids.join());
+        $('form').submit();
+    }
+</script>
+{% endblock %}

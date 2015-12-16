@@ -1,10 +1,11 @@
-from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from voyages.apps.contribute.models import *
-from voyages.extratools import AdvancedEditor
-from django.utils.translation import ugettext_lazy as _
 from captcha.fields import CaptchaField
 from collections import OrderedDict
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+from django.utils.translation import ugettext_lazy as _
+from voyages.apps.contribute.models import *
+from voyages.apps.voyage.models import Voyage
+from voyages.extratools import AdvancedEditor
 
 class AdminFaqAdminForm(forms.ModelForm):
     """
@@ -66,3 +67,28 @@ class SignUpForm(forms.Form):
         profile.institution = self.cleaned_data['institution']
         profile.new_material_and_sources = self.cleaned_data['new_material_and_sources']
         profile.save()
+
+class DeleteContributionForm(forms.Form):
+    """
+    This form will gather a collection of voyage_id values that
+    should be deleted according to this contribution.
+    """
+    delete_ids = forms.CharField(max_length=255, required=True)
+    notes = forms.CharField(max_length=1000, required=True)
+
+    def clean_delete_ids(self):
+        data = self.cleaned_data['delete_ids']
+        # Ensure that the CSV string data only contains voyage_ids
+        # that are current present in the database.
+        try:
+            ids = [int(x) for x in data.split(',')]
+        except:
+            raise forms.ValidationError(_('Improperly formatted field'))
+        id_count = len(ids)
+        if id_count == 0:
+            raise forms.ValidationError(_('At least one voyage_id should be provided'))
+        matches = Voyage.objects.filter(voyage_id__in=ids).count()
+        if matches != id_count:
+            raise forms.ValidationError(_('Some of the provided voyage_ids is invalid'))
+        return ids
+

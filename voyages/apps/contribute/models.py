@@ -30,11 +30,73 @@ class UserProfile(models.Model):
     institution = models.CharField(max_length=255)
     new_material_and_sources = models.TextField(max_length=1000)
 
-class ImputedArticleSource(models.Model):
+
+class InterimVoyage(models.Model):
     """
-    Article source for an imputed voyage.
+    Describes an interim voyage, which may be a new entry in the database,
+    a modification of an existing entry or the merger of several existing
+    entries.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
+
+    # Ship, nation, owners
+    name_of_vessel = models.CharField(max_length=255, null=True, blank=True)
+    year_ship_constructed = models.IntegerField(null=True)
+    year_ship_registered = models.IntegerField(null=True)
+    ship_construction_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    ship_registration_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True)
+    rig_of_vessel = models.ForeignKey(voyage.models.RigOfVessel, related_name='+', null=True)
+    tonnage_of_vessel = models.IntegerField(null=True)
+    ton_type = models.ForeignKey(voyage.models.TonType, related_name='+', null=True)
+    guns_mounted = models.IntegerField(null=True)
+    first_ship_owner = models.CharField(max_length=255, null=True, blank=True)
+    second_ship_owner = models.CharField(max_length=255, null=True, blank=True)
+    additional_ship_owners = models.TextField(max_length=1000, null=True, blank=True)
+
+    # Outcome
+    voyage_outcome = models.ForeignKey(voyage.models.ParticularOutcome, related_name='+', null=True)
+    african_resistance = models.ForeignKey(voyage.models.Resistance, related_name='+', null=True)
+
+    # Itinerary
+    first_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    second_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    first_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    second_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    port_of_departure = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    number_of_ports_called_prior_to_slave_purchase = models.IntegerField(null=True)
+    first_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    second_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    third_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    place_of_call_before_atlantic_crossing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(null=True)
+    first_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    second_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    third_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    principal_place_of_slave_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+
+    # Dates
+    date_departure = models.CommaSeparatedIntegerField(max_length=10,blank=True, null=True)
+    date_slave_purchase_began = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_vessel_left_last_slaving_port = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_first_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_second_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_third_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_return_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_voyage_completed = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    length_of_middle_passage = models.IntegerField(null=True)
+
+    # Captains
+    first_captain = models.CharField(max_length=255, null=True, blank=True)
+    second_captain = models.CharField(max_length=255, null=True, blank=True)
+    third_captain = models.CharField(max_length=255, null=True, blank=True)
+
+class InterimArticleSource(models.Model):
+    """
+    Article source for an interim voyage.models.
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='article_sources')
     authors = models.TextField(max_length=1000, null=True, blank=True)
     article_title = models.CharField(max_length=255, null=True, blank=True)
@@ -45,11 +107,11 @@ class ImputedArticleSource(models.Model):
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
 
-class ImputedBookSource(models.Model):
+class InterimBookSource(models.Model):
     """
-    Book source for an imputed voyage.
+    Book source for an interim voyage.models.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='book_sources')
     authors = models.TextField(max_length=1000, null=True, blank=True)
     book_title = models.CharField(max_length=255, null=True, blank=True)
@@ -60,22 +122,22 @@ class ImputedBookSource(models.Model):
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
 
-class ImputedOtherSource(models.Model):
+class InterimOtherSource(models.Model):
     """
-    Book source for an imputed voyage.
+    Book source for an interim voyage.models.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='other_sources')
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     page = models.CharField(max_length=20, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
 
-class ImputedPrimarySource(models.Model):
+class InterimPrimarySource(models.Model):
     """
-    Primary source for an imputed voyage.
+    Primary source for an interim voyage.models.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='primary_sources')
     name_of_library_or_archive = models.CharField(max_length=255, null=True, blank=True)
     location_of_library_or_archive = models.CharField(max_length=255, null=True, blank=True)
@@ -84,77 +146,16 @@ class ImputedPrimarySource(models.Model):
     document_detail = models.CharField(max_length=255, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
 
-class ImputedSlaveNumber(models.Model):
+class InterimSlaveNumber(models.Model):
     """
-    An imputed number corresponding to some Voyage variable.
+    An interim number corresponding to some Voyage variable.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='slave_numbers')
     var_name = models.CharField(
         'Slave number code-book variable name', max_length=20,
         null=False, blank=False)
     number = models.IntegerField('Number')
-
-class ImputedVoyage(models.Model):
-    """
-    Describes an imputed voyage, which may be a new entry in the database,
-    a modification of an existing entry or the merger of several existing
-    entries.
-    """
-
-    # Ship, nation, owners
-    name_of_vessel = models.CharField(max_length=255, null=True, blank=True)
-    year_ship_constructed = models.IntegerField(null=True)
-    year_ship_registered = models.IntegerField(null=True)
-    ship_construction_place = models.ForeignKey(voyage.Place, null=True)
-    ship_registration_place = models.ForeignKey(voyage.Place, null=True)
-    national_carrier = models.ForeignKey(voyage.Nation, null=True)
-    rig_of_vessel = models.ForeignKey(voyage.RigOfVessel, null=True)
-    tonnage_of_vessel = models.IntegerField(null=True)
-    ton_type = models.ForeignKey(voyage.TonType, null=True)
-    guns_mounted = models.IntegerField(null=True)
-    first_ship_owner = models.CharField(max_length=255, null=True, blank=True)
-    second_ship_owner = models.CharField(max_length=255, null=True, blank=True)
-    additional_ship_owners = models.TextField(max_length=1000, null=True, blank=True)
-
-    # Outcome
-    voyage_outcome = models.ForeignKey(voyage.ParticularOutcome, null=True)
-    african_resistance = models.ForeignKey(voyage.Resistance, null=True)
-
-    # Itinerary
-    first_port_intended_embarkation = models.ForeignKey(voyage.Place, null=True)
-    second_port_intended_embarkation = models.ForeignKey(voyage.Place, null=True)
-    first_port_intended_disembarkation = models.ForeignKey(voyage.Place, null=True)
-    second_port_intended_disembarkation = models.ForeignKey(voyage.Place, null=True)
-    port_of_departure = models.ForeignKey(voyage.Place, null=True)
-    number_of_ports_called_prior_to_slave_purchase = models.IntegerField(null=True)
-    first_place_of_slave_purchase = models.ForeignKey(voyage.Place, null=True)
-    second_place_of_slave_purchase = models.ForeignKey(voyage.Place, null=True)
-    third_place_of_slave_purchase = models.ForeignKey(voyage.Place, null=True)
-    principal_place_of_slave_purchase = models.ForeignKey(voyage.Place, null=True)
-    place_of_call_before_atlantic_crossing = models.ForeignKey(voyage.Place, null=True)
-    number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(null=True)
-    first_place_of_landing = models.ForeignKey(voyage.Place, null=True)
-    second_place_of_landing = models.ForeignKey(voyage.Place, null=True)
-    third_place_of_landing = models.ForeignKey(voyage.Place, null=True)
-    principal_place_of_slave_disembarkation = models.ForeignKey(voyage.Place, null=True)
-    port_voyage_ended = models.ForeignKey(voyage.Place, null=True)
-
-    # Dates
-    date_departure = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_slave_purchase_began = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_vessel_left_last_slaving_port = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_first_slave_disembarkation = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_second_slave_disembarkation = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_third_slave_disembarkation = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_return_departure = models.CommaSeparatedIntegerField(blank=True, null=True)
-    date_voyage_completed = models.CommaSeparatedIntegerField(blank=True, null=True)
-    length_of_middle_passage = models.IntegerField(null=True)
-
-    # Captains
-    first_captain = models.CharField(max_length=255, null=True, blank=True)
-    second_captain = models.CharField(max_length=255, null=True, blank=True)
-    third_captain = models.CharField(max_length=255, null=True, blank=True)
 
 class ContributionNote(models.Model):
     """
@@ -167,14 +168,24 @@ class ContributionNote(models.Model):
         'The note/comment',
         max_length=1024, null=False, blank=False)
 
+class ContributionStatus:
+    initial = 0
+    committed = 1
+    approved = 2
+    discarded = 3
+
 class BaseVoyageContribution(models.Model):
     """
     Base (abstract) model for all types of contributions.
     """
     contributor = models.ForeignKey(User, null=False,
-                                    related_name='contribution_user')
+                                    related_name='+')
     notes = models.ManyToManyField(
-        ContributionNote, help_text='Notes for the contribution')
+        ContributionNote, related_name='+',
+        help_text='Notes for the contribution')
+    # see the enumeration ContributionStatus
+    status = models.IntegerField(
+        'Status', help_text='Indicates whether the contribution is still being edited, committed, discarded etc')
 
     class Meta:
         abstract = True
@@ -190,14 +201,15 @@ class DeleteVoyageContribution(BaseVoyageContribution):
     """
     deleted_voyages_ids = models.CommaSeparatedIntegerField(
         'Deleted voyage ids',
+        max_length=255,
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
 class EditVoyageContribution(BaseVoyageContribution):
     """
     A contribution that consists of an exiting voyage being edited.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
-                                       related_name='imputed_voyage')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='+')
     edited_voyage_id = models.IntegerField(
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
@@ -206,15 +218,16 @@ class MergeVoyagesContribution(BaseVoyageContribution):
     """
     A contribution that consists of merging existing voyages.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
-                                       related_name='imputed_voyage')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='+')
     merged_voyages_ids = models.CommaSeparatedIntegerField(
         'Merged voyage ids',
+        max_length=255,
         help_text='The voyage_id of each Voyage being merged by this contribution')
 
 class NewVoyageContribution(BaseVoyageContribution):
     """
     A contribution that consists of a new voyage being added.
     """
-    imputed_voyage = models.ForeignKey(ImputedVoyage, null=False,
-                                       related_name='imputed_voyage')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='+')
