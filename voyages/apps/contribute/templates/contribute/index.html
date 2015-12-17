@@ -8,6 +8,7 @@
 {% block center-content %}
 <div class="white-board">
 	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
+
 	<ul>
 		{% if request.user.is_staff %}
 		<!-- Is enabled only if the user is a staff member -->
@@ -17,8 +18,28 @@
 		{% endif %}
 
 		<li>
-			<h3><a href="{% url 'contribute:delete' %}">{% trans "Recommend voyage deletion" %}</a></h3>
+			<h3><a href="{% url 'contribute:new_voyage' %}">{% trans "Include a new voyage" %}</a></h3>
+		</li>
+		<li>
+			<h3><a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a></h3>
+		</li>
+		<li>
+			<h3><a href="{% url 'contribute:merge_voyage' %}">{% trans "Merge voyages" %}</a></h3>
+		</li>
+		<li>
+			<h3><a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a></h3>
 		</li>
 	</ul>
+
+	{% for c in contributions %}
+		{% if forloop.first %}
+			<h2>Pending contributions</h2>
+			<ul>
+		{% endif %}
+		<li><a href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">{{ c.id }} - {{ c.type }}</a></li>
+		{% if forloop.last %}
+			</ul>
+		{% endif %}
+	{% endfor %}
 </div>
 {% endblock %}

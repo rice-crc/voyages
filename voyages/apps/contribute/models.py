@@ -40,44 +40,44 @@ class InterimVoyage(models.Model):
 
     # Ship, nation, owners
     name_of_vessel = models.CharField(max_length=255, null=True, blank=True)
-    year_ship_constructed = models.IntegerField(null=True)
-    year_ship_registered = models.IntegerField(null=True)
-    ship_construction_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    ship_registration_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True)
-    rig_of_vessel = models.ForeignKey(voyage.models.RigOfVessel, related_name='+', null=True)
-    tonnage_of_vessel = models.IntegerField(null=True)
-    ton_type = models.ForeignKey(voyage.models.TonType, related_name='+', null=True)
-    guns_mounted = models.IntegerField(null=True)
+    year_ship_constructed = models.IntegerField(null=True, blank=True)
+    year_ship_registered = models.IntegerField(null=True, blank=True)
+    ship_construction_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    ship_registration_place = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True, blank=True)
+    rig_of_vessel = models.ForeignKey(voyage.models.RigOfVessel, related_name='+', null=True, blank=True)
+    tonnage_of_vessel = models.IntegerField(null=True, blank=True)
+    ton_type = models.ForeignKey(voyage.models.TonType, related_name='+', null=True, blank=True)
+    guns_mounted = models.IntegerField(null=True, blank=True)
     first_ship_owner = models.CharField(max_length=255, null=True, blank=True)
     second_ship_owner = models.CharField(max_length=255, null=True, blank=True)
     additional_ship_owners = models.TextField(max_length=1000, null=True, blank=True)
 
     # Outcome
-    voyage_outcome = models.ForeignKey(voyage.models.ParticularOutcome, related_name='+', null=True)
-    african_resistance = models.ForeignKey(voyage.models.Resistance, related_name='+', null=True)
+    voyage_outcome = models.ForeignKey(voyage.models.ParticularOutcome, related_name='+', null=True, blank=True)
+    african_resistance = models.ForeignKey(voyage.models.Resistance, related_name='+', null=True, blank=True)
 
     # Itinerary
-    first_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    second_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    first_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    second_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    port_of_departure = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    number_of_ports_called_prior_to_slave_purchase = models.IntegerField(null=True)
-    first_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    second_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    third_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    place_of_call_before_atlantic_crossing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(null=True)
-    first_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    second_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    third_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    principal_place_of_slave_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
-    port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True)
+    first_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    second_port_intended_embarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    first_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    second_port_intended_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    port_of_departure = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    number_of_ports_called_prior_to_slave_purchase = models.IntegerField(null=True, blank=True)
+    first_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    second_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    third_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    place_of_call_before_atlantic_crossing = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(null=True, blank=True)
+    first_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    second_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    third_place_of_landing = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    principal_place_of_slave_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
 
     # Dates
-    date_departure = models.CommaSeparatedIntegerField(max_length=10,blank=True, null=True)
+    date_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
     date_slave_purchase_began = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
     date_vessel_left_last_slaving_port = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
     date_first_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
@@ -85,7 +85,7 @@ class InterimVoyage(models.Model):
     date_third_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
     date_return_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
     date_voyage_completed = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    length_of_middle_passage = models.IntegerField(null=True)
+    length_of_middle_passage = models.IntegerField(null=True, blank=True)
 
     # Captains
     first_captain = models.CharField(max_length=255, null=True, blank=True)
@@ -169,7 +169,7 @@ class ContributionNote(models.Model):
         max_length=1024, null=False, blank=False)
 
 class ContributionStatus:
-    initial = 0
+    pending = 0
     committed = 1
     approved = 2
     discarded = 3
