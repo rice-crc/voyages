@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -17,7 +17,10 @@ def index(request):
     Or return to the login page if the user has not logged in yet
     """
     if request.user.is_authenticated():
-        return render(request, "contribute/index.html")
+        contributions = [{'type': 'edit', 'id': x.pk} for x in EditVoyageContribution.objects.filter(contributor=request.user)] +\
+            [{'type': 'merge', 'id': x.pk} for x in MergeVoyagesContribution.objects.filter(contributor=request.user)] +\
+            [{'type': 'new', 'id': x.pk} for x in NewVoyageContribution.objects.filter(contributor=request.user)]
+        return render(request, "contribute/index.html", {'contributions': contributions})
     else:
         return HttpResponseRedirect(reverse('account_login'))
 
@@ -70,5 +73,45 @@ def delete(request):
             voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
     else:
         form = DeleteContributionForm()
-
     return render(request, 'contribute/delete.html', {'form': form, 'voyage_selection': voyage_selection})
+
+contribution_model_by_type = {
+    'edit': EditVoyageContribution,
+    'merge': MergeVoyagesContribution,
+    'new': NewVoyageContribution
+}
+
+@login_required
+def interim(request, contribution_type, contribution_id):
+    notes = ''
+    model = contribution_model_by_type.get(contribution_type)
+    if model is None:
+        raise Http404
+    contribution = model.objects.get(pk=contribution_id)
+    if contribution.status != ContributionStatus.pending:
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        notes = request.POST.get('all_notes', '')
+        form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('contribute:thanks'))
+    else:
+        form = InterimVoyageForm(instance=contribution.interim_voyage)
+    return render(request, 'contribute/interim.html',
+                  {'form': form, 'notes': notes})
+
+@login_required
+def new_voyage_contribution(request):
+    interim_voyage = InterimVoyage()
+    interim_voyage.save()
+    contrib = NewVoyageContribution()
+    contrib.contributor = request.user
+    contrib.interim_voyage = interim_voyage
+    contrib.status = ContributionStatus.pending
+    contrib.save()
+    return HttpResponseRedirect(reverse(
+        'contribute:interim', kwargs={'contribution_type': 'new', 'contribution_id': contrib.pk}))
+
+def under_construction(request):
+    return JsonResponse({'error': 'UNDER CONSTRUCTION'})

@@ -92,3 +92,7 @@ class DeleteContributionForm(forms.Form):
             raise forms.ValidationError(_('Some of the provided voyage_ids is invalid'))
         return ids
 
+class InterimVoyageForm(forms.ModelForm):
+    class Meta:
+        model = InterimVoyage
+        fields = '__all__'
