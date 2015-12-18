@@ -9,6 +9,7 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
 
     this.lookUp = function () {
         var lookUpId = parseInt($('#voyage_id_input').val());
+        if (isNaN(lookUpId)) return;
         if (self.selection.indexOf(lookUpId) != -1) {
             alert(gettext('Voyage already added to selection'));
             return;
@@ -20,7 +21,14 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
                 if (data.hasOwnProperty('error')) {
                     alert(data.error);
                 } else {
-                    self.selection.push(lookUpId);
+                    if (self.allowMultiple) {
+                        self.selection.push(lookUpId);
+                    } else {
+                        while (self.selection.length > 0) {
+                            self.remove(self.selection[0]);
+                        }
+                        self.selection = [ lookUpId ];
+                    }
                     $('#results_table > tbody:last-child').append('<tr id="row_' + data.voyage_id + '"><td>' +
                         data.voyage_id +
                         '</td><td>' + data.captain + '</td>' +
@@ -43,7 +51,14 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
     };
 
     this.submitForm = function() {
-        $('#delete_ids_hidden').val(self.selection.join());
+        $('#ids_hidden').val(self.selection.join());
         $('form').submit();
     };
+
+    $('#voyage_id_input').keyup(function (e) {
+        if (e.keyCode === 13) {
+            $(this).blur();
+            self.lookUp();
+        }
+    });
 }

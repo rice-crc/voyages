@@ -185,7 +185,7 @@ DEFAULT_LANGUAGE = 0
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'
 
-LOGIN_URL = '/contribute/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/contribute/'
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'

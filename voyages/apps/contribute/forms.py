@@ -68,28 +68,39 @@ class SignUpForm(forms.Form):
         profile.new_material_and_sources = self.cleaned_data['new_material_and_sources']
         profile.save()
 
-class DeleteContributionForm(forms.Form):
+class ContributionVoyageSelectionForm(forms.Form):
     """
-    This form will gather a collection of voyage_id values that
-    should be deleted according to this contribution.
+    A class for contribution forms that select one or
+    more voyage ids.
     """
-    delete_ids = forms.CharField(max_length=255, required=True)
+
+    ids = forms.CharField(max_length=255, required=True)
     notes = forms.CharField(max_length=1000, required=True)
 
-    def clean_delete_ids(self):
-        data = self.cleaned_data['delete_ids']
+    def __init__(self, data=None, min_selection=1, max_selection=None, *args, **kwargs):
+        super(ContributionVoyageSelectionForm, self).__init__(data, *args, **kwargs)
+        self.min_selection = min_selection
+        self.max_selection = max_selection
+        self.selected_voyages = []
+
+    def clean_ids(self):
+        data = self.cleaned_data['ids']
+        self.selected_voyages = []
         # Ensure that the CSV string data only contains voyage_ids
         # that are current present in the database.
         try:
             ids = [int(x) for x in data.split(',')]
         except:
             raise forms.ValidationError(_('Improperly formatted field'))
+        self.selected_voyages = ids
         id_count = len(ids)
-        if id_count == 0:
-            raise forms.ValidationError(_('At least one voyage_id should be provided'))
+        if id_count < self.min_selection:
+            raise forms.ValidationError(_('At least %d voyage_id(s) should be provided') % self.min_selection)
+        if self.max_selection is not None and id_count > self.max_selection:
+            raise forms.ValidationError(_('At most %d voyage_id(s) should be provided') % self.max_selection)
         matches = Voyage.objects.filter(voyage_id__in=ids).count()
         if matches != id_count:
-            raise forms.ValidationError(_('Some of the provided voyage_ids is invalid'))
+            raise forms.ValidationError(_('Some of the provided voyage_ids are invalid'))
         return ids
 
 class InterimVoyageForm(forms.ModelForm):
