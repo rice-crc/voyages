@@ -56,16 +56,11 @@ def delete(request):
         if form.is_valid():
             ids = form.cleaned_data['ids']
             with transaction.atomic():
-                note = ContributionNote()
-                note.tag = 'DeleteContributionForm'
-                note.note = form.cleaned_data['notes']
-                note.save()
                 contribution = DeleteVoyageContribution()
                 contribution.contributor = request.user
                 contribution.deleted_voyages_ids = ','.join([str(x) for x in ids])
                 contribution.status = ContributionStatus.committed
-                contribution.save()
-                contribution.notes.add(note)
+                contribution.notes = form.cleaned_data['notes']
                 contribution.save()
             return HttpResponseRedirect(reverse('contribute:thanks'))
         else:
@@ -83,10 +78,6 @@ def edit(request):
         if form.is_valid():
             ids = form.cleaned_data['ids']
             with transaction.atomic():
-                note = ContributionNote()
-                note.tag = 'EditContributionForm'
-                note.note = form.cleaned_data['notes']
-                note.save()
                 interim_voyage = InterimVoyage()
                 interim_voyage.save()
                 contribution = EditVoyageContribution()
@@ -94,8 +85,7 @@ def edit(request):
                 contribution.contributor = request.user
                 contribution.edited_voyage_id = ids[0]
                 contribution.status = ContributionStatus.pending
-                contribution.save()
-                contribution.notes.add(note)
+                contribution.notes = form.cleaned_data['notes']
                 contribution.save()
             return HttpResponseRedirect(reverse(
                 'contribute:interim', kwargs={'contribution_type': 'edit', 'contribution_id': contribution.pk}
@@ -115,10 +105,6 @@ def merge(request):
         if form.is_valid():
             ids = form.cleaned_data['ids']
             with transaction.atomic():
-                note = ContributionNote()
-                note.tag = 'MergeContributionForm'
-                note.note = form.cleaned_data['notes']
-                note.save()
                 interim_voyage = InterimVoyage()
                 interim_voyage.save()
                 contribution = MergeVoyagesContribution()
@@ -126,8 +112,7 @@ def merge(request):
                 contribution.contributor = request.user
                 contribution.merged_voyages_ids = ','.join([str(x) for x in ids])
                 contribution.status = ContributionStatus.pending
-                contribution.save()
-                contribution.notes.add(note)
+                contribution.notes = form.cleaned_data['notes']
                 contribution.save()
             return HttpResponseRedirect(reverse(
                 'contribute:interim', kwargs={'contribution_type': 'merge', 'contribution_id': contribution.pk}
