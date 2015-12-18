@@ -13,8 +13,127 @@
     {% csrf_token %}
     <table>
         {{ form.as_table }}
+        <tr>
+            <th>
+                {% trans "Slaves intended from first port of purchase" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLINTEND">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves intended from second port of purchase" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLINTEN2">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves carried from first port of purchase" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_NCAR13">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves carried from second port of purchase" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_NCAR15">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves carried from third port of purchase" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_NCAR17">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Total slaves purchased in Africa" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_TSLAVESP">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Total slaves on board at departure from last slaving port" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_TSLAVESD">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Total slaves arrived at first port of disembarkation" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLAARRIV">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves disembarked at first place" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLAS32">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves disembarked at second place" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLAS36">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves disembarked at third place" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLAS39">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves deaths before leaving Africa" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLADAFRI">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves deaths between Africa and the Americas" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLADVOY">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                {% trans "Slaves deaths between arrival and sale" %}:
+            </th>
+            <td>
+                <input type="number" name="interim_slave_number_SLADAMER">
+            </td>
+        </tr>
     </table>
     <button type="submit">{% trans "Submit" %}</button>
 </form>
-
+<script type="text/javascript">
+    // Set number inputs
+    $(document).ready(function() {
+        {% for k, v in numbers.items %}
+            $("input[name='interim_slave_number_{{ k }}']").val({{ v }});
+        {% endfor %}
+    });
+</script>
 {% endblock %}

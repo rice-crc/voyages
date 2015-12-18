@@ -30,7 +30,6 @@ class UserProfile(models.Model):
     institution = models.CharField(max_length=255)
     new_material_and_sources = models.TextField(max_length=1000)
 
-
 class InterimVoyage(models.Model):
     """
     Describes an interim voyage, which may be a new entry in the database,
@@ -91,6 +90,8 @@ class InterimVoyage(models.Model):
     first_captain = models.CharField(max_length=255, null=True, blank=True)
     second_captain = models.CharField(max_length=255, null=True, blank=True)
     third_captain = models.CharField(max_length=255, null=True, blank=True)
+
+    notes = models.TextField('Notes', max_length=10000, null=True, blank=True, help_text='Notes for the interim voyage')
 
 class InterimArticleSource(models.Model):
     """
@@ -157,22 +158,12 @@ class InterimSlaveNumber(models.Model):
         null=False, blank=False)
     number = models.IntegerField('Number')
 
-class ContributionNote(models.Model):
-    """
-    Represents a note added to a contribution.
-    """
-    tag = models.CharField(
-        'Tag given to the note/comment',
-        max_length=255, null=False, blank=False)
-    note = models.TextField(
-        'The note/comment',
-        max_length=1024, null=False, blank=False)
-
 class ContributionStatus:
     pending = 0
     committed = 1
-    approved = 2
-    discarded = 3
+    under_review = 2
+    approved = 3
+    rejected = 4
 
 class BaseVoyageContribution(models.Model):
     """
@@ -180,9 +171,7 @@ class BaseVoyageContribution(models.Model):
     """
     contributor = models.ForeignKey(User, null=False,
                                     related_name='+')
-    notes = models.ManyToManyField(
-        ContributionNote, related_name='+',
-        help_text='Notes for the contribution')
+    notes = models.TextField('Notes', max_length=10000, help_text='Notes for the contribution')
     # see the enumeration ContributionStatus
     status = models.IntegerField(
         'Status', help_text='Indicates whether the contribution is still being edited, committed, discarded etc')
