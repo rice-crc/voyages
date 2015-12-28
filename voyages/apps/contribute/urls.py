@@ -10,6 +10,8 @@ urlpatterns = patterns('',
 
     url(r'^delete_voyage$', 'voyages.apps.contribute.views.delete', name='delete_voyage'),
 
+    url(r'^places_ajax$', 'voyages.apps.contribute.views.get_places', name='places_ajax'),
+
     url(r'^voyage_ajax$', 'voyages.apps.contribute.views.get_voyage_by_id', name='voyage_ajax'),
 
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',

@@ -2,6 +2,12 @@
 {% load i18n %}
 
 {% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
+<style>
+    .var_group {
+        margin: 10px;
+    }
+</style>
 
 <h1>{% trans "Interim voyage" %}</h1>
 
@@ -9,131 +15,225 @@
     {% trans "Some intro text." %}
 </p>
 
-<form action="{{ request.get_full_path }}" method="post">
+<form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
-        <tr>
-            <th>
-                {% trans "Slaves intended from first port of purchase" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLINTEND">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves intended from second port of purchase" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLINTEN2">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves carried from first port of purchase" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_NCAR13">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves carried from second port of purchase" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_NCAR15">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves carried from third port of purchase" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_NCAR17">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Total slaves purchased in Africa" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_TSLAVESP">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Total slaves on board at departure from last slaving port" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_TSLAVESD">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Total slaves arrived at first port of disembarkation" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLAARRIV">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves disembarked at first place" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLAS32">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves disembarked at second place" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLAS36">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves disembarked at third place" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLAS39">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves deaths before leaving Africa" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLADAFRI">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves deaths between Africa and the Americas" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLADVOY">
-            </td>
-        </tr>
-        <tr>
-            <th>
-                {% trans "Slaves deaths between arrival and sale" %}:
-            </th>
-            <td>
-                <input type="number" name="interim_slave_number_SLADAMER">
-            </td>
-        </tr>
     </table>
-    <button type="submit">{% trans "Submit" %}</button>
+    <div>
+        <a role="button" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
+          <h1>{% trans "Ship, nation, owners" %}</h1>
+        </a>
+    </div>
+    <div id="ship_nation_owners" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {{ form.name_of_vessel.errors }}
+            {{ form.name_of_vessel.label_tag }}
+            <div class="input-group col-sm-8">
+                {{ form.name_of_vessel }}
+            </div>
+        </div>
+    </div>
+    <div>
+        <a role="button" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
+          <h1>{% trans "Slaves (numbers)" %}</h1>
+        </a>
+    </div>
+    <div id="slave_numbers_main" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            <label for="interim_slave_number_SLINTEND">
+                {% trans "Slaves intended from first port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEND" name="interim_slave_number_SLINTEND">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLINTEN2">
+                {% trans "Slaves intended from second port of purchase" %}:
+            </label>            
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEN2" name="interim_slave_number_SLINTEN2">
+            </div>            
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR13">
+                {% trans "Slaves carried from first port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR13" name="interim_slave_number_NCAR13">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR15">
+                {% trans "Slaves carried from second port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR15" name="interim_slave_number_NCAR15">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR17">
+                {% trans "Slaves carried from third port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR17" name="interim_slave_number_NCAR17">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_TSLAVESP">
+                {% trans "Total slaves purchased in Africa" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESP" name="interim_slave_number_TSLAVESP">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_TSLAVESD">
+                {% trans "Total slaves on board at departure from last slaving port" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESD" name="interim_slave_number_TSLAVESD">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAARRIV">
+                {% trans "Total slaves arrived at first port of disembarkation" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAARRIV" name="interim_slave_number_SLAARRIV">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS32">
+                {% trans "Slaves disembarked at first place" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS32" name="interim_slave_number_SLAS32">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS36">
+                {% trans "Slaves disembarked at second place" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS36" name="interim_slave_number_SLAS36">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS39">
+                {% trans "Slaves disembarked at third place" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS39" name="interim_slave_number_SLAS39">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADAFRI">
+                {% trans "Slaves deaths before leaving Africa" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAFRI" name="interim_slave_number_SLADAFRI">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADVOY">
+                {% trans "Slaves deaths between Africa and the Americas" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADVOY" name="interim_slave_number_SLADVOY">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADAMER">
+                {% trans "Slaves deaths between arrival and sale" %}:
+            </label>
+            <div class="input-group col-sm-3">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <div class="form-group col-md-12">
+        <button class="btn btn-primary" type="submit">{% trans "Submit voyage" %}</button>
+    </div>
 </form>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js">
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js">
+</script>
 <script type="text/javascript">
-    // Set number inputs
+    // Existing voyage(s) data.
+    var voyages = {{ voyages_data|safe }};
+    var selectizeInput = function(input) {
+        var name = input.attr('name');
+        var values = {};
+        var length = 0;
+        for (var id in voyages) {
+            var v = voyages[id];
+            if (v.hasOwnProperty(name)) {
+                var value = v[name];
+                if (value != null) {
+                    if (!values.hasOwnProperty(value)) {
+                        values[value] = [];
+                        ++length;
+                    }
+                    values[value].push(id);
+                }
+            }
+        }
+        if (length > 0) {
+            var nodeName = input[0].nodeName.toUpperCase();
+            if (nodeName == 'INPUT') {
+                var options = [];
+                var optgroups = [{ id: 'typed', name: gettext('Typed value')}];
+                for (var value in values) {
+                    options.push({ source: value, value: value });
+                    var ids = values[value];
+                    var optgroupname = (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
+                        ' ' + ids.join(', ');
+                    optgroups.push({ id: value, name: optgroupname });
+                }
+                input.selectize({
+                    create: function (x, callback) {
+                        callback({ source: 'typed', value: x });
+                    },
+                    persist: false,
+                    closeAfterSelect: false,
+                    options: options,
+                    optgroups: optgroups,
+                    labelField: 'value',
+                    valueField: 'value',
+                    optgroupField: 'source',
+                    optgroupLabelField: 'name',
+                    optgroupValueField: 'id',
+                    searchField: ['value'],
+                    maxItems: 1,
+                    plugins: ['optgroup_columns', 'restore_on_backspace']
+                });
+                if (options.length == 1 && input.val() == '') {
+                    input.val(options[0].value);
+                }
+            } else if (nodeName == 'SELECT') {
+                console.log(input);
+                console.log(values);
+            }
+        } else {
+            addNotesPopup(input.attr('name'), input.parent());
+        }
+        input.addClass('form-control');
+    };
+
     $(document).ready(function() {
+        // Set number inputs
         {% for k, v in numbers.items %}
             $("input[name='interim_slave_number_{{ k }}']").val({{ v }});
         {% endfor %}
+
+        $('input[type=text], input[type=number]').each(function () {
+            var f = $(this);
+            selectizeInput(f);
+        });
     });
 </script>
 {% endblock %}
