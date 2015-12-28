@@ -8,7 +8,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
-from voyages.apps.voyage.models import Voyage
+from voyages.apps.voyage.models import Voyage, Place, Region, BroadRegion
+from django.utils.translation import ugettext as _
 
 def index(request):
     """
@@ -33,7 +34,6 @@ def get_summary(v):
 
 @csrf_exempt
 def get_voyage_by_id(request):
-    error = None
     if request.method == 'POST':
         voyage_id = request.POST.get('voyage_id')
         if voyage_id is not None:
@@ -47,6 +47,41 @@ def get_voyage_by_id(request):
     else:
         error = 'POST request required'
     return JsonResponse({'error': error})
+
+
+@csrf_exempt
+def get_places(request):
+    # retrieve list of places in the system.
+    places = sorted(Place.objects.prefetch_related('region__broad_region'),
+                    key=lambda p: (p.region.broad_region.broad_region, p.region.region, p.place))
+    result = []
+    last_broad_region = None
+    last_region = None
+    brcounter = 0
+    rcounter = 0
+    for place in places:
+        region = place.region
+        broad_region = region.broad_region
+        if last_broad_region != broad_region:
+            brcounter += 1
+            last_broad_region = broad_region
+            result.append({'type': 'broad_region',
+                           'pk': broad_region.pk,
+                           'value': -100000 * brcounter,
+                           'broad_region': _(broad_region.broad_region)})
+        if last_region != region:
+            rcounter += 1
+            last_region = region
+            result.append({'type': 'region',
+                           'value': -rcounter,
+                           'pk': region.pk,
+                           'parent': broad_region.pk,
+                           'region': _(region.region)})
+        result.append({'type': 'port',
+                       'value': place.pk,
+                       'parent': region.pk,
+                       'port': _(place.place)})
+    return JsonResponse(result, safe=False)
 
 @login_required
 def delete(request):
@@ -138,6 +173,16 @@ def interim(request, contribution_type, contribution_id):
     contribution = model.objects.get(pk=contribution_id)
     if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
         return HttpResponseForbidden()
+    previous_data = {}
+    related = list(Voyage.objects.filter(voyage_id__in=contribution.get_related_voyage_ids()))
+    for voyage in related:
+        dict = {}
+        ship = voyage.voyage_ship
+        if ship is not None:
+            dict['name_of_vessel'] = ship.ship_name
+            dict['year_ship_constructed'] = ship.year_of_construction
+            dict['national_carrier'] = ship.nationality_ship_id
+        previous_data[voyage.voyage_id] = dict
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
         prefix = 'interim_slave_number_'
@@ -157,8 +202,10 @@ def interim(request, contribution_type, contribution_id):
     else:
         form = InterimVoyageForm(instance=contribution.interim_voyage)
         numbers = {n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
+    import json
     return render(request, 'contribute/interim.html',
-                  {'form': form, 'numbers': numbers})
+                  {'form': form, 'numbers': numbers,
+                   'voyages_data': json.dumps(previous_data)})
 
 @login_required
 def new_voyage(request):

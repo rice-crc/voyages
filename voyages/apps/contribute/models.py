@@ -176,6 +176,9 @@ class BaseVoyageContribution(models.Model):
     status = models.IntegerField(
         'Status', help_text='Indicates whether the contribution is still being edited, committed, discarded etc')
 
+    def get_related_voyage_ids(self):
+        return []
+
     class Meta:
         abstract = True
 
@@ -193,6 +196,9 @@ class DeleteVoyageContribution(BaseVoyageContribution):
         max_length=255,
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
+    def get_related_voyage_ids(self):
+        return self.deleted_voyages_ids
+
 class EditVoyageContribution(BaseVoyageContribution):
     """
     A contribution that consists of an exiting voyage being edited.
@@ -202,6 +208,9 @@ class EditVoyageContribution(BaseVoyageContribution):
     edited_voyage_id = models.IntegerField(
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
+
+    def get_related_voyage_ids(self):
+        return [self.edited_voyage_id]
 
 class MergeVoyagesContribution(BaseVoyageContribution):
     """
@@ -213,6 +222,9 @@ class MergeVoyagesContribution(BaseVoyageContribution):
         'Merged voyage ids',
         max_length=255,
         help_text='The voyage_id of each Voyage being merged by this contribution')
+
+    def get_related_voyage_ids(self):
+        return self.merged_voyages_ids
 
 class NewVoyageContribution(BaseVoyageContribution):
     """
