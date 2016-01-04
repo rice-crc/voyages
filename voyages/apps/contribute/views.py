@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
-from voyages.apps.voyage.models import Voyage, Place, Region, BroadRegion
+from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
 
 def index(request):
@@ -177,11 +177,31 @@ def interim(request, contribution_type, contribution_id):
     related = list(Voyage.objects.filter(voyage_id__in=contribution.get_related_voyage_ids()))
     for voyage in related:
         dict = {}
+        # Ship, nation, owners
         ship = voyage.voyage_ship
         if ship is not None:
             dict['name_of_vessel'] = ship.ship_name
             dict['year_ship_constructed'] = ship.year_of_construction
+            dict['year_ship_registered'] = ship.registered_year
             dict['national_carrier'] = ship.nationality_ship_id
+            dict['ship_construction_place'] = ship.vessel_construction_place_id
+            dict['ship_registration_place'] = ship.registered_place_id
+            dict['rig_of_vessel'] = ship.rig_of_vessel_id
+            dict['tonnage_of_vessel'] = ship.tonnage
+            dict['ton_type'] = ship.ton_type_id
+            dict['guns_mounted'] = ship.guns_mounted
+            owners = list(VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(order_by=['owner_order']))
+            if len(owners) > 0:
+                dict['first_ship_owner'] = owners[0].owner.name
+            if len(owners) > 1:
+                dict['second_ship_owner'] = owners[1].owner.name
+            if len(owners) > 2:
+                dict['additional_ship_owners'] = '\n'.join([x.owner.name for x in owners[2:]])
+        # Outcome
+        outcome = voyage.voyage_name_outcome.get()
+        if outcome is not None:
+            dict['voyage_outcome'] = outcome.particular_outcome_id
+            dict['african_resistance'] = outcome.resistance_id
         previous_data[voyage.voyage_id] = dict
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)

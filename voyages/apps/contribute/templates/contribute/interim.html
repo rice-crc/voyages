@@ -7,6 +7,37 @@
     .var_group {
         margin: 10px;
     }
+
+	.broad_region {
+		margin-left: 10px;
+		font-weight: bold;
+	}
+
+	.region {
+		margin-left: 20px;
+		font-style: italic;
+		height: 0px;
+		padding: 0px !important;
+	}
+
+	.port {
+		height: 0px;
+		margin-left: 30px;
+		padding: 0px !important;
+	}
+
+	.expanded, .search_match {
+		height: auto !important;
+		padding: 3px 12px !important;
+	}
+
+	.search_match {
+		margin-left: 5px !important;
+	}
+
+	.geo_complement {
+		color: #B0B0B0;
+	}
 </style>
 
 <h1>{% trans "Interim voyage" %}</h1>
@@ -17,9 +48,6 @@
 
 <form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
     <div>
         <a role="button" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
           <h1>{% trans "Ship, nation, owners" %}</h1>
@@ -27,11 +55,191 @@
     </div>
     <div id="ship_nation_owners" class="collapse col-md-12 var_group">
         <div class="form-group">
-            {{ form.name_of_vessel.errors }}
-            {{ form.name_of_vessel.label_tag }}
-            <div class="input-group col-sm-8">
-                {{ form.name_of_vessel }}
-            </div>
+            {% with form.name_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ship_construction_place as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select-port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ship_registration_place as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select-port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.year_ship_constructed as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.year_ship_registered as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.national_carrier as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Nationalities" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.rig_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Rig of vessel" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.tonnage_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ton_type as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Tonnage type" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.guns_mounted as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_ship_owner as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_ship_owner as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.additional_ship_owners as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+    </div>
+    <div>
+        <a role="button" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
+          <h1>{% trans "Voyage outcome" %}</h1>
+        </a>
+    </div>
+    <div id="outcome" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.voyage_outcome as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Voyage outcome" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.african_resistance as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "African resistance" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% endwith %}
         </div>
     </div>
     <div>
@@ -44,7 +252,7 @@
             <label for="interim_slave_number_SLINTEND">
                 {% trans "Slaves intended from first port of purchase" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEND" name="interim_slave_number_SLINTEND">
             </div>
         </div>
@@ -52,7 +260,7 @@
             <label for="interim_slave_number_SLINTEN2">
                 {% trans "Slaves intended from second port of purchase" %}:
             </label>            
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEN2" name="interim_slave_number_SLINTEN2">
             </div>            
         </div>
@@ -60,7 +268,7 @@
             <label for="interim_slave_number_NCAR13">
                 {% trans "Slaves carried from first port of purchase" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR13" name="interim_slave_number_NCAR13">
             </div>
         </div>
@@ -68,7 +276,7 @@
             <label for="interim_slave_number_NCAR15">
                 {% trans "Slaves carried from second port of purchase" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR15" name="interim_slave_number_NCAR15">
             </div>
         </div>
@@ -76,7 +284,7 @@
             <label for="interim_slave_number_NCAR17">
                 {% trans "Slaves carried from third port of purchase" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR17" name="interim_slave_number_NCAR17">
             </div>
         </div>
@@ -84,7 +292,7 @@
             <label for="interim_slave_number_TSLAVESP">
                 {% trans "Total slaves purchased in Africa" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESP" name="interim_slave_number_TSLAVESP">
             </div>
         </div>
@@ -92,7 +300,7 @@
             <label for="interim_slave_number_TSLAVESD">
                 {% trans "Total slaves on board at departure from last slaving port" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESD" name="interim_slave_number_TSLAVESD">
             </div>
         </div>
@@ -100,7 +308,7 @@
             <label for="interim_slave_number_SLAARRIV">
                 {% trans "Total slaves arrived at first port of disembarkation" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAARRIV" name="interim_slave_number_SLAARRIV">
             </div>
         </div>
@@ -108,7 +316,7 @@
             <label for="interim_slave_number_SLAS32">
                 {% trans "Slaves disembarked at first place" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS32" name="interim_slave_number_SLAS32">
             </div>
         </div>
@@ -116,7 +324,7 @@
             <label for="interim_slave_number_SLAS36">
                 {% trans "Slaves disembarked at second place" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS36" name="interim_slave_number_SLAS36">
             </div>
         </div>
@@ -124,7 +332,7 @@
             <label for="interim_slave_number_SLAS39">
                 {% trans "Slaves disembarked at third place" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS39" name="interim_slave_number_SLAS39">
             </div>
         </div>
@@ -132,7 +340,7 @@
             <label for="interim_slave_number_SLADAFRI">
                 {% trans "Slaves deaths before leaving Africa" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAFRI" name="interim_slave_number_SLADAFRI">
             </div>
         </div>
@@ -140,7 +348,7 @@
             <label for="interim_slave_number_SLADVOY">
                 {% trans "Slaves deaths between Africa and the Americas" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADVOY" name="interim_slave_number_SLADVOY">
             </div>
         </div>
@@ -148,7 +356,7 @@
             <label for="interim_slave_number_SLADAMER">
                 {% trans "Slaves deaths between arrival and sale" %}:
             </label>
-            <div class="input-group col-sm-3">
+            <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
@@ -165,8 +373,8 @@
 <script type="text/javascript">
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
-    var selectizeInput = function(input) {
-        var name = input.attr('name');
+
+    var getValues = function(name) {
         var values = {};
         var length = 0;
         for (var id in voyages) {
@@ -182,47 +390,81 @@
                 }
             }
         }
-        if (length > 0) {
-            var nodeName = input[0].nodeName.toUpperCase();
-            if (nodeName == 'INPUT') {
-                var options = [];
-                var optgroups = [{ id: 'typed', name: gettext('Typed value')}];
-                for (var value in values) {
-                    options.push({ source: value, value: value });
-                    var ids = values[value];
-                    var optgroupname = (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
-                        ' ' + ids.join(', ');
-                    optgroups.push({ id: value, name: optgroupname });
-                }
-                input.selectize({
-                    create: function (x, callback) {
-                        callback({ source: 'typed', value: x });
-                    },
-                    persist: false,
-                    closeAfterSelect: false,
-                    options: options,
-                    optgroups: optgroups,
-                    labelField: 'value',
-                    valueField: 'value',
-                    optgroupField: 'source',
-                    optgroupLabelField: 'name',
-                    optgroupValueField: 'id',
-                    searchField: ['value'],
-                    maxItems: 1,
-                    plugins: ['optgroup_columns', 'restore_on_backspace']
-                });
-                if (options.length == 1 && input.val() == '') {
-                    input.val(options[0].value);
-                }
-            } else if (nodeName == 'SELECT') {
-                console.log(input);
-                console.log(values);
+        return length > 0 ? values : null;
+    };
+
+    var selectizeInput = function(input) {
+        var values = getValues(input.attr('name'));
+        var optgroups = [];
+        for (var value in values) {
+            var ids = values[value];
+            var optgroupname = (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
+                ' ' + ids.join(', ');
+            optgroups.push({ id: value, label: optgroupname, $order: -1 });
+        }
+        var nodeName = input[0].nodeName.toUpperCase();
+        if (values && nodeName == 'INPUT') {
+            var options = [];
+            var currentValue = input.val();
+            optgroups.push({ id: 'typed', label: gettext('Typed value')});
+            if (currentValue != '') {
+                options.push({ source: 'typed', value: currentValue });
             }
+            for (var value in values) {
+                options.push({ source: value, value: value });
+            }
+            input.selectize({
+                create: function (x, callback) {
+                    callback({ source: 'typed', value: x });
+                },
+                persist: false,
+                closeAfterSelect: false,
+                options: options,
+                optgroups: optgroups,
+                labelField: 'value',
+                valueField: 'value',
+                optgroupField: 'source',
+                optgroupLabelField: 'label',
+                optgroupValueField: 'id',
+                searchField: ['value'],
+                maxItems: 1,
+                plugins: ['optgroup_columns', 'restore_on_backspace']
+            });
+            if (options.length == 1 && currentValue == '') {
+                input.val(options[0].value);
+            }
+        } else if (nodeName == 'SELECT') {
+            var $s = input.selectize({
+                optgroupField: 'source',
+                sortField: 'text',
+                lockOptgroupOrder: true,
+                onInitialize: function() {
+                    for (var key in optgroups) {
+                        var og = optgroups[key];
+                        this.addOptionGroup(og.id, og);
+                    }
+                    for (var value in values) {
+                        var found = -1;
+                        var list = this.options;
+                        for (var i in list) {
+                            if (list[i].value == value) {
+                                found = i;
+                                break;
+                            }
+                        }
+                        if (found < 0) continue;
+                        this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                    }
+                },
+            });
         } else {
             addNotesPopup(input.attr('name'), input.parent());
         }
         input.addClass('form-control');
     };
+
+    var regions = {};
+    var broad_regions = {};
 
     $(document).ready(function() {
         // Set number inputs
@@ -230,10 +472,89 @@
             $("input[name='interim_slave_number_{{ k }}']").val({{ v }});
         {% endfor %}
 
-        $('input[type=text], input[type=number]').each(function () {
-            var f = $(this);
-            selectizeInput(f);
+        $('input[type=text], input[type=number], select, textarea')
+            .not('.select-port')
+            .each(function () {
+                var f = $(this);
+                selectizeInput(f);
+            }
+        );
+
+        $.ajax('/contribute/places_ajax', {
+            success: function(ports) {
+                for (var i = 0; i < ports.length; ++i) {
+                    var item = ports[i];
+                    if (item.type == "region") {
+                        regions[item.pk] = item;
+                    } else if (item.type == "broad_region") {
+                        broad_regions[item.pk] = item;
+                    }
+                }
+                $(".select-port").each(function() {
+                    var self = $(this);
+                    var values = getValues(self.attr('name'));
+                    if (values) {
+                        console.log(values);
+                    }
+                    self.selectize({
+                        maxItems: 1,
+                        options: ports,
+                        valueField: 'value',
+                        searchField: ['port', 'region', 'broad_region'],
+                        render: {
+                            option: function(data, escape) {
+                                if (data.type == 'port') {
+                                    return '<div class="port region_' + data.parent + '">' + escape(data.port) + '</div>';
+                                }
+                                if (data.type == 'region') {
+                                    return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
+                                }
+                                return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region">' + escape(data.broad_region) + '</div>';
+                            },
+                            item: function(data, escape) {
+                                var region = regions[data.parent];
+                                var broad_region = broad_regions[region.parent];
+                                return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
+                            },
+                        }
+                    });
+                });
+            }
         });
     });
+
+    // Special handling of port/region/broad region selection.
+    var protoSelectOption = Selectize.prototype.onOptionSelect;
+    Selectize.prototype.onOptionSelect = function(e) {
+        if (e && e.preventDefault) {
+            e.preventDefault();
+            var target = $(e.currentTarget);
+            var className = "expanded";
+            if (this.$control_input.val() != '' && !this.options.create) {
+                // Clear search if user selected an option.
+                id = target.attr('id');
+                this.$control_input.val('');
+                this.refreshOptions();
+                if (id) {
+                    target = $("#" + id);
+                }
+            }
+            if (target.hasClass("broad_region")) {
+                $(".broad_region,.region,.port").removeClass(className);
+                target.addClass(className);
+                $(".broad_region_" + target.data('pk')).addClass(className);
+                this.setActiveOption($(".broad_region_" + target.data('pk') + ":first"));
+            } else if (target.hasClass("region")) {
+                $(".port").removeClass(className);
+                target.addClass(className);
+                $(".region_" + target.data('pk')).addClass(className);
+                this.setActiveOption($(".region_" + target.data('pk') + ":first"));
+            } else {
+                protoSelectOption.apply(this, arguments);
+            }
+        } else {
+            protoSelectOption.apply(this, arguments);
+        }
+    };
 </script>
 {% endblock %}
