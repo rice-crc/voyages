@@ -197,7 +197,7 @@ class DeleteVoyageContribution(BaseVoyageContribution):
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
     def get_related_voyage_ids(self):
-        return self.deleted_voyages_ids
+        return [int(x) for x in self.deleted_voyages_ids.split(',')]
 
 class EditVoyageContribution(BaseVoyageContribution):
     """
@@ -224,7 +224,7 @@ class MergeVoyagesContribution(BaseVoyageContribution):
         help_text='The voyage_id of each Voyage being merged by this contribution')
 
     def get_related_voyage_ids(self):
-        return self.merged_voyages_ids
+        return [int(x) for x in self.merged_voyages_ids.split(',')]
 
 class NewVoyageContribution(BaseVoyageContribution):
     """

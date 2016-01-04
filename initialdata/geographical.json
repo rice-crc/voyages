@@ -1290,10 +1290,10 @@
     "model": "voyage.place", 
     "fields": {
         "show_on_main_map": true, 
-        "region": 1, 
+        "region": 53, 
         "longitude": "-15.7604000", 
         "place": "Canary Islands", 
-        "value": 10115, 
+        "value": 60141, 
         "latitude": "28.1510800", 
         "show_on_voyage_map": true
     }
@@ -1303,10 +1303,10 @@
     "model": "voyage.place", 
     "fields": {
         "show_on_main_map": true, 
-        "region": 1, 
+        "region": 53, 
         "longitude": "-16.1716400", 
         "place": "Tenerife", 
-        "value": 10116, 
+        "value": 60142, 
         "latitude": "28.5460300", 
         "show_on_voyage_map": true
     }
@@ -3578,10 +3578,10 @@
     "model": "voyage.place", 
     "fields": {
         "show_on_main_map": false, 
-        "region": 70, 
+        "region": 64, 
         "longitude": "0E-7", 
         "place": "Point Askaig", 
-        "value": 11403, 
+        "value": 10513, 
         "latitude": "0E-7", 
         "show_on_voyage_map": false
     }
@@ -5777,7 +5777,7 @@
         "show_on_main_map": false, 
         "region": 25, 
         "longitude": "-76.7666700", 
-        "place": "Annotta Bay", 
+        "place": "Annotto Bay", 
         "value": 35101, 
         "latitude": "18.2666700", 
         "show_on_voyage_map": true
@@ -12043,7 +12043,7 @@
         "show_on_main_map": false, 
         "region": 90, 
         "longitude": "0E-7", 
-        "place": "Santo Domingo (port)", 
+        "place": "San Domingo (a) Santo Domingo", 
         "value": 31106, 
         "latitude": "0E-7", 
         "show_on_voyage_map": false

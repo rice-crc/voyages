@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.encoding import smart_str
 from voyages.apps.voyage.models import *
+from unidecode import unidecode
 import re
 import readline
 import sys
@@ -101,13 +102,19 @@ class Command(BaseCommand):
                 self.errors += 1
             return model
 
+        def filter_out_source_letter(letter):
+            return letter == ' ' or letter == ','
+
         # Prefetch data: Sources
         all_sources = VoyageSources.objects.all()
         trie = {}
         _end = '_end'
         for source in all_sources:
             dict = trie
-            for letter in source.short_ref:
+            plain = unidecode(source.short_ref).lower()
+            for letter in plain:
+                if filter_out_source_letter(letter):
+                    continue
                 dict = dict.setdefault(letter, {})
             dict[_end] = source
 
@@ -116,13 +123,18 @@ class Command(BaseCommand):
         # prefix of the given reference.
         def get_source(ref):
             best = None
+            match = ''
             dict = trie
-            for letter in ref:
+            plain = unidecode(ref).lower()
+            for letter in plain:
+                if filter_out_source_letter(letter):
+                    continue
                 dict = dict.get(letter)
                 if dict is None:
                     break
+                match += letter
                 best = dict.get(_end, best)
-            return best
+            return best, match
 
         def cint(val, allow_null=True):
             if (val is None or empty.match(val)) and not allow_null:
@@ -146,9 +158,9 @@ class Command(BaseCommand):
             date component.
             :return: the CSV date.
             """
-            return (row[var_name_prefix + suffixes[1]] if suffixes[1] is not None else '') + ',' + \
-                   (row[var_name_prefix + suffixes[0]] if suffixes[0] is not None else '') + ',' + \
-                   (row[var_name_prefix + suffixes[2]] if suffixes[2] is not None else '')
+            return (row[var_name_prefix + suffixes[1]] if suffixes[1] is not None else '').strip() + ',' + \
+                   (row[var_name_prefix + suffixes[0]] if suffixes[0] is not None else '').strip() + ',' + \
+                   (row[var_name_prefix + suffixes[2]] if suffixes[2] is not None else '').strip()
 
         def date_iso_csv(iso_value):
             """
@@ -164,7 +176,7 @@ class Command(BaseCommand):
                 self.errors += 1
                 sys.stderr.write('Error with date ' + iso_value + '\n')
                 return ''
-            return components[1] + ',' + components[2] + ',' + components[0]
+            return components[1].strip() + ',' + components[2].strip() + ',' + components[0].strip()
 
         with open(csv_file[0], 'rU') as f:
             reader = unicodecsv.DictReader(f, delimiter=',')
@@ -435,10 +447,11 @@ class Command(BaseCommand):
                     source_ref = row[u'source' + key]
                     if empty.match(source_ref):
                         break
-                    source = get_source(source_ref)
+                    (source, match) = get_source(source_ref)
                     if source is None:
                         self.errors += 1
-                        sys.stderr.write('Source not found for "' + smart_str(source_ref) + '"\n')
+                        sys.stderr.write('Source not found for "' + smart_str(source_ref) +
+                                         '", longest partial match: ' + smart_str(match) + '\n')
                         continue
                     source_connection = VoyageSourcesConnection()
                     source_connection.group = voyage

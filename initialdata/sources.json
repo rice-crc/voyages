@@ -269,7 +269,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "Anon,Journal", 
-        "full_ref": "Anon, <i>Journal d'un voyage sur les costes d'Afrique et aux Indes d'Espagne; avec une description particuliere de la riviere de la Plata, de Buenosayres, & autres Lieux; commenc\u00e9 en 1702 & fini en 1706</i> (Amsterdam, 1730).         ", 
+        "full_ref": "<p>Anon, <em>Journal d'un voyage sur les&nbsp;<span class=\"st\"><em>c&ocirc;tes</em></span> d'Afrique et aux Indes d'Espagne; avec une description particuliere de la riviere de la Plata, de Buenosayres, &amp; autres Lieux; commenc&eacute; en 1702 &amp; fini en 1706</em> (Amsterdam, 1730).</p>", 
         "source_type": 3
     }
 },
@@ -493,8 +493,8 @@
     "pk": 13721, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Boeseken", 
-        "full_ref": "B\u00f6eseken, A. J., <i>Slaves and Free Blacks at the Cape, 1658-1700</i> (Capetown, 1977).", 
+        "short_ref": "B\u00f6eseken", 
+        "full_ref": "<p>B&ouml;eseken, A. J., <em>Slaves and Free Blacks at the Cape, 1658-1700</em> (Capetown, 1977).</p>", 
         "source_type": 3
     }
 },
@@ -511,8 +511,8 @@
     "pk": 13723, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "BorregoPla;", 
-        "full_ref": "Borrego Pl\u00e1, Maria del Carmen, <i>Cartagena de Indias en el siglo XVI</i> (Sevilla, 1983).", 
+        "short_ref": "Borrego Pl\u00e1", 
+        "full_ref": "<p>Borrego Pl&aacute;, Maria del Carmen, <em>Cartagena de Indias en el siglo XVI</em> (Sevilla, 1983).</p>", 
         "source_type": 3
     }
 },
@@ -1609,8 +1609,8 @@
     "pk": 13845, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Hernaes", 
-        "full_ref": "Hern\u00e6s, Per O, <i>Slaves, Danes, and African Coast Society: The Danish Slave Trade from West Africa and Afro-Danish Relations on the Eighteenth Century Gold Coast</i> (Trondheim, 1995).", 
+        "short_ref": "Hern\u00e6s", 
+        "full_ref": "<p>Hern&aelig;s, Per O, <em>Slaves, Danes, and African Coast Society: The Danish Slave Trade from West Africa and Afro-Danish Relations on the Eighteenth Century Gold Coast</em> (Trondheim, 1995).</p>", 
         "source_type": 3
     }
 },
@@ -2392,8 +2392,8 @@
     "pk": 13932, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Norregard,Slaveoproret", 
-        "full_ref": "N\u00f8rreg\u00e5rd, Georg,\u201cSlaveopr\u00f8ret p\u00e5 \u2018Patentia\u2019 1753,\u201d Aarbog for Handels og S\u00f8fartsmuseetPatentia' 1753,\" <i>Aarbog for Handels og S\u00f8fartsmuseet paa Kronborg</i>, (1950): 23-44.", 
+        "short_ref": "N\u00f8rreg\u00e5rd,Slaveoproret", 
+        "full_ref": "<p>N&oslash;rreg&aring;rd, Georg,&ldquo;Slaveopr&oslash;ret p&aring; &lsquo;Patentia&rsquo; 1753,&rdquo; Aarbog for Handels og S&oslash;fartsmuseetPatentia' 1753,\" <em>Aarbog for Handels og S&oslash;fartsmuseet paa Kronborg</em>, (1950): 23-44.</p>", 
         "source_type": 3
     }
 },
@@ -2401,8 +2401,8 @@
     "pk": 13933, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Norregard,Madagascar", 
-        "full_ref": "N\u00f8rreg\u00e5rd, Georg,\u201cPa slavetogt til Madagascar, 1737-1739,\u201d Handels- og S\u00f8fartsmuseet Arborg, (1955): 20-48.", 
+        "short_ref": "N\u00f8rreg\u00e5rd,Madagascar", 
+        "full_ref": "<p>N&oslash;rreg&aring;rd, Georg,&ldquo;Pa slavetogt til Madagascar, 1737-1739,&rdquo; Handels- og S&oslash;fartsmuseet Arborg, (1955): 20-48.</p>", 
         "source_type": 3
     }
 },
@@ -2410,8 +2410,8 @@
     "pk": 13934, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Norregard", 
-        "full_ref": "N\u00f8rreg\u00e5rd, Georg, <i>Danish Settlements in West Africa, 1658-1850</i> (Boston, 1965).", 
+        "short_ref": "N\u00f8rreg\u00e5rd", 
+        "full_ref": "<p>N&oslash;rreg&aring;rd, Georg, <em>Danish Settlements in West Africa, 1658-1850</em> (Boston, 1965).</p>", 
         "source_type": 3
     }
 },
@@ -2779,8 +2779,8 @@
     "pk": 13975, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Schofield", 
-        "full_ref": "Schofield, Maurice M.,\"The Slave Trade from Lancashire and Cheshire Ports Outside Liverpool, c. 1750-c. 1790,\" in Roger Anstey and P.E.H. Hair (eds.), <i>Liverpool, the African Slave Trade, and Abolition</i>, enlarged edition (Liverpool, 1989).", 
+        "short_ref": "Schofield,", 
+        "full_ref": "<p>Schofield, Maurice M.,\"The Slave Trade from Lancashire and Cheshire Ports Outside Liverpool, c. 1750-c. 1790,\" in Roger Anstey and P.E.H. Hair (eds.), <em>Liverpool, the African Slave Trade, and Abolition</em>, enlarged edition (Liverpool, 1989).</p>", 
         "source_type": 3
     }
 },
@@ -3130,8 +3130,8 @@
     "pk": 14014, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Szymanksi", 
-        "full_ref": "Szymanski, Hans, <i>Brandenburg Preu\u00dfen zur See, 1605-1815</i> (Leipzig, 1937).", 
+        "short_ref": "Szymanski", 
+        "full_ref": "<p>Szymanski, Hans, <em>Brandenburg Preu&szlig;en zur See, 1605-1815</em> (Leipzig, 1937).</p>", 
         "source_type": 3
     }
 },
@@ -5003,7 +5003,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,OldNewYork,vol.9", 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA) Francis, Old New York, vol. 9, \u201cDeposition of a sailor\u201d", 
+        "full_ref": "<p>New York Historical Society (New York, New York, USA) Francis, Old New York, vol. 9, &ldquo;Deposition of a sailor&rdquo;</p>", 
         "source_type": 1
     }
 },
@@ -5021,7 +5021,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,Misc microfilm, #5", 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA) Miscellaneous microfilm, no. 5, \u201cA Book of Trade For The Sloope Rhodde Island...Jan:ry 18, 1748/9\u201d", 
+        "full_ref": "<p>New York Historical Society (New York, New York, USA) Miscellaneous microfilm, no. 5, &ldquo;A Book of Trade For The Sloope Rhodde Island...Jan:ry 18, 1748/9&rdquo;</p>", 
         "source_type": 1
     }
 },
@@ -5030,7 +5030,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,RufusKing", 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA) Rufus King ms", 
+        "full_ref": "<p>New York Historical Society (New York, New York, USA) Rufus King ms</p>", 
         "source_type": 1
     }
 },
@@ -5039,7 +5039,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,VanCortland,letterbk", 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA) Van Cortland ms, Letterbook", 
+        "full_ref": "<p>New York Historical Society (New York, New York, USA) Van Cortland ms, Letterbook</p>", 
         "source_type": 1
     }
 },
@@ -5048,7 +5048,7 @@
     "model": "voyage.voyagesources", 
     "fields": {
         "short_ref": "NYHS,Vernon", 
-        "full_ref": "<i>Hispanic Society of America</i> (New York, New York, USA) Vernon ms, boxes 1-2", 
+        "full_ref": "<p>New York Historical Society (New York, New York, USA) Vernon ms, boxes 1-2</p>", 
         "source_type": 1
     }
 },
@@ -5119,8 +5119,8 @@
     "pk": 14235, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "RISA,vol.1", 
-        "full_ref": "<i>Rhode Island State Archives</i> (Providence, Rhode Island, USA) Maritime Papers, Manifests-Import Cargoes, vol. 1, 1744-45, 1775-85", 
+        "short_ref": "RISA,Maritime", 
+        "full_ref": "<p><em>Rhode Island State Archives</em> (Providence, Rhode Island, USA) Maritime Papers, Manifests-Import Cargoes, vol. 1 and 3, 1744-45, 1775-85</p>", 
         "source_type": 1
     }
 },
@@ -6079,15 +6079,6 @@
     }
 },
 {
-    "pk": 14342, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "Lessens", 
-        "full_ref": "Lesens, Pierre, <i>M\u00e9moire  pour  le sieur Pierre LESENS, capitaine de navire,  de pr\u00e9sent en la ville des Cayes,  appelant (...) contre le sieur Pierre Guillaume Robert BUNEL,  se disant n\u00e9gociant \u00e0 Honfleur et repr\u00e9sent\u00e9 en cette colonie par le sieur Pierre GRINGUET,  capitaine du navire \"La Renomm\u00e9e,\" actuellement en rade aux Cayes, ledit sieur BUNEL osant se dire,  agir  au  nom et comme armateur et propri\u00e9taire  du navire  \"La Furieuse,\"  command\u00e9 par ledit  sieur  LESENS, l'un des int\u00e9ress\u00e9s audit navire, intim\u00e9 sign\u00e9 BAUDRY DES LOZI\u00e8RES\"</i> (Port au Prince, impr. Mozard, 1789), in 8\u00b0. 8\u00b0 Fn 1 (sic), in A. Corda, <i>Catalogue  des  factums  et  d'autres documents  judiciaires  ant\u00e9rieurs  \u00e0  1790</i>, 10 vols, Biblioth\u00e8que nationale. Paris.", 
-        "source_type": 3
-    }
-},
-{
     "pk": 14343, 
     "model": "voyage.voyagesources", 
     "fields": {
@@ -6136,8 +6127,8 @@
     "pk": 14348, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "P\u00e9rez Garc\u00eda and Chavez", 
-        "full_ref": "P\u00e9rez Garc\u00eda, Rafael M., and Manuel F. Fern\u00e1ndez Chaves, \"Sevilla y la trata negrera atl\u00e1ntica: env\u00edos de esclavos desde Cabo Verde a la Am\u00e9rica espa\u00f1ola, 1569-1579,\" in Le\u00f3n Carlos \u00c1lvarez Santal\u00f3 (coord.), <i>Estudios de Historia Moderna en Homenaje al profesor Antonio Garc\u00eda-Baquero</i> (Seville, 2009), 597-622", 
+        "short_ref": "P\u00e9rez Garc\u00eda and Chaves", 
+        "full_ref": "<p>P&eacute;rez Garc&iacute;a, Rafael M., and Manuel F. Fern&aacute;ndez Chaves, \"Sevilla y la trata negrera atl&aacute;ntica: env&iacute;os de esclavos desde Cabo Verde a la Am&eacute;rica espa&ntilde;ola, 1569-1579,\" in Le&oacute;n Carlos &Aacute;lvarez Santal&oacute; (coord.), <em>Estudios de Historia Moderna en Homenaje al profesor Antonio Garc&iacute;a-Baquero</em> (Seville, 2009), 597-622</p>", 
         "source_type": 3
     }
 },
@@ -6163,7 +6154,7 @@
     "pk": 14351, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Gelpi Baiz", 
+        "short_ref": "Gelp\u00ed Baiz", 
         "full_ref": "<p>Gelp&iacute; Baiz, Elsa, <em>Siglo en blanco: estudio de la econom&iacute;a azucarera en Puerto Rico, siglo XVI (1540-1612)</em> (San Juan, 2000).</p>", 
         "source_type": 3
     }
@@ -6343,8 +6334,8 @@
     "pk": 14371, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Acosta Saignes,1961", 
-        "full_ref": "Acosta Saignes, Miguel, \"La Trata de Esclavos en Venezuela,\" <i>Revista de Historia</i> (Venezuela), 1 (1960/61): 1-43.", 
+        "short_ref": "Acosta Saignes, 1961", 
+        "full_ref": "<p>Acosta Saignes, Miguel, \"La Trata de Esclavos en Venezuela,\" <em>Revista de Historia</em> (Venezuela), 1 (1960/61): 1-43.</p>", 
         "source_type": 3
     }
 },
@@ -6388,8 +6379,8 @@
     "pk": 14376, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "Prior,pp, 12-13", 
-        "full_ref": "Prior, Thomas, </i>An authentic narrative of the success of tar-water in curing a great number\u2026</i> (Dublin, 1746)", 
+        "short_ref": "Prior,pp. 12-13", 
+        "full_ref": "<p>Prior, Thomas, An authentic narrative of the success of tar-water in curing a great number&hellip; (Dublin, 1746)</p>", 
         "source_type": 3
     }
 },
@@ -6721,9 +6712,9 @@
     "pk": 14413, 
     "model": "voyage.voyagesources", 
     "fields": {
-        "short_ref": "www.cslib.org/slaverlog.htm", 
-        "full_ref": "Connecticut State Library Log Book of Slave Traders", 
-        "source_type": 3
+        "short_ref": "CSL", 
+        "full_ref": "<p>Connecticut State Library Log Book of Slave Traders at www.cslib.org/slaverlog.htm</p>", 
+        "source_type": 1
     }
 },
 {
@@ -7339,33 +7330,6 @@
     }
 },
 {
-    "pk": 14484, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "StJamesChronicle", 
-        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
-        "source_type": 2
-    }
-},
-{
-    "pk": 14485, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "St.JamesChronicle", 
-        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
-        "source_type": 2
-    }
-},
-{
-    "pk": 14486, 
-    "model": "voyage.voyagesources", 
-    "fields": {
-        "short_ref": "StJames'sChronicle", 
-        "full_ref": "<p><em>St. James's Chronicle</em> (London)</p>", 
-        "source_type": 2
-    }
-},
-{
     "pk": 14487, 
     "model": "voyage.voyagesources", 
     "fields": {
@@ -7444,6 +7408,519 @@
         "short_ref": "ANC,TC", 
         "full_ref": "<p>Archivo Nacional de Cuba, Tribunal de Comercio</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\">X</div>\r\n</div>", 
         "source_type": 1
+    }
+},
+{
+    "pk": 14496, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "RJAM,DPHDM,", 
+        "full_ref": "<p>Rio de Janeiro, Arquivo da Marinha, Diretoria do Patrim&ocirc;nio Hist&oacute;rico e Documenta&ccedil;&atilde;o da Marinha</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14497, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Steckley", 
+        "full_ref": "<p>Steckley, George F. (ed), <em>The letters of John Paige, London merchant, 1648-58</em> (London, London Record Society, 1984)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14498, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Bonham's", 
+        "full_ref": "<p>Bonham's (auction House), New York, Lot 15291 (Sold in 2014): \"Manuscript Document Signed by George W. Babcock, 1 p, folio, on board the <em>Marlborough</em> at Montserrado, March 7, 1778, being orders for Francis Bradfield, Captain of the <em>Fancy</em>,\"</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14499, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "ANC,GSC,494-18690", 
+        "full_ref": "<p>Archivo Nacional de Cuba, Havana, Gobierno Superior Civil<em><br /></em></p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14500, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Vilar2", 
+        "full_ref": "<p>Vila Vilar, Enriqueta, <em>Las Canarias como base de aprovisionamiento de nav&iacute;os portugueses</em> (Gran Canaria, 2008)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14501, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Cabrera and Santana", 
+        "full_ref": "<p>Lobo Cabrera and Torres Santana, \"La Palma y los mercados del &Aacute;frica negra 1600-1640,\" <em>Anuario de Estudios Atlanticos</em>, 43 (1997): 435</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14502, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Plasse", 
+        "full_ref": "<p>Plasse, Jean Pierre. <em>Journal de Bord d'un N&eacute;grier</em> (Marseille, &Eacute;ditions le Mot et le Reste, 2005)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14503, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Heintze", 
+        "full_ref": "<p>Heintze, Beatriz, <em>Fontes para a historia de Angola do seculo XVII,</em>&nbsp;2 vols. (Wiesbaden, F. Steiner Verlag, 1985)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14504, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Assadourian", 
+        "full_ref": "<p>Assadourian, Carlos Sempat, <em>El tr&aacute;fico de esclavos en C&oacute;rdoba de Angola a Potos&iacute;, siglos XVI-XVII </em>( C&oacute;rdoba, 1966)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14505, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Freedom Papers", 
+        "full_ref": "<p>Scott, Rebecca and Jean H&eacute;brard, <em>Freedom Papers: An Atlantic Odyssey in the Age of Emancipation </em>(Cambridge, MA, 2012)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14506, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Jumar", 
+        "full_ref": "<p>Jumar, Fernando, \"Le Commerce Atlantique au Rio de la Plata, 1680-1778\" (These de Doctorat - Echole des Hautes Etudes en Sciences Sociales, Paris, 2000)</p>", 
+        "source_type": 4
+    }
+},
+{
+    "pk": 14507, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Leiva Vivas", 
+        "full_ref": "<p>Leiva Vivas, Rafael,<em> Trafico de esclavos negros esclavos a Honduras </em>(Alicante<em>, </em>Biblioteca Virtual Miguel de Cervantes, 2012)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14508, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "ANUV", 
+        "full_ref": "<p>Universidad Veracruzana, Unidad de Servicios Bibliotecarios y de Informaci&oacute;n, Xalapa (USBI, Xalapa).&nbsp; Archivos Notariales de la Universidad Veracruzana, http://www.uv.mx/bnotarial/</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14509, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Andrews", 
+        "full_ref": "<p>Andrews, K.R. \"English Voyages to the Caribbean, 1596-1604: An Annotated List,\" <em>William and Mary Quarterly,</em> third series, 31 (1974): 248</p>\r\n<div id=\"mcePasteBin\" style=\"position: absolute; top: 0px; left: 0; background: red; width: 1px; height: 1px; overflow: hidden\" contenteditable=\"false\">\r\n<div contenteditable=\"true\"><em>: An Annotated List</em>,</div>\r\n</div>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14510, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Eagle", 
+        "full_ref": "<p>Marc Eagle, \"Chasing the Aven&ccedil;a: An Investigation of Illicit Slave Trading in Santo Domingo at the End of the Portuguese <em>Asiento </em>Period,\" <em>Slavery &amp; Abolition: A Journal of Slave and Post-Slave Studies</em>, 35 (2014): 99-120</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14511, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Madison", 
+        "full_ref": "<p>Mattern, David, JCA Stagg, Ellen J. Barber, Mary A. Hackett, Anne Mandeville Colony, Angela Kreider, and Jeanne Kerr Cross (eds.), <em>The Papers of James Madison, Secretary of State Series</em>, 16 vols (University of Virginia Press, Charlottesville, VA, 1956-)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14512, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "NARA,Boston,RG36", 
+        "full_ref": "<p>National Archives at Boston, Waltham, MA., RG 36, Records of the Custom Houses, Accounts of Duties, 1768-1776, </p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14513, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "SC,Equity", 
+        "full_ref": "<p><em>South Carolina Department of Archives and History</em> (Columbia, South Carolina, USA), Charleston District Court of Equity</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14514, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Masscases", 
+        "full_ref": "<p>Massachusetts Cases, http://masscases.com/cases/sjc/6/6mass358.html</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14515, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Justia, Supreme Court", 
+        "full_ref": "<p>https://supreme.justia.com/cases/federal/us/25/460/case.html</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14516, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "StHG", 
+        "full_ref": "<p>St. Helena Gazette, 1845 to 1862, located in BNA, Colonial Office, series 251 (CO251)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14517, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Mira Caballos", 
+        "full_ref": "<p>Esteban Mira Caballos, \"Las Licencias de escravos negros a <span class=\"st\">Hispanoam&eacute;rica</span> (1544-1550),\" <em>Revista de Indias</em>, 54 (1994): 273-98</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14518, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Arellano", 
+        "full_ref": "<p>Arellano Moreno, Antonio, <em>Or&iacute;genes de la econom&iacute;a Venzala,&nbsp;</em>2nd ed. (Caracas, 1960)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14519, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Gasparini", 
+        "full_ref": "<p>Gasparini, Graziano, Manuel P&eacute;rez Vila, and Carlos F. Duarte, <em>La Guaira: Or&iacute;genes hist&oacute;ricos: morfolog&iacute;a urbana&nbsp;</em>(Caracas: Centro Sim&oacute;n Bol&iacute;var, Ministerio de Informaci&oacute;n y Turismo, 1981)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14520, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "NYHS,SC", 
+        "full_ref": "<p>New York Historical Society, Slavery Collections, New York, NY</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14521, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Brown,1965", 
+        "full_ref": "<p>Brown, Vaughan W., <em>Shipping in the Port of Annapolis 1748-1775</em> (Annapolis, MD: U.S. Naval Institute, 1965)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14522, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Beekman", 
+        "full_ref": "<p>White, Philip L., <em>The Beekman Mercantile Papers, 1746-1799</em>, 2 vols. (New York, 1956)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14523, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Grafton", 
+        "full_ref": "<p>Grafton Family Papers, Phillips Library, Peabody Essex Museum<span style=\"font-weight: bold;\">, </span>Peabody, Mass.</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14524, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Oliver", 
+        "full_ref": "<p>Oliver, Fitch Edward, <em>The Diary of William Pynchon of Salem: A Picture of Salem Life, Social and Political, a Century Ago</em> (Boston and New York, 1890)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14525, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Broadside Savannah, July 25, 1774", 
+        "full_ref": "<p>Library of Congress, Washington DC, Prints and Photographs, LC-USZ63-16876 (1-2), Original is misplaced, but image is at http://memory.loc.gov/ammem/aaohtml/aopart1b.html</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14526, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Thompson", 
+        "full_ref": "<p>Thompson, Thomas, <em>An Account of Two Missionary Voyages</em> (London<span style=\"font-weight: bold;\">, </span>1758)</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14527, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "A&L,1753-58", 
+        "full_ref": "<p>Austin &amp; Laurens Account Book, 1753-1758, Beinecke Library, Yale University, New Haven, CT</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14528, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "WYL", 
+        "full_ref": "<p>Wylde Family Paper, Unversity of Durham, UK (collection code&nbsp;GB 0033 WYL)</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14529, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "JeffersonPapers2", 
+        "full_ref": "<p>William CC Claiborne to Thomas Jefferson, 27 Oct 1804, Thomas Jefferson Papers, Founders Online, National Archives, http://founders.archives.gov/documents/Jefferson/99-01-02-0552</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14530, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "NYPL, Gordon", 
+        "full_ref": "<p>George W. Gordon Papers,Tabulated Statements, List of American Vessels sold at the Port of Rio de Janeiro, New York Public Library, New York, NY</p>\r\n<p>&nbsp;</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14531, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "LRU", 
+        "full_ref": "<p><em>Lloyd's Register of Shipping</em>, Green Underwriters' Book (London, 1764-)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14532, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Meri\u00f1o and Perera", 
+        "full_ref": "<p>Mar&iacute;a de los Angeles Meri&ntilde;o Fuentes and Aisnara Perera Diaz, <em>Del Trafico a la Libertad: el caso de los Africanos de la Fragata Dos Hermanos en Cuba (1795-1837) </em>(Santiago de Cuba, 2014)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14533, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Hawthorne", 
+        "full_ref": "<p>Walter Hawthorne, <em>From Africa to Brazil: Culture, Identity, and the Atlantic Slave Trade, 1600-1830</em> (Cambridge, 2010)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14534, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Schomburgk", 
+        "full_ref": "<p>Schomburgk, Robert Herman, <em>History of Barbados</em> (London, 1848)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14535, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Todd", 
+        "full_ref": "<p>Todd, Tracey, \"Barbados: Notes from a Working Vacation,\" <em>Middleton Place Foundation Notebook,</em> 32, no. 2 (2010), pp. 5-6</p>\r\n<table style=\"border-collapse: collapse; width: 65pt;\" border=\"0\" width=\"65\" cellspacing=\"0\" cellpadding=\"0\"><colgroup><col style=\"width: 65pt;\" width=\"65\" /> </colgroup>\r\n<tbody>\r\n<tr style=\"height: 15.0pt;\">\r\n<td style=\"height: 15.0pt; width: 65pt;\" width=\"65\" height=\"15\">http://www.barbadoscarolinas.org/PDF/Barbados_Note_Working_Vacation.pdf</td>\r\n</tr>\r\n</tbody>\r\n</table>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14536, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "BNL", 
+        "full_ref": "<p><em>Boston News-Letter </em>(later, <em>Boston Weekly News-Letter</em>)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14537, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "NARA,Boston,Court", 
+        "full_ref": "<p>National Archives, Boston, Waltham, MA., US District Court Files, Rhode Island, US v Cyprian Sterry</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14538, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "AGNA", 
+        "full_ref": "<p>Archivo General de la Naci&oacute;n Argentina, Buenos Aires</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14540, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Kriger", 
+        "full_ref": "<p>Colleen E. Kriger, \"'Our Indigo designe' Planing and Processing Indigo for Export, the Upper Guinea Coast, 1684-1702,\" in Robin Law, Silke Strickrodt and Suzanne Schwarz (eds.), <em>Commercial Agriculture in Africa in the pre-Colonial Era</em> (London, 2012), pp. 98-115.</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14541, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Gazetteer and London Daily Advertiser", 
+        "full_ref": "<p>Gazetteer and London Daily Advertiser</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14542, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "GazetteerandNewDailyAdvertiser", 
+        "full_ref": "<p>Gazetteer and New Daily Advertiser</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14543, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "GUS", 
+        "full_ref": "<p><em>Gazette of the United States</em></p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14544, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "HLB", 
+        "full_ref": "<p>HLB, 8 vols</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14545, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Brown Univ Sally", 
+        "full_ref": "<p>Logbook of the slave ship Sally, https://search.library.brown.edu/catalog/b5897876</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14546, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Jorge Felipe", 
+        "full_ref": "<p>PhD thesis, forthcoming, Michigan State University</p>", 
+        "source_type": 4
+    }
+},
+{
+    "pk": 14547, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MR", 
+        "full_ref": "<p>Misplaced reference</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14548, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "MMM,DX/1304", 
+        "full_ref": "<p><em>Merseyside Maritime Museum</em> (Liverpool, UK) DX/1304, Correspondence relating to the slaver Edward</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14549, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Remembrancer", 
+        "full_ref": "<p>Remembrancer (London, 1747-49)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14550, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Ritchie", 
+        "full_ref": "<p>Ritchie, R.C., <em>Captain Kidd and the War against the Pirates</em> (Cambridge, MA, 1986)</p>", 
+        "source_type": 3
+    }
+},
+{
+    "pk": 14551, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "RISA,Notary", 
+        "full_ref": "<p>Rhode Island State Archives, Notary Records, IV, pp. 111-112</p>", 
+        "source_type": 1
+    }
+},
+{
+    "pk": 14552, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "SJC", 
+        "full_ref": "<p><em>St. James's Chronicle&nbsp; </em>(London)</p>", 
+        "source_type": 2
+    }
+},
+{
+    "pk": 14553, 
+    "model": "voyage.voyagesources", 
+    "fields": {
+        "short_ref": "Stoddart", 
+        "full_ref": "<p>Stoddart, James, \"A cruise in a slaver,\" <em>Blackwood's Magazine,</em> 245 (1939): 186-99</p>", 
+        "source_type": 3
     }
 }
 ]
