@@ -147,7 +147,7 @@ def create_query_forms():
     for each of them that is either a basic or a general variable
     Returns a list of dictionaries containing the var_name, var_full_name, form
     """
-    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    voyage_span_first_year, voyage_span_last_year = globals.calculate_maxmin_years()
     form_list = []
     # for all basic and/or general variables
     for var in [x for x in globals.var_dict if x['is_general'] or x['is_basic']]:
@@ -613,7 +613,7 @@ def search(request):
     tab = 'result'
     result_data['summary_statistics_columns'] = globals.summary_statistics_columns
     form_list = []
-    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    voyage_span_first_year, voyage_span_last_year = globals.calculate_maxmin_years()
     search_url = None
     results = None
     time_frame_form = None
@@ -1673,18 +1673,6 @@ def date_filter_query(date_filters, results):
             results = results.exclude(**tmp_query)
 
     return results
-
-
-def calculate_maxmin_years():
-    if VoyageDates.objects.count() > 1:
-        voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-        voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-    else:
-        voyage_span_first_year = 1514
-        voyage_span_last_year = 1866
-
-    return voyage_span_first_year, voyage_span_last_year
-
 
 def formatDate(year, month):
     """
