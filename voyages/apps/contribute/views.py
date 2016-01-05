@@ -202,25 +202,74 @@ def interim(request, contribution_type, contribution_id):
         if outcome is not None:
             dict['voyage_outcome'] = outcome.particular_outcome_id
             dict['african_resistance'] = outcome.resistance_id
+        itinerary = voyage.voyage_itinerary
+        if itinerary is not None:
+            dict['first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
+            dict['second_port_intended_embarkation'] = itinerary.int_second_port_emb_id
+            dict['first_port_intended_disembarkation'] = itinerary.int_first_port_dis_id
+            dict['second_port_intended_disembarkation'] = itinerary.int_second_port_dis_id
+            dict['port_of_departure'] = itinerary.port_of_departure_id
+            dict['number_of_ports_called_prior_to_slave_purchase'] = itinerary.ports_called_buying_slaves
+            dict['first_place_of_slave_purchase'] = itinerary.first_place_slave_purchase_id
+            dict['second_place_of_slave_purchase'] = itinerary.second_place_slave_purchase_id
+            dict['third_place_of_slave_purchase'] = itinerary.third_place_slave_purchase_id
+            dict['principal_place_of_slave_purchase'] = itinerary.principal_place_of_slave_purchase_id
+            dict['place_of_call_before_atlantic_crossing'] = itinerary.port_of_call_before_atl_crossing_id
+            dict['number_of_new_world_ports_called_prior_to_disembarkation'] = itinerary.number_of_ports_of_call
+            dict['first_place_of_landing'] = itinerary.first_landing_place_id
+            dict['second_place_of_landing'] = itinerary.second_landing_place_id
+            dict['third_place_of_landing'] = itinerary.third_landing_place_id
+            dict['principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
+            dict['port_voyage_ended'] = itinerary.place_voyage_ended_id
+        dates = voyage.voyage_dates
+        if dates is not None:
+            dict['date_departure'] = dates.voyage_began
+            dict['date_slave_purchase_began'] = dates.slave_purchase_began
+            dict['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
+            dict['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
+            dict['date_second_slave_disembarkation'] = dates.arrival_at_second_place_landing
+            dict['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
+            dict['date_return_departure'] = dates.departure_last_place_of_landing
+            dict['date_voyage_completed'] = dates.voyage_completed
+            dict['length_of_middle_passage'] = dates.length_middle_passage_days
+
         previous_data[voyage.voyage_id] = dict
     if request.method == 'POST':
-        form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
-        prefix = 'interim_slave_number_'
-        numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
-        if form.is_valid():
+        if request.POST.get('submit_val') == 'delete':
             with transaction.atomic():
-                form.save()
-                # Clear previous numbers and save new ones.
-                InterimSlaveNumber.objects.filter(interim_voyage__id=contribution.interim_voyage.pk).delete()
-                for k, v in numbers.items():
-                    number = InterimSlaveNumber()
-                    number.interim_voyage = contribution.interim_voyage
-                    number.var_name = k[len(prefix):]
-                    number.number = v
-                    number.save()
-            return HttpResponseRedirect(reverse('contribute:thanks'))
+                contribution.interim_voyage.delete()
+                contribution.delete()
+            return HttpResponseRedirect(reverse('contribute:index'))
+        else:
+            form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
+            prefix = 'interim_slave_number_'
+            numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+            if form.is_valid():
+                with transaction.atomic():
+                    form.save()
+                    # Clear previous numbers and save new ones.
+                    InterimSlaveNumber.objects.filter(interim_voyage__id=contribution.interim_voyage.pk).delete()
+                    for k, v in numbers.items():
+                        number = InterimSlaveNumber()
+                        number.interim_voyage = contribution.interim_voyage
+                        number.var_name = k[len(prefix):]
+                        number.number = v
+                        number.save()
+                return HttpResponseRedirect(reverse('contribute:thanks'))
     else:
-        form = InterimVoyageForm(instance=contribution.interim_voyage)
+        data = {}
+        # If this is a merger or edit, initialize fields when there is consensus.
+        if len(previous_data) > 0:
+            values = previous_data.values()
+            for k, v in values[0].items():
+                equal = True
+                for i in range(1, len(previous_data)):
+                    equal = v == values[i].get(k)
+                    if not equal:
+                        break
+                if equal:
+                    data[k] = v
+        form = InterimVoyageForm(data, instance=contribution.interim_voyage)
         numbers = {n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
     import json
     return render(request, 'contribute/interim.html',

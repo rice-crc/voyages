@@ -68,7 +68,7 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-8">
-                    <input class="select-port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% endwith %}
         </div>
@@ -77,7 +77,7 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-8">
-                    <input class="select-port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% endwith %}
         </div>
@@ -243,6 +243,254 @@
         </div>
     </div>
     <div>
+        <a role="button" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
+          <h1>{% trans "Voyage itinerary" %}</h1>
+        </a>
+    </div>
+    <div id="itinerary" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.first_port_intended_embarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_port_intended_embarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.port_of_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.principal_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.place_of_call_before_atlantic_crossing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.principal_place_of_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.port_voyage_ended as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+    </div>
+    <div>
+        <a role="button" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
+          <h1>{% trans "Voyage dates" %}</h1>
+        </a>
+    </div>
+    <div id="dates" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.date_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_slave_purchase_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_vessel_left_last_slaving_port as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_first_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_second_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_third_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_return_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_voyage_completed as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.length_of_middle_passage as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+    </div>
+    <div>
         <a role="button" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
           <h1>{% trans "Slaves (numbers)" %}</h1>
         </a>
@@ -364,6 +612,7 @@
     <p></p>
     <div class="form-group col-md-12">
         <button class="btn btn-primary" type="submit">{% trans "Submit voyage" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Delete contribution" %}</button>
     </div>
 </form>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js">
@@ -393,14 +642,17 @@
         return length > 0 ? values : null;
     };
 
+    var getGroupName = function(ids) {
+        return (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
+                ' ' + ids.join(', ');
+    };
+
     var selectizeInput = function(input) {
         var values = getValues(input.attr('name'));
         var optgroups = [];
         for (var value in values) {
             var ids = values[value];
-            var optgroupname = (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
-                ' ' + ids.join(', ');
-            optgroups.push({ id: value, label: optgroupname, $order: -1 });
+            optgroups.push({ id: value, label: getGroupName(ids), $order: -1 });
         }
         var nodeName = input[0].nodeName.toUpperCase();
         if (values && nodeName == 'INPUT') {
@@ -420,9 +672,9 @@
                 persist: false,
                 closeAfterSelect: false,
                 options: options,
-                optgroups: optgroups,
                 labelField: 'value',
                 valueField: 'value',
+                optgroups: optgroups,
                 optgroupField: 'source',
                 optgroupLabelField: 'label',
                 optgroupValueField: 'id',
@@ -472,8 +724,15 @@
             $("input[name='interim_slave_number_{{ k }}']").val({{ v }});
         {% endfor %}
 
+        $('#delete_contrib').click(function(e) {
+            if (!confirm('{% trans "The contribution will be deleted and this partial contribution will be lost. Continue anyway?" %}')) {
+                e.preventDefault();
+            }
+        });
+
         $('input[type=text], input[type=number], select, textarea')
-            .not('.select-port')
+            .not('.select_port')
+            .not('.date_input')
             .each(function () {
                 var f = $(this);
                 selectizeInput(f);
@@ -481,24 +740,47 @@
         );
 
         $.ajax('/contribute/places_ajax', {
-            success: function(ports) {
-                for (var i = 0; i < ports.length; ++i) {
-                    var item = ports[i];
+            success: function(originalPorts) {
+                for (var i = 0; i < originalPorts.length; ++i) {
+                    var item = originalPorts[i];
                     if (item.type == "region") {
                         regions[item.pk] = item;
                     } else if (item.type == "broad_region") {
                         broad_regions[item.pk] = item;
                     }
+                    item.source = 'data';
                 }
-                $(".select-port").each(function() {
+                $(".select_port").each(function() {
                     var self = $(this);
+                    var ports = originalPorts.slice(0);
                     var values = getValues(self.attr('name'));
-                    if (values) {
-                        console.log(values);
+                    var optgroups = [ { id: 'data', label: '{% trans 'Ports' %}' } ];
+                    for (var value in values) {
+                        for (var j = 0; j < ports.length; ++j) {
+                            var p = ports[j];
+                            if (p.type == 'port' && p.value == value) {
+                                // Found the port matching a pre-existing value.
+                                var copy = jQuery.extend({}, p);
+                                copy.type = 'existing';
+                                copy.source = getGroupName(values[value]);
+                                optgroups.push({ id: copy.source, label: copy.source });
+                                ports.unshift(copy);
+                                break;
+                            }
+                        }
                     }
+                    var portItemDisplay = function(data, escape) {
+                        var region = regions[data.parent];
+                        var broad_region = broad_regions[region.parent];
+                        return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
+                    };
                     self.selectize({
                         maxItems: 1,
                         options: ports,
+                        optgroups: optgroups,
+                        optgroupField: 'source',
+                        optgroupLabelField: 'label',
+                        optgroupValueField: 'id',
                         valueField: 'value',
                         searchField: ['port', 'region', 'broad_region'],
                         render: {
@@ -509,17 +791,122 @@
                                 if (data.type == 'region') {
                                     return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
                                 }
+                                if (data.type == 'existing') {
+                                    return portItemDisplay(data, escape);
+                                }
                                 return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region">' + escape(data.broad_region) + '</div>';
                             },
-                            item: function(data, escape) {
-                                var region = regions[data.parent];
-                                var broad_region = broad_regions[region.parent];
-                                return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
-                            },
+                            item: portItemDisplay,
                         }
                     });
                 });
             }
+        });
+
+        // Handle dates.
+        var dateOptions = [];
+        for (var i = {{ voyage_span_first_year }}; i < {{ voyage_span_last_year }}; ++i) {
+            dateOptions.push({ type: 'year', label: i, value: 'y' + i });
+        }
+
+        {% get_current_language as LANGUAGE_CODE %}
+        var locale = "{{ LANGUAGE_CODE }}";
+        var getMonthName = function(i) {
+            var date = new Date(i + "/01/2015");
+            return date.toLocaleString(locale, { month: "long" });
+        };
+        for (var i = 1; i <= 12; ++i) {
+            var month = getMonthName(i);
+            dateOptions.push({ type: 'month', label: month, value: 'm' + i });
+        }
+        for (var i = 1; i <= 31; ++i) {
+            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + i });
+        }
+        $(".date_input").each(function() {
+            var self = $(this);
+            var optgroups = [
+                { type: 'year', name: '{% trans "Year in the range" %} {{ voyage_span_first_year }} - {{ voyage_span_last_year }}'},
+                { type: 'month', name: '{% trans "Month" %}'},
+                { type: 'day', name: '{% trans "Day" %}'},
+            ];
+            var values = getValues(self.attr('name'));
+            var options = dateOptions.slice(0);
+            var existing = {};
+            for (var value in values) {
+                if (value == ',,') continue;
+                // Parse value in MM,DD,YYYY format.
+                var parse = value.split(',');
+                if (parse.length != 3) continue;
+                parse[0] = parseInt(parse[0]);
+                parse[1] = parseInt(parse[1]);
+                parse[2] = parseInt(parse[2]);
+                var label = '';
+                if (!isNaN(parse[2])) label += parse[2];
+                if (!isNaN(parse[0])) label += ', ' + getMonthName(parse[0]);
+                if (!isNaN(parse[1])) label += ', ' + parse[1];
+                var item = { type: value, label: label, value: 'full_' + value, year: parse[2], month: parse[0], day: parse[1] };
+                existing[item.value] = item;
+                options.unshift(item);
+                optgroups.unshift({ type: value, name: getGroupName(values[value]) });
+            }
+            self.selectize({
+                options: options,
+                maxItems: 3,
+                searchField: ['label'],
+                valueField: 'value',
+                labelField: 'label',
+                optgroupLabelField: 'name',
+                optgroupValueField: 'type',
+                optgroupField: 'type',
+                optgroups: optgroups,
+                render: {
+                    option: function(data, escape) {
+                        if (data.type == 'year') {
+                            return '<div style="display:none;">' + escape(data.label) + '</div>';
+                        }
+                        if (data.type == 'month') {
+                            return '<div class="month">' + escape(data.label) + '</div>';
+                        }
+                        return '<span>' + escape(data.label) + '&nbsp;</span>' + (data.label % 10 == 0 ? '<br />' : '');
+                    },
+                }
+            });
+            var inside = false;
+            this.selectize.on('item_add', function(value, item) {
+                if (inside) return;
+                if (value.startsWith('full')) {
+                    this.clear();
+                    inside = true;
+                    var data = existing[value];
+                    if (!isNaN(data.year)) this.addItem('y' + data.year);
+                    if (!isNaN(data.month)) this.addItem('m' + data.month);
+                    if (!isNaN(data.day)) this.addItem('d' + data.day);
+                    inside = false;
+                    return;
+                }
+                // See if there is an item with the same type already selected,
+                // if so, delete the item so only the new entry is kept.
+                var type = value.charAt(0);
+                for (var i = 0; i < this.items.length; ++i) {
+                    var val = this.items[i];
+                    if (val.charAt(0) == type && val != value) {
+                        this.removeItem(val);
+                        break;
+                    }
+                }
+                var clone = this.items.slice(0).sort();
+                // Place the items in the appropriate order:
+                for (var i = clone.length - 1; i >= 0; --i) {
+                    var val = clone[i];
+                    this.removeItem(val);
+                }
+                inside = true;
+                for (var i = clone.length - 1; i >= 0; --i) {
+                    var val = clone[i];
+                    this.addItem(val);
+                }
+                inside = false;
+            });
         });
     });
 
@@ -539,18 +926,28 @@
                     target = $("#" + id);
                 }
             }
+            var nextActive = null;
             if (target.hasClass("broad_region")) {
                 $(".broad_region,.region,.port").removeClass(className);
                 target.addClass(className);
                 $(".broad_region_" + target.data('pk')).addClass(className);
-                this.setActiveOption($(".broad_region_" + target.data('pk') + ":first"));
+                nextActive = $(".broad_region_" + target.data('pk') + ":last");
             } else if (target.hasClass("region")) {
                 $(".port").removeClass(className);
                 target.addClass(className);
                 $(".region_" + target.data('pk')).addClass(className);
-                this.setActiveOption($(".region_" + target.data('pk') + ":first"));
+                nextActive = $(".region_" + target.data('pk') + ":last");
             } else {
                 protoSelectOption.apply(this, arguments);
+            }
+            if (nextActive) {
+                var self = this;
+                window.setTimeout(function() {
+                    // This will ensure that the selected option
+                    // and as many of its children are displayed.
+                    self.setActiveOption(nextActive);
+                    self.setActiveOption(target);
+                }, 200);
             }
         } else {
             protoSelectOption.apply(this, arguments);
