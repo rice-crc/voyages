@@ -11,6 +11,8 @@ from voyages.apps.contribute.models import *
 from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
 
+number_prefix = 'interim_slave_number_'
+        
 def index(request):
     """
     Handles the redirection when user attempts to login
@@ -122,6 +124,7 @@ def edit(request):
                 contribution.status = ContributionStatus.pending
                 contribution.notes = form.cleaned_data['notes']
                 contribution.save()
+                init_interim_voyage(interim_voyage, contribution)
             return HttpResponseRedirect(reverse(
                 'contribute:interim', kwargs={'contribution_type': 'edit', 'contribution_id': contribution.pk}
             ))
@@ -149,6 +152,7 @@ def merge(request):
                 contribution.status = ContributionStatus.pending
                 contribution.notes = form.cleaned_data['notes']
                 contribution.save()
+                init_interim_voyage(interim_voyage, contribution)
             return HttpResponseRedirect(reverse(
                 'contribute:interim', kwargs={'contribution_type': 'merge', 'contribution_id': contribution.pk}
             ))
@@ -173,67 +177,7 @@ def interim(request, contribution_type, contribution_id):
     contribution = model.objects.get(pk=contribution_id)
     if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
         return HttpResponseForbidden()
-    previous_data = {}
-    related = list(Voyage.objects.filter(voyage_id__in=contribution.get_related_voyage_ids()))
-    for voyage in related:
-        dict = {}
-        # Ship, nation, owners
-        ship = voyage.voyage_ship
-        if ship is not None:
-            dict['name_of_vessel'] = ship.ship_name
-            dict['year_ship_constructed'] = ship.year_of_construction
-            dict['year_ship_registered'] = ship.registered_year
-            dict['national_carrier'] = ship.nationality_ship_id
-            dict['ship_construction_place'] = ship.vessel_construction_place_id
-            dict['ship_registration_place'] = ship.registered_place_id
-            dict['rig_of_vessel'] = ship.rig_of_vessel_id
-            dict['tonnage_of_vessel'] = ship.tonnage
-            dict['ton_type'] = ship.ton_type_id
-            dict['guns_mounted'] = ship.guns_mounted
-            owners = list(VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(order_by=['owner_order']))
-            if len(owners) > 0:
-                dict['first_ship_owner'] = owners[0].owner.name
-            if len(owners) > 1:
-                dict['second_ship_owner'] = owners[1].owner.name
-            if len(owners) > 2:
-                dict['additional_ship_owners'] = '\n'.join([x.owner.name for x in owners[2:]])
-        # Outcome
-        outcome = voyage.voyage_name_outcome.get()
-        if outcome is not None:
-            dict['voyage_outcome'] = outcome.particular_outcome_id
-            dict['african_resistance'] = outcome.resistance_id
-        itinerary = voyage.voyage_itinerary
-        if itinerary is not None:
-            dict['first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
-            dict['second_port_intended_embarkation'] = itinerary.int_second_port_emb_id
-            dict['first_port_intended_disembarkation'] = itinerary.int_first_port_dis_id
-            dict['second_port_intended_disembarkation'] = itinerary.int_second_port_dis_id
-            dict['port_of_departure'] = itinerary.port_of_departure_id
-            dict['number_of_ports_called_prior_to_slave_purchase'] = itinerary.ports_called_buying_slaves
-            dict['first_place_of_slave_purchase'] = itinerary.first_place_slave_purchase_id
-            dict['second_place_of_slave_purchase'] = itinerary.second_place_slave_purchase_id
-            dict['third_place_of_slave_purchase'] = itinerary.third_place_slave_purchase_id
-            dict['principal_place_of_slave_purchase'] = itinerary.principal_place_of_slave_purchase_id
-            dict['place_of_call_before_atlantic_crossing'] = itinerary.port_of_call_before_atl_crossing_id
-            dict['number_of_new_world_ports_called_prior_to_disembarkation'] = itinerary.number_of_ports_of_call
-            dict['first_place_of_landing'] = itinerary.first_landing_place_id
-            dict['second_place_of_landing'] = itinerary.second_landing_place_id
-            dict['third_place_of_landing'] = itinerary.third_landing_place_id
-            dict['principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
-            dict['port_voyage_ended'] = itinerary.place_voyage_ended_id
-        dates = voyage.voyage_dates
-        if dates is not None:
-            dict['date_departure'] = dates.voyage_began
-            dict['date_slave_purchase_began'] = dates.slave_purchase_began
-            dict['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
-            dict['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
-            dict['date_second_slave_disembarkation'] = dates.arrival_at_second_place_landing
-            dict['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
-            dict['date_return_departure'] = dates.departure_last_place_of_landing
-            dict['date_voyage_completed'] = dates.voyage_completed
-            dict['length_of_middle_passage'] = dates.length_middle_passage_days
-
-        previous_data[voyage.voyage_id] = dict
+    previous_data = contribution_related_data(contribution)
     if request.method == 'POST':
         if request.POST.get('submit_val') == 'delete':
             with transaction.atomic():
@@ -257,20 +201,8 @@ def interim(request, contribution_type, contribution_id):
                         number.save()
                 return HttpResponseRedirect(reverse('contribute:thanks'))
     else:
-        data = {}
-        # If this is a merger or edit, initialize fields when there is consensus.
-        if len(previous_data) > 0:
-            values = previous_data.values()
-            for k, v in values[0].items():
-                equal = True
-                for i in range(1, len(previous_data)):
-                    equal = v == values[i].get(k)
-                    if not equal:
-                        break
-                if equal:
-                    data[k] = v
-        form = InterimVoyageForm(data, instance=contribution.interim_voyage)
-        numbers = {n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
+        numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
+        form = InterimVoyageForm(instance=contribution.interim_voyage)
     import json
     return render(request, 'contribute/interim.html',
                   {'form': form, 'numbers': numbers,
@@ -290,3 +222,117 @@ def new_voyage(request):
 
 def under_construction(request):
     return JsonResponse({'error': 'UNDER CONSTRUCTION'})
+
+def init_interim_voyage(interim, contribution):
+    # If this is a merger or edit, initialize fields when there is consensus.
+    previous_data = contribution_related_data(contribution)
+    if len(previous_data) > 0:
+        values = previous_data.values()
+        for k, v in values[0].items():
+            if v is None:
+                continue
+            equal = True
+            for i in range(1, len(previous_data)):
+                equal = v == values[i].get(k)
+                if not equal:
+                    break
+            if equal:
+                if k.startswith(number_prefix):
+                    number = InterimSlaveNumber()
+                    number.number = v
+                    number.var_name = k[len(number_prefix):]
+                    number.interim_voyage = interim
+                    number.save()
+                else:
+                    if hasattr(interim, k + '_id'):
+                        k += '_id'
+                    setattr(interim, k, v)
+    interim.save()
+
+def contribution_related_data(contribution):    
+    previous_data = {}
+    related = contribution.get_related_voyages()
+    for voyage in related:
+        previous_data[voyage.voyage_id] = voyage_to_dict(voyage)
+    return previous_data
+
+def voyage_to_dict(voyage):
+    dict = {}
+    # Ship, nation, owners
+    ship = voyage.voyage_ship
+    if ship is not None:
+        dict['name_of_vessel'] = ship.ship_name
+        dict['year_ship_constructed'] = ship.year_of_construction
+        dict['year_ship_registered'] = ship.registered_year
+        dict['national_carrier'] = ship.nationality_ship_id
+        dict['ship_construction_place'] = ship.vessel_construction_place_id
+        dict['ship_registration_place'] = ship.registered_place_id
+        dict['rig_of_vessel'] = ship.rig_of_vessel_id
+        dict['tonnage_of_vessel'] = ship.tonnage
+        dict['ton_type'] = ship.ton_type_id
+        dict['guns_mounted'] = ship.guns_mounted
+        owners = list(VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(order_by=['owner_order']))
+        if len(owners) > 0:
+            dict['first_ship_owner'] = owners[0].owner.name
+        if len(owners) > 1:
+            dict['second_ship_owner'] = owners[1].owner.name
+        if len(owners) > 2:
+            dict['additional_ship_owners'] = '\n'.join([x.owner.name for x in owners[2:]])
+    # Outcome
+    outcome = voyage.voyage_name_outcome.get()
+    if outcome is not None:
+        dict['voyage_outcome'] = outcome.particular_outcome_id
+        dict['african_resistance'] = outcome.resistance_id
+    itinerary = voyage.voyage_itinerary
+    if itinerary is not None:
+        dict['first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
+        dict['second_port_intended_embarkation'] = itinerary.int_second_port_emb_id
+        dict['first_port_intended_disembarkation'] = itinerary.int_first_port_dis_id
+        dict['second_port_intended_disembarkation'] = itinerary.int_second_port_dis_id
+        dict['port_of_departure'] = itinerary.port_of_departure_id
+        dict['number_of_ports_called_prior_to_slave_purchase'] = itinerary.ports_called_buying_slaves
+        dict['first_place_of_slave_purchase'] = itinerary.first_place_slave_purchase_id
+        dict['second_place_of_slave_purchase'] = itinerary.second_place_slave_purchase_id
+        dict['third_place_of_slave_purchase'] = itinerary.third_place_slave_purchase_id
+        dict['principal_place_of_slave_purchase'] = itinerary.principal_place_of_slave_purchase_id
+        dict['place_of_call_before_atlantic_crossing'] = itinerary.port_of_call_before_atl_crossing_id
+        dict['number_of_new_world_ports_called_prior_to_disembarkation'] = itinerary.number_of_ports_of_call
+        dict['first_place_of_landing'] = itinerary.first_landing_place_id
+        dict['second_place_of_landing'] = itinerary.second_landing_place_id
+        dict['third_place_of_landing'] = itinerary.third_landing_place_id
+        dict['principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
+        dict['port_voyage_ended'] = itinerary.place_voyage_ended_id
+    dates = voyage.voyage_dates
+    if dates is not None:
+        dict['date_departure'] = dates.voyage_began
+        dict['date_slave_purchase_began'] = dates.slave_purchase_began
+        dict['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
+        dict['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
+        dict['date_second_slave_disembarkation'] = dates.arrival_at_second_place_landing
+        dict['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
+        dict['date_return_departure'] = dates.departure_last_place_of_landing
+        dict['date_voyage_completed'] = dates.voyage_completed
+        dict['length_of_middle_passage'] = dates.length_middle_passage_days
+    numbers = voyage.voyage_slaves_numbers
+    if numbers is not None:
+        dict[number_prefix + 'SLADAFRI'] = numbers.slave_deaths_before_africa
+        dict[number_prefix + 'SLADVOY'] = numbers.slave_deaths_between_africa_america
+        dict[number_prefix + 'SLADAMER'] = numbers.slave_deaths_between_arrival_and_sale
+        dict[number_prefix + 'SLINTEND'] = numbers.num_slaves_intended_first_port
+        dict[number_prefix + 'SLINTEN2'] = numbers.num_slaves_intended_second_port
+        dict[number_prefix + 'NCAR13'] = numbers.num_slaves_carried_first_port
+        dict[number_prefix + 'NCAR15'] = numbers.num_slaves_carried_second_port
+        dict[number_prefix + 'NCAR17'] = numbers.num_slaves_carried_third_port
+        dict[number_prefix + 'TSLAVESP'] = numbers.total_num_slaves_purchased
+        dict[number_prefix + 'TSLAVESD'] = numbers.total_num_slaves_dep_last_slaving_port
+        dict[number_prefix + 'SLAARRIV'] = numbers.total_num_slaves_arr_first_port_embark
+        dict[number_prefix + 'SLAS32'] = numbers.num_slaves_disembark_first_place
+        dict[number_prefix + 'SLAS36'] = numbers.num_slaves_disembark_second_place
+        dict[number_prefix + 'SLAS39'] = numbers.num_slaves_disembark_third_place
+        dict[number_prefix + 'SLAXIMP'] = numbers.imp_total_num_slaves_embarked
+        dict[number_prefix + 'SLAMIMP'] = numbers.imp_total_num_slaves_disembarked
+        dict[number_prefix + 'VYMRTIMP'] = numbers.imp_mortality_during_voyage
+    #crew = voyage.voyage_crew
+    #if crew is not None:
+        #dict[''] = crew
+    return dict
