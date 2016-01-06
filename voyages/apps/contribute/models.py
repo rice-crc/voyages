@@ -179,6 +179,10 @@ class BaseVoyageContribution(models.Model):
     def get_related_voyage_ids(self):
         return []
 
+    def get_related_voyages(self):
+        x = list(voyage.models.Voyage.objects.filter(voyage_id__in=self.get_related_voyage_ids()))
+        return x
+
     class Meta:
         abstract = True
 
