@@ -1264,7 +1264,21 @@ class VoyageManager(models.Manager):
     def cache(cls):
         with cls._lock:
             if not cls._has_loaded:
-                cls._all = {v.pk: v for v in Voyage.objects.all()}
+                # Ensure that we load some related members thus
+                # avoiding hitting the DB multiple times.
+                cls._all = {v.pk: v for v in Voyage.objects.all().select_related(
+                    'voyage_slaves_numbers',
+                    'voyage_dates',
+                    'voyage_itinerary',
+                    'voyage_ship').
+                    prefetch_related(
+                    'voyage_itinerary__imp_principal_place_of_slave_purchase',
+                    'voyage_itinerary__imp_principal_place_of_slave_purchase__region',
+                    'voyage_itinerary__imp_principal_place_of_slave_purchase__region__broad_region',
+                    'voyage_itinerary__imp_principal_port_slave_dis',
+                    'voyage_itinerary__imp_principal_port_slave_dis__region',
+                    'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
+                    'voyage_ship__imputed_nationality')}
                 cls._has_loaded = True
         return cls._all
 
@@ -1276,17 +1290,6 @@ class VoyageManager(models.Manager):
 
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
-
-    # Ensure that we load some related members thus
-    # avoiding hitting the DB multiple times.
-    def get_query_set(self):
-        return super(VoyageManager, self).get_query_set().select_related(
-            'voyage_itinerary__imp_principal_place_of_slave_purchase__region__broad_region',
-            'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
-            'voyage_slaves_numbers',
-            'voyage_dates',
-            'voyage_ship__imputed_nationality')
-
 
 class Voyage(models.Model):
     """

@@ -1227,7 +1227,8 @@ def search(request):
             all_voyages = VoyageManager.cache()
             missed_embarked = 0
             missed_disembarked = 0
-            for pk in results.values_list('pk', flat=True).load_all():
+            keys = list(results.values_list('pk', flat=True).load_all())
+            for pk in keys:
                 voyage = all_voyages.get(int(pk))
                 if voyage is None:
                     continue
