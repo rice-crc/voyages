@@ -38,6 +38,20 @@
 	.geo_complement {
 		color: #B0B0B0;
 	}
+
+	.cell_hover {
+		background-color: darkgray;
+	}
+
+	#demographics_table td {
+		width: 85px;
+		height: 52px;
+		cursor: text;
+	}
+
+	#demographics_table td, #demographics_table th {
+		vertical-align: middle !important;
+	}
 </style>
 
 <h1>{% trans "Interim voyage" %}</h1>
@@ -491,6 +505,120 @@
         </div>
     </div>
     <div>
+        <a role="button" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
+          <h1>{% trans "Captain and crew" %}</h1>
+        </a>
+    </div>
+    <div id="crew" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.first_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% endwith %}
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW1">
+                {% trans "Crew at voyage outset" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW1" name="interim_slave_number_CREW1">
+            </div>
+            <label for="interim_slave_number_CREW2">
+                {% trans "Crew at departure from last port of slave purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW2" name="interim_slave_number_CREW2">
+            </div>
+            <label for="interim_slave_number_CREW3">
+                {% trans "Crew at first landing of slaves" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW3" name="interim_slave_number_CREW3">
+            </div>
+            <label for="interim_slave_number_CREW4">
+                {% trans "Crew when return voyage began" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW4" name="interim_slave_number_CREW4">
+            </div>
+            <label for="interim_slave_number_CREW5">
+                {% trans "Crew at end of voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW5" name="interim_slave_number_CREW5">
+            </div>
+            <label for="interim_slave_number_CREW">
+                {% trans "Number of crew unspecified" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW" name="interim_slave_number_CREW">
+            </div>
+            <label for="interim_slave_number_SAILD1">
+                {% trans "Crew died before first place of trade in Africa" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD1" name="interim_slave_number_SAILD1">
+            </div>
+            <label for="interim_slave_number_SAILD2">
+                {% trans "Crew died while ship was on African coast" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD2" name="interim_slave_number_SAILD2">
+            </div>
+            <label for="interim_slave_number_SAILD3">
+                {% trans "Crew died during Middle Passage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD3" name="interim_slave_number_SAILD3">
+            </div>
+            <label for="interim_slave_number_SAILD4">
+                {% trans "Crew died in the Americas" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD4" name="interim_slave_number_SAILD4">
+            </div>
+            <label for="interim_slave_number_SAILD5">
+                {% trans "Crew died on return voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD5" name="interim_slave_number_SAILD5">
+            </div>
+            <label for="interim_slave_number_CREWDIED">
+                {% trans "Crew died during complete voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREWDIED" name="interim_slave_number_CREWDIED">
+            </div>
+            <label for="interim_slave_number_NDESERT">
+                {% trans "Total number of crew deserted" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NDESERT" name="interim_slave_number_NDESERT">
+            </div>
+        </div>
+    </div>
+    <div>
         <a role="button" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
           <h1>{% trans "Slaves (numbers)" %}</h1>
         </a>
@@ -606,6 +734,71 @@
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
+            </div>
+        </div>
+    </div>
+    <div>
+        <a role="button" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
+          <h1>{% trans "Sources" %}</h1>
+        </a>
+    </div>
+    <div id="sources" class="collapse col-md-12 var_group">
+    </div>
+    <div>
+        <a role="button" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
+          <h1>{% trans "Slaves (characteristics)" %}</h1>
+        </a>
+    </div>
+    <div id="demographics" class="collapse col-md-12 var_group">
+        <div id="hidden_div" style="display:none">
+            <input type="number" id="cell_editor" style="width: 65px;">
+        </div>
+        <table id="demographics_table" class="table table-striped" style="width: auto">
+            <thead>
+                <th></th>
+                <th>{% trans "Men" %}</th>
+                <th>{% trans "Women" %}</th>
+                <th>{% trans "Boys" %}</th>
+                <th>{% trans "Girls" %}</th>
+                <th>{% trans "Males" %}</th>
+                <th>{% trans "Females" %}</th>
+                <th>{% trans "Adults" %}</th>
+                <th>{% trans "Children" %}</th>
+                <th>{% trans "Infants" %}</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{% trans "Embarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (third port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Died on voyage" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <label for="notes_slaves_demographics">
+                {% trans "Notes for slaves characteristics" %}:
+            </label>
+            <div class="input-group col-md-8">
+                <textarea class="form-control not_selectized" id="notes_slaves_demographics" name="notes_slaves_demographics"></textarea>
             </div>
         </div>
     </div>
@@ -728,6 +921,7 @@
         $('input[type=text], input[type=number], select, textarea')
             .not('.select_port')
             .not('.date_input')
+            .not('.not_selectized')
             .each(function () {
                 var f = $(this);
                 selectizeInput(f);
@@ -935,12 +1129,78 @@
             });
         });
 
-        // Set number inputs
+        // Store numbers in an object.
+        var numbers = {
         {% for k, v in numbers.items %}
             {% if v %}
-                $("input[name='{{ k }}']")[0].selectize.setValue('{{ v }}');
+                '{{ k }}': {{ v }},
             {% endif %}
         {% endfor %}
+        };
+
+        // Set demographic table.
+        var demographics_column_headers = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
+        var demographics_row_indices = [ 1, 4, 5, 2, 3, 6 ];
+        var demographics_rows = $.map(
+            $("#demographics_table").find("tbody").find("tr"),
+            function(row, i) {
+                return $(row).find("td");
+            }
+        );
+
+        // Set numeric inputs and demographics matrix.
+        var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
+        var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
+        for (var key in numbers) {
+            var match = regex.exec(key);
+            var found = false;
+            if (match) {
+                var col = demographics_column_headers.indexOf(match[1]);
+                var row = demographics_row_indices.indexOf(parseInt(match[2]));
+                if (col >= 0 && row >= 0 && row < 6) {
+                    $(demographics_rows[row][col]).html(numbers[key]);
+                    found = true;
+                }
+            }
+            if (!found) {
+                $("input[name='" + key + "']")[0].selectize.setValue(numbers[key]);
+            }
+        }
+
+        $("#demographics_table td").hover(
+            function() {
+                $(this).addClass('cell_hover');
+            },
+            function() {
+                $(this).removeClass('cell_hover');
+            }
+        );
+
+        var current_cell = null;
+        var editor = $('#cell_editor');
+
+        $("#demographics_table td").click(function() {
+            if (current_cell) return;
+            current_cell = $(this);
+            var value = parseInt(current_cell.html());
+            current_cell.html('');
+            editor.appendTo(current_cell);
+            editor.focus();
+            editor.blur(function() {
+                if (current_cell) {
+                    var value = editor.val();
+                    current_cell.html(value);
+                    current_cell = null;
+                    editor.appendTo($('#hidden_div'));
+                }
+            });
+            editor.keyup(function(e) {
+                if (e.keyCode == 13) {
+                    editor.blur();
+                }
+            });
+            editor.val(value);
+        });
 
         $('form').submit(function() {
             $("input[name^='date']").each(function() {
@@ -949,6 +1209,18 @@
                 var date = parseDateValue(self.val());
                 self.val(date.month + ',' + date.day + ',' + date.year);
             });
+            // Append demographics matrix.
+            var form = $(this);
+            for (var i = 0; i < demographics_rows.length; ++i) {
+                for (var j = 0; j < demographics_column_headers.length; ++j) {
+                    var value = parseInt($(demographics_rows[i][j]).html());
+                    if (!isNaN(value)) {
+                        form.append('<input type="hidden" name="' +
+                            NUMBERS_KEY_PREFIX + demographics_column_headers[j] + demographics_row_indices[i] +
+                            '" value="' + value + '" />');
+                    }
+                }
+            }
             return true;
         });
     });

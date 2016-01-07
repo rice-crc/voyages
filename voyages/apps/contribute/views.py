@@ -12,7 +12,7 @@ from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
 
 number_prefix = 'interim_slave_number_'
-        
+
 def index(request):
     """
     Handles the redirection when user attempts to login
@@ -332,7 +332,81 @@ def voyage_to_dict(voyage):
         dict[number_prefix + 'SLAXIMP'] = numbers.imp_total_num_slaves_embarked
         dict[number_prefix + 'SLAMIMP'] = numbers.imp_total_num_slaves_disembarked
         dict[number_prefix + 'VYMRTIMP'] = numbers.imp_mortality_during_voyage
-    #crew = voyage.voyage_crew
-    #if crew is not None:
-        #dict[''] = crew
+        # Demographics
+        dict[number_prefix + 'MEN1'] = numbers.num_men_embark_first_port_purchase
+        dict[number_prefix + 'WOMEN1'] = numbers.num_women_embark_first_port_purchase
+        dict[number_prefix + 'BOY1'] = numbers.num_boy_embark_first_port_purchase
+        dict[number_prefix + 'GIRL1'] = numbers.num_girl_embark_first_port_purchase
+        dict[number_prefix + 'ADULT1'] = numbers.num_adult_embark_first_port_purchase
+        dict[number_prefix + 'CHILD1'] = numbers.num_child_embark_first_port_purchase
+        dict[number_prefix + 'INFANT1'] = numbers.num_infant_embark_first_port_purchase
+        dict[number_prefix + 'MALE1'] = numbers.num_males_embark_first_port_purchase
+        dict[number_prefix + 'FEMALE1'] = numbers.num_females_embark_first_port_purchase
+        dict[number_prefix + 'MEN2'] = numbers.num_men_died_middle_passage
+        dict[number_prefix + 'WOMEN2'] = numbers.num_women_died_middle_passage
+        dict[number_prefix + 'BOY2'] = numbers.num_boy_died_middle_passage
+        dict[number_prefix + 'GIRL2'] = numbers.num_girl_died_middle_passage
+        dict[number_prefix + 'ADULT2'] = numbers.num_adult_died_middle_passage
+        dict[number_prefix + 'CHILD2'] = numbers.num_child_died_middle_passage
+        dict[number_prefix + 'INFANT2'] = numbers.num_infant_died_middle_passage
+        dict[number_prefix + 'MALE2'] = numbers.num_males_died_middle_passage
+        dict[number_prefix + 'FEMALE2'] = numbers.num_females_died_middle_passage
+        dict[number_prefix + 'MEN3'] = numbers.num_men_disembark_first_landing
+        dict[number_prefix + 'WOMEN3'] = numbers.num_women_disembark_first_landing
+        dict[number_prefix + 'BOY3'] = numbers.num_boy_disembark_first_landing
+        dict[number_prefix + 'GIRL3'] = numbers.num_girl_disembark_first_landing
+        dict[number_prefix + 'ADULT3'] = numbers.num_adult_disembark_first_landing
+        dict[number_prefix + 'CHILD3'] = numbers.num_child_disembark_first_landing
+        dict[number_prefix + 'INFANT3'] = numbers.num_infant_disembark_first_landing
+        dict[number_prefix + 'MALE3'] = numbers.num_males_disembark_first_landing
+        dict[number_prefix + 'FEMALE3'] = numbers.num_females_disembark_first_landing
+        dict[number_prefix + 'MEN4'] = numbers.num_men_embark_second_port_purchase
+        dict[number_prefix + 'WOMEN4'] = numbers.num_women_embark_second_port_purchase
+        dict[number_prefix + 'BOY4'] = numbers.num_boy_embark_second_port_purchase
+        dict[number_prefix + 'GIRL4'] = numbers.num_girl_embark_second_port_purchase
+        dict[number_prefix + 'ADULT4'] = numbers.num_adult_embark_second_port_purchase
+        dict[number_prefix + 'CHILD4'] = numbers.num_child_embark_second_port_purchase
+        dict[number_prefix + 'INFANT4'] = numbers.num_infant_embark_second_port_purchase
+        dict[number_prefix + 'MALE4'] = numbers.num_males_embark_second_port_purchase
+        dict[number_prefix + 'FEMALE4'] = numbers.num_females_embark_second_port_purchase
+        dict[number_prefix + 'MEN5'] = numbers.num_men_embark_third_port_purchase
+        dict[number_prefix + 'WOMEN5'] = numbers.num_women_embark_third_port_purchase
+        dict[number_prefix + 'BOY5'] = numbers.num_boy_embark_third_port_purchase
+        dict[number_prefix + 'GIRL5'] = numbers.num_girl_embark_third_port_purchase
+        dict[number_prefix + 'ADULT5'] = numbers.num_adult_embark_third_port_purchase
+        dict[number_prefix + 'CHILD5'] = numbers.num_child_embark_third_port_purchase
+        dict[number_prefix + 'INFANT5'] = numbers.num_infant_embark_third_port_purchase
+        dict[number_prefix + 'MALE5'] = numbers.num_males_embark_third_port_purchase
+        dict[number_prefix + 'FEMALE5'] = numbers.num_females_embark_third_port_purchase
+        dict[number_prefix + 'MEN6'] = numbers.num_men_disembark_second_landing
+        dict[number_prefix + 'WOMEN6'] = numbers.num_women_disembark_second_landing
+        dict[number_prefix + 'BOY6'] = numbers.num_boy_disembark_second_landing
+        dict[number_prefix + 'GIRL6'] = numbers.num_girl_disembark_second_landing
+        dict[number_prefix + 'ADULT6'] = numbers.num_adult_disembark_second_landing
+        dict[number_prefix + 'CHILD6'] = numbers.num_child_disembark_second_landing
+        dict[number_prefix + 'INFANT6'] = numbers.num_infant_disembark_second_landing
+        dict[number_prefix + 'MALE6'] = numbers.num_males_disembark_second_landing
+        dict[number_prefix + 'FEMALE6'] = numbers.num_females_disembark_second_landing
+
+    # Captains
+    captains = voyage.voyage_captain.all()
+    captain_keys = ['first', 'second', 'third']
+    for i in range(0, len(captains)):
+        dict[captain_keys[i] + '_captain'] = captains[i].name
+    # Crew numbers
+    crew = voyage.voyage_crew
+    if crew is not None:
+        dict[number_prefix + 'CREW1'] = crew.crew_voyage_outset
+        dict[number_prefix + 'CREW2'] = crew.crew_departure_last_port
+        dict[number_prefix + 'CREW3'] = crew.crew_first_landing
+        dict[number_prefix + 'CREW4'] = crew.crew_return_begin
+        dict[number_prefix + 'CREW5'] = crew.crew_end_voyage
+        dict[number_prefix + 'CREW'] = crew.unspecified_crew
+        dict[number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
+        dict[number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
+        dict[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
+        dict[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
+        dict[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
+        dict[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
+        dict[number_prefix + 'NDESERT'] = crew.crew_deserted
     return dict
