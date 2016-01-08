@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <style>
     .var_group {
@@ -52,6 +53,14 @@
 	#demographics_table td, #demographics_table th {
 		vertical-align: middle !important;
 	}
+
+    .has_pre_existing_values, .has_notes {
+        background-color: yellow;
+    }
+
+    .tab-pane {
+        padding: 20px;
+    }
 </style>
 
 <h1>{% trans "Interim voyage" %}</h1>
@@ -743,6 +752,162 @@
         </a>
     </div>
     <div id="sources" class="collapse col-md-12 var_group">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+          {% trans "Add source" %}
+        </button>
+        <table id="sources_table" style="display:none;" class="table table-striped">
+            <thead>
+                <th>{% trans "Type of source" %}</th>
+                <th>{% trans "Details" %}</th>
+                <th></th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs" role="tablist" id="tab_control">
+                            <li data-tab="primary" role="presentation" class="active"><a href="#primary"
+                                                                                         aria-controls="primary"
+                                                                                         role="tab" data-toggle="tab">
+                                {% trans "Primary source" %}</a></li>
+                            <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
+                                                                          role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
+                            <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                                                                       data-toggle="tab">{% trans "Book" %}</a></li>
+                            <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
+                                                                        data-toggle="tab">{% trans "Other" %}</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active form-horizontal" id="primary">
+                                <div class="form-group">
+                                    <label for="primary_name">{% trans "Name of library of archive" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="primary_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_loc">{% trans "Location of library/archive" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="primary_loc">
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_series">{% trans "Series or collection" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="primary_series">
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_vol">{% trans "Volume or box or bundle" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="primary_vol">
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_detail">{% trans "Document detail (page or folio number, and/or date of document)" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="primary_detail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_info">{% trans "Information about source" %}</label>
+                                    <textarea class="form-control not_selectized" id="primary_info"></textarea>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="article">
+                                <div class="form-group">
+                                    <label for="article_author">{% trans "Author" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="article_author">
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_title">{% trans "Title" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="article_title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_journal">{% trans "Journal" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="article_journal">
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_volume">{% trans "Volume number" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="article_volume">
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_year">{% trans "Year" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="article_year">
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_first_page">{% trans "Page numbers" %}</label>
+                                    <div>
+                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_first_page" style="width: 35%;">
+                                        <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_last_page" style="width: 35%;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="article_info">{% trans "Other information" %}</label>
+                                    <textarea class="form-control not_selectized" id="article_info"></textarea>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="book">
+                                <div class="form-group">
+                                    <label for="book_author">{% trans "Author" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="book_author">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_title">{% trans "Title" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="book_title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_publisher">{% trans "Publisher" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="book_publisher">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_pub_place">{% trans "Place of publication" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="book_pub_place">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_year">{% trans "Year" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="book_year">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_first_page">{% trans "Page numbers" %}</label>
+                                    <div>
+                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_first_page" style="width: 35%;">
+                                        <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_last_page" style="width: 35%;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="book_info">{% trans "Other information" %}</label>
+                                    <textarea class="form-control not_selectized" id="book_info"></textarea>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="other">
+                                <div class="form-group">
+                                    <label for="other_title">{% trans "Title" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="other_title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="other_location">{% trans "Location" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="other_location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="other_page">{% trans "Page" %}</label>
+                                    <input class="form-control not_selectized" type="text" id="other_page">
+                                </div>
+                                <div class="form-group">
+                                    <label for="other_info">{% trans "Information about source (for example, URL for an electronic resource)" %}</label>
+                                    <textarea class="form-control not_selectized" id="other_info"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="add_source_btn" type="button" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div>
         <a role="button" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
@@ -794,15 +959,16 @@
             </tbody>
         </table>
         <div class="form-group">
-            <label for="notes_slaves_demographics">
+            <label for="notes_for_slaves_demographics">
                 {% trans "Notes for slaves characteristics" %}:
             </label>
             <div class="input-group col-md-8">
-                <textarea class="form-control not_selectized" id="notes_slaves_demographics" name="notes_slaves_demographics"></textarea>
+                <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
             </div>
         </div>
     </div>
-    <p></p>
+    <input id="global_notes_input" type="hidden" name="notes" />
+    <hr />
     <div class="form-group col-md-12">
         <button class="btn btn-primary" type="submit">{% trans "Submit voyage" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Delete contribution" %}</button>
@@ -1163,7 +1329,9 @@
                 }
             }
             if (!found) {
-                $("input[name='" + key + "']")[0].selectize.setValue(numbers[key]);
+                $("input[name='" + key + "']").each(function() {
+                    this.selectize.setValue(numbers[key]);
+                });
             }
         }
 
@@ -1202,6 +1370,32 @@
             editor.val(value);
         });
 
+        // Parse notes.
+        var NOTES_PREFIX = 'notes_for_';
+        {% if form.notes.value %}
+            var notes = {{ form.notes.value|safe }}
+            for (var key in notes) {
+                $('#' + NOTES_PREFIX + key).val(notes[key]).change();
+            }
+        {% endif %}
+
+        // Highlight labels of fields with pre-existing values:
+        for (var id in voyages) {
+            var v = voyages[id];
+            for (var name in v) {
+                if (v[name] != null && v[name] != ',,') {
+                    $('label[for="id_' + name + '"]').addClass('has_pre_existing_values');
+                }
+            }
+        }
+
+        $("#add_source_btn").click(function () {
+            var type = $("ul#tab_control li.active").data("tab");
+            $('#sources_table').show();
+            $('#sources_table > tbody:last-child').append('<tr><td>' + type + '</td><td>...</td><td>...</td></tr>');
+            $('#myModal').modal('hide');
+        });
+
         $('form').submit(function() {
             $("input[name^='date']").each(function() {
                 var self = $(this);
@@ -1209,6 +1403,17 @@
                 var date = parseDateValue(self.val());
                 self.val(date.month + ',' + date.day + ',' + date.year);
             });
+            // Send notes.
+            var notes_submit = {};
+            var prefix_length = NOTES_PREFIX.length;
+            $.map($(".field_notes"), function(note, i) {
+                var $note = $(note);
+                var note_val = $note.val();
+                if (note_val != '') {
+                    notes_submit[$note.attr('name').substring(prefix_length)] = note_val;
+                }
+            });
+            $("#global_notes_input").val(JSON.stringify(notes_submit));
             // Append demographics matrix.
             var form = $(this);
             for (var i = 0; i < demographics_rows.length; ++i) {
@@ -1246,12 +1451,12 @@
                 $(".broad_region,.region,.port").removeClass(className);
                 target.addClass(className);
                 $(".broad_region_" + target.data('pk')).addClass(className);
-                nextActive = $(".broad_region_" + target.data('pk') + ":last");
+                nextActive = ".broad_region_" + target.data('pk');
             } else if (target.hasClass("region")) {
                 $(".port").removeClass(className);
                 target.addClass(className);
                 $(".region_" + target.data('pk')).addClass(className);
-                nextActive = $(".region_" + target.data('pk') + ":last");
+                nextActive = ".region_" + target.data('pk');
             } else {
                 protoSelectOption.apply(this, arguments);
             }
@@ -1265,8 +1470,10 @@
             };
             if (nextActive) {
                 var self = this;
-                activateOptionWithDelay(nextActive, function() {
-                    activateOptionWithDelay(target);
+                activateOptionWithDelay($(nextActive + ":last"), function() {
+                    activateOptionWithDelay(target, function() {
+                        activateOptionWithDelay($(nextActive + ":first"));
+                    });
                 });
             }
         } else {
