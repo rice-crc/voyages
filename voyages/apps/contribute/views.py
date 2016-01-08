@@ -329,9 +329,6 @@ def voyage_to_dict(voyage):
         dict[number_prefix + 'SLAS32'] = numbers.num_slaves_disembark_first_place
         dict[number_prefix + 'SLAS36'] = numbers.num_slaves_disembark_second_place
         dict[number_prefix + 'SLAS39'] = numbers.num_slaves_disembark_third_place
-        dict[number_prefix + 'SLAXIMP'] = numbers.imp_total_num_slaves_embarked
-        dict[number_prefix + 'SLAMIMP'] = numbers.imp_total_num_slaves_disembarked
-        dict[number_prefix + 'VYMRTIMP'] = numbers.imp_mortality_during_voyage
         # Demographics
         dict[number_prefix + 'MEN1'] = numbers.num_men_embark_first_port_purchase
         dict[number_prefix + 'WOMEN1'] = numbers.num_women_embark_first_port_purchase
