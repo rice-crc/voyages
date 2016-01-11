@@ -163,6 +163,21 @@ def merge(request):
         form = ContributionVoyageSelectionForm(min_selection=2)
     return render(request, 'contribute/merge.html', {'form': form, 'voyage_selection': voyage_selection})
 
+def create_source(source_values, interim_voyage):
+    type = source_values['type']
+    if type == 'Primary source':
+        source = InterimPrimarySource()
+        source.name_of_library_or_archive = source_values['library']
+        source.location_of_library_or_archive = source_values['location']
+        source.series_or_collection = source_values['series']
+        source.volume_or_box_or_bundle = source_values['volume']
+        source.document_detail = source_values['detail']
+        source.information = source_values['info']
+    else:
+        raise Exception('Unrecognized source type: ' + type)
+    source.interim_voyage = interim_voyage
+    return source
+
 contribution_model_by_type = {
     'edit': EditVoyageContribution,
     'merge': MergeVoyagesContribution,
@@ -188,11 +203,22 @@ def interim(request, contribution_type, contribution_id):
             form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
             prefix = 'interim_slave_number_'
             numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+            import json
+            sources = [create_source(x, contribution.interim_voyage)
+                       for x in json.loads(request.POST.get('sources', '[]'))]
             if form.is_valid():
                 with transaction.atomic():
+                    def del_children(child_model):
+                        child_model.objects.filter(interim_voyage__id=contribution.interim_voyage.pk).delete()
+                    del_children(InterimPrimarySource)
+                    del_children(InterimArticleSource)
+                    del_children(InterimBookSource)
+                    del_children(InterimOtherSource)
+                    del_children(InterimSlaveNumber)
                     form.save()
+                    for src in sources:
+                        src.save()
                     # Clear previous numbers and save new ones.
-                    InterimSlaveNumber.objects.filter(interim_voyage__id=contribution.interim_voyage.pk).delete()
                     for k, v in numbers.items():
                         number = InterimSlaveNumber()
                         number.interim_voyage = contribution.interim_voyage
@@ -205,7 +231,9 @@ def interim(request, contribution_type, contribution_id):
         form = InterimVoyageForm(instance=contribution.interim_voyage)
     import json
     return render(request, 'contribute/interim.html',
-                  {'form': form, 'numbers': numbers,
+                  {'form': form,
+                   'numbers': numbers,
+                   'interim': contribution.interim_voyage,
                    'voyages_data': json.dumps(previous_data)})
 
 @login_required
