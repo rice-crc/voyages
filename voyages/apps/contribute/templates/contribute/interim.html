@@ -752,7 +752,7 @@
         </a>
     </div>
     <div id="sources" class="collapse col-md-12 var_group">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
         <table id="sources_table" style="display:none;" class="table table-striped">
@@ -789,7 +789,7 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active form-horizontal" id="primary">
                                 <div class="form-group">
-                                    <label for="primary_name">{% trans "Name of library of archive" %}</label>
+                                    <label for="primary_name">{% trans "Name of library or archive" %}</label>
                                     <input class="form-control not_selectized" type="text" id="primary_name">
                                 </div>
                                 <div class="form-group">
@@ -978,9 +978,39 @@
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js">
 </script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/source_reference.js">
+</script>
 <script type="text/javascript">
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
+
+    // Keep a source id so that each new source gets a unique identifier.
+    var _sourceid = 0;
+    var sources = [
+    {% for source in interim.primary_sources.all %}
+        new PrimarySource("{{ source.name_of_library_or_archive }}",
+            "{{ source.location_of_library_or_archive }}",
+            "{{ source.series_or_collection }}",
+            "{{ source.volume_or_box_or_bundle }}",
+            "{{ source.document_detail }}",
+            "{{ source.information }}",
+            ++_sourceid),
+    {% endfor %}
+    ];
+
+    // Removes the source from the table and array.
+    function removeSource(id) {
+        for (var k = 0; k < sources.length; ++k) {
+            if (sources[k].id == id) {
+                sources.splice(k);
+                $("#row_source_" + id).remove();
+                if (!sources.length) {
+                    $('#sources_table').hide();
+                }
+                return;
+            }
+        }
+    }
 
     var getValues = function(name) {
         var values = {};
@@ -1078,6 +1108,47 @@
     var broad_regions = {};
 
     $(document).ready(function() {
+
+        // Store numbers in an object.
+        var numbers = {
+        {% for k, v in numbers.items %}
+            {% if v %}
+                '{{ k }}': {{ v }},
+            {% endif %}
+        {% endfor %}
+        };
+
+        // Set demographic table.
+        var demographics_column_headers = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
+        var demographics_row_indices = [ 1, 4, 5, 2, 3, 6 ];
+        var demographics_rows = $.map(
+            $("#demographics_table").find("tbody").find("tr"),
+            function(row, i) {
+                return $(row).find("td");
+            }
+        );
+
+        // Set numeric inputs and demographics matrix.
+        var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
+        var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
+        for (var key in numbers) {
+            var match = regex.exec(key);
+            var found = false;
+            if (match) {
+                var col = demographics_column_headers.indexOf(match[1]);
+                var row = demographics_row_indices.indexOf(parseInt(match[2]));
+                if (col >= 0 && row >= 0 && row < 6) {
+                    $(demographics_rows[row][col]).html(numbers[key]);
+                    found = true;
+                }
+            }
+            if (!found) {
+                $("input[name='" + key + "']").each(function() {
+                    $(this).val(numbers[key]);
+                });
+            }
+        }
+
         $('#delete_contrib').click(function(e) {
             if (!confirm('{% trans "The contribution will be deleted and this partial contribution will be lost. Continue anyway?" %}')) {
                 e.preventDefault();
@@ -1295,46 +1366,6 @@
             });
         });
 
-        // Store numbers in an object.
-        var numbers = {
-        {% for k, v in numbers.items %}
-            {% if v %}
-                '{{ k }}': {{ v }},
-            {% endif %}
-        {% endfor %}
-        };
-
-        // Set demographic table.
-        var demographics_column_headers = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
-        var demographics_row_indices = [ 1, 4, 5, 2, 3, 6 ];
-        var demographics_rows = $.map(
-            $("#demographics_table").find("tbody").find("tr"),
-            function(row, i) {
-                return $(row).find("td");
-            }
-        );
-
-        // Set numeric inputs and demographics matrix.
-        var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
-        var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
-        for (var key in numbers) {
-            var match = regex.exec(key);
-            var found = false;
-            if (match) {
-                var col = demographics_column_headers.indexOf(match[1]);
-                var row = demographics_row_indices.indexOf(parseInt(match[2]));
-                if (col >= 0 && row >= 0 && row < 6) {
-                    $(demographics_rows[row][col]).html(numbers[key]);
-                    found = true;
-                }
-            }
-            if (!found) {
-                $("input[name='" + key + "']").each(function() {
-                    this.selectize.setValue(numbers[key]);
-                });
-            }
-        }
-
         $("#demographics_table td").hover(
             function() {
                 $(this).addClass('cell_hover');
@@ -1389,12 +1420,48 @@
             }
         }
 
+        var addSourceToTable = function(source) {
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+        };
+
+        $("#add_source_modal_btn").click(function () {
+            $("#myModal input").val('');
+        });
+
         $("#add_source_btn").click(function () {
             var type = $("ul#tab_control li.active").data("tab");
             $('#sources_table').show();
-            $('#sources_table > tbody:last-child').append('<tr><td>' + type + '</td><td>...</td><td>...</td></tr>');
+            var source = null;
+            var id = ++_sourceid;
+            if (type == 'primary') {
+                source = new PrimarySource(
+                    $("#primary_name").val(),
+                    $("#primary_loc").val(),
+                    $("#primary_series").val(),
+                    $("#primary_vol").val(),
+                    $("#primary_detail").val(),
+                    $("#primary_info").val(),
+                    id);
+            }
+            if (source) {
+                var validation = source.validate();
+                if (validation) {
+                    alert(validation);
+                    return false;
+                } else {
+                    sources.push(source);
+                    addSourceToTable(source);
+                }
+            }
             $('#myModal').modal('hide');
         });
+
+        for (var i = 0; i < sources.length; ++i) {
+            addSourceToTable(sources[i]);
+        }
+        if (sources.length) {
+            $('#sources_table').show();
+        }
 
         $('form').submit(function() {
             $("input[name^='date']").each(function() {
@@ -1426,6 +1493,9 @@
                     }
                 }
             }
+            var $sources = $('<input type="hidden" name="sources" />');
+            $sources.val(JSON.stringify(sources));
+            form.append($sources);
             return true;
         });
     });
