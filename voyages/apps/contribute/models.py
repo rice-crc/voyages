@@ -107,6 +107,7 @@ class InterimArticleSource(models.Model):
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
 
 class InterimBookSource(models.Model):
     """
@@ -122,6 +123,7 @@ class InterimBookSource(models.Model):
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
 
 class InterimOtherSource(models.Model):
     """
@@ -133,6 +135,7 @@ class InterimOtherSource(models.Model):
     location = models.CharField(max_length=255, null=True, blank=True)
     page = models.CharField(max_length=20, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
 
 class InterimPrimarySource(models.Model):
     """
@@ -146,6 +149,7 @@ class InterimPrimarySource(models.Model):
     volume_or_box_or_bundle = models.CharField(max_length=255, null=True, blank=True)
     document_detail = models.CharField(max_length=255, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
 
 class InterimSlaveNumber(models.Model):
     """

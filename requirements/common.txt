@@ -12,6 +12,7 @@ bitly_api
 psycopg2
 xlwt
 unidecode
+unicodecsv
 django-password-reset
 openpyxl>=1.9
 django-allauth

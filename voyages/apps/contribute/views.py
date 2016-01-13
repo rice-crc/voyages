@@ -165,6 +165,8 @@ def merge(request):
 
 def create_source(source_values, interim_voyage):
     type = source_values['type']
+    # TODO: source_reference.js will specify the model attributes/values so
+    # a simple loop will properly initialize source models.
     if type == 'Primary source':
         source = InterimPrimarySource()
         source.name_of_library_or_archive = source_values['library']
@@ -173,6 +175,7 @@ def create_source(source_values, interim_voyage):
         source.volume_or_box_or_bundle = source_values['volume']
         source.document_detail = source_values['detail']
         source.information = source_values['info']
+        source.url = source_values['url']
     else:
         raise Exception('Unrecognized source type: ' + type)
     source.interim_voyage = interim_voyage
