@@ -772,7 +772,8 @@
                                 aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="height: 500px; overflow-y: auto;">
+                        <input type="hidden" name="source_id_field" id="source_id_field" />
                         <ul class="nav nav-tabs" role="tablist" id="tab_control">
                             <li data-tab="primary" role="presentation" class="active"><a href="#primary"
                                                                                          aria-controls="primary"
@@ -812,6 +813,10 @@
                                     <label for="primary_info">{% trans "Information about source" %}</label>
                                     <textarea class="form-control not_selectized" id="primary_info"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <textarea class="form-control not_selectized" id="primary_url"></textarea>
+                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="article">
                                 <div class="form-group">
@@ -845,6 +850,10 @@
                                 <div class="form-group">
                                     <label for="article_info">{% trans "Other information" %}</label>
                                     <textarea class="form-control not_selectized" id="article_info"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <textarea class="form-control not_selectized" id="article_url"></textarea>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="book">
@@ -880,6 +889,10 @@
                                     <label for="book_info">{% trans "Other information" %}</label>
                                     <textarea class="form-control not_selectized" id="book_info"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <textarea class="form-control not_selectized" id="book_url"></textarea>
+                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="other">
                                 <div class="form-group">
@@ -895,8 +908,12 @@
                                     <input class="form-control not_selectized" type="text" id="other_page">
                                 </div>
                                 <div class="form-group">
-                                    <label for="other_info">{% trans "Information about source (for example, URL for an electronic resource)" %}</label>
+                                    <label for="other_info">{% trans "Information about source" %}</label>
                                     <textarea class="form-control not_selectized" id="other_info"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <textarea class="form-control not_selectized" id="other_url"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -988,15 +1005,60 @@
     var _sourceid = 0;
     var sources = [
     {% for source in interim.primary_sources.all %}
-        new PrimarySource("{{ source.name_of_library_or_archive }}",
-            "{{ source.location_of_library_or_archive }}",
-            "{{ source.series_or_collection }}",
-            "{{ source.volume_or_box_or_bundle }}",
-            "{{ source.document_detail }}",
-            "{{ source.information }}",
+        new PrimarySource("{{ source.name_of_library_or_archive|default_if_none:'' }}",
+            "{{ source.location_of_library_or_archive|default_if_none:'' }}",
+            "{{ source.series_or_collection|default_if_none:'' }}",
+            "{{ source.volume_or_box_or_bundle|default_if_none:'' }}",
+            "{{ source.document_detail|default_if_none:'' }}",
+            "{{ source.information|default_if_none:'' }}",
+            "{{ source.url|default_if_none:'' }}",
+            ++_sourceid),
+    {% endfor %}
+    {% for source in interim.article_sources.all %}
+        new ArticleSource("{{ source.authors|default_if_none:'' }}",
+            "{{ source.article_title|default_if_none:'' }}",
+            "{{ source.journal|default_if_none:'' }}",
+            "{{ source.volume_number|default_if_none:'' }}",
+            "{{ source.year|default_if_none:'' }}",
+            "{{ source.page_start|default_if_none:'' }}",
+            "{{ source.page_end|default_if_none:'' }}",
+            "{{ source.information|default_if_none:'' }}",
+            "{{ source.url|default_if_none:'' }}",
+            ++_sourceid),
+    {% endfor %}
+    {% for source in interim.book_sources.all %}
+        new BookSource("{{ source.authors|default_if_none:'' }}",
+            "{{ source.book_title|default_if_none:'' }}",
+            "{{ source.publisher|default_if_none:'' }}",
+            "{{ source.place_of_publication|default_if_none:'' }}",
+            "{{ source.year|default_if_none:'' }}",
+            "{{ source.page_start|default_if_none:'' }}",
+            "{{ source.page_end|default_if_none:'' }}",
+            "{{ source.information|default_if_none:'' }}",
+            "{{ source.url|default_if_none:'' }}",
+            ++_sourceid),
+    {% endfor %}
+    {% for source in interim.other_sources.all %}
+        new OtherSource("{{ source.title|default_if_none:'' }}",
+            "{{ source.location|default_if_none:'' }}",
+            "{{ source.page|default_if_none:'' }}",
+            "{{ source.information|default_if_none:'' }}",
+            "{{ source.url|default_if_none:'' }}",
             ++_sourceid),
     {% endfor %}
     ];
+
+    function editSource(id) {
+        for (var k = 0; k < sources.length; ++k) {
+            if (sources[k].id == id) {
+                var s = sources[k];
+                s.bindToForm();
+                $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
+                $("#add_source_btn").html('{% trans "Save changes"  %}');
+                $('#myModal').modal('show');
+            }
+        }
+    }
 
     // Removes the source from the table and array.
     function removeSource(id) {
@@ -1420,37 +1482,42 @@
             }
         }
 
-        var addSourceToTable = function(source) {
-            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+        var addSourceToTable = function(source, isEdit) {
+            if (isEdit) removeSource(source.id);
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="editSource(' + source.id + '); return false;">Edit</a></td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+            $('#sources_table').show();
         };
 
         $("#add_source_modal_btn").click(function () {
-            $("#myModal input").val('');
+            $("#myModal input, #myModal textarea").val('');
+            var id = ++_sourceid;
+            $("#source_id_field").val(id);
+            $("#add_source_btn").html('{% trans "Add"  %}');
         });
 
         $("#add_source_btn").click(function () {
             var type = $("ul#tab_control li.active").data("tab");
             $('#sources_table').show();
             var source = null;
-            var id = ++_sourceid;
             if (type == 'primary') {
-                source = new PrimarySource(
-                    $("#primary_name").val(),
-                    $("#primary_loc").val(),
-                    $("#primary_series").val(),
-                    $("#primary_vol").val(),
-                    $("#primary_detail").val(),
-                    $("#primary_info").val(),
-                    id);
+                source = new PrimarySource();
+            } else if (type == 'article') {
+                source = new ArticleSource();
+            } else if (type == 'book') {
+                source = new BookSource();
+            } else if (type == 'other') {
+                source = new OtherSource();
             }
             if (source) {
+                source.bindFromForm();
                 var validation = source.validate();
-                if (validation) {
-                    alert(validation);
+                if (validation.hasErrors()) {
+                    alert(validation.toString());
                     return false;
-                } else {
+                } else if (!validation.hasWarnings() ||
+                        confirm(validation.toString() + "\n" + gettext('Continue anyway?'))) {
+                    addSourceToTable(source, true);
                     sources.push(source);
-                    addSourceToTable(source);
                 }
             }
             $('#myModal').modal('hide');

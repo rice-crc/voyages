@@ -1,9 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.utils.encoding import smart_str
 from voyages.apps.voyage.models import *
+from voyages.apps.resources.models import Image, AfricanName
 from unidecode import unidecode
 import re
-import readline
 import sys
 import unicodecsv
 
@@ -65,6 +65,8 @@ class Command(BaseCommand):
         resistances = {o.value: o for o in Resistance.objects.all()}
         rigs = {x.value: x for x in RigOfVessel.objects.all()}
         ton_types = {x.value: x for x in TonType.objects.all()}
+        africans = list(AfricanName.objects.all())
+        images = list(Image.objects.all())
 
         # Declare a dict containing all pre-fetch dicts so that we can
         # easily log any errors when looking for pre-fetched data.
@@ -480,10 +482,31 @@ class Command(BaseCommand):
 
         print 'Deleting old data...'
 
-        def delete_all(model):
-            model.objects.all().delete()
+        quote_char = '`' if target_db == 'mysql' else '"'
+        
+        from django.db import connection 
+        cursor = connection.cursor()
 
-        delete_all(Voyage)
+        def clear_fk(fk_field):
+            sql = 'UPDATE {0}{1}{0} SET {0}{2}{0}=NULL'
+            sql = sql.format(quote_char, Voyage._meta.db_table, fk_field)
+            print sql
+            cursor.execute(sql)
+
+        def delete_all(model):
+            sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
+            sql = sql.format(quote_char)
+            print sql
+            cursor.execute(sql)
+
+        clear_fk('voyage_ship_id')
+        clear_fk('voyage_itinerary_id')
+        clear_fk('voyage_dates_id')
+        clear_fk('voyage_crew_id')
+        clear_fk('voyage_slaves_numbers_id')
+        delete_all(VoyageCaptainConnection)
+        delete_all(VoyageShipOwnerConnection)
+        delete_all(VoyageSourcesConnection)
         delete_all(VoyageCaptain)
         delete_all(VoyageCrew)
         delete_all(VoyageDates)
@@ -492,9 +515,9 @@ class Command(BaseCommand):
         delete_all(VoyageShip)
         delete_all(VoyageShipOwner)
         delete_all(VoyageSlavesNumbers)
-        delete_all(VoyageCaptainConnection)
-        delete_all(VoyageShipOwnerConnection)
-        delete_all(VoyageSourcesConnection)
+        delete_all(AfricanName)
+        delete_all(Image)
+        delete_all(Voyage)
 
         print 'Inserting new records...'
 
@@ -529,6 +552,8 @@ class Command(BaseCommand):
         bulk_insert(VoyageCrew, crews)
         bulk_insert(VoyageSlavesNumbers, voyage_numbers)
         bulk_insert(VoyageOutcome, outcomes)
+        bulk_insert(AfricanName, africans)
+        bulk_insert(Image, images)
 
         # Now insert the many-to-many connections
         set_voyages_fk(captain_connections)
@@ -551,7 +576,7 @@ class Command(BaseCommand):
                 update_query_template = 'UPDATE {0}{1}{0} as a SET {0}{4}{0}=b.{0}id{0} ' \
                                         'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}'
             sql = update_query_template.format(
-                '`' if target_db == 'mysql' else '"',
+                quote_char,
                 Voyage._meta.db_table,
                 related_model._meta.db_table,
                 fk_on_related,
@@ -561,8 +586,6 @@ class Command(BaseCommand):
             print sql
             return sql
 
-        from django.db import connection
-        cursor = connection.cursor()
         cursor.execute(get_raw_sql(VoyageShip, 'voyage_ship_id'))
         cursor.execute(get_raw_sql(VoyageItinerary, 'voyage_itinerary_id'))
         cursor.execute(get_raw_sql(VoyageDates, 'voyage_dates_id'))
