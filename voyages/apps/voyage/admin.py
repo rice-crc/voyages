@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
-import autocomplete_light
+from autocomplete_light import shortcuts as autocomplete_light
 from .forms import *
 
 

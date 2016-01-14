@@ -104,6 +104,14 @@ class ContributionVoyageSelectionForm(forms.Form):
         return ids
 
 class InterimVoyageForm(forms.ModelForm):
+    def full_clean(self):
+        self.cleaned_data = {}
+        super(InterimVoyageForm, self).full_clean()
+        for k, v in self._errors.items():
+            if k.startswith('date_'):
+                del self._errors[k]
+        return self.cleaned_data
+
     class Meta:
         model = InterimVoyage
         fields = '__all__'

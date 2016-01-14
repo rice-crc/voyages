@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 from .models import Glossary, Faq
 from haystack.query import SearchQuerySet
 from haystack.forms import HighlightedSearchForm
@@ -12,7 +12,7 @@ def _sort_glossary(qresult, lang):
     """
     glossary_content = []
     letters = []
-    letters_found = SortedDict()
+    letters_found = OrderedDict()
     field = 'glossary_term_lang_' + lang
 
     for i in string.ascii_uppercase:

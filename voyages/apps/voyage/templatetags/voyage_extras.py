@@ -1,11 +1,10 @@
-from django import template
 from django.template import Template, Context
 from django.template.defaultfilters import stringfilter
-from django.conf import settings
-from voyages.apps.common.filters import trans_log
+from voyages.apps.common.filters import *
 
 register = template.Library()
 register.filter('trans_log', trans_log)
+register.filter('jsonify', jsonify)
 
 @register.filter
 @stringfilter
