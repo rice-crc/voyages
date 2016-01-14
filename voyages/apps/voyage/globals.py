@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # List of basic variables
-from django.utils.datastructures import SortedDict
 import models
-import lxml.html
 from django.db.models import Max, Min
 import re
 from datetime import date

@@ -34,6 +34,7 @@ var _bindFrom = function(self) {
             var inputId = self._fields[key][0];
             self[key] = $("#" + inputId).val();
         }
+        return self;
     };
 };
 
@@ -44,11 +45,49 @@ var _bindTo = function(self) {
             var inputId = self._fields[key][0];
             $("#" + inputId).val(self[key]);
         }
+        return self;
+    };
+}
+
+var _fromModel = function(self) {
+    return function(model) {
+        for (var key in self._fields) {
+            var fieldName = self._fields[key][1];
+            self[key] = model[fieldName];
+        }
+        return self;
+    };
+};
+
+var _toModel = function(self) {
+    return function() {
+        var model = {};
+        for (var key in self._fields) {
+            var fieldName = self._fields[key][1];
+            model[fieldName] = self[key];
+        }
+        model['type'] = self.type;
+        return model;
     };
 }
 
 function validateMinLength(val, minLength) {
     return $.type(val) === 'string' && val.length >= minLength;
+}
+
+function validateInt(val, minValue, maxValue, notNull) {
+    minValue = minValue || Number.MIN_VALUE;
+    maxValue = maxValue || Number.MAX_VALUE;
+    if ($.type(val) === 'string') {
+        if (val == '') return notNull ? false : true;
+        val = parseInt(val);
+    }
+    if (val.isNaN()) return false;
+    return val >= minValue && val <= maxValue;
+}
+
+function validateYear(val, notNull) {
+    return validateInt(val, 1500, 1867, notNull);
 }
 
 function PrimarySource(library, location, series, volume, detail, info, url, id) {
@@ -80,16 +119,18 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
         return result;
     };
     this._fields = {
-        "library": ["primary_name"],
-        "location": ["primary_loc"],
-        "series": ["primary_series"],
-        "volume": ["primary_vol"],
-        "detail": ["primary_detail"],
-        "info": ["primary_info"],
-        "url": ["primary_url"],
+        "library": ["primary_name", "name_of_library_or_archive"],
+        "location": ["primary_loc", "location_of_library_or_archive"],
+        "series": ["primary_series", "series_or_collection"],
+        "volume": ["primary_vol", "volume_or_box_or_bundle"],
+        "detail": ["primary_detail", "document_detail"],
+        "info": ["primary_info", "information"],
+        "url": ["primary_url", "url"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
 }
 
 function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd, info, url, id) {
@@ -130,18 +171,20 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
         return result;
     };
     this._fields = {
-        "author": ["article_author"],
-        "title": ["article_title"],
-        "journal": ["article_journal"],
-        "volume": ["article_volume"],
-        "year": ["article_year"],
-        "pageStart": ["article_first_page"],
-        "pageEnd": ["article_last_page"],
-        "info": ["article_info"],
-        "url": ["article_url"],
+        "author": ["article_author", "authors"],
+        "title": ["article_title", "article_title"],
+        "journal": ["article_journal", "journal"],
+        "volume": ["article_volume", "volume_number"],
+        "year": ["article_year", "year"],
+        "pageStart": ["article_first_page", "page_start"],
+        "pageEnd": ["article_last_page", "page_end"],
+        "info": ["article_info", "information"],
+        "url": ["article_url", "url"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
 }
 
 function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, id) {
@@ -182,18 +225,20 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         return result;
     };
     this._fields = {
-        "author": ["book_author"],
-        "title": ["book_title"],
-        "publisher": ["book_publisher"],
-        "place": ["book_pub_place"],
-        "year": ["book_year"],
-        "pageStart": ["book_first_page"],
-        "pageEnd": ["book_last_page"],
-        "info": ["book_info"],
-        "url": ["book_url"],
+        "author": ["book_author", "authors"],
+        "title": ["book_title", "book_title"],
+        "publisher": ["book_publisher", "publisher"],
+        "place": ["book_pub_place", "place_of_publication"],
+        "year": ["book_year", "year"],
+        "pageStart": ["book_first_page", "page_start"],
+        "pageEnd": ["book_last_page", "page_end"],
+        "info": ["book_info", "information"],
+        "url": ["book_url", "url"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
 }
 
 function OtherSource(title, location, page, info, url, id) {
@@ -211,7 +256,7 @@ function OtherSource(title, location, page, info, url, id) {
         if (!validateMinLength(self.title, 4)) {
             errors.push(gettext("Title is mandatory"));
         }
-        if (!validateMinLength(self.information, 4)) {
+        if (!validateMinLength(self.info, 4)) {
             warnings.push(gettext("Information is a recommended field"));
         }
         if (!validateMinLength(self.url, 4)) {
@@ -220,26 +265,58 @@ function OtherSource(title, location, page, info, url, id) {
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
-        var result = self.author + ', ' + self.title;
+        var result = self.title;
         if (self.publisher) {
-            result += ' - ' + self.publisher;
-        }
-        if (self.place) {
-            result += ', ' + self.place;
+            result += ' - ' + self.location;
         }
         return result;
     };
     this._fields = {
-        "author": ["book_author"],
-        "title": ["book_title"],
-        "publisher": ["book_publisher"],
-        "place": ["book_pub_place"],
-        "year": ["book_year"],
-        "pageStart": ["book_first_page"],
-        "pageEnd": ["book_last_page"],
-        "info": ["book_info"],
-        "url": ["book_url"],
+        "title": ["other_title", "title"],
+        "location": ["other_location", "location"],
+        "page": ["other_page", "page"],
+        "info": ["other_info", "information"],
+        "url": ["other_url", "url"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
+function sourceFactory(data, id) {
+    var source = null;
+    var fields = null;
+    if (data.model && data.fields) {
+        // Construct object based on Django model's JSON representation.
+        if (data.model == 'contribute.interimprimarysource') {
+            source = new PrimarySource();
+        } else if (data.model == 'contribute.interimarticlesource') {
+            source = new ArticleSource();
+        } else if (data.model == 'contribute.interimbooksource') {
+            source = new BookSource();
+        } else if (data.model == 'contribute.interimothersource') {
+            source = new OtherSource();
+        }
+        fields = data.fields;
+    } else if (data.type) {
+        // Construct object based on JS object's JSON representation.
+        if (data.type == 'Primary source') {
+            source = new PrimarySource();
+        } else if (data.type == 'Article source') {
+            source = new ArticleSource();
+        } else if (data.type == 'Book source') {
+            source = new BookSource();
+        } else if (data.type == 'Other source') {
+            source = new OtherSource();
+        }
+        fields = data;
+    }
+    if (source != null && fields != null) {
+        source.fromModel(fields);
+        if (id) {
+            source.id = id;
+        }
+    }
+    return source;
 }

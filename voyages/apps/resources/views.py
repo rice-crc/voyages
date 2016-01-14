@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
@@ -31,7 +31,7 @@ def get_all_images(request):
                 .order_by('date')
             category_images["number_of_images"] = len(search_set)
             for j in search_set:
-                category_images["images"].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
+                category_images["images"].append(OrderedDict({'file': j.file, 'year': j.date, 'title': j.title}))
                 # TODO: May be too ugly, considered to change
                 if len(category_images["images"]) == 4:
                     break
@@ -66,7 +66,7 @@ def get_images_category(request, category):
             category_images["number_of_images"] = len(search_set)
             if i.label == category:
                 for i in search_set:
-                    category_images["images"].append(SortedDict({'file': i.file, 'year': i.date, 'title': i.title}))
+                    category_images["images"].append(OrderedDict({'file': i.file, 'year': i.date, 'title': i.title}))
 
             images.append(category_images)
 
@@ -546,7 +546,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
     embarkation_cq = []
     disembarkation = []
     opened_tabs = {}
-    current_query = SortedDict()
+    current_query = OrderedDict()
 
     # Iterate and collect all options
     # Mark sections as True/False (collapsed/expanded)

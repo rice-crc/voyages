@@ -1,5 +1,5 @@
 from django import forms
-import autocomplete_light
+from autocomplete_light import shortcuts as autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals

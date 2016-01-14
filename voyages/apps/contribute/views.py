@@ -165,19 +165,20 @@ def merge(request):
 
 def create_source(source_values, interim_voyage):
     type = source_values['type']
-    # TODO: source_reference.js will specify the model attributes/values so
-    # a simple loop will properly initialize source models.
+    source = None
     if type == 'Primary source':
         source = InterimPrimarySource()
-        source.name_of_library_or_archive = source_values['library']
-        source.location_of_library_or_archive = source_values['location']
-        source.series_or_collection = source_values['series']
-        source.volume_or_box_or_bundle = source_values['volume']
-        source.document_detail = source_values['detail']
-        source.information = source_values['info']
-        source.url = source_values['url']
-    else:
+    elif type == 'Article source':
+        source = InterimArticleSource()
+    elif type == 'Book source':
+        source = InterimBookSource()
+    elif type == 'Other source':
+        source = InterimOtherSource()
+    if source is None:
         raise Exception('Unrecognized source type: ' + type)
+    for k, v in source_values.items():
+        if hasattr(source, k):
+            setattr(source, k, v if v != '' else None)
     source.interim_voyage = interim_voyage
     return source
 
@@ -196,6 +197,7 @@ def interim(request, contribution_type, contribution_id):
     if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
         return HttpResponseForbidden()
     previous_data = contribution_related_data(contribution)
+    sources_post = None
     if request.method == 'POST':
         if request.POST.get('submit_val') == 'delete':
             with transaction.atomic():
@@ -207,8 +209,9 @@ def interim(request, contribution_type, contribution_id):
             prefix = 'interim_slave_number_'
             numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
             import json
+            sources_post = request.POST.get('sources')
             sources = [create_source(x, contribution.interim_voyage)
-                       for x in json.loads(request.POST.get('sources', '[]'))]
+                       for x in json.loads(sources_post if sources_post is not None else '[]')]
             if form.is_valid():
                 with transaction.atomic():
                     def del_children(child_model):
@@ -237,6 +240,7 @@ def interim(request, contribution_type, contribution_id):
                   {'form': form,
                    'numbers': numbers,
                    'interim': contribution.interim_voyage,
+                   'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
 
 @login_required

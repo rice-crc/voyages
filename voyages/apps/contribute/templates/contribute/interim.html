@@ -1,5 +1,6 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load voyage_extras %}
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
@@ -68,6 +69,8 @@
 <p>
     {% trans "Some intro text." %}
 </p>
+
+{{ form.errors }}
 
 <form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
     {% csrf_token %}
@@ -814,7 +817,7 @@
                                     <textarea class="form-control not_selectized" id="primary_info"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <label for="primary_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
                                     <textarea class="form-control not_selectized" id="primary_url"></textarea>
                                 </div>
                             </div>
@@ -852,7 +855,7 @@
                                     <textarea class="form-control not_selectized" id="article_info"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <label for="article_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
                                     <textarea class="form-control not_selectized" id="article_url"></textarea>
                                 </div>
                             </div>
@@ -890,7 +893,7 @@
                                     <textarea class="form-control not_selectized" id="book_info"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <label for="book_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
                                     <textarea class="form-control not_selectized" id="book_url"></textarea>
                                 </div>
                             </div>
@@ -912,7 +915,7 @@
                                     <textarea class="form-control not_selectized" id="other_info"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="primary_info">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                                    <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
                                     <textarea class="form-control not_selectized" id="other_url"></textarea>
                                 </div>
                             </div>
@@ -995,7 +998,7 @@
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js">
 </script>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/source_reference.js">
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js">
 </script>
 <script type="text/javascript">
     // Existing voyage(s) data.
@@ -1003,50 +1006,22 @@
 
     // Keep a source id so that each new source gets a unique identifier.
     var _sourceid = 0;
-    var sources = [
-    {% for source in interim.primary_sources.all %}
-        new PrimarySource("{{ source.name_of_library_or_archive|default_if_none:'' }}",
-            "{{ source.location_of_library_or_archive|default_if_none:'' }}",
-            "{{ source.series_or_collection|default_if_none:'' }}",
-            "{{ source.volume_or_box_or_bundle|default_if_none:'' }}",
-            "{{ source.document_detail|default_if_none:'' }}",
-            "{{ source.information|default_if_none:'' }}",
-            "{{ source.url|default_if_none:'' }}",
-            ++_sourceid),
-    {% endfor %}
-    {% for source in interim.article_sources.all %}
-        new ArticleSource("{{ source.authors|default_if_none:'' }}",
-            "{{ source.article_title|default_if_none:'' }}",
-            "{{ source.journal|default_if_none:'' }}",
-            "{{ source.volume_number|default_if_none:'' }}",
-            "{{ source.year|default_if_none:'' }}",
-            "{{ source.page_start|default_if_none:'' }}",
-            "{{ source.page_end|default_if_none:'' }}",
-            "{{ source.information|default_if_none:'' }}",
-            "{{ source.url|default_if_none:'' }}",
-            ++_sourceid),
-    {% endfor %}
-    {% for source in interim.book_sources.all %}
-        new BookSource("{{ source.authors|default_if_none:'' }}",
-            "{{ source.book_title|default_if_none:'' }}",
-            "{{ source.publisher|default_if_none:'' }}",
-            "{{ source.place_of_publication|default_if_none:'' }}",
-            "{{ source.year|default_if_none:'' }}",
-            "{{ source.page_start|default_if_none:'' }}",
-            "{{ source.page_end|default_if_none:'' }}",
-            "{{ source.information|default_if_none:'' }}",
-            "{{ source.url|default_if_none:'' }}",
-            ++_sourceid),
-    {% endfor %}
-    {% for source in interim.other_sources.all %}
-        new OtherSource("{{ source.title|default_if_none:'' }}",
-            "{{ source.location|default_if_none:'' }}",
-            "{{ source.page|default_if_none:'' }}",
-            "{{ source.information|default_if_none:'' }}",
-            "{{ source.url|default_if_none:'' }}",
-            ++_sourceid),
-    {% endfor %}
+    var all_source_types = [
+        {% if sources_post %}
+            {{ sources_post|safe }}
+        {% else %}
+            {{ interim.primary_sources.all|jsonify }},
+            {{ interim.article_sources.all|jsonify }},
+            {{ interim.book_sources.all|jsonify }},
+            {{ interim.other_sources.all|jsonify }}
+        {% endif %}
     ];
+    var sources = [];
+    for (var i = 0; i < all_source_types.length; ++i) {
+        sources = sources.concat($.map(all_source_types[i], function(a) {
+            return sourceFactory(a, ++_sourceid);
+        }));
+    }
 
     function editSource(id) {
         for (var k = 0; k < sources.length; ++k) {
@@ -1518,9 +1493,9 @@
                         confirm(validation.toString() + "\n" + gettext('Continue anyway?'))) {
                     addSourceToTable(source, true);
                     sources.push(source);
+                    $('#myModal').modal('hide');
                 }
             }
-            $('#myModal').modal('hide');
         });
 
         for (var i = 0; i < sources.length; ++i) {
@@ -1561,7 +1536,10 @@
                 }
             }
             var $sources = $('<input type="hidden" name="sources" />');
-            $sources.val(JSON.stringify(sources));
+            var source_models = $.map(sources, function(s, i) {
+                return s.toModel();
+            });
+            $sources.val(JSON.stringify(source_models));
             form.append($sources);
             return true;
         });

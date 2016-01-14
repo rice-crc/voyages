@@ -3,15 +3,14 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
-import autocomplete_light
+from autocomplete_light import shortcuts as autocomplete_light
 autocomplete_light.autodiscover()
 from django.contrib import admin
 
 admin.autodiscover()
 
 # Sitemap
-from django.contrib.sitemaps import Sitemap, FlatPageSitemap
-from sitemap import StaticSitemap, ViewSitemap
+from sitemap import StaticSitemap
 
 js_info_dict = {
     'packages': ('voyages',),
@@ -39,9 +38,6 @@ urlpatterns = patterns('',
 
     # Handle language changes
     url(r'^setlanguage/(?P<lang_code>\w+)$', 'voyages.apps.common.views.set_language', name='set_lang'),
-
-    # password rest urls
-    url(r'^password/', include('password_reset.urls')),
 
     # Translation support for javascript code.
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
