@@ -158,6 +158,9 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
         if (!validateMinLength(self.journal, 4)) {
             warnings.push(gettext("Journal is a recommended field"));
         }
+        if (parseInt(self.year) < 1500) {
+            errors.push(gettext('Reference year cannot be earlier than 1500'))
+        }
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
@@ -211,6 +214,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         }
         if (!validateMinLength(self.publisher, 4)) {
             warnings.push(gettext("Publisher is a recommended field"));
+        }
+        if (parseInt(self.year) < 1500) {
+            errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
         return new ValidationResult(warnings, errors);
     };
@@ -319,4 +325,103 @@ function sourceFactory(data, id) {
         }
     }
     return source;
+}
+
+// Form utility functions.
+function parseDateValue(val) {
+    var items = val.split(',');
+    var year = null;
+    var month = null;
+    var day = null;
+    for (var i = 0; i < items.length; ++i) {
+        var item = items[i];
+        if (item.startsWith('y')) {
+            year = parseInt(item.substring(1));
+        } else if (item.startsWith('m')) {
+            month = parseInt(item.substring(1));
+        } else if (item.startsWith('d')) {
+            day = parseInt(item.substring(1));
+        }
+    }
+    if (year != null && isNaN(year)) {
+        year = null;
+    }
+    if (month != null && isNaN(month)) {
+        month = null;
+    }
+    if (day != null && isNaN(day)) {
+        day = null;
+    }
+    var result = { year: year, month: month, day: day };
+    result.isValid = function() {
+        // Date is considered valid if it has at least a year.
+        // If it has a day, it must have a month as well.
+        return result.year != null && (result.day == null || result.month != null);
+    };
+    result.toMMDDYYY = function() {
+        return (result.month || '') + ',' + (result.day || '') + ',' + (result.year || '');
+    };
+    return result;
+};
+
+function optionIntCompare(a, b) {
+    if (a != null && b != null) {
+        return a - b;
+    }
+    return null;
+}
+
+function dateCompare(a, b) {
+    var yc = optionIntCompare(a.year, b.year);
+    if (yc == null) return null;
+    if (yc != 0) return yc;
+    var mc = optionIntCompare(a.month, b.month);
+    if (mc == null) return 0;
+    if (mc != 0) return mc;
+    var dc = optionIntCompare(a.day, b.day);
+    if (dc == null) return 0;
+    return dc;
+}
+
+// Validate the form.
+function validatePreSubmit(sources) {
+    var warnings = [];
+    var errors = [];
+    // Validate dates - must be in order and years within limits.
+    var allDateFields = [
+        'date_departure',
+        'date_slave_purchase_began',
+        'date_vessel_left_last_slaving_port',
+        'date_first_slave_disembarkation',
+        'date_second_slave_disembarkation',
+        'date_third_slave_disembarkation',
+        'date_return_departure',
+        'date_voyage_completed',
+    ];
+    var dates = $.map(allDateFields, function(field, i) {
+        var date = parseDateValue($("input[name='" + field + "']").val());
+        if (date.isValid()) return {
+            field: field,
+            date: date,
+        };
+    });
+    for (var i = 0; i < dates.length - 1; ++i) {
+        var a = dates[i];
+        var b = dates[i + 1];
+        var cmp = dateCompare(a.date, b.date);
+        if (cmp > 0) {
+            errors.push('Dates are out of order: ' + a.field + ', ' + b.field);
+        }
+    }
+    // Ton type can only be set if tonnage is set.
+    var tonType = $("select[name='ton_type']").val();
+    var tonnage = $("input[name='tonnage_of_vessel']").val();
+    if (!isNaN(parseInt(tonType)) && isNaN(parseInt(tonnage))) {
+        errors.push(gettext('Tonnage type is set without a tonnage value.'));
+    }
+    // Validate sources - at least one.
+    if (sources.length == 0) {
+        errors.push(gettext('The contribution has to specify at least one source reference.'));
+    }
+    return new ValidationResult(warnings, errors);
 }
