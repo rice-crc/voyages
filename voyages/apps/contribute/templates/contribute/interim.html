@@ -1074,6 +1074,7 @@
     };
 
     var selectizeInput = function(input) {
+        console.log(input.attr('name'));
         var values = getValues(input.attr('name'));
         var optgroups = [];
         for (var value in values) {
@@ -1083,18 +1084,22 @@
         var nodeName = input[0].nodeName.toUpperCase();
         if (values && nodeName == 'INPUT') {
             var options = [];
-            var currentValue = input.val();
+            var currentValue = input.attr('value');
             optgroups.push({ id: 'typed', label: gettext('Typed value')});
-            if (currentValue != '') {
-                options.push({ source: 'typed', value: currentValue });
-            }
             for (var value in values) {
                 options.push({ source: value, value: value });
+                if (value == currentValue) {
+                    currentValue = '';
+                }
+            }
+            if (currentValue != '') {
+                options.push({ source: 'typed', value: currentValue });
             }
             input.selectize({
                 create: function (x, callback) {
                     callback({ source: 'typed', value: x });
                 },
+                delimiter: '#%#$', // avoid problems when commas are part of the input text.
                 persist: false,
                 closeAfterSelect: false,
                 options: options,
@@ -1139,6 +1144,7 @@
             addNotesPopup(input.attr('name'), input.parent());
         }
         input.addClass('form-control');
+        console.log(input.val());
     };
 
     var regions = {};
@@ -1268,7 +1274,7 @@
 
         // Handle dates.
         var dateOptions = [];
-        for (var i = {{ voyage_span_first_year }}; i < {{ voyage_span_last_year }}; ++i) {
+        for (var i = 1500; i <= 1867; ++i) {
             dateOptions.push({ type: 'year', label: i, value: 'y' + i });
         }
 
@@ -1288,27 +1294,10 @@
         for (var i = 1; i <= 31; ++i) {
             dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i) });
         }
-        var parseDateValue = function(val) {
-            var items = val.split(',');
-            var year = '';
-            var month = '';
-            var day = '';
-            for (var i = 0; i < items.length; ++i) {
-                var item = items[i];
-                if (item.startsWith('y')) {
-                    year = parseInt(item.substring(1));
-                } else if (item.startsWith('m')) {
-                    month = parseInt(item.substring(1));
-                } else if (item.startsWith('d')) {
-                    day = parseInt(item.substring(1));
-                }
-            }
-            return { year: year, month: month, day: day };
-        };
         $(".date_input").each(function() {
             var self = $(this);
             var optgroups = [
-                { type: 'year', name: '{% trans "Year in the range" %} {{ voyage_span_first_year }} - {{ voyage_span_last_year }}'},
+                { type: 'year', name: '{% trans "Year in the range" %} 1500 - 1867'},
                 { type: 'month', name: '{% trans "Month" %}'},
                 { type: 'day', name: '{% trans "Day" %}'},
             ];
@@ -1372,9 +1361,9 @@
                     this.clear();
                     inside = true;
                     var data = existing[value];
-                    if (!isNaN(data.year)) this.addItem('y' + data.year);
-                    if (!isNaN(data.month)) this.addItem('m' + leadingZero(data.month));
-                    if (!isNaN(data.day)) this.addItem('d' + leadingZero(data.day));
+                    if (data.year) this.addItem('y' + data.year);
+                    if (data.month) this.addItem('m' + leadingZero(data.month));
+                    if (data.day) this.addItem('d' + leadingZero(data.day));
                     inside = false;
                     return;
                 }
@@ -1506,11 +1495,19 @@
         }
 
         $('form').submit(function() {
+            var validation = validatePreSubmit(sources);
+            if (validation.hasErrors()) {
+                alert(validation.toString());
+                return false;
+            } else if (validation.hasWarnings() &&
+                    !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                return false;
+            }
             $("input[name^='date']").each(function() {
                 var self = $(this);
                 // Convert date to the expected format MM,DD,YYYY
                 var date = parseDateValue(self.val());
-                self.val(date.month + ',' + date.day + ',' + date.year);
+                self.val(date.toMMDDYYY());
             });
             // Send notes.
             var notes_submit = {};
