@@ -419,6 +419,11 @@ function validatePreSubmit(sources) {
     if (!isNaN(parseInt(tonType)) && isNaN(parseInt(tonnage))) {
         errors.push(gettext('Tonnage type is set without a tonnage value.'));
     }
+    var yearConstructed = parseInt($("input[name='year_ship_constructed']").val());
+    var yearRegistered = parseInt($("input[name='year_ship_registered']").val());
+    if (!isNaN(yearConstructed) && !isNaN(yearRegistered) && yearRegistered < yearConstructed) {
+        errors.push(gettext('Year of ship registration cannot precede year of ship construction.'));
+    }
     // Validate sources - at least one.
     if (sources.length == 0) {
         errors.push(gettext('The contribution has to specify at least one source reference.'));

@@ -64,10 +64,14 @@
     }
 </style>
 
-<h1>{% trans "Interim voyage" %}</h1>
+<h1>{{ contribution }}</h1>
 
 <p>
-    {% trans "Some intro text." %}
+    {% trans "Variables are organized into eight categories." %}
+    {{ contribution.help_text|safe }}
+    {% trans "Comments or notes on any entry may be added by clicking on the box to the right of each input box." %}
+    {% trans "If required, use the box for notes at the foot of the page for additional information." %}
+    {% trans "You can review your complete entry at any time by clicking on the 'Review' button, and to submit your entry you must move to the Review page first." %}
 </p>
 
 {{ form.errors }}
@@ -750,6 +754,65 @@
         </div>
     </div>
     <div>
+        <a role="button" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
+          <h1>{% trans "Slaves (characteristics)" %}</h1>
+        </a>
+    </div>
+    <div id="demographics" class="collapse col-md-12 var_group">
+        <div id="hidden_div" style="display:none">
+            <input type="number" id="cell_editor" style="width: 65px;">
+        </div>
+        <table id="demographics_table" class="table table-striped" style="width: auto">
+            <thead>
+                <th></th>
+                <th>{% trans "Men" %}</th>
+                <th>{% trans "Women" %}</th>
+                <th>{% trans "Boys" %}</th>
+                <th>{% trans "Girls" %}</th>
+                <th>{% trans "Males" %}</th>
+                <th>{% trans "Females" %}</th>
+                <th>{% trans "Adults" %}</th>
+                <th>{% trans "Children" %}</th>
+                <th>{% trans "Infants" %}</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{% trans "Embarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (third port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Died on voyage" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <label for="notes_for_slaves_demographics">
+                {% trans "Notes for slaves characteristics" %}:
+            </label>
+            <div class="input-group col-md-8">
+                <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div>
         <a role="button" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
           <h1>{% trans "Sources" %}</h1>
         </a>
@@ -929,69 +992,11 @@
             </div>
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
-          <h1>{% trans "Slaves (characteristics)" %}</h1>
-        </a>
-    </div>
-    <div id="demographics" class="collapse col-md-12 var_group">
-        <div id="hidden_div" style="display:none">
-            <input type="number" id="cell_editor" style="width: 65px;">
-        </div>
-        <table id="demographics_table" class="table table-striped" style="width: auto">
-            <thead>
-                <th></th>
-                <th>{% trans "Men" %}</th>
-                <th>{% trans "Women" %}</th>
-                <th>{% trans "Boys" %}</th>
-                <th>{% trans "Girls" %}</th>
-                <th>{% trans "Males" %}</th>
-                <th>{% trans "Females" %}</th>
-                <th>{% trans "Adults" %}</th>
-                <th>{% trans "Children" %}</th>
-                <th>{% trans "Infants" %}</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>{% trans "Embarked slaves (first port)" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Embarked slaves (second port)" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Embarked slaves (third port)" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Died on voyage" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Disembarked slaves (first port)" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-                <tr>
-                    <th>{% trans "Disembarked slaves (second port)" %}</th>
-                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="form-group">
-            <label for="notes_for_slaves_demographics">
-                {% trans "Notes for slaves characteristics" %}:
-            </label>
-            <div class="input-group col-md-8">
-                <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
-            </div>
-        </div>
-    </div>
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
     <div class="form-group col-md-12">
-        <button class="btn btn-primary" type="submit">{% trans "Submit voyage" %}</button>
-        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Delete contribution" %}</button>
+        <button class="btn btn-primary" type="submit">{% trans "Proceed" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
     </div>
 </form>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js">

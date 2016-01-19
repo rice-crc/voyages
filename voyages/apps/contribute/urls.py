@@ -17,6 +17,9 @@ urlpatterns = patterns('',
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
         'voyages.apps.contribute.views.interim', name='interim'),
 
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+        'voyages.apps.contribute.views.interim_summary', name='interim_summary'),
+
     url(r'edit_voyage$', 'voyages.apps.contribute.views.edit', name='edit_voyage'),
 
     url(r'merge_voyages$', 'voyages.apps.contribute.views.merge', name='merge_voyages'),
