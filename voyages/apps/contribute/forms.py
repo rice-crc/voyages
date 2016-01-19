@@ -75,7 +75,6 @@ class ContributionVoyageSelectionForm(forms.Form):
     """
 
     ids = forms.CharField(max_length=255, required=True)
-    notes = forms.CharField(max_length=1000, required=True)
 
     def __init__(self, data=None, min_selection=1, max_selection=None, *args, **kwargs):
         super(ContributionVoyageSelectionForm, self).__init__(data, *args, **kwargs)
@@ -95,9 +94,9 @@ class ContributionVoyageSelectionForm(forms.Form):
         self.selected_voyages = ids
         id_count = len(ids)
         if id_count < self.min_selection:
-            raise forms.ValidationError(_('At least %d voyage_id(s) should be provided') % self.min_selection)
+            raise forms.ValidationError(_('At least %d voyage(s) should be provided') % self.min_selection)
         if self.max_selection is not None and id_count > self.max_selection:
-            raise forms.ValidationError(_('At most %d voyage_id(s) should be provided') % self.max_selection)
+            raise forms.ValidationError(_('At most %d voyage(s) should be provided') % self.max_selection)
         matches = Voyage.objects.filter(voyage_id__in=ids).count()
         if matches != id_count:
             raise forms.ValidationError(_('Some of the provided voyage_ids are invalid'))

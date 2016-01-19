@@ -2,29 +2,31 @@
 {% load i18n %}
 
 {% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 
-<h1>{% trans "Delete contribution" %}</h1>
+<h1>{% trans "Recommend the deletion of an existing voyage" %}</h1>
 
 <p>
-    {% trans "Please select voyage(s) and explain the reasons why they should be removed from the database." %}
+    {% trans "Please use the box for notes to tell us why the selected voyage(s) should be removed from the database." %}
 </p>
 
-{% include "contribute/voyage_selection_table.html" %}
 <p></p>
 
-<div>
-    <form action="{% url 'contribute:delete_voyage' %}" method="post">
+{% include "contribute/voyage_selection_table.html" %}
+<div class="col-sm-12">
+    <form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal">
         {% csrf_token %}
         <input type="hidden" name="ids" id="ids_hidden">
         {{ form.ids.errors }}
-        <div>
-            <label for="notes_input">{% trans "Please tell us why the voyage(s) above should be removed:" %}</label><br/>
-            <textarea id="notes_input" name="notes"></textarea>
-            {{ form.notes.errors }}
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="notes_input">{% trans "Notes:" %}</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" id="notes_input" name="notes"></textarea>
+            </div>
         </div>
     </form>
     <p>
-        <button id="confirm_btn" onclick="selection.submitForm();">{% trans "Submit" %}</button>
+        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Submit" %}</button>
     </p>
 </div>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>

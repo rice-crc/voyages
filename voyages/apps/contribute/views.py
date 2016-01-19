@@ -97,7 +97,7 @@ def delete(request):
                 contribution.contributor = request.user
                 contribution.deleted_voyages_ids = ','.join([str(x) for x in ids])
                 contribution.status = ContributionStatus.committed
-                contribution.notes = form.cleaned_data['notes']
+                contribution.notes = request.POST.get('notes')
                 contribution.save()
             return HttpResponseRedirect(reverse('contribute:thanks'))
         else:
@@ -122,7 +122,6 @@ def edit(request):
                 contribution.contributor = request.user
                 contribution.edited_voyage_id = ids[0]
                 contribution.status = ContributionStatus.pending
-                contribution.notes = form.cleaned_data['notes']
                 contribution.save()
                 init_interim_voyage(interim_voyage, contribution)
             return HttpResponseRedirect(reverse(
@@ -130,7 +129,8 @@ def edit(request):
             ))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id=ids[0])]
+            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id=ids[0])] \
+                if len(ids) != 0 else []
     else:
         form = ContributionVoyageSelectionForm(max_selection=1)
     return render(request, 'contribute/edit.html', {'form': form, 'voyage_selection': voyage_selection})
@@ -150,7 +150,6 @@ def merge(request):
                 contribution.contributor = request.user
                 contribution.merged_voyages_ids = ','.join([str(x) for x in ids])
                 contribution.status = ContributionStatus.pending
-                contribution.notes = form.cleaned_data['notes']
                 contribution.save()
                 init_interim_voyage(interim_voyage, contribution)
             return HttpResponseRedirect(reverse(
@@ -188,12 +187,18 @@ contribution_model_by_type = {
     'new': NewVoyageContribution
 }
 
-@login_required
-def interim(request, contribution_type, contribution_id):
+def get_contribution(contribution_type, contribution_id):
     model = contribution_model_by_type.get(contribution_type)
     if model is None:
         raise Http404
     contribution = model.objects.get(pk=contribution_id)
+    if contribution is None:
+        raise Http404
+    return contribution
+
+@login_required
+def interim(request, contribution_type, contribution_id):
+    contribution = get_contribution(contribution_type, contribution_id)
     if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
         return HttpResponseForbidden()
     previous_data = contribution_related_data(contribution)
@@ -238,10 +243,24 @@ def interim(request, contribution_type, contribution_id):
     import json
     return render(request, 'contribute/interim.html',
                   {'form': form,
+                   'contribution': contribution,
                    'numbers': numbers,
                    'interim': contribution.interim_voyage,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+
+@login_required()
+def interim_summary(request, contribution_type, contribution_id):
+    contribution = get_contribution(contribution_type, contribution_id)
+    if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
+        return HttpResponseForbidden()
+    numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
+    form = InterimVoyageForm(instance=contribution.interim_voyage)
+    return render(request, 'contribute/interim_summary.html',
+                  {'contribution': contribution,
+                   'interim': contribution.interim_voyage,
+                   'numbers': numbers,
+                   'form': form})
 
 @login_required
 def new_voyage(request):

@@ -2,29 +2,25 @@
 {% load i18n %}
 
 {% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 
-<h1>{% trans "Merge voyages contribution" %}</h1>
+<h1>{% trans "Merge existing records of voyages" %}</h1>
 
 <p>
-    {% trans "Please select voyage(s) that are in fact the same and should be merged." %}
+    {% trans "Please select two or more existing voyage records for merging." %}
 </p>
 
-{% include "contribute/voyage_selection_table.html" %}
 <p></p>
 
-<div>
+{% include "contribute/voyage_selection_table.html" %}
+<div class="col-sm-12">
     <form action="{% url 'contribute:merge_voyages' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="ids" id="ids_hidden">
         {{ form.ids.errors }}
-        <div>
-            <label for="notes_input">{% trans "Notes:" %}</label><br/>
-            <textarea id="notes_input" name="notes"></textarea>
-            {{ form.notes.errors }}
-        </div>
     </form>
     <p>
-        <button id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
+        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
     </p>
 </div>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
