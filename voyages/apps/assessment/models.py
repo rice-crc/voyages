@@ -103,12 +103,8 @@ class EstimateManager(models.Manager):
         with cls._lock:
             if not cls._has_loaded:
                 cls._has_loaded = True
-                cls._all = {v.pk: v for v in Estimate.objects.all()}
+                cls._all = {v.pk: v for v in Estimate.objects.prefetch_related(
+                    'nation',
+                    'embarkation_region__export_area',
+                    'disembarkation_region__import_area').all()}
         return cls._all
-
-    # Ensure that we load some related members thus
-    # avoiding hitting the DB multiple times.
-    def get_query_set(self):
-        return super(EstimateManager, self).get_query_set().select_related(
-            'embarkation_region__export_area',
-            'disembarkation_region__import_area')

@@ -32,6 +32,7 @@ from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
+from cache import VoyageCache, CachedGeo
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -594,8 +595,7 @@ def voyage_variables(request, voyage_id):
                    'voyage_id': voyage_id})
 
 def reload_cache(request):
-    VoyageManager.invalidate_cache()
-    VoyageManager.cache()
+    VoyageCache.load(True)
     return HttpResponse("Voyages cache reloaded")
 
 from django.views.decorators.csrf import csrf_exempt
@@ -1207,55 +1207,43 @@ def search(request):
             map_ports = {}
             map_flows = {}
 
-            def add_port(place):
-                result = place is not None and place.show_on_voyage_map and \
-                    place.region.show_on_map and place.region.broad_region.show_on_map
+            def add_port(geo):
+                result = geo is not None and geo[0].show and geo[1].show and geo[2].show
                 if result:
-                    map_ports[place.place] = (place.latitude, place.longitude, place.region, place.region.broad_region)
+                    map_ports[geo[0].name] = geo
                 return result
 
             def add_flow(source, destination, embarked, disembarked):
                 result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
                 if result:
-                    flow_key = source.place + '_' + destination.place
+                    flow_key = source[0].name + '_' + destination[0].name
                     if flow_key in map_flows:
                         embarked += map_flows[flow_key][2]
                         disembarked += map_flows[flow_key][3]
-                    map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
+                    map_flows[flow_key] = (source[0].name, destination[0].name, embarked, disembarked)
                 return result
 
-            all_voyages = VoyageManager.cache()
+            # Ensure cache is loaded.
+            VoyageCache.load()
+            all_voyages = VoyageCache.voyages
             missed_embarked = 0
             missed_disembarked = 0
-            keys = list(results.values_list('pk', flat=True).load_all())
-            for pk in keys:
+            # Set up an unspecified source that will be used if the appropriate setting is enabled
+            geo_unspecified = CachedGeo(-1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
+            source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
+            for pk in results.values_list('pk', flat=True):
                 voyage = all_voyages.get(int(pk))
                 if voyage is None:
                     continue
-                itinerary = voyage.voyage_itinerary
-                numbers = voyage.voyage_slaves_numbers
-                embarked = numbers.imp_total_num_slaves_embarked
-                disembarked = numbers.imp_total_num_slaves_disembarked
-                source = itinerary.imp_principal_place_of_slave_purchase
-                destination = itinerary.imp_principal_port_slave_dis
+                source = CachedGeo.get_hierarchy(voyage.emb_pk)
                 if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
-                    source = Place()
-                    source.place = _('Africa, port unspecified')
-                    source.latitude = 0.05
-                    source.longitude = 9.34
-                    source.region = Region()
-                    source.region.region = source.place
-                    source.region.latitude = source.latitude
-                    source.region.longitude = source.longitude
-                    source.region.broad_region = BroadRegion()
-                    source.region.broad_region.broad_region = source.place
-                    source.region.broad_region.latitude = source.latitude
-                    source.region.broad_region.longitude = source.longitude
+                    source = source_unspecified
+                destination = CachedGeo.get_hierarchy(voyage.dis_pk)
                 add_flow(
                     source,
                     destination,
-                    embarked,
-                    disembarked)
+                    voyage.embarked,
+                    voyage.disembarked)
             if missed_embarked > 0 or missed_disembarked > 0:
                 import logging
                 logging.getLogger('voyages').info('Missing flow: (' + str(missed_embarked) +
@@ -1266,43 +1254,38 @@ def search(request):
                               'map_flows': map_flows
                           }, content_type='text/javascript')
         elif submitVal == 'animation_ajax':
-            all_voyages = VoyageManager.cache()
-            nations = {n.id: _(n.label) for n in Nationality.objects.all()}
+            VoyageCache.load()
+            all_voyages = VoyageCache.voyages
             result = []
-            for pk in results.values_list('pk', flat=True).load_all():
+            for pk in results.values_list('pk', flat=True):
                 voyage = all_voyages.get(int(pk))
                 if voyage is None:
                     continue
-                itinerary = voyage.voyage_itinerary
-                numbers = voyage.voyage_slaves_numbers
-                embarked = numbers.imp_total_num_slaves_embarked
-                disembarked = numbers.imp_total_num_slaves_disembarked
-                source = itinerary.imp_principal_place_of_slave_purchase
-                destination = itinerary.imp_principal_port_slave_dis
-                dates = voyage.voyage_dates
-                year = dates.get_date_year(dates.voyage_began)
-                ship = voyage.voyage_ship
-                if source is not None and destination is not None and source.show_on_voyage_map and \
-                        destination.show_on_voyage_map and year is not None and \
-                        embarked is not None and embarked > 0 and disembarked is not None:
-                    flag_id = ship.imputed_nationality.id if ship.imputed_nationality is not None else 0
-                    flag = nations.get(flag_id)
+                source = CachedGeo.get_hierarchy(voyage.emb_pk)
+                destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+                if source is not None and destination is not None and source[0].show and \
+                        destination[0].show and voyage.year is not None and \
+                        voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
+                    flag = VoyageCache.nations.get(voyage.ship_nat_pk)
                     if flag is None:
                         flag = ''
                     result.append('{ "voyage_id": ' + str(voyage.voyage_id) +
-                                  ', "source_name": "' + _(source.place) + '"' +
-                                  ', "source_lat": ' + str(source.latitude) +
-                                  ', "source_lng": ' + str(source.longitude) +
-                                  ', "destination_name": "' + _(destination.place) + '"' +
-                                  ', "destination_lat": ' + str(destination.latitude) +
-                                  ', "destination_lng": ' + str(destination.longitude) +
-                                  ', "embarked": ' + str(embarked) +
-                                  ', "disembarked": ' + str(disembarked) +
-                                  ', "year": ' + str(year) +
-                                  ', "ship_ton": ' + (str(ship.tonnage) if ship.tonnage is not None else '0') +
-                                  ', "ship_nationality_id": ' + str(flag_id) +
+                                  ', "source_name": "' + _(source[0].name) + '"' +
+                                  ', "source_lat": ' + str(source[0].lat) +
+                                  ', "source_lng": ' + str(source[0].lng) +
+                                  ', "destination_name": "' + _(destination[0].name) + '"' +
+                                  ', "destination_lat": ' + str(destination[0].lat) +
+                                  ', "destination_lng": ' + str(destination[0].lng) +
+                                  ', "embarked": ' + str(voyage.embarked) +
+                                  ', "disembarked": ' + str(voyage.disembarked) +
+                                  ', "year": ' + str(voyage.year) +
+                                  ', "ship_ton": ' +
+                                  (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') +
+                                  ', "ship_nationality_id": ' +
+                                  (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') +
                                   ', "ship_nationality_name": "' + flag + '"'
-                                  ', "ship_name": "' + (unicode(ship.ship_name) if ship.ship_name is not None else '') + '"'
+                                  ', "ship_name": "' +
+                                  (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"'
                                   ' }')
             return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':

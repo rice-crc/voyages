@@ -227,6 +227,8 @@ def interim(request, contribution_type, contribution_id):
                     del_children(InterimOtherSource)
                     del_children(InterimSlaveNumber)
                     form.save()
+                    contribution.notes = request.POST.get('contribution_main_notes')
+                    contribution.save()
                     for src in sources:
                         src.save()
                     # Clear previous numbers and save new ones.
