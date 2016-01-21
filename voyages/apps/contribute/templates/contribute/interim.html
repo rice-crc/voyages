@@ -242,7 +242,7 @@
                 <div class="input-group col-sm-8">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
-                        <optgroup label='{% trans "Voyage outcome" %}'>
+                        <optgroup label='{% trans "Other voyage outcomes" %}'>
                             {% for val,text in f.field.choices %}
                                 {% if val != '' %}
                                     <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
@@ -992,6 +992,8 @@
             </div>
         </div>
     </div>
+    <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
+    <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
     <div class="form-group col-md-12">
@@ -1084,7 +1086,7 @@
         var optgroups = [];
         for (var value in values) {
             var ids = values[value];
-            optgroups.push({ id: value, label: getGroupName(ids), $order: -1 });
+            optgroups.push({ id: value, label: getGroupName(ids), $order: -1000 });
         }
         var nodeName = input[0].nodeName.toUpperCase();
         if (values && nodeName == 'INPUT') {
@@ -1124,7 +1126,7 @@
         } else if (nodeName == 'SELECT') {
             var $s = input.selectize({
                 optgroupField: 'source',
-                sortField: 'text',
+                sortField: [{ field: 'priority' }, { field: 'text' }],
                 lockOptgroupOrder: true,
                 onInitialize: function() {
                     for (var key in optgroups) {
@@ -1212,6 +1214,22 @@
                 selectizeInput(f);
             }
         );
+
+        // Add group with most common options for select items
+        var selectize = $("#id_{{ form.voyage_outcome.html_name }}")[0].selectize;
+        selectize.addOptionGroup('most_common', {
+            label: '{% trans "Most common outcomes" %}',
+            $order: -100,
+        });
+        var commonIds = [1, 42, 173, 64, 52]
+        for (var i in selectize.options) {
+            var found = selectize.options[i];
+            if (selectize.optgroups[found.source].$order < 0) continue;
+            var commonIndex = $.inArray(parseInt(found.value), commonIds);
+            if (commonIndex >= 0) {
+                selectize.options[i] = { priority: commonIndex, source: 'most_common', value: found.value, text: found.text };
+            }
+        }
 
         $.ajax('/contribute/places_ajax', {
             success: function(originalPorts) {

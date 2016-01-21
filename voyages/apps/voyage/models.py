@@ -1,10 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
-# TODO:
-# - add foreign keys of subclass (Ship, Dates, ...) to the main Voyage model.
-
-
 # Voyage Regions and Places
 class BroadRegion(models.Model):
     """
@@ -619,7 +615,8 @@ class VoyageDates(models.Model):
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
 
-    def get_date_year(self, value):
+    @classmethod
+    def get_date_year(cls, value):
         """
         Returns year value from CommaSeparatedField, or None if undefined
         """
@@ -1251,43 +1248,9 @@ class VoyageSourcesConnection(models.Model):
     text_ref = models.CharField(_('Text reference(citation)'),
                                 max_length=255, null=True, blank=True)
 
-
 # Voyage (main) model
 # for parsing natural key
 class VoyageManager(models.Manager):
-    _all = {}
-    _has_loaded = False
-    import threading
-    _lock = threading.Lock()
-
-    @classmethod
-    def cache(cls):
-        with cls._lock:
-            if not cls._has_loaded:
-                # Ensure that we load some related members thus
-                # avoiding hitting the DB multiple times.
-                cls._all = {v.pk: v for v in Voyage.objects.all().select_related(
-                    'voyage_slaves_numbers',
-                    'voyage_dates',
-                    'voyage_itinerary',
-                    'voyage_ship').
-                    prefetch_related(
-                    'voyage_itinerary__imp_principal_place_of_slave_purchase',
-                    'voyage_itinerary__imp_principal_place_of_slave_purchase__region',
-                    'voyage_itinerary__imp_principal_place_of_slave_purchase__region__broad_region',
-                    'voyage_itinerary__imp_principal_port_slave_dis',
-                    'voyage_itinerary__imp_principal_port_slave_dis__region',
-                    'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
-                    'voyage_ship__imputed_nationality')}
-                cls._has_loaded = True
-        return cls._all
-
-    @classmethod
-    def invalidate_cache(cls):
-        with cls._lock:
-            cls._has_loaded = False
-            cls._all = {}
-
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
 
