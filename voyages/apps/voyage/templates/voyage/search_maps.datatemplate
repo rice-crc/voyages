@@ -3,8 +3,8 @@
 
 {% localize off %}
 var ports = {
-    {% for port_name, data in map_ports.items %}
-        "{{ port_name }}": new Port(
+    {% for data in map_ports.values %}
+        "{{ data.0.name }}": new Port(
             new NamedPoint("{{ data.0.name|trans_log }}", new L.LatLng({{ data.0.lat }}, {{ data.0.lng }})),
             new NamedPoint("{{ data.1.name|trans_log }}", new L.LatLng({{ data.1.lat }}, {{ data.1.lng }})),
             new NamedPoint("{{ data.2.name|trans_log }}", new L.LatLng({{ data.2.lat }}, {{ data.2.lng }}), null, {{ data.2.pk }})),

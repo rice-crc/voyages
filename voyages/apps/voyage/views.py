@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
 from django.shortcuts import render
@@ -1209,17 +1209,18 @@ def search(request):
 
             def add_port(geo):
                 result = geo is not None and geo[0].show and geo[1].show and geo[2].show
-                if result:
-                    map_ports[geo[0].name] = geo
+                if result and not geo[0].pk in map_ports:
+                    map_ports[geo[0].pk] = geo
                 return result
 
             def add_flow(source, destination, embarked, disembarked):
                 result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
                 if result:
-                    flow_key = source[0].name + '_' + destination[0].name
-                    if flow_key in map_flows:
-                        embarked += map_flows[flow_key][2]
-                        disembarked += map_flows[flow_key][3]
+                    flow_key = long(source[0].pk) * 2147483647 + long(destination[0].pk)
+                    current = map_flows.get(flow_key)
+                    if current is not None:
+                        embarked += current[2]
+                        disembarked += current[3]
                     map_flows[flow_key] = (source[0].name, destination[0].name, embarked, disembarked)
                 return result
 
@@ -1256,38 +1257,39 @@ def search(request):
         elif submitVal == 'animation_ajax':
             VoyageCache.load()
             all_voyages = VoyageCache.voyages
-            result = []
-            for pk in results.values_list('pk', flat=True):
-                voyage = all_voyages.get(int(pk))
-                if voyage is None:
-                    continue
-                source = CachedGeo.get_hierarchy(voyage.emb_pk)
-                destination = CachedGeo.get_hierarchy(voyage.dis_pk)
-                if source is not None and destination is not None and source[0].show and \
-                        destination[0].show and voyage.year is not None and \
-                        voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
-                    flag = VoyageCache.nations.get(voyage.ship_nat_pk)
-                    if flag is None:
-                        flag = ''
-                    result.append('{ "voyage_id": ' + str(voyage.voyage_id) +
-                                  ', "source_name": "' + _(source[0].name) + '"' +
-                                  ', "source_lat": ' + str(source[0].lat) +
-                                  ', "source_lng": ' + str(source[0].lng) +
-                                  ', "destination_name": "' + _(destination[0].name) + '"' +
-                                  ', "destination_lat": ' + str(destination[0].lat) +
-                                  ', "destination_lng": ' + str(destination[0].lng) +
-                                  ', "embarked": ' + str(voyage.embarked) +
-                                  ', "disembarked": ' + str(voyage.disembarked) +
-                                  ', "year": ' + str(voyage.year) +
-                                  ', "ship_ton": ' +
-                                  (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') +
-                                  ', "ship_nationality_id": ' +
-                                  (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') +
-                                  ', "ship_nationality_name": "' + flag + '"'
-                                  ', "ship_name": "' +
-                                  (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"'
-                                  ' }')
-            return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
+
+            def animation_response():
+                for pk in results.values_list('pk', flat=True):
+                    voyage = all_voyages.get(int(pk))
+                    if voyage is None:
+                        continue
+                    source = CachedGeo.get_hierarchy(voyage.emb_pk)
+                    destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+                    if source is not None and destination is not None and source[0].show and \
+                            destination[0].show and voyage.year is not None and \
+                            voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
+                        flag = VoyageCache.nations.get(voyage.ship_nat_pk)
+                        if flag is None:
+                            flag = ''
+                        yield '{ "voyage_id": ' + str(voyage.voyage_id) + \
+                              ', "source_name": "' + _(source[0].name) + '"' + \
+                              ', "source_lat": ' + str(source[0].lat) + \
+                              ', "source_lng": ' + str(source[0].lng) + \
+                              ', "destination_name": "' + _(destination[0].name) + '"' + \
+                              ', "destination_lat": ' + str(destination[0].lat) + \
+                              ', "destination_lng": ' + str(destination[0].lng) + \
+                              ', "embarked": ' + str(voyage.embarked) + \
+                              ', "disembarked": ' + str(voyage.disembarked) + \
+                              ', "year": ' + str(voyage.year) + \
+                              ', "ship_ton": ' + \
+                              (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') + \
+                              ', "ship_nationality_id": ' + \
+                              (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
+                              ', "ship_nationality_name": "' + flag + '"' \
+                              ', "ship_name": "' + \
+                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' \
+                              ' }'
+            return HttpResponse('[' + ',\n'.join(animation_response()) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
@@ -1305,11 +1307,17 @@ def search(request):
         no_result = True
 
     # Paginate results to pages
-    paginator = Paginator(results, results_per_page)
-    pagins = paginator.page(int(current_page))
-    request.session['current_page'] = current_page
-    # Prepare paginator ranges
-    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
+    if tab == 'result':
+        paginator = Paginator(results, results_per_page)
+        pagins = paginator.page(int(current_page))
+        request.session['current_page'] = current_page
+        # Prepare paginator ranges
+        (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
+        result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
+    else:
+        pagins = None
+        (paginator_range, pages_range) = (None, None)
+        result_display = None
     # Customize result page
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -1321,7 +1329,6 @@ def search(request):
         request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
-    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -1388,6 +1395,15 @@ def prettify_results(results, lookup_table):
         mangled.append(idict)
     return mangled
 
+class ChoicesCache:
+    nations = list(Nationality.objects.all())
+    particular_outcomes = list(ParticularOutcome.objects.all())
+    slaves_outcomes = list(SlavesOutcome.objects.all())
+    owner_outcomes = list(OwnerOutcome.objects.all())
+    resistances = list(Resistance.objects.all())
+    captured_outcomes = list(VesselCapturedOutcome.objects.all())
+    rigs = list(RigOfVessel.objects.all())
+
 def getChoices(varname):
     """
     Retrieve a list of two-tuple items for select boxes depending on the model
@@ -1396,32 +1412,32 @@ def getChoices(varname):
     """
     choices = []
     if varname in ['var_nationality']:
-        for nation in Nationality.objects.all():
+        for nation in ChoicesCache.nations:
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
             choices.append((nation.value, _(nation.label)))
     elif varname in ['var_imputed_nationality']:
-        for nation in Nationality.objects.all():
+        for nation in ChoicesCache.nations:
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
                 choices.append((nation.value, _(nation.label)))
     elif varname in ['var_outcome_voyage']:
-        for outcome in ParticularOutcome.objects.all():
+        for outcome in ChoicesCache.particular_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_slaves']:
-        for outcome in SlavesOutcome.objects.all():
+        for outcome in ChoicesCache.slaves_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_owner']:
-        for outcome in OwnerOutcome.objects.all():
+        for outcome in ChoicesCache.owner_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_resistance']:
-        for outcome in Resistance.objects.all():
+        for outcome in ChoicesCache.resistances:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_ship_captured']:
-        for outcome in VesselCapturedOutcome.objects.all():
+        for outcome in ChoicesCache.captured_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname == 'var_rig_of_vessel':
-        for rig in RigOfVessel.objects.all():
+        for rig in ChoicesCache.rigs:
             choices.append((rig.value, _(rig.label)))
     return choices
 

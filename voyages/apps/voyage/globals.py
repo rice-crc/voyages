@@ -394,7 +394,13 @@ def formatYear(year, month=0):
     """
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
+class VoyageDateCache:
+    cached_voyage_fist_year = None
+    cached_voyage_last_year = None
+
 def calculate_maxmin_years():
+    if VoyageDateCache.cached_voyage_fist_year is not None and VoyageDateCache.cached_voyage_last_year is not None:
+        return VoyageDateCache.cached_voyage_fist_year, VoyageDateCache.cached_voyage_last_year
     def_first = 1514
     def_last = 1866
     voyage_span_first_year = def_first
@@ -404,7 +410,9 @@ def calculate_maxmin_years():
         voyage_span_first_year = q.aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
         voyage_span_last_year = q.aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
 
-    return voyage_span_first_year or def_first, voyage_span_last_year or def_last
+    VoyageDateCache.cached_voyage_fist_year = voyage_span_first_year or def_first
+    VoyageDateCache.cached_voyage_last_year = voyage_span_last_year or def_last
+    return VoyageDateCache.cached_voyage_fist_year, VoyageDateCache.cached_voyage_last_year
 
 sfirst_year, slast_year = calculate_maxmin_years()
 mfirst_year = int(sfirst_year)
