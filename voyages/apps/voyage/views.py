@@ -1232,8 +1232,9 @@ def search(request):
             # Set up an unspecified source that will be used if the appropriate setting is enabled
             geo_unspecified = CachedGeo(-1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
             source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
-            for pk in results.values_list('pk', flat=True):
-                voyage = all_voyages.get(int(pk))
+            keys = get_voyage_pks_from_haystack_results(results)
+            for pk in keys:
+                voyage = all_voyages.get(pk)
                 if voyage is None:
                     continue
                 source = CachedGeo.get_hierarchy(voyage.emb_pk)
@@ -1259,8 +1260,9 @@ def search(request):
             all_voyages = VoyageCache.voyages
 
             def animation_response():
-                for pk in results.values_list('pk', flat=True):
-                    voyage = all_voyages.get(int(pk))
+                keys = get_voyage_pks_from_haystack_results(results)
+                for pk in keys:
+                    voyage = all_voyages.get(pk)
                     if voyage is None:
                         continue
                     source = CachedGeo.get_hierarchy(voyage.emb_pk)
@@ -1374,6 +1376,22 @@ def search(request):
                    'map_year': map_year
                   })
 
+def get_voyage_pks_from_haystack_results(results):
+    """
+    This is a HACK that gives us much better performance when enumerating the
+    voyage primary keys of the search results.
+    :param results:
+    :return:
+    """
+    q = results.query
+    q._reset()
+    q.set_limits(0, 50000)
+    final_query = q.build_query()
+    search_kwargs = q.build_params(None)
+    search_kwargs['fields'] = 'id'
+    search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
+    raw_results = q.backend.conn.search(final_query, **search_kwargs)
+    return [int(x['id'].split('.')[-1]) for x in raw_results]
 
 def prettify_results(results, lookup_table):
     """
