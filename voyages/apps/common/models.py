@@ -88,3 +88,20 @@ class SavedQuery(models.Model):
         from django.http import HttpResponseRedirect
         from django.core.urlresolvers import reverse
         return HttpResponseRedirect(reverse(redirect_url_name))
+
+def get_pks_from_haystack_results(results):
+    """
+    This is a HACK that gives us much better performance when enumerating the
+    voyage primary keys of the search results.
+    :param results:
+    :return:
+    """
+    q = results.query
+    q._reset()
+    q.set_limits(0, 50000)
+    final_query = q.build_query()
+    search_kwargs = q.build_params(None)
+    search_kwargs['fields'] = 'id'
+    search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
+    raw_results = q.backend.conn.search(final_query, **search_kwargs)
+    return [int(x['id'].split('.')[-1]) for x in raw_results]
