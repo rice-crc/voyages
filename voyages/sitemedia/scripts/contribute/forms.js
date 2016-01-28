@@ -8,7 +8,8 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
     }
 
     this.lookUp = function () {
-        var lookUpId = parseInt($('#voyage_id_input').val());
+        var $input = $('#voyage_id_input');
+        var lookUpId = parseInt($input.val());
         if (isNaN(lookUpId)) return;
         if (self.selection.indexOf(lookUpId) != -1) {
             alert(gettext('Voyage already added to selection'));
@@ -36,7 +37,8 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
                         '</td><td>' + data.captain + '</td>' +
                         '<td><a href="#" onclick="selection.remove(' + data.voyage_id + '); return false;">x</a></td></tr>');
                     $('#results_table').show();
-                    $('#voyage_id_input').val('');
+                    $input.val('');
+                    $input.focus();
                 }
             });
     };

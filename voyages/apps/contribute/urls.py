@@ -1,28 +1,29 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
+from voyages.apps.contribute import views
 
 urlpatterns = patterns('',
-    url(r'^$', 'voyages.apps.contribute.views.index', name='index'),
+    url(r'^$', views.index, name='index'),
 
     url(r'^guidelines$', TemplateView.as_view(template_name='contribute/guidelines.html'), name='guidelines'),
 
     url(r'^thanks', TemplateView.as_view(template_name='contribute/thanks.html'), name='thanks'),
 
-    url(r'^delete_voyage$', 'voyages.apps.contribute.views.delete', name='delete_voyage'),
+    url(r'^delete_voyage$', views.delete, name='delete_voyage'),
 
-    url(r'^places_ajax$', 'voyages.apps.contribute.views.get_places', name='places_ajax'),
+    url(r'^places_ajax$', views.get_places, name='places_ajax'),
 
-    url(r'^voyage_ajax$', 'voyages.apps.contribute.views.get_voyage_by_id', name='voyage_ajax'),
+    url(r'^voyage_ajax$', views.get_voyage_by_id, name='voyage_ajax'),
 
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
-        'voyages.apps.contribute.views.interim', name='interim'),
+        views.interim, name='interim'),
 
     url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
-        'voyages.apps.contribute.views.interim_summary', name='interim_summary'),
+        views.interim_summary, name='interim_summary'),
 
-    url(r'edit_voyage$', 'voyages.apps.contribute.views.edit', name='edit_voyage'),
+    url(r'edit_voyage$', views.edit, name='edit_voyage'),
 
-    url(r'merge_voyages$', 'voyages.apps.contribute.views.merge', name='merge_voyages'),
+    url(r'merge_voyages$', views.merge, name='merge_voyages'),
 
-    url(r'new_voyage$', 'voyages.apps.contribute.views.new_voyage', name='new_voyage'),
+    url(r'new_voyage$', views.new_voyage, name='new_voyage'),
 )

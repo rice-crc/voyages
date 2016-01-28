@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
@@ -191,18 +191,18 @@ def get_contribution(contribution_type, contribution_id):
     model = contribution_model_by_type.get(contribution_type)
     if model is None:
         raise Http404
-    contribution = model.objects.get(pk=contribution_id)
-    if contribution is None:
-        raise Http404
+    contribution = get_object_or_404(model, pk=contribution_id)
     return contribution
 
 @login_required
 def interim(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
-    if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
+    if (contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed) or \
+            request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     previous_data = contribution_related_data(contribution)
     sources_post = None
+    interim = contribution.interim_voyage
     if request.method == 'POST':
         if request.POST.get('submit_val') == 'delete':
             with transaction.atomic():
@@ -220,12 +220,17 @@ def interim(request, contribution_type, contribution_id):
             if form.is_valid():
                 with transaction.atomic():
                     def del_children(child_model):
-                        child_model.objects.filter(interim_voyage__id=contribution.interim_voyage.pk).delete()
+                        child_model.objects.filter(interim_voyage__id=interim.pk).delete()
                     del_children(InterimPrimarySource)
                     del_children(InterimArticleSource)
                     del_children(InterimBookSource)
                     del_children(InterimOtherSource)
                     del_children(InterimSlaveNumber)
+                    # Get pre-existing sources.
+                    for src in interim.pre_existing_sources.all():
+                        src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
+                        src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
+                        src.save()
                     form.save()
                     contribution.notes = request.POST.get('contribution_main_notes')
                     contribution.save()
@@ -234,27 +239,30 @@ def interim(request, contribution_type, contribution_id):
                     # Clear previous numbers and save new ones.
                     for k, v in numbers.items():
                         number = InterimSlaveNumber()
-                        number.interim_voyage = contribution.interim_voyage
+                        number.interim_voyage = interim
                         number.var_name = k[len(prefix):]
                         number.number = v
                         number.save()
-                return HttpResponseRedirect(reverse('contribute:thanks'))
+                return HttpResponseRedirect(reverse(
+                    'contribute:interim_summary',
+                    kwargs={'contribution_type': contribution_type, 'contribution_id': contribution_id}))
     else:
-        numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
-        form = InterimVoyageForm(instance=contribution.interim_voyage)
+        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
+        form = InterimVoyageForm(instance=interim)
     import json
     return render(request, 'contribute/interim.html',
                   {'form': form,
                    'contribution': contribution,
                    'numbers': numbers,
-                   'interim': contribution.interim_voyage,
+                   'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
 
 @login_required()
 def interim_summary(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
-    if contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed:
+    if (contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed) or \
+            (request.user.pk != contribution.contributor.pk and not request.user.is_staff):
         return HttpResponseForbidden()
     numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
     form = InterimVoyageForm(instance=contribution.interim_voyage)
@@ -262,7 +270,8 @@ def interim_summary(request, contribution_type, contribution_id):
                   {'contribution': contribution,
                    'interim': contribution.interim_voyage,
                    'numbers': numbers,
-                   'form': form})
+                   'form': form,
+                   'user': request.user})
 
 @login_required
 def new_voyage(request):
@@ -304,6 +313,23 @@ def init_interim_voyage(interim, contribution):
                         k += '_id'
                     setattr(interim, k, v)
     interim.save()
+    # Fetch any existing sources, group them so that
+    # references shared by more than one voyage are only
+    # included once.
+    related = contribution.get_related_voyages()
+    source_to_voyage = {}
+    for voyage in related:
+        for conn in VoyageSourcesConnection.objects.filter(group=voyage):
+            current = source_to_voyage.setdefault(conn.text_ref, [])
+            current.append((voyage, conn))
+    for tuples in source_to_voyage.values():
+        conn = tuples[0][1]
+        ps = InterimPreExistingSource()
+        ps.interim_voyage = interim
+        ps.voyage_ids = ','.join([str(v.voyage_id) for (v, c) in tuples])
+        ps.original_ref = conn.text_ref
+        ps.full_ref = conn.source.full_ref
+        ps.save()
 
 def contribution_related_data(contribution):    
     previous_data = {}
