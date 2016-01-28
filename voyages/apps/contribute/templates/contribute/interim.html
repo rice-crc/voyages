@@ -818,14 +818,54 @@
         </a>
     </div>
     <div id="sources" class="collapse col-md-12 var_group">
+        {% if interim.pre_existing_sources.all %}
+            <h3>{% trans "Current source references" %}</h3>
+            {% trans "Please specify whether the sources below should be included, excluded, or edited." %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans "Voyage ID(s)" %}</th>
+                    <th>{% trans "Short reference" %}</th>
+                    <th>{% trans "Full reference" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for source in interim.pre_existing_sources.all %}
+                    <tr>
+                        <td>{{ source.voyage_ids }}</td>
+                        <td>{{ source.original_ref }}</td>
+                        <td>{{ source.full_ref|safe }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span id="pre_source_action_span_{{ source.pk }}" class="glyphicon glyphicon-{% if source.action = 0 %}ok{% endif %}{% if source.action = 1 %}pencil{% endif %}{% if source.action = 2 %}remove{% endif %}"></span>
+                                </button>
+                                <input type="hidden" id="pre_existing_source_action_{{ source.pk }}" name="pre_existing_source_action_{{ source.pk }}" value="{{ source.action }}">
+                                <ul class="dropdown-menu pull-right">
+                                <li><a href="" class="pre_source_menu_accept" data-sourcepk="{{ source.pk }}">{% trans "Accept as it is" %}</a></li>
+                                <li><a href="" class="pre_source_menu_exclude" data-sourcepk="{{ source.pk }}">{% trans "Exclude reference (please explain)" %}</a></li>
+                                <li><a href="" class="pre_source_menu_edit" data-sourcepk="{{ source.pk }}">{% trans "Edit reference (please explain)" %}</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li style="margin:10px; min-width: 400px;"><label for="pre_existing_source_notes_{{ source.pk }}">Notes:</label><textarea class="form-control not_selectized" name="pre_existing_source_notes_{{ source.pk }}" id="pre_existing_source_notes_{{ source.pk }}" type="text">{{ source.notes }}</textarea></li>
+                              </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
         <table id="sources_table" style="display:none;" class="table table-striped">
             <thead>
-                <th>{% trans "Type of source" %}</th>
-                <th>{% trans "Details" %}</th>
-                <th></th>
+                <tr>
+                    <th>{% trans "Type of source" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
             </tbody>
@@ -997,7 +1037,7 @@
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
     <div class="form-group col-md-12">
-        <button class="btn btn-primary" type="submit">{% trans "Proceed" %}</button>
+        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Proceed" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
     </div>
 </form>
@@ -1008,6 +1048,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js">
 </script>
 <script type="text/javascript">
+    var submit_val = '';
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
 
@@ -1081,7 +1122,6 @@
     };
 
     var selectizeInput = function(input) {
-        console.log(input.attr('name'));
         var values = getValues(input.attr('name'));
         var optgroups = [];
         for (var value in values) {
@@ -1151,7 +1191,6 @@
             addNotesPopup(input.attr('name'), input.parent());
         }
         input.addClass('form-control');
-        console.log(input.val());
     };
 
     var regions = {};
@@ -1203,6 +1242,7 @@
             if (!confirm('{% trans "The contribution will be deleted and this partial contribution will be lost. Continue anyway?" %}')) {
                 e.preventDefault();
             }
+            submit_val = 'delete';
         });
 
         $('input[type=text], input[type=number], select, textarea')
@@ -1517,14 +1557,50 @@
             $('#sources_table').show();
         }
 
+        var sourceIcons = ['ok', 'pencil', 'remove'];
+        var sourceMenu = function (src, action) {
+            var pk = $(src).data('sourcepk');
+            var span = $('#pre_source_action_span_' + pk);
+            span.removeClass();
+            span.addClass("glyphicon glyphicon-" + sourceIcons[action]);
+            $('#pre_existing_source_action_' + pk).val(action);
+            if (action > 0) {
+                $('#pre_existing_source_notes_' + pk).focus();
+            }
+            return false;
+        };
+
+        $('.pre_source_menu_accept').click(function (e) {
+            return sourceMenu(this, 0);
+        });
+        $('.pre_source_menu_edit').click(function (e) {
+            return sourceMenu(this, 1);
+        });
+        $('.pre_source_menu_exclude').click(function (e) {
+            return sourceMenu(this, 2);
+        });
+
         $('form').submit(function() {
-            var validation = validatePreSubmit(sources);
-            if (validation.hasErrors()) {
-                alert(validation.toString());
-                return false;
-            } else if (validation.hasWarnings() &&
-                    !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
-                return false;
+            if (submit_val != 'delete') {
+                // Build pre-existing sources list.
+                var preSources = $.map(
+                    [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                    function(pk, i) {
+                        return {
+                            'pk': pk,
+                            'action': parseInt($('#pre_existing_source_action_' + pk).val()),
+                            'notes': $('#pre_existing_source_notes_' + pk).val()
+                        };
+                    }
+                );
+                var validation = validatePreSubmit(sources, preSources);
+                if (validation.hasErrors()) {
+                    alert(validation.toString());
+                    return false;
+                } else if (validation.hasWarnings() &&
+                        !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                    return false;
+                }
             }
             $("input[name^='date']").each(function() {
                 var self = $(this);

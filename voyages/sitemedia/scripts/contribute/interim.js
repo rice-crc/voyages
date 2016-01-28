@@ -384,7 +384,7 @@ function dateCompare(a, b) {
 }
 
 // Validate the form.
-function validatePreSubmit(sources) {
+function validatePreSubmit(sources, preSources) {
     var warnings = [];
     var errors = [];
     // Validate dates - must be in order and years within limits.
@@ -425,8 +425,17 @@ function validatePreSubmit(sources) {
         errors.push(gettext('Year of ship registration cannot precede year of ship construction.'));
     }
     // Validate sources - at least one.
-    if (sources.length == 0) {
+    if (sources.length == 0 && preSources.length == 0) {
         errors.push(gettext('The contribution has to specify at least one source reference.'));
+    }
+    for (var i = 0; i < preSources.length; ++i) {
+        var ps = preSources[i];
+        if (ps.action != 0 && ps.action != 1 && ps.action != 2) {
+            errors.push('Unrecognized action!'); // Should never get here.
+        }
+        if ((ps.action == 1 || ps.action == 2) && (!ps.notes || ps.notes.length < 3)) {
+            errors.push(gettext('Any pre-existing source marked for editing or deletion requires a comment.'));
+        }
     }
     return new ValidationResult(warnings, errors);
 }

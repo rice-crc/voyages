@@ -152,6 +152,24 @@ class InterimPrimarySource(models.Model):
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
 
+class InterimPreExistingSourceActions:
+    accepted = 0,
+    edit = 1,
+    exclude = 2
+
+class InterimPreExistingSource(models.Model):
+    """
+    A reference to a pre-existing source and any changes
+    that should be made to it.
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='pre_existing_sources')
+    voyage_ids = models.CommaSeparatedIntegerField(null=False, max_length=255)
+    action = models.IntegerField(null=False, default=0)
+    original_ref = models.CharField(max_length=255, null=False)
+    full_ref = models.TextField(max_length=1000, null=False)
+    notes = models.TextField(max_length=1000, null=True, blank=True)
+
 class InterimSlaveNumber(models.Model):
     """
     An interim number corresponding to some Voyage variable.
