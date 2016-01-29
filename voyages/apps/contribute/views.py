@@ -8,8 +8,10 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
+from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
+import json
 
 number_prefix = 'interim_slave_number_'
 
@@ -197,10 +199,16 @@ def get_contribution(contribution_type, contribution_id):
 @login_required
 def interim(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
-    if (contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed) or \
-            request.user.pk != contribution.contributor.pk:
+    if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
-    previous_data = contribution_related_data(contribution)
+
+    def redirect():
+        return HttpResponseRedirect(reverse(
+            'contribute:interim_summary',
+            kwargs={'contribution_type': contribution_type, 'contribution_id': contribution_id}))
+
+    if contribution.status != ContributionStatus.pending:
+        return redirect()
     sources_post = None
     interim = contribution.interim_voyage
     if request.method == 'POST':
@@ -213,7 +221,6 @@ def interim(request, contribution_type, contribution_id):
             form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
             prefix = 'interim_slave_number_'
             numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
-            import json
             sources_post = request.POST.get('sources')
             sources = [create_source(x, contribution.interim_voyage)
                        for x in json.loads(sources_post if sources_post is not None else '[]')]
@@ -243,13 +250,11 @@ def interim(request, contribution_type, contribution_id):
                         number.var_name = k[len(prefix):]
                         number.number = v
                         number.save()
-                return HttpResponseRedirect(reverse(
-                    'contribute:interim_summary',
-                    kwargs={'contribution_type': contribution_type, 'contribution_id': contribution_id}))
+                return redirect()
     else:
         numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
         form = InterimVoyageForm(instance=interim)
-    import json
+    previous_data = contribution_related_data(contribution)
     return render(request, 'contribute/interim.html',
                   {'form': form,
                    'contribution': contribution,
@@ -261,17 +266,18 @@ def interim(request, contribution_type, contribution_id):
 @login_required()
 def interim_summary(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
-    if (contribution.status != ContributionStatus.pending and contribution.status != ContributionStatus.committed) or \
-            (request.user.pk != contribution.contributor.pk and not request.user.is_staff):
+    if request.user.pk != contribution.contributor.pk and not request.user.is_staff:
         return HttpResponseForbidden()
     numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
     form = InterimVoyageForm(instance=contribution.interim_voyage)
+    previous_data = contribution_related_data(contribution)
     return render(request, 'contribute/interim_summary.html',
                   {'contribution': contribution,
                    'interim': contribution.interim_voyage,
                    'numbers': numbers,
                    'form': form,
-                   'user': request.user})
+                   'user': request.user,
+                   'voyages_data': json.dumps(previous_data)})
 
 @login_required
 def new_voyage(request):
@@ -341,17 +347,28 @@ def contribution_related_data(contribution):
 def voyage_to_dict(voyage):
     dict = {}
     # Ship, nation, owners
+    VoyageCache.load()
     ship = voyage.voyage_ship
+
+    def get_label(obj, field='name'):
+        if obj is None:
+            return None
+        return getattr(obj, field)
     if ship is not None:
         dict['name_of_vessel'] = ship.ship_name
         dict['year_ship_constructed'] = ship.year_of_construction
         dict['year_ship_registered'] = ship.registered_year
         dict['national_carrier'] = ship.nationality_ship_id
+        dict['national_carrier_name'] = VoyageCache.nations.get(ship.nationality_ship_id)
         dict['ship_construction_place'] = ship.vessel_construction_place_id
+        dict['ship_construction_place_name'] = get_label(VoyageCache.ports.get(ship.vessel_construction_place_id))
         dict['ship_registration_place'] = ship.registered_place_id
+        dict['ship_registration_place_name'] = get_label(VoyageCache.ports.get(ship.registered_place_id))
         dict['rig_of_vessel'] = ship.rig_of_vessel_id
+        dict['rig_of_vessel_name'] = get_label(VoyageCache.rigs.get(ship.rig_of_vessel_id), 'label')
         dict['tonnage_of_vessel'] = ship.tonnage
         dict['ton_type'] = ship.ton_type_id
+        dict['ton_type_name'] = get_label(VoyageCache.ton_types.get(ship.ton_type_id), 'label')
         dict['guns_mounted'] = ship.guns_mounted
         owners = list(VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(order_by=['owner_order']))
         if len(owners) > 0:
@@ -365,6 +382,9 @@ def voyage_to_dict(voyage):
     if outcome is not None:
         dict['voyage_outcome'] = outcome.particular_outcome_id
         dict['african_resistance'] = outcome.resistance_id
+        dict['voyage_outcome_name'] = get_label(
+            VoyageCache.particular_outcomes.get(outcome.particular_outcome_id), 'label')
+        dict['african_resistance_name'] = get_label(VoyageCache.resistances.get(outcome.resistance_id), 'label')
     itinerary = voyage.voyage_itinerary
     if itinerary is not None:
         dict['first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
@@ -384,6 +404,22 @@ def voyage_to_dict(voyage):
         dict['third_place_of_landing'] = itinerary.third_landing_place_id
         dict['principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
         dict['port_voyage_ended'] = itinerary.place_voyage_ended_id
+        # Port names.
+        dict['first_port_intended_embarkation_name'] = get_label(VoyageCache.ports.get(itinerary.int_first_port_emb_id))
+        dict['second_port_intended_embarkation_name'] = get_label(VoyageCache.ports.get(itinerary.int_second_port_emb_id))
+        dict['first_port_intended_disembarkation_name'] = get_label(VoyageCache.ports.get(itinerary.int_first_port_dis_id))
+        dict['second_port_intended_disembarkation_name'] = get_label(VoyageCache.ports.get(itinerary.int_second_port_dis_id))
+        dict['port_of_departure_name'] = get_label(VoyageCache.ports.get(itinerary.port_of_departure_id))
+        dict['first_place_of_slave_purchase_name'] = get_label(VoyageCache.ports.get(itinerary.first_place_slave_purchase_id))
+        dict['second_place_of_slave_purchase_name'] = get_label(VoyageCache.ports.get(itinerary.second_place_slave_purchase_id))
+        dict['third_place_of_slave_purchase_name'] = get_label(VoyageCache.ports.get(itinerary.third_place_slave_purchase_id))
+        dict['principal_place_of_slave_purchase_name'] = get_label(VoyageCache.ports.get(itinerary.principal_place_of_slave_purchase_id))
+        dict['place_of_call_before_atlantic_crossing_name'] = get_label(VoyageCache.ports.get(itinerary.port_of_call_before_atl_crossing_id))
+        dict['first_place_of_landing_name'] = get_label(VoyageCache.ports.get(itinerary.first_landing_place_id))
+        dict['second_place_of_landing_name'] = get_label(VoyageCache.ports.get(itinerary.second_landing_place_id))
+        dict['third_place_of_landing_name'] = get_label(VoyageCache.ports.get(itinerary.third_landing_place_id))
+        dict['principal_place_of_slave_disembarkation_name'] = get_label(VoyageCache.ports.get(itinerary.principal_port_of_slave_dis_id))
+        dict['port_voyage_ended_name'] = get_label(VoyageCache.ports.get(itinerary.place_voyage_ended_id))
     dates = voyage.voyage_dates
     if dates is not None:
         dict['date_departure'] = dates.voyage_began

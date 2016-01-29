@@ -49,6 +49,7 @@
 		width: 85px;
 		height: 52px;
 		cursor: text;
+        text-align: right;
 	}
 
 	#demographics_table td, #demographics_table th {
@@ -764,16 +765,18 @@
         </div>
         <table id="demographics_table" class="table table-striped" style="width: auto">
             <thead>
-                <th></th>
-                <th>{% trans "Men" %}</th>
-                <th>{% trans "Women" %}</th>
-                <th>{% trans "Boys" %}</th>
-                <th>{% trans "Girls" %}</th>
-                <th>{% trans "Males" %}</th>
-                <th>{% trans "Females" %}</th>
-                <th>{% trans "Adults" %}</th>
-                <th>{% trans "Children" %}</th>
-                <th>{% trans "Infants" %}</th>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Men" %}</th>
+                    <th>{% trans "Women" %}</th>
+                    <th>{% trans "Boys" %}</th>
+                    <th>{% trans "Girls" %}</th>
+                    <th>{% trans "Males" %}</th>
+                    <th>{% trans "Females" %}</th>
+                    <th>{% trans "Adults" %}</th>
+                    <th>{% trans "Children" %}</th>
+                    <th>{% trans "Infants" %}</th>
+                </tr>
             </thead>
             <tbody>
                 <tr>
@@ -864,6 +867,7 @@
                 <tr>
                     <th>{% trans "Type of source" %}</th>
                     <th>{% trans "Details" %}</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -1098,27 +1102,7 @@
     }
 
     var getValues = function(name) {
-        var values = {};
-        var length = 0;
-        for (var id in voyages) {
-            var v = voyages[id];
-            if (v.hasOwnProperty(name)) {
-                var value = v[name];
-                if (value != null) {
-                    if (!values.hasOwnProperty(value)) {
-                        values[value] = [];
-                        ++length;
-                    }
-                    values[value].push(id);
-                }
-            }
-        }
-        return length > 0 ? values : null;
-    };
-
-    var getGroupName = function(ids) {
-        return (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
-                ' ' + ids.join(', ');
+        return getVoyagesValues(voyages, name);
     };
 
     var selectizeInput = function(input) {
@@ -1208,41 +1192,15 @@
         };
 
         // Set demographic table.
-        var demographics_column_headers = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
-        var demographics_row_indices = [ 1, 4, 5, 2, 3, 6 ];
-        var demographics_rows = $.map(
-            $("#demographics_table").find("tbody").find("tr"),
-            function(row, i) {
-                return $(row).find("td");
-            }
-        );
-
-        // Set numeric inputs and demographics matrix.
-        var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
-        var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
-        for (var key in numbers) {
-            var match = regex.exec(key);
-            var found = false;
-            if (match) {
-                var col = demographics_column_headers.indexOf(match[1]);
-                var row = demographics_row_indices.indexOf(parseInt(match[2]));
-                if (col >= 0 && row >= 0 && row < 6) {
-                    $(demographics_rows[row][col]).html(numbers[key]);
-                    found = true;
-                }
-            }
-            if (!found) {
-                $("input[name='" + key + "']").each(function() {
-                    $(this).val(numbers[key]);
-                });
-            }
-        }
+        var demographics_rows = getDemographicsRows('demographics_table');
+        fillDemograhicsTable('demographics_table', numbers, true);
 
         $('#delete_contrib').click(function(e) {
-            if (!confirm('{% trans "The contribution will be deleted and this partial contribution will be lost. Continue anyway?" %}')) {
+            if (!confirm('{% trans "The contribution will be deleted. Continue anyway?" %}')) {
                 e.preventDefault();
+            } else {
+                submit_val = 'delete';
             }
-            submit_val = 'delete';
         });
 
         $('input[type=text], input[type=number], select, textarea')
@@ -1344,8 +1302,7 @@
         {% get_current_language as LANGUAGE_CODE %}
         var locale = "{{ LANGUAGE_CODE }}";
         var getMonthName = function(i) {
-            var date = new Date(i + "/01/2015");
-            return date.toLocaleString(locale, { month: "long" });
+            return getMonthLocaleName(locale, i);
         };
         var leadingZero = function(d) {
             return d < 10 ? '0' + d : '' + d;
@@ -1504,7 +1461,8 @@
             var v = voyages[id];
             for (var name in v) {
                 if (v[name] != null && v[name] != ',,') {
-                    $('label[for="id_' + name + '"]').addClass('has_pre_existing_values');
+                    var prefix = name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_';
+                    $('label[for="' + prefix + name + '"]').addClass('has_pre_existing_values');
                 }
             }
         }
@@ -1622,11 +1580,11 @@
             // Append demographics matrix.
             var form = $(this);
             for (var i = 0; i < demographics_rows.length; ++i) {
-                for (var j = 0; j < demographics_column_headers.length; ++j) {
+                for (var j = 0; j < DEMOGRAPHICS_COLUMN_HEADERS.length; ++j) {
                     var value = parseInt($(demographics_rows[i][j]).html());
                     if (!isNaN(value)) {
                         form.append('<input type="hidden" name="' +
-                            NUMBERS_KEY_PREFIX + demographics_column_headers[j] + demographics_row_indices[i] +
+                            NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_INDICES[i] +
                             '" value="' + value + '" />');
                     }
                 }

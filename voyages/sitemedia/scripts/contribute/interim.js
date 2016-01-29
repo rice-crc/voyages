@@ -439,3 +439,68 @@ function validatePreSubmit(sources, preSources) {
     }
     return new ValidationResult(warnings, errors);
 }
+
+function getVoyagesValues(voyages, name) {
+    var values = {};
+    var length = 0;
+    for (var id in voyages) {
+        var v = voyages[id];
+        if (v.hasOwnProperty(name)) {
+            var value = v[name];
+            if (value != null) {
+                if (!values.hasOwnProperty(value)) {
+                    values[value] = [];
+                    ++length;
+                }
+                values[value].push(id);
+            }
+        }
+    }
+    return length > 0 ? values : null;
+}
+
+function getGroupName(ids) {
+    return (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
+            ' ' + ids.join(', ');
+};
+
+function getMonthLocaleName(locale, i) {
+    var date = new Date(i + "/01/2015");
+    return date.toLocaleString(locale, { month: "long" });
+};
+
+// Some common constants.
+var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
+var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
+var DEMOGRAPHICS_ROW_INDICES = [ 1, 4, 5, 2, 3, 6 ];
+
+function getDemographicsRows(id) {
+    return $.map(
+        $("#" + id).find("tbody").find("tr"),
+        function(row, i) {
+            return $(row).find("td");
+        }
+    );
+};
+
+var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
+function fillDemograhicsTable(id, numbers, editable) {
+    demographics_rows = getDemographicsRows(id);
+    for (var key in numbers) {
+        var match = regex.exec(key);
+        var found = false;
+        if (match) {
+            var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
+            var row = DEMOGRAPHICS_ROW_INDICES.indexOf(parseInt(match[2]));
+            if (col >= 0 && row >= 0 && row < 6) {
+                $(demographics_rows[row][col]).html(numbers[key]);
+                found = true;
+            }
+        }
+        if (editable && !found) {
+            $("input[name='" + key + "']").each(function() {
+                $(this).val(numbers[key]);
+            });
+        }
+    }
+}
