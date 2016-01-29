@@ -54,6 +54,10 @@ class VoyageCache:
     regions = {}
     broad_regions = {}
     nations = {}
+    particular_outcomes = {}
+    resistances = {}
+    rigs = {}
+    ton_types = {}
 
     _loaded = False
     _lock = threading.Lock()
@@ -86,6 +90,10 @@ class VoyageCache:
                                                                           'show_on_map').iterator()}
             cls.nations = {x[0]: _(x[1])
                            for x in Nationality.objects.values_list('pk', 'label').iterator()}
+            cls.particular_outcomes = {o.pk: o for o in ParticularOutcome.objects.all()}
+            cls.resistances = {r.pk: r for r in Resistance.objects.all()}
+            cls.rigs = {r.pk: r for r in RigOfVessel.objects.all()}
+            cls.ton_types = {tt.pk: tt for tt in TonType.objects.all()}
             cls.voyages = {x[0]: CachedVoyage(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9])
                            for x in Voyage.objects.values_list('pk',
                                                                'voyage_id',

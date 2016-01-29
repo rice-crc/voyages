@@ -223,6 +223,8 @@ class DeleteVoyageContribution(BaseVoyageContribution):
         max_length=255,
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
+    type = 'delete'
+
     def get_related_voyage_ids(self):
         return [int(x) for x in self.deleted_voyages_ids.split(',')]
 
@@ -236,6 +238,8 @@ class EditVoyageContribution(BaseVoyageContribution):
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
     help_text = _('Edit each variable as required, or leave as is if you think no change is necessary')
+
+    type = 'edit'
 
     def __unicode__(self):
         return _('Edit an existing voyage')
@@ -255,6 +259,8 @@ class MergeVoyagesContribution(BaseVoyageContribution):
         help_text='The voyage_id of each Voyage being merged by this contribution')
     help_text = _('<strong>to-do: write specific comments for merge contrib.</strong>')
 
+    type = 'merge'
+
     def __unicode__(self):
         return _('Merge two or more voyages into one')
 
@@ -268,6 +274,8 @@ class NewVoyageContribution(BaseVoyageContribution):
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='+')
     help_text = _('Complete as many boxes in each category as your source(s) allow.')
+
+    type = 'new'
 
     def __unicode__(self):
         return _('New voyage')
