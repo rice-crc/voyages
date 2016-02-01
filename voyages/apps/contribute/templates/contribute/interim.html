@@ -33,9 +33,22 @@
 		padding: 3px 12px !important;
 	}
 
+    .field_notes {
+        min-width: 420px !important;
+        min-height: 100px !important;
+    }
+
+    .form-control {
+        position: static !important;
+    }
+
 	.search_match {
 		margin-left: 5px !important;
 	}
+
+    .selectize-dropdown {
+        position: absolute !important;
+    }
 
 	.geo_complement {
 		color: #B0B0B0;
@@ -62,6 +75,11 @@
 
     .tab-pane {
         padding: 20px;
+    }
+
+    .form_help_text {
+        color: gray;
+        margin-left: 25%;
     }
 </style>
 
@@ -91,8 +109,8 @@
                 {{ f.label_tag }}
                 <div class="input-group col-sm-8">
                     {{ f }}
-                </div>
-            {% endwith %}
+                </div>                
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.ship_construction_place as f %}
@@ -101,7 +119,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.ship_registration_place as f %}
@@ -110,7 +128,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.year_ship_constructed as f %}
@@ -119,7 +137,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.year_ship_registered as f %}
@@ -128,7 +146,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.national_carrier as f %}
@@ -146,7 +164,7 @@
                         </optgroup>
                     </select>
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.rig_of_vessel as f %}
@@ -164,7 +182,7 @@
                         </optgroup>
                     </select>
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.tonnage_of_vessel as f %}
@@ -173,7 +191,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.ton_type as f %}
@@ -191,7 +209,7 @@
                         </optgroup>
                     </select>
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.guns_mounted as f %}
@@ -200,7 +218,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.first_ship_owner as f %}
@@ -209,7 +227,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_ship_owner as f %}
@@ -218,7 +236,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.additional_ship_owners as f %}
@@ -227,7 +245,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
     <div>
@@ -252,7 +270,7 @@
                         </optgroup>
                     </select>
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.african_resistance as f %}
@@ -270,7 +288,7 @@
                         </optgroup>
                     </select>
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
     <div>
@@ -286,7 +304,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_port_intended_embarkation as f %}
@@ -295,7 +313,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.first_port_intended_disembarkation as f %}
@@ -304,7 +322,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_port_intended_disembarkation as f %}
@@ -313,7 +331,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.port_of_departure as f %}
@@ -322,7 +340,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
@@ -331,7 +349,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.first_place_of_slave_purchase as f %}
@@ -340,7 +358,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_place_of_slave_purchase as f %}
@@ -349,7 +367,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.third_place_of_slave_purchase as f %}
@@ -358,7 +376,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.principal_place_of_slave_purchase as f %}
@@ -367,7 +385,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.place_of_call_before_atlantic_crossing as f %}
@@ -376,7 +394,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
@@ -385,7 +403,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.first_place_of_landing as f %}
@@ -394,7 +412,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_place_of_landing as f %}
@@ -403,7 +421,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.third_place_of_landing as f %}
@@ -412,7 +430,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.principal_place_of_slave_disembarkation as f %}
@@ -421,7 +439,7 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.port_voyage_ended as f %}
@@ -430,15 +448,16 @@
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
     <div>
         <a role="button" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
-          <h1>{% trans "Voyage dates" %}</h1>
+            <h1>{% trans "Voyage dates" %}</h1>
         </a>
     </div>
     <div id="dates" class="collapse col-md-12 var_group">
+        <p>{% trans "Enter partial information (year only or month and year only) when full date unknown." %}</p>
         <div class="form-group">
             {% with form.date_departure as f %}
                 {{ f.errors }}
@@ -446,7 +465,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_slave_purchase_began as f %}
@@ -455,7 +474,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_vessel_left_last_slaving_port as f %}
@@ -464,7 +483,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_first_slave_disembarkation as f %}
@@ -473,7 +492,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_second_slave_disembarkation as f %}
@@ -482,7 +501,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_third_slave_disembarkation as f %}
@@ -491,7 +510,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_return_departure as f %}
@@ -500,7 +519,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.date_voyage_completed as f %}
@@ -509,7 +528,7 @@
                 <div class="input-group col-sm-3">
                     <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.length_of_middle_passage as f %}
@@ -518,7 +537,7 @@
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
     <div>
@@ -534,7 +553,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.second_captain as f %}
@@ -543,7 +562,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             {% with form.third_captain as f %}
@@ -552,7 +571,7 @@
                 <div class="input-group col-sm-8">
                     {{ f }}
                 </div>
-            {% endwith %}
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
             <label for="interim_slave_number_CREW1">
@@ -850,7 +869,7 @@
                                 <li><a href="" class="pre_source_menu_exclude" data-sourcepk="{{ source.pk }}">{% trans "Exclude reference (please explain)" %}</a></li>
                                 <li><a href="" class="pre_source_menu_edit" data-sourcepk="{{ source.pk }}">{% trans "Edit reference (please explain)" %}</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li style="margin:10px; min-width: 400px;"><label for="pre_existing_source_notes_{{ source.pk }}">Notes:</label><textarea class="form-control not_selectized" name="pre_existing_source_notes_{{ source.pk }}" id="pre_existing_source_notes_{{ source.pk }}" type="text">{{ source.notes }}</textarea></li>
+                                <li style="margin:10px; min-width: 400px;"><label for="pre_existing_source_notes_{{ source.pk }}">Notes:</label><textarea class="form-control not_selectized" name="pre_existing_source_notes_{{ source.pk }}" id="pre_existing_source_notes_{{ source.pk }}" type="text">{{ source.notes|default_if_none:'' }}</textarea></li>
                               </ul>
                             </div>
                         </td>
@@ -1036,8 +1055,13 @@
             </div>
         </div>
     </div>
-    <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
-    <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
+    <hr />
+    <div class="form-group">
+        <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
+        <div class="col-sm-8">
+            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
+        </div>
+    </div>
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
     <div class="form-group col-md-12">
@@ -1167,7 +1191,8 @@
                             }
                         }
                         if (found < 0) continue;
-                        this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                        //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                        this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
                     }
                 },
             });
@@ -1181,6 +1206,7 @@
     var broad_regions = {};
 
     $(document).ready(function() {
+        $('.form-group>label').addClass('control-label col-sm-3');
 
         // Store numbers in an object.
         var numbers = {
@@ -1240,6 +1266,7 @@
                     }
                     item.source = 'data';
                 }
+                var EXISTING_PREFIX = '@existing_';
                 $(".select_port").each(function() {
                     var self = $(this);
                     var ports = originalPorts.slice(0);
@@ -1251,8 +1278,10 @@
                             if (p.type == 'port' && p.value == value) {
                                 // Found the port matching a pre-existing value.
                                 var copy = jQuery.extend({}, p);
+                                copy.value = EXISTING_PREFIX + copy.value;
                                 copy.type = 'existing';
                                 copy.source = getGroupName(values[value]);
+                                copy.order = 0;
                                 optgroups.push({ id: copy.source, label: copy.source });
                                 ports.unshift(copy);
                                 break;
@@ -1273,6 +1302,7 @@
                         optgroupValueField: 'id',
                         valueField: 'value',
                         searchField: ['port', 'region', 'broad_region'],
+                        sortField: 'order',
                         render: {
                             option: function(data, escape) {
                                 if (data.type == 'port') {
@@ -1287,6 +1317,12 @@
                                 return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region">' + escape(data.broad_region) + '</div>';
                             },
                             item: portItemDisplay,
+                        }
+                    });
+                    self.change(function() {
+                        var value = self.val();
+                        if ($.type(value) === 'string' && value.startsWith(EXISTING_PREFIX)) {
+                            self.val(value.substring(EXISTING_PREFIX.length));
                         }
                     });
                 });

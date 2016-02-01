@@ -102,6 +102,8 @@ class ContributionVoyageSelectionForm(forms.Form):
             raise forms.ValidationError(_('Some of the provided voyage_ids are invalid'))
         return ids
 
+default_name_help_text = _('Enter last name , first name.')
+
 class InterimVoyageForm(forms.ModelForm):
     def full_clean(self):
         self.cleaned_data = {}
@@ -114,3 +116,65 @@ class InterimVoyageForm(forms.ModelForm):
     class Meta:
         model = InterimVoyage
         fields = '__all__'
+        help_texts = {
+            'national_carrier': _('If not country of registration, use the comments box to explain coding.'),
+            'first_ship_owner': default_name_help_text,
+            'second_ship_owner': default_name_help_text,
+            'additional_ship_owners': default_name_help_text,
+            'first_captain': default_name_help_text,
+            'second_captain': default_name_help_text,
+            'additional_captain': default_name_help_text,
+            'principal_place_of_slave_purchase': _('If more than one place of purchase, use the comments box to explain choice of principal place.'),
+            'principal_place_of_slave_disembarkation': _('If more than one place of landing, use the comments box to explain choice of principal place.'),
+        }
+        labels = {
+            # Ship, nation, owners
+            'name_of_vessel': _('Name of vessel'),
+            'year_ship_constructed': _('Year of ship construction'),
+            'year_ship_registered': _('Year of ship registration'),
+            'ship_construction_place': _('Place where ship constructed'),
+            'ship_registration_place': _('Place where ship registered'),
+            'national_carrier': _('National carrier'),
+            'rig_of_vessel': _('Rig of vessel'),
+            'tonnage_of_vessel': _('Tonnage of vessel'),
+            'ton_type': _('Definition of ton'),
+            'guns_mounted': _('Guns mounted'),
+            'first_ship_owner': _('First or managing owner of venture'),
+            'second_ship_owner': _('Second owner of venture'),
+            'additional_ship_owners': _('Other owners'),
+            # Outcome
+            'voyage_outcome': _('Outcome of voyage'),
+            'african_resistance': _('African resistance'),
+            # Itinerary
+            'first_port_intended_embarkation': _('First port of intended embarkation'),
+            'second_port_intended_embarkation': _('Second port of intended embarkation'),
+            'first_port_intended_disembarkation': _('First port of intended disembarkation'),
+            'second_port_intended_disembarkation': _('Second port of intended disembarkation'),
+            'port_of_departure': _('Port of departure'),
+            'number_of_ports_called_prior_to_slave_purchase': _('Number of ports called prior to slave purchase'),
+            'first_place_of_slave_purchase': _('First place of slave purchase'),
+            'second_place_of_slave_purchase': _('Second place of slave purchase'),
+            'third_place_of_slave_purchase': _('Third place of slave purchase'),
+            'principal_place_of_slave_purchase': _('Principal place of slave purchase'),
+            'place_of_call_before_atlantic_crossing': _('Places of call before Atlantic crossing'),
+            'number_of_new_world_ports_called_prior_to_disembarkation': _('Number of New World ports of call before disembarkation'),
+            'first_place_of_landing': _('First place of landing'),
+            'second_place_of_landing': _('Second place of landing'),
+            'third_place_of_landing': _('Third place of landing'),
+            'principal_place_of_slave_disembarkation': _('Principal place of slave disembarkation'),
+            'port_voyage_ended': _('Port at which voyage ended'),
+            # Dates
+            'date_departure': _('Date of departure'),
+            'date_slave_purchase_began': _('Date that slave purchase began'),
+            'date_vessel_left_last_slaving_port': _('Date that vessel left last slaving port'),
+            'date_first_slave_disembarkation': _('Date of first disembarkation of slaves'),
+            'date_second_slave_disembarkation': _('Date of second disembarkation of slaves'),
+            'date_third_slave_disembarkation': _('Date of third disembarkation of slaves'),
+            'date_return_departure': _('Date that ship left on return voyage'),
+            'date_voyage_completed': _('Date when voyage completed'),
+            'length_of_middle_passage': _('Length of Middle Passage in days'),
+            # Captains
+            'first_captain': _('First captain of voyage'),
+            'second_captain': _('Second captain of voyage'),
+            'third_captain': _('Third captain of voyage')
+        }
