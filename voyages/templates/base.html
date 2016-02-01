@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 	
 	{% comment %}Basic common javascript source files {% endcomment %}
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="{{ STATIC_URL }}scripts/jquery-1.9.1.min.js"></script>
 	
 	{% comment %}Fly-out top navigation menu {% endcomment %}
     <script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>

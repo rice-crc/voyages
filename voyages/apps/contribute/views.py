@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -21,10 +21,11 @@ def index(request):
     Display the user index page if the user is already authenticated
     Or return to the login page if the user has not logged in yet
     """
+    filter_args = {'contributor': request.user, 'status': ContributionStatus.pending}
     if request.user.is_authenticated():
-        contributions = [{'type': 'edit', 'id': x.pk} for x in EditVoyageContribution.objects.filter(contributor=request.user)] +\
-            [{'type': 'merge', 'id': x.pk} for x in MergeVoyagesContribution.objects.filter(contributor=request.user)] +\
-            [{'type': 'new', 'id': x.pk} for x in NewVoyageContribution.objects.filter(contributor=request.user)]
+        contributions = [{'type': 'edit', 'id': x.pk} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'merge', 'id': x.pk} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
+            [{'type': 'new', 'id': x.pk} for x in NewVoyageContribution.objects.filter(**filter_args)]
         return render(request, "contribute/index.html", {'contributions': contributions})
     else:
         return HttpResponseRedirect(reverse('account_login'))
@@ -57,33 +58,38 @@ def get_voyage_by_id(request):
 def get_places(request):
     # retrieve list of places in the system.
     places = sorted(Place.objects.prefetch_related('region__broad_region'),
-                    key=lambda p: (p.region.broad_region.broad_region, p.region.region, p.place))
+                    key=lambda p: (p.region.broad_region.broad_region, p.region.value, p.value))
     result = []
     last_broad_region = None
     last_region = None
-    brcounter = 0
-    rcounter = 0
+    counter = 0
     for place in places:
         region = place.region
         broad_region = region.broad_region
+        counter += 1
         if last_broad_region != broad_region:
-            brcounter += 1
             last_broad_region = broad_region
             result.append({'type': 'broad_region',
+                           'order': counter,
                            'pk': broad_region.pk,
-                           'value': -100000 * brcounter,
+                           'value': -counter,
                            'broad_region': _(broad_region.broad_region)})
+            counter += 1
         if last_region != region:
-            rcounter += 1
             last_region = region
             result.append({'type': 'region',
-                           'value': -rcounter,
+                           'order': counter,
+                           'value': -counter,
                            'pk': region.pk,
+                           'code': region.value,
                            'parent': broad_region.pk,
                            'region': _(region.region)})
+            counter += 1
         result.append({'type': 'port',
+                       'order': counter,
                        'value': place.pk,
                        'parent': region.pk,
+                       'code': place.value,
                        'port': _(place.place)})
     return JsonResponse(result, safe=False)
 
@@ -262,6 +268,16 @@ def interim(request, contribution_type, contribution_id):
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+@login_required
+def interim_commit(request, contribution_type, contribution_id):
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+    contribution = get_contribution(contribution_type, contribution_id)
+    if request.user.pk != contribution.contributor.pk or contribution.status != ContributionStatus.pending:
+        return HttpResponseForbidden()
+    contribution.status = ContributionStatus.committed
+    contribution.save()
+    return HttpResponseRedirect(reverse('contribute:thanks'))
 
 @login_required()
 def interim_summary(request, contribution_type, contribution_id):

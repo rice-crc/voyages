@@ -237,7 +237,7 @@ class EditVoyageContribution(BaseVoyageContribution):
     edited_voyage_id = models.IntegerField(
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
-    help_text = _('Edit each variable as required, or leave as is if you think no change is necessary')
+    help_text = _('Edit each variable as required, or leave as is if you think no change is necessary.')
 
     type = 'edit'
 
@@ -257,7 +257,8 @@ class MergeVoyagesContribution(BaseVoyageContribution):
         'Merged voyage ids',
         max_length=255,
         help_text='The voyage_id of each Voyage being merged by this contribution')
-    help_text = _('<strong>to-do: write specific comments for merge contrib.</strong>')
+    help_text = _('Enter your preferred data to the right. If required use the box for '
+                  'notes to explain your reasons for recommending the merge.')
 
     type = 'merge'
 

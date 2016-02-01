@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
         views.interim, name='interim'),
 
+    url(r'interim_commit/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+        views.interim_commit, name='interim_commit'),
+
     url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
         views.interim_summary, name='interim_summary'),
 

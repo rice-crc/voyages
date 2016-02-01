@@ -90,6 +90,33 @@ function validateYear(val, notNull) {
     return validateInt(val, 1500, 1867, notNull);
 }
 
+// Concatenate all strings in the array if and only if
+// all pieces are non-null and non-empty. Otherwise,
+// returns null.
+function concat(pieces) {
+    var result = '';
+    for (var i = 0; i < pieces.length; ++i) {
+        var s = pieces[i];
+        if (!s || s.length == 0) return null;
+        result += s;
+    }
+    return result;
+}
+
+function sourceDetails(detailsArr) {
+    var nonEmpty = $.map(detailsArr, function(d) {
+        if (d) {
+            var x = d.trim();
+            if (x.length) return x;
+        }
+    });
+    if (nonEmpty.length) {
+        return '&nbsp;<span class="source_reference_extras">' +
+            nonEmpty.join('<br />') + '</span>';
+    }
+    return '';
+}
+
 function PrimarySource(library, location, series, volume, detail, info, url, id) {
     this.type = 'Primary source';
     this.library = library;
@@ -109,13 +136,15 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
         return new ValidationResult([], errors);
     };
     this.toString = function () {
-        var result = self.library + ', ' + self.location;
+        var result = '<span class="source_reference_main_part">' +
+            self.library + ', ' + self.location;
         if (self.series) {
             result += ' - ' + self.series;
         }
         if (self.volume) {
             result += ', v. ' + self.volume;
         }
+        result += '</span>' + sourceDetails([self.detail, self.info, self.url]);
         return result;
     };
     this._fields = {
@@ -164,13 +193,19 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
-        var result = self.author + ', ' + self.title;
+        var result = '<span class="source_reference_main_part">' +
+            self.author + ', ' + self.title;
         if (self.journal) {
             result += ' - ' + self.journal;
         }
         if (self.volume) {
             result += ', v. ' + self.volume;
         }
+        result += '</span>' + sourceDetails([
+            concat(['(', self.year, ')']),
+            concat([gettext('Pages '), self.pageStart, '-', self.pageEnd]),
+            self.info,
+            self.url]);
         return result;
     };
     this._fields = {
@@ -221,13 +256,19 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
-        var result = self.author + ', ' + self.title;
+        var result = '<span class="source_reference_main_part">' +
+            self.author + ', ' + self.title;
         if (self.publisher) {
             result += ' - ' + self.publisher;
         }
         if (self.place) {
             result += ', ' + self.place;
         }
+        result += '</span>' + sourceDetails([
+            concat(['(', self.year, ')']),
+            concat([gettext('Pages '), self.pageStart, '-', self.pageEnd]),
+            self.info,
+            self.url]);
         return result;
     };
     this._fields = {
@@ -271,10 +312,14 @@ function OtherSource(title, location, page, info, url, id) {
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
-        var result = self.title;
-        if (self.publisher) {
+        var result = '<span class="source_reference_main_part">' + self.title;
+        if (self.location) {
             result += ' - ' + self.location;
         }
+        result += '</span>' + sourceDetails([
+            concat([gettext('Page '), self.page]),
+            self.info,
+            self.url]);
         return result;
     };
     this._fields = {

@@ -5,7 +5,7 @@
 {% block title %}{% trans "Verify submitted information" %}{% endblock %}
 
 {% block center-content %}
-<div id="summary_toolbar" style="padding-top:6px; padding-bottom:6px; background-color:rgba(255,255,255,0.7)">
+<div id="summary_toolbar" style="padding-top:6px; padding-bottom:6px; background-color:rgba(255,255,255,0.85)">
 <div class="btn-group">
     <button type="button" class="btn btn-default" aria-label="Print" id="print_button">
         <span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Print" %}
@@ -635,6 +635,23 @@
 
         <span>{{ contribution.notes }}</span>
     {% endif %}
+
+    <h1>{% trans "Contributor" %}</h1>
+
+    <p>
+        <label for="contributor_name">{% trans "Name" %}:</label>
+        <span id="contributor_name">{% if request.user.get_full_name != '' %}{{ request.user.get_full_name }}{% else %}{{ request.user }}{% endif %}</span>
+    </p>
+    <p>
+        <label for="contributor_email">{% trans "E-mail" %}:</label>
+        <span id="contributor_email">{{ request.user.email }}</span>
+    <p>
+
+    <hr />
+    <label for="timestamp">{% trans "Summary date" %}:</label>
+    <span id="timestamp"></span>
+
+
     {% endif %}
 </div>
 {% endwith %}
@@ -647,11 +664,13 @@
     });
 
     function print(data) {
+        var title = gettext('Print contribution');
         var mywindow = window.open('', 'my div', 'height=640,width=800');
-        mywindow.document.write('<html><head><title>' + window.title + '</title>');
-        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-        mywindow.document.write('</head><body >');
-        mywindow.document.write(data);
+        mywindow.document.write('<html><head><title>' + title + '</title>');
+        mywindow.document.write('<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css" type="text/css" />');
+        mywindow.document.write('<style>' + $('#local_styles').html() + '</style>');
+        mywindow.document.write('</head><body>');
+        mywindow.document.write('<div class="container body-content">' + data + '</div>');
         mywindow.document.write('</body></html>');
 
         mywindow.document.close(); // necessary for IE >= 10
@@ -797,11 +816,18 @@
             window.location.href = $('#delete_form')[0].action;
         }
     });
+    $('#submit_contrib').click(function(e) {
+        if (confirm('{% trans "The contribution will be submitted and no more editing may take place. If you wish to return to this contribution to amend it later, just access the contribution on the Contribute Home page and resume editing. Submit this contribution for review?" %}')) {
+            $('#commit_form').submit();
+        }
+    });
+    $('#timestamp').html(new Date());
 </script>
+<form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>
 {# Styles should move to Head - but this currently breaks the general layout #}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<style>
+<style id="local_styles">
     .blank_value {
         color: lightgray;
     }
