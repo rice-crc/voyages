@@ -799,25 +799,10 @@ def search(request):
             pst = {x: y for x, y in request.POST.items()}
 
             # Try to retrieve sessions values
-            try:
-                tables_columns = request.session['voyages_tables_columns']
-            except KeyError:
-                tables_columns = None
-
-            try:
-                tables_rows = request.session['voyages_tables_rows']
-            except KeyError:
-                tables_rows = None
-
-            try:
-                tables_cells = request.session['voyages_tables_cells']
-            except KeyError:
-                tables_cells = None
-
-            try:
-                omit_empty = request.session['voyages_tables_omit']
-            except KeyError:
-                omit_empty = None
+            tables_columns = request.get('voyages_tables_columns')
+            tables_rows = request.get('voyages_tables_rows')
+            tables_cells = request.get('voyages_tables_cells')
+            omit_empty = request.get('voyages_tables_omit')
 
             # Collect settings (if possible retrieve from the session)
             if 'columns' not in pst and tables_columns:
@@ -1384,7 +1369,6 @@ def prettify_results(results, lookup_table):
     The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
     """
     # Results must be a list of dictionaries of variable name and value
-    mangled = []
     for i in results:
         idict = {}
         voyageid = int(i['var_voyage_id'])
@@ -1394,8 +1378,7 @@ def prettify_results(results, lookup_table):
                 idict[varname] = prettify_varvalue(varvalue, voyageid)
             else:
                 idict[varname] = None
-        mangled.append(idict)
-    return mangled
+        yield idict
 
 class ChoicesCache:
     nations = list(Nationality.objects.all())
@@ -1994,7 +1977,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         curpage = paginator.page(current_page)
         res = map(lambda x: x.get_stored_fields(), curpage.object_list)
     else:
-        res = results.values(*[x['var_name'] for x in globals.var_dict]).all()[0:results.count()]
+        res = list(results.values(*[x[0] for x in columns]).all())
     pres = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
