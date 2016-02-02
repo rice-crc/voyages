@@ -98,7 +98,7 @@ def get_pks_from_haystack_results(results):
     """
     q = results.query
     q._reset()
-    q.set_limits(0, 50000)
+    q.set_limits(0, 500000)
     final_query = q.build_query()
     search_kwargs = q.build_params(None)
     search_kwargs['fields'] = 'id'

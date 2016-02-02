@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-28 15:30-0200\n"
+"POT-Creation-Date: 2016-02-02 09:21-0500\n"
 "PO-Revision-Date: 2015-10-30 09:56-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,128 +18,223 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: sitemedia/maps/js/voyagesMap.js:144
+#: voyages/sitemedia/maps/js/voyagesMap.js:144
 msgid "port"
 msgstr "porto"
 
-#: sitemedia/maps/js/voyagesMap.js:144
+#: voyages/sitemedia/maps/js/voyagesMap.js:144
 msgid "ports"
 msgstr "portos"
 
-#: sitemedia/maps/js/voyagesMap.js:145
+#: voyages/sitemedia/maps/js/voyagesMap.js:145
 msgid "region"
 msgstr "região"
 
-#: sitemedia/maps/js/voyagesMap.js:145
+#: voyages/sitemedia/maps/js/voyagesMap.js:145
 msgid "regions"
 msgstr "regiões"
 
-#: sitemedia/maps/js/voyagesMap.js:146
+#: voyages/sitemedia/maps/js/voyagesMap.js:146
 msgid "broad region"
 msgstr "grande região"
 
-#: sitemedia/maps/js/voyagesMap.js:146
+#: voyages/sitemedia/maps/js/voyagesMap.js:146
 msgid "broad regions"
 msgstr "grande regiões"
 
-#: sitemedia/maps/js/voyagesMap.js:365 sitemedia/maps/js/voyagesMap.js.c:456
+#: voyages/sitemedia/maps/js/voyagesMap.js:365
+#: voyages/sitemedia/maps/js/voyagesMap.js:456
 msgid "click for details"
 msgstr "clique para ver detalhes"
 
-#: sitemedia/maps/js/voyagesMap.js:411
+#: voyages/sitemedia/maps/js/voyagesMap.js:411
 msgid "Africans arriving from Africa"
 msgstr "Africanos chegando da África"
 
-#: sitemedia/maps/js/voyagesMap.js:413
+#: voyages/sitemedia/maps/js/voyagesMap.js:413
 msgid "Africans returning to Africa"
 msgstr "Africanos retornando à África"
 
-#: sitemedia/maps/js/voyagesMap.js:419
+#: voyages/sitemedia/maps/js/voyagesMap.js:419
 msgid "Africans carried off"
 msgstr "Africanos transportados de"
 
-#: sitemedia/maps/js/voyagesMap.js:420 sitemedia/maps/js/voyagesMap.js.c:422
-#: sitemedia/maps/js/voyagesMap.js:689
+#: voyages/sitemedia/maps/js/voyagesMap.js:420
+#: voyages/sitemedia/maps/js/voyagesMap.js:422
+#: voyages/sitemedia/maps/js/voyagesMap.js:689
 msgid "Embarked"
 msgstr "Embarcados"
 
-#: sitemedia/maps/js/voyagesMap.js:421 sitemedia/maps/js/voyagesMap.js.c:422
-#: sitemedia/maps/js/voyagesMap.js:691
+#: voyages/sitemedia/maps/js/voyagesMap.js:421
+#: voyages/sitemedia/maps/js/voyagesMap.js:422
+#: voyages/sitemedia/maps/js/voyagesMap.js:691
 msgid "Disembarked"
 msgstr "Desembarcados"
 
-#: sitemedia/maps/js/voyagesMap.js:459
+#: voyages/sitemedia/maps/js/voyagesMap.js:459
 msgid "Totals"
 msgstr "Totais"
 
-#: sitemedia/maps/js/voyagesMap.js:694 sitemedia/maps/js/voyagesMap.js.c:740
+#: voyages/sitemedia/maps/js/voyagesMap.js:694
+#: voyages/sitemedia/maps/js/voyagesMap.js:745
 msgid "Place or region of embarkation:"
 msgstr "Porto ou região de embarque:"
 
-#: sitemedia/maps/js/voyagesMap.js:728 sitemedia/maps/js/voyagesMap.js.c:741
+#: voyages/sitemedia/maps/js/voyagesMap.js:733
+#: voyages/sitemedia/maps/js/voyagesMap.js:746
 msgid "Place or region of disembarkation:"
 msgstr "Porto ou região de desembarque:"
 
-#: sitemedia/scripts/breadcrumb.js:9 sitemedia/scripts/breadcrumb.js.c:13
+#: voyages/sitemedia/scripts/breadcrumb.js:9
+#: voyages/sitemedia/scripts/breadcrumb.js:13
 msgid "Home"
 msgstr "Página inicial"
 
-#: sitemedia/scripts/breadcrumb.js:31 sitemedia/scripts/breadcrumb.js.c:33
+#: voyages/sitemedia/scripts/breadcrumb.js:31
+#: voyages/sitemedia/scripts/breadcrumb.js:33
 msgid "Understanding the Database"
 msgstr "Entendendo a base de dados"
 
-#: sitemedia/scripts/breadcrumb.js:35
+#: voyages/sitemedia/scripts/breadcrumb.js:35
 msgid "Essays"
 msgstr "Ensaios"
 
-#: sitemedia/scripts/navigation_topbar.js:4
+#: voyages/sitemedia/scripts/contribute/forms.js:15
+msgid "Voyage already added to selection"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:20
+msgid "Warnings: "
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:24
+msgid "Errors: "
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:134
+msgid "Library or archive name is mandatory"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:182
+#: voyages/sitemedia/scripts/contribute/interim.js:245
+msgid "Author name is mandatory"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:185
+#: voyages/sitemedia/scripts/contribute/interim.js:248
+#: voyages/sitemedia/scripts/contribute/interim.js:304
+msgid "Title is mandatory"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:188
+msgid "Journal is a recommended field"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:191
+#: voyages/sitemedia/scripts/contribute/interim.js:254
+msgid "Reference year cannot be earlier than 1500"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:206
+#: voyages/sitemedia/scripts/contribute/interim.js:269
+msgid "Pages "
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:251
+msgid "Publisher is a recommended field"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:307
+msgid "Information is a recommended field"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:310
+msgid "URL is a recommended field"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:320
+msgid "Page "
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:465
+msgid "Tonnage type is set without a tonnage value."
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:470
+msgid "Year of ship registration cannot precede year of ship construction."
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:474
+msgid "The contribution has to specify at least one source reference."
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:482
+msgid ""
+"Any pre-existing source marked for editing or deletion requires a comment."
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/interim.js:508
+#, fuzzy
+#| msgid "Voyages Database"
+msgid "Voyages"
+msgstr "Banco de Dados Viagens"
+
+#: voyages/sitemedia/scripts/contribute/interim.js:508
+msgid "Voyage"
+msgstr ""
+
+#: voyages/sitemedia/scripts/contribute/selectize.js:613
+msgid "Please type your comments below:"
+msgstr ""
+
+#: voyages/sitemedia/scripts/navigation_topbar.js:4
 msgid "Voyages Database"
 msgstr "Banco de Dados Viagens"
 
-#: sitemedia/scripts/navigation_topbar.js:5
+#: voyages/sitemedia/scripts/navigation_topbar.js:5
 msgid "Assessing the Slave Trade"
 msgstr "Análises do Tráfico de Escravos"
 
-#: sitemedia/scripts/navigation_topbar.js:6
+#: voyages/sitemedia/scripts/navigation_topbar.js:6
 msgid "Resources"
 msgstr "Recursos"
 
-#: sitemedia/scripts/navigation_topbar.js:7
+#: voyages/sitemedia/scripts/navigation_topbar.js:7
 msgid "Educational Materials"
 msgstr "Materiais educacionais"
 
-#: sitemedia/scripts/navigation_topbar.js:8
+#: voyages/sitemedia/scripts/navigation_topbar.js:8
 msgid "About the Project"
 msgstr "Sobre o projeto"
 
-#: sitemedia/scripts/navigation_topbar.js:9
+#: voyages/sitemedia/scripts/navigation_topbar.js:9
 msgid "Contribute"
 msgstr "Contribua"
 
-#: sitemedia/scripts/voyage/voyage-search.js:177
+#: voyages/sitemedia/scripts/voyage/voyage-search.js:177
 msgid "[nothing selected]"
 msgstr "[nada selecionado]"
 
-#~ msgid "Inbound"
-#~ msgstr "Entrada"
+msgid "Inbound"
+msgstr "Entrada"
 
-#~ msgid "Outbound"
-#~ msgstr "Saída"
+msgid "Outbound"
+msgstr "Saída"
 
-#~ msgid "Source"
-#~ msgstr "Origem"
+msgid "Source"
+msgstr "Origem"
 
-#~ msgid "Outbound traffic"
-#~ msgstr "Tráfico saindo"
+msgid "Outbound traffic"
+msgstr "Tráfico saindo"
 
-#~ msgid "Destination"
-#~ msgstr "Destino"
+msgid "Destination"
+msgstr "Destino"
 
-#~ msgid "Inbound traffic"
-#~ msgstr "Tráfico entrando"
+msgid "Inbound traffic"
+msgstr "Tráfico entrando"
 
-#~ msgid "Traffic from"
-#~ msgstr "Tráfico originado em"
+msgid "Traffic from"
+msgstr "Tráfico originado em"
 
-#~ msgid "to"
-#~ msgstr "para"
+msgid "to"
+msgstr "para"

@@ -1667,7 +1667,7 @@
             }
             var activateOptionWithDelay = function(opt, fn) {
                 window.setTimeout(function() {
-                    self.setActiveOption(opt);
+                    self.setActiveOption($(opt[0]));
                     if (fn) {
                         fn();
                     }
