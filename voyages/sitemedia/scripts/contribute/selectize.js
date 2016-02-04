@@ -3210,7 +3210,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 		valueField: 'value',
 		labelField: 'text',
 		optgroupLabelField: 'label',
-		optgroupValueField: 'value',
+		optgroupValueField: 'value',Av. Onze de Junho, 686
 		lockOptgroupOrder: false,
 	
 		sortField: '$order',
@@ -3223,7 +3223,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 		dropdownClass: 'selectize-dropdown',
 		dropdownContentClass: 'selectize-dropdown-content',
 	
-		dropdownParent: null,
+		dropdownParent: 'body',
 	
 		copyClassesToDropdown: true,
 	

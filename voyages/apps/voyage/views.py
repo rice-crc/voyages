@@ -1283,7 +1283,7 @@ def search(request):
             if not pageNum:
                 pageNum = 1
                 print "Warning: unable to get page number from post"
-            return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list, query_dict)
+            return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list)
         elif submitVal == 'delete_prev_query':
             prev_query_num = int(request.POST.get('prev_query_num'))
             prevqs = request.session['previous_queries']
@@ -1969,9 +1969,8 @@ def extract_places(string):
         return places_list[0] + ", " + places_list[1], places_list[2]
 
 
-def download_xls_page(results, current_page, results_per_page, columns, var_list, query_dict):
+def download_xls_page(results, current_page, results_per_page, columns, var_list):
     # Download only current page
-    res = results
     if current_page != -1:
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
@@ -1996,7 +1995,6 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         ws.write(1,idx,label=get_spss_name(column[0]))
 
     for idx, item in enumerate(pres):
-        #stored_fields = item.get_stored_fields()
         for idy, column in enumerate(columns):
             data = item[column[0]]
             if data is None:

@@ -37,8 +37,9 @@ function writebreadcrumb() {
 		}else {
 			/* Add successive elements and seperators */
 			for (var i = 4; i < maxIdx; i++) {
-				path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[i]) + elem[i].length + 1) 
-				+ "/\">" + elem[i] + "</a>";
+				/*path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[i]) + elem[i].length + 1)
+				+ "/\">" + elem[i] + "</a>";*/
+				path += seperatorst + "<span>" + elem[i] + "</span>";
 			}
 		}
 		
