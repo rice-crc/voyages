@@ -100,7 +100,7 @@
 	{% get_current_language as LANGUAGE_CODE %}
 	<li id="block06" class="nav_block language_menu">
 		<a href="#" id="language">{% trans "Language" %}</a>
-		<div class="language_menu_{{ LANGUAGE_CODE }}"></div>
+		<a href="#" class="language_menu_{{ LANGUAGE_CODE }}"></a>
 		<div class="linkbox">
 			<ul>
 				{% for lang in LANGUAGES %}

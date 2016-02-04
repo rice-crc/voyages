@@ -23,9 +23,9 @@ def index(request):
     """
     filter_args = {'contributor': request.user, 'status': ContributionStatus.pending}
     if request.user.is_authenticated():
-        contributions = [{'type': 'edit', 'id': x.pk} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'merge', 'id': x.pk} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
-            [{'type': 'new', 'id': x.pk} for x in NewVoyageContribution.objects.filter(**filter_args)]
+        contributions = [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
+            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
         return render(request, "contribute/index.html", {'contributions': contributions})
     else:
         return HttpResponseRedirect(reverse('account_login'))
@@ -306,9 +306,6 @@ def new_voyage(request):
     contrib.save()
     return HttpResponseRedirect(reverse(
         'contribute:interim', kwargs={'contribution_type': 'new', 'contribution_id': contrib.pk}))
-
-def under_construction(request):
-    return JsonResponse({'error': 'UNDER CONSTRUCTION'})
 
 def init_interim_voyage(interim, contribution):
     # If this is a merger or edit, initialize fields when there is consensus.

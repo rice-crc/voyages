@@ -6,10 +6,6 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <style>
-    .var_group {
-        margin: 10px;
-    }
-
 	.broad_region {
 		margin-left: 10px;
 		font-weight: bold;
@@ -81,6 +77,50 @@
         color: gray;
         margin-left: 25%;
     }
+
+    .form-horizontal a {
+        display: block;
+        background-color: #F1F1F1;
+        border-bottom: solid 1px #CCC;
+    }
+
+    .form-horizontal a:hover {
+        text-decoration: none;
+    }
+
+    .form-horizontal a h1 {
+        font-size: 20px;
+        margin-top: 0;
+        //margin-bottom: 0;
+        padding: 10px;
+    }
+
+    .form-horizontal a h1:before, .tree_expanded:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        padding-right: 5px;
+    }
+
+    .form-horizontal a.collapsed h1:before, .tree_collapsed:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e080";
+        padding-right: 5px;
+    }
+
+    .var_group {
+        background-color: #FFFFFF;
+        border: solid 1px #CCC;
+        padding: 20px;
+    }
+
+    .is_stuck {
+        z-index: 5;
+    }
+
+    .expander_container {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
 </style>
 
 <h1>{{ contribution }}</h1>
@@ -97,12 +137,14 @@
 
 <form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
     {% csrf_token %}
-    <div>
-        <a role="button" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
-          <h1>{% trans "Ship, nation, owners" %}</h1>
-        </a>
-    </div>
-    <div id="ship_nation_owners" class="collapse col-md-12 var_group">
+    <!-- Ship, nation, owners -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
+              <h1>{% trans "Ship, nation, owners" %}</h1>
+            </a>
+        </div>
+        <div id="ship_nation_owners" class="collapse col-md-12 var_group">
         <div class="form-group">
             {% with form.name_of_vessel as f %}
                 {{ f.errors }}
@@ -248,12 +290,16 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
-          <h1>{% trans "Voyage outcome" %}</h1>
-        </a>
     </div>
-    <div id="outcome" class="collapse col-md-12 var_group">
+
+    <!-- Voyage outcome -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
+              <h1>{% trans "Voyage outcome" %}</h1>
+            </a>
+        </div>
+        <div id="outcome" class="collapse col-md-12 var_group">
         <div class="form-group">
             {% with form.voyage_outcome as f %}
                 {{ f.errors }}
@@ -291,12 +337,16 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
-          <h1>{% trans "Voyage itinerary" %}</h1>
-        </a>
     </div>
-    <div id="itinerary" class="collapse col-md-12 var_group">
+
+    <!-- Voyage itinerary -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
+              <h1>{% trans "Voyage itinerary" %}</h1>
+            </a>
+        </div>
+        <div id="itinerary" class="collapse col-md-12 var_group">
         <div class="form-group">
             {% with form.first_port_intended_embarkation as f %}
                 {{ f.errors }}
@@ -451,12 +501,16 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
-            <h1>{% trans "Voyage dates" %}</h1>
-        </a>
     </div>
-    <div id="dates" class="collapse col-md-12 var_group">
+
+    <!-- Voyage dates -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
+                <h1>{% trans "Voyage dates" %}</h1>
+            </a>
+        </div>
+        <div id="dates" class="collapse col-md-12 var_group">
         <p>{% trans "Enter partial information (year only or month and year only) when full date unknown." %}</p>
         <div class="form-group">
             {% with form.date_departure as f %}
@@ -540,12 +594,16 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
-          <h1>{% trans "Captain and crew" %}</h1>
-        </a>
     </div>
-    <div id="crew" class="collapse col-md-12 var_group">
+
+    <!-- Captain and crew -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
+              <h1>{% trans "Captain and crew" %}</h1>
+            </a>
+        </div>
+        <div id="crew" class="collapse col-md-12 var_group">
         <div class="form-group">
             {% with form.first_captain as f %}
                 {{ f.errors }}
@@ -580,72 +638,96 @@
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW1" name="interim_slave_number_CREW1">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREW2">
                 {% trans "Crew at departure from last port of slave purchase" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW2" name="interim_slave_number_CREW2">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREW3">
                 {% trans "Crew at first landing of slaves" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW3" name="interim_slave_number_CREW3">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREW4">
                 {% trans "Crew when return voyage began" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW4" name="interim_slave_number_CREW4">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREW5">
                 {% trans "Crew at end of voyage" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW5" name="interim_slave_number_CREW5">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREW">
                 {% trans "Number of crew unspecified" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW" name="interim_slave_number_CREW">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_SAILD1">
                 {% trans "Crew died before first place of trade in Africa" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD1" name="interim_slave_number_SAILD1">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_SAILD2">
                 {% trans "Crew died while ship was on African coast" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD2" name="interim_slave_number_SAILD2">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_SAILD3">
                 {% trans "Crew died during Middle Passage" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD3" name="interim_slave_number_SAILD3">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_SAILD4">
                 {% trans "Crew died in the Americas" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD4" name="interim_slave_number_SAILD4">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_SAILD5">
                 {% trans "Crew died on return voyage" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD5" name="interim_slave_number_SAILD5">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_CREWDIED">
                 {% trans "Crew died during complete voyage" %}:
             </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREWDIED" name="interim_slave_number_CREWDIED">
             </div>
+        </div>
+        <div class="form-group">
             <label for="interim_slave_number_NDESERT">
                 {% trans "Total number of crew deserted" %}:
             </label>
@@ -654,12 +736,16 @@
             </div>
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
-          <h1>{% trans "Slaves (numbers)" %}</h1>
-        </a>
     </div>
-    <div id="slave_numbers_main" class="collapse col-md-12 var_group">
+
+    <!-- Slaves (numbers) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
+              <h1>{% trans "Slaves (numbers)" %}</h1>
+            </a>
+        </div>
+        <div id="slave_numbers_main" class="collapse col-md-12 var_group">
         <div class="form-group">
             <label for="interim_slave_number_SLINTEND">
                 {% trans "Slaves intended from first port of purchase" %}:
@@ -773,12 +859,16 @@
             </div>
         </div>
     </div>
-    <div>
-        <a role="button" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
-          <h1>{% trans "Slaves (characteristics)" %}</h1>
-        </a>
     </div>
-    <div id="demographics" class="collapse col-md-12 var_group">
+
+    <!-- Slaves (characteristics) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
+              <h1>{% trans "Slaves (characteristics)" %}</h1>
+            </a>
+        </div>
+        <div id="demographics" class="collapse col-md-12 var_group">
         <div id="hidden_div" style="display:none">
             <input type="number" id="cell_editor" style="width: 65px;">
         </div>
@@ -833,13 +923,16 @@
             </div>
         </div>
     </div>
-
-    <div>
-        <a role="button" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
-          <h1>{% trans "Sources" %}</h1>
-        </a>
     </div>
-    <div id="sources" class="collapse col-md-12 var_group">
+
+    <!-- Sources -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
+              <h1>{% trans "Sources" %}</h1>
+            </a>
+        </div>
+        <div id="sources" class="collapse col-md-12 var_group">
         {% if interim.pre_existing_sources.all %}
             <h3>{% trans "Current source references" %}</h3>
             {% trans "Please specify whether the sources below should be included, excluded, or edited." %}
@@ -893,168 +986,9 @@
             <tbody>
             </tbody>
         </table>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
-                    </div>
-                    <div class="modal-body" style="height: 500px; overflow-y: auto;">
-                        <input type="hidden" name="source_id_field" id="source_id_field" />
-                        <ul class="nav nav-tabs" role="tablist" id="tab_control">
-                            <li data-tab="primary" role="presentation" class="active"><a href="#primary"
-                                                                                         aria-controls="primary"
-                                                                                         role="tab" data-toggle="tab">
-                                {% trans "Primary source" %}</a></li>
-                            <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
-                                                                          role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
-                            <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
-                                                                       data-toggle="tab">{% trans "Book" %}</a></li>
-                            <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
-                                                                        data-toggle="tab">{% trans "Other" %}</a></li>
-                        </ul>
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active form-horizontal" id="primary">
-                                <div class="form-group">
-                                    <label for="primary_name">{% trans "Name of library or archive" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="primary_name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_loc">{% trans "Location of library/archive" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="primary_loc">
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_series">{% trans "Series or collection" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="primary_series">
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_vol">{% trans "Volume or box or bundle" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="primary_vol">
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_detail">{% trans "Document detail (page or folio number, and/or date of document)" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="primary_detail">
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_info">{% trans "Information about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="primary_info"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="primary_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="primary_url"></textarea>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="article">
-                                <div class="form-group">
-                                    <label for="article_author">{% trans "Author" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="article_author">
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_title">{% trans "Title" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="article_title">
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_journal">{% trans "Journal" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="article_journal">
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_volume">{% trans "Volume number" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="article_volume">
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_year">{% trans "Year" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="article_year">
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_first_page">{% trans "Page numbers" %}</label>
-                                    <div>
-                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_first_page" style="width: 35%;">
-                                        <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
-                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_last_page" style="width: 35%;">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_info">{% trans "Other information" %}</label>
-                                    <textarea class="form-control not_selectized" id="article_info"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="article_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="article_url"></textarea>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="book">
-                                <div class="form-group">
-                                    <label for="book_author">{% trans "Author" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="book_author">
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_title">{% trans "Title" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="book_title">
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_publisher">{% trans "Publisher" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="book_publisher">
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_pub_place">{% trans "Place of publication" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="book_pub_place">
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_year">{% trans "Year" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="book_year">
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_first_page">{% trans "Page numbers" %}</label>
-                                    <div>
-                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_first_page" style="width: 35%;">
-                                        <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
-                                        <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_last_page" style="width: 35%;">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_info">{% trans "Other information" %}</label>
-                                    <textarea class="form-control not_selectized" id="book_info"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="book_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="book_url"></textarea>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="other">
-                                <div class="form-group">
-                                    <label for="other_title">{% trans "Title" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="other_title">
-                                </div>
-                                <div class="form-group">
-                                    <label for="other_location">{% trans "Location" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="other_location">
-                                </div>
-                                <div class="form-group">
-                                    <label for="other_page">{% trans "Page" %}</label>
-                                    <input class="form-control not_selectized" type="text" id="other_page">
-                                </div>
-                                <div class="form-group">
-                                    <label for="other_info">{% trans "Information about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="other_info"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                                    <textarea class="form-control not_selectized" id="other_url"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="add_source_btn" type="button" class="btn btn-primary">Add</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+    </div>
+
     <hr />
     <div class="form-group">
         <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
@@ -1069,12 +1003,170 @@
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
     </div>
 </form>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js">
-</script>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js">
-</script>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js">
-</script>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
+            </div>
+            <div class="modal-body" style="height: 500px; overflow-y: auto;">
+                <input type="hidden" name="source_id_field" id="source_id_field" />
+                <ul class="nav nav-tabs" role="tablist" id="tab_control">
+                    <li data-tab="primary" role="presentation" class="active"><a href="#primary"
+                                                                                 aria-controls="primary"
+                                                                                 role="tab" data-toggle="tab">
+                        {% trans "Primary source" %}</a></li>
+                    <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
+                                                                  role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
+                    <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                                                               data-toggle="tab">{% trans "Book" %}</a></li>
+                    <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
+                                                                data-toggle="tab">{% trans "Other" %}</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="primary">
+                        <div class="form-group">
+                            <label for="primary_name">{% trans "Name of library or archive" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_loc">{% trans "Location of library/archive" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_loc">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_series">{% trans "Series or collection" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_series">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_vol">{% trans "Volume or box or bundle" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_vol">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_detail">{% trans "Document detail (page or folio number, and/or date of document)" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_detail">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="primary_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="primary_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="article">
+                        <div class="form-group">
+                            <label for="article_author">{% trans "Author" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_author">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_journal">{% trans "Journal" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_journal">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_volume">{% trans "Volume number" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_volume">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_year">{% trans "Year" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_year">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_first_page">{% trans "Page numbers" %}</label>
+                            <div style="width: 100%; overflow-x: hidden">
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_first_page" style="width: 35%;">
+                                <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_last_page" style="width: 35%;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="article_info">{% trans "Other information" %}</label>
+                            <textarea class="form-control not_selectized" id="article_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="article_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="article_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="book">
+                        <div class="form-group">
+                            <label for="book_author">{% trans "Author" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_author">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_publisher">{% trans "Publisher" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_publisher">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_pub_place">{% trans "Place of publication" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_pub_place">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_year">{% trans "Year" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_year">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_first_page">{% trans "Page numbers" %}</label>
+                            <div style="width: 100%; overflow-x: hidden">
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_first_page" style="width: 35%;">
+                                <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_last_page" style="width: 35%;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="book_info">{% trans "Other information" %}</label>
+                            <textarea class="form-control not_selectized" id="book_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="book_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="book_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="other">
+                        <div class="form-group">
+                            <label for="other_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_location">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_page">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="other_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="other_url"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="add_source_btn" type="button" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript">
     var submit_val = '';
     // Existing voyage(s) data.
@@ -1206,7 +1298,7 @@
     var broad_regions = {};
 
     $(document).ready(function() {
-        $('.form-group>label').addClass('control-label col-sm-3');
+        $('.form-horizontal .form-group>label').addClass('control-label col-sm-3');
 
         // Store numbers in an object.
         var numbers = {
@@ -1309,12 +1401,12 @@
                                     return '<div class="port region_' + data.parent + '">' + escape(data.port) + '</div>';
                                 }
                                 if (data.type == 'region') {
-                                    return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
+                                    return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent tree_collapsed region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
                                 }
                                 if (data.type == 'existing') {
                                     return portItemDisplay(data, escape);
                                 }
-                                return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region">' + escape(data.broad_region) + '</div>';
+                                return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region tree_collapsed">' + escape(data.broad_region) + '</div>';
                             },
                             item: portItemDisplay,
                         }
@@ -1640,6 +1732,7 @@
     Selectize.prototype.onOptionSelect = function(e) {
         if (e && e.preventDefault) {
             e.preventDefault();
+            if (e.type == 'mousedown') return false;
             var target = $(e.currentTarget);
             var className = "expanded";
             if (this.$control_input.val() != '' && !this.options.create) {
@@ -1653,33 +1746,32 @@
             }
             var nextActive = null;
             if (target.hasClass("broad_region")) {
-                $(".broad_region,.region,.port").removeClass(className);
-                target.addClass(className);
-                $(".broad_region_" + target.data('pk')).addClass(className);
                 nextActive = ".broad_region_" + target.data('pk');
+                var isExpanded = $(nextActive + ":first").hasClass(className);
+                $(".broad_region,.region,.port").removeClass(className);
+                $(".tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+                if (isExpanded) return false;
+                target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
+                $(".broad_region_" + target.data('pk')).addClass(className);
             } else if (target.hasClass("region")) {
-                $(".port").removeClass(className);
-                target.addClass(className);
-                $(".region_" + target.data('pk')).addClass(className);
                 nextActive = ".region_" + target.data('pk');
+                var isExpanded = $(nextActive + ":first").hasClass(className);
+                $(".port").removeClass(className);
+                $(".region.tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+                if (isExpanded) return false;
+                target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
+                $(".region_" + target.data('pk')).addClass(className);
             } else {
                 protoSelectOption.apply(this, arguments);
             }
-            var activateOptionWithDelay = function(opt, fn) {
-                window.setTimeout(function() {
-                    self.setActiveOption($(opt[0]));
-                    if (fn) {
-                        fn();
-                    }
-                }, 200);
+            var activateOption = function(opt) {
+                self.setActiveOption($(opt[0]), true, false);
             };
             if (nextActive) {
                 var self = this;
-                activateOptionWithDelay($(nextActive + ":last"), function() {
-                    activateOptionWithDelay(target, function() {
-                        activateOptionWithDelay($(nextActive + ":first"));
-                    });
-                });
+                activateOption(self.$dropdown_content.find(nextActive + ":last"));
+                activateOption(target);
+                activateOption(self.$dropdown_content.find(nextActive + ":first"));
             }
         } else {
             protoSelectOption.apply(this, arguments);
