@@ -799,10 +799,10 @@ def search(request):
             pst = {x: y for x, y in request.POST.items()}
 
             # Try to retrieve sessions values
-            tables_columns = request.get('voyages_tables_columns')
-            tables_rows = request.get('voyages_tables_rows')
-            tables_cells = request.get('voyages_tables_cells')
-            omit_empty = request.get('voyages_tables_omit')
+            tables_columns = request.session.get('voyages_tables_columns')
+            tables_rows = request.session.get('voyages_tables_rows')
+            tables_cells = request.session.get('voyages_tables_cells')
+            omit_empty = request.session.get('voyages_tables_omit')
 
             # Collect settings (if possible retrieve from the session)
             if 'columns' not in pst and tables_columns:
