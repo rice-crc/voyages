@@ -3210,7 +3210,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 		valueField: 'value',
 		labelField: 'text',
 		optgroupLabelField: 'label',
-		optgroupValueField: 'value',Av. Onze de Junho, 686
+		optgroupValueField: 'value',
 		lockOptgroupOrder: false,
 	
 		sortField: '$order',
