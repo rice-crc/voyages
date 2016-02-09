@@ -30,7 +30,7 @@ class SavedQuery(models.Model):
         link = ('https://' if request.is_secure() else 'http://') + request.get_host() + \
                reverse(url_name, kwargs={'link_id': self.id})
         from django.http import HttpResponse
-        return HttpResponse(link, mimetype='text/plain')
+        return HttpResponse(link, content_type='text/plain')
 
     def get_post(self):
         """
