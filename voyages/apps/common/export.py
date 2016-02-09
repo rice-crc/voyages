@@ -9,7 +9,7 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
     """
     import xlwt
     from django.http import HttpResponse
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=data.xls'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet("Data")

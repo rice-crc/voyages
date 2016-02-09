@@ -2244,4 +2244,4 @@ def debug_permalink(request, link_id):
     from django.shortcuts import get_object_or_404
     from django.http import HttpResponse
     permalink = get_object_or_404(SavedQuery, pk=link_id)
-    return HttpResponse(permalink.query, mimetype='text/plain')
+    return HttpResponse(permalink.query, content_type='text/plain')

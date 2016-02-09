@@ -267,8 +267,8 @@ def images_search(request):
         request.session['time_end'] = time_end
 
     else:
-        results = request.session['results_images']
-        images = request.session['images_images']
+        results = request.session.get('results_images')
+        images = request.session.get('images_images')
 
     return render(request, 'resources/images-search-results.html',
             {'results': results,
