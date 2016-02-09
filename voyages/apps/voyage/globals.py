@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # List of basic variables
+from voyages.apps.common.models import get_values_from_haystack_results
 import models
 from django.db.models import Max, Min
 import re
 from datetime import date
 from django.utils.translation import ugettext_lazy as _
+from itertools import groupby
 
 session_expire_minutes = 60
 
@@ -1747,9 +1749,25 @@ methodology_items = [
      'page': "methodology-22"},
 ]
 
+YEAR_FIELD = 'var_imp_arrival_at_port_of_dis'
+def get_aggregate_data(results, var_name):
+    """
+    Obtains a list of pairs  (year, values), where
+    values is a list containing all the non-null values
+    of var_name within the corresponding year.
+    :param results: The search results.
+    :param var_name: The variable name.
+    :return:
+    """
+    data = [(int(r.get(YEAR_FIELD)), float(r.get(var_name)))
+            for r in get_values_from_haystack_results(results, [YEAR_FIELD, var_name])
+            if YEAR_FIELD in r and var_name in r]
+    sorting = lambda x: x[0]
+    data = sorted(data, key=sorting)
+    return [(k, list(g)) for k, g in groupby(data, key=sorting)]
 
 # Timeline part
-def get_average_set_timeline(query_dict, var_name, start_year, stop_year):
+def get_average_set_timeline(query_dict, var_name):
     """Calculate average of var and create a list divided by years
 
     :param query_dict: Query dictionary, on which based on
@@ -1757,23 +1775,13 @@ def get_average_set_timeline(query_dict, var_name, start_year, stop_year):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
+    lst = []
+    for year, values in get_aggregate_data(query_dict, var_name):
+        average = sum([x[1] for x in values]) / (len(values) + 0.0)
+        lst.append([year, round(average, 1)])
+    return lst
 
-    timeline_list = []
-
-    for i in range(start_year, stop_year):
-        # For each year, get stats on var_name
-        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
-
-        # If results available, store mean
-        if value[var_name] is not None:
-            timeline_list.append([i, round(value[var_name]['mean'], 1)])
-
-    # Sort based on years and return
-    timeline_list.sort(key=lambda tup: tup[0])
-    return timeline_list
-
-
-def get_sum_set_timeline(query_dict, var_name, start_year, stop_year):
+def get_sum_set_timeline(query_dict, var_name):
     """Calculate sum of var and create a list divided by years
 
     :param query_dict: Query dictionary, on which based on
@@ -1781,23 +1789,11 @@ def get_sum_set_timeline(query_dict, var_name, start_year, stop_year):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
-
-    timeline_list = []
-
-    for i in range(start_year, stop_year):
-        # For each year, get stats on var_name
-        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
-
-        # If results available, store sum
-        if value[var_name] is not None:
-            timeline_list.append([i, round(value[var_name]['sum'], 1)])
-
-    # Sort based on years and return
-    timeline_list.sort(key=lambda tup: tup[0])
-    return timeline_list
+    data = get_aggregate_data(query_dict, var_name)
+    return list([[year, round(sum([x[1] for x in values]), 1)] for year, values in data])
 
 
-def get_exist_set_timeline(query_dict, var_name, start_year, stop_year):
+def get_exist_set_timeline(query_dict, var_name):
     """Calculate exist/nonexist ratio of var and create a list divided by years
 
     :param query_dict: Query dictionary, on which based on
@@ -1805,24 +1801,19 @@ def get_exist_set_timeline(query_dict, var_name, start_year, stop_year):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
+    data = [(int(r.get(YEAR_FIELD)), r.get(var_name))
+            for r in get_values_from_haystack_results(query_dict, [YEAR_FIELD, var_name])
+            if YEAR_FIELD in r]
+    sorting = lambda a: a[0]
+    data = sorted(data, key=sorting)
+    lst = []
+    for year, g in groupby(data, key=sorting):
+        values = list(g)
+        count = sum([0.0 if x[1] is None else 1.0 for x in values])
+        lst.append([year, round(100.0 * count / len(values), 1)])
+    return lst
 
-    timeline_list = []
-
-    for i in range(start_year, stop_year):
-        # For each year, get stats on var_name
-        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name)
-        value_result = value.stats_results()
-
-        # If results available, calculate not_null/all and get percent of this (*100)
-        if value_result[var_name] is not None:
-            timeline_list.append([i, round((float(value_result[var_name]['count'])/float(len(value))*100), 1)])
-
-    # Sort based on years and return
-    timeline_list.sort(key=lambda tup: tup[0])
-    return timeline_list
-
-
-def get_percentage_set_timeline(query_dict, var_name, start_year, stop_year):
+def get_percentage_set_timeline(query_dict, var_name):
     """Calculate mean of var (in percent scale) and create a list divided by years
 
     :param query_dict: Query dictionary, on which based on
@@ -1830,23 +1821,14 @@ def get_percentage_set_timeline(query_dict, var_name, start_year, stop_year):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
-
-    timeline_list = []
-
-    for i in range(start_year, stop_year):
-        # For each year, get stats on var_name
-        value = query_dict.filter(var_imp_arrival_at_port_of_dis=i).stats(var_name).stats_results()
-
-        # If results available, get mean and present as percent (*100)
-        if value[var_name] is not None:
-            timeline_list.append([i, round(value[var_name]['mean']*100, 1)])
-
-    # Sort based on years and return
-    timeline_list.sort(key=lambda tup: tup[0])
-    return timeline_list
+    lst = []
+    for year, values in get_aggregate_data(query_dict, var_name):
+        average = sum([x[1] for x in values]) / (len(values) + 0.0)
+        lst.append([year, round(100 * average, 1)])
+    return lst
 
 
-def get_simple_set_timeline(query_dict, var_name, start_year=None, stop_year=None):
+def get_simple_set_timeline(query_dict, var_name):
     """Create a list of values divided by years
 
     :param query_dict: Query dictionary, on which based on
@@ -1854,17 +1836,8 @@ def get_simple_set_timeline(query_dict, var_name, start_year=None, stop_year=Non
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
-
-    # Facet on var_name, minimum 1 and limit 500 (first year is 1514, last 1866,
-    # so '500' is fine
-    timeline_list = query_dict.facet(var_name, mincount=1, limit=500).facet_counts()
-
-    # Create list of lists, where inner list is in form of: [year, value]
-    timeline_list = [[int(v[0]), v[1]] for v in timeline_list['fields'][var_name]]
-
-    # Sort based on years and return
-    timeline_list.sort(key=lambda tup: tup[0])
-    return timeline_list
+    data = get_aggregate_data(query_dict, var_name)
+    return list([[year, len(values)] for year, values in data])
 
 # List of options and settings for timeline in form of:
 # (index, name, function_to_get_set, variable in solr, [extra_dict])
