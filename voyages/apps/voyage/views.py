@@ -1172,9 +1172,7 @@ def search(request):
 
             # Get set based on choice
             timeline_data = timeline_selected_tuple[2](results,
-                                                       timeline_selected_tuple[3],
-                                                       int(voyage_span_first_year),
-                                                       int(voyage_span_last_year))
+                                                       timeline_selected_tuple[3])
 
             if request.POST is not None and "download" in request.POST:
                 return download_xls([[("Year", 1), (timeline_selected_tuple[1], 1)]], timeline_data)
