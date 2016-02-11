@@ -34,6 +34,7 @@ from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
 from cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
+from graphs import *
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -1097,8 +1098,8 @@ def search(request):
             xind = request.session.get(session_defs_key + '_x_ind', 0)
             yind = request.session.get(session_defs_key + '_y_ind', 0)
             # Handle adding a y-function or simply changing the x-function.
-            xfuns = globals.graphs_x_functions if graphs_tab == 'tab_graphs_lin' else \
-                globals.graphs_bar_x_functions
+            xfuns = graphs.graphs_x_axes if graphs_tab == 'tab_graphs_lin' else \
+                graphs.other_graphs_x_axes
             graphs_form_params = {'data': request.POST, 'prefix': graphs_tab, 'xfunctions': xfuns}
             if graphs_tab == 'tab_graphs_pie':
                 graphs_form_params['xfield_label'] = 'Sectors'
@@ -1122,9 +1123,7 @@ def search(request):
             # Create form allowing the user to remove selected y-functions.
             remove_plots_list = []
             for yid in y_axes:
-                ydef = globals.graphs_y_functions[yid]
-                ydesc = ydef[0]
-                remove_plots_list.append((ydesc, yid))
+                remove_plots_list.append((graphs.graphs_y_axes[yid].description, yid))
             graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
 
             # Handle removing a y-function.
@@ -1137,14 +1136,8 @@ def search(request):
             request.session[session_defs_key + '_y_ind'] = yind
 
             # Fetch graph data and pass it to the View template.
-            graph_xfun_index = xind
-            xdef = xfuns[xind]
-            xfun = xdef[1]
-            graph_data = {}
-            for yind in y_axes:
-                ydef = globals.graphs_y_functions[yind]
-                dataset = [t for t in xfun(results, ydef) if t[1] is not None and t[1] != 0]
-                graph_data[ydef[0]] = dataset
+            x_axis = graphs_x_axes[xind] if graphs_tab == 'tab_graphs_lin' else other_graphs_x_axes[xind]
+            graph_data = get_graph_data(results, x_axis, [graphs_y_axes[yind] for yind in y_axes])
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1214,7 +1207,7 @@ def search(request):
             missed_embarked = 0
             missed_disembarked = 0
             # Set up an unspecified source that will be used if the appropriate setting is enabled
-            geo_unspecified = CachedGeo(-1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
+            geo_unspecified = CachedGeo(-1, -1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
             source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
             keys = get_pks_from_haystack_results(results)
             for pk in keys:
@@ -2065,7 +2058,7 @@ def retrieve_summary_stats(results):
     tmp_list = []
     for item in globals.summary_statistics:
         tmp_row = [item['display_name'],]
-        stats = results.stats(item['var_name']).stats_results()[item['var_name']]
+        stats = results.stats(item['var_name']).stats_results().get(item['var_name'])
 
         if item['has_total'] and stats:
             tmp_row.append(int(stats['sum']))

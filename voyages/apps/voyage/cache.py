@@ -6,8 +6,9 @@ class CachedGeo:
     """
     Caches a geographical place (could be a port, region, or broad region)
     """
-    def __init__(self, pk, name, lat, lng, show, parent):
+    def __init__(self, pk, value, name, lat, lng, show, parent):
         self.pk = pk
+        self.value = value
         self.name = name
         self.lat = lat
         self.lng = lng
@@ -55,6 +56,9 @@ class VoyageCache:
     broad_regions = {}
     nations = {}
     particular_outcomes = {}
+    slave_outcomes = {}
+    owner_outcomes = {}
+    captured_outcomes = {}
     resistances = {}
     rigs = {}
     ton_types = {}
@@ -68,22 +72,25 @@ class VoyageCache:
             if not force_reload and cls._loaded:
                 return
             cls._loaded = False
-            cls.ports = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5])
+            cls.ports = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], x[6])
                          for x in Place.objects.values_list('pk',
+                                                            'value',
                                                             'place',
                                                             'latitude',
                                                             'longitude',
                                                             'show_on_main_map',
                                                             'region_id').iterator()}
-            cls.regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5])
+            cls.regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], x[6])
                            for x in Region.objects.values_list('pk',
+                                                               'value',
                                                                'region',
                                                                'latitude',
                                                                'longitude',
                                                                'show_on_main_map',
                                                                'broad_region_id').iterator()}
-            cls.broad_regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], None)
+            cls.broad_regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], None)
                                  for x in BroadRegion.objects.values_list('pk',
+                                                                          'value',
                                                                           'broad_region',
                                                                           'latitude',
                                                                           'longitude',
@@ -91,6 +98,9 @@ class VoyageCache:
             cls.nations = {x[0]: _(x[1])
                            for x in Nationality.objects.values_list('pk', 'label').iterator()}
             cls.particular_outcomes = {o.pk: o for o in ParticularOutcome.objects.all()}
+            cls.slave_outcomes = {o.pk: o for o in SlavesOutcome.objects.all()}
+            cls.owner_outcomes = {o.pk: o for o in OwnerOutcome.objects.all()}
+            cls.captured_outcomes = {o.pk: o for o in VesselCapturedOutcome.objects.all()}
             cls.resistances = {r.pk: r for r in Resistance.objects.all()}
             cls.rigs = {r.pk: r for r in RigOfVessel.objects.all()}
             cls.ton_types = {tt.pk: tt for tt in TonType.objects.all()}

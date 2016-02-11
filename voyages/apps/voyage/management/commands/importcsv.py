@@ -192,7 +192,8 @@ class Command(BaseCommand):
                 voyage.voyage_id = id
                 voyages[id] = voyage
                 # Next we set up voyage direct and nested members
-                voyage.voyage_in_cd_rom = row[u'evgreen']
+                in_cd_room = row[u'evgreen']
+                voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
                 voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
                 # Ship
                 ship_model = VoyageShip()

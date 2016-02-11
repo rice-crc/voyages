@@ -159,6 +159,8 @@ I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-
 # Indicates whether the map path flows should include paths with missing source.
 MAP_MISSING_SOURCE_ENABLED = True
 
+ENABLE_CONTRIBUTE_SECTION = False
+
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
