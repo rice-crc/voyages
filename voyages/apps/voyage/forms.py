@@ -3,6 +3,7 @@ from autocomplete_light import shortcuts as autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
+import graphs
 from django.utils.translation import ugettext_lazy as _
 
 class UploadFileForm(forms.Form):
@@ -247,15 +248,15 @@ class GraphRemovePlotForm(forms.Form):
 
 class GraphSelectionForm(forms.Form):
     def __init__(self,
-                 xfunctions=globals.graphs_bar_x_functions,
+                 xfunctions=graphs.other_graphs_x_axes,
                  xfield_label='X axis',
                  yfield_label='Y axis',
                  *args,
                  **kwargs):
         super(forms.Form, self).__init__(*args, **kwargs)
-        lmbd = lambda x: (str(x[0]), x[1][0])
+        lmbd = lambda x: (str(x[0]), x[1].description)
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
-        self.ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+        self.ychoices = map(lmbd, enumerate(graphs.graphs_y_axes))
         self.fields['xselect'] = forms.ChoiceField(label=_(xfield_label), choices=self.xchoices)
         self.fields['yselect'] = forms.ChoiceField(label=_(yfield_label), choices=self.ychoices)
 

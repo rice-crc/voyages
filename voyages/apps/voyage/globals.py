@@ -609,11 +609,13 @@ def make_avg_fun(varname):
 def make_avg_nopretty_fun(varname):
     prettifier = graph_display_methods.get(varname, no_mangle)
     def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
-        stats = queryset.stats(varname).stats_results()
-        if stats and stats[varname]:
-            return prettifier(stats[varname]['mean'])
-        else:
-            return None
+        values = list([float(b) for b in [a.get(varname) for a in queryset] if b is not None])
+        return sum(values) / len(values)
+        #stats = queryset.stats(varname).stats_results()
+        #if stats and stats[varname]:
+        #    return prettifier(stats[varname]['mean'])
+        #else:
+        #    return None
     return avg_nopretty_fun
 
 def make_row_tot_percent_fun(varname):
@@ -722,180 +724,11 @@ table_functions = [(_('Number of Voyages'), lambda x, y, z, a: x.count(),),
 # Cell functions that return two values, embarked/disembarked
 double_functions = [_('Sum of embarked/disembarked slaves'), _('Average number of embarked/disembarked slaves'), _('Number of voyages - embarked/disembarked slaves')]
 
-
-
-# I don't think I should worry about Nones, since I should just not include them in the dataset
-def averaging_fun(lst):
-    sm = 0
-    cnt = 0
-    for i in lst:
-        if i != None:
-            cnt += 1
-            sm += i
-    if cnt > 0:
-        return float(sm) / float(cnt)
-    else:
-        # Should I return None or 0? Should I just skip the values that have None?
-        return None
-
-summing_fun = sum
-#def summing_fun(lst):
-#    sm = 0
-#    for i in lst:
-#        if i != None:
-#            sm += i
-#    return sm
-
-def rate_of_resistance_fun(queryset):
-    qcount = queryset.count()
-    if qcount <= 0:
-        return None
-    varname = 'var_resistance'
-    # stats does not work with string fields, only numeric fields
-    #stats = queryset.stats(varname).stats_results()
-    rset = queryset.raw_search(varname + ': [* TO *]')
-    rcount = rset.count()
-    return (float(rcount)/float(qcount)) * 100
-
-# Graphs
-
-# Takes a searchqueryset and returns a number
-# (description, varname, function on varname values)
-# I don't think it uses the last function
-graphs_y_functions = [(_('Number of voyages'), 'var_voyage_id', len, lambda x: x.count(),),
-                      (_('Average voyage length, home port to slaves landing (days)*'), 'var_imp_length_home_to_disembark', averaging_fun, make_avg_nopretty_fun('var_imp_length_home_to_disembark'),),
-                      (_('Average middle passage (days)*'), 'var_length_middle_passage_days', averaging_fun, make_avg_nopretty_fun('var_length_middle_passage_days'),),
-                      (_('Standardized tonnage*'), 'var_tonnage_mod', averaging_fun, make_avg_nopretty_fun('var_tonnage_mod')),
-                      (_('Average crew at voyage outset'), 'var_crew_voyage_outset', averaging_fun, make_avg_nopretty_fun('var_crew_voyage_outset'),),
-                      (_('Average crew at first landing of slaves'), 'var_crew_first_landing', averaging_fun, make_avg_nopretty_fun('var_crew_first_landing'),),
-                      (_('Total crew at voyage outset'), 'var_crew_voyage_outset', summing_fun, make_sum_nopretty_fun('var_crew_voyage_outset'),),
-                      (_('Total crew at first landing of slaves'), 'var_crew_first_landing', summing_fun, make_sum_nopretty_fun('var_crew_first_landing'),),
-                      (_('Average number of slaves embarked'), 'var_imp_total_num_slaves_purchased', averaging_fun, make_avg_nopretty_fun('var_imp_total_num_slaves_purchased'),),
-                      (_('Average number of slaves disembarked'), 'var_imp_total_slaves_disembarked', averaging_fun, make_avg_nopretty_fun('var_imp_total_slaves_disembarked')),
-                      (_('Total number of slaves embarked'), 'var_imp_total_num_slaves_purchased', summing_fun, make_sum_nopretty_fun('var_imp_total_num_slaves_purchased'),),
-                      (_('Total number of slaves disembarked'), 'var_imp_total_slaves_disembarked', summing_fun, make_sum_nopretty_fun('var_imp_total_slaves_disembarked'),),
-                      (_('Percentage men*'), 'var_imputed_percentage_men', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_men'),),
-                      (_('Percentage women*'), 'var_imputed_percentage_women', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_women'),),
-                      (_('Percentage boys*'), 'var_imputed_percentage_boys', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_boys'),),
-                      (_('Percentage girls*'), 'var_imputed_percentage_girls', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_girls'),),
-                      (_('Percentage children*'), 'var_imputed_percentage_child', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_child'),),
-                      (_('Percentage male*'), 'var_imputed_percentage_male', averaging_fun, make_avg_nopretty_fun('var_imputed_percentage_male'),),
-                      (_('Sterling cash price in Jamaica*'), 'var_imputed_sterling_cash', averaging_fun, make_avg_nopretty_fun('var_imputed_sterling_cash'),),
-                      (_('Rate of resistance'), 'var_resistance', None, rate_of_resistance_fun),
-                      (_('Percentage of slaves embarked who died during voyage*'), 'var_imputed_mortality', averaging_fun, make_avg_nopretty_fun('var_imputed_mortality'),),]
-
-
-# get dicts for x and y values, then make a dictionary of x values, put y values into a list for each x value
-def make_x_line_fun(xvar):
-    def x_fun(sqs, ydef):
-        yvar = ydef[1]
-        # function when going against a list, probably not needed, will be slower and will be needed only if the next if statement falls through
-        yfun = ydef[2]
-        yqsetfun = ydef[3]
-        xstats = sqs.stats(xvar).stats_results()
-        dataset = []
-        xfilter = xvar + "__exact"
-        if xstats and xstats[xvar]:
-            xmax = int(xstats[xvar]['max'])
-            xmin = int(xstats[xvar]['min'])
-            for x in range(xmin, xmax + 1):
-                fsqs = sqs.filter(**{xfilter: x})
-                yval = yqsetfun(fsqs)
-                if yval != None:
-                    dataset.append((x, yval))
-        dataset = sorted(dataset, key=lambda x: x[0])
-        return dataset
-    return x_fun
-
-# Takes a searchqueryset and a y function definition (description, varname, reduce function) and returns a dataset (list of tuples) in the form (x,y)
-graphs_x_functions = [(_('Year arrived with slaves*'), make_x_line_fun('var_imp_arrival_at_port_of_dis')),
-                      (_('Voyage length, home port to slaves landing (days)*'), make_x_line_fun('var_imp_length_home_to_disembark')),
-                      (_('Middle passage (days)*'), make_x_line_fun('var_length_middle_passage_days')),
-                      (_('Crew at voyage outset'), make_x_line_fun('var_crew_voyage_outset')),
-                      (_('Crew at first landing of slaves'), make_x_line_fun('var_crew_first_landing')),
-                      (_('Slaves embarked'), make_x_line_fun('var_imp_total_num_slaves_purchased')),
-                      (_('Slaves disembarked'), make_x_line_fun('var_imp_total_slaves_disembarked')),]
-
-def get_year_bar_tuples(interval, first_year=mfirst_year, last_year=mlast_year):
-    start_year = (int(first_year) - (int(first_year) % int(interval))) + 1
-    current_year = start_year
-    years = []
-    while current_year <= last_year:
-        # Range is exclusive of the start, and inclusive of the end, so a search for years 1800 to 1899 will need the range 1799-1899
-        years.append([current_year, current_year + interval - 1])
-        current_year += interval
-    def year_labeler(years):
-        if years[0] == years[1]:
-            return years[1]
-        else:
-            return str(years[0]) + '-' + str(years[1])
-    result = []
-    for i in years:
-        result.append((year_labeler(i), {'var_imp_arrival_at_port_of_dis__range': i}))
-    return make_x_bar_fun('var_imp_arrival_at_port_of_dis', lst=result)
-
-# Lst is a list of tuples of label, searchfilterdef
-# Returns a function that can be run with a searchqueryset and a ydef, and will return a dataset of tuples of x,y
-lbllblr = lambda x: x.label
-def make_x_bar_fun(varname, table=None, tablelblr=lbllblr, lst=None):
-    if table:
-        lst = []
-        for i in table.objects.all():
-            varfilt = varname + '_idnum__exact'
-            filt = {varfilt: i.value}
-            lbl = tablelblr(i)
-            lst.append((lbl, filt))
-    def x_fun(sqs, ydef):
-        dataset = []
-        for lbl,filt in lst:
-            fsqs = sqs.filter(**filt)
-            yval = ydef[3](fsqs)
-            dataset.append((lbl, yval))
-        return dataset
-    return x_fun
-
-
-def make_x_bar_month_fun(varname):
-    output = []
-    for num, mon in list_months:
-        varkey = varname + "_month__exact"
-        output.append((mon, {varkey: int(num)}))
-    return make_x_bar_fun(varname, lst=output)
-
 # Convert a list of nationality objects into a list of tuples of (label, filterdef)
 imp_nat_pos_bar = map(lambda x: (x.label, {'var_imputed_nationality_idnum__exact': x.value}), imputed_nationality_possibilities)
 
 placelblr = lambda x: x.place
 regionlblr = lambda x: x.region
-
-
-graphs_bar_x_functions = [(_('Flag*'), make_x_bar_fun(_('var_imputed_nationality'), lst=imp_nat_pos_bar)),
-                          (_('Rig'), make_x_bar_fun(_('var_rig_of_vessel'), table=models.RigOfVessel, tablelblr=lbllblr)),
-                          (_('Particular outcome of the voyage'), make_x_bar_fun(_('var_outcome_voyage'), table=models.ParticularOutcome, tablelblr=lbllblr)),
-                          (_('Outcome for slaves*'), make_x_bar_fun(_('var_outcome_slaves'), table=models.SlavesOutcome, tablelblr=lbllblr)),
-                          (_('Outcome for owner*'), make_x_bar_fun(_('var_outcome_owner'), table=models.OwnerOutcome)),
-                          (_('Outcome if ship captured*'), make_x_bar_fun(_('var_outcome_ship_captured'), table=models.VesselCapturedOutcome)),
-                          (_('African resistance'), make_x_bar_fun(_('var_resistance'), table=models.Resistance)),
-                          (_('Place where voyage began*'), make_x_bar_fun(_('var_imp_port_voyage_begin'), table=models.Place, tablelblr=placelblr)),
-                          (_('Region where voyage began*'), make_x_bar_fun(_('var_imp_region_voyage_begin'), table=models.Region, tablelblr=regionlblr)),
-                          (_('Principal place of slave purchase*'), make_x_bar_fun(_('var_imp_principal_place_of_slave_purchase'), table=models.Place, tablelblr=placelblr)),
-                          (_('Principal region of slave purchase*'), make_x_bar_fun(_('var_imp_principal_region_of_slave_purchase'), table=models.Region, tablelblr=regionlblr)),
-                          (_('Principal place of slave landing*'), make_x_bar_fun(_('var_imp_principal_port_slave_dis'), table=models.Place, tablelblr=placelblr)),
-                          (_('Principal region of slave landing*'), make_x_bar_fun(_('var_imp_principal_region_slave_dis'), table=models.Region, tablelblr=regionlblr)),
-                          (_('Broad region of slave landing*'), make_x_bar_fun(_('var_imp_principal_broad_region_disembark'), table=models.BroadRegion, tablelblr=lambda x: x.broad_region)),
-                          (_('Place where voyage ended'), make_x_bar_fun(_('var_place_voyage_ended'), table=models.Place, tablelblr=placelblr)),
-                          (_('Region where voyage ended'), make_x_bar_fun(_('var_region_voyage_ended'), table=models.Region, tablelblr=regionlblr)),
-                          (_('Month voyage began'), make_x_bar_month_fun('var_voyage_began')),
-                          (_('Month trade began in Africa'), make_x_bar_month_fun('var_slave_purchase_began')),
-                          (_('Month vessel departed Africa'), make_x_bar_month_fun('var_date_departed_africa')),
-                          (_('Month vessel arrived with slaves'), make_x_bar_month_fun('var_first_dis_of_slaves')),
-                          (_('Month vessel departed for home port'), make_x_bar_month_fun('var_departure_last_place_of_landing')),
-                          (_('Month voyage completed'), make_x_bar_month_fun('var_voyage_completed')),
-                          (_('Year arrived with slaves (5 year periods)'), get_year_bar_tuples(5)),
-                          (_('Year arrived with slaves (10 year periods)'), get_year_bar_tuples(10)),
-                          (_('Year arrived with slaves (25 year periods)'), get_year_bar_tuples(25)),]
-
-
 
 #print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
 #print models.VoyageShip.objects.values('vessel_construction_place').distinct()
@@ -1750,7 +1583,7 @@ methodology_items = [
 ]
 
 YEAR_FIELD = 'var_imp_arrival_at_port_of_dis'
-def get_aggregate_data(results, var_name):
+def get_time_aggregate_data(results, var_name):
     """
     Obtains a list of pairs  (year, values), where
     values is a list containing all the non-null values
@@ -1776,7 +1609,7 @@ def get_average_set_timeline(query_dict, var_name):
     :return: list of values [['year', 'value'],]
     """
     lst = []
-    for year, values in get_aggregate_data(query_dict, var_name):
+    for year, values in get_time_aggregate_data(query_dict, var_name):
         average = sum([x[1] for x in values]) / (len(values) + 0.0)
         lst.append([year, round(average, 1)])
     return lst
@@ -1789,7 +1622,7 @@ def get_sum_set_timeline(query_dict, var_name):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
-    data = get_aggregate_data(query_dict, var_name)
+    data = get_time_aggregate_data(query_dict, var_name)
     return list([[year, round(sum([x[1] for x in values]), 1)] for year, values in data])
 
 
@@ -1822,7 +1655,7 @@ def get_percentage_set_timeline(query_dict, var_name):
     :return: list of values [['year', 'value'],]
     """
     lst = []
-    for year, values in get_aggregate_data(query_dict, var_name):
+    for year, values in get_time_aggregate_data(query_dict, var_name):
         average = sum([x[1] for x in values]) / (len(values) + 0.0)
         lst.append([year, round(100 * average, 1)])
     return lst
@@ -1836,7 +1669,7 @@ def get_simple_set_timeline(query_dict, var_name):
     :param var_name: Appropriate name of solr variable
     :return: list of values [['year', 'value'],]
     """
-    data = get_aggregate_data(query_dict, var_name)
+    data = get_time_aggregate_data(query_dict, var_name)
     return list([[year, len(values)] for year, values in data])
 
 # List of options and settings for timeline in form of:
