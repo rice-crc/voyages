@@ -1136,8 +1136,8 @@ def search(request):
             request.session[session_defs_key + '_y_ind'] = yind
 
             # Fetch graph data and pass it to the View template.
-            x_axis = graphs_x_axes[xind] if graphs_tab == 'tab_graphs_lin' else other_graphs_x_axes[xind]
-            graph_data = get_graph_data(results, x_axis, [graphs_y_axes[yind] for yind in y_axes])
+            graph_xfun_index = xind
+            graph_data = get_graph_data(results, xfuns[xind], [graphs_y_axes[yind] for yind in y_axes])
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
