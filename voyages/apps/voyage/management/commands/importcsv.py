@@ -263,7 +263,7 @@ class Command(BaseCommand):
                 dates.slave_purchase_began = date_csv('d1slatr')
                 dates.vessel_left_port = date_csv('dlslatr')
                 dates.first_dis_of_slaves = date_csv('datarr', ['32', '33', '34'])
-                dates.date_departed_africa = date_iso_csv(row[u'datedep'])
+                dates.date_departed_africa = date_iso_csv(row[u'dateleftafr'])
                 dates.arrival_at_second_place_landing = date_csv('datarr', ['36', '37', '38'])
                 dates.third_dis_of_slaves = date_csv('datarr', ['39', '40', '41'])
                 dates.departure_last_place_of_landing = date_csv('ddepam', ['', 'b', 'c'])
