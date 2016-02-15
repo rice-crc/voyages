@@ -1,8 +1,9 @@
 from django import forms
-import autocomplete_light
+from autocomplete_light import shortcuts as autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
 import globals
+import graphs
 from django.utils.translation import ugettext_lazy as _
 
 class UploadFileForm(forms.Form):
@@ -29,91 +30,91 @@ class VoyageBaseForm(forms.Form):
 
 # Voyage
 # Ship, Nation, Owners
-class VoyageShipForm(forms.ModelForm):
+class VoyageShipForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Ship (this is inline).
     """
     class Meta:
         model = VoyageShip
-        widgets = autocomplete_light.get_widgets_dict(VoyageShip)
+        fields = '__all__'
 
 
-class VoyageShipOwnerConnectionForm(forms.ModelForm):
+class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Ship Owner Outcome (this is inline).
     """
     class Meta:
         model = VoyageShipOwnerConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageShipOwnerConnection)
+        fields = '__all__'
 
 
 # Voyage Outcome
-class VoyageOutcomeForm(forms.ModelForm):
+class VoyageOutcomeForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Outcome (this is inline).
     """
     class Meta:
         model = VoyageOutcome
-        widgets = autocomplete_light.get_widgets_dict(VoyageOutcome)
+        fields = '__all__'
 
 
 # Voyage Itinerary
-class VoyageItineraryForm(forms.ModelForm):
+class VoyageItineraryForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Itinerary (this is inline).
     """
     class Meta:
         model = VoyageItinerary
-        widgets = autocomplete_light.get_widgets_dict(VoyageItinerary)
+        fields = '__all__'
 
 
 # Voyage Dates
-class VoyageDatesForm(forms.ModelForm):
+class VoyageDatesForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Dates (this is inline).
     """
     class Meta:
         model = VoyageDates
-        widgets = autocomplete_light.get_widgets_dict(VoyageDates)
+        fields = '__all__'
 
 
 # Voyage Captain and Crew
-class VoyageCaptainConnectionForm(forms.ModelForm):
+class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Captain Connection (this is inline).
     """
     class Meta:
         model = VoyageCaptainConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageCaptainConnection)
+        fields = '__all__'
 
 
-class VoyageCrewForm(forms.ModelForm):
+class VoyageCrewForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Crew (this is inline).
     """
     class Meta:
         model = VoyageCrew
-        widgets = autocomplete_light.get_widgets_dict(VoyageCrew)
+        fields = '__all__'
 
 
 # Voyage Slaves (numbers + characteristics)
-class VoyageSlavesNumbersForm(forms.ModelForm):
+class VoyageSlavesNumbersForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
     class Meta:
         model = VoyageSlavesNumbers
-        widgets = autocomplete_light.get_widgets_dict(VoyageSlavesNumbers)
+        fields = '__all__'
 
 
 # Voyage Sources
-class VoyageSourcesConnectionForm(forms.ModelForm):
+class VoyageSourcesConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
     class Meta:
         model = VoyageSourcesConnection
-        widgets = autocomplete_light.get_widgets_dict(VoyageSourcesConnection)
+        fields = '__all__'
 
 
 class VoyagesSourcesAdminForm(forms.ModelForm):
@@ -124,6 +125,7 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class': 'tinymcetextarea'}))
 
     class Meta:
+        fields = '__all__'
         model = VoyageSources
 
 class SimpleTextForm(VoyageBaseForm):
@@ -246,15 +248,15 @@ class GraphRemovePlotForm(forms.Form):
 
 class GraphSelectionForm(forms.Form):
     def __init__(self,
-                 xfunctions=globals.graphs_bar_x_functions,
+                 xfunctions=graphs.other_graphs_x_axes,
                  xfield_label='X axis',
                  yfield_label='Y axis',
                  *args,
                  **kwargs):
         super(forms.Form, self).__init__(*args, **kwargs)
-        lmbd = lambda x: (str(x[0]), x[1][0])
+        lmbd = lambda x: (str(x[0]), x[1].description)
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
-        self.ychoices = map(lmbd, enumerate(globals.graphs_y_functions))
+        self.ychoices = map(lmbd, enumerate(graphs.graphs_y_axes))
         self.fields['xselect'] = forms.ChoiceField(label=_(xfield_label), choices=self.xchoices)
         self.fields['yselect'] = forms.ChoiceField(label=_(yfield_label), choices=self.ychoices)
 

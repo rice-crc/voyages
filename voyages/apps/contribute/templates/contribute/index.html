@@ -1,4 +1,4 @@
-{% extends "contribute/login_base.html" %}
+{% extends "account/base.html" %}
 {% load i18n %}
 
 <!-- The landing page when users log in via contribute login -->
@@ -6,8 +6,15 @@
 {% block title %}{% trans "User Home" %}{% endblock %}
 
 {% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<style>
+	.clickable-row {
+		cursor: pointer;
+	}
+</style>
 <div class="white-board">
 	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
+
 	<ul>
 		{% if request.user.is_staff %}
 		<!-- Is enabled only if the user is a staff member -->
@@ -15,10 +22,53 @@
 			<h3><a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
 		</li>
 		{% endif %}
-
+		{% if settings.ENABLE_CONTRIBUTE_SECTION %}
 		<li>
-			Contribute Coming Soon.
+			<h3><a href="{% url 'contribute:new_voyage' %}">{% trans "Include a new voyage" %}</a></h3>
 		</li>
+		<li>
+			<h3><a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a></h3>
+		</li>
+		<li>
+			<h3><a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a></h3>
+		</li>
+		<li>
+			<h3><a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a></h3>
+		</li>
+		{% else %}
+		<p>
+			{% trans "The contribute section is still under construction. We will send you an e-mail as soon as it becomes available." %}
+		</p>
+		{% endif %}
 	</ul>
+
+	{% if settings.ENABLE_CONTRIBUTE_SECTION %}
+		{% for c in contributions %}
+			{% if forloop.first %}
+				<h2>Pending contributions</h2>
+				<table class="table table-hover table-striped">
+					<thead>
+					<tr><th>{% trans "Voyage ID(s)"  %}</th><th>{% trans "Type of contribution" %}</th></tr>
+					</thead>
+					<tbody>
+			{% endif %}
+						<tr class='clickable-row' data-href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">
+							<td>
+							{{ c.contribution.get_related_voyage_ids|join:", " }}
+							<td>{{ c.type }}</td>
+						</tr>
+			{% if forloop.last %}
+					</tbody>
+				</table>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".clickable-row").click(function() {
+			window.document.location = $(this).data("href");
+		});
+	});
+</script>
 {% endblock %}

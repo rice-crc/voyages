@@ -118,6 +118,8 @@ Run these commands to load all the data fixtures except images.json::
   $ python manage.py loaddata initialdata/sources.json
   $ python manage.py loaddata initialdata/resource_countries.json
   $ python manage.py loaddata initialdata/african_names.json
+  $ python manage.py loaddata initialdata/sites.json
+  $ python manage.py loaddata initialdata/social.json
 
 Sync voyage data from legacy system
 
@@ -276,6 +278,11 @@ Mark text to be translated in template:
    $ ./manage.py compilemessages
 
   See more information on https://docs.djangoproject.com/en/1.6/topics/i18n/translation/
+
+Captchas
+------------------------------------------------
+
+apt-get -y install libz-dev libjpeg-dev libfreetype6-dev python-dev
 
 Extra tools: (residing in voyages/extratools.py)
 ------------------------------------------------

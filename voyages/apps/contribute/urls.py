@@ -1,18 +1,32 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
-from voyages.apps.contribute.forms import LoginForm
+from voyages.apps.contribute import views
 
 urlpatterns = patterns('',
-    url(r'^$', 'voyages.apps.contribute.views.index', name='index'),
-    
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'contribute/voyagelogin.html', 'authentication_form':LoginForm}, name='login'),
+    url(r'^$', views.index, name='index'),
 
     url(r'^guidelines$', TemplateView.as_view(template_name='contribute/guidelines.html'), name='guidelines'),
-    url(r'^newuser$', TemplateView.as_view(template_name='under_constr.html'), name='newuser'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
 
-    url(r'^change-password$', 'django.contrib.auth.views.password_change', 
-        {'post_change_redirect': 'change-password-done'}, name="password-change"),
-    url(r'^change-password-done$', 'django.contrib.auth.views.password_change_done', {
-        'template_name': 'contribute/password_change_done.html'}, name="password-change-done")
+    url(r'^thanks', TemplateView.as_view(template_name='contribute/thanks.html'), name='thanks'),
+
+    url(r'^delete_voyage$', views.delete, name='delete_voyage'),
+
+    url(r'^places_ajax$', views.get_places, name='places_ajax'),
+
+    url(r'^voyage_ajax$', views.get_voyage_by_id, name='voyage_ajax'),
+
+    url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+        views.interim, name='interim'),
+
+    url(r'interim_commit/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+        views.interim_commit, name='interim_commit'),
+
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+        views.interim_summary, name='interim_summary'),
+
+    url(r'edit_voyage$', views.edit, name='edit_voyage'),
+
+    url(r'merge_voyages$', views.merge, name='merge_voyages'),
+
+    url(r'new_voyage$', views.new_voyage, name='new_voyage'),
 )

@@ -1,0 +1,9 @@
+[{
+        "pk": 1,
+        "model": "sites.site",
+        "fields": {
+            "name": "Slave Voyages",
+            "domain":"slavevoyages.org"
+        }
+    }
+]

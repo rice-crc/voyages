@@ -1,11 +1,10 @@
-from django import template
 from django.template import Template, Context
 from django.template.defaultfilters import stringfilter
-from django.conf import settings
-from voyages.apps.common.filters import trans_log
+from voyages.apps.common.filters import *
 
 register = template.Library()
 register.filter('trans_log', trans_log)
+register.filter('jsonify', jsonify)
 
 @register.filter
 @stringfilter
@@ -53,3 +52,11 @@ def replace(text, args):
     replace_val = tmp[2]
     import re
     return re.sub(search_val, replace_val, text)
+
+@register.filter
+def selected_choice(f):
+    key = f.field.to_field_name or 'pk'
+    matches = f.field.queryset.filter(**{key: f.value()})
+    if len(matches) == 1:
+        return matches[0]
+    return None

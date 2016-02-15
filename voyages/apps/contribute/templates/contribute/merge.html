@@ -1,0 +1,37 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+
+<h1>{% trans "Merge existing records of voyages" %}</h1>
+
+<p>
+    {% trans "Please select two or more existing voyage records for merging." %}
+</p>
+
+<p></p>
+
+{% include "contribute/voyage_selection_table.html" %}
+<div class="col-sm-12">
+    <form action="{% url 'contribute:merge_voyages' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="ids" id="ids_hidden">
+        {{ form.ids.errors }}
+    </form>
+    <p>
+        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
+    </p>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
+<script type="text/javascript">
+    var selection = new VoyageSelection(
+        "{% url 'contribute:voyage_ajax' %}",
+        [
+            {% for voyage in voyage_selection %}
+                {{ voyage.voyage_id }},
+            {% endfor %}
+        ],
+        true);
+</script>
+{% endblock %}

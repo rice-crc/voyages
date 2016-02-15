@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.conf import settings
+from django.core import serializers
 from django import template
-from django.template.loader import add_to_builtins
 from django.utils.translation import ugettext as _
 
 import logging
@@ -42,4 +42,6 @@ def trans_log(val):
         logger.info(val.replace('\n', ' ').replace('\r', ' '))
     return mark_safe(result)
 
-add_to_builtins('voyages.apps.common.filters')
+@register.filter
+def jsonify(list):
+    return mark_safe(serializers.serialize('json', list))

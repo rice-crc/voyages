@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
 from django.shortcuts import render
@@ -32,6 +32,9 @@ from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
+from cache import VoyageCache, CachedGeo
+from voyages.apps.common.models import get_pks_from_haystack_results
+from graphs import *
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -147,7 +150,7 @@ def create_query_forms():
     for each of them that is either a basic or a general variable
     Returns a list of dictionaries containing the var_name, var_full_name, form
     """
-    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    voyage_span_first_year, voyage_span_last_year = globals.calculate_maxmin_years()
     form_list = []
     # for all basic and/or general variables
     for var in [x for x in globals.var_dict if x['is_general'] or x['is_basic']]:
@@ -594,8 +597,7 @@ def voyage_variables(request, voyage_id):
                    'voyage_id': voyage_id})
 
 def reload_cache(request):
-    VoyageManager.invalidate_cache()
-    VoyageManager.cache()
+    VoyageCache.load(True)
     return HttpResponse("Voyages cache reloaded")
 
 from django.views.decorators.csrf import csrf_exempt
@@ -613,7 +615,7 @@ def search(request):
     tab = 'result'
     result_data['summary_statistics_columns'] = globals.summary_statistics_columns
     form_list = []
-    voyage_span_first_year, voyage_span_last_year = calculate_maxmin_years()
+    voyage_span_first_year, voyage_span_last_year = globals.calculate_maxmin_years()
     search_url = None
     results = None
     time_frame_form = None
@@ -798,25 +800,10 @@ def search(request):
             pst = {x: y for x, y in request.POST.items()}
 
             # Try to retrieve sessions values
-            try:
-                tables_columns = request.session['voyages_tables_columns']
-            except KeyError:
-                tables_columns = None
-
-            try:
-                tables_rows = request.session['voyages_tables_rows']
-            except KeyError:
-                tables_rows = None
-
-            try:
-                tables_cells = request.session['voyages_tables_cells']
-            except KeyError:
-                tables_cells = None
-
-            try:
-                omit_empty = request.session['voyages_tables_omit']
-            except KeyError:
-                omit_empty = None
+            tables_columns = request.session.get('voyages_tables_columns')
+            tables_rows = request.session.get('voyages_tables_rows')
+            tables_cells = request.session.get('voyages_tables_cells')
+            omit_empty = request.session.get('voyages_tables_omit')
 
             # Collect settings (if possible retrieve from the session)
             if 'columns' not in pst and tables_columns:
@@ -1111,8 +1098,8 @@ def search(request):
             xind = request.session.get(session_defs_key + '_x_ind', 0)
             yind = request.session.get(session_defs_key + '_y_ind', 0)
             # Handle adding a y-function or simply changing the x-function.
-            xfuns = globals.graphs_x_functions if graphs_tab == 'tab_graphs_lin' else \
-                globals.graphs_bar_x_functions
+            xfuns = graphs.graphs_x_axes if graphs_tab == 'tab_graphs_lin' else \
+                graphs.other_graphs_x_axes
             graphs_form_params = {'data': request.POST, 'prefix': graphs_tab, 'xfunctions': xfuns}
             if graphs_tab == 'tab_graphs_pie':
                 graphs_form_params['xfield_label'] = 'Sectors'
@@ -1136,9 +1123,7 @@ def search(request):
             # Create form allowing the user to remove selected y-functions.
             remove_plots_list = []
             for yid in y_axes:
-                ydef = globals.graphs_y_functions[yid]
-                ydesc = ydef[0]
-                remove_plots_list.append((ydesc, yid))
+                remove_plots_list.append((graphs.graphs_y_axes[yid].description, yid))
             graph_remove_plots_form = GraphRemovePlotForm(remove_plots_list, request.POST)
 
             # Handle removing a y-function.
@@ -1152,13 +1137,7 @@ def search(request):
 
             # Fetch graph data and pass it to the View template.
             graph_xfun_index = xind
-            xdef = xfuns[xind]
-            xfun = xdef[1]
-            graph_data = {}
-            for yind in y_axes:
-                ydef = globals.graphs_y_functions[yind]
-                dataset = [t for t in xfun(results, ydef) if t[1] is not None and t[1] != 0]
-                graph_data[ydef[0]] = dataset
+            graph_data = get_graph_data(results, xfuns[xind], [graphs_y_axes[yind] for yind in y_axes])
         elif submitVal == 'tab_timeline':
             tab = 'timeline'
 
@@ -1186,9 +1165,7 @@ def search(request):
 
             # Get set based on choice
             timeline_data = timeline_selected_tuple[2](results,
-                                                       timeline_selected_tuple[3],
-                                                       int(voyage_span_first_year),
-                                                       int(voyage_span_last_year))
+                                                       timeline_selected_tuple[3])
 
             if request.POST is not None and "download" in request.POST:
                 return download_xls([[("Year", 1), (timeline_selected_tuple[1], 1)]], timeline_data)
@@ -1207,54 +1184,45 @@ def search(request):
             map_ports = {}
             map_flows = {}
 
-            def add_port(place):
-                result = place is not None and place.show_on_voyage_map and \
-                    place.region.show_on_map and place.region.broad_region.show_on_map
-                if result:
-                    map_ports[place.place] = (place.latitude, place.longitude, place.region, place.region.broad_region)
+            def add_port(geo):
+                result = geo is not None and geo[0].show and geo[1].show and geo[2].show
+                if result and not geo[0].pk in map_ports:
+                    map_ports[geo[0].pk] = geo
                 return result
 
             def add_flow(source, destination, embarked, disembarked):
                 result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
                 if result:
-                    flow_key = source.place + '_' + destination.place
-                    if flow_key in map_flows:
-                        embarked += map_flows[flow_key][2]
-                        disembarked += map_flows[flow_key][3]
-                    map_flows[flow_key] = (source.place, destination.place, embarked, disembarked)
+                    flow_key = long(source[0].pk) * 2147483647 + long(destination[0].pk)
+                    current = map_flows.get(flow_key)
+                    if current is not None:
+                        embarked += current[2]
+                        disembarked += current[3]
+                    map_flows[flow_key] = (source[0].name, destination[0].name, embarked, disembarked)
                 return result
 
-            all_voyages = VoyageManager.cache()
+            # Ensure cache is loaded.
+            VoyageCache.load()
+            all_voyages = VoyageCache.voyages
             missed_embarked = 0
             missed_disembarked = 0
-            for pk in results.values_list('pk', flat=True).load_all():
-                voyage = all_voyages.get(int(pk))
+            # Set up an unspecified source that will be used if the appropriate setting is enabled
+            geo_unspecified = CachedGeo(-1, -1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
+            source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
+            keys = get_pks_from_haystack_results(results)
+            for pk in keys:
+                voyage = all_voyages.get(pk)
                 if voyage is None:
                     continue
-                itinerary = voyage.voyage_itinerary
-                numbers = voyage.voyage_slaves_numbers
-                embarked = numbers.imp_total_num_slaves_embarked
-                disembarked = numbers.imp_total_num_slaves_disembarked
-                source = itinerary.imp_principal_place_of_slave_purchase
-                destination = itinerary.imp_principal_port_slave_dis
+                source = CachedGeo.get_hierarchy(voyage.emb_pk)
                 if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
-                    source = Place()
-                    source.place = _('Africa, port unspecified')
-                    source.latitude = 0.05
-                    source.longitude = 9.34
-                    source.region = Region()
-                    source.region.region = source.place
-                    source.region.latitude = source.latitude
-                    source.region.longitude = source.longitude
-                    source.region.broad_region = BroadRegion()
-                    source.region.broad_region.broad_region = source.place
-                    source.region.broad_region.latitude = source.latitude
-                    source.region.broad_region.longitude = source.longitude
+                    source = source_unspecified
+                destination = CachedGeo.get_hierarchy(voyage.dis_pk)
                 add_flow(
                     source,
                     destination,
-                    embarked,
-                    disembarked)
+                    voyage.embarked,
+                    voyage.disembarked)
             if missed_embarked > 0 or missed_disembarked > 0:
                 import logging
                 logging.getLogger('voyages').info('Missing flow: (' + str(missed_embarked) +
@@ -1265,51 +1233,48 @@ def search(request):
                               'map_flows': map_flows
                           }, content_type='text/javascript')
         elif submitVal == 'animation_ajax':
-            all_voyages = VoyageManager.cache()
-            nations = {n.id: _(n.label) for n in Nationality.objects.all()}
-            result = []
-            for pk in results.values_list('pk', flat=True).load_all():
-                voyage = all_voyages.get(int(pk))
-                if voyage is None:
-                    continue
-                itinerary = voyage.voyage_itinerary
-                numbers = voyage.voyage_slaves_numbers
-                embarked = numbers.imp_total_num_slaves_embarked
-                disembarked = numbers.imp_total_num_slaves_disembarked
-                source = itinerary.imp_principal_place_of_slave_purchase
-                destination = itinerary.imp_principal_port_slave_dis
-                dates = voyage.voyage_dates
-                year = dates.get_date_year(dates.voyage_began)
-                ship = voyage.voyage_ship
-                if source is not None and destination is not None and source.show_on_voyage_map and \
-                        destination.show_on_voyage_map and year is not None and \
-                        embarked is not None and embarked > 0 and disembarked is not None:
-                    flag_id = ship.imputed_nationality.id if ship.imputed_nationality is not None else 0
-                    flag = nations.get(flag_id)
-                    if flag is None:
-                        flag = ''
-                    result.append('{ "voyage_id": ' + str(voyage.voyage_id) +
-                                  ', "source_name": "' + _(source.place) + '"' +
-                                  ', "source_lat": ' + str(source.latitude) +
-                                  ', "source_lng": ' + str(source.longitude) +
-                                  ', "destination_name": "' + _(destination.place) + '"' +
-                                  ', "destination_lat": ' + str(destination.latitude) +
-                                  ', "destination_lng": ' + str(destination.longitude) +
-                                  ', "embarked": ' + str(embarked) +
-                                  ', "disembarked": ' + str(disembarked) +
-                                  ', "year": ' + str(year) +
-                                  ', "ship_ton": ' + (str(ship.tonnage) if ship.tonnage is not None else '0') +
-                                  ', "ship_nationality_id": ' + str(flag_id) +
-                                  ', "ship_nationality_name": "' + flag + '"'
-                                  ', "ship_name": "' + (unicode(ship.ship_name) if ship.ship_name is not None else '') + '"'
-                                  ' }')
-            return HttpResponse('[' + ',\n'.join(result) + ']', 'application/json')
+            VoyageCache.load()
+            all_voyages = VoyageCache.voyages
+
+            def animation_response():
+                keys = get_pks_from_haystack_results(results)
+                for pk in keys:
+                    voyage = all_voyages.get(pk)
+                    if voyage is None:
+                        continue
+                    source = CachedGeo.get_hierarchy(voyage.emb_pk)
+                    destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+                    if source is not None and destination is not None and source[0].show and \
+                            destination[0].show and voyage.year is not None and \
+                            voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
+                        flag = VoyageCache.nations.get(voyage.ship_nat_pk)
+                        if flag is None:
+                            flag = ''
+                        yield '{ "voyage_id": ' + str(voyage.voyage_id) + \
+                              ', "source_name": "' + _(source[0].name) + '"' + \
+                              ', "source_lat": ' + str(source[0].lat) + \
+                              ', "source_lng": ' + str(source[0].lng) + \
+                              ', "destination_name": "' + _(destination[0].name) + '"' + \
+                              ', "destination_lat": ' + str(destination[0].lat) + \
+                              ', "destination_lng": ' + str(destination[0].lng) + \
+                              ', "embarked": ' + str(voyage.embarked) + \
+                              ', "disembarked": ' + str(voyage.disembarked) + \
+                              ', "year": ' + str(voyage.year) + \
+                              ', "ship_ton": ' + \
+                              (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') + \
+                              ', "ship_nationality_id": ' + \
+                              (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
+                              ', "ship_nationality_name": "' + flag + '"' \
+                              ', "ship_name": "' + \
+                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' \
+                              ' }'
+            return HttpResponse('[' + ',\n'.join(animation_response()) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
                 pageNum = 1
                 print "Warning: unable to get page number from post"
-            return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list, query_dict)
+            return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list)
         elif submitVal == 'delete_prev_query':
             prev_query_num = int(request.POST.get('prev_query_num'))
             prevqs = request.session['previous_queries']
@@ -1321,11 +1286,17 @@ def search(request):
         no_result = True
 
     # Paginate results to pages
-    paginator = Paginator(results, results_per_page)
-    pagins = paginator.page(int(current_page))
-    request.session['current_page'] = current_page
-    # Prepare paginator ranges
-    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
+    if tab == 'result':
+        paginator = Paginator(results, results_per_page)
+        pagins = paginator.page(int(current_page))
+        request.session['current_page'] = current_page
+        # Prepare paginator ranges
+        (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
+        result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
+    else:
+        pagins = None
+        (paginator_range, pages_range) = (None, None)
+        result_display = None
     # Customize result page
     if not request.session.exists(request.session.session_key):
         request.session.create()
@@ -1337,7 +1308,6 @@ def search(request):
         request.session['previous_queries'] = request.session['previous_queries'][:5]
 
     previous_queries = enumerate(map(prettify_var_list, request.session.get('previous_queries', [])))
-    result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
 
     return render(request, "voyage/search.html",
                   {'voyage_span_first_year': voyage_span_first_year,
@@ -1383,7 +1353,6 @@ def search(request):
                    'map_year': map_year
                   })
 
-
 def prettify_results(results, lookup_table):
     """
     Returns a list of dictionaries keyed by variable name, prettifies the value so that it displays properly
@@ -1391,7 +1360,6 @@ def prettify_results(results, lookup_table):
     The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
     """
     # Results must be a list of dictionaries of variable name and value
-    mangled = []
     for i in results:
         idict = {}
         voyageid = int(i['var_voyage_id'])
@@ -1401,8 +1369,16 @@ def prettify_results(results, lookup_table):
                 idict[varname] = prettify_varvalue(varvalue, voyageid)
             else:
                 idict[varname] = None
-        mangled.append(idict)
-    return mangled
+        yield idict
+
+class ChoicesCache:
+    nations = list(Nationality.objects.all())
+    particular_outcomes = list(ParticularOutcome.objects.all())
+    slaves_outcomes = list(SlavesOutcome.objects.all())
+    owner_outcomes = list(OwnerOutcome.objects.all())
+    resistances = list(Resistance.objects.all())
+    captured_outcomes = list(VesselCapturedOutcome.objects.all())
+    rigs = list(RigOfVessel.objects.all())
 
 def getChoices(varname):
     """
@@ -1412,32 +1388,32 @@ def getChoices(varname):
     """
     choices = []
     if varname in ['var_nationality']:
-        for nation in Nationality.objects.all():
+        for nation in ChoicesCache.nations:
             if "/" in nation.label or "Other (specify in note)" in nation.label:
                 continue
             choices.append((nation.value, _(nation.label)))
     elif varname in ['var_imputed_nationality']:
-        for nation in Nationality.objects.all():
+        for nation in ChoicesCache.nations:
             # imputed flags
             if nation.label in globals.list_imputed_nationality_values:
                 choices.append((nation.value, _(nation.label)))
     elif varname in ['var_outcome_voyage']:
-        for outcome in ParticularOutcome.objects.all():
+        for outcome in ChoicesCache.particular_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_slaves']:
-        for outcome in SlavesOutcome.objects.all():
+        for outcome in ChoicesCache.slaves_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_owner']:
-        for outcome in OwnerOutcome.objects.all():
+        for outcome in ChoicesCache.owner_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_resistance']:
-        for outcome in Resistance.objects.all():
+        for outcome in ChoicesCache.resistances:
             choices.append((outcome.value, _(outcome.label)))
     elif varname in ['var_outcome_ship_captured']:
-        for outcome in VesselCapturedOutcome.objects.all():
+        for outcome in ChoicesCache.captured_outcomes:
             choices.append((outcome.value, _(outcome.label)))
     elif varname == 'var_rig_of_vessel':
-        for rig in RigOfVessel.objects.all():
+        for rig in ChoicesCache.rigs:
             choices.append((rig.value, _(rig.label)))
     return choices
 
@@ -1673,18 +1649,6 @@ def date_filter_query(date_filters, results):
             results = results.exclude(**tmp_query)
 
     return results
-
-
-def calculate_maxmin_years():
-    if VoyageDates.objects.count() > 1:
-        voyage_span_first_year = VoyageDates.objects.all().aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-        voyage_span_last_year = VoyageDates.objects.all().aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-    else:
-        voyage_span_first_year = 1514
-        voyage_span_last_year = 1866
-
-    return voyage_span_first_year, voyage_span_last_year
-
 
 def formatDate(year, month):
     """
@@ -1996,15 +1960,14 @@ def extract_places(string):
         return places_list[0] + ", " + places_list[1], places_list[2]
 
 
-def download_xls_page(results, current_page, results_per_page, columns, var_list, query_dict):
+def download_xls_page(results, current_page, results_per_page, columns, var_list):
     # Download only current page
-    res = results
     if current_page != -1:
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
         res = map(lambda x: x.get_stored_fields(), curpage.object_list)
     else:
-        res = results.values(*[x['var_name'] for x in globals.var_dict]).all()[0:results.count()]
+        res = list(results.values(*[x[0] for x in columns]).all())
     pres = prettify_results(res, globals.display_methods_xls)
 
     response = HttpResponse(content_type='application/vnd.ms-excel')
@@ -2023,7 +1986,6 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
         ws.write(1,idx,label=get_spss_name(column[0]))
 
     for idx, item in enumerate(pres):
-        #stored_fields = item.get_stored_fields()
         for idy, column in enumerate(columns):
             data = item[column[0]]
             if data is None:
@@ -2096,7 +2058,7 @@ def retrieve_summary_stats(results):
     tmp_list = []
     for item in globals.summary_statistics:
         tmp_row = [item['display_name'],]
-        stats = results.stats(item['var_name']).stats_results()[item['var_name']]
+        stats = results.stats(item['var_name']).stats_results().get(item['var_name'])
 
         if item['has_total'] and stats:
             tmp_row.append(int(stats['sum']))
@@ -2275,4 +2237,4 @@ def debug_permalink(request, link_id):
     from django.shortcuts import get_object_or_404
     from django.http import HttpResponse
     permalink = get_object_or_404(SavedQuery, pk=link_id)
-    return HttpResponse(permalink.query, mimetype='text/plain')
+    return HttpResponse(permalink.query, content_type='text/plain')

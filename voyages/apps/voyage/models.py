@@ -1,10 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
-# TODO:
-# - add foreign keys of subclass (Ship, Dates, ...) to the main Voyage model.
-
-
 # Voyage Regions and Places
 class BroadRegion(models.Model):
     """
@@ -18,7 +14,7 @@ class BroadRegion(models.Model):
     latitude = models.DecimalField("Latitude of point",
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
-    value = models.IntegerField("Numeric code", max_length=5)
+    value = models.IntegerField("Numeric code")
     show_on_map = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -45,7 +41,7 @@ class Region(models.Model):
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
     broad_region = models.ForeignKey('BroadRegion')
-    value = models.IntegerField("Numeric code", max_length=5)
+    value = models.IntegerField("Numeric code")
     show_on_map = models.BooleanField(default=True)
     show_on_main_map = models.BooleanField(default=True)
 
@@ -68,7 +64,7 @@ class Place(models.Model):
 
     place = models.CharField(max_length=255)
     region = models.ForeignKey('Region')
-    value = models.IntegerField("Numeric code", unique=True, max_length=5)
+    value = models.IntegerField("Numeric code", unique=True)
     longitude = models.DecimalField("Longitude of point",
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
@@ -93,7 +89,7 @@ class VoyageGroupings(models.Model):
     Labels for groupings names.
     """
     label = models.CharField(max_length=30)
-    value = models.IntegerField(max_length=3)
+    value = models.IntegerField()
 
     class Meta:
         verbose_name = "Grouping for estimating imputed slaves"
@@ -109,7 +105,7 @@ class Nationality(models.Model):
     Nationality of ships.
     """
     label = models.CharField(max_length=255)
-    value = models.IntegerField(max_length=2)
+    value = models.IntegerField()
 
     class Meta:
         verbose_name = "Nationality"
@@ -124,7 +120,7 @@ class TonType(models.Model):
     Types of tonnage.
     """
     label = models.CharField(max_length=255)
-    value = models.IntegerField(max_length=2)
+    value = models.IntegerField()
 
     class Meta:
         verbose_name = "Type of tons"
@@ -139,7 +135,7 @@ class RigOfVessel(models.Model):
     Rig of Vessel.
     """
     label = models.CharField(max_length=25)
-    value = models.IntegerField(max_length=2)
+    value = models.IntegerField()
 
     class Meta:
         verbose_name = "Rig of vessel"
@@ -167,14 +163,14 @@ class VoyageShip(models.Model):
     nationality_ship = models.ForeignKey('Nationality',
                                          related_name="nationality_ship",
                                          null=True, blank=True)
-    tonnage = models.IntegerField("Tonnage of vessel", max_length=4,
+    tonnage = models.IntegerField("Tonnage of vessel",
                                   null=True, blank=True)
     ton_type = models.ForeignKey('TonType', null=True, blank=True)
     rig_of_vessel = models.ForeignKey('RigOfVessel', null=True, blank=True)
-    guns_mounted = models.IntegerField("Guns mounted", max_length=2,
+    guns_mounted = models.IntegerField("Guns mounted",
                                        null=True, blank=True)
     year_of_construction = models.IntegerField\
-            ("Year of vessel's construction", max_length=4,
+            ("Year of vessel's construction",
              null=True, blank=True)
     vessel_construction_place = models.ForeignKey \
             ('Place', related_name="vessel_construction_place",
@@ -185,7 +181,7 @@ class VoyageShip(models.Model):
              verbose_name="Region where vessel constructed",
              null=True, blank=True)
     registered_year = models.IntegerField\
-            ("Year of vessel's registration", max_length=4,
+            ("Year of vessel's registration",
              null=True, blank=True)
     registered_place = models.ForeignKey \
             ('Place', related_name="registered_place",
@@ -236,7 +232,7 @@ class VoyageShipOwnerConnection(models.Model):
     """
     owner = models.ForeignKey('VoyageShipOwner', related_name="owner_name")
     voyage = models.ForeignKey('Voyage', related_name="voyage_related")
-    owner_order = models.IntegerField(max_length=2)
+    owner_order = models.IntegerField()
 
     def __unicode__(self):
         return "Ship owner:"
@@ -248,7 +244,7 @@ class ParticularOutcome(models.Model):
     Particular outcome.
     """
     label = models.CharField("Outcome label", max_length=200)
-    value = models.IntegerField("Code of outcome", max_length=3)
+    value = models.IntegerField("Code of outcome")
 
     def __unicode__(self):
         return self.label
@@ -264,7 +260,7 @@ class SlavesOutcome(models.Model):
     Outcome of voyage for slaves.
     """
     label = models.CharField("Outcome label", max_length=200)
-    value = models.IntegerField("Code of outcome", max_length=1)
+    value = models.IntegerField("Code of outcome")
 
     def __unicode__(self):
         return self.label
@@ -278,7 +274,7 @@ class VesselCapturedOutcome(models.Model):
     Outcome of voyage if vessel captured.
     """
     label = models.CharField("Outcome label", max_length=200)
-    value = models.IntegerField("Code of outcome", max_length=2)
+    value = models.IntegerField("Code of outcome")
 
     def __unicode__(self):
         return self.label
@@ -292,7 +288,7 @@ class OwnerOutcome(models.Model):
     Outcome of voyage for owner.
     """
     label = models.CharField("Outcome label", max_length=200)
-    value = models.IntegerField("Code of outcome", max_length=1)
+    value = models.IntegerField("Code of outcome")
 
     def __unicode__(self):
         return self.label
@@ -306,7 +302,7 @@ class Resistance(models.Model):
     Resistance labels
     """
     label = models.CharField("Resistance label", max_length=255)
-    value = models.IntegerField("Code of resistance", max_length=1)
+    value = models.IntegerField("Code of resistance")
 
     def __unicode__(self):
         return self.label
@@ -406,7 +402,7 @@ class VoyageItinerary(models.Model):
     # End of intended variables
     ports_called_buying_slaves = models.IntegerField\
             ("Number of ports of call prior to buying slaves (NPPRETRA)",
-             max_length=3, null=True, blank=True)
+             null=True, blank=True)
 
     first_place_slave_purchase = models.ForeignKey \
             ('Place', related_name="first_place_slave_purchase",
@@ -592,7 +588,7 @@ class VoyageDates(models.Model):
     # Later this can become just a property/ can be calculated
     length_middle_passage_days = models.IntegerField\
             ("Length of Middle Passage in (days) (VOYAGE)",
-             max_length=6, null=True, blank=True)
+             null=True, blank=True)
 
     # Imputed variables
     imp_voyage_began = models.CommaSeparatedIntegerField \
@@ -611,15 +607,16 @@ class VoyageDates(models.Model):
     # Later this can become just a property/ can be calculated
     imp_length_home_to_disembark = models.IntegerField\
             ("Voyage length from home port to disembarkation (days) (VOY1IMP)",
-             max_length=6, null=True, blank=True)
+             null=True, blank=True)
     imp_length_leaving_africa_to_disembark = models.IntegerField\
             ("Voyage length from leaving Africa to disembarkation (days) (VOY2IMP)",
-             max_length=6, null=True, blank=True)
+             null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_dates")
 
-    def get_date_year(self, value):
+    @classmethod
+    def get_date_year(cls, value):
         """
         Returns year value from CommaSeparatedField, or None if undefined
         """
@@ -704,7 +701,7 @@ class VoyageCaptainConnection(models.Model):
             ('VoyageCaptain', related_name='captain_name')
     voyage = models.ForeignKey\
             ('Voyage', related_name='voyage')
-    captain_order = models.IntegerField(max_length=1)
+    captain_order = models.IntegerField()
 
     class Meta:
         verbose_name = 'Voyage captain information'
@@ -722,44 +719,42 @@ class VoyageCrew(models.Model):
 
     crew_voyage_outset = models.IntegerField\
             ("Crew at voyage outset",
-             max_length=3, null=True, blank=True)
+             null=True, blank=True)
     crew_departure_last_port = models.IntegerField \
             ("Crew at departure from last port of slave purchase",
-             max_length=3, null=True, blank=True)
+             null=True, blank=True)
     crew_first_landing = models.IntegerField \
-            ("Crew at first landing of slaves", max_length=2,
+            ("Crew at first landing of slaves",
              null=True, blank=True)
     crew_return_begin = models.IntegerField \
-            ("Crew when return voyage begin", max_length=2,
+            ("Crew when return voyage begin",
              null=True, blank=True)
     crew_end_voyage = models.IntegerField \
-            ("Crew at end of voyage", max_length=2,
+            ("Crew at end of voyage",
              null=True, blank=True)
     unspecified_crew = models.IntegerField \
-            ("Number of crew unspecified", max_length=3,
+            ("Number of crew unspecified",
              null=True, blank=True)
     crew_died_before_first_trade = models.IntegerField \
             ("Crew died before first place of trade in Africa",
-             max_length=2,
              null=True, blank=True)
     crew_died_while_ship_african = models.IntegerField \
             ("Crew died while ship was on African coast",
-             max_length=2,
              null=True, blank=True)
     crew_died_middle_passage = models.IntegerField \
-            ("Crew died during Middle Passage", max_length=2,
+            ("Crew died during Middle Passage",
              null=True, blank=True)
     crew_died_in_americas = models.IntegerField \
-            ("Crew died in the Americas", max_length=2,
+            ("Crew died in the Americas",
              null=True, blank=True)
     crew_died_on_return_voyage = models.IntegerField \
-            ("Crew died on return voyage", max_length=2,
+            ("Crew died on return voyage",
              null=True, blank=True)
     crew_died_complete_voyage = models.IntegerField \
-            ("Crew died during complete voyage", max_length=3,
+            ("Crew died during complete voyage",
              null=True, blank=True)
     crew_deserted = models.IntegerField \
-            ("Total number of crew deserted", max_length=2,
+            ("Total number of crew deserted",
              null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
@@ -783,36 +778,36 @@ class VoyageSlavesNumbers(models.Model):
     slave_deaths_between_africa_america = models.IntegerField \
             ("Slaves death between Africa and Americas (SLADVOY)",
              null=True, blank=True)
-    slave_deaths_between_africa_america = models.IntegerField \
+    slave_deaths_between_arrival_and_sale = models.IntegerField \
             ("Slaves death before arrival and sale (SLADAMER)",
              null=True, blank=True)
     num_slaves_intended_first_port = models.IntegerField \
             ("Number of slaves intended from first port of purchase "
-             "(SLINTEND)", null=True, blank=True, max_length=4)
+             "(SLINTEND)", null=True, blank=True)
     num_slaves_intended_second_port = models.IntegerField \
             ("Number of slaves intended from second port of purchase "
-             "(SLINTEN2)", null=True, blank=True, max_length=4)
+             "(SLINTEN2)", null=True, blank=True)
 
     num_slaves_carried_first_port = models.IntegerField \
             ("Number of slaves carried from first port of purchase "
-             "(NCAR13)", null=True, blank=True, max_length=4)
+             "(NCAR13)", null=True, blank=True)
     num_slaves_carried_second_port = models.IntegerField \
             ("Number of slaves carried from second port of purchase "
-             "(NCAR15)", null=True, blank=True, max_length=4)
+             "(NCAR15)", null=True, blank=True)
     num_slaves_carried_third_port = models.IntegerField \
             ("Number of slaves carried from third port of purchase "
-             "(NCAR17)", null=True, blank=True, max_length=4)
+             "(NCAR17)", null=True, blank=True)
 
     total_num_slaves_purchased = models.IntegerField \
             ("Total slaves purchased (TSLAVESP)",
-             null=True, blank=True, max_length=4)
+             null=True, blank=True)
     total_num_slaves_dep_last_slaving_port = models.IntegerField \
             ("Total slaves on board at departure from last slaving port "
-             "(TSLAVESD)", null=True, blank=True, max_length=4)
+             "(TSLAVESD)", null=True, blank=True)
 
     total_num_slaves_arr_first_port_embark = models.IntegerField \
             ("Total slaves arrived at first port of disembarkation "
-             "(SLAARRIV)", null=True, blank=True, max_length=4)
+             "(SLAARRIV)", null=True, blank=True)
 
     num_slaves_disembark_first_place = models.IntegerField \
             ("Number of slaves disembarked at first place "
@@ -1203,7 +1198,7 @@ class VoyageSourcesType(models.Model):
     Representing the group of sources.
     """
 
-    group_id = models.IntegerField(max_length=1)
+    group_id = models.IntegerField()
     group_name = models.CharField(max_length=30)
 
     class Meta:
@@ -1249,46 +1244,15 @@ class VoyageSourcesConnection(models.Model):
     source = models.ForeignKey('VoyageSources', related_name="source",
                                null=True, blank=True)
     group = models.ForeignKey('Voyage', related_name="group")
-    source_order = models.IntegerField(max_length=2)
+    source_order = models.IntegerField()
     text_ref = models.CharField(_('Text reference(citation)'),
                                 max_length=255, null=True, blank=True)
-
 
 # Voyage (main) model
 # for parsing natural key
 class VoyageManager(models.Manager):
-    _all = {}
-    _has_loaded = False
-    import threading
-    _lock = threading.Lock()
-
-    @classmethod
-    def cache(cls):
-        with cls._lock:
-            if not cls._has_loaded:
-                cls._all = {v.pk: v for v in Voyage.objects.all()}
-                cls._has_loaded = True
-        return cls._all
-
-    @classmethod
-    def invalidate_cache(cls):
-        with cls._lock:
-            cls._has_loaded = False
-            cls._all = {}
-
     def get_by_natural_key(self, voyage_id):
         return self.get(voyage_id=voyage_id)
-
-    # Ensure that we load some related members thus
-    # avoiding hitting the DB multiple times.
-    def get_query_set(self):
-        return super(VoyageManager, self).get_query_set().select_related(
-            'voyage_itinerary__imp_principal_place_of_slave_purchase__region__broad_region',
-            'voyage_itinerary__imp_principal_port_slave_dis__region__broad_region',
-            'voyage_slaves_numbers',
-            'voyage_dates',
-            'voyage_ship__imputed_nationality')
-
 
 class Voyage(models.Model):
     """
@@ -1327,17 +1291,17 @@ class Voyage(models.Model):
     voyage_captain = models.ManyToManyField \
             ("VoyageCaptain", through='VoyageCaptainConnection',
              help_text="Voyage Captain",
-             blank=True, null=True)
+             blank=True)
     voyage_ship_owner = models.ManyToManyField \
         ("VoyageShipOwner", through='VoyageShipOwnerConnection',
          help_text="Voyage Ship Owner",
-         blank=True, null=True)
+         blank=True)
 
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
     voyage_sources = models.ManyToManyField \
             ('VoyageSources', through='VoyageSourcesConnection',
-             related_name='voyage_sources', blank=True, null=True)
+             related_name='voyage_sources', blank=True)
 
 
     # generate natural key

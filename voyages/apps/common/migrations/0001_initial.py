@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import migrations, models
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        pass
+    dependencies = [
+    ]
 
-    def backwards(self, orm):
-        pass
-
-    models = {
-        
-    }
-
-    complete_apps = ['common']
+    operations = [
+        migrations.CreateModel(
+            name='SavedQuery',
+            fields=[
+                ('id', models.CharField(max_length=8, serialize=False, primary_key=True)),
+                ('hash', models.CharField(default=b'', max_length=255, db_index=True)),
+                ('query', models.TextField()),
+            ],
+        ),
+    ]
