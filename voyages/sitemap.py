@@ -41,7 +41,8 @@ class StaticSitemap(Sitemap):
                        continue
                    if q.regex.groups:
                        continue
-                   if 'template_name' in q.default_args or 'template' in q.default_args :
+                   if (hasattr(q, 'default_args') and ('template_name' in q.default_args or 'template' in q.default_args)) or\
+                           (hasattr(q, 'default_kwargs') and ('template_name' in q.default_kwargs or 'template' in q.default_kwargs)):
                        # only urls with templates, because we get mtime from the file
                        if getattr(q,'name',False):
                            # only views with names so reverse() can work on them

@@ -1,0 +1,1781 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load voyage_extras %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
+<style>
+	.broad_region {
+		margin-left: 10px;
+		font-weight: bold;
+	}
+
+	.region {
+		margin-left: 20px;
+		font-style: italic;
+		height: 0px;
+		padding: 0px !important;
+	}
+
+	.port {
+		height: 0px;
+		margin-left: 30px;
+		padding: 0px !important;
+	}
+
+	.expanded, .search_match {
+		height: auto !important;
+		padding: 3px 12px !important;
+	}
+
+    .field_notes {
+        min-width: 420px !important;
+        min-height: 100px !important;
+    }
+
+    .form-control {
+        position: static !important;
+    }
+
+	.search_match {
+		margin-left: 5px !important;
+	}
+
+    .selectize-dropdown {
+        position: absolute !important;
+    }
+
+	.geo_complement {
+		color: #B0B0B0;
+	}
+
+	.cell_hover {
+		background-color: darkgray;
+	}
+
+	#demographics_table td {
+		width: 85px;
+		height: 52px;
+		cursor: text;
+        text-align: right;
+	}
+
+	#demographics_table td, #demographics_table th {
+		vertical-align: middle !important;
+	}
+
+    .has_pre_existing_values, .has_notes {
+        background-color: yellow;
+    }
+
+    .tab-pane {
+        padding: 20px;
+    }
+
+    .form_help_text {
+        color: gray;
+        margin-left: 25%;
+    }
+
+    .form-horizontal a {
+        display: block;
+        background-color: #F1F1F1;
+        border-bottom: solid 1px #CCC;
+    }
+
+    .form-horizontal a:hover {
+        text-decoration: none;
+    }
+
+    .form-horizontal a h1 {
+        font-size: 20px;
+        margin-top: 0;
+        //margin-bottom: 0;
+        padding: 10px;
+    }
+
+    .form-horizontal a h1:before, .tree_expanded:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        padding-right: 5px;
+    }
+
+    .form-horizontal a.collapsed h1:before, .tree_collapsed:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e080";
+        padding-right: 5px;
+    }
+
+    .var_group {
+        background-color: #FFFFFF;
+        border: solid 1px #CCC;
+        padding: 20px;
+    }
+
+    .is_stuck {
+        z-index: 5;
+    }
+
+    .expander_container {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+</style>
+
+<h1>{{ contribution }}</h1>
+
+<p>
+    {% trans "Variables are organized into eight categories." %}
+    {{ contribution.help_text|safe }}
+    {% trans "Comments or notes on any entry may be added by clicking on the box to the right of each input box." %}
+    {% trans "If required, use the box for notes at the foot of the page for additional information." %}
+    {% trans "You can review your complete entry at any time by clicking on the 'Review' button, and to submit your entry you must move to the Review page first." %}
+</p>
+
+{{ form.errors }}
+
+<form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
+    {% csrf_token %}
+    <!-- Ship, nation, owners -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
+              <h1>{% trans "Ship, nation, owners" %}</h1>
+            </a>
+        </div>
+        <div id="ship_nation_owners" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.name_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>                
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ship_construction_place as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ship_registration_place as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.year_ship_constructed as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.year_ship_registered as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.national_carrier as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Nationalities" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.rig_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Rig of vessel" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.tonnage_of_vessel as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.ton_type as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Tonnage type" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.guns_mounted as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_ship_owner as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_ship_owner as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.additional_ship_owners as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+    </div>
+    </div>
+
+    <!-- Voyage outcome -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
+              <h1>{% trans "Voyage outcome" %}</h1>
+            </a>
+        </div>
+        <div id="outcome" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.voyage_outcome as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Other voyage outcomes" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.african_resistance as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "African resistance" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+    </div>
+    </div>
+
+    <!-- Voyage itinerary -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
+              <h1>{% trans "Voyage itinerary" %}</h1>
+            </a>
+        </div>
+        <div id="itinerary" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.first_port_intended_embarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_port_intended_embarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.port_of_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.principal_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.place_of_call_before_atlantic_crossing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.first_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_place_of_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.principal_place_of_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.port_voyage_ended as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+    </div>
+    </div>
+
+    <!-- Voyage dates -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
+                <h1>{% trans "Voyage dates" %}</h1>
+            </a>
+        </div>
+        <div id="dates" class="collapse col-md-12 var_group">
+        <p>{% trans "Enter partial information (year only or month and year only) when full date unknown." %}</p>
+        <div class="form-group">
+            {% with form.date_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_slave_purchase_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_vessel_left_last_slaving_port as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_first_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_second_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_third_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_return_departure as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.date_voyage_completed as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-3">
+                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.length_of_middle_passage as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+    </div>
+    </div>
+
+    <!-- Captain and crew -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
+              <h1>{% trans "Captain and crew" %}</h1>
+            </a>
+        </div>
+        <div id="crew" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.first_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.second_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.third_captain as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW1">
+                {% trans "Crew at voyage outset" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW1" name="interim_slave_number_CREW1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW2">
+                {% trans "Crew at departure from last port of slave purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW2" name="interim_slave_number_CREW2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW3">
+                {% trans "Crew at first landing of slaves" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW3" name="interim_slave_number_CREW3">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW4">
+                {% trans "Crew when return voyage began" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW4" name="interim_slave_number_CREW4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW5">
+                {% trans "Crew at end of voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW5" name="interim_slave_number_CREW5">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREW">
+                {% trans "Number of crew if voyage stage unknow" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW" name="interim_slave_number_CREW">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SAILD1">
+                {% trans "Crew died before first place of trade in Africa" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD1" name="interim_slave_number_SAILD1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SAILD2">
+                {% trans "Crew died while ship was on African coast" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD2" name="interim_slave_number_SAILD2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SAILD3">
+                {% trans "Crew died during middle passage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD3" name="interim_slave_number_SAILD3">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SAILD4">
+                {% trans "Crew died in the Americas" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD4" name="interim_slave_number_SAILD4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SAILD5">
+                {% trans "Crew died on return voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD5" name="interim_slave_number_SAILD5">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_CREWDIED">
+                {% trans "Crew died during complete voyage" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREWDIED" name="interim_slave_number_CREWDIED">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NDESERT">
+                {% trans "Total number of crew deserted" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NDESERT" name="interim_slave_number_NDESERT">
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Slaves (numbers) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
+              <h1>{% trans "Slaves (numbers)" %}</h1>
+            </a>
+        </div>
+        <div id="slave_numbers_main" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            <label for="interim_slave_number_SLINTEND">
+                {% trans "Slaves intended from first port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEND" name="interim_slave_number_SLINTEND">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLINTEN2">
+                {% trans "Slaves intended from second port of purchase" %}:
+            </label>            
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEN2" name="interim_slave_number_SLINTEN2">
+            </div>            
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR13">
+                {% trans "Slaves carried from first port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR13" name="interim_slave_number_NCAR13">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR15">
+                {% trans "Slaves carried from second port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR15" name="interim_slave_number_NCAR15">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_NCAR17">
+                {% trans "Slaves carried from third port of purchase" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR17" name="interim_slave_number_NCAR17">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_TSLAVESP">
+                {% trans "Total slaves purchased in Africa" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESP" name="interim_slave_number_TSLAVESP">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_TSLAVESD">
+                {% trans "Total slaves on board at departure from last slaving port" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESD" name="interim_slave_number_TSLAVESD">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAARRIV">
+                {% trans "Total slaves arrived at first port of disembarkation" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAARRIV" name="interim_slave_number_SLAARRIV">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS32">
+                {% trans "Slaves disembarked at first place" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS32" name="interim_slave_number_SLAS32">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS36">
+                {% trans "Slaves disembarked at second place" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS36" name="interim_slave_number_SLAS36">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLAS39">
+                {% trans "Slaves disembarked at third place" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS39" name="interim_slave_number_SLAS39">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADAFRI">
+                {% trans "Slaves deaths before leaving Africa" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAFRI" name="interim_slave_number_SLADAFRI">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADVOY">
+                {% trans "Slaves deaths between Africa and the Americas" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADVOY" name="interim_slave_number_SLADVOY">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="interim_slave_number_SLADAMER">
+                {% trans "Slaves deaths between arrival and sale" %}:
+            </label>
+            <div class="input-group col-sm-2">
+                <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Slaves (characteristics) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
+              <h1>{% trans "Slaves (characteristics)" %}</h1>
+            </a>
+        </div>
+        <div id="demographics" class="collapse col-md-12 var_group">
+        <div id="hidden_div" style="display:none">
+            <input type="number" id="cell_editor" style="width: 65px;">
+        </div>
+        <table id="demographics_table" class="table table-striped" style="width: auto">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Men" %}</th>
+                    <th>{% trans "Women" %}</th>
+                    <th>{% trans "Boys" %}</th>
+                    <th>{% trans "Girls" %}</th>
+                    <th>{% trans "Males" %}</th>
+                    <th>{% trans "Females" %}</th>
+                    <th>{% trans "Adults" %}</th>
+                    <th>{% trans "Children" %}</th>
+                    <th>{% trans "Infants" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{% trans "Embarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Embarked slaves (third port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Died on voyage" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (first port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Disembarked slaves (second port)" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <label for="notes_for_slaves_demographics">
+                {% trans "Notes for slaves characteristics" %}:
+            </label>
+            <div class="input-group col-md-8">
+                <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
+              <h1>{% trans "Sources" %}</h1>
+            </a>
+        </div>
+        <div id="sources" class="collapse col-md-12 var_group">
+        {% if interim.pre_existing_sources.all %}
+            <h3>{% trans "Current source references" %}</h3>
+            {% trans "Please specify whether the sources below should be included, excluded, or edited." %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans "Voyage ID(s)" %}</th>
+                    <th>{% trans "Short reference" %}</th>
+                    <th>{% trans "Full reference" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for source in interim.pre_existing_sources.all %}
+                    <tr>
+                        <td>{{ source.voyage_ids }}</td>
+                        <td>{{ source.original_ref }}</td>
+                        <td>{{ source.full_ref|safe }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span id="pre_source_action_span_{{ source.pk }}" class="glyphicon glyphicon-{% if source.action = 0 %}ok{% endif %}{% if source.action = 1 %}pencil{% endif %}{% if source.action = 2 %}remove{% endif %}"></span>
+                                </button>
+                                <input type="hidden" id="pre_existing_source_action_{{ source.pk }}" name="pre_existing_source_action_{{ source.pk }}" value="{{ source.action }}">
+                                <ul class="dropdown-menu pull-right">
+                                <li><a href="" class="pre_source_menu_accept" data-sourcepk="{{ source.pk }}">{% trans "Accept as it is" %}</a></li>
+                                <li><a href="" class="pre_source_menu_exclude" data-sourcepk="{{ source.pk }}">{% trans "Exclude reference (please explain)" %}</a></li>
+                                <li><a href="" class="pre_source_menu_edit" data-sourcepk="{{ source.pk }}">{% trans "Edit reference (please explain)" %}</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li style="margin:10px; min-width: 400px;"><label for="pre_existing_source_notes_{{ source.pk }}">Notes:</label><textarea class="form-control not_selectized" name="pre_existing_source_notes_{{ source.pk }}" id="pre_existing_source_notes_{{ source.pk }}" type="text">{{ source.notes|default_if_none:'' }}</textarea></li>
+                              </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add_source_modal_btn">
+          {% trans "Add source" %}
+        </button>
+        <table id="sources_table" style="display:none;" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Type of source" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <hr />
+    <div class="form-group">
+        <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
+        <div class="col-sm-8">
+            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
+        </div>
+    </div>
+    <input id="global_notes_input" type="hidden" name="notes" />
+    <hr />
+    <div class="form-group col-md-12">
+        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Proceed" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+    </div>
+</form>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
+            </div>
+            <div class="modal-body" style="height: 500px; overflow-y: auto;">
+                <input type="hidden" name="source_id_field" id="source_id_field" />
+                <ul class="nav nav-tabs" role="tablist" id="tab_control">
+                    <li data-tab="primary" role="presentation" class="active"><a href="#primary"
+                                                                                 aria-controls="primary"
+                                                                                 role="tab" data-toggle="tab">
+                        {% trans "Primary source" %}</a></li>
+                    <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
+                                                                  role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
+                    <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                                                               data-toggle="tab">{% trans "Book" %}</a></li>
+                    <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
+                                                                data-toggle="tab">{% trans "Other" %}</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="primary">
+                        <div class="form-group">
+                            <label for="primary_name">{% trans "Name of library or archive" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_loc">{% trans "Location of library/archive" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_loc">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_series">{% trans "Series or collection" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_series">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_vol">{% trans "Volume or box or bundle" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_vol">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_detail">{% trans "Document detail (page or folio number, and/or date of document)" %}</label>
+                            <input class="form-control not_selectized" type="text" id="primary_detail">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="primary_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="primary_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="primary_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="article">
+                        <div class="form-group">
+                            <label for="article_author">{% trans "Author" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_author">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_journal">{% trans "Journal" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_journal">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_volume">{% trans "Volume number" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_volume">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_year">{% trans "Year" %}</label>
+                            <input class="form-control not_selectized" type="text" id="article_year">
+                        </div>
+                        <div class="form-group">
+                            <label for="article_first_page">{% trans "Page numbers" %}</label>
+                            <div style="width: 100%; overflow-x: hidden">
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_first_page" style="width: 35%;">
+                                <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_last_page" style="width: 35%;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="article_info">{% trans "Other information" %}</label>
+                            <textarea class="form-control not_selectized" id="article_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="article_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="article_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="book">
+                        <div class="form-group">
+                            <label for="book_author">{% trans "Author" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_author">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_publisher">{% trans "Publisher" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_publisher">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_pub_place">{% trans "Place of publication" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_pub_place">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_year">{% trans "Year" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_year">
+                        </div>
+                        <div class="form-group">
+                            <label for="book_first_page">{% trans "Page numbers" %}</label>
+                            <div style="width: 100%; overflow-x: hidden">
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_first_page" style="width: 35%;">
+                                <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
+                                <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_last_page" style="width: 35%;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="book_info">{% trans "Other information" %}</label>
+                            <textarea class="form-control not_selectized" id="book_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="book_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="book_url"></textarea>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="other">
+                        <div class="form-group">
+                            <label for="other_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_location">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="other_page">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="other_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="other_url"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="add_source_btn" type="button" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
+<script type="text/javascript">
+    var submit_val = '';
+    // Existing voyage(s) data.
+    var voyages = {{ voyages_data|safe }};
+
+    // Keep a source id so that each new source gets a unique identifier.
+    var _sourceid = 0;
+    var all_source_types = [
+        {% if sources_post %}
+            {{ sources_post|safe }}
+        {% else %}
+            {{ interim.primary_sources.all|jsonify }},
+            {{ interim.article_sources.all|jsonify }},
+            {{ interim.book_sources.all|jsonify }},
+            {{ interim.other_sources.all|jsonify }}
+        {% endif %}
+    ];
+    var sources = [];
+    for (var i = 0; i < all_source_types.length; ++i) {
+        sources = sources.concat($.map(all_source_types[i], function(a) {
+            return sourceFactory(a, ++_sourceid);
+        }));
+    }
+
+    function editSource(id) {
+        for (var k = 0; k < sources.length; ++k) {
+            if (sources[k].id == id) {
+                var s = sources[k];
+                s.bindToForm();
+                $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
+                $("#add_source_btn").html('{% trans "Save changes"  %}');
+                $('#myModal').modal('show');
+            }
+        }
+    }
+
+    // Removes the source from the table and array.
+    function removeSource(id) {
+        for (var k = 0; k < sources.length; ++k) {
+            if (sources[k].id == id) {
+                sources.splice(k);
+                $("#row_source_" + id).remove();
+                if (!sources.length) {
+                    $('#sources_table').hide();
+                }
+                return;
+            }
+        }
+    }
+
+    var getValues = function(name) {
+        return getVoyagesValues(voyages, name);
+    };
+
+    var selectizeInput = function(input) {
+        var values = getValues(input.attr('name'));
+        var optgroups = [];
+        for (var value in values) {
+            var ids = values[value];
+            optgroups.push({ id: value, label: getGroupName(ids), $order: -1000 });
+        }
+        var nodeName = input[0].nodeName.toUpperCase();
+        if (values && nodeName == 'INPUT') {
+            var options = [];
+            var currentValue = input.attr('value');
+            optgroups.push({ id: 'typed', label: gettext('Typed value')});
+            for (var value in values) {
+                options.push({ source: value, value: value });
+                if (value == currentValue) {
+                    currentValue = '';
+                }
+            }
+            if (currentValue != '') {
+                options.push({ source: 'typed', value: currentValue });
+            }
+            input.selectize({
+                create: function (x, callback) {
+                    callback({ source: 'typed', value: x });
+                },
+                delimiter: '#%#$', // avoid problems when commas are part of the input text.
+                persist: false,
+                closeAfterSelect: false,
+                options: options,
+                labelField: 'value',
+                valueField: 'value',
+                optgroups: optgroups,
+                optgroupField: 'source',
+                optgroupLabelField: 'label',
+                optgroupValueField: 'id',
+                searchField: ['value'],
+                maxItems: 1,
+                plugins: ['optgroup_columns', 'restore_on_backspace']
+            });
+            if (options.length == 1 && currentValue == '') {
+                input.val(options[0].value);
+            }
+        } else if (nodeName == 'SELECT') {
+            var $s = input.selectize({
+                optgroupField: 'source',
+                sortField: [{ field: 'priority' }, { field: 'text' }],
+                lockOptgroupOrder: true,
+                onInitialize: function() {
+                    for (var key in optgroups) {
+                        var og = optgroups[key];
+                        this.addOptionGroup(og.id, og);
+                    }
+                    for (var value in values) {
+                        var found = -1;
+                        var list = this.options;
+                        for (var i in list) {
+                            if (list[i].value == value) {
+                                found = i;
+                                break;
+                            }
+                        }
+                        if (found < 0) continue;
+                        //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                        this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
+                    }
+                },
+            });
+        } else {
+            addNotesPopup(input.attr('name'), input.parent());
+        }
+        input.addClass('form-control');
+    };
+
+    var regions = {};
+    var broad_regions = {};
+
+    $(document).ready(function() {
+        $('.form-horizontal .form-group>label').addClass('control-label col-sm-3');
+
+        // Store numbers in an object.
+        var numbers = {
+        {% for k, v in numbers.items %}
+            {% if v %}
+                '{{ k }}': {{ v }},
+            {% endif %}
+        {% endfor %}
+        };
+
+        // Set demographic table.
+        var demographics_rows = getDemographicsRows('demographics_table');
+        fillDemograhicsTable('demographics_table', numbers, true);
+
+        $('#delete_contrib').click(function(e) {
+            if (!confirm('{% trans "The contribution will be deleted. Continue anyway?" %}')) {
+                e.preventDefault();
+            } else {
+                submit_val = 'delete';
+            }
+        });
+
+        $('input[type=text], input[type=number], select, textarea')
+            .not('.select_port')
+            .not('.date_input')
+            .not('.not_selectized')
+            .each(function () {
+                var f = $(this);
+                selectizeInput(f);
+            }
+        );
+
+        // Add group with most common options for select items
+        var selectize = $("#id_{{ form.voyage_outcome.html_name }}")[0].selectize;
+        selectize.addOptionGroup('most_common', {
+            label: '{% trans "Most common outcomes" %}',
+            $order: -100,
+        });
+        var commonIds = [1, 42, 173, 64, 52]
+        for (var i in selectize.options) {
+            var found = selectize.options[i];
+            if (selectize.optgroups[found.source].$order < 0) continue;
+            var commonIndex = $.inArray(parseInt(found.value), commonIds);
+            if (commonIndex >= 0) {
+                selectize.options[i] = { priority: commonIndex, source: 'most_common', value: found.value, text: found.text };
+            }
+        }
+
+        $.ajax('/contribute/places_ajax', {
+            success: function(originalPorts) {
+                for (var i = 0; i < originalPorts.length; ++i) {
+                    var item = originalPorts[i];
+                    if (item.type == "region") {
+                        regions[item.pk] = item;
+                    } else if (item.type == "broad_region") {
+                        broad_regions[item.pk] = item;
+                    }
+                    item.source = 'data';
+                }
+                var EXISTING_PREFIX = '@existing_';
+                $(".select_port").each(function() {
+                    var self = $(this);
+                    var ports = originalPorts.slice(0);
+                    var values = getValues(self.attr('name'));
+                    var optgroups = [ { id: 'data', label: '{% trans 'Ports' %}' } ];
+                    for (var value in values) {
+                        for (var j = 0; j < ports.length; ++j) {
+                            var p = ports[j];
+                            if (p.type == 'port' && p.value == value) {
+                                // Found the port matching a pre-existing value.
+                                var copy = jQuery.extend({}, p);
+                                copy.value = EXISTING_PREFIX + copy.value;
+                                copy.type = 'existing';
+                                copy.source = getGroupName(values[value]);
+                                copy.order = 0;
+                                optgroups.push({ id: copy.source, label: copy.source });
+                                ports.unshift(copy);
+                                break;
+                            }
+                        }
+                    }
+                    var portItemDisplay = function(data, escape) {
+                        var region = regions[data.parent];
+                        var broad_region = broad_regions[region.parent];
+                        return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
+                    };
+                    self.selectize({
+                        maxItems: 1,
+                        options: ports,
+                        optgroups: optgroups,
+                        optgroupField: 'source',
+                        optgroupLabelField: 'label',
+                        optgroupValueField: 'id',
+                        valueField: 'value',
+                        searchField: ['port', 'region', 'broad_region'],
+                        sortField: 'order',
+                        render: {
+                            option: function(data, escape) {
+                                if (data.type == 'port') {
+                                    return '<div class="port region_' + data.parent + '">' + escape(data.port) + '</div>';
+                                }
+                                if (data.type == 'region') {
+                                    return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent tree_collapsed region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
+                                }
+                                if (data.type == 'existing') {
+                                    return portItemDisplay(data, escape);
+                                }
+                                return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region tree_collapsed">' + escape(data.broad_region) + '</div>';
+                            },
+                            item: portItemDisplay,
+                        }
+                    });
+                    self.change(function() {
+                        var value = self.val();
+                        if ($.type(value) === 'string' && value.startsWith(EXISTING_PREFIX)) {
+                            self.val(value.substring(EXISTING_PREFIX.length));
+                        }
+                    });
+                });
+            }
+        });
+
+        // Handle dates.
+        var dateOptions = [];
+        for (var i = 1500; i <= 1867; ++i) {
+            dateOptions.push({ type: 'year', label: i, value: 'y' + i });
+        }
+
+        {% get_current_language as LANGUAGE_CODE %}
+        var locale = "{{ LANGUAGE_CODE }}";
+        var getMonthName = function(i) {
+            return getMonthLocaleName(locale, i);
+        };
+        var leadingZero = function(d) {
+            return d < 10 ? '0' + d : '' + d;
+        };
+        for (var i = 1; i <= 12; ++i) {
+            var month = getMonthName(i);
+            dateOptions.push({ type: 'month', label: month, value: 'm' + leadingZero(i) });
+        }
+        for (var i = 1; i <= 31; ++i) {
+            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i) });
+        }
+        $(".date_input").each(function() {
+            var self = $(this);
+            var optgroups = [
+                { type: 'year', name: '{% trans "Year in the range" %} 1500 - 1867'},
+                { type: 'month', name: '{% trans "Month" %}'},
+                { type: 'day', name: '{% trans "Day" %}'},
+            ];
+            var values = getValues(self.attr('name'));
+            var options = dateOptions.slice(0);
+            var existing = {};
+            for (var value in values) {
+                if (value == ',,') continue;
+                // Parse value in MM,DD,YYYY format.
+                var parse = value.split(',');
+                if (parse.length != 3) continue;
+                parse[0] = parseInt(parse[0]);
+                parse[1] = parseInt(parse[1]);
+                parse[2] = parseInt(parse[2]);
+                var label = '';
+                if (parse[2] != '' && !isNaN(parse[2])) label += parse[2];
+                if (parse[0] != '' && !isNaN(parse[0])) label += ', ' + getMonthName(parse[0]);
+                if (parse[1] != '' && !isNaN(parse[1])) label += ', ' + parse[1];
+                var item = { type: value, label: label, value: 'full_' + value, year: parse[2], month: parse[0], day: parse[1] };
+                existing[item.value] = item;
+                options.unshift(item);
+                optgroups.unshift({ type: value, name: getGroupName(values[value]) });
+            }
+            var current_value = self.attr('value');
+            var parse = current_value.split(',');
+            current_value = '';
+            if (parse.length == 3) {
+                var valid = []
+                if (parse[2] != '' && !isNaN(parse[2])) valid.push('y' + parse[2]);
+                if (parse[0] != '' && !isNaN(parse[0])) valid.push('m' + leadingZero(parse[0]));
+                if (parse[1] != '' && !isNaN(parse[1])) valid.push('d' + leadingZero(parse[1]));
+                current_value = valid.join(',');
+            }
+            self.val(current_value);
+            self.selectize({
+                options: options,
+                maxItems: 3,
+                searchField: ['label'],
+                valueField: 'value',
+                labelField: 'label',
+                optgroupLabelField: 'name',
+                optgroupValueField: 'type',
+                optgroupField: 'type',
+                optgroups: optgroups,
+                render: {
+                    option: function(data, escape) {
+                        if (data.type == 'year') {
+                            return '<div style="display:none;">' + escape(data.label) + '</div>';
+                        }
+                        if (data.type == 'month') {
+                            return '<div class="month">' + escape(data.label) + '</div>';
+                        }
+                        return '<span>' + escape(data.label) + '&nbsp;</span>' + (data.label % 10 == 0 ? '<br />' : '');
+                    },
+                }
+            });
+            var inside = false;
+            this.selectize.on('item_add', function(value, item) {
+                if (inside) return;
+                if (value.startsWith('full')) {
+                    this.clear();
+                    inside = true;
+                    var data = existing[value];
+                    if (data.year) this.addItem('y' + data.year);
+                    if (data.month) this.addItem('m' + leadingZero(data.month));
+                    if (data.day) this.addItem('d' + leadingZero(data.day));
+                    inside = false;
+                    return;
+                }
+                // See if there is an item with the same type already selected,
+                // if so, delete the item so only the new entry is kept.
+                var type = value.charAt(0);
+                for (var i = 0; i < this.items.length; ++i) {
+                    var val = this.items[i];
+                    if (val.charAt(0) == type && val != value) {
+                        this.removeItem(val);
+                        break;
+                    }
+                }
+                var clone = this.items.slice(0).sort();
+                // Place the items in the appropriate order:
+                for (var i = clone.length - 1; i >= 0; --i) {
+                    var val = clone[i];
+                    this.removeItem(val);
+                }
+                inside = true;
+                for (var i = clone.length - 1; i >= 0; --i) {
+                    var val = clone[i];
+                    this.addItem(val);
+                }
+                inside = false;
+            });
+        });
+
+        $("#demographics_table td").hover(
+            function() {
+                $(this).addClass('cell_hover');
+            },
+            function() {
+                $(this).removeClass('cell_hover');
+            }
+        );
+
+        var current_cell = null;
+        var editor = $('#cell_editor');
+
+        $("#demographics_table td").click(function() {
+            if (current_cell) return;
+            current_cell = $(this);
+            var value = parseInt(current_cell.html());
+            current_cell.html('');
+            editor.appendTo(current_cell);
+            editor.focus();
+            editor.blur(function() {
+                if (current_cell) {
+                    var value = editor.val();
+                    current_cell.html(value);
+                    current_cell = null;
+                    editor.appendTo($('#hidden_div'));
+                }
+            });
+            editor.keyup(function(e) {
+                if (e.keyCode == 13) {
+                    editor.blur();
+                }
+            });
+            editor.val(value);
+        });
+
+        // Parse notes.
+        var NOTES_PREFIX = 'notes_for_';
+        {% if form.notes.value %}
+            var notes = {{ form.notes.value|safe }}
+            for (var key in notes) {
+                $('#' + NOTES_PREFIX + key).val(notes[key]).change();
+            }
+        {% endif %}
+
+        // Highlight labels of fields with pre-existing values:
+        for (var id in voyages) {
+            var v = voyages[id];
+            for (var name in v) {
+                if (v[name] != null && v[name] != ',,') {
+                    var prefix = name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_';
+                    $('label[for="' + prefix + name + '"]').addClass('has_pre_existing_values');
+                }
+            }
+        }
+
+        var addSourceToTable = function(source, isEdit) {
+            if (isEdit) removeSource(source.id);
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="editSource(' + source.id + '); return false;">Edit</a></td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+            $('#sources_table').show();
+        };
+
+        $("#add_source_modal_btn").click(function () {
+            $("#myModal input, #myModal textarea").val('');
+            var id = ++_sourceid;
+            $("#source_id_field").val(id);
+            $("#add_source_btn").html('{% trans "Add"  %}');
+        });
+
+        $("#add_source_btn").click(function () {
+            var type = $("ul#tab_control li.active").data("tab");
+            $('#sources_table').show();
+            var source = null;
+            if (type == 'primary') {
+                source = new PrimarySource();
+            } else if (type == 'article') {
+                source = new ArticleSource();
+            } else if (type == 'book') {
+                source = new BookSource();
+            } else if (type == 'other') {
+                source = new OtherSource();
+            }
+            if (source) {
+                source.bindFromForm();
+                var validation = source.validate();
+                if (validation.hasErrors()) {
+                    alert(validation.toString());
+                    return false;
+                } else if (!validation.hasWarnings() ||
+                        confirm(validation.toString() + "\n" + gettext('Continue anyway?'))) {
+                    addSourceToTable(source, true);
+                    sources.push(source);
+                    $('#myModal').modal('hide');
+                }
+            }
+        });
+
+        for (var i = 0; i < sources.length; ++i) {
+            addSourceToTable(sources[i]);
+        }
+        if (sources.length) {
+            $('#sources_table').show();
+        }
+
+        var sourceIcons = ['ok', 'pencil', 'remove'];
+        var sourceMenu = function (src, action) {
+            var pk = $(src).data('sourcepk');
+            var span = $('#pre_source_action_span_' + pk);
+            span.removeClass();
+            span.addClass("glyphicon glyphicon-" + sourceIcons[action]);
+            $('#pre_existing_source_action_' + pk).val(action);
+            if (action > 0) {
+                $('#pre_existing_source_notes_' + pk).focus();
+            }
+            return false;
+        };
+
+        $('.pre_source_menu_accept').click(function (e) {
+            return sourceMenu(this, 0);
+        });
+        $('.pre_source_menu_edit').click(function (e) {
+            return sourceMenu(this, 1);
+        });
+        $('.pre_source_menu_exclude').click(function (e) {
+            return sourceMenu(this, 2);
+        });
+
+        $('form').submit(function() {
+            if (submit_val != 'delete') {
+                // Build pre-existing sources list.
+                var preSources = $.map(
+                    [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                    function(pk, i) {
+                        return {
+                            'pk': pk,
+                            'action': parseInt($('#pre_existing_source_action_' + pk).val()),
+                            'notes': $('#pre_existing_source_notes_' + pk).val()
+                        };
+                    }
+                );
+                var validation = validatePreSubmit(sources, preSources);
+                if (validation.hasErrors()) {
+                    alert(validation.toString());
+                    return false;
+                } else if (validation.hasWarnings() &&
+                        !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                    return false;
+                }
+            }
+            $("input[name^='date']").each(function() {
+                var self = $(this);
+                // Convert date to the expected format MM,DD,YYYY
+                var date = parseDateValue(self.val());
+                self.val(date.toMMDDYYY());
+            });
+            // Send notes.
+            var notes_submit = {};
+            var prefix_length = NOTES_PREFIX.length;
+            $.map($(".field_notes"), function(note, i) {
+                var $note = $(note);
+                var note_val = $note.val();
+                if (note_val != '') {
+                    notes_submit[$note.attr('name').substring(prefix_length)] = note_val;
+                }
+            });
+            $("#global_notes_input").val(JSON.stringify(notes_submit));
+            // Append demographics matrix.
+            var form = $(this);
+            for (var i = 0; i < demographics_rows.length; ++i) {
+                for (var j = 0; j < DEMOGRAPHICS_COLUMN_HEADERS.length; ++j) {
+                    var value = parseInt($(demographics_rows[i][j]).html());
+                    if (!isNaN(value)) {
+                        form.append('<input type="hidden" name="' +
+                            NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_INDICES[i] +
+                            '" value="' + value + '" />');
+                    }
+                }
+            }
+            var $sources = $('<input type="hidden" name="sources" />');
+            var source_models = $.map(sources, function(s, i) {
+                return s.toModel();
+            });
+            $sources.val(JSON.stringify(source_models));
+            form.append($sources);
+            return true;
+        });
+    });
+
+    // Special handling of port/region/broad region selection.
+    var protoSelectOption = Selectize.prototype.onOptionSelect;
+    Selectize.prototype.onOptionSelect = function(e) {
+        if (e && e.preventDefault) {
+            e.preventDefault();
+            if (e.type == 'mousedown') return false;
+            var target = $(e.currentTarget);
+            var className = "expanded";
+            if (this.$control_input.val() != '' && !this.options.create) {
+                // Clear search if user selected an option.
+                id = target.attr('id');
+                this.$control_input.val('');
+                this.refreshOptions();
+                if (id) {
+                    target = $("#" + id);
+                }
+            }
+            var nextActive = null;
+            if (target.hasClass("broad_region")) {
+                nextActive = ".broad_region_" + target.data('pk');
+                var isExpanded = $(nextActive + ":first").hasClass(className);
+                $(".broad_region,.region,.port").removeClass(className);
+                $(".tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+                if (isExpanded) return false;
+                target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
+                $(".broad_region_" + target.data('pk')).addClass(className);
+            } else if (target.hasClass("region")) {
+                nextActive = ".region_" + target.data('pk');
+                var isExpanded = $(nextActive + ":first").hasClass(className);
+                $(".port").removeClass(className);
+                $(".region.tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+                if (isExpanded) return false;
+                target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
+                $(".region_" + target.data('pk')).addClass(className);
+            } else {
+                protoSelectOption.apply(this, arguments);
+            }
+            var activateOption = function(opt) {
+                self.setActiveOption($(opt[0]), true, false);
+            };
+            if (nextActive) {
+                var self = this;
+                activateOption(self.$dropdown_content.find(nextActive + ":last"));
+                activateOption(target);
+                activateOption(self.$dropdown_content.find(nextActive + ":first"));
+            }
+        } else {
+            protoSelectOption.apply(this, arguments);
+        }
+    };
+</script>
+{% endblock %}

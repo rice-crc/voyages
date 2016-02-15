@@ -1,0 +1,43 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+
+<h1>{% trans "Recommend the deletion of an existing voyage" %}</h1>
+
+<p>
+    {% trans "Please use the box for notes to tell us why the selected voyage(s) should be removed from the database." %}
+</p>
+
+<p></p>
+
+{% include "contribute/voyage_selection_table.html" %}
+<div class="col-sm-12">
+    <form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <input type="hidden" name="ids" id="ids_hidden">
+        {{ form.ids.errors }}
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="notes_input">{% trans "Notes:" %}</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" id="notes_input" name="notes"></textarea>
+            </div>
+        </div>
+    </form>
+    <p>
+        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Submit" %}</button>
+    </p>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
+<script type="text/javascript">
+    var selection = new VoyageSelection(
+        "{% url 'contribute:voyage_ajax' %}",
+        [
+            {% for voyage in voyage_selection %}
+                {{ voyage.voyage_id }},
+            {% endfor %}
+        ],
+        true);
+</script>
+{% endblock %}

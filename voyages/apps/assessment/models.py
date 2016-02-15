@@ -1,5 +1,5 @@
 from django.db import models
-
+from itertools import groupby
 
 class ExportArea(models.Model):
     """
@@ -81,7 +81,7 @@ class Estimate(models.Model):
     """
 
     nation = models.ForeignKey(Nation)
-    year = models.IntegerField(max_length=4)
+    year = models.IntegerField()
     embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
     disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
     embarked_slaves = models.FloatField(null=True, blank=True)
@@ -92,7 +92,16 @@ class Estimate(models.Model):
 
 
 class EstimateManager(models.Manager):
-    _all = {}
+    estimates = {}
+    export_areas = {}
+    import_areas = {}
+    export_regions = {}
+    import_regions = {}
+    nations = {}
+
+    export_hierarchy = {}
+    import_hierarchy = {}
+
     _has_loaded = False
     import threading
 
@@ -103,12 +112,36 @@ class EstimateManager(models.Manager):
         with cls._lock:
             if not cls._has_loaded:
                 cls._has_loaded = True
-                cls._all = {v.pk: v for v in Estimate.objects.all()}
-        return cls._all
+                cls.export_areas = {a.pk: a for a in ExportArea.objects.all()}
+                cls.import_areas = {a.pk: a for a in ImportArea.objects.all()}
 
-    # Ensure that we load some related members thus
-    # avoiding hitting the DB multiple times.
-    def get_query_set(self):
-        return super(EstimateManager, self).get_query_set().select_related(
-            'embarkation_region__export_area',
-            'disembarkation_region__import_area')
+                def extract_export_region(r):
+                    r.export_area = cls.export_areas[r.export_area_id]
+                    return r
+
+                cls.export_regions = {r.pk: extract_export_region(r) for r in ExportRegion.objects.all()}
+
+                def extract_import_region(r):
+                    r.import_area = cls.import_areas[r.import_area_id]
+                    return r
+
+                cls.import_regions = {r.pk: extract_import_region(r) for r in ImportRegion.objects.all()}
+
+                # Build hierarchies
+                keyfunc = lambda r: r.export_area
+                sorted_regions = sorted(cls.export_regions.values(), key=keyfunc)
+                cls.export_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
+                keyfunc = lambda r: r.import_area
+                sorted_regions = sorted(cls.import_regions.values(), key=keyfunc)
+                cls.import_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
+
+                cls.nations = {n.pk: n for n in Nation.objects.all()}
+
+                def extract_estimate(e):
+                    e.nation = cls.nations[e.nation_id]
+                    e.embarkation_region = cls.export_regions[e.embarkation_region_id]
+                    e.disembarkation_region = cls.import_regions[e.disembarkation_region_id]
+                    return e
+
+                cls.estimates = {e.pk: extract_estimate(e) for e in Estimate.objects.all()}
+        return cls.estimates

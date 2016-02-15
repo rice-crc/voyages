@@ -2,12 +2,15 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 from django.core.paginator import Paginator
 from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
 from .forms import *
 from .globals import *
+from search_indexes import AfricanNamesIndex
+from voyages.apps.common.models import get_values_from_haystack_results
+from voyages.apps.common.export import download_xls
 
 from voyages.apps.voyage.views import prepare_paginator_variables
 from voyages.apps.voyage.globals import structure_places
@@ -31,7 +34,7 @@ def get_all_images(request):
                 .order_by('date')
             category_images["number_of_images"] = len(search_set)
             for j in search_set:
-                category_images["images"].append(SortedDict({'file': j.file, 'year': j.date, 'title': j.title}))
+                category_images["images"].append(OrderedDict({'file': j.file, 'year': j.date, 'title': j.title}))
                 # TODO: May be too ugly, considered to change
                 if len(category_images["images"]) == 4:
                     break
@@ -66,7 +69,7 @@ def get_images_category(request, category):
             category_images["number_of_images"] = len(search_set)
             if i.label == category:
                 for i in search_set:
-                    category_images["images"].append(SortedDict({'file': i.file, 'year': i.date, 'title': i.title}))
+                    category_images["images"].append(OrderedDict({'file': i.file, 'year': i.date, 'title': i.title}))
 
             images.append(category_images)
 
@@ -267,8 +270,8 @@ def images_search(request):
         request.session['time_end'] = time_end
 
     else:
-        results = request.session['results_images']
-        images = request.session['images_images']
+        results = request.session.get('results_images')
+        images = request.session.get('images_images')
 
     return render(request, 'resources/images-search-results.html',
             {'results': results,
@@ -314,6 +317,16 @@ def get_image_search_detail(request, page):
     image = request.session['results_images'][int(page)-1]
 
     return render(request, 'resources/image-search-detail-window.html',  {'image': image})
+
+AFRICAN_NAME_SOLR_FIELDS = [field_name for field_name in AfricanNamesIndex.fields]
+def download_slaves_helper(data):
+    """
+    Generate a spreadsheet file with slave data.
+    :param data: A list of dicts each representing an African name.
+    :return:
+    """
+    rows = [[x.get(field_name) for field_name in AFRICAN_NAME_SOLR_FIELDS] for x in data]
+    return download_xls([[(f, 1) for f in AFRICAN_NAME_SOLR_FIELDS]], rows)
 
 
 def get_all_slaves(request):
@@ -364,8 +377,6 @@ def get_all_slaves(request):
                        'section_2': False,
                        'section_3': False}
         request.session["names_opened_tabs"] = opened_tabs
-
-
 
     # If there is no requested page number, serve 1
     desired_page = request.POST.get('desired_page')
@@ -478,7 +489,7 @@ def get_all_slaves(request):
             request.session["sort_column"] = sort_column
             request.session["sort_mode"] = sort_mode
 
-        elif request.POST.get("action") is not None and request.POST.get("action") == "Search":
+        elif request.POST.get("action") == "Search":
             # Encode and store query dict/opened tabs/current query
             query_dict, opened_tabs, current_query = create_query_dict(request.POST, embarkation_list,
                                                                        disembarkation_list, countries)
@@ -503,6 +514,10 @@ def get_all_slaves(request):
             else:
                 results = SearchQuerySet().models(AfricanName).order_by(sort_string)
             request.session['names_results'] = results
+        elif request.POST.get("action") == "download_all":
+            # Build download file.
+            data = get_values_from_haystack_results(results, AFRICAN_NAME_SOLR_FIELDS)
+            return download_slaves_helper(data)
 
         # Manage results per page
         if results_per_page_form.is_valid():
@@ -514,11 +529,12 @@ def get_all_slaves(request):
             results_per_page_form.fields['option'].initial = request.session['slaves_per_page_choice']
             results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['slaves_per_page_choice']})
 
-
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(current_page)
-    print current_query
+    if request.method == "POST" and request.POST.get("action") == "download_current_view":
+        data = [x.get_stored_fields() for x in pagins.object_list]
+        return download_slaves_helper(data)
 
     # Get ranges and number of pages
     (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
@@ -546,7 +562,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
     embarkation_cq = []
     disembarkation = []
     opened_tabs = {}
-    current_query = SortedDict()
+    current_query = OrderedDict()
 
     # Iterate and collect all options
     # Mark sections as True/False (collapsed/expanded)

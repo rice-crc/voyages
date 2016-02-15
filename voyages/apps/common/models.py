@@ -30,7 +30,7 @@ class SavedQuery(models.Model):
         link = ('https://' if request.is_secure() else 'http://') + request.get_host() + \
                reverse(url_name, kwargs={'link_id': self.id})
         from django.http import HttpResponse
-        return HttpResponse(link, mimetype='text/plain')
+        return HttpResponse(link, content_type='text/plain')
 
     def get_post(self):
         """
@@ -88,3 +88,44 @@ class SavedQuery(models.Model):
         from django.http import HttpResponseRedirect
         from django.core.urlresolvers import reverse
         return HttpResponseRedirect(reverse(redirect_url_name))
+
+def get_pks_from_haystack_results(results):
+    """
+    This is a HACK that gives us much better performance when enumerating the
+    voyage primary keys of the search results.
+    :param results:
+    :return:
+    """
+    q = results.query._clone()
+    q._reset()
+    q.set_limits(0, 500000)
+    final_query = q.build_query()
+    search_kwargs = q.build_params(None)
+    search_kwargs['fields'] = 'id'
+    search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
+    try:
+        raw_results = q.backend.conn.search(final_query, **search_kwargs)
+    except:
+        raw_results = []
+    return [int(x['id'].split('.')[-1]) for x in raw_results]
+
+def get_values_from_haystack_results(results, fields):
+    """
+    Retrieves a set of fields from haystack search results in
+    RAW format. This is useful to bypass some slow methods in haystack.
+    :param results:
+    :param fields:
+    :return:
+    """
+    q = results.query._clone()
+    q._reset()
+    q.set_limits(0, 500000)
+    final_query = q.build_query()
+    search_kwargs = q.build_params(None)
+    search_kwargs['fields'] = fields
+    search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
+    try:
+        raw_results = q.backend.conn.search(final_query, **search_kwargs)
+    except:
+        raw_results = []
+    return raw_results

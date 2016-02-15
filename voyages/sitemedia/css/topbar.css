@@ -176,24 +176,15 @@ html > body #main_nav ul {
 
 .language_menu_en, .language_menu_pt {
 	float: right;
+	margin-left: -8px !important;
 }
 
 .language_menu_en:after {
 	content: "En";
-	font-size: 11pt;
-	font-family: "Times New Roman",Times,FreeSerif,serif;
-	vertical-align: -70%;
-	padding: 5px;
-    color: white;
 }
 
 .language_menu_pt:after {
 	content: "Pt";
-	font-size: 11pt;
-	font-family: "Times New Roman",Times,FreeSerif,serif;
-	vertical-align: -70%;
-	padding: 5px;
-    color: white;
 }
 /*
 .language_menu_pt {

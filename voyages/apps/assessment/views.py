@@ -5,6 +5,7 @@ from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from .forms import *
 from voyages.apps.common.export import download_xls
+from voyages.apps.common.models import get_pks_from_haystack_results
 import collections
 
                               
@@ -49,8 +50,8 @@ def get_estimates_map(request):
     regions = {}
     flows = {}
     cache = EstimateManager.cache()
-    for result in results:
-        result = cache[result.pk]
+    for pk in get_pks_from_haystack_results(results):
+        result = cache[int(pk)]
         dregion = result.disembarkation_region.name
         eregion = result.embarkation_region.name
         regions[dregion] = (result.disembarkation_region.latitude, result.disembarkation_region.longitude, result.disembarkation_region.import_area)
@@ -79,8 +80,8 @@ def get_estimates_timeline(request):
     # formed by tuples (embarked_count, disembarked_count)
     timeline = {}
     cache = EstimateManager.cache()
-    for result in results:
-        result = cache[result.pk]
+    for pk in get_pks_from_haystack_results(results):
+        result = cache[pk]
         item = (0, 0)
         if result.year in timeline:
             item = timeline[result.year]
@@ -198,8 +199,8 @@ def get_estimates_table(request):
         all_col_keys = set([col_key_function(e) for e in estimates if col_filter(e)])
         table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
 
-    for pk in results.values_list('pk', flat=True).load_all():
-        result = cache.get(int(pk))
+    for pk in get_pks_from_haystack_results(results):
+        result = cache.get(pk)
         if result is not None:
             key = (row_key_function(result), col_key_function(result))
             cell = (0, 0)
@@ -394,16 +395,16 @@ def get_estimates_common(request, data):
         else:
             return 1
 
+    EstimateManager.cache()
     # Check which Flags (nations) are selected and include the selection in the query.
-    nations = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")] for x in Nation.objects.all()]
+    nations = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")]
+               for x in EstimateManager.nations.values()]
     data['nations'] = nations
     query["nation__in"] = [nation[0] for nation in nations if nation[2] == 1]
     data['all_nations_selected'] = len(nations) == len(query["nation__in"])
 
     export_regions = {}
-    areas = ExportArea.objects.all()
-    for area in areas:
-        regions = ExportRegion.objects.filter(export_area__pk=area.pk)
+    for area, regions in EstimateManager.export_hierarchy.iteritems():
         children = [[[x.name, x.pk], is_checked("eregion-button-", x, "submit_regions")] for x in regions]
         checked = is_checked("earea-button-", area, "submit_regions")
         if len(regions) == 1:
@@ -411,9 +412,7 @@ def get_estimates_common(request, data):
         export_regions[(area, checked)] = children
 
     import_regions = {}
-    areas = ImportArea.objects.all()
-    for area in areas:
-        regions = ImportRegion.objects.filter(import_area__pk=area.pk)
+    for area, regions in EstimateManager.import_hierarchy.iteritems():
         children = [[[x.name, x.pk], is_checked("dregion-button-", x, "submit_regions")] for x in regions]
         checked = is_checked("darea-button-", area, "submit_regions")
         if len(regions) == 1:

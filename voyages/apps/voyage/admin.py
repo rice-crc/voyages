@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
-import autocomplete_light
+from autocomplete_light import shortcuts as autocomplete_light
 from .forms import *
 
 
@@ -315,12 +315,15 @@ class VoyageAdmin(admin.ModelAdmin):
                VoyageItineraryInline, VoyageDatesInline,
                VoyageCrewInline, VoyageSlavesNumbersInline,
                VoyageSourcesConnectionInline)
-    form = autocomplete_light.modelform_factory(Voyage)
+    form = autocomplete_light.modelform_factory(Voyage, fields='__all__')
     list_display = ['voyage_id']
     list_display_links = ['voyage_id']
     ordering = ['-voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
     search_fields = ['voyage_id']
     exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew', 'voyage_slaves_numbers')
+
+    class Meta:
+        fields = '__all__'
 
 
 # Registers section

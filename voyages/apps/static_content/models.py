@@ -23,7 +23,7 @@ class ContentPage(models.Model):
 
     title = models.TextField(max_length=50)
     description = models.TextField(max_length=2000)
-    order = models.IntegerField(max_length=1)
+    order = models.IntegerField()
     group = models.ForeignKey(ContentGroup)
 
     class Meta:
