@@ -113,13 +113,21 @@
         padding: 20px;
     }
 
-    .is_stuck {
-        z-index: 5;
-    }
-
     .expander_container {
         overflow-x: hidden;
         overflow-y: auto;
+    }
+
+    .selectize_day {
+        display: inline-block;
+    }
+
+    .selectize_year {
+        display: none;
+    }
+
+    .selectize_year.search_match {
+        display: block;
     }
 </style>
 
@@ -1424,7 +1432,7 @@
         // Handle dates.
         var dateOptions = [];
         for (var i = 1500; i <= 1867; ++i) {
-            dateOptions.push({ type: 'year', label: i, value: 'y' + i });
+            dateOptions.push({ type: 'year', label: i, value: 'y' + i, search: i });
         }
 
         {% get_current_language as LANGUAGE_CODE %}
@@ -1437,10 +1445,10 @@
         };
         for (var i = 1; i <= 12; ++i) {
             var month = getMonthName(i);
-            dateOptions.push({ type: 'month', label: month, value: 'm' + leadingZero(i) });
+            dateOptions.push({ type: 'month', label: month, value: 'm' + leadingZero(i), search: month + ' (' + leadingZero(i) + ')' });
         }
         for (var i = 1; i <= 31; ++i) {
-            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i) });
+            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i), search: leadingZero(i) });
         }
         $(".date_input").each(function() {
             var self = $(this);
@@ -1483,7 +1491,7 @@
             self.selectize({
                 options: options,
                 maxItems: 3,
-                searchField: ['label'],
+                searchField: ['search'],
                 valueField: 'value',
                 labelField: 'label',
                 optgroupLabelField: 'name',
@@ -1493,14 +1501,23 @@
                 render: {
                     option: function(data, escape) {
                         if (data.type == 'year') {
-                            return '<div style="display:none;">' + escape(data.label) + '</div>';
+                            return '<div class="selectize_year">' + escape(data.label) + '</div>';
                         }
                         if (data.type == 'month') {
-                            return '<div class="month">' + escape(data.label) + '</div>';
+                            return '<div class="selectize_month">' + escape(data.search) + '</div>';
                         }
-                        return '<span>' + escape(data.label) + '&nbsp;</span>' + (data.label % 10 == 0 ? '<br />' : '');
+                        if (data.type == 'day') {
+                            return '<div class="selectize_day">' + escape(data.label) + '</div>';
+                        }
+                        return '<div class="selectize_full">' + escape(data.label) + '&nbsp;</div>';
                     },
-                }
+                },
+                score: function(search) {
+                    var score = this.getScoreFunction(search);
+                    return function(item) {
+                        return item.type == 'year' && search.length != 4 ? 0.0 : score(item);
+                    };
+                },
             });
             var inside = false;
             this.selectize.on('item_add', function(value, item) {

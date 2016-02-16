@@ -47,8 +47,7 @@ class Axis:
         if self.mode == Axis.AVERAGE_MODE:
             return sum([0.0 if x is None else float(x) for x in values]) / count
         if self.mode == Axis.FREQUENCY_MODE:
-            values = [b.get(self.var_name) for b in lst]
-            return sum([0.0 if a is None else 1.0 for a in values]) / count
+            return 100.0 * count / len(lst)
         raise Exception
 
     def get_value(self, d):

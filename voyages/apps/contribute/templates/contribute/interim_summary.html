@@ -22,9 +22,11 @@
         </button>
     {% endif %}
 </div>
-    <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
-    <input type="checkbox" id="show_existing" checked> <label for="show_existing">{% trans "Previous values" %}</label>
-    <input type="checkbox" id="show_notes" checked> <label for="show_notes">{% trans "Notes" %}</label>
+    <div id="toogles">
+        <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
+        <input type="checkbox" id="show_existing" checked> <label for="show_existing">{% trans "Previous values" %}</label>
+        <input type="checkbox" id="show_notes" checked> <label for="show_notes">{% trans "Notes" %}</label>
+    </div>
 </div>
 <br />
 <br />
@@ -34,6 +36,11 @@
 {% with blank_text='' %}
 <div class="col-md-12" id="data_display">
     <h1>{% trans "Ship, nation, owners" %}</h1>
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
     {% with form.name_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
@@ -128,6 +135,11 @@
 
     <h1>{% trans "Voyage outcome" %}</h1>
 
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
     {% with form.voyage_outcome as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
@@ -145,6 +157,11 @@
 
     <h1>{% trans "Voyage itinerary" %}</h1>
 
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
     {% with form.first_port_intended_embarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
@@ -260,6 +277,11 @@
 
     <h1>{% trans "Voyage dates" %}</h1>
 
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
     {% with form.date_departure as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
@@ -326,6 +348,11 @@
 
     <h1>{% trans "Captain and crew" %}</h1>
 
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
     {% with form.first_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
@@ -441,6 +468,11 @@
 
     <h1>{% trans "Slaves (numbers)" %}</h1>
 
+    <div class="row group_header">
+        <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4">{% trans "Contributed value" %}</span>
+        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
+    </div>
 	<div class="row">
 		<label for="interim_slave_number_SLINTEND">
 						{% trans "Slaves intended from first port of purchase" %}:
@@ -659,6 +691,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/jquery.sticky-kit.min.js"></script>
 <script type="text/javascript">
+    "use strict";
     $('#print_button').click(function() {
         print($('#data_display').html());
     });
@@ -688,31 +721,61 @@
         var $div = $(this);
         var name = $div.attr('id').substring(4);
         var values = getVoyagesValues(voyages, name);
+        var voyagesCount = Object.keys(voyages).length;
         if (values) {
-            var list = '<dl class="dl-horizontal">';
+            var list = '<p>';
             var count = 0;
             for (var key in values) {
                 if (key == ',,') continue;
                 ++count;
-                list += '<dt>' + getGroupName(values[key]) + ':</dt><dd>' + key + '</dd>';
+                if (voyagesCount > 1) {
+                    list += '<strong>' + values[key].join(', ') + ':</strong> ';
+                }
+                list += '<span class="old_single_value">' + key + '</span><br />';
             }
             if (count > 0) {
-                $div.append(list + '</dl>');
+                $div.append(list + '</p>');
             }
         }
     });
+
+    var alternateBackground = function() {
+        var child = $("#data_display").children(".row").first();
+        var isAlternate = false;
+        var lastGroupHeader = null;
+        while (child.length == 1) {
+            if (child.hasClass('row')) {
+                var isGroupHeader = child.hasClass('group_header');
+                if (lastGroupHeader != null && isGroupHeader) {
+                    lastGroupHeader.hide();
+                }
+                if (isGroupHeader) {
+                    isAlternate = false;
+                    child.show();
+                    lastGroupHeader = child;
+                }
+                else if (child.css('display') != 'none') {
+                    child.toggleClass('alternate_row', isAlternate);
+                    isAlternate = !isAlternate;
+                    lastGroupHeader = null;
+                }
+            }
+            child = child.next();
+        }
+    };
 
     var toggleFuncFactory = function(className) {
         return function () {
             var checked = $(this).prop('checked');
             $('.' + className).toggle(checked);
+            alternateBackground();
         };
     };
 
     if (voyages.length == 0) {
         $('#show_existing').hide();
     } else {
-        $('#show_existing').change(toggleFuncFactory('old_values'));
+        $('#show_existing').change(toggleFuncFactory('old_values, .old_values_header'));
     }
 
     $('#show_blanks').change(toggleFuncFactory('blank'));
@@ -744,7 +807,7 @@
         return result;
     };
 
-    $('span.date_value, div.date_value>dl>dd').each(function() {
+    $('span.date_value, div.date_value .old_single_value').each(function() {
         var $this = $(this);
         var date = dateFormat($this.html());
         $this.html(date);
@@ -822,6 +885,9 @@
         }
     });
     $('#timestamp').html(new Date());
+
+    $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
+    alternateBackground();
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>
@@ -849,6 +915,15 @@
 
     #summary_toolbar {
         z-index: 10;
+    }
+
+    .group_header {
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .group_header, .alternate_row {
+        background-color: lightgray;
     }
 </style>
 {% endblock %}
