@@ -90,8 +90,7 @@
 
     .form-horizontal a h1 {
         font-size: 20px;
-        margin-top: 0;
-        //margin-bottom: 0;
+        margin-top: 0px;
         padding: 10px;
     }
 
@@ -111,11 +110,6 @@
         background-color: #FFFFFF;
         border: solid 1px #CCC;
         padding: 20px;
-    }
-
-    .expander_container {
-        overflow-x: hidden;
-        overflow-y: auto;
     }
 
     .selectize_day {
@@ -139,6 +133,7 @@
     {% trans "Comments or notes on any entry may be added by clicking on the box to the right of each input box." %}
     {% trans "If required, use the box for notes at the foot of the page for additional information." %}
     {% trans "You can review your complete entry at any time by clicking on the 'Review' button, and to submit your entry you must move to the Review page first." %}
+    {% trans "Should you wish to add a port or region that does not appear in the drop down menu, please let the editors know via the note box at the foot of the entry form." %}
 </p>
 
 {{ form.errors }}
@@ -1007,7 +1002,7 @@
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
     <div class="form-group col-md-12">
-        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Proceed" %}</button>
+        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
     </div>
 </form>
