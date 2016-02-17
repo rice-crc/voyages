@@ -121,12 +121,9 @@ Run these commands to load all the data fixtures except images.json::
   $ python manage.py loaddata initialdata/sites.json
   $ python manage.py loaddata initialdata/social.json
 
-Sync voyage data from legacy system
+Import data from SPSS generated CSV
 
-.. Note::
-  This process could take over 2 hours to run
-
-  $ python manage.py synclegacydb
+  $ python manage.py importcsv [--db=mysql or pgsql] csv_file
 
 Now load the images.json file::
 
