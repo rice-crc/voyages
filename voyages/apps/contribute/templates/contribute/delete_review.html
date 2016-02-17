@@ -1,0 +1,24 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+
+<h2>{% trans "Review deleted voyages" %}</h2>
+
+<h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
+
+{% for vars in deleted_voyage_vars %}
+    {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}
+<hr />
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group col-md-12">
+        <button class="btn btn-danger" type="submit" name="submit_val" value="confirm">{% trans "Confirm deletion" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="cancel">{% trans "Cancel contribution" %}</button>
+    </div>
+</form>
+{% endblock %}

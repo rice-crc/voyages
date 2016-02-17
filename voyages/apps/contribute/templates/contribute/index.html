@@ -37,17 +37,34 @@
 	</ul>
 	{% for c in contributions %}
 		{% if forloop.first %}
-			<h2>Pending contributions</h2>
+			<h2>Contributions</h2>
 			<table class="table table-hover table-striped">
 				<thead>
-				<tr><th>{% trans "Voyage ID(s)"  %}</th><th>{% trans "Type of contribution" %}</th></tr>
+				<tr>
+					<th>{% trans "Voyage ID(s)"  %}</th>
+					<th>{% trans "Type of contribution" %}</th>
+					<th>{% trans "Status" %}</th>
+				</tr>
 				</thead>
 				<tbody>
 		{% endif %}
-					<tr class='clickable-row' data-href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">
+					<tr class='{% if c.type != "delete" %}clickable-row{% endif %}' data-href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">
 						<td>
 						{{ c.contribution.get_related_voyage_ids|join:", " }}
 						<td>{{ c.type }}</td>
+						<td>
+							{% if c.contribution.status == 0 %}
+								{% trans "Pending" %}
+							{% elif c.contribution.status == 1 %}
+								{% trans "Submitted" %}
+							{% elif c.contribution.status == 2 %}
+								{% trans "Under review" %}
+							{% elif c.contribution.status == 3 %}
+								{% trans "Approved" %}
+							{% elif c.contribution.status == 4 %}
+								{% trans "Rejected" %}
+							{% endif %}
+						</td>
 					</tr>
 		{% if forloop.last %}
 				</tbody>
@@ -58,6 +75,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".clickable-row").click(function() {
+
 			window.document.location = $(this).data("href");
 		});
 	});
