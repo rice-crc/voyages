@@ -10,7 +10,7 @@
     <button type="button" class="btn btn-default" aria-label="Print" id="print_button">
         <span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Print" %}
     </button>
-    {% if contribution.status == 0 and user.pk == contribution.contributor.pk %}
+    {% if contribution.status <= 1 and user.pk == contribution.contributor.pk %}
         <button type="button" class="btn btn-default" aria-label="Edit" id="edit_contrib">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Edit contribution" %}
         </button>
@@ -30,549 +30,531 @@
 </div>
 <br />
 <br />
-<p>
-    Some explanatory text?
-</p>
 {% with blank_text='' %}
 <div class="col-md-12" id="data_display">
-    <h1>{% trans "Ship, nation, owners" %}</h1>
     <div class="row group_header">
         <span class="col-sm-4">{% trans "Variable" %}</span>
+        <span class="col-sm-4 old_values_header"></span>
         <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
+    <h3>{% trans "Ship, nation, owners" %}</h3>
     {% with form.name_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ship_construction_place as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ship_registration_place as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.year_ship_constructed as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.year_ship_registered as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.national_carrier as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.rig_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.tonnage_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ton_type as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.guns_mounted as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_ship_owner as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_ship_owner as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.additional_ship_owners as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
-    <h1>{% trans "Voyage outcome" %}</h1>
+    <h3>{% trans "Voyage outcome" %}</h3>
 
     <div class="row group_header">
-        <span class="col-sm-4">{% trans "Variable" %}</span>
-        <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
     {% with form.voyage_outcome as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.african_resistance as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
-    <h1>{% trans "Voyage itinerary" %}</h1>
+    <h3>{% trans "Voyage itinerary" %}</h3>
 
     <div class="row group_header">
-        <span class="col-sm-4">{% trans "Variable" %}</span>
-        <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
     {% with form.first_port_intended_embarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_port_intended_embarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_port_intended_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_port_intended_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.principal_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.place_of_call_before_atlantic_crossing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.principal_place_of_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.port_voyage_ended as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
-    <h1>{% trans "Voyage dates" %}</h1>
+    <h3>{% trans "Voyage dates" %}</h3>
 
     <div class="row group_header">
-        <span class="col-sm-4">{% trans "Variable" %}</span>
-        <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
     {% with form.date_departure as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_slave_purchase_began as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_vessel_left_last_slaving_port as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_first_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_second_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_third_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_return_departure as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_voyage_completed as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
+            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.length_of_middle_passage as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
-    <h1>{% trans "Captain and crew" %}</h1>
+    <h3>{% trans "Captain and crew" %}</h3>
 
     <div class="row group_header">
-        <span class="col-sm-4">{% trans "Variable" %}</span>
-        <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
     {% with form.first_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
             <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     <div class="row">
         <label for="interim_slave_number_CREW1">
         {% trans "Crew at voyage outset" %}:
         </label>
-        <span id="interim_slave_number_CREW1"></span>
         <div class="old_values" id="old_interim_slave_number_CREW1"></div>
+        <span id="interim_slave_number_CREW1"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREW2">
         {% trans "Crew at departure from last port of slave purchase" %}:
         </label>
-        <span id="interim_slave_number_CREW2"></span>
         <div class="old_values" id="old_interim_slave_number_CREW2"></div>
+        <span id="interim_slave_number_CREW2"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREW3">
         {% trans "Crew at first landing of slaves" %}:
         </label>
-        <span id="interim_slave_number_CREW3"></span>
         <div class="old_values" id="old_interim_slave_number_CREW3"></div>
+        <span id="interim_slave_number_CREW3"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREW4">
         {% trans "Crew when return voyage began" %}:
         </label>
-        <span id="interim_slave_number_CREW4"></span>
         <div class="old_values" id="old_interim_slave_number_CREW4"></div>
+        <span id="interim_slave_number_CREW4"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREW5">
         {% trans "Crew at end of voyage" %}:
         </label>
-        <span id="interim_slave_number_CREW5"></span>
         <div class="old_values" id="old_interim_slave_number_CREW5"></div>
+        <span id="interim_slave_number_CREW5"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREW">
         {% trans "Number of crew if voyage stage unknow" %}:
         </label>
-        <span id="interim_slave_number_CREW"></span>
         <div class="old_values" id="old_interim_slave_number_CREW"></div>
+        <span id="interim_slave_number_CREW"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_SAILD1">
         {% trans "Crew died before first place of trade in Africa" %}:
         </label>
-        <span id="interim_slave_number_SAILD1"></span>
         <div class="old_values" id="old_interim_slave_number_SAILD1"></div>
+        <span id="interim_slave_number_SAILD1"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_SAILD2">
         {% trans "Crew died while ship was on African coast" %}:
         </label>
-        <span id="interim_slave_number_SAILD2"></span>
         <div class="old_values" id="old_interim_slave_number_SAILD2"></div>
+        <span id="interim_slave_number_SAILD2"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_SAILD3">
         {% trans "Crew died during middle passage" %}:
         </label>
-        <span id="interim_slave_number_SAILD3"></span>
         <div class="old_values" id="old_interim_slave_number_SAILD3"></div>
+        <span id="interim_slave_number_SAILD3"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_SAILD4">
         {% trans "Crew died in the Americas" %}:
         </label>
-        <span id="interim_slave_number_SAILD4"></span>
         <div class="old_values" id="old_interim_slave_number_SAILD4"></div>
+        <span id="interim_slave_number_SAILD4"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_SAILD5">
         {% trans "Crew died on return voyage" %}:
         </label>
-        <span id="interim_slave_number_SAILD5"></span>
         <div class="old_values" id="old_interim_slave_number_SAILD5"></div>
+        <span id="interim_slave_number_SAILD5"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_CREWDIED">
         {% trans "Crew died during complete voyage" %}:
         </label>
-        <span id="interim_slave_number_CREWDIED"></span>
         <div class="old_values" id="old_interim_slave_number_CREWDIED"></div>
+        <span id="interim_slave_number_CREWDIED"></span>
     </div>
     <div class="row">
         <label for="interim_slave_number_NDESERT">
         {% trans "Total number of crew deserted" %}:
         </label>
-        <span id="interim_slave_number_NDESERT"></span>
         <div class="old_values" id="old_interim_slave_number_NDESERT"></div>
+        <span id="interim_slave_number_NDESERT"></span>
     </div>
 
-    <h1>{% trans "Slaves (numbers)" %}</h1>
+    <h3>{% trans "Slaves (numbers)" %}</h3>
 
     <div class="row group_header">
-        <span class="col-sm-4">{% trans "Variable" %}</span>
-        <span class="col-sm-4">{% trans "Contributed value" %}</span>
-        <span class="col-sm-4 old_values_header">{% trans "Pre-existing value(s)" %}</span>
     </div>
 	<div class="row">
 		<label for="interim_slave_number_SLINTEND">
 						{% trans "Slaves intended from first port of purchase" %}:
 		</label>
-		<span id="interim_slave_number_SLINTEND"></span>
 		<div class="old_values" id="old_interim_slave_number_SLINTEND"></div>
+		<span id="interim_slave_number_SLINTEND"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLINTEN2">
 						{% trans "Slaves intended from second port of purchase" %}:
 		</label>
-		<span id="interim_slave_number_SLINTEN2"></span>
 		<div class="old_values" id="old_interim_slave_number_SLINTEN2"></div>
+		<span id="interim_slave_number_SLINTEN2"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_NCAR13">
 						{% trans "Slaves carried from first port of purchase" %}:
 		</label>
-		<span id="interim_slave_number_NCAR13"></span>
 		<div class="old_values" id="old_interim_slave_number_NCAR13"></div>
+		<span id="interim_slave_number_NCAR13"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_NCAR15">
 						{% trans "Slaves carried from second port of purchase" %}:
 		</label>
-		<span id="interim_slave_number_NCAR15"></span>
 		<div class="old_values" id="old_interim_slave_number_NCAR15"></div>
+		<span id="interim_slave_number_NCAR15"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_NCAR17">
 						{% trans "Slaves carried from third port of purchase" %}:
 		</label>
-		<span id="interim_slave_number_NCAR17"></span>
 		<div class="old_values" id="old_interim_slave_number_NCAR17"></div>
+		<span id="interim_slave_number_NCAR17"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_TSLAVESP">
 						{% trans "Total slaves purchased in Africa" %}:
 		</label>
-		<span id="interim_slave_number_TSLAVESP"></span>
 		<div class="old_values" id="old_interim_slave_number_TSLAVESP"></div>
+		<span id="interim_slave_number_TSLAVESP"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_TSLAVESD">
 						{% trans "Total slaves on board at departure from last slaving port" %}:
 		</label>
-		<span id="interim_slave_number_TSLAVESD"></span>
 		<div class="old_values" id="old_interim_slave_number_TSLAVESD"></div>
+		<span id="interim_slave_number_TSLAVESD"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLAARRIV">
 						{% trans "Total slaves arrived at first port of disembarkation" %}:
 		</label>
-		<span id="interim_slave_number_SLAARRIV"></span>
 		<div class="old_values" id="old_interim_slave_number_SLAARRIV"></div>
+		<span id="interim_slave_number_SLAARRIV"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLAS32">
 						{% trans "Slaves disembarked at first place" %}:
 		</label>
-		<span id="interim_slave_number_SLAS32"></span>
 		<div class="old_values" id="old_interim_slave_number_SLAS32"></div>
+		<span id="interim_slave_number_SLAS32"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLAS36">
 						{% trans "Slaves disembarked at second place" %}:
 		</label>
-		<span id="interim_slave_number_SLAS36"></span>
 		<div class="old_values" id="old_interim_slave_number_SLAS36"></div>
+		<span id="interim_slave_number_SLAS36"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLAS39">
 						{% trans "Slaves disembarked at third place" %}:
 		</label>
-		<span id="interim_slave_number_SLAS39"></span>
 		<div class="old_values" id="old_interim_slave_number_SLAS39"></div>
+		<span id="interim_slave_number_SLAS39"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLADAFRI">
 						{% trans "Slaves deaths before leaving Africa" %}:
 		</label>
-		<span id="interim_slave_number_SLADAFRI"></span>
 		<div class="old_values" id="old_interim_slave_number_SLADAFRI"></div>
+		<span id="interim_slave_number_SLADAFRI"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLADVOY">
 						{% trans "Slaves deaths between Africa and the Americas" %}:
 		</label>
-		<span id="interim_slave_number_SLADVOY"></span>
 		<div class="old_values" id="old_interim_slave_number_SLADVOY"></div>
+		<span id="interim_slave_number_SLADVOY"></span>
 	</div>
 	<div class="row">
 		<label for="interim_slave_number_SLADAMER">
 						{% trans "Slaves deaths between arrival and sale" %}:
 		</label>
-		<span id="interim_slave_number_SLADAMER"></span>
 		<div class="old_values" id="old_interim_slave_number_SLADAMER"></div>
+		<span id="interim_slave_number_SLADAMER"></span>
 	</div>
 
-    <h1>{% trans "Slaves (characteristics)" %}</h1>
+    <h3>{% trans "Slaves (characteristics)" %}</h3>
 
     <table id="demographics_table" class="table table-striped" style="width: auto">
         <thead>
@@ -618,10 +600,10 @@
     </table>
     <span id="id_slaves_demographics"><!-- Placeholder for notes on the demographics table. --></span>
 
-    <h1>{% trans "Sources" %}</h1>
+    <h3>{% trans "Sources" %}</h3>
 
     {% if interim.pre_existing_sources.all %}
-        <h3>{% trans "Current source references" %}</h3>
+        <h4>{% trans "Current source references" %}</h4>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -649,7 +631,7 @@
             </tbody>
         </table>
 
-        <h2>{% trans "Contributed source references" %}</h2>
+        <h4>{% trans "Contributed source references" %}</h4>
 
         <table id="sources_table" style="display:none;" class="table table-striped">
             <thead>
@@ -663,12 +645,12 @@
         </table>
 
     {% if contribution.notes %}
-        <h1>{% trans "General comments" %}</h1>
+        <h3>{% trans "General comments" %}</h3>
 
         <span>{{ contribution.notes }}</span>
     {% endif %}
 
-    <h1>{% trans "Contributor" %}</h1>
+    <h3>{% trans "Contributor" %}</h3>
 
     <p>
         <label for="contributor_name">{% trans "Name" %}:</label>
@@ -717,11 +699,12 @@
 
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
+    var voyage_ids = Object.keys(voyages);
     $('.old_values').each(function() {
         var $div = $(this);
         var name = $div.attr('id').substring(4);
         var values = getVoyagesValues(voyages, name);
-        var voyagesCount = Object.keys(voyages).length;
+        var voyagesCount = voyage_ids.length;
         if (values) {
             var list = '<p>';
             var count = 0;
@@ -742,22 +725,15 @@
     var alternateBackground = function() {
         var child = $("#data_display").children(".row").first();
         var isAlternate = false;
-        var lastGroupHeader = null;
         while (child.length == 1) {
             if (child.hasClass('row')) {
                 var isGroupHeader = child.hasClass('group_header');
-                if (lastGroupHeader != null && isGroupHeader) {
-                    lastGroupHeader.hide();
-                }
                 if (isGroupHeader) {
                     isAlternate = false;
-                    child.show();
-                    lastGroupHeader = child;
                 }
                 else if (child.css('display') != 'none') {
                     child.toggleClass('alternate_row', isAlternate);
                     isAlternate = !isAlternate;
-                    lastGroupHeader = null;
                 }
             }
             child = child.next();
@@ -858,6 +834,8 @@
     }
     if (k) {
         $('#sources_table').show();
+    } else {
+        $('#sources_table').after('<span class="glyphicon glyphicon-exclamation-sign">&nbsp;</span><span>{% trans "There are no contributed source references" %}</span>');
     }
 
     var notes = {{ interim.notes|safe }};
@@ -876,7 +854,7 @@
     });
     $('#edit_contrib').click(function(e) {
         if (confirm('{% trans "Return to contribution for editing?" %}')) {
-            window.location.href = $('#delete_form')[0].action;
+            window.location.href = $('#delete_form')[0].action + "?revert_to_pending=true";
         }
     });
     $('#submit_contrib').click(function(e) {
@@ -887,6 +865,7 @@
     $('#timestamp').html(new Date());
 
     $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
+    $(".old_values_header").html(voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + voyage_ids[0]);
     alternateBackground();
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>

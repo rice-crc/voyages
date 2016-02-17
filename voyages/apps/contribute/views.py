@@ -21,7 +21,7 @@ def index(request):
     Display the user index page if the user is already authenticated
     Or return to the login page if the user has not logged in yet
     """
-    filter_args = {'contributor': request.user, 'status': ContributionStatus.pending}
+    filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
     if request.user.is_authenticated():
         contributions = [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
             [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
@@ -213,6 +213,9 @@ def interim(request, contribution_type, contribution_id):
             'contribute:interim_summary',
             kwargs={'contribution_type': contribution_type, 'contribution_id': contribution_id}))
 
+    if request.GET.get('revert_to_pending') == 'true' and contribution.status <= ContributionStatus.committed:
+        contribution.status = ContributionStatus.pending
+        contribution.save()
     if contribution.status != ContributionStatus.pending:
         return redirect()
     sources_post = None
