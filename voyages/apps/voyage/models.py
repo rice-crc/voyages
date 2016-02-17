@@ -1316,9 +1316,3 @@ class Voyage(models.Model):
 
     def __unicode__(self):
         return "Voyage #%s" % str(self.voyage_id)
-
-
-class LegacyModel(models.Model):
-    class Meta:
-        managed = False
-        abstract = True
