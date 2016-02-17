@@ -11,6 +11,8 @@ urlpatterns = [
 
     url(r'^delete_voyage', views.delete, name='delete_voyage'),
 
+    url(r'^delete_review/(?P<contribution_id>\d+)', views.delete_review, name='delete_review'),
+
     url(r'^places_ajax', views.get_places, name='places_ajax'),
 
     url(r'^voyage_ajax', views.get_voyage_by_id, name='voyage_ajax'),

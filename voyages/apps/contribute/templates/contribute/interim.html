@@ -1386,7 +1386,7 @@
                     var portItemDisplay = function(data, escape) {
                         var region = regions[data.parent];
                         var broad_region = broad_regions[region.parent];
-                        return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
+                        return '<div><span class="geo_complement">' + broad_region.broad_region + ' &raquo; ' + region.region + ' &raquo; </span>' + escape(data.port) + '</div>';
                     };
                     self.selectize({
                         maxItems: 1,

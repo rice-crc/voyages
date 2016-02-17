@@ -25,6 +25,7 @@ def index(request):
     if request.user.is_authenticated():
         contributions = [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
             [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
+            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in DeleteVoyageContribution.objects.filter(**filter_args)] +\
             [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
         return render(request, "contribute/index.html", {'contributions': contributions})
     else:
@@ -103,17 +104,42 @@ def delete(request):
             with transaction.atomic():
                 contribution = DeleteVoyageContribution()
                 contribution.contributor = request.user
+                contribution.status = ContributionStatus.pending
                 contribution.deleted_voyages_ids = ','.join([str(x) for x in ids])
-                contribution.status = ContributionStatus.committed
                 contribution.notes = request.POST.get('notes')
                 contribution.save()
-            return HttpResponseRedirect(reverse('contribute:thanks'))
+            return HttpResponseRedirect(reverse('contribute:delete_review',
+                                                kwargs={'contribution_id': contribution.pk}))
         else:
             ids = form.selected_voyages
             voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm()
-    return render(request, 'contribute/delete.html', {'form': form, 'voyage_selection': voyage_selection})
+    return render(request, 'contribute/delete.html', {
+        'form': form,
+        'voyage_selection': voyage_selection})
+
+def delete_review(request, contribution_id):
+    contribution = get_object_or_404(DeleteVoyageContribution, pk=contribution_id)
+    if request.user.pk != contribution.contributor.pk:
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        action = request.POST.get('submit_val')
+        if action == 'confirm':
+            contribution.status = ContributionStatus.committed
+            contribution.save()
+            return HttpResponseRedirect(reverse('contribute:thanks'))
+        elif action == 'cancel':
+            contribution.delete()
+            return HttpResponseRedirect(reverse('contribute:index'))
+        else:
+            return HttpResponseBadRequest()
+    from voyages.apps.voyage.views import voyage_variables_data
+    ids = [int(pk) for pk in contribution.deleted_voyages_ids.split(',')]
+    deleted_voyage_vars = [voyage_variables_data(voyage_id)[1] for voyage_id in ids]
+    return render(request, 'contribute/delete_review.html', {
+        'deleted_voyage_vars': deleted_voyage_vars,
+        'voyage_selection': ids})
 
 @login_required
 def edit(request):
