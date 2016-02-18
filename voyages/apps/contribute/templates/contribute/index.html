@@ -48,7 +48,7 @@
 				</thead>
 				<tbody>
 		{% endif %}
-					<tr class='{% if c.type != "delete" %}clickable-row{% endif %}' data-href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">
+					<tr class='clickable-row' data-href="{% url 'contribute:interim' contribution_type=c.type contribution_id=c.id %}">
 						<td>
 						{{ c.contribution.get_related_voyage_ids|join:", " }}
 						<td>{{ c.type }}</td>
@@ -63,6 +63,8 @@
 								{% trans "Approved" %}
 							{% elif c.contribution.status == 4 %}
 								{% trans "Rejected" %}
+							{% elif c.contribution.status == 5 %}
+								{% trans "Published" %}
 							{% endif %}
 						</td>
 					</tr>
@@ -75,7 +77,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".clickable-row").click(function() {
-
 			window.document.location = $(this).data("href");
 		});
 	});

@@ -18,7 +18,16 @@
     {% csrf_token %}
     <div class="form-group col-md-12">
         <button class="btn btn-danger" type="submit" name="submit_val" value="confirm">{% trans "Confirm deletion" %}</button>
-        <button class="btn btn-danger" type="submit" name="submit_val" value="cancel">{% trans "Cancel contribution" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="cancel" id="cancel_btn">{% trans "Cancel contribution" %}</button>
     </div>
 </form>
+<script type="text/javascript">
+    $("#cancel_btn").click(function(e) {
+        var conf = confirm('{% trans "This delete contribution will be cancelled. This action cannot be undone, continue?" %}');
+        if (!conf) {
+            e.preventDefault();
+        }
+        return conf;
+    });
+</script>
 {% endblock %}
