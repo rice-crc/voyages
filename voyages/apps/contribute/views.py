@@ -5,6 +5,7 @@ from django.db import transaction
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
@@ -54,7 +55,7 @@ def get_voyage_by_id(request):
         error = 'POST request required'
     return JsonResponse({'error': error})
 
-
+@cache_page(24 * 60 * 60)
 @csrf_exempt
 def get_places(request):
     # retrieve list of places in the system.
@@ -121,7 +122,7 @@ def delete(request):
 
 def delete_review(request, contribution_id):
     contribution = get_object_or_404(DeleteVoyageContribution, pk=contribution_id)
-    if request.user.pk != contribution.contributor.pk:
+    if request.user.pk != contribution.contributor.pk or contribution.status > ContributionStatus.committed:
         return HttpResponseForbidden()
     if request.method == 'POST':
         action = request.POST.get('submit_val')
@@ -230,6 +231,10 @@ def get_contribution(contribution_type, contribution_id):
 
 @login_required
 def interim(request, contribution_type, contribution_id):
+    if contribution_type == 'delete':
+        return HttpResponseRedirect(reverse('contribute:delete_review',
+                                    kwargs={'contribution_id': contribution_id}))
+
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()

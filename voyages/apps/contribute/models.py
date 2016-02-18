@@ -187,6 +187,7 @@ class ContributionStatus:
     under_review = 2
     approved = 3
     rejected = 4
+    published = 5
 
 class BaseVoyageContribution(models.Model):
     """
