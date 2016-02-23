@@ -1546,6 +1546,9 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 						self.ignoreHover = true;
 						var $next = self.getAdjacentOption(self.$activeOption, 1);
 						if ($next.length) self.setActiveOption($next, true, true);
+					} else {
+						var $next = self.$dropdown_content.find('[data-selectable]:first');
+						if ($next.length) self.setActiveOption($next, true, true);
 					}
 					e.preventDefault();
 					return;
@@ -1560,9 +1563,11 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 					e.preventDefault();
 					return;
 				case KEY_RETURN:
-					if (self.isOpen && self.$activeOption) {
-						self.onOptionSelect({currentTarget: self.$activeOption});
+					if (self.isOpen) {
 						e.preventDefault();
+						if (self.$activeOption) {
+							self.onOptionSelect({currentTarget: self.$activeOption});
+						}
 					}
 					return;
 				case KEY_LEFT:
@@ -1810,8 +1815,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			var changed = $input.val() !== value;
 			if (changed) {
 				$input.val(value).triggerHandler('update');
-				this.lastValue = value;
 			}
+			this.lastValue = value;
 		},
 	
 		/**
@@ -2195,6 +2200,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.hasOptions = results.items.length > 0 || has_create_option;
 			if (self.hasOptions) {
 				if (results.items.length > 0) {
+					// Voyages: reset active item if query is empty.
+					if (query == '') active_before = null;
 					$active_before = active_before && self.getOption(active_before);
 					if ($active_before && $active_before.length) {
 						$active = $active_before;
@@ -2205,7 +2212,10 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 						if ($create && !self.settings.addPrecedence) {
 							$active = self.getAdjacentOption($create, 1);
 						} else {
-							$active = $dropdown_content.find('[data-selectable]:first');
+							// Voyages: do not auto-select first entry.
+							if (query != '') {
+								$active = $dropdown_content.find('[data-selectable]:first');
+							}
 						}
 					}
 				} else {
@@ -2579,7 +2589,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 				if (i < self.caretPos) {
 					self.setCaret(self.caretPos - 1);
 				}
-	
+
 				self.refreshState();
 				self.updatePlaceholder();
 				self.updateOriginalInput({silent: silent});
@@ -2906,14 +2916,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.positionDropdown();
 			self.refreshOptions(true);
 	
-			// select previous option
-			if (option_select) {
-				$option_select = self.getOption(option_select);
-				if ($option_select.length) {
-					self.setActiveOption($option_select);
-				}
-			}
-	
+			// Voyages: select null option
+			self.setActiveOption(null);
 			return true;
 		},
 	

@@ -112,6 +112,10 @@
         padding: 20px;
     }
 
+    .selectize-dropdown {
+        min-width: 180px !important;
+    }
+
     .selectize_day {
         display: inline-block;
     }
@@ -1260,6 +1264,7 @@
                 optgroupLabelField: 'label',
                 optgroupValueField: 'id',
                 searchField: ['value'],
+                selectOnTab: true,
                 maxItems: 1,
                 plugins: ['optgroup_columns', 'restore_on_backspace']
             });
@@ -1269,6 +1274,7 @@
         } else if (nodeName == 'SELECT') {
             var $s = input.selectize({
                 optgroupField: 'source',
+                selectOnTab: true,
                 sortField: [{ field: 'priority' }, { field: 'text' }],
                 lockOptgroupOrder: true,
                 onInitialize: function() {
@@ -1397,6 +1403,7 @@
                         optgroupValueField: 'id',
                         valueField: 'value',
                         searchField: ['port', 'region', 'broad_region'],
+                        selectOnTab: true,
                         sortField: 'order',
                         render: {
                             option: function(data, escape) {
@@ -1487,6 +1494,7 @@
                 options: options,
                 maxItems: 3,
                 searchField: ['search'],
+                selectOnTab: true,
                 valueField: 'value',
                 labelField: 'label',
                 optgroupLabelField: 'name',
@@ -1742,9 +1750,12 @@
     // Special handling of port/region/broad region selection.
     var protoSelectOption = Selectize.prototype.onOptionSelect;
     Selectize.prototype.onOptionSelect = function(e) {
-        if (e && e.preventDefault) {
-            e.preventDefault();
-            if (e.type == 'mousedown') return false;
+        if (e && e.currentTarget) {
+			if (e.preventDefault) {
+			    e.preventDefault();
+			    e.stopPropagation();
+			}
+            if (e.type && e.type == 'mousedown') return false;
             var target = $(e.currentTarget);
             var className = "expanded";
             if (this.$control_input.val() != '' && !this.options.create) {
@@ -1765,6 +1776,7 @@
                 if (isExpanded) return false;
                 target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
                 $(".broad_region_" + target.data('pk')).addClass(className);
+                this.setTextboxValue('');
             } else if (target.hasClass("region")) {
                 nextActive = ".region_" + target.data('pk');
                 var isExpanded = $(nextActive + ":first").hasClass(className);
@@ -1773,6 +1785,7 @@
                 if (isExpanded) return false;
                 target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
                 $(".region_" + target.data('pk')).addClass(className);
+                this.setTextboxValue('');
             } else {
                 protoSelectOption.apply(this, arguments);
             }
