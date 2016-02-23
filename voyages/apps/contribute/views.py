@@ -37,7 +37,8 @@ def get_summary(v):
     return {'voyage_id': v.voyage_id,
             'captain': ', '.join([c.name for c in v.voyage_captain.all()]),
             'ship': v.voyage_ship.ship_name,
-            'year_arrived': dates.get_date_year(dates.first_dis_of_slaves)}
+            'year_arrived': dates.get_date_year(dates.first_dis_of_slaves) or
+                            dates.get_date_year(dates.imp_arrival_at_port_of_dis)}
 
 @csrf_exempt
 def get_voyage_by_id(request):
