@@ -1175,6 +1175,13 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript">
+    var KEY_RETURN = 13;
+    var KEY_DOWN = 40;
+    var KEY_LEFT = 37;
+    var KEY_RIGHT = 39;
+    var KEY_TAB = 9;
+    var KEY_UP = 38;
+
     var submit_val = '';
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
@@ -1571,6 +1578,8 @@
 
         var current_cell = null;
         var editor = $('#cell_editor');
+        var col_count = DEMOGRAPHICS_COLUMN_HEADERS.length;
+        var row_count = DEMOGRAPHICS_ROW_INDICES.length;
 
         $("#demographics_table td").click(function() {
             if (current_cell) return;
@@ -1587,9 +1596,42 @@
                     editor.appendTo($('#hidden_div'));
                 }
             });
-            editor.keyup(function(e) {
-                if (e.keyCode == 13) {
+            editor.keydown(function(e) {
+                var old_cell = current_cell;
+                if (!old_cell) return;
+                var cell_shift = 0;
+                switch (e.keyCode) {
+                case KEY_RETURN:
+                case KEY_DOWN:
+                    cell_shift = col_count;
+                    break;
+                case KEY_UP:
+                    cell_shift = -col_count;
+                    break;
+                case KEY_LEFT:
+                    cell_shift = -1;
+                    break;
+                case KEY_RIGHT:
+                case KEY_TAB:
+                    cell_shift = 1;
+                    break;
+                default:
+                    return;
+                }
+                var old_col = old_cell.data('col');
+                var old_row = old_cell.data('row');
+                var old_cell = old_row * col_count + old_col;
+                var new_cell = old_cell + cell_shift;
+                if (new_cell >= 0 && new_cell < col_count * row_count) {
                     editor.blur();
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var new_row = Math.trunc(new_cell / col_count);
+                    var new_col = new_cell % col_count;
+                    $(demographics_rows[new_row][new_col]).trigger('click');
+                } else if (e.keyCode != KEY_TAB) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
             });
             editor.val(value);
@@ -1802,5 +1844,7 @@
             protoSelectOption.apply(this, arguments);
         }
     };
+    // TODO: remove this code once styling is done.
+    $("#center-content").css('width', '900px');
 </script>
 {% endblock %}

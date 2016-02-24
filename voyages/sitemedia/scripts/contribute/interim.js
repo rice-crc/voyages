@@ -523,7 +523,12 @@ function getDemographicsRows(id) {
     return $.map(
         $("#" + id).find("tbody").find("tr"),
         function(row, i) {
-            return $(row).find("td");
+            var cells = $(row).find("td");
+            cells.data('row', i);
+            cells.each(function(col) {
+                $(this).data('col', col);
+            });
+            return cells;
         }
     );
 };
@@ -538,7 +543,8 @@ function fillDemograhicsTable(id, numbers, editable) {
             var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
             var row = DEMOGRAPHICS_ROW_INDICES.indexOf(parseInt(match[2]));
             if (col >= 0 && row >= 0 && row < 6) {
-                $(demographics_rows[row][col]).html(numbers[key]);
+                var $entry = $(demographics_rows[row][col]);
+                $entry.html(numbers[key]);
                 found = true;
             }
         }
