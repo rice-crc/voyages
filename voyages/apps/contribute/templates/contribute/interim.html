@@ -291,7 +291,7 @@
             {% with form.additional_ship_owners as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8 last_group_input">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -329,7 +329,7 @@
             {% with form.african_resistance as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8 last_group_input">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "African resistance" %}'>
@@ -502,7 +502,7 @@
             {% with form.port_voyage_ended as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8 last_group_input">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -595,7 +595,7 @@
             {% with form.length_of_middle_passage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 last_group_input">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -738,7 +738,7 @@
             <label for="interim_slave_number_NDESERT">
                 {% trans "Total number of crew deserted" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-2 last_group_input">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NDESERT" name="interim_slave_number_NDESERT">
             </div>
         </div>
@@ -861,7 +861,7 @@
             <label for="interim_slave_number_SLADAMER">
                 {% trans "Slaves deaths between arrival and sale" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-2 last_group_input">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
@@ -925,7 +925,7 @@
             <label for="notes_for_slaves_demographics">
                 {% trans "Notes for slaves characteristics" %}:
             </label>
-            <div class="input-group col-md-8">
+            <div class="input-group col-md-8 last_group_input">
                 <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
             </div>
         </div>
@@ -1410,7 +1410,7 @@
                         optgroupValueField: 'id',
                         valueField: 'value',
                         searchField: ['port', 'region', 'broad_region'],
-                        selectOnTab: true,
+                        selectOnTab: false,
                         sortField: 'order',
                         render: {
                             option: function(data, escape) {
@@ -1612,8 +1612,10 @@
                     cell_shift = -1;
                     break;
                 case KEY_RIGHT:
-                case KEY_TAB:
                     cell_shift = 1;
+                    break;
+                case KEY_TAB:
+                    cell_shift = e.shiftKey ? -1 : 1;
                     break;
                 default:
                     return;
@@ -1656,6 +1658,20 @@
                 }
             }
         }
+
+        $('.last_group_input, .last_group_input input, .last_group_input select, .last_group_input textarea').keydown(function(e) {
+            if (e.keyCode == KEY_TAB) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $expander = $(this).closest('.expander_container').next().find('.collapse');
+                $expander.collapse('show');
+                if ($expander.attr('id') == 'demographics') {
+                    $(demographics_rows[0][0]).trigger('click');
+                } else {
+                    $expander.find(':input:visible:enabled:first').focus();
+                }
+            }
+        });
 
         var addSourceToTable = function(source, isEdit) {
             if (isEdit) removeSource(source.id);
@@ -1792,7 +1808,7 @@
     // Special handling of port/region/broad region selection.
     var protoSelectOption = Selectize.prototype.onOptionSelect;
     Selectize.prototype.onOptionSelect = function(e) {
-        if (e && e.currentTarget) {
+        if (this.$input.hasClass('select_port') && e && e.currentTarget) {
 			if (e.preventDefault) {
 			    e.preventDefault();
 			    e.stopPropagation();

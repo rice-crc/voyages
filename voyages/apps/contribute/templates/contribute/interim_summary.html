@@ -22,91 +22,91 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ship_construction_place as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ship_registration_place as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.year_ship_constructed as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.year_ship_registered as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.national_carrier as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.rig_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.tonnage_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ton_type as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.guns_mounted as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_ship_owner as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_ship_owner as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.additional_ship_owners as f %}
-        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+        <div class="multiline_value row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
@@ -118,14 +118,14 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.african_resistance as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
@@ -137,112 +137,112 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_port_intended_embarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_port_intended_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_port_intended_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.principal_place_of_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.place_of_call_before_atlantic_crossing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.first_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_place_of_landing as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.principal_place_of_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.port_voyage_ended as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="id_{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
@@ -254,63 +254,63 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_slave_purchase_began as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_vessel_left_last_slaving_port as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_first_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_second_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_third_slave_disembarkation as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_return_departure as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.date_voyage_completed as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="date_value old_values" id="old_{{ f.html_name }}"></div>
-            <span class="date_value" id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span class="date_value" id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.length_of_middle_passage as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
 
@@ -322,21 +322,21 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.second_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.third_captain as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
-            <span id="id_{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     <div class="row">
@@ -703,20 +703,24 @@
         var values = getVoyagesValues(voyages, name);
         var voyagesCount = voyage_ids.length;
         if (values) {
-            var list = '<p>';
-            var count = 0;
+            var list = [];
             for (var key in values) {
                 if (key == ',,') continue;
-                ++count;
+                var item = '';
                 if (voyagesCount > 1) {
-                    list += '<strong>' + values[key].join(', ') + ':</strong> ';
+                    item = '<strong>' + values[key].join(', ') + ':</strong> ';
                 }
-                list += '<span class="old_single_value">' + key + '</span><br />';
+                list.push(item + '<span class="old_single_value">' + key + '</span>');
             }
-            if (count > 0) {
-                $div.append(list + '</p>');
+            if (list.length > 0) {
+                $div.append(list.join('<br />'));
             }
         }
+    });
+
+    $('.multiline_value span').each(function() {
+        var $span = $(this);
+        $span.html($span.html().replace(/\r?\n/i, '<br />'));
     });
 
     var alternateBackground = function() {
@@ -839,7 +843,7 @@
 
     var notes = {{ interim.notes|safe }};
     for (var key in notes) {
-        $('#id_' + key).after('<div class="notes"><span class="glyphicon glyphicon-comment"></span>&nbsp;' + notes[key] + '</div>');
+        $('#' + key).after('<div class="notes"><span class="glyphicon glyphicon-comment"></span>&nbsp;' + notes[key] + '</div>');
     }
 
     $('#show_blanks,#show_existing,#show_notes').trigger('change');
@@ -864,6 +868,8 @@
     $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
     $(".old_values_header").html(voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + voyage_ids[0]);
     alternateBackground();
+    // TODO: remove this code once styling is done.
+    $("#center-content").css('width', '900px');
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>
@@ -875,7 +881,7 @@
     }
 
     .blank > span:after {
-        color: lightgray;
+        color: gray;
         content: '{% trans "(blank)" %}';
     }
 
@@ -883,6 +889,7 @@
         color: gray;
         margin-left: 15px;
         display: inline-block;
+        float: right;
     }
 
     #demographics_table td {
