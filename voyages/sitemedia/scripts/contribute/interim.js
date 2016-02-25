@@ -71,8 +71,14 @@ var _toModel = function(self) {
     };
 }
 
-function validateMinLength(val, minLength) {
-    return $.type(val) === 'string' && val.length >= minLength;
+function validateMinLength(val, minLength, errors, fieldName) {
+    var valid = $.type(val) === 'string' && val.length >= minLength;
+    if (!valid) {
+        errors.push(fieldName + ': ' +
+            gettext('should be at least {num_char} characters long.').
+                replace('{num_char}', minLength));
+    }
+    return valid;
 }
 
 function validateInt(val, minValue, maxValue, notNull) {
@@ -130,9 +136,7 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     var self = this;
     this.validate = function () {
         var errors = [];
-        if (!validateMinLength(self.library, 4)) {
-            errors.push(gettext("Library or archive name is mandatory"));
-        }
+        validateMinLength(self.library, 2, errors, gettext('Library or archive name'));
         return new ValidationResult([], errors);
     };
     this.toString = function () {
@@ -178,15 +182,9 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.author, 4)) {
-            errors.push(gettext("Author name is mandatory"));
-        }
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.journal, 4)) {
-            warnings.push(gettext("Journal is a recommended field"));
-        }
+        validateMinLength(self.author, 4, errors, gettext('Author name'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.journal, 2, warnings, gettext('Journal is a recommended field'));
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
@@ -241,15 +239,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.author, 4)) {
-            errors.push(gettext("Author name is mandatory"));
-        }
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.publisher, 4)) {
-            warnings.push(gettext("Publisher is a recommended field"));
-        }
+        validateMinLength(self.author, 4, errors, gettext('Author name'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.publisher, 2, warnings, gettext('Publisher is a recommended field'));
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
@@ -300,15 +292,9 @@ function OtherSource(title, location, page, info, url, id) {
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.info, 4)) {
-            warnings.push(gettext("Information is a recommended field"));
-        }
-        if (!validateMinLength(self.url, 4)) {
-            warnings.push(gettext("URL is a recommended field"));
-        }
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {

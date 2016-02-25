@@ -610,7 +610,7 @@
 // Reusable functions for Voyages.
 function addNotesPopup(id, $wrapper, spanStyle) {
 	spanStyle = spanStyle || '';
-	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><button onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" tabindex="-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></button><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
+	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><button onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" tabindex="-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></button><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onblur="$(\'#dropdown_btn_' + id + '\').dropdown(\'toggle\');" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
 }
 
 /**
@@ -1364,7 +1364,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 					return '<div class="item">' + escape(data[field_label]) + '</div>';
 				},
 				'option_create': function(data, escape) {
-					return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+					return '<div class="create">' + gettext('Add') + ' <strong>' + escape(data.input) + '</strong>&hellip;</div>';
 				}
 			};
 	
@@ -2781,6 +2781,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.isOpen = true;
 			self.refreshState();
 			self.$dropdown.css({visibility: 'hidden', display: 'block'});
+			$('.' + self.settings.dropdownClass).css({visibility: 'hidden', display: 'block'});
 			self.positionDropdown();
 			self.$dropdown.css({visibility: 'visible'});
 			self.trigger('dropdown_open', self.$dropdown);
@@ -3669,6 +3670,11 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			var original = self.onKeyDown;
 			return function(e) {
 				var index, option;
+				var inp = String.fromCharCode(e.keyCode);
+				var isEditChar = /[a-zA-Z0-9-_\. ,]/.test(inp);
+				if (isEditChar && this.$control_input.val() === '' && !this.$activeItems.length) {
+					e.keyCode = KEY_BACKSPACE;
+				}
 				if (e.keyCode === KEY_BACKSPACE && this.$control_input.val() === '' && !this.$activeItems.length) {
 					index = this.caretPos - 1;
 					if (index >= 0 && index < this.items.length) {
@@ -3677,7 +3683,6 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 							this.setTextboxValue(options.text.apply(this, [option]));
 							this.refreshOptions(true);
 						}
-						e.preventDefault();
 						return;
 					}
 				}
