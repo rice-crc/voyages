@@ -573,3 +573,9 @@ def voyage_to_dict(voyage):
         dict[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
         dict[number_prefix + 'NDESERT'] = crew.crew_deserted
     return dict
+
+@login_required()
+def editor_main(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    return render(request, 'contribute/editor_main.html')

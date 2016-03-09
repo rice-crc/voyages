@@ -181,6 +181,25 @@ class InterimSlaveNumber(models.Model):
         null=False, blank=False)
     number = models.IntegerField('Number')
 
+class ReviewRequest(models.Model):
+    """
+    A request made to a reviewer for a contribution.
+    """
+    editor = models.ForeignKey(User, null=False, related_name='+')
+    suggested_reviewer = models.ForeignKey(User, null=False, related_name='+')
+    email_sent = models.BooleanField()
+    response = models.IntegerField()
+    editor_comments = models.TextField('Editor comments')
+    final_decision = models.IntegerField()
+    archived = models.BooleanField()
+
+class ReviewVoyageContribution(models.Model):
+    request = models.ForeignKey(ReviewRequest)
+    review_interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                              related_name='+')
+    notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
+
+
 class ContributionStatus:
     pending = 0
     committed = 1
@@ -193,12 +212,13 @@ class BaseVoyageContribution(models.Model):
     """
     Base (abstract) model for all types of contributions.
     """
-    contributor = models.ForeignKey(User, null=False,
-                                    related_name='+')
+    contributor = models.ForeignKey(User, null=False, related_name='+')
     notes = models.TextField('Notes', max_length=10000, help_text='Notes for the contribution')
     # see the enumeration ContributionStatus
     status = models.IntegerField(
         'Status', help_text='Indicates whether the contribution is still being edited, committed, discarded etc')
+
+    review_request = models.ManyToManyField(ReviewRequest)
 
     def get_related_voyage_ids(self):
         return []
