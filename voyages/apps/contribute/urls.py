@@ -30,5 +30,7 @@ urlpatterns = [
 
     url(r'merge_voyages', views.merge, name='merge_voyages'),
 
-    url(r'new_voyage', views.new_voyage, name='new_voyage')]
+    url(r'new_voyage', views.new_voyage, name='new_voyage'),
+
+    url(r'editor_main', views.editor_main, name='editor_main')]
 
