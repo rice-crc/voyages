@@ -1185,16 +1185,21 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 	
 			$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes).addClass(inputMode);
 			$control          = $('<div>').addClass(settings.inputClass).addClass('items').appendTo($wrapper)
-								.css("width", "calc(100% - 40px)")
 								.css("border-top-right-radius", "0")
 								.css("border-bottom-right-radius", "0")
 								.css("margin-right", "-1px");
+			var hasNotesPopup = !settings.hasOwnProperty('notesButton') || settings['notesButton'];
+			if (hasNotesPopup) {
+				$control = $control.css("width", "calc(100% - 40px)");
+			}
 			$control_input    = $('<input type="text" autocomplete="off" />').appendTo($control).attr('tabindex', $input.is(':disabled') ? '-1' : self.tabIndex);
 			var id = next_id++;
 			if ($input.attr('name')) {
 				id = $input.attr('name');
 			}
-			addNotesPopup(id, $wrapper, 'display: inline-block; vertical-align: top;');
+			if (hasNotesPopup) {
+				addNotesPopup(id, $wrapper, 'display: inline-block; vertical-align: top;');
+			}
 			$dropdown_parent  = $(settings.dropdownParent || $wrapper);
 			$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode).hide().appendTo($dropdown_parent);
 			$dropdown_content = $('<div>').addClass(settings.dropdownContentClass).appendTo($dropdown);
