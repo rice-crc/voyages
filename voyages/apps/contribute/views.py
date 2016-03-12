@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
@@ -16,6 +16,12 @@ import json
 
 number_prefix = 'interim_slave_number_'
 
+def get_filtered_contributions(filter_args):
+    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
+            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in DeleteVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
+
 def index(request):
     """
     Handles the redirection when user attempts to login
@@ -24,10 +30,7 @@ def index(request):
     """
     filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
     if request.user.is_authenticated():
-        contributions = [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
-            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in DeleteVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
+        contributions = get_filtered_contributions(filter_args)
         return render(request, "contribute/index.html", {'contributions': contributions})
     else:
         return HttpResponseRedirect(reverse('account_login'))
@@ -579,3 +582,40 @@ def editor_main(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     return render(request, 'contribute/editor_main.html')
+
+@login_required()
+def get_pending_requests(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    filter_args = {'status__gte': ContributionStatus.committed, 'status__lt': ContributionStatus.published}
+    contributions = get_filtered_contributions(filter_args)
+
+    def get_contribution_info(info):
+        contrib = info['contribution']
+        res = {'type': info['type'],
+               'id': info['id'],
+               'contributor': contrib.contributor.get_full_name(),
+               'date_created': contrib.date_created,
+               'voyage_ids': contrib.get_related_voyage_ids()}
+        # Fetch review info.
+        reqs = [req for req in contrib.review_request.all() if not req.archived]
+        if len(reqs) > 1:
+            raise Exception('Invalid state: more than one review request is active')
+        if len(reqs) == 1:
+            res['reviewer'] = reqs[0].suggested_reviewer
+            res['response'] = reqs[0].response
+            res['final_decision'] = reqs[0].final_decision
+        else:
+            res['reviewer'] = ''
+            res['response'] = ''
+            res['status'] = 'No reviewer assigned'
+            res['final_decision'] = ''
+        return res
+
+    return JsonResponse({x['type'] + '/' + str(x['id']): get_contribution_info(x) for x in contributions})
+
+def get_reviewers(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    reviewers = [{'full_name': u.get_full_name(), 'pk': u.pk} for u in User.objects.filter(is_staff=True)]
+    return JsonResponse(reviewers, safe=False)

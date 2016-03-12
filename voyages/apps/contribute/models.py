@@ -212,6 +212,7 @@ class BaseVoyageContribution(models.Model):
     """
     Base (abstract) model for all types of contributions.
     """
+    date_created = models.DateTimeField(auto_now_add=True)
     contributor = models.ForeignKey(User, null=False, related_name='+')
     notes = models.TextField('Notes', max_length=10000, help_text='Notes for the contribution')
     # see the enumeration ContributionStatus

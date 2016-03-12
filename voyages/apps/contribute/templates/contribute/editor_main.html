@@ -4,14 +4,21 @@
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
+<style>
+    .tab-pane {
+        padding: 15px;
+        min-height: 400px;
+    }
+</style>
 <div>
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#pending" aria-controls="home" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
-    <li role="presentation"><a href="#messages" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
-    <li role="presentation"><a href="#voyages" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
+    <li role="presentation" class="active"><a href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
+    <li role="presentation"><a href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
+    <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
     <li role="presentation"><a href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source codes" %}</a></li>
     <li role="presentation"><a href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish new database version" %}</a></li>
   </ul>
@@ -21,12 +28,29 @@
     <div role="tabpanel" class="tab-pane active" id="pending">
     </div>
     <div role="tabpanel" class="tab-pane" id="requests">
+        <table id="requests_table" class="table table-">
+            <thead>
+            <tr>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Contributor" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Voyage ID" %}</th>
+                <th>{% trans "Reviewer" %}</th>
+                <th>{% trans "Response" %}</th>
+                <th>{% trans "Status" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <div role="tabpanel" class="tab-pane" id="users">
+        <a href="/admin/auth/user/">{% trans "Users on Live Admin" %}</a>
     </div>
     <div role="tabpanel" class="tab-pane" id="voyages">
     </div>
     <div role="tabpanel" class="tab-pane" id="sources">
+        <a href="/admin/voyage/voyagesources/">{% trans "Sources on Live Admin" %}</a>
     </div>
     <div role="tabpanel" class="tab-pane" id="publish">
     </div>
@@ -34,23 +58,89 @@
 
 </div>
 
+<div class="modal fade" id="reviewer_assign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{% trans "Assign a reviewer" %}</h4>
+            </div>
+            <div class="modal-body" style="min-height: 250px; overflow-y: auto;">
+                <div class="form-group">
+                    <label for="chosen_reviewer">{% trans "Choose a reviewer" %}</label>
+                    <input class="form-control" type="text" id="chosen_reviewer">
+                </div>
+                <div class="form-group">
+                    <label for="editor_message">{% trans "Editor's message" %}</label>
+                    <textarea class="form-control" type="text" id="editor_message" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="send_request" type="button" class="btn btn-primary">{% trans "Send to reviewer" %}</button>
+                <button type="button" class="btn danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/datatables.min.js"></script>
 <script type="text/javascript">
     // Dynamically load tab contents.
     var loadedTabs = {};
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var href = $(e.target).attr('href');
         if (loadedTabs.hasOwnProperty(href)) return;
-        if (href == '#sources') {
-            $.get("/admin/voyage/voyagesources/", function(data) {
-                $(href).hide();
-                $(href).html(data);
-                $(href).find(':not(#container):not(#content):not(#content *)').hide();
-                $(href).show();
-                loadedTabs[href] = 'done';
+        if (href == '#requests') {
+            var types = {'edit': '{% trans "Edit voyage" %}',
+                         'delete': '{% trans "Delete voyage" %}',
+                         'merge': '{% trans "Merge voyages" %}',
+                         'new': '{% trans "New voyage" %}'};
+            $.ajax({
+                url: '/contribute/json_pending_requests',
+                success: function(data) {
+                    loadedTabs[href] = data;
+                    for (var key in data) {
+                        var row = data[key];
+                        $('#requests_table > tbody:last-child').append(
+                            '<tr><td>' +
+                            (row['type'] == 'delete' ? '@@@' : '<a href="/contribute/interim_summary/' + key + '">@@@</a>')
+                                .replace('@@@', types[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
+                            row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') +
+                            '</td><td class="review_cell" data-id="' + key + '">' +
+                            (row['reviewer'] == '' ? '<button class="reviewer_assign_btn">{% trans "Assign" %}</button>' : row['reviewer'] +
+                                '<button>{% trans "Cancel" %}</button>') + '</td><td>' +
+                            row['response'] + '</td><td>' + row['final_decision'] + '</td></tr>');
+                    }
+                    $('#requests_table').DataTable();
+                    $(".reviewer_assign_btn").click(function() {
+                        $('#reviewer_assign_modal').modal('show');
+                    });
+                }
             });
         }
-    })
+    });
+
+    $(function() {
+        $.ajax({
+            url: '/contribute/json_reviewers',
+            type: 'GET',
+            success: function(res) {
+                $('#chosen_reviewer').selectize({
+                    dropdownParent: null,
+                    valueField: 'pk',
+                    labelField: 'full_name',
+                    searchField: 'full_name',
+                    sortField: 'full_name',
+                    maxItems: 1,
+                    notesButton: false,
+                    options: res,
+                });
+            }
+        });
+    });
     // TODO: remove this code once styling is done.
     $("#center-content").css('width', '900px');
 </script>
