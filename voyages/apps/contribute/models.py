@@ -187,11 +187,11 @@ class ReviewRequest(models.Model):
     """
     editor = models.ForeignKey(User, null=False, related_name='+')
     suggested_reviewer = models.ForeignKey(User, null=False, related_name='+')
-    email_sent = models.BooleanField()
-    response = models.IntegerField()
+    email_sent = models.BooleanField(default=False)
+    response = models.IntegerField(default=0)
     editor_comments = models.TextField('Editor comments')
-    final_decision = models.IntegerField()
-    archived = models.BooleanField()
+    final_decision = models.IntegerField(default=0)
+    archived = models.BooleanField(default=False)
 
 class ReviewVoyageContribution(models.Model):
     request = models.ForeignKey(ReviewRequest)
