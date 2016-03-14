@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
@@ -221,6 +222,7 @@ def create_source(source_values, interim_voyage):
     return source
 
 contribution_model_by_type = {
+    'delete': DeleteVoyageContribution,
     'edit': EditVoyageContribution,
     'merge': MergeVoyagesContribution,
     'new': NewVoyageContribution
@@ -602,7 +604,7 @@ def get_pending_requests(request):
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         if len(reqs) == 1:
-            res['reviewer'] = reqs[0].suggested_reviewer
+            res['reviewer'] = reqs[0].suggested_reviewer.get_full_name()
             res['response'] = reqs[0].response
             res['final_decision'] = reqs[0].final_decision
         else:
@@ -619,3 +621,55 @@ def get_reviewers(request):
         return HttpResponseForbidden()
     reviewers = [{'full_name': u.get_full_name(), 'pk': u.pk} for u in User.objects.filter(is_staff=True)]
     return JsonResponse(reviewers, safe=False)
+
+
+
+def get_contribution_from_post(dict):
+    contribution_pair = dict.get('contribution_id').split('/')
+    contribution_type = contribution_pair[0]
+    contribution_id = int(contribution_pair[1])
+    return get_contribution(contribution_type, contribution_id)
+
+@login_required()
+@require_POST
+def post_review_request(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution = get_contribution_from_post(request.POST)
+    reviewer_id = int(request.POST.get('reviewer_id'))
+    message = request.POST.get('message')
+    if contribution.contributor_id == reviewer_id:
+        return JsonResponse({'error': _('Reviewer and contributor must be different users')})
+    # Check if contribution already has a pending review.
+    reqs = [req for req in contribution.review_request.all() if not req.archived]
+    if len(reqs) >= 1:
+        return JsonResponse({'error': _('There is already an active review for this contribution')})
+
+    review_request = ReviewRequest()
+    try:
+        reviewer = get_object_or_404(User, pk=reviewer_id)
+        review_request.editor = request.user
+        review_request.editor_comments = message
+        review_request.email_sent = False
+        review_request.suggested_reviewer = reviewer
+        review_request.save()
+        contribution.review_request.add(review_request)
+        contribution.save()
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
+
+    return JsonResponse({'review_request': review_request.pk})
+
+@login_required()
+@require_POST
+def post_archive_review_request(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution = get_contribution_from_post(request.POST)
+    reqs = [req for req in contribution.review_request.all() if not req.archived]
+    if len(reqs) == 0:
+        return JsonResponse({'error': _('There is no active review for this contribution')})
+    for req in reqs:
+        req.archived = True
+        req.save()
+    return JsonResponse({'result': len(reqs)})
