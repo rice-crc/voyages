@@ -600,7 +600,8 @@ def get_pending_requests(request):
                'date_created': contrib.date_created,
                'voyage_ids': contrib.get_related_voyage_ids()}
         # Fetch review info.
-        reqs = [req for req in contrib.review_request.all() if not req.archived]
+        reqs = [req for req in ReviewRequest.objects.filter(contribution_id=info['type'] + '/' + str(info['id']))
+                if not req.archived]
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         if len(reqs) == 1:
@@ -622,10 +623,10 @@ def get_reviewers(request):
     reviewers = [{'full_name': u.get_full_name(), 'pk': u.pk} for u in User.objects.filter(is_staff=True)]
     return JsonResponse(reviewers, safe=False)
 
-
-
-def get_contribution_from_post(dict):
-    contribution_pair = dict.get('contribution_id').split('/')
+def get_contribution_from_id(contribution_id):
+    if contribution_id is None:
+        return None
+    contribution_pair = contribution_id.split('/')
     contribution_type = contribution_pair[0]
     contribution_id = int(contribution_pair[1])
     return get_contribution(contribution_type, contribution_id)
@@ -635,13 +636,14 @@ def get_contribution_from_post(dict):
 def post_review_request(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    contribution = get_contribution_from_post(request.POST)
+    contribution_id = request.POST.get('contribution_id')
+    contribution = get_contribution_from_id(contribution_id)
     reviewer_id = int(request.POST.get('reviewer_id'))
     message = request.POST.get('message')
     if contribution.contributor_id == reviewer_id:
         return JsonResponse({'error': _('Reviewer and contributor must be different users')})
     # Check if contribution already has a pending review.
-    reqs = [req for req in contribution.review_request.all() if not req.archived]
+    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
     if len(reqs) >= 1:
         return JsonResponse({'error': _('There is already an active review for this contribution')})
 
@@ -651,9 +653,10 @@ def post_review_request(request):
         review_request.editor = request.user
         review_request.editor_comments = message
         review_request.email_sent = False
+        review_request.contribution_id = contribution_id
         review_request.suggested_reviewer = reviewer
         review_request.save()
-        contribution.review_request.add(review_request)
+        contribution.status = ContributionStatus.under_review
         contribution.save()
     except Exception as e:
         return JsonResponse({'error': str(e)})
@@ -665,7 +668,7 @@ def post_review_request(request):
 def post_archive_review_request(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    contribution = get_contribution_from_post(request.POST)
+    contribution = get_contribution_from_id(request.POST.get('contribution_id'))
     reqs = [req for req in contribution.review_request.all() if not req.archived]
     if len(reqs) == 0:
         return JsonResponse({'error': _('There is no active review for this contribution')})
@@ -673,3 +676,13 @@ def post_archive_review_request(request):
         req.archived = True
         req.save()
     return JsonResponse({'result': len(reqs)})
+
+@login_required()
+def review_request(request, review_request_id):
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if req.archived or req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+    contribution = get_contribution_from_id(req.contribution_id)
+    if contribution is None:
+        raise Http404
+    return render(request, 'contribute/review_request.html', {'request': req, 'contribution': contribution})
