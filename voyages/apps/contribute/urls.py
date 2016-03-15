@@ -34,6 +34,9 @@ urlpatterns = [
 
     url(r'editor_main', views.editor_main, name='editor_main'),
 
+    url(r'review_request/(?P<review_request_id>\d+)',
+        views.review_request, name='review_request'),
+
     url(r'json_pending_requests', views.get_pending_requests, name='json_pending_requests'),
     url(r'json_reviewers', views.get_reviewers, name='json_reviewers'),
 

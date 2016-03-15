@@ -187,6 +187,7 @@ class ReviewRequest(models.Model):
     """
     editor = models.ForeignKey(User, null=False, related_name='+')
     suggested_reviewer = models.ForeignKey(User, null=False, related_name='+')
+    contribution_id = models.TextField(null=False)
     email_sent = models.BooleanField(default=False)
     response = models.IntegerField(default=0)
     editor_comments = models.TextField('Editor comments')
@@ -218,8 +219,6 @@ class BaseVoyageContribution(models.Model):
     # see the enumeration ContributionStatus
     status = models.IntegerField(
         'Status', help_text='Indicates whether the contribution is still being edited, committed, discarded etc')
-
-    review_request = models.ManyToManyField(ReviewRequest)
 
     def get_related_voyage_ids(self):
         return []
