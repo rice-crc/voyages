@@ -607,10 +607,12 @@ def get_pending_requests(request):
         if len(reqs) == 1:
             res['reviewer'] = reqs[0].suggested_reviewer.get_full_name()
             res['response'] = reqs[0].response
+            res['reviewer_comments'] = reqs[0].reviewer_comments
             res['final_decision'] = reqs[0].final_decision
         else:
             res['reviewer'] = ''
             res['response'] = ''
+            res['reviewer_comments'] = ''
             res['status'] = 'No reviewer assigned'
             res['final_decision'] = ''
         return res
@@ -649,15 +651,17 @@ def post_review_request(request):
 
     review_request = ReviewRequest()
     try:
-        reviewer = get_object_or_404(User, pk=reviewer_id)
-        review_request.editor = request.user
-        review_request.editor_comments = message
-        review_request.email_sent = False
-        review_request.contribution_id = contribution_id
-        review_request.suggested_reviewer = reviewer
-        review_request.save()
-        contribution.status = ContributionStatus.under_review
-        contribution.save()
+        with transaction.atomic():
+            reviewer = get_object_or_404(User, pk=reviewer_id)
+            review_request.editor = request.user
+            review_request.editor_comments = message
+            review_request.email_sent = False
+            review_request.contribution_id = contribution_id
+            review_request.suggested_reviewer = reviewer
+            review_request.save()
+            contribution.status = ContributionStatus.under_review
+            contribution.save()
+            # TODO: send e-mail to reviewer.
     except Exception as e:
         return JsonResponse({'error': str(e)})
 
@@ -668,8 +672,10 @@ def post_review_request(request):
 def post_archive_review_request(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    contribution = get_contribution_from_id(request.POST.get('contribution_id'))
-    reqs = [req for req in contribution.review_request.all() if not req.archived]
+    contribution_id = request.POST.get('contribution_id')
+    contribution = get_contribution_from_id(contribution_id)
+    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id)
+            if not req.archived]
     if len(reqs) == 0:
         return JsonResponse({'error': _('There is no active review for this contribution')})
     for req in reqs:
@@ -682,7 +688,65 @@ def review_request(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
     if req.archived or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
+    if req.review_contribution.count() > 0:
+        return HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
     contribution = get_contribution_from_id(req.contribution_id)
     if contribution is None:
         raise Http404
     return render(request, 'contribute/review_request.html', {'request': req, 'contribution': contribution})
+
+@login_required()
+@require_POST
+def reply_review_request(request):
+    review_request_id = request.POST.get('review_request_id')
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+
+    if req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+
+    redirect = HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
+    if req.review_contribution.count() > 0:
+        return redirect
+
+    # Check response
+    response = request.POST.get('response')
+    valid_responses = ['accept', 'reject']
+    if response not in valid_responses:
+        return HttpResponseBadRequest()
+    req.response = ReviewRequestResponse.accepted if response == 'accept' else ReviewRequestResponse.rejected
+    req.reviewer_comments = request.POST.get('message_to_editor')
+    with transaction.atomic():
+        req.save()
+        if response == 'accept':
+            review = ReviewVoyageContribution()
+            review.request = req
+            contribution = get_contribution_from_id(req.contribution_id)
+            if hasattr(contribution, 'interim_voyage'):
+                # Clone interim contribution.
+                interim = contribution.interim_voyage
+                related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+                                 list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
+                                 list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
+                interim.pk = None
+                # Prepend comments with contributor name.
+                note_dict = json.loads(interim.notes)
+                changed = {}
+                for key, note in note_dict.items():
+                    changed[key] = 'Contributor: ' + note
+                interim.notes = json.dumps(changed)
+                interim.save()
+                for item in related_models:
+                    item.pk = None
+                    item.interim_voyage = interim
+                    item.save()
+                review.review_interim_voyage = interim
+            review.save()
+    # TODO: send e-mail to editor.
+    return redirect
+
+@login_required()
+def review(request, review_request_id):
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if req.archived or req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+    return JsonResponse({'error': 'not implemented yet'})
