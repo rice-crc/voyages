@@ -181,6 +181,11 @@ class InterimSlaveNumber(models.Model):
         null=False, blank=False)
     number = models.IntegerField('Number')
 
+class ReviewRequestResponse:
+    no_reply = 0
+    accepted = 1
+    rejected = 2
+
 class ReviewRequest(models.Model):
     """
     A request made to a reviewer for a contribution.
@@ -190,16 +195,15 @@ class ReviewRequest(models.Model):
     contribution_id = models.TextField(null=False)
     email_sent = models.BooleanField(default=False)
     response = models.IntegerField(default=0)
-    editor_comments = models.TextField('Editor comments')
+    editor_comments = models.TextField()
+    reviewer_comments = models.TextField(null=True)
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
 
 class ReviewVoyageContribution(models.Model):
-    request = models.ForeignKey(ReviewRequest)
-    review_interim_voyage = models.ForeignKey(InterimVoyage, null=False,
-                                              related_name='+')
+    request = models.ForeignKey(ReviewRequest, related_name='review_contribution')
+    review_interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
     notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
-
 
 class ContributionStatus:
     pending = 0

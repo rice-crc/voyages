@@ -17,14 +17,26 @@
 
 <h2>{% trans "Respond to review invitation" %}</h2>
 
-<div class="form-group">
-    <label for="message_to_editor">{% trans "Message to editor:" %}</label>
-    <textarea class="form-control" type="text" id="mesage_to_editor" rows="10"></textarea>
-</div>
+<form action="{% url 'contribute:reply_review_request' %}" method="post">
+    <div class="form-group">
+        <label for="message_to_editor">{% trans "Message to editor:" %}</label>
+        <textarea class="form-control" type="text" id="message_to_editor" rows="10" name="message_to_editor"></textarea>
+    </div>
 
-<div>
-    <button class="btn btn-primary">{% trans "Accept request" %}</button>
-    <button class="btn btn-danger">{% trans "Reject request" %}</button>
-</div>
+    <div>
+        {% csrf_token %}
+        <input type="hidden" name="review_request_id" value="{{ request.pk }}">
+        <button type="submit" name="response" value="accept" class="btn btn-primary">{% trans "Accept request" %}</button>
+        <button type="submit" name="response" value="reject" class="btn btn-danger">{% trans "Reject request" %}</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $('.btn').click(function(e) {
+        if (!confirm('{% trans "Confirm response:" %}' + $(this).text()) {
+            e.preventDefault();
+            return false:
+        }
+    });
+</script>
 
 {% endblock %}
