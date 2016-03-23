@@ -205,6 +205,9 @@ class ReviewVoyageContribution(models.Model):
     review_interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
     notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
 
+    def __unicode__(self):
+        return _('Review a contribution')
+
 class ContributionStatus:
     pending = 0
     committed = 1

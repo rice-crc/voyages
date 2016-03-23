@@ -31,10 +31,10 @@
     </div>
 </form>
 <script type="text/javascript">
-    $('.btn').click(function(e) {
-        if (!confirm('{% trans "Confirm response:" %}' + $(this).text()) {
+    $('form').submit(function(e) {
+        if (!confirm('{% trans "Confirm response?" %}')) {
             e.preventDefault();
-            return false:
+            return false;
         }
     });
 </script>

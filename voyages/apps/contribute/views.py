@@ -13,6 +13,8 @@ from voyages.apps.contribute.models import *
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
+from django.core.mail import send_mail
+from django.conf import settings
 import json
 
 number_prefix = 'interim_slave_number_'
@@ -235,6 +237,59 @@ def get_contribution(contribution_type, contribution_id):
     contribution = get_object_or_404(model, pk=contribution_id)
     return contribution
 
+def interim_main(request, contribution, interim):
+    """
+    The reusable part of the interim form handling.
+    This function should be used in the views targeted at
+    contributor, reviewer, and editor.
+    :param request: the request which may contain interim form POST data.
+    :param contribution: the contribution object, which may be a review.
+    :param interim: the interim voyage data.
+    :return: (Boolean b, numbers, form)
+    First entry of tuple is True if GET request or valid POST, False otherwise.
+    Numbers: dictionary of slave numbers
+    Form: the interim form.
+    """
+    result = True
+    if request.method == 'POST':
+        form = InterimVoyageForm(request.POST, instance=interim)
+        prefix = 'interim_slave_number_'
+        numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+        sources_post = request.POST.get('sources')
+        sources = [create_source(x, contribution.interim_voyage)
+                   for x in json.loads(sources_post if sources_post is not None else '[]')]
+        result = form.is_valid()
+        if result:
+            with transaction.atomic():
+                def del_children(child_model):
+                    child_model.objects.filter(interim_voyage__id=interim.pk).delete()
+                del_children(InterimPrimarySource)
+                del_children(InterimArticleSource)
+                del_children(InterimBookSource)
+                del_children(InterimOtherSource)
+                del_children(InterimSlaveNumber)
+                # Get pre-existing sources.
+                for src in interim.pre_existing_sources.all():
+                    src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
+                    src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
+                    src.save()
+                form.save()
+                contribution.notes = request.POST.get('contribution_main_notes')
+                contribution.save()
+                for src in sources:
+                    src.save()
+                # Clear previous numbers and save new ones.
+                for k, v in numbers.items():
+                    number = InterimSlaveNumber()
+                    number.interim_voyage = interim
+                    number.var_name = k[len(prefix):]
+                    number.number = v
+                    number.save()
+    else:
+        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
+        form = InterimVoyageForm(instance=interim)
+    return result, form, numbers
+
 @login_required
 def interim(request, contribution_type, contribution_id):
     if contribution_type == 'delete':
@@ -255,59 +310,26 @@ def interim(request, contribution_type, contribution_id):
         contribution.save()
     if contribution.status != ContributionStatus.pending:
         return redirect()
-    sources_post = None
     interim = contribution.interim_voyage
-    if request.method == 'POST':
-        if request.POST.get('submit_val') == 'delete':
-            with transaction.atomic():
-                contribution.interim_voyage.delete()
-                contribution.delete()
-            return HttpResponseRedirect(reverse('contribute:index'))
-        else:
-            form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
-            prefix = 'interim_slave_number_'
-            numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
-            sources_post = request.POST.get('sources')
-            sources = [create_source(x, contribution.interim_voyage)
-                       for x in json.loads(sources_post if sources_post is not None else '[]')]
-            if form.is_valid():
-                with transaction.atomic():
-                    def del_children(child_model):
-                        child_model.objects.filter(interim_voyage__id=interim.pk).delete()
-                    del_children(InterimPrimarySource)
-                    del_children(InterimArticleSource)
-                    del_children(InterimBookSource)
-                    del_children(InterimOtherSource)
-                    del_children(InterimSlaveNumber)
-                    # Get pre-existing sources.
-                    for src in interim.pre_existing_sources.all():
-                        src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
-                        src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
-                        src.save()
-                    form.save()
-                    contribution.notes = request.POST.get('contribution_main_notes')
-                    contribution.save()
-                    for src in sources:
-                        src.save()
-                    # Clear previous numbers and save new ones.
-                    for k, v in numbers.items():
-                        number = InterimSlaveNumber()
-                        number.interim_voyage = interim
-                        number.var_name = k[len(prefix):]
-                        number.number = v
-                        number.save()
-                return redirect()
-    else:
-        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
-        form = InterimVoyageForm(instance=interim)
+    if request.method == 'POST' and request.POST.get('submit_val') == 'delete':
+        with transaction.atomic():
+            contribution.interim_voyage.delete()
+            contribution.delete()
+        return HttpResponseRedirect(reverse('contribute:index'))
+    (valid, form, numbers) = interim_main(request, contribution, interim)
+    if valid and request.method == 'POST':
+        return redirect()
+    sources_post = None if request.method != 'POST' else request.POST.get('sources')
     previous_data = contribution_related_data(contribution)
     return render(request, 'contribute/interim.html',
                   {'form': form,
+                   'mode': 'contribute',
                    'contribution': contribution,
                    'numbers': numbers,
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+
 @login_required
 def interim_commit(request, contribution_type, contribution_id):
     if request.method != 'POST':
@@ -661,9 +683,19 @@ def post_review_request(request):
             review_request.save()
             contribution.status = ContributionStatus.under_review
             contribution.save()
-            # TODO: send e-mail to reviewer.
     except Exception as e:
         return JsonResponse({'error': str(e)})
+
+    result = 0
+    try:
+        result = send_mail('Voyages - contribution review request', 'Editor message:\r\n' + message,
+                  settings.CONTRIBUTE_SENDER_EMAIL, [reviewer.email])
+    except Exception as e:
+        print e
+    finally:
+        if result == 1:
+            review_request.email_sent = True
+            review_request.save()
 
     return JsonResponse({'review_request': review_request.pk})
 
@@ -673,7 +705,6 @@ def post_archive_review_request(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     contribution_id = request.POST.get('contribution_id')
-    contribution = get_contribution_from_id(contribution_id)
     reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id)
             if not req.archived]
     if len(reqs) == 0:
@@ -715,6 +746,7 @@ def reply_review_request(request):
         return HttpResponseBadRequest()
     req.response = ReviewRequestResponse.accepted if response == 'accept' else ReviewRequestResponse.rejected
     req.reviewer_comments = request.POST.get('message_to_editor')
+    contributor_comment_prefix = 'Contributor: '
     with transaction.atomic():
         req.save()
         if response == 'accept':
@@ -732,21 +764,70 @@ def reply_review_request(request):
                 note_dict = json.loads(interim.notes)
                 changed = {}
                 for key, note in note_dict.items():
-                    changed[key] = 'Contributor: ' + note
+                    changed[key] = contributor_comment_prefix + note
                 interim.notes = json.dumps(changed)
                 interim.save()
                 for item in related_models:
                     item.pk = None
                     item.interim_voyage = interim
+                    if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
+                        item.notes = contributor_comment_prefix + item.notes
                     item.save()
                 review.review_interim_voyage = interim
             review.save()
-    # TODO: send e-mail to editor.
     return redirect
+
+def interim_data(interim):
+    dict = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all() if n.number is not None}
+    fields = InterimVoyage._meta.get_fields()
+    for field in fields:
+        # Check if this is a foreign key.
+        name = field.name
+        type = field.get_internal_type()
+        value = getattr(interim, field.name)
+        if value is None:
+            continue
+        if type == 'ForeignKey':
+            try:
+                dict[name] = value.pk
+                dict[name + 'name'] = str(value)
+            except:
+                pass
+        elif type in ['IntegerField', 'CharField', 'TextField', 'CommaSeparatedIntegerField']:
+            if value != '':
+                dict[name] = value
+    return dict
 
 @login_required()
 def review(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
     if req.archived or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
-    return JsonResponse({'error': 'not implemented yet'})
+    contribution_id = req.contribution_id
+    if contribution_id.startswith('delete'):
+        # TODO: delete requests are handled differently than the other types
+        return JsonResponse({'error': 'DELETE review not implemented yet'})
+    user_contribution = get_contribution_from_id(contribution_id)
+    review_contribution = req.review_contribution.first()
+    interim = review_contribution.review_interim_voyage
+    if interim is None:
+        raise Exception('Could not find reviewer\'s interim form')
+    (result, form, numbers) = interim_main(request, review_contribution, interim)
+    if result and request.method == 'POST':
+        # TODO: Send review.
+        return JsonResponse({'error': 'SENDING review to editor implemented yet'})
+
+    sources_post = None if request.method != 'POST' else request.POST.get('sources')
+    # Build previous data dictionary.
+    # For the review we need to include both the original voyage(s) data
+    # as well as the user contribution itself.
+    previous_data = contribution_related_data(user_contribution)
+    previous_data[_('User contribution')] = interim_data(user_contribution.interim_voyage)
+    return render(request, 'contribute/interim.html',
+                  {'form': form,
+                   'mode': 'review',
+                   'contribution': review_contribution,
+                   'numbers': numbers,
+                   'interim': interim,
+                   'sources_post': sources_post,
+                   'voyages_data': json.dumps(previous_data)})
