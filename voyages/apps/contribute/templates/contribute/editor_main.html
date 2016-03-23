@@ -130,6 +130,7 @@
                         $('#reviewer_assign_modal').modal('show');
                     });
                     $(".review_archive_btn").click(function() {
+                        if (!confirm('{% trans "Confirm archival of this request? Any response the reviewer may have sent will be ignored." %}')) return false;
                         $.ajax({
                             url: '/contribute/post_archive_review_request',
                             method: 'POST',
@@ -214,6 +215,9 @@
             return false;
         }
         disable_modal_contents(true);
+        var onDone = function() {
+            disable_modal_contents(false);
+        };
         $.ajax({
             url: '/contribute/post_review_request',
             method: 'POST',
@@ -221,6 +225,9 @@
                 contribution_id: $('#input_contribution_id').val(),
                 reviewer_id: reviewer.val(),
                 message: message.val()
+            },
+            error: function() {
+                alert('{% trans "A server error occurred, please contact the IT department" %}');
             },
             success: function(data) {
                 if (data.error) {
@@ -233,9 +240,9 @@
                     message.val('');
                 }
             }
-        }).done(function() {
-            disable_modal_contents(false);
-        });;
+        })
+        .done(onDone)
+        .fail(onDone);
     });
 
     // TODO: remove this code once styling is done.

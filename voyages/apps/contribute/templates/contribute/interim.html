@@ -131,6 +131,7 @@
 
 <h1>{{ contribution }}</h1>
 
+{% if mode == 'contribute' %}
 <p>
     {% trans "Variables are organized into eight categories." %}
     {{ contribution.help_text|safe }}
@@ -139,6 +140,7 @@
     {% trans "You can review your complete entry at any time by clicking on the 'Review' button, and to submit your entry you must move to the Review page first." %}
     {% trans "Should you wish to add a port or region that does not appear in the drop down menu, please let the editors know via the note box at the foot of the entry form." %}
 </p>
+{% endif %}
 
 {{ form.errors }}
 

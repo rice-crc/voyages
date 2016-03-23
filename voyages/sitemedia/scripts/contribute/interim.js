@@ -491,8 +491,17 @@ function getVoyagesValues(voyages, name) {
 }
 
 function getGroupName(ids) {
-    return (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
-            ' ' + ids.join(', ');
+    // Check how many numerical ids we have, since those
+    // are used to identify voyage sources. Other text
+    // may be used for user contribution or reviewer input.
+    var count = 0;
+    for (var i = 0; i < ids.length; ++i) {
+        count += isNaN(parseInt(ids[i])) ? 0 : 1;
+    }
+    var joined = ids.join(', ');
+    if (count > 1) return gettext('Voyages') + ' ' + joined;
+    if (count == 1) return gettext('Voyage') + ' ' + joined;
+    return joined;
 };
 
 function getMonthLocaleName(locale, i) {
