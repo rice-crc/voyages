@@ -93,7 +93,47 @@ class InterimVoyage(models.Model):
     third_captain = models.CharField(max_length=255, null=True, blank=True)
 
     notes = models.TextField('Notes', max_length=10000, null=True, blank=True, help_text='Notes for the interim voyage')
+    
+    # Imputed variables (used for reviewer and editor)
+    
+    imputed_national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True, blank=True)
+    imputed_standardized_tonnage = models.IntegerField(null=True, blank=True)
+    imputed_region_ship_constructed = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    
+    imputed_outcome_of_voyage_for_slaves = models.ForeignKey(voyage.models.SlavesOutcome, related_name='+', null=True, blank=True)
+    imputed_outcome_of_voyage_if_ship_captured = models.ForeignKey(voyage.models.VesselCapturedOutcome, related_name='+', null=True, blank=True)
+    imputed_outcome_of_voyage_for_owner = models.ForeignKey(voyage.models.OwnerOutcome, related_name='+', null=True, blank=True)
+    
+    imputed_port_where_voyage_began = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    imputed_principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    imputed_principal_port_of_slave_disembarkation = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
+    imputed_region_where_voyage_began = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_first_region_of_slave_landing = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_second_region_of_slave_landing = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_third_region_of_slave_landing = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_first_region_of_embarkation_of_slaves = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_second_region_of_embarkation_of_slaves = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
+    imputed_third_region_of_embarkation_of_slaves = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
 
+    imputed_year_voyage_began = models.IntegerField(null=True, blank=True)
+    imputed_year_departed_africa = models.IntegerField(null=True, blank=True)
+    imputed_year_arrived_at_port_of_disembarkation = models.IntegerField(null=True, blank=True)
+    imputed_quinquennium_in_which_voyage_occurred = models.IntegerField(null=True, blank=True)
+    imputed_decade_in_which_voyage_occurred = models.IntegerField(null=True, blank=True)
+    imputed_quarter_century_in_which_voyage_occurred = models.IntegerField(null=True, blank=True)
+    imputed_century_in_which_voyage_occurred = models.IntegerField(null=True, blank=True)
+    imputed_voyage_length_home_port_to_first_port_of_disembarkation = models.IntegerField(null=True, blank=True)
+    imputed_length_of_middle_passage = models.IntegerField(null=True, blank=True)
+    
+    imputed_voyage_groupings_for_estimating_imputed_slaves = models.ForeignKey(voyage.models.VoyageGroupings, related_name='+', null=True, blank=True)
+    imputed_total_slaves_embarked = models.IntegerField(null=True, blank=True)
+    imputed_total_slaves_disembarked = models.IntegerField(null=True, blank=True)
+    
+    imputed_number_of_slaves_embarked_for_mortality_calculation = models.IntegerField(null=True, blank=True)
+    imputed_total_slave_deaths_during_middle_passage = models.IntegerField(null=True, blank=True)
+    imputed_mortality_rate = models.FloatField(null=True, blank=True)
+    imputed_standardized_price_of_slaves = models.FloatField(null=True, blank=True)
+    
 class InterimArticleSource(models.Model):
     """
     Article source for an interim voyage.models.

@@ -528,7 +528,7 @@ function getDemographicsRows(id) {
     );
 };
 
-var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
+var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])(IMP)?$');
 function fillDemograhicsTable(id, numbers, editable) {
     demographics_rows = getDemographicsRows(id);
     for (var key in numbers) {
@@ -536,7 +536,8 @@ function fillDemograhicsTable(id, numbers, editable) {
         var found = false;
         if (match) {
             var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
-            var row = DEMOGRAPHICS_ROW_INDICES.indexOf(parseInt(match[2]));
+            var aux = parseInt(match[2]);
+            var row = match[3] ? aux + 5 : DEMOGRAPHICS_ROW_INDICES.indexOf(aux);
             if (col >= 0 && row >= 0 && row < 6) {
                 var $entry = $(demographics_rows[row][col]);
                 $entry.html(numbers[key]);
@@ -550,3 +551,72 @@ function fillDemograhicsTable(id, numbers, editable) {
         }
     }
 }
+
+var initEditableTable = function(editor, table_id, col_count, row_count, cells) {
+    var KEY_RETURN = 13;
+    var KEY_DOWN = 40;
+    var KEY_LEFT = 37;
+    var KEY_RIGHT = 39;
+    var KEY_TAB = 9;
+    var KEY_UP = 38;
+    
+    var current_cell = null;
+    $('#' + table_id + ' td').click(function() {
+        if (current_cell) return;
+        current_cell = $(this);
+        var value = parseInt(current_cell.html());
+        current_cell.html('');
+        editor.unbind();
+        editor.appendTo(current_cell);
+        editor.focus();
+        editor.blur(function() {
+            if (current_cell) {
+                var value = editor.val();
+                current_cell.html(value);
+                current_cell = null;
+                editor.appendTo($('#hidden_div'));
+            }
+        });
+        editor.keydown(function(e) {
+            var old_cell = current_cell;
+            if (!old_cell) return;
+            var cell_shift = 0;
+            switch (e.keyCode) {
+            case KEY_RETURN:
+            case KEY_DOWN:
+                cell_shift = col_count;
+                break;
+            case KEY_UP:
+                cell_shift = -col_count;
+                break;
+            case KEY_LEFT:
+                cell_shift = -1;
+                break;
+            case KEY_RIGHT:
+                cell_shift = 1;
+                break;
+            case KEY_TAB:
+                cell_shift = e.shiftKey ? -1 : 1;
+                break;
+            default:
+                return;
+            }
+            var old_col = old_cell.data('col');
+            var old_row = old_cell.data('row');
+            var old_cell = old_row * col_count + old_col;
+            var new_cell = old_cell + cell_shift;
+            if (new_cell >= 0 && new_cell < col_count * row_count) {
+                editor.blur();
+                e.preventDefault();
+                e.stopPropagation();
+                var new_row = Math.trunc(new_cell / col_count);
+                var new_col = new_cell % col_count;
+                $(cells[new_row][new_col]).trigger('click');
+            } else if (e.keyCode != KEY_TAB) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+        editor.val(value);
+    });
+};
