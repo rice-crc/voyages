@@ -254,9 +254,9 @@ def interim_main(request, contribution, interim):
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=interim)
         prefix = 'interim_slave_number_'
-        numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+        numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources')
-        sources = [create_source(x, contribution.interim_voyage)
+        sources = [create_source(x, interim)
                    for x in json.loads(sources_post if sources_post is not None else '[]')]
         result = form.is_valid()
         if result:
@@ -342,7 +342,7 @@ def interim_commit(request, contribution_type, contribution_id):
     return HttpResponseRedirect(reverse('contribute:thanks'))
 
 @login_required()
-def interim_summary(request, contribution_type, contribution_id):
+def interim_summary(request, contribution_type, contribution_id, mode='contribute'):
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk and not request.user.is_staff:
         return HttpResponseForbidden()
@@ -352,6 +352,7 @@ def interim_summary(request, contribution_type, contribution_id):
     return render(request, 'contribute/interim_summary.html',
                   {'contribution': contribution,
                    'interim': contribution.interim_voyage,
+                   'mode': mode,
                    'numbers': numbers,
                    'form': form,
                    'user': request.user,
@@ -813,9 +814,9 @@ def review(request, review_request_id):
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
     (result, form, numbers) = interim_main(request, review_contribution, interim)
-    if result and request.method == 'POST':
+    #if result and request.method == 'POST':
         # TODO: Send review.
-        return JsonResponse({'error': 'SENDING review to editor implemented yet'})
+        #return JsonResponse({'error': 'SENDING review to editor implemented yet'})
 
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
     # Build previous data dictionary.
