@@ -26,6 +26,12 @@ urlpatterns = [
     url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
         views.interim_summary, name='interim_summary'),
 
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>reviewer)',
+        views.interim_summary, name='interim_summary_reviewer'),
+
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>editor)',
+        views.interim_summary, name='interim_summary_editor'),
+
     url(r'edit_voyage', views.edit, name='edit_voyage'),
 
     url(r'merge_voyages', views.merge, name='merge_voyages'),

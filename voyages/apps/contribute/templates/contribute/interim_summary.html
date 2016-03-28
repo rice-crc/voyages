@@ -816,7 +816,8 @@
         }
     });
 
-    fillDemograhicsTable('demographics_table', numbers, false);
+    demographicsTable(numbers, false, voyages);
+    ageAndSexTable(numbers, false, voyages);
 
     var all_source_types = [
         {{ interim.primary_sources.all|jsonify }},

@@ -51,7 +51,7 @@
 	}
 
 	.cell_hover {
-		background-color: darkgray;
+		background-color: darkgray !important;
 	}
 
 	#demographics_table td {
@@ -293,7 +293,7 @@
             {% with form.additional_ship_owners as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -371,7 +371,7 @@
             {% with form.african_resistance as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "African resistance" %}'>
@@ -427,7 +427,7 @@
             {% with form.imputed_outcome_of_voyage_for_owner as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8 last_group_input">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Voyage outcomes for owner" %}'>
@@ -601,7 +601,7 @@
             {% with form.port_voyage_ended as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -611,7 +611,7 @@
             {% with form.imputed_port_where_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -620,7 +620,7 @@
             {% with form.imputed_principal_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -629,7 +629,7 @@
             {% with form.imputed_principal_port_of_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -638,7 +638,7 @@
             {% with form.imputed_region_where_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -647,7 +647,7 @@
             {% with form.imputed_region_where_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -656,7 +656,7 @@
             {% with form.imputed_first_region_of_slave_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -665,7 +665,7 @@
             {% with form.imputed_second_region_of_slave_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -674,7 +674,7 @@
             {% with form.imputed_first_region_of_embarkation_of_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -683,7 +683,7 @@
             {% with form.imputed_second_region_of_embarkation_of_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-8">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -786,7 +786,7 @@
             {% with form.length_of_middle_passage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -797,7 +797,7 @@
             {% with form.imputed_year_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -806,7 +806,7 @@
             {% with form.imputed_year_departed_africa as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -815,7 +815,7 @@
             {% with form.imputed_year_arrived_at_port_of_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -824,7 +824,7 @@
             {% with form.imputed_quinquennium_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -833,7 +833,7 @@
             {% with form.imputed_decade_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -842,7 +842,7 @@
             {% with form.imputed_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -851,7 +851,7 @@
             {% with form.imputed_quarter_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -860,7 +860,7 @@
             {% with form.imputed_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -869,7 +869,7 @@
             {% with form.imputed_voyage_length_home_port_to_first_port_of_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1145,7 +1145,7 @@
             <label for="interim_slave_number_SLADAMER">
                 {% trans "Slaves deaths between arrival and sale" %}:
             </label>
-            <div class="input-group col-sm-2 last_group_input">
+            <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
@@ -1178,7 +1178,7 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        <div class="form-group">
+        <div class="form-group last_group_input">
             {% with form.imputed_total_slaves_disembarked as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
@@ -1227,7 +1227,7 @@
                     </div>
                 {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
             </div>
-            <div class="form-group">
+            <div class="form-group last_group_input">
                 {% with form.imputed_standardized_price_of_slaves as f %}
                     {{ f.errors }}
                     {{ f.label_tag }}
@@ -1464,6 +1464,7 @@
     {% elif mode == 'review' %}
     <div class="form-group col-md-12">
         TODO: reviewer decision and visualization of summary.
+        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
     </div>
     {% elif mode == 'editor_review' %}
     {% endif %}
@@ -1777,11 +1778,8 @@
         };
 
         // Set demographic table.
-        var demographics_rows = getDemographicsRows('demographics_table');
-        fillDemograhicsTable('demographics_table', numbers, true);
-        {% if mode != 'contribute' %}        
-        var age_and_sex_rows = getDemographicsRows('age_and_sex_table');
-        {% endif %}
+        var demographics_table = demographicsTable(numbers, true, voyages);
+        var age_and_sex_table = ageAndSexTable(numbers, true, voyages);
 
         $('#delete_contrib').click(function(e) {
             if (!confirm('{% trans "The contribution will be deleted. Continue anyway?" %}')) {
@@ -2035,30 +2033,6 @@
             });
         });
 
-        $("#demographics_table td, #age_and_sex_table td").hover(
-            function() {
-                $(this).addClass('cell_hover');
-            },
-            function() {
-                $(this).removeClass('cell_hover');
-            }
-        );
-
-        initEditableTable(
-            $('#cell_editor'),
-            'demographics_table',
-            DEMOGRAPHICS_COLUMN_HEADERS.length,
-            DEMOGRAPHICS_ROW_INDICES.length{% if mode != 'contribute' %} + 4{% endif %},
-            demographics_rows);
-        {% if mode != 'contribute' %}
-        initEditableTable(
-            $('#cell_editor'),
-            'age_and_sex_table',
-            3,
-            9,
-            age_and_sex_rows);
-        {% endif %}
-
         // Parse notes.
         var NOTES_PREFIX = 'notes_for_';
         {% if form.notes.value %}
@@ -2086,7 +2060,9 @@
                 var $expander = $(this).closest('.expander_container').next().find('.collapse');
                 $expander.collapse('show');
                 if ($expander.attr('id') == 'demographics') {
-                    $(demographics_rows[0][0]).trigger('click');
+                    demographics_table.focus();
+                } else if ($expander.attr('id') == 'age_and_sex') {
+                    age_and_sex_table.focus();
                 } else {
                     $expander.find(':input:visible:enabled:first').focus();
                 }
@@ -2205,29 +2181,9 @@
             $("#global_notes_input").val(JSON.stringify(notes_submit));
             // Append demographics matrix.
             var form = $(this);
-            for (var i = 0; i < demographics_rows.length; ++i) {
-                for (var j = 0; j < DEMOGRAPHICS_COLUMN_HEADERS.length; ++j) {
-                    var value = parseInt($(demographics_rows[i][j]).html());
-                    if (!isNaN(value)) {
-                        form.append('<input type="hidden" name="' +
-                            NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_INDICES[i] +
-                            '" value="' + value + '" />');
-                    }
-                }
-            }
+            demographics_table.appendToForm(form);
             {% if mode != 'contribute' %}
-            // Imputed demographics matrix.
-            for (var i = 0; i < 4; ++i) {
-                for (var j = 0; j < DEMOGRAPHICS_COLUMN_HEADERS.length; ++j) {
-                    var k = i + demographics_rows.length;
-                    var value = parseInt($(demographics_rows[k][j]).html());
-                    if (!isNaN(value)) {
-                        form.append('<input type="hidden" name="' +
-                            NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + k +
-                            'IMP" value="' + value + '" />');
-                    }
-                }
-            }
+            age_and_sex_table.appendToForm(form);
             {% endif %}
             var $sources = $('<input type="hidden" name="sources" />');
             var source_models = $.map(sources, function(s, i) {
