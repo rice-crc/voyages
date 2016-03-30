@@ -1,0 +1,18 @@
+ul.contribute_menu {
+  padding-left: 0;
+}
+ul.contribute_menu li {
+  list-style: none;
+  display: inline-block;
+  width: 49%;
+}
+ul.contribute_menu li a {
+  color: #FFF;
+  font-weight: normal;
+  display: block;
+  padding: 20px 15px;
+  background-color: #008ca8;
+}
+ul.contribute_menu li a:hover {
+  text-decoration: none;
+}

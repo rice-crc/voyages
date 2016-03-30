@@ -7,6 +7,7 @@
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
 <style>
 	.clickable-row {
 		cursor: pointer;
@@ -15,24 +16,24 @@
 <div class="white-board">
 	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
 
-	<ul>
+	<ul class="contribute_menu">
 		{% if request.user.is_staff %}
 		<!-- Is enabled only if the user is a staff member -->
-		<li>
-			<h3><a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
+		<li class="live_admin">
+			<a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
 		</li>
 		{% endif %}
-		<li>
-			<h3><a href="{% url 'contribute:new_voyage' %}">{% trans "Include a new voyage" %}</a></h3>
+		<li class="contribute_menu">
+			<a href="{% url 'contribute:new_voyage' %}">{% trans "Include a new voyage" %}</a>
 		</li>
-		<li>
-			<h3><a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a></h3>
+		<li class="contribute_menu">
+			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
 		</li>
-		<li>
-			<h3><a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a></h3>
+		<li class="contribute_menu">
+			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
 		</li>
-		<li>
-			<h3><a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a></h3>
+		<li class="contribute_menu">
+			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
 		</li>
 	</ul>
 	{% for c in contributions %}

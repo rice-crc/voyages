@@ -7,3 +7,4 @@ localsettings.py
 documents/cache/*
 .idea
 *.log
+localsettings.py.bk
