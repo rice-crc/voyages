@@ -44,7 +44,22 @@
 	</div>
 
 	{% if request.user.is_authenticated %}
-	<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a></div>
+	<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a>
+		<ul>
+		<li>
+			<a href="{% url 'contribute:new_voyage' %}">{% trans "Include a new voyage" %}</a>
+		</li>
+		<li>
+			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
+		</li>
+		<li>
+			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
+		</li>
+		<li>
+			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
+		</li>
+		</ul>
+	</div>
 	{% endif %}
 	
 	<div class="secondary-menu-item-0">
