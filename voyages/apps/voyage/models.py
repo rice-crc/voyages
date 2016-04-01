@@ -708,7 +708,7 @@ class VoyageCaptainConnection(models.Model):
         verbose_name_plural = 'Voyage captain information'
 
     def __unicode__(self):
-        return "Captain: %d %s" % (self.captain_order, self.captain )
+        return "Captain: %d %s" % (self.captain_order, unicode(self.captain))
 
 
 class VoyageCrew(models.Model):
