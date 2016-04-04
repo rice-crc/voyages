@@ -43,13 +43,6 @@ def first_valid(lst):
             return x
     return None
 
-def get_imputed_vars(interim):
-    """
-    Extract all imputed variables from the interim model.
-    :param interim: the interim model (contribute.models.InterimVoyage)
-    """
-    dict = get_date_vars(interim)
-
 def recode_var(dict, value):
     """
     Recode a variable based on groups of values.
@@ -64,13 +57,7 @@ def recode_var(dict, value):
             return key
     return None
     
-def get_date_vars(interim):
-    """
-    The date variables in the interim model are usually comma separated.
-    This function will search through a list of ordered date fields and
-    take the first non-null year value from the list for the imputed year
-    variable.
-    """
+def get_imputed_vars(interim):
     named_sources = {
         'd1slatrc': interim.date_slave_purchase_began,
         'datarr34': interim.date_first_slave_disembarkation,
@@ -129,10 +116,10 @@ def get_date_vars(interim):
         voy2imp = None
     interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation = voy2imp
     
-    natinimp = interim.ship_registration_place
+    natinimp = interim.ship_registration_place__id
     tonnage = interim.tonnage_of_vessel
     if tonnage:
-        tontype = interim.ton_type
+        tontype = interim.ton_type__id
         if tontype == 13:
             tonmod = tonnage
         if (tontype < 3 or tontype == 4 or tontype == 5) and yearam > 1773:
@@ -182,8 +169,12 @@ def get_date_vars(interim):
         
         interim.imputed_standardized_tonnage = tonmod
     
+    fate2 = None
+    fate3 = None
+    fate4 = None
     if interim.voyage_outcome:
-        interim.imputed_outcome_of_voyage_for_slaves = recode_var(
+        # fate2 - Outcome of voyage for slaves
+        fate2 = recode_var(
             {
                 1: [1, 4, 5, 7, 8, 9, 11, 12, 15, 16, 17, 19, 20, 24, 26, 29, 30, 39, 40, 46, 47, 48, 49,
                     51, 52, 54, 58, 68, 70, 71, 72, 76, 78, 79, 80, 81, 82, 85, 88, 92, 95, 97, 104, 108,
@@ -202,7 +193,9 @@ def get_date_vars(interim):
             }, 
             interim.voyage_outcome
         )
-        interim.imputed_outcome_of_voyage_if_ship_captured = recode_var(
+        interim.imputed_outcome_of_voyage_for_slaves = fate2
+        # fate3 - Outcome of voyage If vessel captured
+        fate3 = recode_var(
             {
                 1: [2, 3, 4, 5, 27, 28, 29, 30, 75, 85, 86, 91, 94, 95, 97],
                 2: [6, 7, 8, 9, 31, 48, 96, 159, 192, 193],
@@ -227,7 +220,9 @@ def get_date_vars(interim):
             }, 
             interim.voyage_outcome
         )
-        interim.imputed_outcome_of_voyage_for_owner = recode_var(
+        interim.imputed_outcome_of_voyage_if_ship_captured = fate3
+        # fate4 - Outcome of voyage for owner
+        fate4 = recode_var(
             {
                 1: [1, 49, 68, 77, 79, 88, 92, 135, 203, 205, 206, 207, 208],
                 2: [2, 3, 4, 5, 27, 28, 29, 30, 54, 58, 59, 85, 86, 91, 94, 95, 97],
@@ -242,5 +237,134 @@ def get_date_vars(interim):
             }, 
             interim.voyage_outcome
         )
+        interim.imputed_outcome_of_voyage_for_owner = fate4
         
+    # At the equivalent point in SPSS, regions are infered from places.
+    # This is probably redundant given our models already connect places
+    # to regions, so lines 293-406 of the SPSS script are skipped.
+    
+    # what to do with 410-420?
+    
+    embport = interim.first_port_intended_embarkation__id
+    embport2 = interim.second_port_intended_embarkation__id
+    regem1 = interim.imputed_first_region_of_embarkation_of_slaves__id
+    regem2= interim.imputed_second_region_of_embarkation_of_slaves__id
+    regem3 = interim.imputed_third_region_of_embarkation_of_slaves__id
+    
+    numbers = {n.var_name: n.number for n in interim.slave_numbers.all()}
+    
+    # mjbyptimp - Principal port of slave purchase (replaces majbuypt as imputed variable)
+    
+    ncar13 = numbers.get('NCAR13', 0)
+    ncar15 = numbers.get('NCAR15', 0)
+    ncar17 = numbers.get('NCAR17', 0)
+    ncartot = ncar13 + ncar15 + ncar17
+    tslavesd = numbers.get('TSLAVESD')
+    tslavesp = numbers.get('TSLAVESP')
+    pctemb = ncartot / tslavesd if tslavesd
+    if pctemb == None and tslavesp:
+        pctemb = ncartot / tslavesp
+    
+    places = [
+        interim.first_place_of_slave_purchase,
+        interim.second_place_of_slave_purchase,
+        interim.third_place_of_slave_purchase
+    ]
+    mjbyptimp = places[0]
+    if not mjbyptimp: mjbyptimp = places[1]
+    if not mjbyptimp: mjbyptimp = places[2]
+    if places[1] and places[1] == places[2]: mjbyptimp = places[1]
+
+    if ncar13 > ncar15 and ncar13 > ncar17: mjbyptimp = places[0]
+    if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = places[1]
+    if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = places[2]
+    
+    if (pctemb and pctemb < 0.5) or (ncartot < 50 and tslavesd is None and tslavesp is None):
+        if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = places[0]
+        if ncar13 > 0 and ncar15 == 0 and ncar17 > 0: mjbyptimp = places[1]
+        if ncar13 > 0 and ncar15 > 0 and ncar17 == 0: mjbyptimp = places[2]
+        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and places[2] is None: mjbyptimp = places[0]
+        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and places[1] and places[2] is None: mjbyptimp = places[1]
+        if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and regem1 = regem2: mjbyptimp = regem1 + 99
+        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and regem1 = regem3: mjbyptimp = regem1 + 99
+        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and regem2 = regem3: mjbyptimp = regem2 + 99
+        if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and regem1 != regem2: mjbyptimp = 60999
+        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and regem1 != regem3: mjbyptimp = 60999
+        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and regem2 != regem3: mjbyptimp = 60999
+
+    if not ncartot:
+        if places[0] >=1 and places[1] >=1 and places[2] is None and regem1=regem2: mjbyptimp = regem1 + 99
+        if places[0] >=1 and places[2] >=1 and places[1] is None and regem1=regem3: mjbyptimp = regem1 + 99
+        if places[1] >=1 and places[2] >=1 and places[0] is None and regem2=regem3: mjbyptimp = regem2 + 99
+        if places[0] >=1 and places[1] >=1 and places[2] is None and regem1 != regem2: mjbyptimp = 60999
+        if places[0] >=1 and places[2] >=1 and places[1] is None and regem1 != regem3: mjbyptimp = 60999
+        if places[1] >=1 and places[2] >=1 and places[0] is None and regem2 != regem3: mjbyptimp = 60999
+        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 = regem2: mjbyptimp = regem1 + 99
+        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 = regem3: mjbyptimp = regem1 + 99
+        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem2 = regem3: mjbyptimp = regem2 + 99
+        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
+    
+    no_places = place[0] is None and place[1] is None place[2] is None
+    if embport and embport2 is None and no_places:
+        mjbyptimp = embport
+    if embport2 and no_places:
+        mjbyptimp = embport2
+    if not mjbyptimp and interim.imputed_outcome_of_voyage_for_slaves != 2 and (embport or embport2 or ncartot > 0 or not place):
+        mjbyptimp = 60999
+    
+    # mjslptimp - Principal port of slave purchase
+    
+    
+    sla1port = interim.first_place_of_slave_purchase__id
+    adpsale1 = interim.second_place_of_slave_purchase__id
+    adpsale2 = interim.third_place_of_slave_purchase__id
+    arrport = interim.first_port_intended_disembarkation__id
+    arrport2 = interim.second_port_intended_disembarkation__id
+    mjslptimp = None
+    if sla1port and not adpsale1 and not adpsale2: mjslptimp = sla1port
+    if adpsale1 and not sla1port and not adpsale2: mjslptimp = adpsale1
+    if adpsale2 and not sla1port and not adpsale1: mjslptimp = adpsale2
+    if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
+    
+    # TODO: check if we are really suppose to set the variable to
+    # None if both sides are equal to None.
+    if sla1port == adpsale1: mjslptimp = sla1port
+    if sla1port == adpsale2: mjslptimp = sla1port
+    if adpsale1 == adpsale2: mjslptimp = adpsale1
+    
+    slas32 = numbers.get('SLAS32', 0)
+    slas36 = numbers.get('SLAS36', 0)
+    slas39 = numbers.get('SLAS39', 0)
+    
+    if slas32 > slas36 and slas32 > slas39: mjslptimp = sla1port
+    if slas36 > slas32 and slas36 > slas39: mjslptimp = adpsale1
+    if slas39 > slas32 and slas39 > slas36: mjslptimp = adpsale2
+    
+    slaarriv = numbers.get('SLAARRIV', 0)
+    slastot = slas32 + slas36 + slas39
+    pctdis = slastot / slaarriv
+    if pctdis < 0.5 or (slastot < 50 and not slaarriv) and sla1port and adpsale1:
+        if adpsale2:
+            mjslptimp = 99801
+        else:
+            if slas32 == 0 and slas36 >= 1: mjslptimp = sla1port
+            if slas36 == 0 and slas32 >= 1: mjslptimp = adpsale1
+            if slas36 >=1 and slas32 >= 1 & regdis1 == regdis2: mjslptimp = regdis1 + 99
+            if slas36 >=1 and slas32 >= 1 & regdis1 != regdis2: mjslptimp = 99801
+    
+    if not slastot:
+        if sla1port and adpsale1 and not adpsale2 and regdis1 == regdis2: mjslptimp = regdis1 + 99
+        if sla1port and adpsale2 and not adpsale1 and regdis1 == regdis3: mjslptimp = regdis1 + 99
+        if adpsale1 and adpsale2 and not sla1port and regdis2 == regdis3: mjslptimp = regdis2 + 99
+        if sla1port and adpsale1 and not adpsale2 and regdis1 != regdis2: mjslptimp = 99801
+        if sla1port and adpsale2 and not adpsale1 and regdis1 != regdis3: mjslptimp = 99801
+        if adpsale1 and adpsale2 and not sla1port and regdis2 != regdis3: mjslptimp = 99801
+        if sla1port and adpsale1 and adpsale2 and regdis1 == regdis2: mjslptimp = regdis1 + 99
+        if sla1port and adpsale1 and adpsale2 and regdis1 == regdis3: mjslptimp = regdis1 + 99
+        if sla1port and adpsale1 and adpsale2 and regdis2 == regdis3: mjslptimp = regdis2 + 99
+        if sla1port and adpsale1 and adpsale2 and regdis1 != regdis2 and regdis1 != regdis3 and regdis2 != regdis3: mjslptimp = 99801
         
+    if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
+    
+    if not mjslptimp and (fate2 == 1 or fate2 == 3 or fate2 == 5) and \
+       (arrport or arrport2 or sla1port or adpsale1 or adpsale2 or slastot > 0): mjslptimp = 99801
