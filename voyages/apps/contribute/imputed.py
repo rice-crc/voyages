@@ -555,4 +555,21 @@ def get_imputed_vars(interim):
     if yearam >= 1826 and yearam < 1876 and rig == 9 and natinimp == 9: xmimpflag = 154 
     if rig == 27 and natinimp == 9: xmimpflag = 155 
     if rig == 35 and natinimp == 9: xmimpflag = 156
+    interim.imputed_voyage_groupings_for_estimating_imputed_slaves = VoyageGroupings.objects.get(value=xmimpflag)
     
+    
+    # slaximp - Imputed number of slaves embarked
+    # slamimp - Imputed number of slaves disembarked
+    if tslavesd >= 1: slaximp = tslavesd
+    if tslavesd is None and tslavesp >= 1: slaximp = tslavesp
+    if tslavesd is None and tslavesp is None and ncartot > slaarriv: slaximp=ncartot
+    if tslavesd is None and tslavesp is None and slaarriv is None and ncartot > slastot: slaximp = ncartot
+    if tslavesd is None and tslavesp is None and slaarriv is None and slastot is None and ncartot >= 50: slaximp = ncartot
+    if slaarriv >= 1: slamimp = slaarriv
+    if slaarriv is None and slastot <= tslavesd: slamimp=slastot
+    if slaarriv is None and tslavesd is None and slastot <= tslavesp: slamimp = slastot
+    if slaarriv is None and tslavesd is None and tslavesp is None and slastot <= ncartot: slamimp = slastot
+    if slaarriv is None and tslavesd is None and tslavesd is None and ncartot is None and slastot >= 50: slamimp=slastot
+    # LOT OF CODE
+    interim.imputed_total_slaves_embarked = slaximp
+    interim.imputed_total_slaves_disembarked = slamimp
