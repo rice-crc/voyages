@@ -9,8 +9,8 @@ class FlatPageAdmin(admin.ModelAdmin):
     """
     Support for flat page.
     """
-    fields = ('url', 'title', 'content')
-    readonly_fields = ('url', 'title',)
+    fields = ('url', 'title', 'content', 'sites')
+    #readonly_fields = ('url', 'title',)
     
     list_display = ['title', 'url']
   
@@ -18,8 +18,8 @@ class FlatPageAdmin(admin.ModelAdmin):
     actions = None
 
     # Prevents anyone from trying to add a new flat page
-    def has_add_permission(self, request):
-        return False
+    #def has_add_permission(self, request):
+    #    return False
 
     def has_delete_permission(self, request, obj=None):
         return False

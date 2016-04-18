@@ -32,6 +32,7 @@ from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
+from django.utils.translation import get_language
 from cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
 from graphs import *
@@ -129,7 +130,16 @@ def download_file(request):
 
 def download_flatpage(request):
     from django.contrib.flatpages.models import FlatPage
-    flatpage = FlatPage.objects.get(pk=1)
+    page_title = 'Downloads'
+    lang = get_language()
+    flatpage = None
+    if lang != 'en':
+        try:
+            flatpage = FlatPage.objects.get(title=page_title + '_' + lang)
+        except:
+            pass
+    if flatpage is None:
+        flatpage = FlatPage.objects.get(title=page_title)
     from datetime import date
     return render(request,
                   'flatpages/download.html',
