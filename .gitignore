@@ -2,7 +2,7 @@
 build/
 dist/
 test-results/
-localsettings.py
+localsettings.py*
 *~
 documents/cache/*
 .idea
