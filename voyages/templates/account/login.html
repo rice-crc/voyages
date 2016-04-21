@@ -12,27 +12,25 @@
 {% url 'account_reset_password'  as password_reset_url %}
 
 <p>
-	{% blocktrans %}The Contribute section of the Voyages website contains data entry forms by which users
-	of the website can supply revise existing information in the Voyages Database or supply
-	new data. A team of slave trade scholars will review each contribution, as part of the
-	peer-review process. Once confirmed, the new or revised information will be incorporated
-	in the next version of the Voyages Database. We anticipate releasing a new version every
-	three years.{% endblocktrans %}
+	{% blocktrans %}The Contribute section allows users of the Voyages website to supply and/or revise existing information
+    in the Voyages Database. A team of slave trade scholars will review each contribution as part of the peer-review process.
+    New and/or revised information will be incorporated in the subsequent updates to the Voyages Database.{% endblocktrans %}
 </p>
 
 <p>
-	{% blocktrans %}The Contribution entry forms take advantage of possibilities offered by the internet
-	to continuously improve the store of knowledge, whether in the traditional form of written
-	documents or in the new form of collections of machine-readable data. The Voyages Database
-	is itself the product of extensive revisions since the publication of the CD-ROM version of
-	the dataset in 1999. The Contribute section will allow the database to evolve in a way that
-	respects the high standards of scholarship governing the construction of the original database.{% endblocktrans %}
+	{% blocktrans %}The Contribute feature facilitates collaborative research and information sharing among the global
+    network of scholars working to continuously improve the store of knowledge about the slave trade.  These scholars are
+    increasingly working across diverse forms of media, from written documents to collections of machine-readable data.
+    The Voyages Database is itself the product of extensive revisions since the publication of the CD-ROM version of the
+    dataset in 1999. The Contribute section allows the database to continue evolving in a way that respects the high
+    standards of scholarship governing the construction of the original database.{% endblocktrans %}
 </p>
 
 <p>
-	{% blocktrans %}Step-by-step instructions on how to use the data entry forms are provided in the Voyages
-	Guide, a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
-	For advice on contributing new data, we ask you to read our <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
+	{% blocktrans %}Step-by-step instructions on how to use the Contribute forms are provided in the Voyages Guide, 
+    a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
+    For further advice on contributing new data, we ask you to read our
+    <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
 </p>
 
 <p>
@@ -67,7 +65,7 @@
         {% if redirect_field_value %}
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
-		<input type="hidden" name="next" value="{% url 'contribute:index' %}" />
+		<input type="hidden" name="next" value="{% url 'contribute:legal' %}" />
 		<button type="submit" class="local_account_login_btn">
 			{% trans 'Sign in' %}
 		</button>

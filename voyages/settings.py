@@ -183,7 +183,7 @@ TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/contribute/'
+LOGIN_REDIRECT_URL = '/contribute/legal'
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096

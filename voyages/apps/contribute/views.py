@@ -38,6 +38,12 @@ def index(request):
     else:
         return HttpResponseRedirect(reverse('account_login'))
 
+def legal(request):
+    from forms import legal_terms_title
+    from forms import legal_terms_paragraph
+    return render(request, 'contribute/legal.html',
+                  {'title': legal_terms_title, 'paragraph': legal_terms_paragraph})
+
 def get_summary(v):
     dates = v.voyage_dates
     return {'voyage_id': v.voyage_id,
@@ -67,7 +73,10 @@ def get_voyage_by_id(request):
 def get_places(request):
     # retrieve list of places in the system.
     places = sorted(Place.objects.prefetch_related('region__broad_region'),
-                    key=lambda p: (p.region.broad_region.broad_region, p.region.value, p.value))
+                    key=lambda p: (
+                        p.region.broad_region.broad_region if p.region.broad_region.value != 80000 else 'zzz',
+                        p.region.value,
+                        p.value))
     result = []
     last_broad_region = None
     last_region = None
