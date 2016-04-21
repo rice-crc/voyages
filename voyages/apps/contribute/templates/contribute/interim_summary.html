@@ -29,14 +29,14 @@
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.ship_registration_place as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}_name"></div>
-            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
     {% with form.year_ship_constructed as f %}
@@ -697,26 +697,6 @@
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
     var voyage_ids = Object.keys(voyages);
-    $('.old_values').each(function() {
-        var $div = $(this);
-        var name = $div.attr('id').substring(4);
-        var values = getVoyagesValues(voyages, name);
-        var voyagesCount = voyage_ids.length;
-        if (values) {
-            var list = [];
-            for (var key in values) {
-                if (key == ',,') continue;
-                var item = '';
-                if (voyagesCount > 1) {
-                    item = '<strong>' + values[key].join(', ') + ':</strong> ';
-                }
-                list.push(item + '<span class="old_single_value">' + key + '</span>');
-            }
-            if (list.length > 0) {
-                $div.append(list.join('<br />'));
-            }
-        }
-    });
 
     $('.multiline_value span').each(function() {
         var $span = $(this);
@@ -771,7 +751,7 @@
             d.year = isNaN(d.year) ? null : d.year;
             d.day = isNaN(d.day) ? null : d.day;
             arr = [d.month, d.day, d.year];
-            var sep = ', ';
+            var sep = ' ';
             if (locale == 'pt') {
                 sep = '/';
                 arr = [d.day, d.month, d.year];
@@ -815,6 +795,30 @@
             }
         }
     });
+    
+    $('.old_values').each(function() {
+        var $div = $(this);
+        var parent = $div.closest('.row');
+        var name = $div.attr('id').substring(4);
+        var values = getVoyagesValues(voyages, name);
+        var voyagesCount = voyage_ids.length;
+        if (values) {
+            // Remove blank class from parent.
+            parent.removeClass('blank');
+            var list = [];
+            for (var key in values) {
+                if (key == ',,') continue;
+                var item = '';
+                if (voyagesCount > 1) {
+                    item = '<strong>' + values[key].join(', ') + ':</strong> ';
+                }
+                list.push(item + '<span class="old_single_value">' + key + '</span>');
+            }
+            if (list.length > 0) {
+                $div.append(list.join('<br />'));
+            }
+        }
+    });
 
     demographicsTable(numbers, false, voyages);
     ageAndSexTable(numbers, false, voyages);
@@ -844,7 +848,9 @@
 
     var notes = {{ interim.notes|safe }};
     for (var key in notes) {
-        $('#' + key).after('<div class="notes"><span class="glyphicon glyphicon-comment"></span>&nbsp;' + notes[key] + '</div>');
+        var $div = $('#' + key);
+        $div.after('<div class="notes"><span class="glyphicon glyphicon-comment"></span>&nbsp;' + notes[key] + '</div>');
+        $div.closest('.row').removeClass('blank');
     }
 
     $('#show_blanks,#show_existing,#show_notes').trigger('change');

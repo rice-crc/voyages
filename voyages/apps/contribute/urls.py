@@ -31,6 +31,8 @@ urlpatterns = [
 
     url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>editor)',
         views.interim_summary, name='interim_summary_editor'),
+        
+    url(r'legal', views.legal, name='legal'),
 
     url(r'edit_voyage', views.edit, name='edit_voyage'),
 
