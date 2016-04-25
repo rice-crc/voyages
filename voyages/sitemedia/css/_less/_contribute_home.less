@@ -1,4 +1,8 @@
 @import '_variables.less';
+
+body {
+    font-size: 8pt;
+}
 ul.contribute_menu {
     padding-left: 0;
     li {
@@ -13,7 +17,7 @@ ul.contribute_menu {
             padding: 20px 15px;
             background-color: @voyagesLightBlue;
             text-align: center;
-            font-size: 1.25em;
+            font-size: 1.5em;
             &:hover {
                 text-decoration: none;
             }
@@ -171,3 +175,13 @@ h1.contribute_header {
     .selectize_year.search_match {
         display: block;
     }
+
+@media (min-width: 768px) {
+    .form-horizontal {
+    .control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+     text-align: left; 
+}    
+    } 
+}
