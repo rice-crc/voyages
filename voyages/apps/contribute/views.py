@@ -340,6 +340,15 @@ def interim(request, contribution_type, contribution_id):
                    'voyages_data': json.dumps(previous_data)})
 
 @login_required
+@require_POST
+def interim_save_ajax(request, contribution_type, contribution_id):
+    contribution = get_contribution(contribution_type, contribution_id)
+    if request.user.pk != contribution.contributor.pk:
+        return HttpResponseForbidden()
+    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+    return JsonResponse({'valid': valid, 'errors': form.errors})
+
+@login_required
 def interim_commit(request, contribution_type, contribution_id):
     if request.method != 'POST':
         return HttpResponseBadRequest()

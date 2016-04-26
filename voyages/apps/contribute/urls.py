@@ -16,6 +16,9 @@ urlpatterns = [
     url(r'^places_ajax', views.get_places, name='places_ajax'),
 
     url(r'^voyage_ajax', views.get_voyage_by_id, name='voyage_ajax'),
+    
+    url(r'^interim_save_ajax/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
+        views.interim_save_ajax, name='interim_save_ajax'),
 
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
         views.interim, name='interim'),
