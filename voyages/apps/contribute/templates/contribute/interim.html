@@ -1336,8 +1336,10 @@
     <hr />
     {% if mode == 'contribute' %}
     <div class="form-group col-md-12">
-        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
+        <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
+        <button class="btn btn-warning" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
     {% elif mode == 'review' %}
     <div class="form-group col-md-12">
@@ -1575,7 +1577,7 @@
         var nodeName = input[0].nodeName.toUpperCase();
         if (values && nodeName == 'INPUT') {
             var options = [];
-            var currentValue = input.attr('value');
+            var currentValue = input.attr('value') || input.val();
             optgroups.push({ id: 'typed', label: gettext('Typed value')});
             for (var value in values) {
                 options.push({ source: value, value: value });
@@ -2017,8 +2019,8 @@
         $('.pre_source_menu_exclude').click(function (e) {
             return sourceMenu(this, 2);
         });
-
-        $('form').submit(function() {
+        
+        var formSubmission = function() {
             if (submit_val != 'delete') {
                 // Build pre-existing sources list.
                 var preSources = $.map(
@@ -2057,19 +2059,52 @@
                 }
             });
             $("#global_notes_input").val(JSON.stringify(notes_submit));
+            // Remove previously appended fields.
+            $('.' + APPENDED_FIELD_CLASS).remove();
+            var form = $('form');
             // Append demographics matrix.
-            var form = $(this);
             demographics_table.appendToForm(form);
             {% if mode != 'contribute' %}
             age_and_sex_table.appendToForm(form);
             {% endif %}
-            var $sources = $('<input type="hidden" name="sources" />');
+            var $sources = $('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="sources" />');
             var source_models = $.map(sources, function(s, i) {
                 return s.toModel();
             });
             $sources.val(JSON.stringify(source_models));
             form.append($sources);
             return true;
+        };
+
+        $('form').submit(formSubmission);
+        
+        // Ajax save.
+        $('#save_btn').click(function() {
+            var valid = formSubmission();
+            if (valid) {
+                $(this).prop('disabled', true);
+                var $form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: '{{ request.get_full_path }}'.replace('/interim/', '/interim_save_ajax/'),
+                    data: $form.serialize(),
+                    success: function (response) {
+                        var $success = $('#success_info');
+                        $success.css('opacity', 1.0);
+                        $success.animate({
+                                opacity: 0.0
+                            },
+                            5000
+                        );
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error saving: ' + textStatus);
+                    },
+                    complete: function() {
+                        $('#save_btn').prop('disabled', false);
+                    }
+                });
+            }
         });
     });
 

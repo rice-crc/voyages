@@ -520,6 +520,8 @@ var KEY_RIGHT = 39;
 var KEY_TAB = 9;
 var KEY_UP = 38;
 
+var APPENDED_FIELD_CLASS = '__appended_field__';
+
 // Wrap the slave numbers table logic in a JS object that can be reused
 // for multiple tables (demographics, sex and age etc).
 function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_headers, pre_existing_data) {
@@ -665,9 +667,8 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
                 if (!isNaN(value)) {
-                    form.append('<input type="hidden" name="' +
-                        NUMBERS_KEY_PREFIX + self.column_headers[j] + self.row_headers[i] +
-                        '" value="' + value + '" />');
+                    var name = NUMBERS_KEY_PREFIX + self.column_headers[j] + self.row_headers[i];
+                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="' + name + '" value="' + value + '" />');
                 }
             }
         }
