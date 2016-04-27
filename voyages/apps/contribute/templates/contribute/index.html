@@ -16,23 +16,23 @@
 <div class="white-board">
 	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
 
-	<ul class="contribute_menu">
+	<ul class="contribute_menu row">
 		{% if request.user.is_staff %}
 		<!-- Is enabled only if the user is a staff member -->
-		<li class="live_admin">
+		<li class="live_admin col-sm-6">
 			<a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
 		</li>
 		{% endif %}
-		<li>
+		<li class="col-sm-6">
 			<a href="{% url 'contribute:new_voyage' %}">{% trans "New voyage" %}</a>
 		</li>
-		<li>
+		<li class="col-sm-6">
 			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
 		</li>
-		<li>
+		<li class="col-sm-6">
 			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
 		</li>
-		<li>
+		<li class="col-sm-6">
 			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
 		</li>
 	</ul>
