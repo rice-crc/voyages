@@ -133,12 +133,12 @@ h1.contribute_header {
 .selectize-dropdown {
   min-width: 180px !important;
 }
-.selectize_day {
-  display: inline-block;
-}
-.selectize_year {
+.selectize_day, .selectize_month, .selectize_year {
   display: none;
 }
-.selectize_year.search_match {
+.selectize_day.search_match {
+  display: inline-block;
+}
+.selectize_year.search_match, .selectize_month.search_match {
   display: block;
 }
