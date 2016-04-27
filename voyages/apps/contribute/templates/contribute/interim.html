@@ -1337,7 +1337,7 @@
     {% if mode == 'contribute' %}
     <div class="form-group col-md-12">
         <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
-        <button class="btn btn-warning" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
+        <button class="btn btn-success" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
@@ -1646,7 +1646,7 @@
     var broad_regions = {};
 
     $(document).ready(function() {
-        $('.form-horizontal .form-group>label').addClass('control-label col-sm-3');
+        $('.form-horizontal .form-group>label').addClass('control-label col-sm-4');
 
         // Store numbers in an object.
         var numbers = {
@@ -1870,13 +1870,34 @@
                 },
                 score: function(search) {
                     var score = this.getScoreFunction(search);
+                    var current = $.map(self[0].selectize.items, function(s) { return s[0]; });
                     return function(item) {
-                        return item.type == 'year' && search.length != 4 ? 0.0 : score(item);
+                        var stype = item.type[0];
+                        // If not expected type omit result.
+                        var allowed = 'y';
+                        if (current.indexOf('y') >= 0) {
+                            allowed = 'm';
+                            if (current.indexOf('m') >= 0) {
+                                 allowed = current.indexOf('d') >= 0 ? '' : 'd';
+                            }
+                        }
+                        if (stype != allowed) return 0.0;
+                        if (stype == 'd' && search.length == 1) return score(item) * (parseInt(item.label) < 10 ? 5 : 1);
+                        return stype == 'y' && search.length != 4 ? 0.0 : score(item);
                     };
                 },
             });
             var inside = false;
-            this.selectize.on('item_add', function(value, item) {
+            var selectize = this.selectize;
+            var originalKeyDown = selectize.onKeyDown;
+            selectize.onKeyDown = function(e) {
+                // Treat tab, space, slash, dash as a RETURN.
+                if (e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9) {
+                    e.keyCode = 13;
+                }
+                return originalKeyDown.call(selectize, e);  
+            };
+            selectize.on('item_add', function(value, item) {
                 if (inside) return;
                 if (value.startsWith('full')) {
                     this.clear();
