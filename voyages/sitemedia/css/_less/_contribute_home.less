@@ -1,11 +1,18 @@
 @import '_variables.less';
+
+body {
+    font-size: 8pt;
+}
+p.help-block {
+    font-size: 12px;
+    text-align: left;
+}
 ul.contribute_menu {
-    padding-left: 0;
+    padding: 10px;
     li {
         list-style: none;
-        display: inline-block;
-        width: 49%;
         margin-bottom: 10px;
+        padding: 5px 10px;
         a {
             color: #FFF;
             font-weight: normal;
@@ -13,7 +20,7 @@ ul.contribute_menu {
             padding: 20px 15px;
             background-color: @voyagesLightBlue;
             text-align: center;
-            font-size: 1.25em;
+            font-size: 1.5em;
             &:hover {
                 text-decoration: none;
             }
@@ -113,7 +120,7 @@ h1.contribute_header {
 
     .form_help_text {
         color: gray;
-        margin-left: 25%;
+        margin-left: 33%;
     }
 
     .form-horizontal a {
@@ -159,15 +166,25 @@ h1.contribute_header {
     .selectize-dropdown {
         min-width: 180px !important;
     }
-
-    .selectize_day {
-        display: inline-block;
-    }
-
-    .selectize_year {
+    
+    .selectize_day, .selectize_month, .selectize_year {
         display: none;
     }
-
-    .selectize_year.search_match {
+    
+    .selectize_day.search_match {
+        display: inline-block;
+    }
+    
+    .selectize_year.search_match, .selectize_month.search_match {
         display: block;
     }
+
+@media (min-width: 768px) {
+    .form-horizontal {
+    .control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+     text-align: left; 
+}    
+    } 
+}
