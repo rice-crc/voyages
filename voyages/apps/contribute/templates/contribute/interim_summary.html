@@ -766,15 +766,6 @@
         return result;
     };
 
-    $('span.date_value, div.date_value .old_single_value').each(function() {
-        var $this = $(this);
-        var date = dateFormat($this.html());
-        $this.html(date);
-        if (date == '') {
-            $this.parent().addClass('blank');
-        }
-    });
-
     var numbers = {
     {% for k, v in numbers.items %}
         {% if v %}
@@ -817,6 +808,15 @@
             if (list.length > 0) {
                 $div.append(list.join('<br />'));
             }
+        }
+    });
+
+    $('span.date_value, div.date_value .old_single_value').each(function() {
+        var $this = $(this);
+        var date = dateFormat($this.html());
+        $this.html(date);
+        if (date == '') {
+            $this.parent().addClass('blank');
         }
     });
 
