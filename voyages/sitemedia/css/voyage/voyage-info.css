@@ -3,7 +3,7 @@ body {
 	background-image: url('/static/images/voyage/voyage-bg.png');
 	background-repeat: repeat-x;
 	background-color: #FFFFFF;
-	font-size: inherit !important;
+	font-size: 8pt;
 }
 
 h1 {
