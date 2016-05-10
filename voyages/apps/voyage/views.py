@@ -1582,36 +1582,6 @@ def check_and_save_options_form(request, to_reset_form):
 
     return form, results_per_page
 
-def shorten_search_url(request):
-    response_data = {}
-    url = shorten_url(request.GET['long_url'])
-    response_data['url'] = url
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-def shorten_url(long_url):
-    """
-    Function to shorten url using google url shortening service.
-    :param long_url: Long url to shorten
-    If google doesn't provide url or the google url doesn't work, then it will just return the long_url
-    """
-    url = long_url
-    try:
-        payload = json.dumps({'longUrl': long_url})
-        headers = {'Content-Type': 'application/json'}
-        result = requests.post('https://www.googleapis.com/urlshortener/v1/url', headers=headers, data=payload)
-        url = result.json().get('id', long_url)
-    except:
-        url = long_url
-    else:
-        try:
-            # Python can't handle the redirect to the testvoyages url
-            req = requests.get(url, allow_redirects=False)
-            if not req.ok:
-                url = long_url
-        except:
-            url = long_url
-    return url
-
 def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
