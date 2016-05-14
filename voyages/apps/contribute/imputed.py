@@ -56,8 +56,20 @@ def recode_var(dict, value):
         if value in lst:
             return key
     return None
+
+def threshold(value, min):
+    return None if (value and value < min) else value
+
+def compute_imputed_vars(interim):
+    """
+    This method will update the imputed fields of the
+    given interim voyage. It will also add imputed numbers
+    to the slave_numbers collection.
     
-def get_imputed_vars(interim):
+    Note that this method will invoke the save method
+    of the model.
+    """
+    
     named_sources = {
         'd1slatrc': interim.date_slave_purchase_began,
         'datarr34': interim.date_first_slave_disembarkation,
@@ -69,8 +81,6 @@ def get_imputed_vars(interim):
     
     def extract_year_from_sources(sources):
         return first_valid(map(extract_year, [named_sources.get(var_name) for var_name in sources]))
-    
-    # WARNING: ddepamc IS MISSING from our model
     
     # YEARDEP - Year voyage began (imputed)
     yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
@@ -101,8 +111,7 @@ def get_imputed_vars(interim):
         interim.date_first_slave_disembarkation,
         interim.date_departure
     )
-    if voy1imp and voy1imp <= 10:
-        voy1imp = None 
+    voy1imp = threshold(voy1imp, 11)
     interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation = voy1imp
     # VOY2IMP = DATEDIF(DATE_LAND1, DATE_LEFTAFR, "days").
     voy2imp = date_diff(
@@ -112,8 +121,7 @@ def get_imputed_vars(interim):
     interim_length = interim.length_of_middle_passage
     if voy2imp is None or (voy2imp < 20 and interim_length and interim_length - voy2imp > 10)):
         voy2imp = interim_length
-    if voy2imp and voy2imp <= 38:
-        voy2imp = None
+    voy2imp = threshold(voy2imp, 39)
     interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation = voy2imp
     
     natinimp = interim.ship_registration_place__value
@@ -1221,64 +1229,56 @@ def get_imputed_vars(interim):
 	# male4imp - Imputed number of males embarked at second port of purchase
 	# feml4imp - Imputed number of females embarked at second port of purchase
     
-    # TODO: write first into local variables men1, women1... then reuse them
-    adlt1imp = numbers.get('MEN1', 0) + 
-        numbers.get('WOMEN1', 0) + 
-        numbers.get('ADULT1', 0) +
-        numbers.get('MEN4', 0) + 
-        numbers.get('WOMEN4', 0) + 
-        numbers.get('ADULT4', 0) + 
-        numbers.get('MEN5', 0) + 
-        numbers.get('WOMEN5', 0) + 
-        numbers.get('ADULT5', 0)
-    chil1imp = numbers.get('BOY1', 0) + 
-        numbers.get('GIRL1', 0) + 
-        numbers.get('CHILD1', 0) + 
-        numbers.get('INFANT1', 0) + 
-        numbers.get('BOY4', 0) + 
-        numbers.get('GIRL4', 0) + 
-        numbers.get('CHILD4', 0) + 
-        numbers.get('INFANT4', 0) + 
-        numbers.get('BOY5', 0) + 
-        numbers.get('GIRL5', 0) + 
-        numbers.get('CHILD5', 0)
-    male1imp = numbers.get('MALE1', 0) + 
-        numbers.get('MALE4', 0) + 
-        numbers.get('MALE5', 0)
-    feml1imp = numbers.get('FEMALE1', 0) + 
-        numbers.get('FEMALE4', 0) + 
-        numbers.get('FEMALE5', 0)
+    men1 = numbers.get('MEN1', 0)
+    men4 = numbers.get('MEN4', 0)
+    men5 = numbers.get('MEN5', 0)
+    
+    women1 = numbers.get('WOMEN1', 0)
+    women4 = numbers.get('WOMEN4', 0)
+    women5 = numbers.get('WOMEN5', 0)
+    
+    adult1 = numbers.get('ADULT1', 0)
+    adult4 = numbers.get('ADULT4', 0)
+    adult5 = numbers.get('ADULT5', 0)
+    
+    girl1 = numbers.get('GIRL1', 0)
+    girl4 = numbers.get('GIRL4', 0)
+    girl5 = numbers.get('GIRL5', 0)
+    
+    boy1 = numbers.get('BOY1', 0)
+    boy4 = numbers.get('BOY4', 0)
+    boy5 = numbers.get('BOY5', 0)
+    
+    child1 = numbers.get('CHILD1', 0)
+    child4 = numbers.get('CHILD4', 0)
+    child5 = numbers.get('CHILD5', 0)
+     
+    infant1 = numbers.get('INFANT1', 0)
+    infant4 = numbers.get('INFANT4', 0)
+    infant5 = numbers.get('INFANT5', 0)
+     
+    male1 = numbers.get('MALE1', 0)
+    male4 = numbers.get('MALE4', 0)
+    male5 = numbers.get('MALE5', 0)
+     
+    female1 = numbers.get('FEMALE1', 0)
+    female4 = numbers.get('FEMALE4', 0)
+    female5 = numbers.get('FEMALE5', 0)
+    
+    adlt1imp = men1 + women1 + adult1 + men4 + women4 + adult4 + men5 + women5 + adult5
+    chil1imp = boy1 + girl1 + child1 + infant1 + boy4 + girl4 + child4 + infant4 + boy5 + girl5 + child5
+    male1imp = male1 + male4 + male5
+    feml1imp = female1 + female4 + female5
     if not male1imp: 
-        male1imp = numbers.get('MEN1', 0) + 
-            numbers.get('BOY1', 0) + 
-            numbers.get('MEN4', 0) + 
-            numbers.get('BOY4', 0) + 
-            numbers.get('MEN5', 0) + 
-            numbers.get('BOY5', 0)
+        male1imp = men1 + boy1 + men4 + boy4 + men5 + boy5
     if not feml1imp:
-        feml1imp = numbers.get('WOMEN1', 0) + 
-            numbers.get('GIRL1', 0) + 
-            numbers.get('WOMEN4', 0) + 
-            numbers.get('GIRL4', 0) + 
-            numbers.get('WOMEN5', 0) + 
-            numbers.get('GIRL5', 0)
+        feml1imp = women1 + girl1 + women4 + girl4 + women5 + girl5
     slavema1 = adlt1imp + chil1imp
     slavemx1 = male1imp + feml1imp
-    slavmax1 = numbers.get('MEN1', 0) +
-		numbers.get('WOMEN1', 0) +
-		numbers.get('BOY1', 0) +
-		numbers.get('GIRL1', 0) +
-		numbers.get('MEN4', 0) +
-		numbers.get('WOMEN4', 0) +
-		numbers.get('BOY4', 0) +
-		numbers.get('GIRL4', 0) +
-		numbers.get('MEN5', 0) +
-		numbers.get('WOMEN5', 0) +
-		numbers.get('BOY5', 0) +
-		numbers.get('GIRL5', 0)
-    if slavema1 <= 19: slavema1 = None
-    if slavemx1 <= 19: slavemx1 = None
-    if slavmax1 <= 19: slavmax1 = None
+    slavmax1 = men1 + women1 + boy1 + girl1 + men4 + women4 + boy4 + girl4 + men5 + women5 + boy5 + girl5
+    slavema1 = threshold(slavema1, 20)
+    slavemx1 = threshold(slavemx1, 20)
+    slavema1 = threshold(slavmax1, 20)
     if slavema1 is None:
         adlt1imp = None
         chil1imp = None
@@ -1292,4 +1292,146 @@ def get_imputed_vars(interim):
     if slavmax1 >= 20: boyrat1 = (boy1 + boy4 + boy5) / slavmax1
     if slavmax1 >= 20: girlrat1 = (girl1 + girl4 + girl5) / slavmax1
 
-    # @ original script line 1530
+    men3 = numbers.get('MEN3', 0)
+    men6 = numbers.get('MEN6', 0)
+    
+    women3 = numbers.get('WOMEN3', 0)
+    women6 = numbers.get('WOMEN6', 0)
+    
+    adult3 = numbers.get('ADULT3', 0)
+    adult6 = numbers.get('ADULT6', 0)
+    
+    girl3 = numbers.get('GIRL3', 0)
+    girl6 = numbers.get('GIRL6', 0)
+    
+    boy3 = numbers.get('BOY3', 0)
+    boy6 = numbers.get('BOY6', 0)
+    
+    child3 = numbers.get('CHILD3', 0)
+    child6 = numbers.get('CHILD6', 0)
+     
+    infant3 = numbers.get('INFANT3', 0)
+     
+    male3 = numbers.get('MALE3', 0)
+    male6 = numbers.get('MALE6', 0)
+     
+    female3 = numbers.get('FEMALE3', 0)
+    female6 = numbers.get('FEMALE6', 0)
+    
+    male3imp = male3 + male6
+    feml3imp = female3 + female6
+    if male3imp == 0: male3imp = men3 + boy3 + men6 + boy6
+    if feml3imp == 0: feml3imp = women3 + girl3 + women6 + girl6
+    
+    slavema3 = threshold(adlt3imp + chil3imp, 20)
+    slavemx3 = threshold(male3imp + feml3imp, 20)
+    slavmax3 = threshold(men3 + women3 + boy3 + girl3 + men6 + women6 + boy6 + girl6, 20)
+    
+    if slavema3 is None:
+        adlt3imp = None
+        chil3imp = None
+    if slavemx3 is None:
+        feml3imp = None
+        male3imp = None
+    
+    chilrat3 = chil3imp / slavema3
+    malrat3 = male3imp / slavemx3
+    if slavmax3 >= 20: menrat3 = (men3 + men6) / slavmax3
+    if slavmax3 >= 20: womrat3 = (women3 + women6) / slavmax3
+    if slavmax3 >= 20: boyrat3 = (boy3 + boy6) / slavmax3
+    if slavmax3 >= 20: girlrat3 = (girl3 + girl6) / slavmax3
+    
+    # men7 - Imputed men when leaving Africa or arriving at ports of landing
+	# women7 - Imputed women when leaving Africa or arriving at ports of landing
+	# boy7 - Imputed boys when leaving Africa or arriving at ports of landing
+	# girl7 - Imputed girls when leaving Africa or arriving at ports of landing
+	# adult7 - Imputed adults when leaving Africa or arriving at ports of landing
+	# child7 - Imputed children when leaving Africa or arriving at ports of lading
+	# male7 - Imputed males when leaving Africa or arriving at ports of landing
+	# female7 - Imputed females when leaving Africa or arriving at ports of landing
+	# slavema7 - Number of slaves with age identIfied, Africa or ports of lading
+	# slavemx7 - Number of slaves with sex identIfied, Africa or ports of landing
+	# slavmax7 - Number of slaves identIfied by both age and sex
+	# menrat7 - Imputed ratio of men when leaving Africa or arriving at ports of landing
+	# womrat7 - Imputed ratio of women when leaving Africa or arriving at ports of landing
+	# boyrat7 - Imputed ratio of boys when leaving Africa or arriving at ports of landing
+	# girlrat7 - Imputed ratio of girls when leaving Africa or arriving at ports of landing
+	# chilrat7 - Imputed ratio of children when leaving Africa or arriving at ports of landing
+	# malrat7 - Imputed ratio of males when leaving Africa or arriving at ports of landing
+    
+    if slavema3 >= 20: slavema7 = slavema3
+    if slavemx3 >= 20: slavemx7 = slavemx3
+    if slavmax3 >= 20: slavmax7 = slavmax3
+    if slavmax7 >= 20: men7 = men3 + men6
+    if slavmax7 >= 20: women7 = women3 + women6
+    if slavmax7 >= 20: boy7 = boy3 + boy6
+    if slavmax7 >= 20: girl7 = girl3 + girl6
+    if slavema7 >= 20: adult7 = adlt3imp
+    if slavema7 >= 20: child7 = chil3imp
+    if slavemx7 >= 20: male7 = male3imp
+    if slavemx7 >= 20: female7 = feml3imp
+    if menrat3 >= 0: menrat7 = menrat3
+    if womrat3 >= 0: womrat7 = womrat3
+    if boyrat3 >= 0: boyrat7 = boyrat3
+    if girlrat3 >= 0: girlrat7 = girlrat3
+    if malrat3 >= 0: malrat7 = malrat3
+    if chilrat3 >= 0: chilrat7 = chilrat3
+
+    if slavema3 is None and slavema1 >= 20: slavema7 = slavema1
+    if slavemx3 is None and slavemx1 >= 20: slavemx7 = slavemx1
+    if slavmax3 is None and slavmax1 >= 20: slavmax7 = slavmax1
+    if slavmax3 is None and slavmax1 >= 20: men7 = men1 + men4 + men5
+    if slavmax3 is None and slavmax1 >= 20: women7 = women1 + women4 + women5
+    if slavmax3 is None and slavmax1 >= 20: boy7 = boy1 + boy4 + boy5
+    if slavmax3 is None and slavmax1 >= 20: girl7 = girl1 + girl4 + girl5
+    if slavema3 is None and slavema1 >= 20: adult7 = adlt1imp
+    if slavema3 is None and slavema1 >= 20: child7 = chil1imp
+    if slavemx3 is None and slavemx1 >= 20: male7 = male1imp
+    if slavemx3 is None and slavemx1 >= 20: female7 = feml1imp
+    if menrat3 is None and menrat1 >= 0: menrat7 = menrat1
+    if womrat3 is None and womrat1 >= 0: womrat7 = womrat1
+    if boyrat3 is None and boyrat1 >= 0: boyrat7 = boyrat1
+    if girlrat3 is None and girlrat1 >= 0: girlrat7 = girlrat1
+    if malrat3 is None and malrat1 >= 0: malrat7 = malrat1
+    if chilrat3 is None and chilrat1 >= 0: chilrat7 = chilrat1
+    
+	# adlt2imp - Imputed number of adults who died on middle passage
+	# chil2imp - Imputed number of children who died on middle passage
+	# male2imp - Imputed number of males who died on middle passage
+	# feml2imp - Imputed number of females who died on middle passage
+    men2 = numbers.get('MEN2', 0)    
+    women2 = numbers.get('WOMEN2', 0)
+    adult2 = numbers.get('ADULT2', 0)
+    girl2 = numbers.get('GIRL2', 0)    
+    boy2 = numbers.get('BOY2', 0)
+    child2 = numbers.get('CHILD2', 0)
+    male2 = numbers.get('MALE2', 0)
+    female2 = numbers.get('FEMALE2', 0)
+    
+    male2imp = male2
+    feml2imp = female2
+    if male2imp: male2imp = men2 + boy2
+    if missing (feml2imp): feml2imp = women2 + girl2
+
+    if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp: adlt2imp = sladvoy - chil2imp
+    if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp: chil2imp = sladvoy - adlt2imp
+    if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp: male2imp = sladvoy - feml2imp
+    if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp: feml2imp = sladvoy - male2imp
+    
+    def update_number(var_name, value):
+        InterimSlaveNumber.objects.
+            filter(interim_voyage__id=interim.pk).
+            filter(var_name=var_name).
+            delete()
+        if not value return
+        number = InterimSlaveNumber()
+        number.interim_voyage = interim
+        number.var_name = var_name
+        number.number = value
+        number.save()
+    
+    # Set interim voyage numbers.
+    with transaction.atomic():
+        interim.save()
+        # TODO: add numbers, e.g:
+        # update_number('MEN7', men7)

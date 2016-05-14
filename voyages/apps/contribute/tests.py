@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 import random
 from django.contrib.auth.models import User
 
-
 @override_settings(LANGUAGE_CODE='en')
 class TestAuthentication(TestCase):
     """
@@ -33,11 +32,11 @@ class TestAuthentication(TestCase):
         # Should redirect
         response = self.client.post(reverse('contribute:index'),
                                     {'id_username': 'admin', 'id_password': 'should_not_work'}, follow=True)
-        self.assertEqual(response.redirect_chain[0][0], 'http://testserver/contribute/login/')
+        self.assertEqual(response.redirect_chain[0][0], 'http://testserver/accounts/login/')
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse('contribute:login'),
+        response = self.client.post(reverse('account_login'),
                                     {'id_username': 'admin', 'id_password': 'should_not_work'})
         self.assertEqual(response.status_code, 200)
         # Should display the error message
@@ -49,7 +48,7 @@ class TestAuthentication(TestCase):
 
         # Should redirect, since we are not logged in
         response = self.client.get(reverse('contribute:index'), follow=True)
-        self.assertRedirects(response, reverse('contribute:login'), status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse('account_login'), status_code=302, target_status_code=200)
 
 
     def test_valid_login_info(self):
@@ -95,3 +94,32 @@ class TestAuthentication(TestCase):
         # using email with good password
         result = self.client.login(username='test@user.com', password='testuser')
         self.assertTrue(result)
+        
+class TestImputedDataCalculation(TestCase):
+    """
+    Here we test the converted SPSS script that should generate imputed variables
+    """
+    
+    def test_dataset(self):
+        # The test dataset is divided into two CSV files, one contains the source
+        # variable data and the other contains the expected output.
+        import csv
+        import os
+        folder = os.path.dirname(os.path.realpath(__file__))
+        def parse_csv(file_name):            
+            data = {}
+            with open(folder + '/testdata/' + file_name) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    data[row['voyageid']] = row
+            return data
+        
+        test_input = parse_csv('ImputeTestData.csv')
+        test_output = parse_csv('ImputeTestDataOutput.csv')
+        self.assertEqual(len(test_input), len(test_output))
+        # Join input and output data
+        for k, v in test_input:
+            v.update(test_output[k])
+        
+        # TODO: step 1 - create an InterimVoyage and numbers for each test entry,
+        # step 2 - apply the conversion script to interim data and compare results.
