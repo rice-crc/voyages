@@ -692,7 +692,7 @@ function ageAndSexTable(numbers, editable, pre_existing_data) {
 // Construct the demographics table, with preset column and row headers.
 function demographicsTable(numbers, editable, pre_existing_data) {
     var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
-    var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '2IMP', '3IMP', '4IMP'];
+    var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '3IMP', '7', '2IMP'];
     return new SlaveNumbersTable(
         'demographics_table',
         numbers,
