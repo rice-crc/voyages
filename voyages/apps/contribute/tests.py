@@ -3,6 +3,8 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 from django.contrib.auth.models import User
+from imputed import compute_imputed_vars
+from models import *
 
 @override_settings(LANGUAGE_CODE='en')
 class TestAuthentication(TestCase):
@@ -100,6 +102,8 @@ class TestImputedDataCalculation(TestCase):
     Here we test the converted SPSS script that should generate imputed variables
     """
     
+    fixtures = ['geographical.json', 'groupings.json']
+    
     def test_dataset(self):
         # The test dataset is divided into two CSV files, one contains the source
         # variable data and the other contains the expected output.
@@ -118,8 +122,10 @@ class TestImputedDataCalculation(TestCase):
         test_output = parse_csv('ImputeTestDataOutput.csv')
         self.assertEqual(len(test_input), len(test_output))
         # Join input and output data
-        for k, v in test_input:
+        for k, v in test_input.items():
             v.update(test_output[k])
         
+        interim = InterimVoyage()
+        compute_imputed_vars(interim)
         # TODO: step 1 - create an InterimVoyage and numbers for each test entry,
         # step 2 - apply the conversion script to interim data and compare results.
