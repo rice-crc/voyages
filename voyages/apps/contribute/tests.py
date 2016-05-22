@@ -127,18 +127,35 @@ class TestImputedDataCalculation(TestCase):
         # Join input and output data
         for k, v in test_input.items():
             v.update(test_output[k])
+        first = True
+        errors = {}
         for voyage_id, row in test_input.items():
             print 'Testing voyage_id:' + str(voyage_id)
             interim = self.interim_voyage(row)
             all_vars = compute_imputed_vars(interim)[2]
             # Check that the imputed fields all match.
+            mismatches = []
             for k, v in all_vars.items():
+                if not k in row:
+                    if first:
+                        print "Missing field: " + k
+                    continue
                 expected = row[k]
-                if isinstance(v, numbers.Integral):
-                    expected = int(expected)
-                if isinstance(v, numbers.Real):
-                    expected = float(expected)
-                self.assertEqual(v, expected, 'Mismatch at "' + k + '" expected "' + str(expected) + '", got "' + str(v) + '" instead.')                   
+                if isinstance(v, numbers.Integral) or isinstance(v, numbers.Real):
+                    expected = float(expected) if expected is not None else None
+                    if (not expected and v) or abs(v - expected) >= 0.01:
+                        mismatches.append((k, expected, v))
+                elif v != expected:
+                    mismatches.append((k, expected, v))
+            if len(mismatches) > 0:
+                errors[voyage_id] = 'Mismatches:\n' + \
+                    ',\n'.join(['\t' + k + ': expected "' + str(expected) + '", got "' + str(v) + '" instead' for (k, expected, v) in mismatches]) + \
+                    '\nInterim:\n' + str(vars(interim)) + \
+                    '\nInterim numbers:\n' + str(interim.slave_numbers.all()) + \
+                    '\nAll variables:\n' + str(all_vars)
+            first = False        
+        
+        self.assertEqual(0, len(errors), '\n'.join(errors.values()))
         
     def interim_voyage(self, dict):
         # TODO: this code may be placed somewhere else so that
@@ -150,10 +167,11 @@ class TestImputedDataCalculation(TestCase):
         outcome_from_value = fn_from_value(ParticularOutcome)
         resistance_from_value = fn_from_value(Resistance)
         
-        def date_from_triple(y, m, d):
+        def date_from_triple(m, d, y):
             arr = [dict[m], dict[d], dict[y]]
             arr = [str(x) if x else '' for x in arr]
-            return ','.join(arr)
+            result = ','.join(arr)
+            return result if result != ',,' else None
         
         interim = InterimVoyage()
         interim.name_of_vessel = dict['shipname']
@@ -200,4 +218,26 @@ class TestImputedDataCalculation(TestCase):
         interim.first_captain = dict['captaina']
         interim.second_captain = dict['captainb']
         interim.third_captain = dict['captainc']
+        interim.save()
+        number_variables = ['ncar13', 'ncar15', 'ncar17', 'tslavesd', 
+            'tslavesp', 'slas32', 'slas36', 'slas39', 'slaarriv', 'sladvoy',
+            'men1', 'men4', 'men5', 'women1', 'women4', 'women5', 'adult1',
+            'adult4', 'adult5', 'girl1', 'girl4', 'girl5', 'boy1', 'boy4',
+            'boy5', 'child1', 'child4', 'child5', 'infant1', 'infant4',
+            'male1', 'male4', 'male5', 'female1', 'female4', 'female5',
+            'men3', 'men6', 'women3', 'women6', 'adult3', 'adult6', 'girl3',
+            'girl6', 'boy3', 'boy6', 'child3', 'child6', 'infant3', 'male3',
+            'male6', 'female3', 'female6', 'men2', 'women2', 'adult2',
+            'girl2', 'boy2', 'child2', 'male2', 'female2']
+        numbers_added = {}
+        for var_name in number_variables:
+            var_value = dict.get(var_name)
+            if var_value is None:
+                continue
+            number = InterimSlaveNumber()
+            number.interim_voyage = interim
+            number.var_name = var_name.upper()
+            number.number = var_value
+            number.save()
+            numbers_added[number.var_name] = number
         return interim

@@ -69,6 +69,9 @@ imputed_vars_model_map = {
 def clear_mod(x, mod):
     return x - (x % mod) if x is not None else None
     
+def region_value(x):
+    return clear_mod(x, 100)
+    
 def broad_value(x):
     return clear_mod(x, 10000) if x <= 80000 else 80000
 
@@ -162,22 +165,22 @@ def compute_imputed_vars(_interim):
         'ddepamc': _interim.date_return_departure,
     }
     
-    def extract_year_from_sources(sources):
+    def _extract_year_from_sources(sources):
         return first_valid(map(extract_year, [_named_sources.get(var_name) for var_name in sources]))
     
     # YEARDEP - Year voyage began (imputed)
-    yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
-    yeardep = extract_year_from_sources(yeardep_sources)
+    _yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
+    yeardep = _extract_year_from_sources(_yeardep_sources)
     
     # YEARAF - Year departed Africa (imputed)
-    yearaf_sources = ['dlslatrc', 'd1slatrc', 'datedepc', 'datarr34', 'ddepamc', 'datarr45']
-    yearaf = extract_year_from_sources(yearaf_sources)
+    _yearaf_sources = ['dlslatrc', 'd1slatrc', 'datedepc', 'datarr34', 'ddepamc', 'datarr45']
+    yearaf = _extract_year_from_sources(_yearaf_sources)
     
     # YEARAM Year of arrival at port of disembarkation (imputed)
-    yearam_sources = ['datarr34', 'dlslatrc', 'd1slatrc', 'datedepc', 'ddepamc', 'datedepc', 'datarr45']
-    yearam = extract_year_from_sources(yearam_sources)
+    _yearam_sources = ['datarr34', 'dlslatrc', 'd1slatrc', 'datedepc', 'ddepamc', 'datedepc', 'datarr45']
+    yearam = _extract_year_from_sources(_yearam_sources)
     
-    year5 = year_mod(yearam, 5, 1525)
+    year5 = year_mod(yearam, 5, 1500)
     year10 = year_mod(yearam, 10, 1500)
     year25 = year_mod(yearam, 25, 1500)
     year100 = ((yearam - 1) // 100) * 100 if yearam else None
@@ -254,6 +257,7 @@ def compute_imputed_vars(_interim):
     fate3 = None
     fate4 = None
     if _interim.voyage_outcome:
+        _outcome_value = get_obj_value(_interim.voyage_outcome)
         # fate2 - Outcome of voyage for slaves
         fate2 = recode_var(
             {
@@ -272,7 +276,7 @@ def compute_imputed_vars(_interim):
                 6: [208],
                 7: [28, 75, 89, 91, 98]
             }, 
-            _interim.voyage_outcome
+            _outcome_value
         )
         # fate3 - Outcome of voyage If vessel captured
         fate3 = recode_var(
@@ -298,7 +302,7 @@ def compute_imputed_vars(_interim):
                 17: [211],
                 18: [212]
             }, 
-            _interim.voyage_outcome
+            _outcome_value
         )
         # fate4 - Outcome of voyage for owner
         fate4 = recode_var(
@@ -314,7 +318,7 @@ def compute_imputed_vars(_interim):
                     187, 188, 189, 191, 192, 193, 194, 195, 196, 198, 199, 201, 202],
                 4: [40,70,96,208]
             }, 
-            _interim.voyage_outcome
+            _outcome_value
         )
         
     # At the equivalent point in SPSS, regions are infered from places.
@@ -323,9 +327,10 @@ def compute_imputed_vars(_interim):
     
     embport = get_obj_value(_interim.first_port_intended_embarkation)
     embport2 = get_obj_value(_interim.second_port_intended_embarkation)
-    regem1 = get_obj_value(_interim.imputed_first_region_of_embarkation_of_slaves)
-    regem2= get_obj_value(_interim.imputed_second_region_of_embarkation_of_slaves)
-    regem3 = get_obj_value(_interim.imputed_third_region_of_embarkation_of_slaves)
+    # WARNING: regem* variables are based on variables which are not in interim model
+    regem1 = region_value(embport)
+    regem2= region_value(embport2)
+    regem3 = None
     
     _numbers = {n.var_name: n.number for n in _interim.slave_numbers.all()}
     
@@ -341,26 +346,26 @@ def compute_imputed_vars(_interim):
     if pctemb == None and tslavesp:
         pctemb = ncartot / tslavesp
     
-    places = [
+    _places = [
         get_obj_value(_interim.first_place_of_slave_purchase),
         get_obj_value(_interim.second_place_of_slave_purchase),
         get_obj_value(_interim.third_place_of_slave_purchase)
     ]
-    mjbyptimp = places[0]
-    if not mjbyptimp: mjbyptimp = places[1]
-    if not mjbyptimp: mjbyptimp = places[2]
-    if places[1] and places[1] == places[2]: mjbyptimp = places[1]
+    mjbyptimp = _places[0]
+    if not mjbyptimp: mjbyptimp = _places[1]
+    if not mjbyptimp: mjbyptimp = _places[2]
+    if _places[1] and _places[1] == _places[2]: mjbyptimp = _places[1]
 
-    if ncar13 > ncar15 and ncar13 > ncar17: mjbyptimp = places[0]
-    if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = places[1]
-    if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = places[2]
+    if ncar13 > ncar15 and ncar13 > ncar17: mjbyptimp = _places[0]
+    if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = _places[1]
+    if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = _places[2]
     
     if (pctemb and pctemb < 0.5) or (ncartot < 50 and tslavesd is None and tslavesp is None):
-        if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = places[0]
-        if ncar13 > 0 and ncar15 == 0 and ncar17 > 0: mjbyptimp = places[1]
-        if ncar13 > 0 and ncar15 > 0 and ncar17 == 0: mjbyptimp = places[2]
-        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and places[2] is None: mjbyptimp = places[0]
-        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and places[1] and places[2] is None: mjbyptimp = places[1]
+        if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = _places[0]
+        if ncar13 > 0 and ncar15 == 0 and ncar17 > 0: mjbyptimp = _places[1]
+        if ncar13 > 0 and ncar15 > 0 and ncar17 == 0: mjbyptimp = _places[2]
+        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and _places[2] is None: mjbyptimp = _places[0]
+        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and _places[1] and _places[2] is None: mjbyptimp = _places[1]
         if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and regem1 == regem2: mjbyptimp = regem1 + 99
         if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and regem1 == regem3: mjbyptimp = regem1 + 99
         if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and regem2 == regem3: mjbyptimp = regem2 + 99
@@ -369,30 +374,30 @@ def compute_imputed_vars(_interim):
         if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and regem2 != regem3: mjbyptimp = 60999
 
     if not ncartot:
-        if places[0] >=1 and places[1] >=1 and places[2] is None and regem1 == regem2: mjbyptimp = regem1 + 99
-        if places[0] >=1 and places[2] >=1 and places[1] is None and regem1 == regem3: mjbyptimp = regem1 + 99
-        if places[1] >=1 and places[2] >=1 and places[0] is None and regem2 == regem3: mjbyptimp = regem2 + 99
-        if places[0] >=1 and places[1] >=1 and places[2] is None and regem1 != regem2: mjbyptimp = 60999
-        if places[0] >=1 and places[2] >=1 and places[1] is None and regem1 != regem3: mjbyptimp = 60999
-        if places[1] >=1 and places[2] >=1 and places[0] is None and regem2 != regem3: mjbyptimp = 60999
-        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 == regem2: mjbyptimp = regem1 + 99
-        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 == regem3: mjbyptimp = regem1 + 99
-        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem2 == regem3: mjbyptimp = regem2 + 99
-        if places[0] >=1 and places[1] >=1 and places[2] >= 1 and regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
+        if _places[0] >=1 and _places[1] >=1 and _places[2] is None and regem1 and regem1 == regem2: mjbyptimp = regem1 + 99
+        if _places[0] >=1 and _places[2] >=1 and _places[1] is None and regem1 and regem1 == regem3: mjbyptimp = regem1 + 99
+        if _places[1] >=1 and _places[2] >=1 and _places[0] is None and regem2 and regem2 == regem3: mjbyptimp = regem2 + 99
+        if _places[0] >=1 and _places[1] >=1 and _places[2] is None and regem1 != regem2: mjbyptimp = 60999
+        if _places[0] >=1 and _places[2] >=1 and _places[1] is None and regem1 != regem3: mjbyptimp = 60999
+        if _places[1] >=1 and _places[2] >=1 and _places[0] is None and regem2 != regem3: mjbyptimp = 60999
+        if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem1 and regem1 == regem2: mjbyptimp = regem1 + 99
+        if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem1 and regem1 == regem3: mjbyptimp = regem1 + 99
+        if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem2 and regem2 == regem3: mjbyptimp = regem2 + 99
+        if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
     
-    no_places = places[0] is None and places[1] is None and places[2] is None
-    if embport and embport2 is None and no_places:
+    _no_places = _places[0] is None and _places[1] is None and _places[2] is None
+    if embport and embport2 is None and _no_places:
         mjbyptimp = embport
-    if embport2 and no_places:
+    if embport2 and _no_places:
         mjbyptimp = embport2
-    if not mjbyptimp and get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or places[0] >= 1 or places[1] >= 1 or places[2] >= 1):
+    if not mjbyptimp and get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or _places[0] >= 1 or _places[1] >= 1 or _places[2] >= 1):
         mjbyptimp = 60999
     
     # mjslptimp - Principal port of slave disembarkation
     
-    sla1port = get_obj_value(_interim.first_place_of_slave_purchase)
-    adpsale1 = get_obj_value(_interim.second_place_of_slave_purchase)
-    adpsale2 = get_obj_value(_interim.third_place_of_slave_purchase)
+    sla1port = get_obj_value(_interim.first_place_of_landing)
+    adpsale1 = get_obj_value(_interim.second_place_of_landing)
+    adpsale2 = get_obj_value(_interim.third_place_of_landing)
     arrport = get_obj_value(_interim.first_port_intended_disembarkation)
     arrport2 = get_obj_value(_interim.second_port_intended_disembarkation)
     mjslptimp = None
@@ -405,7 +410,7 @@ def compute_imputed_vars(_interim):
     # None if both sides are equal to None.
     if sla1port == adpsale1: mjslptimp = sla1port
     if sla1port == adpsale2: mjslptimp = sla1port
-    if adpsale1 == adpsale2: mjslptimp = adpsale1
+    if adpsale1 and adpsale1 == adpsale2: mjslptimp = adpsale1
     
     slas32 = _numbers.get('SLAS32', 0)
     slas36 = _numbers.get('SLAS36', 0)
@@ -418,6 +423,9 @@ def compute_imputed_vars(_interim):
     slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
     pctdis = slastot / slaarriv if slaarriv else None
+    regdis1 = region_value(sla1port)
+    regdis2 = region_value(adpsale1)
+    regdis3 = region_value(adpsale2)
     if pctdis < 0.5 or (slastot < 50 and not slaarriv) and sla1port and adpsale1:
         if adpsale2:
             mjslptimp = 99801
@@ -451,10 +459,10 @@ def compute_imputed_vars(_interim):
     if mjslptimp >= 50300 and mjslptimp < 50400 and portdep is None: ptdepimp=50399
     if mjslptimp >= 50400 and mjslptimp < 50500 and portdep is None: ptdepimp=50422
         
-    region_mod = 100
-    deptregimp = clear_mod(ptdepimp, region_mod)
-    majbyimp = clear_mod(mjbyptimp, region_mod)
-    mjselimp = clear_mod(mjslptimp, region_mod)
+    _region_mod = 100
+    deptregimp = clear_mod(ptdepimp, _region_mod)
+    majbyimp = clear_mod(mjbyptimp, _region_mod)
+    mjselimp = clear_mod(mjslptimp, _region_mod)
     deptregimp1 = broad_value(ptdepimp)
     majbyimp1 = broad_value(mjbyptimp)
     mjselimp1 = broad_value(mjslptimp)
@@ -625,7 +633,7 @@ def compute_imputed_vars(_interim):
     slamimp = None
     if tslavesd >= 1: slaximp = tslavesd
     if tslavesd is None and tslavesp >= 1: slaximp = tslavesp
-    if tslavesd is None and tslavesp is None and ncartot > slaarriv: slaximp=ncartot
+    if tslavesd is None and tslavesp is None and ncartot > slaarriv: slaximp = ncartot
     if tslavesd is None and tslavesp is None and slaarriv is None and ncartot > slastot: slaximp = ncartot
     if tslavesd is None and tslavesp is None and slaarriv is None and slastot is None and ncartot >= 50: slaximp = ncartot
     if slaarriv >= 1: slamimp = slaarriv
@@ -1305,7 +1313,6 @@ def compute_imputed_vars(_interim):
      
     infant1 = _numbers.get('INFANT1', 0)
     infant4 = _numbers.get('INFANT4', 0)
-    infant5 = _numbers.get('INFANT5', 0)
      
     male1 = _numbers.get('MALE1', 0)
     male4 = _numbers.get('MALE4', 0)
@@ -1522,6 +1529,6 @@ def compute_imputed_vars(_interim):
     # Generate model field values.
     imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
     # Generate imputed number values.    
-    imputed__numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
+    imputed_numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
 
-    return (imputed_field_values, imputed__numbers, local_vars)
+    return (imputed_field_values, imputed_numbers, local_vars)
