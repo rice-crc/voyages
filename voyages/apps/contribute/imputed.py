@@ -3,6 +3,74 @@
 
 from datetime import datetime
 from voyages.apps.voyage.models import *
+from django.core.exceptions import ObjectDoesNotExist
+import inspect
+
+slave_number_var_names = [
+    'adlt1imp', 'chil1imp', 'male1imp', 'feml1imp', 'slavmax1', 'slavema1',
+    'slavemx1', 'menrat1', 'womrat1', 'boyrat1', 'girlrat1', 'chilrat1',
+    'malrat1', 'adlt2imp', 'chil2imp', 'male2imp', 'feml2imp', 'adlt3imp',
+    'chil3imp', 'male3imp', 'feml3imp', 'slavmax3', 'slavema3', 'slavemx3',
+    'menrat3', 'womrat3', 'boyrat3', 'girlrat3', 'chilrat3', 'malrat3',
+    'men7', 'women7', 'boy7', 'girl7', 'adult7', 'child7', 'male7',
+    'female7', 'slavmax7', 'slavema7', 'slavemx7', 'menrat7', 'womrat7',
+    'boyrat7', 'girlrat7', 'chilrat7', 'malrat7', 'tslmtimp', 'vymrtimp',
+    'vymrtrat']
+
+# Convenience id function
+def id(x):
+    return x
+    
+def fn_from_value(model):
+    def fn(val):
+        if val is None or val == '':
+            return None
+        try:
+            val = int(val)
+            return model.objects.get(value=val)
+        except ObjectDoesNotExist:
+            print 'Could not found ' + str(model) + ' with value=' + str(val)
+            print inspect.stack()
+            return None
+        except ValueError:
+            return None
+    return fn
+        
+# Construct a dictionary that will map imputed variable names to
+# _interimVoyage model fields, with an adapter function that converts
+# the value to the expected type (e.g., from numerical code value to
+# actual model from the database).
+place_from_val = fn_from_value(Place)
+region_from_val = fn_from_value(Region)
+# Map between imputed SPSS variables and our model.
+imputed_vars_model_map = {
+    'natinimp': ('imputed_national_carrier', fn_from_value(Nationality)),
+    'tonmod': ('imputed_standardized_tonnage', id),
+    'fate2': ('imputed_outcome_of_voyage_for_slaves', fn_from_value(SlavesOutcome)),
+    'fate3': ('imputed_outcome_of_voyage_if_ship_captured', fn_from_value(VesselCapturedOutcome)),
+    'fate4': ('imputed_outcome_of_voyage_for_owner', fn_from_value(OwnerOutcome)),
+    'ptdepimp': ('imputed_port_where_voyage_began', place_from_val),
+    'deptregimp': ('imputed_region_where_voyage_began', region_from_val),
+    'mjbyptimp': ('imputed_principal_place_of_slave_purchase', place_from_val),
+    'mjslptimp': ('imputed_principal_port_of_slave_disembarkation', place_from_val),
+    'yeardep': ('imputed_year_voyage_began', id),
+    'yearaf': ('imputed_year_departed_africa', id),
+    'yearam': ('imputed_year_arrived_at_port_of_disembarkation', id),
+    'year5': ('imputed_quinquennium_in_which_voyage_occurred', id),
+    'year10': ('imputed_decade_in_which_voyage_occurred', id),
+    'year25': ('imputed_quarter_century_in_which_voyage_occurred', id),
+    'year100': ('imputed_century_in_which_voyage_occurred', id),
+    'voy1imp': ('imputed_voyage_length_home_port_to_first_port_of_disembarkation', id),
+    'voy2imp': ('imputed_length_of_middle_passage', id),
+    'slaximp': ('imputed_total_slaves_embarked', id),
+    'slamimp': ('imputed_total_slaves_disembarked', id),
+}
+
+def clear_mod(x, mod):
+    return x - (x % mod) if x is not None else None
+    
+def broad_value(x):
+    return clear_mod(x, 10000) if x <= 80000 else 80000
 
 def extract_year(csv_date):
     """
@@ -44,8 +112,8 @@ def first_valid(lst):
             return x
     return None
 
-def get_obj_value(place):
-    return place.value if place else None
+def get_obj_value(obj):
+    return obj.value if obj else None
 
 def recode_var(dict, value):
     """
@@ -63,77 +131,78 @@ def recode_var(dict, value):
 
 def threshold(value, min):
     return None if (value and value < min) else value
+    
+def year_mod(the_year, mod, start):
+    if the_year is None:
+        return None
+    return 1 + ((the_year - start - 1) // mod)
 
-def compute_imputed_vars(interim):
+def compute_imputed_vars(_interim):
     """
-    This method will update the imputed fields of the
-    given interim voyage. It will also add imputed numbers
-    to the slave_numbers collection.
+    This method will calculate all imputed variables.
+    :return a triple (imputed_model_vars, imputed__numbers, imputed_dict)
     
-    Note that this method will invoke the save method
-    of the model.
+    The first is a dictionary with keys corresponding to _interimVoyage
+    model fields and corresponding values.
+    
+    The second is a dictionary with keys corresponding to the SPSS
+    variable name and the value being the number (or None).
+    
+    The third is a dictionary that contains all values indexed
+    by SPSS variable names, even those that do not belong to
+    the model or _numbers.
     """
     
-    named_sources = {
-        'd1slatrc': interim.date_slave_purchase_began,
-        'datarr34': interim.date_first_slave_disembarkation,
-        'datarr45': interim.date_voyage_completed,
-        'datedepc': interim.date_departure,
-        'dlslatrc': interim.date_vessel_left_last_slaving_port,
-        'ddepamc': interim.date_return_departure,
+    _named_sources = {
+        'd1slatrc': _interim.date_slave_purchase_began,
+        'datarr34': _interim.date_first_slave_disembarkation,
+        'datarr45': _interim.date_voyage_completed,
+        'datedepc': _interim.date_departure,
+        'dlslatrc': _interim.date_vessel_left_last_slaving_port,
+        'ddepamc': _interim.date_return_departure,
     }
     
     def extract_year_from_sources(sources):
-        return first_valid(map(extract_year, [named_sources.get(var_name) for var_name in sources]))
+        return first_valid(map(extract_year, [_named_sources.get(var_name) for var_name in sources]))
     
     # YEARDEP - Year voyage began (imputed)
     yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
-    interim.imputed_year_voyage_began = extract_year_from_sources(yeardep_sources)
+    yeardep = extract_year_from_sources(yeardep_sources)
     
     # YEARAF - Year departed Africa (imputed)
     yearaf_sources = ['dlslatrc', 'd1slatrc', 'datedepc', 'datarr34', 'ddepamc', 'datarr45']
-    interim.imputed_year_departed_africa = extract_year_from_sources(yearaf_sources)
+    yearaf = extract_year_from_sources(yearaf_sources)
     
     # YEARAM Year of arrival at port of disembarkation (imputed)
     yearam_sources = ['datarr34', 'dlslatrc', 'd1slatrc', 'datedepc', 'ddepamc', 'datedepc', 'datarr45']
     yearam = extract_year_from_sources(yearam_sources)
-    interim.imputed_year_arrived_at_port_of_disembarkation = yearam
     
-    def year_mod(the_year, mod, start):
-        if the_year is None:
-            return None
-        return 1 + ((the_year - start - 1) // mod)
-    
-    # YEAR5
-    interim.imputed_quinquennium_in_which_voyage_occurred = year_mod(yearam, 5, 1525)
-    # YEAR10
-    interim.imputed_decade_in_which_voyage_occurred = year_mod(yearam, 10, 1500)
-    # YEAR25
-    interim.imputed_quarter_century_in_which_voyage_occurred = year_mod(yearam, 25, 1500)
-    # YEAR100
-    interim.imputed_century_in_which_voyage_occurred = ((yearam - 1) // 100) * 100 if yearam else None
+    year5 = year_mod(yearam, 5, 1525)
+    year10 = year_mod(yearam, 10, 1500)
+    year25 = year_mod(yearam, 25, 1500)
+    year100 = ((yearam - 1) // 100) * 100 if yearam else None
     # VOY1IMP = DATEDIF(DATE_LAND1, DATE_DEP, "days").
     voy1imp = date_diff(
-        interim.date_first_slave_disembarkation,
-        interim.date_departure
+        _interim.date_first_slave_disembarkation,
+        _interim.date_departure
     )
     voy1imp = threshold(voy1imp, 11)
-    interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation = voy1imp
     # VOY2IMP = DATEDIF(DATE_LAND1, DATE_LEFTAFR, "days").
     voy2imp = date_diff(
-        interim.date_first_slave_disembarkation,
-        interim.date_vessel_left_last_slaving_port
+        _interim.date_first_slave_disembarkation,
+        _interim.date_vessel_left_last_slaving_port
     )
-    interim_length = interim.length_of_middle_passage
-    if voy2imp is None or (voy2imp < 20 and interim_length and interim_length - voy2imp > 10):
-        voy2imp = interim_length
+    _interim_length = _interim.length_of_middle_passage
+    if voy2imp is None or (voy2imp < 20 and _interim_length and _interim_length - voy2imp > 10):
+        voy2imp = _interim_length
     voy2imp = threshold(voy2imp, 39)
-    interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation = voy2imp
     
-    natinimp = get_obj_value(interim.ship_registration_place)
-    tonnage = interim.tonnage_of_vessel
+    natinimp = get_obj_value(_interim.national_carrier)
+    tonnage = _interim.tonnage_of_vessel
+    tonmod = None
     if tonnage:
-        tontype = interim.ton_type__id
+        tonnage = int(tonnage)
+        tontype = get_obj_value(_interim.ton_type)
         if tontype == 13:
             tonmod = tonnage
         if (tontype < 3 or tontype == 4 or tontype == 5) and yearam > 1773:
@@ -180,13 +249,11 @@ def compute_imputed_vars(interim):
             tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 15 or tontype == 14 or tontype == 17:
             tonmod = 52.86 + (1.22 * tonnage)
-        
-        interim.imputed_standardized_tonnage = tonmod
     
     fate2 = None
     fate3 = None
     fate4 = None
-    if interim.voyage_outcome:
+    if _interim.voyage_outcome:
         # fate2 - Outcome of voyage for slaves
         fate2 = recode_var(
             {
@@ -205,9 +272,8 @@ def compute_imputed_vars(interim):
                 6: [208],
                 7: [28, 75, 89, 91, 98]
             }, 
-            interim.voyage_outcome
+            _interim.voyage_outcome
         )
-        interim.imputed_outcome_of_voyage_for_slaves = SlavesOutcome.objects.get(value=fate2) if fate2 else None
         # fate3 - Outcome of voyage If vessel captured
         fate3 = recode_var(
             {
@@ -232,9 +298,8 @@ def compute_imputed_vars(interim):
                 17: [211],
                 18: [212]
             }, 
-            interim.voyage_outcome
+            _interim.voyage_outcome
         )
-        interim.imputed_outcome_of_voyage_if_ship_captured = VesselCapturedOutcome.objects.get(value=fate3) if fate3 else None
         # fate4 - Outcome of voyage for owner
         fate4 = recode_var(
             {
@@ -249,38 +314,37 @@ def compute_imputed_vars(interim):
                     187, 188, 189, 191, 192, 193, 194, 195, 196, 198, 199, 201, 202],
                 4: [40,70,96,208]
             }, 
-            interim.voyage_outcome
+            _interim.voyage_outcome
         )
-        interim.imputed_outcome_of_voyage_for_owner = OwnerOutcome.objects.get(value=fate4) if fate4 else None
         
     # At the equivalent point in SPSS, regions are infered from places.
     # This is probably redundant given our models already connect places
     # to regions, so lines 293-406 of the SPSS script are skipped.
     
-    embport = get_obj_value(interim.first_port_intended_embarkation)
-    embport2 = get_obj_value(interim.second_port_intended_embarkation)
-    regem1 = get_obj_value(interim.imputed_first_region_of_embarkation_of_slaves)
-    regem2= get_obj_value(interim.imputed_second_region_of_embarkation_of_slaves)
-    regem3 = get_obj_value(interim.imputed_third_region_of_embarkation_of_slaves)
+    embport = get_obj_value(_interim.first_port_intended_embarkation)
+    embport2 = get_obj_value(_interim.second_port_intended_embarkation)
+    regem1 = get_obj_value(_interim.imputed_first_region_of_embarkation_of_slaves)
+    regem2= get_obj_value(_interim.imputed_second_region_of_embarkation_of_slaves)
+    regem3 = get_obj_value(_interim.imputed_third_region_of_embarkation_of_slaves)
     
-    numbers = {n.var_name: n.number for n in interim.slave_numbers.all()}
+    _numbers = {n.var_name: n.number for n in _interim.slave_numbers.all()}
     
     # mjbyptimp - Principal port of slave purchase (replaces majbuypt as imputed variable)
     
-    ncar13 = numbers.get('NCAR13', 0)
-    ncar15 = numbers.get('NCAR15', 0)
-    ncar17 = numbers.get('NCAR17', 0)
+    ncar13 = _numbers.get('NCAR13', 0)
+    ncar15 = _numbers.get('NCAR15', 0)
+    ncar17 = _numbers.get('NCAR17', 0)
     ncartot = ncar13 + ncar15 + ncar17
-    tslavesd = numbers.get('TSLAVESD')
-    tslavesp = numbers.get('TSLAVESP')
+    tslavesd = _numbers.get('TSLAVESD')
+    tslavesp = _numbers.get('TSLAVESP')
     pctemb = ncartot / tslavesd if tslavesd else None
     if pctemb == None and tslavesp:
         pctemb = ncartot / tslavesp
     
     places = [
-        interim.first_place_of_slave_purchase,
-        interim.second_place_of_slave_purchase,
-        interim.third_place_of_slave_purchase
+        get_obj_value(_interim.first_place_of_slave_purchase),
+        get_obj_value(_interim.second_place_of_slave_purchase),
+        get_obj_value(_interim.third_place_of_slave_purchase)
     ]
     mjbyptimp = places[0]
     if not mjbyptimp: mjbyptimp = places[1]
@@ -321,18 +385,16 @@ def compute_imputed_vars(interim):
         mjbyptimp = embport
     if embport2 and no_places:
         mjbyptimp = embport2
-    if not mjbyptimp and get_obj_value(interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or places[0] >= 1 or places[1] >= 1 or places[2] >= 1):
+    if not mjbyptimp and get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or places[0] >= 1 or places[1] >= 1 or places[2] >= 1):
         mjbyptimp = 60999
-    
-    interim.imputed_principal_place_of_slave_purchase = Place.objects.get(value=mjbyptimp) if mjbyptimp else None
     
     # mjslptimp - Principal port of slave disembarkation
     
-    sla1port = get_obj_value(interim.first_place_of_slave_purchase)
-    adpsale1 = get_obj_value(interim.second_place_of_slave_purchase)
-    adpsale2 = get_obj_value(interim.third_place_of_slave_purchase)
-    arrport = get_obj_value(interim.first_port_intended_disembarkation)
-    arrport2 = get_obj_value(interim.second_port_intended_disembarkation)
+    sla1port = get_obj_value(_interim.first_place_of_slave_purchase)
+    adpsale1 = get_obj_value(_interim.second_place_of_slave_purchase)
+    adpsale2 = get_obj_value(_interim.third_place_of_slave_purchase)
+    arrport = get_obj_value(_interim.first_port_intended_disembarkation)
+    arrport2 = get_obj_value(_interim.second_port_intended_disembarkation)
     mjslptimp = None
     if sla1port and not adpsale1 and not adpsale2: mjslptimp = sla1port
     if adpsale1 and not sla1port and not adpsale2: mjslptimp = adpsale1
@@ -345,15 +407,15 @@ def compute_imputed_vars(interim):
     if sla1port == adpsale2: mjslptimp = sla1port
     if adpsale1 == adpsale2: mjslptimp = adpsale1
     
-    slas32 = numbers.get('SLAS32', 0)
-    slas36 = numbers.get('SLAS36', 0)
-    slas39 = numbers.get('SLAS39', 0)
+    slas32 = _numbers.get('SLAS32', 0)
+    slas36 = _numbers.get('SLAS36', 0)
+    slas39 = _numbers.get('SLAS39', 0)
     
     if slas32 > slas36 and slas32 > slas39: mjslptimp = sla1port
     if slas36 > slas32 and slas36 > slas39: mjslptimp = adpsale1
     if slas39 > slas32 and slas39 > slas36: mjslptimp = adpsale2
     
-    slaarriv = numbers.get('SLAARRIV', 0)
+    slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
     pctdis = slastot / slaarriv if slaarriv else None
     if pctdis < 0.5 or (slastot < 50 and not slaarriv) and sla1port and adpsale1:
@@ -381,32 +443,13 @@ def compute_imputed_vars(interim):
     
     if not mjslptimp and (fate2 == 1 or fate2 == 3 or fate2 == 5) and \
        (arrport or arrport2 or sla1port or adpsale1 or adpsale2 or slastot > 0): mjslptimp = 99801
-       
-    interim.imputed_principal_port_of_slave_disembarkation = Place.objects.get(value=mjslptimp) if mjslptimp else None
-
+    
     # ptdepimp - Imputed port where voyage began
-    portdep = get_obj_value(interim.port_of_departure)
+    portdep = get_obj_value(_interim.port_of_departure)
     ptdepimp = portdep
     if mjslptimp >= 50200 and mjslptimp < 50300 and portdep is None: ptdepimp=50299
     if mjslptimp >= 50300 and mjslptimp < 50400 and portdep is None: ptdepimp=50399
     if mjslptimp >= 50400 and mjslptimp < 50500 and portdep is None: ptdepimp=50422
-
-    interim.imputed_port_where_voyage_began = Place.objects.get(value=ptdepimp) if ptdepimp else None
-    
-    def get_region(place):
-        return place.region if place is not None else None
-    
-    interim.imputed_region_where_voyage_began = get_region(interim.imputed_port_where_voyage_began)
-    
-    interim.imputed_first_region_of_slave_landing = get_region(interim.first_place_of_landing)
-    interim.imputed_second_region_of_slave_landing = get_region(interim.second_place_of_landing)
-    interim.imputed_third_region_of_slave_landing = get_region(interim.third_place_of_landing)
-    
-    def clear_mod(x, mod):
-        return x - (x % mod) if x is not None else None
-        
-    def broad_value(x):
-        return clear_mod(x, 10000) if x <= 80000 else 80000
         
     region_mod = 100
     deptregimp = clear_mod(ptdepimp, region_mod)
@@ -415,12 +458,12 @@ def compute_imputed_vars(interim):
     deptregimp1 = broad_value(ptdepimp)
     majbyimp1 = broad_value(mjbyptimp)
     mjselimp1 = broad_value(mjslptimp)
-    portret = get_obj_value(interim.port_voyage_ended)
+    portret = get_obj_value(_interim.port_voyage_ended)
     retrnreg1 = broad_value(portret)    
     
     # xmimpflag - Voyage groupings for estimating imputed slaves
     xmimpflag = None
-    rig = get_obj_value(interim.rig_of_vessel)
+    rig = get_obj_value(_interim.rig_of_vessel)
     if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1626 and yearam < 1651: xmimpflag = 127 
     if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1651 and yearam < 1676: xmimpflag = 128 
     if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1676 and yearam < 1701: xmimpflag = 129 
@@ -574,8 +617,6 @@ def compute_imputed_vars(interim):
     if yearam >= 1826 and yearam < 1876 and rig == 9 and natinimp == 9: xmimpflag = 154 
     if rig == 27 and natinimp == 9: xmimpflag = 155 
     if rig == 35 and natinimp == 9: xmimpflag = 156
-    
-    interim.imputed_voyage_groupings_for_estimating_imputed_slaves = VoyageGroupings.objects.get(value=xmimpflag) if xmimpflag else None
     
     # slaximp - Imputed number of slaves embarked
     # slamimp - Imputed number of slaves disembarked
@@ -1198,16 +1239,13 @@ def compute_imputed_vars(interim):
     if xmimpflag == 156 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 118.333333333333
     if xmimpflag == 156 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 118.333333333333 / (1 - 0.17641709128796 )
     
-    sladvoy = numbers.get('SLADVOY')
+    sladvoy = _numbers.get('SLADVOY')
     if sladvoy > 0 and slaarriv is None and tslavesd is None and tslavesp is None and ncartot is None and slastot >= 50: slaximp = slastot + sladvoy
     if sladvoy > 0 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv > 1: slaximp = slaarriv + sladvoy
     if sladvoy > 0 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = slamimp + sladvoy
 
     slaximp = round(slaximp) if slaximp else None
     slamimp = round(slamimp) if slamimp else None
-    
-    interim.imputed_total_slaves_embarked = slaximp
-    interim.imputed_total_slaves_disembarked = slamimp
     
     # tslmtimp - Imputed total of slaves embarked for mortality calculation
     # vymrtimp - Imputed number of slaves died in middle passage
@@ -1219,10 +1257,6 @@ def compute_imputed_vars(interim):
     if vymrtimp >= 0: tslmtimp = tslavesd
     if (tslavesd is None and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
     vymrtrat = vymrtimp / tslmtimp if vymrtimp and tslmtimp else None
-    
-    interim.imputed_number_of_slaves_embarked_for_mortality_calculation = tslmtimp
-    interim.imputed_total_slave_deaths_during_middle_passage = vymrtimp
-    interim.imputed_mortality_rate = vymrtrat
     
     # AGE AND GENDER VARIABLES INCORPORATING INFORMATION FROM VARIABLES 4,5,6
 	
@@ -1245,41 +1279,41 @@ def compute_imputed_vars(interim):
 	# male4imp - Imputed number of males embarked at second port of purchase
 	# feml4imp - Imputed number of females embarked at second port of purchase
     
-    men1 = numbers.get('MEN1', 0)
-    men4 = numbers.get('MEN4', 0)
-    men5 = numbers.get('MEN5', 0)
+    men1 = _numbers.get('MEN1', 0)
+    men4 = _numbers.get('MEN4', 0)
+    men5 = _numbers.get('MEN5', 0)
     
-    women1 = numbers.get('WOMEN1', 0)
-    women4 = numbers.get('WOMEN4', 0)
-    women5 = numbers.get('WOMEN5', 0)
+    women1 = _numbers.get('WOMEN1', 0)
+    women4 = _numbers.get('WOMEN4', 0)
+    women5 = _numbers.get('WOMEN5', 0)
     
-    adult1 = numbers.get('ADULT1', 0)
-    adult4 = numbers.get('ADULT4', 0)
-    adult5 = numbers.get('ADULT5', 0)
+    adult1 = _numbers.get('ADULT1', 0)
+    adult4 = _numbers.get('ADULT4', 0)
+    adult5 = _numbers.get('ADULT5', 0)
     
-    girl1 = numbers.get('GIRL1', 0)
-    girl4 = numbers.get('GIRL4', 0)
-    girl5 = numbers.get('GIRL5', 0)
+    girl1 = _numbers.get('GIRL1', 0)
+    girl4 = _numbers.get('GIRL4', 0)
+    girl5 = _numbers.get('GIRL5', 0)
     
-    boy1 = numbers.get('BOY1', 0)
-    boy4 = numbers.get('BOY4', 0)
-    boy5 = numbers.get('BOY5', 0)
+    boy1 = _numbers.get('BOY1', 0)
+    boy4 = _numbers.get('BOY4', 0)
+    boy5 = _numbers.get('BOY5', 0)
     
-    child1 = numbers.get('CHILD1', 0)
-    child4 = numbers.get('CHILD4', 0)
-    child5 = numbers.get('CHILD5', 0)
+    child1 = _numbers.get('CHILD1', 0)
+    child4 = _numbers.get('CHILD4', 0)
+    child5 = _numbers.get('CHILD5', 0)
      
-    infant1 = numbers.get('INFANT1', 0)
-    infant4 = numbers.get('INFANT4', 0)
-    infant5 = numbers.get('INFANT5', 0)
+    infant1 = _numbers.get('INFANT1', 0)
+    infant4 = _numbers.get('INFANT4', 0)
+    infant5 = _numbers.get('INFANT5', 0)
      
-    male1 = numbers.get('MALE1', 0)
-    male4 = numbers.get('MALE4', 0)
-    male5 = numbers.get('MALE5', 0)
+    male1 = _numbers.get('MALE1', 0)
+    male4 = _numbers.get('MALE4', 0)
+    male5 = _numbers.get('MALE5', 0)
      
-    female1 = numbers.get('FEMALE1', 0)
-    female4 = numbers.get('FEMALE4', 0)
-    female5 = numbers.get('FEMALE5', 0)
+    female1 = _numbers.get('FEMALE1', 0)
+    female4 = _numbers.get('FEMALE4', 0)
+    female5 = _numbers.get('FEMALE5', 0)
     
     adlt1imp = men1 + women1 + adult1 + men4 + women4 + adult4 + men5 + women5 + adult5
     chil1imp = boy1 + girl1 + child1 + infant1 + boy4 + girl4 + child4 + infant4 + boy5 + girl5 + child5
@@ -1326,31 +1360,31 @@ def compute_imputed_vars(interim):
 	# chilrat3 - Child ratio among disembarked slaves
 	# malrat3 - Male ratio among disembarked slaves
     
-    men3 = numbers.get('MEN3', 0)
-    men6 = numbers.get('MEN6', 0)
+    men3 = _numbers.get('MEN3', 0)
+    men6 = _numbers.get('MEN6', 0)
     
-    women3 = numbers.get('WOMEN3', 0)
-    women6 = numbers.get('WOMEN6', 0)
+    women3 = _numbers.get('WOMEN3', 0)
+    women6 = _numbers.get('WOMEN6', 0)
     
-    adult3 = numbers.get('ADULT3', 0)
-    adult6 = numbers.get('ADULT6', 0)
+    adult3 = _numbers.get('ADULT3', 0)
+    adult6 = _numbers.get('ADULT6', 0)
     
-    girl3 = numbers.get('GIRL3', 0)
-    girl6 = numbers.get('GIRL6', 0)
+    girl3 = _numbers.get('GIRL3', 0)
+    girl6 = _numbers.get('GIRL6', 0)
     
-    boy3 = numbers.get('BOY3', 0)
-    boy6 = numbers.get('BOY6', 0)
+    boy3 = _numbers.get('BOY3', 0)
+    boy6 = _numbers.get('BOY6', 0)
     
-    child3 = numbers.get('CHILD3', 0)
-    child6 = numbers.get('CHILD6', 0)
+    child3 = _numbers.get('CHILD3', 0)
+    child6 = _numbers.get('CHILD6', 0)
      
-    infant3 = numbers.get('INFANT3', 0)
+    infant3 = _numbers.get('INFANT3', 0)
      
-    male3 = numbers.get('MALE3', 0)
-    male6 = numbers.get('MALE6', 0)
+    male3 = _numbers.get('MALE3', 0)
+    male6 = _numbers.get('MALE6', 0)
      
-    female3 = numbers.get('FEMALE3', 0)
-    female6 = numbers.get('FEMALE6', 0)
+    female3 = _numbers.get('FEMALE3', 0)
+    female6 = _numbers.get('FEMALE6', 0)
     
     adlt3imp = men3 + women3 + adult3 + men6 + women6 + adult6
     chil3imp = boy3 + girl3 + child3 + infant3 + boy6 + girl6 + child6
@@ -1457,14 +1491,17 @@ def compute_imputed_vars(interim):
 	# chil2imp - Imputed number of children who died on middle passage
 	# male2imp - Imputed number of males who died on middle passage
 	# feml2imp - Imputed number of females who died on middle passage
-    men2 = numbers.get('MEN2', 0)    
-    women2 = numbers.get('WOMEN2', 0)
-    adult2 = numbers.get('ADULT2', 0)
-    girl2 = numbers.get('GIRL2', 0)    
-    boy2 = numbers.get('BOY2', 0)
-    child2 = numbers.get('CHILD2', 0)
-    male2 = numbers.get('MALE2', 0)
-    female2 = numbers.get('FEMALE2', 0)
+    men2 = _numbers.get('MEN2', 0)    
+    women2 = _numbers.get('WOMEN2', 0)
+    adult2 = _numbers.get('ADULT2', 0)
+    girl2 = _numbers.get('GIRL2', 0)    
+    boy2 = _numbers.get('BOY2', 0)
+    child2 = _numbers.get('CHILD2', 0)
+    male2 = _numbers.get('MALE2', 0)
+    female2 = _numbers.get('FEMALE2', 0)
+    
+    adlt2imp = men2 + women2 + adult2
+    chil2imp = boy2 + girl2 + child2
     
     male2imp = male2
     feml2imp = female2
@@ -1476,59 +1513,15 @@ def compute_imputed_vars(interim):
     if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp: male2imp = sladvoy - feml2imp
     if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp: feml2imp = sladvoy - male2imp
     
-    def update_number(var_name, value):
-        InterimSlaveNumber.objects.\
-            filter(interim_voyage__id=interim.pk).\
-            filter(var_name=var_name).\
-            delete()
-        if value:
-            number = InterimSlaveNumber()
-            number.interim_voyage = interim
-            number.var_name = var_name
-            number.number = value
-            number.save()
-    
-    imputed_var_names = ['adpsale1', 'adpsale2', 'adult1', 'adult2', 'adult3', 'adult4',
-        'adult5', 'adult6', 'arrport', 'arrport2', 'boy1', 'boy2', 'boy3', 'boy4', 'boy5',
-        'boy6', 'captaina', 'captainb', 'captainc', 'child1', 'child2', 'child3', 'child4',
-        'child5', 'child6', 'constreg', 'crew', 'crew1', 'crew2', 'crew3', 'crew4', 'crew5',
-        'crewdied', 'datedepa', 'datedepb', 'datedepc', 'd1slatra', 'd1slatrb', 'd1slatrc',
-        'dlslatra', 'dlslatrb', 'dlslatrc', 'ddepam', 'ddepamb', 'ddepamc', 'datarr32', 'datarr33',
-        'datarr34', 'datarr36', 'datarr37', 'datarr38', 'datarr39', 'datarr40', 'datarr41',
-        'datarr43', 'datarr44', 'datarr45', 'embport', 'embport2', 'embreg', 'embreg2', 'fate', 
-        'female1', 'female2', 'female3', 'female4', 'female5', 'female6', 'girl1', 'girl2', 'girl3', 
-        'girl4', 'girl5', 'girl6', 'guns', 'infant1', 'infant3', 'infant4', 'jamcaspr', 'majbuypt', 
-        'majselpt', 'male1', 'male2', 'male3', 'male4', 'male5', 'male6', 'men1', 'men2', 'men3', 
-        'men4', 'men5', 'men6', 'national', 'ncar13', 'ncar15', 'ncar17', 'ndesert', 'npafttra', 
-        'nppretra', 'npprior', 'ownera', 'ownerb', 'ownerc', 'ownerd', 'ownere', 'ownerf', 
-        'ownerg', 'ownerh', 'owneri', 'ownerj', 'ownerk', 'ownerl', 'ownerm', 'ownern', 'ownero', 
-        'ownerp', 'plac1tra', 'plac2tra', 'plac3tra', 'placcons', 'placreg', 'portdep', 'portret', 
-        'regarr', 'regarr2', 'regdis1', 'regdis2', 'regdis3', 'regem1', 'regem2', 'regem3', 
-        'regisreg', 'resistance', 'retrnreg', 'retrnreg1', 'rig', 'saild1', 'saild2', 'saild3', 
-        'saild4', 'saild5', 'shipname', 'sla1port', 'slaarriv', 'sladafri', 'sladamer', 'sladvoy', 
-        'slas32', 'slas36', 'slas39', 'slavema1', 'slavema3', 'slavemx1', 'slavemx3', 'slavmax1', 
-        'slavmax3', 'slavmax7', 'slinten2', 'slintend', 'sourcea', 'sourceb', 'sourcec', 'sourced', 
-        'sourcee', 'sourcef', 'sourceg', 'sourceh', 'sourcei', 'sourcej', 'sourcek', 'sourcel', 
-        'sourcem', 'sourcen', 'sourceo', 'sourcep', 'sourceq', 'sourcer', 'tonnage', 'tontype', 
-        'tslavesd', 'tslavesp', 'voyage', 'women1', 'women2', 'women3', 'women4', 'women5', 
-        'women6', 'xmimpflag', 'yearaf', 'yearam', 'yeardep', 'yrcons', 'yrreg', 'natinimp', 
-        'year5', 'year10', 'year25', 'year100', 'tonmod', 'fate2', 'fate3', 'fate4', 'ncartot', 
-        'pctemb', 'mjbyptimp', 'slastot', 'pctdis', 'mjslptimp', 'ptdepimp', 'deptregimp', 
-        'majbyimp', 'mjselimp', 'deptregimp1', 'majbyimp1', 'mjselimp1', 'slaximp', 'slamimp', 
-        'vymrtimp', 'tslmtimp', 'vymrtrat', 'adlt1imp', 'chil1imp', 'male1imp', 'feml1imp', 
-        'chilrat1', 'malrat1', 'menrat1', 'womrat1', 'boyrat1', 'girlrat1', 'adlt3imp', 'chil3imp', 
-        'male3imp', 'feml3imp', 'chilrat3', 'malrat3', 'menrat3', 'womrat3', 'boyrat3', 'girlrat3', 
-        'slavema7', 'slavemx7', 'men7', 'women7', 'boy7', 'girl7', 'adult7', 'child7', 'male7', 
-        'female7', 'menrat7', 'womrat7', 'boyrat7', 'girlrat7', 'malrat7', 'chilrat7', 'adlt2imp', 
-        'chil2imp', 'male2imp', 'feml2imp']
+    # WARNING (missing var): imputed_region_ship_constructed,
+    # WARNING (missing model field): deptregimp1, majbyimp, majbyimp1, mjselimp
+
     local_vars = locals()
-    missing = [name for name in imputed_var_names if name not in local_vars]
-    print "Missing fields:"
-    print missing
+    local_vars = {k: v if v != 0 else None for k, v in local_vars.items() if not k.startswith('_')}
     
-    # Set interim voyage numbers.
-    #with transaction.atomic():
-    #    interim.save()
-        # Use a bit of python magic.
-        # TODO: add numbers, e.g:
-        # update_number('MEN7', men7)
+    # Generate model field values.
+    imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
+    # Generate imputed number values.    
+    imputed__numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
+
+    return (imputed_field_values, imputed__numbers, local_vars)
