@@ -97,7 +97,7 @@ class InterimVoyage(models.Model):
     # Imputed variables (used for reviewer and editor)
     
     imputed_national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True, blank=True)
-    imputed_standardized_tonnage = models.IntegerField(null=True, blank=True)
+    imputed_standardized_tonnage = models.FloatField(null=True, blank=True)
     imputed_region_ship_constructed = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
     
     imputed_outcome_of_voyage_for_slaves = models.ForeignKey(voyage.models.SlavesOutcome, related_name='+', null=True, blank=True)
