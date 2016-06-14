@@ -1,6 +1,7 @@
 # Calculation of imputed variables
 # Python code based on original SPSS script.
 
+from __future__ import division # Make the / operator use floating point division.
 from datetime import datetime
 from voyages.apps.voyage.models import *
 from django.core.exceptions import ObjectDoesNotExist
@@ -133,7 +134,7 @@ def recode_var(dict, value):
     return None
 
 def threshold(value, min):
-    return None if (value and value < min) else value
+    return None if (value is not None and value < min) else value
     
 def year_mod(the_year, mod, start):
     if the_year is None:
@@ -145,7 +146,7 @@ def compute_imputed_vars(_interim):
     This method will calculate all imputed variables.
     :return a triple (imputed_model_vars, imputed__numbers, imputed_dict)
     
-    The first is a dictionary with keys corresponding to _interimVoyage
+    The first is a dictionary with keys corresponding to InterimVoyage
     model fields and corresponding values.
     
     The second is a dictionary with keys corresponding to the SPSS
@@ -153,7 +154,7 @@ def compute_imputed_vars(_interim):
     
     The third is a dictionary that contains all values indexed
     by SPSS variable names, even those that do not belong to
-    the model or _numbers.
+    the model or numbers.
     """
     
     _named_sources = {
@@ -327,7 +328,6 @@ def compute_imputed_vars(_interim):
     
     embport = get_obj_value(_interim.first_port_intended_embarkation)
     embport2 = get_obj_value(_interim.second_port_intended_embarkation)
-    # WARNING: regem* variables are based on variables which are not in interim model
     regem1 = region_value(embport)
     regem2= region_value(embport2)
     regem3 = None
@@ -360,7 +360,7 @@ def compute_imputed_vars(_interim):
     if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = _places[1]
     if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = _places[2]
     
-    if (pctemb and pctemb < 0.5) or (ncartot < 50 and tslavesd is None and tslavesp is None):
+    if (pctemb and pctemb < 0.5) or (ncartot < 50 and not tslavesd and not tslavesp):
         if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = _places[0]
         if ncar13 > 0 and ncar15 == 0 and ncar17 > 0: mjbyptimp = _places[1]
         if ncar13 > 0 and ncar15 > 0 and ncar17 == 0: mjbyptimp = _places[2]
@@ -632,625 +632,625 @@ def compute_imputed_vars(_interim):
     slaximp = None
     slamimp = None
     if tslavesd >= 1: slaximp = tslavesd
-    if tslavesd is None and tslavesp >= 1: slaximp = tslavesp
-    if tslavesd is None and tslavesp is None and ncartot > slaarriv: slaximp = ncartot
-    if tslavesd is None and tslavesp is None and slaarriv is None and ncartot > slastot: slaximp = ncartot
-    if tslavesd is None and tslavesp is None and slaarriv is None and slastot is None and ncartot >= 50: slaximp = ncartot
+    if not tslavesd and tslavesp >= 1: slaximp = tslavesp
+    if not tslavesd and not tslavesp and ncartot > slaarriv: slaximp = ncartot
+    if not tslavesd and not tslavesp and not slaarriv and ncartot > slastot: slaximp = ncartot
+    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot >= 50: slaximp = ncartot
     if slaarriv >= 1: slamimp = slaarriv
-    if slaarriv is None and slastot <= tslavesd: slamimp=slastot
-    if slaarriv is None and tslavesd is None and slastot <= tslavesp: slamimp = slastot
-    if slaarriv is None and tslavesd is None and tslavesp is None and slastot <= ncartot: slamimp = slastot
-    if slaarriv is None and tslavesd is None and tslavesd is None and ncartot is None and slastot >= 50: slamimp = slastot
+    if not slaarriv and slastot <= tslavesd: slamimp=slastot
+    if not slaarriv and not tslavesd and slastot <= tslavesp: slamimp = slastot
+    if not slaarriv and not tslavesd and not tslavesp and slastot <= ncartot: slamimp = slastot
+    if not slaarriv and not tslavesd and not tslavesd and not ncartot and slastot >= 50: slamimp = slastot
     
-    if xmimpflag == 127 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.165107561642471)
-    if xmimpflag == 127 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.165107561642471)
-    if xmimpflag == 127 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 163.181286549708
-    if xmimpflag == 127 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 163.181286549708 / (1 - 0.165107561642471 )
-    if xmimpflag == 128 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.230972326367458)
-    if xmimpflag == 128 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.230972326367458)
-    if xmimpflag == 128 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 241.774647887324
-    if xmimpflag == 128 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 241.774647887324 / (1 - 0.230972326367458 )
-    if xmimpflag == 129 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.218216262481124)
-    if xmimpflag == 129 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.218216262481124)
-    if xmimpflag == 129 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 249.141527001862
-    if xmimpflag == 129 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 249.141527001862 / (1 - 0.218216262481124 )
-    if xmimpflag == 130 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.164154067860228)
-    if xmimpflag == 130 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.164154067860228)
-    if xmimpflag == 130 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 227.680034129693
-    if xmimpflag == 130 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 227.680034129693 / (1 - 0.164154067860228 )
-    if xmimpflag == 131 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.153670852602567)
-    if xmimpflag == 131 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.153670852602567)
-    if xmimpflag == 131 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 272.60549132948
-    if xmimpflag == 131 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 272.60549132948 / (1 - 0.153670852602567 )
-    if xmimpflag == 132 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.120410468186061)
-    if xmimpflag == 132 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.120410468186061)
-    if xmimpflag == 132 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 268.071314102564
-    if xmimpflag == 132 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 268.071314102564 / (1 - 0.120410468186061 )
-    if xmimpflag == 133 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.126821090786133)
-    if xmimpflag == 133 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.126821090786133)
-    if xmimpflag == 133 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 290.826654240447
-    if xmimpflag == 133 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 290.826654240447 / (1 - 0.126821090786133 )
-    if xmimpflag == 134 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.105799354866935)
-    if xmimpflag == 134 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.105799354866935)
-    if xmimpflag == 134 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 225.932515337423
-    if xmimpflag == 134 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 225.932515337423 / (1 - 0.105799354866935 )
-    if xmimpflag == 135 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.114160782328086)
-    if xmimpflag == 135 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.114160782328086)
-    if xmimpflag == 135 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 391.452674897119
-    if xmimpflag == 135 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 391.452674897119 / (1 - 0.114160782328086 )
-    if xmimpflag == 136 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.170755559662484)
-    if xmimpflag == 136 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.170755559662484)
-    if xmimpflag == 136 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 480.734042553191
-    if xmimpflag == 136 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 480.734042553191 / (1 - 0.170755559662484 )
-    if xmimpflag == 101 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.142415261804064)
-    if xmimpflag == 101 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.142415261804064)
-    if xmimpflag == 101 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 163.80243902439
-    if xmimpflag == 101 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 163.80243902439 / (1 - 0.142415261804064 )
-    if xmimpflag == 102 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.104951847967976)
-    if xmimpflag == 102 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.104951847967976)
-    if xmimpflag == 102 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 153.265497076023
-    if xmimpflag == 102 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 153.265497076023 / (1 - 0.104951847967976 )
-    if xmimpflag == 103 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0794334443169517)
-    if xmimpflag == 103 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0794334443169517)
-    if xmimpflag == 103 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 138.094017094017
-    if xmimpflag == 103 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 138.094017094017 / (1 - 0.0794334443169517 )
-    if xmimpflag == 104 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.125269157905197)
-    if xmimpflag == 104 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.125269157905197)
-    if xmimpflag == 104 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 107.64
-    if xmimpflag == 104 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 107.64 - (107.64 * 0.125269157905197 )
-    if xmimpflag == 105 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0887057111704602)
-    if xmimpflag == 105 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0887057111704602)
-    if xmimpflag == 105 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 191.988789237668
-    if xmimpflag == 105 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 191.988789237668 / (1 - 0.0887057111704602 )
-    if xmimpflag == 106 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0985396051230542)
-    if xmimpflag == 106 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0985396051230542)
-    if xmimpflag == 106 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 188.140969162996
-    if xmimpflag == 106 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 188.140969162996 / (1 - 0.0985396051230542 )
-    if xmimpflag == 107 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.199714956235816)
-    if xmimpflag == 107 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.199714956235816)
-    if xmimpflag == 107 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 239.363636363636
-    if xmimpflag == 107 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 239.363636363636 / (1 - 0.199714956235816 )
-    if xmimpflag == 108 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.116764553914052)
-    if xmimpflag == 108 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.116764553914052)
-    if xmimpflag == 108 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 241.066480055983
-    if xmimpflag == 108 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 241.066480055983 / (1 - 0.116764553914052 )
-    if xmimpflag == 110 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.217817105373686)
-    if xmimpflag == 110 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.217817105373686)
-    if xmimpflag == 110 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 321.139784946236
-    if xmimpflag == 110 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 321.139784946236 / (1 - 0.217817105373686 )
-    if xmimpflag == 111 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.134584278813695)
-    if xmimpflag == 111 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.134584278813695)
-    if xmimpflag == 111 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 320.396527777777
-    if xmimpflag == 111 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 320.396527777777 / (1 - 0.134584278813695 )
-    if xmimpflag == 112 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0649564900465187)
-    if xmimpflag == 112 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0649564900465187)
-    if xmimpflag == 112 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 302.919243986254
-    if xmimpflag == 112 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 302.919243986254 / (1 - 0.0649564900465187 )
-    if xmimpflag == 113 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.294943293777566)
-    if xmimpflag == 113 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.294943293777566)
-    if xmimpflag == 113 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 178.191780821918
-    if xmimpflag == 113 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 178.191780821918 / (1 - 0.294943293777566 )
-    if xmimpflag == 114 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.190466263797331)
-    if xmimpflag == 114 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.190466263797331)
-    if xmimpflag == 114 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 268.709993468321
-    if xmimpflag == 114 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 268.709993468321 / (1 - 0.190466263797331 )
-    if xmimpflag == 115 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.165262209695588)
-    if xmimpflag == 115 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.165262209695588)
-    if xmimpflag == 115 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 265.480215827338
-    if xmimpflag == 115 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 265.480215827338 / (1 - 0.165262209695588 )
-    if xmimpflag == 116 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.250590294065011)
-    if xmimpflag == 116 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.250590294065011)
-    if xmimpflag == 116 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 216.026607538803
-    if xmimpflag == 116 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 216.026607538803 / (1 - 0.250590294065011 )
-    if xmimpflag == 117 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0862116624182079)
-    if xmimpflag == 117 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0862116624182079)
-    if xmimpflag == 117 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 341.979498861048
-    if xmimpflag == 117 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 341.979498861048 / (1 - 0.0862116624182079 )
-    if xmimpflag == 118 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0795782666543268)
-    if xmimpflag == 118 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0795782666543268)
-    if xmimpflag == 118 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 382.444580777097
-    if xmimpflag == 118 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 382.444580777097 / (1 - 0.0795782666543268 )
-    if xmimpflag == 120 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.100542298212489)
-    if xmimpflag == 120 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.100542298212489)
-    if xmimpflag == 120 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 191.62583518931
-    if xmimpflag == 120 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 191.62583518931 / (1 - 0.100542298212489 )
-    if xmimpflag == 121 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0690791392436498)
-    if xmimpflag == 121 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0690791392436498)
-    if xmimpflag == 121 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 162.041666666667
-    if xmimpflag == 121 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 162.041666666667 / (1 - 0.0690791392436498 )
-    if xmimpflag == 122 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.274602006426542)
-    if xmimpflag == 122 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.274602006426542)
-    if xmimpflag == 122 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 173.454545454545
-    if xmimpflag == 122 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 173.454545454545 / (1 - 0.274602006426542 )
-    if xmimpflag == 123 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.274602006426542)
-    if xmimpflag == 123 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.274602006426542)
-    if xmimpflag == 123 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 255.028571428571
-    if xmimpflag == 123 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 255.028571428571 / (1 - 0.274602006426542 )
-    if xmimpflag == 124 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.181330570603409)
-    if xmimpflag == 124 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.181330570603409)
-    if xmimpflag == 124 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 447.532008830022
-    if xmimpflag == 124 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 447.532008830022 / (1 - 0.181330570603409 )
-    if xmimpflag == 1 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.255634697158707)
-    if xmimpflag == 1 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.255634697158707)
-    if xmimpflag == 1 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 166.401374570447
-    if xmimpflag == 1 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 166.401374570447 / (1 - 0.255634697158707 )
-    if xmimpflag == 2 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.173114449095158)
-    if xmimpflag == 2 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.173114449095158)
-    if xmimpflag == 2 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 152.863945578231
-    if xmimpflag == 2 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 152.863945578231 / (1 - 0.173114449095158 )
-    if xmimpflag == 3 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.191426939591589)
-    if xmimpflag == 3 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.191426939591589)
-    if xmimpflag == 3 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 250.179245283019
-    if xmimpflag == 3 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 250.179245283019 / (1 - 0.191426939591589 )
-    if xmimpflag == 4 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.143739162059858)
-    if xmimpflag == 4 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.143739162059858)
-    if xmimpflag == 4 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 273.896226415094
-    if xmimpflag == 4 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 273.896226415094 - (273.896226415094 * 0.143739162059858 )
-    if xmimpflag == 5 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0703329947332674)
-    if xmimpflag == 5 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0703329947332674)
-    if xmimpflag == 5 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 380.04854368932
-    if xmimpflag == 5 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 380.04854368932 - (380.04854368932 * 0.0703329947332674 )
-    if xmimpflag == 6 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.117444418143106)
-    if xmimpflag == 6 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.117444418143106)
-    if xmimpflag == 6 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 305.868020304568
-    if xmimpflag == 6 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 305.868020304568 / (1 - 0.117444418143106 )
-    if xmimpflag == 7 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.126779394689057)
-    if xmimpflag == 7 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.126779394689057)
-    if xmimpflag == 7 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 265.88
-    if xmimpflag == 7 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 265.88 - (265.88 * 0.126779394689057 )
-    if xmimpflag == 8 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.189011301766662)
-    if xmimpflag == 8 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.189011301766662)
-    if xmimpflag == 8 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 281.325
-    if xmimpflag == 8 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 281.325 / (1 - 0.189011301766662 )
-    if xmimpflag == 9 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.140365224720275)
-    if xmimpflag == 9 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.140365224720275)
-    if xmimpflag == 9 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 402.502202643172
-    if xmimpflag == 9 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 402.502202643172 / (1 - 0.140365224720275 )
-    if xmimpflag == 10 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.107188743129005)
-    if xmimpflag == 10 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.107188743129005)
-    if xmimpflag == 10 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 277.059842519684
-    if xmimpflag == 10 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 277.059842519684 / (1 - 0.107188743129005 )
-    if xmimpflag == 11 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.126901348540731)
-    if xmimpflag == 11 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.126901348540731)
-    if xmimpflag == 11 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 355.810945273632
-    if xmimpflag == 11 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 355.810945273632 / (1 - 0.126901348540731 )
-    if xmimpflag == 12 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0655772248600899)
-    if xmimpflag == 12 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0655772248600899)
-    if xmimpflag == 12 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 309.533898305085
-    if xmimpflag == 12 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 309.533898305085 / (1 - 0.0655772248600899 )
-    if xmimpflag == 13 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0778021073375869)
-    if xmimpflag == 13 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0778021073375869)
-    if xmimpflag == 13 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 305.812154696132
-    if xmimpflag == 13 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 305.812154696132 / (1 - 0.0778021073375869 )
-    if xmimpflag == 14 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0654921908875572)
-    if xmimpflag == 14 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0654921908875572)
-    if xmimpflag == 14 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 285.054112554113
-    if xmimpflag == 14 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 285.054112554113 / (1 - 0.0654921908875572 )
-    if xmimpflag == 15 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0671696102131247)
-    if xmimpflag == 15 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0671696102131247)
-    if xmimpflag == 15 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 361.638059701493
-    if xmimpflag == 15 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 361.638059701493 / (1 - 0.0671696102131247 )
-    if xmimpflag == 16 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.371414750110571)
-    if xmimpflag == 16 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.371414750110571)
-    if xmimpflag == 16 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 239.9
-    if xmimpflag == 16 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 239.9 / (1 - 0.371414750110571 )
-    if xmimpflag == 157 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.230610260687796)
-    if xmimpflag == 157 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.230610260687796)
-    if xmimpflag == 157 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 139.029411764706
-    if xmimpflag == 157 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 139.029411764706 / (1 - 0.230610260687796 )
-    if xmimpflag == 159 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.154487726688789)
-    if xmimpflag == 159 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.154487726688789)
-    if xmimpflag == 159 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 245.12676056338
-    if xmimpflag == 159 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 245.12676056338 / (1 - 0.154487726688789 )
-    if xmimpflag == 99 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.166050441674744)
-    if xmimpflag == 99 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.166050441674744)
-    if xmimpflag == 99 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 125.619750283768
-    if xmimpflag == 99 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 125.619750283768 / (1 - 0.166050441674744 )
-    if xmimpflag == 100 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.178717812379779)
-    if xmimpflag == 100 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.178717812379779)
-    if xmimpflag == 100 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 565.645161290322
-    if xmimpflag == 100 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 565.645161290322 / (1 - 0.178717812379779 )
-    if xmimpflag == 17 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0557746478873239)
-    if xmimpflag == 17 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0557746478873239)
-    if xmimpflag == 17 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 148.882352941176
-    if xmimpflag == 17 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 148.882352941176 / (1 - 0.0557746478873239 )
-    if xmimpflag == 98 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.126563817175912)
-    if xmimpflag == 98 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.126563817175912)
-    if xmimpflag == 98 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 132.596685082873
-    if xmimpflag == 98 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 132.596685082873 / (1 - 0.126563817175912 )
-    if xmimpflag == 18 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.093544030879478)
-    if xmimpflag == 18 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.093544030879478)
-    if xmimpflag == 18 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 184.486013986014
-    if xmimpflag == 18 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 184.486013986014 / (1 - 0.093544030879478 )
-    if xmimpflag == 19 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0985982521761244)
-    if xmimpflag == 19 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0985982521761244)
-    if xmimpflag == 19 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 230.298469387755
-    if xmimpflag == 19 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 230.298469387755 / (1 - 0.0985982521761244 )
-    if xmimpflag == 20 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0944678720322908)
-    if xmimpflag == 20 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0944678720322908)
-    if xmimpflag == 20 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 444.290145985401
-    if xmimpflag == 20 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 444.290145985401 / (1 - 0.0944678720322908 )
-    if xmimpflag == 21 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.167379623404603)
-    if xmimpflag == 21 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.167379623404603)
-    if xmimpflag == 21 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 492.946428571429
-    if xmimpflag == 21 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 492.946428571429 / (1 - 0.167379623404603 )
-    if xmimpflag == 22 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.183801786070534)
-    if xmimpflag == 22 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.183801786070534)
-    if xmimpflag == 22 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 91.9594594594595
-    if xmimpflag == 22 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 91.9594594594595 / (1 - 0.183801786070534 )
-    if xmimpflag == 23 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.102358180948044)
-    if xmimpflag == 23 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.102358180948044)
-    if xmimpflag == 23 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 95.972972972973
-    if xmimpflag == 23 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 95.972972972973 / (1 - 0.102358180948044 )
-    if xmimpflag == 24 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.122708750828674)
-    if xmimpflag == 24 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.122708750828674)
-    if xmimpflag == 24 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 146.31
-    if xmimpflag == 24 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 146.31 / (1 - 0.122708750828674 )
-    if xmimpflag == 25 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.101742168136026)
-    if xmimpflag == 25 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.101742168136026)
-    if xmimpflag == 25 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 279.357142857143
-    if xmimpflag == 25 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 279.357142857143 / (1 - 0.101742168136026 )
-    if xmimpflag == 26 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0830808603000646)
-    if xmimpflag == 26 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0830808603000646)
-    if xmimpflag == 26 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 341.5
-    if xmimpflag == 26 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 341.5 / (1 - 0.0830808603000646 )
-    if xmimpflag == 27 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0951735364832193)
-    if xmimpflag == 27 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0951735364832193)
-    if xmimpflag == 27 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 335.546666666667
-    if xmimpflag == 27 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 335.546666666667 - (335.546666666667 * 0.0951735364832193 )
-    if xmimpflag == 28 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0599984615282753)
-    if xmimpflag == 28 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0599984615282753)
-    if xmimpflag == 28 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 348.926267281106
-    if xmimpflag == 28 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 348.926267281106 - (348.926267281106 * 0.0599984615282753 )
-    if xmimpflag == 29 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0849037398486349)
-    if xmimpflag == 29 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0849037398486349)
-    if xmimpflag == 29 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 323.539358600583
-    if xmimpflag == 29 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 323.539358600583 / (1 - 0.0849037398486349 )
-    if xmimpflag == 30 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0831292966753462)
-    if xmimpflag == 30 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0831292966753462)
-    if xmimpflag == 30 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 435.738461538461
-    if xmimpflag == 30 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 435.738461538461 / (1 - 0.0831292966753462 )
-    if xmimpflag == 31 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.154603810637904)
-    if xmimpflag == 31 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.154603810637904)
-    if xmimpflag == 31 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 221.279220779221
-    if xmimpflag == 31 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 221.279220779221 / (1 - 0.154603810637904 )
-    if xmimpflag == 32 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.169381440464976)
-    if xmimpflag == 32 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.169381440464976)
-    if xmimpflag == 32 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 296.593103448276
-    if xmimpflag == 32 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 296.593103448276 / (1 - 0.169381440464976 )
-    if xmimpflag == 33 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.183684529291394)
-    if xmimpflag == 33 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.183684529291394)
-    if xmimpflag == 33 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 281.452966714906
-    if xmimpflag == 33 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 281.452966714906 / (1 - 0.183684529291394 )
-    if xmimpflag == 34 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0864964921326426)
-    if xmimpflag == 34 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0864964921326426)
-    if xmimpflag == 34 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 325.652360515021
-    if xmimpflag == 34 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 325.652360515021 / (1 - 0.0864964921326426 )
-    if xmimpflag == 35 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.176037224384829)
-    if xmimpflag == 35 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.176037224384829)
-    if xmimpflag == 35 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 272.474358974359
-    if xmimpflag == 35 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 272.474358974359 / (1 - 0.176037224384829 )
-    if xmimpflag == 36 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.116937605450612)
-    if xmimpflag == 36 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.116937605450612)
-    if xmimpflag == 36 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 556.677419354839
-    if xmimpflag == 36 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 556.677419354839 / (1 - 0.116937605450612 )
-    if xmimpflag == 37 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.172812495199871)
-    if xmimpflag == 37 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.172812495199871)
-    if xmimpflag == 37 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 890.470588235294
-    if xmimpflag == 37 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 890.470588235294 / (1 - 0.172812495199871 )
-    if xmimpflag == 38 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.105087524949968)
-    if xmimpflag == 38 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.105087524949968)
-    if xmimpflag == 38 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 335.813953488372
-    if xmimpflag == 38 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 335.813953488372 / (1 - 0.105087524949968 )
-    if xmimpflag == 39 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0856667000685018)
-    if xmimpflag == 39 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0856667000685018)
-    if xmimpflag == 39 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 257.263157894737
-    if xmimpflag == 39 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 257.263157894737 / (1 - 0.0856667000685018 )
-    if xmimpflag == 40 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0865650987499053)
-    if xmimpflag == 40 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0865650987499053)
-    if xmimpflag == 40 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 328.195266272189
-    if xmimpflag == 40 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 328.195266272189 / (1 - 0.0865650987499053 )
-    if xmimpflag == 41 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.171814252005436)
-    if xmimpflag == 41 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.171814252005436)
-    if xmimpflag == 41 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 129.145454545455
-    if xmimpflag == 41 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 129.145454545455 / (1 - 0.171814252005436 )
-    if xmimpflag == 42 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0610387045813586)
-    if xmimpflag == 42 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0610387045813586)
-    if xmimpflag == 42 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 158.1
-    if xmimpflag == 42 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 158.1 / (1 - 0.0610387045813586 )
-    if xmimpflag == 43 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.159823459162871)
-    if xmimpflag == 43 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.159823459162871)
-    if xmimpflag == 43 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 247.759689922481
-    if xmimpflag == 43 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 247.759689922481 / (1 - 0.159823459162871 )
-    if xmimpflag == 44 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0988853555387519)
-    if xmimpflag == 44 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0988853555387519)
-    if xmimpflag == 44 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 363
-    if xmimpflag == 44 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 363 / (1 - 0.0988853555387519 )
-    if xmimpflag == 45 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0904513085721602)
-    if xmimpflag == 45 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0904513085721602)
-    if xmimpflag == 45 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 466.25641025641
-    if xmimpflag == 45 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 466.25641025641 / (1 - 0.0904513085721602 )
-    if xmimpflag == 46 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.082310278477633)
-    if xmimpflag == 46 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.082310278477633)
-    if xmimpflag == 46 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 159.810810810811
-    if xmimpflag == 46 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 159.810810810811 / (1 - 0.082310278477633 )
-    if xmimpflag == 47 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.104714300552102)
-    if xmimpflag == 47 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.104714300552102)
-    if xmimpflag == 47 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 638.25
-    if xmimpflag == 47 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 638.25 / (1 - 0.104714300552102 )
-    if xmimpflag == 48 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.193439630544956)
-    if xmimpflag == 48 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.193439630544956)
-    if xmimpflag == 48 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 608.392156862745
-    if xmimpflag == 48 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 608.392156862745 / (1 - 0.193439630544956 )
-    if xmimpflag == 49 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.145583038352611)
-    if xmimpflag == 49 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.145583038352611)
-    if xmimpflag == 49 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 428.888888888889
-    if xmimpflag == 49 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 428.888888888889 / (1 - 0.145583038352611 )
-    if xmimpflag == 50 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.233333333333333)
-    if xmimpflag == 50 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.233333333333333)
-    if xmimpflag == 50 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 270.846153846154
-    if xmimpflag == 50 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 270.846153846154 / (1 - 0.233333333333333 )
-    if xmimpflag == 51 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.179223522528989)
-    if xmimpflag == 51 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.179223522528989)
-    if xmimpflag == 51 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 229.64
-    if xmimpflag == 51 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 229.64 / (1 - 0.179223522528989 )
-    if xmimpflag == 52 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0819156347249732)
-    if xmimpflag == 52 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0819156347249732)
-    if xmimpflag == 52 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 290.164383561644
-    if xmimpflag == 52 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 290.164383561644 - (290.164383561644 * 0.0819156347249732 )
-    if xmimpflag == 53 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0540922242825536)
-    if xmimpflag == 53 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0540922242825536)
-    if xmimpflag == 53 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 256.548387096774
-    if xmimpflag == 53 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 256.548387096774 / (1 - 0.0540922242825536 )
-    if xmimpflag == 54 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0913651933726713)
-    if xmimpflag == 54 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0913651933726713)
-    if xmimpflag == 54 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 216.907894736842
-    if xmimpflag == 54 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 216.907894736842 / (1 - 0.0913651933726713 )
-    if xmimpflag == 55 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0604022380426763)
-    if xmimpflag == 55 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0604022380426763)
-    if xmimpflag == 55 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 241.461538461538
-    if xmimpflag == 55 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 241.461538461538 / (1 - 0.0604022380426763 )
-    if xmimpflag == 56 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0542026549646127)
-    if xmimpflag == 56 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0542026549646127)
-    if xmimpflag == 56 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 340.230769230769
-    if xmimpflag == 56 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 340.230769230769 / (1 - 0.0542026549646127 )
-    if xmimpflag == 57 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0974564330758702)
-    if xmimpflag == 57 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0974564330758702)
-    if xmimpflag == 57 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 516.45
-    if xmimpflag == 57 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 516.45 / (1 - 0.0974564330758702 )
-    if xmimpflag == 58 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.162886379968412)
-    if xmimpflag == 58 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.162886379968412)
-    if xmimpflag == 58 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 447.518072289157
-    if xmimpflag == 58 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 447.518072289157 - (447.518072289157 * 0.162886379968412 )
-    if xmimpflag == 59 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0561646667118922)
-    if xmimpflag == 59 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0561646667118922)
-    if xmimpflag == 59 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 152.923076923077
-    if xmimpflag == 59 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 152.923076923077 / (1 - 0.0561646667118922 )
-    if xmimpflag == 60 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.133468501803896)
-    if xmimpflag == 60 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.133468501803896)
-    if xmimpflag == 60 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 403.292993630573
-    if xmimpflag == 60 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 403.292993630573 / (1 - 0.133468501803896 )
-    if xmimpflag == 61 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.106708705390018)
-    if xmimpflag == 61 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.106708705390018)
-    if xmimpflag == 61 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 285.644444444444
-    if xmimpflag == 61 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 285.644444444444 / (1 - 0.106708705390018 )
-    if xmimpflag == 62 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0785278768682708)
-    if xmimpflag == 62 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0785278768682708)
-    if xmimpflag == 62 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 335.658227848101
-    if xmimpflag == 62 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 335.658227848101 / (1 - 0.0785278768682708 )
-    if xmimpflag == 63 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.107782269167156)
-    if xmimpflag == 63 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.107782269167156)
-    if xmimpflag == 63 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 472.267857142857
-    if xmimpflag == 63 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 472.267857142857 / (1 - 0.107782269167156 )
-    if xmimpflag == 160 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0779281672325541)
-    if xmimpflag == 160 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0779281672325541)
-    if xmimpflag == 160 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 536.842857142857
-    if xmimpflag == 160 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 536.842857142857 / (1 - 0.0779281672325541 )
-    if xmimpflag == 65 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.115409873680179)
-    if xmimpflag == 65 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.115409873680179)
-    if xmimpflag == 65 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 103.376146788991
-    if xmimpflag == 65 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 103.376146788991 / (1 - 0.115409873680179 )
-    if xmimpflag == 66 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.207088877726936)
-    if xmimpflag == 66 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.207088877726936)
-    if xmimpflag == 66 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 68.1506849315068
-    if xmimpflag == 66 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 68.1506849315068 / (1 - 0.207088877726936 )
-    if xmimpflag == 67 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.110922605367631)
-    if xmimpflag == 67 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.110922605367631)
-    if xmimpflag == 67 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 80.0491803278688
-    if xmimpflag == 67 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 80.0491803278688 / (1 - 0.110922605367631 )
-    if xmimpflag == 68 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.127935729778166)
-    if xmimpflag == 68 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.127935729778166)
-    if xmimpflag == 68 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 84
-    if xmimpflag == 68 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 84 - (84 * 0.127935729778166 )
-    if xmimpflag == 69 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.206358225584424)
-    if xmimpflag == 69 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.206358225584424)
-    if xmimpflag == 69 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 1004.47058823529
-    if xmimpflag == 69 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 1004.47058823529 / (1 - 0.206358225584424 )
-    if xmimpflag == 70 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.142775407154303)
-    if xmimpflag == 70 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.142775407154303)
-    if xmimpflag == 70 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 311.222222222222
-    if xmimpflag == 70 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 311.222222222222 / (1 - 0.142775407154303 )
-    if xmimpflag == 71 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.106323148232566)
-    if xmimpflag == 71 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.106323148232566)
-    if xmimpflag == 71 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 310.39837398374
-    if xmimpflag == 71 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 310.39837398374 / (1 - 0.106323148232566 )
-    if xmimpflag == 97 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.138965456634756)
-    if xmimpflag == 97 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.138965456634756)
-    if xmimpflag == 97 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 259.21875
-    if xmimpflag == 97 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 259.21875 / (1 - 0.138965456634756 )
-    if xmimpflag == 72 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.169436742362705)
-    if xmimpflag == 72 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.169436742362705)
-    if xmimpflag == 72 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 265.325842696629
-    if xmimpflag == 72 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 265.325842696629 / (1 - 0.169436742362705 )
-    if xmimpflag == 85 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.339905284604731)
-    if xmimpflag == 85 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.339905284604731)
-    if xmimpflag == 85 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 563.333333333333
-    if xmimpflag == 85 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 563.333333333333 / (1 - 0.339905284604731 )
-    if xmimpflag == 73 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.129605450439467)
-    if xmimpflag == 73 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.129605450439467)
-    if xmimpflag == 73 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 407.289473684211
-    if xmimpflag == 73 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 407.289473684211 / (1 - 0.129605450439467 )
-    if xmimpflag == 74 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0794384325299229)
-    if xmimpflag == 74 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0794384325299229)
-    if xmimpflag == 74 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 117.137931034483
-    if xmimpflag == 74 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 117.137931034483 / (1 - 0.0794384325299229 )
-    if xmimpflag == 75 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.189369734252207)
-    if xmimpflag == 75 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.189369734252207)
-    if xmimpflag == 75 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 192.772020725389
-    if xmimpflag == 75 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 192.772020725389 / (1 - 0.189369734252207 )
-    if xmimpflag == 76 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.131187789757565)
-    if xmimpflag == 76 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.131187789757565)
-    if xmimpflag == 76 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 199.041666666667
-    if xmimpflag == 76 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 199.041666666667 / (1 - 0.131187789757565 )
-    if xmimpflag == 77 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.136342992788614)
-    if xmimpflag == 77 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.136342992788614)
-    if xmimpflag == 77 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 186.407894736842
-    if xmimpflag == 77 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 186.407894736842 / (1 - 0.136342992788614 )
-    if xmimpflag == 78 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.103049659988616)
-    if xmimpflag == 78 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.103049659988616)
-    if xmimpflag == 78 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 155.470588235294
-    if xmimpflag == 78 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 155.470588235294 / (1 - 0.103049659988616 )
-    if xmimpflag == 79 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.35)
-    if xmimpflag == 79 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.35)
-    if xmimpflag == 79 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 193.74358974359
-    if xmimpflag == 79 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 193.74358974359 / (1 - 0.35 )
-    if xmimpflag == 80 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0732085200996002)
-    if xmimpflag == 80 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0732085200996002)
-    if xmimpflag == 80 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 249.692307692308
-    if xmimpflag == 80 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 249.692307692308 / (1 - 0.0732085200996002 )
-    if xmimpflag == 81 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0934359066589073)
-    if xmimpflag == 81 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0934359066589073)
-    if xmimpflag == 81 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 352.952806122449
-    if xmimpflag == 81 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 352.952806122449 / (1 - 0.0934359066589073 )
-    if xmimpflag == 82 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.07182740558555)
-    if xmimpflag == 82 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.07182740558555)
-    if xmimpflag == 82 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 419.619047619047
-    if xmimpflag == 82 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 419.619047619047 / (1 - 0.07182740558555 )
-    if xmimpflag == 83 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0956449943871365)
-    if xmimpflag == 83 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0956449943871365)
-    if xmimpflag == 83 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 304.5625
-    if xmimpflag == 83 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 304.5625 - (304.5625 * 0.0956449943871365 )
-    if xmimpflag == 84 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.163929225997462)
-    if xmimpflag == 84 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.163929225997462)
-    if xmimpflag == 84 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 319.285714285714
-    if xmimpflag == 84 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 319.285714285714 / (1 - 0.163929225997462 )
-    if xmimpflag == 86 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.112733293827202)
-    if xmimpflag == 86 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.112733293827202)
-    if xmimpflag == 86 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 129.277777777778
-    if xmimpflag == 86 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 129.277777777778 / (1 - 0.112733293827202 )
-    if xmimpflag == 87 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0655504344628028)
-    if xmimpflag == 87 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0655504344628028)
-    if xmimpflag == 87 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 211
-    if xmimpflag == 87 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 211 / (1 - 0.0655504344628028 )
-    if xmimpflag == 88 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.198929221794951)
-    if xmimpflag == 88 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.198929221794951)
-    if xmimpflag == 88 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 296.473684210526
-    if xmimpflag == 88 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 296.473684210526 - (296.473684210526 * 0.198929221794951 )
-    if xmimpflag == 89 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.107517933823928)
-    if xmimpflag == 89 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.107517933823928)
-    if xmimpflag == 89 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 281.958333333333
-    if xmimpflag == 89 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 281.958333333333 / (1 - 0.107517933823928 )
-    if xmimpflag == 90 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.028250184258012)
-    if xmimpflag == 90 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.028250184258012)
-    if xmimpflag == 90 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 208.341176470588
-    if xmimpflag == 90 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 208.341176470588 / (1 - 0.028250184258012 )
-    if xmimpflag == 91 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0487771272192143)
-    if xmimpflag == 91 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0487771272192143)
-    if xmimpflag == 91 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 267.896551724138
-    if xmimpflag == 91 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 267.896551724138 / (1 - 0.0487771272192143 )
-    if xmimpflag == 92 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.111975986975987)
-    if xmimpflag == 92 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.111975986975987)
-    if xmimpflag == 92 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 328.555555555556
-    if xmimpflag == 92 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 328.555555555556 / (1 - 0.111975986975987 )
-    if xmimpflag == 93 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0979648763988006)
-    if xmimpflag == 93 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0979648763988006)
-    if xmimpflag == 93 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 101.111111111111
-    if xmimpflag == 93 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 101.111111111111 / (1 - 0.0979648763988006 )
-    if xmimpflag == 94 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.297737659966491)
-    if xmimpflag == 94 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.297737659966491)
-    if xmimpflag == 94 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 319.733333333333
-    if xmimpflag == 94 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 319.733333333333 / (1 - 0.297737659966491 )
-    if xmimpflag == 95 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0220048899755501)
-    if xmimpflag == 95 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0220048899755501)
-    if xmimpflag == 95 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 220.428571428571
-    if xmimpflag == 95 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 220.428571428571 / (1 - 0.0220048899755501 )
-    if xmimpflag == 96 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0)
-    if xmimpflag == 96 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0)
-    if xmimpflag == 96 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 433
-    if xmimpflag == 96 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 433 / (1 - 0 )
-    if xmimpflag == 137 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.12659407459354)
-    if xmimpflag == 137 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.12659407459354)
-    if xmimpflag == 137 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 104.986301369863
-    if xmimpflag == 137 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 104.986301369863 / (1 - 0.12659407459354 )
-    if xmimpflag == 138 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.179201806454531)
-    if xmimpflag == 138 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.179201806454531)
-    if xmimpflag == 138 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 108.37037037037
-    if xmimpflag == 138 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 108.37037037037 - (108.37037037037 * 0.179201806454531 )
-    if xmimpflag == 139 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.162003845923261)
-    if xmimpflag == 139 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.162003845923261)
-    if xmimpflag == 139 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 128.438775510204
-    if xmimpflag == 139 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 128.438775510204 / (1 - 0.162003845923261 )
-    if xmimpflag == 140 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.171264386321147)
-    if xmimpflag == 140 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.171264386321147)
-    if xmimpflag == 140 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 557.6
-    if xmimpflag == 140 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 557.6 / (1 - 0.171264386321147 )
-    if xmimpflag == 141 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.213152374545978)
-    if xmimpflag == 141 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.213152374545978)
-    if xmimpflag == 141 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 74
-    if xmimpflag == 141 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 74 / (1 - 0.213152374545978 )
-    if xmimpflag == 142 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.190548809128441)
-    if xmimpflag == 142 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.190548809128441)
-    if xmimpflag == 142 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 80.5625
-    if xmimpflag == 142 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 80.5625 - (80.5625 * 0.190548809128441 )
-    if xmimpflag == 145 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.0577485174550083)
-    if xmimpflag == 145 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.0577485174550083)
-    if xmimpflag == 145 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 376.928571428571
-    if xmimpflag == 145 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 376.928571428571 / (1 - 0.0577485174550083 )
-    if xmimpflag == 146 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.153749295952981)
-    if xmimpflag == 146 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.153749295952981)
-    if xmimpflag == 146 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 154.307692307692
-    if xmimpflag == 146 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 154.307692307692 / (1 - 0.153749295952981 )
-    if xmimpflag == 147 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.143606923731731)
-    if xmimpflag == 147 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.143606923731731)
-    if xmimpflag == 147 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 165.903225806452
-    if xmimpflag == 147 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 165.903225806452 - (165.903225806452 * 0.143606923731731 )
-    if xmimpflag == 148 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.254317624200109)
-    if xmimpflag == 148 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.254317624200109)
-    if xmimpflag == 148 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 199.730769230769
-    if xmimpflag == 148 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 199.730769230769 / (1 - 0.254317624200109 )
-    if xmimpflag == 149 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.136559928551299)
-    if xmimpflag == 149 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.136559928551299)
-    if xmimpflag == 149 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 1003
-    if xmimpflag == 149 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 1003 / (1 - 0.136559928551299 )
-    if xmimpflag == 150 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.182187702624498)
-    if xmimpflag == 150 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.182187702624498)
-    if xmimpflag == 150 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 100.090909090909
-    if xmimpflag == 150 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 100.090909090909 / (1 - 0.182187702624498 )
-    if xmimpflag == 151 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.00833333333333333)
-    if xmimpflag == 151 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.00833333333333333)
-    if xmimpflag == 151 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 127.103448275862
-    if xmimpflag == 151 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 127.103448275862 / (1 - 0.00833333333333333)
-    if xmimpflag == 152 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.100333848361108)
-    if xmimpflag == 152 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.100333848361108)
-    if xmimpflag == 152 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 436.5
-    if xmimpflag == 152 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 436.5 / (1 - 0.100333848361108 )
-    if xmimpflag == 154 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.235321405225611)
-    if xmimpflag == 154 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.235321405225611)
-    if xmimpflag == 154 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 580.060606060606
-    if xmimpflag == 154 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 580.060606060606 / (1 - 0.235321405225611 )
-    if xmimpflag == 155 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.157476046121814)
-    if xmimpflag == 155 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.157476046121814)
-    if xmimpflag == 155 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 70.0833333333334
-    if xmimpflag == 155 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 70.0833333333334 / (1 - 0.157476046121814 )
-    if xmimpflag == 156 and slaximp >= 1 and slaarriv is None and slastot is None: slamimp = slaximp - (slaximp * 0.17641709128796)
-    if xmimpflag == 156 and slamimp >= 1 and tslavesd is None and tslavesp is None and ncartot is None: slaximp = slamimp / (1 - 0.17641709128796)
-    if xmimpflag == 156 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slamimp = 118.333333333333
-    if xmimpflag == 156 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = 118.333333333333 / (1 - 0.17641709128796 )
+    if xmimpflag == 127 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.165107561642471)
+    if xmimpflag == 127 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.165107561642471)
+    if xmimpflag == 127 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 163.181286549708
+    if xmimpflag == 127 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 163.181286549708 / (1 - 0.165107561642471 )
+    if xmimpflag == 128 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.230972326367458)
+    if xmimpflag == 128 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.230972326367458)
+    if xmimpflag == 128 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 241.774647887324
+    if xmimpflag == 128 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 241.774647887324 / (1 - 0.230972326367458 )
+    if xmimpflag == 129 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.218216262481124)
+    if xmimpflag == 129 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.218216262481124)
+    if xmimpflag == 129 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 249.141527001862
+    if xmimpflag == 129 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 249.141527001862 / (1 - 0.218216262481124 )
+    if xmimpflag == 130 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.164154067860228)
+    if xmimpflag == 130 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.164154067860228)
+    if xmimpflag == 130 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 227.680034129693
+    if xmimpflag == 130 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 227.680034129693 / (1 - 0.164154067860228 )
+    if xmimpflag == 131 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.153670852602567)
+    if xmimpflag == 131 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.153670852602567)
+    if xmimpflag == 131 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 272.60549132948
+    if xmimpflag == 131 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 272.60549132948 / (1 - 0.153670852602567 )
+    if xmimpflag == 132 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.120410468186061)
+    if xmimpflag == 132 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.120410468186061)
+    if xmimpflag == 132 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 268.071314102564
+    if xmimpflag == 132 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 268.071314102564 / (1 - 0.120410468186061 )
+    if xmimpflag == 133 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.126821090786133)
+    if xmimpflag == 133 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.126821090786133)
+    if xmimpflag == 133 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 290.826654240447
+    if xmimpflag == 133 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 290.826654240447 / (1 - 0.126821090786133 )
+    if xmimpflag == 134 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.105799354866935)
+    if xmimpflag == 134 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.105799354866935)
+    if xmimpflag == 134 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 225.932515337423
+    if xmimpflag == 134 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 225.932515337423 / (1 - 0.105799354866935 )
+    if xmimpflag == 135 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.114160782328086)
+    if xmimpflag == 135 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.114160782328086)
+    if xmimpflag == 135 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 391.452674897119
+    if xmimpflag == 135 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 391.452674897119 / (1 - 0.114160782328086 )
+    if xmimpflag == 136 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.170755559662484)
+    if xmimpflag == 136 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.170755559662484)
+    if xmimpflag == 136 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 480.734042553191
+    if xmimpflag == 136 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 480.734042553191 / (1 - 0.170755559662484 )
+    if xmimpflag == 101 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.142415261804064)
+    if xmimpflag == 101 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.142415261804064)
+    if xmimpflag == 101 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 163.80243902439
+    if xmimpflag == 101 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 163.80243902439 / (1 - 0.142415261804064 )
+    if xmimpflag == 102 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.104951847967976)
+    if xmimpflag == 102 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.104951847967976)
+    if xmimpflag == 102 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 153.265497076023
+    if xmimpflag == 102 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 153.265497076023 / (1 - 0.104951847967976 )
+    if xmimpflag == 103 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0794334443169517)
+    if xmimpflag == 103 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0794334443169517)
+    if xmimpflag == 103 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 138.094017094017
+    if xmimpflag == 103 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 138.094017094017 / (1 - 0.0794334443169517 )
+    if xmimpflag == 104 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.125269157905197)
+    if xmimpflag == 104 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.125269157905197)
+    if xmimpflag == 104 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 107.64
+    if xmimpflag == 104 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 107.64 - (107.64 * 0.125269157905197 )
+    if xmimpflag == 105 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0887057111704602)
+    if xmimpflag == 105 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0887057111704602)
+    if xmimpflag == 105 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 191.988789237668
+    if xmimpflag == 105 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 191.988789237668 / (1 - 0.0887057111704602 )
+    if xmimpflag == 106 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0985396051230542)
+    if xmimpflag == 106 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0985396051230542)
+    if xmimpflag == 106 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 188.140969162996
+    if xmimpflag == 106 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 188.140969162996 / (1 - 0.0985396051230542 )
+    if xmimpflag == 107 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.199714956235816)
+    if xmimpflag == 107 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.199714956235816)
+    if xmimpflag == 107 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 239.363636363636
+    if xmimpflag == 107 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 239.363636363636 / (1 - 0.199714956235816 )
+    if xmimpflag == 108 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.116764553914052)
+    if xmimpflag == 108 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.116764553914052)
+    if xmimpflag == 108 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 241.066480055983
+    if xmimpflag == 108 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 241.066480055983 / (1 - 0.116764553914052 )
+    if xmimpflag == 110 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.217817105373686)
+    if xmimpflag == 110 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.217817105373686)
+    if xmimpflag == 110 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 321.139784946236
+    if xmimpflag == 110 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 321.139784946236 / (1 - 0.217817105373686 )
+    if xmimpflag == 111 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.134584278813695)
+    if xmimpflag == 111 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.134584278813695)
+    if xmimpflag == 111 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 320.396527777777
+    if xmimpflag == 111 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 320.396527777777 / (1 - 0.134584278813695 )
+    if xmimpflag == 112 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0649564900465187)
+    if xmimpflag == 112 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0649564900465187)
+    if xmimpflag == 112 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 302.919243986254
+    if xmimpflag == 112 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 302.919243986254 / (1 - 0.0649564900465187 )
+    if xmimpflag == 113 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.294943293777566)
+    if xmimpflag == 113 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.294943293777566)
+    if xmimpflag == 113 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 178.191780821918
+    if xmimpflag == 113 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 178.191780821918 / (1 - 0.294943293777566 )
+    if xmimpflag == 114 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.190466263797331)
+    if xmimpflag == 114 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.190466263797331)
+    if xmimpflag == 114 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 268.709993468321
+    if xmimpflag == 114 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 268.709993468321 / (1 - 0.190466263797331 )
+    if xmimpflag == 115 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.165262209695588)
+    if xmimpflag == 115 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.165262209695588)
+    if xmimpflag == 115 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 265.480215827338
+    if xmimpflag == 115 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 265.480215827338 / (1 - 0.165262209695588 )
+    if xmimpflag == 116 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.250590294065011)
+    if xmimpflag == 116 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.250590294065011)
+    if xmimpflag == 116 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 216.026607538803
+    if xmimpflag == 116 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 216.026607538803 / (1 - 0.250590294065011 )
+    if xmimpflag == 117 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0862116624182079)
+    if xmimpflag == 117 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0862116624182079)
+    if xmimpflag == 117 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 341.979498861048
+    if xmimpflag == 117 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 341.979498861048 / (1 - 0.0862116624182079 )
+    if xmimpflag == 118 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0795782666543268)
+    if xmimpflag == 118 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0795782666543268)
+    if xmimpflag == 118 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 382.444580777097
+    if xmimpflag == 118 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 382.444580777097 / (1 - 0.0795782666543268 )
+    if xmimpflag == 120 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.100542298212489)
+    if xmimpflag == 120 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.100542298212489)
+    if xmimpflag == 120 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 191.62583518931
+    if xmimpflag == 120 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 191.62583518931 / (1 - 0.100542298212489 )
+    if xmimpflag == 121 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0690791392436498)
+    if xmimpflag == 121 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0690791392436498)
+    if xmimpflag == 121 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 162.041666666667
+    if xmimpflag == 121 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 162.041666666667 / (1 - 0.0690791392436498 )
+    if xmimpflag == 122 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.274602006426542)
+    if xmimpflag == 122 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.274602006426542)
+    if xmimpflag == 122 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 173.454545454545
+    if xmimpflag == 122 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 173.454545454545 / (1 - 0.274602006426542 )
+    if xmimpflag == 123 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.274602006426542)
+    if xmimpflag == 123 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.274602006426542)
+    if xmimpflag == 123 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 255.028571428571
+    if xmimpflag == 123 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 255.028571428571 / (1 - 0.274602006426542 )
+    if xmimpflag == 124 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.181330570603409)
+    if xmimpflag == 124 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.181330570603409)
+    if xmimpflag == 124 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 447.532008830022
+    if xmimpflag == 124 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 447.532008830022 / (1 - 0.181330570603409 )
+    if xmimpflag == 1 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.255634697158707)
+    if xmimpflag == 1 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.255634697158707)
+    if xmimpflag == 1 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 166.401374570447
+    if xmimpflag == 1 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 166.401374570447 / (1 - 0.255634697158707 )
+    if xmimpflag == 2 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.173114449095158)
+    if xmimpflag == 2 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.173114449095158)
+    if xmimpflag == 2 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 152.863945578231
+    if xmimpflag == 2 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 152.863945578231 / (1 - 0.173114449095158 )
+    if xmimpflag == 3 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.191426939591589)
+    if xmimpflag == 3 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.191426939591589)
+    if xmimpflag == 3 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 250.179245283019
+    if xmimpflag == 3 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 250.179245283019 / (1 - 0.191426939591589 )
+    if xmimpflag == 4 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.143739162059858)
+    if xmimpflag == 4 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.143739162059858)
+    if xmimpflag == 4 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 273.896226415094
+    if xmimpflag == 4 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 273.896226415094 - (273.896226415094 * 0.143739162059858 )
+    if xmimpflag == 5 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0703329947332674)
+    if xmimpflag == 5 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0703329947332674)
+    if xmimpflag == 5 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 380.04854368932
+    if xmimpflag == 5 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 380.04854368932 - (380.04854368932 * 0.0703329947332674 )
+    if xmimpflag == 6 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.117444418143106)
+    if xmimpflag == 6 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.117444418143106)
+    if xmimpflag == 6 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 305.868020304568
+    if xmimpflag == 6 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 305.868020304568 / (1 - 0.117444418143106 )
+    if xmimpflag == 7 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.126779394689057)
+    if xmimpflag == 7 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.126779394689057)
+    if xmimpflag == 7 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 265.88
+    if xmimpflag == 7 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 265.88 - (265.88 * 0.126779394689057 )
+    if xmimpflag == 8 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.189011301766662)
+    if xmimpflag == 8 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.189011301766662)
+    if xmimpflag == 8 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 281.325
+    if xmimpflag == 8 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 281.325 / (1 - 0.189011301766662 )
+    if xmimpflag == 9 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.140365224720275)
+    if xmimpflag == 9 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.140365224720275)
+    if xmimpflag == 9 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 402.502202643172
+    if xmimpflag == 9 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 402.502202643172 / (1 - 0.140365224720275 )
+    if xmimpflag == 10 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.107188743129005)
+    if xmimpflag == 10 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.107188743129005)
+    if xmimpflag == 10 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 277.059842519684
+    if xmimpflag == 10 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 277.059842519684 / (1 - 0.107188743129005 )
+    if xmimpflag == 11 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.126901348540731)
+    if xmimpflag == 11 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.126901348540731)
+    if xmimpflag == 11 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 355.810945273632
+    if xmimpflag == 11 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 355.810945273632 / (1 - 0.126901348540731 )
+    if xmimpflag == 12 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0655772248600899)
+    if xmimpflag == 12 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0655772248600899)
+    if xmimpflag == 12 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 309.533898305085
+    if xmimpflag == 12 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 309.533898305085 / (1 - 0.0655772248600899 )
+    if xmimpflag == 13 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0778021073375869)
+    if xmimpflag == 13 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0778021073375869)
+    if xmimpflag == 13 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 305.812154696132
+    if xmimpflag == 13 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 305.812154696132 / (1 - 0.0778021073375869 )
+    if xmimpflag == 14 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0654921908875572)
+    if xmimpflag == 14 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0654921908875572)
+    if xmimpflag == 14 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 285.054112554113
+    if xmimpflag == 14 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 285.054112554113 / (1 - 0.0654921908875572 )
+    if xmimpflag == 15 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0671696102131247)
+    if xmimpflag == 15 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0671696102131247)
+    if xmimpflag == 15 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 361.638059701493
+    if xmimpflag == 15 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 361.638059701493 / (1 - 0.0671696102131247 )
+    if xmimpflag == 16 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.371414750110571)
+    if xmimpflag == 16 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.371414750110571)
+    if xmimpflag == 16 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 239.9
+    if xmimpflag == 16 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 239.9 / (1 - 0.371414750110571 )
+    if xmimpflag == 157 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.230610260687796)
+    if xmimpflag == 157 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.230610260687796)
+    if xmimpflag == 157 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 139.029411764706
+    if xmimpflag == 157 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 139.029411764706 / (1 - 0.230610260687796 )
+    if xmimpflag == 159 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.154487726688789)
+    if xmimpflag == 159 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.154487726688789)
+    if xmimpflag == 159 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 245.12676056338
+    if xmimpflag == 159 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 245.12676056338 / (1 - 0.154487726688789 )
+    if xmimpflag == 99 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.166050441674744)
+    if xmimpflag == 99 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.166050441674744)
+    if xmimpflag == 99 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 125.619750283768
+    if xmimpflag == 99 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 125.619750283768 / (1 - 0.166050441674744 )
+    if xmimpflag == 100 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.178717812379779)
+    if xmimpflag == 100 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.178717812379779)
+    if xmimpflag == 100 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 565.645161290322
+    if xmimpflag == 100 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 565.645161290322 / (1 - 0.178717812379779 )
+    if xmimpflag == 17 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0557746478873239)
+    if xmimpflag == 17 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0557746478873239)
+    if xmimpflag == 17 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 148.882352941176
+    if xmimpflag == 17 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 148.882352941176 / (1 - 0.0557746478873239 )
+    if xmimpflag == 98 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.126563817175912)
+    if xmimpflag == 98 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.126563817175912)
+    if xmimpflag == 98 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 132.596685082873
+    if xmimpflag == 98 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 132.596685082873 / (1 - 0.126563817175912 )
+    if xmimpflag == 18 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.093544030879478)
+    if xmimpflag == 18 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.093544030879478)
+    if xmimpflag == 18 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 184.486013986014
+    if xmimpflag == 18 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 184.486013986014 / (1 - 0.093544030879478 )
+    if xmimpflag == 19 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0985982521761244)
+    if xmimpflag == 19 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0985982521761244)
+    if xmimpflag == 19 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 230.298469387755
+    if xmimpflag == 19 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 230.298469387755 / (1 - 0.0985982521761244 )
+    if xmimpflag == 20 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0944678720322908)
+    if xmimpflag == 20 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0944678720322908)
+    if xmimpflag == 20 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 444.290145985401
+    if xmimpflag == 20 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 444.290145985401 / (1 - 0.0944678720322908 )
+    if xmimpflag == 21 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.167379623404603)
+    if xmimpflag == 21 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.167379623404603)
+    if xmimpflag == 21 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 492.946428571429
+    if xmimpflag == 21 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 492.946428571429 / (1 - 0.167379623404603 )
+    if xmimpflag == 22 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.183801786070534)
+    if xmimpflag == 22 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.183801786070534)
+    if xmimpflag == 22 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 91.9594594594595
+    if xmimpflag == 22 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 91.9594594594595 / (1 - 0.183801786070534 )
+    if xmimpflag == 23 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.102358180948044)
+    if xmimpflag == 23 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.102358180948044)
+    if xmimpflag == 23 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 95.972972972973
+    if xmimpflag == 23 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 95.972972972973 / (1 - 0.102358180948044 )
+    if xmimpflag == 24 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.122708750828674)
+    if xmimpflag == 24 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.122708750828674)
+    if xmimpflag == 24 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 146.31
+    if xmimpflag == 24 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 146.31 / (1 - 0.122708750828674 )
+    if xmimpflag == 25 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.101742168136026)
+    if xmimpflag == 25 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.101742168136026)
+    if xmimpflag == 25 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 279.357142857143
+    if xmimpflag == 25 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 279.357142857143 / (1 - 0.101742168136026 )
+    if xmimpflag == 26 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0830808603000646)
+    if xmimpflag == 26 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0830808603000646)
+    if xmimpflag == 26 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 341.5
+    if xmimpflag == 26 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 341.5 / (1 - 0.0830808603000646 )
+    if xmimpflag == 27 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0951735364832193)
+    if xmimpflag == 27 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0951735364832193)
+    if xmimpflag == 27 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 335.546666666667
+    if xmimpflag == 27 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 335.546666666667 - (335.546666666667 * 0.0951735364832193 )
+    if xmimpflag == 28 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0599984615282753)
+    if xmimpflag == 28 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0599984615282753)
+    if xmimpflag == 28 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 348.926267281106
+    if xmimpflag == 28 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 348.926267281106 - (348.926267281106 * 0.0599984615282753 )
+    if xmimpflag == 29 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0849037398486349)
+    if xmimpflag == 29 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0849037398486349)
+    if xmimpflag == 29 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 323.539358600583
+    if xmimpflag == 29 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 323.539358600583 / (1 - 0.0849037398486349 )
+    if xmimpflag == 30 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0831292966753462)
+    if xmimpflag == 30 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0831292966753462)
+    if xmimpflag == 30 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 435.738461538461
+    if xmimpflag == 30 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 435.738461538461 / (1 - 0.0831292966753462 )
+    if xmimpflag == 31 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.154603810637904)
+    if xmimpflag == 31 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.154603810637904)
+    if xmimpflag == 31 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 221.279220779221
+    if xmimpflag == 31 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 221.279220779221 / (1 - 0.154603810637904 )
+    if xmimpflag == 32 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.169381440464976)
+    if xmimpflag == 32 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.169381440464976)
+    if xmimpflag == 32 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 296.593103448276
+    if xmimpflag == 32 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 296.593103448276 / (1 - 0.169381440464976 )
+    if xmimpflag == 33 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.183684529291394)
+    if xmimpflag == 33 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.183684529291394)
+    if xmimpflag == 33 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 281.452966714906
+    if xmimpflag == 33 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 281.452966714906 / (1 - 0.183684529291394 )
+    if xmimpflag == 34 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0864964921326426)
+    if xmimpflag == 34 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0864964921326426)
+    if xmimpflag == 34 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 325.652360515021
+    if xmimpflag == 34 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 325.652360515021 / (1 - 0.0864964921326426 )
+    if xmimpflag == 35 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.176037224384829)
+    if xmimpflag == 35 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.176037224384829)
+    if xmimpflag == 35 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 272.474358974359
+    if xmimpflag == 35 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 272.474358974359 / (1 - 0.176037224384829 )
+    if xmimpflag == 36 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.116937605450612)
+    if xmimpflag == 36 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.116937605450612)
+    if xmimpflag == 36 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 556.677419354839
+    if xmimpflag == 36 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 556.677419354839 / (1 - 0.116937605450612 )
+    if xmimpflag == 37 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.172812495199871)
+    if xmimpflag == 37 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.172812495199871)
+    if xmimpflag == 37 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 890.470588235294
+    if xmimpflag == 37 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 890.470588235294 / (1 - 0.172812495199871 )
+    if xmimpflag == 38 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.105087524949968)
+    if xmimpflag == 38 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.105087524949968)
+    if xmimpflag == 38 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 335.813953488372
+    if xmimpflag == 38 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 335.813953488372 / (1 - 0.105087524949968 )
+    if xmimpflag == 39 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0856667000685018)
+    if xmimpflag == 39 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0856667000685018)
+    if xmimpflag == 39 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 257.263157894737
+    if xmimpflag == 39 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 257.263157894737 / (1 - 0.0856667000685018 )
+    if xmimpflag == 40 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0865650987499053)
+    if xmimpflag == 40 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0865650987499053)
+    if xmimpflag == 40 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 328.195266272189
+    if xmimpflag == 40 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 328.195266272189 / (1 - 0.0865650987499053 )
+    if xmimpflag == 41 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.171814252005436)
+    if xmimpflag == 41 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.171814252005436)
+    if xmimpflag == 41 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 129.145454545455
+    if xmimpflag == 41 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 129.145454545455 / (1 - 0.171814252005436 )
+    if xmimpflag == 42 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0610387045813586)
+    if xmimpflag == 42 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0610387045813586)
+    if xmimpflag == 42 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 158.1
+    if xmimpflag == 42 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 158.1 / (1 - 0.0610387045813586 )
+    if xmimpflag == 43 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.159823459162871)
+    if xmimpflag == 43 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.159823459162871)
+    if xmimpflag == 43 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 247.759689922481
+    if xmimpflag == 43 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 247.759689922481 / (1 - 0.159823459162871 )
+    if xmimpflag == 44 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0988853555387519)
+    if xmimpflag == 44 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0988853555387519)
+    if xmimpflag == 44 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 363
+    if xmimpflag == 44 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 363 / (1 - 0.0988853555387519 )
+    if xmimpflag == 45 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0904513085721602)
+    if xmimpflag == 45 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0904513085721602)
+    if xmimpflag == 45 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 466.25641025641
+    if xmimpflag == 45 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 466.25641025641 / (1 - 0.0904513085721602 )
+    if xmimpflag == 46 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.082310278477633)
+    if xmimpflag == 46 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.082310278477633)
+    if xmimpflag == 46 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 159.810810810811
+    if xmimpflag == 46 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 159.810810810811 / (1 - 0.082310278477633 )
+    if xmimpflag == 47 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.104714300552102)
+    if xmimpflag == 47 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.104714300552102)
+    if xmimpflag == 47 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 638.25
+    if xmimpflag == 47 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 638.25 / (1 - 0.104714300552102 )
+    if xmimpflag == 48 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.193439630544956)
+    if xmimpflag == 48 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.193439630544956)
+    if xmimpflag == 48 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 608.392156862745
+    if xmimpflag == 48 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 608.392156862745 / (1 - 0.193439630544956 )
+    if xmimpflag == 49 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.145583038352611)
+    if xmimpflag == 49 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.145583038352611)
+    if xmimpflag == 49 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 428.888888888889
+    if xmimpflag == 49 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 428.888888888889 / (1 - 0.145583038352611 )
+    if xmimpflag == 50 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.233333333333333)
+    if xmimpflag == 50 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.233333333333333)
+    if xmimpflag == 50 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 270.846153846154
+    if xmimpflag == 50 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 270.846153846154 / (1 - 0.233333333333333 )
+    if xmimpflag == 51 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.179223522528989)
+    if xmimpflag == 51 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.179223522528989)
+    if xmimpflag == 51 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 229.64
+    if xmimpflag == 51 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 229.64 / (1 - 0.179223522528989 )
+    if xmimpflag == 52 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0819156347249732)
+    if xmimpflag == 52 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0819156347249732)
+    if xmimpflag == 52 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 290.164383561644
+    if xmimpflag == 52 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 290.164383561644 - (290.164383561644 * 0.0819156347249732 )
+    if xmimpflag == 53 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0540922242825536)
+    if xmimpflag == 53 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0540922242825536)
+    if xmimpflag == 53 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 256.548387096774
+    if xmimpflag == 53 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 256.548387096774 / (1 - 0.0540922242825536 )
+    if xmimpflag == 54 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0913651933726713)
+    if xmimpflag == 54 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0913651933726713)
+    if xmimpflag == 54 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 216.907894736842
+    if xmimpflag == 54 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 216.907894736842 / (1 - 0.0913651933726713 )
+    if xmimpflag == 55 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0604022380426763)
+    if xmimpflag == 55 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0604022380426763)
+    if xmimpflag == 55 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 241.461538461538
+    if xmimpflag == 55 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 241.461538461538 / (1 - 0.0604022380426763 )
+    if xmimpflag == 56 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0542026549646127)
+    if xmimpflag == 56 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0542026549646127)
+    if xmimpflag == 56 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 340.230769230769
+    if xmimpflag == 56 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 340.230769230769 / (1 - 0.0542026549646127 )
+    if xmimpflag == 57 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0974564330758702)
+    if xmimpflag == 57 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0974564330758702)
+    if xmimpflag == 57 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 516.45
+    if xmimpflag == 57 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 516.45 / (1 - 0.0974564330758702 )
+    if xmimpflag == 58 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.162886379968412)
+    if xmimpflag == 58 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.162886379968412)
+    if xmimpflag == 58 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 447.518072289157
+    if xmimpflag == 58 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 447.518072289157 - (447.518072289157 * 0.162886379968412 )
+    if xmimpflag == 59 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0561646667118922)
+    if xmimpflag == 59 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0561646667118922)
+    if xmimpflag == 59 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 152.923076923077
+    if xmimpflag == 59 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 152.923076923077 / (1 - 0.0561646667118922 )
+    if xmimpflag == 60 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.133468501803896)
+    if xmimpflag == 60 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.133468501803896)
+    if xmimpflag == 60 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 403.292993630573
+    if xmimpflag == 60 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 403.292993630573 / (1 - 0.133468501803896 )
+    if xmimpflag == 61 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.106708705390018)
+    if xmimpflag == 61 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.106708705390018)
+    if xmimpflag == 61 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 285.644444444444
+    if xmimpflag == 61 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 285.644444444444 / (1 - 0.106708705390018 )
+    if xmimpflag == 62 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0785278768682708)
+    if xmimpflag == 62 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0785278768682708)
+    if xmimpflag == 62 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 335.658227848101
+    if xmimpflag == 62 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 335.658227848101 / (1 - 0.0785278768682708 )
+    if xmimpflag == 63 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.107782269167156)
+    if xmimpflag == 63 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.107782269167156)
+    if xmimpflag == 63 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 472.267857142857
+    if xmimpflag == 63 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 472.267857142857 / (1 - 0.107782269167156 )
+    if xmimpflag == 160 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0779281672325541)
+    if xmimpflag == 160 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0779281672325541)
+    if xmimpflag == 160 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 536.842857142857
+    if xmimpflag == 160 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 536.842857142857 / (1 - 0.0779281672325541 )
+    if xmimpflag == 65 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.115409873680179)
+    if xmimpflag == 65 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.115409873680179)
+    if xmimpflag == 65 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 103.376146788991
+    if xmimpflag == 65 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 103.376146788991 / (1 - 0.115409873680179 )
+    if xmimpflag == 66 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.207088877726936)
+    if xmimpflag == 66 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.207088877726936)
+    if xmimpflag == 66 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 68.1506849315068
+    if xmimpflag == 66 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 68.1506849315068 / (1 - 0.207088877726936 )
+    if xmimpflag == 67 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.110922605367631)
+    if xmimpflag == 67 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.110922605367631)
+    if xmimpflag == 67 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 80.0491803278688
+    if xmimpflag == 67 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 80.0491803278688 / (1 - 0.110922605367631 )
+    if xmimpflag == 68 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.127935729778166)
+    if xmimpflag == 68 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.127935729778166)
+    if xmimpflag == 68 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 84
+    if xmimpflag == 68 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 84 - (84 * 0.127935729778166 )
+    if xmimpflag == 69 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.206358225584424)
+    if xmimpflag == 69 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.206358225584424)
+    if xmimpflag == 69 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 1004.47058823529
+    if xmimpflag == 69 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 1004.47058823529 / (1 - 0.206358225584424 )
+    if xmimpflag == 70 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.142775407154303)
+    if xmimpflag == 70 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.142775407154303)
+    if xmimpflag == 70 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 311.222222222222
+    if xmimpflag == 70 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 311.222222222222 / (1 - 0.142775407154303 )
+    if xmimpflag == 71 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.106323148232566)
+    if xmimpflag == 71 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.106323148232566)
+    if xmimpflag == 71 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 310.39837398374
+    if xmimpflag == 71 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 310.39837398374 / (1 - 0.106323148232566 )
+    if xmimpflag == 97 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.138965456634756)
+    if xmimpflag == 97 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.138965456634756)
+    if xmimpflag == 97 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 259.21875
+    if xmimpflag == 97 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 259.21875 / (1 - 0.138965456634756 )
+    if xmimpflag == 72 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.169436742362705)
+    if xmimpflag == 72 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.169436742362705)
+    if xmimpflag == 72 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 265.325842696629
+    if xmimpflag == 72 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 265.325842696629 / (1 - 0.169436742362705 )
+    if xmimpflag == 85 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.339905284604731)
+    if xmimpflag == 85 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.339905284604731)
+    if xmimpflag == 85 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 563.333333333333
+    if xmimpflag == 85 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 563.333333333333 / (1 - 0.339905284604731 )
+    if xmimpflag == 73 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.129605450439467)
+    if xmimpflag == 73 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.129605450439467)
+    if xmimpflag == 73 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 407.289473684211
+    if xmimpflag == 73 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 407.289473684211 / (1 - 0.129605450439467 )
+    if xmimpflag == 74 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0794384325299229)
+    if xmimpflag == 74 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0794384325299229)
+    if xmimpflag == 74 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 117.137931034483
+    if xmimpflag == 74 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 117.137931034483 / (1 - 0.0794384325299229 )
+    if xmimpflag == 75 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.189369734252207)
+    if xmimpflag == 75 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.189369734252207)
+    if xmimpflag == 75 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 192.772020725389
+    if xmimpflag == 75 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 192.772020725389 / (1 - 0.189369734252207 )
+    if xmimpflag == 76 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.131187789757565)
+    if xmimpflag == 76 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.131187789757565)
+    if xmimpflag == 76 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 199.041666666667
+    if xmimpflag == 76 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 199.041666666667 / (1 - 0.131187789757565 )
+    if xmimpflag == 77 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.136342992788614)
+    if xmimpflag == 77 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.136342992788614)
+    if xmimpflag == 77 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 186.407894736842
+    if xmimpflag == 77 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 186.407894736842 / (1 - 0.136342992788614 )
+    if xmimpflag == 78 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.103049659988616)
+    if xmimpflag == 78 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.103049659988616)
+    if xmimpflag == 78 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 155.470588235294
+    if xmimpflag == 78 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 155.470588235294 / (1 - 0.103049659988616 )
+    if xmimpflag == 79 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.35)
+    if xmimpflag == 79 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.35)
+    if xmimpflag == 79 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 193.74358974359
+    if xmimpflag == 79 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 193.74358974359 / (1 - 0.35 )
+    if xmimpflag == 80 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0732085200996002)
+    if xmimpflag == 80 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0732085200996002)
+    if xmimpflag == 80 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 249.692307692308
+    if xmimpflag == 80 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 249.692307692308 / (1 - 0.0732085200996002 )
+    if xmimpflag == 81 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0934359066589073)
+    if xmimpflag == 81 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0934359066589073)
+    if xmimpflag == 81 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 352.952806122449
+    if xmimpflag == 81 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 352.952806122449 / (1 - 0.0934359066589073 )
+    if xmimpflag == 82 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.07182740558555)
+    if xmimpflag == 82 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.07182740558555)
+    if xmimpflag == 82 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 419.619047619047
+    if xmimpflag == 82 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 419.619047619047 / (1 - 0.07182740558555 )
+    if xmimpflag == 83 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0956449943871365)
+    if xmimpflag == 83 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0956449943871365)
+    if xmimpflag == 83 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 304.5625
+    if xmimpflag == 83 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 304.5625 - (304.5625 * 0.0956449943871365 )
+    if xmimpflag == 84 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.163929225997462)
+    if xmimpflag == 84 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.163929225997462)
+    if xmimpflag == 84 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 319.285714285714
+    if xmimpflag == 84 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 319.285714285714 / (1 - 0.163929225997462 )
+    if xmimpflag == 86 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.112733293827202)
+    if xmimpflag == 86 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.112733293827202)
+    if xmimpflag == 86 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 129.277777777778
+    if xmimpflag == 86 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 129.277777777778 / (1 - 0.112733293827202 )
+    if xmimpflag == 87 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0655504344628028)
+    if xmimpflag == 87 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0655504344628028)
+    if xmimpflag == 87 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 211
+    if xmimpflag == 87 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 211 / (1 - 0.0655504344628028 )
+    if xmimpflag == 88 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.198929221794951)
+    if xmimpflag == 88 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.198929221794951)
+    if xmimpflag == 88 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 296.473684210526
+    if xmimpflag == 88 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 296.473684210526 - (296.473684210526 * 0.198929221794951 )
+    if xmimpflag == 89 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.107517933823928)
+    if xmimpflag == 89 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.107517933823928)
+    if xmimpflag == 89 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 281.958333333333
+    if xmimpflag == 89 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 281.958333333333 / (1 - 0.107517933823928 )
+    if xmimpflag == 90 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.028250184258012)
+    if xmimpflag == 90 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.028250184258012)
+    if xmimpflag == 90 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 208.341176470588
+    if xmimpflag == 90 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 208.341176470588 / (1 - 0.028250184258012 )
+    if xmimpflag == 91 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0487771272192143)
+    if xmimpflag == 91 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0487771272192143)
+    if xmimpflag == 91 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 267.896551724138
+    if xmimpflag == 91 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 267.896551724138 / (1 - 0.0487771272192143 )
+    if xmimpflag == 92 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.111975986975987)
+    if xmimpflag == 92 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.111975986975987)
+    if xmimpflag == 92 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 328.555555555556
+    if xmimpflag == 92 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 328.555555555556 / (1 - 0.111975986975987 )
+    if xmimpflag == 93 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0979648763988006)
+    if xmimpflag == 93 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0979648763988006)
+    if xmimpflag == 93 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 101.111111111111
+    if xmimpflag == 93 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 101.111111111111 / (1 - 0.0979648763988006 )
+    if xmimpflag == 94 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.297737659966491)
+    if xmimpflag == 94 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.297737659966491)
+    if xmimpflag == 94 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 319.733333333333
+    if xmimpflag == 94 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 319.733333333333 / (1 - 0.297737659966491 )
+    if xmimpflag == 95 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0220048899755501)
+    if xmimpflag == 95 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0220048899755501)
+    if xmimpflag == 95 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 220.428571428571
+    if xmimpflag == 95 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 220.428571428571 / (1 - 0.0220048899755501 )
+    if xmimpflag == 96 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0)
+    if xmimpflag == 96 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0)
+    if xmimpflag == 96 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 433
+    if xmimpflag == 96 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 433 / (1 - 0 )
+    if xmimpflag == 137 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.12659407459354)
+    if xmimpflag == 137 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.12659407459354)
+    if xmimpflag == 137 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 104.986301369863
+    if xmimpflag == 137 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 104.986301369863 / (1 - 0.12659407459354 )
+    if xmimpflag == 138 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.179201806454531)
+    if xmimpflag == 138 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.179201806454531)
+    if xmimpflag == 138 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 108.37037037037
+    if xmimpflag == 138 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 108.37037037037 - (108.37037037037 * 0.179201806454531 )
+    if xmimpflag == 139 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.162003845923261)
+    if xmimpflag == 139 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.162003845923261)
+    if xmimpflag == 139 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 128.438775510204
+    if xmimpflag == 139 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 128.438775510204 / (1 - 0.162003845923261 )
+    if xmimpflag == 140 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.171264386321147)
+    if xmimpflag == 140 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.171264386321147)
+    if xmimpflag == 140 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 557.6
+    if xmimpflag == 140 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 557.6 / (1 - 0.171264386321147 )
+    if xmimpflag == 141 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.213152374545978)
+    if xmimpflag == 141 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.213152374545978)
+    if xmimpflag == 141 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 74
+    if xmimpflag == 141 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 74 / (1 - 0.213152374545978 )
+    if xmimpflag == 142 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.190548809128441)
+    if xmimpflag == 142 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.190548809128441)
+    if xmimpflag == 142 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 80.5625
+    if xmimpflag == 142 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 80.5625 - (80.5625 * 0.190548809128441 )
+    if xmimpflag == 145 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.0577485174550083)
+    if xmimpflag == 145 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.0577485174550083)
+    if xmimpflag == 145 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 376.928571428571
+    if xmimpflag == 145 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 376.928571428571 / (1 - 0.0577485174550083 )
+    if xmimpflag == 146 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.153749295952981)
+    if xmimpflag == 146 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.153749295952981)
+    if xmimpflag == 146 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 154.307692307692
+    if xmimpflag == 146 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 154.307692307692 / (1 - 0.153749295952981 )
+    if xmimpflag == 147 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.143606923731731)
+    if xmimpflag == 147 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.143606923731731)
+    if xmimpflag == 147 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 165.903225806452
+    if xmimpflag == 147 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 165.903225806452 - (165.903225806452 * 0.143606923731731 )
+    if xmimpflag == 148 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.254317624200109)
+    if xmimpflag == 148 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.254317624200109)
+    if xmimpflag == 148 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 199.730769230769
+    if xmimpflag == 148 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 199.730769230769 / (1 - 0.254317624200109 )
+    if xmimpflag == 149 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.136559928551299)
+    if xmimpflag == 149 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.136559928551299)
+    if xmimpflag == 149 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 1003
+    if xmimpflag == 149 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 1003 / (1 - 0.136559928551299 )
+    if xmimpflag == 150 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.182187702624498)
+    if xmimpflag == 150 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.182187702624498)
+    if xmimpflag == 150 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 100.090909090909
+    if xmimpflag == 150 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 100.090909090909 / (1 - 0.182187702624498 )
+    if xmimpflag == 151 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.00833333333333333)
+    if xmimpflag == 151 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.00833333333333333)
+    if xmimpflag == 151 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 127.103448275862
+    if xmimpflag == 151 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 127.103448275862 / (1 - 0.00833333333333333)
+    if xmimpflag == 152 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.100333848361108)
+    if xmimpflag == 152 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.100333848361108)
+    if xmimpflag == 152 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 436.5
+    if xmimpflag == 152 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 436.5 / (1 - 0.100333848361108 )
+    if xmimpflag == 154 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.235321405225611)
+    if xmimpflag == 154 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.235321405225611)
+    if xmimpflag == 154 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 580.060606060606
+    if xmimpflag == 154 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 580.060606060606 / (1 - 0.235321405225611 )
+    if xmimpflag == 155 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.157476046121814)
+    if xmimpflag == 155 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.157476046121814)
+    if xmimpflag == 155 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 70.0833333333334
+    if xmimpflag == 155 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 70.0833333333334 / (1 - 0.157476046121814 )
+    if xmimpflag == 156 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.17641709128796)
+    if xmimpflag == 156 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.17641709128796)
+    if xmimpflag == 156 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 118.333333333333
+    if xmimpflag == 156 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 118.333333333333 / (1 - 0.17641709128796 )
     
     sladvoy = _numbers.get('SLADVOY')
-    if sladvoy > 0 and slaarriv is None and tslavesd is None and tslavesp is None and ncartot is None and slastot >= 50: slaximp = slastot + sladvoy
-    if sladvoy > 0 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv > 1: slaximp = slaarriv + sladvoy
-    if sladvoy > 0 and tslavesd is None and tslavesp is None and ncartot is None and slaarriv is None and slastot is None: slaximp = slamimp + sladvoy
+    if sladvoy > 0 and not slaarriv and not tslavesd and not tslavesp and not ncartot and slastot >= 50: slaximp = slastot + sladvoy
+    if sladvoy > 0 and not tslavesd and not tslavesp and not ncartot and slaarriv > 1: slaximp = slaarriv + sladvoy
+    if sladvoy > 0 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = slamimp + sladvoy
 
     slaximp = round(slaximp) if slaximp else None
     slamimp = round(slamimp) if slamimp else None
@@ -1259,11 +1259,11 @@ def compute_imputed_vars(_interim):
     # vymrtimp - Imputed number of slaves died in middle passage
     # vymrtrat - Slaves died on voyage / Slaves embarked
     
-    vymrtimp = None
+    vymrtimp = sladvoy
     tslmtimp = None
     if sladvoy is None and slaarriv <= tslavesd: vymrtimp = tslavesd - slaarriv
     if vymrtimp >= 0: tslmtimp = tslavesd
-    if (tslavesd is None and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
+    if (not tslavesd and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
     vymrtrat = vymrtimp / tslmtimp if vymrtimp and tslmtimp else None
     
     # AGE AND GENDER VARIABLES INCORPORATING INFORMATION FROM VARIABLES 4,5,6
@@ -1330,12 +1330,9 @@ def compute_imputed_vars(_interim):
         male1imp = men1 + boy1 + men4 + boy4 + men5 + boy5
     if not feml1imp:
         feml1imp = women1 + girl1 + women4 + girl4 + women5 + girl5
-    slavema1 = adlt1imp + chil1imp
-    slavemx1 = male1imp + feml1imp
-    slavmax1 = men1 + women1 + boy1 + girl1 + men4 + women4 + boy4 + girl4 + men5 + women5 + boy5 + girl5
-    slavema1 = threshold(slavema1, 20)
-    slavemx1 = threshold(slavemx1, 20)
-    slavema1 = threshold(slavmax1, 20)
+    slavema1 = threshold(adlt1imp + chil1imp, 20)
+    slavemx1 = threshold(male1imp + feml1imp, 20)
+    slavmax1 = threshold(men1 + women1 + boy1 + girl1 + men4 + women4 + boy4 + girl4 + men5 + women5 + boy5 + girl5, 20)
     if slavema1 is None:
         adlt1imp = None
         chil1imp = None
@@ -1512,8 +1509,8 @@ def compute_imputed_vars(_interim):
     
     male2imp = male2
     feml2imp = female2
-    if male2imp: male2imp = men2 + boy2
-    if feml2imp is None: feml2imp = women2 + girl2
+    if not male2imp: male2imp = men2 + boy2
+    if not feml2imp: feml2imp = women2 + girl2
 
     if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp: adlt2imp = sladvoy - chil2imp
     if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp: chil2imp = sladvoy - adlt2imp

@@ -129,6 +129,20 @@ class TestImputedDataCalculation(TestCase):
             v.update(test_output[k])
         first = True
         errors = {}
+        
+        def is_number(s):
+            try:
+                float(s)
+                return True
+            except:
+                return False
+        
+        def mismatch_text(m):
+            return m[0] + ': expected "' + str(m[1]) + '" [' + str(type(m[1])) + '], got "' + str(m[2]) + '" [' + str(type(m[2])) + '] instead'
+        
+        def str_dict(d):
+            return '{\n' + ',\n'.join(['\t{0}: {1} [{2}]'.format(k, v, type(v)) for k, v in sorted(d.items()) if not k.startswith('_')]) + '\n}'
+        
         for voyage_id, row in test_input.items():
             print 'Testing voyage_id:' + str(voyage_id)
             interim = self.interim_voyage(row)
@@ -141,20 +155,24 @@ class TestImputedDataCalculation(TestCase):
                         print "Missing field: " + k
                     continue
                 expected = row[k]
-                if isinstance(v, numbers.Integral) or isinstance(v, numbers.Real):
-                    expected = float(expected) if expected is not None else None
-                    if (not expected and v) or abs(v - expected) >= 0.01:
+                if is_number(v) or is_number(expected):
+                    expected = float(expected) if expected is not None else 0.0
+                    if v is None: v = 0.0
+                    if abs(v - expected) >= 0.01:
                         mismatches.append((k, expected, v))
                 elif v != expected:
                     mismatches.append((k, expected, v))
             if len(mismatches) > 0:
-                errors[voyage_id] = 'Mismatches:\n' + \
-                    ',\n'.join(['\t' + k + ': expected "' + str(expected) + '", got "' + str(v) + '" instead' for (k, expected, v) in mismatches]) + \
-                    '\nInterim:\n' + str(vars(interim)) + \
-                    '\nInterim numbers:\n' + str(interim.slave_numbers.all()) + \
-                    '\nAll variables:\n' + str(all_vars)
+                mismatches = sorted(mismatches, key=lambda m: m[0])
+                errors[voyage_id] = 'Mismatches on voyage id ' + voyage_id + ':\n' + \
+                    ',\n'.join(['\t' + mismatch_text(m) for m in mismatches]) + \
+                    '\nInterim numbers:\n' + str_dict({sn.var_name: sn.number for sn in interim.slave_numbers.all()}) + \
+                    '\nInterim:\n' + str_dict(vars(interim)) + \
+                    '\nAll variables:\n' + str_dict(all_vars)
             first = False        
         
+        if len(errors) > 0:
+            print 'Failed ' + str(len(errors)) + '/' + str(len(test_input))
         self.assertEqual(0, len(errors), '\n'.join(errors.values()))
         
     def interim_voyage(self, dict):

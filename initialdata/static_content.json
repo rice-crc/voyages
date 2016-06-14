@@ -1,304 +1,262 @@
 [
 {
-    "pk": 1, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 2,
     "fields": {
-        "name": "Voyage"
+        "title": "The Voyages Database ",
+        "description": "The Trans-Atlantic Slave Trade Database comprises more than 35,000 individual slaving expeditions between 1514 and 1866. Records of the voyages have been found in archives and libraries throughout the Atlantic world. They provide information about vessels, enslaved peoples, slave traders and owners, and trading routes. A variable (Source) cites the records for each voyage in the database. Other variables enable users to search for information about a particular voyage or group of voyages. The website provides full interactive capability to analyze the data and report results in the form of statistical tables, graphs, maps, a timeline, and an animation. ",
+        "order": -1,
+        "group": 1
     }
 },
 {
-    "pk": 2, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 3,
     "fields": {
-        "name": "Assessment"
+        "title": "Understanding the Database",
+        "description": "This part of \u201cThe Database\u201d contains a guide to help newcomers start using the database. An essay explains in detail the sources and methods used in constructing the database and creating the set of estimates based on it. A list of the variables in the version of the database on this website is provided. Lastly, the user will find a comprehensive bibliography of primary and secondary sources consulted in creating the database. ",
+        "order": 0,
+        "group": 1
     }
 },
 {
-    "pk": 3, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 4,
     "fields": {
-        "name": "Resources"
+        "title": "Search the Voyages Database",
+        "description": "This link takes you to the page for querying the main database. You can search for information about a specific voyage, a small group of voyages, or a large subset of the data set, such as all voyages under the Portuguese flag. There is a choice between a smaller \u201cbasic\u201d set of 25 variables and a larger \u201cgeneral\u201d set of 64 variables. Each set groups variables into the same eight categories. The interface of the query section is designed to be as intuitive as possible, but many of the FAQs are about how to use its features. ",
+        "order": 1,
+        "group": 1
     }
 },
 {
-    "pk": 4, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 5,
     "fields": {
-        "name": "Educational Materials"
+        "title": "Downloads",
+        "description": "The variables accessible online cover the full range of information available in the database. Some users will want to work with variables that have not been included in the selection for the website and/or use spreadsheets or statistics software to analyze the data. This link takes you to a page with buttons to download the full set of variables in the Trans-Atlantic Slave Trade Database in SPSS format, a PDF copy of the SPSS codebook, and the website version of the database in two formats (SPSS, csv).",
+        "order": 2,
+        "group": 1
     }
 },
 {
-    "pk": 5, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 6,
     "fields": {
-        "name": "About"
+        "title": "Contribute",
+        "description": " The \u201cContribute\u201d section consists of data entry forms by which users of the website can supply new information or revise existing information on trans-Atlantic slaving voyages. Specialists on the slave trade will review submissions of new or revised information. Once confirmed, the new or revised information will be incorporated in the next revision of the database appearing in the website. We anticipate releasing a new revision every three years.",
+        "order": 3,
+        "group": 1
     }
 },
 {
-    "pk": 6, 
-    "model": "static_content.contentgroup", 
+    "model": "static_content.contentpage",
+    "pk": 7,
     "fields": {
-        "name": "Main"
+        "title": "Assessing the Slave Trade ",
+        "description": "This section of the Voyages website is organized around the three ways historians and researchers have used the Trans-Atlantic Slave Trade Database to interpret the slave trade: essays, quantitative analysis, and maps. Interactive features of the \u201cEstimates\u201d sub-section enable users to raise their own questions about the full volume of the slave trade by year, national carrier, and routes of slaving expeditions, and obtain answers in the form of tables, a timeline, or maps. ",
+        "order": -1,
+        "group": 2
     }
 },
 {
-    "pk": 2, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 8,
     "fields": {
-        "order": -1, 
-        "group": 1, 
-        "description": "The Trans-Atlantic Slave Trade Database comprises more than 35,000 individual slaving expeditions between 1514 and 1866. Records of the voyages have been found in archives and libraries throughout the Atlantic world. They provide information about vessels, enslaved peoples, slave traders and owners, and trading routes. A variable (Source) cites the records for each voyage in the database. Other variables enable users to search for information about a particular voyage or group of voyages. The website provides full interactive capability to analyze the data and report results in the form of statistical tables, graphs, maps, or on a timeline. ", 
-        "title": "The Voyages Database "
+        "title": "Essays",
+        "description": "Three essays offer an introduction to the Voyages website in the form of a broad interpretation and overview of the volume and structure of the trans-Atlantic slave trade from inception to suppression, an examination of seasonality in the trans-Atlantic slave trade, and a study of an African liberated in Cuba from a slave ship captured by a British cruiser in 1826. Vignettes and research notes focus on more specialized topics. Other essays will be added as the website develops. The editorial board will consider for publication in the \u201cEssays\u201d section any text that uses databases on the website as a major source.",
+        "order": 0,
+        "group": 2
     }
 },
 {
-    "pk": 3, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 9,
     "fields": {
-        "order": 0, 
-        "group": 1, 
-        "description": "This part of \u201cThe Database\u201d contains a guide to help newcomers start using the database. An essay explains in detail the sources and methods used in constructing the database and creating the set of estimates based on it. A list of the variables in the version of the database on this website is provided. Lastly, the user will find a comprehensive bibliography of primary and secondary sources consulted in creating the database. ", 
-        "title": "Understanding the Database"
+        "title": "Estimates",
+        "description": "Although the Trans-Atlantic Slave Trade Database includes all slave voyages that have been documented up to now, it cannot claim to be complete. Records of many voyages have disappeared, in some cases irretrievably, while other documents remain to be discovered in public and private archives. The \u201cEstimates,\u201d on the other hand, provide an educated guess of how large the slave trade actually was. Altogether, the estimates are about 25 percent higher than unadjusted numbers in the main database. They raise the final totals to over 12,500,000 Africans forced to undertake the Middle Passage and around 10,700,000 who completed it, the largest forced migration in modern history.",
+        "order": 1,
+        "group": 2
     }
 },
 {
-    "pk": 4, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 10,
     "fields": {
-        "order": 1, 
-        "group": 1, 
-        "description": "This link takes you to the page for querying the main database. You can search for information about a specific voyage, a small group of voyages, or a large subset of the data set, such as all voyages under the Portuguese flag. There is a choice between a smaller \u201cbasic\u201d set of 25 variables and a larger \u201cgeneral\u201d set of 64 variables. Each set groups variables into the same eight categories. The interface of the query section is designed to be as intuitive as possible, but many of the FAQs are about how to use its features. ", 
-        "title": "Search the Voyages Database"
+        "title": "Introductory Maps",
+        "description": "A third way of using the Trans-Atlantic Slave Trade Database to interpret the slave trade is to represent statistics derived from it on historical maps. A project is now underway to create an atlas of the slave trade showing cartographically patterns and trends documented in the database. Yale University Press, the publisher of the atlas, and Mapping Specialists, Ltd., have given the Voyages website permission to preview 9 of over 200 maps that will make up the atlas. They depict the origins of the Atlantic slave trade, its development over time, how wind and ocean currents shaped its routes, and how it affected regions and ports in Africa and the Americas.",
+        "order": 2,
+        "group": 2
     }
 },
 {
-    "pk": 5, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 11,
     "fields": {
-        "order": 2, 
-        "group": 1, 
-        "description": "The variables accessible online cover the full range of information available in the database. Some users will want to work with variables that have not been included in the selection for the website and/or use spreadsheets or statistics software to analyze the data. This link takes you to a page with buttons to download the full set of variables in the Trans-Atlantic Slave Trade Database in SPSS format, a PDF copy of the SPSS codebook, and the website version of the database in three formats (SPSS, csv, and dBase). ", 
-        "title": "Downloads"
+        "title": "The Trans-Atlantic Slave Trade Database has information on almost 36,000 slaving voyages",
+        "description": "that forcibly embarked over 10 million Africans for transport to the Americas between the sixteenth and nineteenth centuries.  The actual number is estimated to have been as high as 12.5 million.  The database and the separate estimates interface offer researchers, students and the general public a chance to rediscover the reality of one of the largest forced movements of peoples in world history.",
+        "order": -1,
+        "group": 6
     }
 },
 {
-    "pk": 6, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 12,
     "fields": {
-        "order": 3, 
-        "group": 1, 
-        "description": " The \u201cContribute\u201d section consists of data entry forms by which users of the website can supply new information or revise existing information on trans-Atlantic slaving voyages. Specialists on the slave trade will review submissions of new or revised information. Once confirmed, the new or revised information will be incorporated in the next revision of the database appearing in the website. We anticipate releasing a new revision every three years.", 
-        "title": "Contribute"
+        "title": "Search the Voyages Database",
+        "description": "Look for particular voyages in this database of documented slaving expeditions. Create listings, tables, and maps that draw on the database.",
+        "order": 0,
+        "group": 6
     }
 },
 {
-    "pk": 7, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 13,
     "fields": {
-        "order": -1, 
-        "group": 2, 
-        "description": "This section of the Voyages website is organized around the three ways historians and researchers have used the Trans-Atlantic Slave Trade Database to interpret the slave trade: essays, quantitative analysis, and maps. Interactive features of the \u201cEstimates\u201d sub-section enable users to raise their own questions about the full volume of the slave trade by year, national carrier, and routes of slaving expeditions, and obtain answers in the form of tables, a timeline, or maps. ", 
-        "title": "Assessing the Slave Trade "
+        "title": "Examine Estimates of the Slave Trade",
+        "description": "Slaves on documented voyages represent four-fifths of the number who were actually transported. Use the interactive estimates page to analyze our estimate of the full volume of the slave trade.",
+        "order": 1,
+        "group": 6
     }
 },
 {
-    "pk": 8, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 14,
     "fields": {
-        "order": 0, 
-        "group": 2, 
-        "description": "Three essays offer an introduction to the Voyages website in the form of a broad interpretation and overview of the volume and structure of the trans-Atlantic slave trade from inception to suppression, an examination of seasonality in the trans-Atlantic slave trade, and a study of an African liberated in Cuba from a slave ship captured by a British cruiser in 1826. Vignettes and research notes focus on more specialized topics. Other essays will be added as the website develops. The editorial board will consider for publication in the \u201cEssays\u201d section any text that uses databases on the website as a major source.", 
-        "title": "Essays"
+        "title": "Explore the African Names Database",
+        "description": "This database identifies 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation of each individual.",
+        "order": 2,
+        "group": 6
     }
 },
 {
-    "pk": 9, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 15,
     "fields": {
-        "order": 1, 
-        "group": 2, 
-        "description": "Although the Trans-Atlantic Slave Trade Database includes all slave voyages that have been documented up to now, it cannot claim to be complete. Records of many voyages have disappeared, in some cases irretrievably, while other documents remain to be discovered in public and private archives. The \u201cEstimates,\u201d on the other hand, provide an educated guess of how large the slave trade actually was. Altogether, the estimates are about 25 percent higher than unadjusted numbers in the main database. They raise the final totals to over 12,500,000 Africans forced to undertake the Middle Passage and around 10,700,000 who completed it, the largest forced migration in modern history.", 
-        "title": "Estimates"
+        "title": "Resources",
+        "description": "This section of the Voyages website provides resources for putting information in the databases into historical context. The materials presently comprise a database of images contemporary to the slave trade and a database of names of Africans intercepted on slave vessels after 1807 - during the period of attempted suppression.",
+        "order": -1,
+        "group": 3
     }
 },
 {
-    "pk": 10, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 16,
     "fields": {
-        "order": 2, 
-        "group": 2, 
-        "description": "A third way of using the Trans-Atlantic Slave Trade Database to interpret the slave trade is to represent statistics derived from it on historical maps. A project is now underway to create an atlas of the slave trade showing cartographically patterns and trends documented in the database. Yale University Press, the publisher of the atlas, and Mapping Specialists, Ltd., have given the Voyages website permission to preview 9 of over 200 maps that will make up the atlas. They depict the origins of the Atlantic slave trade, its development over time, how wind and ocean currents shaped its routes, and how it affected regions and ports in Africa and the Americas.", 
-        "title": "Introductory Maps"
+        "title": "Images",
+        "description": "Representations of the trans-Atlantic slave trade, an activity that lasted for centuries, changed over time. With permission from various archives and libraries, selected images enable users to view people, places, artifacts and vessels. Links are provided to relevant voyages in the Voyages Database.",
+        "order": 0,
+        "group": 3
     }
 },
 {
-    "pk": 11, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 17,
     "fields": {
-        "order": -1, 
-        "group": 6, 
-        "description": "that forcibly embarked over 10 million Africans for transport to the Americas between the sixteenth and nineteenth centuries. It offers researchers, students and the general public a chance to rediscover the reality of one of the largest forced movements of peoples in world history.", 
-        "title": "The Trans-Atlantic Slave Trade Database has information on more than 35,000 slaving voyages"
+        "title": "African Names Database",
+        "description": "During the last 60 years of the trans-Atlantic slave trade, courts around the Atlantic basins condemned over two thousand vessels for engaging in the traffic and recorded the details of captives found on board including their African names. The African Names Database was created from these records, now located in the Registers of Liberated Africans at the Sierra Leone National Archives, Freetown, as well as Series FO84, FO313, CO247 and CO267 held at the British National Archives in London. Links are provided to the ships in the Voyages Database from which the liberated Africans were rescued, as well as to the African Origins site where users can hear the names pronounced and help us identify the languages in which they think the names are used.",
+        "order": 1,
+        "group": 3
     }
 },
 {
-    "pk": 12, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 18,
     "fields": {
-        "order": 0, 
-        "group": 6, 
-        "description": "Look for particular voyages in this database of documented slaving expeditions. Create listings, tables, and maps that draw on the database.", 
-        "title": "Search the Voyages Database"
+        "title": "Educational Materials",
+        "description": "One of the goals of the Trans-Atlantic Slave Trade Database has been to bring the work of historians to a primary and secondary school audience, allowing students to engage in the process of historical inquiry. To that end, a variety of lesson plans spanning a range of grade levels have been developed to offer teachers diverse approaches from which to teach students about the largest forced migration in history. These lesson plans are tied to national standards in Social Studies (National Council for the Social Studies), History (National Center for History in the Schools), and Geography (National Council Geography Education). Relevant lesson plans and educational resources located on other websites have also been identified, to help educators build a broad study of the trans-Atlantic slave trade into their curriculum.",
+        "order": -1,
+        "group": 4
     }
 },
 {
-    "pk": 13, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 19,
     "fields": {
-        "order": 1, 
-        "group": 6, 
-        "description": "Slaves on documented voyages represent four-fifths of the number who were actually transported. Use the interactive estimates page to analyze our estimate of the full volume of the slave trade.", 
-        "title": "Examine Estimates of the Slave Trade"
+        "title": "Lesson Plans",
+        "description": "In order to present the Trans-Atlantic Slave Trade Database to a broader audience, particularly a 6-12 grade audience, a dedicated team of teachers and curriculum developers from around the United States developed lesson plans that explore the database. Utilizing the various resources of the website, these lessons plans allow students to engage the history and legacy of the Atlantic slave trade in diverse and meaningful ways. The lessons are all aligned with national standards in history (National Center for History in the Schools), social studies (National Council for the Social Studies), and geography (National Council for Geography Education) and range in both their grade levels and activities. The lessons also suggest readings for more information about the Slave Trade.",
+        "order": 0,
+        "group": 4
     }
 },
 {
-    "pk": 14, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 20,
     "fields": {
-        "order": 2, 
-        "group": 6, 
-        "description": "This database identifies 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation of each individual.", 
-        "title": "Explore the African Names Database"
+        "title": "Web Resources",
+        "description": "The websites listed here provide a variety of resources, including but not limited to lesson plans, interactive maps, and narratives of enslaved Africans.",
+        "order": 1,
+        "group": 4
     }
 },
 {
-    "pk": 15, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 21,
     "fields": {
-        "order": -1, 
-        "group": 3, 
-        "description": "This section of the Voyages website provides resources for putting information in the databases into historical context. The materials presently comprise a database of images contemporary to the slave trade and a database of names of Africans intercepted on slave vessels after 1807 - during the period of attempted suppression.", 
-        "title": "Resources"
+        "title": "About the Project",
+        "description": "The Trans-Atlantic Slave Trade Database is the culmination of several decades of independent and collaborative research by scholars drawing upon data in libraries and archives around the Atlantic world. The Voyages website itself is the product of two years of development by a multi-disciplinary team of historians, librarians, curriculum specialists, cartographers, computer programmers, and web designers, in consultation with scholars of the slave trade from universities in Europe, Africa, South America, and North America. The National Endowment for the Humanities was the principal sponsor of this Emory University Digital Library Research initiative. The W.E.B. Du Bois Institute of Harvard University and the Wilberforce Institute for the Study of Slavery and Emancipation of the University of Hull have also supported its development.",
+        "order": -1,
+        "group": 5
     }
 },
 {
-    "pk": 16, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 22,
     "fields": {
-        "order": 0, 
-        "group": 3, 
-        "description": "Representations of the trans-Atlantic slave trade, an activity that lasted for centuries, changed over time. With permission from various archives and libraries, selected images enable users to view people, places, artifacts and vessels. Links are provided to relevant voyages in the Voyages Database.", 
-        "title": "Images"
+        "title": "History",
+        "description": "A brief account of the origins of a single multi-source dataset of the trans-Atlantic slave trade and its realization first as a CD-ROM published by Cambridge University Press in 1999 and now, in an expanded version, on the Voyages website.",
+        "order": 0,
+        "group": 5
     }
 },
 {
-    "pk": 17, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 23,
     "fields": {
-        "order": 1, 
-        "group": 3, 
-        "description": "During the last 60 years of the trans-Atlantic slave trade, courts around the Atlantic basins condemned over two thousand vessels for engaging in the traffic and recorded the details of captives found on board including their African names. The African Names Database was created from these records, now located in the Registers of Liberated Africans at the Sierra Leone National Archives, Freetown, as well as Series FO84, FO313, CO247 and CO267 held at the British National Archives in London. Links are provided to the ships in the Voyages Database from which the liberated Africans were rescued, as well as to the African Origins site where users can hear the names pronounced and help us identify the languages in which they think the names are used.", 
-        "title": "African Names Database"
+        "title": "Project Team",
+        "description": "Names of the principal investigators, of members of the project development team, and of individuals serving on the steering committee and advisory board.",
+        "order": 1,
+        "group": 5
     }
 },
 {
-    "pk": 18, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 24,
     "fields": {
-        "order": -1, 
-        "group": 4, 
-        "description": "One of the goals of the Trans-Atlantic Slave Trade Database has been to bring the work of historians to a primary and secondary school audience, allowing students to engage in the process of historical inquiry. To that end, a variety of lesson plans spanning a range of grade levels have been developed to offer teachers diverse approaches from which to teach students about the largest forced migration in history. These lesson plans are tied to national standards in Social Studies (National Council for the Social Studies), History (National Center for History in the Schools), and Geography (National Council Geography Education). Relevant lesson plans and educational resources located on other websites have also been identified, to help educators build a broad study of the trans-Atlantic slave trade into their curriculum.", 
-        "title": "Educational Materials"
+        "title": "Contributors of data",
+        "description": "Names of scholars and researchers whose findings on the trans-Atlantic slave trade have been incorporated into the Voyages Database.",
+        "order": 2,
+        "group": 5
     }
 },
 {
-    "pk": 19, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 25,
     "fields": {
-        "order": 0, 
-        "group": 4, 
-        "description": "In order to present the Trans-Atlantic Slave Trade Database to a broader audience, particularly a 6-12 grade audience, a dedicated team of teachers and curriculum developers from around the United States developed lesson plans that explore the database. Utilizing the various resources of the website, these lessons plans allow students to engage the history and legacy of the Atlantic slave trade in diverse and meaningful ways. The lessons are all aligned with national standards in history (National Center for History in the Schools), social studies (National Council for the Social Studies), and geography (National Council for Geography Education) and range in both their grade levels and activities. The lessons also suggest readings for more information about the Slave Trade.", 
-        "title": "Lesson Plans"
+        "title": "Acknowledgements",
+        "description": "Major sponsors and institutional partners of the Voyages website, as well as other organizations and individuals who have assisted the work of the project team.",
+        "order": 3,
+        "group": 5
     }
 },
 {
-    "pk": 20, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 26,
     "fields": {
-        "order": 1, 
-        "group": 4, 
-        "description": "The websites listed here provide a variety of resources, including but not limited to lesson plans, interactive maps, and narratives of enslaved Africans.", 
-        "title": "Web Resources"
+        "title": "African Origins Project",
+        "description": "A scholar-public collaborative project using audio recordings of names in African Names Database to trace the geographic origins of Africans transported in the transatlantic slave trade.",
+        "order": 4,
+        "group": 5
     }
 },
 {
-    "pk": 21, 
-    "model": "static_content.contentpage", 
+    "model": "static_content.contentpage",
+    "pk": 27,
     "fields": {
-        "order": -1, 
-        "group": 5, 
-        "description": "The Trans-Atlantic Slave Trade Database is the culmination of several decades of independent and collaborative research by scholars drawing upon data in libraries and archives around the Atlantic world. The Voyages website itself is the product of two years of development by a multi-disciplinary team of historians, librarians, curriculum specialists, cartographers, computer programmers, and web designers, in consultation with scholars of the slave trade from universities in Europe, Africa, South America, and North America. The National Endowment for the Humanities was the principal sponsor of this Emory University Digital Library Research initiative. The W.E.B. Du Bois Institute of Harvard University and the Wilberforce Institute for the Study of Slavery and Emancipation of the University of Hull have also supported its development.", 
-        "title": "About the Project"
-    }
-},
-{
-    "pk": 22, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 0, 
-        "group": 5, 
-        "description": "A brief account of the origins of a single multi-source dataset of the trans-Atlantic slave trade and its realization first as a CD-ROM published by Cambridge University Press in 1999 and now, in an expanded version, on the Voyages website.", 
-        "title": "History"
-    }
-},
-{
-    "pk": 23, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 1, 
-        "group": 5, 
-        "description": "Names of the principal investigators, of members of the project development team, and of individuals serving on the steering committee and advisory board.", 
-        "title": "Project Team"
-    }
-},
-{
-    "pk": 24, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 2, 
-        "group": 5, 
-        "description": "Names of scholars and researchers whose findings on the trans-Atlantic slave trade have been incorporated into the Voyages Database.", 
-        "title": "Contributors of data"
-    }
-},
-{
-    "pk": 25, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 3, 
-        "group": 5, 
-        "description": "Major sponsors and institutional partners of the Voyages website, as well as other organizations and individuals who have assisted the work of the project team.", 
-        "title": "Acknowledgements"
-    }
-},
-{
-    "pk": 26, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 4, 
-        "group": 5, 
-        "description": "A scholar-public collaborative project using audio recordings of names in African Names Database to trace the geographic origins of Africans transported in the transatlantic slave trade.", 
-        "title": "African Origins Project"
-    }
-},
-{
-    "pk": 27, 
-    "model": "static_content.contentpage", 
-    "fields": {
-        "order": 5, 
-        "group": 5, 
-        "description": "Members of the Voyages editorial board and the email address for contacting the website.", 
-        "title": "Contact us"
+        "title": "Contact us",
+        "description": "Members of the Voyages editorial board and the email address for contacting the website.",
+        "order": 5,
+        "group": 5
     }
 }
 ]
