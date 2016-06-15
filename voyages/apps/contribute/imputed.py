@@ -202,20 +202,31 @@ def compute_imputed_vars(_interim):
     voy2imp = threshold(voy2imp, 39)
     
     natinimp = get_obj_value(_interim.national_carrier)
+    natinimp = recode_var({
+        3: [1, 2],
+        6: [4, 5],
+        7: [7],
+        8: [8],
+        9: [9],
+        10: [10],
+        15: range(11, 15),
+        30: range(16, 25)
+    }, natinimp)
     tonnage = _interim.tonnage_of_vessel
     tonmod = None
     if tonnage:
         tonnage = int(tonnage)
         tontype = get_obj_value(_interim.ton_type)
+        tonmod = tonnage
         if tontype == 13:
             tonmod = tonnage
-        if (tontype < 3 or tontype == 4 or tontype == 5) and yearam > 1773:
+        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5) and yearam > 1773:
             tonmod = tonnage
-        if (tontype < 3 or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage > 250:
+        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage > 250:
             tonmod = 13.1 + (1.1 * tonnage)
-        if (tontype < 3 or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage > 150 and tonnage < 251:
+        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage > 150 and tonnage < 251:
             tonmod = 65.3 + (1.2 * tonnage)
-        if (tontype < 3 or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage < 151:
+        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5) and yearam < 1774 and tonnage < 151:
             tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 4 and yearam > 1783 and yearam < 1794:
             tonmod = None
@@ -328,9 +339,6 @@ def compute_imputed_vars(_interim):
     
     embport = get_obj_value(_interim.first_port_intended_embarkation)
     embport2 = get_obj_value(_interim.second_port_intended_embarkation)
-    regem1 = region_value(embport)
-    regem2= region_value(embport2)
-    regem3 = None
     
     _numbers = {n.var_name: n.number for n in _interim.slave_numbers.all()}
     
@@ -350,7 +358,10 @@ def compute_imputed_vars(_interim):
         get_obj_value(_interim.first_place_of_slave_purchase),
         get_obj_value(_interim.second_place_of_slave_purchase),
         get_obj_value(_interim.third_place_of_slave_purchase)
-    ]
+    ]    
+    regem1 = region_value(_places[0])
+    regem2= region_value(_places[1])
+    regem3 = region_value(_places[2])
     mjbyptimp = _places[0]
     if not mjbyptimp: mjbyptimp = _places[1]
     if not mjbyptimp: mjbyptimp = _places[2]
@@ -426,14 +437,14 @@ def compute_imputed_vars(_interim):
     regdis1 = region_value(sla1port)
     regdis2 = region_value(adpsale1)
     regdis3 = region_value(adpsale2)
-    if pctdis < 0.5 or (slastot < 50 and not slaarriv) and sla1port and adpsale1:
+    if ((pctdis is not None and pctdis < 0.5) or (slastot < 50 and not slaarriv)) and sla1port and adpsale1:
         if adpsale2:
             mjslptimp = 99801
         else:
             if slas32 == 0 and slas36 >= 1: mjslptimp = sla1port
             if slas36 == 0 and slas32 >= 1: mjslptimp = adpsale1
-            if slas36 >= 1 and slas32 >= 1 & regdis1 == regdis2: mjslptimp = regdis1 + 99
-            if slas36 >= 1 and slas32 >= 1 & regdis1 != regdis2: mjslptimp = 99801
+            if slas36 >= 1 and slas32 >= 1 and regdis1 == regdis2: mjslptimp = regdis1 + 99
+            if slas36 >= 1 and slas32 >= 1 and regdis1 != regdis2: mjslptimp = 99801
     
     if not slastot:
         if sla1port and adpsale1 and not adpsale2 and regdis1 == regdis2: mjslptimp = regdis1 + 99
@@ -1261,7 +1272,7 @@ def compute_imputed_vars(_interim):
     
     vymrtimp = sladvoy
     tslmtimp = None
-    if sladvoy is None and slaarriv <= tslavesd: vymrtimp = tslavesd - slaarriv
+    if sladvoy is None and slaarriv and slaarriv <= tslavesd: vymrtimp = tslavesd - slaarriv
     if vymrtimp >= 0: tslmtimp = tslavesd
     if (not tslavesd and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
     vymrtrat = vymrtimp / tslmtimp if vymrtimp and tslmtimp else None
@@ -1512,10 +1523,12 @@ def compute_imputed_vars(_interim):
     if not male2imp: male2imp = men2 + boy2
     if not feml2imp: feml2imp = women2 + girl2
 
-    if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp: adlt2imp = sladvoy - chil2imp
-    if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp: chil2imp = sladvoy - adlt2imp
-    if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp: male2imp = sladvoy - feml2imp
-    if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp: feml2imp = sladvoy - male2imp
+    # TODO: check if this is the actual conditions, since
+    # the "SPSS" translation does not seem to match expectations.
+    if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp and chil2imp: adlt2imp = sladvoy - chil2imp
+    if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp and adlt2imp: chil2imp = sladvoy - adlt2imp
+    if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp and feml2imp: male2imp = sladvoy - feml2imp
+    if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp and male2imp: feml2imp = sladvoy - male2imp
     
     # WARNING (missing var): imputed_region_ship_constructed,
     # WARNING (missing model field): deptregimp1, majbyimp, majbyimp1, mjselimp
