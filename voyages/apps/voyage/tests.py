@@ -36,6 +36,9 @@ class ReportingTest(TestCase):
         self.assertEqual(globals.get_incremented_year_tuples(25, 1514, 1866), flist25)
 @override_settings(LANGUAGE_CODE='en')
 class SearchTest(TestCase):
+
+    fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
+    
     """
     Tests the search page and associated functions
     """
