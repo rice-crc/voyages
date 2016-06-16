@@ -417,8 +417,6 @@ def compute_imputed_vars(_interim):
     if adpsale2 and not sla1port and not adpsale1: mjslptimp = adpsale2
     if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
     
-    # TODO: check if we are really suppose to set the variable to
-    # None if both sides are equal to None.
     if sla1port == adpsale1: mjslptimp = sla1port
     if sla1port == adpsale2: mjslptimp = sla1port
     if adpsale1 and adpsale1 == adpsale2: mjslptimp = adpsale1
@@ -1523,15 +1521,10 @@ def compute_imputed_vars(_interim):
     if not male2imp: male2imp = men2 + boy2
     if not feml2imp: feml2imp = women2 + girl2
 
-    # TODO: check if this is the actual conditions, since
-    # the "SPSS" translation does not seem to match expectations.
     if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp and chil2imp: adlt2imp = sladvoy - chil2imp
     if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp and adlt2imp: chil2imp = sladvoy - adlt2imp
     if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp and feml2imp: male2imp = sladvoy - feml2imp
     if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp and male2imp: feml2imp = sladvoy - male2imp
-    
-    # WARNING (missing var): imputed_region_ship_constructed,
-    # WARNING (missing model field): deptregimp1, majbyimp, majbyimp1, mjselimp
 
     local_vars = locals()
     local_vars = {k: v if v != 0 else None for k, v in local_vars.items() if not k.startswith('_')}
