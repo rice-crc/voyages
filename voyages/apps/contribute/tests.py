@@ -7,6 +7,7 @@ from imputed import *
 from models import *
 from voyages.apps.voyage.models import *
 import numbers
+import csv
 
 @override_settings(LANGUAGE_CODE='en')
 class TestAuthentication(TestCase):
@@ -98,7 +99,7 @@ class TestAuthentication(TestCase):
         # using email with good password
         result = self.client.login(username='test@user.com', password='testuser')
         self.assertTrue(result)
-        
+
 class TestImputedDataCalculation(TestCase):
     """
     Here we test the converted SPSS script that should generate imputed variables
@@ -106,28 +107,34 @@ class TestImputedDataCalculation(TestCase):
     
     fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
     
+    def parse_csv(self, file_name):            
+        data = {}
+        with open(file_name) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                row = {k: v if v and v.strip() != '' else None for k, v in row.items()}
+                data[row['voyageid']] = row
+        return data
+    
     def test_dataset(self):
+        import os
+        folder = os.path.dirname(os.path.realpath(__file__)) + '/testdata/'
+        errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv', folder + 'ImputeTestDataOutput.csv')        
+        if len(errors) > 0:
+            print 'Failed ' + str(len(errors)) + '/' + str(len(test_input))
+        self.assertEqual(0, len(errors), '\n'.join(errors.values()))
+    
+    def compute_imputed_csv(self, input_csv, output_csv, dump_file=None):
         # The test dataset is divided into two CSV files, one contains the source
         # variable data and the other contains the expected output.
-        import csv
-        import os
-        folder = os.path.dirname(os.path.realpath(__file__))
-        def parse_csv(file_name):            
-            data = {}
-            with open(folder + '/testdata/' + file_name) as csvfile:
-                reader = csv.DictReader(csvfile)
-                for row in reader:
-                    row = {k: v if v and v.strip() != '' else None for k, v in row.items()}
-                    data[row['voyageid']] = row
-            return data
+        test_input = self.parse_csv(input_csv)
+        test_output = self.parse_csv(output_csv)
+        if len(test_input) != len(test_output):
+            raise Exception('Input and output files do not have the same row count')
         
-        test_input = parse_csv('ImputeTestData.csv')
-        test_output = parse_csv('ImputeTestDataOutput.csv')
-        self.assertEqual(len(test_input), len(test_output))
         # Join input and output data
         for k, v in test_input.items():
             v.update(test_output[k])
-        first = True
         errors = {}
         
         def is_number(s):
@@ -143,25 +150,32 @@ class TestImputedDataCalculation(TestCase):
         def str_dict(d):
             return '{\n' + ',\n'.join(['\t{0}: {1} [{2}]'.format(k, v, type(v)) for k, v in sorted(d.items()) if not k.startswith('_')]) + '\n}'
         
+        computed_data = []
+        first = True
         for voyage_id, row in test_input.items():
-            print 'Testing voyage_id:' + str(voyage_id)
             interim = self.interim_voyage(row)
-            all_vars = compute_imputed_vars(interim)[2]
+            try:
+                all_vars = compute_imputed_vars(interim)[2]
+            except Exception as ex:
+                errors[voyage_id] = 'Exception raised: ' + str(ex)
+                continue 
             # Check that the imputed fields all match.
             mismatches = []
             for k, v in all_vars.items():
                 if not k in row:
                     if first:
-                        print "Missing field: " + k
+                        print "WARNING: Missing field in target output: " + k
                     continue
                 expected = row[k]
                 if is_number(v) or is_number(expected):
                     expected = float(expected) if expected is not None else 0.0
-                    if v is None: v = 0.0
+                    v = float(v) if v is not None else 0.0
                     if abs(v - expected) >= 0.01:
                         mismatches.append((k, expected, v))
                 elif v != expected:
                     mismatches.append((k, expected, v))
+            all_vars['voyageid'] = voyage_id
+            computed_data.append(all_vars)
             if len(mismatches) > 0:
                 mismatches = sorted(mismatches, key=lambda m: m[0])
                 errors[voyage_id] = 'Mismatches on voyage id ' + voyage_id + ':\n' + \
@@ -169,11 +183,16 @@ class TestImputedDataCalculation(TestCase):
                     '\nInterim numbers:\n' + str_dict({sn.var_name: sn.number for sn in interim.slave_numbers.all()}) + \
                     '\nInterim:\n' + str_dict(vars(interim)) + \
                     '\nAll variables:\n' + str_dict(all_vars)
-            first = False        
+            first = False
         
-        if len(errors) > 0:
-            print 'Failed ' + str(len(errors)) + '/' + str(len(test_input))
-        self.assertEqual(0, len(errors), '\n'.join(errors.values()))
+        if dump_file is not None and len(computed_data) > 0:
+            with open(dump_file, 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, computed_data[0].keys())
+                writer.writeheader()
+                for row in computed_data:
+                    writer.writerow(row)
+        
+        return errors
         
     def interim_voyage(self, dict):
         # TODO: this code may be placed somewhere else so that
