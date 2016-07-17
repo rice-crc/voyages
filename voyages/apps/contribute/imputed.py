@@ -18,6 +18,24 @@ slave_number_var_names = [
     'boyrat7', 'girlrat7', 'chilrat7', 'malrat7', 'tslmtimp', 'vymrtimp',
     'vymrtrat']
 
+def all_or_nothing(var_names, value_dict):
+    """
+    Fetch all numerical values from value_dict with keys
+    given by var_names. If any of the values is positive,
+    set all entries of value_dict equal to None, or any
+    keys in var_names missing to ZERO.
+    
+    Otherwise, set all of the values for var_names to None.
+    """
+    nonzero = [value_dict[k] for k in var_names if value_dict.get(k)]
+    if next(iter(nonzero), None):
+        for k in var_names:
+            if not value_dict.get(k):
+                value_dict[k] = 0
+    else:    
+        for k in var_names:
+            value_dict[k] = None
+
 # Convenience id function
 def id(x):
     return x
@@ -424,8 +442,8 @@ def compute_imputed_vars(_interim):
     if adpsale2 and not sla1port and not adpsale1: mjslptimp = adpsale2
     if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
     
-    if sla1port == adpsale1: mjslptimp = sla1port
-    if sla1port == adpsale2: mjslptimp = sla1port
+    if sla1port and sla1port == adpsale1: mjslptimp = sla1port
+    if sla1port and sla1port == adpsale2: mjslptimp = sla1port
     if adpsale1 and adpsale1 == adpsale2: mjslptimp = adpsale1
     
     slas32 = _numbers.get('SLAS32', 0)
@@ -1277,7 +1295,8 @@ def compute_imputed_vars(_interim):
     
     vymrtimp = sladvoy
     tslmtimp = None
-    if sladvoy is None and slaarriv and slaarriv <= tslavesd: vymrtimp = tslavesd - slaarriv
+    slaarriv = _numbers.get('SLAARRIV')
+    if sladvoy is None and slaarriv is not None and slaarriv <= tslavesd: vymrtimp = tslavesd - slaarriv
     if vymrtimp >= 0: tslmtimp = tslavesd
     if (not tslavesd and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
     vymrtrat = vymrtimp / tslmtimp if vymrtimp and tslmtimp else None
@@ -1535,6 +1554,41 @@ def compute_imputed_vars(_interim):
 
     local_vars = locals()
     local_vars = {k: v for k, v in local_vars.items() if not k.startswith('_')}
+    
+    # Recode zero numerical values to None and vice versa with an 'all or nothing' logic.
+    _recode_var_names = [
+        'men1', 'women1', 'boy1', 'girl1', 'child1', 'infant1', 'adult1',
+        'men4', 'women4', 'boy4', 'girl4', 'child4', 'infant4', 'adult4',
+        'men5', 'women5', 'boy5', 'girl5', 'child5', 'adult5']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['male1', 'female1', 'male4', 'female4', 'male5', 'female5']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['men2', 'women2', 'boy2', 'girl2', 'child2', 'adult2']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['male2', 'female2']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = [
+        'men3', 'women3', 'boy3', 'girl3', 'child3', 'infant3', 'adult3',
+        'men6', 'women6', 'boy6', 'girl6', 'child6', 'adult6']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['male3', 'female3', 'male6', 'female6']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['ncar13', 'ncar15', 'ncar17', 'ncartot']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _recode_var_names = ['slas32', 'slas36', 'slas39', 'slastot']
+    all_or_nothing(_recode_var_names, local_vars)
+    
+    _no_zeros = ['pctdis', 'adlt2imp', 'chil2imp', 'male2imp', 'feml2imp']
+    for k in _no_zeros:
+        if not local_vars.get(k):
+            local_vars[k] = None
     
     # Generate model field values.
     imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
