@@ -15,6 +15,7 @@ from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.conf import settings
+import imputed
 import json
 
 number_prefix = 'interim_slave_number_'
@@ -31,10 +32,14 @@ def index(request):
     Display the user index page if the user is already authenticated
     Or return to the login page if the user has not logged in yet
     """
-    filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
     if request.user.is_authenticated():
+        filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
         contributions = get_filtered_contributions(filter_args)
-        return render(request, "contribute/index.html", {'contributions': contributions})
+        review_requests = ReviewRequest.objects.filter(
+            suggested_reviewer = request.user, response__lte = 1, archived = False)
+        return render(
+            request, "contribute/index.html",
+            {'contributions': contributions, 'review_requests': review_requests})
     else:
         return HttpResponseRedirect(reverse('account_login'))
 
@@ -135,7 +140,8 @@ def delete(request):
     return render(request, 'contribute/delete.html', {
         'form': form,
         'voyage_selection': voyage_selection})
-
+        
+@login_required
 def delete_review(request, contribution_id):
     contribution = get_object_or_404(DeleteVoyageContribution, pk=contribution_id)
     if request.user.pk != contribution.contributor.pk or contribution.status > ContributionStatus.committed:
@@ -794,6 +800,8 @@ def reply_review_request(request):
                     item.save()
                 review.review_interim_voyage = interim
             review.save()
+        else:
+            redirect = HttpResponseRedirect(reverse('contribute:index'))
     return redirect
 
 def interim_data(interim):
@@ -820,8 +828,11 @@ def interim_data(interim):
 @login_required()
 def review(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
-    if req.archived or req.suggested_reviewer_id != request.user.pk:
+    if req.archived or req.response == 2 or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
+    if req.response == 0:
+        return HttpResponseRedirect(reverse('contribute:review_request',
+                                            kwargs={'review_request_id': review_request_id}))
     contribution_id = req.contribution_id
     if contribution_id.startswith('delete'):
         # TODO: delete requests are handled differently than the other types
@@ -850,3 +861,14 @@ def review(request, review_request_id):
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+                   
+
+@require_POST
+def impute_contribution(request, interim_voyage_id):
+    interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
+    result = imputed.compute_imputed_vars(interim)[0]
+    # Map imputed fields back to the contribution, save it and yield response.
+    for k, v in result.items():
+        setattr(interim, k, v)
+    interim.save()
+    return JsonResponse('OK')
