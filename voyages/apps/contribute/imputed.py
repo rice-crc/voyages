@@ -69,9 +69,15 @@ imputed_vars_model_map = {
     'fate3': ('imputed_outcome_of_voyage_if_ship_captured', fn_from_value(VesselCapturedOutcome)),
     'fate4': ('imputed_outcome_of_voyage_for_owner', fn_from_value(OwnerOutcome)),
     'ptdepimp': ('imputed_port_where_voyage_began', place_from_val),
-    'deptregimp': ('imputed_region_where_voyage_began', region_from_val),
     'mjbyptimp': ('imputed_principal_place_of_slave_purchase', place_from_val),
     'mjslptimp': ('imputed_principal_port_of_slave_disembarkation', place_from_val),
+    'deptregimp': ('imputed_region_where_voyage_began', region_from_val),
+    'regdis1': ('imputed_first_region_of_slave_landing', region_from_val),
+    'regdis2': ('imputed_second_region_of_slave_landing', region_from_val),
+    'regdis3': ('imputed_third_region_of_slave_landing', region_from_val),
+    'regem1': ('imputed_first_region_of_embarkation_of_slaves', region_from_val),
+    'regem2': ('imputed_second_region_of_embarkation_of_slaves', region_from_val),
+    'regem3': ('imputed_third_region_of_embarkation_of_slaves', region_from_val),
     'yeardep': ('imputed_year_voyage_began', id),
     'yearaf': ('imputed_year_departed_africa', id),
     'yearam': ('imputed_year_arrived_at_port_of_disembarkation', id),
@@ -81,8 +87,13 @@ imputed_vars_model_map = {
     'year100': ('imputed_century_in_which_voyage_occurred', id),
     'voy1imp': ('imputed_voyage_length_home_port_to_first_port_of_disembarkation', id),
     'voy2imp': ('imputed_length_of_middle_passage', id),
+    'xmimpflag': ('imputed_voyage_groupings_for_estimating_imputed_slaves', fn_from_value(VoyageGroupings)),
     'slaximp': ('imputed_total_slaves_embarked', id),
     'slamimp': ('imputed_total_slaves_disembarked', id),
+    'tslmtimp': ('imputed_number_of_slaves_embarked_for_mortality_calculation', id),
+    'vymrtimp': ('imputed_total_slave_deaths_during_middle_passage', id),
+    'vymrtrat': ('imputed_mortality_rate', id),
+    # Manually imputed -- 'jamcaspr': ('imputed_standardized_price_of_slaves', id)
 }
 
 def clear_mod(x, mod):
@@ -388,13 +399,31 @@ def compute_imputed_vars(_interim):
     if _places[0] and not _places[1] and not _places[2]: mjbyptimp = _places[0]
     if _places[1] and not _places[0] and not _places[2]: mjbyptimp = _places[1]
     if _places[2] and not _places[0] and not _places[1]: mjbyptimp = _places[2]
-    if _places[0] and _places[0] == _places[1]: mjbyptimp = _places[0]
-    if _places[0] and _places[0] == _places[2]: mjbyptimp = _places[0]
-    if _places[1] and _places[1] == _places[2]: mjbyptimp = _places[1]
+    
+    embreg = region_value(embport)
+    embreg2 = region_value(embport2)
+    if not _places[0] and not _places[1] and not _places[2]:
+        if embport >=1 and not embport2: mjbyptimp = embport
+        if not embport and embport2 >= 1: mjbyptimp = embport2
+        if embport >= 1 and embport2 >= 1 and embreg == embreg2: mjbyptimp = embreg + 99
+        if embport >= 1 and embport2 >= 1 and embreg != embreg2: mjbyptimp = 60999
+    
+    if regem1 and regem1 == regem2 and not regem3: mjbyptimp = regem1 + 99
+    if regem1 and regem1 == regem3 and not regem2: mjbyptimp = regem1 + 99
+    if regem2 and regem2 == regem3 and not regem1: mjbyptimp = regem2 + 99
+    if regem1 and regem1 == regem2 and regem1 == regem3: mjbyptimp = regem1 + 99
+    if regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
     
     if ncar13 > ncar15 and ncar13 > ncar17: mjbyptimp = _places[0]
     if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = _places[1]
     if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = _places[2]
+    
+    if ncar13 == ncar15 and ncar13 > ncar17 and regem1 and regem1 == regem2: mjbyptimp = regem1 + 99
+    if ncar13 == ncar15 and ncar13 > ncar17 and regem1 != regem2: mjbyptimp = 60999
+    if ncar13 == ncar17 and ncar13 > ncar15 and regem1 and regem1 == regem3: mjbyptimp = regem1 + 99
+    if ncar13 == ncar17 and ncar13 > ncar15 and regem1 != regem3: mjbyptimp = 60999
+    if ncar15 == ncar17 and ncar15 > ncar13 and regem2 and regem2 == regem3: mjbyptimp = regem2 + 99
+    if ncar15 == ncar17 and ncar15 > ncar17 and regem2 != regem3: mjbyptimp = 60999
     
     if (pctemb and pctemb < 0.5) or (ncartot < 50 and not tslavesd and not tslavesp):
         if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = _places[0]
@@ -429,6 +458,9 @@ def compute_imputed_vars(_interim):
     if not mjbyptimp and get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or _places[0] >= 1 or _places[1] >= 1 or _places[2] >= 1):
         mjbyptimp = 60999
     
+    majbuypt = get_obj_value(_interim.principal_place_of_slave_purchase)
+    if not mjbyptimp and majbuypt >= 1: mjbyptimp = majbuypt
+    
     # mjslptimp - Principal port of slave disembarkation
     
     sla1port = get_obj_value(_interim.first_place_of_landing)
@@ -440,7 +472,25 @@ def compute_imputed_vars(_interim):
     if sla1port and not adpsale1 and not adpsale2: mjslptimp = sla1port
     if adpsale1 and not sla1port and not adpsale2: mjslptimp = adpsale1
     if adpsale2 and not sla1port and not adpsale1: mjslptimp = adpsale2
-    if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
+    
+    regarr = region_value(arrport)
+    regarr2 = region_value(arrport2)
+    
+    if not sla1port and not adpsale1 and not adpsale2:
+        if arrport >= 1 and not arrport2: mjslptimp = arrport
+        if not arrport and arrport2 >= 1: mjslptimp = arrport2
+        if arrport >= 1 and arrport2 >= 1 and regarr and regarr == regarr2: mjslptimp = regarr + 99
+        if arrport >= 1 and arrport2 >= 1 and regarr != regarr2: mjslptimp = 99801
+        
+    regdis1 = region_value(sla1port)
+    regdis2 = region_value(adpsale1)
+    regdis3 = region_value(adpsale2)
+    
+    if regdis1 and regdis1 == regdis2 and not regdis3: mjslptimp = regdis1 + 99
+    if regdis1 and regdis1 == regdis3 and not regdis2: mjslptimp = regdis1 + 99
+    if regdis2 and regdis2 == regdis3 and not regdis1: mjslptimp = regdis2 + 99
+    if regdis1 and regdis1 == regdis2 and regdis1 == regdis3: mjslptimp = regdis1 + 99
+    if regdis1 != regdis2 and regdis1 != regdis3 and regdis2 != regdis3: mjslptimp = 99801
     
     if sla1port and sla1port == adpsale1: mjslptimp = sla1port
     if sla1port and sla1port == adpsale2: mjslptimp = sla1port
@@ -454,12 +504,16 @@ def compute_imputed_vars(_interim):
     if slas36 > slas32 and slas36 > slas39: mjslptimp = adpsale1
     if slas39 > slas32 and slas39 > slas36: mjslptimp = adpsale2
     
+    if slas32 == slas36 and slas32 > slas39 and regdis1 and regdis1 == regdis2: mjslptimp = regdis1 + 99
+    if slas32 == slas36 and slas32 > slas39 and regdis1 != regdis2: mjslptimp = 99801
+    if slas32 == slas39 and slas32 > slas36 and regdis1 and regdis1 == regdis3: mjslptimp = regdis1 + 99
+    if slas32 == slas39 and slas32 > slas36 and regdis1 != regdis3: mjslptimp = 99801
+    if slas36 == slas39 and slas36 > slas32 and regdis2 and regdis2 == regdis3: mjslptimp = regdis2 + 99
+    if slas36 == slas39 and slas36 > slas39 and regdis2 != regdis3: mjslptimp = 99801
+    
     slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
     pctdis = slastot / slaarriv if slaarriv else None
-    regdis1 = region_value(sla1port)
-    regdis2 = region_value(adpsale1)
-    regdis3 = region_value(adpsale2)
     if ((pctdis is not None and pctdis < 0.5) or (slastot < 50 and not slaarriv)) and sla1port and adpsale1:
         if adpsale2:
             mjslptimp = 99801
@@ -485,6 +539,9 @@ def compute_imputed_vars(_interim):
     
     if not mjslptimp and (fate2 == 1 or fate2 == 3 or fate2 == 5) and \
        (arrport or arrport2 or sla1port or adpsale1 or adpsale2 or slastot > 0): mjslptimp = 99801
+       
+    majselpt = get_obj_value(_interim.principal_place_of_slave_disembarkation)
+    if not mjslptimp and majselpt >= 1: mjslptimp = majselpt
     
     # ptdepimp - Imputed port where voyage began
     portdep = get_obj_value(_interim.port_of_departure)
@@ -669,11 +726,14 @@ def compute_imputed_vars(_interim):
     if not tslavesd and tslavesp >= 1: slaximp = tslavesp
     if not tslavesd and not tslavesp and ncartot > slaarriv and slaarriv: slaximp = ncartot
     if not tslavesd and not tslavesp and not slaarriv and ncartot > slastot and slastot: slaximp = ncartot
+    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot < 50: ncartot = None
     if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot >= 50: slaximp = ncartot
+    
     if slaarriv >= 1: slamimp = slaarriv
     if not slaarriv and slastot <= tslavesd: slamimp = slastot
     if not slaarriv and not tslavesd and slastot <= tslavesp: slamimp = slastot
     if not slaarriv and not tslavesd and not tslavesp and slastot <= ncartot: slamimp = slastot
+    if not tslavesd and not tslavesp and not slaarriv and not ncartot and slastot < 50: slastot = None
     if not slaarriv and not tslavesd and not tslavesd and not ncartot and slastot >= 50: slamimp = slastot
     
     if xmimpflag == 127 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.165107561642471)
@@ -1361,7 +1421,7 @@ def compute_imputed_vars(_interim):
     chil1imp = boy1 + girl1 + child1 + infant1 + boy4 + girl4 + child4 + infant4 + boy5 + girl5 + child5
     male1imp = male1 + male4 + male5
     feml1imp = female1 + female4 + female5
-    if not male1imp: 
+    if not male1imp:
         male1imp = men1 + boy1 + men4 + boy4 + men5 + boy5
     if not feml1imp:
         feml1imp = women1 + girl1 + women4 + girl4 + women5 + girl5
@@ -1547,10 +1607,10 @@ def compute_imputed_vars(_interim):
     if not male2imp: male2imp = men2 + boy2
     if not feml2imp: feml2imp = women2 + girl2
 
-    if sladvoy >= 1 and adlt2imp == 0 and sladvoy > chil2imp and chil2imp: adlt2imp = sladvoy - chil2imp
-    if sladvoy >= 1 and chil2imp == 0 and sladvoy > adlt2imp and adlt2imp: chil2imp = sladvoy - adlt2imp
-    if sladvoy >= 1 and male2imp == 0 and sladvoy > feml2imp and feml2imp: male2imp = sladvoy - feml2imp
-    if sladvoy >= 1 and feml2imp == 0 and sladvoy > male2imp and male2imp: feml2imp = sladvoy - male2imp
+    if sladvoy >= 1 and chil2imp >= 1 and adlt2imp == 0 and sladvoy > chil2imp and chil2imp: adlt2imp = sladvoy - chil2imp
+    if sladvoy >= 1 and adlt2imp >= 1 and chil2imp == 0 and sladvoy > adlt2imp and adlt2imp: chil2imp = sladvoy - adlt2imp
+    if sladvoy >= 1 and feml2imp >= 1 and male2imp == 0 and sladvoy > feml2imp and feml2imp: male2imp = sladvoy - feml2imp
+    if sladvoy >= 1 and male2imp >= 1 and feml2imp == 0 and sladvoy > male2imp and male2imp: feml2imp = sladvoy - male2imp
 
     local_vars = locals()
     local_vars = {k: v for k, v in local_vars.items() if not k.startswith('_')}
