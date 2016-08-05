@@ -345,14 +345,25 @@ def interim(request, contribution_type, contribution_id):
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
 
+def common_save_ajax(request, contribution):
+    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+    return JsonResponse({'valid': valid, 'errors': form.errors})
+    
 @login_required
 @require_POST
 def interim_save_ajax(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
-    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
-    return JsonResponse({'valid': valid, 'errors': form.errors})
+    return common_save_ajax(request, contribution)
+    
+@login_required
+@require_POST
+def review_interim_save_ajax(request, review_request_id):
+    review_request = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if request.user.pk != review_request.suggested_reviewer.pk:
+        return HttpResponseForbidden()
+    return common_save_ajax(request, review_request.review_contribution.first())
 
 @login_required
 def interim_commit(request, contribution_type, contribution_id):
@@ -751,6 +762,36 @@ def review_request(request, review_request_id):
         raise Http404
     return render(request, 'contribute/review_request.html', {'request': req, 'contribution': contribution})
 
+def clone_interim_voyage(contribution, contributor_comment_prefix):
+    """
+    Clone an interim voyage and all of its child models.
+    This is used to obtain an editable reviewer or editor version of
+    the user contribution.
+    Should be executed within a transaction to ensure that all
+    db changes are valid.
+    """
+    interim = contribution.interim_voyage
+    if interim is None:
+        return None
+    related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+                        list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
+                        list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
+    interim.pk = None
+    # Prepend comments with contributor name.
+    note_dict = json.loads(interim.notes)
+    changed = {}
+    for key, note in note_dict.items():
+        changed[key] = contributor_comment_prefix + note
+    interim.notes = json.dumps(changed)
+    interim.save()
+    for item in related_models:
+        item.pk = None
+        item.interim_voyage = interim
+        if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
+            item.notes = contributor_comment_prefix + item.notes
+        item.save()
+    return interim
+
 @login_required()
 @require_POST
 def reply_review_request(request):
@@ -771,7 +812,6 @@ def reply_review_request(request):
         return HttpResponseBadRequest()
     req.response = ReviewRequestResponse.accepted if response == 'accept' else ReviewRequestResponse.rejected
     req.reviewer_comments = request.POST.get('message_to_editor')
-    contributor_comment_prefix = 'Contributor: '
     with transaction.atomic():
         req.save()
         if response == 'accept':
@@ -779,26 +819,7 @@ def reply_review_request(request):
             review.request = req
             contribution = get_contribution_from_id(req.contribution_id)
             if hasattr(contribution, 'interim_voyage'):
-                # Clone interim contribution.
-                interim = contribution.interim_voyage
-                related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-                                 list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
-                                 list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
-                interim.pk = None
-                # Prepend comments with contributor name.
-                note_dict = json.loads(interim.notes)
-                changed = {}
-                for key, note in note_dict.items():
-                    changed[key] = contributor_comment_prefix + note
-                interim.notes = json.dumps(changed)
-                interim.save()
-                for item in related_models:
-                    item.pk = None
-                    item.interim_voyage = interim
-                    if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
-                        item.notes = contributor_comment_prefix + item.notes
-                    item.save()
-                review.review_interim_voyage = interim
+                review.interim_voyage = clone_interim_voyage(contribution, 'Contributor: ')
             review.save()
         else:
             redirect = HttpResponseRedirect(reverse('contribute:index'))
@@ -828,7 +849,7 @@ def interim_data(interim):
 @login_required()
 def review(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
-    if req.archived or req.response == 2 or req.suggested_reviewer_id != request.user.pk:
+    if req.archived or req.response == 2 or req.final_decision != 0 or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
     if req.response == 0:
         return HttpResponseRedirect(reverse('contribute:review_request',
@@ -839,7 +860,7 @@ def review(request, review_request_id):
         return JsonResponse({'error': 'DELETE review not implemented yet'})
     user_contribution = get_contribution_from_id(contribution_id)
     review_contribution = req.review_contribution.first()
-    interim = review_contribution.review_interim_voyage
+    interim = review_contribution.interim_voyage
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
     (result, form, numbers) = interim_main(request, review_contribution, interim)
@@ -861,14 +882,39 @@ def review(request, review_request_id):
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
-                   
+       
+@login_required()
+@require_POST
+def submit_review_to_editor(request, review_request_id):
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if req.archived or req.response != 1 or req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+    decision = -1
+    try:
+        decision = int(request.POST['reviewer_decision'])
+    except exception:
+        pass
+    if decision != 1 and decision != 2:
+        return HttpResponseBadRequest()    
+    with transaction.atomic():
+        req.decision_message = request.POST.get('message_to_editor', '')
+        req.final_decision = decision
+        req.save()
+        editor_contribution = EditorVoyageContribution()
+        editor_contribution.request = req        
+        editor_contribution.interim_voyage = clone_interim_voyage(req.review_contribution, 'Reviewer: ')
+        editor_contribution.save()
+    return JsonResponse({'result': 'OK'})
 
+@login_required()
 @require_POST
 def impute_contribution(request, interim_voyage_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
     interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
     result = imputed.compute_imputed_vars(interim)[0]
     # Map imputed fields back to the contribution, save it and yield response.
     for k, v in result.items():
         setattr(interim, k, v)
     interim.save()
-    return JsonResponse('OK')
+    return JsonResponse({'result': 'OK'})

@@ -221,6 +221,11 @@ class InterimSlaveNumber(models.Model):
         null=False, blank=False)
     number = models.IntegerField('Number')
 
+class ReviewRequestDecision:
+    under_review = 0
+    accepted = 1
+    rejected = 2
+
 class ReviewRequestResponse:
     no_reply = 0
     accepted = 1
@@ -237,16 +242,30 @@ class ReviewRequest(models.Model):
     response = models.IntegerField(default=0)
     editor_comments = models.TextField()
     reviewer_comments = models.TextField(null=True)
+    decision_message = models.TextField(null=True)
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
 
 class ReviewVoyageContribution(models.Model):
+    """
+    The reviewer's input on the contribution.
+    """
     request = models.ForeignKey(ReviewRequest, related_name='review_contribution')
-    review_interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
     notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
 
     def __unicode__(self):
         return _('Review a contribution')
+
+class EditorVoyageContribution(models.Model):
+    """
+    The editor's input on the contribution.
+    """
+    request = models.ForeignKey(ReviewRequest, related_name='editor_contribution')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
+    notes = models.TextField('Notes', max_length=10000, help_text='Editor notes')
+    final_decision = models.IntegerField(default=0)
+    published = models.BooleanField(default=False, help_text='The contribution has been published to the database')
 
 class ContributionStatus:
     pending = 0
