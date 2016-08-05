@@ -1333,20 +1333,43 @@
         </div>
     </div>
     <input id="global_notes_input" type="hidden" name="notes" />
-    <hr />
-    {% if mode == 'contribute' %}
     <div class="form-group col-md-12">
+        <hr />
         <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
+        {% if mode == 'contribute' %}
         <button class="btn btn-success" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        {% endif %}
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
-    {% elif mode == 'review' %}
-    <div class="form-group col-md-12">
-        TODO: reviewer decision and visualization of summary.
-        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
+    {% if mode == 'review' %}
+    <div class="col-md-12">
+        <hr />
+        <h3>{% trans "Reviewer's decision:" %}</h3>
+        <div class="form-group">
+            <label for="message_to_editor">
+                {% trans "Message to editor" %}:
+            </label>
+            <div class="col-sm-8">
+                <textarea class="form-control not_selectized field_notes" id="message_to_editor" name="message_to_editor"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="reviewer_decision">
+                {% trans "Decision" %}:
+            </label>
+            <div class="col-sm-8">
+                <select class="form-control not_selectized" id="reviewer_decision">
+                    <option>{% trans "Please select..." %}</option>
+                    <option value="1">{% trans "Accept" %}</option>
+                    <option value="2">{% trans "Reject" %}</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
     </div>
-    {% elif mode == 'editor_review' %}
+    {% endif %}
+    {% if mode == 'editor_review' %}
     {% endif %}
 </form>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
@@ -2099,34 +2122,75 @@
 
         $('form').submit(formSubmission);
         
+        var saveAjax = function(success, complete) {
+            var $form = $('form');
+            $.ajax({
+                type: "POST",
+                url: '{{ request.get_full_path }}' + '/save_ajax/',
+                data: $form.serialize(),
+                success: function (response) {
+                    var $success = $('#success_info');
+                    $success.css('opacity', 1.0);
+                    $success.animate({
+                            opacity: 0.0
+                        },
+                        5000
+                    );
+                    if (success) success();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error saving: ' + textStatus);
+                },
+                complete: function() {
+                    $('#save_btn').prop('disabled', false);
+                    if (complete) complete();
+                }
+            });
+        };
+        
         // Ajax save.
         $('#save_btn').click(function() {
             var valid = formSubmission();
             if (valid) {
                 $(this).prop('disabled', true);
-                var $form = $('form');
-                $.ajax({
-                    type: "POST",
-                    url: '{{ request.get_full_path }}'.replace('/interim/', '/interim_save_ajax/'),
-                    data: $form.serialize(),
-                    success: function (response) {
-                        var $success = $('#success_info');
-                        $success.css('opacity', 1.0);
-                        $success.animate({
-                                opacity: 0.0
-                            },
-                            5000
-                        );
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error saving: ' + textStatus);
-                    },
-                    complete: function() {
-                        $('#save_btn').prop('disabled', false);
-                    }
-                });
+                saveAjax();
             }
         });
+        {% if mode == 'review' %}
+            $('#submit_editor_btn').click(function() {
+                var decision = parseInt($('#reviewer_decision option:selected').val());
+                if (decision != 1 && decision != 2) {
+                    alert('{% trans "Please choose your decision." %}');
+                    return false;
+                }
+                var message_to_editor = $('#message_to_editor').val().trim();
+                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#reviewer_decision option:selected').text() + '\n' + message_to_editor)) {
+                    return false;
+                }
+                var self = $(this);
+                var complete = function() {
+                    self.prop('disabled', false);
+                };
+                self.prop('disabled', true);
+                var success = function() {
+                    self.prop('disabled', true);              
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ request.get_full_path }}' + '/submit_review_to_editor/',
+                        data: {reviewer_decision: decision, message_to_editor: message_to_editor},
+                        success: function (response) {
+                            window.location.replace("{% url 'contribute:index' %}");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error sending decision: ' + textStatus);
+                        },
+                        complete: complete
+                    });
+                };
+                saveAjax(success, complete);
+                return false;
+            });
+        {% endif %}
     });
 
     // Special handling of port/region/broad region selection.

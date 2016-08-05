@@ -17,7 +17,7 @@ urlpatterns = [
 
     url(r'^voyage_ajax', views.get_voyage_by_id, name='voyage_ajax'),
     
-    url(r'^interim_save_ajax/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
+    url(r'^interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/save_ajax$',
         views.interim_save_ajax, name='interim_save_ajax'),
 
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
@@ -48,6 +48,9 @@ urlpatterns = [
     url(r'review_request/(?P<review_request_id>\d+)',
         views.review_request, name='review_request'),
     url(r'reply_review_request', views.reply_review_request, name='reply_review_request'),
+        
+    url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
+    url(r'review/(?P<review_request_id>\d+)/submit_review_to_editor', views.submit_review_to_editor, name='submit_review_to_editor'),
     url(r'review/(?P<review_request_id>\d+)', views.review, name='review'),
 
     url(r'json_pending_requests', views.get_pending_requests, name='json_pending_requests'),
