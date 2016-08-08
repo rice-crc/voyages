@@ -96,7 +96,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/datatables.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript">
-    var reviewResponses = ['{% trans "No reply yet" %}', '{% trans "Accepted" %}', '{% trans "Rejected" %}'];
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
     // Dynamically load tab contents.
     var loadedTabs = {};
@@ -113,17 +112,21 @@
                     $('#requests_table > tbody > tr').remove();
                     for (var key in data) {
                         var row = data[key];
-                        var response = parseInt(row['response']) || 0;
+                        var response_id = parseInt(row['response_id']) || 0;
                         $('#requests_table > tbody:last-child').append(
                             '<tr><td>' +
                             (row['type'] == 'delete' ? '@@@' : '<a href="/contribute/interim_summary/' + key + '">@@@</a>')
                                 .replace('@@@', types[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
                             row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') +
                             '</td><td class="review_cell" data-id="' + key + '">' +
-                            (row['reviewer'] == '' ? '<button class="reviewer_assign_btn">{% trans "Assign" %}</button>' : row['reviewer'] +
-                                '<br /><span class="' + reviewClasses[response] + '">' + reviewResponses[response] + '</span>' +
-                                '<br /><button class="review_archive_btn">{% trans "Archive request" %}</button>') + '</td><td>' +
-                            row['response'] + '</td><td>' + row['final_decision'] + '</td></tr>');
+                            (row['reviewer'] == ''
+                                ? '<button class="reviewer_assign_btn">{% trans "Assign" %}</button>'
+                                : row['reviewer'] +
+                                    '<br /><button class="review_archive_btn">{% trans "Archive request" %}</button>') +
+                            (row['editor_contribution_id']
+                                ? '<p><a href="/contribute/editorial_review/' + row['editor_contribution_id'] + '">{% trans "Review" %}</a></p>'
+                                : '') + '</td><td>' +
+                            '<span class="' + reviewClasses[response_id] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
                     }
                     $('#requests_table').DataTable();
                     $(".reviewer_assign_btn").click(function() {

@@ -1329,7 +1329,7 @@
     <div class="form-group">
         <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
         <div class="col-sm-8">
-            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
+            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
         </div>
     </div>
     <input id="global_notes_input" type="hidden" name="notes" />
@@ -1359,7 +1359,7 @@
                 {% trans "Decision" %}:
             </label>
             <div class="col-sm-8">
-                <select class="form-control not_selectized" id="reviewer_decision">
+                <select class="form-control not_selectized" id="reviewer_decision" name="reviewer_decision">
                     <option>{% trans "Please select..." %}</option>
                     <option value="1">{% trans "Accept" %}</option>
                     <option value="2">{% trans "Reject" %}</option>
@@ -2065,7 +2065,7 @@
         });
         
         var formSubmission = function() {
-            if (submit_val != 'delete') {
+            if (submit_val != 'delete') {824542
                 // Build pre-existing sources list.
                 var preSources = $.map(
                     [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
@@ -2122,38 +2122,37 @@
 
         $('form').submit(formSubmission);
         
-        var saveAjax = function(success, complete) {
-            var $form = $('form');
-            $.ajax({
-                type: "POST",
-                url: '{{ request.get_full_path }}' + '/save_ajax/',
-                data: $form.serialize(),
-                success: function (response) {
-                    var $success = $('#success_info');
-                    $success.css('opacity', 1.0);
-                    $success.animate({
-                            opacity: 0.0
-                        },
-                        5000
-                    );
-                    if (success) success();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error saving: ' + textStatus);
-                },
-                complete: function() {
-                    $('#save_btn').prop('disabled', false);
-                    if (complete) complete();
-                }
-            });
-        };
-        
         // Ajax save.
         $('#save_btn').click(function() {
             var valid = formSubmission();
             if (valid) {
                 $(this).prop('disabled', true);
-                saveAjax();
+                var $form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: '{{ request.get_full_path }}' + '/save_ajax/',
+                    data: $form.serialize(),
+                    success: function (response) {
+                        if (response.valid) {
+                            var $success = $('#success_info');
+                            $success.css('opacity', 1.0);
+                            $success.animate({
+                                    opacity: 0.0
+                                },
+                                5000
+                            );
+                        }
+                        else {
+                            alert(response.errors);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error saving: ' + textStatus);
+                    },
+                    complete: function() {
+                        $('#save_btn').prop('disabled', false);
+                    }
+                });
             }
         });
         {% if mode == 'review' %}
@@ -2168,26 +2167,28 @@
                     return false;
                 }
                 var self = $(this);
-                var complete = function() {
-                    self.prop('disabled', false);
-                };
+                var valid = formSubmission();
+                if (!valid) return false;
                 self.prop('disabled', true);
-                var success = function() {
-                    self.prop('disabled', true);              
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ request.get_full_path }}' + '/submit_review_to_editor/',
-                        data: {reviewer_decision: decision, message_to_editor: message_to_editor},
-                        success: function (response) {
+                var data = $('form').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ request.get_full_path }}' + '/submit_review_to_editor/',
+                    data: data,
+                    success: function (response) {
+                        if (response.result == 'OK') {
                             window.location.replace("{% url 'contribute:index' %}");
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert('Error sending decision: ' + textStatus);
-                        },
-                        complete: complete
-                    });
-                };
-                saveAjax(success, complete);
+                        } else {
+                            alert(response.result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error sending decision: ' + textStatus);
+                    },
+                    complete: function() {
+                        self.prop('disabled', false);
+                    }
+                });
                 return false;
             });
         {% endif %}
