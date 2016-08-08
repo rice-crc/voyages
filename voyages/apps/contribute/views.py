@@ -36,7 +36,7 @@ def index(request):
         filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
         contributions = get_filtered_contributions(filter_args)
         review_requests = ReviewRequest.objects.filter(
-            suggested_reviewer = request.user, response__lte = 1, archived = False)
+            suggested_reviewer = request.user, response__lte = 1, archived = False, final_decision = 0)
         return render(
             request, "contribute/index.html",
             {'contributions': contributions, 'review_requests': review_requests})
@@ -649,7 +649,15 @@ def get_pending_requests(request):
         return HttpResponseForbidden()
     filter_args = {'status__gte': ContributionStatus.committed, 'status__lt': ContributionStatus.published}
     contributions = get_filtered_contributions(filter_args)
-
+    decision_values = {
+        ReviewRequestDecision.under_review: _('Under review'),
+        ReviewRequestDecision.accepted: _('Contribution accepted'),
+        ReviewRequestDecision.rejected: _('Contribution rejected')}
+    response_values = {
+        ReviewRequestResponse.no_reply: _('Not replied'),
+        ReviewRequestResponse.accepted: _('Accepted reviewing'),
+        ReviewRequestResponse.rejected: _('Declined reviewing')}
+    
     def get_contribution_info(info):
         contrib = info['contribution']
         res = {'type': info['type'],
@@ -663,16 +671,24 @@ def get_pending_requests(request):
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         if len(reqs) == 1:
-            res['reviewer'] = reqs[0].suggested_reviewer.get_full_name()
-            res['response'] = reqs[0].response
-            res['reviewer_comments'] = reqs[0].reviewer_comments
-            res['final_decision'] = reqs[0].final_decision
+            active_request = reqs[0]
+            res['reviewer'] = active_request.suggested_reviewer.get_full_name()
+            res['response_id'] = active_request.response
+            res['response'] = response_values.get(active_request.response, '') \
+                if not active_request.final_decision else _('Decision posted')
+            res['reviewer_comments'] = active_request.reviewer_comments
+            res['reviewer_final_decision'] = decision_values.get(active_request.final_decision, '') if active_request.response else ''
+            if active_request.final_decision:
+                # Fetch if of the editor's contribution.
+                res['editor_contribution_id'] = active_request.editor_contribution.first().pk
         else:
             res['reviewer'] = ''
+            res['response_id'] = 0
             res['response'] = ''
             res['reviewer_comments'] = ''
             res['status'] = 'No reviewer assigned'
-            res['final_decision'] = ''
+            res['reviewer_final_decision'] = ''
+            res['editor_contribution_id'] = 0
         return res
 
     return JsonResponse({x['type'] + '/' + str(x['id']): get_contribution_info(x) for x in contributions})
@@ -778,7 +794,10 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
                         list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
     interim.pk = None
     # Prepend comments with contributor name.
-    note_dict = json.loads(interim.notes)
+    try:
+        note_dict = json.loads(interim.notes) if interim.notes else {}
+    except:
+        note_dict = {}
     changed = {}
     for key, note in note_dict.items():
         changed[key] = contributor_comment_prefix + note
@@ -864,10 +883,6 @@ def review(request, review_request_id):
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
     (result, form, numbers) = interim_main(request, review_contribution, interim)
-    #if result and request.method == 'POST':
-        # TODO: Send review.
-        #return JsonResponse({'error': 'SENDING review to editor implemented yet'})
-
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
     # Build previous data dictionary.
     # For the review we need to include both the original voyage(s) data
@@ -882,6 +897,39 @@ def review(request, review_request_id):
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+
+@login_required()
+def editorial_review(request, editor_contribution_id):
+    contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
+    review_request = contribution.request
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution_id = review_request.contribution_id
+    if contribution_id.startswith('delete'):
+        # TODO: delete requests are handled differently than the other types
+        return JsonResponse({'error': 'DELETE review not implemented yet'})
+    
+    user_contribution = get_contribution_from_id(contribution_id)
+    review_contribution = review_request.review_contribution.first()
+    reviewer_interim = review_contribution.interim_voyage
+    if reviewer_interim is None:
+        raise Exception('Could not find reviewer\'s interim form')
+    sources_post = None if request.method != 'POST' else request.POST.get('sources')
+    # Build previous data dictionary.
+    # Include pre-existing voyage data, user contribution, and reviewer version.
+    previous_data = contribution_related_data(user_contribution)
+    previous_data[_('User contribution')] = interim_data(user_contribution.interim_voyage)
+    previous_data[_('Reviewer')] = interim_data(reviewer_interim)
+    editor_interim = contribution.interim_voyage
+    (result, form, numbers) = interim_main(request, contribution, editor_interim)
+    return render(request, 'contribute/interim.html',
+                  {'form': form,
+                   'mode': 'review',
+                   'contribution': contribution,
+                   'numbers': numbers,
+                   'interim': editor_interim,
+                   'sources_post': sources_post,
+                   'voyages_data': json.dumps(previous_data)})
        
 @login_required()
 @require_POST
@@ -892,20 +940,32 @@ def submit_review_to_editor(request, review_request_id):
     decision = -1
     try:
         decision = int(request.POST['reviewer_decision'])
-    except exception:
+    except:
         pass
     if decision != 1 and decision != 2:
-        return HttpResponseBadRequest()    
-    with transaction.atomic():
-        req.decision_message = request.POST.get('message_to_editor', '')
-        req.final_decision = decision
-        req.save()
-        editor_contribution = EditorVoyageContribution()
-        editor_contribution.request = req        
-        editor_contribution.interim_voyage = clone_interim_voyage(req.review_contribution, 'Reviewer: ')
-        editor_contribution.save()
-    return JsonResponse({'result': 'OK'})
-
+        return HttpResponseBadRequest()
+    try:
+        with transaction.atomic():
+            # Save interim form.
+            contribution = req.review_contribution.first()
+            (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+            if not valid:
+                return JsonResponse({'result': 'Failed', 'errors': form.errors})
+            # Save review request with decision.
+            req.decision_message = request.POST.get('message_to_editor', '')
+            req.final_decision = decision
+            req.save()
+            # Create an editor contribution with cloned review data.
+            editor_contribution = EditorVoyageContribution()
+            editor_contribution.request = req        
+            editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
+            editor_contribution.save()
+        return JsonResponse({'result': 'OK'})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'result': 'Failed', 'errors': [str(e)]})
+        
 @login_required()
 @require_POST
 def impute_contribution(request, interim_voyage_id):

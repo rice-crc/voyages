@@ -252,7 +252,7 @@ class ReviewVoyageContribution(models.Model):
     """
     request = models.ForeignKey(ReviewRequest, related_name='review_contribution')
     interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
-    notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
+    notes = models.TextField('Notes', null=True, max_length=10000, help_text='Reviewer notes')
 
     def __unicode__(self):
         return _('Review a contribution')
@@ -263,9 +263,12 @@ class EditorVoyageContribution(models.Model):
     """
     request = models.ForeignKey(ReviewRequest, related_name='editor_contribution')
     interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
-    notes = models.TextField('Notes', max_length=10000, help_text='Editor notes')
+    notes = models.TextField('Notes', null=True, max_length=10000, help_text='Editor notes')
     final_decision = models.IntegerField(default=0)
     published = models.BooleanField(default=False, help_text='The contribution has been published to the database')
+
+    def __unicode__(self):
+        return _('Editorial review of contribution')
 
 class ContributionStatus:
     pending = 0
