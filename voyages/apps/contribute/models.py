@@ -223,8 +223,10 @@ class InterimSlaveNumber(models.Model):
 
 class ReviewRequestDecision:
     under_review = 0
-    accepted = 1
-    rejected = 2
+    accepted_by_reviewer = 1
+    rejected_by_reviewer = 2
+    accepted_by_editor = 3
+    rejected_by_editor = 4
 
 class ReviewRequestResponse:
     no_reply = 0

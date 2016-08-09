@@ -389,7 +389,7 @@ function parseDateValue(val) {
         // If it has a day, it must have a month as well.
         return result.year != null && (result.day == null || result.month != null);
     };
-    result.toMMDDYYY = function() {
+    result.toMMDDYYYY = function() {
         return (result.month || '') + ',' + (result.day || '') + ',' + (result.year || '');
     };
     return result;
