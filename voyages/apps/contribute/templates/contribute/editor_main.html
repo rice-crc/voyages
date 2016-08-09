@@ -124,7 +124,7 @@
                                 : row['reviewer'] +
                                     '<br /><button class="review_archive_btn">{% trans "Archive request" %}</button>') +
                             (row['editor_contribution_id']
-                                ? '<p><a href="/contribute/editorial_review/' + row['editor_contribution_id'] + '">{% trans "Review" %}</a></p>'
+                                ? '<p><a href="/contribute/editorial_review/' + row['editor_contribution_id'] + '">{% trans "Editorial Review" %}</a></p>'
                                 : '') + '</td><td>' +
                             '<span class="' + reviewClasses[response_id] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
                     }

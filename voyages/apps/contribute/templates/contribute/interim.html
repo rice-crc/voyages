@@ -593,7 +593,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -602,7 +603,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -611,7 +613,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -619,8 +622,9 @@
             {% with form.date_first_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                <div class="input-group col-sm-3">                    
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -629,7 +633,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -638,7 +643,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -646,8 +652,9 @@
             {% with form.date_return_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                <div class="input-group col-sm-3">                    
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -656,7 +663,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -1369,7 +1377,33 @@
         <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
     </div>
     {% endif %}
-    {% if mode == 'editor_review' %}
+    {% if mode == 'editorial_review' %}
+    <div class="col-md-12">
+        <hr />
+        <h3>{% trans "Editorial tools:" %}</h3>
+        <div class="form-group">
+            <label for="decision_message">
+                {% trans "Decision message" %}:
+            </label>
+            <div class="col-sm-8">
+                <textarea class="form-control not_selectized field_notes" id="decision_message" name="decision_message">{{ contribution.request.decision_message }}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="editorial_decision">
+                {% trans "Decision" %}:
+            </label>
+            <div class="col-sm-8">
+                <select class="form-control not_selectized" id="editorial_decision" name="editorial_decision">
+                    <option>{% trans "Please select..." %}</option>
+                    <option value="3">{% trans "Accept" %}</option>
+                    <option value="4">{% trans "Reject" %}</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
+        <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
+    </div>
     {% endif %}
 </form>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
@@ -1835,7 +1869,7 @@
                 { type: 'month', name: '{% trans "Month" %}'},
                 { type: 'day', name: '{% trans "Day" %}'},
             ];
-            var values = getValues(self.attr('name'));
+            var values = getValues(self.attr('id').substring(3));
             var options = dateOptions.slice(0);
             var existing = {};
             for (var value in values) {
@@ -2065,7 +2099,7 @@
         });
         
         var formSubmission = function() {
-            if (submit_val != 'delete') {824542
+            if (submit_val != 'delete') {
                 // Build pre-existing sources list.
                 var preSources = $.map(
                     [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
@@ -2089,8 +2123,8 @@
             $("input[name^='date']").each(function() {
                 var self = $(this);
                 // Convert date to the expected format MM,DD,YYYY
-                var date = parseDateValue(self.val());
-                self.val(date.toMMDDYYY());
+                var date = parseDateValue($('#id_' + self.attr('name')).val());
+                self.val(date.toMMDDYYYY());
             });
             // Send notes.
             var notes_submit = {};
@@ -2124,14 +2158,14 @@
         
         // Ajax save.
         $('#save_btn').click(function() {
+            var self = $(this);
             var valid = formSubmission();
             if (valid) {
-                $(this).prop('disabled', true);
-                var $form = $('form');
+                self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
-                    url: '{{ request.get_full_path }}' + '/save_ajax/',
-                    data: $form.serialize(),
+                    url: '{{ request.get_full_path }}/save_ajax/',
+                    data: $('form').serialize(),
                     success: function (response) {
                         if (response.valid) {
                             var $success = $('#success_info');
@@ -2150,10 +2184,11 @@
                         alert('Error saving: ' + textStatus);
                     },
                     complete: function() {
-                        $('#save_btn').prop('disabled', false);
+                        self.prop('disabled', false);
                     }
                 });
             }
+            return false;
         });
         {% if mode == 'review' %}
             $('#submit_editor_btn').click(function() {
@@ -2170,14 +2205,70 @@
                 var valid = formSubmission();
                 if (!valid) return false;
                 self.prop('disabled', true);
-                var data = $('form').serialize();
                 $.ajax({
                     type: "POST",
-                    url: '{{ request.get_full_path }}' + '/submit_review_to_editor/',
-                    data: data,
+                    url: '{{ request.get_full_path }}/submit_review_to_editor/',
+                    data: $('form').serialize(),
                     success: function (response) {
                         if (response.result == 'OK') {
                             window.location.replace("{% url 'contribute:index' %}");
+                        } else {
+                            alert(response.result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error sending decision: ' + textStatus);
+                    },
+                    complete: function() {
+                        self.prop('disabled', false);
+                    }
+                });
+                return false;
+            });
+        {% endif %}
+        {% if mode == 'editorial_review' %}
+            $('#impute_btn').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: '/contribute/impute_contribution/{{ contribution.pk }}',
+                    data: $('form').serialize(),
+                    success: function (response) {
+                        if (response.result == 'OK') {
+                            window.location.reload();
+                        } else {
+                            alert(response.result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error sending decision: ' + textStatus);
+                    },
+                    complete: function() {
+                        self.prop('disabled', false);
+                    }
+                });
+                return false; 
+            });
+            $('#submit_final_decision_btn').click(function() {
+                var decision = parseInt($('#editorial_decision option:selected').val());
+                if (decision != 3 && decision != 4) {
+                    alert('{% trans "Please choose your decision." %}');
+                    return false;
+                }
+                var decision_message = $('#decision_message').val().trim();
+                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#editorial_decision option:selected').text() + '\n' + decision_message)) {
+                    return false;
+                }
+                var self = $(this);
+                var valid = formSubmission();
+                if (!valid) return false;
+                self.prop('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    url: '{{ request.get_full_path }}/submit_editorial_decision/',
+                    data: $('form').serialize(),
+                    success: function (response) {
+                        if (response.result == 'OK') {
+                            window.location.replace("{% url 'contribute:editor_main' %}");
                         } else {
                             alert(response.result);
                         }

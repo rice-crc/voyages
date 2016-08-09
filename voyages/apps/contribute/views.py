@@ -359,6 +359,14 @@ def interim_save_ajax(request, contribution_type, contribution_id):
     
 @login_required
 @require_POST
+def editorial_review_interim_save_ajax(request, editor_contribution_id):
+    contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    return common_save_ajax(request, contribution)
+
+@login_required
+@require_POST
 def review_interim_save_ajax(request, review_request_id):
     review_request = get_object_or_404(ReviewRequest, pk=review_request_id)
     if request.user.pk != review_request.suggested_reviewer.pk:
@@ -651,8 +659,10 @@ def get_pending_requests(request):
     contributions = get_filtered_contributions(filter_args)
     decision_values = {
         ReviewRequestDecision.under_review: _('Under review'),
-        ReviewRequestDecision.accepted: _('Contribution accepted'),
-        ReviewRequestDecision.rejected: _('Contribution rejected')}
+        ReviewRequestDecision.accepted_by_reviewer: _('Contribution accepted by reviewer'),
+        ReviewRequestDecision.rejected_by_reviewer: _('Contribution rejected by reviewer'),
+        ReviewRequestDecision.accepted_by_editor: _('Contribution accepted by editor'),
+        ReviewRequestDecision.rejected_by_editor: _('Contribution rejected by editor')}
     response_values = {
         ReviewRequestResponse.no_reply: _('Not replied'),
         ReviewRequestResponse.accepted: _('Accepted reviewing'),
@@ -675,7 +685,7 @@ def get_pending_requests(request):
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
             res['response'] = response_values.get(active_request.response, '') \
-                if not active_request.final_decision else _('Decision posted')
+                if not active_request.final_decision else _('Reviewer decision posted')
             res['reviewer_comments'] = active_request.reviewer_comments
             res['reviewer_final_decision'] = decision_values.get(active_request.final_decision, '') if active_request.response else ''
             if active_request.final_decision:
@@ -801,15 +811,17 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     changed = {}
     for key, note in note_dict.items():
         changed[key] = contributor_comment_prefix + note
-    interim.notes = json.dumps(changed)
-    interim.save()
-    for item in related_models:
-        item.pk = None
-        item.interim_voyage = interim
-        if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
-            item.notes = contributor_comment_prefix + item.notes
-        item.save()
-    return interim
+        
+    with transaction.atomic():
+        interim.notes = json.dumps(changed)
+        interim.save()
+        for item in related_models:
+            item.pk = None
+            item.interim_voyage = interim
+            if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
+                item.notes = contributor_comment_prefix + item.notes
+            item.save()
+        return interim
 
 @login_required()
 @require_POST
@@ -839,6 +851,7 @@ def reply_review_request(request):
             contribution = get_contribution_from_id(req.contribution_id)
             if hasattr(contribution, 'interim_voyage'):
                 review.interim_voyage = clone_interim_voyage(contribution, 'Contributor: ')
+            review.notes = 'Contributor: ' + contribution.notes if contribution.notes else ''
             review.save()
         else:
             redirect = HttpResponseRedirect(reverse('contribute:index'))
@@ -901,9 +914,9 @@ def review(request, review_request_id):
 @login_required()
 def editorial_review(request, editor_contribution_id):
     contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
-    review_request = contribution.request
     if not request.user.is_superuser:
         return HttpResponseForbidden()
+    review_request = contribution.request
     contribution_id = review_request.contribution_id
     if contribution_id.startswith('delete'):
         # TODO: delete requests are handled differently than the other types
@@ -924,13 +937,41 @@ def editorial_review(request, editor_contribution_id):
     (result, form, numbers) = interim_main(request, contribution, editor_interim)
     return render(request, 'contribute/interim.html',
                   {'form': form,
-                   'mode': 'review',
+                   'mode': 'editorial_review',
                    'contribution': contribution,
                    'numbers': numbers,
                    'interim': editor_interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
-       
+
+@login_required()
+@require_POST
+def submit_editorial_decision(request, editor_contribution_id):
+    contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    decision = -1
+    try:
+        decision = int(request.POST['editorial_decision'])
+    except:
+        pass
+    if decision != ReviewRequestDecision.accepted_by_editor and decision != ReviewRequestDecision.rejected_by_editor:
+        return HttpResponseBadRequest()
+    with transaction.atomic():
+        # Save interim form.
+        (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+        if not valid:
+            return JsonResponse({'valid': valid, 'errors': form.errors})
+        # Fetch decision.
+        review_request = contribution.request
+        review_request.final_decision = decision
+        msg = request.POST.get('decision_message')
+        msg = 'Editor: ' + msg if msg else ''
+        review_request.decision_message = msg
+        review_request.archived = True
+        review_request.save()
+    return JsonResponse({'result': 'OK'})
+    
 @login_required()
 @require_POST
 def submit_review_to_editor(request, review_request_id):
@@ -942,7 +983,7 @@ def submit_review_to_editor(request, review_request_id):
         decision = int(request.POST['reviewer_decision'])
     except:
         pass
-    if decision != 1 and decision != 2:
+    if decision != ReviewRequestDecision.accepted_by_reviewer and decision != ReviewRequestDecision.rejected_by_reviewer:
         return HttpResponseBadRequest()
     try:
         with transaction.atomic():
@@ -952,12 +993,15 @@ def submit_review_to_editor(request, review_request_id):
             if not valid:
                 return JsonResponse({'result': 'Failed', 'errors': form.errors})
             # Save review request with decision.
-            req.decision_message = request.POST.get('message_to_editor', '')
+            msg = request.POST.get('message_to_editor')
+            msg = 'Reviewer: ' + msg if msg else ''
+            req.decision_message = msg
             req.final_decision = decision
             req.save()
             # Create an editor contribution with cloned review data.
             editor_contribution = EditorVoyageContribution()
-            editor_contribution.request = req        
+            editor_contribution.request = req
+            editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''
             editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
             editor_contribution.save()
         return JsonResponse({'result': 'OK'})
@@ -968,9 +1012,16 @@ def submit_review_to_editor(request, review_request_id):
         
 @login_required()
 @require_POST
-def impute_contribution(request, interim_voyage_id):
+def impute_contribution(request, editor_contribution_id):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
+    # First we save the current version of the interim voyage.
+    contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
+    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+    if not valid:
+        return JsonResponse({'result': 'Failed', 'errors': form.errors})
+    interim_voyage_id = contribution.interim_voyage_id
+    # Reload the interim voyage from database, just in case.
     interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
     result = imputed.compute_imputed_vars(interim)[0]
     # Map imputed fields back to the contribution, save it and yield response.

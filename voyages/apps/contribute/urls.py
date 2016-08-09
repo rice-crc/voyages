@@ -49,6 +49,8 @@ urlpatterns = [
         views.review_request, name='review_request'),
     url(r'reply_review_request', views.reply_review_request, name='reply_review_request'),
     
+    url(r'editorial_review/(?P<editor_contribution_id>\d+)/save_ajax', views.editorial_review_interim_save_ajax, name='editorial_review_interim_save_ajax'),
+    url(r'editorial_review/(?P<editor_contribution_id>\d+)/submit_editorial_decision', views.submit_editorial_decision, name='submit_editorial_decision'),
     url(r'editorial_review/(?P<editor_contribution_id>\d+)', views.editorial_review, name='editorial_review'),
         
     url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
@@ -60,5 +62,7 @@ urlpatterns = [
 
     url(r'post_review_request', views.post_review_request, name='post_review_request'),
     url(r'post_archive_review_request', views.post_archive_review_request, name='post_archive_review_request'),
+    
+    url(r'impute_contribution/(?P<editor_contribution_id>\d+)', views.impute_contribution, name='impute_contribution'),
     ]
 
