@@ -1,4 +1,4 @@
-Django
+Django>=1.10
 lxml
 mysql-python
 hurry.filesize
@@ -16,4 +16,4 @@ unicodecsv
 openpyxl>=1.9
 django-allauth
 django-simple-captcha
-django-haystack
+django-haystack>=2.5.0
