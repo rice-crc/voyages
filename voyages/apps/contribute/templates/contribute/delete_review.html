@@ -6,15 +6,19 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
 
-<h2>{% trans "Review deleted voyages" %}</h2>
+{% if not readonly %}
+    <h2>{% trans "Review deleted voyages" %}</h2>
 
-<h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
-
+    <h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
+{% else %}
+    <h2>{% trans "Delete voyage contribution - Voyage data" %}</h2>
+{% endif %}
 {% for vars in deleted_voyage_vars %}
     {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}
 <hr />
 {% endfor %}
 
+{% if not readonly %}
 <form method="post">
     {% csrf_token %}
     <div class="form-group col-md-12">
@@ -31,4 +35,15 @@
         return conf;
     });
 </script>
+
+{% endif %}
+
+{% if mode == 'reviewer' %}
+reviewer mode
+{% endif %}
+
+{% if mode == 'editor' %}
+editor mode
+{% endif %}
+
 {% endblock %}

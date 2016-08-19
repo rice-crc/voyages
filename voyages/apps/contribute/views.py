@@ -140,11 +140,11 @@ def delete(request):
     return render(request, 'contribute/delete.html', {
         'form': form,
         'voyage_selection': voyage_selection})
-        
+
 @login_required
 def delete_review(request, contribution_id):
     contribution = get_object_or_404(DeleteVoyageContribution, pk=contribution_id)
-    if request.user.pk != contribution.contributor.pk or contribution.status > ContributionStatus.committed:
+    if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     if request.method == 'POST':
         action = request.POST.get('submit_val')
@@ -157,12 +157,22 @@ def delete_review(request, contribution_id):
             return HttpResponseRedirect(reverse('contribute:index'))
         else:
             return HttpResponseBadRequest()
+    return delete_review_render(request, contribution, False, 'contributor')
+
+def delete_review_render(request, contribution, readonly, mode):
     from voyages.apps.voyage.views import voyage_variables_data
     ids = [int(pk) for pk in contribution.deleted_voyages_ids.split(',')]
-    deleted_voyage_vars = [voyage_variables_data(voyage_id)[1] for voyage_id in ids]
+    deleted_voyage_vars = [voyage_variables_data(voyage_id, mode == 'editor')[1] for voyage_id in ids]
+    review_request = None
+    if mode != 'contributor':
+        # Look for a review request for this delete contribution
+        review_request = ReviewRequest.objects.filter(contribution_id='delete/' + str(contribution.pk), archived=False).first()
     return render(request, 'contribute/delete_review.html', {
         'deleted_voyage_vars': deleted_voyage_vars,
-        'voyage_selection': ids})
+        'voyage_selection': ids,
+        'readonly': readonly,
+        'mode': mode,
+        'review_request': review_request})
 
 @login_required
 def edit(request):
@@ -389,6 +399,8 @@ def interim_summary(request, contribution_type, contribution_id, mode='contribut
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk and not request.user.is_staff:
         return HttpResponseForbidden()
+    if contribution_type == 'delete':
+        return delete_review_render(request, contribution, True, 'editor')
     numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
     form = InterimVoyageForm(instance=contribution.interim_voyage)
     previous_data = contribution_related_data(contribution)
@@ -670,18 +682,22 @@ def get_pending_requests(request):
     
     def get_contribution_info(info):
         contrib = info['contribution']
+        voyage_ids = contrib.get_related_voyage_ids()
+        voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.voyage_began)) + ')'
+                       for v in Voyage.objects.filter(voyage_id__in=voyage_ids)]
         res = {'type': info['type'],
                'id': info['id'],
                'contributor': contrib.contributor.get_full_name(),
                'date_created': contrib.date_created,
-               'voyage_ids': contrib.get_related_voyage_ids()}
+               'voyage_ids': voyage_ids,
+               'voyage_info': voyage_info}
         # Fetch review info.
-        reqs = [req for req in ReviewRequest.objects.filter(contribution_id=info['type'] + '/' + str(info['id']))
-                if not req.archived]
+        reqs = list(ReviewRequest.objects.filter(contribution_id=info['type'] + '/' + str(info['id']), archived=False))
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         if len(reqs) == 1:
             active_request = reqs[0]
+            res['review_request_id'] = active_request.pk
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
             res['response'] = response_values.get(active_request.response, '') \
@@ -692,6 +708,7 @@ def get_pending_requests(request):
                 # Fetch if of the editor's contribution.
                 res['editor_contribution_id'] = active_request.editor_contribution.first().pk
         else:
+            res['review_request_id'] = 0
             res['reviewer'] = ''
             res['response_id'] = 0
             res['response'] = ''
@@ -717,6 +734,48 @@ def get_contribution_from_id(contribution_id):
     contribution_id = int(contribution_pair[1])
     return get_contribution(contribution_type, contribution_id)
 
+def assert_no_active_review_requests(contribution_id):
+    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
+    if len(reqs) >= 1:
+        return JsonResponse({'error': _('There is already an active review for this contribution')})
+    return None
+        
+@login_required()
+@require_POST
+def begin_editorial_review(request):
+    """
+    The editor can start an editorial review without going
+    through a reviewer. In this case we will produce a 'dummy'
+    review request and immediately clone the editorial form.
+    """
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution_id = request.POST.get('contribution_id')
+    contribution = get_contribution_from_id(contribution_id)
+    if not hasattr(contribution, 'interim_voyage'):
+        return HttpResponseBadRequest()
+    assertion = assert_no_active_review_requests(contribution_id)
+    if assertion: return assertion    
+    review_request = ReviewRequest()
+    with transaction.atomic():
+        reviewer = request.user
+        review_request.editor = request.user
+        review_request.editor_comments = 'Editorial review bypassing a reviewer'
+        review_request.email_sent = False
+        review_request.contribution_id = contribution_id
+        review_request.suggested_reviewer = reviewer
+        review_request.save()
+        contribution.status = ContributionStatus.under_review
+        contribution.save()
+        contributor_prefix = 'Contributor: '
+        editor_contribution = EditorVoyageContribution()
+        editor_contribution.request = review_request
+        editor_contribution.notes = contributor_prefix + contribution.notes if contribution.notes else ''
+        editor_contribution.interim_voyage = clone_interim_voyage(contribution, contributor_prefix)
+        editor_contribution.save()
+        editor_contribution_id = editor_contribution.pk
+    return JsonResponse({'review_request_id': review_request.pk, 'editor_contribution_id': editor_contribution_id})
+
 @login_required()
 @require_POST
 def post_review_request(request):
@@ -728,10 +787,12 @@ def post_review_request(request):
     message = request.POST.get('message')
     if contribution.contributor_id == reviewer_id:
         return JsonResponse({'error': _('Reviewer and contributor must be different users')})
-    # Check if contribution already has a pending review.
-    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
-    if len(reqs) >= 1:
-        return JsonResponse({'error': _('There is already an active review for this contribution')})
+    
+    if request.POST.get('archive_active_requests') == True:
+        ReviewRequest.objects.filter(contribution_id=contribution_id, archived=False).update(archived=True)
+    else:
+        assertion = assert_no_active_review_requests(contribution_id)
+        if assertion: return assertion
 
     review_request = ReviewRequest()
     try:
@@ -781,7 +842,7 @@ def review_request(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
     if req.archived or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
-    if req.review_contribution.count() > 0:
+    if req.review_contribution.first:
         return HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
     contribution = get_contribution_from_id(req.contribution_id)
     if contribution is None:
@@ -804,11 +865,11 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
                         list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
     interim.pk = None
     # Prepend comments with contributor name.
+    changed = {}
     try:
         note_dict = json.loads(interim.notes) if interim.notes else {}
     except:
-        note_dict = {}
-    changed = {}
+        note_dict = {'parse_error': interim.notes}
     for key, note in note_dict.items():
         changed[key] = contributor_comment_prefix + note
         
@@ -858,15 +919,16 @@ def reply_review_request(request):
     return redirect
 
 def interim_data(interim):
+    from django.db.models.fields import Field
     dict = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all() if n.number is not None}
-    fields = InterimVoyage._meta.get_fields()
+    fields = [f for f in InterimVoyage._meta.get_fields() if isinstance(f, Field)]
     for field in fields:
         # Check if this is a foreign key.
         name = field.name
-        type = field.get_internal_type()
         value = getattr(interim, field.name)
         if value is None:
             continue
+        type = field.get_internal_type()
         if type == 'ForeignKey':
             try:
                 dict[name] = value.pk
@@ -887,12 +949,11 @@ def review(request, review_request_id):
         return HttpResponseRedirect(reverse('contribute:review_request',
                                             kwargs={'review_request_id': review_request_id}))
     contribution_id = req.contribution_id
-    if contribution_id.startswith('delete'):
-        # TODO: delete requests are handled differently than the other types
-        return JsonResponse({'error': 'DELETE review not implemented yet'})
     user_contribution = get_contribution_from_id(contribution_id)
+    if contribution_id.startswith('delete'):
+        return delete_review_render(request, user_contribution, True, 'reviewer')
     review_contribution = req.review_contribution.first()
-    interim = review_contribution.interim_voyage
+    interim = review_contribution.interim_voyage if review_contribution else None
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
     (result, form, numbers) = interim_main(request, review_contribution, interim)
@@ -912,27 +973,24 @@ def review(request, review_request_id):
                    'voyages_data': json.dumps(previous_data)})
 
 @login_required()
-def editorial_review(request, editor_contribution_id):
-    contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
+def editorial_review(request, review_request_id):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    review_request = contribution.request
-    contribution_id = review_request.contribution_id
-    if contribution_id.startswith('delete'):
-        # TODO: delete requests are handled differently than the other types
-        return JsonResponse({'error': 'DELETE review not implemented yet'})
-    
+    review_request = get_object_or_404(ReviewRequest, pk=review_request_id)
+    contribution = review_request.editor_contribution.first()
+    contribution_id = review_request.contribution_id    
     user_contribution = get_contribution_from_id(contribution_id)
+    if contribution_id.startswith('delete'):
+        return delete_review_render(request, user_contribution, True, 'editor')
     review_contribution = review_request.review_contribution.first()
-    reviewer_interim = review_contribution.interim_voyage
-    if reviewer_interim is None:
-        raise Exception('Could not find reviewer\'s interim form')
+    reviewer_interim = review_contribution.interim_voyage if review_contribution else None
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
     # Build previous data dictionary.
     # Include pre-existing voyage data, user contribution, and reviewer version.
     previous_data = contribution_related_data(user_contribution)
     previous_data[_('User contribution')] = interim_data(user_contribution.interim_voyage)
-    previous_data[_('Reviewer')] = interim_data(reviewer_interim)
+    if reviewer_interim:
+        previous_data[_('Reviewer')] = interim_data(reviewer_interim)
     editor_interim = contribution.interim_voyage
     (result, form, numbers) = interim_main(request, contribution, editor_interim)
     return render(request, 'contribute/interim.html',

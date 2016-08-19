@@ -17,6 +17,11 @@
         opacity: 0.8;
         pointer-events: none;
     }
+    
+    #requests_table > tbody > tr > td .btn {
+        margin: 2px;
+        width: 100%;
+    }
 </style>
 <div>
 
@@ -41,6 +46,7 @@
                 <th>{% trans "Contributor" %}</th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Voyage ID" %}</th>
+                <th>{% trans "Ship" %}</th>
                 <th>{% trans "Reviewer" %}</th>
                 <th>{% trans "Response" %}</th>
                 <th>{% trans "Status" %}</th>
@@ -64,37 +70,13 @@
 
 </div>
 
-<div class="modal fade" id="reviewer_assign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{% trans "Assign a reviewer" %}</h4>
-            </div>
-            <div class="modal-body" style="min-height: 250px; overflow-y: auto;">
-                <input type="hidden" id="input_contribution_id">
-                <div class="form-group">
-                    <label for="chosen_reviewer">{% trans "Choose a reviewer" %}</label>
-                    <input class="form-control" type="text" id="chosen_reviewer">
-                </div>
-                <div class="form-group">
-                    <label for="editor_message">{% trans "Editor's message" %}</label>
-                    <textarea class="form-control" type="text" id="editor_message" rows="10"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="send_request" type="button" class="btn btn-primary">{% trans "Send to reviewer" %}</button>
-                <button id="cancel_send" type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "contribute/assign_reviewer_dialog.html" %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/datatables.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/editorial.js"></script>
 <script type="text/javascript">
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
     // Dynamically load tab contents.
@@ -112,21 +94,22 @@
                     $('#requests_table > tbody > tr').remove();
                     for (var key in data) {
                         var row = data[key];
-                        var response_id = parseInt(row['response_id']) || 0;
+                        var responseId = parseInt(row['response_id']) || 0;
                         $('#requests_table > tbody:last-child').append(
                             '<tr><td>' +
-                            (row['type'] == 'delete' ? '@@@' : '<a href="/contribute/interim_summary/' + key + '">@@@</a>')
+                            ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
                                 .replace('@@@', types[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
-                            row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') +
+                            row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
+                            row['voyage_info'].join(', ') +
                             '</td><td class="review_cell" data-id="' + key + '">' +
-                            (row['reviewer'] == ''
-                                ? '<button class="reviewer_assign_btn">{% trans "Assign" %}</button>'
+                            (row['review_request_id'] == 0
+                                ? '<button class="reviewer_assign_btn btn btn-primary">{% trans "Assign" %}</button>'
                                 : row['reviewer'] +
-                                    '<br /><button class="review_archive_btn">{% trans "Archive request" %}</button>') +
+                                    '<br /><button class="review_archive_btn btn btn-danger">{% trans "Archive request" %}</button>') +
                             (row['editor_contribution_id']
-                                ? '<p><a href="/contribute/editorial_review/' + row['editor_contribution_id'] + '">{% trans "Editorial Review" %}</a></p>'
+                                ? '<p><a class="btn btn-primary" role="button" href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></p>'
                                 : '') + '</td><td>' +
-                            '<span class="' + reviewClasses[response_id] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
+                            '<span class="' + reviewClasses[responseId] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
                     }
                     $('#requests_table').DataTable();
                     $(".reviewer_assign_btn").click(function() {
@@ -179,75 +162,10 @@
             }
         });
     });
-
-    $('#cancel_send').click(function(e) {
-        var reviewer = $('#chosen_reviewer');
-        var message = $('#editor_message');
-        if ((reviewer.val() != '' || message.val() != '') && !confirm('{% trans "Abort review request?" %}')) {
-            e.preventDefault();
-            return false;
-        }
-        // Clear form.
-        reviewer[0].selectize.clear();
-        message.val('');
-    });
-
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                var csrftoken = Cookies.get('csrftoken');
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
-    var disable_modal_contents = function(disable) {
-        var content = $(".modal-content");
-        content.toggleClass('busy_disabled', disable);
-        content.find("input, textarea, button").prop('disabled', disable);
+    
+    afterAssignmentCallback = function() {
+        loadTabData('#requests');
     };
-
-    $('#send_request').click(function(e) {
-        var reviewer = $('#chosen_reviewer');
-        var message = $('#editor_message');
-        if (reviewer.val() == '') {
-            alert('{% trans "A reviewer must be selected." %}');
-            return false;
-        }
-        disable_modal_contents(true);
-        var onDone = function() {
-            disable_modal_contents(false);
-        };
-        $.ajax({
-            url: '/contribute/post_review_request',
-            method: 'POST',
-            data: {
-                contribution_id: $('#input_contribution_id').val(),
-                reviewer_id: reviewer.val(),
-                message: message.val()
-            },
-            error: function() {
-                alert('{% trans "A server error occurred, please contact the IT department" %}');
-            },
-            success: function(data) {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    $('#reviewer_assign_modal').modal('hide');
-                    loadTabData('#requests');
-                    // Clear form.
-                    reviewer[0].selectize.clear();
-                    message.val('');
-                }
-            }
-        })
-        .done(onDone)
-        .fail(onDone);
-    });
 
     // TODO: remove this code once styling is done.
     $("#center-content").css('width', '900px');
