@@ -573,7 +573,7 @@ def voyage_images(request, voyage_id):
                    'voyage_id': voyage_id,
                    'voyage': voyage})
 
-def voyage_variables_data(voyage_id):
+def voyage_variables_data(voyage_id, show_imputed=True):
     voyagenum = int(voyage_id)
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
@@ -584,8 +584,7 @@ def voyage_variables_data(voyage_id):
     allvars = []
     for i in allvargroups:
         group = i[0]
-        gvalues = i[1]
-        glist = list(gvalues)
+        glist = list([x for x in i[1] if show_imputed or not x['var_full_name'].endswith('*')])
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:

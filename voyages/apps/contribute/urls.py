@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^guidelines', TemplateView.as_view(template_name='contribute/guidelines.html'), name='guidelines'),
 
     url(r'^thanks', TemplateView.as_view(template_name='contribute/thanks.html'), name='thanks'),
-
+    
     url(r'^delete_voyage', views.delete, name='delete_voyage'),
 
     url(r'^delete_review/(?P<contribution_id>\d+)', views.delete_review, name='delete_review'),
@@ -26,13 +26,13 @@ urlpatterns = [
     url(r'interim_commit/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
         views.interim_commit, name='interim_commit'),
 
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
         views.interim_summary, name='interim_summary'),
 
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>reviewer)',
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>reviewer)$',
         views.interim_summary, name='interim_summary_reviewer'),
 
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>editor)',
+    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>editor)$',
         views.interim_summary, name='interim_summary_editor'),
         
     url(r'legal', views.legal, name='legal'),
@@ -49,9 +49,11 @@ urlpatterns = [
         views.review_request, name='review_request'),
     url(r'reply_review_request', views.reply_review_request, name='reply_review_request'),
     
+    url(r'begin_editorial_review', views.begin_editorial_review, name='begin_editorial_review'),
+    
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/save_ajax', views.editorial_review_interim_save_ajax, name='editorial_review_interim_save_ajax'),
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/submit_editorial_decision', views.submit_editorial_decision, name='submit_editorial_decision'),
-    url(r'editorial_review/(?P<editor_contribution_id>\d+)', views.editorial_review, name='editorial_review'),
+    url(r'editorial_review/(?P<review_request_id>\d+)', views.editorial_review, name='editorial_review'),
         
     url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
     url(r'review/(?P<review_request_id>\d+)/submit_review_to_editor', views.submit_review_to_editor, name='submit_review_to_editor'),
