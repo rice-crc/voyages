@@ -2551,7 +2551,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 					}
 	
 					// hide the menu if the maximum number of items have been selected or no options are left
-					if (!$options.length /*|| self.isFull()*/) {
+					if (!$options.length || self.isFull()) {
 						self.close();
 					} else {
 						self.positionDropdown();

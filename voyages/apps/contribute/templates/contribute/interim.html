@@ -1350,69 +1350,17 @@
         {% endif %}
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
-    {% if mode == 'review' %}
-    <div class="col-md-12">
-        <hr />
-        <h3>{% trans "Reviewer's decision:" %}</h3>
-        <div class="form-group">
-            <label for="message_to_editor">
-                {% trans "Message to editor" %}:
-            </label>
-            <div class="col-sm-8">
-                <textarea class="form-control not_selectized field_notes" id="message_to_editor" name="message_to_editor"></textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="reviewer_decision">
-                {% trans "Decision" %}:
-            </label>
-            <div class="col-sm-8">
-                <select class="form-control not_selectized" id="reviewer_decision" name="reviewer_decision">
-                    <option>{% trans "Please select..." %}</option>
-                    <option value="1">{% trans "Accept" %}</option>
-                    <option value="2">{% trans "Reject" %}</option>
-                </select>
-            </div>
-        </div>
-        <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
-    </div>
-    {% endif %}
-    {% if mode == 'editorial_review' %}
-    <div class="col-md-12">
-        <hr />
-        <h3>{% trans "Editorial tools:" %}</h3>
-        <div class="form-group">
-            <label for="decision_message">
-                {% trans "Decision message" %}:
-            </label>
-            <div class="col-sm-8">
-                <textarea class="form-control not_selectized field_notes" id="decision_message" name="decision_message">{{ contribution.request.decision_message }}</textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="editorial_decision">
-                {% trans "Decision" %}:
-            </label>
-            <div class="col-sm-8">
-                <select class="form-control not_selectized" id="editorial_decision" name="editorial_decision">
-                    <option>{% trans "Please select..." %}</option>
-                    <option value="3">{% trans "Accept" %}</option>
-                    <option value="4">{% trans "Reject" %}</option>
-                </select>
-            </div>
-        </div>
-        <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
-        <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
-    </div>
+    {% if mode == 'review' or mode == 'editorial_review' %}
+        {% include "contribute/decision_part.html" with allow_impute=True review_request=contribution.request %}
     {% endif %}
 </form>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
+<div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
+                <h4 class="modal-title" id="referencesModalLabel">{% trans "Add a source reference" %}</h4>
             </div>
             <div class="modal-body" style="height: 500px; overflow-y: auto;">
                 <input type="hidden" name="source_id_field" id="source_id_field" />
@@ -2155,6 +2103,7 @@
         };
 
         $('form').submit(formSubmission);
+        initDecisionForm(formSubmission);
         
         // Ajax save.
         $('#save_btn').click(function() {
@@ -2190,99 +2139,6 @@
             }
             return false;
         });
-        {% if mode == 'review' %}
-            $('#submit_editor_btn').click(function() {
-                var decision = parseInt($('#reviewer_decision option:selected').val());
-                if (decision != 1 && decision != 2) {
-                    alert('{% trans "Please choose your decision." %}');
-                    return false;
-                }
-                var message_to_editor = $('#message_to_editor').val().trim();
-                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#reviewer_decision option:selected').text() + '\n' + message_to_editor)) {
-                    return false;
-                }
-                var self = $(this);
-                var valid = formSubmission();
-                if (!valid) return false;
-                self.prop('disabled', true);
-                $.ajax({
-                    type: "POST",
-                    url: '{{ request.get_full_path }}/submit_review_to_editor/',
-                    data: $('form').serialize(),
-                    success: function (response) {
-                        if (response.result == 'OK') {
-                            window.location.replace("{% url 'contribute:index' %}");
-                        } else {
-                            alert(response.result);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error sending decision: ' + textStatus);
-                    },
-                    complete: function() {
-                        self.prop('disabled', false);
-                    }
-                });
-                return false;
-            });
-        {% endif %}
-        {% if mode == 'editorial_review' %}
-            $('#impute_btn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: '/contribute/impute_contribution/{{ contribution.pk }}',
-                    data: $('form').serialize(),
-                    success: function (response) {
-                        if (response.result == 'OK') {
-                            window.location.reload();
-                        } else {
-                            alert(response.result);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error sending decision: ' + textStatus);
-                    },
-                    complete: function() {
-                        self.prop('disabled', false);
-                    }
-                });
-                return false; 
-            });
-            $('#submit_final_decision_btn').click(function() {
-                var decision = parseInt($('#editorial_decision option:selected').val());
-                if (decision != 3 && decision != 4) {
-                    alert('{% trans "Please choose your decision." %}');
-                    return false;
-                }
-                var decision_message = $('#decision_message').val().trim();
-                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#editorial_decision option:selected').text() + '\n' + decision_message)) {
-                    return false;
-                }
-                var self = $(this);
-                var valid = formSubmission();
-                if (!valid) return false;
-                self.prop('disabled', true);
-                $.ajax({
-                    type: "POST",
-                    url: '{{ request.get_full_path }}/submit_editorial_decision/',
-                    data: $('form').serialize(),
-                    success: function (response) {
-                        if (response.result == 'OK') {
-                            window.location.replace("{% url 'contribute:editor_main' %}");
-                        } else {
-                            alert(response.result);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error sending decision: ' + textStatus);
-                    },
-                    complete: function() {
-                        self.prop('disabled', false);
-                    }
-                });
-                return false;
-            });
-        {% endif %}
     });
 
     // Special handling of port/region/broad region selection.

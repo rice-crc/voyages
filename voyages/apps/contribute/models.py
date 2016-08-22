@@ -227,11 +227,14 @@ class ReviewRequestDecision:
     rejected_by_reviewer = 2
     accepted_by_editor = 3
     rejected_by_editor = 4
+    deleted = 5
+    begun_editorial_review = 1000
 
 class ReviewRequestResponse:
     no_reply = 0
     accepted = 1
     rejected = 2
+    begun_editorial_review = 1000
 
 class ReviewRequest(models.Model):
     """
@@ -247,6 +250,22 @@ class ReviewRequest(models.Model):
     decision_message = models.TextField(null=True)
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
+    
+    def get_status_msg(self):
+        decision_values = {
+            ReviewRequestDecision.under_review: _('Under review'),
+            ReviewRequestDecision.accepted_by_reviewer: _('Contribution accepted by reviewer'),
+            ReviewRequestDecision.rejected_by_reviewer: _('Contribution rejected by reviewer'),
+            ReviewRequestDecision.accepted_by_editor: _('Contribution accepted by editor'),
+            ReviewRequestDecision.rejected_by_editor: _('Contribution rejected by editor'),
+            ReviewRequestDecision.begun_editorial_review: _('Editorial review bypassing reviewer')}
+        response_values = {
+            ReviewRequestResponse.no_reply: _('Not replied'),
+            ReviewRequestResponse.accepted: _('Accepted reviewing'),
+            ReviewRequestResponse.rejected: _('Declined reviewing')}
+        if self.final_decision == 0:
+            return response_values.get(self.response, '')
+        return decision_values.get(self.final_decision, '')
 
 class ReviewVoyageContribution(models.Model):
     """
@@ -276,9 +295,10 @@ class ContributionStatus:
     pending = 0
     committed = 1
     under_review = 2
-    approved = 3
-    rejected = 4
-    published = 5
+    approved = ReviewRequestDecision.accepted_by_editor
+    rejected = ReviewRequestDecision.rejected_by_editor
+    deleted = ReviewRequestDecision.deleted
+    published = 6
 
 class BaseVoyageContribution(models.Model):
     """
