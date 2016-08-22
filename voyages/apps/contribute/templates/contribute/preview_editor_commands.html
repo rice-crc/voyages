@@ -1,0 +1,40 @@
+{% load i18n %}
+
+{% include "contribute/assign_reviewer_dialog.html" %}
+<button type="button" class="btn btn-primary" aria-label="Assign" id="reviewer_assign_btn">
+    {% trans "Assign a reviewer" %}
+</button>
+<button type="button" class="btn btn-danger" aria-label="Assign" id="begin_editorial_review_btn">
+    {% trans "Begin editorial review" %}
+</button>
+<script type="text/javascript">
+    $("#reviewer_assign_btn").click(function(e) {
+        e.preventDefault();
+        $('#input_contribution_id').val('{{ full_contrib_id }}');
+        $('#reviewer_assign_modal').modal('show');
+        return false;
+    });
+    $("#begin_editorial_review_btn").click(function(e) {
+        e.preventDefault();
+        if (!confirm('{% trans "Begin editorial review bypassing a reviewer?" %}')) return false;
+        $.ajax({
+            url: '/contribute/begin_editorial_review',
+            method: 'POST',
+            data: {
+                contribution_id: '{{ full_contrib_id }}',
+            },
+            error: function() {
+                alert('{% trans "A server error occurred, please contact the webmaster" %}');
+            },
+            success: function(data) {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Navigate to the editorial review of this contribution.
+                    window.location.replace('/contribute/editorial_review/' + data.review_request_id);
+                }
+            }
+        });
+        return false;
+    });                
+</script>

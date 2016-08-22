@@ -29,7 +29,9 @@
 
 <script type="text/javascript">
     // This function is called after a reviewer is assigned
-    var afterAssignmentCallback = function() {};
+    var afterAssignmentCallback = function() {
+        window.location.replace('/contribute/editor_main');
+    };
 
     $('#cancel_send').click(function(e) {
         var reviewer = $('#chosen_reviewer');
@@ -50,6 +52,7 @@
     };
 
     $('#send_request').click(function(e) {
+        e.preventDefault();
         var reviewer = $('#chosen_reviewer');
         var message = $('#editor_message');
         if (reviewer.val() == '') {
@@ -85,5 +88,25 @@
         })
         .done(onDone)
         .fail(onDone);
+        return false;
+    });
+
+    $(document).ready(function() {
+        $.ajax({
+            url: '/contribute/json_reviewers',
+            type: 'GET',
+            success: function(res) {
+                $('#chosen_reviewer').selectize({
+                    dropdownParent: null,
+                    valueField: 'pk',
+                    labelField: 'full_name',
+                    searchField: 'full_name',
+                    sortField: 'full_name',
+                    maxItems: 1,
+                    notesButton: false,
+                    options: res,
+                });
+            }
+        });
     });
 </script>

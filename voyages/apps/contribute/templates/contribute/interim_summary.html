@@ -6,6 +6,7 @@
 
 {% block center-content %}
 {% with blank_text='' %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <div id="toogles">
     <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
     <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label>
@@ -645,9 +646,11 @@
     <hr />
     <label for="timestamp">{% trans "Summary date" %}:</label>
     <span id="timestamp"></span>
+    {% if mode != 'contribute' and review_request %}
+        <div><strong>{% trans "Review status: " %}</strong><em>{{ review_request.get_status_msg }}</em></div>
+    {% endif %}
 </div>
-<br />
-<br />
+<p></p>
 <div id="summary_toolbar" style="padding-top:6px; padding-bottom:6px; background-color:rgba(255,255,255,0.85)">
     <div class="btn-group">
         <button type="button" class="btn btn-default" aria-label="Print" id="print_button">
@@ -664,11 +667,17 @@
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Cancel contribution" %}
             </button>
         {% endif %}
+        {% if mode == 'editor' and not review_request %}
+            {% include "contribute/preview_editor_commands.html" %}
+        {% endif %}
     </div>
 </div>
 {% endwith %}
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript">
     "use strict";
     $('#print_button').click(function() {
@@ -875,6 +884,7 @@
     $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
     $(".old_values_header").html(voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + voyage_ids[0]);
     alternateBackground();
+    
     // TODO: remove this code once styling is done.
     $("#center-content").css('width', '900px');
 </script>

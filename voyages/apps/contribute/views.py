@@ -20,6 +20,9 @@ import json
 
 number_prefix = 'interim_slave_number_'
 
+def full_contribution_id(contribution_type, contribution_id):
+    return contribution_type + '/' + str(contribution_id)
+
 def get_filtered_contributions(filter_args):
     return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
             [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
@@ -164,15 +167,17 @@ def delete_review_render(request, contribution, readonly, mode):
     ids = [int(pk) for pk in contribution.deleted_voyages_ids.split(',')]
     deleted_voyage_vars = [voyage_variables_data(voyage_id, mode == 'editor')[1] for voyage_id in ids]
     review_request = None
+    full_contrib_id = full_contribution_id('delete', contribution.pk)
     if mode != 'contributor':
         # Look for a review request for this delete contribution
-        review_request = ReviewRequest.objects.filter(contribution_id='delete/' + str(contribution.pk), archived=False).first()
+        review_request = ReviewRequest.objects.filter(contribution_id=full_contrib_id, archived=False).first()
     return render(request, 'contribute/delete_review.html', {
         'deleted_voyage_vars': deleted_voyage_vars,
         'voyage_selection': ids,
         'readonly': readonly,
         'mode': mode,
-        'review_request': review_request})
+        'review_request': review_request,
+        'full_contrib_id': full_contrib_id})
 
 @login_required
 def edit(request):
@@ -252,7 +257,9 @@ contribution_model_by_type = {
     'delete': DeleteVoyageContribution,
     'edit': EditVoyageContribution,
     'merge': MergeVoyagesContribution,
-    'new': NewVoyageContribution
+    'new': NewVoyageContribution,
+    'review': ReviewVoyageContribution,
+    'editorial_review': EditorVoyageContribution
 }
 
 def get_contribution(contribution_type, contribution_id):
@@ -397,15 +404,21 @@ def interim_commit(request, contribution_type, contribution_id):
 @login_required()
 def interim_summary(request, contribution_type, contribution_id, mode='contribute'):
     contribution = get_contribution(contribution_type, contribution_id)
-    if request.user.pk != contribution.contributor.pk and not request.user.is_staff:
+    if not request.user.is_superuser and request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     if contribution_type == 'delete':
         return delete_review_render(request, contribution, True, 'editor')
     numbers = {number_prefix + n.var_name: n.number for n in contribution.interim_voyage.slave_numbers.all()}
     form = InterimVoyageForm(instance=contribution.interim_voyage)
     previous_data = contribution_related_data(contribution)
+    full_contrib_id = full_contribution_id(contribution_type, contribution_id)
+    reqs = list(ReviewRequest.objects.filter(contribution_id=full_contrib_id, archived=False))
+    if len(reqs) > 1:
+        raise Exception('Invalid state: more than one review request is active')
     return render(request, 'contribute/interim_summary.html',
                   {'contribution': contribution,
+                   'review_request': reqs[0] if len(reqs) == 1 else None,
+                   'full_contrib_id': full_contrib_id,
                    'interim': contribution.interim_voyage,
                    'mode': mode,
                    'numbers': numbers,
@@ -667,18 +680,8 @@ def editor_main(request):
 def get_pending_requests(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    filter_args = {'status__gte': ContributionStatus.committed, 'status__lt': ContributionStatus.published}
+    filter_args = {'status__gte': ContributionStatus.committed, 'status__lte': ContributionStatus.under_review}
     contributions = get_filtered_contributions(filter_args)
-    decision_values = {
-        ReviewRequestDecision.under_review: _('Under review'),
-        ReviewRequestDecision.accepted_by_reviewer: _('Contribution accepted by reviewer'),
-        ReviewRequestDecision.rejected_by_reviewer: _('Contribution rejected by reviewer'),
-        ReviewRequestDecision.accepted_by_editor: _('Contribution accepted by editor'),
-        ReviewRequestDecision.rejected_by_editor: _('Contribution rejected by editor')}
-    response_values = {
-        ReviewRequestResponse.no_reply: _('Not replied'),
-        ReviewRequestResponse.accepted: _('Accepted reviewing'),
-        ReviewRequestResponse.rejected: _('Declined reviewing')}
     
     def get_contribution_info(info):
         contrib = info['contribution']
@@ -692,7 +695,7 @@ def get_pending_requests(request):
                'voyage_ids': voyage_ids,
                'voyage_info': voyage_info}
         # Fetch review info.
-        reqs = list(ReviewRequest.objects.filter(contribution_id=info['type'] + '/' + str(info['id']), archived=False))
+        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         if len(reqs) == 1:
@@ -700,10 +703,10 @@ def get_pending_requests(request):
             res['review_request_id'] = active_request.pk
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
-            res['response'] = response_values.get(active_request.response, '') \
-                if not active_request.final_decision else _('Reviewer decision posted')
+            res['response'] = active_request.get_status_msg() \
+                if active_request.final_decision in [ReviewRequestDecision.under_review, ReviewRequestDecision.begun_editorial_review] else _('Reviewer decision posted')
             res['reviewer_comments'] = active_request.reviewer_comments
-            res['reviewer_final_decision'] = decision_values.get(active_request.final_decision, '') if active_request.response else ''
+            res['reviewer_final_decision'] = active_request.get_status_msg()
             if active_request.final_decision:
                 # Fetch if of the editor's contribution.
                 res['editor_contribution_id'] = active_request.editor_contribution.first().pk
@@ -718,7 +721,7 @@ def get_pending_requests(request):
             res['editor_contribution_id'] = 0
         return res
 
-    return JsonResponse({x['type'] + '/' + str(x['id']): get_contribution_info(x) for x in contributions})
+    return JsonResponse({full_contribution_id(x['type'], x['id']): get_contribution_info(x) for x in contributions})
 
 def get_reviewers(request):
     if not request.user.is_superuser:
@@ -752,8 +755,6 @@ def begin_editorial_review(request):
         return HttpResponseForbidden()
     contribution_id = request.POST.get('contribution_id')
     contribution = get_contribution_from_id(contribution_id)
-    if not hasattr(contribution, 'interim_voyage'):
-        return HttpResponseBadRequest()
     assertion = assert_no_active_review_requests(contribution_id)
     if assertion: return assertion    
     review_request = ReviewRequest()
@@ -764,6 +765,8 @@ def begin_editorial_review(request):
         review_request.email_sent = False
         review_request.contribution_id = contribution_id
         review_request.suggested_reviewer = reviewer
+        review_request.response = ReviewRequestResponse.begun_editorial_review
+        review_request.final_decision = ReviewRequestDecision.begun_editorial_review
         review_request.save()
         contribution.status = ContributionStatus.under_review
         contribution.save()
@@ -771,7 +774,8 @@ def begin_editorial_review(request):
         editor_contribution = EditorVoyageContribution()
         editor_contribution.request = review_request
         editor_contribution.notes = contributor_prefix + contribution.notes if contribution.notes else ''
-        editor_contribution.interim_voyage = clone_interim_voyage(contribution, contributor_prefix)
+        if hasattr(contribution, 'interim_voyage'):
+            editor_contribution.interim_voyage = clone_interim_voyage(contribution, contributor_prefix)
         editor_contribution.save()
         editor_contribution_id = editor_contribution.pk
     return JsonResponse({'review_request_id': review_request.pk, 'editor_contribution_id': editor_contribution_id})
@@ -842,7 +846,7 @@ def review_request(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
     if req.archived or req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
-    if req.review_contribution.first:
+    if req.review_contribution.first():
         return HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
     contribution = get_contribution_from_id(req.contribution_id)
     if contribution is None:
@@ -1013,13 +1017,14 @@ def submit_editorial_decision(request, editor_contribution_id):
         decision = int(request.POST['editorial_decision'])
     except:
         pass
-    if decision != ReviewRequestDecision.accepted_by_editor and decision != ReviewRequestDecision.rejected_by_editor:
+    if not decision in [ReviewRequestDecision.accepted_by_editor, ReviewRequestDecision.rejected_by_editor, ReviewRequestDecision.deleted]:
         return HttpResponseBadRequest()
     with transaction.atomic():
         # Save interim form.
-        (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
-        if not valid:
-            return JsonResponse({'valid': valid, 'errors': form.errors})
+        if contribution.interim_voyage:
+            (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+            if not valid:
+                return JsonResponse({'valid': valid, 'errors': form.errors})
         # Fetch decision.
         review_request = contribution.request
         review_request.final_decision = decision
@@ -1028,6 +1033,9 @@ def submit_editorial_decision(request, editor_contribution_id):
         review_request.decision_message = msg
         review_request.archived = True
         review_request.save()
+        user_contribution = get_contribution_from_id(review_request.contribution_id)
+        user_contribution.status = decision
+        user_contribution.save()
     return JsonResponse({'result': 'OK'})
     
 @login_required()
@@ -1047,9 +1055,11 @@ def submit_review_to_editor(request, review_request_id):
         with transaction.atomic():
             # Save interim form.
             contribution = req.review_contribution.first()
-            (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
-            if not valid:
-                return JsonResponse({'result': 'Failed', 'errors': form.errors})
+            has_interim_voyage = hasattr(contribution, 'interim_voyage') and contribution.interim_voyage
+            if has_interim_voyage:
+                (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+                if not valid:
+                    return JsonResponse({'result': 'Failed', 'errors': form.errors})
             # Save review request with decision.
             msg = request.POST.get('message_to_editor')
             msg = 'Reviewer: ' + msg if msg else ''
@@ -1059,8 +1069,9 @@ def submit_review_to_editor(request, review_request_id):
             # Create an editor contribution with cloned review data.
             editor_contribution = EditorVoyageContribution()
             editor_contribution.request = req
-            editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''
-            editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
+            editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''            
+            if has_interim_voyage:
+                editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
             editor_contribution.save()
         return JsonResponse({'result': 'OK'})
     except Exception as e:

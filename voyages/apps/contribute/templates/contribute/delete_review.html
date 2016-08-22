@@ -3,8 +3,13 @@
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 
 {% if not readonly %}
     <h2>{% trans "Review deleted voyages" %}</h2>
@@ -38,12 +43,14 @@
 
 {% endif %}
 
-{% if mode == 'reviewer' %}
-reviewer mode
+{% if mode == 'reviewer' or mode == 'editor' %}
+    <form>
+        {% include "contribute/decision_part.html" with allow_impute=False %}
+    </form>
+    <script type="text/javascript">
+        initDecisionForm();
+    </script>
 {% endif %}
 
-{% if mode == 'editor' %}
-editor mode
-{% endif %}
 
 {% endblock %}
