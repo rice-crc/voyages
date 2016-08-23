@@ -815,8 +815,13 @@ def post_review_request(request):
 
     result = 0
     try:
-        result = send_mail('Voyages - contribution review request', 'Editor message:\r\n' + message,
-                  settings.CONTRIBUTE_SENDER_EMAIL, [reviewer.email])
+        reply_url = settings.WEBSITE_ROOT + '/contribute/reply_review_request/' + str(review_request.pk)
+        result = send_mail(
+            'Voyages - contribution review request',
+            'Editor message:\r\n' + message + '\n\nPlease visit ' + reply_url + '\r\nto reply.',
+            settings.CONTRIBUTE_SENDER_EMAIL,
+            [reviewer.email],
+            html_message='<strong>Editor message:</strong><p>' + message + '</p>' + '<p>Please click <a href="' + reply_url + '">here</a> to reply.</p>')
     except Exception as e:
         print e
     finally:
