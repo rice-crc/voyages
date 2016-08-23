@@ -83,4 +83,17 @@
 </p>
 {% endif %}
 
+<script type="text/javascript">
+    var params = {};
+    window.location.search
+        .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+            params[key] = value;
+        }
+    );
+    if (params.next) {
+        $('input[name={{ redirect_field_name }}]').remove();
+        $('form').append('<input type="hidden" name="{{ redirect_field_name }}" value="' + params.next + '" />');
+    }
+</script>
+
 {% endblock %}
