@@ -134,7 +134,7 @@
             {% endif %}
             $('#submit_final_decision_btn').click(function() {
                 var decision = parseInt($('#editorial_decision option:selected').val());
-                if (decision != 3 && decision != 4) {
+                if (decision != 3 && decision != 4 && decision != 5) {
                     alert('{% trans "Please choose your decision." %}');
                     return false;
                 }
@@ -149,7 +149,7 @@
                 $.ajax({
                     type: "POST",
                     {% with editor_contribution=review_request.editor_contribution.first %}
-                    url: '/contribute/editorial_review/{{ editor_contribution.pk }}/submit_editorial_decision/',
+                    url: '/contribute/editorial_review/{{ editor_contribution.pk }}/submit_editorial_decision',
                     {% endwith %}
                     data: $('form').serialize(),
                     success: function (response) {

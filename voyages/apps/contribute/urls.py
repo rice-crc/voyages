@@ -49,11 +49,11 @@ urlpatterns = [
         views.review_request, name='review_request'),
     url(r'reply_review_request', views.reply_review_request, name='reply_review_request'),
     
-    url(r'begin_editorial_review', views.begin_editorial_review, name='begin_editorial_review'),
-    
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/save_ajax', views.editorial_review_interim_save_ajax, name='editorial_review_interim_save_ajax'),
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/submit_editorial_decision', views.submit_editorial_decision, name='submit_editorial_decision'),
     url(r'editorial_review/(?P<review_request_id>\d+)', views.editorial_review, name='editorial_review'),
+    
+    url(r'begin_editorial_review', views.begin_editorial_review, name='begin_editorial_review'),
         
     url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
     url(r'review/(?P<review_request_id>\d+)/submit_review_to_editor', views.submit_review_to_editor, name='submit_review_to_editor'),
