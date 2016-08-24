@@ -299,6 +299,7 @@ class ContributionStatus:
     rejected = ReviewRequestDecision.rejected_by_editor
     deleted = ReviewRequestDecision.deleted
     published = 6
+    active_statuses = [0, 1, 2, 3, 4]
 
 class BaseVoyageContribution(models.Model):
     """

@@ -680,7 +680,7 @@ def editor_main(request):
 def get_pending_requests(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    filter_args = {'status__gte': ContributionStatus.committed, 'status__lte': ContributionStatus.under_review}
+    filter_args = {'status__in': ContributionStatus.active_statuses}
     contributions = get_filtered_contributions(filter_args)
     
     def get_contribution_info(info):
@@ -1036,7 +1036,6 @@ def submit_editorial_decision(request, editor_contribution_id):
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         review_request.decision_message = msg
-        review_request.archived = True
         review_request.save()
         user_contribution = get_contribution_from_id(review_request.contribution_id)
         user_contribution.status = decision

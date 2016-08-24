@@ -634,14 +634,16 @@
 
     <h3>{% trans "Contributor" %}</h3>
 
+    {% with contributor=contribution.contributor %}
     <p>
         <label for="contributor_name">{% trans "Name" %}:</label>
-        <span id="contributor_name">{% if request.user.get_full_name != '' %}{{ request.user.get_full_name }}{% else %}{{ request.user }}{% endif %}</span>
+        <span id="contributor_name">{% if contributor.get_full_name != '' %}{{ contributor.get_full_name }}{% else %}{{ contributor }}{% endif %}</span>
     </p>
     <p>
         <label for="contributor_email">{% trans "E-mail" %}:</label>
-        <span id="contributor_email">{{ request.user.email }}</span>
+        <span id="contributor_email">{{ contributor.email }}</span>
     <p>
+    {% endwith %}
 
     <hr />
     <label for="timestamp">{% trans "Summary date" %}:</label>

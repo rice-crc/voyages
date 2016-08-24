@@ -1315,7 +1315,7 @@
                 </tbody>
             </table>
         {% endif %}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add_source_modal_btn">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#referencesModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
         <table id="sources_table" style="display:none;" class="table table-striped">
@@ -1549,7 +1549,7 @@
                 s.bindToForm();
                 $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
                 $("#add_source_btn").html('{% trans "Save changes"  %}');
-                $('#myModal').modal('show');
+                $('#referencesModal').modal('show');
             }
         }
     }
@@ -1982,7 +1982,7 @@
         };
 
         $("#add_source_modal_btn").click(function () {
-            $("#myModal input, #myModal textarea").val('');
+            $("#referencesModal input, #referencesModal textarea").val('');
             var id = ++_sourceid;
             $("#source_id_field").val(id);
             $("#add_source_btn").html('{% trans "Add"  %}');
@@ -2011,7 +2011,7 @@
                         confirm(validation.toString() + "\n" + gettext('Continue anyway?'))) {
                     addSourceToTable(source, true);
                     sources.push(source);
-                    $('#myModal').modal('hide');
+                    $('#referencesModal').modal('hide');
                 }
             }
         });
@@ -2103,7 +2103,7 @@
         };
 
         $('form').submit(formSubmission);
-        initDecisionForm(formSubmission);
+        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(formSubmission);{% endif %}
         
         // Ajax save.
         $('#save_btn').click(function() {
@@ -2113,7 +2113,11 @@
                 self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
-                    url: '{{ request.get_full_path }}/save_ajax/',
+                    {% if mode == 'contribute' %}
+                    url: '{{ request.get_full_path }}/save_ajax',
+                    {% else %}
+                    url: '/contribute/{{ mode }}/{{ contribution.pk }}/save_ajax',
+                    {% endif %}
                     data: $('form').serialize(),
                     success: function (response) {
                         if (response.valid) {
