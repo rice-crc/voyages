@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
-
+<style>
+    #return_btn {
+        display: inline;
+    }
+</style>
 <h1 class='contribute_header'>{{ contribution }}</h1>
 
 {% if mode == 'contribute' %}
@@ -1354,6 +1358,14 @@
         {% include "contribute/decision_part.html" with allow_impute=True review_request=contribution.request %}
     {% endif %}
 </form>
+<div class="form-group">
+    {% if mode == 'editorial_review' %}
+        <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+    {% endif %}
+    {% if mode == 'review' %}
+        <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
+    {% endif %}
+</div>
 <div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1652,7 +1664,10 @@
 
     $(document).ready(function() {
         $('.form-horizontal .form-group>label').addClass('control-label col-sm-4');
-
+        var $return_btn = $('#return_btn');
+        if ($return_btn.length) {
+            $('#decision_btn_panel').append($return_btn);
+        }
         // Store numbers in an object.
         var numbers = {
         {% for k, v in numbers.items %}
@@ -1897,7 +1912,8 @@
             var originalKeyDown = selectize.onKeyDown;
             selectize.onKeyDown = function(e) {
                 // Treat tab, space, slash, dash as a RETURN.
-                if (e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9) {
+                var isSelectionChar = e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9; 
+                if (selectize.$activeOption && isSelectionChar) {
                     e.keyCode = 13;
                 }
                 return originalKeyDown.call(selectize, e);  
