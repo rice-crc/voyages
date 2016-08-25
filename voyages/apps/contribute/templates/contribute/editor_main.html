@@ -27,8 +27,8 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
-    <li role="presentation"><a href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
+    <li role="presentation" class="active"><a id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
+    <li role="presentation"><a id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
     <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
     <li role="presentation"><a href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source codes" %}</a></li>
     <li role="presentation"><a href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish new database version" %}</a></li>
@@ -78,6 +78,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/editorial.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
 <script type="text/javascript">
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
     // Dynamically load tab contents.
@@ -151,5 +152,12 @@
 
     // TODO: remove this code once styling is done.
     $("#center-content").css('width', '900px');
+    
+    $(document).ready(function() {
+        var params = pageGetParams();
+        if (params.tab) {
+            $('#tab_' + params.tab).click();
+        }
+    });
 </script>
 {% endblock %}
