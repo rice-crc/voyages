@@ -19,26 +19,23 @@ list_months = [('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'), ('05'
 
 def structure_places(place_list):
     """
-    Takes a list of places and then returns a tree of the places structured by region and broad region.
+    Takes a list of place ids and then returns a tree of the places structured by region and broad region.
     Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
     """
     # Dict keyed by region, value is a list of places
-    # Distinct for foreign key returns a list (sort of) of tuples with the django id of the place.
-    # I think it will only ever have one place in each tuple, though it would probably be best to just iterate through the tuple
-    region_list = {}
-    for tup in place_list:
-        for idx in tup:
-            if idx:
-                place = models.Place.objects.get(id=idx)
-                reg = place.region
-                if reg not in region_list:
-                    region_list[reg] = []
-                region_list[reg].append(place)
+    from collections import OrderedDict
+    places = sorted([p for p in [models.Place.objects.filter(pk=idx).first() for idx in place_list] if p], key=lambda p: p.value)
+    region_list = OrderedDict()
+    for place in places:
+        reg = place.region
+        if reg not in region_list:
+            region_list[reg] = []
+        region_list[reg].append(place)
     broad_region_list = {}
     for region, list_of_places in region_list.items():
         broad_reg = region.broad_region
         if broad_reg not in broad_region_list:
-            broad_region_list[broad_reg] = {}
+            broad_region_list[broad_reg] = OrderedDict()
         broad_region_list[broad_reg][region] = list_of_places
     return broad_region_list
 
@@ -794,7 +791,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())},
+     'choices': structure_places(models.VoyageShip.objects.values_list('vessel_construction_place', flat=True).distinct())},
 #     'choices': all_place_list},
     {'var_name': 'var_year_of_construction',
      'spss_name': 'yrcons',
@@ -812,7 +809,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageShip.objects.values_list('registered_place').distinct())},
+     'choices': structure_places(models.VoyageShip.objects.values_list('registered_place', flat=True).distinct())},
 #     'choices': all_place_list},
     {'var_name': 'var_registered_year',
      'spss_name': 'yrreg',
@@ -918,7 +915,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_port_voyage_begin').distinct()),
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_port_voyage_begin', flat=True).distinct()),
 #     'choices': all_place_list,
      "note": "Same as data variable in most cases, but derived from "
              "port of return for certain Brazilian voyages"},
@@ -931,7 +928,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_place_slave_purchase').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_place_slave_purchase', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_second_place_slave_purchase',
@@ -942,7 +939,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_place_slave_purchase').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_place_slave_purchase', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_third_place_slave_purchase',
@@ -953,7 +950,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_place_slave_purchase').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_place_slave_purchase', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_place_of_slave_purchase',
@@ -964,7 +961,7 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_place_of_slave_purchase').distinct()),
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_place_of_slave_purchase', flat=True).distinct()),
 #     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
@@ -976,7 +973,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('port_of_call_before_atl_crossing').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('port_of_call_before_atl_crossing', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_first_landing_place',
@@ -987,7 +984,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_landing_place').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('first_landing_place', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_second_landing_place',
@@ -998,7 +995,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_landing_place').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('second_landing_place', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_third_landing_place',
@@ -1009,7 +1006,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": False,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_landing_place').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('third_landing_place', flat=True).distinct())},
 #     'choices': all_place_list},
 
     {'var_name': 'var_imp_principal_port_slave_dis',
@@ -1020,7 +1017,7 @@ var_dict = [
      "is_estimate": True,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_port_slave_dis').distinct()),
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('imp_principal_port_slave_dis', flat=True).distinct()),
 #     'choices': all_place_list,
      "note": "Place where largest number of captives embarked"},
 
@@ -1032,7 +1029,7 @@ var_dict = [
      "is_estimate": False,
      "is_basic": True,
      "is_general": True,
-     'choices': structure_places(models.VoyageItinerary.objects.values_list('place_voyage_ended').distinct())},
+     'choices': structure_places(models.VoyageItinerary.objects.values_list('place_voyage_ended', flat=True).distinct())},
 #     'choices': all_place_list},
 
     # Itinerary - region variables

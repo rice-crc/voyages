@@ -941,7 +941,7 @@ def interim_data(interim):
         if type == 'ForeignKey':
             try:
                 dict[name] = value.pk
-                dict[name + 'name'] = str(value)
+                dict[name + '_name'] = str(value)
             except:
                 pass
         elif type in ['IntegerField', 'CharField', 'TextField', 'CommaSeparatedIntegerField']:

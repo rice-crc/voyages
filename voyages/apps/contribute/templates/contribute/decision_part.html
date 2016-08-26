@@ -109,6 +109,8 @@
         {% if mode == 'editorial_review' or mode == 'editor' %}
             {% if allow_impute %}
                 $('#impute_btn').click(function() {
+                    var valid = !validation || validation();
+                    if (!valid) return false;
                     $.ajax({
                         type: "POST",
                         {% with editor_contribution=review_request.editor_contribution.first %}

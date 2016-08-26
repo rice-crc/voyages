@@ -16,7 +16,7 @@
     });
     $("#begin_editorial_review_btn").click(function(e) {
         e.preventDefault();
-        if (!confirm('{% trans "Begin editorial review bypassing a reviewer?" %}')) return false;
+        //if (!confirm('{% trans "Begin editorial review bypassing a reviewer?" %}')) return false;
         $.ajax({
             url: '/contribute/begin_editorial_review',
             method: 'POST',
