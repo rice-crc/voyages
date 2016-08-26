@@ -10,6 +10,19 @@
     #return_btn {
         display: inline;
     }
+    
+    .label-table {
+        table-layout: fixed;
+    }
+    
+    .pre-value-cell {
+        cursor: pointer;
+        padding: 3px;
+    }
+    
+    .pre-value-cell:hover {
+        background-color: lightblue;   
+    }
 </style>
 <h1 class='contribute_header'>{{ contribution }}</h1>
 
@@ -1965,14 +1978,64 @@
         {% endif %}
 
         // Highlight labels of fields with pre-existing values:
+        var fieldValues = {};
+        var preDataCount = 0;
         for (var id in voyages) {
             var v = voyages[id];
+            ++preDataCount;
             for (var name in v) {
-                if (v[name] != null && v[name] != ',,') {
-                    var prefix = name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_';
-                    $('label[for="' + prefix + name + '"]').addClass('has_pre_existing_values');
+                var value = v[name];
+                var itemId = (name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_') + name;
+                var data = fieldValues[name];
+                if (!data) fieldValues[name] = data = { itemId: itemId, values: [], dict: {} };
+                if (value != null && value != ',,') {
+                    data.values.push(value);
+                    data.dict[id] = value;
+                    $('label[for="' + itemId + '"]').addClass('has_pre_existing_values');
                 }
             }
+        }
+        for (var key in fieldValues) {
+            var x = fieldValues[key];
+            if (x.values.length == 0) continue;
+            // Check if all values are the same.
+            var areEqual = x.values.length == preDataCount;
+            var first = x.values[0];
+            for (var i = 1; areEqual && i < x.values.length; ++i) {
+                areEqual = x.values[i] == first;
+            }
+            $('label[for="' + x.itemId + '"]').addClass(areEqual ? 'equal_pre_existing_values' : 'different_pre_existing_values');
+        }
+        
+        if (preDataCount > 0) {
+            $('.control-label').replaceWith(function() {
+                // Get the id of control matching the label.
+                var originalField = $(this).attr('for');
+                var field = originalField;
+                if (field.startsWith('id_')) field = field.substring(3);
+                var fv = fieldValues[field]
+                if (!fv) return this.outerHTML;
+                var afv = fieldValues[field + '_name'] || fv; 
+                var values = '';
+                var width = (60.0 / preDataCount) + '%';
+                for (var id in voyages) {
+                    var value = afv.dict[id] || '';
+                    values += '<td width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
+                }
+                return '<table class="col-sm-4 label-table"><tr><td width="40%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
+            });
+            
+            $('.pre-value-cell').click(function() {
+                var $this = $(this);
+                var field = $this.data('field');
+                var value = $this.data('value');
+                var $target = $('#' + field);
+                if ($target[0].selectize) {                    
+                    $target[0].selectize.setValue(value);
+                } else {
+                    $target.val(value);
+                }
+            });
         }
 
         $('.last_group_input, .last_group_input input, .last_group_input select, .last_group_input textarea').keydown(function(e) {
@@ -2216,7 +2279,13 @@
             protoSelectOption.apply(this, arguments);
         }
     };
-    // TODO: remove this code once styling is done.
-    $("#center-content").css('width', '900px');
+    // Maximize screen space.
+    var $leftMenu = $('#left-menu');
+    var occupiedWidth = 40 + $leftMenu.width();
+    {% if mode == 'editorial_review' %}
+        occupiedWidth = 20;
+        $leftMenu.hide();
+    {% endif %}
+    $("#center-content").css('width', 'calc(100% - ' + occupiedWidth + 'px)');
 </script>
 {% endblock %}
