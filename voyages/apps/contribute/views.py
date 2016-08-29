@@ -1096,9 +1096,19 @@ def impute_contribution(request, editor_contribution_id):
     interim_voyage_id = contribution.interim_voyage_id
     # Reload the interim voyage from database, just in case.
     interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
-    result = imputed.compute_imputed_vars(interim)[0]
-    # Map imputed fields back to the contribution, save it and yield response.
-    for k, v in result.items():
-        setattr(interim, k, v)
-    interim.save()
+    tuple = imputed.compute_imputed_vars(interim)
+    result = tuple[0]
+    with transaction.atomic():
+        # Map imputed fields back to the contribution, save it and yield response.
+        for k, v in result.items():
+            setattr(interim, k, v)
+        interim.save()
+        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=tuple[1].keys()).delete()
+        for k, v in tuple[1].items():
+            if not v: continue
+            number = InterimSlaveNumber()
+            number.interim_voyage = interim
+            number.var_name = k.upper()
+            number.number = v
+            number.save()
     return JsonResponse({'result': 'OK'})

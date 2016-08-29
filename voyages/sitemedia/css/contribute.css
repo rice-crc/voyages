@@ -94,11 +94,11 @@ h1.contribute_header {
   background-color: yellow;
   padding-bottom: 7px;
 }
-.equal_pre_existing_values {
-    background-color: green;
+.equal_pre_existing_values td {
+    color: green;
 }
-.different_pre_existing_values {
-    background-color: red;
+.different_pre_existing_values td {
+    color: red;
 }
 .tab-pane {
   padding: 20px;

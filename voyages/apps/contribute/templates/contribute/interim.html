@@ -1152,7 +1152,7 @@
         </div>
         <div id="demographics" class="collapse col-md-12 var_group">
         <div id="hidden_div" style="display:none">
-            <input type="number" id="cell_editor" style="width: 65px;">
+            <input type="number" id="cell_editor" style="width: 65px;" step="any">
         </div>
         <table id="demographics_table" class="table table-striped" style="width: auto">
             <thead>
@@ -1995,17 +1995,6 @@
                 }
             }
         }
-        for (var key in fieldValues) {
-            var x = fieldValues[key];
-            if (x.values.length == 0) continue;
-            // Check if all values are the same.
-            var areEqual = x.values.length == preDataCount;
-            var first = x.values[0];
-            for (var i = 1; areEqual && i < x.values.length; ++i) {
-                areEqual = x.values[i] == first;
-            }
-            $('label[for="' + x.itemId + '"]').addClass(areEqual ? 'equal_pre_existing_values' : 'different_pre_existing_values');
-        }
         
         if (preDataCount > 0) {
             $('.control-label').replaceWith(function() {
@@ -2036,6 +2025,18 @@
                     $target.val(value);
                 }
             });
+        }
+        
+        for (var key in fieldValues) {
+            var x = fieldValues[key];
+            if (x.values.length == 0) continue;
+            // Check if all values are the same.
+            var areEqual = x.values.length == preDataCount;
+            var first = x.values[0];
+            for (var i = 1; areEqual && i < x.values.length; ++i) {
+                areEqual = x.values[i] == first;
+            }
+            $('label[for="' + x.itemId + '"]').closest('table').addClass(areEqual ? 'equal_pre_existing_values' : 'different_pre_existing_values');
         }
 
         $('.last_group_input, .last_group_input input, .last_group_input select, .last_group_input textarea').keydown(function(e) {
