@@ -522,15 +522,14 @@ var KEY_UP = 38;
 
 var APPENDED_FIELD_CLASS = '__appended_field__';
 
-// Wrap the slave numbers table logic in a JS object that can be reused
-// for multiple tables (demographics, sex and age etc).
-function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_headers, pre_existing_data) {
+
+function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count, pre_existing_data, var_name_to_position, position_to_var_name) {
     var self = this;
     self.table_id = table_id;
     self.numbers = numbers;
     self.editable = editable;
-    self.column_headers = column_headers;
-    self.row_headers = row_headers;
+    self.column_count = column_count;
+    self.row_count = row_count;
     self.pre_existing_data = pre_existing_data;
     
     // Fetch rows/cells from the DOM.
@@ -547,13 +546,12 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
     );
     
     // Initialize table data.
-    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
     for (var key in self.numbers) {
-        var match = regex.exec(key);
+        var pos = var_name_to_position(key);
         var found = false;
-        if (match) {
-            var col = self.column_headers.indexOf(match[1]);
-            var row = self.row_headers.indexOf(match[2]);
+        if (pos) {
+            var col = pos.columnIndex;
+            var row = pos.rowIndex;
             if (col >= 0 && row >= 0 && row < self.rows.length && col < self.rows[row].length) {
                 var $entry = $(self.rows[row][col]);
                 $entry.html(numbers[key]);
@@ -582,13 +580,13 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
     if (self.editable) {
         current_cell = null;
         editor = $('#cell_editor');
-        self.col_count = self.column_headers.length;
-        self.row_count = self.row_headers.length;
+        self.col_count = self.column_count;
+        self.row_count = self.row_count;
         // Clicking on a cell will open up an edit box for the entry.
         $('#' + self.table_id + ' td').click(function() {
             if (current_cell) return;
             current_cell = $(this);
-            var value = parseInt(current_cell.html());
+            var value = parseFloat(current_cell.html());
             current_cell.html('');
             editor.unbind();
             editor.appendTo(current_cell);
@@ -667,25 +665,41 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
                 if (!isNaN(value)) {
-                    var name = NUMBERS_KEY_PREFIX + self.column_headers[j] + self.row_headers[i];
+                    var name = position_to_var_name(i, j);
                     form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="' + name + '" value="' + value + '" />');
                 }
             }
         }
-    }; 
+    };
+    return self;
 }
 
 // Construct the age and sex table, with preset column and row headers.
 function ageAndSexTable(numbers, editable, pre_existing_data) {
-    var AGE_AND_SEX_COLUMN_HEADERS = ['PURCHASE', 'LANDING', 'ARRIVAL'];
-    var AGE_AND_SEX_ROW_HEADERS = ['1IMP', '2IMP', '3IMP', '4IMP', '5IMP', '6IMP', '7IMP', '8IMP', '9IMP'];
+    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    var rows = ['SLAVEMA', 'SLAVEMX', 'SLAVMAX',
+                'MENRAT', 'WOMRAT', 'BOYRAT',
+                'GIRLRAT', 'CHILRAT', 'MALRAT'];
+    var cols = ['1', '3', '7'];
     return new SlaveNumbersTable(
         'age_and_sex_table',
         numbers,
         editable,
-        AGE_AND_SEX_COLUMN_HEADERS,
-        AGE_AND_SEX_ROW_HEADERS,
-        pre_existing_data
+        3,
+        9,
+        pre_existing_data,
+        function(key) {
+            var match = regex.exec(key);        
+            if (match) {
+                var row = rows.indexOf(match[1]);
+                var col = cols.indexOf(match[2]);
+                return {columnIndex: col, rowIndex: row};
+            }
+            return null;
+        },
+        function(i, j) {
+            return NUMBERS_KEY_PREFIX + rows[i] + cols[j];
+        }
     );
 }
 
@@ -693,12 +707,25 @@ function ageAndSexTable(numbers, editable, pre_existing_data) {
 function demographicsTable(numbers, editable, pre_existing_data) {
     var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
     var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '3IMP', '7', '2IMP'];
-    return new SlaveNumbersTable(
+    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    return SlaveNumbersTable(
         'demographics_table',
         numbers,
         editable,
-        DEMOGRAPHICS_COLUMN_HEADERS,
-        DEMOGRAPHICS_ROW_HEADERS,
-        pre_existing_data
+        DEMOGRAPHICS_COLUMN_HEADERS.length,
+        DEMOGRAPHICS_ROW_HEADERS.length,
+        pre_existing_data,
+        function(key) {
+            var match = regex.exec(key);        
+            if (match) {
+                var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
+                var row = DEMOGRAPHICS_ROW_HEADERS.indexOf(match[2]);
+                return {columnIndex: col, rowIndex: row};
+            }
+            return null;
+        },
+        function(i, j) {
+            return NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_HEADERS[i];
+        }
     );
 }

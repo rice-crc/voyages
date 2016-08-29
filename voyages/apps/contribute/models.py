@@ -219,7 +219,7 @@ class InterimSlaveNumber(models.Model):
     var_name = models.CharField(
         'Slave number code-book variable name', max_length=20,
         null=False, blank=False)
-    number = models.IntegerField('Number')
+    number = models.FloatField('Number')
 
 class ReviewRequestDecision:
     under_review = 0

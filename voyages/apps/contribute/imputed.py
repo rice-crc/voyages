@@ -1652,7 +1652,7 @@ def compute_imputed_vars(_interim):
     
     # Generate model field values.
     imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
-    # Generate imputed number values.    
+    # Generate imputed number values.
     imputed_numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
 
     return (imputed_field_values, imputed_numbers, local_vars)
