@@ -1112,3 +1112,25 @@ def impute_contribution(request, editor_contribution_id):
             number.number = v
             number.save()
     return JsonResponse({'result': 'OK'})
+    
+@login_required()
+@require_POST
+def editorial_sources(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    mode = request.POST.get('mode')
+    if not mode in ['new', 'edit', 'save']:
+        return HttpResponseBadRequest()
+    source_pk = request.POST.get('source_pk')
+    from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
+    if mode == 'save':
+        form = VoyagesSourcesAdminForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'result': 'OK'})
+        else:
+            return JsonResponse({'result': 'Failed', 'errors': form.errors})
+    else:
+        source = get_object_or_404(VoyageSources, pk=source_pk) if source_pk else VoyageSources()
+        form = VoyagesSourcesAdminForm(instance=source)
+    return render(request, 'contribute/sources_form.html', {'form': form})

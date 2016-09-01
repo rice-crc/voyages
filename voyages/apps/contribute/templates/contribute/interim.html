@@ -1335,13 +1335,12 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#referencesModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
-        <table id="sources_table" style="display:none;" class="table table-striped">
+        <table id="sources_table" style="display:none; table-layout: fixed;" class="table table-striped">
             <thead>
                 <tr>
-                    <th>{% trans "Type of source" %}</th>
+                    <th width="130px">{% trans "Type of source" %}</th>
                     <th>{% trans "Details" %}</th>
-                    <th></th>
-                    <th></th>
+                    <th width="280px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -1351,10 +1350,12 @@
     </div>
 
     <hr />
-    <div class="form-group">
-        <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
-        <div class="col-sm-8">
-            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
+            <div class="col-sm-8">
+                <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
+            </div>
         </div>
     </div>
     <input id="global_notes_input" type="hidden" name="notes" />
@@ -1371,14 +1372,12 @@
         {% include "contribute/decision_part.html" with allow_impute=True review_request=contribution.request %}
     {% endif %}
 </form>
-<div class="form-group">
-    {% if mode == 'editorial_review' %}
-        <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
-    {% endif %}
-    {% if mode == 'review' %}
-        <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
-    {% endif %}
-</div>
+{% if mode == 'editorial_review' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+{% endif %}
+{% if mode == 'review' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
+{% endif %}
 <div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1540,9 +1539,24 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="create_ref_dialog" tabindex="-1" role="dialog" aria-labelledby="create_ref_dialog_label" data-backdrop="static" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create_ref_dialog_label">{% trans "Edit or create sources reference" %}</h4>
+            </div>
+            <div id="create_ref_dialog_body" class="modal-body" style="height: 500px; overflow-y: auto;">
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript">
     var submit_val = '';
     // Existing voyage(s) data.
@@ -1575,12 +1589,50 @@
                 $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
                 $("#add_source_btn").html('{% trans "Save changes"  %}');
                 $('#referencesModal').modal('show');
+                return;
             }
         }
     }
-
+    
+    {% if mode == 'editorial_review' %}
+    function createOrEditReference(item) {
+        var data = {};
+        var pk = parseInt($(item).data('sourcepk'));
+        if (!isNaN(pk)) {
+            data.mode = 'edit';
+            data.source_pk = pk;
+        } else {
+            data.mode = 'new';
+            var id = parseInt($(item).data('id'));
+            for (var k = 0; k < sources.length; ++k) {
+                if (sources[k].id == id) {
+                    data.interim_source = sources[k].toModel();
+                    break;
+                }
+            }
+        }
+        $.ajax({
+            url: '/contribute/editorial_sources',
+            data: data,
+            method: 'POST',
+            success: function(result) {
+                if (result.errors) {
+                    alert(result.errors);
+                } else {
+                    $('#create_ref_dialog_body').html(result);
+                    $('#create_ref_dialog').modal('show');
+                    $('#create_ref_dialog_body script').appendTo($('head'));
+                    tinymce.init({ selector:'#id_full_ref' });
+                }
+            }
+        }); 
+        return false; 
+    }
+    {% endif %}
+    
     // Removes the source from the table and array.
     function removeSource(id) {
+        if (!confirm('{% trans "Remove this source?" %}')) return;
         for (var k = 0; k < sources.length; ++k) {
             if (sources[k].id == id) {
                 sources.splice(k);
@@ -1679,7 +1731,7 @@
         $('.form-horizontal .form-group>label').addClass('control-label col-sm-4');
         var $return_btn = $('#return_btn');
         if ($return_btn.length) {
-            $('#decision_btn_panel').append($return_btn);
+            $return_btn.appendTo($('#decision_btn_group'));
         }
         // Store numbers in an object.
         var numbers = {
@@ -2057,7 +2109,12 @@
 
         var addSourceToTable = function(source, isEdit) {
             if (isEdit) removeSource(source.id);
-            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="editSource(' + source.id + '); return false;">Edit</a></td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+            var editorialCommands = '';
+            {% if mode == 'editorial_review' %}
+                var sources_ref = source.created_voyage_sources;
+                editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-id="' + source.id + '" data-sourcepk="' + (sources_ref || '') + '">' + (sources_ref ? '{% trans "Modify reference" %}' : '{% trans "Create reference" %}') + '</a>'
+            {% endif %}
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group"><a href="#" class="btn btn-primary" onclick="editSource(' + source.id + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.id + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
             $('#sources_table').show();
         };
 
