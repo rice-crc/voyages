@@ -53,6 +53,8 @@ urlpatterns = [
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/submit_editorial_decision', views.submit_editorial_decision, name='submit_editorial_decision'),
     url(r'editorial_review/(?P<review_request_id>\d+)', views.editorial_review, name='editorial_review'),
     
+    url(r'editorial_sources', views.editorial_sources, name='editorial_sources'),
+    
     url(r'begin_editorial_review', views.begin_editorial_review, name='begin_editorial_review'),
         
     url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),

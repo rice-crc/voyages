@@ -184,6 +184,7 @@ class TestImputedDataCalculation(TestCase):
                     '\nInterim:\n' + str_dict(vars(interim)) + \
                     '\nAll variables:\n' + str_dict(all_vars)
             first = False
+            interim.delete()
         
         if dump_file is not None and len(computed_data) > 0:
             with open(dump_file, 'w') as csvfile:

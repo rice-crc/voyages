@@ -57,13 +57,17 @@
                     </select>
                 </div>
             </div>
-            <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
-            {% if allow_impute %}
-                <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
-            {% endif %}
+            <div class="btn-group" id="decision_btn_group">
+                <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
+                {% if allow_impute %}
+                    <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
+                {% endif %}
+            </div>
         {% endif %}
     {% elif mode == 'editorial_review' or mode == 'editor' %}
-        {% include "contribute/preview_editor_commands.html" %}
+        <div class="btn-group">
+            {% include "contribute/preview_editor_commands.html" %}
+        </div>
     {% endif %}
 </div>
 

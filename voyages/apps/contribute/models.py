@@ -149,6 +149,7 @@ class InterimArticleSource(models.Model):
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
 class InterimBookSource(models.Model):
     """
@@ -165,6 +166,7 @@ class InterimBookSource(models.Model):
     page_end = models.IntegerField(null=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
 class InterimOtherSource(models.Model):
     """
@@ -177,6 +179,7 @@ class InterimOtherSource(models.Model):
     page = models.CharField(max_length=20, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
 class InterimPrimarySource(models.Model):
     """
@@ -191,6 +194,7 @@ class InterimPrimarySource(models.Model):
     document_detail = models.CharField(max_length=255, null=True, blank=True)
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
 class InterimPreExistingSourceActions:
     accepted = 0,
