@@ -1121,7 +1121,7 @@ def editorial_sources(request):
     mode = request.POST.get('mode')
     if not mode in ['new', 'edit', 'save']:
         return HttpResponseBadRequest()
-    source_pk = request.POST.get('source_pk')
+    original_ref = request.POST.get('original_ref')
     from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
     if mode == 'save':
         form = VoyagesSourcesAdminForm(request.POST)
@@ -1131,6 +1131,7 @@ def editorial_sources(request):
         else:
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
     else:
-        source = get_object_or_404(VoyageSources, pk=source_pk) if source_pk else VoyageSources()
+        conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
+        source = conn.source if conn else VoyageSources()
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form})
