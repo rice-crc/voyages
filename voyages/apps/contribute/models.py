@@ -170,7 +170,7 @@ class InterimBookSource(models.Model):
 
 class InterimOtherSource(models.Model):
     """
-    Book source for an interim voyage.models.
+    Other source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='other_sources')
