@@ -134,7 +134,18 @@ class InterimVoyage(models.Model):
     imputed_mortality_rate = models.FloatField(null=True, blank=True)
     imputed_standardized_price_of_slaves = models.FloatField(null=True, blank=True)
     
-class InterimArticleSource(models.Model):
+class InterimContributedSource(models.Model):
+    # Fileds which are common to all contributed source types.
+    information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
+    # Fields required to link created sources to published voyages.
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
+    source_ref_text = models.CharField(max_length=255, null=True, blank=True)
+    
+    class Meta:
+        abstract = True
+    
+class InterimArticleSource(InterimContributedSource):
     """
     Article source for an interim voyage.models.
     """
@@ -147,13 +158,10 @@ class InterimArticleSource(models.Model):
     year = models.IntegerField(null=True)
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
-    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
-class InterimBookSource(models.Model):
+class InterimBookSource(InterimContributedSource):
     """
-    Book source for an interim voyage.models.
+    Book/essay in book source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='book_sources')
@@ -164,11 +172,11 @@ class InterimBookSource(models.Model):
     year = models.IntegerField(null=True)
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
-    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
+    source_is_essay_in_book = models.BooleanField(default=False)
+    essay_title = models.CharField(max_length=255, null=True, blank=True)
+    editors = models.TextField(max_length=1000, null=True, blank=True)
 
-class InterimOtherSource(models.Model):
+class InterimOtherSource(InterimContributedSource):
     """
     Other source for an interim voyage.models.
     """
@@ -176,12 +184,10 @@ class InterimOtherSource(models.Model):
                                        related_name='other_sources')
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
+    year = models.IntegerField(null=True)
     page = models.CharField(max_length=20, null=True, blank=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
-    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
 
-class InterimPrimarySource(models.Model):
+class InterimPrimarySource(InterimContributedSource):
     """
     Primary source for an interim voyage.models.
     """
@@ -192,9 +198,17 @@ class InterimPrimarySource(models.Model):
     series_or_collection = models.CharField(max_length=255, null=True, blank=True)
     volume_or_box_or_bundle = models.CharField(max_length=255, null=True, blank=True)
     document_detail = models.CharField(max_length=255, null=True, blank=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
-    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
+
+class InterimNewspaperSource(InterimContributedSource):
+    """
+    Newspaper source
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='newspaper_sources')
+    name = models.CharField(max_length=255, null=True, blank=True)
+    alternative_name = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
+    country = models.CharField(max_length=60, null=True, blank=True)
 
 class InterimPreExistingSourceActions:
     accepted = 0,

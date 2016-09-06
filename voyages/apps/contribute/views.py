@@ -243,13 +243,16 @@ def create_source(source_values, interim_voyage):
         source = InterimArticleSource()
     elif type == 'Book source':
         source = InterimBookSource()
+    elif type == 'Newspaper source':
+        source = InterimNewspaperSource()
     elif type == 'Other source':
         source = InterimOtherSource()
     if source is None:
         raise Exception('Unrecognized source type: ' + type)
     for k, v in source_values.items():
+        if v == '': continue
         if hasattr(source, k):
-            setattr(source, k, v if v != '' else None)
+            setattr(source, k, v)
     source.interim_voyage = interim_voyage
     return source
 
@@ -1134,4 +1137,4 @@ def editorial_sources(request):
         conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
         source = conn.source if conn else VoyageSources()
         form = VoyagesSourcesAdminForm(instance=source)
-    return render(request, 'contribute/sources_form.html', {'form': form})
+    return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})
