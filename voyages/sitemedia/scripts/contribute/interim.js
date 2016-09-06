@@ -31,8 +31,14 @@ var _bindFrom = function(self) {
     return function() {
         self.id = $("#source_id_field").val();
         for (var key in self._fields) {
-            var inputId = self._fields[key][0];
-            self[key] = $("#" + inputId).val();
+            var field = self._fields[key];
+            var inputId = field[0];
+            var $input = $("#" + inputId);
+            if (field.length > 2) {
+                self[key] = field[2]($input);
+            } else {
+                self[key] = $input.val();
+            }
         }
         return self;
     };
@@ -42,8 +48,14 @@ var _bindTo = function(self) {
     return function() {
         $("#source_id_field").val(self.id);
         for (var key in self._fields) {
-            var inputId = self._fields[key][0];
-            $("#" + inputId).val(self[key]);
+            var field = self._fields[key];
+            var inputId = field[0];
+            var $input = $("#" + inputId);
+            if (field.length > 3) {
+                field[3]($input, self[key]);
+            } else {
+                $input.val(self[key]);
+            }
         }
         return self;
     };
@@ -69,6 +81,14 @@ var _toModel = function(self) {
         model['type'] = self.type;
         return model;
     };
+}
+
+var _checkboxGetValue = function($el) {
+    return $el.prop('checked');
+}
+var _checkboxSetValue = function($el, val) {
+    $el.prop('checked', val);
+    $el.trigger('change');
 }
 
 function validateMinLength(val, minLength, errors, fieldName) {
@@ -223,7 +243,7 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.toModel = _toModel(this);
 }
 
-function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, id) {
+function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, id, is_essay, essay_title, editors) {
     this.type = 'Book source';
     this.author = author;
     this.title = title;
@@ -235,6 +255,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.info = info;
     this.url = url;
     this.id = id;
+    this.is_essay = is_essay;
+    this.essay_title = essay_title || false;
+    this.editors = editors;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -245,11 +268,18 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
+        if (self.is_essay) {
+            validateMinLength(self.essay_title, 4, errors, gettext('Essay title'));
+            validateMinLength(self.editors, 4, errors, gettext('Editors'));
+        }
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
-            self.author + ', ' + self.title;
+            self.author + ', ' + (self.is_essay ? self.essay_title : self.title);
+        if (self.is_essay) {
+            result += ' - ' + self.title + '(ed. ' + self.editors + ')';
+        }
         if (self.publisher) {
             result += ' - ' + self.publisher;
         }
@@ -273,6 +303,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         "pageEnd": ["book_last_page", "page_end"],
         "info": ["book_info", "information"],
         "url": ["book_url", "url"],
+        "is_essay": ["book_is_essay", "source_is_essay_in_book", _checkboxGetValue, _checkboxSetValue],
+        "essay_title": ["book_essay_title", "essay_title"],
+        "editors": ["book_editors", "editors"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
@@ -321,6 +354,51 @@ function OtherSource(title, location, page, info, url, id) {
     this.toModel = _toModel(this);
 }
 
+function NewspaperSource(name, alternative_name, city, country, info, url, id) {
+    this.type = 'Newspaper source';
+    this.name = name;
+    this.alternative_name = alternative_name;
+    this.city = city;
+    this.country = country;
+    this.info = info;
+    this.url = url;
+    this.id = id;
+    var self = this;
+    this.validate = function () {
+        var errors = [];
+        var warnings = [];
+        validateMinLength(self.name, 4, errors, gettext('Name'));
+        validateMinLength(self.city, 4, errors, gettext('City'));
+        validateMinLength(self.country, 4, errors, gettext('Country'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
+        return new ValidationResult(warnings, errors);
+    };
+    this.toString = function () {
+        var result = '<span class="source_reference_main_part">' + self.name;
+        if (self.alternative_name) {
+            result += ' (later, ' + self.alternative_name + ')';
+        }
+        result += ', (' + self.city + ', ' + self.country + ')';
+        result += '</span>' + sourceDetails([
+            self.info,
+            self.url]);
+        return result;
+    };
+    this._fields = {
+        "name": ["newspaper_name", "name"],
+        "alternative_name": ["newspaper_alternative_name", "alternative_name"],
+        "city": ["newspaper_city", "city"],
+        "country": ["newspaper_country", "country"],
+        "info": ["newspaper_info", "information"],
+        "url": ["newspaper_url", "url"],
+    };
+    this.bindFromForm = _bindFrom(this);
+    this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
 function sourceFactory(data, id) {
     var source = null;
     var fields = null;
@@ -332,6 +410,8 @@ function sourceFactory(data, id) {
             source = new ArticleSource();
         } else if (data.model == 'contribute.interimbooksource') {
             source = new BookSource();
+        } else if (data.model == 'contribute.interimnewspapersource') {
+            source = new NewspaperSource();
         } else if (data.model == 'contribute.interimothersource') {
             source = new OtherSource();
         }
@@ -344,6 +424,8 @@ function sourceFactory(data, id) {
             source = new ArticleSource();
         } else if (data.type == 'Book source') {
             source = new BookSource();
+        } else if (data.type == 'Newspaper source') {
+            source = new NewspaperSource();        
         } else if (data.type == 'Other source') {
             source = new OtherSource();
         }

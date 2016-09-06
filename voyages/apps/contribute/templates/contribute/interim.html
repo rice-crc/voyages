@@ -1397,11 +1397,14 @@
                                                                   role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
                     <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
                                                                data-toggle="tab">{% trans "Book" %}</a></li>
+                    <li data-tab="newspaper" role="presentation"><a href="#newspaper" aria-controls="other" role="tab"
+                                                                data-toggle="tab">{% trans "Newspaper" %}</a></li>
                     <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
                                                                 data-toggle="tab">{% trans "Other" %}</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
+                    <!-- Primary sources tab -->
                     <div role="tabpanel" class="tab-pane active" id="primary">
                         <div class="form-group">
                             <label for="primary_name">{% trans "Name of library or archive" %}</label>
@@ -1432,6 +1435,7 @@
                             <textarea class="form-control not_selectized" id="primary_url"></textarea>
                         </div>
                     </div>
+                    <!-- Article sources tab -->
                     <div role="tabpanel" class="tab-pane" id="article">
                         <div class="form-group">
                             <label for="article_author">{% trans "Author" %}</label>
@@ -1470,7 +1474,20 @@
                             <textarea class="form-control not_selectized" id="article_url"></textarea>
                         </div>
                     </div>
+                    <!-- Book/Book essay sources tab -->
                     <div role="tabpanel" class="tab-pane" id="book">
+                        <div class="form-group">
+                            <label for="book_is_essay">{% trans "Source is an essay/chapter in a book" %}</label>
+                            <input class="form-control not_selectized col-sm-1" type="checkbox" id="book_is_essay" onchange="$('.book_essay_input_group').toggle(this.checked);">
+                        </div>
+                        <div class="form-group book_essay_input_group" style="display: none;">
+                            <label for="book_essay_title">{% trans "Essay/Chapter title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_essay_title">
+                        </div>
+                        <div class="form-group book_essay_input_group" style="display: none;">
+                            <label for="book_editors">{% trans "Editors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_editors">
+                        </div>
                         <div class="form-group">
                             <label for="book_author">{% trans "Author" %}</label>
                             <input class="form-control not_selectized" type="text" id="book_author">
@@ -1508,6 +1525,34 @@
                             <textarea class="form-control not_selectized" id="book_url"></textarea>
                         </div>
                     </div>
+                    <!-- Newspaper sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="newspaper">
+                        <div class="form-group">
+                            <label for="newspaper_name">{% trans "Name" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_alternative_name">{% trans "Alternative name" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_alternative_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_city">{% trans "City" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_city">
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_country">{% trans "Country" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_country">
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="newspaper_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="newspaper_url"></textarea>
+                        </div>
+                    </div>
+                    <!-- Other sources tab -->
                     <div role="tabpanel" class="tab-pane" id="other">
                         <div class="form-group">
                             <label for="other_title">{% trans "Title" %}</label>
@@ -1625,6 +1670,7 @@
                 } else {
                     $('#create_ref_dialog_body').html(result);
                     $('#create_ref_dialog_body script').appendTo($('head'));
+                    $('#create_ref_dialog_body textarea, #create_ref_dialog_body select').addClass('form-control');
                     window.tinymce.dom.Event.domLoaded = true;
                     tinymce.init({ resize: false, selector:'#id_full_ref' });
                     $('#create_ref_dialog').modal('show');
@@ -1636,8 +1682,8 @@
     {% endif %}
     
     // Removes the source from the table and array.
-    function removeSource(id) {
-        if (!confirm('{% trans "Remove this source?" %}')) return;
+    function removeSource(id, force) {
+        if (!force && !confirm('{% trans "Remove this source?" %}')) return;
         for (var k = 0; k < sources.length; ++k) {
             if (sources[k].id == id) {
                 sources.splice(k);
@@ -2113,7 +2159,7 @@
         });
 
         var addSourceToTable = function(source, isEdit) {
-            if (isEdit) removeSource(source.id);
+            if (isEdit) removeSource(source.id, true);
             var editorialCommands = '';
             {% if mode == 'editorial_review' %}
                 var sources_ref = source.created_voyage_sources;
@@ -2140,6 +2186,8 @@
                 source = new ArticleSource();
             } else if (type == 'book') {
                 source = new BookSource();
+            } else if (type == 'newspaper') {
+                source = new NewspaperSource();
             } else if (type == 'other') {
                 source = new OtherSource();
             }
