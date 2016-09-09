@@ -234,21 +234,24 @@ def merge(request):
         form = ContributionVoyageSelectionForm(min_selection=2)
     return render(request, 'contribute/merge.html', {'form': form, 'voyage_selection': voyage_selection})
 
+def interim_source_model(type):
+    if type == 'Primary source':
+        return InterimPrimarySource
+    elif type == 'Article source':
+        return InterimArticleSource
+    elif type == 'Book source':
+        return InterimBookSource
+    elif type == 'Newspaper source':
+        return InterimNewspaperSource
+    elif type == 'Other source':
+        return InterimOtherSource
+    else:
+        raise Exception('Unrecognized source type: ' + type)
+
 def create_source(source_values, interim_voyage):
     type = source_values['type']
-    source = None
-    if type == 'Primary source':
-        source = InterimPrimarySource()
-    elif type == 'Article source':
-        source = InterimArticleSource()
-    elif type == 'Book source':
-        source = InterimBookSource()
-    elif type == 'Newspaper source':
-        source = InterimNewspaperSource()
-    elif type == 'Other source':
-        source = InterimOtherSource()
-    if source is None:
-        raise Exception('Unrecognized source type: ' + type)
+    model = interim_source_model(type)
+    source = model()
     for k, v in source_values.items():
         if v == '': continue
         if hasattr(source, k):
@@ -301,6 +304,7 @@ def interim_main(request, contribution, interim):
                 del_children(InterimPrimarySource)
                 del_children(InterimArticleSource)
                 del_children(InterimBookSource)
+                del_children(InterimNewspaperSource)
                 del_children(InterimOtherSource)
                 del_children(InterimSlaveNumber)
                 # Get pre-existing sources.
@@ -873,6 +877,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     if interim is None:
         return None
     related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+                        list(interim.newspaper_sources.all()) + \
                         list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
                         list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
     interim.pk = None
@@ -1129,12 +1134,69 @@ def editorial_sources(request):
     if mode == 'save':
         form = VoyagesSourcesAdminForm(request.POST)
         if form.is_valid():
-            form.save()
+            with transaction.atomic():
+                # Save text reference in interim source.
+                interim_source_id = request.POST.get('interim_source_id')
+                if interim_source_id and not (original_ref and 'connection_ref' in request.POST):
+                    return JsonResponse({'result': 'Failed', 'errors': ['Text reference is mandatory']})
+                reference = form.save()
+                if interim_source_id:
+                    pair = interim_source_id.split('/')
+                    interim_source_model = interim_source_model(pair[0])
+                    interim_source = interim_source_model.objects.get(pk=int(pair[1]))
+                    interim_source.source_ref_text = request.POST['connection_ref']
+                    interim_source.created_voyage_sources = reference
+                    interim_source.save()
             return JsonResponse({'result': 'OK'})
         else:
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
     else:
         conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
         source = conn.source if conn else VoyageSources()
+        if mode == 'new':
+            prefix = 'interim_source['
+            plen = len(prefix)
+            interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
+            type = interim_source_dict['type']
+            formatted_content = ''
+            all_types = {x.group_name: x for x in VoyageSourcesType.objects.all()}
+            if type == 'Primary source':
+                formatted_content = '<em>' + interim_source_dict['name_of_library_or_archive'] +\
+                    '</em>' + ' (' + interim_source_dict['location_of_library_or_archive'] + ')'
+                source.source_type = all_types['Documentary source']
+            elif type == 'Article source':
+                formatted_content = interim_source_dict['authors'] + \
+                    ' "' + interim_source_dict['article_title'] + '", <em>' + \
+                    interim_source_dict['journal'] + '</em>, ' + \
+                    interim_source_dict.get('volume_number', 'vol??') + \
+                    ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
+                    interim_source_dict.get('page_start', 'page_start') + '-' + \
+                    interim_source_dict.get('page_end', 'page_end')
+                source.source_type = all_types['Published source']
+            elif type == 'Book source':
+                if interim_source_dict['source_is_essay_in_book'] == 'true':
+                    formatted_content = interim_source_dict['authors'] + \
+                        ', "' + interim_source_dict['essay_title'] + '", ' + \
+                        interim_source_dict['editors'] + ' (ed.)' + \
+                        ' <em>' + interim_source_dict['book_title'] + '</em> (' + \
+                        interim_source_dict.get('place_of_publication', 'place??') + \
+                        ', ' + interim_source_dict.get('year', 'year??') + ')'
+                else:                    
+                    formatted_content = interim_source_dict['authors'] + \
+                        ', <em>' + interim_source_dict['book_title'] + '</em> (' + \
+                        interim_source_dict.get('place_of_publication', 'place??') + \
+                        ', ' + interim_source_dict.get('year', 'year??') + ')'
+                source.source_type = all_types['Published source']
+            elif type == 'Newspaper source':
+                alt_name = interim_source_dict.get('alternative_name')
+                formatted_content = '<em>' + interim_source_dict['name'] + '</em>' + \
+                    ((' (later, ' + alt_name + ')') if alt_name else '') + \
+                    ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
+                    interim_source_dict.get('country', 'country??') + ')'
+                source.source_type = all_types['Newspaper']
+            elif type == 'Other source':
+                formatted_content = 'author??, ' + interim_source_dict['title'] + \
+                    ' (' + interim_source_dict.get('location', 'location??') + ')'
+            source.full_ref = formatted_content
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})
