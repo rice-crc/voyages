@@ -1620,6 +1620,7 @@
             {{ interim.primary_sources.all|jsonify }},
             {{ interim.article_sources.all|jsonify }},
             {{ interim.book_sources.all|jsonify }},
+            {{ interim.newspaper_sources.all|jsonify }},
             {{ interim.other_sources.all|jsonify }}
         {% endif %}
     ];
@@ -1679,6 +1680,9 @@
         }); 
         return false; 
     }
+    $('#create_ref_confirm_btn').click(function() {
+       alert('NOT IMPLEMENTED YET!'); 
+    });
     {% endif %}
     
     // Removes the source from the table and array.
