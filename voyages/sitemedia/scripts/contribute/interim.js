@@ -313,47 +313,6 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.toModel = _toModel(this);
 }
 
-function OtherSource(title, location, page, info, url, id) {
-    this.type = 'Other source';
-    this.title = title;
-    this.location = location;
-    this.page = page;
-    this.info = info;
-    this.url = url;
-    this.id = id;
-    var self = this;
-    this.validate = function () {
-        var errors = [];
-        var warnings = [];
-        validateMinLength(self.title, 4, errors, gettext('Title'));
-        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
-        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
-        return new ValidationResult(warnings, errors);
-    };
-    this.toString = function () {
-        var result = '<span class="source_reference_main_part">' + self.title;
-        if (self.location) {
-            result += ' - ' + self.location;
-        }
-        result += '</span>' + sourceDetails([
-            concat([gettext('Page '), self.page]),
-            self.info,
-            self.url]);
-        return result;
-    };
-    this._fields = {
-        "title": ["other_title", "title"],
-        "location": ["other_location", "location"],
-        "page": ["other_page", "page"],
-        "info": ["other_info", "information"],
-        "url": ["other_url", "url"],
-    };
-    this.bindFromForm = _bindFrom(this);
-    this.bindToForm = _bindTo(this);
-    this.fromModel = _fromModel(this);
-    this.toModel = _toModel(this);
-}
-
 function NewspaperSource(name, alternative_name, city, country, info, url, id) {
     this.type = 'Newspaper source';
     this.name = name;
@@ -399,6 +358,94 @@ function NewspaperSource(name, alternative_name, city, country, info, url, id) {
     this.toModel = _toModel(this);
 }
 
+function PrivateNoteOrCollectionSource(authors, title, location, page, info, url, id) {
+    this.type = 'Private note or collection source';
+    this.authors = authors;
+    this.title = title;
+    this.location = location;
+    this.page = page;
+    this.info = info;
+    this.url = url;
+    this.id = id;
+    var self = this;
+    this.validate = function () {
+        var errors = [];
+        var warnings = [];
+        validateMinLength(self.authors, 4, errors, gettext('Authors'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
+        return new ValidationResult(warnings, errors);
+    };
+    this.toString = function () {
+        var result = '<span class="source_reference_main_part">' + self.title;
+        if (self.location) {
+            result += ' - ' + self.location;
+        }
+        result += '</span>' + sourceDetails([
+            concat([gettext('Page '), self.page]),
+            self.info,
+            self.url]);
+        return result;
+    };
+    this._fields = {
+        "authors": ["pnc_authors", "authors"],
+        "title": ["pnc_title", "title"],
+        "location": ["pnc_location", "location"],
+        "page": ["pnc_page", "page"],
+        "info": ["pnc_info", "information"],
+        "url": ["pnc_url", "url"],
+    };
+    this.bindFromForm = _bindFrom(this);
+    this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
+function UnpublishedSecondarySource(authors, title, location, page, info, url, id) {
+    this.type = 'Unpublished secondary source';
+    this.authors = authors;
+    this.title = title;
+    this.location = location;
+    this.page = page;
+    this.info = info;
+    this.url = url;
+    this.id = id;
+    var self = this;
+    this.validate = function () {
+        var errors = [];
+        var warnings = [];
+        validateMinLength(self.authors, 4, errors, gettext('Authors'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
+        return new ValidationResult(warnings, errors);
+    };
+    this.toString = function () {
+        var result = '<span class="source_reference_main_part">' + self.title;
+        if (self.location) {
+            result += ' - ' + self.location;
+        }
+        result += '</span>' + sourceDetails([
+            concat([gettext('Page '), self.page]),
+            self.info,
+            self.url]);
+        return result;
+    };
+    this._fields = {
+        "authors": ["unpub_authors", "authors"],
+        "title": ["unpub_title", "title"],
+        "location": ["unpub_location", "location"],
+        "page": ["unpub_page", "page"],
+        "info": ["unpub_info", "information"],
+        "url": ["unpub_url", "url"],
+    };
+    this.bindFromForm = _bindFrom(this);
+    this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
 function sourceFactory(data, id) {
     var source = null;
     var fields = null;
@@ -412,8 +459,10 @@ function sourceFactory(data, id) {
             source = new BookSource();
         } else if (data.model == 'contribute.interimnewspapersource') {
             source = new NewspaperSource();
-        } else if (data.model == 'contribute.interimothersource') {
-            source = new OtherSource();
+        } else if (data.model == 'contribute.interimprivatenoteorcollectionsource') {
+            source = new PrivateNoteOrCollectionSource();
+        } else if (data.model == 'contribute.interimunpublishedsecondarysource') {
+            source = new UnpublishedSecondarySource();
         }
         fields = data.fields;
     } else if (data.type) {
@@ -426,8 +475,10 @@ function sourceFactory(data, id) {
             source = new BookSource();
         } else if (data.type == 'Newspaper source') {
             source = new NewspaperSource();        
-        } else if (data.type == 'Other source') {
-            source = new OtherSource();
+        } else if (data.type == 'Private note or collection source') {
+            source = new PrivateNoteOrCollectionSource();
+        } else if (data.type == 'Unpublished secondary source') {
+            source = new UnpublishedSecondarySource();
         }
         fields = data;
     }
