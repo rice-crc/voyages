@@ -176,12 +176,25 @@ class InterimBookSource(InterimContributedSource):
     essay_title = models.CharField(max_length=255, null=True, blank=True)
     editors = models.TextField(max_length=1000, null=True, blank=True)
 
-class InterimOtherSource(InterimContributedSource):
+class InterimPrivateNoteOrCollectionSource(InterimContributedSource):
     """
     Other source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
-                                       related_name='other_sources')
+                                       related_name='private_note_or_collection_sources')
+    authors = models.TextField(max_length=1000, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    year = models.IntegerField(null=True)
+    page = models.CharField(max_length=20, null=True, blank=True)
+
+class InterimUnpublishedSecondarySource(InterimContributedSource):
+    """
+    Other source for an interim voyage.models.
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='unpublished_secondary_sources')
+    authors = models.TextField(max_length=1000, null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     year = models.IntegerField(null=True)

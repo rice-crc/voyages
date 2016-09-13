@@ -243,8 +243,10 @@ def interim_source_model(type):
         return InterimBookSource
     elif type == 'Newspaper source':
         return InterimNewspaperSource
-    elif type == 'Other source':
-        return InterimOtherSource
+    elif type == 'Private note or collection source':
+        return InterimPrivateNoteOrCollectionSource
+    elif type == 'Unpublished secondary source':
+        return InterimUnpublishedSecondarySource
     else:
         raise Exception('Unrecognized source type: ' + type)
 
@@ -305,7 +307,8 @@ def interim_main(request, contribution, interim):
                 del_children(InterimArticleSource)
                 del_children(InterimBookSource)
                 del_children(InterimNewspaperSource)
-                del_children(InterimOtherSource)
+                del_children(InterimPrivateNoteOrCollectionSource)
+                del_children(InterimUnpublishedSecondarySource)
                 del_children(InterimSlaveNumber)
                 # Get pre-existing sources.
                 for src in interim.pre_existing_sources.all():
@@ -877,8 +880,8 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     if interim is None:
         return None
     related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-                        list(interim.newspaper_sources.all()) + \
-                        list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
+                        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) \
+                        list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all()) + \
                         list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
     interim.pk = None
     # Prepend comments with contributor name.
@@ -1194,9 +1197,14 @@ def editorial_sources(request):
                     ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
                     interim_source_dict.get('country', 'country??') + ')'
                 source.source_type = all_types['Newspaper']
-            elif type == 'Other source':
-                formatted_content = 'author??, ' + interim_source_dict['title'] + \
+            elif type == 'Private note or collection source':
+                formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
                     ' (' + interim_source_dict.get('location', 'location??') + ')'
+                source.source_type = all_types['Private note or collection']
+            elif type == 'Unpublished secondary source':
+                formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
+                    ' (' + interim_source_dict.get('location', 'location??') + ')'
+                source.source_type = all_types['Unpublished secondary source']
             source.full_ref = formatted_content
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})

@@ -1397,10 +1397,12 @@
                                                                   role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
                     <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
                                                                data-toggle="tab">{% trans "Book" %}</a></li>
-                    <li data-tab="newspaper" role="presentation"><a href="#newspaper" aria-controls="other" role="tab"
+                    <li data-tab="newspaper" role="presentation"><a href="#newspaper" aria-controls="newspaper" role="tab"
                                                                 data-toggle="tab">{% trans "Newspaper" %}</a></li>
-                    <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
-                                                                data-toggle="tab">{% trans "Other" %}</a></li>
+                    <li data-tab="private" role="presentation"><a href="#private" aria-controls="private" role="tab"
+                                                                data-toggle="tab">{% trans "Private note or collection" %}</a></li>
+                    <li data-tab="unpub" role="presentation"><a href="#unpub" aria-controls="unpub" role="tab"
+                                                                data-toggle="tab">{% trans "Unpublished secondary source" %}</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -1552,27 +1554,58 @@
                             <textarea class="form-control not_selectized" id="newspaper_url"></textarea>
                         </div>
                     </div>
-                    <!-- Other sources tab -->
-                    <div role="tabpanel" class="tab-pane" id="other">
+                    <!-- Private note or collection sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="private">
                         <div class="form-group">
-                            <label for="other_title">{% trans "Title" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_title">
+                            <label for="pnc_authors">{% trans "Authors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_authors">
                         </div>
                         <div class="form-group">
-                            <label for="other_location">{% trans "Location" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_location">
+                            <label for="pnc_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_title">
                         </div>
                         <div class="form-group">
-                            <label for="other_page">{% trans "Page" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_page">
+                            <label for="pnc_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_location">
                         </div>
                         <div class="form-group">
-                            <label for="other_info">{% trans "Information about source" %}</label>
-                            <textarea class="form-control not_selectized" id="other_info"></textarea>
+                            <label for="pnc_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_page">
                         </div>
                         <div class="form-group">
-                            <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                            <textarea class="form-control not_selectized" id="other_url"></textarea>
+                            <label for="pnc_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="pnc_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="pnc_url"></textarea>
+                        </div>
+                    </div>
+                    <!-- Unpublished secondary sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="unpub">
+                        <div class="form-group">
+                            <label for="unpub_authors">{% trans "Authors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_authors">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_location">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_page">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="unpub_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="unpub_url"></textarea>
                         </div>
                     </div>
                 </div>
@@ -2192,8 +2225,10 @@
                 source = new BookSource();
             } else if (type == 'newspaper') {
                 source = new NewspaperSource();
-            } else if (type == 'other') {
-                source = new OtherSource();
+            } else if (type == 'private') {
+                source = new PrivateNoteOrCollectionSource();
+            } else if (type == 'unpub') {
+                source = new UnpublishedSecondarySource();
             }
             if (source) {
                 source.bindFromForm();
