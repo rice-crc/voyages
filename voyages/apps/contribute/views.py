@@ -880,7 +880,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     if interim is None:
         return None
     related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-                        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) \
+                        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
                         list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all()) + \
                         list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
     interim.pk = None
@@ -1140,14 +1140,15 @@ def editorial_sources(request):
             with transaction.atomic():
                 # Save text reference in interim source.
                 interim_source_id = request.POST.get('interim_source_id')
-                if interim_source_id and not (original_ref and 'connection_ref' in request.POST):
+                connection_ref = request.POST.get('connection_ref', original_ref)
+                if interim_source_id and not connection_ref:
                     return JsonResponse({'result': 'Failed', 'errors': ['Text reference is mandatory']})
                 reference = form.save()
                 if interim_source_id:
                     pair = interim_source_id.split('/')
-                    interim_source_model = interim_source_model(pair[0])
-                    interim_source = interim_source_model.objects.get(pk=int(pair[1]))
-                    interim_source.source_ref_text = request.POST['connection_ref']
+                    src_model = interim_source_model(pair[0])
+                    interim_source = src_model.objects.get(pk=int(pair[1]))
+                    interim_source.source_ref_text = connection_ref
                     interim_source.created_voyage_sources = reference
                     interim_source.save()
             return JsonResponse({'result': 'OK'})
@@ -1156,10 +1157,14 @@ def editorial_sources(request):
     else:
         conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
         source = conn.source if conn else VoyageSources()
+        prefix = 'interim_source['
+        plen = len(prefix)
+        interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
+        if conn is None:
+            created_source_pk = interim_source_dict.get('created_voyage_sources')
+            if created_source_pk:
+                source = VoyageSources.objects.get(pk=created_source_pk)
         if mode == 'new':
-            prefix = 'interim_source['
-            plen = len(prefix)
-            interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
             type = interim_source_dict['type']
             formatted_content = ''
             all_types = {x.group_name: x for x in VoyageSourcesType.objects.all()}

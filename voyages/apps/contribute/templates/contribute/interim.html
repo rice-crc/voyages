@@ -1654,7 +1654,8 @@
             {{ interim.article_sources.all|jsonify }},
             {{ interim.book_sources.all|jsonify }},
             {{ interim.newspaper_sources.all|jsonify }},
-            {{ interim.other_sources.all|jsonify }}
+            {{ interim.private_note_or_collection_sources.all|jsonify }},
+            {{ interim.unpublished_secondary_sources.all|jsonify }},
         {% endif %}
     ];
     var sources = [];
@@ -1678,21 +1679,23 @@
     }
     
     {% if mode == 'editorial_review' %}
+    var createdNewSource = null;
     function createOrEditReference(item) {
         var data = {};
         var original_ref = $(item).data('originalref');
+        var id = parseInt($(item).data('id'));
+        for (var k = 0; k < sources.length; ++k) {
+            if (sources[k].id == id) {
+                createdNewSource = sources[k].toModel();
+                data.interim_source = createdNewSource;
+                break;
+            }
+        }
         if (original_ref) {
             data.mode = 'edit';
             data.original_ref = original_ref;
         } else {
             data.mode = 'new';
-            var id = parseInt($(item).data('id'));
-            for (var k = 0; k < sources.length; ++k) {
-                if (sources[k].id == id) {
-                    data.interim_source = sources[k].toModel();
-                    break;
-                }
-            }
         }
         $.ajax({
             url: '/contribute/editorial_sources',
@@ -1713,8 +1716,57 @@
         }); 
         return false; 
     }
-    $('#create_ref_confirm_btn').click(function() {
-       alert('NOT IMPLEMENTED YET!'); 
+    $('#create_ref_confirm_btn').click(function(e) {
+        e.preventDefault();
+        // Validate reference.
+        var data = {
+            short_ref: $('#id_short_ref').val(),
+            full_ref: $('#id_full_ref').val(),
+            source_type: $('#id_source_type').val(),
+            connection_ref: $('#id_connection_ref').val()
+        }
+        var errors = [];
+        var warnings = [];
+        if (data.short_ref.length < 1) {
+            errors.push('{% trans "Short reference must not be empty" %}');
+        }
+        if (data.full_ref.length < 3) {
+            errors.push('{% trans "Full reference is too short" %}');
+        }
+        if (!data.connection_ref.startsWith(data.short_ref)) {
+            errors.push('{% trans "Text reference must start with short reference" %}')
+        } else {
+            var suffix = data.connection_ref.substr(data.short_ref.length);
+            var regex = /^[a-z\d\s\.\-_/:,]+$/i;
+            if (!regex.test(suffix)) {
+                warnings.push('{% trans "Suffix should be alphanumeric and contain only restricted special symbols" %}');
+            }
+        } 
+        if (errors.length) {
+            alert('{% trans "Validation errors" %}\n' + errors.join('\n'));
+            return false;
+        }
+        if (warnings.length) {
+            if (!confirm('{% trans "Validation warnings" %}\n' + warnings.join('\n') + '\n{% trans "Confirm anyway?" %}')) return false;
+        }
+        if (createdNewSource) {
+            data.interim_source_id = createdNewSource['type'] + '/' + createdNewSource['pk'];
+        }
+        data.mode = 'save';
+        // Save data.
+        $.ajax({
+            url: '/contribute/editorial_sources',
+            data: data,
+            method: 'POST',
+            success: function(result) {
+                if (result.errors) {
+                    alert(result.errors);
+                } else {
+                    // TODO: update command to show modify rather than create.
+                    $('#create_ref_dialog').modal('hide');
+                }
+            }
+        });
     });
     {% endif %}
     
@@ -2199,7 +2251,7 @@
             if (isEdit) removeSource(source.id, true);
             var editorialCommands = '';
             {% if mode == 'editorial_review' %}
-                var sources_ref = source.created_voyage_sources;
+                var sources_ref = source.text_ref;
                 editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-id="' + source.id + '" data-originalref="' + (sources_ref || '') + '">' + (sources_ref ? '{% trans "Modify reference" %}' : '{% trans "Create reference" %}') + '</a>'
             {% endif %}
             $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group"><a href="#" class="btn btn-primary" onclick="editSource(' + source.id + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.id + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');

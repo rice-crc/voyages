@@ -67,6 +67,9 @@ var _fromModel = function(self) {
             var fieldName = self._fields[key][1];
             self[key] = model[fieldName];
         }
+        self['id'] = model['id'];
+        self['created_voyage_sources'] = model['created_voyage_sources'];
+        self['text_ref'] = model['source_ref_text'];
         return self;
     };
 };
@@ -79,6 +82,10 @@ var _toModel = function(self) {
             model[fieldName] = self[key];
         }
         model['type'] = self.type;
+        model['id'] = self.id;
+        model['pk'] = self.pk;
+        model['created_voyage_sources'] = self.created_voyage_sources;
+        model['source_ref_text'] = self.text_ref;
         return model;
     };
 }
@@ -487,6 +494,7 @@ function sourceFactory(data, id) {
         if (id) {
             source.id = id;
         }
+        source.pk = data.pk;
     }
     return source;
 }
