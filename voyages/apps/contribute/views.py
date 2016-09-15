@@ -259,6 +259,7 @@ def create_source(source_values, interim_voyage):
         if hasattr(source, k):
             setattr(source, k, v)
     source.interim_voyage = interim_voyage
+    source.pk = source_values['pk']
     return source
 
 contribution_model_by_type = {
@@ -1132,10 +1133,18 @@ def editorial_sources(request):
     mode = request.POST.get('mode')
     if not mode in ['new', 'edit', 'save']:
         return HttpResponseBadRequest()
-    original_ref = request.POST.get('original_ref')
+    original_ref = request.POST.get('original_ref')    
+    conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
+    source = conn.source if conn else VoyageSources()
+    prefix = 'interim_source['
+    plen = len(prefix)
+    interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
+    created_source_pk = interim_source_dict.get('created_voyage_sources_id')
+    if conn is None and created_source_pk:
+        source = VoyageSources.objects.get(pk=created_source_pk)
     from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
     if mode == 'save':
-        form = VoyagesSourcesAdminForm(request.POST)
+        form = VoyagesSourcesAdminForm(request.POST, instance=source)
         if form.is_valid():
             with transaction.atomic():
                 # Save text reference in interim source.
@@ -1151,26 +1160,17 @@ def editorial_sources(request):
                     interim_source.source_ref_text = connection_ref
                     interim_source.created_voyage_sources = reference
                     interim_source.save()
-            return JsonResponse({'result': 'OK'})
+                return JsonResponse({'result': 'OK', 'created_voyage_sources_id': reference.pk})
         else:
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
     else:
-        conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
-        source = conn.source if conn else VoyageSources()
-        prefix = 'interim_source['
-        plen = len(prefix)
-        interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
-        if conn is None:
-            created_source_pk = interim_source_dict.get('created_voyage_sources')
-            if created_source_pk:
-                source = VoyageSources.objects.get(pk=created_source_pk)
         if mode == 'new':
             type = interim_source_dict['type']
             formatted_content = ''
             all_types = {x.group_name: x for x in VoyageSourcesType.objects.all()}
             if type == 'Primary source':
                 formatted_content = '<em>' + interim_source_dict['name_of_library_or_archive'] +\
-                    '</em>' + ' (' + interim_source_dict['location_of_library_or_archive'] + ')'
+                    '</em> (' + interim_source_dict['location_of_library_or_archive'] + ')'
                 source.source_type = all_types['Documentary source']
             elif type == 'Article source':
                 formatted_content = interim_source_dict['authors'] + \
