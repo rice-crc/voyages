@@ -1387,7 +1387,7 @@
                 <h4 class="modal-title" id="referencesModalLabel">{% trans "Add a source reference" %}</h4>
             </div>
             <div class="modal-body" style="height: 500px; overflow-y: auto;">
-                <input type="hidden" name="source_id_field" id="source_id_field" />
+                <input type="hidden" name="source_index_field" id="source_index_field" />
                 <ul class="nav nav-tabs" role="tablist" id="tab_control">
                     <li data-tab="primary" role="presentation" class="active"><a href="#primary"
                                                                                  aria-controls="primary"
@@ -1639,13 +1639,14 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
-<script type="text/javascript">
+<script type="text/javascript">        
+    var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
 
-    // Keep a source id so that each new source gets a unique identifier.
-    var _sourceid = 0;
+    // Keep a source index so that each new source gets a unique identifier.
+    var _sourceIndex = 0;
     var all_source_types = [
         {% if sources_post %}
             {{ sources_post|safe }}
@@ -1661,13 +1662,13 @@
     var sources = [];
     for (var i = 0; i < all_source_types.length; ++i) {
         sources = sources.concat($.map(all_source_types[i], function(a) {
-            return sourceFactory(a, ++_sourceid);
+            return sourceFactory(a, ++_sourceIndex);
         }));
     }
 
-    function editSource(id) {
+    function editSource(index) {
         for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].id == id) {
+            if (sources[k].index == index) {
                 var s = sources[k];
                 s.bindToForm();
                 $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
@@ -1683,9 +1684,9 @@
     function createOrEditReference(item) {
         var data = {};
         var original_ref = $(item).data('originalref');
-        var id = parseInt($(item).data('id'));
+        var index = parseInt($(item).data('index'));
         for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].id == id) {
+            if (sources[k].index == index) {
                 createdNewSource = sources[k].toModel();
                 data.interim_source = createdNewSource;
                 break;
@@ -1721,7 +1722,7 @@
         // Validate reference.
         var data = {
             short_ref: $('#id_short_ref').val(),
-            full_ref: $('#id_full_ref').val(),
+            full_ref: tinyMCE.activeEditor.getContent(),
             source_type: $('#id_source_type').val(),
             connection_ref: $('#id_connection_ref').val()
         }
@@ -1751,6 +1752,7 @@
         }
         if (createdNewSource) {
             data.interim_source_id = createdNewSource['type'] + '/' + createdNewSource['pk'];
+            data.interim_source = createdNewSource;
         }
         data.mode = 'save';
         // Save data.
@@ -1762,7 +1764,22 @@
                 if (result.errors) {
                     alert(result.errors);
                 } else {
-                    // TODO: update command to show modify rather than create.
+                    if (createdNewSource) {
+                        createdNewSource['created_voyage_sources_id'] = result.created_voyage_sources_id;
+                        for (var i = 0; i < sources.length; ++i) {
+                            if (sources[i].index == createdNewSource.index) {
+                                sources[i].fromModel(createdNewSource);
+                                break;
+                            }
+                        }
+                        $('.create_ref_btn').each(function() {
+                            var $btn = $(this);
+                            if ($btn.data('index') == createdNewSource.index) {
+                                $btn.data('originalref', data.connection_ref);
+                                $btn.text(MODIFY_REFERENCE_TEXT);
+                            }
+                        });
+                    }
                     $('#create_ref_dialog').modal('hide');
                 }
             }
@@ -1771,12 +1788,12 @@
     {% endif %}
     
     // Removes the source from the table and array.
-    function removeSource(id, force) {
+    function removeSource(index, force) {
         if (!force && !confirm('{% trans "Remove this source?" %}')) return;
         for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].id == id) {
+            if (sources[k].index == index) {
                 sources.splice(k);
-                $("#row_source_" + id).remove();
+                $("#row_source_" + index).remove();
                 if (!sources.length) {
                     $('#sources_table').hide();
                 }
@@ -2248,20 +2265,20 @@
         });
 
         var addSourceToTable = function(source, isEdit) {
-            if (isEdit) removeSource(source.id, true);
+            if (isEdit) removeSource(source.index, true);
             var editorialCommands = '';
             {% if mode == 'editorial_review' %}
                 var sources_ref = source.text_ref;
-                editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-id="' + source.id + '" data-originalref="' + (sources_ref || '') + '">' + (sources_ref ? '{% trans "Modify reference" %}' : '{% trans "Create reference" %}') + '</a>'
+                editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-index="' + source.index + '" data-originalref="' + (sources_ref || '') + '">' + (sources_ref ? MODIFY_REFERENCE_TEXT : '{% trans "Create reference" %}') + '</a>'
             {% endif %}
-            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group"><a href="#" class="btn btn-primary" onclick="editSource(' + source.id + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.id + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.index + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group"><a href="#" class="btn btn-primary" onclick="editSource(' + source.index + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.index + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
             $('#sources_table').show();
         };
 
         $("#add_source_modal_btn").click(function () {
             $("#referencesModal input, #referencesModal textarea").val('');
-            var id = ++_sourceid;
-            $("#source_id_field").val(id);
+            var index = ++_sourceIndex;
+            $("#source_index_field").val(index);
             $("#add_source_btn").html('{% trans "Add"  %}');
         });
 

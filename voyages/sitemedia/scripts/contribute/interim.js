@@ -29,7 +29,7 @@ function ValidationResult(warnings, errors) {
 
 var _bindFrom = function(self) {
     return function() {
-        self.id = $("#source_id_field").val();
+        self.index = $("#source_index_field").val();
         for (var key in self._fields) {
             var field = self._fields[key];
             var inputId = field[0];
@@ -46,7 +46,8 @@ var _bindFrom = function(self) {
 
 var _bindTo = function(self) {
     return function() {
-        $("#source_id_field").val(self.id);
+        $('#referencesModal input').val('');
+        $("#source_index_field").val(self.index);
         for (var key in self._fields) {
             var field = self._fields[key];
             var inputId = field[0];
@@ -67,8 +68,7 @@ var _fromModel = function(self) {
             var fieldName = self._fields[key][1];
             self[key] = model[fieldName];
         }
-        self['id'] = model['id'];
-        self['created_voyage_sources'] = model['created_voyage_sources'];
+        self['created_voyage_sources_id'] = model['created_voyage_sources_id'] || model['created_voyage_sources'];
         self['text_ref'] = model['source_ref_text'];
         return self;
     };
@@ -82,9 +82,8 @@ var _toModel = function(self) {
             model[fieldName] = self[key];
         }
         model['type'] = self.type;
-        model['id'] = self.id;
         model['pk'] = self.pk;
-        model['created_voyage_sources'] = self.created_voyage_sources;
+        model['created_voyage_sources_id'] = self.created_voyage_sources_id;
         model['source_ref_text'] = self.text_ref;
         return model;
     };
@@ -150,7 +149,7 @@ function sourceDetails(detailsArr) {
     return '';
 }
 
-function PrimarySource(library, location, series, volume, detail, info, url, id) {
+function PrimarySource(library, location, series, volume, detail, info, url) {
     this.type = 'Primary source';
     this.library = library;
     this.location = location;
@@ -159,7 +158,6 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     this.detail = detail;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -193,7 +191,7 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     this.toModel = _toModel(this);
 }
 
-function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd, info, url, id) {
+function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd, info, url) {
     this.type = 'Article source';
     this.author = author;
     this.title = title;
@@ -204,7 +202,6 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.pageEnd = pageEnd;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -250,7 +247,7 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.toModel = _toModel(this);
 }
 
-function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, id, is_essay, essay_title, editors) {
+function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, is_essay, essay_title, editors) {
     this.type = 'Book source';
     this.author = author;
     this.title = title;
@@ -261,7 +258,6 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.pageEnd = pageEnd;
     this.info = info;
     this.url = url;
-    this.id = id;
     this.is_essay = is_essay;
     this.essay_title = essay_title || false;
     this.editors = editors;
@@ -320,7 +316,7 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.toModel = _toModel(this);
 }
 
-function NewspaperSource(name, alternative_name, city, country, info, url, id) {
+function NewspaperSource(name, alternative_name, city, country, info, url) {
     this.type = 'Newspaper source';
     this.name = name;
     this.alternative_name = alternative_name;
@@ -328,7 +324,6 @@ function NewspaperSource(name, alternative_name, city, country, info, url, id) {
     this.country = country;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -365,7 +360,7 @@ function NewspaperSource(name, alternative_name, city, country, info, url, id) {
     this.toModel = _toModel(this);
 }
 
-function PrivateNoteOrCollectionSource(authors, title, location, page, info, url, id) {
+function PrivateNoteOrCollectionSource(authors, title, location, page, info, url) {
     this.type = 'Private note or collection source';
     this.authors = authors;
     this.title = title;
@@ -373,7 +368,6 @@ function PrivateNoteOrCollectionSource(authors, title, location, page, info, url
     this.page = page;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -409,7 +403,7 @@ function PrivateNoteOrCollectionSource(authors, title, location, page, info, url
     this.toModel = _toModel(this);
 }
 
-function UnpublishedSecondarySource(authors, title, location, page, info, url, id) {
+function UnpublishedSecondarySource(authors, title, location, page, info, url) {
     this.type = 'Unpublished secondary source';
     this.authors = authors;
     this.title = title;
@@ -417,7 +411,6 @@ function UnpublishedSecondarySource(authors, title, location, page, info, url, i
     this.page = page;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -453,7 +446,7 @@ function UnpublishedSecondarySource(authors, title, location, page, info, url, i
     this.toModel = _toModel(this);
 }
 
-function sourceFactory(data, id) {
+function sourceFactory(data, index) {
     var source = null;
     var fields = null;
     if (data.model && data.fields) {
@@ -491,8 +484,8 @@ function sourceFactory(data, id) {
     }
     if (source != null && fields != null) {
         source.fromModel(fields);
-        if (id) {
-            source.id = id;
+        if (index) {
+            source.index = index;
         }
         source.pk = data.pk;
     }
