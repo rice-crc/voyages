@@ -285,15 +285,15 @@ class ReviewRequest(models.Model):
     def get_status_msg(self):
         decision_values = {
             ReviewRequestDecision.under_review: _('Under review'),
-            ReviewRequestDecision.accepted_by_reviewer: _('Contribution accepted by reviewer'),
-            ReviewRequestDecision.rejected_by_reviewer: _('Contribution rejected by reviewer'),
-            ReviewRequestDecision.accepted_by_editor: _('Contribution accepted by editor'),
-            ReviewRequestDecision.rejected_by_editor: _('Contribution rejected by editor'),
-            ReviewRequestDecision.begun_editorial_review: _('Editorial review bypassing reviewer')}
+            ReviewRequestDecision.accepted_by_reviewer: _('Accepted (reviewer)'),
+            ReviewRequestDecision.rejected_by_reviewer: _('Rejected (reviewer)'),
+            ReviewRequestDecision.accepted_by_editor: _('Accepted'),
+            ReviewRequestDecision.rejected_by_editor: _('Rejected'),
+            ReviewRequestDecision.begun_editorial_review: _('Editor bypass')}
         response_values = {
-            ReviewRequestResponse.no_reply: _('Not replied'),
-            ReviewRequestResponse.accepted: _('Accepted reviewing'),
-            ReviewRequestResponse.rejected: _('Declined reviewing')}
+            ReviewRequestResponse.no_reply: _('No reply'),
+            ReviewRequestResponse.accepted: _('Will review'),
+            ReviewRequestResponse.rejected: _('Cannot review')}
         if self.final_decision == 0:
             return response_values.get(self.response, '')
         return decision_values.get(self.final_decision, '')

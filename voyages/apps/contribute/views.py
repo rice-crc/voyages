@@ -686,18 +686,15 @@ def editor_main(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     return render(request, 'contribute/editor_main.html')
-
-@login_required()
-def get_pending_requests(request):
-    if not request.user.is_superuser:
-        return HttpResponseForbidden()
-    filter_args = {'status__in': ContributionStatus.active_statuses}
+    
+def get_reviews_by_status(statuses):
+    filter_args = {'status__in': statuses}
     contributions = get_filtered_contributions(filter_args)
     
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
-        voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.voyage_began)) + ')'
+        voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
                        for v in Voyage.objects.filter(voyage_id__in=voyage_ids)]
         res = {'type': info['type'],
                'id': info['id'],
@@ -715,7 +712,7 @@ def get_pending_requests(request):
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
             res['response'] = active_request.get_status_msg() \
-                if active_request.final_decision in [ReviewRequestDecision.under_review, ReviewRequestDecision.begun_editorial_review] else _('Reviewer decision posted')
+                if active_request.final_decision in [ReviewRequestDecision.under_review, ReviewRequestDecision.begun_editorial_review] else _('Posted')
             res['reviewer_comments'] = active_request.reviewer_comments
             res['reviewer_final_decision'] = active_request.get_status_msg()
             if active_request.final_decision:
@@ -731,14 +728,27 @@ def get_pending_requests(request):
             res['reviewer_final_decision'] = ''
             res['editor_contribution_id'] = 0
         return res
+        
+    return {full_contribution_id(x['type'], x['id']): get_contribution_info(x) for x in contributions}
 
-    return JsonResponse({full_contribution_id(x['type'], x['id']): get_contribution_info(x) for x in contributions})
+@login_required()
+def get_pending_requests(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    return JsonResponse(get_reviews_by_status(ContributionStatus.active_statuses))
 
+@login_required()
 def get_reviewers(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     reviewers = [{'full_name': u.get_full_name(), 'pk': u.pk} for u in User.objects.filter(is_staff=True)]
     return JsonResponse(reviewers, safe=False)
+
+@login_required()
+def get_pending_publication(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    return JsonResponse(get_reviews_by_status([ContributionStatus.approved]))
 
 def get_contribution_from_id(contribution_id):
     if contribution_id is None:
@@ -853,8 +863,12 @@ def post_archive_review_request(request):
     if len(reqs) == 0:
         return JsonResponse({'error': _('There is no active review for this contribution')})
     for req in reqs:
-        req.archived = True
-        req.save()
+        with transaction.atomic():
+            contribution = get_contribution_from_id(req.contribution_id)
+            contribution.status = ReviewRequestDecision.under_review
+            contribution.save()
+            req.archived = True
+            req.save()
     return JsonResponse({'result': len(reqs)})
 
 @login_required()
