@@ -11,3 +11,13 @@ $.ajaxSetup({
         }
     }
 });
+
+function maximizeContent(hideLeftMenu) {
+    var $leftMenu = $('#left-menu');
+    var occupiedWidth = 40 + $leftMenu.width();
+    if (hideLeftMenu) {
+        occupiedWidth = 20;
+        $leftMenu.hide();
+    }
+    $("#center-content").css('width', 'calc(100% - ' + occupiedWidth + 'px)');
+}

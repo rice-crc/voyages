@@ -160,7 +160,7 @@
                     data: $('form').serialize(),
                     success: function (response) {
                         if (response.result == 'OK') {
-                            window.location.replace("{% url 'contribute:editor_main' %}");
+                            window.location.replace("{% url 'contribute:editor_main' %}?tab=requests");
                         } else {
                             alert(response.result);
                         }

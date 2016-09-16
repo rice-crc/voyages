@@ -37,9 +37,22 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="pending">
+        <table id="pending_publication_table" class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Contributor" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Voyage ID" %}</th>
+                <th>{% trans "Ship" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <div role="tabpanel" class="tab-pane" id="requests">
-        <table id="requests_table" class="table table-">
+        <table id="requests_table" class="table table-striped">
             <thead>
             <tr>
                 <th>{% trans "Type" %}</th>
@@ -48,6 +61,7 @@
                 <th>{% trans "Voyage ID" %}</th>
                 <th>{% trans "Ship" %}</th>
                 <th>{% trans "Reviewer" %}</th>
+                <th>{% trans "Action" %}</th>
                 <th>{% trans "Response" %}</th>
                 <th>{% trans "Status" %}</th>
             </tr>
@@ -81,62 +95,95 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
 <script type="text/javascript">
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
+    var contribTypes = {'edit': '{% trans "Edit voyage" %}',
+                    'delete': '{% trans "Delete voyage" %}',
+                    'merge': '{% trans "Merge voyages" %}',
+                    'new': '{% trans "New voyage" %}'};
     // Dynamically load tab contents.
     var loadedTabs = {};
+    
+    function loadRequestsList() {
+        $.ajax({
+            url: '/contribute/json_pending_requests',
+            success: function(data) {
+                loadedTabs['#requests'] = data;
+                $('#requests_table > tbody > tr').remove();
+                for (var key in data) {
+                    var row = data[key];
+                    var responseId = parseInt(row['response_id']) || 0;
+                    $('#requests_table > tbody:last-child').append(
+                        '<tr><td>' +
+                        ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
+                            .replace('@@@', contribTypes[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
+                        row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
+                        row['voyage_info'].join(', ') +
+                        '</td><td>' + row['reviewer'] +
+                        '</td><td class="review_cell" data-id="' + key + '">' +
+                        '<div class="dropdown"><button aria-expanded="false" class="btn dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li>' +
+                        (row['review_request_id'] == 0
+                            ? '<a class="reviewer_assign_btn" href="#">{% trans "Assign" %}</a>'
+                            : '<a class="review_archive_btn" href="#">{% trans "Archive request" %}</a>') + '</li>' +
+                        (row['editor_contribution_id']
+                            ? '<li><a href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></li>'
+                            : '') + '</ul></div></td><td>' +
+                        '<span class="' + reviewClasses[responseId] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
+                }
+                $(".dropdown-toggle").dropdown();
+                if (!$('#requests_table').data('hasInitialized')) {
+                    $('#requests_table').DataTable({pageLength: 25});
+                    $('#requests_table').data('hasInitialized', true);
+                }
+                $(".reviewer_assign_btn").click(function() {
+                    $('#input_contribution_id').val($(this).closest('td').data('id'));
+                    $('#reviewer_assign_modal').modal('show');
+                });
+                $(".review_archive_btn").click(function() {
+                    if (!confirm('{% trans "Confirm archival of this request? Any response the reviewer may have sent will be ignored." %}')) return false;
+                    $.ajax({
+                        url: '/contribute/post_archive_review_request',
+                        method: 'POST',
+                        data: {
+                            contribution_id: $(this).closest('td').data('id')
+                        },
+                        success: function(data) {
+                            if (data.error) {
+                                alert(data.error);
+                            } else {
+                                loadRequestsList();
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    }
+    
+    function loadPendingList() {        
+        $.ajax({
+            url: '/contribute/json_pending_publication',
+            success: function(data) {
+                loadedTabs['#pending'] = data;
+                $('#pending_publication_table > tbody > tr').remove();
+                for (var key in data) {
+                    var row = data[key];
+                    var responseId = parseInt(row['response_id']) || 0;
+                    $('#pending_publication_table > tbody:last-child').append(
+                        '<tr><td>' +
+                        ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
+                            .replace('@@@', contribTypes[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
+                        row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
+                        row['voyage_info'].join(', ') +
+                        '</td><td></tr>');
+                }
+            }
+        });
+    }
+    
     var loadTabData = function(href) {
         if (href == '#requests') {
-            var types = {'edit': '{% trans "Edit voyage" %}',
-                         'delete': '{% trans "Delete voyage" %}',
-                         'merge': '{% trans "Merge voyages" %}',
-                         'new': '{% trans "New voyage" %}'};
-            $.ajax({
-                url: '/contribute/json_pending_requests',
-                success: function(data) {
-                    loadedTabs[href] = data;
-                    $('#requests_table > tbody > tr').remove();
-                    for (var key in data) {
-                        var row = data[key];
-                        var responseId = parseInt(row['response_id']) || 0;
-                        $('#requests_table > tbody:last-child').append(
-                            '<tr><td>' +
-                            ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
-                                .replace('@@@', types[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
-                            row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
-                            row['voyage_info'].join(', ') +
-                            '</td><td class="review_cell" data-id="' + key + '">' +
-                            (row['review_request_id'] == 0
-                                ? '<button class="reviewer_assign_btn btn btn-primary">{% trans "Assign" %}</button>'
-                                : row['reviewer'] +
-                                    '<br /><button class="review_archive_btn btn btn-danger">{% trans "Archive request" %}</button>') +
-                            (row['editor_contribution_id']
-                                ? '<p><a class="btn btn-primary" role="button" href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></p>'
-                                : '') + '</td><td>' +
-                            '<span class="' + reviewClasses[responseId] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
-                    }
-                    $('#requests_table').DataTable();
-                    $(".reviewer_assign_btn").click(function() {
-                        $('#input_contribution_id').val($(this).parent().data('id'));
-                        $('#reviewer_assign_modal').modal('show');
-                    });
-                    $(".review_archive_btn").click(function() {
-                        if (!confirm('{% trans "Confirm archival of this request? Any response the reviewer may have sent will be ignored." %}')) return false;
-                        $.ajax({
-                            url: '/contribute/post_archive_review_request',
-                            method: 'POST',
-                            data: {
-                                contribution_id: $(this).parent().data('id')
-                            },
-                            success: function(data) {
-                                if (data.error) {
-                                    alert(data.error);
-                                } else {
-                                    loadTabData('#requests');
-                                }
-                            }
-                        });
-                    });
-                }
-            });
+            loadRequestsList();
+        } else if (href == '#pending') {
+            loadPendingList();
         }
     };
 
@@ -159,5 +206,7 @@
             $('#tab_' + params.tab).click();
         }
     });
+    // Maximize screen space.
+    maximizeContent(true);
 </script>
 {% endblock %}

@@ -1688,6 +1688,7 @@
         for (var k = 0; k < sources.length; ++k) {
             if (sources[k].index == index) {
                 createdNewSource = sources[k].toModel();
+                createdNewSource.index = index;
                 data.interim_source = createdNewSource;
                 break;
             }
@@ -2323,15 +2324,15 @@
 
         var sourceIcons = ['ok', 'pencil', 'remove'];
         var sourceMenu = function (src, action) {
-            {% if mode == 'editorial_review' %}
-            createOrEditReference(src);
-            {% endif %}
             var pk = $(src).data('sourcepk');
             var span = $('#pre_source_action_span_' + pk);
             span.removeClass();
             span.addClass("glyphicon glyphicon-" + sourceIcons[action]);
             $('#pre_existing_source_action_' + pk).val(action);
-            if (action > 0) {
+            {% if mode == 'editorial_review' %}
+            if (action == 1) {
+                createOrEditReference(src);
+            } else {% endif %} if (action > 0) {
                 $('#pre_existing_source_notes_' + pk).focus();
             }
             return false;
@@ -2502,12 +2503,6 @@
         }
     };
     // Maximize screen space.
-    var $leftMenu = $('#left-menu');
-    var occupiedWidth = 40 + $leftMenu.width();
-    {% if mode == 'editorial_review' %}
-        occupiedWidth = 20;
-        $leftMenu.hide();
-    {% endif %}
-    $("#center-content").css('width', 'calc(100% - ' + occupiedWidth + 'px)');
+    maximizeContent({% if mode == 'editorial_review' %}true{% endif %});
 </script>
 {% endblock %}

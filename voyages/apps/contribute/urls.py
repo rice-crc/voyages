@@ -62,6 +62,7 @@ urlpatterns = [
     url(r'review/(?P<review_request_id>\d+)', views.review, name='review'),
 
     url(r'json_pending_requests', views.get_pending_requests, name='json_pending_requests'),
+    url(r'json_pending_publication', views.get_pending_publication, name='json_pending_publication'),
     url(r'json_reviewers', views.get_reviewers, name='json_reviewers'),
 
     url(r'post_review_request', views.post_review_request, name='post_review_request'),
