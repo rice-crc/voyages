@@ -1,5 +1,6 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load voyage_extras %}
 
 {% block center-content %}
@@ -1895,7 +1896,9 @@
         var numbers = {
         {% for k, v in numbers.items %}
             {% if v %}
+            {% localize off %}
                 '{{ k }}': {{ v }},
+            {% endlocalize %}
             {% endif %}
         {% endfor %}
         };
