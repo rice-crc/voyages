@@ -499,6 +499,76 @@ def contribution_related_data(contribution):
         previous_data[voyage.voyage_id] = voyage_to_dict(voyage)
     return previous_data
 
+slave_number_var_map = {'SLADAFRI': 'slave_deaths_before_africa',
+                        'SLADVOY': 'slave_deaths_between_africa_america',
+                        'SLADAMER': 'slave_deaths_between_arrival_and_sale',
+                        'SLINTEND': 'num_slaves_intended_first_port',
+                        'SLINTEN2': 'num_slaves_intended_second_port',
+                        'NCAR13': 'num_slaves_carried_first_port',
+                        'NCAR15': 'num_slaves_carried_second_port',
+                        'NCAR17': 'num_slaves_carried_third_port',
+                        'TSLAVESP': 'total_num_slaves_purchased',
+                        'TSLAVESD': 'total_num_slaves_dep_last_slaving_port',
+                        'SLAARRIV': 'total_num_slaves_arr_first_port_embark',
+                        'SLAS32': 'num_slaves_disembark_first_place',
+                        'SLAS36': 'num_slaves_disembark_second_place',
+                        'SLAS39': 'num_slaves_disembark_third_place
+                        # Demographics
+                        'MEN1': 'num_men_embark_first_port_purchase',
+                        'WOMEN1': 'num_women_embark_first_port_purchase',
+                        'BOY1': 'num_boy_embark_first_port_purchase',
+                        'GIRL1': 'num_girl_embark_first_port_purchase',
+                        'ADULT1': 'num_adult_embark_first_port_purchase',
+                        'CHILD1': 'num_child_embark_first_port_purchase',
+                        'INFANT1': 'num_infant_embark_first_port_purchase',
+                        'MALE1': 'num_males_embark_first_port_purchase',
+                        'FEMALE1': 'num_females_embark_first_port_purchase',
+                        'MEN2': 'num_men_died_middle_passage',
+                        'WOMEN2': 'num_women_died_middle_passage',
+                        'BOY2': 'num_boy_died_middle_passage',
+                        'GIRL2': 'num_girl_died_middle_passage',
+                        'ADULT2': 'num_adult_died_middle_passage',
+                        'CHILD2': 'num_child_died_middle_passage',
+                        'INFANT2': 'num_infant_died_middle_passage',
+                        'MALE2': 'num_males_died_middle_passage',
+                        'FEMALE2': 'num_females_died_middle_passage',
+                        'MEN3': 'num_men_disembark_first_landing',
+                        'WOMEN3': 'num_women_disembark_first_landing',
+                        'BOY3': 'num_boy_disembark_first_landing',
+                        'GIRL3': 'num_girl_disembark_first_landing',
+                        'ADULT3': 'num_adult_disembark_first_landing',
+                        'CHILD3': 'num_child_disembark_first_landing',
+                        'INFANT3': 'num_infant_disembark_first_landing',
+                        'MALE3': 'num_males_disembark_first_landing',
+                        'FEMALE3': 'num_females_disembark_first_landing',
+                        'MEN4': 'num_men_embark_second_port_purchase',
+                        'WOMEN4': 'num_women_embark_second_port_purchase',
+                        'BOY4': 'num_boy_embark_second_port_purchase',
+                        'GIRL4': 'num_girl_embark_second_port_purchase',
+                        'ADULT4': 'num_adult_embark_second_port_purchase',
+                        'CHILD4': 'num_child_embark_second_port_purchase',
+                        'INFANT4': 'num_infant_embark_second_port_purchase',
+                        'MALE4': 'num_males_embark_second_port_purchase',
+                        'FEMALE4': 'num_females_embark_second_port_purchase',
+                        'MEN5': 'num_men_embark_third_port_purchase',
+                        'WOMEN5': 'num_women_embark_third_port_purchase',
+                        'BOY5': 'num_boy_embark_third_port_purchase',
+                        'GIRL5': 'num_girl_embark_third_port_purchase',
+                        'ADULT5': 'num_adult_embark_third_port_purchase',
+                        'CHILD5': 'num_child_embark_third_port_purchase',
+                        'INFANT5': 'num_infant_embark_third_port_purchase',
+                        'MALE5': 'num_males_embark_third_port_purchase',
+                        'FEMALE5': 'num_females_embark_third_port_purchase',
+                        'MEN6': 'num_men_disembark_second_landing',
+                        'WOMEN6': 'num_women_disembark_second_landing',
+                        'BOY6': 'num_boy_disembark_second_landing',
+                        'GIRL6': 'num_girl_disembark_second_landing',
+                        'ADULT6': 'num_adult_disembark_second_landing',
+                        'CHILD6': 'num_child_disembark_second_landing',
+                        'INFANT6': 'num_infant_disembark_second_landing',
+                        'MALE6': 'num_males_disembark_second_landing',
+                        'FEMALE6': 'num_females_disembark_second_landing'}
+
 def voyage_to_dict(voyage):
     dict = {}
     # Ship, nation, owners
@@ -588,76 +658,9 @@ def voyage_to_dict(voyage):
         dict['length_of_middle_passage'] = dates.length_middle_passage_days
     numbers = voyage.voyage_slaves_numbers
     if numbers is not None:
-        dict[number_prefix + 'SLADAFRI'] = numbers.slave_deaths_before_africa
-        dict[number_prefix + 'SLADVOY'] = numbers.slave_deaths_between_africa_america
-        dict[number_prefix + 'SLADAMER'] = numbers.slave_deaths_between_arrival_and_sale
-        dict[number_prefix + 'SLINTEND'] = numbers.num_slaves_intended_first_port
-        dict[number_prefix + 'SLINTEN2'] = numbers.num_slaves_intended_second_port
-        dict[number_prefix + 'NCAR13'] = numbers.num_slaves_carried_first_port
-        dict[number_prefix + 'NCAR15'] = numbers.num_slaves_carried_second_port
-        dict[number_prefix + 'NCAR17'] = numbers.num_slaves_carried_third_port
-        dict[number_prefix + 'TSLAVESP'] = numbers.total_num_slaves_purchased
-        dict[number_prefix + 'TSLAVESD'] = numbers.total_num_slaves_dep_last_slaving_port
-        dict[number_prefix + 'SLAARRIV'] = numbers.total_num_slaves_arr_first_port_embark
-        dict[number_prefix + 'SLAS32'] = numbers.num_slaves_disembark_first_place
-        dict[number_prefix + 'SLAS36'] = numbers.num_slaves_disembark_second_place
-        dict[number_prefix + 'SLAS39'] = numbers.num_slaves_disembark_third_place
-        # Demographics
-        dict[number_prefix + 'MEN1'] = numbers.num_men_embark_first_port_purchase
-        dict[number_prefix + 'WOMEN1'] = numbers.num_women_embark_first_port_purchase
-        dict[number_prefix + 'BOY1'] = numbers.num_boy_embark_first_port_purchase
-        dict[number_prefix + 'GIRL1'] = numbers.num_girl_embark_first_port_purchase
-        dict[number_prefix + 'ADULT1'] = numbers.num_adult_embark_first_port_purchase
-        dict[number_prefix + 'CHILD1'] = numbers.num_child_embark_first_port_purchase
-        dict[number_prefix + 'INFANT1'] = numbers.num_infant_embark_first_port_purchase
-        dict[number_prefix + 'MALE1'] = numbers.num_males_embark_first_port_purchase
-        dict[number_prefix + 'FEMALE1'] = numbers.num_females_embark_first_port_purchase
-        dict[number_prefix + 'MEN2'] = numbers.num_men_died_middle_passage
-        dict[number_prefix + 'WOMEN2'] = numbers.num_women_died_middle_passage
-        dict[number_prefix + 'BOY2'] = numbers.num_boy_died_middle_passage
-        dict[number_prefix + 'GIRL2'] = numbers.num_girl_died_middle_passage
-        dict[number_prefix + 'ADULT2'] = numbers.num_adult_died_middle_passage
-        dict[number_prefix + 'CHILD2'] = numbers.num_child_died_middle_passage
-        dict[number_prefix + 'INFANT2'] = numbers.num_infant_died_middle_passage
-        dict[number_prefix + 'MALE2'] = numbers.num_males_died_middle_passage
-        dict[number_prefix + 'FEMALE2'] = numbers.num_females_died_middle_passage
-        dict[number_prefix + 'MEN3'] = numbers.num_men_disembark_first_landing
-        dict[number_prefix + 'WOMEN3'] = numbers.num_women_disembark_first_landing
-        dict[number_prefix + 'BOY3'] = numbers.num_boy_disembark_first_landing
-        dict[number_prefix + 'GIRL3'] = numbers.num_girl_disembark_first_landing
-        dict[number_prefix + 'ADULT3'] = numbers.num_adult_disembark_first_landing
-        dict[number_prefix + 'CHILD3'] = numbers.num_child_disembark_first_landing
-        dict[number_prefix + 'INFANT3'] = numbers.num_infant_disembark_first_landing
-        dict[number_prefix + 'MALE3'] = numbers.num_males_disembark_first_landing
-        dict[number_prefix + 'FEMALE3'] = numbers.num_females_disembark_first_landing
-        dict[number_prefix + 'MEN4'] = numbers.num_men_embark_second_port_purchase
-        dict[number_prefix + 'WOMEN4'] = numbers.num_women_embark_second_port_purchase
-        dict[number_prefix + 'BOY4'] = numbers.num_boy_embark_second_port_purchase
-        dict[number_prefix + 'GIRL4'] = numbers.num_girl_embark_second_port_purchase
-        dict[number_prefix + 'ADULT4'] = numbers.num_adult_embark_second_port_purchase
-        dict[number_prefix + 'CHILD4'] = numbers.num_child_embark_second_port_purchase
-        dict[number_prefix + 'INFANT4'] = numbers.num_infant_embark_second_port_purchase
-        dict[number_prefix + 'MALE4'] = numbers.num_males_embark_second_port_purchase
-        dict[number_prefix + 'FEMALE4'] = numbers.num_females_embark_second_port_purchase
-        dict[number_prefix + 'MEN5'] = numbers.num_men_embark_third_port_purchase
-        dict[number_prefix + 'WOMEN5'] = numbers.num_women_embark_third_port_purchase
-        dict[number_prefix + 'BOY5'] = numbers.num_boy_embark_third_port_purchase
-        dict[number_prefix + 'GIRL5'] = numbers.num_girl_embark_third_port_purchase
-        dict[number_prefix + 'ADULT5'] = numbers.num_adult_embark_third_port_purchase
-        dict[number_prefix + 'CHILD5'] = numbers.num_child_embark_third_port_purchase
-        dict[number_prefix + 'INFANT5'] = numbers.num_infant_embark_third_port_purchase
-        dict[number_prefix + 'MALE5'] = numbers.num_males_embark_third_port_purchase
-        dict[number_prefix + 'FEMALE5'] = numbers.num_females_embark_third_port_purchase
-        dict[number_prefix + 'MEN6'] = numbers.num_men_disembark_second_landing
-        dict[number_prefix + 'WOMEN6'] = numbers.num_women_disembark_second_landing
-        dict[number_prefix + 'BOY6'] = numbers.num_boy_disembark_second_landing
-        dict[number_prefix + 'GIRL6'] = numbers.num_girl_disembark_second_landing
-        dict[number_prefix + 'ADULT6'] = numbers.num_adult_disembark_second_landing
-        dict[number_prefix + 'CHILD6'] = numbers.num_child_disembark_second_landing
-        dict[number_prefix + 'INFANT6'] = numbers.num_infant_disembark_second_landing
-        dict[number_prefix + 'MALE6'] = numbers.num_males_disembark_second_landing
-        dict[number_prefix + 'FEMALE6'] = numbers.num_females_disembark_second_landing
-
+        for k, v in slave_number_var_map.items():
+            dict[number_prefix + k] = getattr(numbers, v)
+    
     # Captains
     captains = voyage.voyage_captain.all()
     captain_keys = ['first', 'second', 'third']
@@ -1227,3 +1230,143 @@ def editorial_sources(request):
             source.full_ref = formatted_content
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})
+
+@login_required()
+@require_POST
+def publish_pending(request):
+    def get_contrib_review_request(info):
+        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
+        if len(reqs) != 1:
+            raise Exception('Invalid state: a single active review must exist for the contribution')
+        return (info['contribution'], reqs[0])
+    
+    voyage_id_range_start = request.POST.get('voyage_id_range_start')
+    if not voyage_id_range_start:
+        from django.db.models import Max
+        voyage_id_range_start = Voyage.objects.all().aggregate(Max('voyage_id')) + 1
+        
+    def get_new_voyage_id():
+        res = voyage_id_range_start
+        voyage_id_range_start += 1
+        return res
+    
+    contributions = get_filtered_contributions({'status': ContributionStatus.approved})
+    inserted = [get_contrib_review_request(x) for x in contributions if x['type'] == 'new']
+    merged = [get_contrib_review_request(x) for x in contributions if x['type'] == 'merge']
+    deleted = [get_contrib_review_request(x) for x in contributions if x['type'] == 'delete']
+    insert_interim = [(None, x[1].editor_contribution) for x in (inserted + merged)]
+    edit_interim = [(x.edited_voyage_id, get_contrib_review_request(x)[1].editor_contribution)
+                    for x in contributions if x['type'] == 'edit']
+    # CHECK THIS: are we supposed to delete the merged and pre-existing voyages?
+    delete_ids = [id for ids in [d.deleted_voyages_ids for d in deleted] for id in ids] +\
+        [id for ids in [m.merged_voyages_ids for m in merged] for id in ids] +\
+        [y[0] for y in edit_interim]
+    # Keep a dictionary of owners names so that we avoid creating duplicates.
+    ship_owners = {o.name: o.pk for o in VoyageShipOwner.objects.all()}
+    # Create new voyages corresponding to editorial data.
+    all_interim = edit_interim + insert_interim
+    with transaction.atomic():
+        # Delete voyages first.
+        # TODO
+        for tuple in all_interim:
+            # We have to create a voyage model based on interim/imputed data.
+            interim = tuple[1]
+            voyage = Voyage()
+            voyage.voyage_id = tuple[0] if tuple[0] else get_new_voyage_id()
+            voyage.save()
+            # Ship
+            ship = VoyageShip()
+            ship.voyage = voyage
+            ship.ship_name = interim.name_of_vessel
+            ship.year_of_construction = interim.year_ship_constructed
+            ship.registered_year = interim.year_ship_registered
+            ship.vessel_construction_place = interim.ship_construction_place
+            ship.registered_place = interim.ship_registration_place
+            ship.nationality_ship = interim.national_carrier
+            ship.rig_of_vessel = interim.rig_of_vessel
+            ship.tonnage = interim.tonnage_of_vessel
+            ship.ton_type = interim.ton_type
+            ship.guns_mounted = interim.guns_mounted
+            ship.imputed_nationality = interim.imputed_national_carrier
+            ship.tonnage_mod = interim.imputed_standardized_tonnage
+            ship.vessel_construction_region = interim.imputed_region_ship_constructed
+            ship.save()
+            # Ship owners
+            # TODO
+            # Outcome
+            outcome = VoyageOutcome()
+            outcome.voyage = voyage
+            outcome.particular_outcome = interim.voyage_outcome
+            outcome.resistance = interim.african_resistance
+            outcome.outcome_slaves = interim.imputed_outcome_of_voyage_for_slaves
+            outcome.vessel_captured_outcome = interim.imputed_outcome_of_voyage_if_ship_captured
+            outcome.outcome_owner = interim.imputed_outcome_of_voyage_for_owner
+            outcome.save()
+            # Itinerary
+            itinerary = VoyageItinerary()
+            itinerary.voyage = voyage
+            itinerary.int_first_port_emb = interim.first_port_intended_embarkation
+            itinerary.int_second_port_emb = interim.second_port_intended_embarkation
+            itinerary.int_first_port_dis = interim.first_port_intended_disembarkation
+            itinerary.int_second_port_dis = interim.second_port_intended_disembarkation
+            itinerary.port_of_departure = interim.port_of_departure
+            itinerary.ports_called_buying_slaves = interim.number_of_ports_called_prior_to_slave_purchase
+            itinerary.first_place_slave_purchase = interim.first_place_of_slave_purchase
+            itinerary.second_place_slave_purchase = interim.second_place_of_slave_purchase
+            itinerary.third_place_slave_purchase = interim.third_place_of_slave_purchase
+            itinerary.principal_place_of_slave_purchase = interim.principal_place_of_slave_purchase
+            itinerary.port_of_call_before_atl_crossing = interim.place_of_call_before_atlantic_crossing
+            itinerary.number_of_ports_of_call = interim.number_of_new_world_ports_called_prior_to_disembarkation
+            itinerary.first_landing_place = interim.first_place_of_landing
+            itinerary.second_landing_place = interim.second_place_of_landing
+            itinerary.third_landing_place = interim.third_place_of_landing
+            itinerary.principal_port_of_slave_dis = interim.principal_place_of_slave_disembarkation
+            itinerary.place_voyage_ended = interim.port_voyage_ended
+            itinerary.imp_port_voyage_begin = interim.imputed_port_where_voyage_began
+            itinerary.imp_principal_place_of_slave_purchase = interim.imputed_principal_place_of_slave_purchase
+            itinerary.imp_principal_port_slave_dis = interim.imputed_principal_port_of_slave_disembarkation
+            itinerary.imp_region_voyage_begin = interim.imputed_region_where_voyage_began
+            itinerary.int_first_region_slave_landing = interim.imputed_first_region_of_slave_landing
+            itinerary.int_second_place_region_slave_landing = interim.imputed_second_region_of_slave_landing
+            # NOT FOUND!
+            # itinerary. = interim.imputed_third_region_of_slave_landing
+            # itinerary. = interim.imputed_first_region_of_embarkation_of_slaves
+            # itinerary. = interim.imputed_second_region_of_embarkation_of_slaves
+            # itinerary. = interim.imputed_third_region_of_embarkation_of_slaves
+            # TODO: some fields in the itinerary are missing!
+            itinerary.save()
+            # Dates
+            dates = VoyageDates()
+            dates.voyage = voyage
+            date.voyage_began = interim.date_departure
+            date.slave_purchase_began = interim.date_slave_purchase_began
+            date.vessel_left_port = interim.date_vessel_left_last_slaving_port
+            date.first_dis_of_slaves = interim.date_first_slave_disembarkation
+            date.arrival_at_second_place_landing = interim.date_second_slave_disembarkation
+            date.third_dis_of_slaves = interim.date_third_slave_disembarkation
+            date.departure_last_place_of_landing = interim.date_return_departure
+            date.voyage_completed = interim.date_voyage_completed
+            date.length_middle_passage_days = interim.length_of_middle_passage
+            date.imp_voyage_began = interim.imputed_year_voyage_began
+            date.imp_departed_africa = interim.imputed_year_departed_africa
+            date.imp_arrival_at_port_of_dis = interim.imputed_year_arrived_at_port_of_disembarkation
+            date.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
+            date.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
+            dates.save()
+            # Captains
+            # TODO
+            # Numbers
+            numbers = VoyageSlavesNumbers()
+            numbers.voyage = voyage
+            # The slave numbers are stored sparsely
+            for num in interim.slave_numbers.all():
+                # TODO: imputed var names are not valid keys for the dict.
+                setattr(numbers, slave_number_var_map[num.var_name], num.number)
+            numbers.save()
+            # This is redundant, but we are keeping the original model design consistent.
+            voyage.voyage_ship = ship
+            voyage.voyage_itinerary = itinerary
+            voyage.voyage_dates = dates
+            voyage.voyage_slaves_numbers = numbers
+            voyage.save()
+    return JsonResponse({'result': 'Failed', 'errors': ['Not implemented']]})
