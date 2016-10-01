@@ -57,7 +57,7 @@ urlpatterns = [
     
     url(r'begin_editorial_review', views.begin_editorial_review, name='begin_editorial_review'),
         
-    url(r'review/(?P<review_request_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
+    url(r'review/(?P<reviewer_contribution_id>\d+)/save_ajax', views.review_interim_save_ajax, name='review_interim_save_ajax'),
     url(r'review/(?P<review_request_id>\d+)/submit_review_to_editor', views.submit_review_to_editor, name='submit_review_to_editor'),
     url(r'review/(?P<review_request_id>\d+)', views.review, name='review'),
 
