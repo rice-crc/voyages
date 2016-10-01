@@ -24,7 +24,9 @@
                     </select>
                 </div>
             </div>
-            <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
+            <div class="btn-group" id="decision_btn_group">
+                <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
+            </div>
         {% endif %}
         {% if mode == 'editorial_review' or mode == 'editor' %}
             <h3>{% trans "Editorial tools:" %}</h3>
@@ -123,6 +125,12 @@
                         data: $('form').serialize(),
                         success: function (response) {
                             if (response.result == 'OK') {
+                                var dict = response.imputed_vars;
+                                var text = '';
+                                for (var key in dict) {
+                                    text += '\n' + key + ': ' + dict[key];
+                                }
+                                alert('{% trans "Impute variables computed as follows" %}: ' + text);
                                 window.location.reload();
                             } else {
                                 alert(response.result);

@@ -395,11 +395,11 @@ def editorial_review_interim_save_ajax(request, editor_contribution_id):
 
 @login_required
 @require_POST
-def review_interim_save_ajax(request, review_request_id):
-    review_request = get_object_or_404(ReviewRequest, pk=review_request_id)
-    if request.user.pk != review_request.suggested_reviewer.pk:
+def review_interim_save_ajax(request, reviewer_contribution_id):
+    contribution = get_object_or_404(ReviewVoyageContribution, pk=reviewer_contribution_id)
+    if request.user.pk != contribution.request.suggested_reviewer.pk:
         return HttpResponseForbidden()
-    return common_save_ajax(request, review_request.review_contribution.first())
+    return common_save_ajax(request, contribution)
 
 @login_required
 def interim_commit(request, contribution_type, contribution_id):
@@ -499,75 +499,118 @@ def contribution_related_data(contribution):
         previous_data[voyage.voyage_id] = voyage_to_dict(voyage)
     return previous_data
 
-slave_number_var_map = {'SLADAFRI': 'slave_deaths_before_africa',
-                        'SLADVOY': 'slave_deaths_between_africa_america',
-                        'SLADAMER': 'slave_deaths_between_arrival_and_sale',
-                        'SLINTEND': 'num_slaves_intended_first_port',
-                        'SLINTEN2': 'num_slaves_intended_second_port',
-                        'NCAR13': 'num_slaves_carried_first_port',
-                        'NCAR15': 'num_slaves_carried_second_port',
-                        'NCAR17': 'num_slaves_carried_third_port',
-                        'TSLAVESP': 'total_num_slaves_purchased',
-                        'TSLAVESD': 'total_num_slaves_dep_last_slaving_port',
-                        'SLAARRIV': 'total_num_slaves_arr_first_port_embark',
-                        'SLAS32': 'num_slaves_disembark_first_place',
-                        'SLAS36': 'num_slaves_disembark_second_place',
-                        'SLAS39': 'num_slaves_disembark_third_place
-                        # Demographics
-                        'MEN1': 'num_men_embark_first_port_purchase',
-                        'WOMEN1': 'num_women_embark_first_port_purchase',
-                        'BOY1': 'num_boy_embark_first_port_purchase',
-                        'GIRL1': 'num_girl_embark_first_port_purchase',
-                        'ADULT1': 'num_adult_embark_first_port_purchase',
-                        'CHILD1': 'num_child_embark_first_port_purchase',
-                        'INFANT1': 'num_infant_embark_first_port_purchase',
-                        'MALE1': 'num_males_embark_first_port_purchase',
-                        'FEMALE1': 'num_females_embark_first_port_purchase',
-                        'MEN2': 'num_men_died_middle_passage',
-                        'WOMEN2': 'num_women_died_middle_passage',
-                        'BOY2': 'num_boy_died_middle_passage',
-                        'GIRL2': 'num_girl_died_middle_passage',
-                        'ADULT2': 'num_adult_died_middle_passage',
-                        'CHILD2': 'num_child_died_middle_passage',
-                        'INFANT2': 'num_infant_died_middle_passage',
-                        'MALE2': 'num_males_died_middle_passage',
-                        'FEMALE2': 'num_females_died_middle_passage',
-                        'MEN3': 'num_men_disembark_first_landing',
-                        'WOMEN3': 'num_women_disembark_first_landing',
-                        'BOY3': 'num_boy_disembark_first_landing',
-                        'GIRL3': 'num_girl_disembark_first_landing',
-                        'ADULT3': 'num_adult_disembark_first_landing',
-                        'CHILD3': 'num_child_disembark_first_landing',
-                        'INFANT3': 'num_infant_disembark_first_landing',
-                        'MALE3': 'num_males_disembark_first_landing',
-                        'FEMALE3': 'num_females_disembark_first_landing',
-                        'MEN4': 'num_men_embark_second_port_purchase',
-                        'WOMEN4': 'num_women_embark_second_port_purchase',
-                        'BOY4': 'num_boy_embark_second_port_purchase',
-                        'GIRL4': 'num_girl_embark_second_port_purchase',
-                        'ADULT4': 'num_adult_embark_second_port_purchase',
-                        'CHILD4': 'num_child_embark_second_port_purchase',
-                        'INFANT4': 'num_infant_embark_second_port_purchase',
-                        'MALE4': 'num_males_embark_second_port_purchase',
-                        'FEMALE4': 'num_females_embark_second_port_purchase',
-                        'MEN5': 'num_men_embark_third_port_purchase',
-                        'WOMEN5': 'num_women_embark_third_port_purchase',
-                        'BOY5': 'num_boy_embark_third_port_purchase',
-                        'GIRL5': 'num_girl_embark_third_port_purchase',
-                        'ADULT5': 'num_adult_embark_third_port_purchase',
-                        'CHILD5': 'num_child_embark_third_port_purchase',
-                        'INFANT5': 'num_infant_embark_third_port_purchase',
-                        'MALE5': 'num_males_embark_third_port_purchase',
-                        'FEMALE5': 'num_females_embark_third_port_purchase',
-                        'MEN6': 'num_men_disembark_second_landing',
-                        'WOMEN6': 'num_women_disembark_second_landing',
-                        'BOY6': 'num_boy_disembark_second_landing',
-                        'GIRL6': 'num_girl_disembark_second_landing',
-                        'ADULT6': 'num_adult_disembark_second_landing',
-                        'CHILD6': 'num_child_disembark_second_landing',
-                        'INFANT6': 'num_infant_disembark_second_landing',
-                        'MALE6': 'num_males_disembark_second_landing',
-                        'FEMALE6': 'num_females_disembark_second_landing'}
+slave_number_var_map = {
+    'SLADAFRI': 'slave_deaths_before_africa',
+    'SLADVOY': 'slave_deaths_between_africa_america',
+    'SLADAMER': 'slave_deaths_between_arrival_and_sale',
+    'SLINTEND': 'num_slaves_intended_first_port',
+    'SLINTEN2': 'num_slaves_intended_second_port',
+    'NCAR13': 'num_slaves_carried_first_port',
+    'NCAR15': 'num_slaves_carried_second_port',
+    'NCAR17': 'num_slaves_carried_third_port',
+    'TSLAVESP': 'total_num_slaves_purchased',
+    'TSLAVESD': 'total_num_slaves_dep_last_slaving_port',
+    'SLAARRIV': 'total_num_slaves_arr_first_port_embark',
+    'SLAS32': 'num_slaves_disembark_first_place',
+    'SLAS36': 'num_slaves_disembark_second_place',
+    'SLAS39': 'num_slaves_disembark_third_place',
+    'MEN1': 'num_men_embark_first_port_purchase',
+    'WOMEN1': 'num_women_embark_first_port_purchase',
+    'BOY1': 'num_boy_embark_first_port_purchase',
+    'GIRL1': 'num_girl_embark_first_port_purchase',
+    'ADULT1': 'num_adult_embark_first_port_purchase',
+    'CHILD1': 'num_child_embark_first_port_purchase',
+    'INFANT1': 'num_infant_embark_first_port_purchase',
+    'MALE1': 'num_males_embark_first_port_purchase',
+    'FEMALE1': 'num_females_embark_first_port_purchase',
+    'MEN2': 'num_men_died_middle_passage',
+    'WOMEN2': 'num_women_died_middle_passage',
+    'BOY2': 'num_boy_died_middle_passage',
+    'GIRL2': 'num_girl_died_middle_passage',
+    'ADULT2': 'num_adult_died_middle_passage',
+    'CHILD2': 'num_child_died_middle_passage',
+    'INFANT2': 'num_infant_died_middle_passage',
+    'MALE2': 'num_males_died_middle_passage',
+    'FEMALE2': 'num_females_died_middle_passage',
+    'MEN3': 'num_men_disembark_first_landing',
+    'WOMEN3': 'num_women_disembark_first_landing',
+    'BOY3': 'num_boy_disembark_first_landing',
+    'GIRL3': 'num_girl_disembark_first_landing',
+    'ADULT3': 'num_adult_disembark_first_landing',
+    'CHILD3': 'num_child_disembark_first_landing',
+    'INFANT3': 'num_infant_disembark_first_landing',
+    'MALE3': 'num_males_disembark_first_landing',
+    'FEMALE3': 'num_females_disembark_first_landing',
+    'MEN4': 'num_men_embark_second_port_purchase',
+    'WOMEN4': 'num_women_embark_second_port_purchase',
+    'BOY4': 'num_boy_embark_second_port_purchase',
+    'GIRL4': 'num_girl_embark_second_port_purchase',
+    'ADULT4': 'num_adult_embark_second_port_purchase',
+    'CHILD4': 'num_child_embark_second_port_purchase',
+    'INFANT4': 'num_infant_embark_second_port_purchase',
+    'MALE4': 'num_males_embark_second_port_purchase',
+    'FEMALE4': 'num_females_embark_second_port_purchase',
+    'MEN5': 'num_men_embark_third_port_purchase',
+    'WOMEN5': 'num_women_embark_third_port_purchase',
+    'BOY5': 'num_boy_embark_third_port_purchase',
+    'GIRL5': 'num_girl_embark_third_port_purchase',
+    'ADULT5': 'num_adult_embark_third_port_purchase',
+    'CHILD5': 'num_child_embark_third_port_purchase',
+    'INFANT5': 'num_infant_embark_third_port_purchase',
+    'MALE5': 'num_males_embark_third_port_purchase',
+    'FEMALE5': 'num_females_embark_third_port_purchase',
+    'MEN6': 'num_men_disembark_second_landing',
+    'WOMEN6': 'num_women_disembark_second_landing',
+    'BOY6': 'num_boy_disembark_second_landing',
+    'GIRL6': 'num_girl_disembark_second_landing',
+    'ADULT6': 'num_adult_disembark_second_landing',
+    'CHILD6': 'num_child_disembark_second_landing',
+    'INFANT6': 'num_infant_disembark_second_landing',
+    'MALE6': 'num_males_disembark_second_landing',
+    'FEMALE6': 'num_females_disembark_second_landing'}
+
+impute_slave_number_var_map = {
+    'SLAXIMP': 'imp_total_num_slaves_embarked',
+    'SLAMIMP': 'imp_total_num_slaves_disembarked',
+    'VYMRTIMP': 'imp_mortality_during_voyage',
+    'ADLT1IMP': 'imp_num_adult_embarked',
+    'CHIL1IMP': 'imp_num_children_embarked',
+    'MALE1IMP': 'imp_num_male_embarked',
+    'FEML1IMP': 'imp_num_female_embarked',
+    'SLAVEMA1': 'total_slaves_embarked_age_identified',
+    'SLAVEMX1': 'total_slaves_embarked_gender_identified',
+    'ADLT2IMP': 'imp_adult_death_middle_passage',
+    'CHIL2IMP': 'imp_child_death_middle_passage',
+    'MALE2IMP': 'imp_male_death_middle_passage',
+    'FEML2IMP': 'imp_female_death_middle_passage',
+    'ADLT3IMP': 'imp_num_adult_landed',
+    'CHIL3IMP': 'imp_num_child_landed',
+    'MALE3IMP': 'imp_num_male_landed',
+    'FEML3IMP': 'imp_num_female_landed',
+    'SLAVEMA3': 'total_slaves_landed_age_identified',
+    'SLAVEMX3': 'total_slaves_landed_gender_identified',
+    'SLAVEMA7': 'total_slaves_dept_or_arr_age_identified',
+    'SLAVEMX7': 'total_slaves_dept_or_arr_gender_identified',
+    'TSLMTIMP': 'imp_slaves_embarked_for_mortality',
+    'MEN7': 'imp_num_men_total',
+    'WOMEN7': 'imp_num_women_total',
+    'BOY7': 'imp_num_boy_total',
+    'GIRL7': 'imp_num_girl_total',
+    'ADULT7': 'imp_num_adult_total',
+    'CHILD7': 'imp_num_child_total',
+    'MALE7': 'imp_num_males_total',
+    'FEMALE7': 'imp_num_females_total',
+    'MENRAT7': 'percentage_men',
+    'WOMRAT7': 'percentage_women',
+    'BOYRAT7': 'percentage_boy',
+    'GIRLRAT7': 'percentage_girl',
+    'MALRAT7': 'percentage_male',
+    'CHILRAT7': 'percentage_child',
+    'VYMRTRAT': 'imp_mortality_ratio',
+    'JAMCASPR': 'imp_jamaican_cash_price'}
+
+all_slave_number_var_map = slave_number_var_map.copy()
+all_slave_number_var_map.update(impute_slave_number_var_map)
 
 def voyage_to_dict(voyage):
     dict = {}
@@ -1140,7 +1183,7 @@ def impute_contribution(request, editor_contribution_id):
             number.var_name = k.upper()
             number.number = v
             number.save()
-    return JsonResponse({'result': 'OK'})
+    return JsonResponse({'result': 'OK', 'imputed_vars': tuple[2]})
     
 @login_required()
 @require_POST
@@ -1360,8 +1403,7 @@ def publish_pending(request):
             numbers.voyage = voyage
             # The slave numbers are stored sparsely
             for num in interim.slave_numbers.all():
-                # TODO: imputed var names are not valid keys for the dict.
-                setattr(numbers, slave_number_var_map[num.var_name], num.number)
+                setattr(numbers, all_slave_number_var_map[num.var_name], num.number)
             numbers.save()
             # This is redundant, but we are keeping the original model design consistent.
             voyage.voyage_ship = ship
@@ -1369,4 +1411,5 @@ def publish_pending(request):
             voyage.voyage_dates = dates
             voyage.voyage_slaves_numbers = numbers
             voyage.save()
-    return JsonResponse({'result': 'Failed', 'errors': ['Not implemented']]})
+    return JsonResponse({'result': 'Failed', 'errors': ['Not implemented']})
+    

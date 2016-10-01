@@ -195,7 +195,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}        
+        {% if mode == 'editorial_review' %}        
         <div class="form-group">
             {% with form.imputed_national_carrier as f %}
                 {{ f.errors }}
@@ -282,7 +282,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_outcome_of_voyage_for_slaves as f %}
                 {{ f.errors }}
@@ -502,7 +502,7 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_port_where_voyage_began as f %}
                 {{ f.errors }}
@@ -696,7 +696,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_year_voyage_began as f %}
                 {{ f.errors }}
@@ -1054,7 +1054,7 @@
             </div>
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_voyage_groupings_for_estimating_imputed_slaves as f %}
                 {{ f.errors }}
@@ -1095,7 +1095,7 @@
     </div>
     </div>
     
-    {% if mode != 'contribute' %}
+    {% if mode == 'editorial_review' %}
     <!-- Slaves (mortality and price) -->
     <div class="expander_container">
         <div>
@@ -1195,7 +1195,7 @@
                     <th>{% trans "Disembarked slaves (second port)" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
-                {% if mode != 'contribute' %}
+                {% if mode == 'editorial_review' %}
                 <tr>
                     <th>{% trans "Imputed number at ports of purchase*" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
@@ -1226,7 +1226,7 @@
     </div>
     </div>
     
-    {% if mode != 'contribute' %}
+    {% if mode == 'editorial_review' %}
     <!-- Slaves (age and sex) -->
     <div class="expander_container">
         <div>
@@ -1379,8 +1379,8 @@
 {% if mode == 'review' %}
     <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
 {% endif %}
-<div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static" >
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document" style="width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -2222,6 +2222,14 @@
                 var width = (60.0 / preDataCount) + '%';
                 for (var id in voyages) {
                     var value = afv.dict[id] || '';
+                    // Check if this is a date to properly format it.
+                    if (field.includes('date')) {
+                        var arr = value.split(',');
+                        if (arr.length == 3) {
+                            value = arr[2] + ' ' + (arr[0] ? getMonthName(arr[0]) + ' ' : '') + arr[1];
+                            value.trim();
+                        }
+                    }
                     values += '<td width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
                 }
                 return '<table class="col-sm-4 label-table"><tr><td width="40%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
@@ -2275,7 +2283,7 @@
                 var sources_ref = source.text_ref;
                 editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-index="' + source.index + '" data-originalref="' + (sources_ref || '') + '">' + (sources_ref ? MODIFY_REFERENCE_TEXT : '{% trans "Create reference" %}') + '</a>'
             {% endif %}
-            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.index + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group"><a href="#" class="btn btn-primary" onclick="editSource(' + source.index + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.index + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.index + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group" style="float:right;"><a href="#" class="btn btn-primary" onclick="editSource(' + source.index + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.index + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
             $('#sources_table').show();
         };
 
