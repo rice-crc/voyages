@@ -130,7 +130,7 @@
                 }
                 $(".dropdown-toggle").dropdown();
                 if (!$('#requests_table').data('hasInitialized')) {
-                    $('#requests_table').DataTable({pageLength: 25});
+                    $('#requests_table').DataTable({bPaginate: false});
                     $('#requests_table').data('hasInitialized', true);
                 }
                 $(".reviewer_assign_btn").click(function() {

@@ -65,9 +65,18 @@ def get_voyage_by_id(request):
     if request.method == 'POST':
         voyage_id = request.POST.get('voyage_id')
         if voyage_id is not None:
-            v = Voyage.objects.filter(voyage_id=int(voyage_id)).first()
+            voyage_id = int(voyage_id)
+            v = Voyage.objects.filter(voyage_id=voyage_id).first()
             if v is not None:
-                return JsonResponse(get_summary(v))
+                summary = get_summary(v)
+                # Check whether the voyage already has an open contribution.
+                active_statuses = ContributionStatus.active_statuses
+                regex = '(^' + str(voyage_id) + '|,' + str(voyage_id) + ')(,|$)'
+                is_blocked = EditVoyageContribution.objects.filter(edited_voyage_id=voyage_id, status__in=active_statuses).count() > 0 or \
+                    MergeVoyagesContribution.objects.filter(merged_voyages_ids__iregex=regex, status__in=active_statuses).count() > 0 or \
+                    DeleteVoyageContribution.objects.filter(deleted_voyages_ids__iregex=regex, status__in=active_statuses).count()
+                summary['is_blocked'] = is_blocked
+                return JsonResponse(summary)
             else:
                 error = 'No voyage found with voyage_id = ' + str(voyage_id)
         else:
