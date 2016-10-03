@@ -268,7 +268,10 @@ def create_source(source_values, interim_voyage):
         if hasattr(source, k):
             setattr(source, k, v)
     source.interim_voyage = interim_voyage
-    source.pk = source_values['pk']
+    try:
+        source.pk = int(source_values['pk'])
+    except:
+        pass
     return source
 
 contribution_model_by_type = {
@@ -301,12 +304,13 @@ def interim_main(request, contribution, interim):
     Form: the interim form.
     """
     result = True
+    src_pks = {}
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=interim)
         prefix = 'interim_slave_number_'
         numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources')
-        sources = [create_source(x, interim)
+        sources = [(create_source(x, interim), x.get('__index'))
                    for x in json.loads(sources_post if sources_post is not None else '[]')]
         result = form.is_valid()
         if result:
@@ -328,8 +332,10 @@ def interim_main(request, contribution, interim):
                 form.save()
                 contribution.notes = request.POST.get('contribution_main_notes')
                 contribution.save()
-                for src in sources:
+                for (src, view_item_index) in sources:
                     src.save()
+                    if view_item_index:
+                        src_pks[view_item_index] = src.pk
                 # Clear previous numbers and save new ones.
                 for k, v in numbers.items():
                     number = InterimSlaveNumber()
@@ -340,7 +346,7 @@ def interim_main(request, contribution, interim):
     else:
         numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
         form = InterimVoyageForm(instance=interim)
-    return result, form, numbers
+    return result, form, numbers, src_pks
 
 @login_required
 def interim(request, contribution_type, contribution_id):
@@ -368,7 +374,7 @@ def interim(request, contribution_type, contribution_id):
             contribution.interim_voyage.delete()
             contribution.delete()
         return HttpResponseRedirect(reverse('contribute:index'))
-    (valid, form, numbers) = interim_main(request, contribution, interim)
+    (valid, form, numbers, src_pks) = interim_main(request, contribution, interim)
     if valid and request.method == 'POST':
         return redirect()
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
@@ -383,8 +389,8 @@ def interim(request, contribution_type, contribution_id):
                    'voyages_data': json.dumps(previous_data)})
 
 def common_save_ajax(request, contribution):
-    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
-    return JsonResponse({'valid': valid, 'errors': form.errors})
+    (valid, form, numbers, src_pks) = interim_main(request, contribution, contribution.interim_voyage)
+    return JsonResponse({'valid': valid, 'errors': form.errors, 'src_pks': src_pks})
     
 @login_required
 @require_POST
@@ -1046,7 +1052,7 @@ def review(request, review_request_id):
     interim = review_contribution.interim_voyage if review_contribution else None
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
-    (result, form, numbers) = interim_main(request, review_contribution, interim)
+    (result, form, numbers, src_pks) = interim_main(request, review_contribution, interim)
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
     # Build previous data dictionary.
     # For the review we need to include both the original voyage(s) data
@@ -1082,7 +1088,7 @@ def editorial_review(request, review_request_id):
     if reviewer_interim:
         previous_data[_('Reviewer')] = interim_data(reviewer_interim)
     editor_interim = contribution.interim_voyage
-    (result, form, numbers) = interim_main(request, contribution, editor_interim)
+    (result, form, numbers, src_pks) = interim_main(request, contribution, editor_interim)
     return render(request, 'contribute/interim.html',
                   {'form': form,
                    'mode': 'editorial_review',
@@ -1108,7 +1114,7 @@ def submit_editorial_decision(request, editor_contribution_id):
     with transaction.atomic():
         # Save interim form.
         if contribution.interim_voyage:
-            (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+            (valid, form, numbers, src_pks) = interim_main(request, contribution, contribution.interim_voyage)
             if not valid:
                 return JsonResponse({'valid': valid, 'errors': form.errors})
         # Fetch decision.
@@ -1142,7 +1148,7 @@ def submit_review_to_editor(request, review_request_id):
             contribution = req.review_contribution.first()
             has_interim_voyage = hasattr(contribution, 'interim_voyage') and contribution.interim_voyage
             if has_interim_voyage:
-                (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+                (valid, form, numbers, src_pks) = interim_main(request, contribution, contribution.interim_voyage)
                 if not valid:
                     return JsonResponse({'result': 'Failed', 'errors': form.errors})
             # Save review request with decision.
@@ -1171,7 +1177,7 @@ def impute_contribution(request, editor_contribution_id):
         return HttpResponseForbidden()
     # First we save the current version of the interim voyage.
     contribution = get_object_or_404(EditorVoyageContribution, pk=editor_contribution_id)
-    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+    (valid, form, numbers, src_pks) = interim_main(request, contribution, contribution.interim_voyage)
     if not valid:
         return JsonResponse({'result': 'Failed', 'errors': form.errors})
     interim_voyage_id = contribution.interim_voyage_id
