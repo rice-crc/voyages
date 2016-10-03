@@ -1389,20 +1389,21 @@
             </div>
             <div class="modal-body" style="height: 500px; overflow-y: auto;">
                 <input type="hidden" name="source_index_field" id="source_index_field" />
+                <input type="hidden" name="source_pk_field" id="source_pk_field" />
                 <ul class="nav nav-tabs" role="tablist" id="tab_control">
-                    <li data-tab="primary" role="presentation" class="active"><a href="#primary"
+                    <li data-tab="primary" data-sourcetype="Primary source" role="presentation" class="active"><a href="#primary"
                                                                                  aria-controls="primary"
                                                                                  role="tab" data-toggle="tab">
                         {% trans "Primary source" %}</a></li>
-                    <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
+                    <li data-tab="article" data-sourcetype="Article source" role="presentation"><a href="#article" aria-controls="article"
                                                                   role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
-                    <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                    <li data-tab="book" data-sourcetype="Book source" role="presentation"><a href="#book" aria-controls="book" role="tab"
                                                                data-toggle="tab">{% trans "Book" %}</a></li>
-                    <li data-tab="newspaper" role="presentation"><a href="#newspaper" aria-controls="newspaper" role="tab"
+                    <li data-tab="newspaper" data-sourcetype="Newspaper source" role="presentation"><a href="#newspaper" aria-controls="newspaper" role="tab"
                                                                 data-toggle="tab">{% trans "Newspaper" %}</a></li>
-                    <li data-tab="private" role="presentation"><a href="#private" aria-controls="private" role="tab"
+                    <li data-tab="private" data-sourcetype="Private note or collection source" role="presentation"><a href="#private" aria-controls="private" role="tab"
                                                                 data-toggle="tab">{% trans "Private note or collection" %}</a></li>
-                    <li data-tab="unpub" role="presentation"><a href="#unpub" aria-controls="unpub" role="tab"
+                    <li data-tab="unpub" data-sourcetype="Unpublished secondary source" role="presentation"><a href="#unpub" aria-controls="unpub" role="tab"
                                                                 data-toggle="tab">{% trans "Unpublished secondary source" %}</a></li>
                 </ul>
                 <!-- Tab panes -->
@@ -1666,17 +1667,22 @@
             return sourceFactory(a, ++_sourceIndex);
         }));
     }
-
-    function editSource(index) {
+    function getSourceByIndex(index) {
         for (var k = 0; k < sources.length; ++k) {
             if (sources[k].index == index) {
-                var s = sources[k];
-                s.bindToForm();
-                $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
-                $("#add_source_btn").html('{% trans "Save changes"  %}');
-                $('#referencesModal').modal('show');
-                return;
+                return sources[k];
             }
+        }
+        return null;
+    }
+
+    function editSource(index) {
+        var s = getSourceByIndex(index);
+        if (s) {
+            s.bindToForm();
+            $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
+            $("#add_source_btn").html('{% trans "Save changes"  %}');
+            $('#referencesModal').modal('show');
         }
     }
     
@@ -1686,14 +1692,10 @@
         var data = {};
         var original_ref = $(item).data('originalref');
         var index = parseInt($(item).data('index'));
-        for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].index == index) {
-                createdNewSource = sources[k].toModel();
-                createdNewSource.index = index;
-                data.interim_source = createdNewSource;
-                break;
-            }
-        }
+        var sourceWithIndex = getSourceByIndex(index);        
+        createdNewSource = sourceWithIndex.toModel();
+        createdNewSource.index = index;
+        data.interim_source = createdNewSource;
         if (original_ref) {
             data.mode = 'edit';
             data.original_ref = original_ref;
@@ -1794,7 +1796,7 @@
         if (!force && !confirm('{% trans "Remove this source?" %}')) return;
         for (var k = 0; k < sources.length; ++k) {
             if (sources[k].index == index) {
-                sources.splice(k);
+                sources.splice(k, 1);
                 $("#row_source_" + index).remove();
                 if (!sources.length) {
                     $('#sources_table').hide();
@@ -2295,22 +2297,9 @@
         });
 
         $("#add_source_btn").click(function () {
-            var type = $("ul#tab_control li.active").data("tab");
+            var typeName = $("ul#tab_control li.active").data("sourcetype");
             $('#sources_table').show();
-            var source = null;
-            if (type == 'primary') {
-                source = new PrimarySource();
-            } else if (type == 'article') {
-                source = new ArticleSource();
-            } else if (type == 'book') {
-                source = new BookSource();
-            } else if (type == 'newspaper') {
-                source = new NewspaperSource();
-            } else if (type == 'private') {
-                source = new PrivateNoteOrCollectionSource();
-            } else if (type == 'unpub') {
-                source = new UnpublishedSecondarySource();
-            }
+            var source = createSourceByTypeName(typeName);
             if (source) {
                 source.bindFromForm();
                 var validation = source.validate();
@@ -2441,6 +2430,16 @@
                                 },
                                 5000
                             );
+                            if (response.src_pks) {
+                                for (var index in response.src_pks) {
+                                    var source = getSourceByIndex(index);
+                                    var source_pk = response.src_pks[index];
+                                    if (source.pk && source.pk != source_pk) {
+                                        console.log('A source had its primary key changed!');
+                                    }
+                                    source.pk = source_pk;
+                                }
+                            }
                         }
                         else {
                             alert(response.errors);

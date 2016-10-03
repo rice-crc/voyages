@@ -30,6 +30,7 @@ function ValidationResult(warnings, errors) {
 var _bindFrom = function(self) {
     return function() {
         self.index = $("#source_index_field").val();
+        self.pk = $("#source_pk_field").val();
         for (var key in self._fields) {
             var field = self._fields[key];
             var inputId = field[0];
@@ -48,6 +49,7 @@ var _bindTo = function(self) {
     return function() {
         $('#referencesModal input').val('');
         $("#source_index_field").val(self.index);
+        $("#source_pk_field").val(self.pk);
         for (var key in self._fields) {
             var field = self._fields[key];
             var inputId = field[0];
@@ -81,6 +83,7 @@ var _toModel = function(self) {
             var fieldName = self._fields[key][1];
             model[fieldName] = self[key];
         }
+        model['__index'] = self.index;
         model['type'] = self.type;
         model['pk'] = self.pk;
         model['created_voyage_sources_id'] = self.created_voyage_sources_id;
@@ -446,6 +449,24 @@ function UnpublishedSecondarySource(authors, title, location, page, info, url) {
     this.toModel = _toModel(this);
 }
 
+function createSourceByTypeName(typeName) {
+    var source = null;
+    if (typeName == 'Primary source') {
+        source = new PrimarySource();
+    } else if (typeName == 'Article source') {
+        source = new ArticleSource();
+    } else if (typeName == 'Book source') {
+        source = new BookSource();
+    } else if (typeName == 'Newspaper source') {
+        source = new NewspaperSource();        
+    } else if (typeName == 'Private note or collection source') {
+        source = new PrivateNoteOrCollectionSource();
+    } else if (typeName == 'Unpublished secondary source') {
+        source = new UnpublishedSecondarySource();
+    }
+    return source;
+}
+
 function sourceFactory(data, index) {
     var source = null;
     var fields = null;
@@ -467,21 +488,10 @@ function sourceFactory(data, index) {
         fields = data.fields;
     } else if (data.type) {
         // Construct object based on JS object's JSON representation.
-        if (data.type == 'Primary source') {
-            source = new PrimarySource();
-        } else if (data.type == 'Article source') {
-            source = new ArticleSource();
-        } else if (data.type == 'Book source') {
-            source = new BookSource();
-        } else if (data.type == 'Newspaper source') {
-            source = new NewspaperSource();        
-        } else if (data.type == 'Private note or collection source') {
-            source = new PrivateNoteOrCollectionSource();
-        } else if (data.type == 'Unpublished secondary source') {
-            source = new UnpublishedSecondarySource();
-        }
+        source = createSourceByTypeName(data.type);
         fields = data;
     }
+    source.pk = null;
     if (source != null && fields != null) {
         source.fromModel(fields);
         if (index) {
