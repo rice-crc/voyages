@@ -27,8 +27,8 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
-    <li role="presentation"><a id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
+    <li role="presentation"><a id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
+    <li role="presentation" class="active"><a id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
     <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
     <li role="presentation"><a href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source codes" %}</a></li>
     <li role="presentation"><a href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish new database version" %}</a></li>
@@ -36,22 +36,28 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="pending">
+    <div role="tabpanel" class="tab-pane" id="pending">
         <table id="pending_publication_table" class="table table-striped">
             <thead>
             <tr>
+                <th>{% trans "Voyage ID" %}</th>
                 <th>{% trans "Type" %}</th>
+                <th>{% trans "Ship" %}</th>
+                <th>{% trans "Year" %}</th>
+                <th>{% trans "Nation" %}</th>
+                <th>{% trans "Exported" %}</th>
+                <th>{% trans "Imported" %}</th>
+                <th>{% trans "Major place of purchase" %}</th>
+                <th>{% trans "Major place of landing" %}</th>
                 <th>{% trans "Contributor" %}</th>
                 <th>{% trans "Date" %}</th>
-                <th>{% trans "Voyage ID" %}</th>
-                <th>{% trans "Ship" %}</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
-    <div role="tabpanel" class="tab-pane" id="requests">
+    <div role="tabpanel" class="tab-pane active" id="requests">
         <table id="requests_table" class="table table-striped">
             <thead>
             <tr>
@@ -114,9 +120,10 @@
                     $('#requests_table > tbody:last-child').append(
                         '<tr><td>' +
                         ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
-                            .replace('@@@', contribTypes[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
+                            .replace('@@@', contribTypes[row['type']]) + 
+                            '</td><td>' + row['contributor'] + '</td><td>' +
                         row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
-                        row['voyage_info'].join(', ') +
+                        row['voyage_ship'].join(', ') +
                         '</td><td>' + row['reviewer'] +
                         '</td><td class="review_cell" data-id="' + key + '">' +
                         '<div class="dropdown"><button aria-expanded="false" class="btn dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li>' +
@@ -168,11 +175,18 @@
                     var row = data[key];
                     var responseId = parseInt(row['response_id']) || 0;
                     $('#pending_publication_table > tbody:last-child').append(
-                        '<tr><td>' +
+                        '<tr><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
                         ('<a href="/contribute/interim_summary/' + key + '/editor">@@@</a>')
-                            .replace('@@@', contribTypes[row['type']]) + '</td><td>' + row['contributor'] + '</td><td>' +
-                        row['date_created'].substring(0, 10) + '</td><td>' + row['voyage_ids'].join(', ') + '</td><td>' +
-                        row['voyage_info'].join(', ') +
+                            .replace('@@@', contribTypes[row['type']]) + '</td><td>' +
+                        row['voyage_ship'].join('<br />') + '</td><td>' +
+                        row['voyage_years'].join('<br />') + '</td><td>' +
+                        row['voyage_nation'].join('<br />') + '</td><td>' +
+                        row['voyage_exported'].join('<br />') + '</td><td>' +
+                        row['voyage_imported'].join('<br />') + '</td><td>' +
+                        row['voyage_purchase_place'].join('<br />') + '</td><td>' +
+                        row['voyage_landing_place'].join('<br />') + '</td><td>' +
+                        row['contributor'] + '</td><td>' +
+                        row['date_created'].substring(0, 10) + 
                         '</td><td></tr>');
                 }
             }
@@ -186,7 +200,7 @@
             loadPendingList();
         }
     };
-    loadPendingList();
+    loadTabData('#' + $('.tab-pane.active').attr('id'));
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var href = $(e.target).attr('href');
