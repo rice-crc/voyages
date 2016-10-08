@@ -13,7 +13,7 @@
     <input type="checkbox" id="show_notes" checked> <label for="show_notes">{% trans "Notes" %}</label>
 </div>
 <div class="col-md-12" id="data_display">
-    <div class="row group_header">
+    <div class="row group_header" id="main_table_header">
         <span class="col-sm-4">{% trans "Variable" %}</span>
         <span class="col-sm-4 old_values_header"></span>
         <span class="col-sm-4">{% trans "Contributed value" %}</span>
@@ -708,6 +708,15 @@
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
     var voyage_ids = Object.keys(voyages);
+    var existing_voyage_ids = $.map(voyage_ids, function(id) {
+        return $.isNumeric(id) ? id : null;
+    });
+    var existing_voyages = $.map(existing_voyage_ids, function(id) {
+       return voyages[id];
+    });
+    var extra_voyages = $.map(voyage_ids, function(id) {
+        return $.isNumeric(id) ? null : { id: id, voyage: voyages[id] };
+    });
 
     $('.multiline_value span').each(function() {
         var $span = $(this);
@@ -802,8 +811,8 @@
         var $div = $(this);
         var parent = $div.closest('.row');
         var name = $div.attr('id').substring(4);
-        var values = getVoyagesValues(voyages, name);
-        var voyagesCount = voyage_ids.length;
+        var values = getVoyagesValues(existing_voyages, name);
+        var voyagesCount = existing_voyage_ids.length;
         if (values) {
             // Remove blank class from parent.
             parent.removeClass('blank');
@@ -821,6 +830,29 @@
             }
         }
     });
+    
+    var grid_class = 4;
+    if (extra_voyages.length > 0) {
+        var col_count = extra_voyages.length + (existing_voyage_ids.length > 0 ? 3 : 2);
+        grid_class = Math.round(Math.floor(12 / col_count));
+        $('.row > .col-sm-4').removeClass('col-sm-4').addClass('col-sm-' + grid_class);
+        for (var i = 0; i < extra_voyages.length; ++i) {
+            $('#main_table_header').append('<span class="col-sm-' + grid_class + '">' + extra_voyages[i].id + '</span>');
+        }
+        $('.row').each(function() {    
+            var child = $(this).children().last();
+            var old_values_div = $(this).find('.old_values');
+            if (old_values_div.length != 1) return;
+            var field_id = old_values_div.attr('id').substring(4);
+            for (var i = 0; i < extra_voyages.length; ++i) {
+                var clone = child.clone();
+                clone.attr('id', null);
+                var v = extra_voyages[i].voyage;
+                clone.text(v.hasOwnProperty(field_id) ? v[field_id] : '');
+                $(this).append(clone);
+            } 
+        });
+    }
 
     $('span.date_value, div.date_value .old_single_value').each(function() {
         var $this = $(this);
@@ -838,7 +870,9 @@
         {{ interim.primary_sources.all|jsonify }},
         {{ interim.article_sources.all|jsonify }},
         {{ interim.book_sources.all|jsonify }},
-        {{ interim.other_sources.all|jsonify }}
+        {{ interim.newspaper_sources.all|jsonify }},
+        {{ interim.private_note_or_collection_sources.all|jsonify }},
+        {{ interim.unpublished_secondary_sources.all|jsonify }}
     ];
     var k = 0;
     for (var i = 0; i < all_source_types.length; ++i) {
@@ -883,12 +917,12 @@
     });
     $('#timestamp').html(new Date());
 
-    $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
-    $(".old_values_header").html(voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + voyage_ids[0]);
+    $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-" + grid_class);
+    
+    $(".old_values_header").html(existing_voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + existing_voyage_ids[0]);
     alternateBackground();
     
-    // TODO: remove this code once styling is done.
-    $("#center-content").css('width', '900px');
+    maximizeContent({% if mode == 'editor' %}true{% endif %});
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>

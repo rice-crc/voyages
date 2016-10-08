@@ -441,9 +441,17 @@ def interim_summary(request, contribution_type, contribution_id, mode='contribut
     reqs = list(ReviewRequest.objects.filter(contribution_id=full_contrib_id, archived=False))
     if len(reqs) > 1:
         raise Exception('Invalid state: more than one review request is active')
+    review_request = reqs[0] if len(reqs) == 1 else None
+    if review_request:
+        review_contribution = review_request.review_contribution.first()
+        if review_contribution and review_contribution.interim_voyage:
+            previous_data[_('Reviewer')] = interim_data(review_contribution.interim_voyage)
+        editorial_contribution = review_request.editor_contribution.first()
+        if editorial_contribution and editorial_contribution.interim_voyage:
+            previous_data[_('Editor')] = interim_data(editorial_contribution.interim_voyage)
     return render(request, 'contribute/interim_summary.html',
                   {'contribution': contribution,
-                   'review_request': reqs[0] if len(reqs) == 1 else None,
+                   'review_request': review_request,
                    'full_contrib_id': full_contrib_id,
                    'interim': contribution.interim_voyage,
                    'mode': mode,
@@ -752,17 +760,39 @@ def get_reviews_by_status(statuses):
     filter_args = {'status__in': statuses}
     contributions = get_filtered_contributions(filter_args)
     
+    def get_nation_label(nation):
+        return nation.label if nation else ''
+    
+    def get_place_str(place):
+        if place is None: return ''
+        return place.region.region + '/' + place.place
+    
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
+        voyages = list(Voyage.objects.filter(voyage_id__in=voyage_ids))
+        voyage_ship = [v.voyage_ship.ship_name for v in voyages]
+        voyage_years = [VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis) for v in voyages]
+        voyage_nation = [get_nation_label(v.voyage_ship.imputed_nationality) for v in voyages]
+        voyage_exported = [v.voyage_slaves_numbers.imp_total_num_slaves_embarked for v in voyages]
+        voyage_imported = [v.voyage_slaves_numbers.imp_total_num_slaves_disembarked for v in voyages]
+        voyage_purchase_place = [get_place_str(v.voyage_itinerary.imp_principal_place_of_slave_purchase) for v in voyages]
+        voyage_landing_place = [get_place_str(v.voyage_itinerary.imp_principal_port_slave_dis) for v in voyages]
         voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
-                       for v in Voyage.objects.filter(voyage_id__in=voyage_ids)]
+                       for v in voyages]
         res = {'type': info['type'],
                'id': info['id'],
                'contributor': contrib.contributor.get_full_name(),
                'date_created': contrib.date_created,
                'voyage_ids': voyage_ids,
-               'voyage_info': voyage_info}
+               'voyage_info': voyage_info,
+               'voyage_ship': voyage_ship,
+               'voyage_years': voyage_years,
+               'voyage_nation': voyage_nation,
+               'voyage_exported': voyage_exported,
+               'voyage_imported': voyage_imported,
+               'voyage_purchase_place': voyage_purchase_place,
+               'voyage_landing_place': voyage_landing_place}
         # Fetch review info.
         reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
         if len(reqs) > 1:
