@@ -281,6 +281,10 @@ class ReviewRequest(models.Model):
     decision_message = models.TextField(null=True)
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
+    created_voyage_id = models.IntegerField(null=True, help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)')
+    
+    def requires_created_voyage_id(self):
+        return self.contribution_id.startswith('merge') or self.contribution_id.startswith('new')
     
     def get_status_msg(self):
         decision_values = {
@@ -316,8 +320,6 @@ class EditorVoyageContribution(models.Model):
     request = models.ForeignKey(ReviewRequest, related_name='editor_contribution')
     interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
     notes = models.TextField('Notes', null=True, max_length=10000, help_text='Editor notes')
-    final_decision = models.IntegerField(default=0)
-    published = models.BooleanField(default=False, help_text='The contribution has been published to the database')
 
     def __unicode__(self):
         return _('Editorial review of contribution')

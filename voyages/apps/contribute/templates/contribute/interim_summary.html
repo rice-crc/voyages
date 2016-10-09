@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <div id="toogles">
     <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
-    <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label>
+    <!-- <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label> -->
     <input type="checkbox" id="show_notes" checked> <label for="show_notes">{% trans "Notes" %}</label>
 </div>
 <div class="col-md-12" id="data_display">
@@ -671,6 +671,9 @@
         {% endif %}
         {% if mode == 'editor' and not review_request %}
             {% include "contribute/preview_editor_commands.html" %}
+        {% endif %}
+        {% if mode == 'editor' %}
+            <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
         {% endif %}
     </div>
 </div>
