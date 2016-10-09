@@ -59,6 +59,16 @@
                     </select>
                 </div>
             </div>
+            {% if review_request.requires_created_voyage_id %}
+            <div class="form-group">
+                <label for="created_voyage_id">
+                    {% trans "Published voyage id" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <input class="form-control not_selectized" id="created_voyage_id" name="created_voyage_id" value="{{ review_request.created_voyage_id|default_if_none:'' }}">
+                </div>
+            </div>
+            {% endif %}
             <div class="btn-group" id="decision_btn_group">
                 <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
                 {% if allow_impute %}
@@ -152,6 +162,14 @@
                     alert('{% trans "Please choose your decision." %}');
                     return false;
                 }
+                var created_voyage_id_input = $('#created_voyage_id');
+                if (created_voyage_id_input.length) {
+                    var created_voyage_id = parseInt(created_voyage_id_input.val());
+                    if (isNaN(created_voyage_id) && decision == 3) {
+                        alert('{% trans "Please indicate the voyage id to be used with this voyage" %}');
+                        return false;
+                    }
+                }
                 var decision_message = $('#decision_message').val().trim();
                 if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#editorial_decision option:selected').text() + '\n' + decision_message)) {
                     return false;
@@ -170,7 +188,7 @@
                         if (response.result == 'OK') {
                             window.location.replace("{% url 'contribute:editor_main' %}?tab=requests");
                         } else {
-                            alert(response.result);
+                            alert(response.errors);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

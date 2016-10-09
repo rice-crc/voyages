@@ -478,13 +478,11 @@ def init_interim_voyage(interim, contribution):
     if len(previous_data) > 0:
         values = previous_data.values()
         for k, v in values[0].items():
-            if v is None:
-                continue
+            if v is None: continue
             equal = True
             for i in range(1, len(previous_data)):
                 equal = v == values[i].get(k)
-                if not equal:
-                    break
+                if not equal: break
             if equal:
                 if k.startswith(number_prefix):
                     number = InterimSlaveNumber()
@@ -854,7 +852,14 @@ def assert_no_active_review_requests(contribution_id):
     if len(reqs) >= 1:
         return JsonResponse({'error': _('There is already an active review for this contribution')})
     return None
-        
+
+def override_empty_fields_with_single_value(interim, review_request):
+    # TODO: fetch pre-existing data, if the interim value is
+    # not set and there is a single non-null value at one of
+    # the previous interim/voyage data records, we override
+    # the null value with that single value.
+    pass
+
 @login_required()
 @require_POST
 def begin_editorial_review(request):
@@ -888,6 +893,7 @@ def begin_editorial_review(request):
         editor_contribution.notes = contributor_prefix + contribution.notes if contribution.notes else ''
         if hasattr(contribution, 'interim_voyage'):
             editor_contribution.interim_voyage = clone_interim_voyage(contribution, contributor_prefix)
+            override_empty_fields_with_single_value(editor_contribution.interim_voyage, review_request)
         editor_contribution.save()
         editor_contribution_id = editor_contribution.pk
     return JsonResponse({'review_request_id': review_request.pk, 'editor_contribution_id': editor_contribution_id})
@@ -1135,12 +1141,30 @@ def submit_editorial_decision(request, editor_contribution_id):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     decision = -1
+    created_voyage_id = None
     try:
         decision = int(request.POST['editorial_decision'])
+        voyage_id = request.POST.get('created_voyage_id')
+        if voyage_id:
+            created_voyage_id = int(voyage_id)
     except:
         pass
     if not decision in [ReviewRequestDecision.accepted_by_editor, ReviewRequestDecision.rejected_by_editor, ReviewRequestDecision.deleted]:
         return HttpResponseBadRequest()
+    
+    # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
+    review_request = contribution.request
+    if not created_voyage_id and (review_request.requires_created_voyage_id() and decision == ReviewRequestDecision.accepted_by_editor):
+        return HttpResponseBadRequest('Expected a voyage id for new/merge contribution')
+    if created_voyage_id:
+        # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
+        existing = Voyage.objects.filter(voyage_id=created_voyage_id).count()
+        if existing > 0:
+            return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
+        existing = ReviewRequest.objects.filter(created_voyage_id=created_voyage_id, archived=False).count()
+        if existing > 0:
+            return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already in current publication batch')})
+        
     with transaction.atomic():
         # Save interim form.
         if contribution.interim_voyage:
@@ -1148,8 +1172,8 @@ def submit_editorial_decision(request, editor_contribution_id):
             if not valid:
                 return JsonResponse({'valid': valid, 'errors': form.errors})
         # Fetch decision.
-        review_request = contribution.request
         review_request.final_decision = decision
+        review_request.created_voyage_id = created_voyage_id
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         review_request.decision_message = msg
@@ -1193,6 +1217,7 @@ def submit_review_to_editor(request, review_request_id):
             editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''            
             if has_interim_voyage:
                 editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
+                override_empty_fields_with_single_value(editor_contribution.interim_voyage, req)
             editor_contribution.save()
         return JsonResponse({'result': 'OK'})
     except Exception as e:

@@ -873,3 +873,6 @@ function demographicsTable(numbers, editable, pre_existing_data) {
         }
     );
 }
+
+// Helps when Django outputs none in some places.
+var None = {};
