@@ -728,7 +728,7 @@
             {% with form.imputed_quinquennium_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="5">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -737,7 +737,7 @@
             {% with form.imputed_decade_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="10">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -755,7 +755,7 @@
             {% with form.imputed_quarter_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="25">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1918,6 +1918,23 @@
                 submit_val = 'delete';
             }
         });
+        
+        $('.year_range').each(function() {
+            var self = $(this);
+            var mod = self.data('yearmod');
+            var options = [];
+            var index = 0;
+            for (var start = 1500; start < 1870; start += mod) {
+                options.push({label: start + '-' + (start + mod - 1), value: ++index});
+            }
+            var input = self.children('input');
+            input.addClass('not_selectized');
+            input.selectize({
+                options: options, 
+                valueField: 'value',
+                labelField: 'label',
+            });
+        });
 
         $('input[type=text], input[type=number], select, textarea')
             .not('.select_port')
@@ -1926,7 +1943,9 @@
             .not('.not_selectized')
             .each(function () {
                 var f = $(this);
-                selectizeInput(f);
+                if (!f.parent().hasClass('selectize-input')) {
+                    selectizeInput(f);
+                }
             }
         );
 
