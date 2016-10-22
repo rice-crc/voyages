@@ -1864,18 +1864,20 @@
                         var og = optgroups[key];
                         this.addOptionGroup(og.id, og);
                     }
-                    for (var value in values) {
-                        var found = -1;
-                        var list = this.options;
-                        for (var i in list) {
-                            if (list[i].value == value) {
-                                found = i;
-                                break;
+                    if (values) {
+                        for (var value in values) {
+                            var found = -1;
+                            var list = this.options;
+                            for (var i in list) {
+                                if (list[i].value == value) {
+                                    found = i;
+                                    break;
+                                }
                             }
+                            if (found < 0) continue;
+                            //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                            this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
                         }
-                        if (found < 0) continue;
-                        //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
-                        this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
                     }
                 },
             });
