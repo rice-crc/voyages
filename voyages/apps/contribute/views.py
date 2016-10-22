@@ -853,12 +853,62 @@ def assert_no_active_review_requests(contribution_id):
         return JsonResponse({'error': _('There is already an active review for this contribution')})
     return None
 
-def override_empty_fields_with_single_value(interim, review_request):
-    # TODO: fetch pre-existing data, if the interim value is
+def override_empty_fields_with_single_value(interim_voyage, review_request):
+    # Fetch pre-existing data, if the interim value is
     # not set and there is a single non-null value at one of
     # the previous interim/voyage data records, we override
     # the null value with that single value.
-    pass
+    def get_dict_from_interim(interim):
+        data = {k: v for k, v in interim.__dict__.items() if not k.startswith('_') and v}
+        # Now we must load numbers
+        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
+        data.update(numbers)      
+        return data
+    
+    user_contribution = get_contribution_from_id(review_request.contribution_id)
+    existing_data = contribution_related_data(user_contribution)
+    existing_data['user'] = get_dict_from_interim(user_contribution.interim_voyage)
+    # Fetch user and reviewer contributions (if any) and map to dict (use __dict__ ?).
+    review_contribution = review_request.review_contribution.first()
+    if review_contribution:
+        existing_data['reviewer'] = get_dict_from_interim(review_contribution.interim_voyage)
+    # First pass, build a dictionary indexed by field with
+    # the first non-null value found for that field, if the key is
+    # already in the dictionary, we check to see if the value is
+    # the same, if they differ, we update the field to None so that
+    # no value gets propagated.
+    from django.db.models.fields import Field
+    fields = [f for f in InterimVoyage._meta.get_fields() if isinstance(f, Field)]
+    foreign_keys = {f.name: f.name + '_id' for f in InterimVoyage._meta.get_fields()
+                    if isinstance(f, Field) and f.get_internal_type() == 'ForeignKey'}
+    single_values = {}
+    for data in existing_data.values():
+        for k, v in data.items():
+            if v is None or v == '': continue
+            if k.startswith('date') and v == ',,': continue 
+            k = foreign_keys.get(k, k)
+            if k in single_values and single_values[k] != v:
+                single_values[k] = None
+            else:
+                single_values[k] = v
+    # Second pass, set values of interim_voyage.
+    numbers = []
+    for k, v in single_values.items():
+        if not v: continue
+        print "set " + str(k) + " to " + str(v)
+        if k.startswith(number_prefix):
+            num = InterimSlaveNumber()
+            num.var_name = k[len(number_prefix):]
+            num.number = v
+            numbers.append(num)
+        elif hasattr(interim_voyage, k):
+            setattr(interim_voyage, k, v)
+    with transaction.atomic():
+        interim_voyage.save(force_update=True)
+        for num in numbers:
+            num.interim_voyage = interim_voyage
+            num.save()
+    return interim_voyage
 
 @login_required()
 @require_POST

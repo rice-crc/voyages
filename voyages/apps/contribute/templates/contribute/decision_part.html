@@ -97,9 +97,9 @@
                 if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#reviewer_decision option:selected').text() + '\n' + message_to_editor)) {
                     return false;
                 }
-                var self = $(this);
                 var valid = !validation || validation();
                 if (!valid) return false;
+                var self = $(this);
                 self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
@@ -127,6 +127,8 @@
                 $('#impute_btn').click(function() {
                     var valid = !validation || validation();
                     if (!valid) return false;
+                    var self = $(this);
+                    self.prop('disabled', true);
                     $.ajax({
                         type: "POST",
                         {% with editor_contribution=review_request.editor_contribution.first %}
@@ -136,8 +138,10 @@
                         success: function (response) {
                             if (response.result == 'OK') {
                                 var dict = response.imputed_vars;
+                                var sorted_keys = Object.keys(dict).sort();
                                 var text = '';
-                                for (var key in dict) {
+                                for (var i = 0; i < sorted_keys.length; ++i) {
+                                    var key = sorted_keys[i];
                                     text += '\n' + key + ': ' + dict[key];
                                 }
                                 alert('{% trans "Impute variables computed as follows" %}: ' + text);
