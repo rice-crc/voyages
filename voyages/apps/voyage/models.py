@@ -1219,7 +1219,7 @@ class VoyageSources(models.Model):
     """
 
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=255, null=True, blank=True)
+                                 max_length=255, null=True, blank=True, unique=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=2550, null=True, blank=True)

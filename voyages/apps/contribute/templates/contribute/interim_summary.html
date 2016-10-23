@@ -714,9 +714,11 @@
     var existing_voyage_ids = $.map(voyage_ids, function(id) {
         return $.isNumeric(id) ? id : null;
     });
-    var existing_voyages = $.map(existing_voyage_ids, function(id) {
-       return voyages[id];
-    });
+    var existing_voyages = {};
+    for (var i = 0; i < existing_voyage_ids.length; ++i) {
+        var id = existing_voyage_ids[i];
+        existing_voyages[id] = voyages[id];
+    }
     var extra_voyages = $.map(voyage_ids, function(id) {
         return $.isNumeric(id) ? null : { id: id, voyage: voyages[id] };
     });

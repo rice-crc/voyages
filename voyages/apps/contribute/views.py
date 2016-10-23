@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
@@ -272,6 +273,9 @@ def create_source(source_values, interim_voyage):
         source.pk = int(source_values['pk'])
     except:
         pass
+    if source.created_voyage_sources:
+        if not source.source_ref_text or not source.source_ref_text.startswith(source.created_voyage_sources.short_ref):
+            raise Exception('Invalid interim source: the text reference must have as prefix the short reference of the Source')
     return source
 
 contribution_model_by_type = {
@@ -310,6 +314,8 @@ def interim_main(request, contribution, interim):
         prefix = 'interim_slave_number_'
         numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources')
+        if not sources_post:
+            raise Exception('Sources should be defined on POST')
         sources = [(create_source(x, interim), x.get('__index'))
                    for x in json.loads(sources_post if sources_post is not None else '[]')]
         result = form.is_valid()
@@ -430,7 +436,7 @@ def interim_commit(request, contribution_type, contribution_id):
 @login_required()
 def interim_summary(request, contribution_type, contribution_id, mode='contribute'):
     contribution = get_contribution(contribution_type, contribution_id)
-    if not request.user.is_superuser and request.user.pk != contribution.contributor.pk:
+    if not request.user.is_superuser and not request.user.is_staff and request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     if contribution_type == 'delete':
         return delete_review_render(request, contribution, True, 'editor')
@@ -778,6 +784,28 @@ def get_reviews_by_status(statuses):
         voyage_landing_place = [get_place_str(v.voyage_itinerary.imp_principal_port_slave_dis) for v in voyages]
         voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
                        for v in voyages]
+        # Fetch review info.
+        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
+        if len(reqs) > 1:
+            raise Exception('Invalid state: more than one review request is active')
+        active_request = reqs[0] if len(reqs) == 1 else None
+        if isinstance(contrib, NewVoyageContribution):
+            # Must fill elements above with interim data.
+            interim = contrib.interim_voyage
+            if active_request:
+                editor_contrib = active_request.editor_contribution.first()
+                if editor_contrib:
+                    interim = editor_contrib.interim_voyage
+                if active_request.created_voyage_id:
+                    voyage_ids = [active_request.created_voyage_id]
+            voyage_ship = [interim.name_of_vessel]
+            voyage_years = [interim.imputed_year_voyage_began]
+            voyage_nation = [get_nation_label(interim.imputed_national_carrier)]
+            voyage_exported = [interim.imputed_total_slaves_embarked]
+            voyage_imported = [interim.imputed_total_slaves_disembarked]
+            voyage_purchase_place = [get_place_str(interim.imputed_principal_place_of_slave_purchase)]
+            voyage_landing_place = [get_place_str(interim.imputed_principal_port_of_slave_disembarkation)]
+            voyage_info = [interim.name_of_vessel]
         res = {'type': info['type'],
                'id': info['id'],
                'contributor': contrib.contributor.get_full_name(),
@@ -791,12 +819,7 @@ def get_reviews_by_status(statuses):
                'voyage_imported': voyage_imported,
                'voyage_purchase_place': voyage_purchase_place,
                'voyage_landing_place': voyage_landing_place}
-        # Fetch review info.
-        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
-        if len(reqs) > 1:
-            raise Exception('Invalid state: more than one review request is active')
-        if len(reqs) == 1:
-            active_request = reqs[0]
+        if active_request:
             res['review_request_id'] = active_request.pk
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
@@ -821,6 +844,7 @@ def get_reviews_by_status(statuses):
     return {full_contribution_id(x['type'], x['id']): get_contribution_info(x) for x in contributions}
 
 @login_required()
+@never_cache
 def get_pending_requests(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
@@ -895,7 +919,6 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     numbers = []
     for k, v in single_values.items():
         if not v: continue
-        print "set " + str(k) + " to " + str(v)
         if k.startswith(number_prefix):
             num = InterimSlaveNumber()
             num.var_name = k[len(number_prefix):]
@@ -1315,7 +1338,11 @@ def editorial_sources(request):
         return HttpResponseBadRequest()
     original_ref = request.POST.get('original_ref')    
     conn = VoyageSourcesConnection.objects.filter(text_ref=original_ref).first() if original_ref else None
-    source = conn.source if conn else VoyageSources()
+    source = conn.source if conn else None
+    if not source and request.POST.get('short_ref'):
+        source = VoyageSources.objects.filter(short_ref=request.POST.get('short_ref')).first()
+    if not source:
+        source = VoyageSources()
     prefix = 'interim_source['
     plen = len(prefix)
     interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
@@ -1330,8 +1357,10 @@ def editorial_sources(request):
                 # Save text reference in interim source.
                 interim_source_id = request.POST.get('interim_source_id')
                 connection_ref = request.POST.get('connection_ref', original_ref)
-                if interim_source_id and not connection_ref:
+                if interim_source_id and (not connection_ref or connection_ref == ''):
                     return JsonResponse({'result': 'Failed', 'errors': ['Text reference is mandatory']})
+                if interim_source_id and not connection_ref.startswith(source.short_ref):
+                    return JsonResponse({'result': 'Failed', 'errors': ['Text reference must begin with Source\'s short reference']})
                 reference = form.save()
                 if interim_source_id:
                     pair = interim_source_id.split('/')

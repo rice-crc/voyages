@@ -145,7 +145,7 @@
                                     text += '\n' + key + ': ' + dict[key];
                                 }
                                 alert('{% trans "Impute variables computed as follows" %}: ' + text);
-                                window.location.reload();
+                                window.location.reload(true);
                             } else {
                                 alert(response.result);
                             }
