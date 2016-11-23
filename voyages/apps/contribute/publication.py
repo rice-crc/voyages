@@ -16,7 +16,6 @@ def publish_reviewed_contributions(review_requests):
                 _publish_single_review_new(req)
             elif req.contribution_id.startswith('edit'):
                 _publish_single_review_update(req)
-    pass
 
 def _delete_child_fk(obj, child_attr):
     child = getattr(obj, child_attr)
@@ -84,14 +83,44 @@ def _get_editorial_version(review_request, contrib_type):
     ship.imputed_nationality = interim.imputed_national_carrier
     ship.tonnage_mod = interim.imputed_standardized_tonnage
     ship.save()
+    
+    # Voyage Ship Owners
+    def create_ship_owner(owner_name, order):
+        owner = VoyageShipOwner()
+        owner.name = owner_name
+        owner.save()
+        conn = VoyageShipOwnerConnection()
+        conn.owner = owner
+        conn.owner_order = order
+        conn.voyage = voyage
+        conn.save()
+    
     if interim.first_ship_owner:
-        voyage.voyage_ship_owner.create(name=interim.first_ship_owner)
+        create_ship_owner(interim.first_ship_owner, 1)
     if interim.second_ship_owner:
-        voyage.voyage_ship_owner.create(name=interim.second_ship_owner)
+        create_ship_owner(interim.second_ship_owner, 2)
     if interim.additional_ship_owners:
         additional = interim.additional_ship_owners.split('\n')
-        for owner in additional:
-            voyage.voyage_ship_owner.create(name=owner)
+        for index, owner in enumerate(additional):
+            create_ship_owner(owner, index + 3)
+            
+    # Voyage Ship Captains
+    def create_captain(name, order):
+        captain = VoyageCaptain()
+        captain.name = name
+        captain.save()
+        conn = VoyageCaptainConnection()
+        conn.captain = captain
+        conn.captain_order = order
+        conn.voyage = voyage
+        conn.save()
+    
+    if interim.first_captain:
+        create_captain(interim.first_captain, 1)
+    if interim.second_captain:
+        create_captain(interim.second_captain, 2)
+    if interim.third_captain:
+        create_captain(interim.third_captain, 3)
     
     # Voyage Itinerary    
     itinerary = VoyageItinerary()
@@ -138,17 +167,149 @@ def _get_editorial_version(review_request, contrib_type):
     # Voyage dates.
     dates = VoyageDates()
     dates.voyage = voyage
+    dates.voyage_began = interim.date_departure
+    dates.slave_purchase_began = interim.date_slave_purchase_began
+    dates.vessel_left_port = interim.date_vessel_left_last_slaving_port
+    dates.first_dis_of_slaves = interim.date_first_slave_disembarkation
+    #dates.date_departed_africa = interim.???  TODO: check this
+    dates.arrival_at_second_place_landing = interim.date_second_slave_disembarkation
+    dates.third_dis_of_slaves = interim.date_third_slave_disembarkation
+    dates.departure_last_place_of_landing = interim.date_return_departure
+    dates.voyage_completed = interim.date_voyage_completed
+    dates.length_middle_passage_days = interim.length_of_middle_passage
+    dates.imp_voyage_began = interim.imputed_year_voyage_began
+    dates.imp_departed_africa = interim.imputed_year_departed_africa
+    dates.imp_arrival_at_port_of_dis = interim.imputed_year_arrived_at_port_of_disembarkation
+    dates.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
+    dates.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
     dates.save()
+    
+    numbers = {n.var_name.upper(): n.number for n in interim.slave_numbers}
     
     # Voyage crew
     crew = VoyageCrew()
     crew.voyage = voyage
+    crew.crew_voyage_outset = numbers.get('CREW1')
+    crew.crew_departure_last_port = numbers.get('CREW2')
+    crew.crew_first_landing = numbers.get('CREW3')
+    crew.crew_return_begin = numbers.get('CREW4')
+    crew.crew_end_voyage = numbers.get('CREW5')
+    crew.unspecified_crew = numbers.get('CREW')
+    crew.crew_died_before_first_trade = numbers.get('SAILD1')
+    crew.crew_died_while_ship_african = numbers.get('SAILD2')
+    crew.crew_died_middle_passage = numbers.get('SAILD3')
+    crew.crew_died_in_americas = numbers.get('SAILD4')
+    crew.crew_died_on_return_voyage = numbers.get('SAILD5')
+    crew.crew_died_complete_voyage = numbers.get('CREWDIED')
+    crew.crew_deserted = numbers.get('NDESERT')
     crew.save()
     
     # Voyage slave numbers
     slaves_numbers = VoyageSlavesNumbers()
     slaves_numbers.voyage = voyage
+    slaves_numbers.slave_deaths_before_africa = numbers.get('SLADAFRI')
+    slaves_numbers.slave_deaths_between_africa_america = numbers.get('SLADVOY')
+    slaves_numbers.slave_deaths_between_arrival_and_sale = numbers.get('SLADAMER')
+    slaves_numbers.num_slaves_intended_first_port = numbers.get('SLINTEND')
+    slaves_numbers.num_slaves_intended_second_port = numbers.get('SLINTEN2')
+    slaves_numbers.num_slaves_carried_first_port = numbers.get('NCAR13')
+    slaves_numbers.num_slaves_carried_second_port = numbers.get('NCAR15')
+    slaves_numbers.num_slaves_carried_third_port = numbers.get('NCAR17')
+    slaves_numbers.total_num_slaves_purchased = numbers.get('TSLAVESP')
+    slaves_numbers.total_num_slaves_dep_last_slaving_port = numbers.get('TSLAVESD')
+    slaves_numbers.total_num_slaves_arr_first_port_embark = numbers.get('SLAARRIV')
+    slaves_numbers.num_slaves_disembark_first_place = numbers.get('SLAS32')
+    slaves_numbers.num_slaves_disembark_second_place = numbers.get('SLAS36')
+    slaves_numbers.num_slaves_disembark_third_place = numbers.get('SLAS39')
+    slaves_numbers.imp_total_num_slaves_embarked = numbers.get('SLAXIMP')
+    slaves_numbers.imp_total_num_slaves_disembarked = numbers.get('SLAMIMP')
+    slaves_numbers.imp_jamaican_cash_price = numbers.get('JAMCASPR')
+    slaves_numbers.imp_mortality_during_voyage = numbers.get('VYMRTIMP')
+    slaves_numbers.num_men_embark_first_port_purchase = numbers.get('MEN1')
+    slaves_numbers.num_women_embark_first_port_purchase = numbers.get('WOMEN1')
+    slaves_numbers.num_boy_embark_first_port_purchase = numbers.get('BOY1')
+    slaves_numbers.num_girl_embark_first_port_purchase = numbers.get('GIRL1')
+    slaves_numbers.num_adult_embark_first_port_purchase = numbers.get('ADULT1')
+    slaves_numbers.num_child_embark_first_port_purchase = numbers.get('CHILD1')
+    slaves_numbers.num_infant_embark_first_port_purchase = numbers.get('INFANT1')
+    slaves_numbers.num_males_embark_first_port_purchase = numbers.get('MALE1')
+    slaves_numbers.num_females_embark_first_port_purchase = numbers.get('FEMALE1')
+    slaves_numbers.num_men_died_middle_passage = numbers.get('MEN2')
+    slaves_numbers.num_women_died_middle_passage = numbers.get('WOMEN2')
+    slaves_numbers.num_boy_died_middle_passage = numbers.get('BOY2')
+    slaves_numbers.num_girl_died_middle_passage = numbers.get('GIRL2')
+    slaves_numbers.num_adult_died_middle_passage = numbers.get('ADULT2')
+    slaves_numbers.num_child_died_middle_passage = numbers.get('CHILD2')
+    slaves_numbers.num_infant_died_middle_passage = numbers.get('INFANT2')
+    slaves_numbers.num_males_died_middle_passage = numbers.get('MALE2')
+    slaves_numbers.num_females_died_middle_passage = numbers.get('FEMALE2')
+    slaves_numbers.num_men_disembark_first_landing = numbers.get('MEN3')
+    slaves_numbers.num_women_disembark_first_landing = numbers.get('WOMEN3')
+    slaves_numbers.num_boy_disembark_first_landing = numbers.get('BOY3')
+    slaves_numbers.num_girl_disembark_first_landing = numbers.get('GIRL3')
+    slaves_numbers.num_adult_disembark_first_landing = numbers.get('ADULT3')
+    slaves_numbers.num_child_disembark_first_landing = numbers.get('CHILD3')
+    slaves_numbers.num_infant_disembark_first_landing = numbers.get('INFANT3')
+    slaves_numbers.num_males_disembark_first_landing = numbers.get('MALE3')
+    slaves_numbers.num_females_disembark_first_landing = numbers.get('FEMALE3')
+    slaves_numbers.num_men_embark_second_port_purchase = numbers.get('MEN4')
+    slaves_numbers.num_women_embark_second_port_purchase = numbers.get('WOMEN4')
+    slaves_numbers.num_boy_embark_second_port_purchase = numbers.get('BOY4')
+    slaves_numbers.num_girl_embark_second_port_purchase = numbers.get('GIRL4')
+    slaves_numbers.num_adult_embark_second_port_purchase = numbers.get('ADULT4')
+    slaves_numbers.num_child_embark_second_port_purchase = numbers.get('CHILD4')
+    slaves_numbers.num_infant_embark_second_port_purchase = numbers.get('INFANT4')
+    slaves_numbers.num_males_embark_second_port_purchase = numbers.get('MALE4')
+    slaves_numbers.num_females_embark_second_port_purchase = numbers.get('FEMALE4')
+    slaves_numbers.num_men_embark_third_port_purchase = numbers.get('MEN5')
+    slaves_numbers.num_women_embark_third_port_purchase = numbers.get('WOMEN5')
+    slaves_numbers.num_boy_embark_third_port_purchase = numbers.get('BOY5')
+    slaves_numbers.num_girl_embark_third_port_purchase = numbers.get('GIRL5')
+    slaves_numbers.num_adult_embark_third_port_purchase = numbers.get('ADULT5')
+    slaves_numbers.num_child_embark_third_port_purchase = numbers.get('CHILD5')
+    slaves_numbers.num_infant_embark_third_port_purchase = numbers.get('INFANT5')
+    slaves_numbers.num_males_embark_third_port_purchase = numbers.get('MALE5')
+    slaves_numbers.num_females_embark_third_port_purchase = numbers.get('FEMALE5')
+    slaves_numbers.num_men_disembark_second_landing = numbers.get('MEN6')
+    slaves_numbers.num_women_disembark_second_landing = numbers.get('WOMEN6')
+    slaves_numbers.num_boy_disembark_second_landing = numbers.get('BOY6')
+    slaves_numbers.num_girl_disembark_second_landing = numbers.get('GIRL6')
+    slaves_numbers.num_adult_disembark_second_landing = numbers.get('ADULT6')
+    slaves_numbers.num_child_disembark_second_landing = numbers.get('CHILD6')
+    slaves_numbers.num_infant_disembark_second_landing = numbers.get('INFANT6')
+    slaves_numbers.num_males_disembark_second_landing = numbers.get('MALE6')
+    slaves_numbers.num_females_disembark_second_landing = numbers.get('FEMALE6')
+    slaves_numbers.imp_num_adult_embarked = numbers.get('ADLT1IMP')
+    slaves_numbers.imp_num_children_embarked = numbers.get('CHIL1IMP')
+    slaves_numbers.imp_num_male_embarked = numbers.get('MALE1IMP')
+    slaves_numbers.imp_num_female_embarked = numbers.get('FEML1IMP')
+    slaves_numbers.total_slaves_embarked_age_identified = numbers.get('SLAVEMA1')
+    slaves_numbers.total_slaves_embarked_gender_identified = numbers.get('SLAVEMX1')
+    slaves_numbers.imp_adult_death_middle_passage = numbers.get('ADLT2IMP')
+    slaves_numbers.imp_child_death_middle_passage = numbers.get('CHIL2IMP')
+    slaves_numbers.imp_male_death_middle_passage = numbers.get('MALE2IMP')
+    slaves_numbers.imp_female_death_middle_passage = numbers.get('FEML2IMP')
+    slaves_numbers.imp_num_adult_landed = numbers.get('ADLT3IMP')
+    slaves_numbers.imp_num_child_landed = numbers.get('CHIL3IMP')
+    slaves_numbers.imp_num_male_landed = numbers.get('MALE3IMP')
+    slaves_numbers.imp_num_female_landed = numbers.get('FEML3IMP')
+    slaves_numbers.total_slaves_landed_age_identified = numbers.get('SLAVEMA3')
+    slaves_numbers.total_slaves_landed_gender_identified = numbers.get('SLAVEMX3')
+    slaves_numbers.total_slaves_dept_or_arr_age_identified = numbers.get('SLAVEMA7')
+    slaves_numbers.total_slaves_dept_or_arr_gender_identified = numbers.get('SLAVEMX7')
+    slaves_numbers.imp_slaves_embarked_for_mortality = numbers.get('TSLMTIMP')
+    slaves_numbers.imp_num_men_total = numbers.get('MEN7')
+    slaves_numbers.imp_num_women_total = numbers.get('WOMEN7')
+    slaves_numbers.imp_num_boy_total = numbers.get('BOY7')
+    slaves_numbers.imp_num_girl_total = numbers.get('GIRL7')
+    slaves_numbers.imp_num_adult_total = numbers.get('ADULT7')
+    slaves_numbers.imp_num_child_total = numbers.get('CHILD7')
+    slaves_numbers.imp_num_males_total = numbers.get('MALE7')
+    slaves_numbers.imp_num_females_total = numbers.get('FEMALE7')
     slaves_numbers.save()
+    
+    # Voyage sources
+    # TODO: added new sources? deleted references?
     
     # Set voyage foreign keys (this is redundant, but we are keeping the original model design)
     voyage.voyage_ship = ship
