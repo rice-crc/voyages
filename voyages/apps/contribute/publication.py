@@ -1,21 +1,43 @@
 from django.db import transaction
 from voyages.apps.contribute.models import *
+from voyages.apps.contribute.views import full_contribution_id, get_contribution_from_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
 
-def publish_reviewed_contributions(review_requests):
-    with transaction.atomic():
-        for req in review_requests:
-            # Basic validation.
-            if req.final_decision != ReviewRequestDecision.accepted_by_editor:
-                raise Exception('Review cannot be published since it was not accepted by editor')
-            if req.contribution_id.startswith('delete'):
-                _publish_single_review_delete(req)
-            elif req.contribution_id.startswith('merge'):
-                _publish_single_review_merge(req)
-            elif req.contribution_id.startswith('new'):
-                _publish_single_review_new(req)
-            elif req.contribution_id.startswith('edit'):
-                _publish_single_review_update(req)
+def publish_accepted_contributions(log_file):
+    if log_file: log_file.write('Fetching contributions...')
+    contribution_info = get_filtered_contributions({'status': ContributionStatus.approved})
+    review_requests = []
+    for info in contribution_info:
+        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
+        if len(reqs) != 1:
+            raise Exception('Expected a single active review request for approved contributions')
+        review_requests.append(reqs[0])
+    if log_file: log_file.write('Publishing...\n')
+    try:
+        with transaction.atomic():
+            count = 0
+            for req in review_requests:
+                # Basic validation.
+                count += 1
+                if log_file and count % 10 == 0:
+                    log_file.write('Published ' + str(count) + ' voyages')
+                if req.final_decision != ReviewRequestDecision.accepted_by_editor:
+                    raise Exception('Review cannot be published since it was not accepted by editor')
+                if req.contribution_id.startswith('delete'):
+                    _publish_single_review_delete(req)
+                elif req.contribution_id.startswith('merge'):
+                    _publish_single_review_merge(req)
+                elif req.contribution_id.startswith('new'):
+                    _publish_single_review_new(req)
+                elif req.contribution_id.startswith('edit'):
+                    _publish_single_review_update(req)
+        if log_file: log_file.write('Finished all publications.\n')
+    except Exception as exception:
+        if log_file:
+            log_file.write('An error occurred. Database transaction was rolledback\n')
+            log_file.write(str(exception))
+            import traceback
+            log_file.write(traceback.format_exc())
 
 def _delete_child_fk(obj, child_attr):
     child = getattr(obj, child_attr)
@@ -24,22 +46,23 @@ def _delete_child_fk(obj, child_attr):
         obj.save()
         child.delete()
 
-def _get_editorial_version(review_request, contrib_type):
-    editor_contribution = review_request.editor_contribution
+def _save_editorial_version(review_request, contrib_type):
+    editor_contribution = review_request.editor_contribution.first()
     if editor_contribution is None or editor_contribution.interim_voyage is None:
         raise Exception('This type of contribution requires an editor review interim voyage for publication')
     interim = editor_contribution.interim_voyage
     # Create or load a voyage with the appropriate voyage id.
     voyage = Voyage()
+    contrib = get_contribution_from_id(review_request.contribution_id)
+    contrib.status = ContributionStatus.published
+    contrib.save()
     if contrib_type == 'merge' or contrib_type == 'new':
         if not review_request.created_voyage_id:
             raise Exception('For new or merged contributions, an explicit voyage_id must be set')
         voyage.voyage_id = review_request.created_voyage_id
     elif contrib_type == 'edit':
-        contrib_id = int(review_request.contribution_id.split('/')[1])
-        contrib = EditVoyageContribution.objects.get(pk=contrib_id)
         voyage = Voyage.objects.get(voyage_id=contrib.edited_voyage_id)
-    else
+    else:
         raise Exception('Unsupported contribution type ' + contrib_type)
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
@@ -184,7 +207,7 @@ def _get_editorial_version(review_request, contrib_type):
     dates.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
     dates.save()
     
-    numbers = {n.var_name.upper(): n.number for n in interim.slave_numbers}
+    numbers = {n.var_name.upper(): n.number for n in interim.slave_numbers.all()}
     
     # Voyage crew
     crew = VoyageCrew()
@@ -309,7 +332,37 @@ def _get_editorial_version(review_request, contrib_type):
     slaves_numbers.save()
     
     # Voyage sources
-    # TODO: added new sources? deleted references?
+    def create_source_connection(src, conn_ref, order):
+        conn = VoyageSourcesConnection()
+        conn.source = src
+        conn.group = voyage
+        conn.source_order = order
+        conn.text_ref = conn_ref
+        conn.save()
+    
+    def create_source_reference(short_ref, conn_ref, order):
+        src = VoyageSources.objects.filter(short_ref=short_ref).first()
+        if src is None:
+            raise Exception('Source "' + short_ref + '" not found')
+        create_source_connection(src, conn_ref, order)
+    
+    created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
+        list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all())
+    pre_existing_sources = list(interim.pre_existing_sources.all())
+    if contrib_type != 'edit' and contrib_type != 'merge' and len(pre_existing_sources) > 0:
+        raise Exception('A contribution with type "' + contrib_type + '" cannot have pre existing sources')
+    source_order = 1 # TODO: ask Dr. Eltis to see how we should order references
+    for src in created_sources:
+        # Each src here has as type a subclass of InterimContributedSource
+        if not src.created_voyage_sources:
+            raise Exception('Invalid state: a new source must have been created to match "' + src.source_ref_text + '"')
+        create_source_connection(src.created_voyage_sources, src.source_ref_text, source_order)
+        source_order += 1
+    for src in pre_existing_sources:
+        if src.action == InterimPreExistingSourceActions.exclude: continue
+        create_source_reference(src.original_ref, src.full_ref, source_order)
+        source_order += 1
     
     # Set voyage foreign keys (this is redundant, but we are keeping the original model design)
     voyage.voyage_ship = ship
@@ -321,15 +374,27 @@ def _get_editorial_version(review_request, contrib_type):
     
     return voyage
     
+def _delete_voyages(ids):
+    delete_voyages = list(Voyage.objects.filter(voyage_id__in=ids))
+    if len(ids) != len(delete_voyages):
+        raise Exception("Voyage not found for deletion, voyage ids=" + str(ids))
+    for v in delete_voyages:
+        v.delete()
+    
 def _publish_single_review_delete(review_request):
-    pass
+    contribution = get_contribution_from_id(review_request.contribution_id)
+    ids = list(contribution.get_related_voyage_ids())
+    _delete_voyages(ids)
     
 def _publish_single_review_merge(review_request):
+    contribution = get_contribution_from_id(review_request.contribution_id)
     # Delete previous records and create a new one to replace them.
-    pass
+    ids = list(contribution.get_related_voyage_ids())
+    _delete_voyages(ids)
+    _save_editorial_version(review_request, 'merge')
     
 def _publish_single_review_new(review_request):
-    pass
+    _save_editorial_version(review_request, 'new')
     
 def _publish_single_review_update(review_request):
-    pass
+    _save_editorial_version(review_request, 'edit')

@@ -961,6 +961,8 @@ def begin_editorial_review(request):
         contribution.status = ContributionStatus.under_review
         contribution.save()
         contributor_prefix = 'Contributor: '
+        for e in review_request.editor_contribution:
+            e.delete()
         editor_contribution = EditorVoyageContribution()
         editor_contribution.request = review_request
         editor_contribution.notes = contributor_prefix + contribution.notes if contribution.notes else ''
@@ -1285,6 +1287,8 @@ def submit_review_to_editor(request, review_request_id):
             req.final_decision = decision
             req.save()
             # Create an editor contribution with cloned review data.
+            for e in req.editor_contribution:
+                e.delete()
             editor_contribution = EditorVoyageContribution()
             editor_contribution.request = req
             editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''            

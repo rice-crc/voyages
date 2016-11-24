@@ -1,4 +1,4 @@
-Django>=1.10
+Django>=1.10,<2.0
 lxml
 mysql-python
 hurry.filesize
