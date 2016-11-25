@@ -2,16 +2,74 @@ from django.db import transaction
 from voyages.apps.contribute.models import *
 from voyages.apps.contribute.views import full_contribution_id, get_contribution_from_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
+import csv
+
+def export_accepted_contributions_to_csv(csvfile):
+    data = export_accepted_contributions()
+    fields = ['ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
+        'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
+        'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
+        'BOY7', 'BOYRAT1', 'BOYRAT3', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
+        'CAPTAINC', 'CHIL1IMP', 'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2',
+        'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7', 'CHILRAT1',
+        'CHILRAT3', 'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2', 'CREW3',
+        'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
+        'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB',
+        'DLSLATRC', 'DDEPAM', 'DDEPAMB', 'DDEPAMC', 'DATARR32', 'DATARR33',
+        'DATARR34', 'DATARR36', 'DATARR37', 'DATARR38', 'DATARR39', 'DATARR40',
+        'DATARR41', 'DATARR43', 'DATARR44', 'DATARR45', 'DATEDEP', 'DATEBUY',
+        'DATELEFTAFR', 'DATELAND1', 'DATELAND2', 'DATELAND3', 'DATEDEPAM',
+        'DATEEND', 'DEPTREGIMP', 'DEPTREGIMP1', 'EMBPORT', 'EMBPORT2',
+        'EMBREG', 'EMBREG2', 'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4',
+        'FEMALE1', 'FEMALE2', 'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6',
+        'FEMALE7', 'FEML1IMP', 'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2',
+        'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7', 'GIRLRAT1', 'GIRLRAT3',
+        'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT3', 'INFANT4', 'JAMCASPR',
+        'MAJBUYPT', 'MAJBYIMP', 'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP',
+        'MALE2', 'MALE2IMP', 'MALE3', 'MALE3IMP', 'MALE4', 'MALE5', 'MALE6',
+        'MALE7', 'MALRAT1', 'MALRAT3', 'MALRAT7', 'MEN1', 'MEN2', 'MEN3',
+        'MEN4', 'MEN5', 'MEN6', 'MEN7', 'MENRAT1', 'MENRAT3', 'MENRAT7',
+        'MJBYPTIMP', 'MJSELIMP', 'MJSELIMP1', 'MJSLPTIMP', 'NATINIMP',
+        'NATIONAL', 'NCAR13', 'NCAR15', 'NCAR17', 'NDESERT', 'NPAFTTRA',
+        'NPPRETRA', 'NPPRIOR', 'OWNERA', 'OWNERB', 'OWNERC', 'OWNERD',
+        'OWNERE', 'OWNERF', 'OWNERG', 'OWNERH', 'OWNERI', 'OWNERJ', 'OWNERK',
+        'OWNERL', 'OWNERM', 'OWNERN', 'OWNERO', 'OWNERP', 'PLAC1TRA',
+        'PLAC2TRA', 'PLAC3TRA', 'PLACCONS', 'PLACREG', 'PORTDEP', 'PORTRET',
+        'PTDEPIMP', 'REGARR', 'REGARR2', 'REGDIS1', 'REGDIS2', 'REGDIS3',
+        'REGEM1', 'REGEM2', 'REGEM3', 'REGISREG', 'RESISTANCE', 'RETRNREG',
+        'RETRNREG1', 'RIG', 'SAILD1', 'SAILD2', 'SAILD3', 'SAILD4', 'SAILD5',
+        'SHIPNAME', 'SLA1PORT', 'SLAARRIV', 'SLADAFRI', 'SLADAMER', 'SLADVOY',
+        'SLAMIMP', 'SLAS32', 'SLAS36', 'SLAS39', 'SLAVEMA1', 'SLAVEMA3',
+        'SLAVEMA7', 'SLAVEMX1', 'SLAVEMX3', 'SLAVEMX7', 'SLAVMAX1', 'SLAVMAX3',
+        'SLAVMAX7', 'SLAXIMP', 'SLINTEN2', 'SLINTEND', 'SOURCEA', 'SOURCEB',
+        'SOURCEC', 'SOURCED', 'SOURCEE', 'SOURCEF', 'SOURCEG', 'SOURCEH',
+        'SOURCEI', 'SOURCEJ', 'SOURCEK', 'SOURCEL', 'SOURCEM', 'SOURCEN',
+        'SOURCEO', 'SOURCEP', 'SOURCEQ', 'SOURCER', 'TONMOD', 'TONNAGE',
+        'TONTYPE', 'TSLAVESD', 'TSLAVESP', 'TSLMTIMP', 'VOY1IMP', 'VOY2IMP',
+        'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
+        'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT1', 'WOMRAT3', 'WOMRAT7',
+        'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
+        'YEARDEP', 'YRCONS', 'YRREG']
+    writer = csv.DictWriter(csvfile, fieldnames=fields)
+    writer.writeheader()
+    for item in data:
+        writer.writerow(item)
+
+def export_accepted_contributions():
+    """
+    Produce a list of dicts, each representing an accepted contribution.
+    """
+    review_requests = _fetch_accepted_reviews()
+    result = []
+    for req in review_requests:    
+        editor_contribution = req.editor_contribution.first()
+        if editor_contribution is None or editor_contribution.interim_voyage is None: continue
+        result.append(_map_interim_to_spss(editor_contribution.interim_voyage))
+    return result
 
 def publish_accepted_contributions(log_file):
-    if log_file: log_file.write('Fetching contributions...')
-    contribution_info = get_filtered_contributions({'status': ContributionStatus.approved})
-    review_requests = []
-    for info in contribution_info:
-        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
-        if len(reqs) != 1:
-            raise Exception('Expected a single active review request for approved contributions')
-        review_requests.append(reqs[0])
+    if log_file: log_file.write('Fetching contributions...\n')
+    review_requests = _fetch_accepted_reviews()
     if log_file: log_file.write('Publishing...\n')
     try:
         with transaction.atomic():
@@ -19,8 +77,8 @@ def publish_accepted_contributions(log_file):
             for req in review_requests:
                 # Basic validation.
                 count += 1
-                if log_file and count % 10 == 0:
-                    log_file.write('Published ' + str(count) + ' voyages')
+                if log_file:
+                    log_file.write('Processing ' + req.contribution_id + '\n')
                 if req.final_decision != ReviewRequestDecision.accepted_by_editor:
                     raise Exception('Review cannot be published since it was not accepted by editor')
                 if req.contribution_id.startswith('delete'):
@@ -31,13 +89,21 @@ def publish_accepted_contributions(log_file):
                     _publish_single_review_new(req)
                 elif req.contribution_id.startswith('edit'):
                     _publish_single_review_update(req)
-        if log_file: log_file.write('Finished all publications.\n')
+                else:
+                    raise Exception('Unexpected contribution type')
+                req.archived = True
+                req.save()
+        if log_file:
+            log_file.write('Finished all publications.\n')
+            log_file.write('Total published: ' + str(count) + '.\n')
+        return True
     except Exception as exception:
         if log_file:
             log_file.write('An error occurred. Database transaction was rolledback\n')
             log_file.write(str(exception))
             import traceback
             log_file.write(traceback.format_exc())
+        return False
 
 def _delete_child_fk(obj, child_attr):
     child = getattr(obj, child_attr)
@@ -45,6 +111,152 @@ def _delete_child_fk(obj, child_attr):
         setattr(obj, child_attr, None)
         obj.save()
         child.delete()
+        
+def _fetch_accepted_reviews():
+    contribution_info = get_filtered_contributions({'status': ContributionStatus.approved})
+    review_requests = []
+    for info in contribution_info:
+        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
+        if len(reqs) != 1:
+            raise Exception('Expected a single active review request for approved contributions')
+        review_requests.append(reqs[0])
+    return review_requests
+
+def _map_interim_to_spss(interim):
+    data = {}
+    
+    def map_csv_date(varname, csv_date, labels=['A', 'B', 'C']):
+        members = csv_date.split(',')
+        if len(members) != 3:
+            members = [None, None, None]
+        data[varname + labels[0]] = int(members[1]) if members[1] != '' else None
+        data[varname + labels[1]] = int(members[0]) if members[0] != '' else None
+        data[varname + labels[2]] = int(members[2]) if members[2] != '' else None
+    
+    map_csv_date('DATEDEP', interim.date_departure)
+    map_csv_date('D1SLATR', interim.date_slave_purchase_began)
+    map_csv_date('DLSLATR', interim.date_vessel_left_last_slaving_port)
+    map_csv_date('DATARR3', interim.date_first_slave_disembarkation, '234')
+    map_csv_date('DATARR3', interim.date_second_slave_disembarkation, '678')
+    map_csv_date('DATARR', interim.date_third_slave_disembarkation, ['39', '40', '41'])
+    map_csv_date('DDEPAM', interim.date_return_departure, ['', 'B', 'C'])
+    map_csv_date('DATARR4', interim.date_voyage_completed, '345')
+    data['VOYAGE'] = interim.length_of_middle_passage
+    
+    def get_value(x):
+        return x.value if x else None
+    
+    def get_region(place):
+        return place.region.value if place else None
+    
+    # Ship, nation, owners
+    data['SHIPNAME'] = interim.name_of_vessel
+    data['NATIONAL'] = get_value(interim.national_carrier)
+    data['TONNAGE'] = interim.tonnage_of_vessel
+    data['TONTYPE'] = get_value(interim.ton_type)
+    data['RIG'] = get_value(interim.rig_of_vessel)
+    data['GUNS'] = interim.guns_mounted
+    data['YRCONS'] = interim.year_ship_constructed
+    data['PLACCONS'] = get_value(interim.ship_construction_place)
+    data['CONSTREG'] = get_region(interim.ship_construction_place)
+    data['YRREG'] = interim.year_ship_registered
+    data['PLACREG'] = get_value(interim.ship_registration_place)
+    data['REGISREG'] = get_region(interim.ship_registration_place)
+    data['OWNERA'] = interim.first_ship_owner
+    data['OWNERB'] = interim.second_ship_owner
+    other_ship_owners = interim.additional_ship_owners.split('\n')
+    aux = 'CDEFGHIJKLMNOP'
+    for i, owner in enumerate(other_ship_owners):
+        if i >= len(aux): break
+        data['OWNER' + aux[i]] = owner
+       
+    data['CAPTAINA'] = interim.first_captain    
+    data['CAPTAINB'] = interim.second_captain    
+    data['CAPTAINC'] = interim.third_captain
+    
+    # Outcome
+    data['FATE'] = get_value(interim.voyage_outcome)
+    data['RESISTANCE'] = get_value(interim.african_resistance)
+    
+    # Itinerary    
+    data['PORTDEP'] = get_value(interim.port_of_departure)
+    data['EMBPORT'] = get_value(interim.first_port_intended_embarkation)
+    data['EMBPORT2'] = get_value(interim.second_port_intended_embarkation)
+    data['EMBREG'] = get_region(interim.first_port_intended_embarkation)
+    data['EMBREG2'] = get_region(interim.second_port_intended_embarkation)
+    data['ARRPORT'] = get_value(interim.first_port_intended_disembarkation)
+    data['ARRPORT2'] = get_value(interim.second_port_intended_disembarkation)
+    data['REGARR'] = get_region(interim.first_port_intended_disembarkation)
+    data['REGARR2'] = get_region(interim.second_port_intended_disembarkation)
+    data['NPPRETRA'] = interim.number_of_ports_called_prior_to_slave_purchase
+    data['PLAC1TRA'] = get_value(interim.first_place_of_slave_purchase)
+    data['PLAC2TRA'] = get_value(interim.second_place_of_slave_purchase)
+    data['PLAC3TRA'] = get_value(interim.third_place_of_slave_purchase)
+    data['REGEM1'] = get_region(interim.first_place_of_slave_purchase)
+    data['REGEM2'] = get_region(interim.second_place_of_slave_purchase)
+    data['REGEM3'] = get_region(interim.third_place_of_slave_purchase)
+    data['NPAFTTRA'] = get_value(interim.place_of_call_before_atlantic_crossing)
+    data['NPPRIOR'] = interim.number_of_new_world_ports_called_prior_to_disembarkation
+    data['SLA1PORT'] = get_value(interim.first_place_of_landing)
+    data['ADPSALE1'] = get_value(interim.second_place_of_landing)
+    data['ADPSALE2'] = get_value(interim.third_place_of_landing)
+    data['REGDIS1'] = get_region(interim.first_place_of_landing)
+    data['REGDIS2'] = get_region(interim.second_place_of_landing)
+    data['REGDIS3'] = get_region(interim.third_place_of_landing)
+    data['PORTRET'] = get_value(interim.port_voyage_ended)
+    data['RETRNREG'] = get_region(interim.port_voyage_ended)
+    data['RETRNREG1'] = interim.port_voyage_ended.region.broad_region.value if interim.port_voyage_ended else None
+    data['MAJBUYPT'] = get_value(interim.principal_place_of_slave_purchase)
+    data['MAJSELPT'] = get_value(interim.principal_place_of_slave_disembarkation)
+
+    # Imputed variables
+    data['NATINIMP'] = interim.imputed_national_carrier
+    data['TONMOD'] = interim.imputed_standardized_tonnage
+    data['FATE2'] = interim.imputed_outcome_of_voyage_for_slaves
+    data['FATE3'] = interim.imputed_outcome_of_voyage_if_ship_captured
+    data['FATE4'] = interim.imputed_outcome_of_voyage_for_owner
+    data['PTDEPIMP'] = interim.imputed_port_where_voyage_began
+    data['MJBYPTIMP'] = interim.imputed_principal_place_of_slave_purchase
+    data['MJSLPTIMP'] = interim.imputed_principal_port_of_slave_disembarkation
+    data['DEPTREGIMP'] = interim.imputed_region_where_voyage_began
+    data['REGDIS1'] = interim.imputed_first_region_of_slave_landing
+    data['REGDIS2'] = interim.imputed_second_region_of_slave_landing
+    data['REGDIS3'] = interim.imputed_third_region_of_slave_landing
+    data['REGEM1'] = interim.imputed_first_region_of_embarkation_of_slaves
+    data['REGEM2'] = interim.imputed_second_region_of_embarkation_of_slaves
+    data['REGEM3'] = interim.imputed_third_region_of_embarkation_of_slaves
+    data['YEARDEP'] = interim.imputed_year_voyage_began
+    data['YEARAF'] = interim.imputed_year_departed_africa
+    data['YEARAM'] = interim.imputed_year_arrived_at_port_of_disembarkation
+    data['YEAR5'] = interim.imputed_quinquennium_in_which_voyage_occurred
+    data['YEAR10'] = interim.imputed_decade_in_which_voyage_occurred
+    data['YEAR25'] = interim.imputed_quarter_century_in_which_voyage_occurred
+    data['YEAR100'] = interim.imputed_century_in_which_voyage_occurred
+    data['VOY1IMP'] = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
+    data['VOY2IMP'] = interim.imputed_length_of_middle_passage
+    data['XMIMPFLAG'] = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
+    data['SLAXIMP'] = interim.imputed_total_slaves_embarked
+    data['SLAMIMP'] = interim.imputed_total_slaves_disembarked
+    data['TSLMTIMP'] = interim.imputed_number_of_slaves_embarked_for_mortality_calculation
+    data['VYMRTIMP'] = interim.imputed_total_slave_deaths_during_middle_passage
+    data['VYMRTRAT'] = interim.imputed_mortality_rate
+    data['JAMCASPR'] = interim.imputed_standardized_price_of_slaves
+    
+    # Sources
+    created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
+        list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all())
+    source_refs = [x.source_ref_text for x in created_sources] + \
+        [x.full_ref for x in interim.pre_existing_sources.all()]
+    aux = 'ABCDEFGHIJKLMNOPQR'
+    for i, ref in enumerate(source_refs):
+        data['SOURCE' + aux[i]] = ref
+    
+    # Numerical variables
+    for n in interim.slave_numbers.all():
+        data[n.var_name] = n.number
+        
+    return data
 
 def _save_editorial_version(review_request, contrib_type):
     editor_contribution = review_request.editor_contribution.first()
@@ -188,6 +400,9 @@ def _save_editorial_version(review_request, contrib_type):
     itinerary.save()
     
     # Voyage dates.
+    def year_dummies(year):
+        return ',,' + str(year)
+    
     dates = VoyageDates()
     dates.voyage = voyage
     dates.voyage_began = interim.date_departure
@@ -200,9 +415,9 @@ def _save_editorial_version(review_request, contrib_type):
     dates.departure_last_place_of_landing = interim.date_return_departure
     dates.voyage_completed = interim.date_voyage_completed
     dates.length_middle_passage_days = interim.length_of_middle_passage
-    dates.imp_voyage_began = interim.imputed_year_voyage_began
-    dates.imp_departed_africa = interim.imputed_year_departed_africa
-    dates.imp_arrival_at_port_of_dis = interim.imputed_year_arrived_at_port_of_disembarkation
+    dates.imp_voyage_began = year_dummies(interim.imputed_year_voyage_began)
+    dates.imp_departed_africa = year_dummies(interim.imputed_year_departed_africa)
+    dates.imp_arrival_at_port_of_dis = year_dummies(interim.imputed_year_arrived_at_port_of_disembarkation)
     dates.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
     dates.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
     dates.save()
