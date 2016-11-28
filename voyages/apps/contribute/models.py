@@ -134,6 +134,8 @@ class InterimVoyage(models.Model):
     imputed_mortality_rate = models.FloatField(null=True, blank=True)
     imputed_standardized_price_of_slaves = models.FloatField(null=True, blank=True)
     
+    persisted_form_data = models.TextField(max_length=10000, null=True, blank=True, help_text='Auxiliary form data that is persisted in JSON format')
+    
 class InterimContributedSource(models.Model):
     # Fileds which are common to all contributed source types.
     information = models.TextField(max_length=1000, null=True, blank=True)
@@ -237,6 +239,7 @@ class InterimPreExistingSource(models.Model):
                                        related_name='pre_existing_sources')
     voyage_ids = models.CommaSeparatedIntegerField(null=False, max_length=255)
     action = models.IntegerField(null=False, default=0)
+    original_short_ref = models.CharField(max_length=255, null=False)
     original_ref = models.CharField(max_length=255, null=False)
     full_ref = models.TextField(max_length=1000, null=False)
     notes = models.TextField(max_length=1000, null=True, blank=True)

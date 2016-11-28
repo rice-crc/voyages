@@ -84,7 +84,7 @@
 </div>
 
 <script type="text/javascript">
-    function initDecisionForm(validation) {
+    function initDecisionForm(validation, persistedData) {
         {% if mode == 'reviewer' or mode == 'review' %}
             $('#submit_editor_btn').click(function(e) {
                 e.preventDefault();
@@ -205,5 +205,15 @@
                 return false;
             });
         {% endif %}
+        if (persistedData) {
+            var persistedFields = ['message_to_editor', 'reviewer_decision',
+                'decision_message', 'editorial_decision', 'created_voyage_id'];
+            for (var i = 0; i < persistedFields.length; ++i) {
+                var field = persistedFields[i];
+                if (persistedData.hasOwnProperty(field)) {
+                    $('#' + field).val(persistedData[field]);
+                }
+            }
+        }
     }
 </script>
