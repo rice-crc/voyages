@@ -75,24 +75,29 @@ def publish_accepted_contributions(log_file):
     everything is published or nothing is.
     """
     import os
-    log_file.write('Backing up all data.\n')
-    log_file.flush()
-    os.fsync(log_file.fileno())
+    
+    def log(text):     
+        log_file.write(text)
+        log_file.flush()
+        os.fsync(log_file.fileno())
+        
+    log('Backing up all data.\n')
 
     # Step 1 - Backup database
     os.system('python manage.py dumpdata > /var/tmp/db.json')
 
-    log_file.write('Finished backup.\n')
-    log_file.write('Fetching contributions...\n')
+    log('Finished backup.\n')
+    log('Fetching contributions...\n')
     review_requests = _fetch_accepted_reviews()
-    log_file.write('Publishing...\n')
+    log('Publishing...\n')
+    # Step 2 - Publish database
     try:
         with transaction.atomic():
             count = 0
             for req in review_requests:
                 # Basic validation.
                 count += 1
-                log_file.write('Processing ' + req.contribution_id + '\n')
+                log('Processing ' + req.contribution_id + '\n')
                 if req.final_decision != ReviewRequestDecision.accepted_by_editor:
                     raise Exception('Review cannot be published since it was not accepted by editor')
                 if req.contribution_id.startswith('delete'):
@@ -107,17 +112,21 @@ def publish_accepted_contributions(log_file):
                     raise Exception('Unexpected contribution type')
                 req.archived = True
                 req.save()
-        log_file.write('Finished all publications.\n')
-        log_file.write('Total published: ' + str(count) + '.\n')
+        log('Finished all publications.\n')
+        log('Total published: ' + str(count) + '.\n')
+        # Step 3 - update solr index.
+        log('Updating solr index.\n')
+        os.system('python manage.py update_index voyage.voyage --age 24')
+        log('Solr index is now updated.\n')
         return True
     except Exception as exception:
-        log_file.write('An error occurred. Database transaction was rolledback\n')
-        log_file.write(str(exception))
+        log('An error occurred. Database transaction was rolledback.\n')
+        log(str(exception))
         import traceback
-        log_file.write(traceback.format_exc())
+        log(traceback.format_exc())
         return False
     finally:
-        log_file.write('EOF')
+        log('EOF')
         log_file.close()
 
 def _delete_child_fk(obj, child_attr):
