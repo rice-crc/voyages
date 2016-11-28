@@ -13,6 +13,7 @@ from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.models import *
+from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.conf import settings
@@ -302,10 +303,11 @@ def interim_main(request, contribution, interim):
     :param request: the request which may contain interim form POST data.
     :param contribution: the contribution object, which may be a review.
     :param interim: the interim voyage data.
-    :return: (Boolean b, numbers, form)
+    :return: (Boolean b, numbers, form, source_pks)
     First entry of tuple is True if GET request or valid POST, False otherwise.
     Numbers: dictionary of slave numbers
     Form: the interim form.
+    Source pks: the primary key of the source references
     """
     result = True
     src_pks = {}
@@ -333,10 +335,22 @@ def interim_main(request, contribution, interim):
                 # Get pre-existing sources.
                 for src in interim.pre_existing_sources.all():
                     src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
-                    src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
-                    src.save()
-                form.save()
-                contribution.notes = request.POST.get('contribution_main_notes')
+                    src.notes = escape(request.POST.get('pre_existing_source_notes_' + str(src.pk), ''))
+                    src.save()                
+                interim = form.save()
+                # Additional form data.
+                persistedFields = ['message_to_editor', 'reviewer_decision', 
+                    'decision_message', 'editorial_decision', 'created_voyage_id']
+                persistedDict = {k: escape(request.POST[k]) for k in persistedFields if k in request.POST}
+                interim.persisted_form_data = json.dumps(persistedDict) if len(persistedDict) > 0 else None
+                # Reparse notes safely.
+                try:
+                    note_dict = {k: escape(v) for k, v in json.loads(interim.notes).items()}
+                except:
+                    note_dict = {'parse_error': interim.notes}
+                interim.notes = json.dumps(note_dict)
+                interim.save()
+                contribution.notes = escape(request.POST.get('contribution_main_notes'))
                 contribution.save()
                 for (src, view_item_index) in sources:
                     src.save()
@@ -515,6 +529,7 @@ def init_interim_voyage(interim, contribution):
         ps = InterimPreExistingSource()
         ps.interim_voyage = interim
         ps.voyage_ids = ','.join([str(v.voyage_id) for (v, c) in tuples])
+        ps.original_short_ref = conn.source.short_ref
         ps.original_ref = conn.text_ref
         ps.full_ref = conn.source.full_ref
         ps.save()
@@ -1078,7 +1093,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     except:
         note_dict = {'parse_error': interim.notes}
     for key, note in note_dict.items():
-        changed[key] = contributor_comment_prefix + note
+        changed[key] = escape(contributor_comment_prefix + note)
         
     with transaction.atomic():
         interim.notes = json.dumps(changed)
@@ -1087,7 +1102,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
             item.pk = None
             item.interim_voyage = interim
             if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
-                item.notes = contributor_comment_prefix + item.notes
+                item.notes = escape(contributor_comment_prefix + item.notes)
             item.save()
         return interim
 
@@ -1251,6 +1266,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         review_request.created_voyage_id = created_voyage_id
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
+        msg = escape(msg)
         review_request.decision_message = msg
         review_request.save()
         user_contribution = get_contribution_from_id(review_request.contribution_id)
@@ -1283,6 +1299,7 @@ def submit_review_to_editor(request, review_request_id):
             # Save review request with decision.
             msg = request.POST.get('message_to_editor')
             msg = 'Reviewer: ' + msg if msg else ''
+            msg = escape(msg)
             req.decision_message = msg
             req.final_decision = decision
             req.save()
@@ -1291,7 +1308,7 @@ def submit_review_to_editor(request, review_request_id):
                 e.delete()
             editor_contribution = EditorVoyageContribution()
             editor_contribution.request = req
-            editor_contribution.notes = 'Reviewer: ' + contribution.notes if contribution.notes else ''            
+            editor_contribution.notes = escape('Reviewer: ' + contribution.notes if contribution.notes else '')            
             if has_interim_voyage:
                 editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
                 override_empty_fields_with_single_value(editor_contribution.interim_voyage, req)
@@ -1430,139 +1447,32 @@ def editorial_sources(request):
 @login_required()
 @require_POST
 def publish_pending(request):
-    def get_contrib_review_request(info):
-        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
-        if len(reqs) != 1:
-            raise Exception('Invalid state: a single active review must exist for the contribution')
-        return (info['contribution'], reqs[0])
-    
-    voyage_id_range_start = request.POST.get('voyage_id_range_start')
-    if not voyage_id_range_start:
-        from django.db.models import Max
-        voyage_id_range_start = Voyage.objects.all().aggregate(Max('voyage_id')) + 1
-        
-    def get_new_voyage_id():
-        res = voyage_id_range_start
-        voyage_id_range_start += 1
-        return res
-    
-    contributions = get_filtered_contributions({'status': ContributionStatus.approved})
-    inserted = [get_contrib_review_request(x) for x in contributions if x['type'] == 'new']
-    merged = [get_contrib_review_request(x) for x in contributions if x['type'] == 'merge']
-    deleted = [get_contrib_review_request(x) for x in contributions if x['type'] == 'delete']
-    insert_interim = [(None, x[1].editor_contribution) for x in (inserted + merged)]
-    edit_interim = [(x.edited_voyage_id, get_contrib_review_request(x)[1].editor_contribution)
-                    for x in contributions if x['type'] == 'edit']
-    # CHECK THIS: are we supposed to delete the merged and pre-existing voyages?
-    delete_ids = [id for ids in [d.deleted_voyages_ids for d in deleted] for id in ids] +\
-        [id for ids in [m.merged_voyages_ids for m in merged] for id in ids] +\
-        [y[0] for y in edit_interim]
-    # Keep a dictionary of owners names so that we avoid creating duplicates.
-    ship_owners = {o.name: o.pk for o in VoyageShipOwner.objects.all()}
-    # Create new voyages corresponding to editorial data.
-    all_interim = edit_interim + insert_interim
-    with transaction.atomic():
-        # Delete voyages first.
-        # TODO
-        for tuple in all_interim:
-            # We have to create a voyage model based on interim/imputed data.
-            interim = tuple[1]
-            voyage = Voyage()
-            voyage.voyage_id = tuple[0] if tuple[0] else get_new_voyage_id()
-            voyage.save()
-            # Ship
-            ship = VoyageShip()
-            ship.voyage = voyage
-            ship.ship_name = interim.name_of_vessel
-            ship.year_of_construction = interim.year_ship_constructed
-            ship.registered_year = interim.year_ship_registered
-            ship.vessel_construction_place = interim.ship_construction_place
-            ship.registered_place = interim.ship_registration_place
-            ship.nationality_ship = interim.national_carrier
-            ship.rig_of_vessel = interim.rig_of_vessel
-            ship.tonnage = interim.tonnage_of_vessel
-            ship.ton_type = interim.ton_type
-            ship.guns_mounted = interim.guns_mounted
-            ship.imputed_nationality = interim.imputed_national_carrier
-            ship.tonnage_mod = interim.imputed_standardized_tonnage
-            ship.vessel_construction_region = interim.imputed_region_ship_constructed
-            ship.save()
-            # Ship owners
-            # TODO
-            # Outcome
-            outcome = VoyageOutcome()
-            outcome.voyage = voyage
-            outcome.particular_outcome = interim.voyage_outcome
-            outcome.resistance = interim.african_resistance
-            outcome.outcome_slaves = interim.imputed_outcome_of_voyage_for_slaves
-            outcome.vessel_captured_outcome = interim.imputed_outcome_of_voyage_if_ship_captured
-            outcome.outcome_owner = interim.imputed_outcome_of_voyage_for_owner
-            outcome.save()
-            # Itinerary
-            itinerary = VoyageItinerary()
-            itinerary.voyage = voyage
-            itinerary.int_first_port_emb = interim.first_port_intended_embarkation
-            itinerary.int_second_port_emb = interim.second_port_intended_embarkation
-            itinerary.int_first_port_dis = interim.first_port_intended_disembarkation
-            itinerary.int_second_port_dis = interim.second_port_intended_disembarkation
-            itinerary.port_of_departure = interim.port_of_departure
-            itinerary.ports_called_buying_slaves = interim.number_of_ports_called_prior_to_slave_purchase
-            itinerary.first_place_slave_purchase = interim.first_place_of_slave_purchase
-            itinerary.second_place_slave_purchase = interim.second_place_of_slave_purchase
-            itinerary.third_place_slave_purchase = interim.third_place_of_slave_purchase
-            itinerary.principal_place_of_slave_purchase = interim.principal_place_of_slave_purchase
-            itinerary.port_of_call_before_atl_crossing = interim.place_of_call_before_atlantic_crossing
-            itinerary.number_of_ports_of_call = interim.number_of_new_world_ports_called_prior_to_disembarkation
-            itinerary.first_landing_place = interim.first_place_of_landing
-            itinerary.second_landing_place = interim.second_place_of_landing
-            itinerary.third_landing_place = interim.third_place_of_landing
-            itinerary.principal_port_of_slave_dis = interim.principal_place_of_slave_disembarkation
-            itinerary.place_voyage_ended = interim.port_voyage_ended
-            itinerary.imp_port_voyage_begin = interim.imputed_port_where_voyage_began
-            itinerary.imp_principal_place_of_slave_purchase = interim.imputed_principal_place_of_slave_purchase
-            itinerary.imp_principal_port_slave_dis = interim.imputed_principal_port_of_slave_disembarkation
-            itinerary.imp_region_voyage_begin = interim.imputed_region_where_voyage_began
-            itinerary.int_first_region_slave_landing = interim.imputed_first_region_of_slave_landing
-            itinerary.int_second_place_region_slave_landing = interim.imputed_second_region_of_slave_landing
-            # NOT FOUND!
-            # itinerary. = interim.imputed_third_region_of_slave_landing
-            # itinerary. = interim.imputed_first_region_of_embarkation_of_slaves
-            # itinerary. = interim.imputed_second_region_of_embarkation_of_slaves
-            # itinerary. = interim.imputed_third_region_of_embarkation_of_slaves
-            # TODO: some fields in the itinerary are missing!
-            itinerary.save()
-            # Dates
-            dates = VoyageDates()
-            dates.voyage = voyage
-            date.voyage_began = interim.date_departure
-            date.slave_purchase_began = interim.date_slave_purchase_began
-            date.vessel_left_port = interim.date_vessel_left_last_slaving_port
-            date.first_dis_of_slaves = interim.date_first_slave_disembarkation
-            date.arrival_at_second_place_landing = interim.date_second_slave_disembarkation
-            date.third_dis_of_slaves = interim.date_third_slave_disembarkation
-            date.departure_last_place_of_landing = interim.date_return_departure
-            date.voyage_completed = interim.date_voyage_completed
-            date.length_middle_passage_days = interim.length_of_middle_passage
-            date.imp_voyage_began = interim.imputed_year_voyage_began
-            date.imp_departed_africa = interim.imputed_year_departed_africa
-            date.imp_arrival_at_port_of_dis = interim.imputed_year_arrived_at_port_of_disembarkation
-            date.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
-            date.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
-            dates.save()
-            # Captains
-            # TODO
-            # Numbers
-            numbers = VoyageSlavesNumbers()
-            numbers.voyage = voyage
-            # The slave numbers are stored sparsely
-            for num in interim.slave_numbers.all():
-                setattr(numbers, all_slave_number_var_map[num.var_name], num.number)
-            numbers.save()
-            # This is redundant, but we are keeping the original model design consistent.
-            voyage.voyage_ship = ship
-            voyage.voyage_itinerary = itinerary
-            voyage.voyage_dates = dates
-            voyage.voyage_slaves_numbers = numbers
-            voyage.save()
-    return JsonResponse({'result': 'Failed', 'errors': ['Not implemented']})
-    
+    # Here we are using a lightweight approach at background processing by starting
+    # a thread and logging the progress to a file whose name is returned in the
+    # response.
+    import os, re, tempfile, thread
+    from voyages.apps.contribute.publication import publish_accepted_contributions
+    try:
+        dir = settings.MEDIA_ROOT + '/publication_logs/'
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
+        thread.start_new_thread(publish_accepted_contributions, (log_file,))
+        return JsonResponse({'result': 'OK', 'log_file': re.sub('^.*/', '', log_file.name)})
+    except Exception as exception:
+        return JsonResponse({'result': 'Failed', 'error': exception.message})
+      
+@login_required()
+@require_POST
+def retrieve_publication_status(request):
+    dir = settings.MEDIA_ROOT + '/publication_logs/'
+    log_file = dir + request.POST['log_file']
+    with open(log_file, 'r') as f:
+        lines = f.readlines()
+        skip_count = int(request.POST.get('skip_count', 0))
+        text = ''
+        i = skip_count
+        while i < len(lines):
+            text += lines[i] + '<br />'
+            i += 1
+        return JsonResponse({'lines': text, 'count': i - skip_count})

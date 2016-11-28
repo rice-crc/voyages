@@ -2448,7 +2448,7 @@
         };
 
         $('form').submit(formSubmission);
-        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(formSubmission);{% endif %}
+        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(formSubmission, {{ form.persisted_form_data.value|safe }});{% endif %}
         
         // Ajax save.
         $('#save_btn').click(function() {

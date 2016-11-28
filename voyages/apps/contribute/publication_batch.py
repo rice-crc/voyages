@@ -15,13 +15,6 @@ if len(sys.argv) <= 1:
 
 f = open(sys.argv[1], 'w')
 f.write('Starting publication script.\n')
-f.write('Backing up all data.\n')
-
-# Step 1 - Backup database
-#os.system('python manage.py dumpdata > /var/tmp/db.json')
-
-f.write('Finished backup.\n')
-f.write('Publishing accepted contributions...\n')
 publish_accepted_contributions(f)
 
 f.close()

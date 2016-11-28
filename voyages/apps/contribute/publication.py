@@ -68,17 +68,31 @@ def export_accepted_contributions():
     return result
 
 def publish_accepted_contributions(log_file):
-    if log_file: log_file.write('Fetching contributions...\n')
+    """
+    Publish all accepted contributions and use the
+    given log_file to register the progress. Since
+    all the db operations are transacional, either
+    everything is published or nothing is.
+    """
+    import os
+    log_file.write('Backing up all data.\n')
+    log_file.flush()
+    os.fsync(log_file.fileno())
+
+    # Step 1 - Backup database
+    os.system('python manage.py dumpdata > /var/tmp/db.json')
+
+    log_file.write('Finished backup.\n')
+    log_file.write('Fetching contributions...\n')
     review_requests = _fetch_accepted_reviews()
-    if log_file: log_file.write('Publishing...\n')
+    log_file.write('Publishing...\n')
     try:
         with transaction.atomic():
             count = 0
             for req in review_requests:
                 # Basic validation.
                 count += 1
-                if log_file:
-                    log_file.write('Processing ' + req.contribution_id + '\n')
+                log_file.write('Processing ' + req.contribution_id + '\n')
                 if req.final_decision != ReviewRequestDecision.accepted_by_editor:
                     raise Exception('Review cannot be published since it was not accepted by editor')
                 if req.contribution_id.startswith('delete'):
@@ -93,17 +107,18 @@ def publish_accepted_contributions(log_file):
                     raise Exception('Unexpected contribution type')
                 req.archived = True
                 req.save()
-        if log_file:
-            log_file.write('Finished all publications.\n')
-            log_file.write('Total published: ' + str(count) + '.\n')
+        log_file.write('Finished all publications.\n')
+        log_file.write('Total published: ' + str(count) + '.\n')
         return True
     except Exception as exception:
-        if log_file:
-            log_file.write('An error occurred. Database transaction was rolledback\n')
-            log_file.write(str(exception))
-            import traceback
-            log_file.write(traceback.format_exc())
+        log_file.write('An error occurred. Database transaction was rolledback\n')
+        log_file.write(str(exception))
+        import traceback
+        log_file.write(traceback.format_exc())
         return False
+    finally:
+        log_file.write('EOF')
+        log_file.close()
 
 def _delete_child_fk(obj, child_attr):
     child = getattr(obj, child_attr)
@@ -576,7 +591,7 @@ def _save_editorial_version(review_request, contrib_type):
         source_order += 1
     for src in pre_existing_sources:
         if src.action == InterimPreExistingSourceActions.exclude: continue
-        create_source_reference(src.original_ref, src.full_ref, source_order)
+        create_source_reference(src.original_short_ref, src.original_ref, source_order)
         source_order += 1
     
     # Set voyage foreign keys (this is redundant, but we are keeping the original model design)

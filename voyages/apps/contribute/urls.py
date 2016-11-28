@@ -64,7 +64,9 @@ urlpatterns = [
     url(r'json_pending_requests', views.get_pending_requests, name='json_pending_requests'),
     url(r'json_pending_publication', views.get_pending_publication, name='json_pending_publication'),
     url(r'json_reviewers', views.get_reviewers, name='json_reviewers'),
-
+    url(r'json_publish_pending', views.publish_pending, name='json_publish_pending'),
+    url(r'json_retrieve_publication_status', views.retrieve_publication_status, name='json_retrieve_publication_status'),
+    
     url(r'post_review_request', views.post_review_request, name='post_review_request'),
     url(r'post_archive_review_request', views.post_archive_review_request, name='post_archive_review_request'),
     
