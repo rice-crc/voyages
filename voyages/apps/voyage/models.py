@@ -1303,6 +1303,7 @@ class Voyage(models.Model):
             ('VoyageSources', through='VoyageSourcesConnection',
              related_name='voyage_sources', blank=True)
 
+    last_update = models.DateTimeField(auto_now=True)
 
     # generate natural key
     def natural_key(self):
