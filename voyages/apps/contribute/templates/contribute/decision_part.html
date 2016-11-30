@@ -145,7 +145,8 @@
                                     text += '\n' + key + ': ' + dict[key];
                                 }
                                 alert('{% trans "Impute variables computed as follows" %}: ' + text);
-                                window.location.reload(true);
+                                // Reload page and expand all sections.
+                                window.location.href = window.location.href + '?expandAllSections=true';
                             } else {
                                 alert(response.result);
                             }
