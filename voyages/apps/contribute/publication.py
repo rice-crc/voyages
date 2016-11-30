@@ -4,7 +4,7 @@ from voyages.apps.contribute.views import full_contribution_id, get_contribution
 from voyages.apps.voyage.models import *
 import csv
 
-def export_accepted_contributions_to_csv(csvfile):
+def export_accepted_contributions_to_csv(csv_file):
     data = export_accepted_contributions()
     fields = ['ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
         'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
@@ -50,7 +50,7 @@ def export_accepted_contributions_to_csv(csvfile):
         'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT1', 'WOMRAT3', 'WOMRAT7',
         'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
         'YEARDEP', 'YRCONS', 'YRREG']
-    writer = csv.DictWriter(csvfile, fieldnames=fields)
+    writer = csv.DictWriter(csv_file, fieldnames=fields)
     writer.writeheader()
     for item in data:
         writer.writerow(item)
@@ -188,7 +188,7 @@ def _map_interim_to_spss(interim):
     data['REGISREG'] = get_region(interim.ship_registration_place)
     data['OWNERA'] = interim.first_ship_owner
     data['OWNERB'] = interim.second_ship_owner
-    other_ship_owners = interim.additional_ship_owners.split('\n')
+    other_ship_owners = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
     aux = 'CDEFGHIJKLMNOP'
     for i, owner in enumerate(other_ship_owners):
         if i >= len(aux): break
@@ -359,7 +359,7 @@ def _save_editorial_version(review_request, contrib_type):
     if interim.second_ship_owner:
         create_ship_owner(interim.second_ship_owner, 2)
     if interim.additional_ship_owners:
-        additional = interim.additional_ship_owners.split('\n')
+        additional = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
         for index, owner in enumerate(additional):
             create_ship_owner(owner, index + 3)
             

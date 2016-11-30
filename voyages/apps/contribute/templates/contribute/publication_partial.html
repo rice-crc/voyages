@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <button id="publish_all_btn" class="btn btn-primary">{% trans "Publish all" %}</button>
-<button id="download_btn" class="btn btn-primary">{% trans "Download" %}</button>
+<a id="download_btn" class="btn btn-primary" href="{% url 'contribute:download_pending_contributions' %}">{% trans "Download accepted (pending)" %}</a>
 
 <p></p>
 

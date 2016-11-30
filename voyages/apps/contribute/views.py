@@ -1243,14 +1243,18 @@ def submit_editorial_decision(request, editor_contribution_id):
         return HttpResponseBadRequest()
     
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
-    review_request = contribution.request
+    review_request = contribution.request    
+    user_contribution = get_contribution_from_id(review_request.contribution_id)
     if not created_voyage_id and (review_request.requires_created_voyage_id() and decision == ReviewRequestDecision.accepted_by_editor):
         return HttpResponseBadRequest('Expected a voyage id for new/merge contribution')
     if created_voyage_id:
         # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
         existing = Voyage.objects.filter(voyage_id=created_voyage_id).count()
         if existing > 0:
-            return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
+            # Only case when this is allowed is if a merge contribution
+            # uses one of the merged voyages ids.
+            if not created_voyage_id in user_contribution.get_related_voyage_ids():
+                return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
         existing = ReviewRequest.objects.filter(created_voyage_id=created_voyage_id, archived=False).count()
         if existing > 0:
             return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already in current publication batch')})
@@ -1269,7 +1273,6 @@ def submit_editorial_decision(request, editor_contribution_id):
         msg = escape(msg)
         review_request.decision_message = msg
         review_request.save()
-        user_contribution = get_contribution_from_id(review_request.contribution_id)
         user_contribution.status = decision
         user_contribution.save()
     return JsonResponse({'result': 'OK'})
@@ -1443,6 +1446,15 @@ def editorial_sources(request):
             source.full_ref = formatted_content
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})
+
+@login_required()
+def download_pending_contributions(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="publications.csv"'
+    import csv
+    from voyages.apps.contribute.publication import export_accepted_contributions_to_csv
+    export_accepted_contributions_to_csv(response)
+    return response
 
 @login_required()
 @require_POST

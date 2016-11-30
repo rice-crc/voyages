@@ -1641,6 +1641,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
 <script type="text/javascript">        
     var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
@@ -1808,6 +1809,10 @@
                 return;
             }
         }
+    }
+    
+    function expandAll() {
+        $('.collapse').collapse('show');
     }
 
     var getValues = function(name) {
@@ -2498,6 +2503,10 @@
             }
             return false;
         });
+        var pageParams = pageGetParams();
+        if (pageParams.expandAllSections) {
+            expandAll();
+        }
     });
 
     // Special handling of port/region/broad region selection.
