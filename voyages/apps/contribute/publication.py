@@ -2,10 +2,11 @@ from django.db import transaction
 from voyages.apps.contribute.models import *
 from voyages.apps.contribute.views import full_contribution_id, get_contribution_from_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
-import csv
+import unicodecsv as csv
 
 def export_accepted_contributions_to_csv(csv_file):
     data = export_accepted_contributions()
+    # TODO: export status variables (accepted/published/under review)
     fields = ['ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
         'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
         'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
@@ -60,11 +61,17 @@ def export_accepted_contributions():
     Produce a list of dicts, each representing an accepted contribution.
     """
     review_requests = _fetch_accepted_reviews()
+    return export_from_review_requests(review_requests)
+    
+def export_from_review_requests(review_requests):
     result = []
     for req in review_requests:    
-        editor_contribution = req.editor_contribution.first()
-        if editor_contribution is None or editor_contribution.interim_voyage is None: continue
-        result.append(_map_interim_to_spss(editor_contribution.interim_voyage))
+        contrib = req.editor_contribution.first()
+        if contrib is None or contrib.interim_voyage is None:
+            contrib = get_contribution_from_id(review_request.contribution_id)
+        if contrib is None or contrib.interim_voyage is None:
+            continue
+        result.append(_map_interim_to_spss(contrib.interim_voyage))
     return result
 
 def publish_accepted_contributions(log_file):
@@ -234,21 +241,21 @@ def _map_interim_to_spss(interim):
     data['MAJSELPT'] = get_value(interim.principal_place_of_slave_disembarkation)
 
     # Imputed variables
-    data['NATINIMP'] = interim.imputed_national_carrier
+    data['NATINIMP'] = get_value(interim.imputed_national_carrier)
     data['TONMOD'] = interim.imputed_standardized_tonnage
-    data['FATE2'] = interim.imputed_outcome_of_voyage_for_slaves
-    data['FATE3'] = interim.imputed_outcome_of_voyage_if_ship_captured
-    data['FATE4'] = interim.imputed_outcome_of_voyage_for_owner
-    data['PTDEPIMP'] = interim.imputed_port_where_voyage_began
-    data['MJBYPTIMP'] = interim.imputed_principal_place_of_slave_purchase
-    data['MJSLPTIMP'] = interim.imputed_principal_port_of_slave_disembarkation
-    data['DEPTREGIMP'] = interim.imputed_region_where_voyage_began
-    data['REGDIS1'] = interim.imputed_first_region_of_slave_landing
-    data['REGDIS2'] = interim.imputed_second_region_of_slave_landing
-    data['REGDIS3'] = interim.imputed_third_region_of_slave_landing
-    data['REGEM1'] = interim.imputed_first_region_of_embarkation_of_slaves
-    data['REGEM2'] = interim.imputed_second_region_of_embarkation_of_slaves
-    data['REGEM3'] = interim.imputed_third_region_of_embarkation_of_slaves
+    data['FATE2'] = get_value(interim.imputed_outcome_of_voyage_for_slaves)
+    data['FATE3'] = get_value(interim.imputed_outcome_of_voyage_if_ship_captured)
+    data['FATE4'] = get_value(interim.imputed_outcome_of_voyage_for_owner)
+    data['PTDEPIMP'] = get_value(interim.imputed_port_where_voyage_began)
+    data['MJBYPTIMP'] = get_value(interim.imputed_principal_place_of_slave_purchase)
+    data['MJSLPTIMP'] = get_value(interim.imputed_principal_port_of_slave_disembarkation)
+    data['DEPTREGIMP'] = get_value(interim.imputed_region_where_voyage_began)
+    data['REGDIS1'] = get_value(interim.imputed_first_region_of_slave_landing)
+    data['REGDIS2'] = get_value(interim.imputed_second_region_of_slave_landing)
+    data['REGDIS3'] = get_value(interim.imputed_third_region_of_slave_landing)
+    data['REGEM1'] = get_value(interim.imputed_first_region_of_embarkation_of_slaves)
+    data['REGEM2'] = get_value(interim.imputed_second_region_of_embarkation_of_slaves)
+    data['REGEM3'] = get_value(interim.imputed_third_region_of_embarkation_of_slaves)
     data['YEARDEP'] = interim.imputed_year_voyage_began
     data['YEARAF'] = interim.imputed_year_departed_africa
     data['YEARAM'] = interim.imputed_year_arrived_at_port_of_disembarkation
@@ -258,7 +265,7 @@ def _map_interim_to_spss(interim):
     data['YEAR100'] = interim.imputed_century_in_which_voyage_occurred
     data['VOY1IMP'] = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
     data['VOY2IMP'] = interim.imputed_length_of_middle_passage
-    data['XMIMPFLAG'] = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
+    data['XMIMPFLAG'] = get_value(interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
     data['SLAXIMP'] = interim.imputed_total_slaves_embarked
     data['SLAMIMP'] = interim.imputed_total_slaves_disembarked
     data['TSLMTIMP'] = interim.imputed_number_of_slaves_embarked_for_mortality_calculation

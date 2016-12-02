@@ -2,6 +2,7 @@
 
 <button id="publish_all_btn" class="btn btn-primary">{% trans "Publish all" %}</button>
 <a id="download_btn" class="btn btn-primary" href="{% url 'contribute:download_pending_contributions' %}">{% trans "Download accepted (pending)" %}</a>
+<a id="download_all_btn" class="btn btn-primary" href="#">{% trans "Download all voyages (pending and published)" %}</a>
 
 <p></p>
 
@@ -57,5 +58,8 @@
                 alert('Error sending decision: ' + textStatus);
             }
         });
+    });
+    $('#download_all_btn').click(function() {
+        alert('Not implemented yet.'); // TODO 
     });
 </script>
