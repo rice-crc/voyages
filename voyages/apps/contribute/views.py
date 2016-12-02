@@ -804,6 +804,8 @@ def get_reviews_by_status(statuses):
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         active_request = reqs[0] if len(reqs) == 1 else None
+        if active_request and active_request.requires_created_voyage_id():
+            voyage_ids = [active_request.created_voyage_id]
         if isinstance(contrib, NewVoyageContribution):
             # Must fill elements above with interim data.
             interim = contrib.interim_voyage
@@ -811,8 +813,6 @@ def get_reviews_by_status(statuses):
                 editor_contrib = active_request.editor_contribution.first()
                 if editor_contrib:
                     interim = editor_contrib.interim_voyage
-                if active_request.created_voyage_id:
-                    voyage_ids = [active_request.created_voyage_id]
             voyage_ship = [interim.name_of_vessel]
             voyage_years = [interim.imputed_year_voyage_began]
             voyage_nation = [get_nation_label(interim.imputed_national_carrier)]
