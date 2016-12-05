@@ -206,6 +206,7 @@ def retrieve_post_search_forms(post):
         varname = var['var_name']
         tmpElem = {'var_name': varname,
                    'var_full_name': var['var_full_name']}
+        form = None
         if varname in globals.list_text_fields:
             form = SimpleTextForm(post, prefix=varname)
         elif varname in globals.list_select_fields:

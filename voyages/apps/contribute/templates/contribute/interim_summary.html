@@ -1,5 +1,6 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load voyage_extras %}
 
 {% block title %}{% trans "Verify submitted information" %}{% endblock %}
@@ -794,7 +795,9 @@
     var numbers = {
     {% for k, v in numbers.items %}
         {% if v %}
+        {% localize off %}
             '{{ k }}': {{ v }},
+        {% endlocalize %}
         {% endif %}
     {% endfor %}
     };
