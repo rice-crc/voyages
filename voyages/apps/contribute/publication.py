@@ -4,54 +4,59 @@ from voyages.apps.contribute.views import full_contribution_id, get_contribution
 from voyages.apps.voyage.models import *
 import unicodecsv as csv
 
-def export_accepted_contributions_to_csv(csv_file):
-    data = export_accepted_contributions()
+_exported_spss_fields = \
+    ['VOYAGEID', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
+    'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
+    'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
+    'BOY7', 'BOYRAT1', 'BOYRAT3', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
+    'CAPTAINC', 'CHIL1IMP', 'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2',
+    'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7', 'CHILRAT1',
+    'CHILRAT3', 'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2', 'CREW3',
+    'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
+    'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB',
+    'DLSLATRC', 'DDEPAM', 'DDEPAMB', 'DDEPAMC', 'DATARR32', 'DATARR33',
+    'DATARR34', 'DATARR36', 'DATARR37', 'DATARR38', 'DATARR39', 'DATARR40',
+    'DATARR41', 'DATARR43', 'DATARR44', 'DATARR45', 'DATEDEP', 'DATEBUY',
+    'DATELEFTAFR', 'DATELAND1', 'DATELAND2', 'DATELAND3', 'DATEDEPAM',
+    'DATEEND', 'DEPTREGIMP', 'DEPTREGIMP1', 'EMBPORT', 'EMBPORT2',
+    'EMBREG', 'EMBREG2', 'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4',
+    'FEMALE1', 'FEMALE2', 'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6',
+    'FEMALE7', 'FEML1IMP', 'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2',
+    'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7', 'GIRLRAT1', 'GIRLRAT3',
+    'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT2', 'INFANT3',
+    'INFANT4', 'INFANT5', 'INFANT6', 'JAMCASPR',
+    'MAJBUYPT', 'MAJBYIMP', 'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP',
+    'MALE2', 'MALE2IMP', 'MALE3', 'MALE3IMP', 'MALE4', 'MALE5', 'MALE6',
+    'MALE7', 'MALRAT1', 'MALRAT3', 'MALRAT7', 'MEN1', 'MEN2', 'MEN3',
+    'MEN4', 'MEN5', 'MEN6', 'MEN7', 'MENRAT1', 'MENRAT3', 'MENRAT7',
+    'MJBYPTIMP', 'MJSELIMP', 'MJSELIMP1', 'MJSLPTIMP', 'NATINIMP',
+    'NATIONAL', 'NCAR13', 'NCAR15', 'NCAR17', 'NDESERT', 'NPAFTTRA',
+    'NPPRETRA', 'NPPRIOR', 'OWNERA', 'OWNERB', 'OWNERC', 'OWNERD',
+    'OWNERE', 'OWNERF', 'OWNERG', 'OWNERH', 'OWNERI', 'OWNERJ', 'OWNERK',
+    'OWNERL', 'OWNERM', 'OWNERN', 'OWNERO', 'OWNERP', 'PLAC1TRA',
+    'PLAC2TRA', 'PLAC3TRA', 'PLACCONS', 'PLACREG', 'PORTDEP', 'PORTRET',
+    'PTDEPIMP', 'REGARR', 'REGARR2', 'REGDIS1', 'REGDIS2', 'REGDIS3',
+    'REGEM1', 'REGEM2', 'REGEM3', 'REGISREG', 'RESISTANCE', 'RETRNREG',
+    'RETRNREG1', 'RIG', 'SAILD1', 'SAILD2', 'SAILD3', 'SAILD4', 'SAILD5',
+    'SHIPNAME', 'SLA1PORT', 'SLAARRIV', 'SLADAFRI', 'SLADAMER', 'SLADVOY',
+    'SLAMIMP', 'SLAS32', 'SLAS36', 'SLAS39', 'SLAVEMA1', 'SLAVEMA3',
+    'SLAVEMA7', 'SLAVEMX1', 'SLAVEMX3', 'SLAVEMX7', 'SLAVMAX1', 'SLAVMAX3',
+    'SLAVMAX7', 'SLAXIMP', 'SLINTEN2', 'SLINTEND', 'SOURCEA', 'SOURCEB',
+    'SOURCEC', 'SOURCED', 'SOURCEE', 'SOURCEF', 'SOURCEG', 'SOURCEH',
+    'SOURCEI', 'SOURCEJ', 'SOURCEK', 'SOURCEL', 'SOURCEM', 'SOURCEN',
+    'SOURCEO', 'SOURCEP', 'SOURCEQ', 'SOURCER', 'TONMOD', 'TONNAGE',
+    'TONTYPE', 'TSLAVESD', 'TSLAVESP', 'TSLMTIMP', 'VOY1IMP', 'VOY2IMP',
+    'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
+    'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT1', 'WOMRAT3', 'WOMRAT7',
+    'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
+    'YEARDEP', 'YRCONS', 'YRREG']
+
+def get_csv_writer(output):
+    return csv.DictWriter(output, fieldnames=_exported_spss_fields)
+
+def export_data_to_csv(data, csv_file):
     # TODO: export status variables (accepted/published/under review)
-    fields = ['ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
-        'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
-        'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
-        'BOY7', 'BOYRAT1', 'BOYRAT3', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
-        'CAPTAINC', 'CHIL1IMP', 'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2',
-        'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7', 'CHILRAT1',
-        'CHILRAT3', 'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2', 'CREW3',
-        'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
-        'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB',
-        'DLSLATRC', 'DDEPAM', 'DDEPAMB', 'DDEPAMC', 'DATARR32', 'DATARR33',
-        'DATARR34', 'DATARR36', 'DATARR37', 'DATARR38', 'DATARR39', 'DATARR40',
-        'DATARR41', 'DATARR43', 'DATARR44', 'DATARR45', 'DATEDEP', 'DATEBUY',
-        'DATELEFTAFR', 'DATELAND1', 'DATELAND2', 'DATELAND3', 'DATEDEPAM',
-        'DATEEND', 'DEPTREGIMP', 'DEPTREGIMP1', 'EMBPORT', 'EMBPORT2',
-        'EMBREG', 'EMBREG2', 'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4',
-        'FEMALE1', 'FEMALE2', 'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6',
-        'FEMALE7', 'FEML1IMP', 'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2',
-        'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7', 'GIRLRAT1', 'GIRLRAT3',
-        'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT3', 'INFANT4', 'JAMCASPR',
-        'MAJBUYPT', 'MAJBYIMP', 'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP',
-        'MALE2', 'MALE2IMP', 'MALE3', 'MALE3IMP', 'MALE4', 'MALE5', 'MALE6',
-        'MALE7', 'MALRAT1', 'MALRAT3', 'MALRAT7', 'MEN1', 'MEN2', 'MEN3',
-        'MEN4', 'MEN5', 'MEN6', 'MEN7', 'MENRAT1', 'MENRAT3', 'MENRAT7',
-        'MJBYPTIMP', 'MJSELIMP', 'MJSELIMP1', 'MJSLPTIMP', 'NATINIMP',
-        'NATIONAL', 'NCAR13', 'NCAR15', 'NCAR17', 'NDESERT', 'NPAFTTRA',
-        'NPPRETRA', 'NPPRIOR', 'OWNERA', 'OWNERB', 'OWNERC', 'OWNERD',
-        'OWNERE', 'OWNERF', 'OWNERG', 'OWNERH', 'OWNERI', 'OWNERJ', 'OWNERK',
-        'OWNERL', 'OWNERM', 'OWNERN', 'OWNERO', 'OWNERP', 'PLAC1TRA',
-        'PLAC2TRA', 'PLAC3TRA', 'PLACCONS', 'PLACREG', 'PORTDEP', 'PORTRET',
-        'PTDEPIMP', 'REGARR', 'REGARR2', 'REGDIS1', 'REGDIS2', 'REGDIS3',
-        'REGEM1', 'REGEM2', 'REGEM3', 'REGISREG', 'RESISTANCE', 'RETRNREG',
-        'RETRNREG1', 'RIG', 'SAILD1', 'SAILD2', 'SAILD3', 'SAILD4', 'SAILD5',
-        'SHIPNAME', 'SLA1PORT', 'SLAARRIV', 'SLADAFRI', 'SLADAMER', 'SLADVOY',
-        'SLAMIMP', 'SLAS32', 'SLAS36', 'SLAS39', 'SLAVEMA1', 'SLAVEMA3',
-        'SLAVEMA7', 'SLAVEMX1', 'SLAVEMX3', 'SLAVEMX7', 'SLAVMAX1', 'SLAVMAX3',
-        'SLAVMAX7', 'SLAXIMP', 'SLINTEN2', 'SLINTEND', 'SOURCEA', 'SOURCEB',
-        'SOURCEC', 'SOURCED', 'SOURCEE', 'SOURCEF', 'SOURCEG', 'SOURCEH',
-        'SOURCEI', 'SOURCEJ', 'SOURCEK', 'SOURCEL', 'SOURCEM', 'SOURCEN',
-        'SOURCEO', 'SOURCEP', 'SOURCEQ', 'SOURCER', 'TONMOD', 'TONNAGE',
-        'TONTYPE', 'TSLAVESD', 'TSLAVESP', 'TSLMTIMP', 'VOY1IMP', 'VOY2IMP',
-        'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
-        'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT1', 'WOMRAT3', 'WOMRAT7',
-        'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
-        'YEARDEP', 'YRCONS', 'YRREG']
-    writer = csv.DictWriter(csv_file, fieldnames=fields)
+    writer = get_csv_writer(csv_file)
     writer.writeheader()
     for item in data:
         writer.writerow(item)
@@ -64,15 +69,20 @@ def export_accepted_contributions():
     return export_from_review_requests(review_requests)
     
 def export_from_review_requests(review_requests):
-    result = []
     for req in review_requests:    
         contrib = req.editor_contribution.first()
         if contrib is None or contrib.interim_voyage is None:
             contrib = get_contribution_from_id(review_request.contribution_id)
         if contrib is None or contrib.interim_voyage is None:
             continue
-        result.append(_map_interim_to_spss(contrib.interim_voyage))
-    return result
+        data = _map_interim_to_spss(contrib.interim_voyage)
+        data['VOYAGEID'] = req.created_voyage_id if req.requires_created_voyage_id() else ' '.join(contrib.get_related_voyage_ids)
+        yield data
+    
+def export_from_voyages():
+    voyages = Voyage.objects.all().select_related('voyage_dates', 'voyage_ship', 'voyage_itinerary', 'voyage_crew', 'voyage_slaves_numbers').iterator()
+    for v in voyages:
+        yield _map_voyage_to_spss(v)
 
 def publish_accepted_contributions(log_file):
     """
@@ -152,47 +162,267 @@ def _fetch_accepted_reviews():
             raise Exception('Expected a single active review request for approved contributions')
         review_requests.append(reqs[0])
     return review_requests
+    
+def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
+    members = csv_date.split(',')
+    if len(members) != 3:
+        members = [None, None, None]
+    data[varname + labels[0]] = int(members[1]) if members[1] != '' else None
+    data[varname + labels[1]] = int(members[0]) if members[0] != '' else None
+    data[varname + labels[2]] = int(members[2]) if members[2] != '' else None
+    
+def _get_label_value(x):
+    return x.value if x else None
+
+def _get_region_value(place):
+    return place.region.value if place else None
+    
+def _map_voyage_to_spss(voyage):
+    data = {}
+    data['VOYAGEID'] = voyage.voyage_id
+    
+    # Dates
+    dates = voyage.voyage_dates
+    _map_csv_date(data, 'DATEDEP', dates.voyage_began)
+    _map_csv_date(data, 'D1SLATR', dates.slave_purchase_began)
+    _map_csv_date(data, 'DLSLATR', dates.vessel_left_port)
+    _map_csv_date(data, 'DATARR3', dates.first_dis_of_slaves, '234')
+    _map_csv_date(data, 'DATARR3', dates.arrival_at_second_place_landing, '678')
+    _map_csv_date(data, 'DATARR', dates.third_dis_of_slaves, ['39', '40', '41'])
+    _map_csv_date(data, 'DDEPAM', dates.departure_last_place_of_landing, ['', 'B', 'C'])
+    _map_csv_date(data, 'DATARR4', dates.voyage_completed, '345')
+    data['VOYAGE'] = dates.length_middle_passage_days
+    data['YEARDEP'] = VoyageDates.get_date_year(dates.imp_voyage_began)
+    data['YEARAF'] = VoyageDates.get_date_year(dates.imp_departed_africa)
+    yearam = VoyageDates.get_date_year(dates.imp_arrival_at_port_of_dis)
+    data['YEARAM'] = yearam
+    data['VOY1IMP'] = dates.imp_length_home_to_disembark
+    data['VOY2IMP'] = dates.imp_length_leaving_africa_to_disembark
+    from imputed import year_mod
+    data['YEAR5'] = year_mod(yearam, 5, 1500)
+    data['YEAR10'] = year_mod(yearam, 10, 1500)
+    data['YEAR25'] = year_mod(yearam, 25, 1500)
+    data['YEAR100'] = ((yearam - 1) // 100) * 100 if yearam else None
+    
+    # Ship
+    ship = voyage.voyage_ship
+    data['SHIPNAME'] = ship.ship_name
+    data['NATIONAL'] = _get_label_value(ship.nationality_ship)
+    data['TONNAGE'] = ship.tonnage
+    data['TONTYPE'] = _get_label_value(ship.ton_type)
+    data['RIG'] = _get_label_value(ship.rig_of_vessel)
+    data['GUNS'] = ship.guns_mounted
+    data['YRCONS'] = ship.year_of_construction
+    data['PLACCONS'] = _get_label_value(ship.vessel_construction_place)
+    data['CONSTREG'] = _get_label_value(ship.vessel_construction_region)
+    data['YRREG'] = ship.registered_year
+    data['PLACREG'] = _get_label_value(ship.registered_place)
+    data['REGISREG'] = _get_label_value(ship.registered_region)
+    
+    aux = 'ABCDEFGHIJKLMNOP'
+    ship_owners = [x.owner for x in sorted(VoyageShipOwnerConnection.objects.filter(voyage=voyage), key=lambda x: x.owner_order)]
+    for i, owner in enumerate(ship_owners):
+        if i >= len(aux): break
+        data['OWNER' + aux[i]] = owner.name
+    data['NATINIMP'] = _get_label_value(ship.imputed_nationality)
+    data['TONMOD'] = ship.tonnage_mod
+
+    aux = 'ABC'
+    ship_captains = [x.captain for x in sorted(VoyageCaptainConnection.objects.filter(voyage=voyage), key=lambda x: x.captain_order)]
+    for i, captain in enumerate(ship_captains):
+        if i >= len(aux): break
+        data['CAPTAIN' + aux[i]] = captain.name
+    
+    # Itinerary
+    itinerary = voyage.voyage_itinerary
+    data['PORTDEP'] = _get_label_value(itinerary.port_of_departure)
+    data['EMBPORT'] = _get_label_value(itinerary.int_first_port_emb)
+    data['EMBPORT2'] = _get_label_value(itinerary.int_second_port_emb)
+    data['EMBREG'] = _get_label_value(itinerary.int_first_region_purchase_slaves)
+    data['EMBREG2'] = _get_label_value(itinerary.int_second_region_purchase_slaves)
+    data['ARRPORT'] = _get_label_value(itinerary.int_first_port_dis)
+    data['ARRPORT2'] = _get_label_value(itinerary.int_second_port_dis)
+    data['REGARR'] = _get_label_value(itinerary.int_first_region_slave_landing)
+    data['REGARR2'] = _get_label_value(itinerary.int_second_place_region_slave_landing)
+    data['NPPRETRA'] = itinerary.ports_called_buying_slaves
+    data['PLAC1TRA'] = _get_label_value(itinerary.first_place_slave_purchase)
+    data['PLAC2TRA'] = _get_label_value(itinerary.second_place_slave_purchase)
+    data['PLAC3TRA'] = _get_label_value(itinerary.third_place_slave_purchase)
+    data['REGEM1'] = _get_label_value(itinerary.first_region_slave_emb)
+    data['REGEM2'] = _get_label_value(itinerary.second_region_slave_emb)
+    data['REGEM3'] = _get_label_value(itinerary.third_region_slave_emb)
+    data['NPAFTTRA'] = _get_label_value(itinerary.port_of_call_before_atl_crossing)
+    data['NPPRIOR'] = itinerary.number_of_ports_of_call
+    data['SLA1PORT'] = _get_label_value(itinerary.first_landing_place)
+    data['ADPSALE1'] = _get_label_value(itinerary.second_landing_place)
+    data['ADPSALE2'] = _get_label_value(itinerary.third_landing_place)
+    data['REGDIS1'] = _get_label_value(itinerary.first_landing_region)
+    data['REGDIS2'] = _get_label_value(itinerary.second_landing_region)
+    data['REGDIS3'] = _get_label_value(itinerary.third_landing_region)
+    data['PORTRET'] = _get_label_value(itinerary.place_voyage_ended)
+    data['RETRNREG'] = _get_label_value(itinerary.region_of_return)
+    data['RETRNREG1'] = _get_label_value(itinerary.broad_region_of_return)
+    data['MAJBUYPT'] = _get_label_value(itinerary.principal_place_of_slave_purchase)
+    data['MAJSELPT'] = _get_label_value(itinerary.principal_port_of_slave_dis)
+    data['PTDEPIMP'] = _get_label_value(itinerary.imp_port_voyage_begin)
+    data['MJBYPTIMP'] = _get_label_value(itinerary.imp_principal_place_of_slave_purchase)
+    data['MJSLPTIMP'] = _get_label_value(itinerary.imp_principal_port_slave_dis)
+    data['DEPTREGIMP'] = _get_label_value(itinerary.imp_region_voyage_begin)
+    
+    # Crew
+    crew = voyage.voyage_crew
+    data['CREW1'] = crew.crew_voyage_outset
+    data['CREW2'] = crew.crew_departure_last_port
+    data['CREW3'] = crew.crew_first_landing
+    data['CREW4'] = crew.crew_return_begin
+    data['CREW5'] = crew.crew_end_voyage
+    data['CREW'] = crew.unspecified_crew
+    data['SAILD1'] = crew.crew_died_before_first_trade
+    data['SAILD2'] = crew.crew_died_while_ship_african
+    data['SAILD3'] = crew.crew_died_middle_passage
+    data['SAILD4'] = crew.crew_died_in_americas
+    data['SAILD5'] = crew.crew_died_on_return_voyage
+    data['CREWDIED'] = crew.crew_died_complete_voyage
+    data['NDESERT'] = crew.crew_deserted
+    
+    # Numbers
+    numbers = voyage.voyage_slaves_numbers
+    data['SLADAFRI'] = numbers.slave_deaths_before_africa
+    data['SLADVOY'] = numbers.slave_deaths_between_africa_america
+    data['SLADAMER'] = numbers.slave_deaths_between_arrival_and_sale
+    data['SLINTEND'] = numbers.num_slaves_intended_first_port
+    data['SLINTEN2'] = numbers.num_slaves_intended_second_port
+    data['NCAR13'] = numbers.num_slaves_carried_first_port
+    data['NCAR15'] = numbers.num_slaves_carried_second_port
+    data['NCAR17'] = numbers.num_slaves_carried_third_port
+    data['TSLAVESP'] = numbers.total_num_slaves_purchased
+    data['TSLAVESD'] = numbers.total_num_slaves_dep_last_slaving_port
+    data['SLAARRIV'] = numbers.total_num_slaves_arr_first_port_embark
+    data['SLAS32'] = numbers.num_slaves_disembark_first_place
+    data['SLAS36'] = numbers.num_slaves_disembark_second_place
+    data['SLAS39'] = numbers.num_slaves_disembark_third_place
+    data['SLAXIMP'] = numbers.imp_total_num_slaves_embarked
+    data['SLAMIMP'] = numbers.imp_total_num_slaves_disembarked
+    data['JAMCASPR'] = numbers.imp_jamaican_cash_price
+    data['VYMRTIMP'] = numbers.imp_mortality_during_voyage
+    data['MEN1'] = numbers.num_men_embark_first_port_purchase
+    data['WOMEN1'] = numbers.num_women_embark_first_port_purchase
+    data['BOY1'] = numbers.num_boy_embark_first_port_purchase
+    data['GIRL1'] = numbers.num_girl_embark_first_port_purchase
+    data['ADULT1'] = numbers.num_adult_embark_first_port_purchase
+    data['CHILD1'] = numbers.num_child_embark_first_port_purchase
+    data['INFANT1'] = numbers.num_infant_embark_first_port_purchase
+    data['MALE1'] = numbers.num_males_embark_first_port_purchase
+    data['FEMALE1'] = numbers.num_females_embark_first_port_purchase
+    data['MEN2'] = numbers.num_men_died_middle_passage
+    data['WOMEN2'] = numbers.num_women_died_middle_passage
+    data['BOY2'] = numbers.num_boy_died_middle_passage
+    data['GIRL2'] = numbers.num_girl_died_middle_passage
+    data['ADULT2'] = numbers.num_adult_died_middle_passage
+    data['CHILD2'] = numbers.num_child_died_middle_passage
+    data['INFANT2'] = numbers.num_infant_died_middle_passage
+    data['MALE2'] = numbers.num_males_died_middle_passage
+    data['FEMALE2'] = numbers.num_females_died_middle_passage
+    data['MEN3'] = numbers.num_men_disembark_first_landing
+    data['WOMEN3'] = numbers.num_women_disembark_first_landing
+    data['BOY3'] = numbers.num_boy_disembark_first_landing
+    data['GIRL3'] = numbers.num_girl_disembark_first_landing
+    data['ADULT3'] = numbers.num_adult_disembark_first_landing
+    data['CHILD3'] = numbers.num_child_disembark_first_landing
+    data['INFANT3'] = numbers.num_infant_disembark_first_landing
+    data['MALE3'] = numbers.num_males_disembark_first_landing
+    data['FEMALE3'] = numbers.num_females_disembark_first_landing
+    data['MEN4'] = numbers.num_men_embark_second_port_purchase
+    data['WOMEN4'] = numbers.num_women_embark_second_port_purchase
+    data['BOY4'] = numbers.num_boy_embark_second_port_purchase
+    data['GIRL4'] = numbers.num_girl_embark_second_port_purchase
+    data['ADULT4'] = numbers.num_adult_embark_second_port_purchase
+    data['CHILD4'] = numbers.num_child_embark_second_port_purchase
+    data['INFANT4'] = numbers.num_infant_embark_second_port_purchase
+    data['MALE4'] = numbers.num_males_embark_second_port_purchase
+    data['FEMALE4'] = numbers.num_females_embark_second_port_purchase
+    data['MEN5'] = numbers.num_men_embark_third_port_purchase
+    data['WOMEN5'] = numbers.num_women_embark_third_port_purchase
+    data['BOY5'] = numbers.num_boy_embark_third_port_purchase
+    data['GIRL5'] = numbers.num_girl_embark_third_port_purchase
+    data['ADULT5'] = numbers.num_adult_embark_third_port_purchase
+    data['CHILD5'] = numbers.num_child_embark_third_port_purchase
+    data['INFANT5'] = numbers.num_infant_embark_third_port_purchase
+    data['MALE5'] = numbers.num_males_embark_third_port_purchase
+    data['FEMALE5'] = numbers.num_females_embark_third_port_purchase
+    data['MEN6'] = numbers.num_men_disembark_second_landing
+    data['WOMEN6'] = numbers.num_women_disembark_second_landing
+    data['BOY6'] = numbers.num_boy_disembark_second_landing
+    data['GIRL6'] = numbers.num_girl_disembark_second_landing
+    data['ADULT6'] = numbers.num_adult_disembark_second_landing
+    data['CHILD6'] = numbers.num_child_disembark_second_landing
+    data['INFANT6'] = numbers.num_infant_disembark_second_landing
+    data['MALE6'] = numbers.num_males_disembark_second_landing
+    data['FEMALE6'] = numbers.num_females_disembark_second_landing
+    data['ADLT1IMP'] = numbers.imp_num_adult_embarked
+    data['CHIL1IMP'] = numbers.imp_num_children_embarked
+    data['MALE1IMP'] = numbers.imp_num_male_embarked
+    data['FEML1IMP'] = numbers.imp_num_female_embarked
+    data['SLAVEMA1'] = numbers.total_slaves_embarked_age_identified
+    data['SLAVEMX1'] = numbers.total_slaves_embarked_gender_identified
+    data['ADLT2IMP'] = numbers.imp_adult_death_middle_passage
+    data['CHIL2IMP'] = numbers.imp_child_death_middle_passage
+    data['MALE2IMP'] = numbers.imp_male_death_middle_passage
+    data['FEML2IMP'] = numbers.imp_female_death_middle_passage
+    data['ADLT3IMP'] = numbers.imp_num_adult_landed
+    data['CHIL3IMP'] = numbers.imp_num_child_landed
+    data['MALE3IMP'] = numbers.imp_num_male_landed
+    data['FEML3IMP'] = numbers.imp_num_female_landed
+    data['SLAVEMA3'] = numbers.total_slaves_landed_age_identified
+    data['SLAVEMX3'] = numbers.total_slaves_landed_gender_identified
+    data['SLAVEMA7'] = numbers.total_slaves_dept_or_arr_age_identified
+    data['SLAVEMX7'] = numbers.total_slaves_dept_or_arr_gender_identified
+    data['TSLMTIMP'] = numbers.imp_slaves_embarked_for_mortality
+    data['MEN7'] = numbers.imp_num_men_total
+    data['WOMEN7'] = numbers.imp_num_women_total
+    data['BOY7'] = numbers.imp_num_boy_total
+    data['GIRL7'] = numbers.imp_num_girl_total
+    data['ADULT7'] = numbers.imp_num_adult_total
+    data['CHILD7'] = numbers.imp_num_child_total
+    data['MALE7'] = numbers.imp_num_males_total
+    data['FEMALE7'] = numbers.imp_num_females_total
+    
+    aux = 'ABCDEFGHIJKLMNOPQR'
+    sources = [x.source for x in sorted(VoyageSourcesConnection.objects.filter(group=voyage), key=lambda x: x.source_order)]
+    for i, source in enumerate(sources):
+        if i >= len(aux): break
+        data['SOURCE' + aux[i]] = source.short_ref
+        
+    data['XMIMPFLAG'] = _get_label_value(voyage.voyage_groupings)
+    
+    return data
 
 def _map_interim_to_spss(interim):
     data = {}
     
-    def map_csv_date(varname, csv_date, labels=['A', 'B', 'C']):
-        members = csv_date.split(',')
-        if len(members) != 3:
-            members = [None, None, None]
-        data[varname + labels[0]] = int(members[1]) if members[1] != '' else None
-        data[varname + labels[1]] = int(members[0]) if members[0] != '' else None
-        data[varname + labels[2]] = int(members[2]) if members[2] != '' else None
-    
-    map_csv_date('DATEDEP', interim.date_departure)
-    map_csv_date('D1SLATR', interim.date_slave_purchase_began)
-    map_csv_date('DLSLATR', interim.date_vessel_left_last_slaving_port)
-    map_csv_date('DATARR3', interim.date_first_slave_disembarkation, '234')
-    map_csv_date('DATARR3', interim.date_second_slave_disembarkation, '678')
-    map_csv_date('DATARR', interim.date_third_slave_disembarkation, ['39', '40', '41'])
-    map_csv_date('DDEPAM', interim.date_return_departure, ['', 'B', 'C'])
-    map_csv_date('DATARR4', interim.date_voyage_completed, '345')
+    _map_csv_date(data, 'DATEDEP', interim.date_departure)
+    _map_csv_date(data, 'D1SLATR', interim.date_slave_purchase_began)
+    _map_csv_date(data, 'DLSLATR', interim.date_vessel_left_last_slaving_port)
+    _map_csv_date(data, 'DATARR3', interim.date_first_slave_disembarkation, '234')
+    _map_csv_date(data, 'DATARR3', interim.date_second_slave_disembarkation, '678')
+    _map_csv_date(data, 'DATARR', interim.date_third_slave_disembarkation, ['39', '40', '41'])
+    _map_csv_date(data, 'DDEPAM', interim.date_return_departure, ['', 'B', 'C'])
+    _map_csv_date(data, 'DATARR4', interim.date_voyage_completed, '345')
     data['VOYAGE'] = interim.length_of_middle_passage
-    
-    def get_value(x):
-        return x.value if x else None
-    
-    def get_region(place):
-        return place.region.value if place else None
     
     # Ship, nation, owners
     data['SHIPNAME'] = interim.name_of_vessel
-    data['NATIONAL'] = get_value(interim.national_carrier)
+    data['NATIONAL'] = _get_label_value(interim.national_carrier)
     data['TONNAGE'] = interim.tonnage_of_vessel
-    data['TONTYPE'] = get_value(interim.ton_type)
-    data['RIG'] = get_value(interim.rig_of_vessel)
+    data['TONTYPE'] = _get_label_value(interim.ton_type)
+    data['RIG'] = _get_label_value(interim.rig_of_vessel)
     data['GUNS'] = interim.guns_mounted
     data['YRCONS'] = interim.year_ship_constructed
-    data['PLACCONS'] = get_value(interim.ship_construction_place)
-    data['CONSTREG'] = get_region(interim.ship_construction_place)
+    data['PLACCONS'] = _get_label_value(interim.ship_construction_place)
+    data['CONSTREG'] = _get_region_value(interim.ship_construction_place)
     data['YRREG'] = interim.year_ship_registered
-    data['PLACREG'] = get_value(interim.ship_registration_place)
-    data['REGISREG'] = get_region(interim.ship_registration_place)
+    data['PLACREG'] = _get_label_value(interim.ship_registration_place)
+    data['REGISREG'] = _get_region_value(interim.ship_registration_place)
     data['OWNERA'] = interim.first_ship_owner
     data['OWNERB'] = interim.second_ship_owner
     other_ship_owners = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
@@ -206,56 +436,57 @@ def _map_interim_to_spss(interim):
     data['CAPTAINC'] = interim.third_captain
     
     # Outcome
-    data['FATE'] = get_value(interim.voyage_outcome)
-    data['RESISTANCE'] = get_value(interim.african_resistance)
+    data['FATE'] = _get_label_value(interim.voyage_outcome)
+    data['RESISTANCE'] = _get_label_value(interim.african_resistance)
     
-    # Itinerary    
-    data['PORTDEP'] = get_value(interim.port_of_departure)
-    data['EMBPORT'] = get_value(interim.first_port_intended_embarkation)
-    data['EMBPORT2'] = get_value(interim.second_port_intended_embarkation)
-    data['EMBREG'] = get_region(interim.first_port_intended_embarkation)
-    data['EMBREG2'] = get_region(interim.second_port_intended_embarkation)
-    data['ARRPORT'] = get_value(interim.first_port_intended_disembarkation)
-    data['ARRPORT2'] = get_value(interim.second_port_intended_disembarkation)
-    data['REGARR'] = get_region(interim.first_port_intended_disembarkation)
-    data['REGARR2'] = get_region(interim.second_port_intended_disembarkation)
+    # Itinerary
+    data['PORTDEP'] = _get_label_value(interim.port_of_departure)
+    data['EMBPORT'] = _get_label_value(interim.first_port_intended_embarkation)
+    data['EMBPORT2'] = _get_label_value(interim.second_port_intended_embarkation)
+    data['EMBREG'] = _get_region_value(interim.first_port_intended_embarkation)
+    data['EMBREG2'] = _get_region_value(interim.second_port_intended_embarkation)
+    data['ARRPORT'] = _get_label_value(interim.first_port_intended_disembarkation)
+    data['ARRPORT2'] = _get_label_value(interim.second_port_intended_disembarkation)
+    data['REGARR'] = _get_region_value(interim.first_port_intended_disembarkation)
+    data['REGARR2'] = _get_region_value(interim.second_port_intended_disembarkation)
     data['NPPRETRA'] = interim.number_of_ports_called_prior_to_slave_purchase
-    data['PLAC1TRA'] = get_value(interim.first_place_of_slave_purchase)
-    data['PLAC2TRA'] = get_value(interim.second_place_of_slave_purchase)
-    data['PLAC3TRA'] = get_value(interim.third_place_of_slave_purchase)
-    data['REGEM1'] = get_region(interim.first_place_of_slave_purchase)
-    data['REGEM2'] = get_region(interim.second_place_of_slave_purchase)
-    data['REGEM3'] = get_region(interim.third_place_of_slave_purchase)
-    data['NPAFTTRA'] = get_value(interim.place_of_call_before_atlantic_crossing)
+    data['PLAC1TRA'] = _get_label_value(interim.first_place_of_slave_purchase)
+    data['PLAC2TRA'] = _get_label_value(interim.second_place_of_slave_purchase)
+    data['PLAC3TRA'] = _get_label_value(interim.third_place_of_slave_purchase)
+    data['REGEM1'] = _get_region_value(interim.first_place_of_slave_purchase)
+    data['REGEM2'] = _get_region_value(interim.second_place_of_slave_purchase)
+    data['REGEM3'] = _get_region_value(interim.third_place_of_slave_purchase)
+    data['NPAFTTRA'] = _get_label_value(interim.place_of_call_before_atlantic_crossing)
     data['NPPRIOR'] = interim.number_of_new_world_ports_called_prior_to_disembarkation
-    data['SLA1PORT'] = get_value(interim.first_place_of_landing)
-    data['ADPSALE1'] = get_value(interim.second_place_of_landing)
-    data['ADPSALE2'] = get_value(interim.third_place_of_landing)
-    data['REGDIS1'] = get_region(interim.first_place_of_landing)
-    data['REGDIS2'] = get_region(interim.second_place_of_landing)
-    data['REGDIS3'] = get_region(interim.third_place_of_landing)
-    data['PORTRET'] = get_value(interim.port_voyage_ended)
-    data['RETRNREG'] = get_region(interim.port_voyage_ended)
+    data['SLA1PORT'] = _get_label_value(interim.first_place_of_landing)
+    data['ADPSALE1'] = _get_label_value(interim.second_place_of_landing)
+    data['ADPSALE2'] = _get_label_value(interim.third_place_of_landing)
+    data['REGDIS1'] = _get_region_value(interim.first_place_of_landing)
+    data['REGDIS2'] = _get_region_value(interim.second_place_of_landing)
+    data['REGDIS3'] = _get_region_value(interim.third_place_of_landing)
+    data['PORTRET'] = _get_label_value(interim.port_voyage_ended)
+    data['RETRNREG'] = _get_region_value(interim.port_voyage_ended)
     data['RETRNREG1'] = interim.port_voyage_ended.region.broad_region.value if interim.port_voyage_ended else None
-    data['MAJBUYPT'] = get_value(interim.principal_place_of_slave_purchase)
-    data['MAJSELPT'] = get_value(interim.principal_place_of_slave_disembarkation)
+    data['MAJBUYPT'] = _get_label_value(interim.principal_place_of_slave_purchase)
+    data['MAJSELPT'] = _get_label_value(interim.principal_place_of_slave_disembarkation)
 
     # Imputed variables
-    data['NATINIMP'] = get_value(interim.imputed_national_carrier)
+    data['NATINIMP'] = _get_label_value(interim.imputed_national_carrier)
     data['TONMOD'] = interim.imputed_standardized_tonnage
-    data['FATE2'] = get_value(interim.imputed_outcome_of_voyage_for_slaves)
-    data['FATE3'] = get_value(interim.imputed_outcome_of_voyage_if_ship_captured)
-    data['FATE4'] = get_value(interim.imputed_outcome_of_voyage_for_owner)
-    data['PTDEPIMP'] = get_value(interim.imputed_port_where_voyage_began)
-    data['MJBYPTIMP'] = get_value(interim.imputed_principal_place_of_slave_purchase)
-    data['MJSLPTIMP'] = get_value(interim.imputed_principal_port_of_slave_disembarkation)
-    data['DEPTREGIMP'] = get_value(interim.imputed_region_where_voyage_began)
-    data['REGDIS1'] = get_value(interim.imputed_first_region_of_slave_landing)
-    data['REGDIS2'] = get_value(interim.imputed_second_region_of_slave_landing)
-    data['REGDIS3'] = get_value(interim.imputed_third_region_of_slave_landing)
-    data['REGEM1'] = get_value(interim.imputed_first_region_of_embarkation_of_slaves)
-    data['REGEM2'] = get_value(interim.imputed_second_region_of_embarkation_of_slaves)
-    data['REGEM3'] = get_value(interim.imputed_third_region_of_embarkation_of_slaves)
+    data['FATE2'] = _get_label_value(interim.imputed_outcome_of_voyage_for_slaves)
+    data['FATE3'] = _get_label_value(interim.imputed_outcome_of_voyage_if_ship_captured)
+    data['FATE4'] = _get_label_value(interim.imputed_outcome_of_voyage_for_owner)
+    data['PTDEPIMP'] = _get_label_value(interim.imputed_port_where_voyage_began)
+    data['MJBYPTIMP'] = _get_label_value(interim.imputed_principal_place_of_slave_purchase)
+    data['MJSLPTIMP'] = _get_label_value(interim.imputed_principal_port_of_slave_disembarkation)
+    data['DEPTREGIMP'] = _get_label_value(interim.imputed_region_where_voyage_began)
+    # TODO: we should check why we have REGDIS1/REGEM vars being both imputed and not imputed. Is this a design error?
+    data['REGDIS1'] = _get_label_value(interim.imputed_first_region_of_slave_landing)
+    data['REGDIS2'] = _get_label_value(interim.imputed_second_region_of_slave_landing)
+    data['REGDIS3'] = _get_label_value(interim.imputed_third_region_of_slave_landing)
+    data['REGEM1'] = _get_label_value(interim.imputed_first_region_of_embarkation_of_slaves)
+    data['REGEM2'] = _get_label_value(interim.imputed_second_region_of_embarkation_of_slaves)
+    data['REGEM3'] = _get_label_value(interim.imputed_third_region_of_embarkation_of_slaves)
     data['YEARDEP'] = interim.imputed_year_voyage_began
     data['YEARAF'] = interim.imputed_year_departed_africa
     data['YEARAM'] = interim.imputed_year_arrived_at_port_of_disembarkation
@@ -265,7 +496,7 @@ def _map_interim_to_spss(interim):
     data['YEAR100'] = interim.imputed_century_in_which_voyage_occurred
     data['VOY1IMP'] = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
     data['VOY2IMP'] = interim.imputed_length_of_middle_passage
-    data['XMIMPFLAG'] = get_value(interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
+    data['XMIMPFLAG'] = _get_label_value(interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
     data['SLAXIMP'] = interim.imputed_total_slaves_embarked
     data['SLAMIMP'] = interim.imputed_total_slaves_disembarked
     data['TSLMTIMP'] = interim.imputed_number_of_slaves_embarked_for_mortality_calculation

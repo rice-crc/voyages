@@ -1452,8 +1452,36 @@ def download_pending_contributions(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="publications.csv"'
     import csv
-    from voyages.apps.contribute.publication import export_accepted_contributions_to_csv
-    export_accepted_contributions_to_csv(response)
+    from voyages.apps.contribute.publication import export_data_to_csv, export_accepted_contributions
+    data = export_accepted_contributions()
+    export_data_to_csv(data, response)
+    return response
+    
+class Echo(object):
+    """An object that implements just the write method of the file-like
+    interface.
+    """
+    def write(self, value):
+        """Write the value by returning it, instead of storing in a buffer."""
+        return value
+    
+@login_required()
+def download_published_and_accepted_contributions(request):
+    import csv
+    from voyages.apps.contribute.publication import _exported_spss_fields, get_csv_writer, export_accepted_contributions, export_from_voyages
+    from django.http import StreamingHttpResponse
+    pseudo_buffer = Echo()
+    writer = get_csv_writer(pseudo_buffer)
+    
+    def __content():
+        yield ','.join(_exported_spss_fields) + '\n'
+        for item in export_accepted_contributions():
+            yield writer.writerow(item)
+        for item in export_from_voyages():
+            yield writer.writerow(item)
+        
+    response = StreamingHttpResponse((x for x in __content()), content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="published_and_accepted.csv"'
     return response
 
 @login_required()
