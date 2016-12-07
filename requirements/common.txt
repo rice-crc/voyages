@@ -17,3 +17,4 @@ openpyxl>=1.9
 django-allauth
 django-simple-captcha
 django-haystack>=2.5.0
+haversine
