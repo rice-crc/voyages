@@ -1249,6 +1249,8 @@ def search(request):
         elif submitVal == 'animation_ajax':
             VoyageCache.load()
             all_voyages = VoyageCache.voyages
+            from voyages.apps.voyage.maps import VoyageRoutesCache
+            all_routes = VoyageRoutesCache.load()
 
             def animation_response():
                 keys = get_pks_from_haystack_results(results)
@@ -1256,6 +1258,7 @@ def search(request):
                     voyage = all_voyages.get(pk)
                     if voyage is None:
                         continue
+                    route = all_routes.get(pk, ([],))[0]
                     source = CachedGeo.get_hierarchy(voyage.emb_pk)
                     destination = CachedGeo.get_hierarchy(voyage.dis_pk)
                     if source is not None and destination is not None and source[0].show and \
@@ -1280,7 +1283,8 @@ def search(request):
                               (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
                               ', "ship_nationality_name": "' + _(flag) + '"' \
                               ', "ship_name": "' + \
-                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' \
+                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' + \
+                              ', "route": ' + json.dumps(route) +\
                               ' }'
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':

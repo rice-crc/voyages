@@ -887,13 +887,13 @@ var voyagesMap = {
 	},
 
 	_smoothPolyline: function(points) {
-		// Helper functions to computes the angle
-		// formed by 3 points.
 		var self = this;
 		var atan = function(x, y) {
 			var theta = Math.atan2(x, y);
 			return theta < 0 ? 2 * Math.PI + theta : theta;
 		};
+		// Helper functions to computes the angle
+		// formed by 3 points.
 		var angle = function(p1, p2, p3) {
 			var zoom = self._map.getZoom();
 			var q1 = self._map.project(p1, zoom);

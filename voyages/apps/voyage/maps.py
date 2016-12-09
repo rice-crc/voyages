@@ -5,9 +5,9 @@ from math import sqrt
 from Queue import PriorityQueue
 from cache import VoyageCache, CachedGeo
 from haversine import haversine as dist
-import re, os
+import os, re, threading
 
-class VoyageRouteCache():
+class VoyageRoutes():
     def __init__(self):
         dir = os.path.dirname(os.path.abspath(__file__))
         with open(dir + '/../../sitemedia/maps/js/routeNodes.js', 'r') as f:
@@ -64,6 +64,12 @@ class VoyageRouteCache():
         return route
 
     def get_voyage_routes(self):
+        """
+        Build or return a cached dictionary indexed by voyage pk
+        containing pairs (route, idx) where route is a list of 
+        lat-lng pairs and idx is a pair (embarkation port pk,
+        disembarkation port pk).
+        """
         if self._voyage_routes: return self._voyage_routes
         VoyageCache.load()
         all_voyages = VoyageCache.voyages
@@ -90,8 +96,19 @@ class VoyageRouteCache():
                     finish_index = self.closest_node(dest)
                     port_node_index[v.dis_pk] = finish_index
                 route = self.find_route(start_index, finish_index)
-                if len(route) > 0: 
-                    route = [src] + route + [dest]
+                route = [src] + route + [dest]
                 voyage_by_ends[idx] = route
-            self._voyage_routes[v.pk] = route
+            self._voyage_routes[v.pk] = (route, idx)
         return self._voyage_routes
+        
+class VoyageRoutesCache:
+    _cache = None
+    _lock = threading.Lock()
+    
+    @classmethod
+    def load(cls, force_reload = False):
+        with cls._lock:
+            if force_reload or not cls._cache:
+                routes = VoyageRoutes()
+                cls._cache = routes.get_voyage_routes()
+            return cls._cache
