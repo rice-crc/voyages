@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.urlresolvers import reverse
-from django.db import transaction
+from django.db import connection, transaction
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
 from django.views.decorators.http import require_POST
@@ -886,9 +886,9 @@ def get_contribution_from_id(contribution_id):
     contribution_id = int(contribution_pair[1])
     return get_contribution(contribution_type, contribution_id)
 
-def assert_no_active_review_requests(contribution_id):
+def assert_limit_active_review_requests(contribution_id, max_allowed=0):
     reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
-    if len(reqs) >= 1:
+    if len(reqs) > max_allowed:
         return JsonResponse({'error': _('There is already an active review for this contribution')})
     return None
 
@@ -960,11 +960,13 @@ def begin_editorial_review(request):
         return HttpResponseForbidden()
     contribution_id = request.POST.get('contribution_id')
     contribution = get_contribution_from_id(contribution_id)
-    assertion = assert_no_active_review_requests(contribution_id)
-    if assertion: return assertion    
-    review_request = ReviewRequest()
     with transaction.atomic():
+        cursor = connection.cursor()
+        cursor.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
+        assertion = assert_limit_active_review_requests(contribution_id, 0)
+        if assertion: return assertion
         reviewer = request.user
+        review_request = ReviewRequest()
         review_request.editor = request.user
         review_request.editor_comments = 'Editorial review bypassing a reviewer'
         review_request.email_sent = False
@@ -999,16 +1001,17 @@ def post_review_request(request):
     message = request.POST.get('message')
     if contribution.contributor_id == reviewer_id:
         return JsonResponse({'error': _('Reviewer and contributor must be different users')})
-    
-    if request.POST.get('archive_active_requests') == True:
-        ReviewRequest.objects.filter(contribution_id=contribution_id, archived=False).update(archived=True)
-    else:
-        assertion = assert_no_active_review_requests(contribution_id)
-        if assertion: return assertion
 
     review_request = ReviewRequest()
     try:
         with transaction.atomic():
+            cursor = connection.cursor()
+            cursor.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')    
+            if request.POST.get('archive_active_requests') == True:
+                ReviewRequest.objects.filter(contribution_id=contribution_id, archived=False).update(archived=True)
+            else:
+                assertion = assert_limit_active_review_requests(contribution_id, 0)
+                if assertion: return assertion
             reviewer = get_object_or_404(User, pk=reviewer_id)
             review_request.editor = request.user
             review_request.editor_comments = message

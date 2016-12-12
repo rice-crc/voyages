@@ -2392,7 +2392,8 @@
             }
         {% endif %}
         
-        var formSubmission = function() {
+        var formSubmission = function(allowEmptySources) {
+            allowEmptySources = allowEmptySources || false;
             if (submit_val != 'delete') {
                 // Build pre-existing sources list.
                 var preSources = $.map(
@@ -2405,13 +2406,15 @@
                         };
                     }
                 );
-                var validation = validatePreSubmit(sources, preSources);
-                if (validation.hasErrors()) {
-                    alert(validation.toString());
-                    return false;
-                } else if (validation.hasWarnings() &&
-                        !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
-                    return false;
+                if (sources.length > 0 || preSources.length > 0 || !allowEmptySources) {
+                    var validation = validatePreSubmit(sources, preSources);
+                    if (validation.hasErrors()) {
+                        alert(validation.toString());
+                        return false;
+                    } else if (validation.hasWarnings() &&
+                            !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                        return false;
+                    }
                 }
             }
             $("input[name^='date']").each(function() {
@@ -2452,13 +2455,14 @@
             return true;
         };
 
-        $('form').submit(formSubmission);
-        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(formSubmission, {{ form.persisted_form_data.value|safe }});{% endif %}
+        var submitFunc = function() { return formSubmission(false); };
+        $('form').submit(submitFunc);
+        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(submitFunc, {{ form.persisted_form_data.value|safe }});{% endif %}
         
         // Ajax save.
         $('#save_btn').click(function() {
             var self = $(this);
-            var valid = formSubmission();
+            var valid = formSubmission(true);
             if (valid) {
                 self.prop('disabled', true);
                 $.ajax({

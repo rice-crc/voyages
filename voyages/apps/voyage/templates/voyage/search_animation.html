@@ -291,12 +291,8 @@
             } else {
                 t = 0;
             }
-            try {
-                var lngLat = d.interpolate(t);
-            } catch (e) {
-                console.log(t);
-                return "";
-            }
+            if (t >= 1) return "";
+            var lngLat = d.interpolate(t);
             if (isNaN(lngLat[0]) || isNaN(lngLat[1])) {
                 console.log('Interpolation error');
                 return "";
@@ -306,31 +302,6 @@
             var point = map.latLngToLayerPoint(latLng);
             return "translate(" + point.x + "," + point.y + ")";
         };
-        /*
-        var geodesic = new GreatCircle(
-            { x: d.source_lng, y: d.source_lat },
-            { x: d.destination_lng, y: d.destination_lat });
-        return function(t) {
-            t = startTime + t * (1 - startTime);
-            if (t > animationTime) {
-                animationTime = t;
-            }
-            var x = i / (2 * count);
-            if (t > x) {
-                t = (t - x)/(1 - x);
-            } else {
-                t = 0;
-            }
-            var lngLat = geodesic.interpolate(t);
-            if (isNaN(lngLat[0]) || isNaN(lngLat[1])) {
-                console.log('Interpolation error');
-                return "";
-            }
-            var latLng = L.latLng(lngLat[1], lngLat[0]);
-            $(dom).data("latLng", latLng);
-            var point = map.latLngToLayerPoint(latLng);
-            return "translate(" + point.x + "," + point.y + ")";
-        };*/
     }
 
     $(document).ready(function() {
