@@ -125,6 +125,23 @@ function validateYear(val, notNull) {
     return validateInt(val, 1500, 1867, notNull);
 }
 
+// A helper class that allows concatenating elements with variable
+// separators removing blank terms from the concatenation.
+function ConcatTerm(term, concatenator) {
+    var self = this;
+    self.term = term || '';
+    self.concatenator = concatenator || '';
+    self.isNullOrEmpty = function() { return term == null || term == ''; };
+    self.add = function(concatTerm) {
+        if (self.isNullOrEmpty()) {
+            return concatTerm.isNullOrEmpty() ? new ConcatTerm() : concatTerm;
+        } else {
+            if (concatTerm.isNullOrEmpty()) return self;
+            return new ConcatTerm(self.term + self.concatenator + concatTerm.term, concatTerm.concatenator);
+        }
+    };
+}
+
 // Concatenate all strings in the array if and only if
 // all pieces are non-null and non-empty. Otherwise,
 // returns null.
@@ -132,7 +149,7 @@ function concat(pieces) {
     var result = '';
     for (var i = 0; i < pieces.length; ++i) {
         var s = pieces[i];
-        if (!s || s.length == 0) return null;
+        if (!s || s.length == 0) return '';
         result += s;
     }
     return result;
@@ -142,12 +159,12 @@ function sourceDetails(detailsArr) {
     var nonEmpty = $.map(detailsArr, function(d) {
         if (d) {
             var x = d.trim();
-            if (x.length) return x;
+            if (x.length) return '<p>' + x + '</p>';
         }
     });
     if (nonEmpty.length) {
-        return '&nbsp;<span class="source_reference_extras">' +
-            nonEmpty.join('<br />') + '</span>';
+        return '&nbsp;<div class="source_reference_extras">' +
+            nonEmpty.join(' ') + '</div>';
     }
     return '';
 }
@@ -282,21 +299,23 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     };
     this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
-            self.author + ', ' + (self.is_essay ? self.essay_title : self.title);
+            self.author + ', ';
         if (self.is_essay) {
-            result += ' - ' + self.title + '(ed. ' + self.editors + ')';
+            result += '"' + self.essay_title + '" in ' + self.editors + ' (ed.), <em>' + self.title + '</em>';
+        } else {
+            result += self.title;
         }
-        if (self.publisher) {
-            result += ' - ' + self.publisher;
+        var extra = (new ConcatTerm(self.place, ', ')).
+                add(new ConcatTerm(self.publisher, ': ')).
+                add(new ConcatTerm(self.year));
+        result += concat([' (', extra.term, ')']);
+        // Pages or single page?
+        if (self.pageStart && self.pageStart == self.pageEnd) {
+            result += concat([gettext(' p. '), self.pageStart]);
+        } else {
+            result += concat([gettext(' pp. '), self.pageStart, '-', self.pageEnd]);
         }
-        if (self.place) {
-            result += ', ' + self.place;
-        }
-        result += '</span>' + sourceDetails([
-            concat(['(', self.year, ')']),
-            concat([gettext('Pages '), self.pageStart, '-', self.pageEnd]),
-            self.info,
-            self.url]);
+        result += '</span>' + sourceDetails([self.info, self.url]);
         return result;
     };
     this._fields = {

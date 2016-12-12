@@ -162,6 +162,9 @@
                         }
                     });
                 });
+            },
+            error: function() {
+                alert('{% trans "A server error occurred, please contact the webmaster" %}');
             }
         });
     }
@@ -190,6 +193,9 @@
                         row['date_created'].substring(0, 10) + 
                         '</td><td></tr>');
                 }
+            },
+            error: function() {
+                alert('{% trans "A server error occurred, please contact the webmaster" %}');
             }
         });
     }
