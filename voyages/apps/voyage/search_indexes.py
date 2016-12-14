@@ -6,17 +6,22 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 import re
 import unidecode
+import six
+
+def split_date(value):
+    return value.split(",") if isinstance(value, six.string_types) else []
 
 def getMonth(value):
-    return str(value.split(",")[0]).zfill(2)
-
+    arr = split_date(value)
+    return str(arr[0]).zfill(2) if len(arr) == 3 else None
 
 def getDay(value):
-    return str(value.split(",")[1]).zfill(2)
-
+    arr = split_date(value)
+    return str(arr[1]).zfill(2) if len(arr) == 3 else None
 
 def getYear(value):
-    return str(value.split(",")[2]).zfill(2)
+    arr = split_date(value)
+    return str(arr[2]).zfill(4) if len(arr) == 3 else None
 
 def getDate(value):
     if not value:

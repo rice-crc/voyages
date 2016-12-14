@@ -5,9 +5,11 @@ import random
 from django.contrib.auth.models import User
 from imputed import *
 from models import *
+from forms import *
 from voyages.apps.voyage.models import *
 import numbers
 import csv
+import json
 
 @override_settings(LANGUAGE_CODE='en')
 class TestAuthentication(TestCase):
@@ -37,7 +39,7 @@ class TestAuthentication(TestCase):
         # Should redirect
         response = self.client.post(reverse('contribute:index'),
                                     {'id_username': 'admin', 'id_password': 'should_not_work'}, follow=True)
-        self.assertEqual(response.redirect_chain[0][0], 'http://testserver/accounts/login/')
+        self.assertEqual(response.redirect_chain[0][0], '/accounts/login/')
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(response.status_code, 200)
 
@@ -121,7 +123,7 @@ class TestImputedDataCalculation(TestCase):
         folder = os.path.dirname(os.path.realpath(__file__)) + '/testdata/'
         errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv', folder + 'ImputeTestDataOutput.csv')        
         if len(errors) > 0:
-            print 'Failed ' + str(len(errors)) + '/' + str(len(test_input))
+            print 'Failed count ' + str(len(errors))
         self.assertEqual(0, len(errors), '\n'.join(errors.values()))
     
     def compute_imputed_csv(self, input_csv, output_csv, dump_file=None):
@@ -279,3 +281,98 @@ class TestImputedDataCalculation(TestCase):
             number.save()
             numbers_added[number.var_name] = number
         return interim
+
+class TestEditorialPlatform(TestCase):
+    """
+    Here we will test the editorial platform by creating mock
+    user contributions and following possible editorial workflows
+    until their conclusion (e.g. publication).
+    """
+    
+    fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
+    
+    def test_workflow(self):
+    
+        # Create a user for the contributor.
+        the_password = 'mypass'
+        contributor = User.objects.create_user(username='contributor', password=the_password)
+        
+        # Create a reviewer user
+        reviewer = User.objects.create_user(username='reviewer', password=the_password)
+        
+        # Create an editor user
+        editor = User.objects.create_superuser('editor', 'editor@voyages.org', the_password)
+        
+        def login(user):
+            return self.client.login(username=user.username, password=the_password)
+            
+        self.assertTrue(login(contributor))
+        response = self.client.get(reverse('contribute:new_voyage'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        data = response.context
+        contribution = data['contribution']
+        interim = data['interim']
+        form = data['form']
+        numbers = data['numbers']
+        self.assertNotEqual(contribution, None)
+        self.assertNotEqual(interim, None)
+        self.assertNotEqual(form, None)
+        self.assertEqual(numbers, {})
+        
+        # Check that the fields are blank (just a sample, there are too many to check).
+        self.assertEqual(interim.name_of_vessel, None)
+        self.assertEqual(interim.date_departure, None)
+        
+        # Fill out form and submit contribution.
+        interim.name_of_vessel = u'Lion'
+        interim.year_ship_constructed = 1642
+        interim.year_ship_registered = 1645
+        interim.ship_construction_place = Place.objects.get(place='London')
+        interim.ship_registration_place = interim.ship_construction_place
+        interim.national_carrier = Nationality.objects.get(label='Great Britain')
+        # Many other fields.
+        from django.forms import model_to_dict
+        form = InterimVoyageForm(model_to_dict(interim), instance=interim)
+        is_valid = form.is_valid()
+        if not is_valid:
+            # Avoid calling form.errors if not needed.
+            self.assertTrue(is_valid, form.errors.as_text())
+        
+        # Slave numbers.
+        prefix = 'interim_slave_number_'
+        slave_numbers = {
+            u'interim_slave_number_CREW1': 25,
+            u'interim_slave_number_CREW2': 19,
+            u'interim_slave_number_CREW3': 17,
+            u'interim_slave_number_CREW4': 12,
+            u'interim_slave_number_CREW5': 11,
+            u'interim_slave_number_SAILD1': 2,
+            u'interim_slave_number_SAILD2': 5,
+            u'interim_slave_number_SAILD3': 2,
+            u'interim_slave_number_SAILD4': 2,
+            u'interim_slave_number_SAILD5': 1,
+            u'interim_slave_number_DIED': 10,
+        }
+        
+        # Submit data to save record (no source references yet).
+        ajax_data = {k: v.pk if hasattr(v, 'pk') else v for k, v in form.cleaned_data.items() if v is not None}
+        ajax_data.update(slave_numbers)
+        json_response = self.client.post(
+            reverse('contribute:interim_save_ajax', kwargs={'contribution_type': 'new', 'contribution_id': contribution.pk}),
+            ajax_data)
+        parsed_response = json.loads(json_response.content)
+        self.assertTrue(parsed_response['valid'], json_response.content)
+        self.assertEqual(len(parsed_response['errors']), 0, json_response.content)
+        
+        # Create a few user contributions
+        #NewVoyageContribution()
+        #EditVoyageContribution()
+        #MergeVoyagesContribution()
+        #DeleteVoyageContribution()
+        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
+        # response = self.client.post(
+        #     reverse('submit_editorial_decision', kwargs={'editor_contribution_id': 0}),
+        #     {'editorial_decision': 'aaaa', 'decision_message': 'bbbb', 'created_voyage_id': None})
+        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
+        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
+        

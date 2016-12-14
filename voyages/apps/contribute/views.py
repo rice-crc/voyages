@@ -61,6 +61,10 @@ def get_summary(v):
             'ship': v.voyage_ship.ship_name,
             'year_arrived': dates.get_date_year(dates.first_dis_of_slaves) or
                             dates.get_date_year(dates.imp_arrival_at_port_of_dis)}
+                            
+def set_isolation_serializable():
+    cursor = connection.cursor()
+    cursor.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
 
 @csrf_exempt
 def get_voyage_by_id(request):
@@ -315,11 +319,9 @@ def interim_main(request, contribution, interim):
         form = InterimVoyageForm(request.POST, instance=interim)
         prefix = 'interim_slave_number_'
         numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
-        sources_post = request.POST.get('sources')
-        if not sources_post:
-            raise Exception('Sources should be defined on POST')
+        sources_post = request.POST.get('sources', '[]')
         sources = [(create_source(x, interim), x.get('__index'))
-                   for x in json.loads(sources_post if sources_post is not None else '[]')]
+                   for x in json.loads(sources_post)]
         result = form.is_valid()
         if result:
             with transaction.atomic():
@@ -961,8 +963,7 @@ def begin_editorial_review(request):
     contribution_id = request.POST.get('contribution_id')
     contribution = get_contribution_from_id(contribution_id)
     with transaction.atomic():
-        cursor = connection.cursor()
-        cursor.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
+        set_isolation_serializable()
         assertion = assert_limit_active_review_requests(contribution_id, 0)
         if assertion: return assertion
         reviewer = request.user
@@ -1005,8 +1006,7 @@ def post_review_request(request):
     review_request = ReviewRequest()
     try:
         with transaction.atomic():
-            cursor = connection.cursor()
-            cursor.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')    
+            set_isolation_serializable()
             if request.POST.get('archive_active_requests') == True:
                 ReviewRequest.objects.filter(contribution_id=contribution_id, archived=False).update(archived=True)
             else:

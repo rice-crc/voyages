@@ -84,7 +84,7 @@ def export_from_voyages():
     for v in voyages:
         yield _map_voyage_to_spss(v)
 
-def publish_accepted_contributions(log_file):
+def publish_accepted_contributions(log_file, skip_backup=False):
     """
     Publish all accepted contributions and use the
     given log_file to register the progress. Since
@@ -97,13 +97,13 @@ def publish_accepted_contributions(log_file):
         log_file.write(text)
         log_file.flush()
         os.fsync(log_file.fileno())
-        
-    log('Backing up all data.\n')
 
     # Step 1 - Backup database
-    os.system('python manage.py dumpdata > /var/tmp/db.json')
-
-    log('Finished backup.\n')
+    if not skip_backup:        
+        log('Backing up all data.\n')
+        os.system('python manage.py dumpdata > /var/tmp/db.json')
+        log('Finished backup.\n')
+    
     log('Fetching contributions...\n')
     review_requests = _fetch_accepted_reviews()
     log('Publishing...\n')
