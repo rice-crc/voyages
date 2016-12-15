@@ -327,9 +327,43 @@ class TestEditorialPlatform(TestCase):
         interim.name_of_vessel = u'Lion'
         interim.year_ship_constructed = 1642
         interim.year_ship_registered = 1645
-        interim.ship_construction_place = Place.objects.get(place='London')
-        interim.ship_registration_place = interim.ship_construction_place
-        interim.national_carrier = Nationality.objects.get(label='Great Britain')
+        interim.ship_construction_place = Place.objects.get(pk=51)
+        interim.ship_registration_place = Place.objects.get(pk=51)
+        interim.national_carrier = Nationality.objects.get(pk=7)
+        interim.rig_of_vessel = RigOfVessel.objects.get(pk=1)
+        interim.tonnage_of_vessel = 200
+        interim.ton_type = TonType.objects.get(pk=21)
+        interim.guns_mounted = 21
+        interim.first_ship_owner = "Smart, Jonathan"
+        interim.second_ship_owner = "Spring, Martin"
+        interim.additional_ship_owners = "McCall, Seamus"
+        interim.voyage_outcome = VoyageOutcome.objects.get(pk=1)
+        interim.african_resistance = Resistance.objects.get(pk=5)
+        interim.first_port_intended_embarkation = Place.objects.get(pk=522)
+        interim.second_port_intended_embarkation = Place.objects.get(pk=539)
+        interim.first_port_intended_disembarkation = Place.objects.get(pk=372)
+        interim.port_of_departure = Place.objects.get(pk=51)
+        interim.number_of_ports_called_prior_to_slave_purchase = 1
+        interim.first_place_of_slave_purchase = Place.objects.get(pk=519)
+        interim.second_place_of_slave_purchase = Place.objects.get(pk=523)
+        interim.principal_place_of_slave_purchase = Place.objects.get(pk=523)
+        interim.place_of_call_before_atlantic_crossing = Place.objects.get(pk=667)
+        interim.number_of_new_world_ports_called_prior_to_disembarkation = 1
+        interim.first_place_of_landing = Place.objects.get(pk=728)
+        interim.second_place_of_landing = Place.objects.get(pk=342)
+        interim.principal_place_of_slave_disembarkation = Place.objects.get(pk=728)
+        interim.date_departure = "1,30,1646"
+        interim.date_slave_purchase_began = "4,22,1646"
+        interim.date_vessel_left_last_slaving_port = "6,23,1646"
+        interim.date_first_slave_disembarkation = "9,30,1646"
+        interim.date_second_slave_disembarkation = "11,4,1646"
+        interim.date_third_slave_disembarkation = ",,"
+        interim.date_return_departure = "2,15,1647"
+        interim.date_voyage_completed = "6,1,1647"
+        interim.length_of_middle_passage = 100
+        interim.first_captain = "Ribbles, Sam"
+        interim.second_captain = "Wood, John"
+        interim.third_captain = "Inglis, Henry"
         # Many other fields.
         from django.forms import model_to_dict
         form = InterimVoyageForm(model_to_dict(interim), instance=interim)
@@ -341,17 +375,48 @@ class TestEditorialPlatform(TestCase):
         # Slave numbers.
         prefix = 'interim_slave_number_'
         slave_numbers = {
-            u'interim_slave_number_CREW1': 25,
-            u'interim_slave_number_CREW2': 19,
-            u'interim_slave_number_CREW3': 17,
-            u'interim_slave_number_CREW4': 12,
-            u'interim_slave_number_CREW5': 11,
-            u'interim_slave_number_SAILD1': 2,
-            u'interim_slave_number_SAILD2': 5,
-            u'interim_slave_number_SAILD3': 2,
-            u'interim_slave_number_SAILD4': 2,
-            u'interim_slave_number_SAILD5': 1,
-            u'interim_slave_number_DIED': 10,
+            u'interim_slave_number_MEN6': 20.0,
+            u'interim_slave_number_MEN4': 12.0,
+            u'interim_slave_number_CREW5': 11.0,
+            u'interim_slave_number_CREW2': 19.0,
+            u'interim_slave_number_CREW3': 17.0,
+            u'interim_slave_number_CREW1': 25.0,
+            u'interim_slave_number_GIRL4': 10.0,
+            u'interim_slave_number_GIRL6': 8.0,
+            u'interim_slave_number_GIRL1': 18.0,
+            u'interim_slave_number_CREW4': 12.0,
+            u'interim_slave_number_GIRL3': 5.0,
+            u'interim_slave_number_GIRL2': 5.0,
+            u'interim_slave_number_WOMEN6': 10.0,
+            u'interim_slave_number_SLINTEN2': 50.0,
+            u'interim_slave_number_SLAARRIV': 198.0,
+            u'interim_slave_number_MEN2': 12.0,
+            u'interim_slave_number_WOMEN4': 12.0,
+            u'interim_slave_number_WOMEN2': 12.0,
+            u'interim_slave_number_WOMEN3': 42.0,
+            u'interim_slave_number_SLAS36': 48.0,
+            u'interim_slave_number_WOMEN1': 60.0,
+            u'interim_slave_number_TSLAVESP': 248.0,
+            u'interim_slave_number_MEN1': 75.0,
+            u'interim_slave_number_NCAR13': 190.0,
+            u'interim_slave_number_TSLAVESD': 234.0,
+            u'interim_slave_number_SLADAFRI': 14.0,
+            u'interim_slave_number_BOY1': 37.0,
+            u'interim_slave_number_NDESERT': 1.0,
+            u'interim_slave_number_SAILD5': 1.0,
+            u'interim_slave_number_SAILD4': 2.0,
+            u'interim_slave_number_SAILD3': 2.0,
+            u'interim_slave_number_SAILD2': 5.0,
+            u'interim_slave_number_SAILD1': 2.0,
+            u'interim_slave_number_CREWDIED': 10.0,
+            u'interim_slave_number_MEN3': 65.0,
+            u'interim_slave_number_SLINTEND': 200.0,
+            u'interim_slave_number_BOY2': 5.0,
+            u'interim_slave_number_BOY3': 25.0,
+            u'interim_slave_number_BOY4': 10.0,
+            u'interim_slave_number_BOY6': 10.0,
+            u'interim_slave_number_NCAR15': 44.0,
+            u'interim_slave_number_SLAS32': 150.0
         }
         
         # Submit data to save record (no source references yet).
@@ -363,16 +428,4 @@ class TestEditorialPlatform(TestCase):
         parsed_response = json.loads(json_response.content)
         self.assertTrue(parsed_response['valid'], json_response.content)
         self.assertEqual(len(parsed_response['errors']), 0, json_response.content)
-        
-        # Create a few user contributions
-        #NewVoyageContribution()
-        #EditVoyageContribution()
-        #MergeVoyagesContribution()
-        #DeleteVoyageContribution()
-        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
-        # response = self.client.post(
-        #     reverse('submit_editorial_decision', kwargs={'editor_contribution_id': 0}),
-        #     {'editorial_decision': 'aaaa', 'decision_message': 'bbbb', 'created_voyage_id': None})
-        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
-        # response = self.client.post(reverse('begin_editorial_review'), {'contribution_id': 'aaaa'})
-        
+                
