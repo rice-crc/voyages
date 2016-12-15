@@ -269,7 +269,7 @@ class ReviewRequestResponse:
     accepted = 1
     rejected = 2
     begun_editorial_review = 1000
-
+    
 class ReviewRequest(models.Model):
     """
     A request made to a reviewer for a contribution.
@@ -285,6 +285,9 @@ class ReviewRequest(models.Model):
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
     created_voyage_id = models.IntegerField(null=True, help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)')
+    
+    def contribution(self):
+        return get_contribution_from_id(self.contribution_id)
     
     def requires_created_voyage_id(self):
         return self.contribution_id.startswith('merge') or self.contribution_id.startswith('new')
@@ -315,6 +318,9 @@ class ReviewVoyageContribution(models.Model):
 
     def __unicode__(self):
         return _('Review a contribution')
+        
+    def get_related_voyage_ids(self):
+        return self.request.contribution().get_related_voyage_ids()
 
 class EditorVoyageContribution(models.Model):
     """
@@ -326,6 +332,9 @@ class EditorVoyageContribution(models.Model):
 
     def __unicode__(self):
         return _('Editorial review of contribution')
+        
+    def get_related_voyage_ids(self):
+        return self.request.contribution().get_related_voyage_ids()
 
 class ContributionStatus:
     pending = 0
@@ -352,8 +361,7 @@ class BaseVoyageContribution(models.Model):
         return []
 
     def get_related_voyages(self):
-        x = list(voyage.models.Voyage.objects.filter(voyage_id__in=self.get_related_voyage_ids()))
-        return x
+        return list(voyage.models.Voyage.objects.filter(voyage_id__in=self.get_related_voyage_ids()))
 
     class Meta:
         abstract = True
@@ -429,3 +437,27 @@ class NewVoyageContribution(BaseVoyageContribution):
 
     def __unicode__(self):
         return _('New voyage')
+        
+
+
+contribution_model_by_type = {
+    'delete': DeleteVoyageContribution,
+    'edit': EditVoyageContribution,
+    'merge': MergeVoyagesContribution,
+    'new': NewVoyageContribution,
+    'review': ReviewVoyageContribution,
+    'editorial_review': EditorVoyageContribution
+}
+
+def get_contribution(contribution_type, contribution_id):
+    model = contribution_model_by_type.get(contribution_type)
+    if model is None: return None
+    return model.objects.filter(pk=contribution_id).first()
+    
+def get_contribution_from_id(contribution_id):
+    if contribution_id is None:
+        return None
+    contribution_pair = contribution_id.split('/')
+    contribution_type = contribution_pair[0]
+    contribution_id = int(contribution_pair[1])
+    return get_contribution(contribution_type, contribution_id)

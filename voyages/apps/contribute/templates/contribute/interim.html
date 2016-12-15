@@ -38,6 +38,15 @@
 </p>
 {% endif %}
 
+{% if contribution.get_related_voyage_ids %}
+    <h3>{% trans "Voyage ID(s): " %}
+    {% for id in contribution.get_related_voyage_ids %}
+        {{ id }}
+        {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    </h3>
+{% endif %}
+
 {{ form.errors }}
 
 <form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
@@ -2468,7 +2477,7 @@
                 $.ajax({
                     type: "POST",
                     {% if mode == 'contribute' %}
-                    url: '{{ request.get_full_path }}/save_ajax',
+                    url: '{{ request.path }}/save_ajax',
                     {% else %}
                     url: '/contribute/{{ mode }}/{{ contribution.pk }}/save_ajax',
                     {% endif %}

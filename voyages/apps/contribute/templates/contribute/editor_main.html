@@ -137,8 +137,33 @@
                         '<span class="' + reviewClasses[responseId] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
                 }
                 $(".dropdown-toggle").dropdown();
+                $.fn.dataTable.ext.type.order['contrib-type-pre'] = function(d) {
+                    // Sort according to type using Dr. Eltis' request.
+                    // (rather than the type's alphabetical order).
+                    d = $(d).text();
+                    for (var k in contribTypes) {
+                        if (d == contribTypes[k]) {
+                            d = k;
+                            break;
+                        }
+                    }
+                    switch (d) {
+                        case 'delete': return 1;
+                        case 'new':    return 2;
+                        case 'edit':   return 3;
+                        case 'merge':  return 4;
+                    }
+                    return 0;
+                };
                 if (!$('#requests_table').data('hasInitialized')) {
-                    $('#requests_table').DataTable({bPaginate: false});
+                    $('#requests_table').DataTable({
+                        bPaginate: false,
+                        order: [[0, "asc"], [3, "asc"]],
+                        "columnDefs": [{
+                            "type": "contrib-type",
+                            "targets": 0
+                        }]
+                    });
                     $('#requests_table').data('hasInitialized', true);
                 }
                 $(".reviewer_assign_btn").click(function() {

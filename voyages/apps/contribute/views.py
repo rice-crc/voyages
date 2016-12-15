@@ -283,22 +283,6 @@ def create_source(source_values, interim_voyage):
             raise Exception('Invalid interim source: the text reference must have as prefix the short reference of the Source')
     return source
 
-contribution_model_by_type = {
-    'delete': DeleteVoyageContribution,
-    'edit': EditVoyageContribution,
-    'merge': MergeVoyagesContribution,
-    'new': NewVoyageContribution,
-    'review': ReviewVoyageContribution,
-    'editorial_review': EditorVoyageContribution
-}
-
-def get_contribution(contribution_type, contribution_id):
-    model = contribution_model_by_type.get(contribution_type)
-    if model is None:
-        raise Http404
-    contribution = get_object_or_404(model, pk=contribution_id)
-    return contribution
-
 def interim_main(request, contribution, interim):
     """
     The reusable part of the interim form handling.
@@ -377,6 +361,7 @@ def interim(request, contribution_type, contribution_id):
                                     kwargs={'contribution_id': contribution_id}))
 
     contribution = get_contribution(contribution_type, contribution_id)
+    if contribution is None: raise Http404
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
 
@@ -418,6 +403,7 @@ def common_save_ajax(request, contribution):
 @require_POST
 def interim_save_ajax(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
+    if contribution is None: raise Http404
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     return common_save_ajax(request, contribution)
@@ -443,6 +429,7 @@ def interim_commit(request, contribution_type, contribution_id):
     if request.method != 'POST':
         return HttpResponseBadRequest()
     contribution = get_contribution(contribution_type, contribution_id)
+    if contribution is None: raise Http404
     if request.user.pk != contribution.contributor.pk or contribution.status != ContributionStatus.pending:
         return HttpResponseForbidden()
     contribution.status = ContributionStatus.committed
@@ -452,6 +439,7 @@ def interim_commit(request, contribution_type, contribution_id):
 @login_required()
 def interim_summary(request, contribution_type, contribution_id, mode='contribute'):
     contribution = get_contribution(contribution_type, contribution_id)
+    if contribution is None: raise Http404
     if not request.user.is_superuser and not request.user.is_staff and request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     if contribution_type == 'delete':
@@ -806,7 +794,7 @@ def get_reviews_by_status(statuses):
         if len(reqs) > 1:
             raise Exception('Invalid state: more than one review request is active')
         active_request = reqs[0] if len(reqs) == 1 else None
-        if active_request and active_request.requires_created_voyage_id():
+        if active_request and active_request.created_voyage_id and active_request.requires_created_voyage_id():
             voyage_ids = [active_request.created_voyage_id]
         if isinstance(contrib, NewVoyageContribution):
             # Must fill elements above with interim data.
@@ -880,14 +868,6 @@ def get_pending_publication(request):
         return HttpResponseForbidden()
     return JsonResponse(get_reviews_by_status([ContributionStatus.approved]))
 
-def get_contribution_from_id(contribution_id):
-    if contribution_id is None:
-        return None
-    contribution_pair = contribution_id.split('/')
-    contribution_type = contribution_pair[0]
-    contribution_id = int(contribution_pair[1])
-    return get_contribution(contribution_type, contribution_id)
-
 def assert_limit_active_review_requests(contribution_id, max_allowed=0):
     reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
     if len(reqs) > max_allowed:
@@ -906,7 +886,8 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
         data.update(numbers)      
         return data
     
-    user_contribution = get_contribution_from_id(review_request.contribution_id)
+    user_contribution = review_request.contribution()
+    if user_contribution is None: raise Http404
     existing_data = contribution_related_data(user_contribution)
     existing_data['user'] = get_dict_from_interim(user_contribution.interim_voyage)
     # Fetch user and reviewer contributions (if any) and map to dict (use __dict__ ?).
@@ -962,6 +943,7 @@ def begin_editorial_review(request):
         return HttpResponseForbidden()
     contribution_id = request.POST.get('contribution_id')
     contribution = get_contribution_from_id(contribution_id)
+    if contribution is None: raise Http404
     with transaction.atomic():
         set_isolation_serializable()
         assertion = assert_limit_active_review_requests(contribution_id, 0)
@@ -998,6 +980,7 @@ def post_review_request(request):
         return HttpResponseForbidden()
     contribution_id = request.POST.get('contribution_id')
     contribution = get_contribution_from_id(contribution_id)
+    if contribution is None: raise Http404
     reviewer_id = int(request.POST.get('reviewer_id'))
     message = request.POST.get('message')
     if contribution.contributor_id == reviewer_id:
@@ -1054,7 +1037,7 @@ def post_archive_review_request(request):
         return JsonResponse({'error': _('There is no active review for this contribution')})
     for req in reqs:
         with transaction.atomic():
-            contribution = get_contribution_from_id(req.contribution_id)
+            contribution = req.contribution()
             contribution.status = ReviewRequestDecision.under_review
             contribution.save()
             req.archived = True
@@ -1068,9 +1051,8 @@ def review_request(request, review_request_id):
         return HttpResponseForbidden()
     if req.review_contribution.first():
         return HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
-    contribution = get_contribution_from_id(req.contribution_id)
-    if contribution is None:
-        raise Http404
+    contribution = req.contribution()
+    if contribution is None: raise Http404
     return render(request, 'contribute/review_request.html', {'request': req, 'contribution': contribution})
 
 def clone_interim_voyage(contribution, contributor_comment_prefix):
@@ -1134,7 +1116,8 @@ def reply_review_request(request):
         if response == 'accept':
             review = ReviewVoyageContribution()
             review.request = req
-            contribution = get_contribution_from_id(req.contribution_id)
+            contribution = req.contribution()
+            if contribution is None: raise Http404
             if hasattr(contribution, 'interim_voyage'):
                 review.interim_voyage = clone_interim_voyage(contribution, 'Contributor: ')
             review.notes = 'Contributor: ' + contribution.notes if contribution.notes else ''
@@ -1174,7 +1157,8 @@ def review(request, review_request_id):
         return HttpResponseRedirect(reverse('contribute:review_request',
                                             kwargs={'review_request_id': review_request_id}))
     contribution_id = req.contribution_id
-    user_contribution = get_contribution_from_id(contribution_id)
+    user_contribution = req.contribution()
+    if user_contribution is None: raise Http404
     if contribution_id.startswith('delete'):
         return delete_review_render(request, user_contribution, True, 'reviewer')
     review_contribution = req.review_contribution.first()
@@ -1204,7 +1188,8 @@ def editorial_review(request, review_request_id):
     review_request = get_object_or_404(ReviewRequest, pk=review_request_id)
     contribution = review_request.editor_contribution.first()
     contribution_id = review_request.contribution_id    
-    user_contribution = get_contribution_from_id(contribution_id)
+    user_contribution = review_request.contribution()
+    if user_contribution is None: raise Http404
     if contribution_id.startswith('delete'):
         return delete_review_render(request, user_contribution, True, 'editor')
     review_contribution = review_request.review_contribution.first()
@@ -1247,7 +1232,8 @@ def submit_editorial_decision(request, editor_contribution_id):
     
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
     review_request = contribution.request    
-    user_contribution = get_contribution_from_id(review_request.contribution_id)
+    user_contribution = review_request.contribution()
+    if user_contribution is None: raise Http404
     if not created_voyage_id and (review_request.requires_created_voyage_id() and decision == ReviewRequestDecision.accepted_by_editor):
         return HttpResponseBadRequest('Expected a voyage id for new/merge contribution')
     if created_voyage_id:
