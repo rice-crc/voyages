@@ -49,7 +49,7 @@
 
 {{ form.errors }}
 
-<form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
+<form action="{{ request.path }}" method="post" class="form-horizontal">
     {% csrf_token %}
     <!-- Ship, nation, owners -->
     <div class="expander_container">
