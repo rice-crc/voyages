@@ -289,7 +289,7 @@ class TestEditorialPlatform(TestCase):
     until their conclusion (e.g. publication).
     """
     
-    fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
+    fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json', 'testvoyages.json']
     
     def test_workflow(self):
     
@@ -337,7 +337,7 @@ class TestEditorialPlatform(TestCase):
         interim.first_ship_owner = "Smart, Jonathan"
         interim.second_ship_owner = "Spring, Martin"
         interim.additional_ship_owners = "McCall, Seamus"
-        interim.voyage_outcome = VoyageOutcome.objects.get(pk=1)
+        interim.voyage_outcome = ParticularOutcome.objects.get(pk=1)
         interim.african_resistance = Resistance.objects.get(pk=5)
         interim.first_port_intended_embarkation = Place.objects.get(pk=522)
         interim.second_port_intended_embarkation = Place.objects.get(pk=539)
@@ -428,4 +428,42 @@ class TestEditorialPlatform(TestCase):
         parsed_response = json.loads(json_response.content)
         self.assertTrue(parsed_response['valid'], json_response.content)
         self.assertEqual(len(parsed_response['errors']), 0, json_response.content)
-                
+        
+        ajax_data['submit_val'] = ''
+        contrib_args = {'contribution_type': 'new', 'contribution_id': contribution.pk}
+        response = self.client.post(reverse('contribute:interim', kwargs=contrib_args), ajax_data)
+        self.assertEqual(response.status_code, 200) # not a redirect since there are no sources for this contribution.
+        
+        # Now submit sources.
+        source_type_inverse = {v: k for k, v in source_type_dict.items()}
+        sources = [
+            {u'place_of_publication': u'Cambridge', u'information': None, u'source_ref_text': None,
+             u'page_end': 34, u'book_title': u'Transatlantic History', u'url': None, u'publisher': u'CUP',
+             u'year': 2015, u'created_voyage_sources': None, u'source_is_essay_in_book': True,
+             u'editors': u'Jenkins, Frederick', u'authors': u'Fellows, John', u'essay_title': u'Early English Slave Trade', 
+             u'page_start': 33, u'pk': None, u'created_voyage_sources_id': None, u'source_ref_text': None,
+             u'type': source_type_inverse[InterimBookSource], u'__index': 1}
+        ]
+        ajax_data['sources'] = json.dumps(sources)
+        response = self.client.post(reverse('contribute:interim', kwargs=contrib_args), ajax_data, follow=True)
+        self.assertRedirects(response, reverse('contribute:interim_summary', kwargs=contrib_args), status_code=302, target_status_code=200)
+        self.assertTrue(response.content.find('Transatlantic History') > 0)
+        self.assertTrue(response.content.find('London') > 0)
+        self.assertTrue(response.content.find('Great Britain') > 0)
+        
+        # Commit submission.
+        response = self.client.post(reverse('contribute:interim_commit', kwargs=contrib_args), follow=True)
+        self.assertRedirects(response, reverse('contribute:thanks'), status_code=302, target_status_code=200)
+        
+        # Check backend data.
+        contribution = NewVoyageContribution.objects.get(pk=contribution.pk)
+        self.assertEqual(contribution.contributor.username, 'contributor')
+        self.assertEqual(contribution.status, ContributionStatus.committed)
+        interim = contribution.interim_voyage
+        self.assertEqual(interim.first_ship_owner, "Smart, Jonathan")
+        self.assertEqual(interim.guns_mounted, 21)
+        self.assertEqual(interim.voyage_outcome.pk, 1)
+        sources = list(interim.book_sources.all())
+        self.assertEqual(len(sources), 1)
+        self.assertEqual(sources[0].place_of_publication, u'Cambridge')
+        self.assertEqual(sources[0].authors, u'Fellows, John')

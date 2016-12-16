@@ -250,20 +250,10 @@ def merge(request):
     return render(request, 'contribute/merge.html', {'form': form, 'voyage_selection': voyage_selection})
 
 def interim_source_model(type):
-    if type == 'Primary source':
-        return InterimPrimarySource
-    elif type == 'Article source':
-        return InterimArticleSource
-    elif type == 'Book source':
-        return InterimBookSource
-    elif type == 'Newspaper source':
-        return InterimNewspaperSource
-    elif type == 'Private note or collection source':
-        return InterimPrivateNoteOrCollectionSource
-    elif type == 'Unpublished secondary source':
-        return InterimUnpublishedSecondarySource
-    else:
+    result = source_type_dict.get(type)
+    if result is None:
         raise Exception('Unrecognized source type: ' + type)
+    return result
 
 def create_source(source_values, interim_voyage):
     type = source_values['type']
@@ -340,7 +330,7 @@ def interim_main(request, contribution, interim):
                 contribution.save()
                 for (src, view_item_index) in sources:
                     src.save()
-                    if view_item_index:
+                    if view_item_index is not None:
                         src_pks[view_item_index] = src.pk
                 # Clear previous numbers and save new ones.
                 for k, v in numbers.items():
@@ -382,7 +372,7 @@ def interim(request, contribution_type, contribution_id):
             contribution.delete()
         return HttpResponseRedirect(reverse('contribute:index'))
     (valid, form, numbers, src_pks) = interim_main(request, contribution, interim)
-    if valid and request.method == 'POST':
+    if valid and request.method == 'POST' and (len(src_pks) > 0 or contribution_type != 'new'):
         return redirect()
     sources_post = None if request.method != 'POST' else request.POST.get('sources')
     previous_data = contribution_related_data(contribution)

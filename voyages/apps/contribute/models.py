@@ -437,8 +437,6 @@ class NewVoyageContribution(BaseVoyageContribution):
 
     def __unicode__(self):
         return _('New voyage')
-        
-
 
 contribution_model_by_type = {
     'delete': DeleteVoyageContribution,
@@ -461,3 +459,12 @@ def get_contribution_from_id(contribution_id):
     contribution_type = contribution_pair[0]
     contribution_id = int(contribution_pair[1])
     return get_contribution(contribution_type, contribution_id)
+
+source_type_dict = {
+    'Primary source': InterimPrimarySource,
+    'Article source': InterimArticleSource,
+    'Book source': InterimBookSource,
+    'Newspaper source': InterimNewspaperSource,
+    'Private note or collection source': InterimPrivateNoteOrCollectionSource,
+    'Unpublished secondary source': InterimUnpublishedSecondarySource
+    }
