@@ -18,6 +18,7 @@ from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.conf import settings
 import imputed
+import itertools
 import json
 
 number_prefix = 'interim_slave_number_'
@@ -273,6 +274,10 @@ def create_source(source_values, interim_voyage):
             raise Exception('Invalid interim source: the text reference must have as prefix the short reference of the Source')
     return source
 
+interim_new_source_types = [InterimPrimarySource, InterimArticleSource,
+    InterimBookSource, InterimNewspaperSource,
+    InterimPrivateNoteOrCollectionSource, InterimUnpublishedSecondarySource]
+
 def interim_main(request, contribution, interim):
     """
     The reusable part of the interim form handling.
@@ -301,12 +306,10 @@ def interim_main(request, contribution, interim):
             with transaction.atomic():
                 def del_children(child_model):
                     child_model.objects.filter(interim_voyage__id=interim.pk).delete()
-                del_children(InterimPrimarySource)
-                del_children(InterimArticleSource)
-                del_children(InterimBookSource)
-                del_children(InterimNewspaperSource)
-                del_children(InterimPrivateNoteOrCollectionSource)
-                del_children(InterimUnpublishedSecondarySource)
+                
+                for src_type in interim_new_source_types:
+                    del_children(src_type)
+                
                 del_children(InterimSlaveNumber)
                 # Get pre-existing sources.
                 for src in interim.pre_existing_sources.all():
@@ -1219,7 +1222,17 @@ def submit_editorial_decision(request, editor_contribution_id):
         pass
     if not decision in [ReviewRequestDecision.accepted_by_editor, ReviewRequestDecision.rejected_by_editor, ReviewRequestDecision.deleted]:
         return HttpResponseBadRequest()
-    
+    if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage:
+        # Check whether every new source in the editorial version has been created in the system before continuing.
+        all_sources = [list(src_type.objects.filter(interim_voyage__id=contribution.interim_voyage.pk)) for src_type in interim_new_source_types]
+        all_sources = list(itertools.chain.from_iterable(all_sources))
+        for src in all_sources:
+            created_src = src.created_voyage_sources 
+            if not created_src:
+                return JsonResponse({'result': 'Failed', 'errors': _('All new sources must be created before this submission is accepted.')})
+            if not src.source_ref_text or not src.source_ref_text.startswith(created_src.short_ref):
+                return JsonResponse({'result': 'Failed', 'errors': _('New sources must have a connection reference starting with the source\'s short reference.')})
+                
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
     review_request = contribution.request    
     user_contribution = review_request.contribution()
@@ -1234,7 +1247,7 @@ def submit_editorial_decision(request, editor_contribution_id):
             # uses one of the merged voyages ids.
             if not created_voyage_id in user_contribution.get_related_voyage_ids():
                 return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
-        existing = ReviewRequest.objects.filter(created_voyage_id=created_voyage_id, archived=False).count()
+        existing = ReviewRequest.objects.filter(created_voyage_id=created_voyage_id, archived=False).exclude(pk=review_request.pk).count()
         if existing > 0:
             return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already in current publication batch')})
         
@@ -1348,7 +1361,7 @@ def editorial_sources(request):
         source = VoyageSources()
     prefix = 'interim_source['
     plen = len(prefix)
-    interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v}
+    interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v is not None}
     created_source_pk = interim_source_dict.get('created_voyage_sources_id')
     if conn is None and created_source_pk:
         source = VoyageSources.objects.get(pk=created_source_pk)

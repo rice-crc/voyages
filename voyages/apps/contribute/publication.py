@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core import management
 from django.db import transaction
 from voyages.apps.contribute.models import *
 from voyages.apps.contribute.views import full_contribution_id, get_contribution_from_id, get_filtered_contributions
@@ -71,14 +73,18 @@ def export_accepted_contributions():
 def export_from_review_requests(review_requests):
     for req in review_requests:    
         contrib = req.editor_contribution.first()
-        if contrib is None or contrib.interim_voyage is None:
-            contrib = get_contribution_from_id(review_request.contribution_id)
-        if contrib is None or contrib.interim_voyage is None:
+        if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
+            contrib = get_contribution_from_id(req.contribution_id)
+        if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
             continue
         data = _map_interim_to_spss(contrib.interim_voyage)
-        data['VOYAGEID'] = req.created_voyage_id if req.requires_created_voyage_id() else ' '.join(contrib.get_related_voyage_ids)
+        if req.requires_created_voyage_id():
+            data['VOYAGEID'] = req.created_voyage_id
+        else:
+            ids	= contrib.get_related_voyage_ids()
+            data['VOYAGEID'] = ' '.join([str(id) for id in ids])
         yield data
-    
+
 def export_from_voyages():
     voyages = Voyage.objects.all().select_related('voyage_dates', 'voyage_ship', 'voyage_itinerary', 'voyage_crew', 'voyage_slaves_numbers').iterator()
     for v in voyages:
@@ -101,13 +107,16 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     # Step 1 - Backup database
     if not skip_backup:        
         log('Backing up all data.\n')
-        os.system('python manage.py dumpdata > /var/tmp/db.json')
+        # os.system('python manage.py dumpdata > ' + settings.MEDIA_ROOT  + '/db.json')
+        with open(settings.MEDIA_ROOT  + '/db.json', 'w') as f:
+            management.call_command('dumpdata', stdout=f)
         log('Finished backup.\n')
     
     log('Fetching contributions...\n')
     review_requests = _fetch_accepted_reviews()
     log('Publishing...\n')
     # Step 2 - Publish database
+    transaction_finished = False
     try:
         with transaction.atomic():
             count = 0
@@ -129,15 +138,18 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                     raise Exception('Unexpected contribution type')
                 req.archived = True
                 req.save()
+        transaction_finished = True
         log('Finished all publications.\n')
         log('Total published: ' + str(count) + '.\n')
         # Step 3 - update solr index.
         log('Updating solr index.\n')
-        os.system('python manage.py update_index voyage.voyage --age 24')
+        #os.system('python manage.py update_index voyage.voyage --age 24')
+        management.call_command('update_index', 'voyage.voyage', age=24, stdout=log_file)
         log('Solr index is now updated.\n')
         return True
     except Exception as exception:
-        log('An error occurred. Database transaction was rolledback.\n')
+        log('An error occurred.\n')
+        if not transaction_finished: log('Database transaction was rolledback.\n')
         log(str(exception))
         import traceback
         log(traceback.format_exc())
@@ -512,6 +524,7 @@ def _map_interim_to_spss(interim):
         [x.full_ref for x in interim.pre_existing_sources.all()]
     aux = 'ABCDEFGHIJKLMNOPQR'
     for i, ref in enumerate(source_refs):
+        if i >= len(aux): break
         data['SOURCE' + aux[i]] = ref
     
     # Numerical variables
@@ -537,7 +550,7 @@ def _save_editorial_version(review_request, contrib_type):
     elif contrib_type == 'edit':
         voyage = Voyage.objects.get(voyage_id=contrib.edited_voyage_id)
     else:
-        raise Exception('Unsupported contribution type ' + contrib_type)
+        raise Exception('Unsupported contribution type ' + str(contrib_type))
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
         voyage.voyage_in_cd_rom = False
@@ -833,7 +846,7 @@ def _save_editorial_version(review_request, contrib_type):
     for src in created_sources:
         # Each src here has as type a subclass of InterimContributedSource
         if not src.created_voyage_sources:
-            raise Exception('Invalid state: a new source must have been created to match "' + src.source_ref_text + '"')
+            raise Exception('Invalid state: a new source must have been created to match "' + str(src.source_ref_text) + '"')
         create_source_connection(src.created_voyage_sources, src.source_ref_text, source_order)
         source_order += 1
     for src in pre_existing_sources:
@@ -862,6 +875,8 @@ def _publish_single_review_delete(review_request):
     contribution = get_contribution_from_id(review_request.contribution_id)
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
+    contribution.status = ContributionStatus.published
+    contribution.save()
     
 def _publish_single_review_merge(review_request):
     contribution = get_contribution_from_id(review_request.contribution_id)

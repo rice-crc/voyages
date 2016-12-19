@@ -556,7 +556,7 @@ def voyage_map(request, voyage_id):
     Displays the map for a voyage
     """
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
-    year_completed = int(voyage.var_imp_voyage_began)
+    year_completed = int(voyage.var_imp_voyage_began) if voyage.var_imp_voyage_began else 0
     map_year = get_map_year(year_completed, year_completed)
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
