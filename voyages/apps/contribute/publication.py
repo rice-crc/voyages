@@ -107,7 +107,6 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     # Step 1 - Backup database
     if not skip_backup:        
         log('Backing up all data.\n')
-        # os.system('python manage.py dumpdata > ' + settings.MEDIA_ROOT  + '/db.json')
         with open(settings.MEDIA_ROOT  + '/db.json', 'w') as f:
             management.call_command('dumpdata', stdout=f)
         log('Finished backup.\n')
@@ -118,6 +117,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     # Step 2 - Publish database
     transaction_finished = False
     try:
+        all_deleted_ids = []
         with transaction.atomic():
             count = 0
             for req in review_requests:
@@ -127,9 +127,9 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                 if req.final_decision != ReviewRequestDecision.accepted_by_editor:
                     raise Exception('Review cannot be published since it was not accepted by editor')
                 if req.contribution_id.startswith('delete'):
-                    _publish_single_review_delete(req)
+                    _publish_single_review_delete(req, all_deleted_ids)
                 elif req.contribution_id.startswith('merge'):
-                    _publish_single_review_merge(req)
+                    _publish_single_review_merge(req, all_deleted_ids)
                 elif req.contribution_id.startswith('new'):
                     _publish_single_review_new(req)
                 elif req.contribution_id.startswith('edit'):
@@ -141,9 +141,19 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         transaction_finished = True
         log('Finished all publications.\n')
         log('Total published: ' + str(count) + '.\n')
-        # Step 3 - update solr index.
+        # Step 3 - Update solr index.
         log('Updating solr index.\n')
-        #os.system('python manage.py update_index voyage.voyage --age 24')
+        # Take care of deleted documents first.
+        try:
+            entry = settings.HAYSTACK_CONNECTIONS.get('default')
+            solr_url = entry.get('URL') if entry else None
+            if solr_url:
+                import urllib2
+                for id in all_deleted_ids:
+                    url = solr_url + '/update?stream.body=<delete><query>var_voyage_id:' + str(id) + '</query></delete>&commit=true'
+                    urllib2.urlopen(url).read()
+        except:
+            pass
         management.call_command('update_index', 'voyage.voyage', age=24, stdout=log_file)
         log('Solr index is now updated.\n')
         return True
@@ -818,7 +828,16 @@ def _save_editorial_version(review_request, contrib_type):
     slaves_numbers.imp_num_adult_total = numbers.get('ADULT7')
     slaves_numbers.imp_num_child_total = numbers.get('CHILD7')
     slaves_numbers.imp_num_males_total = numbers.get('MALE7')
-    slaves_numbers.imp_num_females_total = numbers.get('FEMALE7')
+    slaves_numbers.imp_num_females_total = numbers.get('FEMALE7')    
+    slaves_numbers.percentage_men = numbers.get('MENRAT7')
+    slaves_numbers.percentage_women = numbers.get('WOMRAT7')
+    slaves_numbers.percentage_boy = numbers.get('BOYRAT7')
+    slaves_numbers.percentage_girl = numbers.get('GIRLRAT7')
+    slaves_numbers.percentage_male = numbers.get('MALRAT7')
+    slaves_numbers.percentage_child = numbers.get('CHILDRAT7')
+    slaves_numbers.percentage_adult = 1.0 - slaves_numbers.percentage_child if slaves_numbers.percentage_child is not None else None
+    slaves_numbers.percentage_female = 1.0 - slaves_numbers.percentage_male if slaves_numbers.percentage_male is not None else None
+    slaves_numbers.imp_mortality_ratio = numbers.get('VYMRTRAT')
     slaves_numbers.save()
     
     # Voyage sources
@@ -842,7 +861,7 @@ def _save_editorial_version(review_request, contrib_type):
     pre_existing_sources = list(interim.pre_existing_sources.all())
     if contrib_type != 'edit' and contrib_type != 'merge' and len(pre_existing_sources) > 0:
         raise Exception('A contribution with type "' + contrib_type + '" cannot have pre existing sources')
-    source_order = 1 # TODO: ask Dr. Eltis to see how we should order references
+    source_order = 1
     for src in created_sources:
         # Each src here has as type a subclass of InterimContributedSource
         if not src.created_voyage_sources:
@@ -871,18 +890,20 @@ def _delete_voyages(ids):
     for v in delete_voyages:
         v.delete()
     
-def _publish_single_review_delete(review_request):
+def _publish_single_review_delete(review_request, all_deleted_ids):
     contribution = get_contribution_from_id(review_request.contribution_id)
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
+    all_deleted_ids.extend(ids)
     contribution.status = ContributionStatus.published
     contribution.save()
     
-def _publish_single_review_merge(review_request):
+def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = get_contribution_from_id(review_request.contribution_id)
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
+    all_deleted_ids.extend(ids)
     _save_editorial_version(review_request, 'merge')
     
 def _publish_single_review_new(review_request):
