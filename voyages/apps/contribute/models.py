@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
+import itertools
 
 class AdminFaq(models.Model):
     """
@@ -468,3 +469,8 @@ source_type_dict = {
     'Private note or collection source': InterimPrivateNoteOrCollectionSource,
     'Unpublished secondary source': InterimUnpublishedSecondarySource
     }
+    
+def get_all_new_sources_for_interim(interim_pk):
+    all_sources = [list(src_type.objects.filter(interim_voyage__id=interim_pk)) for src_type in source_type_dict.values()]
+    return list(itertools.chain.from_iterable(all_sources))
+ 

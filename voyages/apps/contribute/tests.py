@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
@@ -282,7 +282,7 @@ class TestImputedDataCalculation(TestCase):
             numbers_added[number.var_name] = number
         return interim
 
-class TestEditorialPlatform(TestCase):
+class TestEditorialPlatform(TransactionTestCase):
     """
     Here we will test the editorial platform by creating mock
     user contributions and following possible editorial workflows
@@ -304,6 +304,7 @@ class TestEditorialPlatform(TestCase):
         editor = User.objects.create_superuser('editor', 'editor@voyages.org', the_password)
         
         def login(user):
+            self.client.logout()
             return self.client.login(username=user.username, password=the_password)
             
         self.assertTrue(login(contributor))
@@ -467,3 +468,49 @@ class TestEditorialPlatform(TestCase):
         self.assertEqual(len(sources), 1)
         self.assertEqual(sources[0].place_of_publication, u'Cambridge')
         self.assertEqual(sources[0].authors, u'Fellows, John')
+        
+        # Switch to editor and begin editorial review for contribution.
+        login(editor)
+        json_response = self.client.get(reverse('contribute:json_pending_requests'))
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(len(parsed_response), 1)
+        self.assertTrue('new/' + str(contribution.pk) in parsed_response)
+        data = parsed_response.values()[0]
+        self.assertEqual([u'Lion'], data['voyage_ship'])
+        
+        json_response = self.client.post(reverse('contribute:begin_editorial_review'), {'contribution_id': 'new/' + str(contribution.pk)})
+        parsed_response = json.loads(json_response.content)
+        review_request_id = parsed_response.get('review_request_id', 0)
+        editor_contribution_id = parsed_response.get('editor_contribution_id', 0)
+        self.assertTrue(review_request_id > 0)
+        self.assertTrue(parsed_response.get('editor_contribution_id', 0) > 0)
+        
+        # Access the editorial page.
+        response = self.client.get(reverse('contribute:editorial_review', kwargs={'review_request_id': review_request_id}))
+        data = response.context
+        self.assertEqual(contribution.pk, data['contribution'].pk)
+        self.assertItemsEqual(slave_numbers, data['numbers'])
+        editor_interim = data['interim']
+        self.assertNotEqual(interim.pk, editor_interim.pk)
+        self.assertEqual(editor_interim.name_of_vessel, u'Lion')
+        self.assertEqual(editor_interim.second_ship_owner, "Spring, Martin")
+        self.assertEqual(editor_interim.date_departure, "1,30,1646")
+        editor_sources = get_all_new_sources_for_interim(editor_interim.pk)
+        self.assertEqual(1, len(editor_sources))
+        source = editor_sources[0]
+        self.assertEqual(source.place_of_publication, u'Cambridge')
+        self.assertEqual(source.authors, u'Fellows, John')
+        editor_numbers = {prefix + x.var_name: x.number for x in editor_interim.slave_numbers.all()}
+        self.assertDictEqual(slave_numbers, editor_numbers)
+        # Impute data.
+        json_response = self.client.post(reverse('contribute:impute_contribution', kwargs={'editor_contribution_id': editor_contribution_id}), ajax_data)
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual('OK', parsed_response['result'])
+        
+        expected_imputed_numbers = {u'MEN6': 20.0, u'MALE2IMP': 17.0, u'CREW4': 12.0, u'CREW5': 11.0, u'CREW2': 19.0, u'CREW3': 17.0, u'CREW1': 25.0, u'MENRAT7': 0.459459459459, u'GIRL7': 13.0, u'GIRL6': 8.0, u'GIRL1': 18.0, u'MENRAT3': 0.459459459459, u'FEMALE7': 65.0, u'MENRAT1': 0.371794871795, u'WOMEN6': 10.0, u'GIRL2': 5.0, u'SLINTEN2': 50.0, u'SLAARRIV': 198.0, u'WOMEN7': 52.0, u'WOMEN4': 12.0, u'WOMEN2': 12.0, u'SLAS32': 150.0, u'SLAS36': 48.0, u'WOMEN1': 60.0, u'WOMRAT7': 0.281081081081, u'WOMRAT1': 0.307692307692, u'WOMRAT3': 0.281081081081, u'TSLAVESP': 248.0, u'MEN1': 75.0, u'WOMEN3': 42.0, u'SLAVEMA3': 185.0, u'MALE7': 120.0, u'SLAVEMA1': 234.0, u'SLAVEMA7': 185.0, u'SLAVEMX1': 234.0, u'GIRL4': 10.0, u'NCAR13': 190.0, u'TSLAVESD': 234.0, u'GIRLRAT7': 0.0702702702703, u'BOYRAT1': 0.200854700855, u'SLADAFRI': 14.0, u'BOYRAT3': 0.189189189189, u'GIRLRAT3': 0.0702702702703, u'GIRLRAT1': 0.119658119658, u'SLAVMAX1': 234.0, u'NDESERT': 1.0, u'ADULT7': 137.0, u'BOY1': 37.0, u'MALE3IMP': 120.0, u'CHILRAT7': 0.259459459459, u'MALE1IMP': 134.0, u'SAILD5': 1.0, u'SLAVEMX7': 185.0, u'CHILRAT3': 0.259459459459, u'GIRL3': 5.0, u'BOYRAT7': 0.189189189189, u'SLAVEMX3': 185.0, u'MEN4': 12.0, u'BOY4': 10.0, u'CREWDIED': 10.0, u'MEN3': 65.0, u'SLINTEND': 200.0, u'BOY2': 5.0, u'BOY3': 25.0, u'MEN7': 85.0, u'BOY6': 10.0, u'BOY7': 35.0, u'MALRAT1': 0.57264957265, u'MEN2': 12.0, u'MALRAT3': 0.648648648649, u'MALRAT7': 0.648648648649, u'CHILD7': 48.0, u'SAILD4': 2.0, u'SLAVMAX7': 185.0, u'SAILD1': 2.0, u'NCAR15': 44.0, u'SAILD3': 2.0, u'SLAVMAX3': 185.0, u'CHILRAT1': 0.320512820513, u'SAILD2': 5.0}
+        editor_interim = InterimVoyage.objects.get(pk=editor_interim.pk)
+        editor_numbers = {x.var_name: x.number for x in editor_interim.slave_numbers.all()}
+        with open('/tmp/test.log', 'w') as f:
+            json.dump(editor_numbers, f)
+            f.flush()
+        self.assertItemsEqual(expected_imputed_numbers.items(), editor_numbers.items())

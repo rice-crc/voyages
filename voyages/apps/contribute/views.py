@@ -18,7 +18,6 @@ from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.conf import settings
 import imputed
-import itertools
 import json
 
 number_prefix = 'interim_slave_number_'
@@ -274,9 +273,7 @@ def create_source(source_values, interim_voyage):
             raise Exception('Invalid interim source: the text reference must have as prefix the short reference of the Source')
     return source
 
-interim_new_source_types = [InterimPrimarySource, InterimArticleSource,
-    InterimBookSource, InterimNewspaperSource,
-    InterimPrivateNoteOrCollectionSource, InterimUnpublishedSecondarySource]
+interim_new_source_types = list(source_type_dict.values())
 
 def interim_main(request, contribution, interim):
     """
@@ -1224,8 +1221,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         return HttpResponseBadRequest()
     if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage:
         # Check whether every new source in the editorial version has been created in the system before continuing.
-        all_sources = [list(src_type.objects.filter(interim_voyage__id=contribution.interim_voyage.pk)) for src_type in interim_new_source_types]
-        all_sources = list(itertools.chain.from_iterable(all_sources))
+        all_sources = get_all_new_sources_for_interim(contribution.interim_voyage.pk)
         for src in all_sources:
             created_src = src.created_voyage_sources 
             if not created_src:
