@@ -236,7 +236,8 @@
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var href = $(e.target).attr('href');
-        if (loadedTabs.hasOwnProperty(href)) return;
+        // Disable caching since the action in one tab may affect the results in another tab.
+        // if (loadedTabs.hasOwnProperty(href)) return;
         loadTabData(href);
     });
     

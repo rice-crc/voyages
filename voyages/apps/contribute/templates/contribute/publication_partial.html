@@ -4,6 +4,8 @@
 <a id="download_btn" class="btn btn-primary" href="{% url 'contribute:download_pending_contributions' %}">{% trans "Download accepted (pending)" %}</a>
 <a id="download_all_btn" class="btn btn-primary" href="{% url 'contribute:download_published_and_accepted_contributions' %}">{% trans "Download all voyages (pending and published)" %}</a>
 
+<p><label class="checkbox-inline" for="skip_backup_check">{% trans "Skip full database backup" %}</label><input id="skip_backup_check" name="skip_backup" type="checkbox" value="" ></p>
+
 <p></p>
 
 <div>
@@ -20,7 +22,7 @@
         $.ajax({
             type: "POST",
             url: '/contribute/json_publish_pending',
-            data: {},
+            data: {skip_backup: document.getElementById('skip_backup_check').checked},
             success: function (response) {
                 if (response.result == 'OK') {
                     var log_pane = $('#publication_log_pane');

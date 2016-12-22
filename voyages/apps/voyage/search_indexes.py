@@ -9,7 +9,14 @@ import unidecode
 import six
 
 def split_date(value):
-    return value.split(",") if isinstance(value, six.string_types) else []
+    if value is None: return []
+    arr = value.split(",") if isinstance(value, six.string_types) else []
+    for i in range(0, len(arr)):
+        try:
+            arr[i] = int(arr[i])
+        except:
+            arr[i] = ''
+    return arr
 
 def getMonth(value):
     arr = split_date(value)
@@ -375,7 +382,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         try:
-            return int(getYear(obj.voyage_dates.imp_arrival_at_port_of_dis))
+            return getYear(obj.voyage_dates.imp_arrival_at_port_of_dis)
         except (AttributeError, TypeError):
             return None
 
