@@ -626,7 +626,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return None
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     def get_date_month(self, value):
         """
@@ -638,7 +641,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return 0
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     def get_date_day(self, value):
         """
@@ -650,7 +656,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return 0
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     # don't think this is being used anywhere
 #    def calculate_year_period(self, period):

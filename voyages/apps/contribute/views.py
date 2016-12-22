@@ -1259,10 +1259,12 @@ def submit_editorial_decision(request, editor_contribution_id):
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         msg = escape(msg)
-        review_request.decision_message = msg
-        review_request.save()
         user_contribution.status = decision
         user_contribution.save()
+        if decision == ContributionStatus.deleted:
+            review_request.archived = True
+        review_request.decision_message = msg
+        review_request.save()            
     return JsonResponse({'result': 'OK'})
     
 @login_required()
@@ -1487,7 +1489,7 @@ def publish_pending(request):
         if not os.path.exists(dir):
             os.makedirs(dir)
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
-        thread.start_new_thread(publish_accepted_contributions, (log_file,))
+        thread.start_new_thread(publish_accepted_contributions, (log_file, request.POST.get('skip_backup', False)))
         return JsonResponse({'result': 'OK', 'log_file': re.sub('^.*/', '', log_file.name)})
     except Exception as exception:
         return JsonResponse({'result': 'Failed', 'error': exception.message})

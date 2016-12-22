@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core import management
 from django.db import transaction
 from voyages.apps.contribute.models import *
-from voyages.apps.contribute.views import full_contribution_id, get_contribution_from_id, get_filtered_contributions
+from voyages.apps.contribute.views import full_contribution_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
 import unicodecsv as csv
 
@@ -74,7 +74,7 @@ def export_from_review_requests(review_requests):
     for req in review_requests:    
         contrib = req.editor_contribution.first()
         if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
-            contrib = get_contribution_from_id(req.contribution_id)
+            contrib = req.contribution()
         if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
             continue
         data = _map_interim_to_spss(contrib.interim_voyage)
@@ -136,6 +136,9 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                     _publish_single_review_update(req)
                 else:
                     raise Exception('Unexpected contribution type')
+                contribution = req.contribution()
+                contribution.status = ContributionStatus.published
+                contribution.save()
                 req.archived = True
                 req.save()
         transaction_finished = True
@@ -550,9 +553,7 @@ def _save_editorial_version(review_request, contrib_type):
     interim = editor_contribution.interim_voyage
     # Create or load a voyage with the appropriate voyage id.
     voyage = Voyage()
-    contrib = get_contribution_from_id(review_request.contribution_id)
-    contrib.status = ContributionStatus.published
-    contrib.save()
+    contrib = review_request.contribution()
     if contrib_type == 'merge' or contrib_type == 'new':
         if not review_request.created_voyage_id:
             raise Exception('For new or merged contributions, an explicit voyage_id must be set')
@@ -686,7 +687,11 @@ def _save_editorial_version(review_request, contrib_type):
     
     # Voyage dates.
     def year_dummies(year):
-        return ',,' + str(year)
+        try:
+            year_int = int(year)
+            return ',,' + str(year_int)
+        except:
+            return ',,'
     
     dates = VoyageDates()
     dates.voyage = voyage
@@ -891,15 +896,13 @@ def _delete_voyages(ids):
         v.delete()
     
 def _publish_single_review_delete(review_request, all_deleted_ids):
-    contribution = get_contribution_from_id(review_request.contribution_id)
+    contribution = review_request.contribution()
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
-    contribution.status = ContributionStatus.published
-    contribution.save()
     
 def _publish_single_review_merge(review_request, all_deleted_ids):
-    contribution = get_contribution_from_id(review_request.contribution_id)
+    contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
