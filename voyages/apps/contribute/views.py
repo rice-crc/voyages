@@ -1325,20 +1325,22 @@ def impute_contribution(request, editor_contribution_id):
     interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
     tuple = imputed.compute_imputed_vars(interim)
     result = tuple[0]
+    imputed_numbers = tuple[1]
     with transaction.atomic():
+        # Delete old numeric values.
+        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=imputed_numbers.keys()).delete()
         # Map imputed fields back to the contribution, save it and yield response.
         for k, v in result.items():
             setattr(interim, k, v)
         interim.save()
-        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=tuple[1].keys()).delete()
-        for k, v in tuple[1].items():
+        for k, v in imputed_numbers.items():
             if not v: continue
             number = InterimSlaveNumber()
             number.interim_voyage = interim
             number.var_name = k.upper()
             number.number = v
             number.save()
-    return JsonResponse({'result': 'OK', 'imputed_vars': tuple[2]})
+    return JsonResponse({'result': 'OK', 'imputed_vars': tuple[2], 'imputed_numbers': imputed_numbers})
     
 @login_required()
 @require_POST
@@ -1371,9 +1373,9 @@ def editorial_sources(request):
                 connection_ref = request.POST.get('connection_ref', original_ref)
                 if interim_source_id and (not connection_ref or connection_ref == ''):
                     return JsonResponse({'result': 'Failed', 'errors': ['Text reference is mandatory']})
-                if interim_source_id and not connection_ref.startswith(source.short_ref):
-                    return JsonResponse({'result': 'Failed', 'errors': ['Text reference must begin with Source\'s short reference']})
                 reference = form.save()
+                if interim_source_id and not connection_ref.startswith(reference.short_ref):
+                    return JsonResponse({'result': 'Failed', 'errors': ['Text reference must begin with Source\'s short reference']})
                 if interim_source_id:
                     pair = interim_source_id.split('/')
                     src_model = interim_source_model(pair[0])

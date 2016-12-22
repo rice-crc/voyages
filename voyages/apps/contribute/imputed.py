@@ -179,7 +179,7 @@ def compute_imputed_vars(_interim):
     model fields and corresponding values.
     
     The second is a dictionary with keys corresponding to the SPSS
-    variable name and the value being the number (or None).
+    number variable name and the value being the number (or None).
     
     The third is a dictionary that contains all values indexed
     by SPSS variable names, even those that do not belong to
@@ -1476,12 +1476,12 @@ def compute_imputed_vars(_interim):
     
     child3 = _numbers.get('CHILD3', 0)
     child6 = _numbers.get('CHILD6', 0)
-     
+    
     infant3 = _numbers.get('INFANT3', 0)
-     
+    
     male3 = _numbers.get('MALE3', 0)
     male6 = _numbers.get('MALE6', 0)
-     
+    
     female3 = _numbers.get('FEMALE3', 0)
     female6 = _numbers.get('FEMALE6', 0)
     

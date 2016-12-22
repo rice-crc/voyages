@@ -437,7 +437,7 @@ class TestEditorialPlatform(TransactionTestCase):
         
         # Now submit sources.
         source_type_inverse = {v: k for k, v in source_type_dict.items()}
-        sources = [
+        new_sources = [
             {u'place_of_publication': u'Cambridge', u'information': None, u'source_ref_text': None,
              u'page_end': 34, u'book_title': u'Transatlantic History', u'url': None, u'publisher': u'CUP',
              u'year': 2015, u'created_voyage_sources': None, u'source_is_essay_in_book': True,
@@ -445,6 +445,7 @@ class TestEditorialPlatform(TransactionTestCase):
              u'page_start': 33, u'pk': None, u'created_voyage_sources_id': None, u'source_ref_text': None,
              u'type': source_type_inverse[InterimBookSource], u'__index': 1}
         ]
+        sources = new_sources
         ajax_data['sources'] = json.dumps(sources)
         response = self.client.post(reverse('contribute:interim', kwargs=contrib_args), ajax_data, follow=True)
         self.assertRedirects(response, reverse('contribute:interim_summary', kwargs=contrib_args), status_code=302, target_status_code=200)
@@ -503,14 +504,67 @@ class TestEditorialPlatform(TransactionTestCase):
         editor_numbers = {prefix + x.var_name: x.number for x in editor_interim.slave_numbers.all()}
         self.assertDictEqual(slave_numbers, editor_numbers)
         # Impute data.
+        ajax_data['editorial_decision'] = u'Should accept this contribution in the test'
         json_response = self.client.post(reverse('contribute:impute_contribution', kwargs={'editor_contribution_id': editor_contribution_id}), ajax_data)
         parsed_response = json.loads(json_response.content)
         self.assertEqual('OK', parsed_response['result'])
         
-        expected_imputed_numbers = {u'MEN6': 20.0, u'MALE2IMP': 17.0, u'CREW4': 12.0, u'CREW5': 11.0, u'CREW2': 19.0, u'CREW3': 17.0, u'CREW1': 25.0, u'MENRAT7': 0.459459459459, u'GIRL7': 13.0, u'GIRL6': 8.0, u'GIRL1': 18.0, u'MENRAT3': 0.459459459459, u'FEMALE7': 65.0, u'MENRAT1': 0.371794871795, u'WOMEN6': 10.0, u'GIRL2': 5.0, u'SLINTEN2': 50.0, u'SLAARRIV': 198.0, u'WOMEN7': 52.0, u'WOMEN4': 12.0, u'WOMEN2': 12.0, u'SLAS32': 150.0, u'SLAS36': 48.0, u'WOMEN1': 60.0, u'WOMRAT7': 0.281081081081, u'WOMRAT1': 0.307692307692, u'WOMRAT3': 0.281081081081, u'TSLAVESP': 248.0, u'MEN1': 75.0, u'WOMEN3': 42.0, u'SLAVEMA3': 185.0, u'MALE7': 120.0, u'SLAVEMA1': 234.0, u'SLAVEMA7': 185.0, u'SLAVEMX1': 234.0, u'GIRL4': 10.0, u'NCAR13': 190.0, u'TSLAVESD': 234.0, u'GIRLRAT7': 0.0702702702703, u'BOYRAT1': 0.200854700855, u'SLADAFRI': 14.0, u'BOYRAT3': 0.189189189189, u'GIRLRAT3': 0.0702702702703, u'GIRLRAT1': 0.119658119658, u'SLAVMAX1': 234.0, u'NDESERT': 1.0, u'ADULT7': 137.0, u'BOY1': 37.0, u'MALE3IMP': 120.0, u'CHILRAT7': 0.259459459459, u'MALE1IMP': 134.0, u'SAILD5': 1.0, u'SLAVEMX7': 185.0, u'CHILRAT3': 0.259459459459, u'GIRL3': 5.0, u'BOYRAT7': 0.189189189189, u'SLAVEMX3': 185.0, u'MEN4': 12.0, u'BOY4': 10.0, u'CREWDIED': 10.0, u'MEN3': 65.0, u'SLINTEND': 200.0, u'BOY2': 5.0, u'BOY3': 25.0, u'MEN7': 85.0, u'BOY6': 10.0, u'BOY7': 35.0, u'MALRAT1': 0.57264957265, u'MEN2': 12.0, u'MALRAT3': 0.648648648649, u'MALRAT7': 0.648648648649, u'CHILD7': 48.0, u'SAILD4': 2.0, u'SLAVMAX7': 185.0, u'SAILD1': 2.0, u'NCAR15': 44.0, u'SAILD3': 2.0, u'SLAVMAX3': 185.0, u'CHILRAT1': 0.320512820513, u'SAILD2': 5.0}
+        expected_imputed_numbers = {u'MEN4': 12.0, u'SLAVEMX7': 185.0, u'MEN6': 20.0, u'MEN7': 85.0, u'MEN1': 75.0, u'MEN2': 12.0, u'MEN3': 65.0, u'ADLT3IMP': 137.0, u'WOMEN1': 60.0, u'WOMEN2': 12.0, u'WOMEN3': 42.0, u'WOMEN4': 12.0, u'WOMEN6': 10.0, u'WOMEN7': 52.0, u'MALE2IMP': 17.0, u'SLAS36': 48.0, u'SLAS32': 150.0, u'FEML1IMP': 100.0, u'SLAVEMX3': 185.0, u'SLAARRIV': 198.0, u'SLAVEMA1': 234.0, u'SLAVEMA3': 185.0, u'ADLT2IMP': 24.0, u'SLAVEMA7': 185.0, u'CHILD7': 48.0, u'SLADAFRI': 14.0, u'CHIL3IMP': 48.0, u'SLAVMAX3': 185.0, u'SLAVMAX1': 234.0, u'BOYRAT3': 0.189189189189189, u'CHIL2IMP': 10.0, u'BOYRAT1': 0.200854700854701, u'SAILD5': 1.0, u'SAILD4': 2.0, u'SAILD1': 2.0, u'SAILD3': 2.0, u'SAILD2': 5.0, u'BOY2': 5.0, u'BOY3': 25.0, u'BOY1': 37.0, u'BOY6': 10.0, u'BOY7': 35.0, u'BOY4': 10.0, u'CREWDIED': 10.0, u'VYMRTIMP': 36.0, u'MENRAT3': 0.459459459459459, u'VYMRTRAT': 0.153846153846154, u'TSLMTIMP': 234.0, u'NDESERT': 1.0, u'FEMALE7': 65.0, u'MALE1IMP': 134.0, u'MALRAT3': 0.648648648648649, u'MALRAT1': 0.572649572649573, u'MALRAT7': 0.648648648648649, u'ADLT1IMP': 159.0, u'TSLAVESD': 234.0, u'TSLAVESP': 248.0, u'CHILRAT1': 0.320512820512821, u'CHILRAT3': 0.259459459459459, u'CHILRAT7': 0.259459459459459, u'WOMRAT3': 0.281081081081081, u'WOMRAT1': 0.307692307692308, u'WOMRAT7': 0.281081081081081, u'BOYRAT7': 0.189189189189189, u'GIRLRAT7': 0.0702702702702703, u'GIRLRAT1': 0.11965811965812, u'GIRLRAT3': 0.0702702702702703, u'SLINTEN2': 50.0, u'SLAVMAX7': 185.0, u'CREW4': 12.0, u'CREW5': 11.0, u'FEML2IMP': 17.0, u'CREW1': 25.0, u'CREW2': 19.0, u'CREW3': 17.0, u'SLAVEMX1': 234.0, u'MENRAT7': 0.459459459459459, u'MENRAT1': 0.371794871794872, u'MALE7': 120.0, u'CHIL1IMP': 75.0, u'SLINTEND': 200.0, u'ADULT7': 137.0, u'GIRL7': 13.0, u'GIRL6': 8.0, u'GIRL4': 10.0, u'GIRL3': 5.0, u'GIRL2': 5.0, u'GIRL1': 18.0, u'MALE3IMP': 120.0, u'NCAR13': 190.0, u'FEML3IMP': 65.0, u'NCAR15': 44.0}
+
         editor_interim = InterimVoyage.objects.get(pk=editor_interim.pk)
         editor_numbers = {x.var_name: x.number for x in editor_interim.slave_numbers.all()}
-        with open('/tmp/test.log', 'w') as f:
-            json.dump(editor_numbers, f)
-            f.flush()
-        self.assertItemsEqual(expected_imputed_numbers.items(), editor_numbers.items())
+        
+        def are_same_numbers(d1, d2, delta):
+            keys = list(set(d1.keys()) | set(d2.keys()))
+            failures = []
+            for k in keys:
+                v1 = d1.get(k)
+                v2 = d2.get(k)
+                if v1 == v2: continue
+                if (v1 is None) != (v2 is None) or abs(v1 - v2) > delta: 
+                    failures.append(str(k) + ': ' + str(v1) + ' vs ' + str(v2))
+            self.assertEqual(len(failures), 0, ', '.join(failures) + '\n\n\n' + str(parsed_response['imputed_numbers']))
+        
+        for k in slave_number_var_names:
+            self.assertAlmostEqual(expected_imputed_numbers.get(k.upper(), -1), parsed_response['imputed_numbers'][k], msg=str(k), delta=0.001)
+        are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
+        
+        # If we try to accept the contribution, it should fail since the new reference is not yet created.
+        submit_data = {
+            'editorial_decision': ReviewRequestDecision.accepted_by_editor,
+            'created_voyage_id': 99999,
+            'decision_message': u'Approving new voyage in testing'}
+        json_response = self.client.post(
+            reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
+            submit_data)
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(parsed_response['result'], 'Failed')
+        
+        # Now we create the source reference.
+        source_post_data = {'interim_source[' + str(k) + ']': v for k, v in new_sources[0].items() if v is not None}
+        source_post_data['mode'] = 'new'
+        response = self.client.post(reverse('contribute:editorial_sources'), source_post_data)
+        data = response.context
+        form = data['form']
+        # The form should correspond to a VoyageSourcesAdminForm initialized with our fictitious info.
+        form_p = form.as_p()
+        self.assertTrue(form_p.find('Transatlantic History') > 0)
+        self.assertTrue(form_p.find('Fellows, John') > 0)
+        self.assertTrue(form_p.find('(Cambridge, 2015)') > 0)
+        
+        source_post_data = form.initial.copy()
+        source_post_data['mode'] = 'save'
+        source_post_data['short_ref'] = 'TEST_SOURCE_1'
+        source_post_data['connection_ref'] = 'TEST_SOURCE_1;DUMMY CONN REF'
+        editor_sources = get_all_new_sources_for_interim(editor_interim.pk)
+        self.assertEqual(1, len(editor_sources))
+        source = editor_sources[0]
+        source_post_data['interim_source_id'] = new_sources[0]['type'] + '/' + str(source.pk)
+        json_response = self.client.post(reverse('contribute:editorial_sources'), source_post_data)
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(parsed_response['result'], 'OK', str(parsed_response.get('errors')))
+        created_voyage_sources_id = parsed_response['created_voyage_sources_id']
+        created_source = VoyageSources.objects.get(pk=created_voyage_sources_id)
+        self.assertEqual(created_source.short_ref, 'TEST_SOURCE_1')
+        self.assertTrue(created_source.full_ref.find('Transatlantic History') > 0)
+        self.assertEqual(created_source.source_type.group_name, 'Published source')
