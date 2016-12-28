@@ -1438,16 +1438,6 @@ def editorial_sources(request):
             source.full_ref = formatted_content
         form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {'form': form, 'original_ref': original_ref})
-
-@login_required()
-def download_pending_contributions(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="publications.csv"'
-    import csv
-    from voyages.apps.contribute.publication import export_data_to_csv, export_accepted_contributions
-    data = export_accepted_contributions()
-    export_data_to_csv(data, response)
-    return response
     
 class Echo(object):
     """An object that implements just the write method of the file-like
@@ -1458,22 +1448,29 @@ class Echo(object):
         return value
     
 @login_required()
-def download_published_and_accepted_contributions(request):
+def download_voyages(request):
     import csv
-    from voyages.apps.contribute.publication import _exported_spss_fields, get_csv_writer, export_accepted_contributions, export_from_voyages
+    from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages
     from django.http import StreamingHttpResponse
     pseudo_buffer = Echo()
     writer = get_csv_writer(pseudo_buffer)
     
+    statuses = []
+    if request.GET.get('accepted_unpublished_check') == 'True':
+        statuses.append(ContributionStatus.approved)
+    if request.GET.get('under_review_check') == 'True':
+        statuses.append(ContributionStatus.under_review)
+    
     def __content():
-        yield ','.join(_exported_spss_fields) + '\n'
-        for item in export_accepted_contributions():
+        yield get_header_csv_text()
+        for item in export_contributions(statuses):
             yield writer.writerow(item)
-        for item in export_from_voyages():
-            yield writer.writerow(item)
+        if request.GET.get('published_check') == 'True':
+            for item in export_from_voyages():
+                yield writer.writerow(item)
         
     response = StreamingHttpResponse((x for x in __content()), content_type='text/csv; charset=utf-8')
-    response['Content-Disposition'] = 'attachment; filename="published_and_accepted.csv"'
+    response['Content-Disposition'] = 'attachment; filename="download_voyages.csv"'
     return response
 
 @login_required()

@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.core import management
 from django.db import transaction
+from django.db.models import Prefetch
 from voyages.apps.contribute.models import *
 from voyages.apps.contribute.views import full_contribution_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
 import unicodecsv as csv
 
 _exported_spss_fields = \
-    ['VOYAGEID', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
+    ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
     'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
     'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
     'BOY7', 'BOYRAT1', 'BOYRAT3', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
@@ -53,28 +54,40 @@ _exported_spss_fields = \
     'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
     'YEARDEP', 'YRCONS', 'YRREG']
 
+def get_header_csv_text():
+    return ','.join(_exported_spss_fields) + '\n'
+
 def get_csv_writer(output):
     return csv.DictWriter(output, fieldnames=_exported_spss_fields)
 
 def export_data_to_csv(data, csv_file):
-    # TODO: export status variables (accepted/published/under review)
     writer = get_csv_writer(csv_file)
     writer.writeheader()
     for item in data:
         writer.writerow(item)
 
-def export_accepted_contributions():
+def export_contributions(statuses):
     """
-    Produce a list of dicts, each representing an accepted contribution.
+    Produce a list of dicts, each representing a contribution.
     """
-    review_requests = _fetch_accepted_reviews()
+    review_requests = _fetch_active_reviews_by_status(statuses)
     return export_from_review_requests(review_requests)
     
 def export_from_review_requests(review_requests):
     for req in review_requests:    
         contrib = req.editor_contribution.first()
+        user_contribution = req.contribution()
+        status_text = 'accepted by editor' if req.final_decision == ReviewRequestDecision.accepted_by_editor else 'undecided'
         if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
-            contrib = req.contribution()
+            contrib = user_contribution
+            # Check if this is a delete contribution.
+            if contrib and isinstance(contrib, DeleteVoyageContribution):
+                delete_ids = contrib.deleted_voyages_ids.split(',')
+                voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
+                for v in voyages:
+                    data = _map_voyage_to_spss(v)
+                    data['STATUS'] = 'DELETE (%s)' % status_text
+                    yield data
         if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
             continue
         data = _map_interim_to_spss(contrib.interim_voyage)
@@ -83,10 +96,32 @@ def export_from_review_requests(review_requests):
         else:
             ids	= contrib.get_related_voyage_ids()
             data['VOYAGEID'] = ' '.join([str(id) for id in ids])
+        contrib = req.contribution()
+        if isinstance(contrib, NewVoyageContribution):
+            data['STATUS'] = 'NEW (%s)' % status_text
+        elif isinstance(contrib, EditVoyageContribution):
+            data['STATUS'] = 'EDIT (%s)' % status_text
+        elif isinstance(contrib, MergeVoyageContribution):
+            data['STATUS'] = 'MERGE of %s (%s)' % (', '.join([str(id) for id in ids]), status_text)
+        else:
+            data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
         yield data
 
 def export_from_voyages():
-    voyages = Voyage.objects.all().select_related('voyage_dates', 'voyage_ship', 'voyage_itinerary', 'voyage_crew', 'voyage_slaves_numbers').iterator()
+    related_models = {
+        'voyage_dates': VoyageDates,
+        'voyage_groupings': VoyageGroupings,
+        'voyage_ship': VoyageShip,
+        'voyage_itinerary': VoyageItinerary,
+        'voyage_crew': VoyageCrew,
+        'voyage_slaves_numbers': VoyageSlavesNumbers}
+    prefetch_fields = [
+        Prefetch('voyage_captain', queryset=VoyageCaptain.objects.order_by('captain_name__captain_order')),
+        Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
+        Prefetch('voyage_sources', queryset=VoyageSources.objects.only('short_ref').order_by('source__source_order'))]
+    for k, v in related_models.items():
+        prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
+    voyages = Voyage.objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
 
@@ -112,7 +147,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         log('Finished backup.\n')
     
     log('Fetching contributions...\n')
-    review_requests = _fetch_accepted_reviews()
+    review_requests = _fetch_active_reviews_by_status([ContributionStatus.approved])
     log('Publishing...\n')
     # Step 2 - Publish database
     transaction_finished = False
@@ -178,14 +213,14 @@ def _delete_child_fk(obj, child_attr):
         obj.save()
         child.delete()
         
-def _fetch_accepted_reviews():
-    contribution_info = get_filtered_contributions({'status': ContributionStatus.approved})
+def _fetch_active_reviews_by_status(statuses):
+    contribution_info = get_filtered_contributions({'status__in': statuses})
     review_requests = []
     for info in contribution_info:
         reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
-        if len(reqs) != 1:
+        if len(reqs) != 1 and info['contribution'].status == ContributionStatus.approved:
             raise Exception('Expected a single active review request for approved contributions')
-        review_requests.append(reqs[0])
+        review_requests += reqs
     return review_requests
     
 def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
@@ -203,7 +238,7 @@ def _get_region_value(place):
     return place.region.value if place else None
     
 def _map_voyage_to_spss(voyage):
-    data = {}
+    data = {'STATUS': 'PUBLISHED'}
     data['VOYAGEID'] = voyage.voyage_id
     
     # Dates
@@ -245,16 +280,14 @@ def _map_voyage_to_spss(voyage):
     data['REGISREG'] = _get_label_value(ship.registered_region)
     
     aux = 'ABCDEFGHIJKLMNOP'
-    ship_owners = [x.owner for x in sorted(VoyageShipOwnerConnection.objects.filter(voyage=voyage), key=lambda x: x.owner_order)]
-    for i, owner in enumerate(ship_owners):
+    for i, owner in enumerate(voyage.voyage_ship_owner.all()):
         if i >= len(aux): break
         data['OWNER' + aux[i]] = owner.name
     data['NATINIMP'] = _get_label_value(ship.imputed_nationality)
     data['TONMOD'] = ship.tonnage_mod
 
     aux = 'ABC'
-    ship_captains = [x.captain for x in sorted(VoyageCaptainConnection.objects.filter(voyage=voyage), key=lambda x: x.captain_order)]
-    for i, captain in enumerate(ship_captains):
+    for i, captain in enumerate(voyage.voyage_captain.all()):
         if i >= len(aux): break
         data['CAPTAIN' + aux[i]] = captain.name
     
@@ -413,8 +446,7 @@ def _map_voyage_to_spss(voyage):
     data['FEMALE7'] = numbers.imp_num_females_total
     
     aux = 'ABCDEFGHIJKLMNOPQR'
-    sources = [x.source for x in sorted(VoyageSourcesConnection.objects.filter(group=voyage), key=lambda x: x.source_order)]
-    for i, source in enumerate(sources):
+    for i, source in enumerate(voyage.voyage_sources.all()):
         if i >= len(aux): break
         data['SOURCE' + aux[i]] = source.short_ref
         
