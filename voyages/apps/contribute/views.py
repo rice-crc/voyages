@@ -1234,7 +1234,7 @@ def submit_editorial_decision(request, editor_contribution_id):
     user_contribution = review_request.contribution()
     if user_contribution is None: raise Http404
     if not created_voyage_id and (review_request.requires_created_voyage_id() and decision == ReviewRequestDecision.accepted_by_editor):
-        return HttpResponseBadRequest('Expected a voyage id for new/merge contribution')
+        return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
     if created_voyage_id:
         # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
         existing = Voyage.objects.filter(voyage_id=created_voyage_id).count()
