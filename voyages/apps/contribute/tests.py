@@ -421,17 +421,21 @@ class TestEditorialPlatform(TransactionTestCase):
         }
         
         # Submit data to save record (no source references yet).
-        ajax_data = {k: v.pk if hasattr(v, 'pk') else v for k, v in form.cleaned_data.items() if v is not None}
+        def get_cleaned_form_data(form):
+            return {k: v.pk if hasattr(v, 'pk') else v for k, v in form.cleaned_data.items() if v is not None}
+        
+        ajax_data = get_cleaned_form_data(form)
         ajax_data.update(slave_numbers)
+        original_contribution_pk = contribution.pk
         json_response = self.client.post(
-            reverse('contribute:interim_save_ajax', kwargs={'contribution_type': 'new', 'contribution_id': contribution.pk}),
+            reverse('contribute:interim_save_ajax', kwargs={'contribution_type': 'new', 'contribution_id': original_contribution_pk}),
             ajax_data)
         parsed_response = json.loads(json_response.content)
         self.assertTrue(parsed_response['valid'], json_response.content)
         self.assertEqual(len(parsed_response['errors']), 0, json_response.content)
         
         ajax_data['submit_val'] = ''
-        contrib_args = {'contribution_type': 'new', 'contribution_id': contribution.pk}
+        contrib_args = {'contribution_type': 'new', 'contribution_id': original_contribution_pk}
         response = self.client.post(reverse('contribute:interim', kwargs=contrib_args), ajax_data)
         self.assertEqual(response.status_code, 200) # not a redirect since there are no sources for this contribution.
         
@@ -458,7 +462,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertRedirects(response, reverse('contribute:thanks'), status_code=302, target_status_code=200)
         
         # Check backend data.
-        contribution = NewVoyageContribution.objects.get(pk=contribution.pk)
+        contribution = NewVoyageContribution.objects.get(pk=original_contribution_pk)
         self.assertEqual(contribution.contributor.username, 'contributor')
         self.assertEqual(contribution.status, ContributionStatus.committed)
         interim = contribution.interim_voyage
@@ -475,11 +479,11 @@ class TestEditorialPlatform(TransactionTestCase):
         json_response = self.client.get(reverse('contribute:json_pending_requests'))
         parsed_response = json.loads(json_response.content)
         self.assertEqual(len(parsed_response), 1)
-        self.assertTrue('new/' + str(contribution.pk) in parsed_response)
+        self.assertTrue('new/' + str(original_contribution_pk) in parsed_response)
         data = parsed_response.values()[0]
         self.assertEqual([u'Lion'], data['voyage_ship'])
         
-        json_response = self.client.post(reverse('contribute:begin_editorial_review'), {'contribution_id': 'new/' + str(contribution.pk)})
+        json_response = self.client.post(reverse('contribute:begin_editorial_review'), {'contribution_id': 'new/' + str(original_contribution_pk)})
         parsed_response = json.loads(json_response.content)
         review_request_id = parsed_response.get('review_request_id', 0)
         editor_contribution_id = parsed_response.get('editor_contribution_id', 0)
@@ -523,17 +527,25 @@ class TestEditorialPlatform(TransactionTestCase):
                 if v1 == v2: continue
                 if (v1 is None) != (v2 is None) or abs(v1 - v2) > delta: 
                     failures.append(str(k) + ': ' + str(v1) + ' vs ' + str(v2))
-            self.assertEqual(len(failures), 0, ', '.join(failures) + '\n\n\n' + str(parsed_response['imputed_numbers']))
+            self.assertEqual(len(failures), 0, ', '.join(failures) + '\n\n\n')
         
         for k in slave_number_var_names:
             self.assertAlmostEqual(expected_imputed_numbers.get(k.upper(), -1), parsed_response['imputed_numbers'][k], msg=str(k), delta=0.001)
         are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
         
         # If we try to accept the contribution, it should fail since the new reference is not yet created.
-        submit_data = {
+        form = InterimVoyageForm(model_to_dict(editor_interim), instance=interim)
+        is_valid = form.is_valid()
+        if not is_valid:
+            # Avoid calling form.errors if not needed.
+            self.assertTrue(is_valid, form.errors.as_text())
+        submit_data = get_cleaned_form_data(form)
+        submit_data.update(slave_numbers)
+        submit_data.update({prefix + k: v for k, v in editor_numbers.items()})
+        submit_data.update({
             'editorial_decision': ReviewRequestDecision.accepted_by_editor,
             'created_voyage_id': 99999,
-            'decision_message': u'Approving new voyage in testing'}
+            'decision_message': u'Approving new voyage in testing'})
         json_response = self.client.post(
             reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
             submit_data)
@@ -568,3 +580,90 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(created_source.short_ref, 'TEST_SOURCE_1')
         self.assertTrue(created_source.full_ref.find('Transatlantic History') > 0)
         self.assertEqual(created_source.source_type.group_name, 'Published source')
+        
+        # If we try to accept the contribution, it should fail since the new reference is not yet created.
+        submit_data['created_voyage_id'] = None
+        editor_source_dict = new_sources[0]
+        editor_source_dict['created_voyage_sources_id'] = created_voyage_sources_id
+        editor_source_dict['source_ref_text'] = 'TEST_SOURCE_1;DUMMY CONN REF2' # Note that we are changing the ref text.
+        editor_source_dict['pk'] = source.pk
+        submit_data['sources'] = json.dumps([editor_source_dict])
+        json_response = self.client.post(
+            reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
+            submit_data)
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(parsed_response['result'], 'Failed')
+        
+        submit_data['created_voyage_id'] = 999999
+        json_response = self.client.post(
+            reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
+            submit_data)
+        parsed_response = json.loads(json_response.content)
+        print parsed_response
+        self.assertEqual(parsed_response['result'], 'OK')
+        
+        contribution = NewVoyageContribution.objects.get(pk=original_contribution_pk)
+        self.assertEqual(contribution.status, ContributionStatus.approved)
+        active_reviews = list(ReviewRequest.objects.filter(contribution_id='new/' + str(original_contribution_pk), archived=False).all())
+        self.assertEqual(len(active_reviews), 1)
+        self.assertEqual(active_reviews[0].final_decision, ReviewRequestDecision.accepted_by_editor)
+        
+        editor_interim = InterimVoyage.objects.get(pk=editor_interim.pk)
+        editor_numbers = {x.var_name: x.number for x in editor_interim.slave_numbers.all()}
+        are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
+        
+        # The voyage should now appear on the list of accepted for publication.
+        json_response = self.client.post(reverse('contribute:json_pending_publication'))
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(len(parsed_response), 1)
+        self.assertTrue('new/' + str(original_contribution_pk) in parsed_response)
+        data = parsed_response.values()[0]
+        self.assertEqual(data['reviewer_final_decision'], 'Accepted')
+        self.assertEqual(data['review_request_id'], active_reviews[0].pk)
+        self.assertEqual(data['voyage_ids'], [999999])
+        
+        # Next we will publish the contribution and see if it is now included in the database.
+        json_response = self.client.post(reverse('contribute:json_publish_pending'), {'skip_backup': True})
+        parsed_response = json.loads(json_response.content)
+        self.assertEqual(parsed_response['result'], 'OK')
+        log_file_path = parsed_response.get('log_file')
+        self.assertTrue(log_file_path is not None)
+        import time
+        time.sleep(1)
+        json_response = self.client.post(reverse('contribute:json_retrieve_publication_status'), {'log_file': log_file_path, 'skip_count': 0})
+        parsed_response = json.loads(json_response.content)
+        self.assertTrue('lines' in parsed_response)
+        iterations = 1
+        line_count = parsed_response['count']
+        text = parsed_response['lines']
+        while iterations < 3 and not text.endswith('EOF\n'):
+            iterations += 1
+            time.sleep(1)
+            json_response = self.client.post(reverse('contribute:json_retrieve_publication_status'), {'log_file': log_file_path, 'skip_count': line_count})
+            line_count += parsed_response['count']
+            text += parsed_response['lines']
+        self.assertTrue(line_count > 0)
+        self.assertTrue(text.find('new/' + str(original_contribution_pk)) >= 0)
+        
+        # Check that the voyage is indeed published and that fields match (just a sample of all fields).
+        pub_voyage = Voyage.objects.filter(voyage_id=999999).first()
+        from django.core import serializers
+        error_dump = serializers.serialize("json", [pub_voyage.voyage_ship, pub_voyage.voyage_itinerary, pub_voyage.voyage_slaves_numbers, pub_voyage.voyage_dates])
+        print error_dump
+        self.assertTrue(pub_voyage is not None)
+        self.assertEqual(pub_voyage.voyage_ship.ship_name, u'Lion')
+        self.assertEqual(pub_voyage.voyage_ship.registered_year, 1645)
+        self.assertEqual(pub_voyage.voyage_ship.vessel_construction_place_id, 51)
+        self.assertEqual(pub_voyage.voyage_ship.imputed_nationality_id, 7)
+        self.assertEqual(pub_voyage.voyage_itinerary.int_second_port_emb_id, 539)
+        self.assertEqual(pub_voyage.voyage_itinerary.imp_port_voyage_begin_id, 51)
+        self.assertEqual(pub_voyage.voyage_dates.arrival_at_second_place_landing, '11,4,1646')
+        self.assertEqual(pub_voyage.voyage_dates.departure_last_place_of_landing, '2,15,1647')
+        self.assertEqual(pub_voyage.voyage_dates.length_middle_passage_days, 100)
+        self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.slave_deaths_before_africa, 14, msg=error_dump, delta=0.01)
+        self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.num_slaves_disembark_first_place, 150, msg=error_dump, delta=0.01)
+        self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.imp_mortality_ratio, 0.153846, msg=error_dump, delta=0.01)
+        self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.total_num_slaves_purchased, 248, msg=error_dump, delta=0.01)
+        
+        owners = [x.owner.name for x in sorted(VoyageShipOwnerConnection.objects.select_related('owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)]
+        self.assertSequenceEqual(owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])
