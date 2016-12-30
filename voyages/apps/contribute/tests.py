@@ -665,5 +665,11 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.imp_mortality_ratio, 0.153846, msg=error_dump, delta=0.01)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.total_num_slaves_purchased, 248, msg=error_dump, delta=0.01)
         
-        owners = [x.owner.name for x in sorted(VoyageShipOwnerConnection.objects.select_related('owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)]
-        self.assertSequenceEqual(owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])
+        pub_owners = [x.owner.name for x in sorted(VoyageShipOwnerConnection.objects.select_related('owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)]
+        self.assertSequenceEqual(pub_owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])
+        
+        # Check references.
+        pub_sources = list(VoyageSourcesConnection.objects.select_related('source').filter(group=pub_voyage))
+        self.assertEqual(1, len(pub_sources))
+        self.assertEqual(pub_sources[0].text_ref, 'TEST_SOURCE_1;DUMMY CONN REF2')
+        self.assertEqual(pub_sources[0].source.short_ref, 'TEST_SOURCE_1')
