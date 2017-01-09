@@ -1460,6 +1460,8 @@ def download_voyages(request):
         statuses.append(ContributionStatus.approved)
     if request.GET.get('under_review_check') == 'True':
         statuses.append(ContributionStatus.under_review)
+    if request.GET.get('rejected_check') == 'True':
+        statuses.append(ContributionStatus.rejected)
     
     def __content():
         yield get_header_csv_text()

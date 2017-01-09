@@ -77,7 +77,11 @@ def export_from_review_requests(review_requests):
     for req in review_requests:    
         contrib = req.editor_contribution.first()
         user_contribution = req.contribution()
-        status_text = 'accepted by editor' if req.final_decision == ReviewRequestDecision.accepted_by_editor else 'undecided'
+        status_text = 'undecided'
+        if req.final_decision == ReviewRequestDecision.accepted_by_editor:
+            status_text = 'accepted by editor'
+        elif req.final_decision == ReviewRequestDecision.rejected_by_editor:
+            status_text = 'rejected by editor'
         if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
             contrib = user_contribution
             # Check if this is a delete contribution.
@@ -101,7 +105,7 @@ def export_from_review_requests(review_requests):
             data['STATUS'] = 'NEW (%s)' % status_text
         elif isinstance(contrib, EditVoyageContribution):
             data['STATUS'] = 'EDIT (%s)' % status_text
-        elif isinstance(contrib, MergeVoyageContribution):
+        elif isinstance(contrib, MergeVoyagesContribution):
             data['STATUS'] = 'MERGE of %s (%s)' % (', '.join([str(id) for id in ids]), status_text)
         else:
             data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
