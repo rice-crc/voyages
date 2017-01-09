@@ -32,6 +32,7 @@
     <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
     <li role="presentation"><a href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source codes" %}</a></li>
     <li role="presentation"><a href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish new database version" %}</a></li>
+    <li role="presentation"><a href="#downloads" aria-controls="downloads" role="tab" data-toggle="tab">{% trans "Download voyages" %}</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -86,6 +87,9 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="publish">
         {% include "contribute/publication_partial.html" %}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="downloads">
+        {% include "contribute/downloads_partial.html" %}
     </div>
   </div>
 
