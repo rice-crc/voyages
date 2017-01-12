@@ -1007,7 +1007,8 @@ def post_review_request(request):
             [reviewer.email],
             html_message='<strong>Editor message:</strong><p>' + message + '</p>' + '<p>Please click <a href="' + reply_url + '">here</a> to reply.</p>')
     except Exception as e:
-        print e
+        import traceback
+        traceback.print_exc()
     finally:
         if result == 1:
             review_request.email_sent = True

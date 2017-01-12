@@ -493,7 +493,6 @@ def get_all_slaves(request):
             # Encode and store query dict/opened tabs/current query
             query_dict, opened_tabs, current_query = create_query_dict(request.POST, embarkation_list,
                                                                        disembarkation_list, countries)
-            print "query dict = " + str(query_dict)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
             request.session['names_current_query'] = current_query

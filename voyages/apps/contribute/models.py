@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
 import itertools
@@ -78,14 +79,14 @@ class InterimVoyage(models.Model):
     port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
 
     # Dates
-    date_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_slave_purchase_began = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_vessel_left_last_slaving_port = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_first_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_second_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_third_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_return_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_voyage_completed = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_slave_purchase_began = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_vessel_left_last_slaving_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_first_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_second_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_third_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_return_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_voyage_completed = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
     length_of_middle_passage = models.IntegerField(null=True, blank=True)
 
     # Captains
@@ -142,7 +143,7 @@ class InterimContributedSource(models.Model):
     information = models.TextField(max_length=1000, null=True, blank=True)
     url = models.TextField(max_length=400, null=True, blank=True)
     # Fields required to link created sources to published voyages.
-    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, related_name='+')
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, on_delete=models.SET_NULL, related_name='+')
     source_ref_text = models.CharField(max_length=255, null=True, blank=True)
     
     class Meta:
@@ -238,7 +239,7 @@ class InterimPreExistingSource(models.Model):
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='pre_existing_sources')
-    voyage_ids = models.CommaSeparatedIntegerField(null=False, max_length=255)
+    voyage_ids = models.CharField(validators=[validate_comma_separated_integer_list], null=False, max_length=255)
     action = models.IntegerField(null=False, default=0)
     original_short_ref = models.CharField(max_length=255, null=False)
     original_ref = models.CharField(max_length=255, null=False)
@@ -376,8 +377,9 @@ class DeleteVoyageContribution(BaseVoyageContribution):
     """
     A contribution that consists of deleting selected voyages.
     """
-    deleted_voyages_ids = models.CommaSeparatedIntegerField(
+    deleted_voyages_ids = models.CharField(
         'Deleted voyage ids',
+        validators=[validate_comma_separated_integer_list],
         max_length=255,
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
@@ -411,8 +413,9 @@ class MergeVoyagesContribution(BaseVoyageContribution):
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='+')
-    merged_voyages_ids = models.CommaSeparatedIntegerField(
+    merged_voyages_ids = models.CharField(
         'Merged voyage ids',
+        validators=[validate_comma_separated_integer_list],
         max_length=255,
         help_text='The voyage_id of each Voyage being merged by this contribution')
     help_text = _('Enter your preferred data to the right. If required use the box for '
