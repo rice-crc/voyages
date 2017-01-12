@@ -189,7 +189,6 @@ def create_query_forms():
         elif varname in globals.list_boolean_fields:
             form = SimpleSelectBooleanForm(prefix=varname)
         else:
-            print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
         tmpElem['form'] = form
@@ -307,7 +306,6 @@ def create_forms_from_var_list(var_list):
             form = SimpleSelectBooleanForm(prefix=varname)
             form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
         else:
-            print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
         form.fields['is_shown_field'].initial = str(idx)
@@ -838,8 +836,6 @@ def search(request):
             elif 'cells' not in pst:
                 pst['cells'] = '1'
 
-            print "submit val = " + str(request.POST['submitVal'])
-
             if submitVal == "tab_tables_in":
                 if omit_empty is True and 'omit_empty' not in pst:
                     omit_empty = False
@@ -1292,7 +1288,6 @@ def search(request):
             pageNum = request.POST.get('pageNum')
             if not pageNum:
                 pageNum = 1
-                print "Warning: unable to get page number from post"
             return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list)
         elif submitVal == 'delete_prev_query':
             prev_query_num = int(request.POST.get('prev_query_num'))
@@ -1844,7 +1839,6 @@ def sort_documentary_sources_dict(dict, sort):
     for country in dict:
         for city_dict in country["cities_list"]:
             for city_group_dict in city_dict["city_groups_dict"]:
-                # print "Source = " + str(city_group_dict["sources"])
                 if sort == "short_ref":
                     city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['short_ref'])
                 else:

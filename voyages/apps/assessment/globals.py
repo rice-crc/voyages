@@ -50,7 +50,6 @@ def get_broad_regions(search_configuration=None, mode=None):
         areas = [[k.name, 1] if "darea-button-" + k.pk in search_configuration["post"] else [k.name, 0] for k in areas_from_query if "darea-button-" + k.pk in search_configuration["post"]]
     else:
         areas = [[k.name, 1] for k in areas_from_query]
-    print "areas = " + str(areas)
 
     return [areas, ]
 
@@ -89,8 +88,6 @@ def get_regions(search_configuration=None, mode=None):
 def update_regions_labels(regions, search_configuration, area_prefix, region_prefix):
     new_regions = {}
     query = []
-
-    print "for area_prefix = " + area_prefix + ", dict = " + str(regions)
 
     for area, regions in regions.iteritems():
         new_region_list = []

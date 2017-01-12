@@ -159,7 +159,6 @@ def unmangle_resistance(value, voyageid=None):
 def voyage_by_id(voyageid):
     fil = models.Voyage.objects.filter(voyage_id=voyageid)
     if len(fil) < 1:
-        print("ERROR: Could not find voyage " + str(voyageid) + " in database, not displaying date")
         return None
     else:
         return fil[0]
@@ -726,11 +725,6 @@ imp_nat_pos_bar = map(lambda x: (x.label, {'var_imputed_nationality_idnum__exact
 
 placelblr = lambda x: x.place
 regionlblr = lambda x: x.region
-
-#print list(models.VoyageShip.objects.values_list('vessel_construction_place').distinct())
-#print models.VoyageShip.objects.values('vessel_construction_place').distinct()
-
-#all_place_list = structure_places_all(models.Place.objects.all())
 
 additional_var_dict = [
     {'var_name': 'var_imp_principal_broad_region_disembark_idnum',
