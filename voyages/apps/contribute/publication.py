@@ -328,7 +328,11 @@ def _map_voyage_to_spss(voyage):
     data['MAJSELPT'] = _get_label_value(itinerary.principal_port_of_slave_dis)
     data['PTDEPIMP'] = _get_label_value(itinerary.imp_port_voyage_begin)
     data['MJBYPTIMP'] = _get_label_value(itinerary.imp_principal_place_of_slave_purchase)
+    data['MAJBYIMP'] = _get_label_value(itinerary.imp_principal_place_of_slave_purchase.region if itinerary.imp_principal_place_of_slave_purchase else None)
+    data['MAJBYIMP1'] = _get_label_value(itinerary.imp_principal_place_of_slave_purchase.region.broad_region if itinerary.imp_principal_place_of_slave_purchase else None)
     data['MJSLPTIMP'] = _get_label_value(itinerary.imp_principal_port_slave_dis)
+    data['MJSELIMP'] = _get_label_value(itinerary.imp_principal_port_slave_dis.region if itinerary.imp_principal_port_slave_dis else None)
+    data['MJSELIMP1'] = _get_label_value(itinerary.imp_principal_port_slave_dis.region.broad_region if itinerary.imp_principal_port_slave_dis else None)
     data['DEPTREGIMP'] = _get_label_value(itinerary.imp_region_voyage_begin)
     
     # Crew
