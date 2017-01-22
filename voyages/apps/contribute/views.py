@@ -1461,6 +1461,8 @@ def download_voyages(request):
         statuses.append(ContributionStatus.approved)
     if request.GET.get('under_review_check') == 'True':
         statuses.append(ContributionStatus.under_review)
+    if request.GET.get('committed_check') == 'True':
+        statuses.append(ContributionStatus.committed)
     if request.GET.get('rejected_check') == 'True':
         statuses.append(ContributionStatus.rejected)
     

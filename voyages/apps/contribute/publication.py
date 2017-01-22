@@ -70,8 +70,12 @@ def export_contributions(statuses):
     """
     Produce a list of dicts, each representing a contribution.
     """
-    review_requests = _fetch_active_reviews_by_status(statuses)
-    return export_from_review_requests(review_requests)
+    (review_requests, notreviewed) = _fetch_active_reviews_by_status(statuses)
+    for data in export_from_review_requests(review_requests):
+        yield data
+    for user_contrib in notreviewed:
+        for data in export_contribution(user_contrib, None, None, 'not reviewed'):
+            yield data
     
 def export_from_review_requests(review_requests):
     for req in review_requests:    
@@ -82,34 +86,40 @@ def export_from_review_requests(review_requests):
             status_text = 'accepted by editor'
         elif req.final_decision == ReviewRequestDecision.rejected_by_editor:
             status_text = 'rejected by editor'
-        if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
-            contrib = user_contribution
-            # Check if this is a delete contribution.
-            if contrib and isinstance(contrib, DeleteVoyageContribution):
-                delete_ids = contrib.deleted_voyages_ids.split(',')
-                voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
-                for v in voyages:
-                    data = _map_voyage_to_spss(v)
-                    data['STATUS'] = 'DELETE (%s)' % status_text
-                    yield data
-        if contrib is None or not hasattr(contrib, 'interim_voyage') or contrib.interim_voyage is None:
-            continue
-        data = _map_interim_to_spss(contrib.interim_voyage)
-        if req.requires_created_voyage_id():
-            data['VOYAGEID'] = req.created_voyage_id
-        else:
-            ids	= contrib.get_related_voyage_ids()
-            data['VOYAGEID'] = ' '.join([str(id) for id in ids])
-        contrib = req.contribution()
-        if isinstance(contrib, NewVoyageContribution):
-            data['STATUS'] = 'NEW (%s)' % status_text
-        elif isinstance(contrib, EditVoyageContribution):
-            data['STATUS'] = 'EDIT (%s)' % status_text
-        elif isinstance(contrib, MergeVoyagesContribution):
-            data['STATUS'] = 'MERGE of %s (%s)' % (', '.join([str(id) for id in ids]), status_text)
-        else:
-            data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
-        yield data
+        items = export_contribution(user_contribution,
+            contrib.interim_voyage if hasattr(contrib, 'interim_voyage') else None,
+            req.created_voyage_id if req.requires_created_voyage_id() else None,
+            status_text)
+        for data in items:
+            yield data
+
+def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_text):
+    if isinstance(user_contrib, DeleteVoyageContribution):
+        delete_ids = user_contrib.deleted_voyages_ids.split(',')
+        voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
+        for v in voyages:
+            data = _map_voyage_to_spss(v)
+            data['STATUS'] = 'DELETE (%s)' % status_text
+            yield data
+        return
+    if interim_voyage is None:
+        interim_voyage = user_contrib.interim_voyage
+    if interim_voyage is None: return
+    data = _map_interim_to_spss(interim_voyage)
+    ids	= user_contrib.get_related_voyage_ids()
+    if created_voyage_id:
+        data['VOYAGEID'] = created_voyage_id
+    else:
+        data['VOYAGEID'] = ' '.join([str(id) for id in ids])
+    if isinstance(user_contrib, NewVoyageContribution):
+        data['STATUS'] = 'NEW (%s)' % status_text
+    elif isinstance(user_contrib, EditVoyageContribution):
+        data['STATUS'] = 'EDIT (%s)' % status_text
+    elif isinstance(user_contrib, MergeVoyagesContribution):
+        data['STATUS'] = 'MERGE of %s (%s)' % (', '.join([str(id) for id in ids]), status_text)
+    else:
+        data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
+    yield data
 
 def export_from_voyages():
     related_models = {
@@ -151,7 +161,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         log('Finished backup.\n')
     
     log('Fetching contributions...\n')
-    review_requests = _fetch_active_reviews_by_status([ContributionStatus.approved])
+    (review_requests, _) = _fetch_active_reviews_by_status([ContributionStatus.approved])
     log('Publishing...\n')
     # Step 2 - Publish database
     transaction_finished = False
@@ -220,12 +230,16 @@ def _delete_child_fk(obj, child_attr):
 def _fetch_active_reviews_by_status(statuses):
     contribution_info = get_filtered_contributions({'status__in': statuses})
     review_requests = []
+    notreviewed_contributions = []
     for info in contribution_info:
         reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
         if len(reqs) != 1 and info['contribution'].status == ContributionStatus.approved:
             raise Exception('Expected a single active review request for approved contributions')
-        review_requests += reqs
-    return review_requests
+        if len(reqs) == 0:
+            notreviewed_contributions.append(info['contribution'])
+        else:
+            review_requests += reqs
+    return review_requests, notreviewed_contributions
     
 def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     members = csv_date.split(',')

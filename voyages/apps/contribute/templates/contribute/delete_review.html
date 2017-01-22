@@ -51,6 +51,9 @@
         initDecisionForm();
     </script>
 {% endif %}
+{% if mode == 'editor' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+{% endif %}
 
 
 {% endblock %}

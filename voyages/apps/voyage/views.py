@@ -549,13 +549,19 @@ def prettify_var_list(varlist):
             output.append((fullname + ":", (prefix + value)))
     return output
 
+def first_match(items):
+    return items[0] if len(items) > 0 else None
+
 def voyage_map(request, voyage_id):
     """
     Displays the map for a voyage
     """
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
-    year_completed = int(voyage.var_imp_voyage_began) if voyage.var_imp_voyage_began else 0
-    map_year = get_map_year(year_completed, year_completed)
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
+    if voyage:
+        year_completed = int(voyage.var_imp_voyage_began) if voyage.var_imp_voyage_began else 0
+        map_year = get_map_year(year_completed, year_completed)
+    else:
+        map_year = None
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
                    'map_year': map_year,
@@ -566,7 +572,7 @@ def voyage_images(request, voyage_id):
     """
     Displays the images for a voyage
     """
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'images',
                    'voyage_id': voyage_id,
@@ -574,7 +580,9 @@ def voyage_images(request, voyage_id):
 
 def voyage_variables_data(voyage_id, show_imputed=True):
     voyagenum = int(voyage_id)
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum))
+    if voyage is None:
+        return None, []
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
     voyagevariables = voyage.get_stored_fields()
     #for vname, vvalue in voyage.get_stored_fields().items():
