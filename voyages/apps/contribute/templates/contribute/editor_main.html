@@ -162,6 +162,7 @@
                 if (!$('#requests_table').data('hasInitialized')) {
                     $('#requests_table').DataTable({
                         bPaginate: false,
+                        stateSave: true,
                         order: [[0, "asc"], [3, "asc"]],
                         "columnDefs": [{
                             "type": "contrib-type",
