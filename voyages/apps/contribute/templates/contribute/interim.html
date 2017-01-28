@@ -1943,7 +1943,7 @@
             var options = [];
             var index = 0;
             for (var start = 1500; start < 1870; start += mod) {
-                options.push({label: start + '-' + (start + mod - 1), value: ++index});
+                options.push({label: (start + 1) + '-' + (start + mod), value: ++index});
             }
             var input = self.children('input');
             input.addClass('not_selectized');
