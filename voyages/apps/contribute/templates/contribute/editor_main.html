@@ -163,6 +163,7 @@
                     $('#requests_table').DataTable({
                         bPaginate: false,
                         stateSave: true,
+                        stateDuration: 60 * 60 * 24 * 365 * 10,
                         order: [[0, "asc"], [3, "asc"]],
                         "columnDefs": [{
                             "type": "contrib-type",
