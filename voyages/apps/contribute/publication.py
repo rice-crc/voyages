@@ -269,6 +269,7 @@ def _map_voyage_to_spss(voyage):
     _map_csv_date(data, 'DATARR', dates.third_dis_of_slaves, ['39', '40', '41'])
     _map_csv_date(data, 'DDEPAM', dates.departure_last_place_of_landing, ['', 'B', 'C'])
     _map_csv_date(data, 'DATARR4', dates.voyage_completed, '345')
+    data['EVGREEN'] = voyage.voyage_in_cd_rom
     data['VOYAGE'] = dates.length_middle_passage_days
     data['YEARDEP'] = VoyageDates.get_date_year(dates.imp_voyage_began)
     data['YEARAF'] = VoyageDates.get_date_year(dates.imp_departed_africa)
@@ -616,6 +617,7 @@ def _save_editorial_version(review_request, contrib_type):
         voyage = Voyage.objects.get(voyage_id=contrib.edited_voyage_id)
     else:
         raise Exception('Unsupported contribution type ' + str(contrib_type))
+    
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
         voyage.voyage_in_cd_rom = False
@@ -738,6 +740,16 @@ def _save_editorial_version(review_request, contrib_type):
     itinerary.imp_principal_region_slave_dis = region(interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.imp_broad_region_slave_dis = broad_region(interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.save()
+    
+    # Voyage Outcome
+    outcome = VoyageOutcome()
+    outcome.voyage = voyage
+    outcome.particular_outcome = interim.voyage_outcome
+    outcome.resistance = interim.african_resistance
+    outcome.outcome_slaves = interim.imputed_outcome_of_voyage_for_slaves
+    outcome.vessel_captured_outcome = interim.imputed_outcome_of_voyage_if_ship_captured
+    outcome.outcome_owner = interim.imputed_outcome_of_voyage_for_owner
+    outcome.save()
     
     # Voyage dates.
     def year_dummies(year):
@@ -959,6 +971,8 @@ def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
+    # TODO: should we keep the voyage_in_cd_rom value of a merged value?
+    # Voyage.objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True)
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
     _save_editorial_version(review_request, 'merge')

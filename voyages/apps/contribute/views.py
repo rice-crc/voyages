@@ -755,7 +755,7 @@ def editor_main(request):
         return HttpResponseForbidden()
     return render(request, 'contribute/editor_main.html')
     
-def get_reviews_by_status(statuses):
+def get_reviews_by_status(statuses, display_interim_data=False):
     filter_args = {'status__in': statuses}
     contributions = get_filtered_contributions(filter_args)
     
@@ -786,7 +786,7 @@ def get_reviews_by_status(statuses):
         active_request = reqs[0] if len(reqs) == 1 else None
         if active_request and active_request.created_voyage_id and active_request.requires_created_voyage_id():
             voyage_ids = [active_request.created_voyage_id]
-        if isinstance(contrib, NewVoyageContribution):
+        if (display_interim_data and not isinstance(contrib, DeleteVoyageContribution)) or isinstance(contrib, NewVoyageContribution):
             # Must fill elements above with interim data.
             interim = contrib.interim_voyage
             if active_request:
@@ -843,7 +843,7 @@ def get_reviews_by_status(statuses):
 def get_pending_requests(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    return JsonResponse(get_reviews_by_status(ContributionStatus.active_statuses))
+    return JsonResponse(get_reviews_by_status(ContributionStatus.active_statuses, False))
 
 @login_required()
 def get_reviewers(request):
@@ -856,7 +856,7 @@ def get_reviewers(request):
 def get_pending_publication(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    return JsonResponse(get_reviews_by_status([ContributionStatus.approved]))
+    return JsonResponse(get_reviews_by_status([ContributionStatus.approved], True))
 
 def assert_limit_active_review_requests(contribution_id, max_allowed=0):
     reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
