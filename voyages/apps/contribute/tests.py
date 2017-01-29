@@ -39,7 +39,7 @@ class TestAuthentication(TestCase):
         # Should redirect
         response = self.client.post(reverse('contribute:index'),
                                     {'id_username': 'admin', 'id_password': 'should_not_work'}, follow=True)
-        self.assertEqual(response.redirect_chain[0][0], '/accounts/login/')
+        self.assertTrue(response.redirect_chain[0][0].endswith('/accounts/login/'))
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(response.status_code, 200)
 
@@ -660,6 +660,9 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(pub_voyage.voyage_dates.arrival_at_second_place_landing, '11,4,1646')
         self.assertEqual(pub_voyage.voyage_dates.departure_last_place_of_landing, '2,15,1647')
         self.assertEqual(pub_voyage.voyage_dates.length_middle_passage_days, 100)
+        outcome = pub_voyage.voyage_name_outcome.first()
+        self.assertNotEqual(outcome, None)
+        self.assertEqual(outcome.resistance.value, 1)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.slave_deaths_before_africa, 14, msg=error_dump, delta=0.01)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.num_slaves_disembark_first_place, 150, msg=error_dump, delta=0.01)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.imp_mortality_ratio, 0.153846, msg=error_dump, delta=0.01)
