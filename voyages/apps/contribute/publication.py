@@ -242,6 +242,7 @@ def _fetch_active_reviews_by_status(statuses):
     return review_requests, notreviewed_contributions
     
 def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
+    if csv_date is None: return None
     members = csv_date.split(',')
     if len(members) != 3:
         members = [None, None, None]
@@ -505,11 +506,12 @@ def _map_interim_to_spss(interim):
     data['REGISREG'] = _get_region_value(interim.ship_registration_place)
     data['OWNERA'] = interim.first_ship_owner
     data['OWNERB'] = interim.second_ship_owner
-    other_ship_owners = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
-    aux = 'CDEFGHIJKLMNOP'
-    for i, owner in enumerate(other_ship_owners):
-        if i >= len(aux): break
-        data['OWNER' + aux[i]] = owner
+    if interim.additional_ship_owners:
+        other_ship_owners = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
+        aux = 'CDEFGHIJKLMNOP'
+        for i, owner in enumerate(other_ship_owners):
+            if i >= len(aux): break
+            data['OWNER' + aux[i]] = owner
        
     data['CAPTAINA'] = interim.first_captain    
     data['CAPTAINB'] = interim.second_captain    
