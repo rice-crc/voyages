@@ -601,7 +601,7 @@ def _map_interim_to_spss(interim):
         
     return data
 
-def _save_editorial_version(review_request, contrib_type):
+def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=None):
     editor_contribution = review_request.editor_contribution.first()
     if editor_contribution is None or editor_contribution.interim_voyage is None:
         raise Exception('This type of contribution requires an editor review interim voyage for publication')
@@ -620,7 +620,7 @@ def _save_editorial_version(review_request, contrib_type):
     
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
-        voyage.voyage_in_cd_rom = False
+        voyage.voyage_in_cd_rom = in_cd_rom_override if in_cd_rom_override is not None else False
     else:
         _delete_child_fk(voyage, 'voyage_ship')
         _delete_child_fk(voyage, 'voyage_itinerary')
@@ -971,11 +971,10 @@ def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
-    # TODO: should we keep the voyage_in_cd_rom value of a merged value?
-    # Voyage.objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True)
+    in_cd_rom_list = list(Voyage.objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True))
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
-    _save_editorial_version(review_request, 'merge')
+    _save_editorial_version(review_request, 'merge', True in in_cd_rom_list)
     
 def _publish_single_review_new(review_request):
     _save_editorial_version(review_request, 'new')
