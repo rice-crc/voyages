@@ -1220,6 +1220,8 @@ def submit_editorial_decision(request, editor_contribution_id):
         pass
     if not decision in [ReviewRequestDecision.accepted_by_editor, ReviewRequestDecision.rejected_by_editor, ReviewRequestDecision.deleted]:
         return HttpResponseBadRequest()
+    if decision == ReviewRequestDecision.accepted_by_editor and not contribution.ran_impute:
+        return JsonResponse({'result': 'Failed', 'errors': _('Impute program must be ran on contribution before acceptance')})
     if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage:
         # Check whether every new source in the editorial version has been created in the system before continuing.
         all_sources = get_all_new_sources_for_interim(contribution.interim_voyage.pk)
@@ -1330,6 +1332,8 @@ def impute_contribution(request, editor_contribution_id):
     result = tuple[0]
     imputed_numbers = tuple[1]
     with transaction.atomic():
+        contribution.ran_impute = True
+        contribution.save()
         # Delete old numeric values.
         InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=imputed_numbers.keys()).delete()
         # Map imputed fields back to the contribution, save it and yield response.
