@@ -161,6 +161,7 @@
                     return false; 
                 });
             {% endif %}
+            {% with editor_contribution=review_request.editor_contribution.first %}
             $('#submit_final_decision_btn').click(function() {
                 var decision = parseInt($('#editorial_decision option:selected').val());
                 if (decision != 3 && decision != 4 && decision != 5) {
@@ -175,6 +176,12 @@
                         return false;
                     }
                 }
+                {% if not editor_contribution.ran_impute %}
+                if (decision == 3) {
+                    alert('{% trans "The impute program must be executed before accepting a contribution." %}');
+                    return false;
+                }
+                {% endif %}
                 var decision_message = $('#decision_message').val().trim();
                 if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#editorial_decision option:selected').text() + '\n' + decision_message)) {
                     return false;
@@ -185,9 +192,8 @@
                 self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
-                    {% with editor_contribution=review_request.editor_contribution.first %}
+                    
                     url: '/contribute/editorial_review/{{ editor_contribution.pk }}/submit_editorial_decision',
-                    {% endwith %}
                     data: $('form').serialize(),
                     success: function (response) {
                         if (response.result == 'OK') {
@@ -205,6 +211,7 @@
                 });
                 return false;
             });
+            {% endwith %}
         {% endif %}
         if (persistedData) {
             var persistedFields = ['message_to_editor', 'reviewer_decision',

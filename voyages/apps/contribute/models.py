@@ -331,6 +331,7 @@ class EditorVoyageContribution(models.Model):
     request = models.ForeignKey(ReviewRequest, related_name='editor_contribution')
     interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
     notes = models.TextField('Notes', null=True, max_length=10000, help_text='Editor notes')
+    ran_impute = models.BooleanField(default=False)
 
     def __unicode__(self):
         return _('Editorial review of contribution')
