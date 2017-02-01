@@ -12,3 +12,12 @@ NOTE: the .po extension is automatically added
 
 The produced PO file can be then merged with the localized versions for
 translation using msgcat (details are given after running this script).
+
+# Maps
+
+To generate the underlying directed network visit
+{SERVER HTTP PATH}/static/maps/index.html
+The tool has explanatory notes on how to visually design and inspect the network.
+
+Once a routeNodes.js file is generated from the tool, it must replace the one
+in {project local path}/sitemedia/maps/routeNodes.js

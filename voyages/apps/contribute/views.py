@@ -1231,6 +1231,13 @@ def submit_editorial_decision(request, editor_contribution_id):
                 return JsonResponse({'result': 'Failed', 'errors': _('All new sources must be created before this submission is accepted.')})
             if not src.source_ref_text or not src.source_ref_text.startswith(created_src.short_ref):
                 return JsonResponse({'result': 'Failed', 'errors': _('New sources must have a connection reference starting with the source\'s short reference.')})
+        # Check if yearam and fate2 variables are set.
+        yearam = contribution.interim_voyage.imputed_year_arrived_at_port_of_disembarkation
+        fate2 = contribution.interim_voyage.imputed_outcome_of_voyage_for_slaves
+        if not yearam:
+            return JsonResponse({'result': 'Failed', 'errors': _('Imputed value for YEARAM is mandatory')})
+        if not fate2:
+            return JsonResponse({'result': 'Failed', 'errors': _('Imputed value for FATE2 is mandatory')})
                 
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
     review_request = contribution.request    
