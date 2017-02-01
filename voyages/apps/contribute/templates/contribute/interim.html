@@ -49,7 +49,7 @@
 
 {{ form.errors }}
 
-<form action="{{ request.path }}" method="post" class="form-horizontal">
+<form action="{{ request.path }}" method="post" class="form-horizontal" id="main_form">
     {% csrf_token %}
     <!-- Ship, nation, owners -->
     <div class="expander_container">
@@ -2394,11 +2394,43 @@
 
         // Parse notes.
         var NOTES_PREFIX = 'notes_for_';
-        {% if form.notes.value %}
-            var notes = {{ form.notes.value|safe }}
-            for (var key in notes) {
-                $('#' + NOTES_PREFIX + key).val(notes[key]).change();
+        {% if interim.notes %}
+        var notes = {{ interim.notes|safe }};
+        // Remark: the note text area elements may not be ready yet.
+        var missing = [];
+        for (var key in notes) {
+            var notesElement = $('#' + NOTES_PREFIX + key);
+            if (notesElement.length > 0) {
+                notesElement.val(notes[key]).change();
+            } else {
+                missing.push(key);
             }
+        }
+        if (missing.length > 0) {
+            // If the comment text areas have not been generated yet,
+            // we keep running a timer to assign the comments until
+            // they are found.
+            var timer = null;
+            var count = missing.length;
+            timer = setTimeout(
+                function() {
+                    for (var i = 0; i < missing.length; ++i) {
+                        if (missing[i] == null) continue;
+                        var notesElement = $('#' + NOTES_PREFIX + missing[i]);
+                        if (notesElement.length > 0) {
+                            notesElement.val(notes[missing[i]]).change();
+                            missing[i] = null;
+                            --count;
+                        }
+                    }
+                    if (count == 0) {
+                        clearTimeout(timer);
+                    }
+                },
+                500);
+        }
+        {% else %}
+        var notes = {};
         {% endif %}
         
         var formSubmission = function(allowEmptySources) {
