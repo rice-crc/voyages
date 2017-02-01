@@ -381,7 +381,7 @@ def interim(request, contribution_type, contribution_id):
                    'mode': 'contribute',
                    'contribution': contribution,
                    'numbers': numbers,
-                   'interim': interim,
+                   'interim': id,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
 
@@ -1231,13 +1231,6 @@ def submit_editorial_decision(request, editor_contribution_id):
                 return JsonResponse({'result': 'Failed', 'errors': _('All new sources must be created before this submission is accepted.')})
             if not src.source_ref_text or not src.source_ref_text.startswith(created_src.short_ref):
                 return JsonResponse({'result': 'Failed', 'errors': _('New sources must have a connection reference starting with the source\'s short reference.')})
-        # Check if yearam and fate2 variables are set.
-        yearam = contribution.interim_voyage.imputed_year_arrived_at_port_of_disembarkation
-        fate2 = contribution.interim_voyage.imputed_outcome_of_voyage_for_slaves
-        if not yearam:
-            return JsonResponse({'result': 'Failed', 'errors': _('Imputed value for YEARAM is mandatory')})
-        if not fate2:
-            return JsonResponse({'result': 'Failed', 'errors': _('Imputed value for FATE2 is mandatory')})
                 
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
     review_request = contribution.request    
@@ -1263,6 +1256,19 @@ def submit_editorial_decision(request, editor_contribution_id):
             (valid, form, numbers, src_pks) = interim_main(request, contribution, contribution.interim_voyage)
             if not valid:
                 return JsonResponse({'valid': valid, 'errors': form.errors})
+            if decision == ReviewRequestDecision.accepted_by_editor:
+                # Check if yearam and fate2 variables are set.
+                yearam = contribution.interim_voyage.imputed_year_arrived_at_port_of_disembarkation
+                fate2 = contribution.interim_voyage.imputed_outcome_of_voyage_for_slaves
+                missing_fields = []
+                if not yearam:
+                    missing_fields.append('YEARAM')
+                if not fate2:
+                    missing_fields.append('FATE2')
+                if len(missing_fields) > 0:
+                    transaction.set_rollback(True)
+                    return JsonResponse({'result': 'Failed', 'errors': ('Imputed field(s) %s is(are) mandatory' % ', '.join(missing_fields))})
+
         # Fetch decision.
         review_request.final_decision = decision
         review_request.created_voyage_id = created_voyage_id
