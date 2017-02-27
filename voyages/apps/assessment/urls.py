@@ -5,7 +5,7 @@ import voyages.apps.assessment.views
 import voyages.apps.static_content.views
 
 urlpatterns = [
-    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})',
+    url(r'^c(?P<chapternum>\d{2})_s(?P<sectionnum>\d{2})_p(?P<pagenum>\d{2})$',
         voyages.apps.assessment.views.get_page, name='get-page'),
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Assessment'}, name='index'),
     url(r'^essays$', TemplateView.as_view(template_name='assessment/c01_base.html'), name='essays'),

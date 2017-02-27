@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
+import itertools
 
 class AdminFaq(models.Model):
     """
@@ -77,14 +79,14 @@ class InterimVoyage(models.Model):
     port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
 
     # Dates
-    date_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_slave_purchase_began = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_vessel_left_last_slaving_port = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_first_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_second_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_third_slave_disembarkation = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_return_departure = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
-    date_voyage_completed = models.CommaSeparatedIntegerField(max_length=10, blank=True, null=True)
+    date_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_slave_purchase_began = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_vessel_left_last_slaving_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_first_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_second_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_third_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_return_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_voyage_completed = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
     length_of_middle_passage = models.IntegerField(null=True, blank=True)
 
     # Captains
@@ -97,7 +99,7 @@ class InterimVoyage(models.Model):
     # Imputed variables (used for reviewer and editor)
     
     imputed_national_carrier = models.ForeignKey(voyage.models.Nationality, related_name='+', null=True, blank=True)
-    imputed_standardized_tonnage = models.IntegerField(null=True, blank=True)
+    imputed_standardized_tonnage = models.FloatField(null=True, blank=True)
     imputed_region_ship_constructed = models.ForeignKey(voyage.models.Region, related_name='+', null=True, blank=True)
     
     imputed_outcome_of_voyage_for_slaves = models.ForeignKey(voyage.models.SlavesOutcome, related_name='+', null=True, blank=True)
@@ -134,7 +136,20 @@ class InterimVoyage(models.Model):
     imputed_mortality_rate = models.FloatField(null=True, blank=True)
     imputed_standardized_price_of_slaves = models.FloatField(null=True, blank=True)
     
-class InterimArticleSource(models.Model):
+    persisted_form_data = models.TextField(max_length=10000, null=True, blank=True, help_text='Auxiliary form data that is persisted in JSON format')
+    
+class InterimContributedSource(models.Model):
+    # Fileds which are common to all contributed source types.
+    information = models.TextField(max_length=1000, null=True, blank=True)
+    url = models.TextField(max_length=400, null=True, blank=True)
+    # Fields required to link created sources to published voyages.
+    created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, on_delete=models.SET_NULL, related_name='+')
+    source_ref_text = models.CharField(max_length=255, null=True, blank=True)
+    
+    class Meta:
+        abstract = True
+    
+class InterimArticleSource(InterimContributedSource):
     """
     Article source for an interim voyage.models.
     """
@@ -147,12 +162,10 @@ class InterimArticleSource(models.Model):
     year = models.IntegerField(null=True)
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
 
-class InterimBookSource(models.Model):
+class InterimBookSource(InterimContributedSource):
     """
-    Book source for an interim voyage.models.
+    Book/essay in book source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='book_sources')
@@ -163,22 +176,35 @@ class InterimBookSource(models.Model):
     year = models.IntegerField(null=True)
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
+    source_is_essay_in_book = models.BooleanField(default=False)
+    essay_title = models.CharField(max_length=255, null=True, blank=True)
+    editors = models.TextField(max_length=1000, null=True, blank=True)
 
-class InterimOtherSource(models.Model):
+class InterimPrivateNoteOrCollectionSource(InterimContributedSource):
     """
-    Book source for an interim voyage.models.
+    Other source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
-                                       related_name='other_sources')
+                                       related_name='private_note_or_collection_sources')
+    authors = models.TextField(max_length=1000, null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
+    year = models.IntegerField(null=True)
     page = models.CharField(max_length=20, null=True, blank=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
 
-class InterimPrimarySource(models.Model):
+class InterimUnpublishedSecondarySource(InterimContributedSource):
+    """
+    Other source for an interim voyage.models.
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='unpublished_secondary_sources')
+    authors = models.TextField(max_length=1000, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    year = models.IntegerField(null=True)
+    page = models.CharField(max_length=20, null=True, blank=True)
+
+class InterimPrimarySource(InterimContributedSource):
     """
     Primary source for an interim voyage.models.
     """
@@ -189,8 +215,17 @@ class InterimPrimarySource(models.Model):
     series_or_collection = models.CharField(max_length=255, null=True, blank=True)
     volume_or_box_or_bundle = models.CharField(max_length=255, null=True, blank=True)
     document_detail = models.CharField(max_length=255, null=True, blank=True)
-    information = models.TextField(max_length=1000, null=True, blank=True)
-    url = models.TextField(max_length=400, null=True, blank=True)
+
+class InterimNewspaperSource(InterimContributedSource):
+    """
+    Newspaper source
+    """
+    interim_voyage = models.ForeignKey(InterimVoyage, null=False,
+                                       related_name='newspaper_sources')
+    name = models.CharField(max_length=255, null=True, blank=True)
+    alternative_name = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
+    country = models.CharField(max_length=60, null=True, blank=True)
 
 class InterimPreExistingSourceActions:
     accepted = 0,
@@ -204,8 +239,9 @@ class InterimPreExistingSource(models.Model):
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='pre_existing_sources')
-    voyage_ids = models.CommaSeparatedIntegerField(null=False, max_length=255)
+    voyage_ids = models.CharField(validators=[validate_comma_separated_integer_list], null=False, max_length=255)
     action = models.IntegerField(null=False, default=0)
+    original_short_ref = models.CharField(max_length=255, null=False)
     original_ref = models.CharField(max_length=255, null=False)
     full_ref = models.TextField(max_length=1000, null=False)
     notes = models.TextField(max_length=1000, null=True, blank=True)
@@ -219,13 +255,23 @@ class InterimSlaveNumber(models.Model):
     var_name = models.CharField(
         'Slave number code-book variable name', max_length=20,
         null=False, blank=False)
-    number = models.IntegerField('Number')
+    number = models.FloatField('Number')
+
+class ReviewRequestDecision:
+    under_review = 0
+    accepted_by_reviewer = 1
+    rejected_by_reviewer = 2
+    accepted_by_editor = 3
+    rejected_by_editor = 4
+    deleted = 5
+    begun_editorial_review = 1000
 
 class ReviewRequestResponse:
     no_reply = 0
     accepted = 1
     rejected = 2
-
+    begun_editorial_review = 1000
+    
 class ReviewRequest(models.Model):
     """
     A request made to a reviewer for a contribution.
@@ -237,24 +283,71 @@ class ReviewRequest(models.Model):
     response = models.IntegerField(default=0)
     editor_comments = models.TextField()
     reviewer_comments = models.TextField(null=True)
+    decision_message = models.TextField(null=True)
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
+    created_voyage_id = models.IntegerField(null=True, help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)')
+    
+    def contribution(self):
+        return get_contribution_from_id(self.contribution_id)
+    
+    def requires_created_voyage_id(self):
+        return self.contribution_id.startswith('merge') or self.contribution_id.startswith('new')
+    
+    def get_status_msg(self):
+        decision_values = {
+            ReviewRequestDecision.under_review: _('Under review'),
+            ReviewRequestDecision.accepted_by_reviewer: _('Accepted (reviewer)'),
+            ReviewRequestDecision.rejected_by_reviewer: _('Rejected (reviewer)'),
+            ReviewRequestDecision.accepted_by_editor: _('Accepted'),
+            ReviewRequestDecision.rejected_by_editor: _('Rejected'),
+            ReviewRequestDecision.begun_editorial_review: _('Editor bypass')}
+        response_values = {
+            ReviewRequestResponse.no_reply: _('No reply'),
+            ReviewRequestResponse.accepted: _('Will review'),
+            ReviewRequestResponse.rejected: _('Cannot review')}
+        if self.final_decision == 0:
+            return response_values.get(self.response, '')
+        return decision_values.get(self.final_decision, '')
 
 class ReviewVoyageContribution(models.Model):
+    """
+    The reviewer's input on the contribution.
+    """
     request = models.ForeignKey(ReviewRequest, related_name='review_contribution')
-    review_interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
-    notes = models.TextField('Notes', max_length=10000, help_text='Reviewer notes')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
+    notes = models.TextField('Notes', null=True, max_length=10000, help_text='Reviewer notes')
 
     def __unicode__(self):
         return _('Review a contribution')
+        
+    def get_related_voyage_ids(self):
+        return self.request.contribution().get_related_voyage_ids()
+
+class EditorVoyageContribution(models.Model):
+    """
+    The editor's input on the contribution.
+    """
+    request = models.ForeignKey(ReviewRequest, related_name='editor_contribution')
+    interim_voyage = models.ForeignKey(InterimVoyage, null=True, related_name='+')
+    notes = models.TextField('Notes', null=True, max_length=10000, help_text='Editor notes')
+    ran_impute = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return _('Editorial review of contribution')
+        
+    def get_related_voyage_ids(self):
+        return self.request.contribution().get_related_voyage_ids()
 
 class ContributionStatus:
     pending = 0
     committed = 1
     under_review = 2
-    approved = 3
-    rejected = 4
-    published = 5
+    approved = ReviewRequestDecision.accepted_by_editor
+    rejected = ReviewRequestDecision.rejected_by_editor
+    deleted = ReviewRequestDecision.deleted
+    published = 6
+    active_statuses = [0, 1, 2, 3, 4]
 
 class BaseVoyageContribution(models.Model):
     """
@@ -271,8 +364,7 @@ class BaseVoyageContribution(models.Model):
         return []
 
     def get_related_voyages(self):
-        x = list(voyage.models.Voyage.objects.filter(voyage_id__in=self.get_related_voyage_ids()))
-        return x
+        return list(voyage.models.Voyage.objects.filter(voyage_id__in=self.get_related_voyage_ids()))
 
     class Meta:
         abstract = True
@@ -286,8 +378,9 @@ class DeleteVoyageContribution(BaseVoyageContribution):
     """
     A contribution that consists of deleting selected voyages.
     """
-    deleted_voyages_ids = models.CommaSeparatedIntegerField(
+    deleted_voyages_ids = models.CharField(
         'Deleted voyage ids',
+        validators=[validate_comma_separated_integer_list],
         max_length=255,
         help_text='The voyage_id of each Voyage being deleted by this contribution')
 
@@ -321,8 +414,9 @@ class MergeVoyagesContribution(BaseVoyageContribution):
     """
     interim_voyage = models.ForeignKey(InterimVoyage, null=False,
                                        related_name='+')
-    merged_voyages_ids = models.CommaSeparatedIntegerField(
+    merged_voyages_ids = models.CharField(
         'Merged voyage ids',
+        validators=[validate_comma_separated_integer_list],
         max_length=255,
         help_text='The voyage_id of each Voyage being merged by this contribution')
     help_text = _('Enter your preferred data to the right. If required use the box for '
@@ -348,3 +442,39 @@ class NewVoyageContribution(BaseVoyageContribution):
 
     def __unicode__(self):
         return _('New voyage')
+
+contribution_model_by_type = {
+    'delete': DeleteVoyageContribution,
+    'edit': EditVoyageContribution,
+    'merge': MergeVoyagesContribution,
+    'new': NewVoyageContribution,
+    'review': ReviewVoyageContribution,
+    'editorial_review': EditorVoyageContribution
+}
+
+def get_contribution(contribution_type, contribution_id):
+    model = contribution_model_by_type.get(contribution_type)
+    if model is None: return None
+    return model.objects.filter(pk=contribution_id).first()
+    
+def get_contribution_from_id(contribution_id):
+    if contribution_id is None:
+        return None
+    contribution_pair = contribution_id.split('/')
+    contribution_type = contribution_pair[0]
+    contribution_id = int(contribution_pair[1])
+    return get_contribution(contribution_type, contribution_id)
+
+source_type_dict = {
+    'Primary source': InterimPrimarySource,
+    'Article source': InterimArticleSource,
+    'Book source': InterimBookSource,
+    'Newspaper source': InterimNewspaperSource,
+    'Private note or collection source': InterimPrivateNoteOrCollectionSource,
+    'Unpublished secondary source': InterimUnpublishedSecondarySource
+    }
+    
+def get_all_new_sources_for_interim(interim_pk):
+    all_sources = [list(src_type.objects.filter(interim_voyage__id=interim_pk)) for src_type in source_type_dict.values()]
+    return list(itertools.chain.from_iterable(all_sources))
+ 

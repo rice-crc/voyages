@@ -578,3 +578,14 @@ var StringUtils = {
 function insertAttrib(elem, key, val) {
 	elem.setAttribute(key, val);
 }
+
+// Access page GET parameters from script
+function pageGetParams() {
+    var params = {};
+    window.location.search
+        .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+            params[key] = value;
+        }
+    );
+    return params;
+}

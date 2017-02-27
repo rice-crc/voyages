@@ -1,0 +1,53 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">{% trans "Downloads" %}</div>
+  <div class="panel-body">
+    <button class="btn btn-default" id="select_all_downloads">{% trans "Select all" %}</button>
+    <button class="btn btn-default" id="clear_all_downloads">{% trans "Clear" %}</button>
+    <p><input id="accepted_unpublished_check" name="accepted_unpublished" type="checkbox" checked><label class="checkbox-inline" for="accepted_unpublished">{% trans "Accepted (pending publication)" %}</label></p>
+    <p><input id="rejected_check" name="rejected" type="checkbox" checked><label class="checkbox-inline" for="rejected">{% trans "Rejected" %}</label></p>
+    <p><input id="under_review_check" name="under_review" type="checkbox" checked><label class="checkbox-inline" for="under_review">{% trans "Under review" %}</label></p>
+    <p><input id="committed_check" name="comitted" type="checkbox" checked><label class="checkbox-inline" for="comitted">{% trans "Commited by contributor" %}</label></p>
+    <p><input id="published_check" name="published" type="checkbox"><label class="checkbox-inline" for="under_review">{% trans "Published" %}</label></p>
+    
+    <button class="btn btn-primary" id="download_selection">{% trans "Download" %}</button>
+  </div>
+</div>
+
+<p></p>
+
+<div>
+    <span id="last_updated_span"></span>
+</div>
+
+<div id="publication_log_pane" class="alert alert-info" style="display: none;">
+</div>
+
+<script type="text/javascript">
+    var statusChecks = ['accepted_unpublished_check', 'rejected_check', 'under_review_check', 'committed_check', 'published_check'];
+    function toggleDownloads(b) {
+        for (var i = 0; i < statusChecks.length; ++i) {
+            $('#' + statusChecks[i]).prop('checked', b); 
+        }
+    }
+    $('#select_all_downloads').click(function() {
+        toggleDownloads(true);
+    });
+    $('#clear_all_downloads').click(function() {
+        toggleDownloads(false);
+    });
+    $('#download_selection').click(function() {
+        var args = [];
+        for (var i = 0; i < statusChecks.length; ++i) {
+            if ($('#' + statusChecks[i]).prop('checked')) {
+                args.push(statusChecks[i] + '=True');
+            }
+        }
+        if (args.length == 0) {
+            alert('{% trans "You must select at least one status" %}');
+        } else {
+            window.location = "{% url 'contribute:download_voyages' %}?" + args.join('&');
+        }
+    });
+</script>

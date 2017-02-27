@@ -81,7 +81,7 @@
 
     {% block footer %}
     <div id="footer">
-        {% if request.get_full_path == '/admin/' %}
+        {% if request.path == '/admin/' %}
         <a href="{% url 'downloads' %}">Download Files</a>
         {% endif %}
     </div>

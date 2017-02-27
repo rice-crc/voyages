@@ -1,18 +1,20 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load voyage_extras %}
 
 {% block title %}{% trans "Verify submitted information" %}{% endblock %}
 
 {% block center-content %}
 {% with blank_text='' %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <div id="toogles">
     <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
-    <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label>
+    <!-- <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label> -->
     <input type="checkbox" id="show_notes" checked> <label for="show_notes">{% trans "Notes" %}</label>
 </div>
 <div class="col-md-12" id="data_display">
-    <div class="row group_header">
+    <div class="row group_header" id="main_table_header">
         <span class="col-sm-4">{% trans "Variable" %}</span>
         <span class="col-sm-4 old_values_header"></span>
         <span class="col-sm-4">{% trans "Contributed value" %}</span>
@@ -601,7 +603,7 @@
                     <td>{{ source.original_ref }}</td>
                     <td>{{ source.full_ref|safe }}</td>
                     <td class="text-center">
-                        <span class="glyphicon glyphicon-{% if source.action = 0 %}ok{% endif %}{% if source.action = 1 %}pencil{% endif %}{% if source.action = 2 %}remove{% endif %}"></span>
+                        <span class="glyphicon glyphicon-{% if source.action == 0 %}ok{% endif %}{% if source.action == 1 %}pencil{% endif %}{% if source.action == 2 %}remove{% endif %}"></span>
                     </td>
                     <td>
                         {{ source.notes }}
@@ -633,27 +635,31 @@
 
     <h3>{% trans "Contributor" %}</h3>
 
+    {% with contributor=contribution.contributor %}
     <p>
         <label for="contributor_name">{% trans "Name" %}:</label>
-        <span id="contributor_name">{% if request.user.get_full_name != '' %}{{ request.user.get_full_name }}{% else %}{{ request.user }}{% endif %}</span>
+        <span id="contributor_name">{% if contributor.get_full_name != '' %}{{ contributor.get_full_name }}{% else %}{{ contributor }}{% endif %}</span>
     </p>
     <p>
         <label for="contributor_email">{% trans "E-mail" %}:</label>
-        <span id="contributor_email">{{ request.user.email }}</span>
+        <span id="contributor_email">{{ contributor.email }}</span>
     <p>
+    {% endwith %}
 
     <hr />
     <label for="timestamp">{% trans "Summary date" %}:</label>
     <span id="timestamp"></span>
+    {% if mode != 'contribute' and review_request %}
+        <div><strong>{% trans "Review status: " %}</strong><em>{{ review_request.get_status_msg }}</em></div>
+    {% endif %}
 </div>
-<br />
-<br />
+<p></p>
 <div id="summary_toolbar" style="padding-top:6px; padding-bottom:6px; background-color:rgba(255,255,255,0.85)">
     <div class="btn-group">
         <button type="button" class="btn btn-default" aria-label="Print" id="print_button">
             <span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Print" %}
         </button>
-        {% if contribution.status <= 1 and user.pk == contribution.contributor.pk %}
+        {% if mode == 'contribute' and contribution.status <= 1 and user.pk == contribution.contributor.pk %}
             <button type="button" class="btn btn-default" aria-label="Edit" id="edit_contrib">
                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Edit contribution" %}
             </button>
@@ -664,11 +670,20 @@
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Cancel contribution" %}
             </button>
         {% endif %}
+        {% if mode == 'editor' and not review_request %}
+            {% include "contribute/preview_editor_commands.html" %}
+        {% endif %}
+        {% if mode == 'editor' %}
+            <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+        {% endif %}
     </div>
 </div>
 {% endwith %}
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript">
     "use strict";
     $('#print_button').click(function() {
@@ -697,6 +712,17 @@
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
     var voyage_ids = Object.keys(voyages);
+    var existing_voyage_ids = $.map(voyage_ids, function(id) {
+        return $.isNumeric(id) ? id : null;
+    });
+    var existing_voyages = {};
+    for (var i = 0; i < existing_voyage_ids.length; ++i) {
+        var id = existing_voyage_ids[i];
+        existing_voyages[id] = voyages[id];
+    }
+    var extra_voyages = $.map(voyage_ids, function(id) {
+        return $.isNumeric(id) ? null : { id: id, voyage: voyages[id] };
+    });
 
     $('.multiline_value span').each(function() {
         var $span = $(this);
@@ -769,7 +795,9 @@
     var numbers = {
     {% for k, v in numbers.items %}
         {% if v %}
+        {% localize off %}
             '{{ k }}': {{ v }},
+        {% endlocalize %}
         {% endif %}
     {% endfor %}
     };
@@ -791,8 +819,8 @@
         var $div = $(this);
         var parent = $div.closest('.row');
         var name = $div.attr('id').substring(4);
-        var values = getVoyagesValues(voyages, name);
-        var voyagesCount = voyage_ids.length;
+        var values = getVoyagesValues(existing_voyages, name);
+        var voyagesCount = existing_voyage_ids.length;
         if (values) {
             // Remove blank class from parent.
             parent.removeClass('blank');
@@ -810,6 +838,29 @@
             }
         }
     });
+    
+    var grid_class = 4;
+    if (extra_voyages.length > 0) {
+        var col_count = extra_voyages.length + (existing_voyage_ids.length > 0 ? 3 : 2);
+        grid_class = Math.round(Math.floor(12 / col_count));
+        $('.row > .col-sm-4').removeClass('col-sm-4').addClass('col-sm-' + grid_class);
+        for (var i = 0; i < extra_voyages.length; ++i) {
+            $('#main_table_header').append('<span class="col-sm-' + grid_class + '">' + extra_voyages[i].id + '</span>');
+        }
+        $('.row').each(function() {    
+            var child = $(this).children().last();
+            var old_values_div = $(this).find('.old_values');
+            if (old_values_div.length != 1) return;
+            var field_id = old_values_div.attr('id').substring(4);
+            for (var i = 0; i < extra_voyages.length; ++i) {
+                var clone = child.clone();
+                clone.attr('id', null);
+                var v = extra_voyages[i].voyage;
+                clone.text(v.hasOwnProperty(field_id) ? v[field_id] : '');
+                $(this).append(clone);
+            } 
+        });
+    }
 
     $('span.date_value, div.date_value .old_single_value').each(function() {
         var $this = $(this);
@@ -827,7 +878,9 @@
         {{ interim.primary_sources.all|jsonify }},
         {{ interim.article_sources.all|jsonify }},
         {{ interim.book_sources.all|jsonify }},
-        {{ interim.other_sources.all|jsonify }}
+        {{ interim.newspaper_sources.all|jsonify }},
+        {{ interim.private_note_or_collection_sources.all|jsonify }},
+        {{ interim.unpublished_secondary_sources.all|jsonify }}
     ];
     var k = 0;
     for (var i = 0; i < all_source_types.length; ++i) {
@@ -872,11 +925,12 @@
     });
     $('#timestamp').html(new Date());
 
-    $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-4");
-    $(".old_values_header").html(voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + voyage_ids[0]);
+    $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-" + grid_class);
+    
+    $(".old_values_header").html(existing_voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + existing_voyage_ids[0]);
     alternateBackground();
-    // TODO: remove this code once styling is done.
-    $("#center-content").css('width', '900px');
+    
+    maximizeContent({% if mode == 'editor' %}true{% endif %});
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>

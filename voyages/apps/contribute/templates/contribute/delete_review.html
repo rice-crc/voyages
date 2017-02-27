@@ -3,18 +3,27 @@
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 
-<h2>{% trans "Review deleted voyages" %}</h2>
+{% if not readonly %}
+    <h2>{% trans "Review deleted voyages" %}</h2>
 
-<h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
-
+    <h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
+{% else %}
+    <h2>{% trans "Delete voyage contribution - Voyage data" %}</h2>
+{% endif %}
 {% for vars in deleted_voyage_vars %}
     {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}
 <hr />
 {% endfor %}
 
+{% if not readonly %}
 <form method="post">
     {% csrf_token %}
     <div class="form-group col-md-12">
@@ -31,4 +40,20 @@
         return conf;
     });
 </script>
+
+{% endif %}
+
+{% if mode == 'reviewer' or mode == 'editor' %}
+    <form>
+        {% include "contribute/decision_part.html" with allow_impute=False %}
+    </form>
+    <script type="text/javascript">
+        initDecisionForm();
+    </script>
+{% endif %}
+{% if mode == 'editor' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+{% endif %}
+
+
 {% endblock %}

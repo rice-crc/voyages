@@ -1,0 +1,38 @@
+{% load i18n %}
+{{ form.media }}
+
+<form class="form-horizontal">
+    <div class="form-group col-sm-12">
+        {% with form.short_ref as f %}
+            {{ f.errors }}
+            {{ f.label_tag }}
+            <div class="input-group col-sm-12">
+                {{ f }}
+            </div>                
+        {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+    </div>
+    <div class="form-group col-sm-12">
+        {% with form.full_ref as f %}
+            {{ f.errors }}
+            {{ f.label_tag }}
+            <div class="input-group col-sm-12">
+                {{ f }}
+            </div>                
+        {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+    </div>
+    <div class="form-group col-sm-12">
+        {% with form.source_type as f %}
+            {{ f.errors }}
+            {{ f.label_tag }}
+            <div class="input-group col-sm-12">
+                {{ f }}
+            </div>                
+        {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+    </div>
+    <div class="form-group col-sm-12">
+        <label for="id_connection_ref">{% trans "Text reference" %}:</label>
+        <div class="input-group col-sm-12">
+            <input class="form-control" type="text" id="id_connection_ref" name="connection_ref" value="{{ original_ref|default_if_none:'' }}">
+        </div>
+    </div>
+</form>

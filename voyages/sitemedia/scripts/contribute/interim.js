@@ -29,10 +29,17 @@ function ValidationResult(warnings, errors) {
 
 var _bindFrom = function(self) {
     return function() {
-        self.id = $("#source_id_field").val();
+        self.index = $("#source_index_field").val();
+        self.pk = $("#source_pk_field").val();
         for (var key in self._fields) {
-            var inputId = self._fields[key][0];
-            self[key] = $("#" + inputId).val();
+            var field = self._fields[key];
+            var inputId = field[0];
+            var $input = $("#" + inputId);
+            if (field.length > 2) {
+                self[key] = field[2]($input);
+            } else {
+                self[key] = $input.val();
+            }
         }
         return self;
     };
@@ -40,10 +47,18 @@ var _bindFrom = function(self) {
 
 var _bindTo = function(self) {
     return function() {
-        $("#source_id_field").val(self.id);
+        $('#referencesModal input').val('');
+        $("#source_index_field").val(self.index);
+        $("#source_pk_field").val(self.pk);
         for (var key in self._fields) {
-            var inputId = self._fields[key][0];
-            $("#" + inputId).val(self[key]);
+            var field = self._fields[key];
+            var inputId = field[0];
+            var $input = $("#" + inputId);
+            if (field.length > 3) {
+                field[3]($input, self[key]);
+            } else {
+                $input.val(self[key]);
+            }
         }
         return self;
     };
@@ -55,6 +70,8 @@ var _fromModel = function(self) {
             var fieldName = self._fields[key][1];
             self[key] = model[fieldName];
         }
+        self['created_voyage_sources_id'] = model['created_voyage_sources_id'] || model['created_voyage_sources'];
+        self['text_ref'] = model['source_ref_text'];
         return self;
     };
 };
@@ -66,9 +83,21 @@ var _toModel = function(self) {
             var fieldName = self._fields[key][1];
             model[fieldName] = self[key];
         }
+        model['__index'] = self.index;
         model['type'] = self.type;
+        model['pk'] = self.pk;
+        model['created_voyage_sources_id'] = self.created_voyage_sources_id;
+        model['source_ref_text'] = self.text_ref;
         return model;
     };
+}
+
+var _checkboxGetValue = function($el) {
+    return $el.prop('checked');
+}
+var _checkboxSetValue = function($el, val) {
+    $el.prop('checked', val);
+    $el.trigger('change');
 }
 
 function validateMinLength(val, minLength, errors, fieldName) {
@@ -96,6 +125,23 @@ function validateYear(val, notNull) {
     return validateInt(val, 1500, 1867, notNull);
 }
 
+// A helper class that allows concatenating elements with variable
+// separators removing blank terms from the concatenation.
+function ConcatTerm(term, concatenator) {
+    var self = this;
+    self.term = term || '';
+    self.concatenator = concatenator || '';
+    self.isNullOrEmpty = function() { return term == null || term == ''; };
+    self.add = function(concatTerm) {
+        if (self.isNullOrEmpty()) {
+            return concatTerm.isNullOrEmpty() ? new ConcatTerm() : concatTerm;
+        } else {
+            if (concatTerm.isNullOrEmpty()) return self;
+            return new ConcatTerm(self.term + self.concatenator + concatTerm.term, concatTerm.concatenator);
+        }
+    };
+}
+
 // Concatenate all strings in the array if and only if
 // all pieces are non-null and non-empty. Otherwise,
 // returns null.
@@ -103,7 +149,7 @@ function concat(pieces) {
     var result = '';
     for (var i = 0; i < pieces.length; ++i) {
         var s = pieces[i];
-        if (!s || s.length == 0) return null;
+        if (!s || s.length == 0) return '';
         result += s;
     }
     return result;
@@ -113,17 +159,17 @@ function sourceDetails(detailsArr) {
     var nonEmpty = $.map(detailsArr, function(d) {
         if (d) {
             var x = d.trim();
-            if (x.length) return x;
+            if (x.length) return '<p>' + x + '</p>';
         }
     });
     if (nonEmpty.length) {
-        return '&nbsp;<span class="source_reference_extras">' +
-            nonEmpty.join('<br />') + '</span>';
+        return '&nbsp;<div class="source_reference_extras">' +
+            nonEmpty.join(' ') + '</div>';
     }
     return '';
 }
 
-function PrimarySource(library, location, series, volume, detail, info, url, id) {
+function PrimarySource(library, location, series, volume, detail, info, url) {
     this.type = 'Primary source';
     this.library = library;
     this.location = location;
@@ -132,7 +178,6 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     this.detail = detail;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -166,7 +211,7 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     this.toModel = _toModel(this);
 }
 
-function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd, info, url, id) {
+function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd, info, url) {
     this.type = 'Article source';
     this.author = author;
     this.title = title;
@@ -177,7 +222,6 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.pageEnd = pageEnd;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -223,7 +267,7 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.toModel = _toModel(this);
 }
 
-function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, id) {
+function BookSource(author, title, publisher, place, year, pageStart, pageEnd, info, url, is_essay, essay_title, editors) {
     this.type = 'Book source';
     this.author = author;
     this.title = title;
@@ -234,7 +278,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.pageEnd = pageEnd;
     this.info = info;
     this.url = url;
-    this.id = id;
+    this.is_essay = is_essay;
+    this.essay_title = essay_title || false;
+    this.editors = editors;
     var self = this;
     this.validate = function () {
         var errors = [];
@@ -245,22 +291,31 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
+        if (self.is_essay) {
+            validateMinLength(self.essay_title, 4, errors, gettext('Essay title'));
+            validateMinLength(self.editors, 4, errors, gettext('Editors'));
+        }
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
-            self.author + ', ' + self.title;
-        if (self.publisher) {
-            result += ' - ' + self.publisher;
+            self.author + ', ';
+        if (self.is_essay) {
+            result += '"' + self.essay_title + '" in ' + self.editors + ' (ed.), <em>' + self.title + '</em>';
+        } else {
+            result += self.title;
         }
-        if (self.place) {
-            result += ', ' + self.place;
+        var extra = (new ConcatTerm(self.place, ', ')).
+                add(new ConcatTerm(self.publisher, ': ')).
+                add(new ConcatTerm(self.year));
+        result += concat([' (', extra.term, ')']);
+        // Pages or single page?
+        if (self.pageStart && self.pageStart == self.pageEnd) {
+            result += concat([gettext(' p. '), self.pageStart]);
+        } else {
+            result += concat([gettext(' pp. '), self.pageStart, '-', self.pageEnd]);
         }
-        result += '</span>' + sourceDetails([
-            concat(['(', self.year, ')']),
-            concat([gettext('Pages '), self.pageStart, '-', self.pageEnd]),
-            self.info,
-            self.url]);
+        result += '</span>' + sourceDetails([self.info, self.url]);
         return result;
     };
     this._fields = {
@@ -273,6 +328,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         "pageEnd": ["book_last_page", "page_end"],
         "info": ["book_info", "information"],
         "url": ["book_url", "url"],
+        "is_essay": ["book_is_essay", "source_is_essay_in_book", _checkboxGetValue, _checkboxSetValue],
+        "essay_title": ["book_essay_title", "essay_title"],
+        "editors": ["book_editors", "editors"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
@@ -280,18 +338,63 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.toModel = _toModel(this);
 }
 
-function OtherSource(title, location, page, info, url, id) {
-    this.type = 'Other source';
+function NewspaperSource(name, alternative_name, city, country, info, url) {
+    this.type = 'Newspaper source';
+    this.name = name;
+    this.alternative_name = alternative_name;
+    this.city = city;
+    this.country = country;
+    this.info = info;
+    this.url = url;
+    var self = this;
+    this.validate = function () {
+        var errors = [];
+        var warnings = [];
+        validateMinLength(self.name, 4, errors, gettext('Name'));
+        validateMinLength(self.city, 4, errors, gettext('City'));
+        validateMinLength(self.country, 4, errors, gettext('Country'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
+        return new ValidationResult(warnings, errors);
+    };
+    this.toString = function () {
+        var result = '<span class="source_reference_main_part">' + self.name;
+        if (self.alternative_name) {
+            result += ' (later, ' + self.alternative_name + ')';
+        }
+        result += ', (' + self.city + ', ' + self.country + ')';
+        result += '</span>' + sourceDetails([
+            self.info,
+            self.url]);
+        return result;
+    };
+    this._fields = {
+        "name": ["newspaper_name", "name"],
+        "alternative_name": ["newspaper_alternative_name", "alternative_name"],
+        "city": ["newspaper_city", "city"],
+        "country": ["newspaper_country", "country"],
+        "info": ["newspaper_info", "information"],
+        "url": ["newspaper_url", "url"],
+    };
+    this.bindFromForm = _bindFrom(this);
+    this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
+function PrivateNoteOrCollectionSource(authors, title, location, page, info, url) {
+    this.type = 'Private note or collection source';
+    this.authors = authors;
     this.title = title;
     this.location = location;
     this.page = page;
     this.info = info;
     this.url = url;
-    this.id = id;
     var self = this;
     this.validate = function () {
         var errors = [];
         var warnings = [];
+        validateMinLength(self.authors, 4, errors, gettext('Authors'));
         validateMinLength(self.title, 4, errors, gettext('Title'));
         validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
         validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
@@ -309,11 +412,12 @@ function OtherSource(title, location, page, info, url, id) {
         return result;
     };
     this._fields = {
-        "title": ["other_title", "title"],
-        "location": ["other_location", "location"],
-        "page": ["other_page", "page"],
-        "info": ["other_info", "information"],
-        "url": ["other_url", "url"],
+        "authors": ["pnc_authors", "authors"],
+        "title": ["pnc_title", "title"],
+        "location": ["pnc_location", "location"],
+        "page": ["pnc_page", "page"],
+        "info": ["pnc_info", "information"],
+        "url": ["pnc_url", "url"],
     };
     this.bindFromForm = _bindFrom(this);
     this.bindToForm = _bindTo(this);
@@ -321,7 +425,68 @@ function OtherSource(title, location, page, info, url, id) {
     this.toModel = _toModel(this);
 }
 
-function sourceFactory(data, id) {
+function UnpublishedSecondarySource(authors, title, location, page, info, url) {
+    this.type = 'Unpublished secondary source';
+    this.authors = authors;
+    this.title = title;
+    this.location = location;
+    this.page = page;
+    this.info = info;
+    this.url = url;
+    var self = this;
+    this.validate = function () {
+        var errors = [];
+        var warnings = [];
+        validateMinLength(self.authors, 4, errors, gettext('Authors'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
+        return new ValidationResult(warnings, errors);
+    };
+    this.toString = function () {
+        var result = '<span class="source_reference_main_part">' + self.title;
+        if (self.location) {
+            result += ' - ' + self.location;
+        }
+        result += '</span>' + sourceDetails([
+            concat([gettext('Page '), self.page]),
+            self.info,
+            self.url]);
+        return result;
+    };
+    this._fields = {
+        "authors": ["unpub_authors", "authors"],
+        "title": ["unpub_title", "title"],
+        "location": ["unpub_location", "location"],
+        "page": ["unpub_page", "page"],
+        "info": ["unpub_info", "information"],
+        "url": ["unpub_url", "url"],
+    };
+    this.bindFromForm = _bindFrom(this);
+    this.bindToForm = _bindTo(this);
+    this.fromModel = _fromModel(this);
+    this.toModel = _toModel(this);
+}
+
+function createSourceByTypeName(typeName) {
+    var source = null;
+    if (typeName == 'Primary source') {
+        source = new PrimarySource();
+    } else if (typeName == 'Article source') {
+        source = new ArticleSource();
+    } else if (typeName == 'Book source') {
+        source = new BookSource();
+    } else if (typeName == 'Newspaper source') {
+        source = new NewspaperSource();        
+    } else if (typeName == 'Private note or collection source') {
+        source = new PrivateNoteOrCollectionSource();
+    } else if (typeName == 'Unpublished secondary source') {
+        source = new UnpublishedSecondarySource();
+    }
+    return source;
+}
+
+function sourceFactory(data, index) {
     var source = null;
     var fields = null;
     if (data.model && data.fields) {
@@ -332,28 +497,26 @@ function sourceFactory(data, id) {
             source = new ArticleSource();
         } else if (data.model == 'contribute.interimbooksource') {
             source = new BookSource();
-        } else if (data.model == 'contribute.interimothersource') {
-            source = new OtherSource();
+        } else if (data.model == 'contribute.interimnewspapersource') {
+            source = new NewspaperSource();
+        } else if (data.model == 'contribute.interimprivatenoteorcollectionsource') {
+            source = new PrivateNoteOrCollectionSource();
+        } else if (data.model == 'contribute.interimunpublishedsecondarysource') {
+            source = new UnpublishedSecondarySource();
         }
         fields = data.fields;
     } else if (data.type) {
         // Construct object based on JS object's JSON representation.
-        if (data.type == 'Primary source') {
-            source = new PrimarySource();
-        } else if (data.type == 'Article source') {
-            source = new ArticleSource();
-        } else if (data.type == 'Book source') {
-            source = new BookSource();
-        } else if (data.type == 'Other source') {
-            source = new OtherSource();
-        }
+        source = createSourceByTypeName(data.type);
         fields = data;
     }
+    source.pk = null;
     if (source != null && fields != null) {
         source.fromModel(fields);
-        if (id) {
-            source.id = id;
+        if (index) {
+            source.index = index;
         }
+        source.pk = data.pk;
     }
     return source;
 }
@@ -389,7 +552,7 @@ function parseDateValue(val) {
         // If it has a day, it must have a month as well.
         return result.year != null && (result.day == null || result.month != null);
     };
-    result.toMMDDYYY = function() {
+    result.toMMDDYYYY = function() {
         return (result.month || '') + ',' + (result.day || '') + ',' + (result.year || '');
     };
     return result;
@@ -522,15 +685,14 @@ var KEY_UP = 38;
 
 var APPENDED_FIELD_CLASS = '__appended_field__';
 
-// Wrap the slave numbers table logic in a JS object that can be reused
-// for multiple tables (demographics, sex and age etc).
-function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_headers, pre_existing_data) {
+
+function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count, pre_existing_data, var_name_to_position, position_to_var_name) {
     var self = this;
     self.table_id = table_id;
     self.numbers = numbers;
     self.editable = editable;
-    self.column_headers = column_headers;
-    self.row_headers = row_headers;
+    self.column_count = column_count;
+    self.row_count = row_count;
     self.pre_existing_data = pre_existing_data;
     
     // Fetch rows/cells from the DOM.
@@ -547,13 +709,12 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
     );
     
     // Initialize table data.
-    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
     for (var key in self.numbers) {
-        var match = regex.exec(key);
+        var pos = var_name_to_position(key);
         var found = false;
-        if (match) {
-            var col = self.column_headers.indexOf(match[1]);
-            var row = self.row_headers.indexOf(match[2]);
+        if (pos) {
+            var col = pos.columnIndex;
+            var row = pos.rowIndex;
             if (col >= 0 && row >= 0 && row < self.rows.length && col < self.rows[row].length) {
                 var $entry = $(self.rows[row][col]);
                 $entry.html(numbers[key]);
@@ -582,13 +743,13 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
     if (self.editable) {
         current_cell = null;
         editor = $('#cell_editor');
-        self.col_count = self.column_headers.length;
-        self.row_count = self.row_headers.length;
+        self.col_count = self.column_count;
+        self.row_count = self.row_count;
         // Clicking on a cell will open up an edit box for the entry.
         $('#' + self.table_id + ' td').click(function() {
             if (current_cell) return;
             current_cell = $(this);
-            var value = parseInt(current_cell.html());
+            var value = parseFloat(current_cell.html());
             current_cell.html('');
             editor.unbind();
             editor.appendTo(current_cell);
@@ -667,38 +828,70 @@ function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_head
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
                 if (!isNaN(value)) {
-                    var name = NUMBERS_KEY_PREFIX + self.column_headers[j] + self.row_headers[i];
+                    var name = position_to_var_name(i, j);
                     form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="' + name + '" value="' + value + '" />');
                 }
             }
         }
-    }; 
+    };
+    return self;
 }
 
 // Construct the age and sex table, with preset column and row headers.
 function ageAndSexTable(numbers, editable, pre_existing_data) {
-    var AGE_AND_SEX_COLUMN_HEADERS = ['PURCHASE', 'LANDING', 'ARRIVAL'];
-    var AGE_AND_SEX_ROW_HEADERS = ['1IMP', '2IMP', '3IMP', '4IMP', '5IMP', '6IMP', '7IMP', '8IMP', '9IMP'];
+    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    var rows = ['SLAVEMA', 'SLAVEMX', 'SLAVMAX',
+                'MENRAT', 'WOMRAT', 'BOYRAT',
+                'GIRLRAT', 'CHILRAT', 'MALRAT'];
+    var cols = ['1', '3', '7'];
     return new SlaveNumbersTable(
         'age_and_sex_table',
         numbers,
         editable,
-        AGE_AND_SEX_COLUMN_HEADERS,
-        AGE_AND_SEX_ROW_HEADERS,
-        pre_existing_data
+        3,
+        9,
+        pre_existing_data,
+        function(key) {
+            var match = regex.exec(key);        
+            if (match) {
+                var row = rows.indexOf(match[1]);
+                var col = cols.indexOf(match[2]);
+                return {columnIndex: col, rowIndex: row};
+            }
+            return null;
+        },
+        function(i, j) {
+            return NUMBERS_KEY_PREFIX + rows[i] + cols[j];
+        }
     );
 }
 
 // Construct the demographics table, with preset column and row headers.
 function demographicsTable(numbers, editable, pre_existing_data) {
     var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
-    var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '2IMP', '3IMP', '4IMP'];
-    return new SlaveNumbersTable(
+    var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '3IMP', '7', '2IMP'];
+    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    return SlaveNumbersTable(
         'demographics_table',
         numbers,
         editable,
-        DEMOGRAPHICS_COLUMN_HEADERS,
-        DEMOGRAPHICS_ROW_HEADERS,
-        pre_existing_data
+        DEMOGRAPHICS_COLUMN_HEADERS.length,
+        DEMOGRAPHICS_ROW_HEADERS.length,
+        pre_existing_data,
+        function(key) {
+            var match = regex.exec(key);        
+            if (match) {
+                var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
+                var row = DEMOGRAPHICS_ROW_HEADERS.indexOf(match[2]);
+                return {columnIndex: col, rowIndex: row};
+            }
+            return null;
+        },
+        function(i, j) {
+            return NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_HEADERS[i];
+        }
     );
 }
+
+// Helps when Django outputs none in some places.
+var None = {};
