@@ -39,7 +39,10 @@ function writebreadcrumb() {
 			for (var i = 4; i < maxIdx; i++) {
 				/*path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[i]) + elem[i].length + 1)
 				+ "/\">" + elem[i] + "</a>";*/
-				path += seperatorst + "<span>" + elem[i] + "</span>";
+				var prettyName = elem[i];
+				prettyName = prettyName.replace('_', ' ');
+				prettyName = prettyName.charAt(0).toUpperCase() + prettyName.slice(1);
+				path += seperatorst + "<span>" + gettext(prettyName) + "</span>";
 			}
 		}
 		

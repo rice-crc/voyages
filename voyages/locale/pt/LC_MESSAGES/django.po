@@ -5667,7 +5667,7 @@ msgstr "Admin ao vivo"
 #: voyages/apps/contribute/templates/contribute/index.html:21
 #, fuzzy
 #| msgid "Include empty"
-msgid "Include a new voyage"
+msgid "New voyage"
 msgstr "Incluir vazio"
 
 #: voyages/apps/contribute/templates/contribute/index.html:24

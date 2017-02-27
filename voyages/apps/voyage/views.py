@@ -32,6 +32,7 @@ from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
 from django.utils.translation import ugettext as _
+from django.utils.translation import get_language
 from cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
 from graphs import *
@@ -129,7 +130,16 @@ def download_file(request):
 
 def download_flatpage(request):
     from django.contrib.flatpages.models import FlatPage
-    flatpage = FlatPage.objects.get(pk=1)
+    page_title = 'Downloads'
+    lang = get_language()
+    flatpage = None
+    if lang != 'en':
+        try:
+            flatpage = FlatPage.objects.get(title=page_title + '_' + lang)
+        except:
+            pass
+    if flatpage is None:
+        flatpage = FlatPage.objects.get(title=page_title)
     from datetime import date
     return render(request,
                   'flatpages/download.html',
@@ -562,11 +572,8 @@ def voyage_images(request, voyage_id):
                   {'tab': 'images',
                    'voyage_id': voyage_id,
                    'voyage': voyage})
-    
-def voyage_variables(request, voyage_id):
-    """
-    Displays all the variables for a single voyage
-    """
+
+def voyage_variables_data(voyage_id):
     voyagenum = int(voyage_id)
     voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
@@ -589,6 +596,13 @@ def voyage_variables(request, voyage_id):
                 allvars.append(((len(glist), unicode(group)), unicode(j['var_full_name']), val, j['var_name']))
             else:
                 allvars.append(((None, None), unicode(j['var_full_name']), val, j['var_name']))
+    return voyage, allvars
+
+def voyage_variables(request, voyage_id):
+    """
+    Displays all the variables for a single voyage
+    """
+    (voyage, allvars) = voyage_variables_data(voyage_id)
 
     return render(request, "voyage/voyage_info.html",
                   {'voyage_variables': allvars,

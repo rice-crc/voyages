@@ -1,0 +1,8 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<h1>{{ title }}</h1>
+<p class="legal_paragraph">{{ paragraph }}</p>
+<button class="btn btn-default" onclick="window.location.href='/contribute/'">{% trans 'Accept' %}</button>
+{% endblock %}

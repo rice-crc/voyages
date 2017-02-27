@@ -1,0 +1,190 @@
+@import '_variables.less';
+
+body {
+    font-size: 8pt;
+}
+p.help-block {
+    font-size: 12px;
+    text-align: left;
+}
+ul.contribute_menu {
+    padding: 10px;
+    li {
+        list-style: none;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        a {
+            color: #FFF;
+            font-weight: normal;
+            display: block;
+            padding: 20px 15px;
+            background-color: @voyagesLightBlue;
+            text-align: center;
+            font-size: 1.5em;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+.secondary-menu-item-0 {
+    ul {
+        li {
+            a {
+                padding-left: 25px;
+                background-image: none;
+                font-size: .85em;
+            }
+        }
+    }
+}
+.white-board {
+    h2 {
+        font-size: 25px;
+        font-weight: normal;
+        margin-bottom: 20px;
+    }
+}
+h1.contribute_header {
+        font-size: 25px;
+        font-weight: normal;
+        margin-bottom: 20px;
+}
+.broad_region {
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
+    .region {
+        margin-left: 20px;
+        font-style: italic;
+        height: 0px;
+        padding: 0px !important;
+    }
+
+    .port {
+        height: 0px;
+        margin-left: 30px;
+        padding: 0px !important;
+    }
+
+    .expanded, .search_match {
+        height: auto !important;
+        padding: 3px 12px !important;
+    }
+
+    .field_notes {
+        min-width: 420px !important;
+        min-height: 100px !important;
+    }
+
+    .form-control {
+        position: static !important;
+    }
+
+    .search_match {
+        margin-left: 5px !important;
+    }
+
+    .selectize-dropdown {
+        position: absolute !important;
+    }
+
+    .geo_complement {
+        color: #B0B0B0;
+    }
+
+    .cell_hover {
+        background-color: darkgray;
+    }
+
+    #demographics_table td {
+        width: 85px;
+        height: 52px;
+        cursor: text;
+        text-align: right;
+    }
+
+    #demographics_table td, #demographics_table th {
+        vertical-align: middle !important;
+    }
+
+    .has_pre_existing_values, .has_notes {
+        background-color: yellow;
+            padding-bottom: 7px;
+    }
+
+    .tab-pane {
+        padding: 20px;
+    }
+
+    .form_help_text {
+        color: gray;
+        margin-left: 33%;
+    }
+
+    .form-horizontal a {
+        display: block;
+        background-color: #F1F1F1;
+        border-bottom: solid 1px #CCC;
+    }
+
+    .form-horizontal a:hover {
+        text-decoration: none;
+    }
+
+    .form-horizontal a h1 {
+        font-size: 18px;
+        margin-top: 0px;
+        padding: 15px 10px;
+            font-weight: normal;
+        margin-bottom: 0;    
+
+    }
+
+    .form-horizontal a h1:before, .tree_expanded:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        padding-right: 5px;
+        font-size: 0.75em;
+    }
+
+    .form-horizontal a.collapsed h1:before, .tree_collapsed:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e080";
+        padding-right: 5px;
+        font-size: 0.75em;
+    }
+
+    .var_group {
+        background-color: #FFFFFF;
+        border: solid 1px #CCC;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .selectize-dropdown {
+        min-width: 180px !important;
+    }
+    
+    .selectize_day, .selectize_month, .selectize_year {
+        display: none;
+    }
+    
+    .selectize_day.search_match {
+        display: inline-block;
+    }
+    
+    .selectize_year.search_match, .selectize_month.search_match {
+        display: block;
+    }
+
+@media (min-width: 768px) {
+    .form-horizontal {
+    .control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+     text-align: left; 
+}    
+    } 
+}

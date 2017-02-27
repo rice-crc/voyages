@@ -5,7 +5,7 @@ hurry.filesize
 pysolr
 wsgiref
 mock
-django-autocomplete-light
+django-autocomplete-light<3.0.0
 sorl-thumbnail 
 pillow
 bitly_api

@@ -2,18 +2,28 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.http import Http404
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.models import *
 from django.utils.translation import ugettext as _
+from django.core.mail import send_mail
+from django.conf import settings
 import json
 
 number_prefix = 'interim_slave_number_'
+
+def get_filtered_contributions(filter_args):
+    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
+            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in DeleteVoyageContribution.objects.filter(**filter_args)] +\
+            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
 
 def index(request):
     """
@@ -21,21 +31,26 @@ def index(request):
     Display the user index page if the user is already authenticated
     Or return to the login page if the user has not logged in yet
     """
-    filter_args = {'contributor': request.user, 'status': ContributionStatus.pending}
+    filter_args = {'contributor': request.user, 'status__lte': ContributionStatus.committed}
     if request.user.is_authenticated():
-        contributions = [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
-            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
+        contributions = get_filtered_contributions(filter_args)
         return render(request, "contribute/index.html", {'contributions': contributions})
     else:
         return HttpResponseRedirect(reverse('account_login'))
+
+def legal(request):
+    from forms import legal_terms_title
+    from forms import legal_terms_paragraph
+    return render(request, 'contribute/legal.html',
+                  {'title': legal_terms_title, 'paragraph': legal_terms_paragraph})
 
 def get_summary(v):
     dates = v.voyage_dates
     return {'voyage_id': v.voyage_id,
             'captain': ', '.join([c.name for c in v.voyage_captain.all()]),
             'ship': v.voyage_ship.ship_name,
-            'year_arrived': dates.get_date_year(dates.first_dis_of_slaves)}
+            'year_arrived': dates.get_date_year(dates.first_dis_of_slaves) or
+                            dates.get_date_year(dates.imp_arrival_at_port_of_dis)}
 
 @csrf_exempt
 def get_voyage_by_id(request):
@@ -53,12 +68,15 @@ def get_voyage_by_id(request):
         error = 'POST request required'
     return JsonResponse({'error': error})
 
-
+@cache_page(24 * 60 * 60)
 @csrf_exempt
 def get_places(request):
     # retrieve list of places in the system.
     places = sorted(Place.objects.prefetch_related('region__broad_region'),
-                    key=lambda p: (p.region.broad_region.broad_region, p.region.value, p.value))
+                    key=lambda p: (
+                        p.region.broad_region.broad_region if p.region.broad_region.value != 80000 else 'zzz',
+                        p.region.value,
+                        p.value))
     result = []
     last_broad_region = None
     last_region = None
@@ -103,17 +121,42 @@ def delete(request):
             with transaction.atomic():
                 contribution = DeleteVoyageContribution()
                 contribution.contributor = request.user
+                contribution.status = ContributionStatus.pending
                 contribution.deleted_voyages_ids = ','.join([str(x) for x in ids])
-                contribution.status = ContributionStatus.committed
                 contribution.notes = request.POST.get('notes')
                 contribution.save()
-            return HttpResponseRedirect(reverse('contribute:thanks'))
+            return HttpResponseRedirect(reverse('contribute:delete_review',
+                                                kwargs={'contribution_id': contribution.pk}))
         else:
             ids = form.selected_voyages
             voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm()
-    return render(request, 'contribute/delete.html', {'form': form, 'voyage_selection': voyage_selection})
+    return render(request, 'contribute/delete.html', {
+        'form': form,
+        'voyage_selection': voyage_selection})
+
+def delete_review(request, contribution_id):
+    contribution = get_object_or_404(DeleteVoyageContribution, pk=contribution_id)
+    if request.user.pk != contribution.contributor.pk or contribution.status > ContributionStatus.committed:
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        action = request.POST.get('submit_val')
+        if action == 'confirm':
+            contribution.status = ContributionStatus.committed
+            contribution.save()
+            return HttpResponseRedirect(reverse('contribute:thanks'))
+        elif action == 'cancel':
+            contribution.delete()
+            return HttpResponseRedirect(reverse('contribute:index'))
+        else:
+            return HttpResponseBadRequest()
+    from voyages.apps.voyage.views import voyage_variables_data
+    ids = [int(pk) for pk in contribution.deleted_voyages_ids.split(',')]
+    deleted_voyage_vars = [voyage_variables_data(voyage_id)[1] for voyage_id in ids]
+    return render(request, 'contribute/delete_review.html', {
+        'deleted_voyage_vars': deleted_voyage_vars,
+        'voyage_selection': ids})
 
 @login_required
 def edit(request):
@@ -190,6 +233,7 @@ def create_source(source_values, interim_voyage):
     return source
 
 contribution_model_by_type = {
+    'delete': DeleteVoyageContribution,
     'edit': EditVoyageContribution,
     'merge': MergeVoyagesContribution,
     'new': NewVoyageContribution
@@ -202,8 +246,65 @@ def get_contribution(contribution_type, contribution_id):
     contribution = get_object_or_404(model, pk=contribution_id)
     return contribution
 
+def interim_main(request, contribution, interim):
+    """
+    The reusable part of the interim form handling.
+    This function should be used in the views targeted at
+    contributor, reviewer, and editor.
+    :param request: the request which may contain interim form POST data.
+    :param contribution: the contribution object, which may be a review.
+    :param interim: the interim voyage data.
+    :return: (Boolean b, numbers, form)
+    First entry of tuple is True if GET request or valid POST, False otherwise.
+    Numbers: dictionary of slave numbers
+    Form: the interim form.
+    """
+    result = True
+    if request.method == 'POST':
+        form = InterimVoyageForm(request.POST, instance=interim)
+        prefix = 'interim_slave_number_'
+        numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+        sources_post = request.POST.get('sources')
+        sources = [create_source(x, interim)
+                   for x in json.loads(sources_post if sources_post is not None else '[]')]
+        result = form.is_valid()
+        if result:
+            with transaction.atomic():
+                def del_children(child_model):
+                    child_model.objects.filter(interim_voyage__id=interim.pk).delete()
+                del_children(InterimPrimarySource)
+                del_children(InterimArticleSource)
+                del_children(InterimBookSource)
+                del_children(InterimOtherSource)
+                del_children(InterimSlaveNumber)
+                # Get pre-existing sources.
+                for src in interim.pre_existing_sources.all():
+                    src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
+                    src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
+                    src.save()
+                form.save()
+                contribution.notes = request.POST.get('contribution_main_notes')
+                contribution.save()
+                for src in sources:
+                    src.save()
+                # Clear previous numbers and save new ones.
+                for k, v in numbers.items():
+                    number = InterimSlaveNumber()
+                    number.interim_voyage = interim
+                    number.var_name = k[len(prefix):]
+                    number.number = v
+                    number.save()
+    else:
+        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
+        form = InterimVoyageForm(instance=interim)
+    return result, form, numbers
+
 @login_required
 def interim(request, contribution_type, contribution_id):
+    if contribution_type == 'delete':
+        return HttpResponseRedirect(reverse('contribute:delete_review',
+                                    kwargs={'contribution_id': contribution_id}))
+
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
@@ -213,61 +314,40 @@ def interim(request, contribution_type, contribution_id):
             'contribute:interim_summary',
             kwargs={'contribution_type': contribution_type, 'contribution_id': contribution_id}))
 
+    if request.GET.get('revert_to_pending') == 'true' and contribution.status <= ContributionStatus.committed:
+        contribution.status = ContributionStatus.pending
+        contribution.save()
     if contribution.status != ContributionStatus.pending:
         return redirect()
-    sources_post = None
     interim = contribution.interim_voyage
-    if request.method == 'POST':
-        if request.POST.get('submit_val') == 'delete':
-            with transaction.atomic():
-                contribution.interim_voyage.delete()
-                contribution.delete()
-            return HttpResponseRedirect(reverse('contribute:index'))
-        else:
-            form = InterimVoyageForm(request.POST, instance=contribution.interim_voyage)
-            prefix = 'interim_slave_number_'
-            numbers = {k: int(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
-            sources_post = request.POST.get('sources')
-            sources = [create_source(x, contribution.interim_voyage)
-                       for x in json.loads(sources_post if sources_post is not None else '[]')]
-            if form.is_valid():
-                with transaction.atomic():
-                    def del_children(child_model):
-                        child_model.objects.filter(interim_voyage__id=interim.pk).delete()
-                    del_children(InterimPrimarySource)
-                    del_children(InterimArticleSource)
-                    del_children(InterimBookSource)
-                    del_children(InterimOtherSource)
-                    del_children(InterimSlaveNumber)
-                    # Get pre-existing sources.
-                    for src in interim.pre_existing_sources.all():
-                        src.action = request.POST.get('pre_existing_source_action_' + str(src.pk), 0)
-                        src.notes = request.POST.get('pre_existing_source_notes_' + str(src.pk), '')
-                        src.save()
-                    form.save()
-                    contribution.notes = request.POST.get('contribution_main_notes')
-                    contribution.save()
-                    for src in sources:
-                        src.save()
-                    # Clear previous numbers and save new ones.
-                    for k, v in numbers.items():
-                        number = InterimSlaveNumber()
-                        number.interim_voyage = interim
-                        number.var_name = k[len(prefix):]
-                        number.number = v
-                        number.save()
-                return redirect()
-    else:
-        numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
-        form = InterimVoyageForm(instance=interim)
+    if request.method == 'POST' and request.POST.get('submit_val') == 'delete':
+        with transaction.atomic():
+            contribution.interim_voyage.delete()
+            contribution.delete()
+        return HttpResponseRedirect(reverse('contribute:index'))
+    (valid, form, numbers) = interim_main(request, contribution, interim)
+    if valid and request.method == 'POST':
+        return redirect()
+    sources_post = None if request.method != 'POST' else request.POST.get('sources')
     previous_data = contribution_related_data(contribution)
     return render(request, 'contribute/interim.html',
                   {'form': form,
+                   'mode': 'contribute',
                    'contribution': contribution,
                    'numbers': numbers,
                    'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
+
+@login_required
+@require_POST
+def interim_save_ajax(request, contribution_type, contribution_id):
+    contribution = get_contribution(contribution_type, contribution_id)
+    if request.user.pk != contribution.contributor.pk:
+        return HttpResponseForbidden()
+    (valid, form, numbers) = interim_main(request, contribution, contribution.interim_voyage)
+    return JsonResponse({'valid': valid, 'errors': form.errors})
+
 @login_required
 def interim_commit(request, contribution_type, contribution_id):
     if request.method != 'POST':
@@ -280,7 +360,7 @@ def interim_commit(request, contribution_type, contribution_id):
     return HttpResponseRedirect(reverse('contribute:thanks'))
 
 @login_required()
-def interim_summary(request, contribution_type, contribution_id):
+def interim_summary(request, contribution_type, contribution_id, mode='contribute'):
     contribution = get_contribution(contribution_type, contribution_id)
     if request.user.pk != contribution.contributor.pk and not request.user.is_staff:
         return HttpResponseForbidden()
@@ -290,6 +370,7 @@ def interim_summary(request, contribution_type, contribution_id):
     return render(request, 'contribute/interim_summary.html',
                   {'contribution': contribution,
                    'interim': contribution.interim_voyage,
+                   'mode': mode,
                    'numbers': numbers,
                    'form': form,
                    'user': request.user,
@@ -538,3 +619,234 @@ def voyage_to_dict(voyage):
         dict[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
         dict[number_prefix + 'NDESERT'] = crew.crew_deserted
     return dict
+
+@login_required()
+def editor_main(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    return render(request, 'contribute/editor_main.html')
+
+@login_required()
+def get_pending_requests(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    filter_args = {'status__gte': ContributionStatus.committed, 'status__lt': ContributionStatus.published}
+    contributions = get_filtered_contributions(filter_args)
+
+    def get_contribution_info(info):
+        contrib = info['contribution']
+        res = {'type': info['type'],
+               'id': info['id'],
+               'contributor': contrib.contributor.get_full_name(),
+               'date_created': contrib.date_created,
+               'voyage_ids': contrib.get_related_voyage_ids()}
+        # Fetch review info.
+        reqs = [req for req in ReviewRequest.objects.filter(contribution_id=info['type'] + '/' + str(info['id']))
+                if not req.archived]
+        if len(reqs) > 1:
+            raise Exception('Invalid state: more than one review request is active')
+        if len(reqs) == 1:
+            res['reviewer'] = reqs[0].suggested_reviewer.get_full_name()
+            res['response'] = reqs[0].response
+            res['reviewer_comments'] = reqs[0].reviewer_comments
+            res['final_decision'] = reqs[0].final_decision
+        else:
+            res['reviewer'] = ''
+            res['response'] = ''
+            res['reviewer_comments'] = ''
+            res['status'] = 'No reviewer assigned'
+            res['final_decision'] = ''
+        return res
+
+    return JsonResponse({x['type'] + '/' + str(x['id']): get_contribution_info(x) for x in contributions})
+
+def get_reviewers(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    reviewers = [{'full_name': u.get_full_name(), 'pk': u.pk} for u in User.objects.filter(is_staff=True)]
+    return JsonResponse(reviewers, safe=False)
+
+def get_contribution_from_id(contribution_id):
+    if contribution_id is None:
+        return None
+    contribution_pair = contribution_id.split('/')
+    contribution_type = contribution_pair[0]
+    contribution_id = int(contribution_pair[1])
+    return get_contribution(contribution_type, contribution_id)
+
+@login_required()
+@require_POST
+def post_review_request(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution_id = request.POST.get('contribution_id')
+    contribution = get_contribution_from_id(contribution_id)
+    reviewer_id = int(request.POST.get('reviewer_id'))
+    message = request.POST.get('message')
+    if contribution.contributor_id == reviewer_id:
+        return JsonResponse({'error': _('Reviewer and contributor must be different users')})
+    # Check if contribution already has a pending review.
+    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id) if not req.archived]
+    if len(reqs) >= 1:
+        return JsonResponse({'error': _('There is already an active review for this contribution')})
+
+    review_request = ReviewRequest()
+    try:
+        with transaction.atomic():
+            reviewer = get_object_or_404(User, pk=reviewer_id)
+            review_request.editor = request.user
+            review_request.editor_comments = message
+            review_request.email_sent = False
+            review_request.contribution_id = contribution_id
+            review_request.suggested_reviewer = reviewer
+            review_request.save()
+            contribution.status = ContributionStatus.under_review
+            contribution.save()
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
+
+    result = 0
+    try:
+        result = send_mail('Voyages - contribution review request', 'Editor message:\r\n' + message,
+                  settings.CONTRIBUTE_SENDER_EMAIL, [reviewer.email])
+    except Exception as e:
+        print e
+    finally:
+        if result == 1:
+            review_request.email_sent = True
+            review_request.save()
+
+    return JsonResponse({'review_request': review_request.pk})
+
+@login_required()
+@require_POST
+def post_archive_review_request(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden()
+    contribution_id = request.POST.get('contribution_id')
+    reqs = [req for req in ReviewRequest.objects.filter(contribution_id=contribution_id)
+            if not req.archived]
+    if len(reqs) == 0:
+        return JsonResponse({'error': _('There is no active review for this contribution')})
+    for req in reqs:
+        req.archived = True
+        req.save()
+    return JsonResponse({'result': len(reqs)})
+
+@login_required()
+def review_request(request, review_request_id):
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if req.archived or req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+    if req.review_contribution.count() > 0:
+        return HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
+    contribution = get_contribution_from_id(req.contribution_id)
+    if contribution is None:
+        raise Http404
+    return render(request, 'contribute/review_request.html', {'request': req, 'contribution': contribution})
+
+@login_required()
+@require_POST
+def reply_review_request(request):
+    review_request_id = request.POST.get('review_request_id')
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+
+    if req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+
+    redirect = HttpResponseRedirect(reverse('contribute:review', kwargs={'review_request_id': review_request_id}))
+    if req.review_contribution.count() > 0:
+        return redirect
+
+    # Check response
+    response = request.POST.get('response')
+    valid_responses = ['accept', 'reject']
+    if response not in valid_responses:
+        return HttpResponseBadRequest()
+    req.response = ReviewRequestResponse.accepted if response == 'accept' else ReviewRequestResponse.rejected
+    req.reviewer_comments = request.POST.get('message_to_editor')
+    contributor_comment_prefix = 'Contributor: '
+    with transaction.atomic():
+        req.save()
+        if response == 'accept':
+            review = ReviewVoyageContribution()
+            review.request = req
+            contribution = get_contribution_from_id(req.contribution_id)
+            if hasattr(contribution, 'interim_voyage'):
+                # Clone interim contribution.
+                interim = contribution.interim_voyage
+                related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
+                                 list(interim.other_sources.all()) + list(interim.primary_sources.all()) + \
+                                 list(interim.pre_existing_sources.all()) + list(interim.slave_numbers.all())
+                interim.pk = None
+                # Prepend comments with contributor name.
+                note_dict = json.loads(interim.notes)
+                changed = {}
+                for key, note in note_dict.items():
+                    changed[key] = contributor_comment_prefix + note
+                interim.notes = json.dumps(changed)
+                interim.save()
+                for item in related_models:
+                    item.pk = None
+                    item.interim_voyage = interim
+                    if hasattr(item, 'notes') and item.notes is not None and item.notes != '':
+                        item.notes = contributor_comment_prefix + item.notes
+                    item.save()
+                review.review_interim_voyage = interim
+            review.save()
+    return redirect
+
+def interim_data(interim):
+    dict = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all() if n.number is not None}
+    fields = InterimVoyage._meta.get_fields()
+    for field in fields:
+        # Check if this is a foreign key.
+        name = field.name
+        type = field.get_internal_type()
+        value = getattr(interim, field.name)
+        if value is None:
+            continue
+        if type == 'ForeignKey':
+            try:
+                dict[name] = value.pk
+                dict[name + 'name'] = str(value)
+            except:
+                pass
+        elif type in ['IntegerField', 'CharField', 'TextField', 'CommaSeparatedIntegerField']:
+            if value != '':
+                dict[name] = value
+    return dict
+
+@login_required()
+def review(request, review_request_id):
+    req = get_object_or_404(ReviewRequest, pk=review_request_id)
+    if req.archived or req.suggested_reviewer_id != request.user.pk:
+        return HttpResponseForbidden()
+    contribution_id = req.contribution_id
+    if contribution_id.startswith('delete'):
+        # TODO: delete requests are handled differently than the other types
+        return JsonResponse({'error': 'DELETE review not implemented yet'})
+    user_contribution = get_contribution_from_id(contribution_id)
+    review_contribution = req.review_contribution.first()
+    interim = review_contribution.review_interim_voyage
+    if interim is None:
+        raise Exception('Could not find reviewer\'s interim form')
+    (result, form, numbers) = interim_main(request, review_contribution, interim)
+    #if result and request.method == 'POST':
+        # TODO: Send review.
+        #return JsonResponse({'error': 'SENDING review to editor implemented yet'})
+
+    sources_post = None if request.method != 'POST' else request.POST.get('sources')
+    # Build previous data dictionary.
+    # For the review we need to include both the original voyage(s) data
+    # as well as the user contribution itself.
+    previous_data = contribution_related_data(user_contribution)
+    previous_data[_('User contribution')] = interim_data(user_contribution.interim_voyage)
+    return render(request, 'contribute/interim.html',
+                  {'form': form,
+                   'mode': 'review',
+                   'contribution': review_contribution,
+                   'numbers': numbers,
+                   'interim': interim,
+                   'sources_post': sources_post,
+                   'voyages_data': json.dumps(previous_data)})

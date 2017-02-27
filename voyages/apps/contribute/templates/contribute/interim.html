@@ -5,133 +5,20 @@
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
-<style>
-	.broad_region {
-		margin-left: 10px;
-		font-weight: bold;
-	}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
 
-	.region {
-		margin-left: 20px;
-		font-style: italic;
-		height: 0px;
-		padding: 0px !important;
-	}
+<h1 class='contribute_header'>{{ contribution }}</h1>
 
-	.port {
-		height: 0px;
-		margin-left: 30px;
-		padding: 0px !important;
-	}
-
-	.expanded, .search_match {
-		height: auto !important;
-		padding: 3px 12px !important;
-	}
-
-    .field_notes {
-        min-width: 420px !important;
-        min-height: 100px !important;
-    }
-
-    .form-control {
-        position: static !important;
-    }
-
-	.search_match {
-		margin-left: 5px !important;
-	}
-
-    .selectize-dropdown {
-        position: absolute !important;
-    }
-
-	.geo_complement {
-		color: #B0B0B0;
-	}
-
-	.cell_hover {
-		background-color: darkgray;
-	}
-
-	#demographics_table td {
-		width: 85px;
-		height: 52px;
-		cursor: text;
-        text-align: right;
-	}
-
-	#demographics_table td, #demographics_table th {
-		vertical-align: middle !important;
-	}
-
-    .has_pre_existing_values, .has_notes {
-        background-color: yellow;
-    }
-
-    .tab-pane {
-        padding: 20px;
-    }
-
-    .form_help_text {
-        color: gray;
-        margin-left: 25%;
-    }
-
-    .form-horizontal a {
-        display: block;
-        background-color: #F1F1F1;
-        border-bottom: solid 1px #CCC;
-    }
-
-    .form-horizontal a:hover {
-        text-decoration: none;
-    }
-
-    .form-horizontal a h1 {
-        font-size: 20px;
-        margin-top: 0;
-        //margin-bottom: 0;
-        padding: 10px;
-    }
-
-    .form-horizontal a h1:before, .tree_expanded:before {
-        font-family: 'Glyphicons Halflings';
-        content: "\e114";
-        padding-right: 5px;
-    }
-
-    .form-horizontal a.collapsed h1:before, .tree_collapsed:before {
-        font-family: 'Glyphicons Halflings';
-        content: "\e080";
-        padding-right: 5px;
-    }
-
-    .var_group {
-        background-color: #FFFFFF;
-        border: solid 1px #CCC;
-        padding: 20px;
-    }
-
-    .is_stuck {
-        z-index: 5;
-    }
-
-    .expander_container {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-</style>
-
-<h1>{{ contribution }}</h1>
-
+{% if mode == 'contribute' %}
 <p>
     {% trans "Variables are organized into eight categories." %}
     {{ contribution.help_text|safe }}
-    {% trans "Comments or notes on any entry may be added by clicking on the box to the right of each input box." %}
-    {% trans "If required, use the box for notes at the foot of the page for additional information." %}
-    {% trans "You can review your complete entry at any time by clicking on the 'Review' button, and to submit your entry you must move to the Review page first." %}
+    {% trans "Comments or notes on any entry may be added by clicking on the comment icon to the right of each input box." %}
+    {% trans "For example, should you wish to add a port or region that does not appear in the drop down menu, please let the editors know via the note box at the foot of the entry form." %}
+    {% trans "If required, use this box for any additional information." %}
+    {% trans "You can review your complete entry at any time by clicking on the 'Review' button. To submit your entry you must move to the Review page first." %}
 </p>
+{% endif %}
 
 {{ form.errors }}
 
@@ -284,11 +171,51 @@
             {% with form.additional_ship_owners as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
+        
+        {% if mode != 'contribute' %}        
+        <div class="form-group">
+            {% with form.imputed_national_carrier as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Nationalities" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_standardized_tonnage as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_region_ship_constructed as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8 last_group_input">
+                    <select class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% endif %}
     </div>
     </div>
 
@@ -322,7 +249,7 @@
             {% with form.african_resistance as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "African resistance" %}'>
@@ -336,6 +263,63 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
+        
+        {% if mode != 'contribute' %}
+        <div class="form-group">
+            {% with form.imputed_outcome_of_voyage_for_slaves as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Voyage outcomes for slaves" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_outcome_of_voyage_if_ship_captured as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Voyage outcomes if ship captured" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_outcome_of_voyage_for_owner as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8 last_group_input">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Voyage outcomes for owner" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% endif %}
     </div>
     </div>
 
@@ -495,11 +479,103 @@
             {% with form.port_voyage_ended as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
+                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% if mode != 'contribute' %}
+        <div class="form-group">
+            {% with form.imputed_port_where_voyage_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
                 <div class="input-group col-sm-8">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
+        <div class="form-group">
+            {% with form.imputed_principal_place_of_slave_purchase as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_principal_port_of_slave_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_region_where_voyage_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_region_where_voyage_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_first_region_of_slave_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_second_region_of_slave_landing as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_first_region_of_embarkation_of_slaves as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_second_region_of_embarkation_of_slaves as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_third_region_of_embarkation_of_slaves as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8 last_group_input">
+                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% endif %}
     </div>
     </div>
 
@@ -588,11 +664,104 @@
             {% with form.length_of_middle_passage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
+                <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        
+        {% if mode != 'contribute' %}
+        <div class="form-group">
+            {% with form.imputed_year_voyage_began as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
                 <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
+        <div class="form-group">
+            {% with form.imputed_year_departed_africa as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_year_arrived_at_port_of_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_quinquennium_in_which_voyage_occurred as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_decade_in_which_voyage_occurred as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_century_in_which_voyage_occurred as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_quarter_century_in_which_voyage_occurred as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_century_in_which_voyage_occurred as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_voyage_length_home_port_to_first_port_of_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_length_of_middle_passage as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2 last_group_input">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% endif %}
     </div>
     </div>
 
@@ -731,7 +900,7 @@
             <label for="interim_slave_number_NDESERT">
                 {% trans "Total number of crew deserted" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-2 last_group_input">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NDESERT" name="interim_slave_number_NDESERT">
             </div>
         </div>
@@ -854,12 +1023,100 @@
             <label for="interim_slave_number_SLADAMER">
                 {% trans "Slaves deaths between arrival and sale" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
+        
+        {% if mode != 'contribute' %}
+        <div class="form-group">
+            {% with form.imputed_voyage_groupings_for_estimating_imputed_slaves as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-8">
+                    <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
+                        <option value=""></option>
+                        <optgroup label='{% trans "Voyage groupings" %}'>
+                            {% for val,text in f.field.choices %}
+                                {% if val != '' %}
+                                    <option value="{{ val }}"{% if f.value == val %} selected{% endif %}>{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.imputed_total_slaves_embarked as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group last_group_input">
+            {% with form.imputed_total_slaves_disembarked as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-2">
+                    {{ f }}
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        {% endif %}
     </div>
     </div>
+    
+    {% if mode != 'contribute' %}
+    <!-- Slaves (mortality and price) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#mortality_and_price" aria-expanded="false" aria-controls="mortality_and_price">
+              <h1>{% trans "Slaves (mortality and price)" %}</h1>
+            </a>
+        </div>
+        <div id="mortality_and_price" class="collapse col-md-12 var_group">
+            <div class="form-group">
+                {% with form.imputed_number_of_slaves_embarked_for_mortality_calculation as f %}
+                    {{ f.errors }}
+                    {{ f.label_tag }}
+                    <div class="input-group col-sm-2">
+                        {{ f }}
+                    </div>
+                {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+            </div>
+            <div class="form-group">
+                {% with form.imputed_total_slave_deaths_during_middle_passage as f %}
+                    {{ f.errors }}
+                    {{ f.label_tag }}
+                    <div class="input-group col-sm-2">
+                        {{ f }}
+                    </div>
+                {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+            </div>
+            <div class="form-group">
+                {% with form.imputed_mortality_rate as f %}
+                    {{ f.errors }}
+                    {{ f.label_tag }}
+                    <div class="input-group col-sm-2">
+                        {{ f }}
+                    </div>
+                {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+            </div>
+            <div class="form-group last_group_input">
+                {% with form.imputed_standardized_price_of_slaves as f %}
+                    {{ f.errors }}
+                    {{ f.label_tag }}
+                    <div class="input-group col-sm-2">
+                        {{ f }}
+                    </div>
+                {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Slaves (characteristics) -->
     <div class="expander_container">
@@ -912,18 +1169,97 @@
                     <th>{% trans "Disembarked slaves (second port)" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
+                {% if mode != 'contribute' %}
+                <tr>
+                    <th>{% trans "Imputed number at ports of purchase*" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Imputed number at ports of landing*" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Imputed number at departure or arrival*" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Imputed deaths on middle passage*" %}</th>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
         <div class="form-group">
             <label for="notes_for_slaves_demographics">
                 {% trans "Notes for slaves characteristics" %}:
             </label>
-            <div class="input-group col-md-8">
+            <div class="input-group col-md-8 last_group_input">
                 <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
             </div>
         </div>
     </div>
     </div>
+    
+    {% if mode != 'contribute' %}
+    <!-- Slaves (age and sex) -->
+    <div class="expander_container">
+        <div>
+            <a role="button" class="collapsed expander" data-toggle="collapse" href="#age_and_sex" aria-expanded="false" aria-controls="age_and_sex">
+              <h1>{% trans "Slaves (age and sex)" %}</h1>
+            </a>
+        </div>
+        <div id="age_and_sex" class="collapse col-md-12 var_group">
+        <table id="age_and_sex_table" class="table table-striped" style="width: auto">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "At ports of purchase" %}</th>
+                    <th>{% trans "At ports of landing" %}</th>
+                    <th>{% trans "At departure or on arrival" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{% trans "Total identified by age*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Total identified by gender*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Total identified by age and gender*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Percentage of men*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Percentage of women*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Percentage of boys*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Percentage of girls*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Child ratio*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Male ratio*" %}</th>
+                    <td></td><td></td><td></td><td></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Sources -->
     <div class="expander_container">
@@ -998,10 +1334,20 @@
     </div>
     <input id="global_notes_input" type="hidden" name="notes" />
     <hr />
+    {% if mode == 'contribute' %}
     <div class="form-group col-md-12">
-        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Proceed" %}</button>
+        <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
+        <button class="btn btn-success" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
+    {% elif mode == 'review' %}
+    <div class="form-group col-md-12">
+        TODO: reviewer decision and visualization of summary.
+        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
+    </div>
+    {% elif mode == 'editor_review' %}
+    {% endif %}
 </form>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
     <div class="modal-dialog" role="document">
@@ -1158,8 +1504,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="add_source_btn" type="button" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="add_source_btn" type="button" class="btn btn-primary">{% trans "Add" %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
             </div>
         </div>
     </div>
@@ -1231,7 +1577,7 @@
         var nodeName = input[0].nodeName.toUpperCase();
         if (values && nodeName == 'INPUT') {
             var options = [];
-            var currentValue = input.attr('value');
+            var currentValue = input.attr('value') || input.val();
             optgroups.push({ id: 'typed', label: gettext('Typed value')});
             for (var value in values) {
                 options.push({ source: value, value: value });
@@ -1257,6 +1603,7 @@
                 optgroupLabelField: 'label',
                 optgroupValueField: 'id',
                 searchField: ['value'],
+                selectOnTab: true,
                 maxItems: 1,
                 plugins: ['optgroup_columns', 'restore_on_backspace']
             });
@@ -1266,6 +1613,7 @@
         } else if (nodeName == 'SELECT') {
             var $s = input.selectize({
                 optgroupField: 'source',
+                selectOnTab: true,
                 sortField: [{ field: 'priority' }, { field: 'text' }],
                 lockOptgroupOrder: true,
                 onInitialize: function() {
@@ -1298,7 +1646,7 @@
     var broad_regions = {};
 
     $(document).ready(function() {
-        $('.form-horizontal .form-group>label').addClass('control-label col-sm-3');
+        $('.form-horizontal .form-group>label').addClass('control-label col-sm-4');
 
         // Store numbers in an object.
         var numbers = {
@@ -1310,8 +1658,8 @@
         };
 
         // Set demographic table.
-        var demographics_rows = getDemographicsRows('demographics_table');
-        fillDemograhicsTable('demographics_table', numbers, true);
+        var demographics_table = demographicsTable(numbers, true, voyages);
+        var age_and_sex_table = ageAndSexTable(numbers, true, voyages);
 
         $('#delete_contrib').click(function(e) {
             if (!confirm('{% trans "The contribution will be deleted. Continue anyway?" %}')) {
@@ -1323,6 +1671,7 @@
 
         $('input[type=text], input[type=number], select, textarea')
             .not('.select_port')
+            .not('.select_region')
             .not('.date_input')
             .not('.not_selectized')
             .each(function () {
@@ -1349,15 +1698,28 @@
 
         $.ajax('/contribute/places_ajax', {
             success: function(originalPorts) {
+                var regionsList = [];
                 for (var i = 0; i < originalPorts.length; ++i) {
                     var item = originalPorts[i];
                     if (item.type == "region") {
                         regions[item.pk] = item;
+                        regionsList.push(item);
                     } else if (item.type == "broad_region") {
                         broad_regions[item.pk] = item;
                     }
                     item.source = 'data';
                 }
+                $(".select_region").each(function() {
+                    var self = $(this);
+                    self.selectize({
+                        maxItems: 1,
+                        options: regionsList,
+                        labelField: 'region',
+                        sortField: 'region',
+                        valueField: 'pk',
+                        selectOnTab: false,
+                    });
+                });
                 var EXISTING_PREFIX = '@existing_';
                 $(".select_port").each(function() {
                     var self = $(this);
@@ -1383,7 +1745,7 @@
                     var portItemDisplay = function(data, escape) {
                         var region = regions[data.parent];
                         var broad_region = broad_regions[region.parent];
-                        return '<div>' + escape(data.port) + '<span class="geo_complement"> &laquo; ' + region.region + ' &laquo; ' + broad_region.broad_region + '</span></div>';
+                        return '<div><span class="geo_complement">' + broad_region.broad_region + ' &raquo; ' + region.region + ' &raquo; </span>' + escape(data.port) + '</div>';
                     };
                     self.selectize({
                         maxItems: 1,
@@ -1394,6 +1756,7 @@
                         optgroupValueField: 'id',
                         valueField: 'value',
                         searchField: ['port', 'region', 'broad_region'],
+                        selectOnTab: false,
                         sortField: 'order',
                         render: {
                             option: function(data, escape) {
@@ -1424,7 +1787,7 @@
         // Handle dates.
         var dateOptions = [];
         for (var i = 1500; i <= 1867; ++i) {
-            dateOptions.push({ type: 'year', label: i, value: 'y' + i });
+            dateOptions.push({ type: 'year', label: i, value: 'y' + i, search: i });
         }
 
         {% get_current_language as LANGUAGE_CODE %}
@@ -1437,10 +1800,10 @@
         };
         for (var i = 1; i <= 12; ++i) {
             var month = getMonthName(i);
-            dateOptions.push({ type: 'month', label: month, value: 'm' + leadingZero(i) });
+            dateOptions.push({ type: 'month', label: month, value: 'm' + leadingZero(i), search: month + ' (' + leadingZero(i) + ')' });
         }
         for (var i = 1; i <= 31; ++i) {
-            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i) });
+            dateOptions.push({ type: 'day', label: (i < 10 ? '0' : '') + i, value: 'd' + leadingZero(i), search: leadingZero(i) });
         }
         $(".date_input").each(function() {
             var self = $(this);
@@ -1483,7 +1846,8 @@
             self.selectize({
                 options: options,
                 maxItems: 3,
-                searchField: ['label'],
+                searchField: ['search'],
+                selectOnTab: false,
                 valueField: 'value',
                 labelField: 'label',
                 optgroupLabelField: 'name',
@@ -1493,17 +1857,47 @@
                 render: {
                     option: function(data, escape) {
                         if (data.type == 'year') {
-                            return '<div style="display:none;">' + escape(data.label) + '</div>';
+                            return '<div class="selectize_year">' + escape(data.label) + '</div>';
                         }
                         if (data.type == 'month') {
-                            return '<div class="month">' + escape(data.label) + '</div>';
+                            return '<div class="selectize_month">' + escape(data.search) + '</div>';
                         }
-                        return '<span>' + escape(data.label) + '&nbsp;</span>' + (data.label % 10 == 0 ? '<br />' : '');
+                        if (data.type == 'day') {
+                            return '<div class="selectize_day">' + escape(data.label) + '</div>';
+                        }
+                        return '<div class="selectize_full">' + escape(data.label) + '&nbsp;</div>';
                     },
-                }
+                },
+                score: function(search) {
+                    var score = this.getScoreFunction(search);
+                    var current = $.map(self[0].selectize.items, function(s) { return s[0]; });
+                    return function(item) {
+                        var stype = item.type[0];
+                        // If not expected type omit result.
+                        var allowed = 'y';
+                        if (current.indexOf('y') >= 0) {
+                            allowed = 'm';
+                            if (current.indexOf('m') >= 0) {
+                                 allowed = current.indexOf('d') >= 0 ? '' : 'd';
+                            }
+                        }
+                        if (stype != allowed) return 0.0;
+                        if (stype == 'd' && search.length == 1) return score(item) * (parseInt(item.label) < 10 ? 5 : 1);
+                        return stype == 'y' && search.length != 4 ? 0.0 : score(item);
+                    };
+                },
             });
             var inside = false;
-            this.selectize.on('item_add', function(value, item) {
+            var selectize = this.selectize;
+            var originalKeyDown = selectize.onKeyDown;
+            selectize.onKeyDown = function(e) {
+                // Treat tab, space, slash, dash as a RETURN.
+                if (e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9) {
+                    e.keyCode = 13;
+                }
+                return originalKeyDown.call(selectize, e);  
+            };
+            selectize.on('item_add', function(value, item) {
                 if (inside) return;
                 if (value.startsWith('full')) {
                     this.clear();
@@ -1540,41 +1934,6 @@
             });
         });
 
-        $("#demographics_table td").hover(
-            function() {
-                $(this).addClass('cell_hover');
-            },
-            function() {
-                $(this).removeClass('cell_hover');
-            }
-        );
-
-        var current_cell = null;
-        var editor = $('#cell_editor');
-
-        $("#demographics_table td").click(function() {
-            if (current_cell) return;
-            current_cell = $(this);
-            var value = parseInt(current_cell.html());
-            current_cell.html('');
-            editor.appendTo(current_cell);
-            editor.focus();
-            editor.blur(function() {
-                if (current_cell) {
-                    var value = editor.val();
-                    current_cell.html(value);
-                    current_cell = null;
-                    editor.appendTo($('#hidden_div'));
-                }
-            });
-            editor.keyup(function(e) {
-                if (e.keyCode == 13) {
-                    editor.blur();
-                }
-            });
-            editor.val(value);
-        });
-
         // Parse notes.
         var NOTES_PREFIX = 'notes_for_';
         {% if form.notes.value %}
@@ -1594,6 +1953,22 @@
                 }
             }
         }
+
+        $('.last_group_input, .last_group_input input, .last_group_input select, .last_group_input textarea').keydown(function(e) {
+            if (e.keyCode == KEY_TAB) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $expander = $(this).closest('.expander_container').next().find('.collapse');
+                $expander.collapse('show');
+                if ($expander.attr('id') == 'demographics') {
+                    demographics_table.focus();
+                } else if ($expander.attr('id') == 'age_and_sex') {
+                    age_and_sex_table.focus();
+                } else {
+                    $expander.find(':input:visible:enabled:first').focus();
+                }
+            }
+        });
 
         var addSourceToTable = function(source, isEdit) {
             if (isEdit) removeSource(source.id);
@@ -1665,8 +2040,8 @@
         $('.pre_source_menu_exclude').click(function (e) {
             return sourceMenu(this, 2);
         });
-
-        $('form').submit(function() {
+        
+        var formSubmission = function() {
             if (submit_val != 'delete') {
                 // Build pre-existing sources list.
                 var preSources = $.map(
@@ -1705,34 +2080,64 @@
                 }
             });
             $("#global_notes_input").val(JSON.stringify(notes_submit));
+            // Remove previously appended fields.
+            $('.' + APPENDED_FIELD_CLASS).remove();
+            var form = $('form');
             // Append demographics matrix.
-            var form = $(this);
-            for (var i = 0; i < demographics_rows.length; ++i) {
-                for (var j = 0; j < DEMOGRAPHICS_COLUMN_HEADERS.length; ++j) {
-                    var value = parseInt($(demographics_rows[i][j]).html());
-                    if (!isNaN(value)) {
-                        form.append('<input type="hidden" name="' +
-                            NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_INDICES[i] +
-                            '" value="' + value + '" />');
-                    }
-                }
-            }
-            var $sources = $('<input type="hidden" name="sources" />');
+            demographics_table.appendToForm(form);
+            {% if mode != 'contribute' %}
+            age_and_sex_table.appendToForm(form);
+            {% endif %}
+            var $sources = $('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="sources" />');
             var source_models = $.map(sources, function(s, i) {
                 return s.toModel();
             });
             $sources.val(JSON.stringify(source_models));
             form.append($sources);
             return true;
+        };
+
+        $('form').submit(formSubmission);
+        
+        // Ajax save.
+        $('#save_btn').click(function() {
+            var valid = formSubmission();
+            if (valid) {
+                $(this).prop('disabled', true);
+                var $form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: '{{ request.get_full_path }}'.replace('/interim/', '/interim_save_ajax/'),
+                    data: $form.serialize(),
+                    success: function (response) {
+                        var $success = $('#success_info');
+                        $success.css('opacity', 1.0);
+                        $success.animate({
+                                opacity: 0.0
+                            },
+                            5000
+                        );
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error saving: ' + textStatus);
+                    },
+                    complete: function() {
+                        $('#save_btn').prop('disabled', false);
+                    }
+                });
+            }
         });
     });
 
     // Special handling of port/region/broad region selection.
     var protoSelectOption = Selectize.prototype.onOptionSelect;
     Selectize.prototype.onOptionSelect = function(e) {
-        if (e && e.preventDefault) {
-            e.preventDefault();
-            if (e.type == 'mousedown') return false;
+        if (this.$input.hasClass('select_port') && e && e.currentTarget) {
+			if (e.preventDefault) {
+			    e.preventDefault();
+			    e.stopPropagation();
+			}
+            if (e.type && e.type == 'mousedown') return false;
             var target = $(e.currentTarget);
             var className = "expanded";
             if (this.$control_input.val() != '' && !this.options.create) {
@@ -1753,6 +2158,7 @@
                 if (isExpanded) return false;
                 target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
                 $(".broad_region_" + target.data('pk')).addClass(className);
+                this.setTextboxValue('');
             } else if (target.hasClass("region")) {
                 nextActive = ".region_" + target.data('pk');
                 var isExpanded = $(nextActive + ":first").hasClass(className);
@@ -1761,6 +2167,7 @@
                 if (isExpanded) return false;
                 target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
                 $(".region_" + target.data('pk')).addClass(className);
+                this.setTextboxValue('');
             } else {
                 protoSelectOption.apply(this, arguments);
             }
@@ -1777,5 +2184,7 @@
             protoSelectOption.apply(this, arguments);
         }
     };
+    // TODO: remove this code once styling is done.
+    $("#center-content").css('width', '900px');
 </script>
 {% endblock %}

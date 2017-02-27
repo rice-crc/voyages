@@ -3,10 +3,14 @@
 
 {% block center-content %}
 
-<h1>{% trans "Thank you for your contribution!" %}</h1>
+<h1 class="contribute_header">{% trans "Thank you for your contribution!" %}</h1>
 
 <p>
-	{% trans "The editors appreciate the time you have taken to keep the Voyages database current. They will be in contact with you after reviewing the new data." %}
+	{% trans "The editors appreciate the time you have taken to keep the Voyages database current." %}
+</p>
+
+<p>
+	{% trans "Return to " %}<a href="{% url 'contribute:index' %}">{% trans "Contribute Home" %}</a>.
 </p>
 
 {% endblock %}

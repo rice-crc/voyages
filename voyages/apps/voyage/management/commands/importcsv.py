@@ -148,7 +148,7 @@ class Command(BaseCommand):
             if (val is None or empty.match(val)) and not allow_null:
                 self.errors += 1
                 return None
-            return float(val) if not empty.match(val) else None
+            return round(float(val), 2) if not empty.match(val) else None
 
         def date_csv(var_name_prefix, suffixes=[u'a', u'b', u'c']):
             """

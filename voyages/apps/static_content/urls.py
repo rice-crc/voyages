@@ -1,7 +1,6 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
+from django.conf.urls import url
+import voyages.apps.static_content.views
 
-
-urlpatterns = patterns('',
-    url(r'^$', 'voyages.apps.static_content.views.get_static_content', name='index'),
-)
+urlpatterns = [
+    url(r'^$', voyages.apps.static_content.views.get_static_content, name='index'),
+]
