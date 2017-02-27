@@ -102,7 +102,7 @@
         "last_login": "2013-06-13T00:53:31Z", 
         "groups": [], 
         "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$ZhKQGpEqU9Hx$YD9P+OSBX0b0C5ZKK+gQIuUZGE26cJkF5Z8b5RASaMI=", 
+        "password": "pbkdf2_sha256$24000$UfI5KpLxAwsQ$XuIm7XdHKeTh+Z/wO+D2iE8kA0OdsryGAC6OPwil8ag=", 
         "email": "test@user.com", 
         "date_joined": "2013-06-05T14:53:28Z"
     }

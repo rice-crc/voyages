@@ -24,8 +24,6 @@ class VoyageBaseForm(forms.Form):
         """
         Determines if form is used in building the query, and if it is shown on the page
         """
-        #print dir(self)
-        #print self
         return not not self.cleaned_data['is_shown_field']
 
 # Voyage

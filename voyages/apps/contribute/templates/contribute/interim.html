@@ -1,12 +1,30 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load voyage_extras %}
 
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
-
+<style>
+    #return_btn {
+        display: inline;
+    }
+    
+    .label-table {
+        table-layout: fixed;
+    }
+    
+    .pre-value-cell {
+        cursor: pointer;
+        padding: 3px;
+    }
+    
+    .pre-value-cell:hover {
+        background-color: lightblue;   
+    }
+</style>
 <h1 class='contribute_header'>{{ contribution }}</h1>
 
 {% if mode == 'contribute' %}
@@ -14,15 +32,24 @@
     {% trans "Variables are organized into eight categories." %}
     {{ contribution.help_text|safe }}
     {% trans "Comments or notes on any entry may be added by clicking on the comment icon to the right of each input box." %}
-    {% trans "For example, should you wish to add a port or region that does not appear in the drop down menu, please let the editors know via the note box at the foot of the entry form." %}
+    {% trans "Should you wish to add a port or region that does not appear in the drop down menu, please let the editors know via the note box at the foot of the entry form." %}
     {% trans "If required, use this box for any additional information." %}
     {% trans "You can review your complete entry at any time by clicking on the 'Review' button. To submit your entry you must move to the Review page first." %}
 </p>
 {% endif %}
 
+{% if contribution.get_related_voyage_ids %}
+    <h3>{% trans "Voyage ID(s): " %}
+    {% for id in contribution.get_related_voyage_ids %}
+        {{ id }}
+        {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    </h3>
+{% endif %}
+
 {{ form.errors }}
 
-<form action="{{ request.get_full_path }}" method="post" class="form-horizontal">
+<form action="{{ request.path }}" method="post" class="form-horizontal" id="main_form">
     {% csrf_token %}
     <!-- Ship, nation, owners -->
     <div class="expander_container">
@@ -177,7 +204,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}        
+        {% if mode == 'editorial_review' %}        
         <div class="form-group">
             {% with form.imputed_national_carrier as f %}
                 {{ f.errors }}
@@ -264,7 +291,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_outcome_of_voyage_for_slaves as f %}
                 {{ f.errors }}
@@ -484,7 +511,7 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_port_where_voyage_began as f %}
                 {{ f.errors }}
@@ -593,7 +620,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -602,7 +630,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -611,7 +640,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -619,8 +649,9 @@
             {% with form.date_first_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                <div class="input-group col-sm-3">                    
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -629,7 +660,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -638,7 +670,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -646,8 +679,9 @@
             {% with form.date_return_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                <div class="input-group col-sm-3">                    
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -656,7 +690,8 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-3">
-                    <input class="date_input" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
+                    <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
@@ -670,7 +705,7 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_year_voyage_began as f %}
                 {{ f.errors }}
@@ -702,7 +737,7 @@
             {% with form.imputed_quinquennium_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="5">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -711,7 +746,7 @@
             {% with form.imputed_decade_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="10">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -729,7 +764,7 @@
             {% with form.imputed_quarter_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-2 year_range" data-yearmod="25">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1028,7 +1063,7 @@
             </div>
         </div>
         
-        {% if mode != 'contribute' %}
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_voyage_groupings_for_estimating_imputed_slaves as f %}
                 {{ f.errors }}
@@ -1069,7 +1104,7 @@
     </div>
     </div>
     
-    {% if mode != 'contribute' %}
+    {% if mode == 'editorial_review' %}
     <!-- Slaves (mortality and price) -->
     <div class="expander_container">
         <div>
@@ -1127,7 +1162,7 @@
         </div>
         <div id="demographics" class="collapse col-md-12 var_group">
         <div id="hidden_div" style="display:none">
-            <input type="number" id="cell_editor" style="width: 65px;">
+            <input type="number" id="cell_editor" style="width: 65px;" step="any">
         </div>
         <table id="demographics_table" class="table table-striped" style="width: auto">
             <thead>
@@ -1169,7 +1204,7 @@
                     <th>{% trans "Disembarked slaves (second port)" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
-                {% if mode != 'contribute' %}
+                {% if mode == 'editorial_review' %}
                 <tr>
                     <th>{% trans "Imputed number at ports of purchase*" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
@@ -1200,7 +1235,7 @@
     </div>
     </div>
     
-    {% if mode != 'contribute' %}
+    {% if mode == 'editorial_review' %}
     <!-- Slaves (age and sex) -->
     <div class="expander_container">
         <div>
@@ -1290,13 +1325,13 @@
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <span id="pre_source_action_span_{{ source.pk }}" class="glyphicon glyphicon-{% if source.action = 0 %}ok{% endif %}{% if source.action = 1 %}pencil{% endif %}{% if source.action = 2 %}remove{% endif %}"></span>
+                                    <span id="pre_source_action_span_{{ source.pk }}" class="glyphicon glyphicon-{% if source.action == 0 %}ok{% endif %}{% if source.action == 1 %}pencil{% endif %}{% if source.action == 2 %}remove{% endif %}"></span>
                                 </button>
                                 <input type="hidden" id="pre_existing_source_action_{{ source.pk }}" name="pre_existing_source_action_{{ source.pk }}" value="{{ source.action }}">
                                 <ul class="dropdown-menu pull-right">
-                                <li><a href="" class="pre_source_menu_accept" data-sourcepk="{{ source.pk }}">{% trans "Accept as it is" %}</a></li>
-                                <li><a href="" class="pre_source_menu_exclude" data-sourcepk="{{ source.pk }}">{% trans "Exclude reference (please explain)" %}</a></li>
-                                <li><a href="" class="pre_source_menu_edit" data-sourcepk="{{ source.pk }}">{% trans "Edit reference (please explain)" %}</a></li>
+                                <li><a href="#" class="pre_source_menu_accept" data-sourcepk="{{ source.pk }}" data-originalref="{{ source.original_ref }}">{% trans "Accept as it is" %}</a></li>
+                                <li><a href="#" class="pre_source_menu_exclude" data-sourcepk="{{ source.pk }}" data-originalref="{{ source.original_ref }}">{% trans "Exclude reference (please explain)" %}</a></li>
+                                <li><a href="#" class="pre_source_menu_edit" data-sourcepk="{{ source.pk }}" data-originalref="{{ source.original_ref }}">{% trans "Edit reference (please explain)" %}</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li style="margin:10px; min-width: 400px;"><label for="pre_existing_source_notes_{{ source.pk }}">Notes:</label><textarea class="form-control not_selectized" name="pre_existing_source_notes_{{ source.pk }}" id="pre_existing_source_notes_{{ source.pk }}" type="text">{{ source.notes|default_if_none:'' }}</textarea></li>
                               </ul>
@@ -1307,16 +1342,15 @@
                 </tbody>
             </table>
         {% endif %}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="add_source_modal_btn">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#referencesModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
-        <table id="sources_table" style="display:none;" class="table table-striped">
+        <table id="sources_table" style="display:none; table-layout: fixed;" class="table table-striped">
             <thead>
                 <tr>
-                    <th>{% trans "Type of source" %}</th>
+                    <th width="130px">{% trans "Type of source" %}</th>
                     <th>{% trans "Details" %}</th>
-                    <th></th>
-                    <th></th>
+                    <th width="280px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -1326,53 +1360,64 @@
     </div>
 
     <hr />
-    <div class="form-group">
-        <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
-        <div class="col-sm-8">
-            <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes }}</textarea>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="contribution_main_notes">{% trans "Notes or comments about this contribution:" %}</label>
+            <div class="col-sm-8">
+                <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
+            </div>
         </div>
     </div>
     <input id="global_notes_input" type="hidden" name="notes" />
-    <hr />
-    {% if mode == 'contribute' %}
     <div class="form-group col-md-12">
+        <hr />
         <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
+        {% if mode == 'contribute' %}
         <button class="btn btn-success" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        {% endif %}
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
-    {% elif mode == 'review' %}
-    <div class="form-group col-md-12">
-        TODO: reviewer decision and visualization of summary.
-        <button class="btn btn-primary" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
-    </div>
-    {% elif mode == 'editor_review' %}
+    {% if mode == 'review' or mode == 'editorial_review' %}
+        {% include "contribute/decision_part.html" with allow_impute=True review_request=contribution.request %}
     {% endif %}
 </form>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" >
-    <div class="modal-dialog" role="document">
+{% if mode == 'editorial_review' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+{% endif %}
+{% if mode == 'review' %}
+    <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
+{% endif %}
+<div class="modal fade" id="referencesModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document" style="width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{% trans "Add a source reference" %}</h4>
+                <h4 class="modal-title" id="referencesModalLabel">{% trans "Add a source reference" %}</h4>
             </div>
             <div class="modal-body" style="height: 500px; overflow-y: auto;">
-                <input type="hidden" name="source_id_field" id="source_id_field" />
+                <input type="hidden" name="source_index_field" id="source_index_field" />
+                <input type="hidden" name="source_pk_field" id="source_pk_field" />
                 <ul class="nav nav-tabs" role="tablist" id="tab_control">
-                    <li data-tab="primary" role="presentation" class="active"><a href="#primary"
+                    <li data-tab="primary" data-sourcetype="Primary source" role="presentation" class="active"><a href="#primary"
                                                                                  aria-controls="primary"
                                                                                  role="tab" data-toggle="tab">
                         {% trans "Primary source" %}</a></li>
-                    <li data-tab="article" role="presentation"><a href="#article" aria-controls="article"
+                    <li data-tab="article" data-sourcetype="Article source" role="presentation"><a href="#article" aria-controls="article"
                                                                   role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
-                    <li data-tab="book" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                    <li data-tab="book" data-sourcetype="Book source" role="presentation"><a href="#book" aria-controls="book" role="tab"
                                                                data-toggle="tab">{% trans "Book" %}</a></li>
-                    <li data-tab="other" role="presentation"><a href="#other" aria-controls="other" role="tab"
-                                                                data-toggle="tab">{% trans "Other" %}</a></li>
+                    <li data-tab="newspaper" data-sourcetype="Newspaper source" role="presentation"><a href="#newspaper" aria-controls="newspaper" role="tab"
+                                                                data-toggle="tab">{% trans "Newspaper" %}</a></li>
+                    <li data-tab="private" data-sourcetype="Private note or collection source" role="presentation"><a href="#private" aria-controls="private" role="tab"
+                                                                data-toggle="tab">{% trans "Private note or collection" %}</a></li>
+                    <li data-tab="unpub" data-sourcetype="Unpublished secondary source" role="presentation"><a href="#unpub" aria-controls="unpub" role="tab"
+                                                                data-toggle="tab">{% trans "Unpublished secondary source" %}</a></li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
+                    <!-- Primary sources tab -->
                     <div role="tabpanel" class="tab-pane active" id="primary">
                         <div class="form-group">
                             <label for="primary_name">{% trans "Name of library or archive" %}</label>
@@ -1403,6 +1448,7 @@
                             <textarea class="form-control not_selectized" id="primary_url"></textarea>
                         </div>
                     </div>
+                    <!-- Article sources tab -->
                     <div role="tabpanel" class="tab-pane" id="article">
                         <div class="form-group">
                             <label for="article_author">{% trans "Author" %}</label>
@@ -1441,7 +1487,20 @@
                             <textarea class="form-control not_selectized" id="article_url"></textarea>
                         </div>
                     </div>
+                    <!-- Book/Book essay sources tab -->
                     <div role="tabpanel" class="tab-pane" id="book">
+                        <div class="form-group">
+                            <label for="book_is_essay">{% trans "Source is an essay/chapter in a book" %}</label>
+                            <input class="form-control not_selectized col-sm-1" type="checkbox" id="book_is_essay" onchange="$('.book_essay_input_group').toggle(this.checked);">
+                        </div>
+                        <div class="form-group book_essay_input_group" style="display: none;">
+                            <label for="book_essay_title">{% trans "Essay/Chapter title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_essay_title">
+                        </div>
+                        <div class="form-group book_essay_input_group" style="display: none;">
+                            <label for="book_editors">{% trans "Editors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="book_editors">
+                        </div>
                         <div class="form-group">
                             <label for="book_author">{% trans "Author" %}</label>
                             <input class="form-control not_selectized" type="text" id="book_author">
@@ -1479,26 +1538,85 @@
                             <textarea class="form-control not_selectized" id="book_url"></textarea>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="other">
+                    <!-- Newspaper sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="newspaper">
                         <div class="form-group">
-                            <label for="other_title">{% trans "Title" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_title">
+                            <label for="newspaper_name">{% trans "Name" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_name">
                         </div>
                         <div class="form-group">
-                            <label for="other_location">{% trans "Location" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_location">
+                            <label for="newspaper_alternative_name">{% trans "Alternative name" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_alternative_name">
                         </div>
                         <div class="form-group">
-                            <label for="other_page">{% trans "Page" %}</label>
-                            <input class="form-control not_selectized" type="text" id="other_page">
+                            <label for="newspaper_city">{% trans "City" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_city">
                         </div>
                         <div class="form-group">
-                            <label for="other_info">{% trans "Information about source" %}</label>
-                            <textarea class="form-control not_selectized" id="other_info"></textarea>
+                            <label for="newspaper_country">{% trans "Country" %}</label>
+                            <input class="form-control not_selectized" type="text" id="newspaper_country">
                         </div>
                         <div class="form-group">
-                            <label for="other_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
-                            <textarea class="form-control not_selectized" id="other_url"></textarea>
+                            <label for="newspaper_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="newspaper_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newspaper_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="newspaper_url"></textarea>
+                        </div>
+                    </div>
+                    <!-- Private note or collection sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="private">
+                        <div class="form-group">
+                            <label for="pnc_authors">{% trans "Authors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_authors">
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_location">
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="pnc_page">
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="pnc_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="pnc_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="pnc_url"></textarea>
+                        </div>
+                    </div>
+                    <!-- Unpublished secondary sources tab -->
+                    <div role="tabpanel" class="tab-pane" id="unpub">
+                        <div class="form-group">
+                            <label for="unpub_authors">{% trans "Authors" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_authors">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_title">{% trans "Title" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_location">{% trans "Location" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_location">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_page">{% trans "Page" %}</label>
+                            <input class="form-control not_selectized" type="text" id="unpub_page">
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_info">{% trans "Information about source" %}</label>
+                            <textarea class="form-control not_selectized" id="unpub_info"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="unpub_url">{% trans "URLs or digitized image of the source to be submitted wherever possible about source" %}</label>
+                            <textarea class="form-control not_selectized" id="unpub_url"></textarea>
                         </div>
                     </div>
                 </div>
@@ -1510,16 +1628,37 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="create_ref_dialog" tabindex="-1" role="dialog" aria-labelledby="create_ref_dialog_label" data-backdrop="static" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create_ref_dialog_label">{% trans "Edit or create sources reference" %}</h4>
+            </div>
+            <div id="create_ref_dialog_body" class="modal-body" style="height: 500px; overflow-y: auto;">
+            </div>
+            <div class="modal-footer">
+                <button id="create_ref_confirm_btn" type="button" class="btn btn-primary">{% trans "Confirm" %}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
+<script type="text/javascript">        
+    var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
     // Existing voyage(s) data.
     var voyages = {{ voyages_data|safe }};
 
-    // Keep a source id so that each new source gets a unique identifier.
-    var _sourceid = 0;
+    // Keep a source index so that each new source gets a unique identifier.
+    var _sourceIndex = 0;
     var all_source_types = [
         {% if sources_post %}
             {{ sources_post|safe }}
@@ -1527,40 +1666,162 @@
             {{ interim.primary_sources.all|jsonify }},
             {{ interim.article_sources.all|jsonify }},
             {{ interim.book_sources.all|jsonify }},
-            {{ interim.other_sources.all|jsonify }}
+            {{ interim.newspaper_sources.all|jsonify }},
+            {{ interim.private_note_or_collection_sources.all|jsonify }},
+            {{ interim.unpublished_secondary_sources.all|jsonify }},
         {% endif %}
     ];
     var sources = [];
     for (var i = 0; i < all_source_types.length; ++i) {
         sources = sources.concat($.map(all_source_types[i], function(a) {
-            return sourceFactory(a, ++_sourceid);
+            return sourceFactory(a, ++_sourceIndex);
         }));
     }
-
-    function editSource(id) {
+    function getSourceByIndex(index) {
         for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].id == id) {
-                var s = sources[k];
-                s.bindToForm();
-                $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
-                $("#add_source_btn").html('{% trans "Save changes"  %}');
-                $('#myModal').modal('show');
+            if (sources[k].index == index) {
+                return sources[k];
             }
         }
+        return null;
     }
 
+    function editSource(index) {
+        var s = getSourceByIndex(index);
+        if (s) {
+            s.bindToForm();
+            $('.nav-tabs a[href="#' + s.type.split(' ', 1)[0].toLowerCase() + '"]').tab('show');
+            $("#add_source_btn").html('{% trans "Save changes"  %}');
+            $('#referencesModal').modal('show');
+        }
+    }
+    
+    {% if mode == 'editorial_review' %}
+    var createdNewSource = null;
+    function createOrEditReference(item) {
+        var data = {};
+        var original_ref = $(item).data('originalref');
+        var index = $(item).data('index');
+        if (index) {
+            index = parseInt(index);
+            var sourceWithIndex = getSourceByIndex(index);        
+            createdNewSource = sourceWithIndex.toModel();
+            createdNewSource.index = index;
+            data.interim_source = createdNewSource;
+        } else {
+            createdNewSource = null;
+        }
+        if (original_ref) {
+            data.mode = 'edit';
+            data.original_ref = original_ref;
+        } else {
+            data.mode = 'new';
+        }
+        $.ajax({
+            url: '/contribute/editorial_sources',
+            data: data,
+            method: 'POST',
+            success: function(result) {
+                if (result.errors) {
+                    alert(result.errors);
+                } else {
+                    $('#create_ref_dialog_body').html(result);
+                    $('#create_ref_dialog_body script').appendTo($('head'));
+                    $('#create_ref_dialog_body textarea, #create_ref_dialog_body select').addClass('form-control');
+                    window.tinymce.dom.Event.domLoaded = true;
+                    tinymce.init({ resize: false, selector:'#id_full_ref' });
+                    $('#create_ref_dialog').modal('show');
+                }
+            }
+        }); 
+        return false; 
+    }
+    $('#create_ref_confirm_btn').click(function(e) {
+        e.preventDefault();
+        // Validate reference.
+        var data = {
+            short_ref: $('#id_short_ref').val(),
+            full_ref: tinyMCE.activeEditor.getContent(),
+            source_type: $('#id_source_type').val(),
+            connection_ref: $('#id_connection_ref').val()
+        }
+        var errors = [];
+        var warnings = [];
+        if (data.short_ref.length < 1) {
+            errors.push('{% trans "Short reference must not be empty" %}');
+        }
+        if (data.full_ref.length < 3) {
+            errors.push('{% trans "Full reference is too short" %}');
+        }
+        if (!data.connection_ref.startsWith(data.short_ref)) {
+            errors.push('{% trans "Text reference must start with short reference" %}')
+        } else {
+            var suffix = data.connection_ref.substr(data.short_ref.length);
+            var regex = /^[a-z\d\s\.\-_/:,]+$/i;
+            if (!regex.test(suffix)) {
+                warnings.push('{% trans "Suffix should be alphanumeric and contain only restricted special symbols" %}');
+            }
+        } 
+        if (errors.length) {
+            alert('{% trans "Validation errors" %}\n' + errors.join('\n'));
+            return false;
+        }
+        if (warnings.length) {
+            if (!confirm('{% trans "Validation warnings" %}\n' + warnings.join('\n') + '\n{% trans "Confirm anyway?" %}')) return false;
+        }
+        if (createdNewSource) {
+            data.interim_source_id = createdNewSource['type'] + '/' + createdNewSource['pk'];
+            data.interim_source = createdNewSource;
+        }
+        data.mode = 'save';
+        // Save data.
+        $.ajax({
+            url: '/contribute/editorial_sources',
+            data: data,
+            method: 'POST',
+            success: function(result) {
+                if (result.errors) {
+                    alert(result.errors);
+                } else if (createdNewSource) {
+                    createdNewSource['created_voyage_sources_id'] = result.created_voyage_sources_id;
+                    createdNewSource['source_ref_text'] = data.connection_ref;
+                    for (var i = 0; i < sources.length; ++i) {
+                        if (sources[i].index == createdNewSource.index) {
+                            sources[i].fromModel(createdNewSource);
+                            break;
+                        }
+                    }
+                    $('.create_ref_btn').each(function() {
+                        var $btn = $(this);
+                        if ($btn.data('index') == createdNewSource.index) {
+                            $btn.data('originalref', data.connection_ref);
+                            $btn.text(MODIFY_REFERENCE_TEXT);
+                        }
+                    });
+                }
+                $('#create_ref_dialog').modal('hide');
+            }
+        });
+    });
+    {% endif %}
+    
     // Removes the source from the table and array.
-    function removeSource(id) {
+    function removeSource(index, force) {
+        if (!force && !confirm('{% trans "Remove this source?" %}')) return;
         for (var k = 0; k < sources.length; ++k) {
-            if (sources[k].id == id) {
-                sources.splice(k);
-                $("#row_source_" + id).remove();
+            if (sources[k].index == index) {
+                sources.splice(k, 1);
+                $("#row_source_" + index).remove();
                 if (!sources.length) {
                     $('#sources_table').hide();
                 }
                 return;
             }
         }
+    }
+    
+    function expandAll() {
+        $('.collapse').collapse('show');
     }
 
     var getValues = function(name) {
@@ -1621,18 +1882,20 @@
                         var og = optgroups[key];
                         this.addOptionGroup(og.id, og);
                     }
-                    for (var value in values) {
-                        var found = -1;
-                        var list = this.options;
-                        for (var i in list) {
-                            if (list[i].value == value) {
-                                found = i;
-                                break;
+                    if (values) {
+                        for (var value in values) {
+                            var found = -1;
+                            var list = this.options;
+                            for (var i in list) {
+                                if (list[i].value == value) {
+                                    found = i;
+                                    break;
+                                }
                             }
+                            if (found < 0) continue;
+                            //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
+                            this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
                         }
-                        if (found < 0) continue;
-                        //this.options[found] = { source: value, value: list[found].value, text: list[found].text };
-                        this.options["@fake" + found] = { source: value, value: list[found].value, text: list[found].text };
                     }
                 },
             });
@@ -1647,12 +1910,17 @@
 
     $(document).ready(function() {
         $('.form-horizontal .form-group>label').addClass('control-label col-sm-4');
-
+        var $return_btn = $('#return_btn');
+        if ($return_btn.length) {
+            $return_btn.appendTo($('#decision_btn_group'));
+        }
         // Store numbers in an object.
         var numbers = {
         {% for k, v in numbers.items %}
             {% if v %}
+            {% localize off %}
                 '{{ k }}': {{ v }},
+            {% endlocalize %}
             {% endif %}
         {% endfor %}
         };
@@ -1668,6 +1936,23 @@
                 submit_val = 'delete';
             }
         });
+        
+        $('.year_range').each(function() {
+            var self = $(this);
+            var mod = self.data('yearmod');
+            var options = [];
+            var index = 0;
+            for (var start = 1500; start < 1870; start += mod) {
+                options.push({label: (start + 1) + '-' + (start + mod), value: ++index});
+            }
+            var input = self.children('input');
+            input.addClass('not_selectized');
+            input.selectize({
+                options: options, 
+                valueField: 'value',
+                labelField: 'label',
+            });
+        });
 
         $('input[type=text], input[type=number], select, textarea')
             .not('.select_port')
@@ -1676,7 +1961,9 @@
             .not('.not_selectized')
             .each(function () {
                 var f = $(this);
-                selectizeInput(f);
+                if (!f.parent().hasClass('selectize-input')) {
+                    selectizeInput(f);
+                }
             }
         );
 
@@ -1812,7 +2099,7 @@
                 { type: 'month', name: '{% trans "Month" %}'},
                 { type: 'day', name: '{% trans "Day" %}'},
             ];
-            var values = getValues(self.attr('name'));
+            var values = getValues(self.attr('id').substring(3));
             var options = dateOptions.slice(0);
             var existing = {};
             for (var value in values) {
@@ -1892,7 +2179,8 @@
             var originalKeyDown = selectize.onKeyDown;
             selectize.onKeyDown = function(e) {
                 // Treat tab, space, slash, dash as a RETURN.
-                if (e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9) {
+                var isSelectionChar = e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9; 
+                if (selectize.$activeOption && isSelectionChar) {
                     e.keyCode = 13;
                 }
                 return originalKeyDown.call(selectize, e);  
@@ -1934,24 +2222,88 @@
             });
         });
 
-        // Parse notes.
-        var NOTES_PREFIX = 'notes_for_';
-        {% if form.notes.value %}
-            var notes = {{ form.notes.value|safe }}
-            for (var key in notes) {
-                $('#' + NOTES_PREFIX + key).val(notes[key]).change();
-            }
-        {% endif %}
-
         // Highlight labels of fields with pre-existing values:
+        var fieldValues = {};
+        var preDataCount = 0;
         for (var id in voyages) {
             var v = voyages[id];
+            ++preDataCount;
             for (var name in v) {
-                if (v[name] != null && v[name] != ',,') {
-                    var prefix = name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_';
-                    $('label[for="' + prefix + name + '"]').addClass('has_pre_existing_values');
+                var value = v[name];
+                var itemId = (name.startsWith(NUMBERS_KEY_PREFIX) ? '' : 'id_') + name;
+                var data = fieldValues[name];
+                if (!data) fieldValues[name] = data = { itemId: itemId, values: [], dict: {} };
+                if (value != null && value != ',,') {
+                    data.values.push(value);
+                    data.dict[id] = value;
+                    $('label[for="' + itemId + '"]').addClass('has_pre_existing_values');
                 }
             }
+        }
+        
+        if (preDataCount > 0) {
+            $('.control-label').replaceWith(function() {
+                // Get the id of control matching the label.
+                var originalField = $(this).attr('for');
+                var field = originalField;
+                if (field.startsWith('id_')) field = field.substring(3);
+                var fv = fieldValues[field]
+                if (!fv) return this.outerHTML;
+                var afv = fieldValues[field + '_name'] || fv; 
+                var values = '';
+                var width = (60.0 / preDataCount) + '%';
+                for (var id in voyages) {
+                    var value = afv.dict[id] || '';
+                    // Check if this is a date to properly format it.
+                    if (field.includes('date')) {
+                        var arr = value.split(',');
+                        if (arr.length == 3) {
+                            value = arr[2] + ' ' + (arr[0] ? getMonthName(arr[0]) + ' ' : '') + arr[1];
+                            value.trim();
+                        }
+                    }
+                    values += '<td width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
+                }
+                return '<table class="col-sm-4 label-table"><tr><td width="40%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
+            });
+            
+            $('.pre-value-cell').click(function() {
+                var $this = $(this);
+                var field = $this.data('field');
+                var value = $this.data('value');
+                var $target = $('#' + field);
+                var sel = $target[0].selectize;
+                if (sel) {
+                    if (field.includes('_date_')) {
+                        // Unpack values.
+                        var arr = value.split(',');
+                        if (arr.length == 3) {
+                            var items = [];
+                            var padInt = function(s) { var a = "" + (parseInt(s) + 100); return a.substring(a.length - 2); };
+                            if (arr[0] != '') items.push('m' + padInt(arr[0]));
+                            if (arr[1] != '') items.push('d' + padInt(arr[1]));
+                            if (arr[2] != '') items.push('y' + arr[2]);
+                            sel.setValue(items);
+                        }
+                    } else {                 
+                        sel.setValue(value);
+                    }
+                } else {
+                    $target.val(value);
+                }
+            });
+        }
+        
+        for (var key in fieldValues) {
+            var x = fieldValues[key];
+            if (x.values.length == 0) continue;
+            // Check if all values are the same.
+            var areEqual = x.values.length == preDataCount;
+            var first = x.values[0];
+            for (var i = 1; areEqual && i < x.values.length; ++i) {
+                areEqual = x.values[i] == first;
+            }
+            $('label[for="' + x.itemId + '"]').closest('table').addClass(areEqual ? 'equal_pre_existing_values' : 'different_pre_existing_values');
         }
 
         $('.last_group_input, .last_group_input input, .last_group_input select, .last_group_input textarea').keydown(function(e) {
@@ -1971,31 +2323,27 @@
         });
 
         var addSourceToTable = function(source, isEdit) {
-            if (isEdit) removeSource(source.id);
-            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.id + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><a href="#" onclick="editSource(' + source.id + '); return false;">Edit</a></td><td><a href="#" onclick="removeSource(' + source.id + '); return false;">X</a></td></tr>');
+            if (isEdit) removeSource(source.index, true);
+            var editorialCommands = '';
+            {% if mode == 'editorial_review' %}
+                var sources_ref = source.text_ref;
+                editorialCommands = '<a class="create_ref_btn btn btn-default" href="#" onclick="return createOrEditReference(this);" data-index="' + source.index + '" data-originalref="' + (sources_ref || '') + '">' + (sources_ref ? MODIFY_REFERENCE_TEXT : '{% trans "Create reference" %}') + '</a>'
+            {% endif %}
+            $('#sources_table > tbody:last-child').append('<tr id="row_source_' + source.index + '"><td>' + source.type + '</td><td>' + source.toString() + '</td><td><div class="btn-group" style="float:right;"><a href="#" class="btn btn-primary" onclick="editSource(' + source.index + '); return false;">{% trans "Edit" %}</a><a href="#" class="btn btn-danger" onclick="removeSource(' + source.index + '); return false;">{% trans "Remove" %}</a>' + editorialCommands + '</div></td></tr>');
             $('#sources_table').show();
         };
 
         $("#add_source_modal_btn").click(function () {
-            $("#myModal input, #myModal textarea").val('');
-            var id = ++_sourceid;
-            $("#source_id_field").val(id);
+            $("#referencesModal input, #referencesModal textarea").val('');
+            var index = ++_sourceIndex;
+            $("#source_index_field").val(index);
             $("#add_source_btn").html('{% trans "Add"  %}');
         });
 
         $("#add_source_btn").click(function () {
-            var type = $("ul#tab_control li.active").data("tab");
+            var typeName = $("ul#tab_control li.active").data("sourcetype");
             $('#sources_table').show();
-            var source = null;
-            if (type == 'primary') {
-                source = new PrimarySource();
-            } else if (type == 'article') {
-                source = new ArticleSource();
-            } else if (type == 'book') {
-                source = new BookSource();
-            } else if (type == 'other') {
-                source = new OtherSource();
-            }
+            var source = createSourceByTypeName(typeName);
             if (source) {
                 source.bindFromForm();
                 var validation = source.validate();
@@ -2006,7 +2354,7 @@
                         confirm(validation.toString() + "\n" + gettext('Continue anyway?'))) {
                     addSourceToTable(source, true);
                     sources.push(source);
-                    $('#myModal').modal('hide');
+                    $('#referencesModal').modal('hide');
                 }
             }
         });
@@ -2025,7 +2373,10 @@
             span.removeClass();
             span.addClass("glyphicon glyphicon-" + sourceIcons[action]);
             $('#pre_existing_source_action_' + pk).val(action);
-            if (action > 0) {
+            {% if mode == 'editorial_review' %}
+            if (action == 1) {
+                createOrEditReference(src);
+            } else {% endif %} if (action > 0) {
                 $('#pre_existing_source_notes_' + pk).focus();
             }
             return false;
@@ -2040,8 +2391,50 @@
         $('.pre_source_menu_exclude').click(function (e) {
             return sourceMenu(this, 2);
         });
+
+        // Parse notes.
+        var NOTES_PREFIX = 'notes_for_';
+        {% if interim.notes %}
+        var notes = {{ interim.notes|safe }};
+        // Remark: the note text area elements may not be ready yet.
+        var missing = [];
+        for (var key in notes) {
+            var notesElement = $('#' + NOTES_PREFIX + key);
+            if (notesElement.length > 0) {
+                notesElement.val(notes[key]).change();
+            } else {
+                missing.push(key);
+            }
+        }
+        if (missing.length > 0) {
+            // If the comment text areas have not been generated yet,
+            // we keep running a timer to assign the comments until
+            // they are found.
+            var timer = null;
+            var count = missing.length;
+            timer = setTimeout(
+                function() {
+                    for (var i = 0; i < missing.length; ++i) {
+                        if (missing[i] == null) continue;
+                        var notesElement = $('#' + NOTES_PREFIX + missing[i]);
+                        if (notesElement.length > 0) {
+                            notesElement.val(notes[missing[i]]).change();
+                            missing[i] = null;
+                            --count;
+                        }
+                    }
+                    if (count == 0) {
+                        clearTimeout(timer);
+                    }
+                },
+                500);
+        }
+        {% else %}
+        var notes = {};
+        {% endif %}
         
-        var formSubmission = function() {
+        var formSubmission = function(allowEmptySources) {
+            allowEmptySources = allowEmptySources || false;
             if (submit_val != 'delete') {
                 // Build pre-existing sources list.
                 var preSources = $.map(
@@ -2054,20 +2447,22 @@
                         };
                     }
                 );
-                var validation = validatePreSubmit(sources, preSources);
-                if (validation.hasErrors()) {
-                    alert(validation.toString());
-                    return false;
-                } else if (validation.hasWarnings() &&
-                        !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
-                    return false;
+                if (sources.length > 0 || preSources.length > 0 || !allowEmptySources) {
+                    var validation = validatePreSubmit(sources, preSources);
+                    if (validation.hasErrors()) {
+                        alert(validation.toString());
+                        return false;
+                    } else if (validation.hasWarnings() &&
+                            !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                        return false;
+                    }
                 }
             }
             $("input[name^='date']").each(function() {
                 var self = $(this);
                 // Convert date to the expected format MM,DD,YYYY
-                var date = parseDateValue(self.val());
-                self.val(date.toMMDDYYY());
+                var date = parseDateValue($('#id_' + self.attr('name')).val());
+                self.val(date.toMMDDYYYY());
             });
             // Send notes.
             var notes_submit = {};
@@ -2076,7 +2471,11 @@
                 var $note = $(note);
                 var note_val = $note.val();
                 if (note_val != '') {
-                    notes_submit[$note.attr('name').substring(prefix_length)] = note_val;
+                    var attr = $note.attr('name');
+                    if (attr.startsWith(NOTES_PREFIX)) {
+                        attr = attr.substring(prefix_length);
+                    }
+                    notes_submit[attr] = note_val;
                 }
             });
             $("#global_notes_input").val(JSON.stringify(notes_submit));
@@ -2097,36 +2496,62 @@
             return true;
         };
 
-        $('form').submit(formSubmission);
+        var submitFunc = function() { return formSubmission(false); };
+        $('form').submit(submitFunc);
+        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(submitFunc, {{ form.persisted_form_data.value|safe }});{% endif %}
         
         // Ajax save.
         $('#save_btn').click(function() {
-            var valid = formSubmission();
+            var self = $(this);
+            var valid = formSubmission(true);
             if (valid) {
-                $(this).prop('disabled', true);
-                var $form = $('form');
+                self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
-                    url: '{{ request.get_full_path }}'.replace('/interim/', '/interim_save_ajax/'),
-                    data: $form.serialize(),
+                    {% if mode == 'contribute' %}
+                    url: '{{ request.path }}/save_ajax',
+                    {% else %}
+                    url: '/contribute/{{ mode }}/{{ contribution.pk }}/save_ajax',
+                    {% endif %}
+                    data: $('form').serialize(),
                     success: function (response) {
-                        var $success = $('#success_info');
-                        $success.css('opacity', 1.0);
-                        $success.animate({
-                                opacity: 0.0
-                            },
-                            5000
-                        );
+                        if (response.valid) {
+                            var $success = $('#success_info');
+                            $success.css('opacity', 1.0);
+                            $success.animate({
+                                    opacity: 0.0
+                                },
+                                5000
+                            );
+                            if (response.src_pks) {
+                                for (var index in response.src_pks) {
+                                    var source = getSourceByIndex(index);
+                                    var source_pk = response.src_pks[index];
+                                    if (source.pk && source.pk != source_pk) {
+                                        console.log('A source had its primary key changed!');
+                                    }
+                                    source.pk = source_pk;
+                                }
+                            }
+                        }
+                        else {
+                            alert(response.errors);
+                        }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert('Error saving: ' + textStatus);
                     },
                     complete: function() {
-                        $('#save_btn').prop('disabled', false);
+                        self.prop('disabled', false);
                     }
                 });
             }
+            return false;
         });
+        var pageParams = pageGetParams();
+        if (pageParams.expandAllSections) {
+            expandAll();
+        }
     });
 
     // Special handling of port/region/broad region selection.
@@ -2184,7 +2609,7 @@
             protoSelectOption.apply(this, arguments);
         }
     };
-    // TODO: remove this code once styling is done.
-    $("#center-content").css('width', '900px');
+    // Maximize screen space.
+    maximizeContent({% if mode == 'editorial_review' %}true{% endif %});
 </script>
 {% endblock %}

@@ -1,0 +1,66 @@
+{% load i18n %}
+
+<div class="panel panel-primary">
+  <div class="panel-heading">{% trans "Publication" %}</div>
+  <div class="panel-body">
+    <p><input id="skip_backup_check" name="skip_backup" type="checkbox" value="" ><label class="checkbox-inline" for="skip_backup_check">{% trans "Skip full database backup" %}</label></p>
+    <button id="publish_all_btn" class="btn btn-primary">{% trans "Publish all" %}</button>
+  </div>
+</div>
+
+<p></p>
+
+<div>
+    <span id="last_updated_span"></span>
+</div>
+
+<div id="publication_log_pane" class="alert alert-info" style="display: none;">
+</div>
+
+<script type="text/javascript">
+    $('#publish_all_btn').click(function() {
+        var self = $(this);
+        self.prop('disabled', false);
+        $.ajax({
+            type: "POST",
+            url: '/contribute/json_publish_pending',
+            data: {skip_backup: document.getElementById('skip_backup_check').checked},
+            success: function (response) {
+                if (response.result == 'OK') {
+                    var log_pane = $('#publication_log_pane');
+                    log_pane.append('<p><strong>{% trans "Publication log:" %}</strong></p>');
+                    log_pane.show();
+                    // Monitor status.
+                    var lineCount = 0;
+                    var pending = false;
+                    var intervalId = 0;
+                    intervalId = setInterval(function() {
+                        if (pending) return;
+                        pending = true;
+                        $('#last_updated_span').text('{% trans "Last updated at" %} ' + (new Date()));
+                        $.ajax({
+                            type: "POST",
+                            url: '/contribute/json_retrieve_publication_status',
+                            data: { log_file: response.log_file, skip_count: lineCount },
+                            success: function (status) {
+                                log_pane.append(status.lines);
+                                lineCount += parseInt(status.count);
+                                if (status.lines.includes('EOF')) {
+                                    clearInterval(intervalId);
+                                }
+                            },
+                            complete: function() {
+                                pending = false;
+                            }
+                        })
+                    }, 5000)
+                } else {
+                    alert(response.error);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error sending decision: ' + textStatus);
+            }
+        });
+    });
+</script>

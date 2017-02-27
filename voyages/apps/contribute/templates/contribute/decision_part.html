@@ -1,0 +1,227 @@
+{% load i18n %}
+
+<div class="col-md-12" id="decision_btn_panel">
+    {% if review_request %}
+        {% if mode == 'reviewer' or mode == 'review' %}
+            <h3>{% trans "Reviewer's decision:" %}</h3>
+            <div class="form-group">
+                <label for="message_to_editor">
+                    {% trans "Message to editor" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <textarea class="form-control not_selectized field_notes" id="message_to_editor" name="message_to_editor"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reviewer_decision">
+                    {% trans "Decision" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <select class="form-control not_selectized" id="reviewer_decision" name="reviewer_decision">
+                        <option>{% trans "Please select..." %}</option>
+                        <option value="1">{% trans "Accept" %}</option>
+                        <option value="2">{% trans "Reject" %}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="btn-group" id="decision_btn_group">
+                <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
+            </div>
+        {% endif %}
+        {% if mode == 'editorial_review' or mode == 'editor' %}
+            <h3>{% trans "Editorial tools:" %}</h3>
+            {% if review_request.editor.pk != review_request.suggested_reviewer.pk %}
+                <div class="alert alert-info">
+                    <span>{% trans "Reviewer's decision:" %}</span> <strong>{% if review_request.final_decision == 1 %}{% trans "Accept" %}{% elif review_request.final_decision == 2 %}{% trans "Reject" %}{% endif %}</strong>
+                    <p>
+                        {{ review_request.decision_message|default_if_none:'' }}
+                    </p>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="decision_message">
+                    {% trans "Decision message" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <textarea class="form-control not_selectized field_notes" id="decision_message" name="decision_message">{{ review_request.decision_message|default_if_none:'' }}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editorial_decision">
+                    {% trans "Decision" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <select class="form-control not_selectized" id="editorial_decision" name="editorial_decision">
+                        <option>{% trans "Please select..." %}</option>
+                        <option value="3">{% trans "Accept" %}</option>
+                        <option value="4">{% trans "Reject" %}</option>
+                        <option value="5">{% trans "Delete" %}</option>
+                    </select>
+                </div>
+            </div>
+            {% if review_request.requires_created_voyage_id %}
+            <div class="form-group">
+                <label for="created_voyage_id">
+                    {% trans "Published voyage id" %}:
+                </label>
+                <div class="input-group col-sm-8">
+                    <input class="form-control not_selectized" id="created_voyage_id" name="created_voyage_id" value="{{ review_request.created_voyage_id|default_if_none:'' }}">
+                </div>
+            </div>
+            {% endif %}
+            <div class="btn-group" id="decision_btn_group">
+                <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
+                {% if allow_impute %}
+                    <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% elif mode == 'editorial_review' or mode == 'editor' %}
+        <div class="btn-group">
+            {% include "contribute/preview_editor_commands.html" %}
+        </div>
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    function initDecisionForm(validation, persistedData) {
+        {% if mode == 'reviewer' or mode == 'review' %}
+            $('#submit_editor_btn').click(function(e) {
+                e.preventDefault();
+                var decision = parseInt($('#reviewer_decision option:selected').val());
+                if (decision != 1 && decision != 2) {
+                    alert('{% trans "Please choose your decision." %}');
+                    return false;
+                }
+                var message_to_editor = $('#message_to_editor').val().trim();
+                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#reviewer_decision option:selected').text() + '\n' + message_to_editor)) {
+                    return false;
+                }
+                var valid = !validation || validation();
+                if (!valid) return false;
+                var self = $(this);
+                self.prop('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    url: '/contribute/review/{{ review_request.pk }}/submit_review_to_editor/',
+                    data: $('form').serialize(),
+                    success: function (response) {
+                        if (response.result == 'OK') {
+                            window.location.replace("{% url 'contribute:index' %}");
+                        } else {
+                            alert(response.result);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error sending decision: ' + textStatus);
+                    },
+                    complete: function() {
+                        self.prop('disabled', false);
+                    }
+                });
+                return false;
+            });
+        {% endif %}
+        {% if mode == 'editorial_review' or mode == 'editor' %}
+            {% if allow_impute %}
+                $('#impute_btn').click(function() {
+                    var valid = !validation || validation();
+                    if (!valid) return false;
+                    var self = $(this);
+                    self.prop('disabled', true);
+                    $.ajax({
+                        type: "POST",
+                        {% with editor_contribution=review_request.editor_contribution.first %}
+                        url: '/contribute/impute_contribution/{{ editor_contribution.pk }}',
+                        {% endwith %}
+                        data: $('form').serialize(),
+                        success: function (response) {
+                            if (response.result == 'OK') {
+                                var dict = response.imputed_vars;
+                                var sorted_keys = Object.keys(dict).sort();
+                                var text = '';
+                                for (var i = 0; i < sorted_keys.length; ++i) {
+                                    var key = sorted_keys[i];
+                                    text += '\n' + key + ': ' + dict[key];
+                                }
+                                alert('{% trans "Impute variables computed as follows" %}: ' + text);
+                                // Reload page and expand all sections.
+                                window.location.href = window.location.href + '?expandAllSections=true';
+                            } else {
+                                alert(response.result);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error sending decision: ' + textStatus);
+                        },
+                        complete: function() {
+                            self.prop('disabled', false);
+                        }
+                    });
+                    return false; 
+                });
+            {% endif %}
+            {% with editor_contribution=review_request.editor_contribution.first %}
+            $('#submit_final_decision_btn').click(function() {
+                var decision = parseInt($('#editorial_decision option:selected').val());
+                if (decision != 3 && decision != 4 && decision != 5) {
+                    alert('{% trans "Please choose your decision." %}');
+                    return false;
+                }
+                var created_voyage_id_input = $('#created_voyage_id');
+                if (created_voyage_id_input.length) {
+                    var created_voyage_id = parseInt(created_voyage_id_input.val());
+                    if (isNaN(created_voyage_id) && decision == 3) {
+                        alert('{% trans "Please indicate the voyage id to be used with this voyage" %}');
+                        return false;
+                    }
+                }
+                {% if not editor_contribution.ran_impute %}
+                if (decision == 3) {
+                    alert('{% trans "The impute program must be executed before accepting a contribution." %}');
+                    return false;
+                }
+                {% endif %}
+                var decision_message = $('#decision_message').val().trim();
+                if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#editorial_decision option:selected').text() + '\n' + decision_message)) {
+                    return false;
+                }
+                var self = $(this);
+                var valid = !validation || validation();
+                if (!valid) return false;
+                self.prop('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    
+                    url: '/contribute/editorial_review/{{ editor_contribution.pk }}/submit_editorial_decision',
+                    data: $('form').serialize(),
+                    success: function (response) {
+                        if (response.result == 'OK') {
+                            window.location.replace("{% url 'contribute:editor_main' %}?tab=requests");
+                        } else {
+                            alert(response.errors);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error sending decision: ' + textStatus);
+                    },
+                    complete: function() {
+                        self.prop('disabled', false);
+                    }
+                });
+                return false;
+            });
+            {% endwith %}
+        {% endif %}
+        if (persistedData) {
+            var persistedFields = ['message_to_editor', 'reviewer_decision',
+                'decision_message', 'editorial_decision', 'created_voyage_id'];
+            for (var i = 0; i < persistedFields.length; ++i) {
+                var field = persistedFields[i];
+                if (persistedData.hasOwnProperty(field)) {
+                    $('#' + field).val(persistedData[field]);
+                }
+            }
+        }
+    }
+</script>

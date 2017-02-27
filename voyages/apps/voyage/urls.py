@@ -14,8 +14,8 @@ urlpatterns = [
     url(r'^source',
         voyages.apps.voyage.views.sources_list, name='sources-list-default'),
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Voyage'}, name='index'),
-    url(r'^understanding-db', voyages.apps.voyage.views.understanding_page, name='guide'),
     url(r'^understanding-db/(?P<name>.*)', voyages.apps.voyage.views.understanding_page, name='understanding-page'),
+    url(r'^understanding-db', voyages.apps.voyage.views.understanding_page, name='guide'),
 
     url(r'^c01_s01_cover', TemplateView.as_view(template_name='voyage/guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover', voyages.apps.voyage.views.variable_list, name='variables'),
@@ -33,6 +33,5 @@ urlpatterns = [
     url(r'^(?P<voyage_id>[0-9]+)/images', voyages.apps.voyage.views.voyage_images, name='voyage_images'),
 
     url(r'^csv_stats_download', voyages.apps.voyage.views.csv_stats_download, name='csv_stats_download'),
-    url(r'^shorten_search_url', voyages.apps.voyage.views.shorten_search_url, name='shorten_search_url'),
     url(r'^download', voyages.apps.voyage.views.download_flatpage, name='download')
 ]

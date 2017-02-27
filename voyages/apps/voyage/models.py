@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.core.validators import validate_comma_separated_integer_list
 
 # Voyage Regions and Places
 class BroadRegion(models.Model):
@@ -546,42 +547,42 @@ class VoyageDates(models.Model):
     years_start = {5: 1525, 10: 1500, 25: 1500, 100: 1500}
 
     # Data variables
-    voyage_began = models.CommaSeparatedIntegerField\
-            ("Date that voyage began (DATEDEPB,A,C)", max_length=10,
+    voyage_began = models.CharField\
+            ("Date that voyage began (DATEDEPB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    slave_purchase_began = models.CommaSeparatedIntegerField\
-            ("Date that slave purchase began (D1SLATRB,A,C)", max_length=10,
+    slave_purchase_began = models.CharField\
+            ("Date that slave purchase began (D1SLATRB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    vessel_left_port = models.CommaSeparatedIntegerField\
-            ("Date that vessel left last slaving port (DLSLATRB,A,C)", max_length=10,
+    vessel_left_port = models.CharField\
+            ("Date that vessel left last slaving port (DLSLATRB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    first_dis_of_slaves = models.CommaSeparatedIntegerField\
-            ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10,
-             blank=True, null=True,
-             help_text="Date in format: MM,DD,YYYY")
-
-    date_departed_africa = models.CommaSeparatedIntegerField\
-            ("Date vessel departed Africa (DATELEFTAFR)", max_length=10,
+    first_dis_of_slaves = models.CharField\
+            ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 
-    arrival_at_second_place_landing = models.CommaSeparatedIntegerField\
-            ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10,
+    date_departed_africa = models.CharField\
+            ("Date vessel departed Africa (DATELEFTAFR)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    third_dis_of_slaves = models.CommaSeparatedIntegerField\
-            ("Date of third disembarkation of slaves (DATARR40,39,41)", max_length=10,
+
+    arrival_at_second_place_landing = models.CharField\
+            ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    departure_last_place_of_landing = models.CommaSeparatedIntegerField\
-            ("Date of departure from last place of landing (DDEPAMB,*,C)", max_length=10,
+    third_dis_of_slaves = models.CharField\
+            ("Date of third disembarkation of slaves (DATARR40,39,41)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    voyage_completed = models.CommaSeparatedIntegerField\
-            ("Date on which slave voyage completed (DATARR44,43,45)", max_length=10,
+    departure_last_place_of_landing = models.CharField\
+            ("Date of departure from last place of landing (DDEPAMB,*,C)", max_length=10, validators=[validate_comma_separated_integer_list],
+             blank=True, null=True,
+             help_text="Date in format: MM,DD,YYYY")
+    voyage_completed = models.CharField\
+            ("Date on which slave voyage completed (DATARR44,43,45)", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 
@@ -591,17 +592,17 @@ class VoyageDates(models.Model):
              null=True, blank=True)
 
     # Imputed variables
-    imp_voyage_began = models.CommaSeparatedIntegerField \
-            ("Year voyage began", max_length=10,
+    imp_voyage_began = models.CharField \
+            ("Year voyage began", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    imp_departed_africa = models.CommaSeparatedIntegerField \
-            ("Year departed Africa", max_length=10,
+    imp_departed_africa = models.CharField \
+            ("Year departed Africa", max_length=10, validators=[validate_comma_separated_integer_list],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
-    imp_arrival_at_port_of_dis = models.CommaSeparatedIntegerField\
+    imp_arrival_at_port_of_dis = models.CharField\
             ("Year of arrival at port of disembarkation (YEARAM)",
-             max_length=10, blank=True, null=True,
+             max_length=10, blank=True, null=True, validators=[validate_comma_separated_integer_list],
              help_text="Date in format: MM,DD,YYYY")
 
     # Later this can become just a property/ can be calculated
@@ -626,7 +627,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return None
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     def get_date_month(self, value):
         """
@@ -638,7 +642,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return 0
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     def get_date_day(self, value):
         """
@@ -650,7 +657,10 @@ class VoyageDates(models.Model):
         if len(strval) < 1:
             return 0
         else:
-            return int(strval)
+            try:
+                return int(strval)
+            except:
+                return None
 
     # don't think this is being used anywhere
 #    def calculate_year_period(self, period):
@@ -1219,7 +1229,7 @@ class VoyageSources(models.Model):
     """
 
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=255, null=True, blank=True)
+                                 max_length=255, null=True, blank=True, unique=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=2550, null=True, blank=True)
@@ -1303,6 +1313,7 @@ class Voyage(models.Model):
             ('VoyageSources', through='VoyageSourcesConnection',
              related_name='voyage_sources', blank=True)
 
+    last_update = models.DateTimeField(auto_now=True)
 
     # generate natural key
     def natural_key(self):

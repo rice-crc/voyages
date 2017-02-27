@@ -29,6 +29,7 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
     voyagesMap.init('{{ map_year }}', '{{ STATIC_URL }}maps/', routeNodes, links);
+    // Keep the line below.
     voyagesMap.addLayer(L.polyline(L.latLng(0, 0), L.latLng(0, 0)));
 
     var selectedRoute = null;
@@ -78,6 +79,44 @@
     var yearStep = function() {};
     var pendingStep = false;
     var animationTime = 0;
+    
+    // Ensure that each data object has a smooth route
+    // and an interpolation method for determining the
+    // point along the curve for a constant speed unit
+    // time traversal.
+    function pathPreload(item) {
+        if (!item.hasOwnProperty('smoothedRoute')) {
+            var path = [];
+            for (var j = 0; j < item.route.length; ++j) {
+                var pt = item.route[j];
+                path.push(L.latLng(pt[0], pt[1]));
+            }
+            //path = voyagesMap._smoothPolyline(path);
+            item.smoothedRoute = path;
+            var arcs = [];
+            var totalAngle = 0;
+            for (var j = 0; j < path.length - 1; ++j) {
+                var a = {y: path[j].lat, x: path[j].lng };
+                var b = {y: path[j + 1].lat, x: path[j + 1].lng };
+                var arc = new GreatCircle(a, b);
+                arcs.push(arc);
+                totalAngle += arc.g;
+            }
+            item.interpolate = function(time) {
+                if (time < 1.0 && time >= 0) {
+                    var angle = totalAngle * time;
+                    for (var j = 0; j < arcs.length; ++j) {
+                        var arc = arcs[j];
+                        if (angle < arc.g) {
+                            return arc.interpolate(angle / arc.g);
+                        }
+                        angle -= arc.g;
+                    }
+                }
+                return [d.destination_lng, d.destination_lat];
+            };
+        }
+    }
 
     function animation(data) {
         $("#timeControls").show();
@@ -87,7 +126,7 @@
             .sortKeys(d3.ascending)
             .sortValues(function(a, b) { return a.voyage_id - b.voyage_id; })
             .entries(data);
-        $( "#slider" ).slider({
+        $("#slider").slider({
             value: 0,
             min: 0,
             max: years.length - 1,
@@ -111,10 +150,14 @@
             }
             try {
                 pendingStep = false;
-                $( "#slider" ).slider('value', animationIndex);
+                $("#slider").slider('value', animationIndex);
                 positionSvg();
                 var year = years[animationIndex].key;
                 var yearData = years[animationIndex].values;
+                for (var i = 0; i < yearData.length; ++i) {
+                    var item = yearData[i];
+                    pathPreload(item);
+                }
                 $("#yearLabel").text(year);
                 var counter = 0;
                 animationTime = 0;
@@ -140,11 +183,7 @@
                         closeToolTip();
                         d3.select(this).classed("selected", true);
                         var d = this.__data__;
-                        var path = [
-                            L.latLng(d.source_lat, d.source_lng),
-                            L.latLng(d.destination_lat, d.destination_lng)
-                        ];
-                        selectedRoute = L.geodesic([path], {
+                        selectedRoute = L.geodesic([d.smoothedRoute], {
                             weight: 3,
                             color: "red",
                             className: "animation_selected_route"
@@ -178,8 +217,6 @@
                         var top = rCirc.bottom - rSvg.top + 50;
                         if (top + tooltip_height + 120 > rSvg.bottom) {
                             top -= tooltip_height + 100;
-                            console.log(top + tooltip_height);
-                            console.log(rSvg);
                         }
                         tooltip.animate({
                             left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltip_width / 2 - 20) + "px",
@@ -240,11 +277,10 @@
     }
 
     function tween(d, i, a, count, startTime, dom) {
-        var geodesic = new GreatCircle(
-            { x: d.source_lng, y: d.source_lat },
-            { x: d.destination_lng, y: d.destination_lat });
+        if (!d) return function () {};
+        pathPreload(d);
+        startTime = parseFloat(startTime);
         return function(t) {
-            startTime = parseFloat(startTime);
             t = startTime + t * (1 - startTime);
             if (t > animationTime) {
                 animationTime = t;
@@ -255,9 +291,10 @@
             } else {
                 t = 0;
             }
-            var lngLat = geodesic.interpolate(t);
+            if (t >= 1) return "";
+            var lngLat = d.interpolate(t);
             if (isNaN(lngLat[0]) || isNaN(lngLat[1])) {
-                console.log('here');
+                console.log('Interpolation error');
                 return "";
             }
             var latLng = L.latLng(lngLat[1], lngLat[0]);
@@ -267,7 +304,7 @@
         };
     }
 
-    $( document ).ready(function() {
+    $(document).ready(function() {
         var animate = true;
         var onCompleted = function(){
                 animate = false;
@@ -304,7 +341,6 @@
             e.preventDefault();
         });
         $("#playBtn").click(function(e) {
-            console.log(animationTime);
             changePausedState(false);
             var selection = g.selectAll(".animation_voyage_group");
             if (selection) {

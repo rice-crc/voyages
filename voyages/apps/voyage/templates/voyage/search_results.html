@@ -35,7 +35,7 @@
         </tr>
 
         {% for i in result_display %}
-            <tr class="grid-row-even grid-row-first" onclick="document.location = '/voyage/{{ i| getattribute:"var_voyage_id" }}/variables'"">
+            <tr class="grid-row-even grid-row-first" onclick="document.location = '/voyage/{{ i| getattribute:"var_voyage_id" }}/variables'">
                 {% for item in request.session.result_columns %}
                     <td>{% if item.0 == 'var_sources' %}
                             {{ i| getattribute:item.0 | default_if_none:"" | filtersource | safe }}
