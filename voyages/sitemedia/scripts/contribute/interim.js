@@ -71,8 +71,14 @@ var _toModel = function(self) {
     };
 }
 
-function validateMinLength(val, minLength) {
-    return $.type(val) === 'string' && val.length >= minLength;
+function validateMinLength(val, minLength, errors, fieldName) {
+    var valid = $.type(val) === 'string' && val.length >= minLength;
+    if (!valid) {
+        errors.push(fieldName + ': ' +
+            gettext('should be at least {num_char} characters long.').
+                replace('{num_char}', minLength));
+    }
+    return valid;
 }
 
 function validateInt(val, minValue, maxValue, notNull) {
@@ -130,9 +136,7 @@ function PrimarySource(library, location, series, volume, detail, info, url, id)
     var self = this;
     this.validate = function () {
         var errors = [];
-        if (!validateMinLength(self.library, 4)) {
-            errors.push(gettext("Library or archive name is mandatory"));
-        }
+        validateMinLength(self.library, 2, errors, gettext('Library or archive name'));
         return new ValidationResult([], errors);
     };
     this.toString = function () {
@@ -178,15 +182,9 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.author, 4)) {
-            errors.push(gettext("Author name is mandatory"));
-        }
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.journal, 4)) {
-            warnings.push(gettext("Journal is a recommended field"));
-        }
+        validateMinLength(self.author, 4, errors, gettext('Author name'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.journal, 2, warnings, gettext('Journal is a recommended field'));
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
@@ -241,15 +239,9 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.author, 4)) {
-            errors.push(gettext("Author name is mandatory"));
-        }
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.publisher, 4)) {
-            warnings.push(gettext("Publisher is a recommended field"));
-        }
+        validateMinLength(self.author, 4, errors, gettext('Author name'));
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.publisher, 2, warnings, gettext('Publisher is a recommended field'));
         if (parseInt(self.year) < 1500) {
             errors.push(gettext('Reference year cannot be earlier than 1500'))
         }
@@ -300,15 +292,9 @@ function OtherSource(title, location, page, info, url, id) {
     this.validate = function () {
         var errors = [];
         var warnings = [];
-        if (!validateMinLength(self.title, 4)) {
-            errors.push(gettext("Title is mandatory"));
-        }
-        if (!validateMinLength(self.info, 4)) {
-            warnings.push(gettext("Information is a recommended field"));
-        }
-        if (!validateMinLength(self.url, 4)) {
-            warnings.push(gettext("URL is a recommended field"));
-        }
+        validateMinLength(self.title, 4, errors, gettext('Title'));
+        validateMinLength(self.info, 4, warnings, gettext('Information is a recommended field'));
+        validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
         return new ValidationResult(warnings, errors);
     };
     this.toString = function () {
@@ -505,8 +491,17 @@ function getVoyagesValues(voyages, name) {
 }
 
 function getGroupName(ids) {
-    return (ids.length > 1 ? gettext('Voyages') : gettext('Voyage')) +
-            ' ' + ids.join(', ');
+    // Check how many numerical ids we have, since those
+    // are used to identify voyage sources. Other text
+    // may be used for user contribution or reviewer input.
+    var count = 0;
+    for (var i = 0; i < ids.length; ++i) {
+        count += isNaN(parseInt(ids[i])) ? 0 : 1;
+    }
+    var joined = ids.join(', ');
+    if (count > 1) return gettext('Voyages') + ' ' + joined;
+    if (count == 1) return gettext('Voyage') + ' ' + joined;
+    return joined;
 };
 
 function getMonthLocaleName(locale, i) {
@@ -516,36 +511,194 @@ function getMonthLocaleName(locale, i) {
 
 // Some common constants.
 var NUMBERS_KEY_PREFIX = 'interim_slave_number_';
-var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
-var DEMOGRAPHICS_ROW_INDICES = [ 1, 4, 5, 2, 3, 6 ];
 
-function getDemographicsRows(id) {
-    return $.map(
-        $("#" + id).find("tbody").find("tr"),
+// Key codes.
+var KEY_RETURN = 13;
+var KEY_DOWN = 40;
+var KEY_LEFT = 37;
+var KEY_RIGHT = 39;
+var KEY_TAB = 9;
+var KEY_UP = 38;
+
+var APPENDED_FIELD_CLASS = '__appended_field__';
+
+// Wrap the slave numbers table logic in a JS object that can be reused
+// for multiple tables (demographics, sex and age etc).
+function SlaveNumbersTable(table_id, numbers, editable, column_headers, row_headers, pre_existing_data) {
+    var self = this;
+    self.table_id = table_id;
+    self.numbers = numbers;
+    self.editable = editable;
+    self.column_headers = column_headers;
+    self.row_headers = row_headers;
+    self.pre_existing_data = pre_existing_data;
+    
+    // Fetch rows/cells from the DOM.
+    self.rows = $.map(
+        $("#" + self.table_id).find("tbody").find("tr"),
         function(row, i) {
-            return $(row).find("td");
+            var cells = $(row).find("td");
+            cells.data('row', i);
+            cells.each(function(col) {
+                $(this).data('col', col);
+            });
+            return cells;
         }
     );
-};
-
-var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9])$');
-function fillDemograhicsTable(id, numbers, editable) {
-    demographics_rows = getDemographicsRows(id);
-    for (var key in numbers) {
+    
+    // Initialize table data.
+    var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    for (var key in self.numbers) {
         var match = regex.exec(key);
         var found = false;
         if (match) {
-            var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
-            var row = DEMOGRAPHICS_ROW_INDICES.indexOf(parseInt(match[2]));
-            if (col >= 0 && row >= 0 && row < 6) {
-                $(demographics_rows[row][col]).html(numbers[key]);
+            var col = self.column_headers.indexOf(match[1]);
+            var row = self.row_headers.indexOf(match[2]);
+            if (col >= 0 && row >= 0 && row < self.rows.length && col < self.rows[row].length) {
+                var $entry = $(self.rows[row][col]);
+                $entry.html(numbers[key]);
+                // Check pre-existing values.
+                var previous_number_values = getVoyagesValues(self.pre_existing_data, key);
+                if (previous_number_values) {
+                    $entry.data('previous_number_values', previous_number_values);
+                    $entry.addClass('has_pre_existing_values');
+                    var description = [];
+                    for (var key in previous_number_values) {
+                        description.push(previous_number_values[key] + ': ' + key);
+                    }
+                    $entry.attr('title', description.join(', '));
+                }
                 found = true;
             }
         }
-        if (editable && !found) {
+        if (self.editable && !found) {
             $("input[name='" + key + "']").each(function() {
-                $(this).val(numbers[key]);
+                $(this).val(self.numbers[key]);
             });
         }
     }
+    
+    // Setup editable table.
+    if (self.editable) {
+        current_cell = null;
+        editor = $('#cell_editor');
+        self.col_count = self.column_headers.length;
+        self.row_count = self.row_headers.length;
+        // Clicking on a cell will open up an edit box for the entry.
+        $('#' + self.table_id + ' td').click(function() {
+            if (current_cell) return;
+            current_cell = $(this);
+            var value = parseInt(current_cell.html());
+            current_cell.html('');
+            editor.unbind();
+            editor.appendTo(current_cell);
+            editor.focus();
+            editor.blur(function() {
+                if (current_cell) {
+                    var value = editor.val();
+                    current_cell.html(value);
+                    current_cell = null;
+                    editor.appendTo($('#hidden_div'));
+                }
+            });
+            editor.keydown(function(e) {
+                var old_cell = current_cell;
+                if (!old_cell) return;
+                var cell_shift = 0;
+                switch (e.keyCode) {
+                case KEY_RETURN:
+                case KEY_DOWN:
+                    cell_shift = self.col_count;
+                    break;
+                case KEY_UP:
+                    cell_shift = -self.col_count;
+                    break;
+                case KEY_LEFT:
+                    cell_shift = -1;
+                    break;
+                case KEY_RIGHT:
+                    cell_shift = 1;
+                    break;
+                case KEY_TAB:
+                    cell_shift = e.shiftKey ? -1 : 1;
+                    break;
+                default:
+                    return;
+                }
+                var old_col = old_cell.data('col');
+                var old_row = old_cell.data('row');
+                var old_cell = old_row * self.col_count + old_col;
+                var new_cell = old_cell + cell_shift;
+                if (new_cell >= 0 && new_cell < self.col_count * self.row_count) {
+                    editor.blur();
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var new_row = Math.trunc(new_cell / self.col_count);
+                    var new_col = new_cell % self.col_count;
+                    $(self.rows[new_row][new_col]).trigger('click');
+                } else if (e.keyCode != KEY_TAB) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+            editor.val(value);
+        });
+    }
+    
+    // Enable hover effect for table cells.
+    $('#' + self.table_id + ' td').hover(
+        function() {
+            $(this).addClass('cell_hover');
+        },
+        function() {
+            $(this).removeClass('cell_hover');
+        }
+    );
+    
+    // The focus method will trigger a click on the first cell of the table.
+    self.focus = function() {
+        $(self.rows[0][0]).trigger('click');
+    };
+    
+    // Append the table data to a form by creating hidden inputs with
+    // the appropriate names and values.
+    self.appendToForm = function (form) {        
+        for (var i = 0; i < self.rows.length; ++i) {
+            for (var j = 0; j < self.rows[i].length; ++j) {
+                var value = parseFloat($(self.rows[i][j]).html());
+                if (!isNaN(value)) {
+                    var name = NUMBERS_KEY_PREFIX + self.column_headers[j] + self.row_headers[i];
+                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="' + name + '" value="' + value + '" />');
+                }
+            }
+        }
+    }; 
+}
+
+// Construct the age and sex table, with preset column and row headers.
+function ageAndSexTable(numbers, editable, pre_existing_data) {
+    var AGE_AND_SEX_COLUMN_HEADERS = ['PURCHASE', 'LANDING', 'ARRIVAL'];
+    var AGE_AND_SEX_ROW_HEADERS = ['1IMP', '2IMP', '3IMP', '4IMP', '5IMP', '6IMP', '7IMP', '8IMP', '9IMP'];
+    return new SlaveNumbersTable(
+        'age_and_sex_table',
+        numbers,
+        editable,
+        AGE_AND_SEX_COLUMN_HEADERS,
+        AGE_AND_SEX_ROW_HEADERS,
+        pre_existing_data
+    );
+}
+
+// Construct the demographics table, with preset column and row headers.
+function demographicsTable(numbers, editable, pre_existing_data) {
+    var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
+    var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '2IMP', '3IMP', '4IMP'];
+    return new SlaveNumbersTable(
+        'demographics_table',
+        numbers,
+        editable,
+        DEMOGRAPHICS_COLUMN_HEADERS,
+        DEMOGRAPHICS_ROW_HEADERS,
+        pre_existing_data
+    );
 }

@@ -1,0 +1,34 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+
+<h2>{% trans "Review deleted voyages" %}</h2>
+
+<h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
+
+{% for vars in deleted_voyage_vars %}
+    {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}
+<hr />
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group col-md-12">
+        <button class="btn btn-danger" type="submit" name="submit_val" value="confirm">{% trans "Confirm deletion" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="cancel" id="cancel_btn">{% trans "Cancel contribution" %}</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $("#cancel_btn").click(function(e) {
+        var conf = confirm('{% trans "This delete contribution will be cancelled. This action cannot be undone, continue?" %}');
+        if (!conf) {
+            e.preventDefault();
+        }
+        return conf;
+    });
+</script>
+{% endblock %}

@@ -610,7 +610,7 @@
 // Reusable functions for Voyages.
 function addNotesPopup(id, $wrapper, spanStyle) {
 	spanStyle = spanStyle || '';
-	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><button onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" tabindex="-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></button><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
+	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><button onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" tabindex="-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></button><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onblur="$(\'#dropdown_btn_' + id + '\').dropdown(\'toggle\');" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
 }
 
 /**
@@ -1185,16 +1185,21 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 	
 			$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes).addClass(inputMode);
 			$control          = $('<div>').addClass(settings.inputClass).addClass('items').appendTo($wrapper)
-								.css("width", "calc(100% - 40px)")
 								.css("border-top-right-radius", "0")
 								.css("border-bottom-right-radius", "0")
 								.css("margin-right", "-1px");
+			var hasNotesPopup = !settings.hasOwnProperty('notesButton') || settings['notesButton'];
+			if (hasNotesPopup) {
+				$control = $control.css("width", "calc(100% - 40px)");
+			}
 			$control_input    = $('<input type="text" autocomplete="off" />').appendTo($control).attr('tabindex', $input.is(':disabled') ? '-1' : self.tabIndex);
 			var id = next_id++;
 			if ($input.attr('name')) {
 				id = $input.attr('name');
 			}
-			addNotesPopup(id, $wrapper, 'display: inline-block; vertical-align: top;');
+			if (hasNotesPopup) {
+				addNotesPopup(id, $wrapper, 'display: inline-block; vertical-align: top;');
+			}
 			$dropdown_parent  = $(settings.dropdownParent || $wrapper);
 			$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode).hide().appendTo($dropdown_parent);
 			$dropdown_content = $('<div>').addClass(settings.dropdownContentClass).appendTo($dropdown);
@@ -1364,7 +1369,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 					return '<div class="item">' + escape(data[field_label]) + '</div>';
 				},
 				'option_create': function(data, escape) {
-					return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+					return '<div class="create">' + gettext('Add') + ' <strong>' + escape(data.input) + '</strong>&hellip;</div>';
 				}
 			};
 	
@@ -1546,6 +1551,9 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 						self.ignoreHover = true;
 						var $next = self.getAdjacentOption(self.$activeOption, 1);
 						if ($next.length) self.setActiveOption($next, true, true);
+					} else {
+						var $next = self.$dropdown_content.find('[data-selectable]:first');
+						if ($next.length) self.setActiveOption($next, true, true);
 					}
 					e.preventDefault();
 					return;
@@ -1560,9 +1568,11 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 					e.preventDefault();
 					return;
 				case KEY_RETURN:
-					if (self.isOpen && self.$activeOption) {
-						self.onOptionSelect({currentTarget: self.$activeOption});
+					if (self.isOpen) {
 						e.preventDefault();
+						if (self.$activeOption) {
+							self.onOptionSelect({currentTarget: self.$activeOption});
+						}
 					}
 					return;
 				case KEY_LEFT:
@@ -1810,8 +1820,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			var changed = $input.val() !== value;
 			if (changed) {
 				$input.val(value).triggerHandler('update');
-				this.lastValue = value;
 			}
+			this.lastValue = value;
 		},
 	
 		/**
@@ -2195,6 +2205,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.hasOptions = results.items.length > 0 || has_create_option;
 			if (self.hasOptions) {
 				if (results.items.length > 0) {
+					// Voyages: reset active item if query is empty.
+					if (query == '') active_before = null;
 					$active_before = active_before && self.getOption(active_before);
 					if ($active_before && $active_before.length) {
 						$active = $active_before;
@@ -2205,7 +2217,10 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 						if ($create && !self.settings.addPrecedence) {
 							$active = self.getAdjacentOption($create, 1);
 						} else {
-							$active = $dropdown_content.find('[data-selectable]:first');
+							// Voyages: do not auto-select first entry.
+							if (query != '') {
+								$active = $dropdown_content.find('[data-selectable]:first');
+							}
 						}
 					}
 				} else {
@@ -2579,7 +2594,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 				if (i < self.caretPos) {
 					self.setCaret(self.caretPos - 1);
 				}
-	
+
 				self.refreshState();
 				self.updatePlaceholder();
 				self.updateOriginalInput({silent: silent});
@@ -2771,6 +2786,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.isOpen = true;
 			self.refreshState();
 			self.$dropdown.css({visibility: 'hidden', display: 'block'});
+			$('.' + self.settings.dropdownClass).css({visibility: 'hidden', display: 'block'});
 			self.positionDropdown();
 			self.$dropdown.css({visibility: 'visible'});
 			self.trigger('dropdown_open', self.$dropdown);
@@ -2906,14 +2922,8 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			self.positionDropdown();
 			self.refreshOptions(true);
 	
-			// select previous option
-			if (option_select) {
-				$option_select = self.getOption(option_select);
-				if ($option_select.length) {
-					self.setActiveOption($option_select);
-				}
-			}
-	
+			// Voyages: select null option
+			self.setActiveOption(null);
 			return true;
 		},
 	
@@ -3665,6 +3675,11 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 			var original = self.onKeyDown;
 			return function(e) {
 				var index, option;
+				var inp = String.fromCharCode(e.keyCode);
+				var isEditChar = /[a-zA-Z0-9-_\. ,]/.test(inp);
+				if (isEditChar && this.$control_input.val() === '' && !this.$activeItems.length) {
+					e.keyCode = KEY_BACKSPACE;
+				}
 				if (e.keyCode === KEY_BACKSPACE && this.$control_input.val() === '' && !this.$activeItems.length) {
 					index = this.caretPos - 1;
 					if (index >= 0 && index < this.items.length) {
@@ -3673,7 +3688,6 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 							this.setTextboxValue(options.text.apply(this, [option]));
 							this.refreshOptions(true);
 						}
-						e.preventDefault();
 						return;
 					}
 				}

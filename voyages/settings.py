@@ -159,8 +159,6 @@ I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-
 # Indicates whether the map path flows should include paths with missing source.
 MAP_MISSING_SOURCE_ENABLED = True
 
-ENABLE_CONTRIBUTE_SECTION = False
-
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
@@ -185,7 +183,7 @@ TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/contribute/'
+LOGIN_REDIRECT_URL = '/contribute/legal'
 
 HAYSTACK_CUSTOM_HIGHLIGHTER = 'voyages.extratools.TextHighlighter'
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096

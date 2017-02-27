@@ -7,6 +7,13 @@ from voyages.apps.contribute.models import *
 from voyages.apps.voyage.models import Voyage
 from voyages.extratools import AdvancedEditor
 
+legal_terms_title = _('Terms and conditions')
+legal_terms_paragraph = _('I warrant that I have the right to contribute the following data to the Voyages '
+                          'Database and its inclusion in the Voyages Database will not infringe anyone\'s '
+                          'intellectual property rights. I also agree that this data will become part of '
+                          'the Voyages: The Trans-Atlantic Slave Trade Database website and will be '
+                          'governed by any applicable licenses.')
+
 class AdminFaqAdminForm(forms.ModelForm):
     """
     Form for editing HTML for Admin FAQ
@@ -29,9 +36,11 @@ class SignUpForm(forms.Form):
     first_name = forms.CharField(max_length=30, label=_('First name'))
     last_name = forms.CharField(max_length=30, label=_('Last name'))
     institution = forms.CharField(max_length=255, label=_('Institution'), required=False)
-    new_material_and_sources = forms.CharField(max_length=1000, label=_('Brief description of new material and sources'), required=False)
-    terms = forms.CharField(widget=forms.Textarea, required=False, label=_('Terms and conditions'),
-                            initial=_('All the legal stuff goes here'))
+    new_material_and_sources = forms.CharField(max_length=1000,
+                                               label=_('Brief description of new material and sources'),
+                                               required=False)
+    terms = forms.CharField(widget=forms.Textarea, required=False, label=legal_terms_title,
+                            initial=legal_terms_paragraph)
     agree_to_terms = forms.BooleanField(required=True, label=_('Agree to the terms and conditions above'))
     captcha = CaptchaField()
 

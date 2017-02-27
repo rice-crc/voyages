@@ -1,18 +1,12 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
+from django.conf.urls import url
 
+import voyages.apps.static_content.views
+import voyages.apps.education.views
+import django.contrib.flatpages.views
 
-# To be used later
-# from voyages.apps.education.views import *
-
-urlpatterns = patterns('',
-                       url(r'^$', 'voyages.apps.static_content.views.get_static_content',
-                           {'group': 'Educational Materials'}, name='index'),
-                       )
-
-urlpatterns += patterns('',
-                        url(r'^lesson-plans$', 'voyages.apps.education.views.lessonplan', name='lesson-plans'),
-                        )
-urlpatterns += patterns('django.contrib.flatpages.views',
-                        url(r'^web-resources', 'flatpage', {'url': '/education/web-resources/'}, name='web-resources'),
-                        )
+urlpatterns = [
+    url(r'^$', voyages.apps.static_content.views.get_static_content,
+        {'group': 'Educational Materials'}, name='index'),
+    url(r'lesson-plans', voyages.apps.education.views.lessonplan, name='lesson-plans'),
+    url(r'web-resources', django.contrib.flatpages.views.flatpage,
+        {'url': '/education/web-resources/'}, name='web-resources')]

@@ -1,34 +1,35 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
+import voyages.apps.static_content.views
+import voyages.apps.resources.views
 
-urlpatterns = patterns('',
-    url(r'^$', 'voyages.apps.static_content.views.get_static_content', {'group': 'Resources'},
+urlpatterns = [
+    url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Resources'},
         name='index'),
     #handle all cases for now
-    url(r'^images/$', 'voyages.apps.resources.views.get_all_images',
+    url(r'^images/', voyages.apps.resources.views.get_all_images,
         name='images'),
-    url(r'^images/category/(?P<category>\w+)$',
-        'voyages.apps.resources.views.get_images_category',
+    url(r'^images/category/(?P<category>\w+)',
+        voyages.apps.resources.views.get_images_category,
         name='images-category'),
-    url(r'^images/category/(?P<category>\w+)/(?P<page>\d{1,3})$',
-        'voyages.apps.resources.views.get_images_category_detail',
+    url(r'^images/category/(?P<category>\w+)/(?P<page>\d{1,3})',
+        voyages.apps.resources.views.get_images_category_detail,
         name='images-category-detail'),
-    url(r'^images/category/(?P<category>\w+)/(?P<page>\d{1,3})/detail$',
-        'voyages.apps.resources.views.get_image_detail',
+    url(r'^images/category/(?P<category>\w+)/(?P<page>\d{1,3})/detail',
+        voyages.apps.resources.views.get_image_detail,
         name='image-detail'),
-    url(r'^images/search$',
-        'voyages.apps.resources.views.images_search',
+    url(r'^images/search',
+        voyages.apps.resources.views.images_search,
         name='images-search'),
-    url(r'^images/search/(?P<page>\d{1,3})$',
-        'voyages.apps.resources.views.images_search_detail',
+    url(r'^images/search/(?P<page>\d{1,3})',
+        voyages.apps.resources.views.images_search_detail,
         name='images-search-detail'),
-    url(r'^images/search/(?P<page>\d{1,3})/detail$',
-        'voyages.apps.resources.views.get_image_search_detail',
+    url(r'^images/search/(?P<page>\d{1,3})/detail',
+        voyages.apps.resources.views.get_image_search_detail,
         name='image-search-detail-window'),
     url(r'^names-database',
-        'voyages.apps.resources.views.get_all_slaves',
+        voyages.apps.resources.views.get_all_slaves,
         name='origins'),
     url(r'^[\w\.\-]+\$',
-        TemplateView.as_view(template_name='under_constr.html')),
-)
+        TemplateView.as_view(template_name='under_constr.html'))]

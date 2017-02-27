@@ -1,0 +1,42 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block center-content %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+
+<h1>{% trans "Review request" %}</h1>
+
+<span>{% trans "Editor" %} <strong>{{ request.editor.get_full_name }}</strong> {% trans "asked you to review the contribution below." %}</span>
+<blockquote>
+<p>
+	{{ request.editor_comments }}
+</p>
+</blockquote>
+
+<a href="/contribute/interim_summary/{{ request.contribution_id }}">{% trans "View contribution summary" %}</a>
+
+<h2>{% trans "Respond to review invitation" %}</h2>
+
+<form action="{% url 'contribute:reply_review_request' %}" method="post">
+    <div class="form-group">
+        <label for="message_to_editor">{% trans "Message to editor:" %}</label>
+        <textarea class="form-control" type="text" id="message_to_editor" rows="10" name="message_to_editor"></textarea>
+    </div>
+
+    <div>
+        {% csrf_token %}
+        <input type="hidden" name="review_request_id" value="{{ request.pk }}">
+        <button type="submit" name="response" value="accept" class="btn btn-primary">{% trans "Accept request" %}</button>
+        <button type="submit" name="response" value="reject" class="btn btn-danger">{% trans "Reject request" %}</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $('form').submit(function(e) {
+        if (!confirm('{% trans "Confirm response?" %}')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
+
+{% endblock %}

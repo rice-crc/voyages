@@ -88,7 +88,7 @@
 				if (items[i].value > maxValue) maxValue = items[i].value;
 			}
 		}
-		xValues = d3.set(xValues).values();
+		xValues = d3.set(xValues).values().map(function(s) { return parseFloat(s); });
 
 		var margin = {top: 90 + 20 * (seriesNames.length - 2), right: 15, bottom: 110, left: 80},
 			width = 960 - margin.left - margin.right,
