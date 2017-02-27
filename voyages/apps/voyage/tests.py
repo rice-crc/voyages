@@ -3,7 +3,6 @@ from django.test.utils import override_settings
 from django.test import Client
 from .models import VoyageDates
 from django.core.urlresolvers import reverse
-from .views import shorten_url
 from mock import patch
 import globals
 import urllib2
@@ -24,29 +23,6 @@ class SimpleGetPageTest(TestCase):
             response = self.client.get(reverse('voyage:understanding-page', kwargs={'name': 'methodology-%s' % str(i)}))
             self.assertEqual(response.status_code, 200)
 
-class UrlShortenerTest(TestCase):
-    """
-    Test of the shorten_url method that uses bitly to shorten url
-    """
-    def test_shorten_valid_url(self):
-        """
-        Attempt to shorten a valid url
-        """
-        long_url = 'http://www.google.com/'
-        short_url = shorten_url(long_url)
-        self.assertNotEqual(short_url, long_url)
-        try:
-            resp = urllib2.urlopen(short_url)
-        except:
-            self.fail("Invalid url provided by shorten_url method")
-
-    def test_shorten_invalid_url(self):
-        """
-        Attempt to shorten an invalid url
-        """
-        long_url = '---adsfasdfafdjgkdf.&^*&5hgvkaadsadsfhgkjfm.com'
-        short_url = shorten_url(long_url)
-        self.assertEqual(short_url, long_url, "When url is invalid, shorten_url should return the long_url")
 class ReportingTest(TestCase):
     """
     Tests some functions used for reporting purposes
@@ -60,6 +36,9 @@ class ReportingTest(TestCase):
         self.assertEqual(globals.get_incremented_year_tuples(25, 1514, 1866), flist25)
 @override_settings(LANGUAGE_CODE='en')
 class SearchTest(TestCase):
+
+    fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
+    
     """
     Tests the search page and associated functions
     """

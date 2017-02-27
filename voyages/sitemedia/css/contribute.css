@@ -94,6 +94,12 @@ h1.contribute_header {
   background-color: yellow;
   padding-bottom: 7px;
 }
+.equal_pre_existing_values td {
+    color: green;
+}
+.different_pre_existing_values td {
+    color: red;
+}
 .tab-pane {
   padding: 20px;
 }
@@ -101,7 +107,7 @@ h1.contribute_header {
   color: gray;
   margin-left: 33%;
 }
-.form-horizontal a {
+.form-horizontal a:not(.btn) {
   display: block;
   background-color: #F1F1F1;
   border-bottom: solid 1px #CCC;
@@ -156,5 +162,6 @@ h1.contribute_header {
     padding-top: 7px;
     margin-bottom: 0;
     text-align: left;
+    padding: 3px;
   }
 }

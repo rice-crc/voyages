@@ -35,7 +35,11 @@
       <div style="display:table; height: 100%; width: 100%">
         <div class="detail-title" style="display:table-row; height:0%">
             <div style="margin: 10px">
-                {% trans 'Voyage' %} {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+                {% if not voyage %}
+                    {% trans 'Voyage not found' %}
+                {% else %}
+                    {% trans 'Voyage' %} {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+                {% endif %}
             </div>
         </div>
 

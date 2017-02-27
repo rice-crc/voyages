@@ -83,4 +83,13 @@
 </p>
 {% endif %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
+<script type="text/javascript">
+    var params = pageGetParams();
+    if (params.next) {
+        $('input[name={{ redirect_field_name }}]').remove();
+        $('form').append('<input type="hidden" name="{{ redirect_field_name }}" value="' + params.next + '" />');
+    }
+</script>
+
 {% endblock %}

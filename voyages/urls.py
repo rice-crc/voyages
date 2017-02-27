@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^setlanguage/(?P<lang_code>\w+)', voyages.apps.common.views.set_language, name='set_lang'),
 
     # Translation support for javascript code.
-    url(r'^jsi18n/', django.views.i18n.javascript_catalog, js_info_dict),
+    url(r'^jsi18n/', django.views.i18n.javascript_catalog, js_info_dict, name='javascript-catalog'),
 
     url(r'^accounts/', include('allauth.urls')),
 

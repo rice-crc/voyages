@@ -10,9 +10,7 @@ import unicodecsv
 empty = re.compile(r"^\s*$")
 
 class Command(BaseCommand):
-    help = 'Imports a CSV file with the full data-set and converts the data to the Django models. The user can ' \
-           'decide to apply the results to the DB or generate .json files that can be imported into DBs with ' \
-           'the loaddata command.'
+    help = 'Imports a CSV file with the full data-set and converts the data to the Django models.'
 
     def add_arguments(self, parser):
         parser.add_argument('csv_file', nargs='+')
@@ -111,14 +109,18 @@ class Command(BaseCommand):
         all_sources = VoyageSources.objects.all()
         trie = {}
         _end = '_end'
-        for source in all_sources:
+        
+        def add_to_trie(key, value):
             dict = trie
-            plain = unidecode(source.short_ref).lower()
             for letter in plain:
                 if filter_out_source_letter(letter):
                     continue
                 dict = dict.setdefault(letter, {})
-            dict[_end] = source
+            dict[_end] = value
+            
+        for source in all_sources:
+            plain = unidecode(source.short_ref).lower()
+            add_to_trie(plain, source)
 
         # This method searches the Sources trie and obtain the
         # Source whose short reference matches the longest

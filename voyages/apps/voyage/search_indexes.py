@@ -6,17 +6,29 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 import re
 import unidecode
+import six
+
+def split_date(value):
+    if value is None: return []
+    arr = value.split(",") if isinstance(value, six.string_types) else []
+    for i in range(0, len(arr)):
+        try:
+            arr[i] = int(arr[i])
+        except:
+            arr[i] = ''
+    return arr
 
 def getMonth(value):
-    return str(value.split(",")[0]).zfill(2)
-
+    arr = split_date(value)
+    return str(arr[0]).zfill(2) if len(arr) == 3 else None
 
 def getDay(value):
-    return str(value.split(",")[1]).zfill(2)
-
+    arr = split_date(value)
+    return str(arr[1]).zfill(2) if len(arr) == 3 else None
 
 def getYear(value):
-    return str(value.split(",")[2]).zfill(2)
+    arr = split_date(value)
+    return str(arr[2]).zfill(4) if len(arr) == 3 else None
 
 def getDate(value):
     if not value:
@@ -343,6 +355,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Voyage
+        
+    def get_updated_field(self):
+        return 'last_update'
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
@@ -367,7 +382,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage dates
     def prepare_var_imp_arrival_at_port_of_dis(self, obj):
         try:
-            return int(getYear(obj.voyage_dates.imp_arrival_at_port_of_dis))
+            return getYear(obj.voyage_dates.imp_arrival_at_port_of_dis)
         except (AttributeError, TypeError):
             return None
 

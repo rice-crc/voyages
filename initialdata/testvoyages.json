@@ -1,0 +1,4807 @@
+[
+{
+    "model": "voyage.voyagesourcestype",
+    "pk": 1,
+    "fields": {
+        "group_id": 0,
+        "group_name": "Documentary source"
+    }
+},
+{
+    "model": "voyage.voyagesourcestype",
+    "pk": 2,
+    "fields": {
+        "group_id": 1,
+        "group_name": "Newspaper"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13827,
+    "fields": {
+        "short_ref": "PP",
+        "full_ref": "<p>Great Britain, <em>Parliamentary Papers</em>: 1777, Accounts and Papers, No 9 1788, XXII 1789, XXIV, XXV, XXVI 1790, XXIX, XXX, XXXI 1790-91, XXXIV 1792, XXXV 1795-96, XLII 1798-99, XLVIII 1799 XLVIII 1801-2, IV 1803-4, X 1806, XII 1813-14, XII 1816, VII 1823, XIX 1825, XXVII, XXIX 1826, XXIX 1826-7, XXII, XXVI 1828, XXVI 1829, XXVI 1830, X 1831, XIX 1831-32, XLVII 1842, XLIV 1845,XLIX 1847-8, XXII 1852-3, XXXIX, lots of xs</p>",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagesourcestype",
+    "pk": 4,
+    "fields": {
+        "group_id": 3,
+        "group_name": "Unpublished secondary source"
+    }
+},
+{
+    "model": "voyage.voyagesourcestype",
+    "pk": 5,
+    "fields": {
+        "group_id": 4,
+        "group_name": "Private note or collection"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 349190,
+    "fields": {
+        "name": "Hinde, Thomas"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 693847,
+    "fields": {
+        "particular_outcome": 55,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1159320
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 693848,
+    "fields": {
+        "particular_outcome": 84,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 1,
+        "outcome_owner": 2,
+        "voyage": 1159321
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 343555,
+    "fields": {
+        "name": "Pelleport"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 585749,
+    "fields": {
+        "name": "Cowan, Alexander"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 581654,
+    "fields": {
+        "name": "Carvalho, Francisco C\u00e2ndido da Silva e"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495385,
+    "fields": {
+        "source": 14054,
+        "group": 1159321,
+        "source_order": 5,
+        "text_ref": "Williams,684"
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 692093,
+    "fields": {
+        "ship_name": "Agreeable",
+        "nationality_ship": 7,
+        "tonnage": 189,
+        "ton_type": 13,
+        "rig_of_vessel": 4,
+        "guns_mounted": null,
+        "year_of_construction": 1788,
+        "vessel_construction_place": 50,
+        "vessel_construction_region": 63,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "189.0",
+        "voyage": 1157566
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495386,
+    "fields": {
+        "source": 14296,
+        "group": 1159321,
+        "source_order": 6,
+        "text_ref": "LList, 24 Jan 1800"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 693851,
+    "fields": {
+        "voyage_began": "3,7,1799",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "2,2,1800",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1799",
+        "imp_departed_africa": ",,1800",
+        "imp_arrival_at_port_of_dis": ",,1800",
+        "imp_length_home_to_disembark": 332,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1159320
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14373,
+    "fields": {
+        "short_ref": "mettas",
+        "full_ref": "Mettas, Jean,  <i>R\u00e9pertoire des Exp\u00e9ditions N\u00e9gri\u00e8res Fran\u00e7aises au XVIIIe Si\u00e8cle;</i> Tome 1, <i>Nantes</i> (Paris, 1978); Tome 2, <i>Ports Autres que Nantes</i> (Paris, 1984), \u00e9dit\u00e9 par Serge et Michelle Daget.",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 693852,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 817,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 53,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 366,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 27,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 50,
+        "region_of_return": 63,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 817,
+        "imp_principal_place_of_slave_purchase": 817,
+        "imp_principal_region_of_slave_purchase": 54,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 366,
+        "imp_principal_port_slave_dis": 366,
+        "imp_principal_region_slave_dis": 27,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1159325
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 693852,
+    "fields": {
+        "ship_name": "Lord Nelson",
+        "nationality_ship": 7,
+        "tonnage": 237,
+        "ton_type": 13,
+        "rig_of_vessel": 4,
+        "guns_mounted": null,
+        "year_of_construction": 1798,
+        "vessel_construction_place": 50,
+        "vessel_construction_region": 63,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "237.0",
+        "voyage": 1159325
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495378,
+    "fields": {
+        "source": 14296,
+        "group": 1159320,
+        "source_order": 10,
+        "text_ref": "LList, 21 Mar 1800"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 594989,
+    "fields": {
+        "name": "Costa, Jos\u00e9 da"
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 490544,
+    "fields": {
+        "captain": 596836,
+        "voyage": 1144999,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 811064,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1133320
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519737,
+    "fields": {
+        "owner": 349190,
+        "voyage": 1157566,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519738,
+    "fields": {
+        "owner": 348044,
+        "voyage": 1157566,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519739,
+    "fields": {
+        "owner": 344494,
+        "voyage": 1157566,
+        "owner_order": 3
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519740,
+    "fields": {
+        "owner": 349190,
+        "voyage": 1157567,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519741,
+    "fields": {
+        "owner": 348044,
+        "voyage": 1157567,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 519742,
+    "fields": {
+        "owner": 344494,
+        "voyage": 1157567,
+        "owner_order": 3
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480117,
+    "fields": {
+        "source": 13827,
+        "group": 1157566,
+        "source_order": 6,
+        "text_ref": "PP,1801-2(88),IV,no.2"
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 478272,
+    "fields": {
+        "captain": 594989,
+        "voyage": 1133320,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13892,
+    "fields": {
+        "short_ref": "LR",
+        "full_ref": "<i>Lloyd's Register of Shipping</i>, 1764, 1768, 1776, 1778-84, 1786-1787, 1789-1808 (all published in London).",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 805452,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1127708
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 497748,
+    "fields": {
+        "owner": 346567,
+        "voyage": 1127708,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 693847,
+    "fields": {
+        "ship_name": "Lord Duncan",
+        "nationality_ship": 7,
+        "tonnage": 101,
+        "ton_type": 13,
+        "rig_of_vessel": 1,
+        "guns_mounted": null,
+        "year_of_construction": 1787,
+        "vessel_construction_place": 108,
+        "vessel_construction_region": 65,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "101.0",
+        "voyage": 1159320
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 693848,
+    "fields": {
+        "ship_name": "Lord Duncan",
+        "nationality_ship": 7,
+        "tonnage": 145,
+        "ton_type": 13,
+        "rig_of_vessel": 1,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "145.0",
+        "voyage": 1159321
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 693851,
+    "fields": {
+        "ship_name": "Lord Nelson",
+        "nationality_ship": 7,
+        "tonnage": 237,
+        "ton_type": 13,
+        "rig_of_vessel": 4,
+        "guns_mounted": null,
+        "year_of_construction": 1798,
+        "vessel_construction_place": 50,
+        "vessel_construction_region": 63,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "237.0",
+        "voyage": 1159324
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 693852,
+    "fields": {
+        "voyage_began": "12,15,1798",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "11,20,1799",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1798",
+        "imp_departed_africa": ",,1799",
+        "imp_arrival_at_port_of_dis": ",,1799",
+        "imp_length_home_to_disembark": 340,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1159321
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495422,
+    "fields": {
+        "source": 13827,
+        "group": 1159325,
+        "source_order": 3,
+        "text_ref": "PP,1806(265),XIII,no.1"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 693855,
+    "fields": {
+        "voyage_began": "3,7,1799",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "2,2,1800",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": "4,2,1800",
+        "voyage_completed": "6,7,1800",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1799",
+        "imp_departed_africa": ",,1800",
+        "imp_arrival_at_port_of_dis": ",,1800",
+        "imp_length_home_to_disembark": 332,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1159324
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 693856,
+    "fields": {
+        "voyage_began": "11,3,1800",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": "2,4,1801",
+        "first_dis_of_slaves": "3,7,1801",
+        "date_departed_africa": "02,04,1801",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": "4,3,1801",
+        "voyage_completed": "6,1,1801",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1800",
+        "imp_departed_africa": ",,1801",
+        "imp_arrival_at_port_of_dis": ",,1801",
+        "imp_length_home_to_disembark": 124,
+        "imp_length_leaving_africa_to_disembark": 31,
+        "voyage": 1159325
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 668494,
+    "fields": {
+        "ship_name": "Great Caesar",
+        "nationality_ship": 7,
+        "tonnage": null,
+        "ton_type": null,
+        "rig_of_vessel": null,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": null,
+        "voyage": 1133965
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 590438,
+    "fields": {
+        "name": "Kendall, John"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 679526,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1144999
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 586343,
+    "fields": {
+        "name": "Armstrong"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 668498,
+    "fields": {
+        "voyage_began": ",,",
+        "slave_purchase_began": "12,18,1722",
+        "vessel_left_port": "1,17,1723",
+        "first_dis_of_slaves": "5,14,1723",
+        "date_departed_africa": "01,17,1723",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1722",
+        "imp_departed_africa": ",,1723",
+        "imp_arrival_at_port_of_dis": ",,1723",
+        "imp_length_home_to_disembark": null,
+        "imp_length_leaving_africa_to_disembark": 117,
+        "voyage": 1133965
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480124,
+    "fields": {
+        "source": 13892,
+        "group": 1157567,
+        "source_order": 1,
+        "text_ref": "LR1801"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 679530,
+    "fields": {
+        "voyage_began": "4,,1720",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": "10,,1720",
+        "first_dis_of_slaves": "4,20,1721",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": "7,2,1721",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1720",
+        "imp_departed_africa": ",,1720",
+        "imp_arrival_at_port_of_dis": ",,1721",
+        "imp_length_home_to_disembark": null,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1144999
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 807533,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1129789
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 662127,
+    "fields": {
+        "port_of_departure": 119,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": null,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": null,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 316,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 12,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 119,
+        "imp_region_voyage_begin": 4,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": null,
+        "imp_principal_place_of_slave_purchase": 748,
+        "imp_principal_region_of_slave_purchase": 84,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 316,
+        "imp_principal_port_slave_dis": 316,
+        "imp_principal_region_slave_dis": 12,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1127598
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 671858,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1137331
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 662131,
+    "fields": {
+        "voyage_began": "6,,1819",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "12,25,1819",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1819",
+        "imp_departed_africa": ",,1819",
+        "imp_arrival_at_port_of_dis": ",,1819",
+        "imp_length_home_to_disembark": null,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1127598
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480126,
+    "fields": {
+        "source": 13827,
+        "group": 1157567,
+        "source_order": 3,
+        "text_ref": "PP,1806(265),XIII,no.1"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 671862,
+    "fields": {
+        "voyage_began": "6,29,1739",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "9,8,1740",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": "4,18,1741",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1739",
+        "imp_departed_africa": ",,1740",
+        "imp_arrival_at_port_of_dis": ",,1740",
+        "imp_length_home_to_disembark": 437,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1137331
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1157567,
+    "fields": {
+        "voyage_id": 80124,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 33,
+        "voyage_ship": 692094,
+        "voyage_itinerary": 692094,
+        "voyage_dates": 692098,
+        "voyage_crew": 835309,
+        "voyage_slaves_numbers": 584685,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524691,
+    "fields": {
+        "owner": 347621,
+        "voyage": 1159321,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495415,
+    "fields": {
+        "source": 14296,
+        "group": 1159324,
+        "source_order": 9,
+        "text_ref": "LList, 6 Sept 1799"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13959,
+    "fields": {
+        "short_ref": "Richardson",
+        "full_ref": "Richardson, David, <i>Bristol</i><i>, Africa and the Eighteenth Century Slave Trade to America</i>: Volume 1, <i>The Years of Expansion, 1698-1729</i> (Bristol, 1986); Volume 2, <i>The Years of Ascendancy, 1730-1745</i> (Bristol, 1987); Volume 3, <i>The Years of Decline, 1746-1769</i> (Bristol, 1991); Volume 4, <i>The Final Years, 1770-1807</i> (Bristol, 1997).",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13969,
+    "fields": {
+        "short_ref": "DickySam",
+        "full_ref": "Sam, Dickey], <i>Liverpool and Slavery: An Historical Account of the Liverpool-African Slave Trade, by a 'Genuine Dicky Sam'</i> (Liverpool, 1884).",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524702,
+    "fields": {
+        "owner": 348720,
+        "voyage": 1159325,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1159320,
+    "fields": {
+        "voyage_id": 82340,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 16,
+        "voyage_ship": 693847,
+        "voyage_itinerary": 693847,
+        "voyage_dates": 693851,
+        "voyage_crew": 837062,
+        "voyage_slaves_numbers": 586438,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1159321,
+    "fields": {
+        "voyage_id": 82341,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 16,
+        "voyage_ship": 693848,
+        "voyage_itinerary": 693848,
+        "voyage_dates": 693852,
+        "voyage_crew": 837063,
+        "voyage_slaves_numbers": 586439,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 662127,
+    "fields": {
+        "particular_outcome": 151,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 7,
+        "outcome_owner": 3,
+        "voyage": 1127598
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1159324,
+    "fields": {
+        "voyage_id": 82346,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 32,
+        "voyage_ship": 693851,
+        "voyage_itinerary": 693851,
+        "voyage_dates": 693855,
+        "voyage_crew": 837066,
+        "voyage_slaves_numbers": 586442,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1159325,
+    "fields": {
+        "voyage_id": 82347,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 33,
+        "voyage_ship": 693852,
+        "voyage_itinerary": 693852,
+        "voyage_dates": 693856,
+        "voyage_crew": 837067,
+        "voyage_slaves_numbers": 586443,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 347294,
+    "fields": {
+        "name": "Compagnie des Indes"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 837062,
+    "fields": {
+        "crew_voyage_outset": 23,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 3,
+        "crew_deserted": 0,
+        "voyage": 1159320
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1144999,
+    "fields": {
+        "voyage_id": 32041,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 111,
+        "voyage_ship": 679526,
+        "voyage_itinerary": 679526,
+        "voyage_dates": 679530,
+        "voyage_crew": 822741,
+        "voyage_slaves_numbers": 572117,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404621,
+    "fields": {
+        "source": 13827,
+        "group": 1127708,
+        "source_order": 1,
+        "text_ref": "PP,1845,XLIX:593-633"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 837063,
+    "fields": {
+        "crew_voyage_outset": 21,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 2,
+        "crew_deserted": 0,
+        "voyage": 1159321
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 671858,
+    "fields": {
+        "port_of_departure": 22,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": null,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": null,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 360,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 22,
+        "region_of_return": 63,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 22,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": null,
+        "imp_principal_place_of_slave_purchase": 748,
+        "imp_principal_region_of_slave_purchase": 84,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 360,
+        "imp_principal_port_slave_dis": 360,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1137331
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1127598,
+    "fields": {
+        "voyage_id": 123,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 17,
+        "voyage_ship": 662127,
+        "voyage_itinerary": 662127,
+        "voyage_dates": 662131,
+        "voyage_crew": 805342,
+        "voyage_slaves_numbers": 554718,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1137331,
+    "fields": {
+        "voyage_id": 16985,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 120,
+        "voyage_ship": 671858,
+        "voyage_itinerary": 671858,
+        "voyage_dates": 671862,
+        "voyage_crew": 815073,
+        "voyage_slaves_numbers": 564449,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 667849,
+    "fields": {
+        "ship_name": "S Jo\u00e3o Batista e Almas",
+        "nationality_ship": 4,
+        "tonnage": null,
+        "ton_type": null,
+        "rig_of_vessel": 21,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 6,
+        "tonnage_mod": null,
+        "voyage": 1133320
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 347321,
+    "fields": {
+        "name": "Royal African Company"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 592060,
+    "fields": {
+        "name": "Stephens, Hugh"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 811709,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1133965
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495417,
+    "fields": {
+        "source": 14296,
+        "group": 1159324,
+        "source_order": 11,
+        "text_ref": "LList, 4 Apr 1800"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 510979,
+    "fields": {
+        "owner": 347294,
+        "voyage": 1144999,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 662237,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1127708
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14283,
+    "fields": {
+        "short_ref": "GRJ",
+        "full_ref": "<i>Gazeta do Rio de Janeiro</i>",
+        "source_type": 2
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 668494,
+    "fields": {
+        "port_of_departure": 51,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 516,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 53,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 342,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 14,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 51,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 516,
+        "imp_principal_place_of_slave_purchase": 516,
+        "imp_principal_region_of_slave_purchase": 56,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 342,
+        "imp_principal_port_slave_dis": 764,
+        "imp_principal_region_slave_dis": 14,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1133965
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 586438,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 168,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 127,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 137,
+        "imp_total_num_slaves_disembarked": 127,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1159320,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 586439,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 242,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 194,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 209,
+        "imp_total_num_slaves_disembarked": 194,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1159321,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 667849,
+    "fields": {
+        "particular_outcome": 52,
+        "resistance": null,
+        "outcome_slaves": 4,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 2,
+        "voyage": 1133320
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 586442,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 371,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 360,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 393,
+        "imp_total_num_slaves_disembarked": 360,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1159324,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 586443,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 271,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 255,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 284,
+        "imp_total_num_slaves_disembarked": 255,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1159325,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 593612,
+    "fields": {
+        "name": "Hodgson, John"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 667853,
+    "fields": {
+        "voyage_began": ",,",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": "8,28,1734",
+        "first_dis_of_slaves": ",,",
+        "date_departed_africa": "08,28,1734",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1734",
+        "imp_departed_africa": ",,1734",
+        "imp_arrival_at_port_of_dis": ",,1734",
+        "imp_length_home_to_disembark": null,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1133320
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404622,
+    "fields": {
+        "source": 14165,
+        "group": 1127708,
+        "source_order": 2,
+        "text_ref": "FO84/17,ff.89-105"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404623,
+    "fields": {
+        "source": 14067,
+        "group": 1127708,
+        "source_order": 3,
+        "text_ref": "Florentino"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404624,
+    "fields": {
+        "source": 14283,
+        "group": 1127708,
+        "source_order": 4,
+        "text_ref": "GRJ,18/03/1820"
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 572117,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": 28,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 294,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 323,
+        "imp_total_num_slaves_disembarked": 294,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": 116,
+        "num_women_disembark_first_landing": 66,
+        "num_boy_disembark_first_landing": 86,
+        "num_girl_disembark_first_landing": 26,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": 182,
+        "imp_num_child_landed": 112,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": 92,
+        "total_slaves_landed_age_identified": 294,
+        "total_slaves_landed_gender_identified": 294,
+        "total_slaves_dept_or_arr_age_identified": 294,
+        "total_slaves_dept_or_arr_gender_identified": 294,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": 116,
+        "imp_num_women_total": 66,
+        "imp_num_boy_total": 86,
+        "imp_num_girl_total": 26,
+        "imp_num_adult_total": 182,
+        "imp_num_child_total": 112,
+        "imp_num_males_total": 202,
+        "imp_num_females_total": 92,
+        "voyage": 1144999,
+        "percentage_men": 0.394558,
+        "percentage_women": 0.22449,
+        "percentage_boy": 0.292517,
+        "percentage_girl": 0.0884354,
+        "percentage_male": 0.687075,
+        "percentage_child": 0.380952,
+        "percentage_adult": 0.619048,
+        "percentage_female": 0.312925,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404118,
+    "fields": {
+        "source": 13827,
+        "group": 1127598,
+        "source_order": 1,
+        "text_ref": "PP,1845,XLIX:593-633"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1404119,
+    "fields": {
+        "source": 13759,
+        "group": 1127598,
+        "source_order": 2,
+        "text_ref": "Daget"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 590552,
+    "fields": {
+        "name": "Dighton, William"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480125,
+    "fields": {
+        "source": 14160,
+        "group": 1157567,
+        "source_order": 2,
+        "text_ref": "BT98/61,338"
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 662237,
+    "fields": {
+        "ship_name": "Trajano",
+        "nationality_ship": null,
+        "tonnage": null,
+        "ton_type": null,
+        "rig_of_vessel": 40,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 6,
+        "tonnage_mod": null,
+        "voyage": 1127708
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 554718,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 240,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 262,
+        "imp_total_num_slaves_disembarked": 240,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1127598,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 564449,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": null,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 271,
+        "imp_total_num_slaves_disembarked": 217,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1137331,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14054,
+    "fields": {
+        "short_ref": "Williams",
+        "full_ref": "Williams, Gomer, <i>History of the Liverpool Privateers and Letters of Marque with an Account of the Liverpool Slave Trade</i> (London, 1897).",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 482536,
+    "fields": {
+        "captain": 590552,
+        "voyage": 1137331,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 693847,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": 576,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": 59,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": 1,
+        "first_place_slave_purchase": 566,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 1,
+        "first_landing_place": 359,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 566,
+        "imp_principal_place_of_slave_purchase": 566,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 359,
+        "imp_principal_port_slave_dis": 359,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1159320
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 835308,
+    "fields": {
+        "crew_voyage_outset": 33,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 6,
+        "crew_deserted": 7,
+        "voyage": 1157566
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 679526,
+    "fields": {
+        "port_of_departure": 129,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 564,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 1,
+        "first_landing_place": 289,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 50,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 132,
+        "region_of_return": 4,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 129,
+        "imp_region_voyage_begin": 4,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 564,
+        "imp_principal_place_of_slave_purchase": 564,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 289,
+        "imp_principal_port_slave_dis": 289,
+        "imp_principal_region_slave_dis": 50,
+        "imp_broad_region_slave_dis": 2,
+        "voyage": 1144999
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 664318,
+    "fields": {
+        "ship_name": "Harriette",
+        "nationality_ship": 10,
+        "tonnage": null,
+        "ton_type": null,
+        "rig_of_vessel": null,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 10,
+        "tonnage_mod": null,
+        "voyage": 1129789
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1423741,
+    "fields": {
+        "source": 14171,
+        "group": 1133965,
+        "source_order": 1,
+        "text_ref": "T70/958,p.94,96"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 350397,
+    "fields": {
+        "name": "Hayes, Thomas"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14067,
+    "fields": {
+        "short_ref": "Florentino",
+        "full_ref": "Florentino, Manolo (Universidade Federal do Rio de Janeiro), Database of slave vessels arriving in  Rio de Janeiro, 1811-1830.",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 692094,
+    "fields": {
+        "ship_name": "Agreeable",
+        "nationality_ship": 7,
+        "tonnage": 189,
+        "ton_type": 13,
+        "rig_of_vessel": 4,
+        "guns_mounted": 16,
+        "year_of_construction": 1786,
+        "vessel_construction_place": 50,
+        "vessel_construction_region": 63,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "189.0",
+        "voyage": 1157567
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 478968,
+    "fields": {
+        "captain": 585472,
+        "voyage": 1133965,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495423,
+    "fields": {
+        "source": 13827,
+        "group": 1159325,
+        "source_order": 4,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 692094,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 576,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 1,
+        "first_landing_place": 359,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 50,
+        "region_of_return": 63,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 576,
+        "imp_principal_place_of_slave_purchase": 576,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 359,
+        "imp_principal_port_slave_dis": 359,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1157567
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 664318,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1129789
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 585472,
+    "fields": {
+        "name": "Lovebond, Henry"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495424,
+    "fields": {
+        "source": 13827,
+        "group": 1159325,
+        "source_order": 5,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 664322,
+    "fields": {
+        "voyage_began": ",,",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "11,,1824",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1824",
+        "imp_departed_africa": ",,1824",
+        "imp_arrival_at_port_of_dis": ",,1824",
+        "imp_length_home_to_disembark": null,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1129789
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495425,
+    "fields": {
+        "source": 14296,
+        "group": 1159325,
+        "source_order": 6,
+        "text_ref": "LList, 8 May 1801"
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1133320,
+    "fields": {
+        "voyage_id": 8651,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 56,
+        "voyage_ship": 667849,
+        "voyage_itinerary": 667849,
+        "voyage_dates": 667853,
+        "voyage_crew": 811064,
+        "voyage_slaves_numbers": 560440,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495426,
+    "fields": {
+        "source": 14296,
+        "group": 1159325,
+        "source_order": 7,
+        "text_ref": "LList, 29 May 1801"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 594190,
+    "fields": {
+        "name": "Wilson, John"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 590808,
+    "fields": {
+        "name": "Seddon, James"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480127,
+    "fields": {
+        "source": 13827,
+        "group": 1157567,
+        "source_order": 4,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 667849,
+    "fields": {
+        "port_of_departure": null,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": 449,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": 36,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 592,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": null,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": null,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 449,
+        "imp_region_voyage_begin": 36,
+        "imp_broad_region_voyage_begin": 6,
+        "principal_place_of_slave_purchase": 592,
+        "imp_principal_place_of_slave_purchase": 592,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": null,
+        "imp_principal_port_slave_dis": 449,
+        "imp_principal_region_slave_dis": 36,
+        "imp_broad_region_slave_dis": 6,
+        "voyage": 1133320
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1127708,
+    "fields": {
+        "voyage_id": 234,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 78,
+        "voyage_ship": 662237,
+        "voyage_itinerary": 662237,
+        "voyage_dates": 662241,
+        "voyage_crew": 805452,
+        "voyage_slaves_numbers": 554828,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 348720,
+    "fields": {
+        "name": "Graham, Monkhouse"
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 692093,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": 542,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": 58,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 576,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 2,
+        "first_landing_place": 359,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 50,
+        "region_of_return": 63,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 576,
+        "imp_principal_place_of_slave_purchase": 576,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 359,
+        "imp_principal_port_slave_dis": 359,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1157566
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 585001,
+    "fields": {
+        "name": "Kewley, William"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1434413,
+    "fields": {
+        "source": 13959,
+        "group": 1137331,
+        "source_order": 1,
+        "text_ref": "Richardson,II"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1434414,
+    "fields": {
+        "source": 14269,
+        "group": 1137331,
+        "source_order": 2,
+        "text_ref": "DG,41.04.21."
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 662237,
+    "fields": {
+        "port_of_departure": 449,
+        "int_first_port_emb": 564,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": 59,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 564,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 449,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 36,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 449,
+        "imp_region_voyage_begin": 36,
+        "imp_broad_region_voyage_begin": 6,
+        "principal_place_of_slave_purchase": 564,
+        "imp_principal_place_of_slave_purchase": 564,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 449,
+        "imp_principal_port_slave_dis": 449,
+        "imp_principal_region_slave_dis": 36,
+        "imp_broad_region_slave_dis": 6,
+        "voyage": 1127708
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495421,
+    "fields": {
+        "source": 14160,
+        "group": 1159325,
+        "source_order": 2,
+        "text_ref": "BT98/61,140"
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 560440,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": 694,
+        "total_num_slaves_arr_first_port_embark": null,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 694,
+        "imp_total_num_slaves_disembarked": 581,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": 512,
+        "num_child_embark_first_port_purchase": 182,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": 512,
+        "imp_num_children_embarked": 182,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": 694,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": 694,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": 512,
+        "imp_num_child_total": 182,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1133320,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": 0.262248,
+        "percentage_adult": 0.737752,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 679526,
+    "fields": {
+        "ship_name": "N\u00e9r\u00e9ide",
+        "nationality_ship": 10,
+        "tonnage": 250,
+        "ton_type": 4,
+        "rig_of_vessel": null,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 10,
+        "tonnage_mod": "365.3",
+        "voyage": 1144999
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495387,
+    "fields": {
+        "source": 14296,
+        "group": 1159321,
+        "source_order": 7,
+        "text_ref": "LList, 31 Jan 1800"
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 662241,
+    "fields": {
+        "voyage_began": "3,15,1820",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "1,2,1821",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": ",,",
+        "voyage_completed": ",,",
+        "length_middle_passage_days": 28,
+        "imp_voyage_began": ",,1820",
+        "imp_departed_africa": ",,1821",
+        "imp_arrival_at_port_of_dis": ",,1821",
+        "imp_length_home_to_disembark": 293,
+        "imp_length_leaving_africa_to_disembark": 28,
+        "voyage": 1127708
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 473916,
+    "fields": {
+        "captain": 587196,
+        "voyage": 1127598,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1129789,
+    "fields": {
+        "voyage_id": 2341,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 123,
+        "voyage_ship": 664318,
+        "voyage_itinerary": 664318,
+        "voyage_dates": 664322,
+        "voyage_crew": 807533,
+        "voyage_slaves_numbers": 556909,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1411902,
+    "fields": {
+        "source": 13689,
+        "group": 1129789,
+        "source_order": 2,
+        "text_ref": "AfricanInstit, Nineteenth"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480116,
+    "fields": {
+        "source": 13827,
+        "group": 1157566,
+        "source_order": 5,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 692094,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1157567
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1451233,
+    "fields": {
+        "source": 14373,
+        "group": 1144999,
+        "source_order": 1,
+        "text_ref": "mettas,II"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14400,
+    "fields": {
+        "short_ref": "MMM, C/EX/L/",
+        "full_ref": "Merseyside Maritime Museum, Liverpool Registers of Merchant Ships, Subsidiary Register Books",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495369,
+    "fields": {
+        "source": 13892,
+        "group": 1159320,
+        "source_order": 1,
+        "text_ref": "LR1800"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495370,
+    "fields": {
+        "source": 14160,
+        "group": 1159320,
+        "source_order": 2,
+        "text_ref": "BT98/60,256"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495371,
+    "fields": {
+        "source": 13827,
+        "group": 1159320,
+        "source_order": 3,
+        "text_ref": "PP,1806(265),XIII,no.1"
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 554828,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": 8,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": 416,
+        "total_num_slaves_arr_first_port_embark": 408,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 416,
+        "imp_total_num_slaves_disembarked": 408,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": 8,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": 416,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1127708,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": 0.0192308
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495373,
+    "fields": {
+        "source": 13827,
+        "group": 1159320,
+        "source_order": 5,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 668494,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1133965
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495375,
+    "fields": {
+        "source": 13969,
+        "group": 1159320,
+        "source_order": 7,
+        "text_ref": "DickySam,120-21"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14160,
+    "fields": {
+        "short_ref": "BT",
+        "full_ref": "<i>The National Archives</i> (Kew, UK) Board of Trade",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495377,
+    "fields": {
+        "source": 14296,
+        "group": 1159320,
+        "source_order": 9,
+        "text_ref": "LList, 6 Sept 1799"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14162,
+    "fields": {
+        "short_ref": "CO",
+        "full_ref": "<i>The National Archives</i> (Kew, UK) Colonial Office",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495379,
+    "fields": {
+        "source": 14296,
+        "group": 1159320,
+        "source_order": 11,
+        "text_ref": "LList, 8 Apr 1800"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 500564,
+    "fields": {
+        "owner": 347321,
+        "voyage": 1133965,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14165,
+    "fields": {
+        "short_ref": "FO",
+        "full_ref": "<i>The National Archives</i> (Kew, UK) Foreign Office",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495382,
+    "fields": {
+        "source": 13827,
+        "group": 1159321,
+        "source_order": 2,
+        "text_ref": "PP,1806(265),XIII,no.2"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495383,
+    "fields": {
+        "source": 13827,
+        "group": 1159321,
+        "source_order": 3,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495384,
+    "fields": {
+        "source": 13827,
+        "group": 1159321,
+        "source_order": 4,
+        "text_ref": "PP,1801-2(88),IV,no.2"
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 502617,
+    "fields": {
+        "captain": 590808,
+        "voyage": 1157566,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 502618,
+    "fields": {
+        "captain": 590808,
+        "voyage": 1157567,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14171,
+    "fields": {
+        "short_ref": "T",
+        "full_ref": "<i>The National Archives</i> (Kew, UK) Treasury",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495388,
+    "fields": {
+        "source": 14296,
+        "group": 1159321,
+        "source_order": 8,
+        "text_ref": "LList, 9 Sept 1800"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495389,
+    "fields": {
+        "source": 14400,
+        "group": 1159321,
+        "source_order": 9,
+        "text_ref": "MMM, C/EX/L/5/3,1798.180"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 693851,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1159324
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 596836,
+    "fields": {
+        "name": "Chabosseau, de"
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 671858,
+    "fields": {
+        "ship_name": "Cicero",
+        "nationality_ship": 7,
+        "tonnage": 120,
+        "ton_type": 21,
+        "rig_of_vessel": null,
+        "guns_mounted": 8,
+        "year_of_construction": null,
+        "vessel_construction_place": 754,
+        "vessel_construction_region": 38,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 7,
+        "tonnage_mod": "218.3",
+        "voyage": 1137331
+    }
+},
+{
+    "model": "voyage.voyagesourcestype",
+    "pk": 3,
+    "fields": {
+        "group_id": 2,
+        "group_name": "Published source"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 348010,
+    "fields": {
+        "name": "Laroche, James*"
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 556909,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 328,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 399,
+        "imp_total_num_slaves_disembarked": 328,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1129789,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1411901,
+    "fields": {
+        "source": 13827,
+        "group": 1129789,
+        "source_order": 1,
+        "text_ref": "PP,1825,XXVII,B:128"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495408,
+    "fields": {
+        "source": 14160,
+        "group": 1159324,
+        "source_order": 2,
+        "text_ref": "BT98/60,296"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495409,
+    "fields": {
+        "source": 13827,
+        "group": 1159324,
+        "source_order": 3,
+        "text_ref": "PP,1806(265),XIII,no.1"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495410,
+    "fields": {
+        "source": 13827,
+        "group": 1159324,
+        "source_order": 4,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495411,
+    "fields": {
+        "source": 13827,
+        "group": 1159324,
+        "source_order": 5,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495412,
+    "fields": {
+        "source": 14290,
+        "group": 1159324,
+        "source_order": 6,
+        "text_ref": "kg, 1-8 Feb 1800"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495413,
+    "fields": {
+        "source": 13969,
+        "group": 1159324,
+        "source_order": 7,
+        "text_ref": "DickySam,120-21"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495414,
+    "fields": {
+        "source": 14296,
+        "group": 1159324,
+        "source_order": 8,
+        "text_ref": "LList, 28 May 1799"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 342391,
+    "fields": {
+        "name": "Bold, Jonas"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495416,
+    "fields": {
+        "source": 14296,
+        "group": 1159324,
+        "source_order": 10,
+        "text_ref": "LList, 21 Mar 1800"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13689,
+    "fields": {
+        "short_ref": "AfricanInstit, Nineteenth",
+        "full_ref": "African Institution, <i>Nineteenth Report of the Directors of the African Institution</i> (London, 1826).          ",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495418,
+    "fields": {
+        "source": 14296,
+        "group": 1159324,
+        "source_order": 12,
+        "text_ref": "LList, 10 June 1800"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495419,
+    "fields": {
+        "source": 14400,
+        "group": 1159324,
+        "source_order": 13,
+        "text_ref": "MMM, C/EX/L/5/4,1799.002"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495420,
+    "fields": {
+        "source": 13892,
+        "group": 1159325,
+        "source_order": 1,
+        "text_ref": "LR1801"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 692093,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1157566
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1423742,
+    "fields": {
+        "source": 14162,
+        "group": 1133965,
+        "source_order": 2,
+        "text_ref": "CO152/15,333"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1423743,
+    "fields": {
+        "source": 14171,
+        "group": 1133965,
+        "source_order": 3,
+        "text_ref": "T70/7,f.39v"
+    }
+},
+{
+    "model": "voyage.voyageoutcome",
+    "pk": 693852,
+    "fields": {
+        "particular_outcome": 1,
+        "resistance": null,
+        "outcome_slaves": 6,
+        "vessel_captured_outcome": 13,
+        "outcome_owner": 1,
+        "voyage": 1159325
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 692097,
+    "fields": {
+        "voyage_began": "7,16,1798",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "5,27,1799",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": "6,23,1799",
+        "voyage_completed": "9,16,1799",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1798",
+        "imp_departed_africa": ",,1799",
+        "imp_arrival_at_port_of_dis": ",,1799",
+        "imp_length_home_to_disembark": 315,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1157566
+    }
+},
+{
+    "model": "voyage.voyagedates",
+    "pk": 692098,
+    "fields": {
+        "voyage_began": "5,7,1800",
+        "slave_purchase_began": ",,",
+        "vessel_left_port": ",,",
+        "first_dis_of_slaves": "2,4,1801",
+        "date_departed_africa": "",
+        "arrival_at_second_place_landing": ",,",
+        "third_dis_of_slaves": ",,",
+        "departure_last_place_of_landing": "4,7,1801",
+        "voyage_completed": "6,8,1801",
+        "length_middle_passage_days": null,
+        "imp_voyage_began": ",,1800",
+        "imp_departed_africa": ",,1801",
+        "imp_arrival_at_port_of_dis": ",,1801",
+        "imp_length_home_to_disembark": 273,
+        "imp_length_leaving_africa_to_disembark": null,
+        "voyage": 1157567
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495427,
+    "fields": {
+        "source": 14296,
+        "group": 1159325,
+        "source_order": 8,
+        "text_ref": "LList, 5 June 1801"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495428,
+    "fields": {
+        "source": 14400,
+        "group": 1159325,
+        "source_order": 9,
+        "text_ref": "MMM, C/EX/L/5/4,1800.155"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14216,
+    "fields": {
+        "short_ref": "Klein,Angola dataset",
+        "full_ref": "<i>University of Wisconsin Library</i> (Madison, Wisconsin, USA) Klein, Angola data-set, 1723-1771",
+        "source_type": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1421705,
+    "fields": {
+        "source": 14216,
+        "group": 1133320,
+        "source_order": 1,
+        "text_ref": "Klein,Angola dataset"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 348044,
+    "fields": {
+        "name": "Hinde, William"
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1133965,
+    "fields": {
+        "voyage_id": 9790,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 103,
+        "voyage_ship": 668494,
+        "voyage_itinerary": 668494,
+        "voyage_dates": 668498,
+        "voyage_crew": 811709,
+        "voyage_slaves_numbers": 561085,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 835309,
+    "fields": {
+        "crew_voyage_outset": 33,
+        "crew_departure_last_port": null,
+        "crew_first_landing": 35,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 1,
+        "crew_deserted": 11,
+        "voyage": 1157567
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 693851,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": 576,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": 59,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": 1,
+        "first_place_slave_purchase": 566,
+        "second_place_slave_purchase": 564,
+        "third_place_slave_purchase": 559,
+        "first_region_slave_emb": 59,
+        "second_region_slave_emb": 59,
+        "third_region_slave_emb": 59,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 1,
+        "first_landing_place": 359,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": 50,
+        "region_of_return": 63,
+        "broad_region_of_return": 5,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 576,
+        "imp_principal_place_of_slave_purchase": 576,
+        "imp_principal_region_of_slave_purchase": 59,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 359,
+        "imp_principal_port_slave_dis": 359,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1159324
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524689,
+    "fields": {
+        "owner": 342391,
+        "voyage": 1159320,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524690,
+    "fields": {
+        "owner": 340951,
+        "voyage": 1159320,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495407,
+    "fields": {
+        "source": 13892,
+        "group": 1159324,
+        "source_order": 1,
+        "text_ref": "LR1800"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524692,
+    "fields": {
+        "owner": 339933,
+        "voyage": 1159321,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 342681,
+    "fields": {
+        "name": "Newton, Samuel"
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504731,
+    "fields": {
+        "captain": 585001,
+        "voyage": 1159320,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504732,
+    "fields": {
+        "captain": 581797,
+        "voyage": 1159320,
+        "captain_order": 2
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504733,
+    "fields": {
+        "captain": 593612,
+        "voyage": 1159321,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504734,
+    "fields": {
+        "captain": 585749,
+        "voyage": 1159321,
+        "captain_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524703,
+    "fields": {
+        "owner": 350397,
+        "voyage": 1159325,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524704,
+    "fields": {
+        "owner": 342681,
+        "voyage": 1159325,
+        "owner_order": 3
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504737,
+    "fields": {
+        "captain": 592060,
+        "voyage": 1159324,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504738,
+    "fields": {
+        "captain": 590438,
+        "voyage": 1159324,
+        "captain_order": 2
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504739,
+    "fields": {
+        "captain": 594190,
+        "voyage": 1159325,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 504740,
+    "fields": {
+        "captain": 586343,
+        "voyage": 1159325,
+        "captain_order": 2
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524700,
+    "fields": {
+        "owner": 342391,
+        "voyage": 1159324,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 344494,
+    "fields": {
+        "name": "Kirkby, Thomas"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 524701,
+    "fields": {
+        "owner": 340951,
+        "voyage": 1159324,
+        "owner_order": 2
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480112,
+    "fields": {
+        "source": 13892,
+        "group": 1157566,
+        "source_order": 1,
+        "text_ref": "LR1799"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480113,
+    "fields": {
+        "source": 14160,
+        "group": 1157566,
+        "source_order": 2,
+        "text_ref": "BT98/59,399"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480114,
+    "fields": {
+        "source": 14162,
+        "group": 1157566,
+        "source_order": 3,
+        "text_ref": "CO140/89,369"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480115,
+    "fields": {
+        "source": 13827,
+        "group": 1157566,
+        "source_order": 4,
+        "text_ref": "PP,1806(265),XIII,no.2"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495374,
+    "fields": {
+        "source": 14290,
+        "group": 1159320,
+        "source_order": 6,
+        "text_ref": "kg, 1-8 Feb 1800"
+    }
+},
+{
+    "model": "voyage.voyagecaptainconnection",
+    "pk": 474037,
+    "fields": {
+        "captain": 581654,
+        "voyage": 1127708,
+        "captain_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480118,
+    "fields": {
+        "source": 14290,
+        "group": 1157566,
+        "source_order": 7,
+        "text_ref": "kg, 25 May-1 June 1799"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480119,
+    "fields": {
+        "source": 14054,
+        "group": 1157566,
+        "source_order": 8,
+        "text_ref": "Williams,682"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480120,
+    "fields": {
+        "source": 14296,
+        "group": 1157566,
+        "source_order": 9,
+        "text_ref": "LList, 28 Dec 1798"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480121,
+    "fields": {
+        "source": 14296,
+        "group": 1157566,
+        "source_order": 10,
+        "text_ref": "LList, 2 July 1799"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480122,
+    "fields": {
+        "source": 14296,
+        "group": 1157566,
+        "source_order": 11,
+        "text_ref": "LList, 2 Aug 1799"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480123,
+    "fields": {
+        "source": 14400,
+        "group": 1157566,
+        "source_order": 12,
+        "text_ref": "MMM, C/EX/L/5/3,1798.088"
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 587196,
+    "fields": {
+        "name": "Triarte, Felix"
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 561085,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": null,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": 150,
+        "total_num_slaves_arr_first_port_embark": null,
+        "num_slaves_disembark_first_place": 140,
+        "num_slaves_disembark_second_place": 0,
+        "num_slaves_disembark_third_place": 0,
+        "imp_total_num_slaves_embarked": 150,
+        "imp_total_num_slaves_disembarked": 140,
+        "imp_jamaican_cash_price": "32.5900",
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": 107,
+        "num_women_disembark_first_landing": 14,
+        "num_boy_disembark_first_landing": 21,
+        "num_girl_disembark_first_landing": 0,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": 121,
+        "imp_num_child_landed": 21,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": 14,
+        "total_slaves_landed_age_identified": 142,
+        "total_slaves_landed_gender_identified": 142,
+        "total_slaves_dept_or_arr_age_identified": 142,
+        "total_slaves_dept_or_arr_gender_identified": 142,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": 107,
+        "imp_num_women_total": 14,
+        "imp_num_boy_total": 21,
+        "imp_num_girl_total": 0,
+        "imp_num_adult_total": 121,
+        "imp_num_child_total": 21,
+        "imp_num_males_total": 128,
+        "imp_num_females_total": 14,
+        "voyage": 1133965,
+        "percentage_men": 0.753521,
+        "percentage_women": 0.0985916,
+        "percentage_boy": 0.147887,
+        "percentage_girl": 0.0,
+        "percentage_male": 0.901408,
+        "percentage_child": 0.147887,
+        "percentage_adult": 0.852113,
+        "percentage_female": 0.098592,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyage",
+    "pk": 1157566,
+    "fields": {
+        "voyage_id": 80123,
+        "voyage_in_cd_rom": true,
+        "voyage_groupings": 32,
+        "voyage_ship": 692093,
+        "voyage_itinerary": 692093,
+        "voyage_dates": 692097,
+        "voyage_crew": 835308,
+        "voyage_slaves_numbers": 584684,
+        "last_update": "2016-11-27T05:00:00Z"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 13759,
+    "fields": {
+        "short_ref": "Daget",
+        "full_ref": "Daget, Serge, <i>R\u00e9pertoire des Exp\u00e9ditions N\u00e9gri\u00e8res Fran\u00e7aises \u00e0 la Traite Ill\u00e9gale (1814-1850)</i> (Nantes, 1988).   ",
+        "source_type": 3
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480128,
+    "fields": {
+        "source": 13827,
+        "group": 1157567,
+        "source_order": 5,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480129,
+    "fields": {
+        "source": 14296,
+        "group": 1157567,
+        "source_order": 6,
+        "text_ref": "LList, 2 Dec 1800"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480130,
+    "fields": {
+        "source": 14296,
+        "group": 1157567,
+        "source_order": 7,
+        "text_ref": "LList, 24 Mar 1801"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480131,
+    "fields": {
+        "source": 14296,
+        "group": 1157567,
+        "source_order": 8,
+        "text_ref": "LList, 27 Mar 1801"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480132,
+    "fields": {
+        "source": 14296,
+        "group": 1157567,
+        "source_order": 9,
+        "text_ref": "LList, 12 June 1801"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480133,
+    "fields": {
+        "source": 14160,
+        "group": 1157567,
+        "source_order": 10,
+        "text_ref": "BT6/235"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1480134,
+    "fields": {
+        "source": 14400,
+        "group": 1157567,
+        "source_order": 11,
+        "text_ref": "MMM, C/EX/L/5/3,1798.088"
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 346567,
+    "fields": {
+        "name": "Carvalho, Manoel Gon\u00e7alves de"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495372,
+    "fields": {
+        "source": 13827,
+        "group": 1159320,
+        "source_order": 4,
+        "text_ref": "PP,1801-2(88),IV,no.1"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 837066,
+    "fields": {
+        "crew_voyage_outset": 49,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 6,
+        "crew_deserted": 8,
+        "voyage": 1159324
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 837067,
+    "fields": {
+        "crew_voyage_outset": 41,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": 1,
+        "crew_deserted": 9,
+        "voyage": 1159325
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 504268,
+    "fields": {
+        "owner": 348010,
+        "voyage": 1137331,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 693848,
+    "fields": {
+        "port_of_departure": 50,
+        "int_first_port_emb": 763,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": 57,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": 539,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": 57,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": 1,
+        "first_landing_place": 360,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 25,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 50,
+        "imp_region_voyage_begin": 63,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": 763,
+        "imp_principal_place_of_slave_purchase": 763,
+        "imp_principal_region_of_slave_purchase": 57,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 360,
+        "imp_principal_port_slave_dis": 360,
+        "imp_principal_region_slave_dis": 25,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1159321
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14290,
+    "fields": {
+        "short_ref": "kg",
+        "full_ref": "<i>Royal Gazette (Kingston)</i>",
+        "source_type": 2
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 822741,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": 1,
+        "crew_died_while_ship_african": 2,
+        "crew_died_middle_passage": 5,
+        "crew_died_in_americas": 3,
+        "crew_died_on_return_voyage": 0,
+        "crew_died_complete_voyage": 11,
+        "crew_deserted": null,
+        "voyage": 1144999
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 340951,
+    "fields": {
+        "name": "Bibby, Robert"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14296,
+    "fields": {
+        "short_ref": "LList",
+        "full_ref": "<i>Lloyds\u2019 Lists (1741, 1744, 1747-53, 1755, 1757-58, 1760-77, 1779-1808)</i>",
+        "source_type": 2
+    }
+},
+{
+    "model": "voyage.voyageship",
+    "pk": 662127,
+    "fields": {
+        "ship_name": "Caroline",
+        "nationality_ship": 10,
+        "tonnage": null,
+        "ton_type": null,
+        "rig_of_vessel": 1,
+        "guns_mounted": null,
+        "year_of_construction": null,
+        "vessel_construction_place": null,
+        "vessel_construction_region": null,
+        "registered_year": null,
+        "registered_place": null,
+        "registered_region": null,
+        "imputed_nationality": 10,
+        "tonnage_mod": null,
+        "voyage": 1127598
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 339933,
+    "fields": {
+        "name": "McDowal, Samuel"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 805342,
+    "fields": {
+        "crew_voyage_outset": null,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1127598
+    }
+},
+{
+    "model": "voyage.voyagecaptain",
+    "pk": 581797,
+    "fields": {
+        "name": "King, Charles"
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495376,
+    "fields": {
+        "source": 14296,
+        "group": 1159320,
+        "source_order": 8,
+        "text_ref": "LList, 28 May 1799"
+    }
+},
+{
+    "model": "voyage.voyagecrew",
+    "pk": 815073,
+    "fields": {
+        "crew_voyage_outset": 30,
+        "crew_departure_last_port": null,
+        "crew_first_landing": null,
+        "crew_return_begin": null,
+        "crew_end_voyage": null,
+        "unspecified_crew": null,
+        "crew_died_before_first_trade": null,
+        "crew_died_while_ship_african": null,
+        "crew_died_middle_passage": null,
+        "crew_died_in_americas": null,
+        "crew_died_on_return_voyage": null,
+        "crew_died_complete_voyage": null,
+        "crew_deserted": null,
+        "voyage": 1137331
+    }
+},
+{
+    "model": "voyage.voyageshipowner",
+    "pk": 347621,
+    "fields": {
+        "name": "Twemlow, Thomas"
+    }
+},
+{
+    "model": "voyage.voyagesources",
+    "pk": 14269,
+    "fields": {
+        "short_ref": "DG",
+        "full_ref": "<i>Daily Gazeteer</i>",
+        "source_type": 2
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 584684,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 315,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 290,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 317,
+        "imp_total_num_slaves_disembarked": 290,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1157566,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageslavesnumbers",
+    "pk": 584685,
+    "fields": {
+        "slave_deaths_before_africa": null,
+        "slave_deaths_between_africa_america": null,
+        "slave_deaths_between_arrival_and_sale": null,
+        "num_slaves_intended_first_port": 222,
+        "num_slaves_intended_second_port": null,
+        "num_slaves_carried_first_port": null,
+        "num_slaves_carried_second_port": null,
+        "num_slaves_carried_third_port": null,
+        "total_num_slaves_purchased": null,
+        "total_num_slaves_dep_last_slaving_port": null,
+        "total_num_slaves_arr_first_port_embark": 222,
+        "num_slaves_disembark_first_place": null,
+        "num_slaves_disembark_second_place": null,
+        "num_slaves_disembark_third_place": null,
+        "imp_total_num_slaves_embarked": 247,
+        "imp_total_num_slaves_disembarked": 222,
+        "imp_jamaican_cash_price": null,
+        "imp_mortality_during_voyage": null,
+        "num_men_embark_first_port_purchase": null,
+        "num_women_embark_first_port_purchase": null,
+        "num_boy_embark_first_port_purchase": null,
+        "num_girl_embark_first_port_purchase": null,
+        "num_adult_embark_first_port_purchase": null,
+        "num_child_embark_first_port_purchase": null,
+        "num_infant_embark_first_port_purchase": null,
+        "num_males_embark_first_port_purchase": null,
+        "num_females_embark_first_port_purchase": null,
+        "num_men_died_middle_passage": null,
+        "num_women_died_middle_passage": null,
+        "num_boy_died_middle_passage": null,
+        "num_girl_died_middle_passage": null,
+        "num_adult_died_middle_passage": null,
+        "num_child_died_middle_passage": null,
+        "num_infant_died_middle_passage": null,
+        "num_males_died_middle_passage": null,
+        "num_females_died_middle_passage": null,
+        "num_men_disembark_first_landing": null,
+        "num_women_disembark_first_landing": null,
+        "num_boy_disembark_first_landing": null,
+        "num_girl_disembark_first_landing": null,
+        "num_adult_disembark_first_landing": null,
+        "num_child_disembark_first_landing": null,
+        "num_infant_disembark_first_landing": null,
+        "num_males_disembark_first_landing": null,
+        "num_females_disembark_first_landing": null,
+        "num_men_embark_second_port_purchase": null,
+        "num_women_embark_second_port_purchase": null,
+        "num_boy_embark_second_port_purchase": null,
+        "num_girl_embark_second_port_purchase": null,
+        "num_adult_embark_second_port_purchase": null,
+        "num_child_embark_second_port_purchase": null,
+        "num_infant_embark_second_port_purchase": null,
+        "num_males_embark_second_port_purchase": null,
+        "num_females_embark_second_port_purchase": null,
+        "num_men_embark_third_port_purchase": null,
+        "num_women_embark_third_port_purchase": null,
+        "num_boy_embark_third_port_purchase": null,
+        "num_girl_embark_third_port_purchase": null,
+        "num_adult_embark_third_port_purchase": null,
+        "num_child_embark_third_port_purchase": null,
+        "num_infant_embark_third_port_purchase": null,
+        "num_males_embark_third_port_purchase": null,
+        "num_females_embark_third_port_purchase": null,
+        "num_men_disembark_second_landing": null,
+        "num_women_disembark_second_landing": null,
+        "num_boy_disembark_second_landing": null,
+        "num_girl_disembark_second_landing": null,
+        "num_adult_disembark_second_landing": null,
+        "num_child_disembark_second_landing": null,
+        "num_infant_disembark_second_landing": null,
+        "num_males_disembark_second_landing": null,
+        "num_females_disembark_second_landing": null,
+        "imp_num_adult_embarked": null,
+        "imp_num_children_embarked": null,
+        "imp_num_male_embarked": null,
+        "imp_num_female_embarked": null,
+        "total_slaves_embarked_age_identified": null,
+        "total_slaves_embarked_gender_identified": null,
+        "imp_adult_death_middle_passage": null,
+        "imp_child_death_middle_passage": null,
+        "imp_male_death_middle_passage": null,
+        "imp_female_death_middle_passage": null,
+        "imp_num_adult_landed": null,
+        "imp_num_child_landed": null,
+        "imp_num_male_landed": null,
+        "imp_num_female_landed": null,
+        "total_slaves_landed_age_identified": null,
+        "total_slaves_landed_gender_identified": null,
+        "total_slaves_dept_or_arr_age_identified": null,
+        "total_slaves_dept_or_arr_gender_identified": null,
+        "imp_slaves_embarked_for_mortality": null,
+        "imp_num_men_total": null,
+        "imp_num_women_total": null,
+        "imp_num_boy_total": null,
+        "imp_num_girl_total": null,
+        "imp_num_adult_total": null,
+        "imp_num_child_total": null,
+        "imp_num_males_total": null,
+        "imp_num_females_total": null,
+        "voyage": 1157567,
+        "percentage_men": null,
+        "percentage_women": null,
+        "percentage_boy": null,
+        "percentage_girl": null,
+        "percentage_male": null,
+        "percentage_child": null,
+        "percentage_adult": null,
+        "percentage_female": null,
+        "imp_mortality_ratio": null
+    }
+},
+{
+    "model": "voyage.voyageitinerary",
+    "pk": 664318,
+    "fields": {
+        "port_of_departure": 136,
+        "int_first_port_emb": null,
+        "int_second_port_emb": null,
+        "int_first_region_purchase_slaves": null,
+        "int_second_region_purchase_slaves": null,
+        "int_first_port_dis": null,
+        "int_second_port_dis": null,
+        "int_first_region_slave_landing": null,
+        "int_second_place_region_slave_landing": null,
+        "ports_called_buying_slaves": null,
+        "first_place_slave_purchase": null,
+        "second_place_slave_purchase": null,
+        "third_place_slave_purchase": null,
+        "first_region_slave_emb": null,
+        "second_region_slave_emb": null,
+        "third_region_slave_emb": null,
+        "port_of_call_before_atl_crossing": null,
+        "number_of_ports_of_call": null,
+        "first_landing_place": 327,
+        "second_landing_place": null,
+        "third_landing_place": null,
+        "first_landing_region": 12,
+        "second_landing_region": null,
+        "third_landing_region": null,
+        "place_voyage_ended": null,
+        "region_of_return": null,
+        "broad_region_of_return": null,
+        "imp_port_voyage_begin": 136,
+        "imp_region_voyage_begin": 4,
+        "imp_broad_region_voyage_begin": 5,
+        "principal_place_of_slave_purchase": null,
+        "imp_principal_place_of_slave_purchase": 748,
+        "imp_principal_region_of_slave_purchase": 84,
+        "imp_broad_region_of_slave_purchase": 1,
+        "principal_port_of_slave_dis": 327,
+        "imp_principal_port_slave_dis": 327,
+        "imp_principal_region_slave_dis": 12,
+        "imp_broad_region_slave_dis": 4,
+        "voyage": 1129789
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495380,
+    "fields": {
+        "source": 14400,
+        "group": 1159320,
+        "source_order": 12,
+        "text_ref": "MMM, C/EX/L/5/4,1799.003"
+    }
+},
+{
+    "model": "voyage.voyageshipownerconnection",
+    "pk": 497662,
+    "fields": {
+        "owner": 343555,
+        "voyage": 1127598,
+        "owner_order": 1
+    }
+},
+{
+    "model": "voyage.voyagesourcesconnection",
+    "pk": 1495381,
+    "fields": {
+        "source": 14160,
+        "group": 1159321,
+        "source_order": 1,
+        "text_ref": "BT98/61,91"
+    }
+}
+]

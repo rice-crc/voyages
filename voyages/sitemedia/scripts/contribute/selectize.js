@@ -610,7 +610,7 @@
 // Reusable functions for Voyages.
 function addNotesPopup(id, $wrapper, spanStyle) {
 	spanStyle = spanStyle || '';
-	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><button onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" tabindex="-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></button><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onblur="$(\'#dropdown_btn_' + id + '\').dropdown(\'toggle\');" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
+	$('<span class="input-group-btn" id="note_btn_' + id + '" style="' + spanStyle + '"><a onclick="setTimeout(function() { $(\'#notes_for_' + id + '\').focus(); }, 10); return false;" class="btn btn-default dropdown-toggle notes_toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdown_btn_' + id + '" style="border-top-left-radius: 0; border-bottom-left-radius: 0;"><span class="glyphicon glyphicon-comment"></span></a><ul class="dropdown-menu pull-right" aria-labelledby="dropdown_btn_' + id + '" style="padding:20px;"> <li>' + gettext('Please type your comments below:') + '</li><li><textarea class="field_notes form-control not_selectized" id="notes_for_' + id + '" name="notes_for_' + id + '" class="col-md-12" onblur="$(\'#dropdown_btn_' + id + '\').dropdown(\'toggle\');" onchange="$(\'#dropdown_btn_' + id + '\').toggleClass(\'has_notes\', $(this).val() != \'\');"></textarea></li></ul></span>').appendTo($wrapper);
 }
 
 /**
@@ -2781,7 +2781,7 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 		open: function() {
 			var self = this;
 	
-			if (self.isLocked || self.isOpen || (self.settings.mode === 'multi' && self.isFull())) return;
+			if (self.isLocked || self.isOpen/* || (self.settings.mode === 'multi' && self.isFull())*/) return;
 			self.focus();
 			self.isOpen = true;
 			self.refreshState();

@@ -39,12 +39,12 @@ class SimpleGetPageTest(TestCase):
         for i in range(-10, 0):
             self.check_invalid(self.prefix_sect_1 + "0" + str(i))
             self.check_invalid(self.prefix_sect_1 + str(i))
-        for i in range(12, 30):
+        for i in range(1000, 1009):
             self.check_invalid(self.prefix_sect_1 + "0" + str(i))
             self.check_invalid(self.prefix_sect_1 + str(i))
         for i in range(-10, 0):
             self.check_invalid(self.prefix_sect_2 + "0" + str(i))
             self.check_invalid(self.prefix_sect_2 + str(i))
-        for i in range(10, 30):
+        for i in range(1000, 1009):
             self.check_invalid(self.prefix_sect_2 + "0" + str(i))
             self.check_invalid(self.prefix_sect_2 + str(i))

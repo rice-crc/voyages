@@ -1,4 +1,4 @@
-* Encoding: ISO-8859-1.
+﻿ * Encoding: UTF-8.
 * SYNTAX FOR IMPUTING VARIABLES FROM OBSERVED DATA IN TRANSATLANTIC SLAVE TRADE DATABASE
 
 *     natinimp     Inputed nation of ship registration
@@ -52,75 +52,80 @@ If (missing(yearam)) yearam=datarr45.
 * SPSS date and time functions operate only for dates from October 14, 1582.  Earlier dates 
 * must be added separately.
 
-If (yearam > 1525 & yearam < 1531) year5 = 1 .
-If (yearam > 1530 & yearam < 1536) year5 = 2 .
-If (yearam > 1535 & yearam < 1541) year5 = 3 .
-If (yearam > 1540 & yearam < 1546) year5 = 4 .
-If (yearam > 1545 & yearam < 1551) year5 = 5 .
-If (yearam > 1550 & yearam < 1556) year5 = 6 .
-If (yearam > 1555 & yearam < 1561) year5 = 7 .
-If (yearam > 1560 & yearam < 1566) year5 = 8 .
-If (yearam > 1565 & yearam < 1571) year5 = 9 .
-If (yearam > 1570 & yearam < 1576) year5 = 10 .
-If (yearam > 1575 & yearam < 1581) year5 = 11 .
-If (yearam > 1580 & yearam < 1586) year5 = 12 .
-If (yearam > 1585 & yearam < 1591) year5 = 13 .
-If (yearam > 1590 & yearam < 1596) year5 = 14 .
-If (yearam > 1595 & yearam < 1601) year5 = 15 .
-If (yearam > 1600 & yearam < 1606) year5 = 16 .
-If (yearam > 1605 & yearam < 1611) year5 = 17 .
-If (yearam > 1610 & yearam < 1616 ) year5 = 18 .
-If (yearam > 1615 & yearam < 1621) year5 = 19 .
-If (yearam > 1620 & yearam < 1626) year5 = 20 .
-If (yearam > 1625 & yearam < 1631) year5 = 21 .
-If (yearam > 1630 & yearam < 1636) year5 = 22 .
-If (yearam > 1635 & yearam < 1641) year5 = 23 .
-If (yearam > 1640 & yearam < 1646) year5 = 24 .
-If (yearam > 1645 & yearam < 1651) year5 = 25 .
-If (yearam > 1650 & yearam < 1656) year5 = 26 .
-If (yearam > 1655 & yearam < 1661) year5 = 27 .
-If (yearam > 1660 & yearam < 1666) year5 = 28 .
-If (yearam > 1665 & yearam < 1671) year5 = 29 .
-If (yearam > 1670 & yearam < 1676) year5 = 30 .
-If (yearam > 1675 & yearam < 1681) year5 = 31 .
-If (yearam > 1680 & yearam < 1686) year5 = 32 .
-If (yearam > 1685 & yearam < 1691) year5 = 33 .
-If (yearam > 1690 & yearam < 1696) year5 = 34 .
-If (yearam > 1695 & yearam < 1701) year5 = 35 .
-If (yearam > 1700 & yearam < 1706) year5 = 36 .
-If (yearam > 1705 & yearam < 1711) year5 = 37 .
-If (yearam > 1710 & yearam < 1716 ) year5 = 38 .
-If (yearam > 1715 & yearam < 1721) year5 = 39 .
-If (yearam > 1720 & yearam < 1726) year5 = 40 .
-If (yearam > 1725 & yearam < 1731) year5 = 41 .
-If (yearam > 1730 & yearam < 1736) year5 = 42 .
-If (yearam > 1735 & yearam < 1741) year5 = 43 .
-If (yearam > 1740 & yearam < 1746) year5 = 44 .
-If (yearam > 1745 & yearam < 1751) year5 = 45 .
-If (yearam > 1750 & yearam < 1756) year5 = 46 .
-If (yearam > 1755 & yearam < 1761) year5 = 47 .
-If (yearam > 1760 & yearam < 1766) year5 = 48 .
-If (yearam > 1765 & yearam < 1771) year5 = 49 .
-If (yearam > 1770 & yearam < 1776) year5 = 50 .
-If (yearam > 1775 & yearam < 1781) year5 = 51 .
-If (yearam > 1780 & yearam < 1786) year5 = 52 .
-If (yearam > 1785 & yearam < 1791) year5 = 53 .
-If (yearam > 1790 & yearam < 1796) year5 = 54 .
-If (yearam > 1795 & yearam < 1801) year5 = 55 .
-If (yearam > 1800 & yearam < 1806) year5 = 56 .
-If (yearam > 1805 & yearam < 1811) year5 = 57 .
-If (yearam > 1810 & yearam < 1816 ) year5 = 58 .
-If (yearam > 1815 & yearam < 1821) year5 = 59 .
-If (yearam > 1820 & yearam < 1826) year5 = 60 .
-If (yearam > 1825 & yearam < 1831) year5 = 61 .
-If (yearam > 1830 & yearam < 1836) year5 = 62 .
-If (yearam > 1835 & yearam < 1841) year5 = 63 .
-If (yearam > 1840 & yearam < 1846) year5 = 64 .
-If (yearam > 1845 & yearam < 1851) year5 = 65 .
-If (yearam > 1850 & yearam < 1856) year5 = 66 .
-If (yearam > 1855 & yearam < 1861) year5 = 67 .
-If (yearam > 1860 & yearam < 1866) year5 = 68 .
-If (yearam > 1865 & yearam < 1871) year5 = 69 .
+If (yearam > 1500 & yearam < 1506) year5 =1.
+If (yearam > 1505 & yearam < 1511) year5 =2.
+If (yearam > 1510 & yearam < 1516) year5 =3.
+If (yearam > 1515 & yearam < 1521) year5 =4.
+If (yearam > 1520 & yearam < 1526) year5 =5.
+If (yearam > 1525 & yearam < 1531) year5 =6.
+If (yearam > 1530 & yearam < 1536) year5 =7.
+If (yearam > 1535 & yearam < 1541) year5 =8.
+If (yearam > 1540 & yearam < 1546) year5 =9.
+If (yearam > 1545 & yearam < 1551) year5 =10.
+If (yearam > 1550 & yearam < 1556) year5 =11.
+If (yearam > 1555 & yearam < 1561) year5 =12.
+If (yearam > 1560 & yearam < 1566) year5 =13.
+If (yearam > 1565 & yearam < 1571) year5 =14.
+If (yearam > 1570 & yearam < 1576) year5 =15.
+If (yearam > 1575 & yearam < 1581) year5 =16.
+If (yearam > 1580 & yearam < 1586) year5 =17.
+If (yearam > 1585 & yearam < 1591) year5 =18.
+If (yearam > 1590 & yearam < 1596) year5 =19.
+If (yearam > 1595 & yearam < 1601) year5 =20.
+If (yearam > 1600 & yearam < 1606) year5 =21.
+If (yearam > 1605 & yearam < 1611) year5 =22.
+If (yearam > 1610 & yearam < 1616 ) year5 =23.
+If (yearam > 1615 & yearam < 1621) year5 =24.
+If (yearam > 1620 & yearam < 1626) year5 =25.
+If (yearam > 1625 & yearam < 1631) year5 =26.
+If (yearam > 1630 & yearam < 1636) year5 =27.
+If (yearam > 1635 & yearam < 1641) year5 =28.
+If (yearam > 1640 & yearam < 1646) year5 =29.
+If (yearam > 1645 & yearam < 1651) year5 =30.
+If (yearam > 1650 & yearam < 1656) year5 =31.
+If (yearam > 1655 & yearam < 1661) year5 =32.
+If (yearam > 1660 & yearam < 1666) year5 =33.
+If (yearam > 1665 & yearam < 1671) year5 =34.
+If (yearam > 1670 & yearam < 1676) year5 =35.
+If (yearam > 1675 & yearam < 1681) year5 =36.
+If (yearam > 1680 & yearam < 1686) year5 =37.
+If (yearam > 1685 & yearam < 1691) year5 =38.
+If (yearam > 1690 & yearam < 1696) year5 =39.
+If (yearam > 1695 & yearam < 1701) year5 =40.
+If (yearam > 1700 & yearam < 1706) year5 =41.
+If (yearam > 1705 & yearam < 1711) year5 =42.
+If (yearam > 1710 & yearam < 1716 ) year5 =43.
+If (yearam > 1715 & yearam < 1721) year5 =44.
+If (yearam > 1720 & yearam < 1726) year5 =45.
+If (yearam > 1725 & yearam < 1731) year5 =46.
+If (yearam > 1730 & yearam < 1736) year5 =47.
+If (yearam > 1735 & yearam < 1741) year5 =48.
+If (yearam > 1740 & yearam < 1746) year5 =49.
+If (yearam > 1745 & yearam < 1751) year5 =50.
+If (yearam > 1750 & yearam < 1756) year5 =51.
+If (yearam > 1755 & yearam < 1761) year5 =52.
+If (yearam > 1760 & yearam < 1766) year5 =53.
+If (yearam > 1765 & yearam < 1771) year5 =54.
+If (yearam > 1770 & yearam < 1776) year5 =55.
+If (yearam > 1775 & yearam < 1781) year5 =56.
+If (yearam > 1780 & yearam < 1786) year5 =57.
+If (yearam > 1785 & yearam < 1791) year5 =58.
+If (yearam > 1790 & yearam < 1796) year5 =59.
+If (yearam > 1795 & yearam < 1801) year5 =60.
+If (yearam > 1800 & yearam < 1806) year5 =61.
+If (yearam > 1805 & yearam < 1811) year5 =62.
+If (yearam > 1810 & yearam < 1816 ) year5 =63.
+If (yearam > 1815 & yearam < 1821) year5 =64.
+If (yearam > 1820 & yearam < 1826) year5 =65.
+If (yearam > 1825 & yearam < 1831) year5 =66.
+If (yearam > 1830 & yearam < 1836) year5 =67.
+If (yearam > 1835 & yearam < 1841) year5 =68.
+If (yearam > 1840 & yearam < 1846) year5 =69.
+If (yearam > 1845 & yearam < 1851) year5 =70.
+If (yearam > 1850 & yearam < 1856) year5 =71.
+If (yearam > 1855 & yearam < 1861) year5 =72.
+If (yearam > 1860 & yearam < 1866) year5 =73.
+If (yearam > 1865 & yearam < 1871) year5 =74.
 
 If (yearam > 1500 & yearam < 1511) year10 = 1 .
 If (yearam > 1510 & yearam < 1521) year10 = 2 .
@@ -422,14 +427,27 @@ IF (MISSING(tslavesd)) pctemb = ncartot/tslavesp .
 if (plac1tra >= 1 & missing(plac2tra) & missing(plac3tra)) mjbyptimp = plac1tra.
 if (plac2tra >= 1 & missing(plac1tra) & missing(plac3tra)) mjbyptimp = plac2tra.
 if (plac3tra >= 1 & missing(plac1tra) & missing(plac2tra)) mjbyptimp = plac3tra.
+if (missing(plac1tra) & missing(plac2tra) & missing(plac3tra) & embport >=1 & missing(embport2)) mjbyptimp = embport.
+if (missing(plac1tra) & missing(plac2tra) & missing(plac3tra) & missing(embport) & embport2 >=1) mjbyptimp = embport2.
+if (missing(plac1tra) & missing(plac2tra) & missing(plac3tra) & embport >=1 & embport2 >= 1 & embreg = embreg2) mjbyptimp = embreg + 99.
+if (missing(plac1tra) & missing(plac2tra) & missing(plac3tra) & embport >=1 & embport2 >= 1 & embreg ~= embreg2) mjbyptimp = 60999.
 
-if (plac1tra = plac2tra) mjbyptimp=plac1tra.
-if (plac1tra = plac3tra) mjbyptimp=plac1tra.
-if (plac2tra = plac3tra) mjbyptimp=plac2tra.
+if (regem1 = regem2 & missing(regem3)) mjbyptimp=regem1+99.
+if (regem1 = regem3 & missing(regem2)) mjbyptimp=regem1+99.
+if (regem2 = regem3 & missing(regem1)) mjbyptimp=regem2+99.
+if (regem1 = regem2 & regem1 = regem3) mjbyptimp = regem1 +99.
+if (regem1 ~= regem2 & regem1 ~= regem3 & regem2 ~= regem3) mjbyptimp = 60999.
 
 if (ncar13 > ncar15 & ncar13 > ncar17) mjbyptimp = plac1tra.
 if (ncar15 > ncar13 & ncar15 > ncar17) mjbyptimp = plac2tra.
 if (ncar17 > ncar13 & ncar17 > ncar15) mjbyptimp = plac3tra.
+
+if (ncar13=ncar15 & ncar13 > ncar17 & regem1=regem2) mjbyptimp=regem1 + 99.
+if (ncar13=ncar15 & ncar13 > ncar17 & regem1 ~= regem2) mjbyptimp=60999.
+if (ncar13=ncar17 & ncar13 > ncar15 & regem1=regem3) mjbyptimp=regem1 + 99.
+if (ncar13=ncar17 & ncar13 > ncar15 & regem1 ~= regem3) mjbyptimp=60999.
+if (ncar15=ncar17 & ncar15 > ncar13 & regem2=regem3) mjbyptimp=regem2 + 99.
+if (ncar15=ncar17 & ncar15 > ncar17 & regem2 ~= regem3) mjbyptimp=60999.
 
 DO IF (pctemb < .5 | (ncartot < 50 & missing(tslavesd) & missing(tslavesp))).
 If (ncar13 = 0 & ncar15 > 0 & ncar17 > 0) mjbyptimp = plac1tra.
@@ -463,6 +481,8 @@ if (embport2 >= 1 & missing(plac1tra) & missing(plac2tra) & missing(plac3tra)) m
 if (missing(mjbyptimp) & fate2 ~= 2 & (embport >= 1 | embport2 >= 1 | plac1tra >= 1 | plac2tra >= 1 | plac3tra >= 1 | ncartot > 0)) mjbyptimp = 60999.
 EXECUTE.
 
+if (missing(mjbyptimp) & majbuypt >=1) mjbyptimp=majbuypt.
+
 *     mjslptimp      Principal port of slave purchase
 
 DO IF (slas32 >= 1 | slas36 >= 1 | slas39 >= 1).
@@ -479,15 +499,27 @@ COMPUTE pctdis = slastot/slaarriv .
 if (sla1port >= 1 & missing(adpsale1) & missing(adpsale2)) mjslptimp = sla1port.
 if (adpsale1 >= 1 & missing(sla1port) & missing(adpsale2)) mjslptimp = adpsale1.
 if (adpsale2 >= 1 & missing(sla1port) & missing(adpsale1)) mjslptimp = adpsale2.
-if (missing(sla1port) & missing(adpsale1) & missing(adpsale2) & arrport >=1) mjslptimp = arrport.
+if (missing(sla1port) & missing(adpsale1) & missing(adpsale2) & arrport >=1 & missing(arrport2)) mjslptimp = arrport.
+if (missing(sla1port) & missing(adpsale1) & missing(adpsale2) & missing(arrport) & arrport2 >=1) mjslptimp = arrport2.
+if (missing(sla1port) & missing(adpsale1) & missing(adpsale2) & arrport >=1 & arrport2 >= 1 & regarr = regarr2) mjslptimp = regarr + 99.
+if (missing(sla1port) & missing(adpsale1) & missing(adpsale2) & arrport >=1 & arrport2 >= 1 & regarr ~= regarr2) mjslptimp = 99801.
 
-if (sla1port = adpsale1) mjslptimp=sla1port.
-if (sla1port = adpsale2) mjslptimp=sla1port.
-if (adpsale1 = adpsale2) mjslptimp=adpsale1.
+if (regdis1 = regdis2 & missing(regdis3)) mjslptimp=regdis1+99.
+if (regdis1 = regdis3 & missing(regdis2)) mjslptimp=regdis1+99.
+if (regdis2 = regdis3 & missing(regdis1)) mjslptimp=regdis2+99.
+if (regdis1 = regdis2 & regdis1 = regdis3) mjbyptimp = regdis1 +99.
+if (regdis1 ~= regdis2 & regdis1 ~= regdis3 & regdis2 ~= regdis3) mjslptimp = 99801.
 
 if (slas32 > slas36 & slas32 > slas39) mjslptimp = sla1port.
 if (slas36 > slas32 & slas36 > slas39) mjslptimp = adpsale1.
 if (slas39 > slas32 & slas39 > slas36) mjslptimp = adpsale2.
+
+if (slas32=slas36 & slas32 > slas39 & regdis1=regdis2) mjslptimp=regdis1 + 99.
+if (slas32=slas36 & slas32 > slas39 & regdis1 ~= regdis2) mjslptimp=99801.
+if (slas32=slas39 & slas32 > slas36 & regdis1=regdis3) mjslptimp=regdis1 + 99.
+if (slas32=slas39 & slas32 > slas36 & regdis1 ~= regdis3) mjslptimp=99801.
+if (slas36=slas39 & slas36 > slas32 & regdis2=regdis3) mjslptimp=regdis2 + 99.
+if (slas36=slas39 & slas36 > slas39 & regdis2 ~= regdis3) mjslptimp=99801.
 
 DO IF ( (pctdis < .5 | (slastot < 50 & missing(slaarriv))) & sla1port >=1 & adpsale1 >=1 & missing(adpsale2)).
 if (slas32 =0 & slas36 >=1) mjslptimp = sla1port.
@@ -515,6 +547,8 @@ if (arrport >= 1 & missing(sla1port) & missing(adpsale1) & missing(adpsale2)) mj
 
 if (missing(mjslptimp) & (fate2 = 1 | fate2 =3 | fate2 = 5) & (arrport >= 1 | arrport2 >= 1 | sla1port >= 1 | adpsale1 >= 1 | adpsale2 >= 1 | slastot > 0)) mjslptimp = 99801.
 EXECUTE.
+
+if (missing(mjslptimp) & majselpt >=1) mjslptimp=majselpt.
 
 *     ptdepimp       Imputed port where voyage began
 
@@ -564,6 +598,7 @@ ptdepimp mjbyptimp mjslptimp
 (21601 thru 21699 = 21600)
 (21701 thru 21799 = 21700)
 (21801 thru 21899 = 21800)
+(21901 thru 21999 = 21900)
 (31101 thru 31199 = 31100)
 (31201 thru 31299 = 31200)
 (31301 thru 31399 = 31300)
@@ -635,7 +670,7 @@ ptdepimp mjbyptimp mjslptimp portret
 (10101 thru 11699 = 10000)
 (20101 thru 21999 = 20000)
 (31102 thru 39002 = 30000)
-(41202 thru 43001 = 40000)
+(41201 thru 43001 = 40000)
 (50101 thru 50599 = 50000)
 (60101 thru 60999 = 60000)
 (80199 thru 99912 = 80000)
@@ -818,12 +853,16 @@ if (tslavesd >= 1) slaximp = tslavesd.
 if (missing(tslavesd) & tslavesp >=1) slaximp = tslavesp.
 if (MISSING(tslavesd) & MISSING(tslavesp) & ncartot > slaarriv) slaximp=ncartot.
 if (MISSING(tslavesd) & MISSING(tslavesp) & MISSING(slaarriv) & ncartot > slastot) slaximp=ncartot.
+if (MISSING(tslavesd) & MISSING(tslavesp) & MISSING(slaarriv) & MISSING(slastot) & ncartot < 50) ncartot=$sysmis.
 if (MISSING(tslavesd) & MISSING(tslavesp) & MISSING(slaarriv) & MISSING(slastot) & ncartot >=50) slaximp=ncartot.
+
 if (slaarriv >= 1) slamimp = slaarriv.
 if (MISSING(slaarriv) & slastot <= tslavesd) slamimp=slastot.
 if (MISSING(slaarriv) & MISSING(tslavesd) & slastot <= tslavesp) slamimp=slastot.
 if (MISSING(slaarriv) & MISSING(tslavesd) & MISSING(tslavesp) & slastot <= ncartot) slamimp=slastot.
+if (MISSING(tslavesd) & MISSING(tslavesp) & MISSING(slaarriv) & MISSING(ncartot) & slastot < 50) slastot=$sysmis.
 if (MISSING(slaarriv) & MISSING(tslavesd) & MISSING(tslavesd) & MISSING(ncartot) & slastot >= 50) slamimp=slastot.
+
 EXECUTE.
 
 If (xmimpflag = 127 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.165107561642471).
@@ -1510,8 +1549,8 @@ END IF .
 
 Compute male1imp = male1+male4+male5.
 Compute feml1imp = female1+female4+female5.
-If (missing(male1imp)) male1imp = men1+boy1+men4+boy4+men5+boy5.
-If (missing(feml1imp)) feml1imp = women1+girl1+women4+girl4+women5+girl5.
+If (male1imp=0) male1imp = men1+boy1+men4+boy4+men5+boy5.
+If (feml1imp=0) feml1imp = women1+girl1+women4+girl4+women5+girl5.
 
 Compute slavema1 = adlt1imp+chil1imp.
 Compute slavemx1 = male1imp+feml1imp.
@@ -1673,11 +1712,13 @@ END IF .
 
 Compute male2imp=male2.
 Compute feml2imp=female2.
-if (missing(male2imp)) male2imp=men2+boy2.
-if (missing (feml2imp)) feml2imp=women2+girl2.
+if (male2imp=0) male2imp=men2+boy2.
+if (feml2imp=0) feml2imp=women2+girl2.
 
-if (sladvoy >=1 & adlt2imp=0 & sladvoy > chil2imp) adlt2imp = sladvoy - chil2imp.
-if (sladvoy>=1 & chil2imp=0 & sladvoy > adlt2imp) chil2imp = sladvoy - adlt2imp.
-if (sladvoy >=1 & male2imp=0 & sladvoy > feml2imp) male2imp = sladvoy - feml2imp.
-if (sladvoy >=1 & feml2imp=0 & sladvoy > male2imp) feml2imp = sladvoy - male2imp.
+if (sladvoy >=1 & chil2imp >=1 & adlt2imp=0 & sladvoy > chil2imp) adlt2imp = sladvoy - chil2imp.
+if (sladvoy>=1 & adlt2imp >=1 & chil2imp=0 & sladvoy > adlt2imp) chil2imp = sladvoy - adlt2imp.
+if (sladvoy >=1 & feml2imp >=1  & male2imp=0 & sladvoy > feml2imp) male2imp = sladvoy - feml2imp.
+if (sladvoy >=1 & male2imp >=1  & feml2imp=0 & sladvoy > male2imp) feml2imp = sladvoy - male2imp.
 EXECUTE.
+
+

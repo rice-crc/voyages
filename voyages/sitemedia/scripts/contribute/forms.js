@@ -21,6 +21,9 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
             function(data) {
                 if (data.hasOwnProperty('error')) {
                     alert(data.error);
+                }
+                else if (data['is_blocked']) {
+                    alert(gettext('This voyage has already been submitted for evaluation. Please contact the editor for any further revisions or additional information you wish to contribute.'));  
                 } else {
                     if (self.allowMultiple) {
                         self.selection.push(lookUpId);
