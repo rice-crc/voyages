@@ -85,13 +85,13 @@ TEMPLATES = [
             'context_processors': [
                 # defaults
                 "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.debug",
-                "django.core.context_processors.i18n",
-                "django.core.context_processors.media",
-                "django.core.context_processors.static",
-                "django.core.context_processors.tz",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "django.core.context_processors.request",
+                "django.template.context_processors.request",
                 # version
                 'voyages.version_context',
                 "voyages.apps.voyage.context_processors.voyage_span",
@@ -181,6 +181,7 @@ DEFAULT_LANGUAGE = 0
 
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 TEST_OUTPUT_DIR = 'test-results'
+FIXTURE_DIRS = ['initialdata']
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/contribute/legal'

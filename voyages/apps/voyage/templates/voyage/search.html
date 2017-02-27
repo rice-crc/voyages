@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-<form id="form" name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
+<form id="form" novalidate name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 <!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
 <div id="col_container" style="height: 100%;">

@@ -1,3 +1,4 @@
+documents/publication_logs
 *.pyc
 build/
 dist/

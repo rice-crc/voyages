@@ -8,7 +8,6 @@ class EstimateSelectionForm(forms.Form):
     lambda_fun = lambda x: (str(x[0]), x[1][0])
 
     row_choices = map(lambda_fun, enumerate(globals.table_rows))
-    print row_choices
     rows = forms.ChoiceField(label=_('Rows'), choices=row_choices, initial=[row_choices[0][1]])
     rows.initial = row_choices[0][0]
 

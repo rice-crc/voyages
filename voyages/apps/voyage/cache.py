@@ -1,4 +1,3 @@
-from django.utils.translation import ugettext as _
 import threading
 from models import *
 
@@ -95,7 +94,7 @@ class VoyageCache:
                                                                           'latitude',
                                                                           'longitude',
                                                                           'show_on_map').iterator()}
-            cls.nations = {x[0]: _(x[1])
+            cls.nations = {x[0]: x[1]
                            for x in Nationality.objects.values_list('pk', 'label').iterator()}
             cls.particular_outcomes = {o.pk: o for o in ParticularOutcome.objects.all()}
             cls.slave_outcomes = {o.pk: o for o in SlavesOutcome.objects.all()}

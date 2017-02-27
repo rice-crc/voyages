@@ -189,7 +189,6 @@ def create_query_forms():
         elif varname in globals.list_boolean_fields:
             form = SimpleSelectBooleanForm(prefix=varname)
         else:
-            print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
         tmpElem['form'] = form
@@ -206,6 +205,7 @@ def retrieve_post_search_forms(post):
         varname = var['var_name']
         tmpElem = {'var_name': varname,
                    'var_full_name': var['var_full_name']}
+        form = None
         if varname in globals.list_text_fields:
             form = SimpleTextForm(post, prefix=varname)
         elif varname in globals.list_select_fields:
@@ -306,7 +306,6 @@ def create_forms_from_var_list(var_list):
             form = SimpleSelectBooleanForm(prefix=varname)
             form.fields['choice_field'].initial = var_list[varname + '_choice_field'].split(';')
         else:
-            print "WARNING: variable not in any form type lists: %s" % varname
             pass
         form.fields['var_name_field'].initial = varname
         form.fields['is_shown_field'].initial = str(idx)
@@ -550,13 +549,19 @@ def prettify_var_list(varlist):
             output.append((fullname + ":", (prefix + value)))
     return output
 
+def first_match(items):
+    return items[0] if len(items) > 0 else None
+
 def voyage_map(request, voyage_id):
     """
     Displays the map for a voyage
     """
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
-    year_completed = int(voyage.var_imp_voyage_began)
-    map_year = get_map_year(year_completed, year_completed)
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
+    if voyage:
+        year_completed = int(voyage.var_imp_voyage_began) if voyage.var_imp_voyage_began else 0
+        map_year = get_map_year(year_completed, year_completed)
+    else:
+        map_year = None
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'map',
                    'map_year': map_year,
@@ -567,15 +572,17 @@ def voyage_images(request, voyage_id):
     """
     Displays the images for a voyage
     """
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id))[0]
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'images',
                    'voyage_id': voyage_id,
                    'voyage': voyage})
 
-def voyage_variables_data(voyage_id):
+def voyage_variables_data(voyage_id, show_imputed=True):
     voyagenum = int(voyage_id)
-    voyage = SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum)[0]
+    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum))
+    if voyage is None:
+        return None, []
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
     voyagevariables = voyage.get_stored_fields()
     #for vname, vvalue in voyage.get_stored_fields().items():
@@ -584,13 +591,13 @@ def voyage_variables_data(voyage_id):
     allvars = []
     for i in allvargroups:
         group = i[0]
-        gvalues = i[1]
-        glist = list(gvalues)
+        glist = list([x for x in i[1] if show_imputed or not x['var_full_name'].endswith('*')])
         for idx,j in enumerate(glist):
             val = unicode("")
             if voyagevariables[j['var_name']]:
                 mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.default_prettifier(j['var_name']))
                 val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
+            if val == u'[]': val = u''
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
                 allvars.append(((len(glist), unicode(group)), unicode(j['var_full_name']), val, j['var_name']))
@@ -836,8 +843,6 @@ def search(request):
                 pst['cells'] = tables_cells
             elif 'cells' not in pst:
                 pst['cells'] = '1'
-
-            print "submit val = " + str(request.POST['submitVal'])
 
             if submitVal == "tab_tables_in":
                 if omit_empty is True and 'omit_empty' not in pst:
@@ -1249,6 +1254,8 @@ def search(request):
         elif submitVal == 'animation_ajax':
             VoyageCache.load()
             all_voyages = VoyageCache.voyages
+            from voyages.apps.voyage.maps import VoyageRoutesCache
+            all_routes = VoyageRoutesCache.load()
 
             def animation_response():
                 keys = get_pks_from_haystack_results(results)
@@ -1256,6 +1263,7 @@ def search(request):
                     voyage = all_voyages.get(pk)
                     if voyage is None:
                         continue
+                    route = all_routes.get(pk, ([],))[0]
                     source = CachedGeo.get_hierarchy(voyage.emb_pk)
                     destination = CachedGeo.get_hierarchy(voyage.dis_pk)
                     if source is not None and destination is not None and source[0].show and \
@@ -1278,16 +1286,16 @@ def search(request):
                               (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') + \
                               ', "ship_nationality_id": ' + \
                               (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
-                              ', "ship_nationality_name": "' + flag + '"' \
+                              ', "ship_nationality_name": "' + _(flag) + '"' \
                               ', "ship_name": "' + \
-                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' \
+                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' + \
+                              ', "route": ' + json.dumps(route) +\
                               ' }'
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']', 'application/json')
         elif submitVal == 'download_xls_current_page':
             pageNum = request.POST.get('pageNum')
             if not pageNum:
                 pageNum = 1
-                print "Warning: unable to get page number from post"
             return download_xls_page(results, int(pageNum), results_per_page, display_columns, var_list)
         elif submitVal == 'delete_prev_query':
             prev_query_num = int(request.POST.get('prev_query_num'))
@@ -1582,36 +1590,6 @@ def check_and_save_options_form(request, to_reset_form):
 
     return form, results_per_page
 
-def shorten_search_url(request):
-    response_data = {}
-    url = shorten_url(request.GET['long_url'])
-    response_data['url'] = url
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-def shorten_url(long_url):
-    """
-    Function to shorten url using google url shortening service.
-    :param long_url: Long url to shorten
-    If google doesn't provide url or the google url doesn't work, then it will just return the long_url
-    """
-    url = long_url
-    try:
-        payload = json.dumps({'longUrl': long_url})
-        headers = {'Content-Type': 'application/json'}
-        result = requests.post('https://www.googleapis.com/urlshortener/v1/url', headers=headers, data=payload)
-        url = result.json().get('id', long_url)
-    except:
-        url = long_url
-    else:
-        try:
-            # Python can't handle the redirect to the testvoyages url
-            req = requests.get(url, allow_redirects=False)
-            if not req.ok:
-                url = long_url
-        except:
-            url = long_url
-    return url
-
 def search_var_dict(var_name):
     for i in globals.var_dict:
         if i['var_name'] == var_name:
@@ -1869,7 +1847,6 @@ def sort_documentary_sources_dict(dict, sort):
     for country in dict:
         for city_dict in country["cities_list"]:
             for city_group_dict in city_dict["city_groups_dict"]:
-                # print "Source = " + str(city_group_dict["sources"])
                 if sort == "short_ref":
                     city_group_dict["sources"] = sorted(city_group_dict["sources"], key=lambda k: k['short_ref'])
                 else:

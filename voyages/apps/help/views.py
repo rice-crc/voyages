@@ -50,7 +50,6 @@ def glossary_page(request):
 
     if request.method == 'POST':
         form = HighlightedSearchForm(request.POST)
-
         if form.is_valid():
             # Perform the query
             query = form.cleaned_data['q']
@@ -76,7 +75,7 @@ def glossary_page(request):
                                'query': query})
 
 
-def _sort_faq(qresult, lang):
+def _sort_faq(qresult, lang='en'):
     """
     Sort the result into categories and questions from response returned by the backend engine
     """

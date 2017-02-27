@@ -402,14 +402,14 @@ def get_all_slaves(request):
     # For embarkation and disembarkation collect ids of places
     for i in places_from_embarkation:
         if i['embarkation_port__place'] not in used:
-            places_separated_embarkation.append((places.filter(place=i['embarkation_port__place']).
-                                                 values('id')[0]['id'],))
+            places_separated_embarkation.append(places.filter(place=i['embarkation_port__place']).
+                                                 values('id')[0]['id'])
             used.append(i['embarkation_port__place'])
     used = []
     for i in places_from_disembarkation:
         if i['disembarkation_port__place'] not in used:
-            places_separated_disembarkation.append((places.filter(place=i['disembarkation_port__place']).
-                                                    values('id')[0]['id'],))
+            places_separated_disembarkation.append(places.filter(place=i['disembarkation_port__place']).
+                                                    values('id')[0]['id'])
             used.append(i['disembarkation_port__place'])
 
     # Retrieve structured places
@@ -493,7 +493,6 @@ def get_all_slaves(request):
             # Encode and store query dict/opened tabs/current query
             query_dict, opened_tabs, current_query = create_query_dict(request.POST, embarkation_list,
                                                                        disembarkation_list, countries)
-            print "query dict = " + str(query_dict)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
             request.session['names_current_query'] = current_query
