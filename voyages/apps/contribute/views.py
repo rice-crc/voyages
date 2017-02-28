@@ -381,7 +381,7 @@ def interim(request, contribution_type, contribution_id):
                    'mode': 'contribute',
                    'contribution': contribution,
                    'numbers': numbers,
-                   'interim': id,
+                   'interim': interim,
                    'sources_post': sources_post,
                    'voyages_data': json.dumps(previous_data)})
 

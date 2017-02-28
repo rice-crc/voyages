@@ -43,5 +43,5 @@ def trans_log(val):
     return mark_safe(result)
 
 @register.filter
-def jsonify(list):
-    return mark_safe(serializers.serialize('json', list))
+def jsonify(lst):
+    return mark_safe(serializers.serialize('json', lst))
