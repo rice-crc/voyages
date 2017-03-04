@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_comma_separated_integer_list
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
+from voyages.apps.common.validators import date_csv_field_validator
 import itertools
 
 class AdminFaq(models.Model):
@@ -79,14 +80,14 @@ class InterimVoyage(models.Model):
     port_voyage_ended = models.ForeignKey(voyage.models.Place, related_name='+', null=True, blank=True)
 
     # Dates
-    date_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_slave_purchase_began = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_vessel_left_last_slaving_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_first_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_second_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_third_slave_disembarkation = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_return_departure = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
-    date_voyage_completed = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10, blank=True, null=True)
+    date_departure = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_slave_purchase_began = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_vessel_left_last_slaving_port = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_first_slave_disembarkation = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_second_slave_disembarkation = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_third_slave_disembarkation = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_return_departure = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
+    date_voyage_completed = models.CharField(validators=[date_csv_field_validator], max_length=10, blank=True, null=True)
     length_of_middle_passage = models.IntegerField(null=True, blank=True)
 
     # Captains
