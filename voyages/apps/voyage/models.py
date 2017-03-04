@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
-from django.core.validators import validate_comma_separated_integer_list
+from voyages.apps.common.validators import date_csv_field_validator
 
 # Voyage Regions and Places
 class BroadRegion(models.Model):
@@ -548,41 +548,41 @@ class VoyageDates(models.Model):
 
     # Data variables
     voyage_began = models.CharField\
-            ("Date that voyage began (DATEDEPB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date that voyage began (DATEDEPB,A,C)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     slave_purchase_began = models.CharField\
-            ("Date that slave purchase began (D1SLATRB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date that slave purchase began (D1SLATRB,A,C)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     vessel_left_port = models.CharField\
-            ("Date that vessel left last slaving port (DLSLATRB,A,C)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date that vessel left last slaving port (DLSLATRB,A,C)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     first_dis_of_slaves = models.CharField\
-            ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date of first disembarkation of slaves (DATARR33,32,34)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 
     date_departed_africa = models.CharField\
-            ("Date vessel departed Africa (DATELEFTAFR)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date vessel departed Africa (DATELEFTAFR)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 
     arrival_at_second_place_landing = models.CharField\
-            ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date of arrival at second place of landing (DATARR37,36,38)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     third_dis_of_slaves = models.CharField\
-            ("Date of third disembarkation of slaves (DATARR40,39,41)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date of third disembarkation of slaves (DATARR40,39,41)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     departure_last_place_of_landing = models.CharField\
-            ("Date of departure from last place of landing (DDEPAMB,*,C)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date of departure from last place of landing (DDEPAMB,*,C)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     voyage_completed = models.CharField\
-            ("Date on which slave voyage completed (DATARR44,43,45)", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Date on which slave voyage completed (DATARR44,43,45)", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
 
@@ -593,16 +593,16 @@ class VoyageDates(models.Model):
 
     # Imputed variables
     imp_voyage_began = models.CharField \
-            ("Year voyage began", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Year voyage began", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     imp_departed_africa = models.CharField \
-            ("Year departed Africa", max_length=10, validators=[validate_comma_separated_integer_list],
+            ("Year departed Africa", max_length=10, validators=[date_csv_field_validator],
              blank=True, null=True,
              help_text="Date in format: MM,DD,YYYY")
     imp_arrival_at_port_of_dis = models.CharField\
             ("Year of arrival at port of disembarkation (YEARAM)",
-             max_length=10, blank=True, null=True, validators=[validate_comma_separated_integer_list],
+             max_length=10, blank=True, null=True, validators=[date_csv_field_validator],
              help_text="Date in format: MM,DD,YYYY")
 
     # Later this can become just a property/ can be calculated
