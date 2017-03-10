@@ -15,7 +15,7 @@ class BroadRegion(models.Model):
     latitude = models.DecimalField("Latitude of point",
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
-    value = models.IntegerField("Numeric code")
+    value = models.IntegerField("Numeric code", unique=True)
     show_on_map = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -42,7 +42,7 @@ class Region(models.Model):
                                      max_digits=10, decimal_places=7,
                                      null=True, blank=True)
     broad_region = models.ForeignKey('BroadRegion')
-    value = models.IntegerField("Numeric code")
+    value = models.IntegerField("Numeric code", unique=True)
     show_on_map = models.BooleanField(default=True)
     show_on_main_map = models.BooleanField(default=True)
 
