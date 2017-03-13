@@ -6,8 +6,56 @@ extract_trans.sh
 ==================================================================================
 Performs a sweep of the translation log and produces a PO file for translation.
 
-USAGE:
-sh extract_trans.sh path/to/trans.log path/to/output
+This app has a significant amount of dynamic content that is generated from text
+in the database. The usual tools to extract web page content for translation in 
+Django do not address this type of content and for this reason we developed an 
+auxiliary tool for this task.
+
+The first step is to use the voyages.apps.common.filter.trans_log filter, which
+attempts to translate the passed string. If it cannot translate it, the string
+is logged to the *trans* logger (see configuration below). The log file is populated
+by visiting the pages of the site that require translation. After a thorough
+visit is concluded, the log should list all original text which did not get
+translated. The script extract_trans.sh can then be used to obtain a PO file 
+which is suitable for the translation process.
+
+Configuration
+-------------
+
+In localsettings.py:
+
+LOGGING = {
+    ..............
+    'handlers': {
+        ...........,
+        'trans': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'trans.log',      <==== SPECIFY THE LOG FILE PATH HERE
+            'formatter': 'basic'
+        }
+    },
+    'loggers': {
+        ...........,
+        'trans': {
+            'handlers': ['trans'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
+Setting up translateable content
+--------------------------------
+
+A view variable can be translated and displayed as follows: {{ variable_name|trans_log }}.
+
+
+Script Usage
+------------
+
+  $ sh extract_trans.sh path/to/trans.log path/to/output
+
 NOTE: the .po extension is automatically added
 
 The produced PO file can be then merged with the localized versions for
@@ -21,3 +69,14 @@ The tool has explanatory notes on how to visually design and inspect the network
 
 Once a routeNodes.js file is generated from the tool, it must replace the one
 in {project local path}/sitemedia/maps/routeNodes.js
+
+Warning
+-------
+
+The usual pipeline for working with PO files can sometimes comment out all translations
+that are not obtained by a {% trans "text to translate" %} tag. If that happens, remember
+that PO files are just plain text and use sed or a text editor to uncomment the entries
+before compiling an MO file.
+
+For more details, please check Django's doc files:
+https://docs.djangoproject.com/en/1.10/topics/i18n/translation/
