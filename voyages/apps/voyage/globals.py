@@ -466,9 +466,9 @@ def make_regions_filter(varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     label_list = []
-    for broad in models.BroadRegion.objects.all():
+    for broad in models.BroadRegion.objects.order_by('value').all():
         label_list.append((broad.broad_region, broad.region_set.count(),))
-        for reg in broad.region_set.all():
+        for reg in broad.region_set.order_by('value').all():
             label_list.append((reg.region, 1,))
             results.append((label_list, {qdictkey: reg.value},))
             label_list = []
@@ -478,11 +478,11 @@ def make_places_filter(varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     label_list = []
-    for broad in models.BroadRegion.objects.all():
+    for broad in models.BroadRegion.objects.order_by('value').all():
         label_list.append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
-        for reg in broad.region_set.all():
+        for reg in broad.region_set.order_by('value').all():
             label_list.append((reg.region, reg.place_set.count(),))
-            for place in reg.place_set.all():
+            for place in reg.place_set.order_by('value').all():
                 label_list.append((place.place, 1,))
                 # TODO: Change place filter to use numeric identifiers instead of text
                 results.append((label_list, {qdictkey: place.value},))
@@ -493,9 +493,9 @@ def make_regions_col_filter(filter_name, varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     labels = [[], []]
-    for broad in models.BroadRegion.objects.all():
+    for broad in models.BroadRegion.objects.order_by('value').all():
         labels[0].append((broad.broad_region, broad.region_set.count(),))
-        for reg in broad.region_set.all():
+        for reg in broad.region_set.order_by('value').all():
             labels[1].append((reg.region, 1,))
             results.append({qdictkey: reg.value})
     return (filter_name, results, labels,)
@@ -504,11 +504,11 @@ def make_places_col_filter(filter_name, varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     labels = [[], [], []]
-    for broad in models.BroadRegion.objects.all():
+    for broad in models.BroadRegion.objects.order_by('value').all():
         labels[0].append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
-        for reg in broad.region_set.all():
+        for reg in broad.region_set.order_by('value').all():
             labels[1].append((reg.region, reg.place_set.count(),))
-            for place in reg.place_set.all():
+            for place in reg.place_set.order_by('value').all():
                 labels[2].append((place.place, 1,))
                 results.append({qdictkey: place.value})
     return (filter_name, results, labels,)
