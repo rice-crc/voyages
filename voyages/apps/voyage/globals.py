@@ -32,7 +32,7 @@ def structure_places(place_list):
             region_list[reg] = []
         region_list[reg].append(place)
     broad_region_list = {}
-    for region, list_of_places in region_list.items():
+    for region, list_of_places in sorted(region_list.items(), key=lambda r: r[0].value):
         broad_reg = region.broad_region
         if broad_reg not in broad_region_list:
             broad_region_list[broad_reg] = OrderedDict()
@@ -54,7 +54,7 @@ def structure_places_all(place_list):
             region_list[reg] = []
         region_list[reg].append(place)
     broad_region_list = {}
-    for region, list_of_places in region_list.items():
+    for region, list_of_places in sorted(region_list.items(), key=lambda r: r[0].value):
         broad_reg = region.broad_region
         if broad_reg not in broad_region_list:
             broad_region_list[broad_reg] = {}
