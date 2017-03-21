@@ -1388,6 +1388,7 @@ def prettify_results(results, lookup_table):
         for varname, varvalue in i.items():
             if varvalue:
                 prettify_varvalue = lookup_table.get(varname, globals.default_prettifier(varname))
+                if varvalue == u'[]': varvalue = u''
                 idict[varname] = prettify_varvalue(varvalue, voyageid)
             else:
                 idict[varname] = None

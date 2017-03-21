@@ -211,7 +211,9 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         return True
     except Exception as exception:
         log('An error occurred.\n')
-        if not transaction_finished: log('Database transaction was rolledback.\n')
+        if not transaction_finished:
+            transaction.rollback()
+            log('Database transaction was rolledback.\n')
         log(str(exception))
         import traceback
         log(traceback.format_exc())
@@ -629,6 +631,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         _delete_child_fk(voyage, 'voyage_dates')
         _delete_child_fk(voyage, 'voyage_crew')
         _delete_child_fk(voyage, 'voyage_slaves_numbers')
+        voyage.voyage_name_outcome.clear()
         voyage.voyage_captain.clear()
         voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
