@@ -38,7 +38,7 @@
                 {% if not voyage %}
                     {% trans 'Voyage not found' %}
                 {% else %}
-                    {% trans 'Voyage' %} {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_voyage_began }})
+                    {% trans 'Voyage' %} {{ voyage.var_voyage_id }}, <i>{{ voyage.var_ship_name }}</i> ({{ voyage.var_imp_arrival_at_port_of_dis }})
                 {% endif %}
             </div>
         </div>
