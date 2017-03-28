@@ -2,32 +2,27 @@ from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 from autocomplete_light import shortcuts as autocomplete_light
 from .forms import *
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
+from django.utils.translation import ugettext_lazy as _
 
 
-# FlatPage Admin
-class FlatPageAdmin(admin.ModelAdmin):
-    """
-    Support for flat page.
-    """
-    fields = ('url', 'title', 'content', 'sites')
-    #readonly_fields = ('url', 'title',)
-    
-    list_display = ['title', 'url']
-  
-    # prevents deleting of flat page
-    actions = None
-
-    # Prevents anyone from trying to add a new flat page
-    #def has_add_permission(self, request):
-    #    return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
+# Define a new FlatPageAdmin
+class FlatPageAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'sites')}),
+        (_('Advanced options'), {
+            'classes': ('collapse', ),
+            'fields': (
+                'registration_required',
+                'template_name',
+            ),
+        }),
+    )
     class Media:
-        js = ( 'scripts/tiny_mce/tinymce.min.js',
-              'scripts/tiny_mce/textareas.js',
-              )
+        js = ('scripts/tiny_mce/tinymce.min.js',
+          'scripts/tiny_mce/textareas.js',
+          )
 
 
 # Voyage Admin
@@ -326,8 +321,7 @@ class VoyageAdmin(admin.ModelAdmin):
         fields = '__all__'
 
 
-# Registers section
-# Flat Page
+# Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 
