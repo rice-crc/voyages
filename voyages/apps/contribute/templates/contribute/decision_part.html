@@ -176,7 +176,7 @@
                         return false;
                     }
                 }
-                {% if not editor_contribution.ran_impute %}
+                {% if not editor_contribution.ran_impute and editor_contribution.interim_voyage is not None %}
                 if (decision == 3) {
                     alert('{% trans "The impute program must be executed before accepting a contribution." %}');
                     return false;
