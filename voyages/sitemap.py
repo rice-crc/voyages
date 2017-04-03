@@ -1,4 +1,4 @@
-import settings
+from django.conf import settings
 import datetime
 import os
 import stat
@@ -80,7 +80,7 @@ class StaticSitemap(Sitemap):
         if os.path.exists(path) :
             return path
         
-        for template_dir in settings.TEMPLATE_DIRS:
+        for template_dir in settings.TEMPLATES[0]['DIRS']:
             path = os.path.join(template_dir, template_path)
             if os.path.exists(path):
                 return path
