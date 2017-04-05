@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>New Search UI for Voyages</title>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/bootstrap.min.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/jquery-ui.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/selectize.bootstrap3.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/bootstrap.vertical-tabs.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/font-awesome.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+
+<script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-3.1.1.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-ui.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/voyage/beta/selectize.js"></script>
+<script src="{{ STATIC_URL }}scripts/voyage/beta/search_term.js"></script>
+<script src="{{ STATIC_URL }}scripts/voyage/beta/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
+<script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
+<script type="text/javascript" src="/jsi18n/"></script>
+
+<style>
+.navbar-default {
+  background-color: #008ca8;
+  border-color: #005b6f;
+}
+.navbar-default .navbar-brand {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #abd9ab;
+}
+.navbar-default .navbar-text {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #abd9ab;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #008ca8;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #abd9ab;
+  background-color: #005b6f;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #005b6f;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #abd9ab;
+  background-color: #005b6f;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #abd9ab;
+  background-color: #005b6f;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #abd9ab;
+  background-color: #005b6f;
+}
+.navbar-default .navbar-toggle {
+  border-color: #005b6f;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #005b6f;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-default .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-link:hover {
+  color: #abd9ab;
+}
+
+.navbar-brand {
+    padding: 0px;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #abd9ab;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #abd9ab;
+    background-color: #005b6f;
+  }
+}
+
+#search_pane {
+    background-color: rgba(220, 237, 241, 0.9);
+    padding: 20px;
+	margin-top: -20px;
+    border-color: #005b6f;
+    border-bottom-width: thin;
+    border-bottom-style: solid;
+}
+
+.active > a {
+	color: orange;
+}
+
+.navhost {
+	display: flex;
+	flex-flow: column;
+	/*position: fixed;
+	left: 0px;
+	top: 0px;
+	right: 0px;*/
+	z-index: 10;
+}
+
+html, body {
+    height: 100%;    
+}
+
+#main_content {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	min-height: 0px;
+}
+.navbar {
+    border-radius: 0px;
+}
+
+.form-control {
+	display: inline;
+	width: auto;
+}
+
+.number-input {
+	width: 100px;
+}
+
+.geo_complement {
+  color: #B0B0B0;
+}
+
+.broad_region {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.region {
+  margin-left: 20px;
+  font-style: italic;
+  height: 0px;
+  padding: 0px !important;
+}
+
+.port {
+  height: 0px;
+  margin-left: 30px;
+  padding: 0px !important;
+}
+
+.expanded, .search_match {
+  height: auto !important;
+  padding: 3px 12px !important;
+}
+
+.selectize-input {
+	max-height: 140px;
+	overflow-y: auto;
+}
+
+.select_port > .selectize-input {
+	height: 140px;
+}
+
+.region.active {
+  height: auto !important;
+  padding: 3px 12px !important;
+}
+
+.port.active {
+  height: auto !important;
+  padding: 3px 12px !important;
+}
+.leaflet-top {
+	z-index: 1;
+}
+
+html, body, .viewport {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.vbox {
+	display: flex;
+	flex-direction: column;
+}
+
+.selectize-dropdown {
+	opacity: 0.9;
+}
+</style>
+</head>
+
+<body class="vbox viewport">
+  <div class="vbox viewport">
+	<div class="navhost">
+		<nav class="navbar navbar-default">
+		  <div class="container">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="#"><img style="height: 100%;" src="{{ STATIC_URL }}/images/menu/logo.png" alt="Voyages" /></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+			  <ul class="nav navbar-nav">
+				<li>
+					<a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#search_pane" title="Keyboard shortcut: CTRL + S">
+						<i class="fa fa-search" aria-hidden="true"></i>
+						<span>Search</span>
+					</a>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Voyages Database</a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Understanding</a></li>
+					<li><a href="#">Search</a></li>
+					<li><a href="#">Downloads</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Contribute</a></li>
+				  </ul>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acessing the Slave Trade</span></a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action 1</a></li>
+					<li><a href="#">Action 2</a></li>
+				  </ul>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Resources</a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action 1</a></li>
+					<li><a href="#">Action 2</a></li>
+				  </ul>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Educational Materials</a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action 1</a></li>
+					<li><a href="#">Action 2</a></li>
+				  </ul>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About the Project</a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action 1</a></li>
+					<li><a href="#">Action 2</a></li>
+				  </ul>
+				</li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language</a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action 1</a></li>
+					<li><a href="#">Action 2</a></li>
+				  </ul>
+				</li>
+			  </ul>
+			</div><!--/.nav-collapse -->
+		  </div>
+		</nav>	
+		<div id="search_pane" class="collapse">
+			<div class="form-group">
+				<label for="year_range" class="control-label">Year range:</label>
+				<input type="text" class="form-control" id="year_range" style="color:#f6931f; font-weight:bold; width: 100px; display: inline;">
+				<p></p>
+				<div id="slider-range" style="max-width: 250px"></div>
+			</div>
+			<div class="form-group">
+				<label for="current_search" class="control-label">Current search:</label>
+				<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the button below."></select>
+			</div>
+			<div class="btn-group" role="group">
+				<button id="search_btn" type="button" class="btn btn-primary">Search</button>
+				<button type="button" class="btn btn-danger" id="clear_btn">Clear</button>
+				<button type="button" class="btn btn-success not-implemented" title="Obtain a permanent link to this search query">Save query</button>
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						History <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+					  <li><a href="#">Search history item 1</a></li>
+					  <li><a href="#">Search history item 2</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="main-content" class="container-fluid" style="/*margin-top: 58px; height: calc(100% - 60px); */ height: 100%; display: flex; width: 100%;">
+		<div id="left-tabs" style="width: 100px;">
+			<ul class="nav nav-tabs tabs-left">
+				<li class="active"><a href="#results" data-toggle="tab"><center><i class="fa fa-bars fa-2x" aria-hidden="true"></i><p>Results</p></center></a></li>
+				<li><a href="#stats" data-toggle="tab"><center><i class="fa fa-object-group fa-2x" aria-hidden="true"></i><p>Statistics</p></center></a></li>
+				<li><a href="#tables" data-toggle="tab"><center><i class="fa fa-table fa-2x"></i><p>Tables</p></center></a></li>
+				<li><a href="#graphs" data-toggle="tab"><center><i class="fa fa-bar-chart fa-2x"></i><p>Graphs</p></center></a></li>
+				<li><a href="#timeline" data-toggle="tab"><center><i class="fa fa-calendar fa-2x"></i><p>Timeline</p></center></a></li>
+				<li><a href="#maps" data-toggle="tab"><center><i class="fa fa-map fa-2x"></i><p>Maps</p></center></a></li>
+				<li><a href="#animation" data-toggle="tab"><center><i class="fa fa-ship fa-2x"></i><p>Animation</p></center></a></li>
+			</ul>
+		</div>
+		<div class="tab-content" style="flex-grow: 1; padding-left: 15px; height: 100%;">
+			<div id="results" class="tab-pane fade in active">
+				<h3>Search Results</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+			<div id="stats" class="tab-pane fade">
+				<h3>Statistics</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+			<div id="tables" class="tab-pane fade">
+				<h3>Tables</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+			<div id="timeline" class="tab-pane fade">
+				<h3>Timeline</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+			<div id="graphs" class="tab-pane fade">
+				<h3>Graphs</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+			<div id="maps" class="tab-pane fade">
+				<h3>Maps</h3>
+				<!-- TODO: only load map when tab is activated -->
+				<div id="map" style="width:100%;"></div>
+			</div>
+			<div id="animation" class="tab-pane fade">
+				<h3>Animation</h3>
+				<p class="dummy_content">Some content.</p>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
+	<script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
+	<script>
+		var mapLoaded = false;
+		$('.nav-tabs a').on('shown.bs.tab', function(event) {
+    	var active = $(event.target).attr('href');
+			console.log(active);
+			if (active == '#maps' && !mapLoaded) {
+					voyagesMap.
+							init('1750', '{{ STATIC_URL }}maps/', routeNodes, links).
+							setMaxPathWidth(20).
+							setPathOpacity(0.75);
+					$(window).on("resize", function() {
+							$("#map").height($('#left-tabs').height() - 70);
+							voyagesMap._map.invalidateSize();
+					}).trigger("resize");
+					voyagesMap._map.invalidateSize();
+			}
+		});
+	</script>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="search_input_modal" tabindex="-1" role="dialog" aria-labelledby="Search Input">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="search_input_title"></h4>
+			<span id="search_input_help_text">
+			</span>
+		  </div>
+		  <div class="modal-body" id="search_input_body">
+		  </div>
+		  <div class="modal-footer">
+			<div id="search_input_validation"></div>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			<button type="submit" class="btn btn-primary" id="search_input_save_btn">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<script>
+		var SEARCH_MIN_YEAR = 1514;
+		var SEARCH_MAX_YEAR = 1866;
+		var selectize = null;
+		var $modal = $('#search_input_modal');
+		var modalResult = false;
+		var modalCallback = function() {};
+		$(document).on('keydown', function(e) {
+			var c = String.fromCharCode(e.which);
+			if (e.ctrlKey && (c == 's' || c == 'S')) {
+				$('#search_pane').collapse('show');
+				e.preventDefault();
+				return true;
+			}
+		});
+		var focusOnSearchBox = function() {
+			if (selectize) selectize.focus();
+		};
+		$("#search_pane").on('shown.bs.collapse', focusOnSearchBox);
+		$("#search_input_modal").on('hidden.bs.modal', focusOnSearchBox);
+		$("#search_input_save_btn").click(function(e) {
+			modalResult = modalCallback();
+			if (!modalResult) {
+				e.preventDefault();
+				return false;
+			}
+			$("#search_input_modal").modal('hide');
+		});
+		$(".not-implemented").click(function() {
+			alert('This is an early prototype. Functionality not implemented!');
+		});
+		var escape_html = function(str) {
+			return (str + '')
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;');
+		};
+		var minLengthValidator = function(minLength) {
+			var error = 'The entry must have at least ' + minLength + ' characters';
+			return function(s) {
+				return s.length >= minLength ? [] : [error];
+			}
+		};
+		var dateRangeValidation = function(arr) {
+			var errors = [];
+			for (var i = 0; errors.length == 0 && i < 2; ++i) {
+				var value = parseInt(arr[i]);
+				if (isNaN(value)) continue;
+				if (value < SEARCH_MIN_YEAR) {
+					errors.push('Year is below minimum value: ' + SEARCH_MIN_YEAR);
+				}
+				if (value > SEARCH_MAX_YEAR) {
+					errors.push('Year is above maximum value: ' + SEARCH_MAX_YEAR);
+				}
+			}
+			return errors;
+		};
+		var searchTerms = [
+			RangeSearchTerm(new VariableInfo('voyage_id', 'ship_nation_owners', 'Voyage ID'), '', null, 'Voyage id help text'),
+			TextSearchTerm(new VariableInfo('vessel_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
+			TextSearchTerm(new VariableInfo('vessel_owners', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
+			PlaceSearchTerm(new VariableInfo('place_voyage_began', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
+			PlaceSearchTerm(new VariableInfo('place_principal_slave_purchase', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
+			PlaceSearchTerm(new VariableInfo('place_principal_slave_landing', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
+			PlaceSearchTerm(new VariableInfo('place_voyage_ended', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
+			RangeSearchTerm(new VariableInfo('year_arrived', 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
+			TextSearchTerm(new VariableInfo('captain_name', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
+			RangeSearchTerm(new VariableInfo('total_slaves_embarked', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text'),
+			RangeSearchTerm(new VariableInfo('total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text'),
+			TextSearchTerm(new VariableInfo('source', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
+		];
+		var searchTermsDict = {};
+		for (var i = 0; i < searchTerms.length; ++i) {
+			var item = searchTerms[i];
+			searchTermsDict[item.varName] = item;
+		}
+		var refreshSearchItem = function(varName) {
+			var searchTerm = searchTermsDict[varName];
+			var $a = $('#' + searchTerm.linkId);
+			if ($a) {
+				$a.text(searchTerm.linkText(escape_html));
+			}
+		};
+		var displayVariableInput = function(varName) {
+			var searchTerm = searchTermsDict[varName];
+			$("#search_input_help_text").html(searchTerm.description);
+			$("#search_input_title").html('Search term for <em>' + searchTerm.label + '</em>');
+			$("#search_input_validation").html('');
+			var content = searchTerm.inputHtml(escape_html);
+			$("#search_input_body").html(content);
+			searchTerm.initInput();
+			modalCallback = function() {
+				searchTerm.updateFromHtmlInput();
+				refreshSearchItem(varName);
+				var validationErrors = searchTerm.validate();
+				if (validationErrors.length > 0) {
+					$("#search_input_validation").html('<ul class="validation_errors"><li>' + validationErrors.join('</li><li>') + '</li></ul>');
+					return false;
+				}
+				return true;
+			};
+			$modal.one('shown.bs.modal', searchTerm.inputFocus);
+			if (searchTerm.enterKeyPress) {
+				$modal.keypress(function(e) {
+					if (e.which == 13) {
+						if (searchTerm.enterKeyPress()) {
+							$("#search_input_save_btn").click();
+						}
+					}
+				});
+			}
+			modalResult = false;
+			$modal.modal({ backdrop: 'static' });
+		}
+		function search() {
+			$('#search_pane').collapse("hide");
+			var activeSearchTerms = jQuery.map($('#current_search').val(), function(id) {
+				var term = searchTermsDict[id];
+				return { varName: term.varName, op: term.operatorLabel, searchTerm: term.getSearchTerm() };
+			});
+			$('.dummy_content').text(JSON.stringify(activeSearchTerms));
+		}
+		$('#search_btn').click(search);
+		Selectize.define('search_term_box', function(options) {
+			var self = this;
+			self.addItem = (function() {
+				var original = self.addItem;
+				return function(value, silent) {
+					displayVariableInput(value);
+					var context = this;
+					var args = arguments;
+					$modal.one('hidden.bs.modal', function (e) {
+						if (modalResult) {
+							original.apply(context, args);
+							refreshSearchItem(value);
+						}
+					});
+				};
+			})();
+			self.onKeyDown = (function() {
+				var original = self.onKeyDown;
+				return function(e) {
+					var context = this;
+					var args = arguments;
+					if (e.keyCode == 13 && e.ctrlKey) {
+						e.preventDefault();
+						// Do search.
+						search();
+					} else {
+						original.apply(context, args);
+					}
+				};
+			})();
+		});
+		$(function() {
+			$("#slider-range").slider({
+				range: true,
+				min: SEARCH_MIN_YEAR,
+				max: SEARCH_MAX_YEAR,
+				values: [ SEARCH_MIN_YEAR, SEARCH_MAX_YEAR ],
+				slide: function(event, ui) {
+					$("#year_range").val(ui.values[0] + " - " + ui.values[1]);
+					var formGroup = $(this).closest('.form-group');
+					formGroup.toggleClass('has-error', false);
+				}
+			});
+			$("#year_range").val($("#slider-range").slider("values", 0) +
+				" - " + $("#slider-range").slider("values", 1));
+			$("#year_range").change(function() {
+				var re = /^([0-9]{4})\s*-\s*([0-9]{4})$/;
+				var val = $("#year_range").val();
+				var minYear = SEARCH_MIN_YEAR;
+				var maxYear = SEARCH_MAX_YEAR;
+				var found = val.match(re);
+				var formGroup = $(this).closest('.form-group');
+				if (found) {
+					minYear = parseInt(found[1]);
+					maxYear = parseInt(found[2]);
+					formGroup.toggleClass('has-error', false);
+				} else {
+					formGroup.toggleClass('has-error', true);
+				}
+				if (minYear < SEARCH_MIN_YEAR) minYear = SEARCH_MIN_YEAR;
+				if (maxYear > SEARCH_MAX_YEAR) maxYear = SEARCH_MAX_YEAR;
+				if (minYear > maxYear) minYear = maxYear;
+				$("#slider-range").slider('values', 0, minYear);
+				$("#slider-range").slider('values', 1, maxYear);
+			});
+			$("#current_search").selectize({
+				plugins: {
+					'remove_button': true,
+					'dropdown_header': {
+						'title': 'Select the variable that will be used in the search. You may start typing to filter variables.'
+					},
+					'optgroup_columns': true,
+					'search_term_box': true},
+				options: searchTerms,
+				optgroups: [
+					{$order: 0, id: 'ship_nation_owners', label: 'Ship, Nation, Owners'},
+					{$order: 1, id: 'outcome', label: 'Voyage Outcome'},
+					{$order: 2, id: 'itinerary', label: 'Voyage Itinerary'},
+					{$order: 3, id: 'dates', label: 'Voyage Dates'},
+					{$order: 4, id: 'captain_crew', label: 'Captain and Crew'},
+					{$order: 5, id: 'numbers', label: 'Slave Numbers'},
+					{$order: 6, id: 'characteristics', label: 'Slave Characteristics'},
+					{$order: 7, id: 'source', label: 'Source'},
+				],
+				labelField: 'label',
+				searchField: ['label'],
+				valueField: 'varName',
+				optgroupField: 'group',
+				optgroupLabelField: 'label',
+				optgroupValueField: 'id',
+				delimiter: ',',
+				maxItems: 1000,
+				render: {
+					item: function(data, escape) {
+						return data.render(escape);
+					}
+				}
+			});
+			selectize = $("#current_search")[0].selectize;
+			selectize.$control.on('mousedown', 'a.search_query_link', function(e) {
+				var $item = $(e.currentTarget);
+				var varName = $item.data('var_name');
+				displayVariableInput(varName);
+			});
+			
+			$('#clear_btn').click(function() {
+				selectize.clear();
+			});
+		});
+	</script>
+</body>
+</html>
