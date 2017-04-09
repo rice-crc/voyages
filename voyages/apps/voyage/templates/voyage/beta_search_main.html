@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>New Search UI for Voyages</title>
 
-<link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/bootstrap.min.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/jquery-ui.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/bootstrap.vertical-tabs.css">
@@ -12,15 +12,19 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}datatables/dataTables.bootstrap.min.css" />
 
 <script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-3.1.1.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-ui.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/selectize.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/search_term.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}datatables/datatables.min.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="/jsi18n/"></script>
 
 <style>
@@ -343,7 +347,19 @@ html, body, .viewport {
 		<div class="tab-content" style="flex-grow: 1; padding-left: 15px; height: 100%;">
 			<div id="results" class="tab-pane fade in active">
 				<h3>Search Results</h3>
-				<p class="dummy_content">Some content.</p>
+				<table id="results_main_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Voyage identification number</th>
+                <th>Vessel name</th>
+                <th>Capitain's name</th>
+                <th>Year arrived with slaves*</th>
+                <th>Principal region of slave purchase*</th>
+                <th>Principal region of slave landing*</th>
+            </tr>
+        </thead>
+        </tfoot>
+    </table>
 			</div>
 			<div id="stats" class="tab-pane fade">
 				<h3>Statistics</h3>
@@ -475,14 +491,14 @@ html, body, .viewport {
 		};
 		var searchTerms = [
 			RangeSearchTerm(new VariableInfo('voyage_id', 'ship_nation_owners', 'Voyage ID'), '', null, 'Voyage id help text'),
-			TextSearchTerm(new VariableInfo('vessel_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
+			TextSearchTerm(new VariableInfo('ship_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
 			TextSearchTerm(new VariableInfo('vessel_owners', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
 			PlaceSearchTerm(new VariableInfo('place_voyage_began', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
 			PlaceSearchTerm(new VariableInfo('place_principal_slave_purchase', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
 			PlaceSearchTerm(new VariableInfo('place_principal_slave_landing', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
 			PlaceSearchTerm(new VariableInfo('place_voyage_ended', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
 			RangeSearchTerm(new VariableInfo('year_arrived', 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
-			TextSearchTerm(new VariableInfo('captain_name', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
+			TextSearchTerm(new VariableInfo('captain', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
 			RangeSearchTerm(new VariableInfo('total_slaves_embarked', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text'),
 			RangeSearchTerm(new VariableInfo('total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text'),
 			TextSearchTerm(new VariableInfo('source', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
@@ -530,13 +546,23 @@ html, body, .viewport {
 			modalResult = false;
 			$modal.modal({ backdrop: 'static' });
 		}
+		var main_datatable = null;
+		var currentSearchObj = {items: []};
+		var resultsTableSearchCallback = function() {
+			// Reload datatables.
+			if (main_datatable) {
+				main_datatable.ajax.reload();
+			}
+		}
+		var searchCallback = resultsTableSearchCallback;
 		function search() {
 			$('#search_pane').collapse("hide");
 			var activeSearchTerms = jQuery.map($('#current_search').val(), function(id) {
 				var term = searchTermsDict[id];
 				return { varName: term.varName, op: term.operatorLabel, searchTerm: term.getSearchTerm() };
 			});
-			$('.dummy_content').text(JSON.stringify(activeSearchTerms));
+			currentSearchObj = {items: activeSearchTerms, orderBy: [{name: 'voyage_id', direction: 'asc'}]};
+			searchCallback();
 		}
 		$('#search_btn').click(search);
 		Selectize.define('search_term_box', function(options) {
@@ -647,6 +673,26 @@ html, body, .viewport {
 			$('#clear_btn').click(function() {
 				selectize.clear();
 			});
+
+			main_datatable = $('#results_main_table').DataTable({
+        ajax: {
+					url: "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search",
+					type: 'POST',
+					data: function(d) {
+						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
+					}
+				},
+				bFilter: false,
+				serverSide: true,
+        columns: [
+					{ "data": "var_voyage_id" },
+					{ "data": "var_ship_name" },
+					{ "data": "var_captain_plaintext" },
+					{ "data": "var_imp_arrival_at_port_of_dis" },
+					{ "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
+					{ "data": "var_imp_principal_port_slave_dis_lang_en" }
+        ]
+    	});
 		});
 	</script>
 </body>
