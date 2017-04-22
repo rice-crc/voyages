@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}datatables/buttons.bootstrap.min.css" />
 
 <script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-3.1.1.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-ui.min.js"></script>
@@ -20,6 +21,9 @@
 <script src="{{ STATIC_URL }}scripts/voyage/beta/search_term.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/beta/bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/datatables.min.js"></script>
+<script src="{{ STATIC_URL }}datatables/dataTables.buttons.min.js"></script>
+<script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}datatables/buttons.colVis.min.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
 <script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
@@ -227,8 +231,12 @@ html, body, .viewport {
 	flex-direction: column;
 }
 
-.selectize-dropdown {
-	opacity: 0.9;
+.keyboard-binding {
+	font-size: 70%;
+}
+
+div.dt-button-collection {
+	width: auto;
 }
 </style>
 </head>
@@ -252,7 +260,7 @@ html, body, .viewport {
 				<li>
 					<a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#search_pane" title="Keyboard shortcut: CTRL + S">
 						<i class="fa fa-search" aria-hidden="true"></i>
-						<span>Search</span>
+						<span>Search</span> <span class="keyboard-binding">(Ctrl + S)</span>
 					</a>
 				</li>
 				<li class="dropdown">
@@ -287,7 +295,7 @@ html, body, .viewport {
 				  </ul>
 				</li>
 				<li class="dropdown">
-				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About the Project</a>
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About</a>
 				  <ul class="dropdown-menu">
 					<li><a href="#">Action 1</a></li>
 					<li><a href="#">Action 2</a></li>
@@ -304,29 +312,37 @@ html, body, .viewport {
 			</div><!--/.nav-collapse -->
 		  </div>
 		</nav>	
-		<div id="search_pane" class="collapse">
-			<div class="form-group">
-				<label for="year_range" class="control-label">Year range:</label>
-				<input type="text" class="form-control" id="year_range" style="color:#f6931f; font-weight:bold; width: 100px; display: inline;">
-				<p></p>
-				<div id="slider-range" style="max-width: 250px"></div>
-			</div>
-			<div class="form-group">
-				<label for="current_search" class="control-label">Current search:</label>
-				<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the button below."></select>
-			</div>
-			<div class="btn-group" role="group">
-				<button id="search_btn" type="button" class="btn btn-primary">Search</button>
-				<button type="button" class="btn btn-danger" id="clear_btn">Clear</button>
-				<button type="button" class="btn btn-success not-implemented" title="Obtain a permanent link to this search query">Save query</button>
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						History <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-					  <li><a href="#">Search history item 1</a></li>
-					  <li><a href="#">Search history item 2</a></li>
-					</ul>
+		<div id="search_pane" class="collapse" style="position: absolute; top: 72px; width: 100%;">
+			<div style="display: flex;">
+				<div style="flex: 0;">				
+					<div class="btn-group-vertical" role="group">
+						<button id="search_btn" type="button" class="btn btn-primary">Search</button>
+						<button type="button" class="btn btn-danger" id="clear_btn">Clear</button>
+						<button type="button" class="btn btn-success not-implemented" title="Obtain a permanent link to this search query">Save query</button>
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								History <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">Search history item 1</a></li>
+								<li><a href="#">Search history item 2</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div style="flex: 1; padding-left: 25px;">
+					<div class="form-group">
+						<label for="year_range" class="control-label">Year range:</label>
+						<input type="text" class="form-control" id="year_range" style="color:#f6931f; font-weight:bold; width: 100px; display: inline;">
+						<p></p>
+						<div style="padding-left: 8px;">
+							<div id="slider-range" style="max-width: 250px;"></div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="current_search" class="control-label">Current search:</label>
+						<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the button below."></select>
+					</div>				
 				</div>
 			</div>
 		</div>
@@ -356,6 +372,7 @@ html, body, .viewport {
                 <th>Year arrived with slaves*</th>
                 <th>Principal region of slave purchase*</th>
                 <th>Principal region of slave landing*</th>
+                <th>Sources</th>
             </tr>
         </thead>
         </tfoot>
@@ -426,7 +443,8 @@ html, body, .viewport {
 		  <div class="modal-footer">
 			<div id="search_input_validation"></div>
 			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			<button type="submit" class="btn btn-primary" id="search_input_save_btn">Save changes</button>
+			<button type="submit" class="btn btn-primary" id="search_input_save_btn">Add to query <span class="keyboard-binding">(Enter)</span></button>
+			<button type="submit" class="btn btn-success" id="search_input_run_btn">Add and perform query <span class="keyboard-binding">(Ctrl + Enter)</span></button>
 		  </div>
 		</div>
 	  </div>
@@ -451,13 +469,18 @@ html, body, .viewport {
 		};
 		$("#search_pane").on('shown.bs.collapse', focusOnSearchBox);
 		$("#search_input_modal").on('hidden.bs.modal', focusOnSearchBox);
-		$("#search_input_save_btn").click(function(e) {
+		var dialogSaveAction = function(e) {
 			modalResult = modalCallback();
 			if (!modalResult) {
 				e.preventDefault();
 				return false;
 			}
 			$("#search_input_modal").modal('hide');
+		};
+		$("#search_input_save_btn").click(dialogSaveAction);
+		$("#search_input_run_btn").click(function(e) {
+			dialogSaveAction(e);
+			setTimeout(search, 1000);
 		});
 		$(".not-implemented").click(function() {
 			alert('This is an early prototype. Functionality not implemented!');
@@ -492,16 +515,16 @@ html, body, .viewport {
 		var searchTerms = [
 			RangeSearchTerm(new VariableInfo('voyage_id', 'ship_nation_owners', 'Voyage ID'), '', null, 'Voyage id help text'),
 			TextSearchTerm(new VariableInfo('ship_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
-			TextSearchTerm(new VariableInfo('vessel_owners', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
-			PlaceSearchTerm(new VariableInfo('place_voyage_began', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
-			PlaceSearchTerm(new VariableInfo('place_principal_slave_purchase', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
-			PlaceSearchTerm(new VariableInfo('place_principal_slave_landing', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
-			PlaceSearchTerm(new VariableInfo('place_voyage_ended', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
-			RangeSearchTerm(new VariableInfo('year_arrived', 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
+			TextSearchTerm(new VariableInfo('owner', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
+			PlaceSearchTerm(new VariableInfo('imp_port_voyage_begin_idnum', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
+			PlaceSearchTerm(new VariableInfo('imp_principal_place_of_slave_purchase_idnum', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
+			PlaceSearchTerm(new VariableInfo('imp_principal_place_of_slave_landing_idnum', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
+			PlaceSearchTerm(new VariableInfo('place_voyage_ended_idnum', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
+			RangeSearchTerm(new VariableInfo('imp_arrival_at_port_of_dis', 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
 			TextSearchTerm(new VariableInfo('captain', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
-			RangeSearchTerm(new VariableInfo('total_slaves_embarked', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text'),
-			RangeSearchTerm(new VariableInfo('total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text'),
-			TextSearchTerm(new VariableInfo('source', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
+			RangeSearchTerm(new VariableInfo('imp_total_num_slaves_purchased', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text', null, 3),
+			RangeSearchTerm(new VariableInfo('imp_total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text', null, 3),
+			TextSearchTerm(new VariableInfo('sources_plaintext_search', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
 		];
 		var searchTermsDict = {};
 		for (var i = 0; i < searchTerms.length; ++i) {
@@ -538,7 +561,8 @@ html, body, .viewport {
 				$modal.keypress(function(e) {
 					if (e.which == 13) {
 						if (searchTerm.enterKeyPress()) {
-							$("#search_input_save_btn").click();
+						  var btnId = e.ctrlKey ? "#search_input_run_btn" : "#search_input_save_btn";
+							$(btnId).click();
 						}
 					}
 				});
@@ -546,12 +570,12 @@ html, body, .viewport {
 			modalResult = false;
 			$modal.modal({ backdrop: 'static' });
 		}
-		var main_datatable = null;
+		var mainDatatable = null;
 		var currentSearchObj = {items: []};
 		var resultsTableSearchCallback = function() {
 			// Reload datatables.
-			if (main_datatable) {
-				main_datatable.ajax.reload();
+			if (mainDatatable) {
+				mainDatatable.ajax.reload();
 			}
 		}
 		var searchCallback = resultsTableSearchCallback;
@@ -559,9 +583,29 @@ html, body, .viewport {
 			$('#search_pane').collapse("hide");
 			var activeSearchTerms = jQuery.map($('#current_search').val(), function(id) {
 				var term = searchTermsDict[id];
-				return { varName: term.varName, op: term.operatorLabel, searchTerm: term.getSearchTerm() };
+				// Here we allow custom search types to generate their backend terms.
+				var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
+					? term.getBackendSearchTerm()
+					: term.getSearchTerm();
+				return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
 			});
-			currentSearchObj = {items: activeSearchTerms, orderBy: [{name: 'voyage_id', direction: 'asc'}]};
+			// Add year range to search.
+			var yearRange = $("#year_range").val().split('-');
+			if (yearRange.length == 2) {
+				var first = parseInt(yearRange[0]);
+				var last = parseInt(yearRange[1]);
+				if (!isNaN(first) && !isNaN(last)) {
+					activeSearchTerms.push({varName: 'imp_arrival_at_port_of_dis', op: 'is between', searchTerm: [first, last]});
+				}
+			}
+			currentSearchObj = {items: activeSearchTerms, orderBy: []};
+			// Store current search on session storage.
+			var searchState = {
+				currentSearchObj: currentSearchObj,
+				searchTerms: jQuery.map($('#current_search').val(), function(id) { return searchTermsDict[id]; }),
+				yearRange: $("#year_range").val()
+			};
+			sessionStorage.setItem('searchState', JSON.stringify(searchState));
 			searchCallback();
 		}
 		$('#search_btn').click(search);
@@ -570,9 +614,14 @@ html, body, .viewport {
 			self.addItem = (function() {
 				var original = self.addItem;
 				return function(value, silent) {
-					displayVariableInput(value);
 					var context = this;
 					var args = arguments;
+					if (silent) {
+							original.apply(context, args);
+							refreshSearchItem(value);
+							return;
+					}
+					displayVariableInput(value);
 					$modal.one('hidden.bs.modal', function (e) {
 						if (modalResult) {
 							original.apply(context, args);
@@ -674,24 +723,136 @@ html, body, .viewport {
 				selectize.clear();
 			});
 
-			main_datatable = $('#results_main_table').DataTable({
+			var allColumns = [
+				{ "data": "var_voyage_id" },
+				{ "data": "var_ship_name" },
+				{ "data": "var_captain_plaintext" },
+				{ "data": "var_imp_arrival_at_port_of_dis" },
+				{ "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
+				{ "data": "var_imp_principal_port_slave_dis_lang_en" },
+				{ "data": "var_sources_plaintext", "visible": false }
+			];
+
+			// See if we have the last search on session storage.
+			var searchStateStr = sessionStorage.getItem('searchState');
+			if (searchStateStr) {
+				try {
+					var searchState = JSON.parse(searchStateStr);
+					currentSearchObj = searchState['currentSearchObj'];
+					var oldSearchTerms = searchState['searchTerms'];
+					$("#year_range").val(searchState['yearRange']);
+					$("#year_range").change();
+					for (var i = 0; i < oldSearchTerms.length; ++i) {
+						var oldTerm = oldSearchTerms[i];
+						var currentTerm = searchTermsDict[oldTerm.varName];
+						jQuery.extend(currentTerm, oldTerm);
+						selectize.addItem(oldTerm.varName, true);
+					}
+				} catch (e) { }
+			}
+
+			mainDatatable = $('#results_main_table').DataTable({
         ajax: {
 					url: "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search",
 					type: 'POST',
 					data: function(d) {
+						if (d.order) {
+							currentSearchObj.orderBy = $.map(d.order, function(item) {
+								return {name: allColumns[item.column].data.substring(4), direction: item.dir};
+							});
+						}
 						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
 					}
 				},
+				dom: 'Bfrtip',
+				lengthMenu: [
+            [ 10, 25, 50, 100 ],
+            [ '10 rows', '25 rows', '50 rows', '100 rows' ]
+        ],
+				buttons: [
+					'pageLength',
+					{
+						extend: 'collection',
+						text: '<span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>',
+						titleAttr: 'Configure visible columns',
+						buttons: [
+							{
+								extend: 'collection',
+								text: 'Ship, nation, owners',
+								buttons: [
+									{
+										extend: 'columnToggle',
+										text: 'Voyage ID',
+										columns: 0,
+									},
+									{
+										extend: 'columnToggle',
+										text: 'Vessel name',
+										columns: 1,
+									},
+									{
+										extend: 'columnToggle',
+										text: 'Captain\'s name',
+										columns: 2,
+									},
+								]
+							},
+							{
+								extend: 'collection',
+								text: 'Voyage Itinerary',
+								buttons: [
+									{
+										extend: 'columnToggle',
+										text: 'Year arrived with slaves*',
+										columns: 3,
+									},
+									{
+										extend: 'columnToggle',
+										text: 'Principal region of slave purchase*',
+										columns: 4,
+									},
+									{
+										extend: 'columnToggle',
+										text: 'Principal region of slave landing*',
+										columns: 5,
+									},
+								]
+							},
+							{
+								extend: 'columnToggle',
+								text: 'Sources',
+								columns: 6,
+							},
+						]
+					},
+					{
+						extend: 'collection',
+						text: '<span class="glyphicon glyphicon-cloud-download"></span>',
+						buttons: [
+							{
+								text: 'CSV',
+								action: function() { alert('not implemented yet'); },
+							},
+							{
+								text: 'Excel',
+								action: function() {
+									var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
+										return visible ? allColumns[index].data : undefined;
+									});
+									var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+									form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({ searchData: currentSearchObj, cols: visibleColumns })));
+									form.appendTo('body').submit().remove();
+								},
+							}
+						]
+					}
+				],
 				bFilter: false,
 				serverSide: true,
-        columns: [
-					{ "data": "var_voyage_id" },
-					{ "data": "var_ship_name" },
-					{ "data": "var_captain_plaintext" },
-					{ "data": "var_imp_arrival_at_port_of_dis" },
-					{ "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
-					{ "data": "var_imp_principal_port_slave_dis_lang_en" }
-        ]
+        columns: allColumns,
+				stateSave: true,
+				stateDuration: -1,
+				colReorder: true,
     	});
 		});
 	</script>

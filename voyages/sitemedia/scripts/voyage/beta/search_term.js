@@ -110,6 +110,10 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 		if (!placesData) {
 			$.get('/contribute/places_ajax', function(data) {
 				// Process data.
+				// Here we assume that the data is properly
+				// order so that each port appears after the
+				// region that it belongs to and the region
+				// appears after the broad region it belongs to.
 				var broad_regions = {};
 				var regions = {};
 				var ports = {};
@@ -117,13 +121,26 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 					var item = data[i];
 					if (item.type == "port") {
 						item.region = regions[item.parent];
+						item.pk = item.value;
+						item.label = item.port;
 						ports[item.value] = item;
 					} else if (item.type == "region") {
-						regions[item.pk] = item;
 						item.broad_region = broad_regions[item.parent];
+						item.label = item.region;
+						item.ports = []
+						regions[item.pk] = item;
 					} else if (item.type == "broad_region") {
+						item.label = item.broad_region;
+						item.ports = []
 						broad_regions[item.pk] = item;
 					}
+				}
+				for (var key in ports) {
+					var p = ports[key];
+					var r = p.region;
+					var b = r.broad_region;
+					r.ports.push(p.code);
+					b.ports.push(p.code);
 				}
 				placesData = {
 					'all': data,
@@ -141,8 +158,9 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 	self.inputHtml = function(escape) {
 		return oldInputHtml(escape).replace('<input ', '<input class="select_port" ');
 	};
-	self.initialized = false;
+	self.selectize = null;
 	self.initInput = function() {
+		self.selectize = null;
 		var portItemDisplay = function(data, escape) {
 			if (data.type == "broad_region") {
 				return '<div>' + escape(data.broad_region) + '</div>';
@@ -181,25 +199,29 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 					item: portItemDisplay,
 				},
 				onInitialize: function() {
-					self.initialized = true;
+					self.selectize = $("#" + self.inputId)[0].selectize;
+					items = self.getSearchTerm();
+					for (var i = 0; i < items.length; ++i) {
+						self.selectize.addItem(items[i].value);
+					}
 				}
 			});
 		});
 	};
 	self.inputFocus = function() {
-		if (self.initialized) {
-			$("#" + self.inputId)[0].selectize.focus();
+		if (self.selectize) {
+			self.selectize.focus();
 		}
 	};
 	self.linkText = function(escape) {
-		var pks = self.__searchTerm;
+		var items = self.getSearchTerm();
 		var text = '';
 		var MAX_TEXT_LENGTH = 65;
-		for (var i = 0; i < pks.length; ++i) {
+		for (var i = 0; i < items.length; ++i) {
 			if (text.length > 0) text += ', ';
-			var next = placesData.ports[pks[i]].port;
+			var next = items[i].label;
 			if (text.length + next.length > MAX_TEXT_LENGTH) {
-				text = text + next + ' and ' + (pks.length - i - 1) + ' more...';
+				text = text + next + ' and ' + (items.length - i - 1) + ' more...';
 				break;
 			} else {
 				text += next;
@@ -208,9 +230,22 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 		return self.operatorLabel + ' "' + escape(text) + '"';
 	};
 	self.updateFromHtmlInput = function() {
-		var selection = $.map($("#" + self.inputId).val().split(','), function(x) { return parseInt(x); });
+		var selection = $.map(
+			self.selectize.items,
+			function(value) {
+				return self.selectize.options[value];
+			}
+		);
 		self.setSearchTerm(selection);
 		return selection;
+	};
+	self.getBackendSearchTerm = function() {
+		return $.map(
+			self.getSearchTerm(),
+			function(item) {
+				return item.type == 'port' ? item.code : item.ports;
+			}
+		)
 	};
 	return self;
 }
@@ -220,13 +255,13 @@ function MultipleSelectionSearchTerm(varInfo, operatorLabel, initialSearchTerm, 
 	return self;
 }
 
-function RangeSearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction) {
+function RangeSearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction, initialRangeMode) {
 	var self = new SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction);
 	var isValidSearchTermVal = function() {
 		return self.__searchTerm.constructor === Array && self.__searchTerm.length == 2;
 	};
 	var rangeOptionLabels = ['equals', 'is at most', 'is at least', 'is between'];
-	self.rangeMode = 0;
+	self.rangeMode = initialRangeMode || 0;
 	self.inputHtml = function(escape) {
 		if (!isValidSearchTermVal()) {
 			self.__searchTerm = [null, null];

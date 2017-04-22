@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
+from voyages.apps.common.export import download_xls
 from voyages.apps.voyage.models import *
 import json
 
@@ -20,6 +21,7 @@ _operators_list = [
     SearchOperator('is at least', 'gte', False), 
     SearchOperator('is between', 'range', True),
     SearchOperator('contains', 'contains', False),
+    SearchOperator('is one of', 'in', True),
 ]
 _operators_dict = {op.front_end_op_str: op for op in _operators_list}
 
@@ -39,7 +41,6 @@ def perform_search(search, lang):
         if is_list and not operator.list_type:
             term = term[0]
         search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
-    print search_terms
     result = SearchQuerySet().models(Voyage).filter(**search_terms)
     order_fields = search.get('orderBy')
     if order_fields:
@@ -53,6 +54,9 @@ def perform_search(search, lang):
                 order_by_field += '_plaintext_exact'
             if field['direction'] == 'desc':
                 order_by_field = '-' + order_by_field
+            remaped_fields.append(order_by_field)
+        print 'hello'
+        print remaped_fields
         result = result.order_by(*remaped_fields)
     return result
 
@@ -68,7 +72,7 @@ def get_results_table(results, post):
     reponse_data['recordsTotal'] = total_results
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = int(table_params['draw'])
-    reponse_data['data'] = [x.get_stored_fields() for x in page]
+    reponse_data['data'] = [{k: v if v != '[]' else '' for k, v in x.get_stored_fields().items()} for x in page]
     return reponse_data
 
 @require_POST
@@ -88,6 +92,17 @@ def ajax_search(request):
     return JsonResponse(response_data)
     #except Exception as e:
     #    return HttpResponseBadRequest(str(e))
+
+@require_POST
+def ajax_download(request):
+    data = json.loads(request.POST['data'])
+    search = data['searchData']
+    lang = request.LANGUAGE_CODE
+    results = perform_search(search, lang)
+    columns = data['cols']
+    return download_xls(
+        [[(col, 1) for col in columns]],
+        [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
 
 def search_view(request):
     return render(request, 'voyage/beta_search_main.html')
