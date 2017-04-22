@@ -55,8 +55,6 @@ def perform_search(search, lang):
             if field['direction'] == 'desc':
                 order_by_field = '-' + order_by_field
             remaped_fields.append(order_by_field)
-        print 'hello'
-        print remaped_fields
         result = result.order_by(*remaped_fields)
     return result
 
@@ -90,8 +88,6 @@ def ajax_search(request):
     else:
         return HttpResponseBadRequest('Unkown type of output.')
     return JsonResponse(response_data)
-    #except Exception as e:
-    #    return HttpResponseBadRequest(str(e))
 
 @require_POST
 def ajax_download(request):

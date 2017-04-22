@@ -13,22 +13,13 @@ function SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, vali
 	self.label = varInfo.label;
 	self.group = varInfo.varGroup;
 	self.varName = varInfo.varName;
-	self.value = '';
 	self.operatorLabel = operatorLabel || ' = ';
 	self.validate = function() {
 		return validationFunction ? validationFunction(self.__searchTerm) : [];
 	};
-	self.__setValue = function() {
-		var x = {};
-		x[self.varName] = self.__searchTerm;
-		self.value = JSON.stringify(x);
-		return self.value;
-	};
-	self.__setValue();
 	self.getSearchTerm = function() { return self.__searchTerm; };
 	self.setSearchTerm = function(term) {
 		self.__searchTerm = term;
-		self.__setValue();
 	};
 	self.inputControlId = 'TextSearchTerm_' + self.varName;
 	self.linkText = function(escape) {
@@ -53,6 +44,14 @@ function SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, vali
 		return text;
 	};
 	self.enterKeyPress = function() { return true; };
+	self.serialize = function() {
+		return {varName: self.varName, op: self.operatorLabel, searchTerm: self.__searchTerm};
+	};
+	self.deserialize = function(data, callback) {
+		self.operatorLabel = data.op;
+		self.setSearchTerm(data.searchTerm);
+		if (callback) callback(self);
+	};
 }
 
 Selectize.define('places', function(options) {
@@ -102,21 +101,26 @@ Selectize.define('places', function(options) {
 	})();
 });
 
-var placesData = null;
-
-function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction) {
-	var self = new SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction);
-	self.getDataAsync = function(callback) {
-		if (!placesData) {
+function PlacesData() {
+	var self = this;
+	self.all = [];
+	self.allDict = {};
+	self.broadRegions = {};
+	self.regions = {};
+	self.ports = {};
+	self.isLoaded = false;
+	self.initAsync = function(callback) {
+		if (!self.isLoaded) {
 			$.get('/contribute/places_ajax', function(data) {
 				// Process data.
 				// Here we assume that the data is properly
 				// order so that each port appears after the
 				// region that it belongs to and the region
 				// appears after the broad region it belongs to.
-				var broad_regions = {};
+				var broadRegions = {};
 				var regions = {};
 				var ports = {};
+				var allDict = {};
 				for (var i = 0; i < data.length; ++i) {
 					var item = data[i];
 					if (item.type == "port") {
@@ -125,15 +129,16 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 						item.label = item.port;
 						ports[item.value] = item;
 					} else if (item.type == "region") {
-						item.broad_region = broad_regions[item.parent];
+						item.broad_region = broadRegions[item.parent];
 						item.label = item.region;
 						item.ports = []
 						regions[item.pk] = item;
 					} else if (item.type == "broad_region") {
 						item.label = item.broad_region;
 						item.ports = []
-						broad_regions[item.pk] = item;
+						broadRegions[item.pk] = item;
 					}
+					allDict[item.value] = item;
 				}
 				for (var key in ports) {
 					var p = ports[key];
@@ -142,18 +147,27 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 					r.ports.push(p.code);
 					b.ports.push(p.code);
 				}
-				placesData = {
-					'all': data,
-					'broad_regions': broad_regions,
-					'regions': regions,
-					'ports': ports,
-				};
-				callback(placesData);
+				self.isLoaded = true;
+				self.all = data;
+				self.allDict = allDict;
+				self.broadRegions = broadRegions;
+				self.regions = regions;
+				self.ports = ports;
+				callback(self);
 			});
 		} else {
-			callback(placesData);
+			callback(self);
 		}
 	};
+	return self;
+}
+
+// Store places data in a shared variable so that
+// we only need one AJAX call to fill it.
+var placesData = new PlacesData();
+
+function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction) {
+	var self = new SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction);
 	var oldInputHtml = self.inputHtml;
 	self.inputHtml = function(escape) {
 		return oldInputHtml(escape).replace('<input ', '<input class="select_port" ');
@@ -172,7 +186,7 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 			var broad_region = region.broad_region;
 			return '<div><span class="geo_complement">' + escape(broad_region.broad_region) + ' &raquo; ' + escape(region.region) + ' &raquo; </span>' + escape(data.port) + '</div>';
 		};
-		self.getDataAsync(function(data) {
+		placesData.initAsync(function(data) {
 			$('#' + self.inputId).selectize({
 				plugins: {
 					'places': true,
@@ -247,11 +261,15 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 			}
 		)
 	};
-	return self;
-}
-
-function MultipleSelectionSearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction) {
-	var self = new SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, validationFunction);
+	self.serialize = function() {
+		return {varName: self.varName, items: self.selectize ? $.makeArray(self.selectize.items) : []};
+	}
+	self.deserialize = function(serialized, callback) {
+		placesData.initAsync(function(data) {
+			self.setSearchTerm($.map(serialized.items, function(value) { return data.allDict[parseInt(value)]; }));
+			if (callback) callback(self);
+		});
+	}
 	return self;
 }
 
@@ -326,14 +344,15 @@ function RangeSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 		}
 		return errors;
 	};
-	self.__setValue = function() {
-		var x = {};
-		x['rangeMode'] = self.rangeMode;
-		x[self.varName] = self.__searchTerm;
-		self.value = JSON.stringify(x);
-		return self.value;
+	self.serialize = function() {
+		return {varName: self.varName, rangeMode: self.rangeMode, searchTerm: self.__searchTerm};
 	};
-	self.__setValue();
+	self.deserialize = function(data, callback) {
+		self.rangeMode = data.rangeMode;
+		self.operatorLabel = rangeOptionLabels[data.rangeMode];
+		self.setSearchTerm(data.searchTerm);
+		if (callback) callback(self);
+	};
 	return self;
 }
 

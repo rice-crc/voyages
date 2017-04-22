@@ -316,16 +316,15 @@ div.dt-button-collection {
 			<div style="display: flex;">
 				<div style="flex: 0;">				
 					<div class="btn-group-vertical" role="group">
-						<button id="search_btn" type="button" class="btn btn-primary">Search</button>
-						<button type="button" class="btn btn-danger" id="clear_btn">Clear</button>
-						<button type="button" class="btn btn-success not-implemented" title="Obtain a permanent link to this search query">Save query</button>
+						<button id="search_btn" type="button" class="btn btn-success">Search<br/><span class="keyboard-binding">(Ctrl + Enter)</span></button>
+						<button type="button" class="btn btn-default" id="clear_btn">Clear</button>
+						<button type="button" class="btn btn-default not-implemented" title="Obtain a permanent link to this search query">Save query</button>
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								History <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu">
-								<li><a href="#">Search history item 1</a></li>
-								<li><a href="#">Search history item 2</a></li>
+							<ul class="dropdown-menu" id="search_history_dropdown">
+								<li><a href="#">No search history</a></li>
 							</ul>
 						</div>
 					</div>
@@ -341,7 +340,7 @@ div.dt-button-collection {
 					</div>
 					<div class="form-group">
 						<label for="current_search" class="control-label">Current search:</label>
-						<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the button below."></select>
+						<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the Search button."></select>
 					</div>				
 				</div>
 			</div>
@@ -452,9 +451,11 @@ div.dt-button-collection {
 	<script>
 		var SEARCH_MIN_YEAR = 1514;
 		var SEARCH_MAX_YEAR = 1866;
+		var YEAR_RANGE_VARNAME = 'imp_arrival_at_port_of_dis';
 		var selectize = null;
 		var $modal = $('#search_input_modal');
 		var modalResult = false;
+		var searchHistory = [];
 		var modalCallback = function() {};
 		$(document).on('keydown', function(e) {
 			var c = String.fromCharCode(e.which);
@@ -483,7 +484,7 @@ div.dt-button-collection {
 			setTimeout(search, 1000);
 		});
 		$(".not-implemented").click(function() {
-			alert('This is an early prototype. Functionality not implemented!');
+			alert('This is an early prototype. Functionality not yet implemented! When implemented, it will save this query in a database and provide you with a permanent link that can be shared publicly.');
 		});
 		var escape_html = function(str) {
 			return (str + '')
@@ -518,9 +519,9 @@ div.dt-button-collection {
 			TextSearchTerm(new VariableInfo('owner', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
 			PlaceSearchTerm(new VariableInfo('imp_port_voyage_begin_idnum', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
 			PlaceSearchTerm(new VariableInfo('imp_principal_place_of_slave_purchase_idnum', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
-			PlaceSearchTerm(new VariableInfo('imp_principal_place_of_slave_landing_idnum', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
+			PlaceSearchTerm(new VariableInfo('imp_principal_port_slave_dis_idnum', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
 			PlaceSearchTerm(new VariableInfo('place_voyage_ended_idnum', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
-			RangeSearchTerm(new VariableInfo('imp_arrival_at_port_of_dis', 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
+			RangeSearchTerm(new VariableInfo(YEAR_RANGE_VARNAME, 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
 			TextSearchTerm(new VariableInfo('captain', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
 			RangeSearchTerm(new VariableInfo('imp_total_num_slaves_purchased', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text', null, 3),
 			RangeSearchTerm(new VariableInfo('imp_total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text', null, 3),
@@ -589,26 +590,95 @@ div.dt-button-collection {
 					: term.getSearchTerm();
 				return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
 			});
-			// Add year range to search.
-			var yearRange = $("#year_range").val().split('-');
-			if (yearRange.length == 2) {
-				var first = parseInt(yearRange[0]);
-				var last = parseInt(yearRange[1]);
-				if (!isNaN(first) && !isNaN(last)) {
-					activeSearchTerms.push({varName: 'imp_arrival_at_port_of_dis', op: 'is between', searchTerm: [first, last]});
+			var $yearRange = $("#year_range");
+			// Check if the user explicitly specified the year search.
+			var hasYearSearch = activeSearchTerms.some(function(t) {
+				var match = t.varName == YEAR_RANGE_VARNAME;
+				if (match) {
+					var range = t.searchTerm;
+					range = [range[0], range[1] || range[0]];
+					$yearRange.val(range[0] + ' - ' + range[1]);
+					$yearRange.change();
+				}
+				return match;
+			});
+			if (!hasYearSearch) {
+				// Add year range to search.
+				var yearRange = $yearRange.val().split('-');
+				if (yearRange.length == 2) {
+					var first = parseInt(yearRange[0]);
+					var last = parseInt(yearRange[1]);
+					if (!isNaN(first) && !isNaN(last)) {
+						activeSearchTerms.push({varName: YEAR_RANGE_VARNAME, op: 'is between', searchTerm: [first, last]});
+					}
 				}
 			}
 			currentSearchObj = {items: activeSearchTerms, orderBy: []};
 			// Store current search on session storage.
 			var searchState = {
 				currentSearchObj: currentSearchObj,
-				searchTerms: jQuery.map($('#current_search').val(), function(id) { return searchTermsDict[id]; }),
+				searchTerms: jQuery.map($('#current_search').val(), function(id) { return searchTermsDict[id].serialize(); }),
 				yearRange: $("#year_range").val()
 			};
-			sessionStorage.setItem('searchState', JSON.stringify(searchState));
+			var serializedSearch = JSON.stringify(searchState);
+			sessionStorage.setItem('searchState', serializedSearch);
+			// Check if this is a new search
+			var d = new Date();
+			var isRepeat = false;
+			searchHistory.some(function(h) {
+				isRepeat = h.search == serializedSearch;
+				if (isRepeat) {
+					h.date = d;
+				}
+				return isRepeat;
+			});
+			if (!isRepeat) {
+				var label = $('#current_search').val();
+				searchHistory.push({ label: label == '' ? '*' : label, search: serializedSearch, date: d });
+			}
+			sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+			updateHistory();
 			searchCallback();
 		}
 		$('#search_btn').click(search);
+		function restoreSerializedSearch(searchStateStr) {
+				try {
+					var searchState = JSON.parse(searchStateStr);
+					currentSearchObj = searchState['currentSearchObj'];
+					var oldSearchTerms = searchState['searchTerms'];
+					$("#year_range").val(searchState['yearRange']);
+					$("#year_range").change();
+					selectize.clear();
+					oldSearchTerms.forEach(function(oldTerm) {
+						searchTermsDict[oldTerm.varName].deserialize(oldTerm, function(t) {
+							selectize.addItem(t.varName, true);
+						});
+					});
+				} catch (e) { }
+		}
+		function clearHistory() {
+			searchHistory = [];
+			sessionStorage.setItem('searchHistory', '[]');
+			updateHistory();
+		}
+		function restoreHistory(element) {
+			restoreSerializedSearch($(element).data('search'));
+		}
+		function updateHistory() {
+			var $menu = $('#search_history_dropdown');
+			$menu.empty();
+			if (searchHistory.length > 0) {
+				$menu.append($('<li onclick="clearHistory(); return false;"><a href="#">Clear History</a></li><li role="separator" class="divider"></li>'));
+				searchHistory.sort(function(a, b) { return new Date(b.date).getTime() - new Date(a.date).getTime(); });
+				searchHistory.forEach(function (history) {
+					var $item = $('<li onclick="restoreHistory(this); return false;"><a href="#">Search query on ' + history.label + ' at ' + history.date + '</a></li>');
+					$item.data('search', history.search);
+					$menu.append($item);
+				});
+			} else {
+				$menu.append($('<li><a href="#">No search history</a></li>'));
+			}
+		}
 		Selectize.define('search_term_box', function(options) {
 			var self = this;
 			self.addItem = (function() {
@@ -683,7 +753,7 @@ div.dt-button-collection {
 				plugins: {
 					'remove_button': true,
 					'dropdown_header': {
-						'title': 'Select the variable that will be used in the search. You may start typing to filter variables.'
+						'title': 'Select a variable that will be used in the query. You may start typing to filter variables.'
 					},
 					'optgroup_columns': true,
 					'search_term_box': true},
@@ -721,13 +791,16 @@ div.dt-button-collection {
 			
 			$('#clear_btn').click(function() {
 				selectize.clear();
+				$("#year_range").val(SEARCH_MIN_YEAR + ' - ' + SEARCH_MAX_YEAR);
+				$("#year_range").change();
+				search();
 			});
 
 			var allColumns = [
 				{ "data": "var_voyage_id" },
 				{ "data": "var_ship_name" },
 				{ "data": "var_captain_plaintext" },
-				{ "data": "var_imp_arrival_at_port_of_dis" },
+				{ "data": "var_" + YEAR_RANGE_VARNAME },
 				{ "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
 				{ "data": "var_imp_principal_port_slave_dis_lang_en" },
 				{ "data": "var_sources_plaintext", "visible": false }
@@ -736,19 +809,17 @@ div.dt-button-collection {
 			// See if we have the last search on session storage.
 			var searchStateStr = sessionStorage.getItem('searchState');
 			if (searchStateStr) {
+				restoreSerializedSearch(searchStateStr);
+			}
+			// Now let us check whether we have the search history in the session storage.
+			var searchHistoryStr = sessionStorage.getItem('searchHistory');
+			if (searchHistoryStr) {
 				try {
-					var searchState = JSON.parse(searchStateStr);
-					currentSearchObj = searchState['currentSearchObj'];
-					var oldSearchTerms = searchState['searchTerms'];
-					$("#year_range").val(searchState['yearRange']);
-					$("#year_range").change();
-					for (var i = 0; i < oldSearchTerms.length; ++i) {
-						var oldTerm = oldSearchTerms[i];
-						var currentTerm = searchTermsDict[oldTerm.varName];
-						jQuery.extend(currentTerm, oldTerm);
-						selectize.addItem(oldTerm.varName, true);
-					}
-				} catch (e) { }
+					searchHistory = JSON.parse(searchHistoryStr);
+				} catch (e) { 
+					searchHistory = [];
+				}
+				updateHistory();
 			}
 
 			mainDatatable = $('#results_main_table').DataTable({
@@ -828,13 +899,14 @@ div.dt-button-collection {
 					{
 						extend: 'collection',
 						text: '<span class="glyphicon glyphicon-cloud-download"></span>',
+						titleAttr: 'Download results',
 						buttons: [
 							{
-								text: 'CSV',
+								text: 'CSV - not implemented',
 								action: function() { alert('not implemented yet'); },
 							},
 							{
-								text: 'Excel',
+								text: 'Excel - this one works!',
 								action: function() {
 									var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
 										return visible ? allColumns[index].data : undefined;
@@ -848,6 +920,7 @@ div.dt-button-collection {
 					}
 				],
 				bFilter: false,
+				processing: true,
 				serverSide: true,
         columns: allColumns,
 				stateSave: true,
