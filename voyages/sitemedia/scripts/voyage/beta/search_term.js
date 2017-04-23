@@ -63,6 +63,13 @@ Selectize.define('places', function(options) {
 				e.preventDefault();
 				e.stopPropagation();
 			}
+			if (e.originalEvent && e.originalEvent.originalTarget) {
+				// Check if this is the link to add region or broad region.
+				if ($(e.originalEvent.originalTarget).hasClass('option_add_all')) {
+					original.apply(this, arguments);
+					return;
+				}
+			}
 			if (e.type && e.type == 'mousedown') return false;
 			var target = $(e.currentTarget);
 			var className = "expanded";
@@ -175,17 +182,6 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 	self.selectize = null;
 	self.initInput = function() {
 		self.selectize = null;
-		var portItemDisplay = function(data, escape) {
-			if (data.type == "broad_region") {
-				return '<div>' + escape(data.broad_region) + '</div>';
-			}
-			if (data.type == "region") {
-				return '<div><span class="geo_complement">' + escape(data.broad_region.broad_region) + ' &raquo;&nbsp;</span>' + escape(data.region) + '</div>';
-			}
-			var region = data.region;
-			var broad_region = region.broad_region;
-			return '<div><span class="geo_complement">' + escape(broad_region.broad_region) + ' &raquo; ' + escape(region.region) + ' &raquo; </span>' + escape(data.port) + '</div>';
-		};
 		placesData.initAsync(function(data) {
 			$('#' + self.inputId).selectize({
 				plugins: {
@@ -206,11 +202,21 @@ function PlaceSearchTerm(varInfo, operatorLabel, initialSearchTerm, description,
 							return '<div class="port region_' + data.parent + '">' + escape(data.port) + '</div>';
 						}
 						if (data.type == 'region') {
-							return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent tree_collapsed region broad_region_' + data.parent + '">' + escape(data.region) + '</div>';
+							return '<div id="r_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent tree_collapsed region broad_region_' + data.parent + '">' + escape(data.region) + ' (<a class="option_add_all">add all</a>)</div>';
 						}
-						return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region tree_collapsed">' + escape(data.broad_region) + '</div>';
+						return '<div id="br_' + data.pk + '" data-pk="' + data.pk + '" class="mouse_transparent broad_region tree_collapsed">' + escape(data.broad_region) + ' (<a class="option_add_all">add all</a>)</div>';
 					},
-					item: portItemDisplay,
+					item: function(data, escape) {
+						if (data.type == "broad_region") {
+							return '<div>' + escape(data.broad_region) + '</div>';
+						}
+						if (data.type == "region") {
+							return '<div><span class="geo_complement">' + escape(data.broad_region.broad_region) + ' &raquo;&nbsp;</span>' + escape(data.region) + '</div>';
+						}
+						var region = data.region;
+						var broad_region = region.broad_region;
+						return '<div><span class="geo_complement">' + escape(broad_region.broad_region) + ' &raquo; ' + escape(region.region) + ' &raquo; </span>' + escape(data.port) + '</div>';
+					},
 				},
 				onInitialize: function() {
 					self.selectize = $("#" + self.inputId)[0].selectize;
