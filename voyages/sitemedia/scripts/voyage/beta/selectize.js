@@ -1631,6 +1631,7 @@
 					e.preventDefault();
 					return;
 				case KEY_RETURN:
+					if (e.ctrlKey) break; 
 					if (self.isOpen && self.$activeOption) {
 						self.onOptionSelect({currentTarget: self.$activeOption});
 						e.preventDefault();
