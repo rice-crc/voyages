@@ -9,9 +9,6 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/selectize.bootstrap3.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/bootstrap.vertical-tabs.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/voyage/beta/font-awesome.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/dataTables.bootstrap.min.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/buttons.bootstrap.min.css" />
 
@@ -25,9 +22,6 @@
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.colVis.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
-<script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
-<script src="{{ STATIC_URL }}maps/js/leaflet.markercluster.js"></script>
-<script src="{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="/jsi18n/"></script>
@@ -239,6 +233,33 @@ html, body, .viewport {
 div.dt-button-collection {
 	width: auto;
 }
+
+.gray {
+	filter: grayscale(1);
+}
+
+.map_node_aggregate_table {
+	border-collapse: collapse;
+}
+
+.map_node_aggregate_table tr th {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tr td {
+	border:1px solid gray;
+	margin: 2px;
+}
+
+.map_node_aggregate_table tfoot tr td {
+	font-weight: bold;
+}
+
+.map_node_aggregate_table td.number {
+	text-align: right;
+}
+
 </style>
 </head>
 
@@ -318,6 +339,7 @@ div.dt-button-collection {
 				<div style="flex: 0;">				
 					<div class="btn-group-vertical" role="group">
 						<button id="search_btn" type="button" class="btn btn-success">Search<br/><span class="keyboard-binding">(Ctrl + Enter)</span></button>
+						<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#search_pane" id="dismiss_btn" title="Close the search pane without running the query">Dismiss</button>
 						<button type="button" class="btn btn-default" id="clear_btn">Clear</button>
 						<button type="button" class="btn btn-default not-implemented" title="Obtain a permanent link to this search query">Save query</button>
 						<div class="btn-group" role="group">
@@ -372,6 +394,9 @@ div.dt-button-collection {
                 <th>Year arrived with slaves*</th>
                 <th>Principal region of slave purchase*</th>
                 <th>Principal region of slave landing*</th>
+                <th>Place where voyage began*</th>
+                <th>Total slaves embarked*</th>
+                <th>Outcome of voyage if ship captured*</th>
                 <th>Sources</th>
             </tr>
         </thead>
@@ -396,38 +421,25 @@ div.dt-button-collection {
 			</div>
 			<div id="maps" class="tab-pane fade">
 				<h3>Maps</h3>
-				<!-- TODO: only load map when tab is activated -->
 				<div id="map" style="width:100%;"></div>
 			</div>
 			<div id="animation" class="tab-pane fade">
 				<h3>Animation</h3>
-				<p class="dummy_content">Some content.</p>
+				<div id="timeControls" class="animation_voyage_controls" style="display:none;">
+						<h1 class="animation_voyage_year_label" id="yearLabel"></h1>
+						<div class="control animation_voyage_year_slider" id="slider" style="width: 200px;"></div>
+						<button class="animation_voyage_pause_button" type="button" id="pauseBtn">Pause</button>
+						<button class="animation_voyage_play_button" type="button" id="playBtn" style="display:none;">Play</button>
+				</div>
+				<div id="tooltip" class="animation_voyage_info" style="display:none; opacity: 0;">
+						<div id="tooltip_content"></div>
+						<div class="animation_tooltip_close_button">x</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	</div>
 
-	<script src="{{ STATIC_URL }}maps/js/routeNodes.js"></script>
-	<script src="{{ STATIC_URL }}maps/js/voyagesMap.js"></script>
-	<script>
-		var mapLoaded = false;
-		$('.nav-tabs a').on('shown.bs.tab', function(event) {
-    	var active = $(event.target).attr('href');
-			console.log(active);
-			if (active == '#maps' && !mapLoaded) {
-					voyagesMap.
-							init('1750', '{{ STATIC_URL }}maps/', routeNodes, links).
-							setMaxPathWidth(20).
-							setPathOpacity(0.75);
-					$(window).on("resize", function() {
-							$("#map").height($('#left-tabs').height() - 70);
-							voyagesMap._map.invalidateSize();
-					}).trigger("resize");
-					voyagesMap._map.invalidateSize();
-			}
-		});
-	</script>
-	
 	<!-- Modal -->
 	<div class="modal fade" id="search_input_modal" tabindex="-1" role="dialog" aria-labelledby="Search Input">
 	  <div class="modal-dialog" role="document">
@@ -797,15 +809,50 @@ div.dt-button-collection {
 				search();
 			});
 
-			var allColumns = [
-				{ "data": "var_voyage_id" },
-				{ "data": "var_ship_name" },
-				{ "data": "var_captain_plaintext" },
-				{ "data": "var_" + YEAR_RANGE_VARNAME },
-				{ "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
-				{ "data": "var_imp_principal_port_slave_dis_lang_en" },
-				{ "data": "var_sources_plaintext", "visible": false }
+			var categoryNames = [
+				"Ship, nation, owners",
+				"Voyage Dates",
+				"Voyage Itinerary",
+				"Slave (numbers)",
+				"Voyage Outcome",
+				"Sources",
 			];
+			var allColumns = [
+				{ data: "var_voyage_id", category: 0, header: "Voyage identification number" },
+				{ data: "var_ship_name", category: 0, header: "Vessel name" },
+				{ data: "var_captain_plaintext", category: 0, header: "Capitain's name" },
+				{ data: "var_" + YEAR_RANGE_VARNAME, category: 1, header: "Year arrived with slaves*" },
+				{ data: "var_imp_principal_place_of_slave_purchase_lang_en", category: 2, header: "Principal region of slave purchase*" },
+				{ data: "var_imp_principal_port_slave_dis_lang_en", category: 2, header: "Principal region of slave landing*" },
+				{ data: "var_imp_port_voyage_begin_lang_en", category: 2, header: "Place where voyage began*", "visible": false },
+				{ data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total slaves embarked*", "visible": false },
+				{ data: "var_outcome_ship_captured_lang_en", category: 4, header: "Outcome of voyage if ship captured*", "visible": false },
+				{ data: "var_sources_plaintext", category: 5, header: "Sources", "visible": false },
+			];
+			var categories = $.map(categoryNames, function(name) {
+				return { name: name, columns: [] };	
+			});
+			allColumns.forEach(function(c, index) {
+				categories[c.category].columns.push({
+					extend: 'columnToggle',
+					text: c.header,
+					columns: index,
+				});
+			});
+			var columnToggleMenu = {
+				extend: 'collection',
+				text: '<span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>',
+				titleAttr: 'Configure visible columns',
+				buttons: $.map(categories, function(category) {
+					return category.columns.length == 1 && category.columns[0].text === category.name
+						? category.columns[0]
+						: {
+								extend: 'collection',
+								text: category.name,
+								buttons: category.columns
+							};
+				})
+			};
 
 			// See if we have the last search on session storage.
 			var searchStateStr = sessionStorage.getItem('searchState');
@@ -846,60 +893,7 @@ div.dt-button-collection {
         ],
 				buttons: [
 					'pageLength',
-					{
-						extend: 'collection',
-						text: '<span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>',
-						titleAttr: 'Configure visible columns',
-						buttons: [
-							{
-								extend: 'collection',
-								text: 'Ship, nation, owners',
-								buttons: [
-									{
-										extend: 'columnToggle',
-										text: 'Voyage ID',
-										columns: 0,
-									},
-									{
-										extend: 'columnToggle',
-										text: 'Vessel name',
-										columns: 1,
-									},
-									{
-										extend: 'columnToggle',
-										text: 'Captain\'s name',
-										columns: 2,
-									},
-								]
-							},
-							{
-								extend: 'collection',
-								text: 'Voyage Itinerary',
-								buttons: [
-									{
-										extend: 'columnToggle',
-										text: 'Year arrived with slaves*',
-										columns: 3,
-									},
-									{
-										extend: 'columnToggle',
-										text: 'Principal region of slave purchase*',
-										columns: 4,
-									},
-									{
-										extend: 'columnToggle',
-										text: 'Principal region of slave landing*',
-										columns: 5,
-									},
-								]
-							},
-							{
-								extend: 'columnToggle',
-								text: 'Sources',
-								columns: 6,
-							},
-						]
-					},
+					columnToggleMenu,
 					{
 						extend: 'collection',
 						text: '<span class="glyphicon glyphicon-cloud-download"></span>',
@@ -923,6 +917,7 @@ div.dt-button-collection {
 						]
 					}
 				],
+				//pagingType: "input",
 				bFilter: false,
 				processing: true,
 				serverSide: true,
@@ -931,6 +926,145 @@ div.dt-button-collection {
 				stateDuration: -1,
 				colReorder: true,
     	});
+		});
+		var mapError = function() {
+			$map.removeClass('gray');
+			alert('Failed to load map data!');
+		}
+		var mapFlowSearchCallback = function() {
+			var $map = $('#map');
+			$map.addClass('gray');
+			$.ajax({
+				url: "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search",
+				type: 'POST',
+				data: JSON.stringify({ searchData: currentSearchObj, output: 'mapFlow' }),
+				success: function(data) {
+					eval(data);
+					voyagesMap.clear();
+					voyagesMap.setNetworkFlow(ports, flows);
+					$map.removeClass('gray');
+				},
+				error: mapError,
+			});
+		};
+		var mapAnimationSearchCallback = function() {
+			var $map = $('#map');
+			$map.addClass('gray');
+			$.ajax({
+				url: "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search",
+				type: 'POST',
+				data: JSON.stringify({ searchData: currentSearchObj, output: 'mapAnimation' }),
+				success: function(data) {
+					voyagesMap.clear();
+					$map.removeClass('gray');
+					animationHelper.startAnimation(data);
+				},
+				error: mapError,
+			});
+		};
+		var mapLoaded = false;
+		var animationScriptsLoaded = false;
+		var noOp = function () {};
+		var tabDeselectedCallback = noOp;
+		var allLoadedScripts = {};
+		function loadScript(url) {
+			var dfd = new $.Deferred();
+			var callback = function() {
+				dfd.resolve('script loaded');
+				allLoadedScripts[url] = true;
+			};
+			if (allLoadedScripts.hasOwnProperty(url)) {
+				callback();
+				return;
+			}
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = url;
+			script.onreadystatechange = callback;
+			script.onload = callback;
+			document.getElementsByTagName('head')[0].appendChild(script);
+			return dfd;
+		}
+		function loadCss(url) {
+			$('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
+		}
+		var loadMap = function(done) {
+			if (!mapLoaded) {
+				loadCss('{{ STATIC_URL }}maps/css/leaflet.css');
+				loadCss('{{ STATIC_URL }}maps/css/MarkerCluster.css');
+				loadCss('{{ STATIC_URL }}maps/css/MarkerCluster.Default.css');
+				loadScript('{{ STATIC_URL }}maps/js/leaflet.js')
+					.then(loadScript('{{ STATIC_URL }}maps/js/leaflet.markercluster.js'))
+					.then(loadScript('{{ STATIC_URL }}maps/js/leaflet.polylineDecorator.js'))
+					.then(function() {
+						$.when(
+								loadScript('{{ STATIC_URL }}maps/js/routeNodes.js'),
+								loadScript('{{ STATIC_URL }}maps/js/voyagesMap.js'),
+						)
+						.then(function() {
+							voyagesMap.
+									init('1750', '{{ STATIC_URL }}maps/', routeNodes, links).
+									setMaxPathWidth(20).
+									setPathOpacity(0.75);
+							$(window).on("resize", function() {
+									$("#map").height($('#left-tabs').height() - 70);
+									voyagesMap._map.invalidateSize();
+							}).trigger("resize");
+							voyagesMap._map.invalidateSize();
+							mapLoaded = true;
+							done();
+						});
+					});
+			} else {
+				done();
+			}
+		};
+		var loadAnimationScripts = function(done) {
+			if (!animationScriptsLoaded) {
+				loadCss('{{ STATIC_URL }}css/animation.css');
+				$.when(
+					loadScript('{{ STATIC_URL }}scripts/d3.min.js'),
+					loadScript('{{ STATIC_URL }}maps/js/arc.js'),
+					loadScript('{{ STATIC_URL }}maps/js/leaflet.geodesic.min.js')
+				)
+				.then(loadScript('{{ STATIC_URL }}scripts/voyage/beta/animation.js'))
+				.then(function() {
+					animationScriptsLoaded = true;
+					done();
+				});
+			} else {
+				done();
+			}
+		};
+		$('.nav-tabs a').on('shown.bs.tab', function(event) {
+    	var active = $(event.target).attr('href');
+		  searchCallback = noOp;
+			tabDeselectedCallback();
+			if (active == '#results') {
+				searchCallback = resultsTableSearchCallback;
+				searchCallback();
+				tabDeselectedCallback = noOp
+			} else if (active == '#maps') {
+				loadMap(function() {
+					$('#map').appendTo($(active));
+					voyagesMap._map.invalidateSize();
+					searchCallback = mapFlowSearchCallback;
+					searchCallback();
+					tabDeselectedCallback = noOp;
+				});
+			} else if (active == '#animation') {
+				loadMap(function() {
+					loadAnimationScripts(function() {
+						$('#map').appendTo($(active));
+						voyagesMap._map.invalidateSize();
+						searchCallback = mapAnimationSearchCallback;
+						searchCallback();
+						tabDeselectedCallback = function() {
+							animationHelper.stopAnimation();
+						};
+					});
+				});
+			}
 		});
 	</script>
 </body>

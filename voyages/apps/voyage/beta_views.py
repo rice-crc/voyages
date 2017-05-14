@@ -1,10 +1,14 @@
+from cache import VoyageCache, CachedGeo
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
+from voyages.apps.common.models import get_pks_from_haystack_results
 from voyages.apps.voyage.models import *
 import json
 
@@ -58,6 +62,102 @@ def perform_search(search, lang):
         result = result.order_by(*remaped_fields)
     return result
 
+def get_results_map_animation(results):
+    VoyageCache.load()
+    all_voyages = VoyageCache.voyages
+    from voyages.apps.voyage.maps import VoyageRoutesCache
+    all_routes = VoyageRoutesCache.load()
+
+    def animation_response():
+        keys = get_pks_from_haystack_results(results)
+        for pk in keys:
+            voyage = all_voyages.get(pk)
+            if voyage is None:
+                continue
+            route = all_routes.get(pk, ([],))[0]
+            source = CachedGeo.get_hierarchy(voyage.emb_pk)
+            destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+            if source is not None and destination is not None and source[0].show and \
+                    destination[0].show and voyage.year is not None and \
+                    voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
+                flag = VoyageCache.nations.get(voyage.ship_nat_pk)
+                if flag is None:
+                    flag = ''
+                yield {
+                    "voyage_id": str(voyage.voyage_id),
+                    "source_name": unicode(source[0].name),
+                    "source_lat": str(source[0].lat),
+                    "source_lng": str(source[0].lng),
+                    "destination_name": unicode(destination[0].name),
+                    "destination_lat": str(destination[0].lat),
+                    "destination_lng": str(destination[0].lng),
+                    "embarked": str(voyage.embarked),
+                    "disembarked": str(voyage.disembarked),
+                    "year": str(voyage.year),
+                    "ship_ton": str(voyage.ship_ton) if voyage.ship_ton is not None else '0',
+                    "ship_nationality_id": str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0',
+                    "ship_nationality_name": unicode(flag),
+                    "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
+                    "route": route
+                }
+    return animation_response()
+
+def get_results_map_flow(request, results):
+    map_ports = {}
+    map_flows = {}
+
+    def add_port(geo):
+        result = geo is not None and geo[0].show and geo[1].show and geo[2].show
+        if result and not geo[0].pk in map_ports:
+            map_ports[geo[0].pk] = geo
+        return result
+
+    def add_flow(source, destination, embarked, disembarked):
+        result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
+        if result:
+            flow_key = long(source[0].pk) * 2147483647 + long(destination[0].pk)
+            current = map_flows.get(flow_key)
+            if current is not None:
+                embarked += current[2]
+                disembarked += current[3]
+            map_flows[flow_key] = (source[0].name, destination[0].name, embarked, disembarked)
+        return result
+
+    # Ensure cache is loaded.
+    VoyageCache.load()
+    all_voyages = VoyageCache.voyages
+    missed_embarked = 0
+    missed_disembarked = 0
+    # Set up an unspecified source that will be used if the appropriate setting is enabled
+    geo_unspecified = CachedGeo(-1, -1, _('Africa, port unspecified'), 0.05, 9.34, True, None)
+    source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
+    keys = get_pks_from_haystack_results(results)
+    for pk in keys:
+        voyage = all_voyages.get(pk)
+        if voyage is None:
+            continue
+        source = CachedGeo.get_hierarchy(voyage.emb_pk)
+        if source is None and settings.MAP_MISSING_SOURCE_ENABLED:
+            source = source_unspecified
+        destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+        add_flow(
+            source,
+            destination,
+            voyage.embarked,
+            voyage.disembarked)
+    if missed_embarked > 0 or missed_disembarked > 0:
+        import logging
+        logging.getLogger('voyages').info('Missing flow: (' + str(missed_embarked) +
+                                            ', ' + str(missed_disembarked) + ')')
+    return render(
+        request,
+        "voyage/search_maps.datatemplate",
+        {
+            'map_ports': map_ports,
+            'map_flows': map_flows
+        },
+        content_type='text/javascript')
+
 def get_results_table(results, post):
     # Here we output a data set page.
     table_params = post['tableParams']
@@ -75,19 +175,19 @@ def get_results_table(results, post):
 
 @require_POST
 def ajax_search(request):
-    #try:
     data = json.loads(request.body)
     search = data['searchData']
     lang = request.LANGUAGE_CODE
     results = perform_search(search, lang)
     # The output now depends on which type of
     # result the caller expects.
-    response_data = {}
     if data['output'] == 'resultsTable':
-        response_data = get_results_table(results, data)
-    else:
-        return HttpResponseBadRequest('Unkown type of output.')
-    return JsonResponse(response_data)
+        return JsonResponse(get_results_table(results, data))
+    elif data['output'] == 'mapAnimation':
+        return JsonResponse(list(get_results_map_animation(results)), safe=False)
+    elif data['output'] == 'mapFlow':
+        return get_results_map_flow(request, results)
+    return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST
 def ajax_download(request):

@@ -1,0 +1,163 @@
+.animation_voyage_controls {
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    transform: translate(-50%, 0);
+}
+
+.animation_voyage_year_label {
+    font-family: "sl-Rockwell", sans-serif;
+    font-size: 3em;
+}
+
+.animation_voyage_year_slider {
+    margin: 5px;
+}
+
+.animation_voyage_pause_button, .animation_voyage_play_button {
+    align: center;
+}
+
+.animation_voyage_inner_circle {
+    fill: black;
+}
+
+.animation_voyage_outer_circle {
+    stroke: gray;
+    stroke-width: 2;
+    fill: transparent;
+}
+
+.animation_voyage_controls {
+    text-align: center;
+    z-index: 999999;
+}
+
+.animation_voyage_info {
+    position: absolute;
+    color: white;
+    font-size: medium;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 6px;
+    padding: 20px;
+    z-index: 9999999;
+}
+
+.animation_voyage_info h1 {
+    color: yellow;
+    padding-right: 72px;
+    font-size: 28px;
+}
+
+.animation_voyage_content {
+    background-repeat: no-repeat;
+    background-position: right top;
+    max-width: 300px;
+}
+
+.flag_1 {
+    background-image: url('/static/images/flags/Spain.png')
+}
+
+.flag_2 {
+    background-image: url('/static/images/flags/Uruguay.png')
+}
+
+.flag_3 {
+    background-image: url('/static/images/flags/Spain_Uruguay.png')
+}
+
+.flag_4 {
+    background-image: url('/static/images/flags/Portugal.png')
+}
+
+.flag_5 {
+    background-image: url('/static/images/flags/Brazil.png')
+}
+
+.flag_6 {
+    background-image: url('/static/images/flags/Portugal_Brazil.png')
+}
+
+.flag_7 {
+    background-image: url('/static/images/flags/United-Kingdom.png')
+}
+
+.flag_8 {
+    background-image: url('/static/images/flags/Netherlands.png')
+}
+
+.flag_9 {
+    background-image: url('/static/images/flags/United-States.png')
+}
+
+.flag_10 {
+    background-image: url('/static/images/flags/France.png')
+}
+
+.flag_11 {
+    background-image: url('/static/images/flags/Denmark.png')
+}
+
+/*
+.flag_12 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+
+.flag_13 {
+    background-image: url('/static/images/flags/Sweden.png')
+}
+
+/*
+.flag_14 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+
+.flag_15 {
+    background-image: url('/static/images/flags/Mexico.png')
+}
+
+/*
+.flag_16 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+
+.flag_17 {
+    background-image: url('/static/images/flags/Norway.png')
+}
+
+.flag_18 {
+    background-image: url('/static/images/flags/Denmark_Baltic.png')
+}
+
+.flag_19 {
+    background-image: url('/static/images/flags/Argentina.png')
+}
+
+.flag_20 {
+    background-image: url('/static/images/flags/Russia.png')
+}
+
+.animation_voyage_info h2 {
+    font-variant: small-caps;
+    font-size: 22px;
+}
+
+.animation_tooltip_moreinfo {
+    font-variant: small-caps;
+    font-size: small;
+}
+
+.animation_tooltip_close_button {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.animation_tooltip_close_button:hover {
+    color: red;
+}
