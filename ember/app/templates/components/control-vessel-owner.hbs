@@ -1,0 +1,16 @@
+<a href="#">Vessel owner {{#if count}}<span class="badge">{{count}}</span>{{/if}}</a>
+<div id="submenu-vessel-owner" class="menu-canvas">
+  <h3 class="menu-canvas-title">Vessel owner</h3>
+  <div class="menu-canvas-content">
+    <div class="menu-item-description">The owner's name of the vessels involved in the voyage. Please note that this name is case insensitive. </div>
+    {{#paper-form class="inline-form" onSubmit=(action "apply") as |form|}}
+      {{form.input type="text" label=label value=ownerName onChange=(action (mut ownerName))}}
+      <div class="element-container">
+        <button type="button" class="btn btn-primary" disabled= {{applyDisabled}} {{action 'apply' on="mouseUp"}}>Apply</button>
+        <button type="button" class="btn btn-primary" disabled= {{resetDisabled}} {{action 'removeSearch' on="mouseUp"}}>Reset</button>
+      </div>
+    {{/paper-form}}
+  </div>
+</div>
+
+{{yield}}
