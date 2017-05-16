@@ -979,9 +979,10 @@ div.dt-button-collection {
 			}
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
-			script.src = url;
+			script.async = false;
 			script.onreadystatechange = callback;
 			script.onload = callback;
+			script.src = url;
 			document.getElementsByTagName('head')[0].appendChild(script);
 			return dfd;
 		}
