@@ -1,0 +1,24 @@
+<a href="#">Voyage ID {{#if count}}<span class="badge">{{count}}</span>{{/if}}</a>
+<div id="submenu-vin" class="menu-canvas">
+  <h3 class="menu-canvas-title">Voyage ID</h3>
+  <div class="menu-canvas-content">
+    <div class="menu-item-description">Voyage ID is also known as VoyageIDs. They are used to represent and reference each unique voyage in the database.</div>
+    Voyage indentification number
+    <select onchange= {{action (mut option) value="target.value"}}>
+      {{#each options as |optionChoice|}}
+        <option value={{optionChoice}} selected={{eq option optionChoice}}>{{optionChoice}}</option>
+      {{/each}}
+    </select>
+    {{#paper-form class="inline-form" onSubmit=(action "applyVid") as |form|}}
+      {{form.input type="number" label=fromLabel value=fromVid onChange=(action (mut fromVid)) min=0}}
+      {{#if isBetween}} and {{form.input type="number" label=toLabel value=toVid onChange=(action (mut toVid)) min=0}}
+      {{/if}}
+      <div class="element-container">
+        <button type="button" class="btn btn-primary" disabled= {{applyDisabled}} {{action 'applyVid' on="mouseUp"}}>Apply</button>
+        <button type="button" class="btn btn-primary" disabled= {{resetDisabled}} {{action 'removeSearch' on="mouseUp"}}>Reset</button>
+      </div>
+    {{/paper-form}}
+  </div>
+</div>
+
+{{yield}}

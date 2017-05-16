@@ -1,0 +1,16 @@
+<div class="jumbo-container">
+  <div class="jumbotron jumbotron-database">
+    <div class="jumbotron-title">{{db-card-title}}</div>
+    <p class="jumbo-description">
+      {{yield}}
+    </p>
+    <hr class="my-4">
+    <!-- <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="#" role="button" disabled>guide</a>
+      {{#link-to "databases.voyages.search" class="btn btn-primary btn-lg" role="button"}}search database{{/link-to}}
+      <a class="btn btn-primary btn-lg" href="#" role="button" disabled>downloads</a>
+      <a class="btn btn-primary btn-lg" href="#" role="button" disabled>contribute</a>
+    </p>
+  </div>
+</div>
