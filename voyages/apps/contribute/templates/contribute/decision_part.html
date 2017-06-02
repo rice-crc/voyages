@@ -192,7 +192,6 @@
                 self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
-                    
                     url: '/contribute/editorial_review/{{ editor_contribution.pk }}/submit_editorial_decision',
                     data: $('form').serialize(),
                     success: function (response) {
