@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import ContentGroup, ContentPage
 
 
+
 class ContentGroupAdmin(admin.ModelAdmin):
     fields = ["name"]
 
@@ -12,10 +13,10 @@ class ContentPageAdmin(admin.ModelAdmin):
     readonly_fields = ["order", "group"]
     search_fields = ["group__name"]
 
-    # Lock adding new items
-    def has_add_permission(self, request):
-        return False
+    # # Lock adding new items
+    # def has_add_permission(self, request):
+    #     return False
 
-# Group remains closed in the admin
-# admin.site.register(ContentGroup, ContentGroupAdmin)
+
+admin.site.register(ContentGroup, ContentGroupAdmin)
 admin.site.register(ContentPage, ContentPageAdmin)
