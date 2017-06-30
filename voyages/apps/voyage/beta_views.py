@@ -4,7 +4,9 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from graphs import *
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
@@ -62,6 +64,28 @@ def perform_search(search, lang):
         result = result.order_by(*remaped_fields)
     return result
 
+# Construct a dict with all X-axes
+_all_x_axes = {a.var_name: a for a in (graphs_x_axes + other_graphs_x_axes)}
+_all_y_axes = {a.var_name: a for a in graphs_y_axes}
+def get_results_graph(results, post):
+    """
+    post['graphData']: contains a single X axis and one or more Y axes.
+    """
+    graphData = post.get('graphData')
+    if graphData is None:
+        return HttpResponseBadRequest('Missing graph data')
+    x_axis = graphData.get('xAxis', '')
+    y_axes = graphData.get('yAxes', [])
+    if not x_axis in _all_x_axes:
+        return HttpResponseBadRequest('X axis is invalid: ' + str(x_axis) + '. Available: ' + str(_all_x_axes.keys()))
+    if len(y_axes) == 0:
+        return HttpResponseBadRequest('No Y axis specified')
+    missing_y_axes = [y for y in y_axes if y not in _all_y_axes]
+    if len(missing_y_axes) > 0:
+        return HttpResponseBadRequest('Missing Y axes: ' + str(missing_y_axes) + '. Available: ' + str(_all_y_axes.keys()))
+    output = get_graph_data(results, _all_x_axes[x_axis], [_all_y_axes[y] for y in y_axes])
+    return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
+
 def get_results_map_animation(results):
     VoyageCache.load()
     all_voyages = VoyageCache.voyages
@@ -100,7 +124,7 @@ def get_results_map_animation(results):
                     "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
                     "route": route
                 }
-    return animation_response()
+    return JsonResponse(list(animation_response()), safe=False)
 
 def get_results_map_flow(request, results):
     map_ports = {}
@@ -171,9 +195,10 @@ def get_results_table(results, post):
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = int(table_params['draw'])
     reponse_data['data'] = [{k: v if v != '[]' else '' for k, v in x.get_stored_fields().items()} for x in page]
-    return reponse_data
+    return JsonResponse(reponse_data)
 
 @require_POST
+@csrf_exempt
 def ajax_search(request):
     data = json.loads(request.body)
     search = data['searchData']
@@ -181,12 +206,15 @@ def ajax_search(request):
     results = perform_search(search, lang)
     # The output now depends on which type of
     # result the caller expects.
-    if data['output'] == 'resultsTable':
-        return JsonResponse(get_results_table(results, data))
-    elif data['output'] == 'mapAnimation':
-        return JsonResponse(list(get_results_map_animation(results)), safe=False)
-    elif data['output'] == 'mapFlow':
+    output_type = data.get('output')
+    if output_type == 'resultsTable':
+        return get_results_table(results, data)
+    elif output_type == 'mapAnimation':
+        return get_results_map_animation(results)
+    elif output_type == 'mapFlow':
         return get_results_map_flow(request, results)
+    elif output_type == 'graph':
+        return get_results_graph(results, data)
     return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST
