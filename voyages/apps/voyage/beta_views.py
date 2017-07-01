@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from graphs import *
+from globals import voyage_timeline_variables
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
@@ -64,12 +65,25 @@ def perform_search(search, lang):
         result = result.order_by(*remaped_fields)
     return result
 
-# Construct a dict with all X-axes
+# Construct a dict with Timeline variables.
+_all_timeline_vars = {t[3]: {'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
+def get_results_timeline(results, post):
+    """
+    post['timelineVariable']: the timeline variable that will be the source of the data.
+    """
+    timeline_var_name = post.get('timelineVariable')
+    timeline_var = _all_timeline_vars.get(timeline_var_name)
+    if not timeline_var:
+        return HttpResponseBadRequest('Timeline variable is invalid ' + str(timeline_var_name) + '. Available: ' + str(_all_timeline_vars.keys()))
+    timeline_data = timeline_var['time_line_func'](results, timeline_var_name)
+    return JsonResponse({'var_name': timeline_var_name, 'data': [{'year': t[0], 'value': t[1]} for t in timeline_data]})
+
+# Construct a dict with all X/Y-axes
 _all_x_axes = {a.var_name: a for a in (graphs_x_axes + other_graphs_x_axes)}
 _all_y_axes = {a.var_name: a for a in graphs_y_axes}
 def get_results_graph(results, post):
     """
-    post['graphData']: contains a single X axis and one or more Y axes.
+    post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).
     """
     graphData = post.get('graphData')
     if graphData is None:
@@ -215,6 +229,8 @@ def ajax_search(request):
         return get_results_map_flow(request, results)
     elif output_type == 'graph':
         return get_results_graph(results, data)
+    elif output_type == 'timeline':
+        return get_results_timeline(results, data)
     return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST
