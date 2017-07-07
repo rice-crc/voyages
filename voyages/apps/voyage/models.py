@@ -610,7 +610,7 @@ class VoyageDates(models.Model):
             ("Voyage length from home port to disembarkation (days) (VOY1IMP)",
              null=True, blank=True)
     imp_length_leaving_africa_to_disembark = models.IntegerField\
-            ("Voyage length from leaving Africa to disembarkation (days) (VOY2IMP)",
+            ("Voyage length from last slave embarkation to first disembarkation (days) (VOY2IMP)",
              null=True, blank=True)
 
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
@@ -1258,11 +1258,13 @@ class VoyageSourcesConnection(models.Model):
     text_ref = models.CharField(_('Text reference(citation)'),
                                 max_length=255, null=True, blank=True)
 
-# Voyage (main) model
-# for parsing natural key
 class VoyageManager(models.Manager):
-    def get_by_natural_key(self, voyage_id):
-        return self.get(voyage_id=voyage_id)
+    def get_queryset(self):
+        return super(VoyageManager, self).get_queryset().filter(is_intra_american=False)
+
+class IntraAmericanVoyageManager(models.Manager):
+    def get_queryset(self):
+        return super(IntraAmericanVoyageManager, self).get_queryset().filter(is_intra_american=True)
 
 class Voyage(models.Model):
     """
@@ -1274,8 +1276,9 @@ class Voyage(models.Model):
     """
     # for parsing natural key
     objects = VoyageManager()
+    intra_american_objects = IntraAmericanVoyageManager()
+    both_objects = models.Manager()
 
-    #voyage_id = models.AutoField(primary_key=True)
     voyage_id = models.IntegerField("Voyage ID", unique=True)
 
     voyage_in_cd_rom = models.BooleanField("Voyage in 1999 CD-ROM?",
@@ -1314,6 +1317,7 @@ class Voyage(models.Model):
              related_name='voyage_sources', blank=True)
 
     last_update = models.DateTimeField(auto_now=True)
+    is_intra_american = models.BooleanField("IntraAmerican Voyage", default=False, null=False)
 
     # generate natural key
     def natural_key(self):

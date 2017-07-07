@@ -48,6 +48,7 @@ def perform_search(search, lang):
         if is_list and not operator.list_type:
             term = term[0]
         search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
+    search_terms[u'var_intra_american_voyage__exact'] = json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false'))
     result = SearchQuerySet().models(Voyage).filter(**search_terms)
     order_fields = search.get('orderBy')
     if order_fields:
