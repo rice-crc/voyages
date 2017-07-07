@@ -104,7 +104,7 @@ class VoyageCache:
             cls.rigs = {r.pk: r for r in RigOfVessel.objects.all()}
             cls.ton_types = {tt.pk: tt for tt in TonType.objects.all()}
             cls.voyages = {x[0]: CachedVoyage(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9])
-                           for x in Voyage.objects.values_list('pk',
+                           for x in Voyage.both_objects.values_list('pk',
                                                                'voyage_id',
                                                                'voyage_itinerary__imp_principal_place_of_slave_purchase_id',
                                                                'voyage_itinerary__imp_principal_port_slave_dis_id',

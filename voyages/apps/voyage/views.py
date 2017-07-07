@@ -47,6 +47,9 @@ reset_fields = ['voyages_tables_columns', 'voyages_tables_rows',
                'tab_graphs_lin_defs_x_ind', 'tab_graphs_lin_defs_y_ind',
                'tab_graphs_pie_defs_x_ind', 'tab_graphs_pie_defs_y_ind',]
 
+def get_voyages_search_query_set():
+    return SearchQuerySet().models(Voyage).filter(var_intra_american_voyage=False)
+
 def get_page(request, chapternum, sectionnum, pagenum):
     """
     Voyage Understanding the Database part
@@ -556,7 +559,7 @@ def voyage_map(request, voyage_id):
     """
     Displays the map for a voyage
     """
-    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
+    voyage = first_match(get_voyages_search_query_set().filter(var_voyage_id=int(voyage_id)))
     if voyage:
         year_completed = int(voyage.var_imp_voyage_began) if voyage.var_imp_voyage_began else 0
         map_year = get_map_year(year_completed, year_completed)
@@ -572,7 +575,7 @@ def voyage_images(request, voyage_id):
     """
     Displays the images for a voyage
     """
-    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=int(voyage_id)))
+    voyage = first_match(get_voyages_search_query_set().filter(var_voyage_id=int(voyage_id)))
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'images',
                    'voyage_id': voyage_id,
@@ -580,7 +583,7 @@ def voyage_images(request, voyage_id):
 
 def voyage_variables_data(voyage_id, show_imputed=True):
     voyagenum = int(voyage_id)
-    voyage = first_match(SearchQuerySet().models(Voyage).filter(var_voyage_id=voyagenum))
+    voyage = first_match(get_voyages_search_query_set().filter(var_voyage_id=voyagenum))
     if voyage is None:
         return None, []
     # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
@@ -752,7 +755,7 @@ def search(request):
         form_list = create_query_forms()
         time_frame_form = TimeFrameSpanSearchForm(initial={'frame_from_year': voyage_span_first_year,
                                                            'frame_to_year': voyage_span_last_year})
-        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        results = get_voyages_search_query_set().order_by('var_voyage_id')
         if request.POST.get('submitVal') == 'reset':
             request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
     elif request.method == "POST":
@@ -1619,7 +1622,7 @@ def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sor
         order_by_field += '_lang_' + lang + '_exact'
     if sort_direction == 'desc':
         order_by_field = '-' + order_by_field
-    results = SearchQuerySet().models(Voyage).filter(**query_dict).order_by(order_by_field)
+    results = get_voyages_search_query_set().filter(**query_dict).order_by(order_by_field)
     # Date filters
     return date_filter_query(date_filters, results)
 
@@ -1696,7 +1699,7 @@ def variable_list():
             else:
                 query[var_name + "__gte"] = ""
 
-            elem['num_voyages'] = SearchQuerySet().models(Voyage).filter(**query).count()
+            elem['num_voyages'] = get_voyages_search_query_set().filter(**query).count()
             tmpGroup.append(elem)
 
         var_list_stats.append({"var_category": key, "variables": tmpGroup})
@@ -2017,7 +2020,7 @@ def csv_stats_download(request):
             no_result = True
             results = []
     else:
-        results = SearchQuerySet().models(Voyage).order_by('var_voyage_id')
+        results = get_voyages_search_query_set().order_by('var_voyage_id')
 
     # Write headers
     tmpRow = []

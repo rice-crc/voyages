@@ -398,6 +398,7 @@ div.dt-button-collection {
                 <th>Total slaves embarked*</th>
                 <th>Outcome of voyage if ship captured*</th>
                 <th>Sources</th>
+                <th>I-Am</th>
             </tr>
         </thead>
         </tfoot>
@@ -528,6 +529,7 @@ div.dt-button-collection {
 		};
 		var searchTerms = [
 			RangeSearchTerm(new VariableInfo('voyage_id', 'ship_nation_owners', 'Voyage ID'), '', null, 'Voyage id help text'),
+			TextSearchTerm(new VariableInfo('intra_american_voyage', 'ship_nation_owners', 'Is I-Am voyage?'), 'equals', null, 'Type true or false.', minLengthValidator(4)),
 			TextSearchTerm(new VariableInfo('ship_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
 			TextSearchTerm(new VariableInfo('owner', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
 			PlaceSearchTerm(new VariableInfo('imp_port_voyage_begin_idnum', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
@@ -828,6 +830,7 @@ div.dt-button-collection {
 				{ data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total slaves embarked*", "visible": false },
 				{ data: "var_outcome_ship_captured_lang_en", category: 4, header: "Outcome of voyage if ship captured*", "visible": false },
 				{ data: "var_sources_plaintext", category: 5, header: "Sources", "visible": false },
+				{ data: "var_intra_american_voyage", category: 0, header: "Intra American Voyage", "visible": false },				
 			];
 			var categories = $.map(categoryNames, function(name) {
 				return { name: name, columns: [] };	

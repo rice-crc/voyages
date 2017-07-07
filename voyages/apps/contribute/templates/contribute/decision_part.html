@@ -187,7 +187,7 @@
                     return false;
                 }
                 var self = $(this);
-                var valid = !validation || validation();
+                var valid = decision != 3 || !validation || validation();
                 if (!valid) return false;
                 self.prop('disabled', true);
                 $.ajax({

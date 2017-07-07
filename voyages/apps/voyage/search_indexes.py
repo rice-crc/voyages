@@ -353,6 +353,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_short_ref = indexes.MultiValueField()
     var_long_ref = indexes.CharField(null=True)
 
+    # Intra-American vs Trans-Atlantic.
+    var_intra_american_voyage = indexes.BooleanField(null=False, indexed=True, model_attr='is_intra_american')
+
     def get_model(self):
         return Voyage
         
@@ -361,7 +364,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
-        return self.get_model().objects.all()
+        return Voyage.both_objects.all()
 
     def prepare_var_imp_voyage_began(self, obj):
         try:

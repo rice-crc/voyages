@@ -660,6 +660,8 @@
     <field name="var_first_landing_region" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_third_place_slave_purchase_lang_pt_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    
+    <field name="var_intra_american_voyage" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="short_ref" type="text_en" indexed="true" stored="true" multiValued="false" />
 

@@ -144,7 +144,7 @@ class Command(BaseCommand):
             if (val is None or empty.match(val)) and not allow_null:
                 self.errors += 1
                 return None
-            return int(val) if not empty.match(val) else None
+            return int(float(val)) if not empty.match(val) else None
 
         def cfloat(val, allow_null=True):
             if (val is None or empty.match(val)) and not allow_null:
@@ -197,6 +197,7 @@ class Command(BaseCommand):
                 in_cd_room = row[u'evgreen']
                 voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
                 voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
+                voyage.is_intra_american = cint(row[u'IntraAmer'], False) == 1
                 # Ship
                 ship_model = VoyageShip()
                 ship_model.ship_name = row[u'shipname']
@@ -524,13 +525,15 @@ class Command(BaseCommand):
 
         print 'Inserting new records...'
 
-        def bulk_insert(model, lst, attr_key=None):
+        def bulk_insert(model, lst, attr_key=None, manager=None):
             print 'Bulk inserting ' + str(model)
-            model.objects.bulk_create(lst)
+            if manager is None:
+                manager = model.objects
+            manager.bulk_create(lst)
             return None if attr_key is None else \
-                {getattr(x, attr_key): x for x in model.objects.all()}
+                {getattr(x, attr_key): x for x in manager.all()}
 
-        voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id')
+        voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id', Voyage.both_objects)
         captains = bulk_insert(VoyageCaptain, captains.values(), 'name')
         ship_owners = bulk_insert(VoyageShipOwner, ship_owners.values(), 'name')
 
