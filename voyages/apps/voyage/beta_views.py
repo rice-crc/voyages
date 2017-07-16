@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from graphs import *
-from globals import voyage_timeline_variables
+from globals import voyage_timeline_variables, table_columns, table_rows, table_functions
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
@@ -65,6 +65,9 @@ def perform_search(search, lang):
             remaped_fields.append(order_by_field)
         result = result.order_by(*remaped_fields)
     return result
+
+def get_results_pivot_table(results, post):
+    pass
 
 # Construct a dict with Timeline variables.
 _all_timeline_vars = {t[3]: {'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
