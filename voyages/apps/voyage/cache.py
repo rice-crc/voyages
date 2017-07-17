@@ -51,9 +51,13 @@ class VoyageCache:
     """
     voyages = {}
     ports = {}
+    ports_by_value = {}
     regions = {}
+    regions_by_value = {}
     broad_regions = {}
+    broad_regions_by_value = {}
     nations = {}
+    nations_by_value = {}
     particular_outcomes = {}
     slave_outcomes = {}
     owner_outcomes = {}
@@ -79,6 +83,7 @@ class VoyageCache:
                                                             'longitude',
                                                             'show_on_main_map',
                                                             'region_id').iterator()}
+            cls.ports_by_value = {x.value: x for x in cls.ports.values()}
             cls.regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], x[6])
                            for x in Region.objects.values_list('pk',
                                                                'value',
@@ -87,6 +92,7 @@ class VoyageCache:
                                                                'longitude',
                                                                'show_on_main_map',
                                                                'broad_region_id').iterator()}
+            cls.regions_by_value = {x.value: x for x in cls.regions.values()}
             cls.broad_regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], None)
                                  for x in BroadRegion.objects.values_list('pk',
                                                                           'value',
@@ -94,8 +100,10 @@ class VoyageCache:
                                                                           'latitude',
                                                                           'longitude',
                                                                           'show_on_map').iterator()}
-            cls.nations = {x[0]: x[1]
-                           for x in Nationality.objects.values_list('pk', 'label').iterator()}
+            cls.broad_regions_by_value = {x.value: x for x in cls.broad_regions.values()}
+            nations = list(Nationality.objects.values_list('pk', 'label', 'value'))
+            cls.nations = {x[0]: x[1] for x in nations}
+            cls.nations_by_value = {x[2]: x[1] for x in nations}
             cls.particular_outcomes = {o.pk: o for o in ParticularOutcome.objects.all()}
             cls.slave_outcomes = {o.pk: o for o in SlavesOutcome.objects.all()}
             cls.owner_outcomes = {o.pk: o for o in OwnerOutcome.objects.all()}

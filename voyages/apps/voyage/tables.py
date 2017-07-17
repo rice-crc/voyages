@@ -19,8 +19,20 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
     search_kwargs = q.build_params(None)
     search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
     search_kwargs['q'] = final_query
-    search_kwargs['json.facet'] = "{categories: {terms: {field: '" + row_field + \
-        "', facet: {subcat: {terms: {field: '" + col_field + "', facet: " + json.dumps(cell_formula_dict) + "}}}}}}"
+    search_kwargs['json.facet'] = json.dumps({
+        'categories': {
+            'terms': {
+                'field': row_field,
+                'facet': {
+                    'subcat': {
+                        'terms': {
+                            'field': col_field,
+                            'facet': cell_formula_dict}
+                        }
+                    }
+                }
+            }
+        })
     response = json.loads(q.backend.conn._select(search_kwargs))
     buckets = response['facets']['categories']['buckets']
     if len(cell_formula_dict) == 1:
@@ -33,11 +45,14 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
 
 class PivotTable():
     def __init__(self, row_data, col_map=lambda x: x, row_map=lambda x: x, sparse=True):
-        self.row_data = row_data
-        original_columns = set([header for r in row_data for header in r[1].keys()])
-        self.columns = [col_map(c) for c in original_columns]
-        self.rows = [row_map(r[0]) for r in row_data]
+        self.row_data = sorted(row_data, key=lambda r: r[0])
+        self.original_columns = sorted(set([header for r in self.row_data for header in r[1].keys()]))
+        self.columns = [col_map(c) for c in self.original_columns]
+        self.rows = [row_map(r[0]) for r in self.row_data]
         if sparse:
-            self.cells = [[(i, r[1][col]) for i, col in enumerate(original_columns) if col in r[1]] for r in row_data]
+            self.cells = [[(i, r[1][col]) for i, col in enumerate(self.original_columns) if col in r[1]] for r in self.row_data]
         else:
-            self.cells = [[r[1].get(col) for col in original_columns] for r in row_data]
+            self.cells = [[r[1].get(col) for col in self.original_columns] for r in self.row_data]
+
+    def to_dict(self):
+        return {'columns': self.columns, 'rows': self.rows, 'cells': self.cells}

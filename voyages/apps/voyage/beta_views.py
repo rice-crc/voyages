@@ -13,6 +13,7 @@ from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
 from voyages.apps.voyage.models import *
+from voyages.apps.voyage.tables import *
 import json
 
 class SearchOperator():
@@ -67,7 +68,28 @@ def perform_search(search, lang):
     return result
 
 def get_results_pivot_table(results, post):
-    pass
+    row_field = post.get('row_field')
+    col_field = post.get('col_field')
+    pivot_functions = post.get('pivot_functions')
+    if row_field is None or col_field is None or pivot_functions is None:
+        return HttpResponseBadRequest('Post data must contain row_field, col_field, and pivot_functions')
+    row_data = get_pivot_table_advanced(results, row_field, col_field, pivot_functions)
+    VoyageCache.load()
+
+    def get_header_map(header):
+        if '_idnum' in header:
+            if 'place' in header or 'port' in header:
+                return lambda x: _(VoyageCache.ports_by_value[x].name)
+            if 'broad_region' in header:
+                return lambda x: _(VoyageCache.broad_regions_by_value[x].name)
+            if 'region' in header:
+                return lambda x: _(VoyageCache.regions_by_value[x].name)
+            if 'nation' in header:
+                return lambda x: _(VoyageCache.nations_by_value[x])
+        return lambda x: x
+
+    pivot_table = PivotTable(row_data, col_map=get_header_map(col_field), row_map=get_header_map(row_field))
+    return JsonResponse(pivot_table.to_dict())
 
 # Construct a dict with Timeline variables.
 _all_timeline_vars = {t[3]: {'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
@@ -235,6 +257,8 @@ def ajax_search(request):
         return get_results_graph(results, data)
     elif output_type == 'timeline':
         return get_results_timeline(results, data)
+    elif output_type == 'pivotTable':
+        return get_results_pivot_table(results, data)
     return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST
