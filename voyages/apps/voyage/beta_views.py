@@ -14,6 +14,7 @@ from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
 from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
+import itertools
 import json
 
 class SearchOperator():
@@ -76,20 +77,43 @@ def get_results_pivot_table(results, post):
     row_data = get_pivot_table_advanced(results, row_field, col_field, pivot_functions)
     VoyageCache.load()
 
+    def grouping(seq):
+        return [(_(g[0]), sum([1 for __ in g[1]])) for g in itertools.groupby(seq)]
+
+    def region_extra_header_map(port_ids):
+        regions = [VoyageCache.regions[VoyageCache.ports_by_value[x].parent].name for x in port_ids]
+        return grouping(regions)
+
+    def broad_region_from_port_extra_header_map(port_ids):
+        broad_regions = [VoyageCache.broad_regions[VoyageCache.regions[VoyageCache.ports_by_value[x].parent].parent].name for x in port_ids]
+        return grouping(broad_regions)
+
+    def broad_region_extra_header_map(region_ids):
+        broad_regions = [VoyageCache.broad_regions[VoyageCache.regions_by_value[x].parent].name for x in region_ids]
+        return grouping(broad_regions)
+
     def get_header_map(header):
         if '_idnum' in header:
             if 'place' in header or 'port' in header:
-                return lambda x: _(VoyageCache.ports_by_value[x].name)
+                return lambda x: _(VoyageCache.ports_by_value[x].name), [broad_region_from_port_extra_header_map, region_extra_header_map]
             if 'broad_region' in header:
-                return lambda x: _(VoyageCache.broad_regions_by_value[x].name)
+                return lambda x: _(VoyageCache.broad_regions_by_value[x].name), None
             if 'region' in header:
-                return lambda x: _(VoyageCache.regions_by_value[x].name)
+                return lambda x: _(VoyageCache.regions_by_value[x].name), [broad_region_extra_header_map]
             if 'nation' in header:
-                return lambda x: _(VoyageCache.nations_by_value[x])
-        return lambda x: x
+                return lambda x: _(VoyageCache.nations_by_value[x]), None
+        return lambda x: x, None
 
-    pivot_table = PivotTable(row_data, col_map=get_header_map(col_field), row_map=get_header_map(row_field))
-    return JsonResponse(pivot_table.to_dict())
+    col_map, col_extra_headers = get_header_map(col_field) 
+    row_map, row_extra_headers = get_header_map(row_field) 
+    pivot_table = PivotTable(row_data, col_map, row_map)
+    pivot_dict = pivot_table.to_dict()
+    # Add extra column or row headers.
+    if col_extra_headers:
+        pivot_dict['col_extra_headers'] = [f(pivot_table.original_columns) for f in col_extra_headers]
+    if row_extra_headers:
+        pivot_dict['row_extra_headers'] = [f(pivot_table.original_rows) for f in row_extra_headers]
+    return JsonResponse(pivot_dict)
 
 # Construct a dict with Timeline variables.
 _all_timeline_vars = {t[3]: {'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
