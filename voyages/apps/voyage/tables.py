@@ -23,9 +23,11 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
         'categories': {
             'terms': {
                 'field': row_field,
+                'limit': 10000,
                 'facet': {
                     'subcat': {
                         'terms': {
+                            'limit': 10000,
                             'field': col_field,
                             'facet': cell_formula_dict}
                         }
@@ -48,7 +50,8 @@ class PivotTable():
         self.row_data = sorted(row_data, key=lambda r: r[0])
         self.original_columns = sorted(set([header for r in self.row_data for header in r[1].keys()]))
         self.columns = [col_map(c) for c in self.original_columns]
-        self.rows = [row_map(r[0]) for r in self.row_data]
+        self.original_rows = [r[0] for r in self.row_data]
+        self.rows = [row_map(row_header) for row_header in self.original_rows]
         if sparse:
             self.cells = [[(i, r[1][col]) for i, col in enumerate(self.original_columns) if col in r[1]] for r in self.row_data]
         else:
