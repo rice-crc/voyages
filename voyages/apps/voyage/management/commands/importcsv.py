@@ -598,4 +598,4 @@ class Command(BaseCommand):
         cursor.execute(get_raw_sql(VoyageCrew, 'voyage_crew_id'))
         cursor.execute(get_raw_sql(VoyageSlavesNumbers, 'voyage_slaves_numbers_id'))
 
-        print 'Completed - go have fun!'
+        print "Completed! Don't forget to rebuild_index on Solr."
