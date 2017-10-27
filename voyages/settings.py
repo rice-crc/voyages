@@ -110,7 +110,7 @@ LOCALE_PATHS = (
 
 INSTALLED_APPS = (
     'autocomplete_light',
-
+    'sass_processor',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -204,7 +204,7 @@ except ImportError:
 
 
 # Modify HAYSTACK config for fixture loading durring tests
-# It is not possible to use override_settings decorator 
+# It is not possible to use override_settings decorator
 # because HAYSTACK triggers an update on save() when fixtures are loaded
 # turns out fixtures are loaded before decorators are applied.
 
