@@ -1,7 +1,7 @@
 body {
-	background-color: #E6F2F1;
+	background-color: #ffffff;
 	margin: 0;
-	font-family: Arial, Helvetica, Bitstream Vera Sans, Sans, sans-serif;
+	font-family: "Proxima Nova", Helvetica, Bitstream Vera Sans, Sans, sans-serif;
 	font-size: 8pt;
 }
 
@@ -149,7 +149,7 @@ div.secondary-bar ul, div.secondary-bar ul li, div.secondary-bar {
 	clear: both;
 	font-size: 8pt;
 	border-top-style: dotted;
-    border-top-width: 1px; 
+    border-top-width: 1px;
 	padding: 5px 5px 5px 5px;
 }
 
@@ -176,7 +176,7 @@ div.left-menu-subtitle {
 #main-content-container {
 	width: 950px;
 	margin: 0;
-	padding:0;	
+	padding:0;
 }
 
 html, body {
