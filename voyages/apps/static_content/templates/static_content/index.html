@@ -1,205 +1,333 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load voyage_extras %}
+{% extends "base.html" %} {% load i18n %} {% load sass_tags %} {% load voyage_extras %}
 
 <!-- Page title here -->
 {% block title %}{% trans "Trans-Atlantic Slave Trade" %}{% endblock %}
-
 {% block csslist %}
 	{% comment %} Additional styles for the home page {% endcomment %}
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index.css" />
+	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-{% block jslist %}
+<!-- {% block jslist %}
 	{% comment %} Javascript files for hovering above maps {% endcomment %}
 	<script src="{{ STATIC_URL }}scripts/utils.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/welcome-map.js" type="text/javascript"></script>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
-<!-- Welcome map -->
-<table border="0" cellspacing="0" cellpadding="0" class="welcome-band">
-	<tr>
-		<td valign="top">
-		<div id="welcome-map">
-			<img style="position: absolute; top: 0px; left: 0px;"
-			id="welcome-image" src="{{ STATIC_URL}}images/index/map.png"
-			width="430" height="340" border="0" />
 
-			<img style="position: absolute; top: 50px; left: 50px;"
-			id="map_north_america_label" src="{{ STATIC_URL}}images/index/map-north-america.png"
-			width="120" height="80" border="0"  />
+<div id="bgvid-container">
 
-			<img style="position: absolute; top: 200px; left: 100px;"
-			id="map_brazil_label" src="{{ STATIC_URL}}images/index/map-brazil.png"
-			width="100" height="60" border="0"  />
+	<div class=" cover-band">
+		<div class="cover-flex-container">
 
-			<img style="position: absolute; top: 125px; left: 95px;"
-			id="map_caribbean_label" src="{{ STATIC_URL}}images/index/map-caribbean.png"
-			width="120" height="60" border="0"  />
-
-			<img style="position: absolute; top: 50px; left: 260px;"
-			id="map_europe_label" src="{{ STATIC_URL}}images/index/map-europe.png"
-			width="100" height="60" border="0"  />
-
-			<img style="position: absolute; top: 130px; left: 270px;"
-			id="map_africa_label" src="{{ STATIC_URL}}images/index/map-africa.png"
-			width="100" height="60" border="0"  />
-		</div>
-		<div id="welcome-map-region-placeholder">
-			<div id="map-hint">
-				{% blocktrans %}Roll over names of designated regions on the map
-				above for descriptions of the role of each in
-				the trans-Atlantic slave trade.{% endblocktrans %}
+			<div class="align-self-start cover-start col-md-10 col-lg-12 col-xl-8 col-sm-12 col-xs-12 no-padding">
+				<h1 class="uppercase cover-color weight-700 db-title site-headline ">EXPLORE THE MOVEMENT OF THE ENSLAVED AROUND THE ATLANTIC WORLD</h1>
+				<p class="cover-color site-story">{% blocktrans %} Over 12.5 million Africans were forcibly embarked for the Americas between the sixteenth and nineteenth centuries – the largest coerced movement of people in global history. Many thousands of the survivors experienced grueling additional
+					journeys within the Americas. Drawing on extensive archival records, the three databases below provide details of 36,000 Trans-Atlantic and 10,000 Intra-American slave voyages, the names and personal details 92,000 captives in the slave. {% endblocktrans %} trade.
+				</p>
 			</div>
 
-			<div class="welcome-map-region-text" id="map_north_america_text" style="display: none">
-				<div class="welcome-map-region-name">
-					{% trans "North America" %}
-				</div>
-				<div class="welcome-map-region-desc">
-					{% blocktrans %}The North American mainland played a relatively minor role in the trans-Atlantic
-					slave trade. Its ports sent out less than five percent of all known voyages, and its
-					slave markets absorbed less than four percent of all slaves carried off from Africa.
-					An intra-American trade in slaves – originating in the Caribbean - supplied additional
-					slaves, however. This region was exceptional in the Americas in that a positive rate
-					of natural population growth began relatively early, thus reducing the dependence
-					of the region on coerced migrants.{% endblocktrans %}
-				</div>
-			</div>
 
-			<div class="welcome-map-region-text" id="map_caribbean_text" style="display: none">
-				<div class="welcome-map-region-name">
-					{% trans "Caribbean" %}
-				</div>
-				<div class="welcome-map-region-desc">
-					{% blocktrans %}The Caribbean was one of the two major broad regional markets for slaves from
-					Africa. Over the two centuries when the trade was at its height, the major
-					locations for sugar production, and therefore the major slave markets, shifted
-					from the eastern Caribbean to the west. Here, first Jamaica, then St. Domingue,
-					and finally in the nineteenth century, Cuba, absorbed most of the slaves brought into
-					the region. As this implies, few islands developed self-sustaining populations
-					at any point in the slave trade era. Caribbean ports also sent out more slaving
-					expeditions to Africa than did the North American mainland ports.{% endblocktrans %}
-				</div>
-			</div>
-
-			<div class="welcome-map-region-text" id="map_brazil_text" style="display: none">
-				<div class="welcome-map-region-name">
-					{% trans "Brazil" %}
-				</div>
-				<div class="welcome-map-region-desc">
-					{% blocktrans %}Brazil was the center of the slave trade carried on under the Portuguese
-					flag, both before and after Brazilian independence in 1822, and Portugal was by
-					far the largest of the national carriers. Brazil dominated the slave trade in the
-					sense that Rio de Janeiro and Bahia sent out more slaving voyages than any port in
-					Europe, and certainly many times more than did Lisbon. Over nearly three centuries
-					between 1560 and 1850, Brazil was consistently the largest destination for slaves
-					in the Americas. Almost all the slaves coming into the region came from just two
-					coastal areas in Africa: the Bight of Benin and West-central Africa.{% endblocktrans %}
-				</div>
-			</div>
-
-			<div class="welcome-map-region-text" id="map_europe_text" style="display: none">
-				<div class="welcome-map-region-name">
-					{% trans "Europe" %}
-				</div>
-				<div class="welcome-map-region-desc">
-					{% blocktrans %}Europe was the starting point for about half of all trans-Atlantic slaving voyages.
-					This traffic dominated the West African to Caribbean section of the slave trade.
-					The major ports were at first located in the Iberian peninsula, but by the eighteenth
-					century northern European ports had become dominant. After 1807, France and the
-					Iberian ports sent out the great majority of European-based slaving voyages.
-					The European consumers’ demand for sugar was the driving force behind 350 years
-					of trans-Atlantic slave trading.{% endblocktrans %}
-				</div>
-			</div>
-
-			<div class="welcome-map-region-text" id="map_africa_text" style="display: none">
-				<div class="welcome-map-region-name">
-					{% trans "Africa" %}
-				</div>
-				<div class="welcome-map-region-desc">
-					{% blocktrans %}Sub-Saharan Africa lost over twelve and a half million people to the
-					trans-Atlantic slave trade alone between 1525 and 1867. Perhaps as many
-					again were carried off to slave markets across the Sahara and the Indian Ocean.
-					Over forty percent of captives left from West-central Africa alone with most of
-					the remainder leaving from the Bight of Benin, the Bight of Biafra, and the Gold
-					Coast. About one in eight died on board the slave vessel and many others died
-					prior to departure and after arrival. Departures were channeled through a dozen
-					or so major embarkation points such as Whydah, Bonny, Loango, Luanda, and Benguela,
-					though many smaller ports also supplied slaves.{% endblocktrans %}
-				</div>
-			</div>
-
-		</div></td>
-		
-		<!-- The welcome text next to the map -->
-		<td valign="top">
-		<div id="welcome-text">
-			<h1>{{ objs.0.title|trans_log }}
-			</h1>
-			<p>
-				{{ objs.0.description|trans_log }}</p>
-		</div>
-	
-		<!-- Featured section -->
-		<table border="0" cellspacing="0" cellpadding="0" id="featured-sections">
-			<tr>
-				<td class="featured-section-image"><a href="{% url 'voyage:search' %}"> <img src="{{ STATIC_URL}}images/index/link-voyage.png" width="124" height="64" border="0" /> </a></td>
-				<td class="featured-section-text">
-				<div class="featured-section-caption">
-					<a href="{% url 'voyage:search' %}">{{ objs.1.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
-				</div>
-				<div class="featured-section-description">
-					{{ objs.1.description|trans_log }}
-				</div></td>
-			</tr>
-			<tr>
-				<td class="featured-section-image"><a href="{% url 'assessment:estimates' %}"> <img src="{{ STATIC_URL}}images/index/link-estimates.png" width="124" height="64" border="0" /> </a></td>
-				<td class="featured-section-text">
-				<div class="featured-section-caption">
-					<a href="{% url 'assessment:estimates' %}">{{ objs.2.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
-				</div>
-				<div class="featured-section-description">
-					{{ objs.2.description|trans_log }}
-				</div></td>
-			</tr>
-			<tr>
-				<td class="featured-section-image"><a href="{% url 'about:origins' %}"> <img src="{{ STATIC_URL}}images/index/link-slaves.png" width="124" height="64" border="0" /> </a></td>
-				<td class="featured-section-text">
-				<div class="featured-section-caption">
-					<a href="{% url 'about:origins' %}">{{ objs.3.title|trans_log }} <img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /> </a>
-				</div>
-				<div class="featured-section-description">
-					{{ objs.3.description|trans_log }}
-				</div></td>
-			</tr>
-		</table>
-	
-		<!-- Other featured links (currently: maps and estimates)-->
-		<div id="other-links">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-				
-					<td>
-						<div class="special-features-title">
-							{% trans 'Special features' %}
+			<div class="align-self-center special-feature-container cover-center">
+				<div class="special-feature">{% trans 'Special features' %}</div>
+				<div class="special-feature-flex-container">
+					<a href="{% url 'assessment:intro-maps' %}">
+						<div class="special-feature-flex-item">
+							<div class="special-feature-title">{% trans 'Introductory Maps' %}</div>
+							<div class="special-feature-desc">Overview of slave trade history in a series of maps </div>
 						</div>
-					</td>
-					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
-					<td style="padding-left: 5px;"><a href="{% url 'assessment:intro-maps' %}">{% trans 'Introductory Maps' %}</a></td>
-					<td style="padding-left: 20px;"><img src="{{ STATIC_URL}}images/index/link-arrow.png" border="0" width="16" height="16" align="top" alt="" /></td>
-					<td style="padding-left: 5px;"><a href="{% url 'assessment:estimates' %}?selected_tab=timeline">{% trans 'Timeline and Chronology' %}</a></td>
-				</tr>
-			</table>
+					</a>
+
+					<a href="{% url 'assessment:estimates' %}?selected_tab=timeline">
+						<div class="special-feature-flex-item">
+							<div class="special-feature-title">{% trans 'Timeline and Chronology' %}</div>
+							<div class="special-feature-desc">Number of captives embarked and disembarked </div>
+						</div>
+					</a>
+
+					<div class="special-feature-flex-item">
+						<div class="special-feature-title">Animation</div>
+						<div class="special-feature-desc">View slave trade movements in animation on map </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="align-self-end cover-end">
+				<div class="social-flex-container">
+					<div class="social-icon-container">
+						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" alt="Slave Voyages on Facebook"><img src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon"></img></a>
+						<a href="" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
+						<a href="https://www.youtube.com/user/EmoryUniversity/" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a>
+						<span class="social-icon">donate to this project</span>
+					</div>
+
+					<div class="social-icon-container">
+						<a href="http://digitalscholarship.emory.edu/" alt="Emory University Center for Digital Scholarship"><img class="cover-logo" src="{{STATIC_URL}}images/site/eu-lits-grey.svg" alt="" style="height: 50px; opacity: 0.7; display: flex!important;"></a>
+					</div>
+
+				</div>
+
+				<div class="social-flex-container">
+					<div class="social-icon-container">
+						<div class="scroll"> scroll down to learn more</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
-		</td>
-	</tr>
-</table>
+	</div>
 
-{% endblock %}
+	<video id="bgvid" playsinline autoplay muted loop preload>
+		<!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
+		<source src="{{STATIC_URL}}videos/sv-bgvid-1.webm" type="video/webm">
+		<source src="{{STATIC_URL}}videos/sv-bgvid-1.mp4" type="video/mp4">
+	</video>
 
-{% block footer %}
-{% include "footerhome.html" %}
-{% endblock %}
+</div>
+
+<div class="container">
+	<div class="row">
+
+		<div class="row band">
+			<div class="col-md-8 band-story">
+				<div class="align-self-start">
+					<h1 class="uppercase trans-color weight-700 db-title">Trans-Atlantic</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
+				</div>
+				<div class="align-self-center">
+					<p class="trans-color">The Trans-Atlantic Slave Trade Database has information on almost 36,000 slaving voyages that forcibly embarked more than 12 million Africans for transportation to the Americas between the sixteenth and nineteenth centuries. Drawing from port records,
+						merchant accounts, newspapers, and other primary sources, the database compiles information about slave trading routes, demographics, owners of ships, and enslaved people’s resistance. The database and a separate estimates interface offer scholarly
+						researchers, students, and the general public a chance to discover the reality of the largest forced migration in world history.</p>
+				</div>
+				<div class="align-self-end band-buttons">
+					<a class="" href="{% url 'voyage:guide' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "About" %}</button>
+					</a>
+					<a class="" href="{% url 'voyage:search' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "Database" %}</button>
+					</a>
+					<a class="" href="{% url 'assessment:estimates' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "Estimates" %}</button>
+					</a>
+					<a class="" href="{% url 'assessment:essays' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "Essays" %}</button>
+					</a>
+					<a class="" href="{% url 'voyage:download' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "Downloads" %}</button>
+					</a>
+
+					<a class="" href="{% url 'contribute:index' %}">
+						<button class="btn btn-outline-primary trans-btn">{% trans "Contribute" %}</button>
+					</a>
+
+				</div>
+			</div>
+			<div class="col-md-4 sm-hidden">
+				<img class="band-image" src="{{STATIC_URL}}images/site/modules/trans.png">
+			</div>
+		</div>
+
+		<div class="row band">
+			<div class="col-md-4 sm-hidden">
+				<img class="band-image" src="{{STATIC_URL}}images/site/modules/intra.png">
+			</div>
+			<div class="col-md-8 band-story">
+				<div class="align-self-start">
+					<h1 class="uppercase intra-color weight-700 db-title">intra-American</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
+				</div>
+				<div class="align-self-center">
+					<p class="intra-color">The Intra-American Slave Trade Database contains information on approximately 10,000 slave voyages within the Americas. These voyages operated within colonial empires, across imperial boundaries, and inside the borders of nations such as the United
+						States and Brazil. The database enables users to explore the contours of this enormous New World slave trade, which not only dispersed African survivors of the Atlantic crossing but also displaced enslaved people born in the Americas.
+					</p>
+				</div>
+				<div class="align-self-end band-buttons">
+					<button class="btn btn-outline-primary intra-btn">About</button>
+					<button class="btn btn-outline-primary intra-btn">Database</button>
+					<button class="btn btn-outline-primary intra-btn">Downloads</button>
+					<button class="btn btn-outline-primary intra-btn">Contribute</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="row band">
+			<div class="col-md-8 band-story">
+				<div class="align-self-start">
+					<h1 class="uppercase past-color weight-700 db-title">People of Trans-Atlantic</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title"> Slave Trade</h1>
+				</div>
+				<div class="align-self-center">
+					<p class="past-color">People of the Atlantic Slave Trade provides personal details of 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation
+						of each individual.</p>
+				</div>
+				<div class="align-self-end band-buttons">
+					<button class="btn btn-outline-primary past-btn">About</button>
+					<button class="btn btn-outline-primary past-btn">Database</button>
+					<button class="btn btn-outline-primary past-btn">Downloads</button>
+					<button class="btn btn-outline-primary past-btn">Contribute</button>
+				</div>
+			</div>
+			<div class="col-md-4 sm-hidden ">
+				<img class="band-image" src="{{STATIC_URL}}images/site/modules/past.png">
+			</div>
+		</div>
+
+		<div class="row band">
+			<div class='col-md-12 band-story'>
+				<div class="align-self-start">
+					<h1 class="uppercase gallery-color weight-700 db-title">Image Galleries</h1>
+				</div>
+				<div class="align-self-center">
+					<p class="gallery-color">Explore several hundred images of the people, places, vessels and manuscripts of the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the
+						original source.</p>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class=" col" style="">
+					<img class="card-img-top" src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Card image cap">
+					<div class="card-block">
+						<h4 class="sv-card-title card-title-color "> manuscripts </h4>
+						<p class="card-text"></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class=" col" style="">
+					<img class="card-img-top" src="{{STATIC_URL}}images/site/gallery/2.jpg" alt="Card image cap">
+					<div class="card-block">
+						<h4 class="sv-card-title card-title-color "> places </h4>
+						<p class="card-text"></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class=" col" style="">
+					<img class="card-img-top" src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="Card image cap">
+					<div class="card-block">
+						<h4 class="sv-card-title card-title-color "> slaves </h4>
+						<p class="card-text"></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class=" col" style="">
+					<img class="card-img-top" src="{{STATIC_URL}}images/site/gallery/3.jpg" alt="Card image cap">
+					<div class="card-block">
+						<h4 class="sv-card-title card-title-color "> vessels </h4>
+						<p class="card-text"></p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<div class="logo-grid-container" style="background: #BBC2CB; margin-top: 4rem;">
+	<div class="logo-grid">
+		{% trans 'Partners' %} {% trans 'Sponsors' %}
+
+		<a href="http://digitalscholarship.emory.edu/" target="_blank" alt="Emory University Center for Digital Scholarship (US)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/eu-lits.svg" alt="" style="">
+			</div>
+		</a>
+
+		<a href="https://www.ucsc.edu/" target="_blank" alt="University of California, Santa Cruz (US)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/ucsc.svg" alt="" style="">
+			</div>
+		</a>
+
+		<a href="https://uci.edu/" target="_blank" alt="University of California, Irvine (US)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/uci.svg">
+			</div>
+		</a>
+
+		<a href="https://www.victoria.ac.nz" target="_blank" alt="Victoria University of Wellington (New Zealand)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/victoria.png" alt="" style="">
+			</div>
+		</a>
+
+		<a href="www.hull.ac.uk" target="_blank" alt="University of Hull (UK)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/university-of-hull.svg" alt="" style="">
+			</div>
+		</a>
+
+		<a href="https://ufrj.br/" target="_blank" alt="UFRJ: Universidade Federal do Rio de Janeiro (Brazil)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/ufrj.svg" alt="" style="color: white; fill2 white;">
+			</div>
+		</a>
+
+	</div>
+</div>
+<div class="logo-grid-container" style="background: #BBC2CB;">
+	<div class="logo-grid">
+		<a href="http://www.fas.harvard.edu/" target="_blank" alt="Hutchins Center for African and African American Research (Harvard University)">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/hutchins.png" alt="" style="">
+			</div>
+		</a>
+
+		<a href="https://www.neh.gov" target="_blank" alt="National Endowment for the Humanities">
+			<div class="logo-grid-item">
+				<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/neh.png" alt="" style="">
+			</div>
+		</a>
+	</div>
+</div>
+
+<script>
+	var reflow = function() {
+		var coverBandHeight = $(".cover-band").height();
+		var window_height = $(window).height();
+		var cover_height = $("#bgvid").height();
+		var visible_height = $(window.top).height();
+		var coverEndHeight = $(".cover-end").height();
+		var coverStartBottom = $(".cover-start").position().top + $(".cover-start").height();
+		var coverCenterHeight = $(".cover-center").height();
+
+		var offset = 32;
+
+		if (coverBandHeight > visible_height) {
+			$("#bgvid-container").height(coverBandHeight + offset);
+			$(".cover-center").css("marginTop", "1rem");
+		} else {
+			$("#bgvid-container").height(visible_height);
+			var coverCenterMarginTop = visible_height - coverStartBottom - offset - coverCenterHeight - coverEndHeight;
+			if (coverCenterMarginTop < 0) {
+				coverCenterMarginTop = 0;
+			}
+			$(".cover-center").css("marginTop", coverCenterMarginTop);
+		}
+
+		var bgvidContainerWidth = $("#bgvid-container").width();
+		var bgvidContainerHeight = $("#bgvid-container").height();
+		var videoRatio = 1875 / 894;
+
+		if (bgvidContainerWidth / bgvidContainerHeight > videoRatio) {
+			$("video#bgvid").width("100%");
+			$("video#bgvid").height("");
+		} else {
+			$("video#bgvid").width("");
+			$("video#bgvid").height("100%");
+		}
+	}
+
+	$(document).ready(reflow);
+
+	window.onresize = function() {
+		reflow();
+	}
+</script>
+
+{% endblock %} {% block footer %} {% include "footerhome.html" %} {% endblock %}
