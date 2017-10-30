@@ -7,33 +7,52 @@
 
 {% block content %}
 
-<div id="left-menu" class="left-menu-box">
-	{% include "voyage/understanding_left_menu.html" %}
+<nav aria-label="breadcrumb" role="navigation">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
+		<li class="breadcrumb-item active" aria-current="page">About</li>
+	</ol>
+</nav>
+
+
+<div class="container-new">
+
+
+
+  <div class="row">
+    <div class="col">
+      {% include "voyage/understanding_left_menu.html" %}
+    </div>
+    <div class="col-9">
+
+
+			<div id="center-content-inner">
+				{% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %}
+			</div>
+
+			<!-- Previous/Next navigation menu -->
+			{% if left or right %}
+			<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
+				<tr>
+					{% if left %}
+					<td class="method-prev"><a href="{{ left.page }}">{{ left.name|trans_log }}</a></td>
+					{% endif %} {% if right %}
+					<td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name|trans_log }}</a></td>
+					{% endif %}
+				</tr>
+			</table>
+			{% endif %}
+
+
+    </div>
+  </div>
 </div>
 
-<div id="center-content">
-	{% block center-content %}
-		<div id="center-content-inner">
-            {% if not page %}
-                {% include "voyage/guide.html" %}
-            {% else %}
-			    {% include page %}
-            {% endif %}
-		</div>
-		
-		<!-- Previous/Next navigation menu -->
-        {% if left or right %}
-		<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
-			<tr>
-                {% if left %}
-                    <td class="method-prev"><a href="{{ left.page }}">{{ left.name|trans_log }}</a></td>
-                {% endif %}
-                {% if right %}
-				    <td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name|trans_log }}</a></td>
-                {% endif %}
-			</tr>
-		</table>
-        {% endif %}
-	{% endblock %}
+<div id="left-menu" class="left-menu-box">
+
 </div>
+
+
+
+
 {% endblock %}

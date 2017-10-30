@@ -7,7 +7,7 @@ for all pages in the About section (except for the index page)-->
 {% block csslist %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css">
 	{% block pagecsslist %}
-		
+
 	{% endblock %}
 {% endblock %}
 
@@ -18,9 +18,9 @@ for all pages in the About section (except for the index page)-->
 		</div>
 	{% endblock %}
 
-	<div id="center-content">	
+	<div id="center-content">
 		<div id="center-content-inner">
-			{% block center-content %}	
+			{% block center-content %}
 			{% endblock %}
 		</div>
 	</div>
@@ -29,4 +29,3 @@ for all pages in the About section (except for the index page)-->
 {% block footer %}
 	{% include "footer.html" %}
 {% endblock %}
-
