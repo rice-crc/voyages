@@ -1,0 +1,33 @@
+@import "colors";
+
+.footer-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 4rem;
+  color: #efefef;
+  background-color: $site-color;
+}
+
+.footer-copyrights {
+  margin: 1rem 0;
+}
+
+.footer-logo {
+  margin: 1rem 0;
+}
+@media (max-width: 768px) {
+  .footer-flex-container {
+    padding: 0 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-copyrights {
+    width: 100%;
+  }
+
+  .footer-logo {
+    margin: auto;
+  }
+}

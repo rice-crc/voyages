@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/trans.css",
+	"sources": [
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/trans.scss",
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/_colors.scss",
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/footer.scss"
+	],
+	"names": [],
+	"mappings": "AEEA,AAAA,sBAAsB,CAAC;EACrB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,SAAS,EAAE,IAAI;EACf,OAAO,EAAE,MAAM;EACf,KAAK,EAAE,OAAO;EACd,gBAAgB,EDAL,OAAO,GCCnB;;AAED,AAAA,kBAAkB,CAAC;EACjB,MAAM,EAAE,MAAM,GACf;;AAED,AAAA,YAAY,CAAC;EACX,MAAM,EAAE,MAAM,GACf;;AACD,MAAM,EAAE,SAAS,EAAE,KAAK;EACtB,AAAA,sBAAsB,CAAC;IACrB,OAAO,EAAE,MAAM;IACf,WAAW,EAAE,MAAM;IACnB,UAAU,EAAE,MAAM,GACnB;EAED,AAAA,kBAAkB,CAAC;IACjB,KAAK,EAAE,IAAI,GACZ;EAED,AAAA,YAAY,CAAC;IACX,MAAM,EAAE,IAAI,GACb;;AF5BH,AAAA,CAAC,CAAC;EACA,KAAK,ECFO,OAAO,GDUpB;EATD,AAGE,CAHD,AAGC,MAAO,CAAC;IACN,KAAK,ECLK,OAAO;IDMjB,OAAO,EAAE,GAAG;IACZ,eAAe,EAAE,IAAI,GACtB;;AAIH,AAAA,UAAU,CAAC;EACT,MAAM,EAAE,SAAS,GAClB;;AAED,AAAA,YAAY,CAAC;EACX,OAAO,EAAE,GAAG,GACb"
+}

@@ -1,0 +1,21 @@
+@import "colors";
+@import "footer";
+
+a {
+  color: $trans-color;
+
+  &:hover {
+    color: $trans-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+
+}
+
+.container {
+  margin: 2rem 15px;
+}
+
+.method-info {
+  opacity: 0.8;
+}
