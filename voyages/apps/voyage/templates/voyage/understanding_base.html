@@ -1,12 +1,86 @@
 {% extends "voyage/voyagebase.html" %}
 {% load voyage_extras %}
 
+{% load sass_tags %}
+
 {% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
+
+
 {% block content %}
 
+<script src="https://use.fontawesome.com/b2b4f3d984.js"></script>
+
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
+
+<style>
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    left: 0;
+  }
+
+  .row-offcanvas-left {
+    right: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    left: -100%; /* 12 columns */
+  }
+
+  .row-offcanvas-right.active
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    right: -100%; /* 12 columns */
+  }
+
+  .row-offcanvas-left.active
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+</style>
 <nav aria-label="breadcrumb" role="navigation">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
@@ -17,14 +91,21 @@
 
 <div class="container-new">
 
+  <div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% include "voyage/understanding_left_menu.html" %}
+		</div>
 
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
 
-  <div class="row">
-    <div class="col">
-      {% include "voyage/understanding_left_menu.html" %}
-    </div>
-    <div class="col-9">
-
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Article Navigation</span>
+          </div>
+        </button>
+      </p>
 
 			<div id="center-content-inner">
 				{% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %}
@@ -32,15 +113,13 @@
 
 			<!-- Previous/Next navigation menu -->
 			{% if left or right %}
-			<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
-				<tr>
+      <div class="page-navigation-flexbox">
 					{% if left %}
-					<td class="method-prev"><a href="{{ left.page }}">{{ left.name|trans_log }}</a></td>
+          <a href="{{ left.page }}" ><div class="page-navigation-item">Previous: {{ left.name|trans_log }}</div></a>
 					{% endif %} {% if right %}
-					<td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name|trans_log }}</a></td>
+          <a href="{% url 'voyage:understanding-page' right.page %}"><div class="page-navigation-item">Next: {{ right.name|trans_log }}</div></a>
 					{% endif %}
-				</tr>
-			</table>
+        </div>
 			{% endif %}
 
 
@@ -48,11 +127,34 @@
   </div>
 </div>
 
-<div id="left-menu" class="left-menu-box">
 
-</div>
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
 
+<script>
+$(document).ready(function () {
+  $('[data-toggle="offcanvas"]').click(function () {
+    $('.row-offcanvas').toggleClass('active')
+  });
+});
 
+$(window).resize(function(){
+
+var offcanvasHeight = $(".sidebar-offcanvas").height();
+if (offcanvasHeight > $(".container-new").height()){
+  $(".container-new").height(offcanvasHeight);
+}
+
+});
+
+$(document).ready(function () {
+
+var offcanvasHeight = $(".sidebar-offcanvas").height();
+if (offcanvasHeight > $(".container-new").height()){
+  $(".container-new").height(offcanvasHeight);
+}
+
+});
+</script>
 
 
 {% endblock %}
