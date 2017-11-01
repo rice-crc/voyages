@@ -1,124 +1,89 @@
-{% load i18n %} 
-<!--  Contains the navigation menu in a nested-unordered-list hierarchy 
+{% load i18n %}
+
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
+	<div class="nav-container">
+		<!-- <a href="/" class="navbar-brand">Slave Voyages</a> -->
+		<a href="/" class="navbar-brand" ><!--<img src="img/logos/sv-logo.svg" alt="Slave Voyages" style="height: 3.5rem;">--> Slave Voyages</a>
+		<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbar9">
+							<span class="navbar-toggler-icon"></span>
+					</button>
+		<div class="navbar-collapse collapse" id="navbar9">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trans-Atlantic</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="{% url 'voyage:guide' %}">{% trans "About" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:search' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="{% url 'assessment:estimates' %}">{% trans "Estimates" %}</a>
+						<a class="dropdown-item" href="{% url 'assessment:essays' %}">{% trans "Essays" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:download' %}">{% trans "Downloads" %}</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{% url 'contribute:index' %}">{% trans "Contribute" %}</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Intra-American</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#">About</a>
+						<a class="dropdown-item" href="#">Database</a>
+						<a class="dropdown-item" href="#">Downloads</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">Contribute</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">People of Atlantic Slave Trade</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="{% url 'about:origins' %}">About</a>
+						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="#">Downloads</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">Contribute</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Resources</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="{% url 'resources:images' %}">{% trans "Image Galleries" %}</a>
+						<a class="dropdown-item" href="{% url 'education:index' %}">{% trans "Lesson Plans" %}</a>
+						<a class="dropdown-item" href="{% url 'education:web-resources' %}">{% trans "External Links" %}</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="{% url 'about:index' %}">{% trans "About" %}</a>
+						<a class="dropdown-item" href="{% url 'about:history' %}">{% trans "History" %}</a>
+						<a class="dropdown-item" href="{% url 'about:team' %}">{% trans "Project Team" %}</a>
+						<a class="dropdown-item" href="{% url 'about:data' %}">{% trans "Contributors of Data" %}</a>
+						<a class="dropdown-item" href="{% url 'about:acknowledgements' %}">{% trans "Acknowledgements" %}</a>
+						<a class="dropdown-item" href="{% url 'about:origins' %}">{% trans "African Origins Project" %}</a>
+						<a class="dropdown-item" href="{% url 'about:contacts' %}">{% trans "Contact Us" %}</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">EN</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item" href="#">English</a>
+						<a class="dropdown-item" href="#">Português</a>
+					</div>
+				</li>
+
+				<!-- <li class="nav-item">
+											<a class="nav-link" href="//codeply.com">Codeply</a>
+									</li>
+									<li class="nav-item">
+											<a class="nav-link" href="#">Link</a>
+									</li> -->
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<!--  Contains the navigation menu in a nested-unordered-list hierarchy
 	- links are managed by the navigation_topbar.js menu -->
-<ul id="toplinks">
-	<li id="block01" class="nav_block">
-		<!--Top is the main link  -->
-		<a href="{% url 'voyage:index' %}" id="voyage">{% trans "Voyages Database" %}</a>
-		<div class="linkbox">
-			<ul>
-				<li>
-					<a href="{% url 'voyage:guide' %}" id="item01a">{% trans "Understanding the Database" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'voyage:search' %}" id="item01b" >{% trans "Search the Voyages Database" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'voyage:download' %}" id="item01c">{% trans "Downloads" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'contribute:index' %}" id="item01d">{% trans "Contribute" %}</a>
-				</li>
-
-			</ul>
-		</div>
-	</li>
-
-	<li id="block02" class="nav_block">
-		<a href="{% url 'assessment:index' %}" id="assessment">{% trans "Assessing the Slave Trade" %}</a>
-		<div class="linkbox">
-			<ul>
-				<li>
-					<a href="{% url 'assessment:essays' %}" id="item02a">{% trans "Essays" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'assessment:estimates' %}" id="item02b">{% trans "Estimates" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'assessment:intro-maps' %}" id="item02c">{% trans "Introductory Maps" %}</a>
-				</li>
-
-			</ul>
-		</div>
-	</li>
-
-	<li id="block03" class="nav_block">
-		<a href="{% url 'resources:index' %}" id="resources">{% trans "Resources" %}</a>
-		<div class="linkbox">
-			<ul>
-				<li>
-					<a href="{% url 'resources:images' %}" id="item03a">{% trans "Images" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'resources:origins' %}" id="item03b">{% trans "African Names Database" %}</a>
-				</li>
-			</ul>
-		</div>
-	</li>
-
-	<li id="block04" class="nav_block">
-		<a href="{% url 'education:index' %}" id="education">{% trans "Educational Materials" %}</a>
-		<div class="linkbox">
-			<ul>
-				<li>
-					<a href="{% url 'education:lesson-plans' %}" id="item04a">{% trans "Lesson Plans" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'education:web-resources' %}" id="item04b">{% trans "Web Resources" %}</a>
-				</li>
-
-			</ul>
-		</div>
-	</li>
-
-	<li id="block05" class="nav_block">
-		<a href="{% url 'about:index' %}" id="about">{% trans "About the Project" %}</a>
-		<div class="linkbox">
-			<ul>
-				<li>
-					<a href="{% url 'about:history' %}" id="item05a">{% trans "History" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'about:team' %}" id="item05b">{% trans "Project Team" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'about:data' %}" id="item05c">{% trans "Contributors of data" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'about:acknowledgements' %}" id="item05d">{% trans "Acknowledgements" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'about:origins' %}" id="item05e">{% trans "African Origins Project" %}</a>
-				</li>
-				<li>
-					<a href="{% url 'about:contacts' %}" id="item05f">{% trans "Contact Us" %}</a>
-				</li>
-			</ul>
-		</div>
-	</li>
-
-	{% get_current_language as LANGUAGE_CODE %}
-	<li id="block06" class="nav_block language_menu">
-		<a href="#" id="language">{% trans "Language" %}</a>
-		<a href="#" class="language_menu_{{ LANGUAGE_CODE }}"></a>
-		<div class="linkbox">
-			<ul>
-				{% for lang in LANGUAGES %}
-					{% get_language_info for lang.0 as lang_info %}
-					<li><a class="language_link language_link_{{ lang.0 }}" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang_info.name_local }}</a></li>
-				{% endfor %}
-			</ul>
-		</div>
-	</li>
-</ul>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('.language_link').click(function(e) {
-			e.preventDefault();
-			$.ajax($(this).attr('href'))
-				.done(function() {
-					window.location.reload();
-				});
-		});
-	});
-</script>

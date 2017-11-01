@@ -1,5 +1,7 @@
 @import "colors";
 @import "footer";
+@import "headings";
+
 
 a {
   color: $trans-color;
@@ -18,4 +20,61 @@ a {
 
 .method-info {
   opacity: 0.8;
+}
+
+.btn-trans {
+  background-color: $trans-color;
+  color: #fff;
+}
+
+
+.secondary-menu-item-1 {
+  padding-left: 30px;
+}
+
+.secondary-menu-item-0 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+.secondary-menu-item-1-selected {
+  padding-left: 25px;
+  border-left: 4px solid $trans-color;
+  font-weight: bold;
+}
+
+.method-info {
+  margin-bottom: 2rem;
+  color: #666666;
+}
+// .method-author {
+//   color: #666666;
+// }
+//
+// .method-location {
+// color: #666666;
+// }
+//
+// .method-date {
+//   color: #666666;
+// }
+
+.page-navigation-flexbox {
+  margin-top: 2rem;
+  list-style: none;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.page-navigation-item {
+  margin-top: 10px;
+  font-weight: bold;
 }

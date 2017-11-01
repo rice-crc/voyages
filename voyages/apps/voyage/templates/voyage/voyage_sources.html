@@ -7,13 +7,31 @@
 
 {% block content %}
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css"> -->
 
-<div id="left-menu" class="left-menu-box">
-	{% include "voyage/understanding_left_menu.html" %}
-</div>
 
-<div id="center-content">
+
+
+
+<nav aria-label="breadcrumb" role="navigation">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
+		<li class="breadcrumb-item active" aria-current="page">About</li>
+	</ol>
+</nav>
+
+
+<div class="container-new">
+
+
+
+  <div class="row">
+    <div class="col">
+      {% include "voyage/understanding_left_menu.html" %}
+    </div>
+    <div class="col-9">
+
+
 	{% block center-content %}
     <div id="center-content-inner">
 
@@ -297,5 +315,12 @@
 		</div>
 
     {% endblock %}
+
 </div>
+</div>
+
+
+</div>
+
+
 {% endblock %}
