@@ -1,10 +1,8 @@
 @import "colors";
 
 .navbar {
-  // margin-top: 2rem;
   padding: .5rem 4rem;
   z-index: 2;
-  // position: absolute;
   background: $trans-color !important;
   border: none;
   width: 100%;
@@ -47,12 +45,8 @@
 .nav-container {
   margin-right: auto;
   margin-left: auto;
-  /*padding-right: 15px;*/
-  /*padding-left: 15px;*/
   width: 100%;
   flex-wrap: nowrap;
-  /*margin-left: 2rem;*/
-  /*margin-right: 2rem;*/
 }
 
 @media (min-width: 1200px) {
@@ -62,7 +56,6 @@
     align-items: center;
   }
 }
-
 
 .breadcrumb {
   padding: .75rem 4rem;
