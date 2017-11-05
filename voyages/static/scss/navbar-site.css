@@ -35,12 +35,8 @@
 .nav-container {
   margin-right: auto;
   margin-left: auto;
-  /*padding-right: 15px;*/
-  /*padding-left: 15px;*/
   width: 100%;
-  flex-wrap: nowrap;
-  /*margin-left: 2rem;*/
-  /*margin-right: 2rem;*/ }
+  flex-wrap: nowrap; }
 
 @media (min-width: 1200px) {
   .nav-container {
