@@ -1,31 +1,41 @@
 {% extends "base.html" %}
-
+{% load sass_tags %}
 <!-- This is the basic template to be inherited from
 for all pages in the About section (except for the index page)-->
 {% block title %}About the Project{% endblock %}
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css">
-	{% block pagecsslist %}
-
-	{% endblock %}
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/sponsors.scss' %}" rel="stylesheet" type="text/css" />
+	<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css"> -->
 {% endblock %}
 
 {% block content %}
-	{% block left-menu %}
-		<div id="left-menu" class="left-menu-box">
-			{% include "about/left-menu.html" %}
+<div class="container-new">
+	<div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% block left-menu %}
+				{% include "about/left-menu.html" %}
+			{% endblock %}
 		</div>
-	{% endblock %}
-
-	<div id="center-content">
-		<div id="center-content-inner">
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Article Navigation</span>
+          </div>
+        </button>
+      </p>
 			{% block center-content %}
 			{% endblock %}
 		</div>
 	</div>
+</div>
 {% endblock %}
 
 {% block footer %}
-	{% include "footer.html" %}
+	{% include "footerhome.html" %}
 {% endblock %}
