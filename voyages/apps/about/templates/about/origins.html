@@ -1,5 +1,5 @@
 {% extends "about/aboutbase.html" %}
-{% load i18n %} 
+{% load i18n %}
 
 <!-- Corresponds to About: The African Origins Project -->
 
@@ -7,9 +7,17 @@
 
 {% block center-content %}
 
-<h1 style="float:left; margin-right:10px;">{% trans "African Origins Project" %}</h1>
-<a href="http://www.african-origins.org" target="_blank">{% trans 'Explore the site' %} <img src="{{ STATIC_URL }}images/about/origins.png"> </a>
+<h1>{% trans "African Origins Project" %}</h1>
+
 {% url 'resources:images' as resources_images %}
+
+<p>
+	<a href="http://www.african-origins.org" target="_blank">
+	 	<span class="fa fa-external-link" style=" vertical-align: middle;"></span>
+		{% trans 'Explore this Site' %}
+	</a>
+</p>
+
 {% blocktrans %}
 <p>
 	In January 2009 the directors of the project to create <em>Voyages:
@@ -69,4 +77,3 @@
 {% endblocktrans %}
 
 {% endblock %}
-
