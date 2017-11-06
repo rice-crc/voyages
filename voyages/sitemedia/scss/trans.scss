@@ -38,16 +38,18 @@ a {
 
 }
 
-.secondary-menu-item-1-selected {
+.secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
   border-left: 4px solid $trans-color;
   font-weight: bold;
 }
 
-.method-info {
+.method-info, .essay-info {
   margin-bottom: 2rem;
   color: #666666;
 }
+
+
 // .method-author {
 //   color: #666666;
 // }
