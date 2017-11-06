@@ -1,29 +1,20 @@
 {% extends "base.html" %}
+{% load sass_tags %}
 {% load i18n %}
 
 <!-- The basic template for any page in the Assessment section -->
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-info.css">
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-info.css"> -->
 {% endblock %}
-
 
 {% block content %}
-
-{% block left-menu %}
-<div id="essays-left-menu" class="left-menu-box">
-	
-</div>
-{% endblock %}
-
-
-<div id="center-content">
-{% block center-content %}
-{% endblock %}
-</div>
-
+{% block center-content %}{% endblock %}
+<!--{-% block left-menu %}{% endblock %-}-->
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
+{% include "footerhome.html" %}
 {% endblock %}
