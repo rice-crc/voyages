@@ -1,14 +1,20 @@
 {% load i18n %}
+{% load sass_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> {% comment %}Basic common css styles {% endcomment %}
 	<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" /> -->
 
+
 	{% comment %}Top navigation menu styles{% endcomment %}
 	<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
 
 	{% block csslist %} {% endblock %} {% comment %}I18n of javascript text{% endcomment %}
 	<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
