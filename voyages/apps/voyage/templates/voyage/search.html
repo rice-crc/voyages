@@ -1,10 +1,15 @@
 {% extends "voyage/voyagebase.html" %}
+{% load sass_tags %}
 
 <!-- Basic template for pages in the Voyage section -->
 
 {% load i18n %}
 
 {% block csslist %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search.css">
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css">
@@ -19,33 +24,37 @@
 {% endblock %}
 
 {% block content %}
-<form id="form" novalidate name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
-      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
-<!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
-<div id="col_container" style="height: 100%;">
-  <div id="center_column" class="column" style="height: 100%;">
-	<table class="query_window" style="height: 100%;">
-	  <tr>
-		<td id="center-content">
-		  {% block center-content %}
+
+<div class="container-new">
+	<div class="row  row-offcanvas row-offcanvas-right">
+
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+      <!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
+
+      <form id="form" novalidate name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
+            enctype="application/x-www-form-urlencoded" >{% csrf_token %}
+			{% include "voyage/search_left_menu.html" %}
+      </form>
+		</div>
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Article Navigation</span>
+          </div>
+        </button>
+      </p>
+      {% block center-content %}
 		  {% include "voyage/search_main_content.html" %}
 		  {% endblock %}
-		</td>
-	  </tr>
-	</table>
-  </div>
-  <div id="left_column" class="column">
-	<td id="left-menu" class="left-menu-box">
-	  {% include "voyage/search_left_menu.html" %}
-	</td>
-  </div>
+		</div>
+
+	</div>
 </div>
 
 
 
 
 
-
-
-</form>
 {% endblock %}
