@@ -8,6 +8,7 @@ $step-size-heading: 0.33333;
 
 h1 {
     @include heading-size(6);
+    margin-bottom: 2rem;
 }
 h2 {
     @include heading-size(5);
