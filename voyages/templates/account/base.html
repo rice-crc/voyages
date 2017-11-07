@@ -1,13 +1,16 @@
 {% extends "voyage/voyagebase.html" %}
+{% load sass_tags %}
 
 <!-- The basic template of the Contribute login section (guideline and login)-->
 
 {% load i18n %}
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css"> -->
 {% if request.user.is_authenticated %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/contribute/login_base.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/contribute/login_base.css"> -->
 {% endif %}
 {% endblock %}
 
@@ -34,49 +37,64 @@
 {% endblock %}
 
 {% block content %}
-<div id="left-menu" class="left-menu-box" style="height: auto;">
-	<div class="left-menu-title">
-		<h3>{% trans 'CONTRIBUTE' %}</h3>
-	</div>
 
-	<div class="secondary-menu-item-0">
-		<a href="{% url 'contribute:guidelines' %}">{% trans 'Guidelines for Contributors' %}</a>
-	</div>
+<div class="container-new">
+	<div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 
-	{% if request.user.is_authenticated %}
-	<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a>
-		<ul>
-		<li>
-			<a href="{% url 'contribute:new_voyage' %}">{% trans "New voyage" %}</a>
-		</li>
-		<li>
-			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
-		</li>
-		<li>
-			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
-		</li>
-		<li>
-			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
-		</li>
-		</ul>
-	</div>
-	{% endif %}
-	
-	<div class="secondary-menu-item-0">
-		{% if request.user.is_authenticated %}
-		<a href="{% url 'account_logout' %}">{% trans 'Log out' %}</a>
-		{% else %}
-		<a href="{% url 'account_login' %}">{% trans 'Sign In' %}</a>
+			<div class="left-menu-title">
+				<h3>{% trans 'CONTRIBUTE' %}</h3>
+			</div>
 
-		{% endif %}
+			<div class="secondary-menu-item-0">
+				<a href="{% url 'contribute:guidelines' %}">{% trans 'Guidelines for Contributors' %}</a>
+			</div>
+
+			{% if request.user.is_authenticated %}
+			<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a>
+				<ul>
+				<li>
+					<a href="{% url 'contribute:new_voyage' %}">{% trans "New voyage" %}</a>
+				</li>
+				<li>
+					<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
+				</li>
+				<li>
+					<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
+				</li>
+				<li>
+					<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
+				</li>
+				</ul>
+			</div>
+			{% endif %}
+
+			<div class="secondary-menu-item-0">
+				{% if request.user.is_authenticated %}
+				<a href="{% url 'account_logout' %}">{% trans 'Log out' %}</a>
+				{% else %}
+				<a href="{% url 'account_login' %}">{% trans 'Sign In' %}</a>
+
+				{% endif %}
+			</div>
+
+		</div>
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Article Navigation</span>
+          </div>
+        </button>
+      </p>
+			{% block center-content %}
+			{% endblock %}
+		</div>
 	</div>
 </div>
 
-<div id="center-content" class="col-md-8" style="height: auto;">
 
-	<div id="center-content-inner">
-		{% block center-content %}
-		{% endblock %}
-	</div>
-</div>
+
+
 {% endblock %}
