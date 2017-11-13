@@ -1,0 +1,44 @@
+@import "footer";
+@import "headings";
+
+.container {
+  margin: 2rem 15px;
+}
+
+.method-info {
+  opacity: 0.8;
+}
+
+.secondary-menu-item-1 {
+  padding-left: 30px;
+}
+
+.secondary-menu-item-0 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+.method-info, .essay-info {
+  margin-bottom: 2rem;
+  color: #666666;
+}
+
+.page-navigation-flexbox {
+  margin-top: 2rem;
+  list-style: none;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.page-navigation-item {
+  margin-top: 10px;
+  font-weight: bold;
+}
