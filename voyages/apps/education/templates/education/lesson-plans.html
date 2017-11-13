@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block pagecsslist %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" />
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" /> -->
 {% endblock %}
 
 {% block center-content %}
@@ -38,22 +38,22 @@
 {% for lesson_item in lesson_plans %}
 	<div class="lesson-plan-title">
 		{{ lesson_item.lesson.text|trans_log }}
-		
+
 		{% if lesson_item.download %}
 		{% for download_item in lesson_item.download %}
 			<span class="download">
 				{% if "ppt" in download_item.file.name  %}
-				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT,
 				{% else %}
-				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF,
 				{% endif %}
-				
+
 				{{ download_item.file.size|filesizeformat }})
 			</span>
 		{% endfor %}
 		{% endif %}
 	</div>
-	
+
 	<div  class="lesson-plan-detail">
 		<div class="lesson-plan-author">
 			{% trans "Author" %}: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author|safe }}</span>
@@ -70,7 +70,7 @@
 		<div class="lesson-plan-standards-title">
 			{% trans "Standards" %}
 		</div>
-		
+
 		{% if lesson_item.standard %}
 		<ul class="lesson-plan-standards">
 			{% for standard_type in lesson_item.standard %}

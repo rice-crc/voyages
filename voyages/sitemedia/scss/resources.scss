@@ -1,0 +1,34 @@
+@import "colors";
+
+.navbar {
+  background: $resource-color !important;
+}
+
+.footer-flex-container {
+  background-color: $resource-color;
+}
+
+a {
+  color: $resource-color;
+
+  &:hover {
+    color: $resource-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.btn-trans {
+  background-color: $resource-color;
+  color: #fff;
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $resource-color;
+  font-weight: bold;
+}
+
+td.link-info-label {
+  color: $text-primary !important;
+}

@@ -1,0 +1,26 @@
+.navbar {
+  background: #47A58A !important; }
+
+.footer-flex-container {
+  background-color: #47A58A; }
+
+a {
+  color: #47A58A; }
+  a:hover {
+    color: #47A58A;
+    opacity: 0.6;
+    text-decoration: none; }
+
+.btn-trans {
+  background-color: #47A58A;
+  color: #fff; }
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid #47A58A;
+  font-weight: bold; }
+
+td.link-info-label {
+  color: #333333 !important; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/resources.css.map */
