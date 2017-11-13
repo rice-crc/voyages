@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/about.css",
+	"sources": [
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/about.scss",
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/_colors.scss"
+	],
+	"names": [],
+	"mappings": "AAGA,AAAA,OAAO,CAAC;EACN,UAAU,ECEE,OAAO,CDFM,UAAU,GACpC;;AAED,AAAA,sBAAsB,CAAC;EACrB,gBAAgB,ECFJ,OAAO,GDGpB;;AAED,AAAA,CAAC,CAAC;EACA,KAAK,ECNO,OAAO,GDapB;EARD,AAGE,CAHD,AAGC,MAAO,CAAC;IACN,KAAK,ECTK,OAAO;IDUjB,OAAO,EAAE,GAAG;IACZ,eAAe,EAAE,IAAI,GACtB;;AAGH,AAAA,UAAU,CAAC;EACT,gBAAgB,EChBJ,OAAO;EDiBnB,KAAK,EAAE,IAAI,GACZ;;AAED,AAAA,+BAA+B,EAAE,AAAA,oBAAoB,CAAC;EACpD,YAAY,EAAE,IAAI;EAClB,WAAW,EAAE,GAAG,CAAC,KAAK,CCtBV,OAAO;EDuBnB,WAAW,EAAE,IAAI,GAClB"
+}
