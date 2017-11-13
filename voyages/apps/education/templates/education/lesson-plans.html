@@ -1,4 +1,5 @@
 {% extends "education/educationbase.html" %}
+{% load sass_tags %}
 
 {% comment %} Display lesson plan items from the database {% endcomment %}
 
@@ -11,6 +12,7 @@
 {% endblock %}
 
 {% block pagecsslist %}
+<link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" /> -->
 {% endblock %}
 
@@ -48,7 +50,7 @@
 				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF,
 				{% endif %}
 
-				{{ download_item.file.size|filesizeformat }})
+				)
 			</span>
 		{% endfor %}
 		{% endif %}

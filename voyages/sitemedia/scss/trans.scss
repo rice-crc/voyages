@@ -9,6 +9,11 @@
   background-color: $trans-color;
 }
 
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $trans-color;
+    opacity: 1;
+}
+
 a {
   color: $trans-color;
 
