@@ -1,48 +1,3 @@
-.footer-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 0 4rem;
-  color: #efefef;
-  background-color: #008ca8; }
-
-.footer-copyrights {
-  margin: 1rem 0; }
-
-.footer-logo {
-  margin: 1rem 0; }
-
-@media (max-width: 768px) {
-  .footer-flex-container {
-    padding: 0 2rem;
-    align-items: center;
-    text-align: center; }
-  .footer-copyrights {
-    width: 100%; }
-  .footer-logo {
-    margin: auto; } }
-
-/* This is the percentage each heading will be reduced by. */
-/* The mixin */
-h1 {
-  font-size: 1.99998em;
-  margin-bottom: 2rem; }
-
-h2 {
-  font-size: 1.66665em; }
-
-h3 {
-  font-size: 1.33332em; }
-
-h4 {
-  font-size: 0.99999em; }
-
-h5 {
-  font-size: 0.66666em; }
-
-h6 {
-  font-size: 0.33333em; }
-
 a {
   color: #008ca8; }
   a:hover {
@@ -50,45 +5,13 @@ a {
     opacity: 0.6;
     text-decoration: none; }
 
-.container {
-  margin: 2rem 15px; }
-
-.method-info {
-  opacity: 0.8; }
-
 .btn-trans {
   background-color: #008ca8;
   color: #fff; }
 
-.secondary-menu-item-1 {
-  padding-left: 30px; }
-
-.secondary-menu-item-0 {
-  padding-top: 5px;
-  padding-bottom: 5px; }
-
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
   border-left: 4px solid #008ca8;
-  font-weight: bold; }
-
-.method-info, .essay-info {
-  margin-bottom: 2rem;
-  color: #666666; }
-
-.page-navigation-flexbox {
-  margin-top: 2rem;
-  list-style: none;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-flow: row wrap;
-  justify-content: space-between; }
-
-.page-navigation-item {
-  margin-top: 10px;
   font-weight: bold; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/trans.css.map */
