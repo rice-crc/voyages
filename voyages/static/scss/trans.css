@@ -25,7 +25,8 @@
 /* This is the percentage each heading will be reduced by. */
 /* The mixin */
 h1 {
-  font-size: 1.99998em; }
+  font-size: 1.99998em;
+  margin-bottom: 2rem; }
 
 h2 {
   font-size: 1.66665em; }
@@ -66,12 +67,12 @@ a {
   padding-top: 5px;
   padding-bottom: 5px; }
 
-.secondary-menu-item-1-selected {
+.secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
   border-left: 4px solid #008ca8;
   font-weight: bold; }
 
-.method-info {
+.method-info, .essay-info {
   margin-bottom: 2rem;
   color: #666666; }
 
