@@ -1,6 +1,9 @@
 .navbar {
   background: #008ca8 !important; }
 
+.footer-flex-container {
+  background-color: #008ca8; }
+
 a {
   color: #008ca8; }
   a:hover {

@@ -1,60 +1,55 @@
 {% extends "base.html" %}
+{% load sass_tags %}
 {% load i18n %}
 {% load voyage_extras %}
 
 {% block title %}{% trans "About the Project" %}{% endblock %}
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-index.css">
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-index.css"> -->
 {% endblock %}
 
 {% block content %}
-<div id="index-intro-band">
 
-	<div id="index-intro-title">
-		{{ objs.0.title|trans_log }}
-	</div>
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-	<div id="index-intro-text">
-		{{ objs.0.description|trans_log }}
-	</div>
+<div class="container-new">
+  <div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% block left-menu %}
+				{% include "about/left-menu.html" %}
+			{% endblock %}
+		</div>
 
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
+
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Article Navigation</span>
+          </div>
+        </button>
+      </p>
+
+			<div id="center-content-inner">
+				<h1>{{ objs.0.title|trans_log }}</h1>
+				{{ objs.0.description|trans_log }}
+			</div>
+
+    </div>
+  </div>
 </div>
 
-<div id="section-titles">
-	<table border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td class="section-title"><a href="{% url 'about:history' %}">{{ objs.1.title|trans_log }}</a></td>
-			<td class="section-title"><a href="{% url 'about:team' %}">{{ objs.2.title|trans_log }}</a></td>
-			<td class="section-title"><a href="{% url 'about:data' %}">{{ objs.3.title|trans_log }}</a></td>
-			<td class="section-title"><a href="{% url 'about:acknowledgements' %}">{{ objs.4.title|trans_log }}</a></td>
-			<td class="section-title"><a href="{% url 'about:origins' %}">{{ objs.5.title|trans_log }}</a></td>
-			<td class="section-title"><a href="{% url 'about:contacts' %}">{{ objs.6.title|trans_log }}</a></td>
-		</tr>
-	</table>
-</div>
 
-<div id="section-descs">
-	<table border="0" cellspacing="0" cellpadding="0">
-		<tr>
-
-			<td class="section-desc">{{ objs.1.description|trans_log }}</td>
-
-			<td class="section-desc">{{ objs.2.description|trans_log }}</td>
-
-			<td class="section-desc">{{ objs.3.description|trans_log }}</td>
-
-			<td class="section-desc">{{ objs.4.description|trans_log }}</td>
-
-			<td class="section-desc">{{ objs.5.description|trans_log }}</td>
-
-			<td class="section-desc">{{ objs.6.description|trans_log }}</td>
-
-		</tr>
-	</table>
-</div>
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
 
 {% endblock %}
 

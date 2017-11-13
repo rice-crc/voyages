@@ -1,0 +1,23 @@
+.navbar {
+  background: #7B919C !important; }
+
+.footer-flex-container {
+  background-color: #7B919C; }
+
+a {
+  color: #7B919C; }
+  a:hover {
+    color: #7B919C;
+    opacity: 0.6;
+    text-decoration: none; }
+
+.btn-trans {
+  background-color: #7B919C;
+  color: #fff; }
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid #7B919C;
+  font-weight: bold; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/about.css.map */

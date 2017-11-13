@@ -2,30 +2,30 @@
 
 
 .navbar {
-  background: $trans-color !important;
+  background: $about-color !important;
 }
 
 .footer-flex-container {
-  background-color: $trans-color;
+  background-color: $about-color;
 }
 
 a {
-  color: $trans-color;
+  color: $about-color;
 
   &:hover {
-    color: $trans-color;
+    color: $about-color;
     opacity: 0.6;
     text-decoration: none;
   }
 }
 
 .btn-trans {
-  background-color: $trans-color;
+  background-color: $about-color;
   color: #fff;
 }
 
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
-  border-left: 4px solid $trans-color;
+  border-left: 4px solid $about-color;
   font-weight: bold;
 }
