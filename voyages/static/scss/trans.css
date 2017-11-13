@@ -4,6 +4,10 @@
 .footer-flex-container {
   background-color: #008ca8; }
 
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #008ca8;
+  opacity: 1; }
+
 a {
   color: #008ca8; }
   a:hover {

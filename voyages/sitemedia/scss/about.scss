@@ -9,6 +9,11 @@
   background-color: $about-color;
 }
 
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $about-color;
+    opacity: 1;
+}
+
 a {
   color: $about-color;
 

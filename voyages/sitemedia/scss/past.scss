@@ -9,6 +9,11 @@
   background-color: $past-color;
 }
 
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $past-color;
+    opacity: 1;
+}
+
 a {
   color: $past-color;
 
