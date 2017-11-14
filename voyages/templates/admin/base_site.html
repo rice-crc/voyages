@@ -13,7 +13,7 @@
 {% block extrastyle %}
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
 
 <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" /> -->
 {% endblock %}
@@ -31,15 +31,14 @@
 {% block top_bar %} {% include "topbar.html" %} {% endblock %}
 {% endblock %}
 
-
-
 {% block branding %}
-<nav aria-label="breadcrumb" role="navigation">
-  <ol class="breadcrumb">
-<h1 id="site-name">{% trans 'Voyage Admin (Live)' %}&nbsp;&nbsp;&nbsp;<span id="site-warning">{% trans 'NOTE: Any changes will take effect immediately' %}</span>
-</h1>
-</ol>
-    </nav>
+<div id="admin-title">
+  {% trans 'Voyage Admin' %} <span class="badge badge-secondary">{% trans 'Live' %}</span>
+</div>
+<span id="admin-tagline">
+  {% trans 'Any changes will take effect immediately' %}
+</span>
 {% endblock %}
 
-{% block nav-global %}{% endblock %}
+{% block nav-global %}
+{% endblock %}

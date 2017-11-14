@@ -1,8 +1,9 @@
 /*
     DJANGO Admin styles
+    Customized to adapt to new Slave Voyages site
 */
 
-
+@import "../colors";
 
 /* GLOBAL DEFAULTS */
 
@@ -203,6 +204,21 @@ p img, h1 img, h2 img, h3 img, h4 img, td img {
 
 .nowrap {
     white-space: nowrap;
+}
+
+#admin-title {
+  font-size: 1.99998em;
+  font-weight: bold;
+}
+
+#admin-tagline {
+  color: #888888;
+}
+
+#admin-subtitle {
+  font-size: 1.6em;
+  font-weight: 500;
+  padding: 1rem 0;
 }
 
 /* TABLES */
@@ -461,8 +477,12 @@ input[type=text], input[type=password], textarea, select, .vTextField {
     font-size: 11px;
     text-align: left;
     font-weight: bold;
-    background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x;
+    background: $trans-color;
     color: white;
+
+    a {
+      color: white;
+    }
 }
 
 .module table {
