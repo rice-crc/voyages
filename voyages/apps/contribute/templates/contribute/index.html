@@ -1,13 +1,16 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load sass_tags %}
 
 <!-- The landing page when users log in via contribute login -->
 
 {% block title %}{% trans "User Home" %}{% endblock %}
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<link href="{% sass_src 'scss/contribute.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 <style>
 	.clickable-row {
 		cursor: pointer;

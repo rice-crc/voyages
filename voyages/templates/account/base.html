@@ -22,21 +22,25 @@
 
 {% block additional_sec_bar %}
 {% if request.user.is_authenticated %}
-
-	<div class="userlogtool secondarybar">
-		<div>
-			{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
-			{% block userlinks %}
-			{% url 'django-admindocs-docroot' as docsroot %}
-			{% if docsroot %}
-			<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
-			{% endif %}
-			<a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a> |
-			<a href="{% url 'account_change_password' %}">{% trans 'Change Password' %}</a> |
-			<a href="{% url 'account_logout' %}">{% trans 'Log out' %}</a>
-			{% endblock %}
+<nav aria-label="breadcrumb" role="navigation">
+	<ol class="breadcrumb">
+		<div class="userlogtool secondarybar">
+			<div>
+				{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+				{% block userlinks %}
+				{% url 'django-admindocs-docroot' as docsroot %}
+				{% if docsroot %}
+				<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+				{% endif %}
+				<a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a> |
+				<a href="{% url 'account_change_password' %}">{% trans 'Change Password' %}</a> |
+				<a href="{% url 'account_logout' %}">{% trans 'Log out' %}</a>
+				{% endblock %}
+			</div>
 		</div>
-	</div>
+	</ol>
+</nav>
+
 {% endif %}
 {% endblock %}
 
