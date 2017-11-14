@@ -60,17 +60,17 @@
 
 			{% if request.user.is_authenticated %}
 			<div class="secondary-menu-item-0"><a href="{% url 'contribute:index' %}">{% trans 'Contribute Home' %}</a>
-				<ul>
-				<li>
+				<ul class="navbar-nav ">
+				<li class="secondary-menu-item-1">
 					<a href="{% url 'contribute:new_voyage' %}">{% trans "New voyage" %}</a>
 				</li>
-				<li>
+				<li class="secondary-menu-item-1">
 					<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
 				</li>
-				<li>
+				<li class="secondary-menu-item-1">
 					<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
 				</li>
-				<li>
+				<li class="secondary-menu-item-1">
 					<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
 				</li>
 				</ul>
