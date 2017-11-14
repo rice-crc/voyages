@@ -2,6 +2,8 @@
 
 <!-- Base template for all pages in django admin -->
 {% load i18n %}
+{% load sass_tags %}
+
 {% block title %}{{ title }} | {% trans 'Voyage Admin' %}{% endblock %}
 
 {% block stylesheet %}
@@ -9,38 +11,35 @@
 {% endblock %}
 
 {% block extrastyle %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" />
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topbar.css" /> -->
 {% endblock %}
 
 {% block extrahead %}
+
 <script src="{{ STATIC_URL }}scripts/jquery-1.9.1.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/jquery.ba-resize.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/hover.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/navigation_topbar.js" type="text/javascript"></script>
+<!-- <script src="{{ STATIC_URL }}scripts/navigation_topbar.js" type="text/javascript"></script> -->
+
 {% include 'autocomplete_light/static.html' %}
 {% endblock %}
-
 {% block topbanner %}
-<table class="top-bar" >
-		<tr>
-			<td style="width:240px;">
-			<div id="main_logo"><a href="{% url 'static_content:index' %}"><img src="{{ STATIC_URL}}images/menu/logo.png"/></a></div>
-			</td>
-			<td>
-			<div id="main_nav" style="margin-top: 3px">
-				{% include "topbar.html" %}
-			</div>
-			</td>
-		</tr>
-</table>
-<div id="secondarybar" class="secondary-bar">
-		{% include "secondarybar.html" %} 
-</div>
+{% block top_bar %} {% include "topbar.html" %} {% endblock %}
 {% endblock %}
 
+
+
 {% block branding %}
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
 <h1 id="site-name">{% trans 'Voyage Admin (Live)' %}&nbsp;&nbsp;&nbsp;<span id="site-warning">{% trans 'NOTE: Any changes will take effect immediately' %}</span>
 </h1>
+</ol>
+    </nav>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
