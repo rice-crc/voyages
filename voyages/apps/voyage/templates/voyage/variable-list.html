@@ -15,7 +15,7 @@
     documented, can be supplied on the basis of patterns observed in data variables.{% endblocktrans %}</p>
 
 <div id="variables-list">
-<table border="0" cellspacing="0" cellpadding="0" class="simple-table">
+<table class="table">
     {% for group in var_list_stats %}
     <tr>
         <td class="header-group" colspan="7">{{ group.var_category|trans_log }}</td>
@@ -44,4 +44,3 @@
     {% endfor %}
 </table>
 </div>
-
