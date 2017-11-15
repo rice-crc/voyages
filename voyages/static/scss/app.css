@@ -30,6 +30,9 @@ a:hover {
 button:hover {
   cursor: pointer; }
 
+footer {
+  background-color: #7B919C; }
+
 .hero,
 .content {
   text-align: center;
