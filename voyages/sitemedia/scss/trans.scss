@@ -1,6 +1,16 @@
 @import "colors";
 
 
+// This is for the variables list in the understanding db section
+.header-group {
+  background-color: rgba(0,0,0,.05);
+  font-weight: bold;
+}
+
+.header {
+  font-weight: bold;
+}
+
 .navbar {
   background: $trans-color !important;
 }
