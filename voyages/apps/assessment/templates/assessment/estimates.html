@@ -1,12 +1,16 @@
 {% extends "base.html" %}
-
+{% load sass_tags %}
 {% load humanize %}
-
 {% load i18n %}
-
 {% load assessment_extras %}
 
 {% block csslist %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/intro-maps.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-estimates.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
