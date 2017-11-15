@@ -29,16 +29,18 @@
 </head>
 
 <body>
-	{% block top_bar %} {% include "topbar.html" %} {% endblock %}
-	{% block additional_sec_bar %} {% endblock %} {% comment %} Secondary menu containing breadcrumb links and help links {% endcomment %}
-	{% block content %}{% endblock %}
+	<div class="container-viewport">
+		{% block top_bar %} {% include "topbar.html" %} {% endblock %}
+		{% block additional_sec_bar %} {% endblock %} {% comment %} Secondary menu containing breadcrumb links and help links {% endcomment %}
+		{% block content %}{% endblock %}
+	</div>
 	{% block footer %}{% endblock %}
 	{% include "google-analytics.html" %}
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}scripts/off-canvas.js" charset="utf-8"></script>
-
+	<script type="text/javascript" src="{{ STATIC_URL }}scripts/footer.js" charset="utf-8"></script>
 </body>
 
 </html>
