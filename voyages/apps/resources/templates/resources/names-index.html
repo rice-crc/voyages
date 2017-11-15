@@ -15,10 +15,9 @@
 
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css"> -->
 {% endblock %}
 
 {% block jslist %}
@@ -29,6 +28,73 @@
 {% block title %}{% trans 'African Names' %}{% endblock %}
 
 {% block content %}
+
+
+<table class="box-main-table" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+  <tr>
+    <td class="box-upper-row-left"></td>
+    <td class="box-upper-row-middle">
+{#        TODO: Is this used? #}
+{#    <input type="hidden" value="expanded" name="form:_idJsp164_state">#}
+    <table class="box-header-table" cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+      <tr>
+      <td class="box-label">{% trans 'Current query' %}</td>
+      <td>
+        <div class="box-button"></div>
+      </td>
+      </tr>
+    </tbody>
+    </table>
+    </td>
+    <td class="box-upper-row-right"></td>
+  </tr>
+  <tr>
+    <td class="box-middle-row-left">
+    <div class="box-middle-row-left"></div>
+    </td>
+    <td class="box-middle-row-middle">
+    <div id="form:_idJsp164" class="box-main-text">
+      <div class="query-summary">
+        {% if current_query %}
+          {% for val in current_query %}
+            {% if forloop.last and val.1 %}
+              <div class="query-summary-item-last">
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
+              </div>
+            {% elif val.1 %}
+              <div class="query-summary-item">
+                {% for k, v in val.1.items %}
+                  <span class="query-summary-variable">{{ k }}</span>
+                  :
+                  <span class="query-summary-value">{{ v }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
+        {% endif %}
+      </div>
+    </div>
+    </td>
+
+  </tr>
+
+</tbody>
+</table>
+
+
+
+
+
+
+
 <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 
@@ -394,5 +460,5 @@
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
+{include "footer.html" }
 {% endblock %}
