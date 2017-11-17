@@ -316,7 +316,7 @@ function embarkation_choices(input, id){
 }
 
 function selectAllPorts(action, item, mode) {
-    var par = $(item).parents().eq(5);
+    var par = $(item);
     var b = par.find("input[name^=checkbox_]")
     if (mode == 0){
         if (action == 1) {
