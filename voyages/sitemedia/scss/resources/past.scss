@@ -1,3 +1,23 @@
+@import "../colors";
+
+
+.datatable-options {
+	display: flex;
+	justify-content: space-between;	
+}
+
+.box-main-text {
+		margin-bottom: 1rem;
+}
+
+.full-input {
+	width: 100%;
+}
+
+.partial-input {
+	width: 40%;
+}
+
 td.td-main-panel {
 	vertical-align: top;
 	background-image: none;
@@ -27,7 +47,7 @@ td.lookup-checkbox-list-item-2 {
 div.slaves-query-section {
 	margin-bottom: 10px;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #B4D6CD;}
+	border-bottom: 1px solid $past-color;}
 
 td.box-upper-row-middle,
 td.box-middle-row-middle,
@@ -51,22 +71,16 @@ td.box-middle-row-right-collapsed {
 
 
 
-td.lookup-checkbox-list-quicksearch {
-	margin-bottom: 5px; }
 
-td.lookup-checkbox-list-quicksearch-label {
-	width: 80px; }
+
 
 td.lookup-checkbox-list-quicksearch-input input {
 	width: 100px; }
 
 div.lookup-checkbox-list {
-	border: 1px solid #B4D6CD;
-	/* background-color: #DCEFE7; */
-	margin-top: 5px;
-	padding: 3px;
-	width: 240px;
+	border: 1px solid $past-color;
 	height: 200px;
+	padding: 0 1rem;
 	overflow: scroll; }
 
 table.lookup-checkbox-list-buttons {
@@ -88,7 +102,7 @@ div.lookup-checkbox-list-item-expanded {
 	height: 11px; }
 
 div.query-summary-item {
-	border-bottom: 1px solid #B4D6CD;
+	border-bottom: 1px solid $past-color;
 	padding-bottom: 5px;
 	margin-bottom: 5px; }
 
@@ -106,4 +120,4 @@ input.button-save {
 	background-color: white;}
 
 input.button-save:hover {
-	background-color: #B4D6CD;}
+	background-color: $past-color;}

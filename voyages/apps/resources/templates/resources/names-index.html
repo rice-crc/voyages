@@ -12,8 +12,10 @@
 <link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/resources/past.scss' %}" rel="stylesheet" type="text/css" />
 
-<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
@@ -31,369 +33,449 @@
 {% block content %}
 
 
+<div class="container-new">
 
-<div class="page-title-2">{% trans 'Current query' %}</div>
+  <div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+      <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
+            enctype="application/x-www-form-urlencoded" >{% csrf_token %}
+        {% include "resources/names-left-menu.html" %}
+      </form>
+		</div>
 
-<div id="form:_idJsp164" class="box-main-text">
-  <div class="query-summary">
-    {% if current_query %}
-      {% for val in current_query %}
-        {% if forloop.last and val.1 %}
-          <div class="query-summary-item-last">
-            {% for k, v in val.1.items %}
-              <span class="query-summary-variable">{{ k }}</span>
-              :
-              <span class="query-summary-value">{{ v }}</span>
-            {% endfor %}
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
+
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Sidebar</span>
           </div>
-        {% elif val.1 %}
-          <div class="query-summary-item">
-            {% for k, v in val.1.items %}
-              <span class="query-summary-variable">{{ k }}</span>
-              :
-              <span class="query-summary-value">{{ v }}</span>
-            {% endfor %}
+        </button>
+      </p>
+
+			<div id="center-content-inner">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="page-title-1">{% trans "People of Atlantic Slave Trade Database" %}</div>
+
+        <div class="page-title-2">{% trans 'Your Current Query' %}</div>
+
+        <div id="form:_idJsp164" class="box-main-text">
+          <div class="query-summary">
+            {% if current_query %}
+              {% for val in current_query %}
+                {% if forloop.last and val.1 %}
+                  <div class="query-summary-item-last">
+                    {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                    {% endfor %}
+                  </div>
+                {% elif val.1 %}
+                  <div class="query-summary-item">
+                    {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
+            {% endif %}
           </div>
-        {% endif %}
-      {% endfor %}
-    {% else %}
-      <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
-    {% endif %}
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <table class="table">
+        <tbody>
+        <tr>
+          <th>
+          {% ifequal sort_column "slave_id" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_id" value="slave_id" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_id');">{% trans 'ID' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_name" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_name" value="slave_name" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_name');">{% trans 'Name' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_age" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_age" value="slave_age" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_age');">{% trans 'Age' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_height" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_height" value="slave_height" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_height');">{% trans 'Height [in]' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_sex_age" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_sexage" value="slave_sex_age" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_sexage');">{% trans 'Sex/Age' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_country" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_origin" value="slave_country" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_origin');">{% trans 'Origin' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_voyage_number" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_voyage" value="slave_voyage_number" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_voyage');">{% trans 'Voyage ID' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_ship_name" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_shipname" value="slave_ship_name" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_shipname');">{% trans 'Ship name' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_date_arrived" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_arrival" value="slave_date_arrived" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_arrival');">{% trans 'Arrival' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_embarkation_port" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_embarkation" value="slave_embarkation_port" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_embarkation');">{% trans 'Embarkation' %}</a>
+          </div>
+          </th>
+
+          <th>
+          {% ifequal sort_column "slave_disembarkation_port" %}
+            {% ifequal sort_mode "1" %}
+              <div class="grid-header-text grid-header-icon-asc">
+            {% endifequal %}
+            {% ifequal sort_mode "2" %}
+              <div class="grid-header-text grid-header-icon-desc">
+            {% endifequal %}
+          {% else %}
+            <div class="grid-header-text">
+          {% endifequal %}
+            <input type="hidden" id="sort_form_disembarkation" value="slave_disembarkation_port" name="sort_column" disabled="true">
+            <a href="#" onclick="sort_results('sort_form_disembarkation');">{% trans 'Disembarkation' %}</a>
+          </div>
+          </th>
+
+          <th>
+          <div class="grid-header-text">
+            <a href="#">{% trans 'Go to African-Origins Record' %}</a>
+          </div>
+          </th>
+        </tr>
+
+        {% for record in results %}
+            {% if forloop.first %}
+                <tr class="grid-row-even grid-row-first">
+            {% else %}
+                <tr class="grid-row-even">
+            {% endif %}
+
+            <td>{{ record.slave_id }}</td>
+                <td>{{ record.object.name }}</td>
+                {% if record.object.age  %}
+                  <td style="text-align: left">{{ record.object.age }}</td>
+                {% else %}
+                  <td style="text-align: left"></td>
+                {% endif %}
+                {% if record.object.height  %}
+                  <td style="text-align: left">{{ record.object.height }}</td>
+                {% else %}
+                  <td style="text-align: left"></td>
+                {% endif %}
+                {% if record.object.sex_age  %}
+                  <td>{{ record.object.sex_age }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+                {% if record.object.country %}
+                  <td>{{ record.object.country.name }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+                <td style="text-align: left">
+                {% if record.object.voyage %}
+                  <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
+                {% else %}
+                  <a href="#" onclick="return alert('{% trans 'A transatlantic Voyage ID for this record does not yet exist, although further research might uncover one. The link in the rightmost column of the African Names Database table will take you to the matching entry in the African Origins database.' %}');">{{ record.object.voyage_number }}</a>
+                {% endif %}
+                </td>
+                <td>{{ record.object.ship_name }}</td>
+                <td style="text-align: left">{{ record.object.date_arrived }}</td>
+                {% if record.object.embarkation_port %}
+                  <td>{{ record.object.embarkation_port }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+                {% if record.object.disembarkation_port %}
+                  <td>{{ record.object.disembarkation_port }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+                <td>
+                  <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
+                </td>
+                </tr>
+
+        {% endfor %}
+
+        </tbody>
+        </table>
+
+
+        <div class="row">
+        <div class="col-md-12 datatable-options">
+        <div class="datatable-results">
+          {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
+          {{ options_results_per_page_form.option }} {% trans 'results per page' %}
+          <input type="hidden">
+        </div>
+
+        <div class="datatable-pagination">
+          <table class="td-table-links">
+            <tbody>
+              <tr>
+              {# First, prev section #}
+              {% if results.number != 1 %}
+                <td class="pager-fast-back">
+                  <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
+                  <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
+                </td>
+              {% else %}
+                <td class="pager-fast-back-no-click">
+                  {% trans '« First' %}
+                </td>
+              {% endif %}
+
+              {% if results.has_previous %}
+                <td class="pager-back">
+                  <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
+                  <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
+                </td>
+              {% else %}
+                <td class="pager-back-no-click">
+                  {% trans '« Prev' %}
+                </td>
+              {% endif %}
+
+              {# Paginator num pages #}
+              {% for i in paginator_range %}
+                {% if i == results.number %}
+                  <td class="pager-number-active">
+                    {{ i }}
+                  </td>
+                {% else %}
+                  <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
+                  <td class="pager-number">
+                    <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
+                  </td>
+                {% endif %}
+              {% endfor %}
+
+              {% if results.has_next %}
+                <td class="pager-fast-forward">
+                  <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
+                  <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
+                </td>
+              {% else %}
+                <td class="pager-fast-forward-no-click">
+                  {% trans 'Next »' %}
+                </td>
+              {% endif %}
+              {% if results.has_next %}
+                <td class="pager-forward">
+                    <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
+                    <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
+                </td>
+              {% else %}
+                <td class="pager-forward-no-click">
+                  {% trans 'Last »' %}
+                </td>
+              {% endif %}
+
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <button class="button-save" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
+          <button class="button-save" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+
+
+
+    </div>
   </div>
 </div>
 
 
 
-
-
-
-
-<form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
-      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
-
-{% include "resources/names-left-menu.html" %}
-
-
-
-
-<table class="grid">
-<tbody>
-<tr>
-  <th>
-  {% ifequal sort_column "slave_id" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_id" value="slave_id" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_id');">{% trans 'ID' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_name" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_name" value="slave_name" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_name');">{% trans 'Name' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_age" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_age" value="slave_age" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_age');">{% trans 'Age' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_height" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_height" value="slave_height" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_height');">{% trans 'Height [in]' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_sex_age" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_sexage" value="slave_sex_age" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_sexage');">{% trans 'Sex/Age' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_country" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_origin" value="slave_country" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_origin');">{% trans 'Origin' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_voyage_number" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_voyage" value="slave_voyage_number" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_voyage');">{% trans 'Voyage ID' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_ship_name" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_shipname" value="slave_ship_name" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_shipname');">{% trans 'Ship name' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_date_arrived" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_arrival" value="slave_date_arrived" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_arrival');">{% trans 'Arrival' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_embarkation_port" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_embarkation" value="slave_embarkation_port" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_embarkation');">{% trans 'Embarkation' %}</a>
-  </div>
-  </th>
-
-  <th>
-  {% ifequal sort_column "slave_disembarkation_port" %}
-    {% ifequal sort_mode "1" %}
-      <div class="grid-header-text grid-header-icon-asc">
-    {% endifequal %}
-    {% ifequal sort_mode "2" %}
-      <div class="grid-header-text grid-header-icon-desc">
-    {% endifequal %}
-  {% else %}
-    <div class="grid-header-text">
-  {% endifequal %}
-    <input type="hidden" id="sort_form_disembarkation" value="slave_disembarkation_port" name="sort_column" disabled="true">
-    <a href="#" onclick="sort_results('sort_form_disembarkation');">{% trans 'Disembarkation' %}</a>
-  </div>
-  </th>
-
-  <th>
-  <div class="grid-header-text">
-    <a href="#">{% trans 'Go to African-Origins Record' %}</a>
-  </div>
-  </th>
-</tr>
-
-{% for record in results %}
-    {% if forloop.first %}
-        <tr class="grid-row-even grid-row-first">
-    {% else %}
-        <tr class="grid-row-even">
-    {% endif %}
-
-    <td>{{ record.slave_id }}</td>
-        <td>{{ record.object.name }}</td>
-        {% if record.object.age  %}
-          <td style="text-align: left">{{ record.object.age }}</td>
-        {% else %}
-          <td style="text-align: left"></td>
-        {% endif %}
-        {% if record.object.height  %}
-          <td style="text-align: left">{{ record.object.height }}</td>
-        {% else %}
-          <td style="text-align: left"></td>
-        {% endif %}
-        {% if record.object.sex_age  %}
-          <td>{{ record.object.sex_age }}</td>
-        {% else %}
-          <td></td>
-        {% endif %}
-        {% if record.object.country %}
-          <td>{{ record.object.country.name }}</td>
-        {% else %}
-          <td></td>
-        {% endif %}
-        <td style="text-align: left">
-        {% if record.object.voyage %}
-          <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
-        {% else %}
-          <a href="#" onclick="return alert('{% trans 'A transatlantic Voyage ID for this record does not yet exist, although further research might uncover one. The link in the rightmost column of the African Names Database table will take you to the matching entry in the African Origins database.' %}');">{{ record.object.voyage_number }}</a>
-        {% endif %}
-        </td>
-        <td>{{ record.object.ship_name }}</td>
-        <td style="text-align: left">{{ record.object.date_arrived }}</td>
-        {% if record.object.embarkation_port %}
-          <td>{{ record.object.embarkation_port }}</td>
-        {% else %}
-          <td></td>
-        {% endif %}
-        {% if record.object.disembarkation_port %}
-          <td>{{ record.object.disembarkation_port }}</td>
-        {% else %}
-          <td></td>
-        {% endif %}
-        <td>
-          <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
-        </td>
-        </tr>
-
-{% endfor %}
-
-</tbody>
-</table>
-
-
-
-
-{% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
-{{ options_results_per_page_form.option }} {% trans 'results per page' %}
-
-<input type="hidden">
-<table class="td-table-links">
-  <tbody>
-    <tr>
-    {# First, prev section #}
-    {% if results.number != 1 %}
-      <td class="pager-fast-back">
-        <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-        <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
-      </td>
-    {% else %}
-      <td class="pager-fast-back-no-click">
-        {% trans '« First' %}
-      </td>
-    {% endif %}
-
-    {% if results.has_previous %}
-      <td class="pager-back">
-        <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-        <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
-      </td>
-    {% else %}
-      <td class="pager-back-no-click">
-        {% trans '« Prev' %}
-      </td>
-    {% endif %}
-
-    {# Paginator num pages #}
-    {% for i in paginator_range %}
-      {% if i == results.number %}
-        <td class="pager-number-active">
-          {{ i }}
-        </td>
-      {% else %}
-        <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
-        <td class="pager-number">
-          <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
-        </td>
-      {% endif %}
-    {% endfor %}
-
-    {% if results.has_next %}
-      <td class="pager-fast-forward">
-        <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-        <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
-      </td>
-    {% else %}
-      <td class="pager-fast-forward-no-click">
-        {% trans 'Next »' %}
-      </td>
-    {% endif %}
-    {% if results.has_next %}
-      <td class="pager-forward">
-          <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-          <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
-      </td>
-    {% else %}
-      <td class="pager-forward-no-click">
-        {% trans 'Last »' %}
-      </td>
-    {% endif %}
-
-  </tr>
-</tbody>
-</table>
-
-<button class="button-save" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
-<button class="button-save" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
 
 {% endblock %}
 
