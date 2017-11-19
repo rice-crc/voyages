@@ -42,6 +42,12 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.full-input {
+  width: 100%; }
+
+.partial-input {
+  width: 40%; }
+
 .sidebar-section {
   margin: 1.5rem 0; }
 
@@ -55,6 +61,9 @@ h6 {
 
 .form-check {
   margin-bottom: 0; }
+
+.section {
+  margin: 1rem 0; }
 
 .table th {
   text-align: center; }
@@ -81,7 +90,6 @@ footer {
 .page-title-2 {
   font-weight: bold;
   font-size: 1.4rem;
-  margin-bottom: .5rem;
   color: #333333; }
 
 .sidebar-title-1 {
