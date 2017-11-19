@@ -2,6 +2,11 @@
 @import "headings";
 @import "colors";
 
+
+.sidebar-section {
+  margin: 1.5rem 0;
+}
+
 .sv-col-form-label, .form-check-label, .lookup-checkbox-list-item-0 {
   font-size: 1rem;
   margin-bottom: 0;
@@ -16,6 +21,15 @@
   margin-bottom: 0;
 }
 
+.table {
+  th {
+    text-align: center;
+  }
+
+  tr {
+    text-align: center;
+  }
+}
 
 html {
   position: relative;
@@ -59,8 +73,7 @@ footer {
 .sidebar-title-2 {
   font-weight: bold;
   font-size: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin: 0 1rem 0.5rem 0;
   color: $text-dark-1;
 }
 

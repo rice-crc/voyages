@@ -1,9 +1,28 @@
 @import "../colors";
 
+.btn-solid {
+  background-color: $past-color;
+	border-color: $past-color;
+  color: #fff;
+	&:hover {
+		background-color: $past-hover-color;
+		border-color: $past-hover-color;
+	}
+}
+
+.btn-outline {
+	color: $past-color;
+	background-color: white;
+	border-color: $past-color;
+	&:hover {
+		background-color: $past-color;
+		border-color: $past-color;
+	}
+}
 
 .datatable-options {
 	display: flex;
-	justify-content: space-between;	
+	justify-content: space-between;
 }
 
 .box-main-text {

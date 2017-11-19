@@ -1,3 +1,19 @@
+.btn-solid {
+  background-color: #DB6B57;
+  border-color: #DB6B57;
+  color: #fff; }
+  .btn-solid:hover {
+    background-color: #DB6B57;
+    border-color: #DB6B57; }
+
+.btn-outline {
+  color: #DB6B57;
+  background-color: white;
+  border-color: #DB6B57; }
+  .btn-outline:hover {
+    background-color: #DB6B57;
+    border-color: #DB6B57; }
+
 .datatable-options {
   display: flex;
   justify-content: space-between; }
