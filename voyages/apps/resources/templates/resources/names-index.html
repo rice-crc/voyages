@@ -312,14 +312,14 @@
             <td>{{ record.slave_id }}</td>
                 <td>{{ record.object.name }}</td>
                 {% if record.object.age  %}
-                  <td style="text-align: left">{{ record.object.age }}</td>
+                  <td>{{ record.object.age }}</td>
                 {% else %}
-                  <td style="text-align: left"></td>
+                  <td></td>
                 {% endif %}
                 {% if record.object.height  %}
-                  <td style="text-align: left">{{ record.object.height }}</td>
+                  <td>{{ record.object.height }}</td>
                 {% else %}
-                  <td style="text-align: left"></td>
+                  <td></td>
                 {% endif %}
                 {% if record.object.sex_age  %}
                   <td>{{ record.object.sex_age }}</td>
@@ -331,7 +331,7 @@
                 {% else %}
                   <td></td>
                 {% endif %}
-                <td style="text-align: left">
+                <td>
                 {% if record.object.voyage %}
                   <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
                 {% else %}
@@ -339,7 +339,7 @@
                 {% endif %}
                 </td>
                 <td>{{ record.object.ship_name }}</td>
-                <td style="text-align: left">{{ record.object.date_arrived }}</td>
+                <td>{{ record.object.date_arrived }}</td>
                 {% if record.object.embarkation_port %}
                   <td>{{ record.object.embarkation_port }}</td>
                 {% else %}
@@ -370,7 +370,7 @@
         </div>
 
         <div class="datatable-pagination">
-          <table class="td-table-links">
+          <table class="td-table-links dataTables_paginate paging_simple_numbers">
             <tbody>
               <tr>
               {# First, prev section #}

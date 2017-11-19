@@ -8,13 +8,15 @@
 <script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
 
 
-
-<div class="form-group row">
-  <div class="col-sm-12 sidebar-title-1">
-    {% trans 'All Search Parameters' %}
+<div class="sidebar-header-container">
+  <div class="form-group row">
+    <div class="col-sm-12 sidebar-title-1">
+      {% trans 'All Search Parameters' %}
+    </div>
   </div>
 </div>
 
+<div class="sidebar-section">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
     {% trans 'General Variables' %}
@@ -185,9 +187,9 @@
 
   </div>
 </div>
+</div>
 
-
-
+<div class="sidebar-section">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
     {% trans 'Place of Origin' %}
@@ -230,11 +232,13 @@
 
 <div class="form-group row">
   <div class="col-sm-12">
-    <button type="button" onclick="selectAllPorts(1, '#origin_list', 1)" value="Select all">{% trans 'Select all' %}</button>
-    <button type="button" onclick="selectAllPorts(-1, '#origin_list', 1)" value="Deselect all">{% trans 'Deselect all' %}</button>
+    <button type="button" class="btn btn-outline-primary btn-outline" onclick="selectAllPorts(1, '#origin_list', 1)" value="Select all">{% trans 'Select All' %}</button>
+    <button type="button" class="btn btn-outline-primary btn-outline" onclick="selectAllPorts(-1, '#origin_list', 1)" value="Deselect all">{% trans 'Deselect All' %}</button>
   </div>
 </div>
+</div>
 
+<div class="sidebar-section">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
     {% trans 'Place of Embarkation' %}
@@ -337,10 +341,13 @@
 
 <div class="form-group row">
   <div class="col-sm-12">
-    <button type="button" onclick="selectAllPorts(1, '#embarkation_list', 0)" value="Select all">{% trans 'Select all' %}</button>
-    <button type="button" onclick="selectAllPorts(-1, '#embarkation_list', 0)" value="Deselect all">{% trans 'Deselect all' %}</button>
+    <button type="button" class="btn btn-outline-primary btn-outline" onclick="selectAllPorts(1, '#embarkation_list', 0)" value="Select all">{% trans 'Select all' %}</button>
+    <button type="button" class="btn btn-outline-primary btn-outline" onclick="selectAllPorts(-1, '#embarkation_list', 0)" value="Deselect all">{% trans 'Deselect all' %}</button>
   </div>
 </div>
+
+</div>
+<div class="sidebar-section">
 
 
 <div class="form-group row">
@@ -369,9 +376,14 @@
   </div>
 </div>
 
+</div>
+<div class="sidebar-section">
+
 <div class="form-group row">
   <div class="col-sm-12">
-    <button type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
-    <button type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'Reset All' %}</button>
+    <button class="btn btn-outline-primary btn-solid" type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
+    <button class="btn btn-outline-primary btn-outline" type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'Reset All' %}</button>
   </div>
+</div>
+
 </div>
