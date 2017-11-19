@@ -6,10 +6,10 @@
     <div id="map" style="width:100%; height:100%; min-height: 500px;"></div>
 </div>
 <div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
-    <h1>{% trans 'Loading map voyages...' %}</h1>
+    <div class="page-title-1">{% trans 'Loading map voyages...' %}</div>
 </div>
 <div id="timeControls" class="animation_voyage_controls" style="display:none;">
-    <h1 class="animation_voyage_year_label" id="yearLabel"></h1>
+    <h1 class="animation_voyage_year_label" id="yearLabel"></div>
     <div class="control animation_voyage_year_slider" id="slider" style="width: 200px;"></div>
     <button class="animation_voyage_pause_button" type="button" id="pauseBtn">{% trans 'Pause' %}</button>
     <button class="animation_voyage_play_button" type="button" id="playBtn" style="display:none;">{% trans 'Play' %}</button>
@@ -192,9 +192,9 @@
                         // Set tooltip content.
                         var content = $("#tooltip_content");
                         content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
-                        var template = '<h1>' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</h1>";
+                        var template = '<div class="page-title-1">' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</div>";
                         if (d.ship_nationality_name != "") {
-                            template += "<h2>" + d.ship_nationality_name + "</h2>";
+                            template += "<div class="page-title-2">" + d.ship_nationality_name + "</div>";
                         }
                         if (d.ship_ton) {
                             template += "<p>{% trans 'This {ton}-ton ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";

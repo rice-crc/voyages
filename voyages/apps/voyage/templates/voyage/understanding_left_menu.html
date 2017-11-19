@@ -1,6 +1,11 @@
 {% load i18n %}
 <!-- Left menu for Understanding the Database -->
 
+<div class="sidebar-header-container">
+	<div class="sidebar-title-1">About This Database</div>
+</div>
+
+<div class="sidebar-section">
 <div class="secondary-menu-item-0">
 	<a href="{% url 'voyage:understanding-page' 'guide' %}">{% trans "Guide" %}</a>
 </div>
@@ -255,4 +260,6 @@
     <div class="secondary-menu-item-1">
         <a href="{% url 'voyage:sources-list' 'private_notes_and_collections' %}">{% trans "Private Notes and Collections" %}</a>
 	</div>
+</div>
+
 </div>
