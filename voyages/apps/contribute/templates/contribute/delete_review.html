@@ -12,11 +12,11 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 
 {% if not readonly %}
-    <h2>{% trans "Review deleted voyages" %}</h2>
+    <div class="page-title-2">{% trans "Review deleted voyages" %}</div>
 
     <h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
 {% else %}
-    <h2>{% trans "Delete voyage contribution - Voyage data" %}</h2>
+    <div class="page-title-2">{% trans "Delete voyage contribution - Voyage data" %}</div>
 {% endif %}
 {% for vars in deleted_voyage_vars %}
     {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}

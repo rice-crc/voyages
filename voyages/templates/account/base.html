@@ -51,10 +51,11 @@
 	<div class="row  row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 
-			<div class="left-menu-title">
-				<h3>{% trans 'CONTRIBUTE' %}</h3>
+			<div class="sidebar-header-container">
+				<div class="sidebar-title-1">{% trans 'Contribute' %}</div>
 			</div>
 
+			<div class="sidebar-section">
 			<div class="secondary-menu-item-0">
 				<a href="{% url 'contribute:guidelines' %}">{% trans 'Guidelines for Contributors' %}</a>
 			</div>
@@ -86,6 +87,7 @@
 
 				{% endif %}
 			</div>
+		</div>
 
 		</div>
 		<div class="col-md-8 col-xs-12 col-lg-9 ">
