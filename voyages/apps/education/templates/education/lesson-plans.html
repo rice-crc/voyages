@@ -18,7 +18,7 @@
 
 {% block center-content %}
 
-<h1>{% trans "Lesson Plans" %}</h1>
+<div class="page-title-1">{% trans "Lesson Plans" %}</div>
 
 <p>
 	{% blocktrans %}In order to present the trans-Atlantic slave trade database to a broader audience, particularly
@@ -38,7 +38,8 @@
 
 {% if lesson_plans %}
 {% for lesson_item in lesson_plans %}
-	<div class="lesson-plan-title">
+<div class="section">
+	<div class="page-title-2">
 		{{ lesson_item.lesson.text|trans_log }}
 
 		{% if lesson_item.download %}
@@ -55,6 +56,7 @@
 		{% endfor %}
 		{% endif %}
 	</div>
+
 
 	<div  class="lesson-plan-detail">
 		<div class="lesson-plan-author">
@@ -94,6 +96,7 @@
 			{{ lesson_item.lesson.abstract|trans_log|safe }}
 		</div>
 	</div>
+</div>
 {% endfor %}
 {% endif %}
 
