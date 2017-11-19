@@ -1,6 +1,15 @@
 @import "colors";
 
 
+.header-group {
+  background-color: #dddddd;
+  font-weight: bold;
+}
+
+td.header {
+  font-weight: bold;
+}
+
 .navbar {
   background: $trans-color !important;
 }
