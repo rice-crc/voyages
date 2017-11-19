@@ -1,7 +1,12 @@
 {% load i18n %}
 {% load resources_extras %}
+{% load sass_tags %}
+
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+
 <script src="{{ STATIC_URL }}scripts/resources/resources-left-menu.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
+
 
 
 <div class="form-group row">
@@ -17,7 +22,7 @@
 </div>
 
 <div class="form-group row">
-  <label for="slave_name" class="col-sm-5 col-form-label">{% trans 'African name' %}</label>
+  <label for="slave_name" class="col-sm-5 sv-col-form-label">{% trans 'African name' %}</label>
   <div class="col-sm-7">
     {% if "slave_name" in query_dict %}
       <input class="full-input" id="search_slave_name" type="text" value="{{ query_dict.slave_name }}" name="slave_name">
@@ -29,7 +34,7 @@
 
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Ship name' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Ship name' %}</label>
   <div class="col-sm-7">
     {% if "slave_ship_name" in query_dict %}
       <input class="full-input" id=search_slave_ship_name type="text" value="{{ query_dict.slave_ship_name }}" name="slave_ship_name">
@@ -42,7 +47,7 @@
 
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Voyage ID' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Voyage ID' %}</label>
   <div class="col-sm-7">
     {% if "slave_voyage_number" in query_dict %}
       <input class="full-input" id="search_slave_voyage_number" type="text" value="{{ query_dict.slave_voyage_number }}" name="slave_voyage_number">
@@ -54,7 +59,7 @@
 
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Time frame' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Time frame' %}</label>
   <div class="col-sm-7">
     {% if "slave_date_arrived__gte" in query_dict %}
       <input id="search_slave_start_date" type="text" class="partial-input" value="{{ query_dict.slave_date_arrived__gte }}" name="slave_date_arrived__gte">
@@ -71,7 +76,7 @@
 </div>
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Age' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Age' %}</label>
   <div class="col-sm-7">
     {% if "slave_age__gte" in query_dict %}
       <input id="search_slave_start_age" type="text" class="partial-input" value="{{ query_dict.slave_age__gte }}" name="slave_age__gte">
@@ -88,7 +93,7 @@
 </div>
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Height (inches)' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Height (inches)' %}</label>
   <div class="col-sm-7">
     {% if "slave_height__gte" in query_dict %}
       <input id="search_slave_start_height" type="text" class="partial-input" value="{{ query_dict.slave_height__gte }}" name="slave_height__gte">
@@ -106,7 +111,7 @@
 
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Sex/Age' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Sex/Age' %}</label>
   <div class="col-sm-7">
     <div class="row">
       <div class="form-check">
@@ -191,7 +196,7 @@
 
 <div class="form-group row">
 
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Filter in below List' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
   <div class="col-sm-7">
     <input id="query-text-origin" type="text" onkeyup="filter_edit_list()" name="" class="full-input">
   </div>
@@ -238,7 +243,7 @@
 
 
 <div class="form-group row">
-  <label for="slave_ship_name" class="col-sm-5 col-form-label">{% trans 'Filter in below List' %}</label>
+  <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
   <div class="col-sm-7">
     <input class="full-input" id="query-text-embarkation" type="text" onkeyup="filter_embarkation()" name="">
   </div>
@@ -367,6 +372,6 @@
 <div class="form-group row">
   <div class="col-sm-12">
     <button type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
-    <button type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'New Query' %}</button>
+    <button type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'Reset All' %}</button>
   </div>
 </div>
