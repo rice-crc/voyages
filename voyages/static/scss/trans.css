@@ -1,3 +1,10 @@
+.header-group {
+  background-color: #dddddd;
+  font-weight: bold; }
+
+td.header {
+  font-weight: bold; }
+
 .navbar {
   background: #008ca8 !important; }
 
