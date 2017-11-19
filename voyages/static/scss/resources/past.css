@@ -16,7 +16,8 @@
 
 .datatable-options {
   display: flex;
-  justify-content: space-between; }
+  justify-content: space-between;
+  margin: 1rem 0; }
 
 .box-main-text {
   margin-bottom: 1rem; }

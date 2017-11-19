@@ -34,7 +34,7 @@
 
 <div class="container-new">
 
-  <div class="row  row-offcanvas row-offcanvas-right">
+  <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
       <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
             enctype="application/x-www-form-urlencoded" >{% csrf_token %}
@@ -377,22 +377,22 @@
               {% if results.number != 1 %}
                 <td class="pager-fast-back">
                   <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
+                  <a href="#" onclick="retrieve_page('form_first_page');">{% trans 'First' %}</a>
                 </td>
               {% else %}
                 <td class="pager-fast-back-no-click">
-                  {% trans '« First' %}
+                  {% trans 'First' %}
                 </td>
               {% endif %}
 
               {% if results.has_previous %}
                 <td class="pager-back">
                   <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
+                  <a href="#" onclick="retrieve_page('form_prev_page');">{% trans 'Prev' %}</a>
                 </td>
               {% else %}
                 <td class="pager-back-no-click">
-                  {% trans '« Prev' %}
+                  {% trans 'Prev' %}
                 </td>
               {% endif %}
 
@@ -413,21 +413,21 @@
               {% if results.has_next %}
                 <td class="pager-fast-forward">
                   <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
+                  <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next' %}</a>
                 </td>
               {% else %}
                 <td class="pager-fast-forward-no-click">
-                  {% trans 'Next »' %}
+                  {% trans 'Next' %}
                 </td>
               {% endif %}
               {% if results.has_next %}
                 <td class="pager-forward">
                     <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-                    <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
+                    <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last' %}</a>
                 </td>
               {% else %}
                 <td class="pager-forward-no-click">
-                  {% trans 'Last »' %}
+                  {% trans 'Last' %}
                 </td>
               {% endif %}
 
@@ -441,8 +441,8 @@
 
       <div class="row">
         <div class="col-md-12">
-          <button class="button-save" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
-          <button class="button-save" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
+          <button class="btn btn-outline-primary btn-outline" type="submit" value="download_current_view" name="action">{% trans 'Download Current View' %}</button>
+          <button class="btn btn-outline-primary btn-outline" type="submit" value="download_all" name="action">{% trans 'Download All Results' %}</button>
         </div>
       </div>
 
