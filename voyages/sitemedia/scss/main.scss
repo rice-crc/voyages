@@ -1,5 +1,20 @@
 @import "footer";
 @import "headings";
+@import "colors";
+
+.sv-col-form-label, .form-check-label, .lookup-checkbox-list-item-0 {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.form-group {
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.form-check {
+  margin-bottom: 0;
+}
 
 
 html {
@@ -23,26 +38,37 @@ footer {
 .page-title-1 {
   font-weight: bold;
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
+  color: $text-dark-1;
 }
 
 .page-title-2 {
   font-weight: bold;
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  margin-bottom: .5rem;
+  color: $text-dark-1;
 }
 
 .sidebar-title-1 {
   font-weight: bold;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: $text-dark-1;
+  // margin-bottom: 1rem;
 }
 
 .sidebar-title-2 {
   font-weight: bold;
   font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: $text-dark-1;
 }
 
+
+
+.table-sm {
+  font-size: 0.8rem;
+}
 .container {
   margin: 2rem 15px;
 }
