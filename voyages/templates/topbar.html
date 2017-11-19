@@ -17,6 +17,11 @@
 						<a class="dropdown-item" href="{% url 'assessment:estimates' %}">{% trans "Estimates" %}</a>
 						<a class="dropdown-item" href="{% url 'assessment:essays' %}">{% trans "Essays" %}</a>
 						<a class="dropdown-item" href="{% url 'voyage:download' %}">{% trans "Downloads" %}</a>
+
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{% url 'assessment:intro-maps' %}">{% trans "Introductory Maps" %}</a>
+						<a class="dropdown-item" href="{% url 'assessment:estimates' %}?selected_tab=timeline">{% trans 'Timeline and Chronology' %}</a>
+
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{% url 'contribute:index' %}">{% trans "Contribute" %}</a>
 					</div>
@@ -36,7 +41,7 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">People of Atlantic Slave Trade</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="{% url 'about:origins' %}">About</a>
+						<a class="dropdown-item" href="{% url 'resources:about' %}">About</a>
 						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
 						<!-- <a class="dropdown-item" href="#">Downloads</a>
 						<div class="dropdown-divider"></div>
@@ -63,6 +68,11 @@
 						<a class="dropdown-item" href="{% url 'about:acknowledgements' %}">{% trans "Acknowledgements" %}</a>
 						<a class="dropdown-item" href="{% url 'about:origins' %}">{% trans "African Origins Project" %}</a>
 						<a class="dropdown-item" href="{% url 'about:contacts' %}">{% trans "Contact Us" %}</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{% url 'about:glossary' %}">{% trans "Glossary" %}</a>
+						<a class="dropdown-item" href="{% url 'about:faq' %}">{% trans "FAQ" %}</a>
+						<a class="dropdown-item" href="{% url 'about:legal' %}">{% trans "Legal" %}</a>
+
 					</div>
 				</li>
 
