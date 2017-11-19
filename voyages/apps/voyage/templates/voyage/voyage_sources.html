@@ -54,9 +54,9 @@
         </td>
         <td class="simple-box-22">
         {% if category == "documentary_sources" %}
-            <h1>{% trans 'Documentary Sources' %}</h1>
+            <div class="page-title-1">{% trans 'Documentary Sources' %}</div>
         {% else %}
-            <h1>{{ category|translate_source_name|trans_log }}</h1>
+            <div class="page-title-1">{{ category|translate_source_name|trans_log }}</div>
         {% endif %}
             <div class="switch-layout">
                 <table cellspacing="0" cellpadding="0" border="0">
