@@ -5,7 +5,7 @@
 {% load account socialaccount %}
 
 {% block center-content %}
-<h1>{% trans "Contribute" %}</h1>
+<div class="page-title-1">{% trans "Contribute" %}</div>
 
 {% url 'voyage:guide' as voyage_guide_url %}
 {% url 'contribute:guidelines' as contribute_guidelines_url %}
@@ -43,7 +43,7 @@
 	{% trans "You are already signed in." %}
 {% else %}
 
-<h2>{% trans "Sign in" %}</h2>
+<div class="page-title-2">{% trans "Sign in" %}</div>
 
 <p>
 	{% trans "In order to access the Contribute section, please sign in." %}

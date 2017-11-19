@@ -10,7 +10,7 @@
 <link href="{% sass_src 'scss/contribute.scss' %}" rel="stylesheet" type="text/css" />
 
 <div class="white-board">
-	<h2>{% trans "Welcome to the Contribute Section" %}</h2>
+	<div class="page-title-2">{% trans "Welcome to the Contribute Section" %}</div>
 
 	<ul class="contribute_menu row">
 		{% if request.user.is_staff %}
@@ -40,7 +40,7 @@
 	</ul>
 	{% for c in contributions %}
 		{% if forloop.first %}
-			<h2>{% trans "Contributions" %}</h2>
+			<div class="page-title-2">{% trans "Contributions" %}</div>
 			<table class="table table-hover table-striped">
 				<thead>
 				<tr>
@@ -78,7 +78,7 @@
 	{% endfor %}
 	{% for r in review_requests %}
 		{% if forloop.first %}
-			<h2>{% trans "Review requests" %}</h2>
+			<div class="page-title-2">{% trans "Review requests" %}</div>
 			<table class="table table-hover table-striped">
 				<thead>
 				<tr>

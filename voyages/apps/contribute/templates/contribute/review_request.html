@@ -4,7 +4,7 @@
 {% block center-content %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
 
-<h1>{% trans "Review request" %}</h1>
+<div class="page-title-1">{% trans "Review request" %}</div>
 
 <span>{% trans "Editor" %} <strong>{{ request.editor.get_full_name }}</strong> {% trans "asked you to review the contribution below." %}</span>
 <blockquote>
@@ -15,7 +15,7 @@
 
 <a href="/contribute/interim_summary/{{ request.contribution_id }}">{% trans "View contribution summary" %}</a>
 
-<h2>{% trans "Respond to review invitation" %}</h2>
+<div class="page-title-2">{% trans "Respond to review invitation" %}</div>
 
 <form action="{% url 'contribute:reply_review_request' %}" method="post">
     <div class="form-group">
