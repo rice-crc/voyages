@@ -54,7 +54,7 @@
 
       <div class="form-group row">
         <div class="col-sm-12">
-              <div class="sidebar-title-2">{% trans 'Category' %}</div>
+              <div>{% trans 'Category' %}</div>
 
               <input type="hidden" value="">
                 {% for images_set in images %}
@@ -62,13 +62,11 @@
 
                       <div class="checkbox-list-label-{{ forloop.counter0 }} form-check">
                         <label class="form-check-label">
-                          <div class="checkbox-list-checkbox-{{ forloop.counter0 }}">
                             {% if enabled_categories and images_set.label_name not in enabled_categories %}
                               <input type="checkbox" name="checkbox4" value="{% trans images_set.label_name|spaces_to_underscores %}">
                             {% else %}
                               <input type="checkbox" checked="checked" name="checkbox{{ images_set.label_code }}" value="{% trans images_set.label_name|spaces_to_underscores %}">
                             {% endif %}
-                          </div>
                           {% trans images_set.label_name %}
                           {% spaceless %}
                           <span class="images-count">({{ images_set.number_of_images }}
