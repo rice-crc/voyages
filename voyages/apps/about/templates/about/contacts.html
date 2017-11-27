@@ -1,5 +1,5 @@
 {% extends "about/aboutbase.html" %}
-{% load i18n %} 
+{% load i18n %}
 
 <!-- About Page -->
 
@@ -14,75 +14,69 @@
 
 <div class="page-title-1">{% trans "Contact Us" %}</div>
 
-<ul id="team">
 
+<div class="page-title-2">
+	{% trans "Voyages Editorial Board" %}
+</div>
+
+<ul>
 	<li>
-		<div class="group">
-			{% trans "VOYAGES EDITORIAL BOARD" %}
-		</div>
-		<ul>
-			<li>
-				<span class="person">Daniel B. Domingues da Silva</span> &ndash; <span class="function">Managing Editor</span>
-				<span class="place"> (Assistant Professor, Department of History, University of Missouri, Columbia, USA)</span>
-			</li>
-			<li>
-				<span class="person">Manuel Barcia Paz</span>
-				<span class="place"> (Lecturer,
-					Department of Spanish, Portuguese and Latin American Studies,
-					University of Leeds,
-					UK)</span>
-			</li>
-			<li>
-				<span class="person">Steve Behrendt</span>
-				<span class="place"> (Senior Lecturer,
-					History Programme,
-					Victoria University of Wellington,
-					New Zealand)</span>
-			</li>
-			<li>
-				<span class="person">David Eltis</span>
-				<span class="place"> (Professor,
-					Robert W. Woodruff Professor of History,
-					Atlanta, Georgia, USA)</span>
-			</li>
-			<li>
-				<span class="person">Manolo Florentino</span>
-				<span class="place"> (Professor,
-					Departamento de História,
-					Universidade Federal do Rio de Janeiro,
-					Brazil)</span>
-			</li>
-			<li>
-				<span class="person">Antonio Mendes</span>
-				<span class="place"> (Centro de História de Além-Mar, Universidade Nova de Lisboa, Portugal)</span>
-			</li>
-			<li>
-				<span class="person">David Richardson</span>
-				<span class="place"> (Director,
-					Wilberforce Institute for the study of Slavery and Emancipation at The University of Hull,
-					UK)</span>
-			</li>
-			<li>
-				<span class="person">Jelmer Vos</span>
-				<span class="place"> (Centro de História de Além-Mar, Universidade Nova de Lisboa, Portugal)</span>
-			</li>
-
-		</ul>
+		<span class="person">Daniel B. Domingues da Silva</span> &ndash; <span class="function">Managing Editor</span>
+		<span class="place"> (Assistant Professor, Department of History, University of Missouri, Columbia, USA)</span>
 	</li>
-
 	<li>
-		<div class="group">
-			{% trans "Questions or Comments" %}
-		</div>
-		<p>
-			{% blocktrans %}Please address all questions and comments regarding the content,
-			appearance, and functioning of this website as well as questions about contributing new
-			data to {% endblocktrans %}<a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;"> &#118;&#111;&#121;&#97;&#103;&#101;s&#64;&#101;mo&#114;y&#46;&#101;&#100;&#117;</a>.
-		</p>
-
+		<span class="person">Manuel Barcia Paz</span>
+		<span class="place"> (Lecturer,
+			Department of Spanish, Portuguese and Latin American Studies,
+			University of Leeds,
+			UK)</span>
+	</li>
+	<li>
+		<span class="person">Steve Behrendt</span>
+		<span class="place"> (Senior Lecturer,
+			History Programme,
+			Victoria University of Wellington,
+			New Zealand)</span>
+	</li>
+	<li>
+		<span class="person">David Eltis</span>
+		<span class="place"> (Professor,
+			Robert W. Woodruff Professor of History,
+			Atlanta, Georgia, USA)</span>
+	</li>
+	<li>
+		<span class="person">Manolo Florentino</span>
+		<span class="place"> (Professor,
+			Departamento de História,
+			Universidade Federal do Rio de Janeiro,
+			Brazil)</span>
+	</li>
+	<li>
+		<span class="person">Antonio Mendes</span>
+		<span class="place"> (Centro de História de Além-Mar, Universidade Nova de Lisboa, Portugal)</span>
+	</li>
+	<li>
+		<span class="person">David Richardson</span>
+		<span class="place"> (Director,
+			Wilberforce Institute for the study of Slavery and Emancipation at The University of Hull,
+			UK)</span>
+	</li>
+	<li>
+		<span class="person">Jelmer Vos</span>
+		<span class="place"> (Centro de História de Além-Mar, Universidade Nova de Lisboa, Portugal)</span>
 	</li>
 
 </ul>
 
-{% endblock %}
+<div class="page-title-2">
+	{% trans "Questions or Comments" %}
+</div>
+<p>
+	{% blocktrans %}Please address all questions and comments regarding the content,
+	appearance, and functioning of this website as well as questions about contributing new
+	data to {% endblocktrans %}<a href="mailto:&#118;&#111;&#121;a&#103;&#101;s&#64;&#101;&#109;o&#114;&#121;&#46;&#101;d&#117;"> &#118;&#111;&#121;&#97;&#103;&#101;s&#64;&#101;mo&#114;y&#46;&#101;&#100;&#117;</a>.
+</p>
 
+
+
+{% endblock %}
