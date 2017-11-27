@@ -1,54 +1,24 @@
-{% extends "help/helpbase.html" %}
+{% extends "about/aboutbase.html" %}
 {% load i18n %}
 {% load highlight %}
 {% load voyage_extras %}
 
-{% block csslist %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-glossary.css" />
-{% endblock %}
+<!-- Corresponds to the About: Glossary page -->
 
-{% block title %}{% trans 'Glossary' %}{% endblock %}
+{% block title %}{% trans "Glossary" %}{% endblock %}
 
-{% block main-content %}
+{% block center-content %}
 
-<div class="glossary-letters-and-search">
+<div class="page-title-1">{% trans "Glossary" %}</div>
 
-<table border="0" cellspacing="0" cellpadding="0" class="glossary-letters-and-search">
-    <tr>
-        <td class="glossary-letters-and-search">
-        <table><tr>
- 
-            {% for k, v in letters_found.items %}
-                {% if v == 0 %}
-                <td class="glossary-selector-letter">
-                    <div class="glossary-selector-letter-dimmed">{{ k }}</div>
-                </td>
-                {% else %}
-                <td class="glossary-selector-letter">
-                    <div class="glossary-selector-letter"><a class="glossary-selector-letter" href="#glossary-letter-{{ k }}">{{ k }}</a></div>
-                </td>
-                {% endif %}
-            {% endfor %}
-        </tr></table>
-    </td>
-    <td id="search-box-wrapper">
-    	<form action="{% url 'help:glossary' %}" method="post" enctype="multipart/form-data">
-    	{% csrf_token %}
-		{% for field in form %}
-		{{ field }}
-		{% endfor %}
-		<button type="submit" value="Search">{% trans 'Search' %}</button>
-    	</form>
-    </td>
-    </tr>
-</table>
-</div>
 
-<div class="glossary-terms" id="form:glossary_frame">
-{% if query and not results %}
-    <h1>{%  trans "No results" %}</h1>
-{% else %}
-    <table cellspacing="0" cellpadding="0" border="0" class="glossary-terms">
+    <table id="glossary">
+      <thead>
+        <tr>
+          <td>Term</td>
+          <td>Explanation</td>
+        </tr>
+      </thead>
     <tbody>
     {% for i in glossary %}
     {% for key, value in i.items %}
@@ -56,18 +26,6 @@
             <a name="glossary-letter-{{ t_value|slice:":1" }}"></a>
             {% for k in value %}
                 <tr>
-                {% if forloop.first %}
-                    {% for t_key, t_value in k.items %}
-                        {% if t_key == "term" %}
-                            <td rowspan="{{ value|length }}" class="glossary-letter" id="form_glossary_{{ t_value|slice:":1" }}">
-                                <a name="glossary-letter-{{ t_value|slice:":1" }}"></a>
-                            <div class="glossary-letter">
-                                {{ t_value|slice:":1" }}
-                            </div>
-                            </td>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
                 {% for t_key, t_value in k.items %}
                     {% if t_key == "term" %}
                         <td class="glossary-term">
@@ -100,6 +58,12 @@
     </tbody>
     </table>
 
-{% endif %}
-</div>
+<script>
+$(document).ready(function() {
+    $('#glossary').DataTable({
+       iDisplayLength: 50,
+    });
+} );
+</script>
+
 {% endblock %}
