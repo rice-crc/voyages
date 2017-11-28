@@ -2,6 +2,14 @@
 @import "headings";
 @import "colors";
 
+// dataTables
+.dataTables_length, .dataTables_info {
+	float: left;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+	padding-top: 0 !important;
+}
 
 .full-input {
 	width: 100%;
