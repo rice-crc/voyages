@@ -21,13 +21,13 @@
         <td class="header-group" colspan="7">{{ group.var_category|trans_log }}</td>
     </tr>
     <tr>
-        <td class="header">{% trans 'Variables' %}</td>
-        <td class="header">SPSS</td>
-        <td class="header">{% trans 'Voyages' %}</td>
-        <td class="header">{% trans 'Estimates' %}</td>
-        <td class="header">{% trans 'Basic' %}</td>
-        <td class="header">{% trans 'General' %}</td>
-        <td class="header">{% trans 'Note' %}</td>
+        <th class="header">{% trans 'Variables' %}</th>
+        <th class="header">SPSS</th>
+        <th class="header">{% trans 'Voyages' %}</th>
+        <th class="header">{% trans 'Estimates' %}</th>
+        <th class="header">{% trans 'Basic' %}</th>
+        <th class="header">{% trans 'General' %}</th>
+        <th class="header">{% trans 'Note' %}</th>
     </tr>
         {% for variable in group.variables %}
         <tr class="{% cycle 'odd_row' 'even_row' %}">
