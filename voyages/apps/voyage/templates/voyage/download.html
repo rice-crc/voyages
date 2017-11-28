@@ -27,20 +27,40 @@
 
   <div class="row">
     <div class="col">
-      <div class="sidebar-title-1">
-        Downloads
-      </div>
-      <div class="secondary-menu-item-0"><a href="#download1">The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</a></div>
-      <div class="secondary-menu-item-0"><a href="#download2">The Trans-Atlantic Slave Trade Database (Voyages data set)</a></div>
-      <div class="secondary-menu-item-0"><a href="#download3">Estimates spreadsheet</a></div>
-      <div class="secondary-menu-item-0"><a href="#download4">African Names Database</a></div>
+
+			<!-- Left side menu for the About section -->
+
+			{% load i18n %}
+
+			<div class="sidebar-header-container">
+				<div class="sidebar-title-1">{% trans "Download" %}</div>
+			</div>
+
+			<div class="sidebar-section">
+			<div class="secondary-menu-item-0">
+				<a href="#download1">{% trans "The 2010 Version of the Trans-Atlantic Slave Trade Database" %}</a>
+			</div>
+			<div class="secondary-menu-item-0">
+				<a href="#download2">{% trans "The Trans-Atlantic Slave Trade Database" %}</a>
+			</div>
+			<div class="secondary-menu-item-0">
+				<a href="#download3">{% trans "Estimates Spreadsheet" %}</a>
+			</div>
+			<div class="secondary-menu-item-0">
+				<a href="#download4">{% trans "African Names Database" %}</a>
+			</div>
+
+			</div>
+
+
+
     </div>
     <div class="col-9">
 	  {% block center-content %}
     <div id="center-content-inner">
       <div class="page-title-1">Downloads</div>
       <a name="download1"></a>
-      <div class="page-title-2">The 2010 Version of the Trans-Atlantic Slave Trade Database (expanded data set)</div>
+      <div class="page-title-2">The 2010 Version of the Trans-Atlantic Slave Trade Database</div>
       <p>The {db_year} version of the transatlantic slave trade database contains 35,941 voyages compared to 34,940 in 2008 (and 27,233 in the 1999 version of the database that appeared on CD-ROM). However, since 2008, several hundred corrections have
         been made and additional information added. Thus 86 of the 2008 voyages have been deleted either because we found they had been entered twice, or because we discovered that a voyage was not involved in the transatlantic slave trade. Voyage id 16772,
         the Pye, Captain Adam, turned out to have carried slaves from Jamaica to the Chesapeake, but obtained its captives in Jamaica, not Africa. Offsetting the deletions are 94 voyages added on the basis of new information. Further many voyages that are
@@ -48,49 +68,132 @@
         online. Users interested in working with this larger data set can download it in a file formatted for use with SPSS software. A variable in this dataset (EVGREEN) identifies voyages on the CD-ROM version published in 1999. Because some users may find
         it useful to view data as it existed in 1999, the CD-ROM version can also be selected for download. A codebook describing all variable names, variable labels, and values of the expanded dataset can be downloaded as a separate PDF document. With only
         a few exceptions, it retains variable names in the original 1999 CD-ROM version. The 2008 version of the database may also be downloaded.</p>
-      <h3>Downloads:</h3>
-      <ul>
-        <li>Expanded dataset (2010, SPSS format): <a href="{{MEDIA_URL}}download/tastdb-exp-2010.sav">tastdb-exp-2010.sav</a></li>
-        <li>Expanded dataset (2008, SPSS format): <a href="{{ MEDIA_URL }}download/tastdb-exp-2008.sav">tastdb-exp-2008.sav</a></li>
-        <li>Original CD-ROM dataset (1999, SPSS format): <a href="{{ MEDIA_URL }}download/tastdb-1999.sav">tastdb-1999.sav</a></li>
-        <li>Codebook: <a href="{{MEDIA_URL}}download/Codebook2013_5-3_final.pdf" target="blank">SPSS codebook</a></li>
-      </ul>
+
+				<table class='table'>
+					<thead>
+						<tr>
+							<th>Filename</th>
+							<th>Description</th>
+							<th>Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>tastdb-exp-2010.sav</td>
+							<td>Expanded dataset (2010, SPSS format)</td>
+							<td><a href="{{MEDIA_URL}}download/tastdb-exp-2010.sav">Download</a></td>
+						</tr>
+						<tr>
+							<td>tastdb-exp-2008.sav</td>
+							<td>Expanded dataset (2008, SPSS format)</td>
+							<td><a href="{{ MEDIA_URL }}download/tastdb-exp-2008.sav">Download</a></td>
+						</tr>
+						<tr>
+							<td>tastdb-1999.sav</td>
+							<td>Original CD-ROM dataset (1999, SPSS format)</td>
+							<td><a href="{{ MEDIA_URL }}download/tastdb-1999.sav">Download</a></td>
+						</tr>
+						<tr>
+							<td>SPSS Codebook</td>
+							<td>Codebook</td>
+							<td><a href="{{MEDIA_URL}}download/Codebook2013_5-3_final.pdf" target="blank">Download</a></td>
+						</tr>
+					</tbody>
+				</table>
+
       <a name="download2"></a>
-      <div class="page-title-2">The Trans-Atlantic Slave Trade Database (Voyages data set)</div>
+      <div class="page-title-2">The Trans-Atlantic Slave Trade Database</div>
       <p>This data set of the Trans-Atlantic Slave Trade Database contains the 99 variables available through the Voyages Database on this website. It is made available in three formats: SPSS (.sav), comma delimited (.csv), and dBase (.dbf). Users interested
         in working with this data set with their preferred software may select an edition year and file format below.</p>
-      <h3>Downloads:</h3>
-      <ul>
-        <li>2010, SPSS: <a href="{{ MEDIA_URL }}download/tastdb-2010.sav">tastdb-2010.sav</a></li>
-        <li>2010, comma-delimited: <a href="{{ MEDIA_URL }}download/tastdb-2010.csv">tastdb-2010.csv</a></li>
-        <li>2010, dBase: <a href="{{ MEDIA_URL }}download/tastdb-2010.dbf">tastdb-2010.dbf</a></li>
-      </ul>
+
+				<table class='table'>
+					<thead>
+						<tr>
+							<th>Filename</th>
+							<th>Description</th>
+							<th>Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>tastdb-2010.sav</td>
+							<td>2010, SPSS</td>
+							<td><a href="{{ MEDIA_URL }}download/tastdb-2010.sav">Download</a></td>
+						</tr>
+						<tr>
+							<td>tastdb-2010.csv</td>
+							<td>2010, Comma-Delimited</td>
+							<td><a href="{{ MEDIA_URL }}download/tastdb-2010.csv">Download</a></td>
+						</tr>
+						<tr>
+							<td>tastdb-2010.dbf</td>
+							<td>2010, dBase</td>
+							<td><a href="{{ MEDIA_URL }}download/tastdb-2010.dbf">Download</a></td>
+						</tr>
+					</tbody>
+				</table>
+
       <a name="download3"></a>
-      <div class="page-title-2">Estimates spreadsheet</div>
+      <div class="page-title-2">Estimates Spreadsheet</div>
       <p>The Estimates section uses data from the expanded Trans-Atlantic Slave Trade Database dataset, aggregated by regions of embarkation and disembarkation, but also incorporates published series of embarkations and disembarkations for particular regions
         when these data provide more accurate estimates than the database itself. Users interested in exploring the complex methodology involved in generating the estimates, or in testing the extent to which alternative assumptions lower or augment estimates
         of the full volume of the slave trade (in its entirety or for a national carrier or period of time), can download below an Excel-formatted copy of the spreadsheet estimating the full volume of the slave trade by national carrier and year of arrival,
         the SPSS file applying estimates of volume in the spreadsheet to data on exports and imports aggregated by national carrier, year of arrival, and the route of the voyage from region of embarkation to region of disembarkation, and a PDF version of
         the essay detailing the methodology used.</p>
-      <h3>Download:</h3>
-      <ul>
-        <li>Estimates spreadsheet: <a href="{{ MEDIA_URL }}download/2010-estimates-excel.xlsx">2010 estimates-excel.xlsx</a></li>
-        <li>Estimates SPSS file: <a href="{{ MEDIA_URL }}download/2010-estimates-SPSS.sav">2010 estimates-SPSS.sav</a></li>
-        <li>Methodology essay: <a href="{{ MEDIA_URL }}download/2010estimates-method.pdf">2010 estimates-method.pdf</a></li>
-      </ul>
+
+
+				<table class='table'>
+					<thead>
+						<tr>
+							<th>Filename</th>
+							<th>Description</th>
+							<th>Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2010 estimates-excel.xlsx</td>
+							<td>Estimates Spreadsheet</td>
+							<td><a href="{{ MEDIA_URL }}download/2010-estimates-excel.xlsx">Download</a></td>
+						</tr>
+						<tr>
+							<td>2010 estimates-SPSS.sav</td>
+							<td>Estimates SPSS</td>
+							<td><a href="{{ MEDIA_URL }}download/2010-estimates-SPSS.sav">Download</a></td>
+						</tr>
+						<tr>
+							<td>2010 estimates-method.pdf</td>
+							<td>Methodology Essay</td>
+							<td><a href="{{ MEDIA_URL }}download/2010estimates-method.pdf">Download</a></td>
+						</tr>
+					</tbody>
+				</table>
+
       <a name="download4"></a>
       <div class="page-title-2">African Names Database</div>
       <p>This database contains personal information of 91,491 Africans taken from captured slave ships or from African slave trading sites after 1807 as a result of the British navy&rsquo;s attempt to suppress the slave trade. It includes names,
         stature, sex/age category, country of origin, the name and database id of the slave vessel involved, year of arrival, and ports of embarkation and disembarkation. These variables may be searched on the African Names Database page of the present site.
         They have also been incorporated into <a href="http://www.african-origins.org" target="_blank">African-Origins.org</a> that provides in addition opportunities to view and contribute to the ethnolinguistic identification of the African names.</p>
-      <h3>Download:</h3>
-      <ul>
-        <li>African Names Database: <a href="{{ MEDIA_URL }}download/AfricanNamesDatabase.csv">AfricanNamesDatabase.csv</a></li>
-      </ul>
+
+
+				<table class='table'>
+					<thead>
+						<tr>
+							<th>Filename</th>
+							<th>Description</th>
+							<th>Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>AfricanNamesDatabase.csv</td>
+							<td>African Names Database</td>
+							<td><a href="{{ MEDIA_URL }}download/AfricanNamesDatabase.csv">Download</a></td>
+						</tr>
+					</tbody>
+				</table>
+
       Questions about downloading or using these datasets? Please contact <a href="mailto:voyages@emory.edu"> voyages@emory.edu</a>.
-
-
-
 
 		</div>
     {% endblock %}
