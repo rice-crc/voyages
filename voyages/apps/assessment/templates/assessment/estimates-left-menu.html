@@ -10,19 +10,19 @@
       <div class="sidebar-title-2">
         {% trans 'Time Frame' %}
       </div>
-
       <div id="form:_idJsp7" class="box-main-text">
         <div>
-          {% trans 'Show data only from' %}
+          {% trans 'Show data from' %}
           {{ year_form.frame_from_year }}
           {% trans 'to' %}
           {{ year_form.frame_to_year }}
-
-          {% trans 'The full extent of time covered by estimates is 1501 – 1866.' %}
         </div>
+        <p>{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
+
         <button class="btn btn-trans btn-sm" type="submit" name="submit_year" value="Apply">{% trans 'Apply' %}</button>
         <button class="btn btn-outline-primary btn-outline-trans btn-outline btn-sm" type="submit" name="submit_year" value="Reset">{% trans 'Reset' %}</button>
       </div>
+
     </div>
 
     <div class="sidebar-section">
