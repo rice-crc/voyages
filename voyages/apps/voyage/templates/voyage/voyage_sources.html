@@ -1,4 +1,5 @@
 {% extends "voyage/voyagebase.html" %}
+{% load sass_tags %}
 
 {% load i18n %}
 {% load voyage_extras %}
@@ -6,7 +7,9 @@
 {% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
 
 {% block content %}
+
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
+
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css"> -->
 
 
@@ -35,7 +38,7 @@
 	{% block center-content %}
     <div id="center-content-inner">
 
-<table class="simple-box" cellspacing="0" cellpadding="0" border="0">
+<table class="">
 <tbody>
     <tr>
         <td class="simple-box-11">
@@ -59,7 +62,7 @@
             <div class="page-title-1">{{ category|translate_source_name|trans_log }}</div>
         {% endif %}
             <div class="switch-layout">
-                <table cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     <tr>
                         <td class="switch-layout-second-link">
@@ -82,7 +85,7 @@
             </div>
         {% if category == "documentary_sources" %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table" >
                 <tbody>
                 {% for country_dict in results %}
                     <tr>
@@ -220,7 +223,7 @@
             </div>
         {% elif sorted_letters %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     {% for i in results %}
                         {% if forloop.first %}
@@ -271,7 +274,7 @@
             </div>
         {% else %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     {% for i in results %}
                         <tr>

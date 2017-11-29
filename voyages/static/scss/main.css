@@ -48,6 +48,11 @@ h6 {
 div.dataTables_wrapper div.dataTables_info {
   padding-top: 0 !important; }
 
+.fixed-width-table {
+  width: 100%; }
+  .fixed-width-table td {
+    word-wrap: break-word; }
+
 .full-input {
   width: 100%; }
 

@@ -11,6 +11,19 @@ div.dataTables_wrapper div.dataTables_info {
 	padding-top: 0 !important;
 }
 
+
+//table style
+.fixed-width-table {
+	// table-layout: fixed;
+	width: 100%;
+
+	td {
+		word-wrap: break-word;
+		// word-break:break-all;
+	}
+}
+
+
 .full-input {
 	width: 100%;
 }

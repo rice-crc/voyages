@@ -26,9 +26,21 @@ a {
   background-color: #008ca8;
   color: #fff; }
 
+.btn-outline-trans {
+  border-color: #008ca8;
+  color: #008ca8; }
+  .btn-outline-trans:hover {
+    background-color: #008ca8;
+    color: white;
+    border-color: #008ca8; }
+
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
   border-left: 4px solid #008ca8;
   font-weight: bold; }
+
+.tabs-selection {
+  margin: 1rem 0;
+  border-bottom: 1px solid #008ca8; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/trans.css.map */
