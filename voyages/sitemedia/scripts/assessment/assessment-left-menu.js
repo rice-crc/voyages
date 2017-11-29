@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("tr .checkbox-list-item-0").hover(
+    $(".checkbox-list-item-0").hover(
         function() {
             /* If len == 2, it's region highlighting */
             if ($(this).children().length == 2){

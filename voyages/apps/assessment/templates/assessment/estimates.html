@@ -4,6 +4,7 @@
 {% load i18n %}
 {% load assessment_extras %}
 
+
 {% block csslist %}
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
@@ -11,10 +12,13 @@
 <link href="{% sass_src 'scss/intro-maps.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css">
+<link href="{% sass_src 'scss/assessment/assessment-tabs.scss' %}" rel="stylesheet" type="text/css" />
+
+
+  <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css"> -->
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-estimates.css">
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
-  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css">
+  <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css"> -->
   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
 {% endblock %}
 
@@ -32,16 +36,17 @@
       <input type="hidden" name="selected_tab" value="{{ tab_selected }}" />
 
 
+
+
       <div class="container-new">
-        <div class="row row-offcanvas row-offcanvas-right">
+        <div class="row  row-offcanvas row-offcanvas-right">
       		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
-      			{% block left-menu %}
-              {% include "assessment/estimates-left-menu.html" %}
-      			{% endblock %}
+      			{% include "assessment/estimates-left-menu.html" %}
       		</div>
 
           <div class="col-md-8 col-xs-12 col-lg-9 ">
-            <p class="hidden-md">
+
+      			<p class="hidden-md">
               <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
                 <div>
                   <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
@@ -50,8 +55,66 @@
               </button>
             </p>
 
+            <div class="">
+              <input type="hidden" value="expanded" name="form:_idJsp45_state">
+              <div class="page-title-1">{% trans 'Time and Chronology' %}</div>
+              <div class="page-title-2">
+                {% trans 'Your Current Query' %}
+                <span class="fa fa-question-circle" style=" vertical-align: middle;" data-toggle="tooltip" data-placement="right" title="For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred."></span>
+              </div>
+              <div class="row">
+                <div class="col">{% trans 'Selected National Carriers' %}</div>
+                <div class="col-md-8 col-xs-12 col-lg-9">
+                  {% if all_nations_selected %}
+                    {% trans 'all' %}
+                  {% else %}
+                    {% for nation in nations %}
+                      {% ifequal nation.2 1 %}
+                        {{ nation.0|trans_log }},
+                      {% endifequal %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">{% trans 'Selected Embarkation Regions' %}</div>
+                <div class="col-md-8 col-xs-12 col-lg-9">
+                  {% if all_embarkations_selected %}
+                    {% trans 'all' %}
+                  {% else %}
+                    {% for region_list in export_regions.values %}
+                      {% for region in region_list %}
+                        {% ifequal region.1 1 %}
+                          {{ region.0.0|trans_log }},
+                        {% endifequal %}
+                      {% endfor %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">{% trans 'Selected Disembarkation Regions' %}</div>
+                <div class="col-md-8 col-xs-12 col-lg-9">
+                  {% if all_disembarkations_selected %}
+                    {% trans 'all' %}
+                  {% else %}
+                    {% for region_list in import_regions.values %}
+                      {% for region in region_list %}
+                        {% ifequal region.1 1 %}
+                          {{ region.0.0|trans_log }},
+                        {% endifequal %}
+                      {% endfor %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+
+            </div>
+
             <div class="tabs-selection">
-              <table class="tabs-selection" cellspacing="0" cellpadding="0" border="0">
+              <table>
               <tbody>
                 <tr>
                   <td class="tabs-tab-first-filler"></td>
@@ -70,7 +133,7 @@
                 </tr>
               </tbody>
               </table>
-
+            </div>
             {% if tab_selected == 'table' %}
               {% include "assessment/estimates_table.html" %}
             {% elif tab_selected == 'timeline' %}
@@ -79,10 +142,30 @@
               {% include "assessment/estimates_map.html" %}
             {% endif %}
 
-      		</div>
-      	</div>
-      </div>
+            <div class="page-title-2">Create a Query Link</div>
+            <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
+            <div>
+              <button onclick="return createLink();">{% trans 'Create Link' %}</button>
+              <button onclick="return resetAll();">{% trans 'Start New Query' %}</button>
+            </div>
+            <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
 
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
 
 
 
@@ -90,6 +173,11 @@
 
 
 
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
 
 {% block footer %}
