@@ -13,7 +13,7 @@
 </p>
 </blockquote>
 
-<a href="/contribute/interim_summary/{{ request.contribution_id }}">{% trans "View contribution summary" %}</a>
+<a href="/contribute/interim_summary/{{ request.contribution_id }}" onclick="window.open('/contribute/interim_summary/{{ request.contribution_id }}?printMode=true', 'Summary', 'width=800,height=600'); return false;">{% trans "View contribution summary" %}</a>
 
 <h2>{% trans "Respond to review invitation" %}</h2>
 
