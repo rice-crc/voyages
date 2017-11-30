@@ -1,0 +1,21 @@
+.gallery-flexbox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.gallery-grid {
+  flex: 1;
+}
+
+.images-category {
+  margin-bottom: 1rem;
+}
+
+.gallery-flexbox {
+  margin-bottom: 2rem;
+}
+
+.images-category-name {
+  font-weight: bold;
+  font-size: 1.333rem;
+}

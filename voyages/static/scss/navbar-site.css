@@ -1,0 +1,52 @@
+.navbar {
+  padding: .5rem 4rem;
+  z-index: 2;
+  border: none;
+  width: 100%; }
+
+.nav-item {
+  padding-right: 1rem; }
+
+.nav-link.active {
+  padding-top: 4px;
+  border-top: 4px solid white; }
+
+.nav-link {
+  font-weight: 500;
+  font-size: 1.1rem; }
+
+.navbar-brand {
+  font-weight: bold; }
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.9); }
+
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #fff; }
+
+.navbar-dark .navbar-nav .active > .nav-link,
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link.show,
+.navbar-dark .navbar-nav .show > .nav-link {
+  color: #fff; }
+
+.nav-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  flex-wrap: nowrap; }
+
+@media (min-width: 1200px) {
+  .nav-container {
+    justify-content: space-between;
+    display: flex;
+    align-items: center; } }
+
+.breadcrumb {
+  padding: .75rem 4rem; }
+
+.container-new {
+  margin: 2rem 4rem; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/navbar-site.css.map */

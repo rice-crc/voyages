@@ -1,0 +1,342 @@
+/* General style */
+div.database-table-options {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #EEDAA2;
+  border-top: 1px solid #EEDAA2;
+  padding: 5px 10px 5px 0px; }
+
+.bold {
+  font-weight: bold; }
+
+/* Override the default width (from base.css) */
+#main-content-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  clear: both; }
+
+.query_window {
+  width: 100%;
+  border-collapse: collapse; }
+
+/* Two-column view style */
+#left-menu, #center-content {
+  margin: 0;
+  padding: 0;
+  vertical-align: top; }
+
+#left_column {
+  width: 300px;
+  right: 300px;
+  margin-left: -100%; }
+
+#center_column {
+  width: 100%; }
+
+#col_container {
+  padding-left: 300px; }
+
+#col_container .column {
+  position: relative;
+  float: left; }
+
+/* Set the width of the left search menu */
+#left-menu {
+  padding: 10px 5px 10px 7px;
+  width: 300px;
+  min-width: 300px;
+  border: #895D03 1px solid; }
+
+/* Set the width of the main content */
+#center-content {
+  border-top: #895D03 1px solid;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  z-index: -1; }
+
+.box-main-table, .box-main-table-tail {
+  margin-bottom: 15px; }
+
+.box-text-label {
+  font-weight: bold; }
+
+/* Header text and color of each search box */
+.box-collapsed .box-header, .box-expanded .box-header,
+.box-expanded .box-header-tail, .box-collapsed .box-header-tail,
+.box-collapsed .box-header-head, .box-expanded .box-header-head {
+  padding: 3px 3px 0px 5px;
+  background-color: #EDD99F;
+  height: 15pt;
+  overflow: hidden; }
+
+/* Gap and corner style of collapsed boxes */
+.box-collapsed .box-header {
+  margin: 2px 5px 5px 5px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: #8A5D04 1px solid; }
+
+/* No bottom margin between the header and body search box */
+.box-expanded .box-header {
+  margin: 2px 5px 0px 5px;
+  -moz-border-radius-topleft: 7px;
+  -moz-border-radius-topright: 7px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  /* No bottom border */
+  border-top: #8A5D04 1px solid;
+  border-left: #8A5D04 1px solid;
+  border-right: #8A5D04 1px solid; }
+
+/* Default background image for each search box body */
+.box-mid-end, .box-mid {
+  background: #FFFFFF url("/static/images/voyage/database-box-content-center.png") repeat-x;
+  margin: 0 5px 0 5px;
+  padding: 5px 5px 5px 10px;
+  min-height: 30px;
+  border: #8A5D04 1px solid; }
+
+.box-mid-end {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  min-height: 30px; }
+
+.box-collapsed .box-mid-end, .box-collapsed .box-mid {
+  display: none; }
+
+.box-button {
+  float: right;
+  margin: 0;
+  padding: 0 20px 0 0;
+  display: block;
+  height: 14pt;
+  cursor: pointer; }
+
+.box-expanded .box-button {
+  background: #EDD99F url("/static/images/voyage/database-box-minus.png") no-repeat; }
+
+.box-collapsed .box-button {
+  background: #EDD99F url("/static/images/voyage/database-box-plus.png") no-repeat; }
+
+.box-header-head {
+  margin: 2px 5px 0px 5px;
+  border-top: #8A5D04 1px solid;
+  border-left: #8A5D04 1px solid;
+  border-right: #8A5D04 1px solid;
+  -moz-border-radius-topleft: 7px;
+  -moz-border-radius-topright: 7px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px; }
+
+.box-collapsed .box-header-head {
+  border: #8A5D04 1px solid; }
+
+.box-collapsed .box-header-tail {
+  margin: 0px 5px 5px 5px;
+  -moz-border-radius-bottomleft: 7px;
+  -moz-border-radius-bottomright: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  border-bottom: #8A5D04 1px solid;
+  border-left: #8A5D04 1px solid;
+  border-right: #8A5D04 1px solid; }
+
+.box-expanded .box-header-tail {
+  margin: 0px 5px 0px 5px;
+  -moz-border-radius: 0px;
+  border-left: #8A5D04 1px solid;
+  border-right: #8A5D04 1px solid; }
+
+/* Result section */
+.search-main-table {
+  width: 100%;
+  border-top: 1px solid #895D03; }
+
+.search-main-panel {
+  vertical-align: top;
+  margin: 0;
+  padding: 0; }
+
+div.permlink-info {
+  margin-bottom: 5px; }
+
+/* Result section */
+.tabs-selection ul {
+  display: inline-block;
+  width: 100%;
+  padding: 6px 0 4px 0;
+  margin: 0; }
+
+.tabs-selection ul li {
+  display: inline-block;
+  padding: 0;
+  margin-left: 12px;
+  margin-right: -10px; }
+
+.tab-menu-item {
+  padding: 6px 10px 3px 10px;
+  color: #000000;
+  font-size: 8pt;
+  text-decoration: none;
+  background-color: #EED083;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top: #8A5D04 1px solid;
+  border-left: #8A5D04 1px solid;
+  border-right: #8A5D04 1px solid; }
+
+.tab-menu-item-selected {
+  color: #000000;
+  background-color: #FFFFFF;
+  border-bottom: #FFFFFF 1px solid; }
+
+.search-panel {
+  min-height: 60px;
+  margin: 10px; }
+
+.download_button a {
+  padding: 3px 5px 3px 5px;
+  background-color: white;
+  border: 1px solid #EED083;
+  text-decoration: none;
+  display: inline-block; }
+
+.download_button a:hover {
+  background-color: #EED083; }
+
+/* Config menu */
+.voyage_config_wrapper {
+  border-top: 1px solid #EEDAA2;
+  border-bottom: 1px solid #EEDAA2;
+  padding: 10px 5px 5px 0px;
+  margin: 5px 0 5px 0; }
+
+.animation_voyage_controls {
+  position: absolute;
+  left: 50%;
+  top: 50px;
+  transform: translate(-50%, 0); }
+
+.animation_voyage_year_label {
+  font-family: "sl-Rockwell", sans-serif;
+  font-size: 3em; }
+
+.animation_voyage_year_slider {
+  margin: 5px; }
+
+.animation_voyage_pause_button, .animation_voyage_play_button {
+  align: center; }
+
+.animation_voyage_inner_circle {
+  fill: black; }
+
+.animation_voyage_outer_circle {
+  stroke: gray;
+  stroke-width: 2;
+  fill: transparent; }
+
+.animation_voyage_controls {
+  text-align: center; }
+
+.animation_voyage_info {
+  position: absolute;
+  color: white;
+  font-size: medium;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  padding: 20px; }
+
+.animation_voyage_info h1 {
+  color: yellow;
+  padding-right: 72px; }
+
+.animation_voyage_content {
+  background-repeat: no-repeat;
+  background-position: right top;
+  max-width: 300px; }
+
+.flag_1 {
+  background-image: url("/static/images/flags/Spain.png"); }
+
+.flag_2 {
+  background-image: url("/static/images/flags/Uruguay.png"); }
+
+.flag_3 {
+  background-image: url("/static/images/flags/Spain_Uruguay.png"); }
+
+.flag_4 {
+  background-image: url("/static/images/flags/Portugal.png"); }
+
+.flag_5 {
+  background-image: url("/static/images/flags/Brazil.png"); }
+
+.flag_6 {
+  background-image: url("/static/images/flags/Portugal_Brazil.png"); }
+
+.flag_7 {
+  background-image: url("/static/images/flags/United-Kingdom.png"); }
+
+.flag_8 {
+  background-image: url("/static/images/flags/Netherlands.png"); }
+
+.flag_9 {
+  background-image: url("/static/images/flags/United-States.png"); }
+
+.flag_10 {
+  background-image: url("/static/images/flags/France.png"); }
+
+.flag_11 {
+  background-image: url("/static/images/flags/Denmark.png"); }
+
+/*
+.flag_12 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+.flag_13 {
+  background-image: url("/static/images/flags/Sweden.png"); }
+
+/*
+.flag_14 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+.flag_15 {
+  background-image: url("/static/images/flags/Mexico.png"); }
+
+/*
+.flag_16 {
+    background-image: url('/static/images/flags/???.png')
+}
+*/
+.flag_17 {
+  background-image: url("/static/images/flags/Norway.png"); }
+
+.flag_18 {
+  background-image: url("/static/images/flags/Denmark_Baltic.png"); }
+
+.flag_19 {
+  background-image: url("/static/images/flags/Argentina.png"); }
+
+.flag_20 {
+  background-image: url("/static/images/flags/Russia.png"); }
+
+.animation_voyage_info h2 {
+  font-variant: small-caps; }
+
+.animation_tooltip_moreinfo {
+  font-variant: small-caps;
+  font-size: small; }
+
+.animation_tooltip_close_button {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  cursor: pointer; }
+
+.animation_tooltip_close_button:hover {
+  color: red; }
+
+/*# sourceMappingURL=../../../../../../../../../../../static/scss/legacy/voyage/voyage-search.css.map */

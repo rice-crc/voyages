@@ -1,0 +1,65 @@
+@import "colors";
+
+
+.header-group {
+  background-color: #dddddd;
+  font-weight: bold;
+}
+
+td.header {
+  font-weight: bold;
+}
+
+.navbar {
+  background: $trans-color !important;
+}
+
+.footer-flex-container {
+  background-color: $trans-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $trans-color;
+    opacity: 1;
+}
+
+a {
+  color: $trans-color;
+
+  &:hover {
+    color: $trans-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.btn-trans {
+  background-color: $trans-color;
+  color: #fff;
+}
+
+.btn-outline-trans {
+  border-color: #008ca8;
+  color: #008ca8;
+  &:hover {
+    background-color: #008ca8;
+    color: white;
+    border-color: #008ca8;
+  }
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $trans-color;
+  font-weight: bold;
+}
+
+// estimates
+.tabs-selection {
+  margin: 1rem 0;
+  border-bottom: 1px solid #008ca8;
+}
+
+#id_frame_from_year, #id_frame_to_year {
+  width: 50px;
+}

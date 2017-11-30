@@ -2,28 +2,26 @@
 {% load i18n %}
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 
-<h1 class="contribute_header">{% trans "Edit an existing record of a voyage" %}</h1>
+<div class="page-title-1" class="contribute_header">{% trans "Edit an existing record of a voyage" %}</div>
 
 <p>
-    {% trans "Please select the voyage you wish to edit." %}
+{% trans "Please select the voyage you wish to edit." %}
 </p>
 
+<p>
 {% include "contribute/voyage_selection_table.html" %}
-<p></p>
+</p>
 
-<div class="col-sm-12">
-    <form action="{% url 'contribute:edit_voyage' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="ids" id="ids_hidden">
-        {{ form.ids.errors }}
-    </form>
-    <p>
-        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
-    </p>
-</div>
+<form action="{% url 'contribute:edit_voyage' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="ids" id="ids_hidden">
+    {{ form.ids.errors }}
+</form>
+<button class="btn btn-trans" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
+
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
 <script type="text/javascript">
     var selection = new VoyageSelection(

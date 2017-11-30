@@ -1,10 +1,11 @@
 {% extends "account/base.html" %}
+{% load sass_tags %}
 
 {% load i18n %}
 {% load account socialaccount %}
 
 {% block center-content %}
-<h1>{% trans "Contribute" %}</h1>
+<div class="page-title-1">{% trans "Contribute" %}</div>
 
 {% url 'voyage:guide' as voyage_guide_url %}
 {% url 'contribute:guidelines' as contribute_guidelines_url %}
@@ -27,7 +28,7 @@
 </p>
 
 <p>
-	{% blocktrans %}Step-by-step instructions on how to use the Contribute forms are provided in the Voyages Guide, 
+	{% blocktrans %}Step-by-step instructions on how to use the Contribute forms are provided in the Voyages Guide,
     a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
     For further advice on contributing new data, we ask you to read our
     <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
@@ -42,7 +43,7 @@
 	{% trans "You are already signed in." %}
 {% else %}
 
-<h2>{% trans "Sign in" %}</h2>
+<div class="page-title-2">{% trans "Sign in" %}</div>
 
 <p>
 	{% trans "In order to access the Contribute section, please sign in." %}

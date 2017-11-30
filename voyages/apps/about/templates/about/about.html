@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load voyage_extras %}
+
+{% block title %}{% trans "About the Project" %}{% endblock %}
+
+{% block csslist %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-index.css">
+{% endblock %}
+
+{% block content %}
+<div id="index-intro-band">
+
+	<div id="index-intro-title">
+		{{ objs.0.title|trans_log }}
+	</div>
+
+	<div id="index-intro-text">
+		{{ objs.0.description|trans_log }}
+	</div>
+
+</div>
+
+<div id="section-titles">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="section-title"><a href="{% url 'about:history' %}">{{ objs.1.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'about:team' %}">{{ objs.2.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'about:data' %}">{{ objs.3.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'about:acknowledgements' %}">{{ objs.4.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'about:origins' %}">{{ objs.5.title|trans_log }}</a></td>
+			<td class="section-title"><a href="{% url 'about:contacts' %}">{{ objs.6.title|trans_log }}</a></td>
+		</tr>
+	</table>
+</div>
+
+<div id="section-descs">
+	<table>
+		<tr>
+
+			<td class="section-desc">{{ objs.1.description|trans_log }}</td>
+
+			<td class="section-desc">{{ objs.2.description|trans_log }}</td>
+
+			<td class="section-desc">{{ objs.3.description|trans_log }}</td>
+
+			<td class="section-desc">{{ objs.4.description|trans_log }}</td>
+
+			<td class="section-desc">{{ objs.5.description|trans_log }}</td>
+
+			<td class="section-desc">{{ objs.6.description|trans_log }}</td>
+
+		</tr>
+	</table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

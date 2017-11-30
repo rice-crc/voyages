@@ -1,4 +1,5 @@
 {% extends "voyage/voyagebase.html" %}
+{% load sass_tags %}
 
 {% load i18n %}
 {% load voyage_extras %}
@@ -6,18 +7,38 @@
 {% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
 
 {% block content %}
+
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css">
 
-<div id="left-menu" class="left-menu-box">
-	{% include "voyage/understanding_left_menu.html" %}
-</div>
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css"> -->
 
-<div id="center-content">
+
+
+
+
+<nav aria-label="breadcrumb" role="navigation">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
+		<li class="breadcrumb-item active" aria-current="page">About</li>
+	</ol>
+</nav>
+
+
+<div class="container-new">
+
+
+
+  <div class="row">
+    <div class="col">
+      {% include "voyage/understanding_left_menu.html" %}
+    </div>
+    <div class="col-9">
+
+
 	{% block center-content %}
     <div id="center-content-inner">
 
-<table class="simple-box" cellspacing="0" cellpadding="0" border="0">
+<table class="">
 <tbody>
     <tr>
         <td class="simple-box-11">
@@ -36,12 +57,12 @@
         </td>
         <td class="simple-box-22">
         {% if category == "documentary_sources" %}
-            <h1>{% trans 'Documentary Sources' %}</h1>
+            <div class="page-title-1">{% trans 'Documentary Sources' %}</div>
         {% else %}
-            <h1>{{ category|translate_source_name|trans_log }}</h1>
+            <div class="page-title-1">{{ category|translate_source_name|trans_log }}</div>
         {% endif %}
             <div class="switch-layout">
-                <table cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     <tr>
                         <td class="switch-layout-second-link">
@@ -64,7 +85,7 @@
             </div>
         {% if category == "documentary_sources" %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table" >
                 <tbody>
                 {% for country_dict in results %}
                     <tr>
@@ -202,7 +223,7 @@
             </div>
         {% elif sorted_letters %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     {% for i in results %}
                         {% if forloop.first %}
@@ -253,7 +274,7 @@
             </div>
         {% else %}
             <div id="sources">
-                <table class="simple-table" cellspacing="0" cellpadding="0" border="0">
+                <table class="fixed-width-table">
                 <tbody>
                     {% for i in results %}
                         <tr>
@@ -297,5 +318,12 @@
 		</div>
 
     {% endblock %}
+
 </div>
+</div>
+
+
+</div>
+
+
 {% endblock %}

@@ -1,11 +1,15 @@
 <!-- Left side menu for the About section -->
 
-{% load i18n %} 
+{% load i18n %}
 
-<div class="left-menu-title">
-	<h3>{% trans "About the Project" %}</h3>
+<div class="sidebar-header-container">
+	<div class="sidebar-title-1">{% trans "About the Project" %}</div>
 </div>
 
+<div class="sidebar-section">
+<div class="secondary-menu-item-0" id="history">
+	<a href="{% url 'about:index' %}">{% trans "About" %}</a>
+</div>
 <div class="secondary-menu-item-0" id="history">
 	<a href="{% url 'about:history' %}">{% trans "History" %}</a>
 </div>
@@ -23,4 +27,14 @@
 </div>
 <div class="secondary-menu-item-0" id="contacts">
 	<a href="{% url 'about:contacts' %}">{% trans "Contact Us" %}</a>
+</div>
+<div class="secondary-menu-item-0" id="contacts">
+	<a href="{% url 'help:glossary' %}">{% trans "Glossary" %}</a>
+</div>
+<div class="secondary-menu-item-0" id="contacts">
+	<a href="{% url 'help:faqs' %}">{% trans "FAQ" %}</a>
+</div>
+<div class="secondary-menu-item-0" id="contacts">
+	<a href="{% url 'help:legal' %}">{% trans "Legal" %}</a>
+</div>
 </div>

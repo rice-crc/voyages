@@ -1,0 +1,40 @@
+@import "colors";
+
+
+.btn-past {
+    color: $past-color !important;
+}
+
+.navbar {
+  background: $past-color !important;
+}
+
+.footer-flex-container {
+  background-color: $past-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $past-color;
+    opacity: 1;
+}
+
+a {
+  color: $past-color;
+
+  &:hover {
+    color: $past-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.btn-trans {
+  background-color: $past-color;
+  color: #fff;
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $past-color;
+  font-weight: bold;
+}

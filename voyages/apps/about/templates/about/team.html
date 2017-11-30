@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block center-content %}
-<h1>{% trans "Project Team" %}</h1>
+<div class="page-title-1">{% trans "Project Team" %}</div>
 
 <p>
 	{% blocktrans %}Many people contributed to the creation and implementation
@@ -19,11 +19,9 @@
 	Emory University):{% endblocktrans %}
 </p>
 
-<ul id="team">
 
-	<li>
-		<div class="group">
-			{% trans "NEH GRANT PRINCIPAL INVESTIGATORS" %}
+		<div class="page-title-2">
+			{% trans "NEH Grant Principal Investigators" %}
 		</div>
 		<ul>
 			<li>
@@ -35,11 +33,9 @@
 				<span class="place">(Woodruff Library, Emory University, Atlanta, Georgia, USA)</span>
 			</li>
 		</ul>
-	</li>
 
-	<li>
-		<div class="group">
-			{% trans "DEVELOPMENT TEAM" %}
+		<div class="page-title-2">
+			{% trans "Development Team" %}
 		</div>
 		<ul>
 			<li>
@@ -162,11 +158,9 @@
 				<span class="person">Jan Zich</span> &ndash; <span class="function">Lead Programmer</span>
 			</li>
 		</ul>
-	</li>
 
-	<li>
-		<div class="group">
-			{% trans "STEERING COMMITTEE" %}
+		<div class="page-title-2">
+			{% trans "Steering Committee" %}
 		</div>
 		<ul>
 			<li>
@@ -182,11 +176,9 @@
 				<span class="place">(Department of History, The University of Hull, UK)</span>
 			</li>
 		</ul>
-	</li>
 
-	<li>
-		<div class="group">
-			{% trans "ADVISORY BOARD" %}
+		<div class="page-title-2">
+			{% trans "Advisory Board" %}
 		</div>
 		<ul>
 			<li>
@@ -214,9 +206,6 @@
 				<span class="place">(Department of Sociology, Emory University, Atlanta, Georgia, USA)</span>
 			</li>
 		</ul>
-	</li>
 
-</ul>
 
 {% endblock %}
-

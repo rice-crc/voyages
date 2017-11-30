@@ -1,0 +1,109 @@
+@import "colors";
+
+.btn-solid {
+  background-color: $resource-color;
+	border-color: $resource-color;
+  color: #fff;
+	&:hover {
+		background-color: $resource-hover-color;
+		border-color: $resource-hover-color;
+	}
+}
+
+.btn-outline {
+	color: $resource-color;
+	background-color: white;
+	border-color: $resource-color;
+	&:hover {
+		background-color: $resource-color;
+		border-color: $resource-color;
+	}
+}
+
+.datatable-options {
+	display: flex;
+	justify-content: space-between;
+	margin: 1rem 0;
+}
+
+.navbar {
+  background: $resource-color !important;
+}
+
+.footer-flex-container {
+  background-color: $resource-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $resource-color;
+    opacity: 1;
+}
+
+a {
+  color: $resource-color;
+
+  &:hover {
+    color: $resource-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $resource-color;
+  font-weight: bold;
+}
+
+td.link-info-label {
+  color: $text-primary !important;
+}
+
+
+// lesson plans
+div.lesson-plan-title {
+	// background-color: $resource-color;
+  color: $text-primary;
+  font-weight: bold;
+}
+
+
+div.lesson-plan-title span.download {
+  font-weight: bold;
+}
+div.lesson-plan-author,
+div.lesson-plan-grade-level,
+div.lesson-plan-course,
+div.lesson-plan-keywords {
+	color: $text-primary;
+	line-height: 160%; }
+
+span.lesson-plan-grade-level,
+span.lesson-plan-course,
+span.lesson-plan-keywords {
+	color: Black;
+	font-weight: normal; }
+
+span.lesson-plan-author-name {
+	color: Black;
+	font-weight: bold; }
+
+div.lesson-plan-standards-title, div.lesson-plan-abstract-title {
+	border-top: 1px dotted #7A96BF;
+	padding-top: 5px;
+	margin-top: 5px;
+	font-weight: bold;
+	line-height: 160%; }
+
+div.lesson-plan-standards-title {
+	margin-top: 5px; }
+
+ul.lesson-plan-standards {
+	margin: 0px;
+	line-height: 160%;
+	padding: 0px;
+	margin-bottom: 5px;
+	list-style: none; }
+
+ul.lesson-plan-standards-listing {
+	list-style: disc; }

@@ -2,10 +2,10 @@
 {% load i18n %}
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 
-<h1 class="contribute_header">{% trans "Merge existing records of voyages" %}</h1>
+<div class="page-title-1" class="contribute_header">{% trans "Merge existing records of voyages" %}</div>
 
 <p>
     {% trans "Please select two or more existing voyage records for merging." %}
@@ -14,16 +14,14 @@
 <p></p>
 
 {% include "contribute/voyage_selection_table.html" %}
-<div class="col-sm-12">
-    <form action="{% url 'contribute:merge_voyages' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="ids" id="ids_hidden">
-        {{ form.ids.errors }}
-    </form>
-    <p>
-        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
-    </p>
-</div>
+<form action="{% url 'contribute:merge_voyages' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="ids" id="ids_hidden">
+    {{ form.ids.errors }}
+</form>
+<p>
+    <button class="btn btn-trans" id="confirm_btn" onclick="selection.submitForm();">{% trans "Begin" %}</button>
+</p>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
 <script type="text/javascript">
     var selection = new VoyageSelection(
