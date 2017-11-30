@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load sass_tags %}
+{% load i18n %}
 
 {% block csslist %}
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css">
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block jslist %}

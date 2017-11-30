@@ -1,14 +1,13 @@
-{% extends "help/helpbase.html" %}
+{% extends "about/aboutbase.html" %}
 {% load i18n %}
 
-{% block csslist %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-legal.css" />
-{% endblock %}
+<!-- Corresponds to the About: Legal page -->
 
-{% block title %}{% trans 'Legal' %}{% endblock %}
+{% block title %}{% trans "Legal" %}{% endblock %}
 
-{% block main-content %}
-<!-- The legal section of the site -->
+{% block center-content %}
+
+<div class="page-title-1">{% trans "Legal" %}</div>
 
 <p>
 	{% blocktrans %}Items on the <em>Voyages</em> website may be protected by the U.S.
@@ -27,7 +26,7 @@
 	images or texts.{% endblocktrans %}
 </p>
 
-<h2>{% trans "Conditions of Use" %}</h2>
+<div class="page-title-2">{% trans "Conditions of Use" %}</div>
 
 <p>
 	{% blocktrans %}The <em>Voyages</em> website is Open Access, which means the contents of
@@ -71,7 +70,7 @@
 	information.{% endblocktrans %}
 </p>
 
-<h2>{% trans "Permissions to Reproduce" %}</h2>
+<div class="page-title-2">{% trans "Permissions to Reproduce" %}</div>
 
 <p>
 	{% blocktrans %}The materials on this site come from a variety of
@@ -96,7 +95,7 @@
 	another context.{% endblocktrans %}
 </p>
 
-<table border="0" cellspacing="0" cellpadding="0" class="persmissions">
+<table class="table">
 	<tr>
 		<th>{% trans "TYPE OF CONTENT" %}</th>
 		<th>{% trans "USE RESTRICTIONS" %}</th>
@@ -341,7 +340,7 @@
 	</tr>
 </table>
 
-<h2>{% trans 'Licenses' %}</h2>
+<div class="page-title-2">{% trans 'Licenses' %}</div>
 
 <p>
 	{% blocktrans %}<em>Voyages: The Trans-Atlantic Slave Trade Database</em> by
@@ -365,4 +364,5 @@
 	or any later version. Open source software components of the Voyages website are freely available through
 	<a href="https://github.com/emory-libraries/voyages" target="_blank">GitHub</a>.{% endblocktrans %}
 </p>
+
 {% endblock %}

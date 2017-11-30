@@ -1,39 +1,61 @@
 {% extends "voyage/voyagebase.html" %}
 {% load voyage_extras %}
-
+{% load sass_tags %}
 {% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
-<div id="left-menu" class="left-menu-box">
-	{% include "voyage/understanding_left_menu.html" %}
+<!-- CSS for Trans-Atlantic -->
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
+<nav aria-label="breadcrumb" role="navigation">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
+		<li class="breadcrumb-item active" aria-current="page">About</li>
+	</ol>
+</nav>
+
+<div class="container-new">
+
+  <div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% include "voyage/understanding_left_menu.html" %}
+		</div>
+
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
+
+			<p class="hidden-md">
+        <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Sidebar</span>
+          </div>
+        </button>
+      </p>
+
+			<div id="center-content-inner">
+				{% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %}
+			</div>
+
+			<!-- Previous/Next navigation menu -->
+			{% if left or right %}
+      <div class="page-navigation-flexbox">
+					{% if left %}
+          <a href="{{ left.page }}" ><div class="page-navigation-item">Previous: {{ left.name|trans_log }}</div></a>
+					{% endif %} {% if right %}
+          <a href="{% url 'voyage:understanding-page' right.page %}"><div class="page-navigation-item">Next: {{ right.name|trans_log }}</div></a>
+					{% endif %}
+        </div>
+			{% endif %}
+
+    </div>
+  </div>
 </div>
 
-<div id="center-content">
-	{% block center-content %}
-		<div id="center-content-inner">
-            {% if not page %}
-                {% include "voyage/guide.html" %}
-            {% else %}
-			    {% include page %}
-            {% endif %}
-		</div>
-		
-		<!-- Previous/Next navigation menu -->
-        {% if left or right %}
-		<table border="0" cellspacing="0" cellpadding="0" class="method-prev-next">
-			<tr>
-                {% if left %}
-                    <td class="method-prev"><a href="{{ left.page }}">{{ left.name|trans_log }}</a></td>
-                {% endif %}
-                {% if right %}
-				    <td class="method-next"><a id="next-page" href="{% url 'voyage:understanding-page' right.page %}">{{ right.name|trans_log }}</a></td>
-                {% endif %}
-			</tr>
-		</table>
-        {% endif %}
-	{% endblock %}
-</div>
+
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
+
 {% endblock %}

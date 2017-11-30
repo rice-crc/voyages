@@ -957,7 +957,9 @@ def begin_editorial_review(request):
         editor_contribution = EditorVoyageContribution()
         editor_contribution.request = review_request
         editor_contribution.notes = contributor_prefix + contribution.notes if contribution.notes else ''
-        if hasattr(contribution, 'interim_voyage'):
+        has_interim_voyage = hasattr(contribution, 'interim_voyage')
+        editor_contribution.ran_impute = not has_interim_voyage
+        if has_interim_voyage:
             editor_contribution.interim_voyage = clone_interim_voyage(contribution, contributor_prefix)
             override_empty_fields_with_single_value(editor_contribution.interim_voyage, review_request)
         editor_contribution.save()
@@ -1221,7 +1223,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         pass
     if not decision in [ReviewRequestDecision.accepted_by_editor, ReviewRequestDecision.rejected_by_editor, ReviewRequestDecision.deleted]:
         return HttpResponseBadRequest()
-    if decision == ReviewRequestDecision.accepted_by_editor and not contribution.ran_impute:
+    if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage and not contribution.ran_impute:
         return JsonResponse({'result': 'Failed', 'errors': _('Impute program must be ran on contribution before acceptance')})
     if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage:
         # Check whether every new source in the editorial version has been created in the system before continuing.
@@ -1318,7 +1320,8 @@ def submit_review_to_editor(request, review_request_id):
                 e.delete()
             editor_contribution = EditorVoyageContribution()
             editor_contribution.request = req
-            editor_contribution.notes = escape('Reviewer: ' + contribution.notes if contribution.notes else '')            
+            editor_contribution.notes = escape('Reviewer: ' + contribution.notes if contribution.notes else '')
+            editor_contribution.ran_impute = not has_interim_voyage
             if has_interim_voyage:
                 editor_contribution.interim_voyage = clone_interim_voyage(contribution, 'Reviewer: ')
                 override_empty_fields_with_single_value(editor_contribution.interim_voyage, req)

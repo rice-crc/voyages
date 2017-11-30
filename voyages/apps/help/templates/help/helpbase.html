@@ -6,15 +6,15 @@
 	<head>
 		<!-- Basic common css styles -->
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/help/help-main.css" />
-		
+
 		{% block csslist %}
 		{% comment %} Additional CSS file here {% endcomment %}
-		
+
 		{% endblock %}
 		<!-- Basic common javascripts -->
 		<script src="{{ STATIC_URL }}scripts/jquery-1.9.1.min.js"></script>
 		<script src="{{ STATIC_URL }}scripts/help/navigation_helptop.js" type="text/javascript"></script>
-		
+
 		{% block jslist %}
 		 {% comment %} Additional Javascript files here {% endcomment %}
 		{% endblock %}
@@ -61,7 +61,6 @@
 		</div>
 		{% block footer %}{% endblock %}
 
-		{% include "googlecode.html" %}
+		{% include "google-analytics.html" %}
 	</body>
 </html>
-

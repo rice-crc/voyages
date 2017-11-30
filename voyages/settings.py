@@ -31,6 +31,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+
+# SASS_PROCESSOR_ROOT = STATIC_URL
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -44,6 +47,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -108,9 +112,13 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
 
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(STATIC_URL, 'scss'),
+]
+
 INSTALLED_APPS = (
     'autocomplete_light',
-
+    'sass_processor',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -204,7 +212,7 @@ except ImportError:
 
 
 # Modify HAYSTACK config for fixture loading durring tests
-# It is not possible to use override_settings decorator 
+# It is not possible to use override_settings decorator
 # because HAYSTACK triggers an update on save() when fixtures are loaded
 # turns out fixtures are loaded before decorators are applied.
 

@@ -2,7 +2,7 @@
 {% load voyage_extras %}
 {% load humanize %}
 
-<h1>{% trans "Variable list" %}</h1>
+<div class="page-title-1">{% trans "Variable list" %}</div>
 
 <p>{% blocktrans %}The variable list provides summary information on variables of the Voyages Database in the "Search the Database"
     section. The variables are displayed here in the form of short labels. The second column gives their equivalents in
@@ -15,19 +15,19 @@
     documented, can be supplied on the basis of patterns observed in data variables.{% endblocktrans %}</p>
 
 <div id="variables-list">
-<table border="0" cellspacing="0" cellpadding="0" class="simple-table">
+<table class="table">
     {% for group in var_list_stats %}
     <tr>
         <td class="header-group" colspan="7">{{ group.var_category|trans_log }}</td>
     </tr>
     <tr>
-        <td class="header">{% trans 'Variables' %}</td>
-        <td class="header">SPSS</td>
-        <td class="header">{% trans 'Voyages' %}</td>
-        <td class="header">{% trans 'Estimates' %}</td>
-        <td class="header">{% trans 'Basic' %}</td>
-        <td class="header">{% trans 'General' %}</td>
-        <td class="header">{% trans 'Note' %}</td>
+        <th class="header">{% trans 'Variables' %}</th>
+        <th class="header">SPSS</th>
+        <th class="header">{% trans 'Voyages' %}</th>
+        <th class="header">{% trans 'Estimates' %}</th>
+        <th class="header">{% trans 'Basic' %}</th>
+        <th class="header">{% trans 'General' %}</th>
+        <th class="header">{% trans 'Note' %}</th>
     </tr>
         {% for variable in group.variables %}
         <tr class="{% cycle 'odd_row' 'even_row' %}">
@@ -44,4 +44,3 @@
     {% endfor %}
 </table>
 </div>
-

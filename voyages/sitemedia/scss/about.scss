@@ -1,0 +1,36 @@
+@import "colors";
+
+
+.navbar {
+  background: $about-color !important;
+}
+
+.footer-flex-container {
+  background-color: $about-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $about-color;
+    opacity: 1;
+}
+
+a {
+  color: $about-color;
+
+  &:hover {
+    color: $about-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.btn-trans {
+  background-color: $about-color;
+  color: #fff;
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $about-color;
+  font-weight: bold;
+}

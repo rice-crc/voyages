@@ -151,6 +151,15 @@ To cleanup the thumbnail image cache run::
 
   $ python manage.py thumbnail cleanup
 
+Haystack patch
+~~~~~~~~~~~~~~
+
+Haystack deals poorly with our index and in some cases it prevents proper behavior of this app.
+A simple patch is available at doc/fields.py. Just determine the virtualenv path in which the
+app will be run (after installing all python dependencies in that same virtualenv) and locate
+'/lib/python2.7/site-packages/haystack/fields.py'. For safety, generate a diff between the
+the lib version against and the one at doc/fields.py. Only a few lines should have changed.
+Replace the file on the local library and the patching is done.
 
 Creating initial data
 ^^^^^^^^^^^^^^^^^^^^^

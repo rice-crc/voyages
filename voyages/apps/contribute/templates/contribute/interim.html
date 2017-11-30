@@ -11,21 +11,21 @@
     #return_btn {
         display: inline;
     }
-    
+
     .label-table {
         table-layout: fixed;
     }
-    
+
     .pre-value-cell {
         cursor: pointer;
         padding: 3px;
     }
-    
+
     .pre-value-cell:hover {
-        background-color: lightblue;   
+        background-color: lightblue;
     }
 </style>
-<h1 class='contribute_header'>{{ contribution }}</h1>
+<div class="page-title-1" class='contribute_header'>{{ contribution }}</div>
 
 {% if mode == 'contribute' %}
 <p>
@@ -55,7 +55,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
-              <h1>{% trans "Ship, nation, owners" %}</h1>
+              <div class="page-title-1">{% trans "Ship, nation, owners" %}</div>
             </a>
         </div>
         <div id="ship_nation_owners" class="collapse col-md-12 var_group">
@@ -65,7 +65,7 @@
                 {{ f.label_tag }}
                 <div class="input-group col-sm-8">
                     {{ f }}
-                </div>                
+                </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
@@ -203,8 +203,8 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        
-        {% if mode == 'editorial_review' %}        
+
+        {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_national_carrier as f %}
                 {{ f.errors }}
@@ -250,7 +250,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
-              <h1>{% trans "Voyage outcome" %}</h1>
+              <div class="page-title-1">{% trans "Voyage outcome" %}</div>
             </a>
         </div>
         <div id="outcome" class="collapse col-md-12 var_group">
@@ -290,7 +290,7 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        
+
         {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_outcome_of_voyage_for_slaves as f %}
@@ -354,7 +354,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
-              <h1>{% trans "Voyage itinerary" %}</h1>
+              <div class="page-title-1">{% trans "Voyage itinerary" %}</div>
             </a>
         </div>
         <div id="itinerary" class="collapse col-md-12 var_group">
@@ -549,15 +549,6 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
-            {% with form.imputed_region_where_voyage_began as f %}
-                {{ f.errors }}
-                {{ f.label_tag }}
-                <div class="input-group col-sm-8">
-                    <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
-                </div>
-            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
-        </div>
-        <div class="form-group">
             {% with form.imputed_first_region_of_slave_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
@@ -610,7 +601,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
-                <h1>{% trans "Voyage dates" %}</h1>
+                <div class="page-title-1">{% trans "Voyage dates" %}</div>
             </a>
         </div>
         <div id="dates" class="collapse col-md-12 var_group">
@@ -649,7 +640,7 @@
             {% with form.date_first_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">                    
+                <div class="input-group col-sm-3">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -679,7 +670,7 @@
             {% with form.date_return_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">                    
+                <div class="input-group col-sm-3">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -704,7 +695,7 @@
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
-        
+
         {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_year_voyage_began as f %}
@@ -747,15 +738,6 @@
                 {{ f.errors }}
                 {{ f.label_tag }}
                 <div class="input-group col-sm-2 year_range" data-yearmod="10">
-                    {{ f }}
-                </div>
-            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
-        </div>
-        <div class="form-group">
-            {% with form.imputed_century_in_which_voyage_occurred as f %}
-                {{ f.errors }}
-                {{ f.label_tag }}
-                <div class="input-group col-sm-2">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -804,7 +786,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
-              <h1>{% trans "Captain and crew" %}</h1>
+              <div class="page-title-1">{% trans "Captain and crew" %}</div>
             </a>
         </div>
         <div id="crew" class="collapse col-md-12 var_group">
@@ -946,7 +928,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
-              <h1>{% trans "Slaves (numbers)" %}</h1>
+              <div class="page-title-1">{% trans "Slaves (numbers)" %}</div>
             </a>
         </div>
         <div id="slave_numbers_main" class="collapse col-md-12 var_group">
@@ -961,10 +943,10 @@
         <div class="form-group">
             <label for="interim_slave_number_SLINTEN2">
                 {% trans "Slaves intended from second port of purchase" %}:
-            </label>            
+            </label>
             <div class="input-group col-sm-2">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEN2" name="interim_slave_number_SLINTEN2">
-            </div>            
+            </div>
         </div>
         <div class="form-group">
             <label for="interim_slave_number_NCAR13">
@@ -1062,7 +1044,7 @@
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
-        
+
         {% if mode == 'editorial_review' %}
         <div class="form-group">
             {% with form.imputed_voyage_groupings_for_estimating_imputed_slaves as f %}
@@ -1103,13 +1085,13 @@
         {% endif %}
     </div>
     </div>
-    
+
     {% if mode == 'editorial_review' %}
     <!-- Slaves (mortality and price) -->
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#mortality_and_price" aria-expanded="false" aria-controls="mortality_and_price">
-              <h1>{% trans "Slaves (mortality and price)" %}</h1>
+              <div class="page-title-1">{% trans "Slaves (mortality and price)" %}</div>
             </a>
         </div>
         <div id="mortality_and_price" class="collapse col-md-12 var_group">
@@ -1157,7 +1139,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
-              <h1>{% trans "Slaves (characteristics)" %}</h1>
+              <div class="page-title-1">{% trans "Slaves (characteristics)" %}</div>
             </a>
         </div>
         <div id="demographics" class="collapse col-md-12 var_group">
@@ -1234,13 +1216,13 @@
         </div>
     </div>
     </div>
-    
+
     {% if mode == 'editorial_review' %}
     <!-- Slaves (age and sex) -->
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#age_and_sex" aria-expanded="false" aria-controls="age_and_sex">
-              <h1>{% trans "Slaves (age and sex)" %}</h1>
+              <div class="page-title-1">{% trans "Slaves (age and sex)" %}</div>
             </a>
         </div>
         <div id="age_and_sex" class="collapse col-md-12 var_group">
@@ -1300,7 +1282,7 @@
     <div class="expander_container">
         <div>
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
-              <h1>{% trans "Sources" %}</h1>
+              <div class="page-title-1">{% trans "Sources" %}</div>
             </a>
         </div>
         <div id="sources" class="collapse col-md-12 var_group">
@@ -1651,7 +1633,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
-<script type="text/javascript">        
+<script type="text/javascript">
     var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
     // Existing voyage(s) data.
@@ -1695,7 +1677,7 @@
             $('#referencesModal').modal('show');
         }
     }
-    
+
     {% if mode == 'editorial_review' %}
     var createdNewSource = null;
     function createOrEditReference(item) {
@@ -1704,7 +1686,7 @@
         var index = $(item).data('index');
         if (index) {
             index = parseInt(index);
-            var sourceWithIndex = getSourceByIndex(index);        
+            var sourceWithIndex = getSourceByIndex(index);
             createdNewSource = sourceWithIndex.toModel();
             createdNewSource.index = index;
             data.interim_source = createdNewSource;
@@ -1733,8 +1715,8 @@
                     $('#create_ref_dialog').modal('show');
                 }
             }
-        }); 
-        return false; 
+        });
+        return false;
     }
     $('#create_ref_confirm_btn').click(function(e) {
         e.preventDefault();
@@ -1761,7 +1743,7 @@
             if (!regex.test(suffix)) {
                 warnings.push('{% trans "Suffix should be alphanumeric and contain only restricted special symbols" %}');
             }
-        } 
+        }
         if (errors.length) {
             alert('{% trans "Validation errors" %}\n' + errors.join('\n'));
             return false;
@@ -1804,7 +1786,7 @@
         });
     });
     {% endif %}
-    
+
     // Removes the source from the table and array.
     function removeSource(index, force) {
         if (!force && !confirm('{% trans "Remove this source?" %}')) return;
@@ -1819,7 +1801,7 @@
             }
         }
     }
-    
+
     function expandAll() {
         $('.collapse').collapse('show');
     }
@@ -1936,7 +1918,7 @@
                 submit_val = 'delete';
             }
         });
-        
+
         $('.year_range').each(function() {
             var self = $(this);
             var mod = self.data('yearmod');
@@ -1948,7 +1930,7 @@
             var input = self.children('input');
             input.addClass('not_selectized');
             input.selectize({
-                options: options, 
+                options: options,
                 valueField: 'value',
                 labelField: 'label',
             });
@@ -2179,11 +2161,11 @@
             var originalKeyDown = selectize.onKeyDown;
             selectize.onKeyDown = function(e) {
                 // Treat tab, space, slash, dash as a RETURN.
-                var isSelectionChar = e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9; 
+                var isSelectionChar = e.keyCode == 109 || e.keyCode == 111 || e.keyCode == 32 || e.keyCode == 9;
                 if (selectize.$activeOption && isSelectionChar) {
                     e.keyCode = 13;
                 }
-                return originalKeyDown.call(selectize, e);  
+                return originalKeyDown.call(selectize, e);
             };
             selectize.on('item_add', function(value, item) {
                 if (inside) return;
@@ -2240,7 +2222,7 @@
                 }
             }
         }
-        
+
         if (preDataCount > 0) {
             $('.control-label').replaceWith(function() {
                 // Get the id of control matching the label.
@@ -2249,7 +2231,7 @@
                 if (field.startsWith('id_')) field = field.substring(3);
                 var fv = fieldValues[field]
                 if (!fv) return this.outerHTML;
-                var afv = fieldValues[field + '_name'] || fv; 
+                var afv = fieldValues[field + '_name'] || fv;
                 var values = '';
                 var width = (60.0 / preDataCount) + '%';
                 for (var id in voyages) {
@@ -2266,7 +2248,7 @@
                 }
                 return '<table class="col-sm-4 label-table"><tr><td width="40%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
             });
-            
+
             $('.pre-value-cell').click(function() {
                 var $this = $(this);
                 var field = $this.data('field');
@@ -2285,7 +2267,7 @@
                             if (arr[2] != '') items.push('y' + arr[2]);
                             sel.setValue(items);
                         }
-                    } else {                 
+                    } else {
                         sel.setValue(value);
                     }
                 } else {
@@ -2293,7 +2275,7 @@
                 }
             });
         }
-        
+
         for (var key in fieldValues) {
             var x = fieldValues[key];
             if (x.values.length == 0) continue;
@@ -2432,7 +2414,7 @@
         {% else %}
         var notes = {};
         {% endif %}
-        
+
         var formSubmission = function(allowEmptySources) {
             allowEmptySources = allowEmptySources || false;
             if (submit_val != 'delete') {
@@ -2499,7 +2481,7 @@
         var submitFunc = function() { return formSubmission(false); };
         $('form').submit(submitFunc);
         {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(submitFunc, {{ form.persisted_form_data.value|safe }});{% endif %}
-        
+
         // Ajax save.
         $('#save_btn').click(function() {
             var self = $(this);

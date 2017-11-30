@@ -2,10 +2,10 @@
 {% load i18n %}
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 
-<h1 class="contribute_header">{% trans "Recommend the deletion of an existing voyage" %}</h1>
+<div class="page-title-1" class="contribute_header">{% trans "Recommend the deletion of an existing voyage" %}</div>
 
 <p>
     {% trans "Please use the box for notes to tell us why the selected voyage(s) should be removed from the database." %}
@@ -14,22 +14,20 @@
 <p></p>
 
 {% include "contribute/voyage_selection_table.html" %}
-<div class="col-sm-12">
-    <form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal">
-        {% csrf_token %}
-        <input type="hidden" name="ids" id="ids_hidden">
-        {{ form.ids.errors }}
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="notes_input">{% trans "Notes:" %}</label>
-            <div class="col-sm-5">
-                <textarea class="form-control" id="notes_input" name="notes"></textarea>
-            </div>
-        </div>
-    </form>
-    <p>
-        <button class="btn btn-danger" id="confirm_btn" onclick="selection.submitForm();">{% trans "Submit" %}</button>
-    </p>
-</div>
+<form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal">
+    {% csrf_token %}
+    <input type="hidden" name="ids" id="ids_hidden">
+    {{ form.ids.errors }}
+    <div class="form-group">
+        <label for="notes_input">{% trans "Notes:" %}</label>
+        <textarea class="form-control" id="notes_input" name="notes"></textarea>
+    </div>
+</form>
+
+<p>
+    <button class="btn btn-trans" id="confirm_btn" onclick="selection.submitForm();">{% trans "Submit" %}</button>
+</p>
+
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/forms.js"></script>
 <script type="text/javascript">
     var selection = new VoyageSelection(

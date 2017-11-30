@@ -1,4 +1,5 @@
 {% extends "education/educationbase.html" %}
+{% load sass_tags %}
 
 {% comment %} Display lesson plan items from the database {% endcomment %}
 
@@ -11,12 +12,13 @@
 {% endblock %}
 
 {% block pagecsslist %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" />
+<link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/education/education-lesson-plans.css" /> -->
 {% endblock %}
 
 {% block center-content %}
 
-<h1>{% trans "Lesson Plans" %}</h1>
+<div class="page-title-1">{% trans "Lesson Plans" %}</div>
 
 <p>
 	{% blocktrans %}In order to present the trans-Atlantic slave trade database to a broader audience, particularly
@@ -36,24 +38,26 @@
 
 {% if lesson_plans %}
 {% for lesson_item in lesson_plans %}
-	<div class="lesson-plan-title">
+<div class="section">
+	<div class="page-title-2">
 		{{ lesson_item.lesson.text|trans_log }}
-		
+
 		{% if lesson_item.download %}
 		{% for download_item in lesson_item.download %}
 			<span class="download">
 				{% if "ppt" in download_item.file.name  %}
-				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download Presentation" %}</a>, PPT,
 				{% else %}
-				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF, 
+				(<a href="{{ download_item.file.url }}">{% trans "Download" %}</a>, PDF,
 				{% endif %}
-				
-				{{ download_item.file.size|filesizeformat }})
+
+				)
 			</span>
 		{% endfor %}
 		{% endif %}
 	</div>
-	
+
+
 	<div  class="lesson-plan-detail">
 		<div class="lesson-plan-author">
 			{% trans "Author" %}: <span class="lesson-plan-author-name">{{ lesson_item.lesson.author|safe }}</span>
@@ -70,7 +74,7 @@
 		<div class="lesson-plan-standards-title">
 			{% trans "Standards" %}
 		</div>
-		
+
 		{% if lesson_item.standard %}
 		<ul class="lesson-plan-standards">
 			{% for standard_type in lesson_item.standard %}
@@ -92,6 +96,7 @@
 			{{ lesson_item.lesson.abstract|trans_log|safe }}
 		</div>
 	</div>
+</div>
 {% endfor %}
 {% endif %}
 

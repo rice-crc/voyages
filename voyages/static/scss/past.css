@@ -1,0 +1,30 @@
+.btn-past {
+  color: #DB6B57 !important; }
+
+.navbar {
+  background: #DB6B57 !important; }
+
+.footer-flex-container {
+  background-color: #DB6B57; }
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #DB6B57;
+  opacity: 1; }
+
+a {
+  color: #DB6B57; }
+  a:hover {
+    color: #DB6B57;
+    opacity: 0.6;
+    text-decoration: none; }
+
+.btn-trans {
+  background-color: #DB6B57;
+  color: #fff; }
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid #DB6B57;
+  font-weight: bold; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/past.css.map */

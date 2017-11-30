@@ -31,6 +31,8 @@ def get_estimates(request):
     tab = None
     if request.method == "POST":
         tab = request.POST.get("selected_tab")
+    if request.method == "GET":
+        tab = request.GET.get("selected_tab")
     if tab == "map":
         return get_estimates_map(request)
     if tab == "timeline":
