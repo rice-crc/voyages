@@ -37,6 +37,9 @@ urlpatterns = [
     # url(r'^download', voyages.apps.voyage.views.download_flatpage, name='download'),
     url(r'^download', TemplateView.as_view(template_name='voyage/download.html'), name='download'),
 
+    url(r'^new-ui', TemplateView.as_view(template_name='voyage/new-ui.html'), name='new-ui'),
+
+
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008', voyages.apps.voyage.beta_views.search_view, name='beta_search'),
