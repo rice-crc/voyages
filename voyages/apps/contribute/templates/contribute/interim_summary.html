@@ -1,4 +1,4 @@
-{% extends "account/base.html" %}
+{% extends override_base|default_if_none:"account/base.html" %}
 {% load i18n %}
 {% load l10n %}
 {% load voyage_extras %}
@@ -856,7 +856,11 @@
                 var clone = child.clone();
                 clone.attr('id', null);
                 var v = extra_voyages[i].voyage;
-                clone.text(v.hasOwnProperty(field_id) ? v[field_id] : '');
+                var cloneText = v.hasOwnProperty(field_id) ? v[field_id] : '';
+                clone.text(cloneText);
+                if (cloneText) {
+                    $(this).removeClass('blank');
+                }
                 $(this).append(clone);
             } 
         });
@@ -927,7 +931,12 @@
 
     $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-" + grid_class);
     
-    $(".old_values_header").html(existing_voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + existing_voyage_ids[0]);
+    if (existing_voyage_ids.length == 0) {
+        $(".old_values_header").remove();
+        $('.old_values').remove();
+    } else {
+        $(".old_values_header").html(existing_voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + existing_voyage_ids[0]);
+    }
     alternateBackground();
     
     maximizeContent({% if mode == 'editor' %}true{% endif %});

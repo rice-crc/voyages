@@ -457,6 +457,7 @@ def interim_summary(request, contribution_type, contribution_id, mode='contribut
                    'mode': mode,
                    'numbers': numbers,
                    'form': form,
+                   'override_base': 'print.html' if request.GET.get('printMode') else None,
                    'user': request.user,
                    'voyages_data': json.dumps(previous_data)})
 
