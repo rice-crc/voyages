@@ -20,8 +20,11 @@
 <script src="https://unpkg.com/vue"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/qtip/jquery.qtip.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/voyage-search.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}scripts/menu-aim.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/select2.min.js" type="text/javascript"></script>
+
+<script src="{{ STATIC_URL }}scripts/new-ui/menu-aim.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/new-ui/form-data.js" type="text/javascript"></script>
 
 {% endblock %}
 
@@ -290,7 +293,7 @@
 
 <script>
 
-
+// select2 multiple component
 Vue.component("form-select2-multiple", {
 	props: {
 		tagId: String,
@@ -307,43 +310,10 @@ Vue.component("form-select2-multiple", {
 });
 
 
-var flagSet = [
-	{id:0, text:'Spain', value:"1"},
-	{id:1, text:'Uruguay', value:"1"},
-	{id:2, text:'Portugal', value:"1"},
-	{id:3, text:'Brazil', value:"1"},
-	{id:4, text:'Great Britain', value:"1"},
-	{id:5, text:'Netherlands', value:"1"},
-	{id:6, text:'U.S.A', value:"1"},
-	{id:7, text:'France', value:"1"},
-	{id:8, text:'Denmark', value:"1"},
-	{id:9, text:'Hanse Towns, Brandenburg', value:"1"},
-	{id:10, text:'Sweden', value:"1"},
-	{id:11, text:'Norway', value:"1"},
-	{id:12, text:'Argentina', value:"1"},
-	{id:13, text:'Russia', value:"1"},
-	{id:14, text:'Sardinia', value:"1"},
-	{id:15, text:'Mexico', value:"1"},
-	{id:16, text:'Genoa', value:"1"},
-	{id:17, text:'Duchy of Courland', value:"1"},
-	{id:18, text:'Prussia', value:"1"},
-	{id:19, text:'Bremen', value:"1"},
-	{id:20, text:'Other', value:"1"}
-]
-
-var flagImputedSet = [
-	{id:0, text:'Spain/Uruguay', value:"1"},
-	{id:1, text:'Portugal/Brazil', value:"1"},
-	{id:2, text:'Great Britain', value:"1"},
-	{id:3, text:'Netherlands', value:"1"},
-	{id:4, text:'U.S.A', value:"1"},
-	{id:5, text:'France', value:"1"},
-	{id:6, text:'U.S.A', value:"1"},
-	{id:7, text:'Denmark/Baltic', value:"1"}
-]
 
 
-		// Vue starts here
+
+		// main app
 		var searchBar = new Vue({
 			el: "#search-bar",
 			delimiters: ['${', '}'],
@@ -372,13 +342,13 @@ var flagImputedSet = [
 					flag: {
 						default: "",
 						current: "",
-						data: flagSet,
+						data: flagData,
 						hasChanged: false,
 					},
 					flagImputed: {
 						default: "",
 						current: "",
-						data: flagImputedSet,
+						data: flagImputedData,
 						hasChanged: false,
 					},
 				},
@@ -455,68 +425,16 @@ var flagImputedSet = [
 		})
 
 
-		// MENU AIM //
 
-		var $menu = $(".search-menu");
 
-		// jQuery-menu-aim: <meaningful part of the example>
-		// Hook up events to be fired on menu row activation.
-		$menu.menuAim({
-				activate: activateSubmenu,
-				deactivate: deactivateSubmenu
-		});
 
-		// jQuery-menu-aim: </meaningful part of the example>
 
-		// jQuery-menu-aim: the following JS is used to show and hide the submenu
-		// contents. Again, this can be done in any number of ways. jQuery-menu-aim
-		// doesn't care how you do this, it just fires the activate and deactivate
-		// events at the right times so you know when to show and hide your submenus.
-		function activateSubmenu(row) {
-				var $row = $(row),
-						submenuId = $row.data("submenuId"),
-						$submenu = $("#" + submenuId),
-						height = $menu.outerHeight(),
-						width = $menu.outerWidth();
 
-				var parentWidth = $row.width();
 
-				// Show the submenu
-				$submenu.css({
-						display: "block",
-						top: -1,
-						left: parentWidth + 47 // main should overlay submenu
-						// height: height - 4  // padding for main dropdown's arrow
-				});
 
-				// Keep the currently activated row's highlighted look
-				$row.find("a").addClass("maintainHover");
-		}
 
-		function deactivateSubmenu(row) {
-				var $row = $(row),
-						submenuId = $row.data("submenuId"),
-						$submenu = $("#" + submenuId);
 
-				// Hide the submenu and remove the row's highlighted look
-				$submenu.css("display", "none");
-				$row.find("a").removeClass("maintainHover");
-		}
 
-		// Bootstrap's dropdown menus immediately close on document click.
-		// Don't let this event close the menu if a submenu is being clicked.
-		// This event propagation control doesn't belong in the menu-aim plugin
-		// itself because the plugin is agnostic to bootstrap.
-		$(".dropdown-menu li").click(function(e) {
-				e.stopPropagation();
-		});
-
-		$(document).click(function() {
-				// Simply hide the submenu on any click. Again, this is just a hacked
-				// together menu/submenu structure to show the use of jQuery-menu-aim.
-				$(".popover").css("display", "none");
-				$("a.maintainHover").removeClass("maintainHover");
-		});
 
 </script>
 
