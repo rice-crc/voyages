@@ -1,0 +1,27 @@
+.search-menu {
+  border-radius: 0;
+  border-right: none;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1);
+  padding: 0;
+}
+
+.search-submenu {
+  min-width: 350px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 0;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+
+.dropdown-item-li {
+    padding: 10px 24px;
+}
+
+.popover-title {
+  margin-bottom: 1rem;
+}
