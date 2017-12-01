@@ -105,8 +105,7 @@
 										<div id="flag" class="search-submenu popover">
 												<h3 class="popover-title">Flag</h3>
 												<div class="popover-content">
-													<select class="js-example-basic-multiple" id="form-flag" name="states[]" multiple="multiple">
-													</select>
+													<form-select2-multiple tagId="form-flag" tagName="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
 												</div>
 										</div>
 								</li>
@@ -282,12 +281,18 @@
 
 <script>
 
-$(document).ready(function() {
-	$('#form-flag').select2({
-		 width: '100%',
-		 data: flagSet
-	 });
+
+Vue.component("form-select2-multiple", {
+	props: ["tagId", "tagName", "data"],
+	template: '<select id="{{tagId}}" name="{{tagName}}" multiple="multiple"></select>',
+	mounted: function() {
+    $(this.$el).select2({
+			 width: '100%',
+			 data: this.data
+		});
+  }
 });
+
 
 var flagSet = [
 	{id:0, text:'Spain', value:"1"},
@@ -343,6 +348,7 @@ var flagSet = [
 					flag: {
 						default: "",
 						current: "",
+						data: flagSet,
 						hasChanged: false,
 					},
 					flagImputed: {
