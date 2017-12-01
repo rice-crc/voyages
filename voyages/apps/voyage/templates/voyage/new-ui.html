@@ -78,7 +78,7 @@
 
 													<div class="form-group">
   													<label for="form-cdrom">Voyage in 1999 CD-ROM</label>
-														<form-checkbox tag-id="form-cdrom" form-label="Voyage in 1999 CD-ROM" v-bind:checked="searchFilter.cdrom.current"></form-checkbox>
+														<form-checkbox tag-id="form-cdrom" form-label="Voyage in 1999 CD-ROM" v-model="searchFilter.cdrom.current"></form-checkbox>
   												 </div>
 
 													 <div class="form-group">
@@ -244,7 +244,7 @@
       </p> -->
 
 			<!-- CurrentQuery -->
-				<code>${searchQuery}</code>
+				<code>{{searchQuery}}</code>
 
 			<!-- End of CurrentQuery -->
 
@@ -326,11 +326,9 @@ Vue.component("form-value-component", {
 	</div>`,
 	methods: {
 		updateValue: function (value) {
-		      // Emit the number value through the input event
-		      this.$emit('input', value)
-		    }
+      this.$emit('input', value)
+    }
 	}
-
 });
 
 // select2 multiple component
@@ -350,13 +348,8 @@ Vue.component("form-select2-multiple", {
 });
 
 Vue.component("form-checkbox", {
-	model: {
-		prop: "checked",
-		event: "change"
-	},
 	props: {
 		checked: Boolean,
-		value: String,
 		formLabel: String,
 		tagId: String
 	},
@@ -364,13 +357,18 @@ Vue.component("form-checkbox", {
 	template: `
 		<div class="form-check">
 			<label class="form-check-label">
-				<input class="form-check-input" :tag-id="tagId" type="checkbox" :checked="checked">
-				{{formLabel}} {{checked}}
+				<input class="form-check-input" :tag-id="tagId" type="checkbox" :checked="checked" @change="$emit('input', $event.target.checked)">
+				{{formLabel}} ha {{checked}}
 			</label>
 		</div>`,
 
 	mounted: function(){
 
+	},
+	methods: {
+		updateValue: function (value) {
+      this.$emit('input', value)
+    }
 	}
 });
 
