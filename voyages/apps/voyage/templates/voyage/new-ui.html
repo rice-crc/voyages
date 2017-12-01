@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% block content %}
+{% verbatim %}
 <div id="search-bar">
 <!-- SearchNav -->
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
@@ -54,10 +55,12 @@
 													<input type="number" v-model="searchFilter.vin.current" id="form-vin" class="form-control">
 												 </div>
 
+												 <form-value-component tag-id="form-vin-2" form-label="Voyage Identification Number 2" v-model="searchFilter.vin.current" >formform</form-value-component>
+
 												 <div class="form-group">
- 													<p>VIN current is: <code>${ searchFilter.vin.current }</code></p>
-													<p>VIN default is: <code>${ searchFilter.vin.default }</code></p>
-													<p>VIN hasChanged is: <code>${ searchFilter.vin.hasChanged }</code></p>
+ 													<p>VIN current is: <code>{{ searchFilter.vin.current }}</code></p>
+													<p>VIN default is: <code>{{ searchFilter.vin.default }}</code></p>
+													<p>VIN hasChanged is: <code>{{ searchFilter.vin.hasChanged }}</code></p>
  												 </div>
 
 												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -71,7 +74,20 @@
 										Voyage in 1999 CD-ROM
 										<div id="cdrom" class="search-submenu popover">
 												<h3 class="popover-title">Voyage in 1999 CD-ROM</h3>
-												<div class="popover-content">Image</div>
+												<div class="popover-content">
+
+													<div class="form-group">
+  													<label for="form-cdrom">Voyage in 1999 CD-ROM</label>
+														<form-checkbox tag-id="form-cdrom" form-label="Voyage in 1999 CD-ROM" v-bind:checked="searchFilter.cdrom.current"></form-checkbox>
+  												 </div>
+
+													 <div class="form-group">
+															<p>cdrom current is: <code>{{ searchFilter.cdrom.current }}</code></p>
+															 <p>cdrom default is: <code>{{ searchFilter.cdrom.default }}</code></p>
+															 <p>cdrom hasChanged is: <code>{{ searchFilter.cdrom.hasChanged }}</code></p>
+														</div>
+
+												</div>
 										</div>
 								</li>
 
@@ -90,11 +106,11 @@
  												 </div>
 
 												 <div class="form-group">
-													 <p>vesselName current is: <code>${ searchFilter.vesselName.current }</code></p>
- 													<p>vesselName default is: <code>${ searchFilter.vesselName.default }</code></p>
- 													<p>vesselOwner current is: <code>${ searchFilter.vesselOwner.current }</code></p>
-													<p>vesselOwner default is: <code>${ searchFilter.vesselOwner.default }</code></p>
-													<p>vessel hasChanged is: <code>${ searchFilter.vessel.hasChanged }</code></p>
+													 <p>vesselName current is: <code>{{ searchFilter.vesselName.current }}</code></p>
+ 													<p>vesselName default is: <code>{{ searchFilter.vesselName.default }}</code></p>
+ 													<p>vesselOwner current is: <code>{{ searchFilter.vesselOwner.current }}</code></p>
+													<p>vesselOwner default is: <code>{{ searchFilter.vesselOwner.default }}</code></p>
+													<p>vessel hasChanged is: <code>{{ searchFilter.vessel.hasChanged }}</code></p>
  												 </div>
 
 												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselApply" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -131,17 +147,22 @@
 								</li>
 
 								<li class="dropdown-item dropdown-item-li" data-submenu-id="rig">
-										Rig, Tonnage
+										Rig
 										<div id="rig" class="search-submenu popover">
-												<h3 class="popover-title">Rig, Tonnage</h3>
-												<div class="popover-content">Image</div>
+												<h3 class="popover-title">Rig</h3>
+												<div class="popover-content">
+													<div class="form-group">
+														<label for="form-rig">Rig</label>
+														<form-select2-multiple tag-id="form-rig" tag-name="rigs[]" v-bind:data="searchFilter.rig.data"></form-select2-multiple>
+													</div>
+												</div>
 										</div>
 								</li>
 
 								<li class="dropdown-item dropdown-item-li" data-submenu-id="gun">
-										Guns Mounted
+										Tonnage and Guns Mounted
 										<div id="gun" class="search-submenu popover">
-												<h3 class="popover-title">Guns Mounted and Vessel Owners</h3>
+												<h3 class="popover-title">Tonnage and Guns Mounted</h3>
 												<div class="popover-content">Image</div>
 										</div>
 								</li>
@@ -291,7 +312,26 @@
 
 </style>
 
+
+
 <script>
+
+// value component
+Vue.component("form-value-component", {
+	props: ["tagId", "formLabel", "value"],
+	template: `
+	<div class="form-group">
+		<label :for="tagId">{{formLabel}}</label>
+		<input type="number" :id="tagId" v-bind:value="value" @input="updateValue($event.target.value)" class="form-control" >
+	</div>`,
+	methods: {
+		updateValue: function (value) {
+		      // Emit the number value through the input event
+		      this.$emit('input', value)
+		    }
+	}
+
+});
 
 // select2 multiple component
 Vue.component("form-select2-multiple", {
@@ -309,6 +349,30 @@ Vue.component("form-select2-multiple", {
   }
 });
 
+Vue.component("form-checkbox", {
+	model: {
+		prop: "checked",
+		event: "change"
+	},
+	props: {
+		checked: Boolean,
+		value: String,
+		formLabel: String,
+		tagId: String
+	},
+
+	template: `
+		<div class="form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" :tag-id="tagId" type="checkbox" :checked="checked">
+				{{formLabel}} {{checked}}
+			</label>
+		</div>`,
+
+	mounted: function(){
+
+	}
+});
 
 
 
@@ -316,7 +380,7 @@ Vue.component("form-select2-multiple", {
 		// main app
 		var searchBar = new Vue({
 			el: "#search-bar",
-			delimiters: ['${', '}'],
+			delimiters: ['{{', '}}'],
 			data: {
 				text: "text",
 				isAdvanced: true,
@@ -351,6 +415,17 @@ Vue.component("form-select2-multiple", {
 						data: flagImputedData,
 						hasChanged: false,
 					},
+					rig: {
+						default: "",
+						current: "",
+						data: rigData,
+						hasChanged: false,
+					},
+					cdrom: {
+						default: false,
+						current: false,
+						hasChanged: false,
+					}
 				},
 				searchQuery: {
 					vin: {
@@ -438,4 +513,5 @@ Vue.component("form-select2-multiple", {
 
 </script>
 
+{% endverbatim %}
 {% endblock %}
