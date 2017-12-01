@@ -105,7 +105,16 @@
 										<div id="flag" class="search-submenu popover">
 												<h3 class="popover-title">Flag</h3>
 												<div class="popover-content">
-													<form-select2-multiple tagId="form-flag" tagName="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+													<div class="form-group">
+														<label for="form-flag">Flag</label>
+														<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+													</div>
+
+													<div class="form-group">
+														<label for="form-flag-imputed">Flag Imputed</label>
+														<form-select2-multiple tag-id="form-flag-imputed" tag-name="countries[]" v-bind:data="searchFilter.flagImputed.data"></form-select2-multiple>
+													</div>
+
 												</div>
 										</div>
 								</li>
@@ -283,8 +292,12 @@
 
 
 Vue.component("form-select2-multiple", {
-	props: ["tagId", "tagName", "data"],
-	template: '<select id="{{tagId}}" name="{{tagName}}" multiple="multiple"></select>',
+	props: {
+		tagId: String,
+		tagName: String,
+		data: Array
+	},
+	template: `<select :id="tagId" :name="tagName" multiple="multiple"></select>`,
 	mounted: function() {
     $(this.$el).select2({
 			 width: '100%',
@@ -316,6 +329,17 @@ var flagSet = [
 	{id:18, text:'Prussia', value:"1"},
 	{id:19, text:'Bremen', value:"1"},
 	{id:20, text:'Other', value:"1"}
+]
+
+var flagImputedSet = [
+	{id:0, text:'Spain/Uruguay', value:"1"},
+	{id:1, text:'Portugal/Brazil', value:"1"},
+	{id:2, text:'Great Britain', value:"1"},
+	{id:3, text:'Netherlands', value:"1"},
+	{id:4, text:'U.S.A', value:"1"},
+	{id:5, text:'France', value:"1"},
+	{id:6, text:'U.S.A', value:"1"},
+	{id:7, text:'Denmark/Baltic', value:"1"}
 ]
 
 
@@ -354,6 +378,7 @@ var flagSet = [
 					flagImputed: {
 						default: "",
 						current: "",
+						data: flagImputedSet,
 						hasChanged: false,
 					},
 				},
