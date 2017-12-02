@@ -95,18 +95,11 @@
 										Vessel Name and Owners
 										<div id="vessel" class="search-submenu popover">
 												<h3 class="popover-title">Vessel Name and Owner</h3>
-													<div class="form-group">
-														<label for="form-vessel-name">Vessel Name</label>
-														<input type="text" v-model="searchFilter.vesselName.current" id="form-vessel-name" class="form-control">
-													</div>
+												<form-value-component tag-id="form-vessel-name" form-label="Vessel Name" v-model="searchFilter.vesselName.current"></form-value-component>
+												<form-value-component tag-id="form-vessel-owner" form-label="Vessel Owner" v-model="searchFilter.vesselOwner.current"></form-value-component>
 
 												 <div class="form-group">
- 													<label for="form-vessel-owner">Vessel Owner</label>
- 													<input type="text" v-model="searchFilter.vesselOwner.current" id="form-vessel-owner" class="form-control">
- 												 </div>
-
-												 <div class="form-group">
-													 <p>vesselName current is: <code>{{ searchFilter.vesselName.current }}</code></p>
+													<p>vesselName current is: <code>{{ searchFilter.vesselName.current }}</code></p>
  													<p>vesselName default is: <code>{{ searchFilter.vesselName.default }}</code></p>
  													<p>vesselOwner current is: <code>{{ searchFilter.vesselOwner.current }}</code></p>
 													<p>vesselOwner default is: <code>{{ searchFilter.vesselOwner.default }}</code></p>
@@ -142,7 +135,10 @@
 										Construction and Registration
 										<div id="construction" class="search-submenu popover">
 												<h3 class="popover-title">Construction and Registration</h3>
-												<div class="popover-content">Image</div>
+												<div class="popover-content">
+													<form-value-component tag-id="form-year-construction" form-label="Year of Construction" v-model="searchFilter.yearConstruction.current"></form-value-component>
+													<form-value-component tag-id="form-year-registration" form-label="Year of Registration" v-model="searchFilter.yearRegistration.current"></form-value-component>
+												</div>
 										</div>
 								</li>
 
@@ -163,7 +159,12 @@
 										Tonnage and Guns Mounted
 										<div id="gun" class="search-submenu popover">
 												<h3 class="popover-title">Tonnage and Guns Mounted</h3>
-												<div class="popover-content">Image</div>
+												<div class="popover-content">
+													<form-value-component tag-id="form-tonnage" form-label="Tonnage" v-model="searchFilter.tonnage.current"></form-value-component>
+													<form-value-component tag-id="form-standardized-tonnage" form-label="Standardized Tonnage" v-model="searchFilter.standardizedTonnage.current"></form-value-component>
+													<form-value-component tag-id="form-guns" form-label="Guns Mounted" v-model="searchFilter.guns.current"></form-value-component>
+
+												</div>
 										</div>
 								</li>
 
@@ -422,6 +423,31 @@ Vue.component("form-checkbox", {
 					cdrom: {
 						default: false,
 						current: false,
+						hasChanged: false,
+					},
+					tonnage: {
+						default: "",
+						current: "",
+						hasChanged: false,
+					},
+					standardizedTonnage: {
+						default: "",
+						current: "",
+						hasChanged: false,
+					},
+					guns: {
+						default: "",
+						current: "",
+						hasChanged: false,
+					},
+					yearRegistration: {
+						default: "",
+						current: "",
+						hasChanged: false,
+					},
+					yearConstruction: {
+						default: "",
+						current: "",
 						hasChanged: false,
 					}
 				},
