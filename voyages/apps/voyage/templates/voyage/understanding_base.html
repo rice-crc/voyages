@@ -11,12 +11,7 @@
 <link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-<nav aria-label="breadcrumb" role="navigation">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="#">Trans-Atlantic Slave Trade</a></li>
-		<li class="breadcrumb-item active" aria-current="page">About</li>
-	</ol>
-</nav>
+<nav aria-label="breadcrumb" role="navigation" id="breadcrumb-host"></nav>
 
 <div class="container-new">
 
@@ -57,5 +52,7 @@
 
 
 <script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
-
+<script type="text/javascript">
+	$(breadCrumbs.getUI(null, document.title)).appendTo($('#breadcrumb-host'));
+</script>
 {% endblock %}

@@ -18,3 +18,4 @@ django-allauth
 django-simple-captcha
 django-haystack==2.5.0
 haversine
+django-sass-processor
