@@ -55,3 +55,54 @@ function writebreadcrumb() {
 	/* Output the bread crumb */
 	return path;
 }
+
+
+// Code for new UI
+function prettyName(name) {
+    // Replace underscores by spaces and captitalize the first letter.
+    name = name || "";
+    name = name.replace('_', ' ').replace('-', ' ');
+    return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function BreadCrumbs(labels, home, ulClass, liClass) {
+    var self = this;
+    self.labels = labels || {};
+    self.home = home || "Home Page";
+    self.ulClass = ulClass || "breadcrumb";
+    self.liClass = liClass || "breadcrumb-item";
+    
+    var getItem = function(url, label) {
+        return '<li class="' + self.liClass + '"><a href="' + url + '">' + gettext(label) + '</a></li>';
+    };
+    
+    self.getUI = function(url, title) {
+        url = url || document.location.href;
+        var levels = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '').split('/');
+        if (levels.length <= 1) {
+            return '<span class="debug-info">Error producing breadcrumbs!</span>';
+        }
+        var accUrl = url.match(/(^\w+:|^)\/\//)[0] + levels[0];
+		var html = '<ol class="' + self.ulClass + '">' + getItem(accUrl, self.home);
+		var maxLevel = title ? levels.length - 1 : levels.length;
+        for (var i = 1; i < maxLevel; ++i) {
+            var label = self.labels.hasOwnProperty(levels[i]) ? self.labels[levels[i]] : prettyName(levels[i]);
+            accUrl += '/' + levels[i];
+            html += getItem(i < levels.length - 1 ? accUrl : "#", label);
+        }
+        if (title) {
+            html += getItem("#", gettext(title));
+        }
+        html += "</ol>";
+        return html;
+    };
+}
+
+var breadCrumbs = new BreadCrumbs({
+    'voyage': 'Voyages Database',
+    'assessment': 'Assessing the Slave Trade',
+    'education': 'Educational Materials',
+    'search': 'Search the Voyages Database',
+	'download': 'Downloads',
+	'understanding-db': 'Understanding the Database',
+});
