@@ -3,6 +3,16 @@
 {% load highlight %}
 {% load voyage_extras %}
 
+{% block jslist %}
+<script>
+$(document).ready(function() {
+    $('#glossary').DataTable({
+       iDisplayLength: 50,
+    });
+} );
+</script>
+{% endblock %}
+
 <!-- Corresponds to the About: Glossary page -->
 
 {% block title %}{% trans "Glossary" %}{% endblock %}
@@ -58,12 +68,6 @@
     </tbody>
     </table>
 
-<script>
-$(document).ready(function() {
-    $('#glossary').DataTable({
-       iDisplayLength: 50,
-    });
-} );
-</script>
+
 
 {% endblock %}
