@@ -9,24 +9,14 @@
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
-
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
 {% endblock %}
 
 {% block title %}{% trans 'Images Search' %}{% endblock %}
 
 {% block content %}
-
-
-
-
 <div class="container-new">
-
-  <div class="row  row-offcanvas row-offcanvas-right">
+  <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 			{% include "resources/images-left-menu.html" %}
 		</div>
@@ -47,40 +37,30 @@
 
 
 
+        <div class="images-category">
+            <div class="page-title-2">
+              {% if not query %}
+        	        {% if enabled_categories|length == 1 %}
+        	            {% for i in enabled_categories %}
+        	                <div class="page-title-2">{% trans 'Images of ' %}{{ i }}</div>
+        	            {% endfor %}
+        	        {% elif enabled_categories|length == 4 %}
+        	            <div class="page-title-2">{% trans 'All images' %} ({{ results|length }} {% trans 'images' %})</div>
+        	        {% else %}
+        	            <div class="page-title-2">{% trans 'Search results' %} ({{ results|length }} {% trans 'images' %})</div>
+        	        {% endif %}
+        	    {% else %}
+        	        <div class="page-title-2">{% trans 'Search results' %} ({{ results|length }} {% trans 'images' %})</div>
+        	    {% endif %}
 
-
-				{% if not query %}
-		        {% if enabled_categories|length == 1 %}
-		            {% for i in enabled_categories %}
-		                <div class="page-title-2">{% trans 'Images of ' %}{{ i }}</div>
-		            {% endfor %}
-		        {% elif enabled_categories|length == 4 %}
-		            <div class="page-title-2">{% trans 'All images' %}</div>
-		        {% else %}
-		            <div class="page-title-2">{% trans 'Search results' %}</div>
-		        {% endif %}
-		    {% else %}
-		        <div class="page-title-2">{% trans 'Search results' %}</div>
-		    {% endif %}
-
-		    <div class="image-navigation">
-		        <table class="image-navigation">
-		        <tbody>
-		            <tr>
-		                <td style="padding: 0px 10px 0px 0px;">
-		                    <a href="{% url 'resources:images' %}">{% trans 'Back to start' %}</a>
-		                </td>
-		                <td style="padding: 0px">
-		                    {{ results|length }} {% trans 'images' %}
-		                </td>
-		            </tr>
-		        </tbody>
-		        </table>
-		    </div>
-
+            </div>
+            <div class="images-category-link">
+              <a href="{% url 'resources:images' %}">{% trans 'Return to all categories' %}</a>
+            </div>
+        </div>
 
 		            {% for result in results %}
-		                {% ifequal forloop.counter0|modulo:5 0 %}
+		                {% ifequal forloop.counter0|modulo:4 0 %}
 										<div class="gallery-flexbox">
 		                {% endifequal %}
 
@@ -106,14 +86,10 @@
 		                        {% endif %}
 		                     </div>
 											 </div>
-		                {% if forloop.last or forloop.counter0|modulo:5 == 4 or forloop.las %}
+		                {% if forloop.last or forloop.counter0|modulo:4 == 3 or forloop.las %}
 									</div>
 		                {% endif %}
 		            {% endfor %}
-
-
-
-
 
 			</div>
     </div>

@@ -2,6 +2,11 @@
 @import "headings";
 @import "colors";
 
+// form
+.form-check-label {
+  padding-left: 0;
+}
+
 // dataTables
 .dataTables_length, .dataTables_info {
 	float: left;
