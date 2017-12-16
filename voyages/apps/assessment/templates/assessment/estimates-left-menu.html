@@ -1,49 +1,8 @@
 {% load i18n %}
 {% load assessment_extras %}
 
-{% block jslist %}
 <script src="{{ STATIC_URL }}scripts/assessment/assessment-left-menu.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script type="text/javascript">
-  $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
-  function createLink() {
-    $.post('permalink', $('form').serialize(), function(link) {
-      var urlTextArea = $('#url_string');
-      urlTextArea.val(link);
-      urlTextArea.focus(function(e) {
-        e.target.select();
-        try {
-          document.execCommand('copy');
-        } catch (e) {
-          console.log('Unable to copy to clipboard using document.execCommand');
-        }
-        jQuery(e.target).one('mouseup', function(e) {
-          e.preventDefault();
-        });
-      });
-      $("#dialog").dialog('open');
-    });
-    return false;
-  }
-
-  function resetAll() {
-    var helper = function(name) {
-      var input = $("<input>")
-        .attr("type", "hidden")
-        .attr("name", name)
-        .val("Reset");
-      $('form').append($(input));
-    }
-    helper('submit_year');
-    helper('submit_nation');
-    helper('submit_regions');
-    helper('table_options');
-    $('form').submit();
-    return false;
-  }
-</script>
-{% endblock %}
 
     <div class="sidebar-title-1">Variables</div>
     <input type="hidden" value="time-frame" name="form:_idJsp6_selected">
@@ -246,3 +205,42 @@
 
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $( "#dialog" ).dialog({ autoOpen: false, minWidth: 550, modal: true, title: "{% trans 'Link created' %}" });
+    function createLink() {
+      $.post('permalink', $('form').serialize(), function(link) {
+        var urlTextArea = $('#url_string');
+        urlTextArea.val(link);
+        urlTextArea.focus(function(e) {
+          e.target.select();
+          try {
+            document.execCommand('copy');
+          } catch (e) {
+            console.log('Unable to copy to clipboard using document.execCommand');
+          }
+          jQuery(e.target).one('mouseup', function(e) {
+            e.preventDefault();
+          });
+        });
+        $("#dialog").dialog('open');
+      });
+      return false;
+    }
+
+    function resetAll() {
+      var helper = function(name) {
+        var input = $("<input>")
+          .attr("type", "hidden")
+          .attr("name", name)
+          .val("Reset");
+        $('form').append($(input));
+      }
+      helper('submit_year');
+      helper('submit_nation');
+      helper('submit_regions');
+      helper('table_options');
+      $('form').submit();
+      return false;
+    }
+  </script>

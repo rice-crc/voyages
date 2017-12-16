@@ -7,10 +7,6 @@
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-{% block jslist %}
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
-{% endblock %}
-
 {% block content %}
 
 <div id="bgvid-container">
@@ -283,5 +279,6 @@
 	</div>
 </div>
 
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
 
 {% endblock %} {% block footer %} {% include "footer.html" %} {% endblock %}
