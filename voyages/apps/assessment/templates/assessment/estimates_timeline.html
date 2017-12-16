@@ -1,46 +1,7 @@
 {% load i18n %}
 {% load l10n %}
 
-<style type="text/css">
-    .g_main {
-        cursor:pointer;
-        pointer-events: all;
-    }
-
-    svg {
-      font-family: "Helvetica Neue", Helvetica;
-    }
-
-    svg text {
-        fill: gray;
-    }
-
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: gray;
-        stroke-width: 0.35px;
-    }
-
-    .x path {
-        stroke: transparent;
-    }
-
-    .vertical_line {
-        stroke: darkgreen;
-        stroke-width: 1px;
-        stroke-dasharray: 1 1;
-    }
-</style>
-<div class="results-panel">
-<div class="page-title-2">{% trans 'Timeline: Number of Captives Embarked and Disembarked per Year' %}</div>
-<div id="graphContainer"></div>
-<div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
-<div id="historicalEventsContainer"></div>
-<p style="margin-left:20px;">
-    <button type="submit" name="download" value="Download timeline data">{% trans 'Download timeline data' %}</button>
-</p>
-</div>
+{% block jslist %}
 <script src="{{ STATIC_URL }}/scripts/d3.min.js"></script>
 <script type="text/javascript">
 {% localize off %}
@@ -412,3 +373,46 @@ function yTickFormat(d) {
 }
 {% endlocalize %}
 </script>
+
+{% endblock %}
+
+<style type="text/css">
+    .g_main {
+        cursor:pointer;
+        pointer-events: all;
+    }
+
+    svg {
+      font-family: "Helvetica Neue", Helvetica;
+    }
+
+    svg text {
+        fill: gray;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: gray;
+        stroke-width: 0.35px;
+    }
+
+    .x path {
+        stroke: transparent;
+    }
+
+    .vertical_line {
+        stroke: darkgreen;
+        stroke-width: 1px;
+        stroke-dasharray: 1 1;
+    }
+</style>
+<div class="results-panel">
+<div class="page-title-2">{% trans 'Timeline: Number of Captives Embarked and Disembarked per Year' %}</div>
+<div id="graphContainer"></div>
+<div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
+<div id="historicalEventsContainer"></div>
+<p style="margin-left:20px;">
+    <button type="submit" name="download" value="Download timeline data">{% trans 'Download timeline data' %}</button>
+</p>
+</div>

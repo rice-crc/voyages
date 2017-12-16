@@ -5,6 +5,13 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block jslist %}
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+	$(breadCrumbs.getUI(null, document.title)).appendTo($('#breadcrumb-host'));
+</script>
+{% endblock %}
+
 {% block content %}
 
 <!-- CSS for Trans-Atlantic -->
@@ -51,8 +58,5 @@
 </div>
 
 
-<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
-<script type="text/javascript">
-	$(breadCrumbs.getUI(null, document.title)).appendTo($('#breadcrumb-host'));
-</script>
+
 {% endblock %}

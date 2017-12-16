@@ -1,8 +1,8 @@
 {
 	"version": 3,
-	"file": "../../home/domingos/Documents/projects/new-ui/voyages/voyages/sitemedia/scss/image-galleries.css",
+	"file": "../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/image-galleries.css",
 	"sources": [
-		"../../home/domingos/Documents/projects/new-ui/voyages/voyages/sitemedia/scss/image-galleries.scss"
+		"../../Users/yli60/Documents/emory/repos/voyages/voyages/sitemedia/scss/image-galleries.scss"
 	],
 	"names": [],
 	"mappings": "AAAA,AAAA,gBAAgB,CAAC;EACf,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa,GAC/B;;AAED,AAAA,aAAa,CAAC;EACZ,IAAI,EAAE,CAAC,GACR;;AAED,AAAA,gBAAgB,CAAC;EACf,aAAa,EAAE,IAAI,GACpB;;AAED,AAAA,gBAAgB,CAAC;EACf,aAAa,EAAE,IAAI,GACpB;;AAED,AAAA,qBAAqB,CAAC;EACpB,WAAW,EAAE,IAAI;EACjB,SAAS,EAAE,QAAQ,GACpB"

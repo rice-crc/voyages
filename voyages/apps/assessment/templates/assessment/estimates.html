@@ -24,7 +24,11 @@
 {% endblock %}
 
 {% block jslist %}
-
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
 
 {% block title %}{% trans 'Estimates' %}{% endblock %}
@@ -173,11 +177,7 @@
 
 
 
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
+
 {% endblock %}
 
 {% block footer %}
