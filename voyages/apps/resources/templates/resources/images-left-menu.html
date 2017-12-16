@@ -11,11 +11,12 @@
 </div>
 
 
-<div class="sidebar-section">
+
 
   <form action="{% url 'resources:images-search' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
+    <div class="sidebar-section">
       <div class="form-group row">
         <label for="q" class="col-sm-5 sv-col-form-label">{% trans "Keyword" %}</label>
         <div class="col-sm-7">
@@ -85,15 +86,16 @@
 
         </div>
       </div>
+      </div>
+
+
+
+      <div class="sidebar-section">
+        <button class="btn btn-outline-primary btn-solid btn-sm" type="submit" value="Submit">{% trans 'Submit' %}</button>
+        <button class="btn btn-outline-primary btn-outline btn-sm" type="submit" value="Start again" name="restart">{% trans 'Reset All' %}</button>
+      </div>
 
 
 
 
-
-
-
-
-    <button class="btn btn-outline-primary btn-solid" type="submit" value="Submit">{% trans 'Submit' %}</button>
-    <button class="btn btn-outline-primary btn-outline" type="submit" value="Start again" name="restart">{% trans 'Start again' %}</button>
-</form>
-</div>
+  </form>
