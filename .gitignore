@@ -9,3 +9,4 @@ documents/cache/*
 .idea
 *.log
 .vscode
+*.css.map
