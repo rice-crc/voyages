@@ -56,10 +56,21 @@
   }
 }
 
+
+
 .breadcrumb {
   padding: .75rem 4rem;
 }
 
 .container-new {
   margin: 2rem 4rem;
+}
+
+@media (max-width: 1200px) {
+  .navbar {
+    padding: .5rem 2rem;
+  }
+  .container-new {
+    margin: 2rem 2rem;
+  }
 }
