@@ -42,6 +42,49 @@
           </div>
         </button>
       </p>
+
+      <div class="page-title-1">{% trans "People of Atlantic Slave Trade Database" %}</div>
+
+<div class="page-title-2">{% trans 'Your Current Query' %}</div>
+
+      <div class="page-section">
+
+        <div id="form:_idJsp164" class="box-main-text">
+          <div class="query-summary">
+            {% if current_query %}
+              {% for val in current_query %}
+                {% if forloop.last and val.1 %}
+                  <div class="query-summary-item-last">
+                    {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                    {% endfor %}
+                  </div>
+                {% elif val.1 %}
+                  <div class="query-summary-item">
+                    {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="page-section">
+        {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
+        {{ options_results_per_page_form.option }} {% trans 'results per page' %}
+      </div>
+
+      
       <div>
       <div>
 
@@ -322,8 +365,6 @@
 
       <!-- pagination -->
 
-      {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
-      {{ options_results_per_page_form.option }} {% trans 'results per page' %}
 
 
         <input type="hidden">
@@ -410,8 +451,8 @@
 
 
 
-      <button class="button-save" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
-      <button class="button-save" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
+      <button class="btn btn-outline-primary btn-outline btn-sm" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
+      <button class="btn btn-outline-primary btn-outline btn-sm" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
 
 
 
