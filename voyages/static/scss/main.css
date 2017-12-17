@@ -19,7 +19,8 @@
   .footer-copyrights {
     width: 100%; }
   .footer-logo {
-    margin: auto; } }
+    margin: auto;
+    padding: 1rem 0; } }
 
 /* This is the percentage each heading will be reduced by. */
 /* The mixin */
