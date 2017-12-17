@@ -1,5 +1,16 @@
 @import "colors";
 
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $about-color;
+  border-color: $about-color;
+}
+.page-link {
+  color: $about-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $about-color;
+}
 
 .navbar {
   background: $about-color !important;
