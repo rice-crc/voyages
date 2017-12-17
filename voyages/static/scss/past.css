@@ -8,6 +8,22 @@
 .page-link:focus, .page-link:hover {
   color: #DB6B57; }
 
+.btn-solid {
+  background-color: #DB6B57;
+  border-color: #DB6B57;
+  color: #fff; }
+  .btn-solid:hover {
+    background-color: #DB6B57;
+    border-color: #DB6B57; }
+
+.btn-outline {
+  color: #DB6B57;
+  background-color: white;
+  border-color: #DB6B57; }
+  .btn-outline:hover {
+    background-color: #DB6B57;
+    border-color: #DB6B57; }
+
 .btn-past {
   color: #DB6B57 !important; }
 

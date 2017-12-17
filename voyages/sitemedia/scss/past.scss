@@ -12,9 +12,29 @@
   color: $past-color;
 }
 
+// btn colors
+.btn-solid {
+  background-color: $past-color;
+	border-color: $past-color;
+  color: #fff;
+	&:hover {
+		background-color: $past-hover-color;
+		border-color: $past-hover-color;
+	}
+}
+
+.btn-outline {
+	color: $past-color;
+	background-color: white;
+	border-color: $past-color;
+	&:hover {
+		background-color: $past-color;
+		border-color: $past-color;
+	}
+}
 
 .btn-past {
-    color: $past-color !important;
+  color: $past-color !important;
 }
 
 .navbar {
