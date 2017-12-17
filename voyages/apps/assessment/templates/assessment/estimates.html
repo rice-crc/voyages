@@ -14,13 +14,11 @@
 
 <link href="{% sass_src 'scss/assessment/assessment-tabs.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/assessment/assessment-estimates.scss' %}" rel="stylesheet" type="text/css" />
-
-
-  <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css"> -->
-  <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-estimates.css"> -->
-  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
-  <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css"> -->
-  <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-estimates.css"> -->
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css"> -->
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
 {% endblock %}
 
 {% block jslist %}
@@ -56,7 +54,7 @@
               </button>
             </p>
 
-            <div class="">
+            <div class="page-section">
               <input type="hidden" value="expanded" name="form:_idJsp45_state">
               <div class="page-title-1">{% trans 'Time and Chronology' %}</div>
               <div class="page-title-2">
@@ -143,12 +141,15 @@
               {% include "assessment/estimates_map.html" %}
             {% endif %}
 
-            <div class="page-title-2">Create a Query Link</div>
-            <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
-            <button class="btn btn-trans btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
-            <button class="btn btn-outline-trans btn-sm" onclick="return resetAll();">{% trans 'Start New Query' %}</button>
-            <div class="sidebar-section">
-              <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
+
+            <div class="page-section margin-v">
+              <div class="page-title-2">Create a Query Link</div>
+              <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
+              <button class="btn btn-trans btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
+              <button class="btn btn-outline-trans btn-sm" onclick="return resetAll();">{% trans 'Start New Query' %}</button>
+              <div class="sidebar-section">
+                <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
+              </div>
             </div>
 
           </div>

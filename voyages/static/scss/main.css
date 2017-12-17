@@ -43,6 +43,9 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.margin-v {
+  margin-top: 1rem; }
+
 .drop-shadow-1:hover {
   box-shadow: 0 0 10px rgba(33, 33, 33, 0.2);
   transition: box-shadow 0.3s ease-in-out; }
