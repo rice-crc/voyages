@@ -49,7 +49,7 @@
 	{% trans "In order to access the Contribute section, please sign in." %}
 </p>
 
-<div style="padding: 5px 5px 5px 100px; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
+<div style="padding: 1rem; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
 	{% if form.errors %}
 	<p style="color: red">
 		{% trans "Your username/email and password didn't match. Please try again." %}
@@ -69,19 +69,20 @@
 			{% trans 'Sign in' %}
 		</button>
 	</form>
-		<form action="/accounts/google/login">
-			<button type="submit" class="google_login_btn">
-				<img src="{{ STATIC_URL}}images/contribute/google_logo.png" width="16px" height="16px" /> {% trans 'Sign in with Google' %}
-			</button>
-      	</form>
+
+	<form action="/accounts/google/login" style="margin: 1rem 0;">
+		<button type="submit" class="google_login_btn">
+			<img src="{{ STATIC_URL}}images/contribute/google_logo.png" width="16px" height="16px" /> {% trans 'Sign in with Google' %}
+		</button>
+	</form>
+
+	{% blocktrans %}
+	If you don't have an account, <a href="{{ contribute_newuser_url }}">Create an Account</a>.
+	If you have forgotten your password, <a href="{{ password_reset_url }}">Retrieve Password</a>.
+	{% endblocktrans %}
 </div>
 
-<p>
-	{% blocktrans %}If you don't have an account, <a href="{{ contribute_newuser_url }}">click here</a>.{% endblocktrans %}
-</p>
-<p>
-    {% blocktrans %}If you have forgotten your password click <a href="{{ password_reset_url }}">Forgotten Password</a>.{% endblocktrans %}
-</p>
+
 {% endif %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
