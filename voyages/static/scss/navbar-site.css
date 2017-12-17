@@ -49,4 +49,10 @@
 .container-new {
   margin: 2rem 4rem; }
 
+@media (max-width: 1200px) {
+  .navbar {
+    padding: .5rem 2rem; }
+  .container-new {
+    margin: 2rem 2rem; } }
+
 /*# sourceMappingURL=../../../../../../../../../static/scss/navbar-site.css.map */
