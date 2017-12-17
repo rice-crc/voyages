@@ -10,15 +10,9 @@
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
-
 <link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-info.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css"> -->
 {% endblock %}
-
-
 
 {% block jslist %}
 <script src="{{ STATIC_URL }}scripts/navigation_voyage.js" type="text/javascript"></script>
@@ -28,8 +22,7 @@
 
 {% block content %}
 <div class="container-new">
-
-  <div class="row  row-offcanvas row-offcanvas-right">
+  <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 		</div>
 
@@ -59,7 +52,5 @@
     </div>
   </div>
 </div>
-
-
 
 {% endblock %}
