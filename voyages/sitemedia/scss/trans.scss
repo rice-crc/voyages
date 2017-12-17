@@ -33,6 +33,19 @@ a {
   }
 }
 
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $trans-color;
+  border-color: $trans-color;
+}
+.page-link {
+  color: $trans-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $trans-color;
+}
+
+// btn colors
 .btn-solid {
   background-color: $trans-color;
 	border-color: $trans-color;

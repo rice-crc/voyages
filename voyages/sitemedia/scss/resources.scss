@@ -1,5 +1,19 @@
 @import "colors";
 
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $resource-color;
+  border-color: $resource-color;
+}
+.page-link {
+  color: $resource-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $resource-color;
+}
+
+
+// btn colors
 .btn-solid {
   background-color: $resource-color;
 	border-color: $resource-color;

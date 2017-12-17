@@ -1,3 +1,13 @@
+.page-item.active .page-link {
+  background-color: #7B919C;
+  border-color: #7B919C; }
+
+.page-link {
+  color: #7B919C; }
+
+.page-link:focus, .page-link:hover {
+  color: #7B919C; }
+
 .navbar {
   background: #7B919C !important; }
 
