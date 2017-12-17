@@ -1,20 +1,13 @@
 {% extends "voyage/voyagebase.html" %}
 {% load sass_tags %}
-
 {% load i18n %}
 {% load voyage_extras %}
 
 {% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
 
 {% block content %}
-
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
-
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css"> -->
-
-
-
-
+<link href="{% sass_src 'scss/database-sources.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
 <nav aria-label="breadcrumb" role="navigation">
 	<ol class="breadcrumb">
@@ -23,77 +16,56 @@
 	</ol>
 </nav>
 
-
 <div class="container-new">
+	<div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% include "voyage/understanding_left_menu.html" %}
+		</div>
 
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
 
-
-  <div class="row">
-    <div class="col">
-      {% include "voyage/understanding_left_menu.html" %}
-    </div>
-    <div class="col-9">
-
-
-	{% block center-content %}
+			<p class="hidden-md">
+				<button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+					<div>
+						<span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+						<span>Toggle Sidebar</span>
+					</div>
+				</button>
+			</p>
     <div id="center-content-inner">
 
-<table class="">
-<tbody>
-    <tr>
-        <td class="simple-box-11">
-            <div></div>
-        </td>
-        <td class="simple-box-12">
-            <div></div>
-        </td>
-        <td class="simple-box-13">
-            <div></div>
-        </td>
-    </tr>
-    <tr>
-        <td class="simple-box-21">
-            <div></div>
-        </td>
-        <td class="simple-box-22">
-        {% if category == "documentary_sources" %}
-            <div class="page-title-1">{% trans 'Documentary Sources' %}</div>
-        {% else %}
-            <div class="page-title-1">{{ category|translate_source_name|trans_log }}</div>
-        {% endif %}
-            <div class="switch-layout">
-                <table class="fixed-width-table">
-                <tbody>
-                    <tr>
-                        <td class="switch-layout-second-link">
-                            {% if sort_method == "full_ref" %}
-                                <a class="active" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
-                            {% else %}
-                                <a class="" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Sort by long reference' %}</a>
-                            {% endif %}
-                        </td>
-                        <td class="switch-layout-second-link">
-                            {% if sort_method == "short_ref" %}
-                                <a class="active" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
-                            {% else %}
-                                <a class="" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Sort by short reference' %}</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+			{% if category == "documentary_sources" %}
+					<div class="page-title-1">{% trans 'Documentary Sources' %}</div>
+			{% else %}
+					<div class="page-title-1">{{ category|translate_source_name|trans_log }}</div>
+			{% endif %}
+
+			<div class="page-section">
+				Sort by
+				{% if sort_method == "full_ref" %}
+						<a class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Long Reference' %}</a>
+				{% else %}
+						<a class="btn btn-outline-primary btn-solid btn-sm" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Long Reference' %}</a>
+				{% endif %}
+				{% if sort_method == "short_ref" %}
+						<a class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Short Reference' %}</a>
+				{% else %}
+						<a class="btn btn-outline-primary btn-solid btn-sm" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Short Reference' %}</a>
+				{% endif %}
+			</div>
+
+			<div class="page-section">
         {% if category == "documentary_sources" %}
             <div id="sources">
-                <table class="fixed-width-table" >
+                <table class="table table-responsive table-break" >
                 <tbody>
                 {% for country_dict in results %}
                     <tr>
                     {# Print country name #}
                     {% if forloop.first %}
-                        <td class="sources-country-first" colspan="3">{{ country_dict.country|trans_log }}</td>
+                        <td class="header-group" colspan="3">{{ country_dict.country|trans_log }}</td>
                     {% else %}
-                        <td class="sources-country" colspan="3">{{ country_dict.country|trans_log }}</td>
+                        <td class="header-group" colspan="3">{{ country_dict.country|trans_log }}</td>
                     {% endif %}
                     </tr>
                     {# For all cities in country #}
@@ -223,7 +195,7 @@
             </div>
         {% elif sorted_letters %}
             <div id="sources">
-                <table class="fixed-width-table">
+                <table class="table table-responsive table-break table-striped">
                 <tbody>
                     {% for i in results %}
                         {% if forloop.first %}
@@ -274,7 +246,7 @@
             </div>
         {% else %}
             <div id="sources">
-                <table class="fixed-width-table">
+                <table class="table table-responsive table-break table-striped">
                 <tbody>
                     {% for i in results %}
                         <tr>
@@ -308,22 +280,11 @@
                 </tbody>
                 </table>
             </div>
-        {% endif %}
-        </td>
-    </tr>
-    <tr></tr>
-</tbody>
-</table>
+        	{% endif %}
 
+					</div>
+				</div>
+			</div>
 		</div>
-
-    {% endblock %}
-
-</div>
-</div>
-
-
-</div>
-
-
+	</div>
 {% endblock %}

@@ -2,6 +2,14 @@
 @import "headings";
 @import "colors";
 
+
+// table word break
+.table-break {
+  width: 100%;
+  word-wrap:break-word;
+  table-layout: fixed;
+}
+
 // layout
 .page-section {
   margin-bottom: 1rem;

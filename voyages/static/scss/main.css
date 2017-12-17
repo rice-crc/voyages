@@ -43,6 +43,11 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.table-break {
+  width: 100%;
+  word-wrap: break-word;
+  table-layout: fixed; }
+
 .page-section {
   margin-bottom: 1rem; }
 

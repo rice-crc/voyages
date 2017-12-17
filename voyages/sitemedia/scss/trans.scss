@@ -33,6 +33,29 @@ a {
   }
 }
 
+.btn-solid {
+  background-color: $trans-color;
+	border-color: $trans-color;
+  color: #fff;
+	&:hover {
+		background-color: $trans-color;
+		border-color: $trans-color;
+    opacity: 1;
+	}
+}
+
+.btn-outline {
+	color: $trans-color;
+	background-color: white;
+	border-color: $trans-color;
+	&:hover {
+		background-color: white;
+		border-color: $trans-color;
+    opacity: 1;
+    color: $trans-color;
+	}
+}
+
 .btn-trans {
   background-color: $trans-color;
   color: #fff;
