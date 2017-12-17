@@ -88,11 +88,6 @@ div.lookup-checkbox-list-item-expanded {
   width: 11px;
   height: 11px; }
 
-div.query-summary-item {
-  border-bottom: 1px solid #DB6B57;
-  padding-bottom: 5px;
-  margin-bottom: 5px; }
-
 span.query-summary-variable {
   font-weight: bold; }
 

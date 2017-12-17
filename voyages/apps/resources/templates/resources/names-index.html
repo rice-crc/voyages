@@ -6,16 +6,19 @@
 
 {% block csslist %}
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css"> -->
 {% endblock %}
 
 {% block jslist %}
@@ -84,7 +87,7 @@
         {{ options_results_per_page_form.option }} {% trans 'results per page' %}
       </div>
 
-      
+
       <div>
       <div>
 
@@ -100,7 +103,7 @@
 
 
       <!-- main data table -->
-      <table class="table table-responsive">
+      <table class="table table-responsive table-past">
         <thead>
           <tr>
           <th>
@@ -281,7 +284,7 @@
 
           <th>
           <div class="grid-header-text">
-            <a href="#">{% trans 'Go to African-Origins Record' %}</a>
+            <a href="#">{% trans 'African Origins' %}</a>
           </div>
           </th>
         </tr>
@@ -298,14 +301,14 @@
               <td>{{ record.slave_id }}</td>
               <td>{{ record.object.name }}</td>
               {% if record.object.age  %}
-                <td style="text-align: left">{{ record.object.age }}</td>
+                <td>{{ record.object.age }}</td>
               {% else %}
-                <td style="text-align: left"></td>
+                <td></td>
               {% endif %}
               {% if record.object.height  %}
-                <td style="text-align: left">{{ record.object.height }}</td>
+                <td>{{ record.object.height }}</td>
               {% else %}
-                <td style="text-align: left"></td>
+                <td></td>
               {% endif %}
               {% if record.object.sex_age  %}
                 <td>{{ record.object.sex_age }}</td>
@@ -317,7 +320,7 @@
               {% else %}
                 <td></td>
               {% endif %}
-              <td style="text-align: left">
+              <td>
               {% if record.object.voyage %}
                 <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
               {% else %}
@@ -325,7 +328,7 @@
               {% endif %}
               </td>
               <td>{{ record.object.ship_name }}</td>
-              <td style="text-align: left">{{ record.object.date_arrived }}</td>
+              <td>{{ record.object.date_arrived }}</td>
               {% if record.object.embarkation_port %}
                 <td>{{ record.object.embarkation_port }}</td>
               {% else %}
@@ -369,7 +372,7 @@
 
         <input type="hidden">
           <div class="dataTables_paginate paging_simple_numbers">
-            <ul class="pagination">
+            <ul class="pagination pagination-sm">
             {# First, prev section #}
             {% if results.number != 1 %}
               <li class="paginate_button page-item previous">
