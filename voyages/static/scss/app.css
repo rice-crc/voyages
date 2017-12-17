@@ -23,7 +23,7 @@
     padding: 1rem 0; } }
 
 * {
-  font-family: "Proxima Nova", "Helvetica", "Arial", sans-serif !important; }
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Proxima Nova", "Helvetica", "Arial", sans-serif !important; }
 
 a:hover {
   text-decoration: none; }
@@ -276,6 +276,10 @@ video#bgvid {
 .cover-end {
   margin-top: 0rem; }
 
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #7B919C;
+  opacity: 1; }
+
 .navbar {
   margin-top: 2rem;
   padding: 0 4rem;
@@ -311,6 +315,9 @@ video#bgvid {
 /* Large devices (desktops, 992px and up) */
 .site-headline {
   font-size: 2.5rem; }
+
+.site-story {
+  font-size: 1.25rem; }
 
 /* original large device */
 @media (max-width: 1199px) {
