@@ -1,17 +1,14 @@
 {% extends "voyage/voyagebase.html" %}
-
+{% load sass_tags %}
 {% load i18n %}
 {% load voyage_extras %}
 
 {% block title %}{% trans 'Sources (bibliography)' %}{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database-sources.css">
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/database.css"> -->
-
-
-
-
 
 <nav aria-label="breadcrumb" role="navigation">
 	<ol class="breadcrumb">
@@ -25,10 +22,9 @@
 
 
 
-  <div class="row">
-    <div class="col">
+	<div class="row row-offcanvas row-offcanvas-right">
+	  <div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 
-			<!-- Left side menu for the About section -->
 
 			{% load i18n %}
 
@@ -55,8 +51,16 @@
 
 
     </div>
-    <div class="col-9">
-	  {% block center-content %}
+
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
+	    <p class="hidden-md">
+	      <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
+	        <div>
+	          <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+	          <span>Toggle Sidebar</span>
+	        </div>
+	      </button>
+	    </p>
     <div id="center-content-inner">
       <div class="page-title-1">Downloads</div>
       <a name="download1"></a>
@@ -69,7 +73,7 @@
         it useful to view data as it existed in 1999, the CD-ROM version can also be selected for download. A codebook describing all variable names, variable labels, and values of the expanded dataset can be downloaded as a separate PDF document. With only
         a few exceptions, it retains variable names in the original 1999 CD-ROM version. The 2008 version of the database may also be downloaded.</p>
 
-				<table class='table'>
+				<table class='table table-responsive'>
 					<thead>
 						<tr>
 							<th>Filename</th>
@@ -106,7 +110,7 @@
       <p>This data set of the Trans-Atlantic Slave Trade Database contains the 99 variables available through the Voyages Database on this website. It is made available in three formats: SPSS (.sav), comma delimited (.csv), and dBase (.dbf). Users interested
         in working with this data set with their preferred software may select an edition year and file format below.</p>
 
-				<table class='table'>
+				<table class='table table-responsive'>
 					<thead>
 						<tr>
 							<th>Filename</th>
@@ -142,7 +146,7 @@
         the essay detailing the methodology used.</p>
 
 
-				<table class='table'>
+				<table class='table table-responsive'>
 					<thead>
 						<tr>
 							<th>Filename</th>
@@ -176,7 +180,7 @@
         They have also been incorporated into <a href="http://www.african-origins.org" target="_blank">African-Origins.org</a> that provides in addition opportunities to view and contribute to the ethnolinguistic identification of the African names.</p>
 
 
-				<table class='table'>
+				<table class='table table-responsive'>
 					<thead>
 						<tr>
 							<th>Filename</th>
@@ -196,7 +200,6 @@
       Questions about downloading or using these datasets? Please contact <a href="mailto:voyages@emory.edu"> voyages@emory.edu</a>.
 
 		</div>
-    {% endblock %}
 
 </div>
 </div>
