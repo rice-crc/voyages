@@ -52,7 +52,8 @@ a {
   font-weight: bold; }
 
 td.link-info-label {
-  color: #333333 !important; }
+  color: #333333 !important;
+  width: 15%; }
 
 div.lesson-plan-title {
   color: #333333;
