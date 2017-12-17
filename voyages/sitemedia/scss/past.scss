@@ -1,5 +1,17 @@
 @import "colors";
 
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $past-color;
+  border-color: $past-color;
+}
+.page-link {
+  color: $past-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $past-color;
+}
+
 
 .btn-past {
     color: $past-color !important;
