@@ -42,6 +42,9 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.page-section {
+  margin-bottom: 1rem; }
+
 .form-check-label {
   padding-left: 0; }
 
