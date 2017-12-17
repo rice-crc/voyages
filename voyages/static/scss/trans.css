@@ -22,6 +22,25 @@ a {
     opacity: 0.6;
     text-decoration: none; }
 
+.btn-solid {
+  background-color: #008ca8;
+  border-color: #008ca8;
+  color: #fff; }
+  .btn-solid:hover {
+    background-color: #008ca8;
+    border-color: #008ca8;
+    opacity: 1; }
+
+.btn-outline {
+  color: #008ca8;
+  background-color: white;
+  border-color: #008ca8; }
+  .btn-outline:hover {
+    background-color: white;
+    border-color: #008ca8;
+    opacity: 1;
+    color: #008ca8; }
+
 .btn-trans {
   background-color: #008ca8;
   color: #fff; }
