@@ -2,6 +2,21 @@
 @import "headings";
 @import "colors";
 
+
+// datatable responsive elements
+@media (max-width: 768px) {
+  .dataTables_filter {
+    text-align: left !important;
+  }
+  .pagination {
+    justify-content: center !important;
+    margin: 1rem !important;
+  }
+  .dataTables_info {
+    float: none !important;
+  }
+}
+
 // margin-v
 .margin-v {
   margin-top: 1rem;
