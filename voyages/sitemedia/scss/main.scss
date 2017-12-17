@@ -3,6 +3,16 @@
 @import "colors";
 
 
+// drop-shadow-1
+.drop-shadow-1:hover {
+  box-shadow: 0 0 10px rgba(33,33,33,.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.drop-shadow-1 {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
 // table word break
 .table-break {
   width: 100%;
