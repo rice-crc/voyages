@@ -19,7 +19,8 @@
   .footer-copyrights {
     width: 100%; }
   .footer-logo {
-    margin: auto; } }
+    margin: auto;
+    padding: 1rem 0; } }
 
 * {
   font-family: "Proxima Nova", "Helvetica", "Arial", sans-serif !important; }
