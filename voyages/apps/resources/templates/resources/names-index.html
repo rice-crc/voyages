@@ -327,63 +327,67 @@
 
 
         <input type="hidden">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <ul class="pagination">
             {# First, prev section #}
             {% if results.number != 1 %}
-              <div class="pager-fast-back">
+              <li class="paginate_button page-item previous">
                 <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-                <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
-              </div>
+                <a href="#" onclick="retrieve_page('form_first_page');" class="page-link">{% trans 'First' %}</a>
+              </li>
             {% else %}
-              <div class="pager-fast-back-no-click">
-                {% trans '« First' %}
-              </div>
+              <li class="paginate_button page-item previous disabled">
+                <a href="#" class="page-link">{% trans 'First' %}</a>
+              </li>
             {% endif %}
 
             {% if results.has_previous %}
-              <div class="pager-back">
+              <li class="paginate_button page-item previous">
                 <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-                <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
-              </div>
+                <a href="#" onclick="retrieve_page('form_prev_page');" class="page-link">{% trans 'Previous' %}</a>
+              </li>
             {% else %}
-              <div class="pager-back-no-click">
-                {% trans '« Prev' %}
-              </div>
+              <li class="paginate_button page-item previous disabled">
+                <a href="#" class="page-link">{% trans 'Previous' %}</a>
+              </li>
             {% endif %}
 
             {# Paginator num pages #}
             {% for i in paginator_range %}
               {% if i == results.number %}
-                <div class="pager-number-active">
-                  {{ i }}
-                </div>
+                <li class="paginate_button page-item active">
+                  <a href="#" class="page-link">{{ i }}</a>
+                </li>
               {% else %}
                 <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
-                <div class="pager-number">
-                  <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
-                </div>
+                <li class="paginate_button page-item">
+                  <a href="#" onclick="retrieve_page('form_page_{{ i }}');" class="page-link">{{ i }}</a>
+                </li>
               {% endif %}
             {% endfor %}
 
             {% if results.has_next %}
-              <div class="pager-fast-forward">
+              <li class="paginate_button page-item next">
                 <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-                <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
-              </div>
+                <a href="#" onclick="retrieve_page('form_next_page');" class="page-link">{% trans 'Next' %}</a>
+              </li>
             {% else %}
-              <div class="pager-fast-forward-no-click">
-                {% trans 'Next »' %}
-              </div>
+              <li class="paginate_button page-item next disabled">
+                <a href="#" class="page-link">{% trans 'Next' %}</a>
+              </li>
             {% endif %}
             {% if results.has_next %}
-              <div class="pager-forward">
+              <li class="paginate_button page-item next">
                   <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
-              </div>
+                  <a href="#" onclick="retrieve_page('form_last_page');" class="page-link">{% trans 'Last' %}</a>
+              </li>
             {% else %}
-              <div class="pager-forward-no-click">
-                {% trans 'Last »' %}
-              </div>
+              <li class="paginate_button page-item next disabled">
+                <a href="#" class="page-link">{% trans 'Last' %}</a>
+              </li>
             {% endif %}
+            </ul>
+          </div>
 
 
 
