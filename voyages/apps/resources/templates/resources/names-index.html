@@ -1,27 +1,21 @@
 {% extends "base.html" %}
-{% load i18n %}
 {% load sass_tags %}
-
+{% load i18n %}
 {% load thumbnail %}
 {% load resources_extras %}
 
-
 {% block csslist %}
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/resources/past.scss' %}" rel="stylesheet" type="text/css" />
-
-<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css"> -->
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-slaves-table.css">
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-expandable-box.css">
 {% endblock %}
 
 {% block jslist %}
@@ -31,19 +25,15 @@
 {% block title %}{% trans 'African Names' %}{% endblock %}
 
 {% block content %}
+<form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
+      enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 
 <div class="container-new">
-
-  <div class="row row-offcanvas row-offcanvas-right">
+	<div class="row  row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
-      <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
-            enctype="application/x-www-form-urlencoded" >{% csrf_token %}
-        {% include "resources/names-left-menu.html" %}
-      </form>
+      {% include "resources/names-left-menu.html" %}
 		</div>
-
-    <div class="col-md-8 col-xs-12 col-lg-9 ">
-
+		<div class="col-md-8 col-xs-12 col-lg-9 ">
 			<p class="hidden-md">
         <button type="button" class="btn btn-trans btn-sm" data-toggle="offcanvas">
           <div>
@@ -52,10 +42,8 @@
           </div>
         </button>
       </p>
-
-			<div id="center-content-inner">
-
-
+      <div>
+      <div>
 
 
 
@@ -68,57 +56,10 @@
 
 
 
-
-
-
-
-
-        <div class="page-title-1">{% trans "People of Atlantic Slave Trade Database" %}</div>
-
-        <div class="page-title-2">{% trans 'Your Current Query' %}</div>
-
-        <div id="form:_idJsp164" class="box-main-text">
-          <div class="query-summary">
-            {% if current_query %}
-              {% for val in current_query %}
-                {% if forloop.last and val.1 %}
-                  <div class="query-summary-item-last">
-                    {% for k, v in val.1.items %}
-                      <span class="query-summary-variable">{{ k }}</span>
-                      :
-                      <span class="query-summary-value">{{ v }}</span>
-                    {% endfor %}
-                  </div>
-                {% elif val.1 %}
-                  <div class="query-summary-item">
-                    {% for k, v in val.1.items %}
-                      <span class="query-summary-variable">{{ k }}</span>
-                      :
-                      <span class="query-summary-value">{{ v }}</span>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
-            {% endif %}
-          </div>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        <table class="table table-sm">
-        <tbody>
-        <tr>
+      <!-- main data table -->
+      <table class="table table-responsive">
+        <thead>
+          <tr>
           <th>
           {% ifequal sort_column "slave_id" %}
             {% ifequal sort_mode "1" %}
@@ -301,149 +242,154 @@
           </div>
           </th>
         </tr>
+        </thead>
 
-        {% for record in results %}
-            {% if forloop.first %}
+        <tbody>
+          {% for record in results %}
+              {% if forloop.first %}
                 <tr class="grid-row-even grid-row-first">
-            {% else %}
+              {% else %}
                 <tr class="grid-row-even">
+              {% endif %}
+
+              <td>{{ record.slave_id }}</td>
+              <td>{{ record.object.name }}</td>
+              {% if record.object.age  %}
+                <td style="text-align: left">{{ record.object.age }}</td>
+              {% else %}
+                <td style="text-align: left"></td>
+              {% endif %}
+              {% if record.object.height  %}
+                <td style="text-align: left">{{ record.object.height }}</td>
+              {% else %}
+                <td style="text-align: left"></td>
+              {% endif %}
+              {% if record.object.sex_age  %}
+                <td>{{ record.object.sex_age }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              {% if record.object.country %}
+                <td>{{ record.object.country.name }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              <td style="text-align: left">
+              {% if record.object.voyage %}
+                <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
+              {% else %}
+                <a href="#" onclick="return alert('{% trans 'A transatlantic Voyage ID for this record does not yet exist, although further research might uncover one. The link in the rightmost column of the African Names Database table will take you to the matching entry in the African Origins database.' %}');">{{ record.object.voyage_number }}</a>
+              {% endif %}
+              </td>
+              <td>{{ record.object.ship_name }}</td>
+              <td style="text-align: left">{{ record.object.date_arrived }}</td>
+              {% if record.object.embarkation_port %}
+                <td>{{ record.object.embarkation_port }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              {% if record.object.disembarkation_port %}
+                <td>{{ record.object.disembarkation_port }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              <td>
+                <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
+              </td>
+              </tr>
+          {% endfor %}
+        </tbody>
+      </table><!-- end of main data table -->
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+      <!-- pagination -->
+
+      {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
+      {{ options_results_per_page_form.option }} {% trans 'results per page' %}
+
+
+        <input type="hidden">
+            {# First, prev section #}
+            {% if results.number != 1 %}
+              <div class="pager-fast-back">
+                <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
+                <a href="#" onclick="retrieve_page('form_first_page');">{% trans '« First' %}</a>
+              </div>
+            {% else %}
+              <div class="pager-fast-back-no-click">
+                {% trans '« First' %}
+              </div>
             {% endif %}
 
-            <td>{{ record.slave_id }}</td>
-                <td>{{ record.object.name }}</td>
-                {% if record.object.age  %}
-                  <td>{{ record.object.age }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                {% if record.object.height  %}
-                  <td>{{ record.object.height }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                {% if record.object.sex_age  %}
-                  <td>{{ record.object.sex_age }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                {% if record.object.country %}
-                  <td>{{ record.object.country.name }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                <td>
-                {% if record.object.voyage %}
-                  <a href="{% url 'voyage:voyage_variables' record.object.voyage_number %}">{{ record.object.voyage_number }}</a>
-                {% else %}
-                  <a href="#" onclick="return alert('{% trans 'A transatlantic Voyage ID for this record does not yet exist, although further research might uncover one. The link in the rightmost column of the African Names Database table will take you to the matching entry in the African Origins database.' %}');">{{ record.object.voyage_number }}</a>
-                {% endif %}
-                </td>
-                <td>{{ record.object.ship_name }}</td>
-                <td>{{ record.object.date_arrived }}</td>
-                {% if record.object.embarkation_port %}
-                  <td>{{ record.object.embarkation_port }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                {% if record.object.disembarkation_port %}
-                  <td>{{ record.object.disembarkation_port }}</td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-                <td>
-                  <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
-                </td>
-                </tr>
+            {% if results.has_previous %}
+              <div class="pager-back">
+                <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
+                <a href="#" onclick="retrieve_page('form_prev_page');">{% trans '« Prev' %}</a>
+              </div>
+            {% else %}
+              <div class="pager-back-no-click">
+                {% trans '« Prev' %}
+              </div>
+            {% endif %}
 
-        {% endfor %}
-
-        </tbody>
-        </table>
-
-
-        <div class="row">
-        <div class="col-md-12 datatable-options">
-        <div class="datatable-results">
-          {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
-          {{ options_results_per_page_form.option }} {% trans 'results per page' %}
-          <input type="hidden">
-        </div>
-
-        <div class="datatable-pagination">
-          <table class="td-table-links dataTables_paginate paging_simple_numbers">
-            <tbody>
-              <tr>
-              {# First, prev section #}
-              {% if results.number != 1 %}
-                <td class="pager-fast-back">
-                  <input type="hidden" id="form_first_page" value="1" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_first_page');">{% trans 'First' %}</a>
-                </td>
+            {# Paginator num pages #}
+            {% for i in paginator_range %}
+              {% if i == results.number %}
+                <div class="pager-number-active">
+                  {{ i }}
+                </div>
               {% else %}
-                <td class="pager-fast-back-no-click">
-                  {% trans 'First' %}
-                </td>
+                <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
+                <div class="pager-number">
+                  <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
+                </div>
               {% endif %}
+            {% endfor %}
 
-              {% if results.has_previous %}
-                <td class="pager-back">
-                  <input type="hidden" id="form_prev_page" value="{{ results.previous_page_number }}" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_prev_page');">{% trans 'Prev' %}</a>
-                </td>
-              {% else %}
-                <td class="pager-back-no-click">
-                  {% trans 'Prev' %}
-                </td>
-              {% endif %}
+            {% if results.has_next %}
+              <div class="pager-fast-forward">
+                <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
+                <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next »' %}</a>
+              </div>
+            {% else %}
+              <div class="pager-fast-forward-no-click">
+                {% trans 'Next »' %}
+              </div>
+            {% endif %}
+            {% if results.has_next %}
+              <div class="pager-forward">
+                  <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
+                  <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last »' %}</a>
+              </div>
+            {% else %}
+              <div class="pager-forward-no-click">
+                {% trans 'Last »' %}
+              </div>
+            {% endif %}
 
-              {# Paginator num pages #}
-              {% for i in paginator_range %}
-                {% if i == results.number %}
-                  <td class="pager-number-active">
-                    {{ i }}
-                  </td>
-                {% else %}
-                  <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
-                  <td class="pager-number">
-                    <a href="#" onclick="retrieve_page('form_page_{{ i }}');">{{ i }}</a>
-                  </td>
-                {% endif %}
-              {% endfor %}
 
-              {% if results.has_next %}
-                <td class="pager-fast-forward">
-                  <input type="hidden" id="form_next_page" value="{{ results.next_page_number }}" name="desired_page" disabled="true">
-                  <a href="#" onclick="retrieve_page('form_next_page');">{% trans 'Next' %}</a>
-                </td>
-              {% else %}
-                <td class="pager-fast-forward-no-click">
-                  {% trans 'Next' %}
-                </td>
-              {% endif %}
-              {% if results.has_next %}
-                <td class="pager-forward">
-                    <input type="hidden" id="form_last_page" value="{{ results.paginator.num_pages }}" name="desired_page" disabled="true">
-                    <a href="#" onclick="retrieve_page('form_last_page');">{% trans 'Last' %}</a>
-                </td>
-              {% else %}
-                <td class="pager-forward-no-click">
-                  {% trans 'Last' %}
-                </td>
-              {% endif %}
 
-            </tr>
-          </tbody>
-          </table>
-        </div>
 
-      </div>
-    </div>
+      <!-- end of pagination -->
 
-      <div class="row">
-        <div class="col-md-12">
-          <button class="btn btn-outline-primary btn-outline" type="submit" value="download_current_view" name="action">{% trans 'Download Current View' %}</button>
-          <button class="btn btn-outline-primary btn-outline" type="submit" value="download_all" name="action">{% trans 'Download All Results' %}</button>
-        </div>
       </div>
 
 
@@ -460,20 +406,31 @@
 
 
 
+      <button class="button-save" type="submit" value="download_current_view" name="action">{% trans 'Download current view' %}</button>
+      <button class="button-save" type="submit" value="download_all" name="action">{% trans 'Download all results' %}</button>
 
 
 
 
 
-			</div>
+      </div>
 
 
 
-    </div>
-  </div>
+
+
+		</div>
+	</div>
 </div>
 
 
+
+
+
+
+
+
+</form>
 
 
 {% endblock %}
