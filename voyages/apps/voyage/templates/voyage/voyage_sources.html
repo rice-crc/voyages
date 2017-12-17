@@ -43,12 +43,12 @@
 			<div class="page-section">
 				Sort by
 				{% if sort_method == "full_ref" %}
-						<a class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Long Reference' %}</a>
+						<div class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Long Reference' %}</div>
 				{% else %}
 						<a class="btn btn-outline-primary btn-solid btn-sm" href="{% url 'voyage:sources-list-sort' category "full_ref" %}">{% trans 'Long Reference' %}</a>
 				{% endif %}
 				{% if sort_method == "short_ref" %}
-						<a class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Short Reference' %}</a>
+						<div class="btn btn-outline-primary btn-outline btn-sm" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Short Reference' %}</div>
 				{% else %}
 						<a class="btn btn-outline-primary btn-solid btn-sm" href="{% url 'voyage:sources-list-sort' category "short_ref" %}">{% trans 'Short Reference' %}</a>
 				{% endif %}
