@@ -2,6 +2,10 @@
 @import "headings";
 @import "colors";
 
+// hidden
+.hidden {
+  display: none;
+}
 
 // datatable responsive elements
 @media (max-width: 768px) {
