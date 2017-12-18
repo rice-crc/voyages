@@ -128,7 +128,7 @@
 			</div>
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
-					<h1 class="uppercase intra-color weight-700 db-title">intra-American</h1>
+					<h1 class="uppercase intra-color weight-700 db-title">Intra-American</h1>
 					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
 				</div>
 				<div class="align-self-center">
@@ -137,10 +137,10 @@
 					</p>
 				</div>
 				<div class="align-self-end band-buttons">
-					<button class="btn btn-outline-primary intra-btn">About</button>
-					<button class="btn btn-outline-primary intra-btn">Database</button>
-					<button class="btn btn-outline-primary intra-btn">Downloads</button>
-					<button class="btn btn-outline-primary intra-btn">Contribute</button>
+					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">About</button>
+					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Database</button>
+					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Downloads</button>
+					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Contribute</button>
 				</div>
 			</div>
 		</div>
@@ -286,6 +286,30 @@
 	</div>
 
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="intra-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Intra-America Is Coming Soon!</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>It will look similar to other modules (e.g. Trans-Atlantic) but due to the overwhelming amount of work on my list, I will roll out Intra-America later.</p>
+				<img src="static/images/site/gone-fishing.gif" style="width: 100%;"></img>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div><!-- Gone Fishing -->
+
+
 
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
 <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
