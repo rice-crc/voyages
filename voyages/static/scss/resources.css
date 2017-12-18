@@ -22,7 +22,8 @@
   border-color: #47A58A; }
   .btn-outline:hover {
     background-color: #47A58A;
-    border-color: #47A58A; }
+    border-color: #47A58A;
+    color: white; }
 
 .datatable-options {
   display: flex;
