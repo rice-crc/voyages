@@ -19,8 +19,8 @@
         </div>
         <p>{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
 
-        <button class="btn btn-trans btn-sm" type="submit" name="submit_year" value="Apply">{% trans 'Apply' %}</button>
-        <button class="btn btn-outline-primary btn-outline-trans btn-outline btn-sm" type="submit" name="submit_year" value="Reset">{% trans 'Reset' %}</button>
+        <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Apply">{% trans 'Apply' %}</button>
+        <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset">{% trans 'Reset' %}</button>
       </div>
 
     </div>
@@ -39,8 +39,8 @@
         <label for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
         </div>
       {% endfor %}
-      <button class="btn btn-trans btn-sm" type="submit" name="submit_nation" value="Apply" name="submit_regions">{% trans 'Apply' %}</button>
-      <button class="btn btn-outline-primary btn-outline-trans btn-outline btn-sm" type="submit" name="submit_nation" type="submit" value="Reset" name="submit_regions">{% trans 'Reset' %}</button>
+      <button class="btn btn-solid btn-sm" type="submit" name="submit_nation" value="Apply" name="submit_regions">{% trans 'Apply' %}</button>
+      <button class="btn btn-outline btn-sm" type="submit" name="submit_nation" type="submit" value="Reset" name="submit_regions">{% trans 'Reset' %}</button>
     </div>
 
 
@@ -113,8 +113,8 @@
           </table>
 
           <!-- Select/Deselect all buttons -->
-          <!-- <button class="btn btn-trans btn-sm" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
-          <button class="btn btn-outline-primary btn-outline-trans btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
+          <!-- <button class="btn btn-solid btn-sm" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
+          <button class="btn btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
         </div>
       </div>
       <div class="sidebar-section">
@@ -181,14 +181,14 @@
             {% endfor %}
           </tbody>
           </table>
-          <button class="btn btn-trans btn-sm margin-v" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
-          <button class="btn btn-outline-primary btn-outline-trans btn-outline btn-sm margin-v" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button>
+          <button class="btn btn-solid btn-sm margin-v" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
+          <button class="btn btn-outline btn-sm margin-v" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button>
 
 
         </div>
 
-        <button class="btn btn-trans margin-v" type="submit" value="Apply" name="submit_regions">{% trans 'Search' %}</button>
-        <button class="btn btn-outline-primary btn-outline-trans btn-outline margin-v" type="submit" value="Reset" name="submit_regions">{% trans 'Reset All' %}</button>
+        <button class="btn btn-solid margin-v" type="submit" value="Apply" name="submit_regions">{% trans 'Search' %}</button>
+        <button class="btn btn-outline margin-v" type="submit" value="Reset" name="submit_regions">{% trans 'Reset All' %}</button>
 
       </div>
 
