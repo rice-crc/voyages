@@ -6,17 +6,17 @@
     <div id="map" style="width:100%; height:100%; min-height: 500px;"></div>
 </div>
 <div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
-    <div class="page-title-1">{% trans 'Loading map voyages...' %}</div>
+    <h1>{% trans 'Loading map voyages...' %}</h1>
 </div>
 <div id="timeControls" class="animation_voyage_controls" style="display:none;">
-    <h1 class="animation_voyage_year_label" id="yearLabel"></div>
+    <h1 class="animation_voyage_year_label" id="yearLabel"></h1>
     <div class="control animation_voyage_year_slider" id="slider" style="width: 200px;"></div>
     <button class="animation_voyage_pause_button" type="button" id="pauseBtn">{% trans 'Pause' %}</button>
     <button class="animation_voyage_play_button" type="button" id="playBtn" style="display:none;">{% trans 'Play' %}</button>
 </div>
 <div id="tooltip" class="animation_voyage_info" style="display:none; opacity: 0;">
     <div id="tooltip_content"></div>
-    <div class="animation_tooltip_close_button">x</div>
+    <div class="animation_tooltip_close_button" onclick="return closeToolTip();">x</div>
 </div>
 <script src="{{ STATIC_URL }}scripts/d3.min.js"></script>
 <script src="{{ STATIC_URL }}maps/js/arc.js"></script>
@@ -79,7 +79,7 @@
     var yearStep = function() {};
     var pendingStep = false;
     var animationTime = 0;
-    
+
     // Ensure that each data object has a smooth route
     // and an interpolation method for determining the
     // point along the curve for a constant speed unit
@@ -192,9 +192,9 @@
                         // Set tooltip content.
                         var content = $("#tooltip_content");
                         content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
-                        var template = '<div class="page-title-1">' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</div>";
+                        var template = '<h1>' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</h1>";
                         if (d.ship_nationality_name != "") {
-                            template += "<div class="page-title-2">" + d.ship_nationality_name + "</div>";
+                            template += "<h2>" + d.ship_nationality_name + "</h2>";
                         }
                         if (d.ship_ton) {
                             template += "<p>{% trans 'This {ton}-ton ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.' %}</p>";
