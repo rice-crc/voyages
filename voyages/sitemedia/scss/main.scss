@@ -2,6 +2,27 @@
 @import "headings";
 @import "colors";
 
+// link
+.link {
+  font-weight: bold;
+  transition: ease 0.3s;
+
+  &:hover {
+    color: #fff !important;
+    transition: ease 0.3s;
+    opacity: 1;
+  }
+}
+
+// footer color
+.grey {
+  color: #ececec;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
 // hidden
 .hidden {
   display: none;

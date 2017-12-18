@@ -391,16 +391,17 @@ video#bgvid {
   }
 }*/
 .link {
-  font-weight: bold; }
+  font-weight: bold;
+  transition: ease 0.3s; }
   .link:hover {
     color: #fff !important;
-    transition: 0.3s; }
+    transition: ease 0.3s; }
+
+.grey {
+  color: #ececec; }
 
 .sv-card-title {
   margin-left: 0.5rem; }
-
-.highlight {
-  font-size: .75rem; }
 
 .nav-container {
   margin-right: auto;

@@ -43,6 +43,19 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.link {
+  font-weight: bold;
+  transition: ease 0.3s; }
+  .link:hover {
+    color: #fff !important;
+    transition: ease 0.3s;
+    opacity: 1; }
+
+.grey {
+  color: #ececec; }
+  .grey:hover {
+    opacity: 1; }
+
 .hidden {
   display: none; }
 
