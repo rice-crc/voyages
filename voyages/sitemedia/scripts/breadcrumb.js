@@ -8,7 +8,7 @@ function writebreadcrumb() {
 	if (maxIdx == 3 && elem[maxIdx] == "") {
 		return "<div class='breadcrumb'>" + gettext("Home") + "</div>";
 	}
-	
+
 	/* Parse the link to the home page */
 	path = "<div class='breadcrumb'><a href=\"" + href.substring(0, href.indexOf("/" + elem[2]) + elem[2].length + 1) + "/\">" + gettext("Home")  + "</a>";
 
@@ -18,15 +18,15 @@ function writebreadcrumb() {
 		path += seperatorst + majorSectionName[elem[3]];
 	} else if (maxIdx >= 4 && elem[3] != "" && elem[4] != "index.html") {
 
-		path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[3]) + elem[3].length + 1) 
+		path += seperatorst + "<a href=\"" + href.substring(0, href.indexOf("/" + elem[3]) + elem[3].length + 1)
 				+ "/\">" + majorSectionName[elem[3]] + "</a>";
-		
+
 		/* Remove the pound sign as necessary */
 		var pound_sign_pos = elem[4].indexOf("#");
 		if (pound_sign_pos >= 0) {
 			elem[4] = elem[4].substring(0, pound_sign_pos);
-		}		
-		
+		}
+
 		if (elem[3] == "voyage" && (elem[4] == "understanding-db")) {
 			path += seperatorst + gettext("Understanding the Database");
         } else if (elem[3] == "voyage" && (elem[4] == "source")) {
@@ -45,7 +45,7 @@ function writebreadcrumb() {
 				path += seperatorst + "<span>" + gettext(prettyName) + "</span>";
 			}
 		}
-		
+
 		if (elem[maxIdx] != "index.html") {
 			/* The title of the index page to each section is never included more than once */
 			path += seperatorst + "<span id=\"breadcrumb-lastelem\">" + document.title + "</span>";
@@ -68,14 +68,18 @@ function prettyName(name) {
 function BreadCrumbs(labels, home, ulClass, liClass) {
     var self = this;
     self.labels = labels || {};
-    self.home = home || "Home Page";
+    self.home = home || "Home";
     self.ulClass = ulClass || "breadcrumb";
     self.liClass = liClass || "breadcrumb-item";
-    
+
     var getItem = function(url, label) {
+				// replace voyage with voyage/understanding-db, aka the about page
+				if (url.indexOf("voyage", url.length - "voyage".length) !== -1) {
+					url = url.concat("/understanding-db");
+				}
         return '<li class="' + self.liClass + '"><a href="' + url + '">' + gettext(label) + '</a></li>';
     };
-    
+
     self.getUI = function(url, title) {
         url = url || document.location.href;
         var levels = url.replace(/(^\w+:|^)\/\//, '').replace(/\/$/, '').split('/');
@@ -103,6 +107,6 @@ var breadCrumbs = new BreadCrumbs({
     'assessment': 'Assessing the Slave Trade',
     'education': 'Educational Materials',
     'search': 'Search the Voyages Database',
-	'download': 'Downloads',
-	'understanding-db': 'Understanding the Database',
+		'download': 'Downloads',
+		'understanding-db': 'Understanding the Database',
 });
