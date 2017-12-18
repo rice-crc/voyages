@@ -40,7 +40,7 @@
 			<p class="hidden-md">
         <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
           <div>
-            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span class="fa fa-exchange" style="vertical-align: middle;"></span>
             <span>Toggle Sidebar</span>
           </div>
         </button>
@@ -107,178 +107,189 @@
         <thead>
           <tr>
           <th>
-          {% ifequal sort_column "slave_id" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_id" value="slave_id" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_id');">{% trans 'ID' %}</a>
+            <a href="#" onclick="sort_results('sort_form_id');">
+              {% trans 'ID' %}
+              {% ifequal sort_column "slave_id" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_name" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_name" value="slave_name" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_name');">{% trans 'Name' %}</a>
+            <a href="#" onclick="sort_results('sort_form_name');">
+              {% trans 'Name' %}
+              {% ifequal sort_column "slave_name" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_age" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_age" value="slave_age" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_age');">{% trans 'Age' %}</a>
+            <a href="#" onclick="sort_results('sort_form_age');">
+              {% trans 'Age' %}
+              {% ifequal sort_column "slave_age" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_height" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_height" value="slave_height" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_height');">{% trans 'Height [in]' %}</a>
+            <a href="#" onclick="sort_results('sort_form_height');">
+              {% trans 'Height (in)' %}
+              {% ifequal sort_column "slave_height" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_sex_age" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_sexage" value="slave_sex_age" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_sexage');">{% trans 'Sex/Age' %}</a>
+            <a href="#" onclick="sort_results('sort_form_sexage');">
+              {% trans 'Sex/Age' %}
+              {% ifequal sort_column "slave_sex_age" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_country" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_origin" value="slave_country" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_origin');">{% trans 'Origin' %}</a>
+            <a href="#" onclick="sort_results('sort_form_origin');">
+              {% trans 'Origin' %}
+              {% ifequal sort_column "slave_country" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_voyage_number" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_voyage" value="slave_voyage_number" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_voyage');">{% trans 'Voyage ID' %}</a>
+            <a href="#" onclick="sort_results('sort_form_voyage');">
+              {% trans 'Voyage ID' %}
+              {% ifequal sort_column "slave_voyage_number" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_ship_name" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_shipname" value="slave_ship_name" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_shipname');">{% trans 'Ship name' %}</a>
+            <a href="#" onclick="sort_results('sort_form_shipname');">
+              {% trans 'Ship Name' %}
+              {% ifequal sort_column "slave_ship_name" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_date_arrived" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_arrival" value="slave_date_arrived" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_arrival');">{% trans 'Arrival' %}</a>
+            <a href="#" onclick="sort_results('sort_form_arrival');">
+              {% trans 'Arrival' %}
+              {% ifequal sort_column "slave_date_arrived" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_embarkation_port" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_embarkation" value="slave_embarkation_port" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_embarkation');">{% trans 'Embarkation' %}</a>
+            <a href="#" onclick="sort_results('sort_form_embarkation');">
+              {% trans 'Embarkation' %}
+              {% ifequal sort_column "slave_embarkation_port" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
           <th>
-          {% ifequal sort_column "slave_disembarkation_port" %}
-            {% ifequal sort_mode "1" %}
-              <div class="grid-header-text grid-header-icon-asc">
-            {% endifequal %}
-            {% ifequal sort_mode "2" %}
-              <div class="grid-header-text grid-header-icon-desc">
-            {% endifequal %}
-          {% else %}
             <div class="grid-header-text">
-          {% endifequal %}
             <input type="hidden" id="sort_form_disembarkation" value="slave_disembarkation_port" name="sort_column" disabled="true">
-            <a href="#" onclick="sort_results('sort_form_disembarkation');">{% trans 'Disembarkation' %}</a>
+            <a href="#" onclick="sort_results('sort_form_disembarkation');">
+              {% trans 'Disembarkation' %}
+              {% ifequal sort_column "slave_disembarkation_port" %}
+                {% ifequal sort_mode "1" %}
+                  <span class="fa fa-sort-amount-asc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+                {% ifequal sort_mode "2" %}
+                  <span class="fa fa-sort-amount-desc" style="vertical-align: middle;"></span>
+                {% endifequal %}
+              {% endifequal %}
+            </a>
           </div>
           </th>
 
