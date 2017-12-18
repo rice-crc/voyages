@@ -74,7 +74,8 @@ h6 {
   margin-bottom: 1rem; }
 
 .form-check-label {
-  padding-left: 0; }
+  padding-left: 0;
+  padding-right: 1rem; }
 
 .dataTables_length, .dataTables_info {
   float: left; }
