@@ -48,10 +48,6 @@ a {
     opacity: 0.6;
     text-decoration: none; }
 
-.btn-trans {
-  background-color: #DB6B57;
-  color: #fff; }
-
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
   border-left: 4px solid #DB6B57;
