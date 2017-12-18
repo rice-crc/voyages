@@ -1,5 +1,28 @@
 @import "colors";
 
+
+// btn colors
+.btn-solid {
+  background-color: $about-color;
+	border-color: $about-color;
+  color: #fff;
+	&:hover {
+		background-color: $about-color;
+		border-color: $about-color;
+	}
+}
+
+.btn-outline {
+	color: $about-color;
+	background-color: white;
+	border-color: $about-color;
+	&:hover {
+		background-color: $about-color;
+		border-color: $about-color;
+    color: white;
+	}
+}
+
 // datatables bootstrap 4 pagination
 .page-item.active .page-link {
   background-color: $about-color;
