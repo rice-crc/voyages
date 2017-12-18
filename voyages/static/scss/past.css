@@ -25,7 +25,8 @@
   border-color: #DB6B57; }
   .btn-outline:hover {
     background-color: #DB6B57;
-    border-color: #DB6B57; }
+    border-color: #DB6B57;
+    color: white; }
 
 .btn-past {
   color: #DB6B57 !important; }
