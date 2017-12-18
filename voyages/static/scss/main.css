@@ -43,6 +43,9 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.hidden {
+  display: none; }
+
 @media (max-width: 768px) {
   .dataTables_filter {
     text-align: left !important; }

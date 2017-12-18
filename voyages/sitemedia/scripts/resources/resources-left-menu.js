@@ -16,7 +16,7 @@ function filter_edit_list() {
     } else {
         items.each(function( index ) {
 
-            if ($(this).children().eq(2).text().toLowerCase().indexOf(text_to_search) >= 0) {
+            if ($(this).children().eq(1).text().toLowerCase().indexOf(text_to_search) >= 0) {
                 $(this).removeClass("hidden");
             } else {
                 $(this).addClass("hidden");
