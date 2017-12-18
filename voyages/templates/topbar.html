@@ -77,20 +77,18 @@
 					</div>
 				</li>
 
+				{% get_current_language as LANGUAGE_CODE %}
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">EN</a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ LANGUAGE_CODE|upper }}</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" href="#">English</a>
-						<a class="dropdown-item" href="#">Português</a>
+
+						{% for lang in LANGUAGES %}
+							{% get_language_info for lang.0 as lang_info %}
+							<a class="dropdown-item language_link language_link_{{ lang.0 }}" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang_info.name_local }}</a>
+						{% endfor %}
 					</div>
 				</li>
 
-				<!-- <li class="nav-item">
-											<a class="nav-link" href="//codeply.com">Codeply</a>
-									</li>
-									<li class="nav-item">
-											<a class="nav-link" href="#">Link</a>
-									</li> -->
 			</ul>
 		</div>
 	</div>
@@ -98,3 +96,16 @@
 
 <!--  Contains the navigation menu in a nested-unordered-list hierarchy
 	- links are managed by the navigation_topbar.js menu -->
+
+	<script type="text/javascript">
+	$(document).ready(function() {
+		// reload the page after a language is switched
+		$('.language_link').click(function(e) {
+			e.preventDefault();
+			$.ajax($(this).attr('href'))
+				.done(function() {
+					window.location.reload();
+				});
+		});
+	});
+	</script>
