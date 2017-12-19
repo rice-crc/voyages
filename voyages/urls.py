@@ -23,7 +23,7 @@ import django.views.i18n
 import django.views.static
 
 urlpatterns = [
-    url(r'^$', include('voyages.apps.static_content.urls', namespace='static_content')),
+    url(r'^', include('voyages.apps.static_content.urls', namespace='static_content')),
     # Short permalink
     url(r'^estimates/(?P<link_id>\w+)', voyages.apps.assessment.views.restore_permalink, name='restore_e_permalink'),
     url(r'^voyages/(?P<link_id>\w+)', voyages.apps.voyage.views.restore_permalink, name='restore_v_permalink'),
@@ -57,17 +57,17 @@ sitemaps = {
 # URLs not included in the sitemap
 urlpatterns += [
     url(r'^sitemap\.xml', django.contrib.sitemaps.views.sitemap, {'sitemaps': sitemaps}, name='sitemap-xml'),
-    
+
     # Flatpages
     url(r'^pages/', include('django.contrib.flatpages.urls')),
-    
-    # Adding download files 
+
+    # Adding download files
     url(r'^admin/downloads', voyages.apps.voyage.views.download_file, name="downloads"),
 
     # Admin documentation
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Admin management  
+    # Admin management
     url(r'^admin/', include(admin.site.urls))]
 
 #Serving static files including files uploaded by users
