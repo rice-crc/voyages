@@ -1,4 +1,4 @@
-Django>=1.10,<2.0
+Django==1.11.6
 lxml
 mysql-python
 hurry.filesize
@@ -6,7 +6,7 @@ pysolr
 wsgiref
 mock
 django-autocomplete-light<3.0.0
-sorl-thumbnail 
+sorl-thumbnail
 pillow
 bitly_api
 psycopg2
