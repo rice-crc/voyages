@@ -1,12 +1,13 @@
 {% extends "account/base.html" %}
 {% load i18n %}
 {% load l10n %}
+{% load sass_tags %}
 {% load voyage_extras %}
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css"> -->
+<link href="{% sass_src 'scss/contribute.scss' %}" rel="stylesheet" type="text/css" />
+
 <style>
     #return_btn {
         display: inline;
@@ -1627,7 +1628,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
