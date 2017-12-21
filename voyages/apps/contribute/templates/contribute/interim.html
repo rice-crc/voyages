@@ -1325,7 +1325,7 @@
                 </tbody>
             </table>
         {% endif %}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#referencesModal" id="add_source_modal_btn">
+        <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#referencesModal" id="add_source_modal_btn">
           {% trans "Add source" %}
         </button>
         <table id="sources_table" style="display:none; table-layout: fixed;" class="table table-striped">
@@ -1343,21 +1343,19 @@
     </div>
 
     <hr />
-    <div class="col-md-12">
         <div class="form-group">
             <label for="contribution_main_notes">{% trans "Contributor’s comments on this entry:" %}</label>
-            <div class="col-sm-8">
+            <div class="">
                 <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
             </div>
         </div>
-    </div>
     <input id="global_notes_input" type="hidden" name="notes" />
-    <div class="form-group col-md-12">
+    <div class="form-group ">
         <hr />
-        <button class="btn btn-primary" type="button" id="save_btn">{% trans "Save" %}</button>
+        <button class="btn btn-solid" type="button" id="save_btn">{% trans "Save" %}</button>
         {% if mode == 'contribute' %}
-        <button class="btn btn-success" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
-        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        <button class="btn btn-outline" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
+        <button class="btn btn-outline" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
         {% endif %}
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
