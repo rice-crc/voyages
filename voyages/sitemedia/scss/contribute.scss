@@ -1,4 +1,10 @@
 @import "btn";
+@import "colors";
+
+// nav pill colors
+.nav-pills .nav-link.active, .show>.nav-pills .nav-link {
+  background-color: $trans-color;
+}
 
 // offset form left padding
 .input-group {

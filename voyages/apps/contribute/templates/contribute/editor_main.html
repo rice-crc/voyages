@@ -1,11 +1,16 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load sass_tags %}
 {% load voyage_extras %}
 
 {% block center-content %}
 <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
-<link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/datatables.css"> -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
 <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
+<link href="{% sass_src 'scss/contribute.scss' %}" rel="stylesheet" type="text/css" />
+
 <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 <style>
     .tab-pane {
@@ -26,13 +31,13 @@
 <div>
 
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation"><a id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages list" %}</a></li>
-    <li role="presentation" class="active"><a id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests list" %}</a></li>
-    <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users list" %}</a></li>
-    <li role="presentation"><a href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source codes" %}</a></li>
-    <li role="presentation"><a href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish new database version" %}</a></li>
-    <li role="presentation"><a href="#downloads" aria-controls="downloads" role="tab" data-toggle="tab">{% trans "Download voyages" %}</a></li>
+  <ul class="nav nav-pills nav-fill" role="tablist">
+    <li class="nav-item" role="presentation"><a class="nav-link " id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages" %}</a></li>
+    <li class="nav-item" role="presentation" class="active"><a class="nav-link " id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link " href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link " href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source Codes" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link " href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish New DB Version" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link " href="#downloads" aria-controls="downloads" role="tab" data-toggle="tab">{% trans "Download Voyages" %}</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -96,10 +101,13 @@
 </div>
 
 {% include "contribute/assign_reviewer_dialog.html" %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/bootstrap.min.js"></script> -->
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/selectize.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/datatables.min.js"></script>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}scripts/datatables.min.js"></script> -->
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/editorial.js"></script>
