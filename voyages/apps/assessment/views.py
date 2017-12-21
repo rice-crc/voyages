@@ -8,11 +8,10 @@ from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
 import collections
 
-                              
 def get_page(request, chapternum, sectionnum, pagenum):
     """
     Essay subsection of the Assessment secton
-    
+
     Display an html page corresponding to the chapter-section-page
 
     The remaining content is rendered using the pagepath parameter
@@ -153,7 +152,7 @@ def get_estimates_table(request):
         estimate_selection_form = EstimateSelectionForm(post)
     if (estimate_selection_form is None or not estimate_selection_form.is_valid()) \
             and "estimate_selection_form" in request.session:
-        estimate_selection_form = request.session["estimate_selection_form"]
+        estimate_selection_form = EstimateSelectionForm(request.session["estimate_selection_form"])
     if post is not None and post.get("table_options") == "Reset to default":
         estimate_selection_form = None
     if estimate_selection_form is not None and estimate_selection_form.is_valid():
@@ -170,7 +169,8 @@ def get_estimates_table(request):
     col_key_function = key_functions[col_key_index]
     data['table_form'] = estimate_selection_form
     # Save form to session so that if the user navigates elsewhere and then returns, the form is unchanged.
-    request.session["estimate_selection_form"] = estimate_selection_form
+    if estimate_selection_form.is_valid():
+        request.session["estimate_selection_form"] = estimate_selection_form.cleaned_data
 
     # Aggregate results according to the row and column keys.
     # Each result is a pair (tuple) containing total embarked and total disembarked.
