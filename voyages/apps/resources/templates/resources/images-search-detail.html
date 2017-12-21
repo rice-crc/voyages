@@ -72,7 +72,7 @@
 					                {% thumbnail i.file "400" as im %}
 					                    <img src="{{ im.url }}">
 					                    {% empty %}
-					                        <img src="{{ MEDIA_URL }}{{ i.file }}" width="100" height="100">
+					                        <img src="{{ MEDIA_URL }}{{ i.file }}" height="100">
 					                {% endthumbnail %}
 					            </a>
 										</div>
