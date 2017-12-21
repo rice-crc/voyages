@@ -6,6 +6,9 @@
   background-color: #008ca8;
   border-color: #008ca8; }
 
+.input-group {
+  padding-left: 0; }
+
 @font-face {
   font-family: "Glyphicons Halflings";
   src: url("fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("fonts/glyphicons-halflings-regular.woff") format("woff"); }
@@ -117,8 +120,7 @@ h1.contribute_header {
   padding: 20px; }
 
 .form_help_text {
-  color: gray;
-  margin-left: 33%; }
+  color: gray; }
 
 .form-horizontal a:not(.btn) {
   display: block; }
