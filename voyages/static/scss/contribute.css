@@ -6,6 +6,13 @@
   background-color: #008ca8;
   border-color: #008ca8; }
 
+@font-face {
+  font-family: "Glyphicons Halflings";
+  src: url("fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("fonts/glyphicons-halflings-regular.woff") format("woff"); }
+
+.selectize-control {
+  width: 100%; }
+
 #results_table {
   margin: 1rem 0; }
 
@@ -114,9 +121,7 @@ h1.contribute_header {
   margin-left: 33%; }
 
 .form-horizontal a:not(.btn) {
-  display: block;
-  background-color: #F1F1F1;
-  border-bottom: solid 1px #CCC; }
+  display: block; }
 
 .form-horizontal a:hover {
   text-decoration: none; }
