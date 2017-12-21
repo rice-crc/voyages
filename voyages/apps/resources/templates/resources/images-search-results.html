@@ -68,9 +68,9 @@
 												<a href="{% url 'resources:images-search-detail' forloop.counter %}">
 		                        <div class="grid">
 		                            {% thumbnail result.file "100x100" as im %}
-		                                <img src="{{ im.url }}" width="100" height="100" />
+		                                <img src="{{ im.url }}" height="100" />
 		                            {% empty %}
-		                                <img src="{{ MEDIA_URL }}{{ result.file }}" width="100" height="100" />
+		                                <img src="{{ MEDIA_URL }}{{ result.file }}" height="100" />
 		                            {% endthumbnail %}
 		                        </div>
 		                    </a>
