@@ -1,5 +1,17 @@
 @import "btn";
 
+// add glyphicons font
+@font-face {
+	font-family: "Glyphicons Halflings";
+	src: url("fonts/glyphicons-halflings-regular.woff2") format("woff2"),
+		 url("fonts/glyphicons-halflings-regular.woff") format("woff"),
+}
+
+// selectize bootstrap
+.selectize-control {
+  width: 100%;
+}
+
 #results_table {
     margin: 1rem 0;
 }
@@ -111,8 +123,8 @@ h1.contribute_header {
 }
 .form-horizontal a:not(.btn) {
   display: block;
-  background-color: #F1F1F1;
-  border-bottom: solid 1px #CCC;
+  // background-color: #F1F1F1;
+  // border-bottom: solid 1px #CCC;
 }
 .form-horizontal a:hover {
   text-decoration: none;
