@@ -5,6 +5,7 @@
   .btn-solid:hover {
     background-color: #008ca8;
     border-color: #008ca8;
+    color: #fff;
     opacity: 1; }
 
 .btn-outline {
