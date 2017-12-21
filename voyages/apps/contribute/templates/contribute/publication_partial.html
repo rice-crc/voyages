@@ -1,14 +1,15 @@
 {% load i18n %}
 
-<div class="panel panel-primary">
-  <div class="panel-heading">{% trans "Publication" %}</div>
-  <div class="panel-body">
-    <p><input id="skip_backup_check" name="skip_backup" type="checkbox" value="" ><label class="checkbox-inline" for="skip_backup_check">{% trans "Skip full database backup" %}</label></p>
-    <button id="publish_all_btn" class="btn btn-primary">{% trans "Publish all" %}</button>
-  </div>
+<div class="page-title-1">{% trans "Publication" %}</div>
+
+<div class="form-check">
+  <label class="form-check-label" for="skip_backup_check">
+    <input class="form-check-input" id="skip_backup_check" name="skip_backup" type="checkbox" value="" >
+    {% trans "Skip full database backup" %}
+  </label>
 </div>
 
-<p></p>
+<button id="publish_all_btn" class="btn btn-solid margin-v">{% trans "Publish all" %}</button>
 
 <div>
     <span id="last_updated_span"></span>

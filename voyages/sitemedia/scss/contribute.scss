@@ -1,6 +1,15 @@
 @import "btn";
 @import "colors";
 
+// form elements
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+.form-check-label {
+  padding-left: 1.25rem;
+}
+
 // nav pill colors
 .nav-pills .nav-link.active, .show>.nav-pills .nav-link {
   background-color: $trans-color;

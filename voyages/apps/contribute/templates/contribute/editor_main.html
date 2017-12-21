@@ -14,7 +14,8 @@
 <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css"> -->
 <style>
     .tab-pane {
-        padding: 15px;
+        margin-top: 1rem;
+        padding: 0;
         min-height: 400px;
     }
 
@@ -33,7 +34,7 @@
   <!-- Nav tabs -->
   <ul class="nav nav-pills nav-fill" role="tablist">
     <li class="nav-item" role="presentation"><a class="nav-link " id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages" %}</a></li>
-    <li class="nav-item" role="presentation" class="active"><a class="nav-link " id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link active" id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source Codes" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish New DB Version" %}</a></li>
@@ -43,7 +44,11 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane" id="pending">
-        <table id="pending_publication_table" class="table table-striped">
+      <div class="page-title-1">
+        Edit Voyages
+      </div>
+      <div class="page-section">
+        <table id="pending_publication_table" class="table table-striped table-responsive">
             <thead>
             <tr>
                 <th>{% trans "Voyage ID" %}</th>
@@ -62,9 +67,14 @@
             <tbody>
             </tbody>
         </table>
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane active" id="requests">
-        <table id="requests_table" class="table table-striped">
+      <div class="page-title-1">
+        Edit Requests
+      </div>
+      <div class="page-section">
+        <table id="requests_table" class="">
             <thead>
             <tr>
                 <th>{% trans "Type" %}</th>
@@ -81,14 +91,25 @@
             <tbody>
             </tbody>
         </table>
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="users">
-        <a href="/admin/auth/user/">{% trans "Users on Live Admin" %}</a>
+      <div class="page-title-1">
+        Edit Users
+      </div>
+      <div class="page-section">
+        <a class="btn btn-solid" href="/admin/auth/user/">{% trans "Users on Live Admin" %}</a>
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="voyages">
     </div>
     <div role="tabpanel" class="tab-pane" id="sources">
-        <a href="/admin/voyage/voyagesources/">{% trans "Sources on Live Admin" %}</a>
+      <div class="page-title-1">
+        Edit Sources
+      </div>
+      <div class="page-section">
+        <a class="btn btn-solid" href="/admin/voyage/voyagesources/">{% trans "Sources on Live Admin" %}</a>
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="publish">
         {% include "contribute/publication_partial.html" %}
@@ -114,10 +135,10 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/utils.js"></script>
 <script type="text/javascript">
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
-    var contribTypes = {'edit': '{% trans "Edit voyage" %}',
-                    'delete': '{% trans "Delete voyage" %}',
-                    'merge': '{% trans "Merge voyages" %}',
-                    'new': '{% trans "New voyage" %}'};
+    var contribTypes = {'edit': '<span class="fa fa-edit">',
+                    'delete': '<span class="fa fa-trash-o">',
+                    'merge': '<span class="fa fa-code-fork">',
+                    'new': '<span class="fa fa-file-o">'};
     // Dynamically load tab contents.
     var loadedTabs = {};
 
@@ -169,6 +190,7 @@
                 };
                 if (!$('#requests_table').data('hasInitialized')) {
                     $('#requests_table').DataTable({
+                        responsive: true,
                         bPaginate: false,
                         stateSave: true,
                         stateDuration: 60 * 60 * 24 * 365 * 10,

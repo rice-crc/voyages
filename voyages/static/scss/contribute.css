@@ -6,11 +6,14 @@
   background-color: #008ca8;
   border-color: #008ca8; }
 
+.form-check {
+  margin-bottom: 0.5rem; }
+
+.form-check-label {
+  padding-left: 1.25rem; }
+
 .nav-pills .nav-link.active, .show > .nav-pills .nav-link {
   background-color: #008ca8; }
-
-.nav-tabs-sm .nav-link {
-  font-size: 1rem; }
 
 .input-group {
   padding-left: 0; }
