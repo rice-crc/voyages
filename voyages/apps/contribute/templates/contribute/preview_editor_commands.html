@@ -1,10 +1,10 @@
 {% load i18n %}
 
 {% include "contribute/assign_reviewer_dialog.html" %}
-<button type="button" class="btn btn-primary" aria-label="Assign" id="reviewer_assign_btn">
+<button type="button" class="btn btn-solid" aria-label="Assign" id="reviewer_assign_btn">
     {% trans "Assign a reviewer" %}
 </button>
-<button type="button" class="btn btn-danger" aria-label="Assign" id="begin_editorial_review_btn">
+<button type="button" class="btn btn-outline" aria-label="Assign" id="begin_editorial_review_btn">
     {% trans "Begin editorial review" %}
 </button>
 <script type="text/javascript">
@@ -36,5 +36,5 @@
             }
         });
         return false;
-    });                
+    });
 </script>

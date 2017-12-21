@@ -7,7 +7,7 @@
 
 {% block center-content %}
 {% with blank_text='' %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css"> -->
 <div id="toogles">
     <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
     <!-- <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label> -->
@@ -656,25 +656,25 @@
 <p></p>
 <div id="summary_toolbar" style="padding-top:6px; padding-bottom:6px; background-color:rgba(255,255,255,0.85)">
     <div class="btn-group">
-        <button type="button" class="btn btn-default" aria-label="Print" id="print_button">
-            <span class="glyphicon glyphicon-print" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Print" %}
+        <button type="button" class="btn btn-outline" aria-label="Print" id="print_button">
+            <span class="glyphicon glyphicon-print" aria-hidden="true"></span>{% trans "Print" %}
         </button>
         {% if mode == 'contribute' and contribution.status <= 1 and user.pk == contribution.contributor.pk %}
-            <button type="button" class="btn btn-default" aria-label="Edit" id="edit_contrib">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Edit contribution" %}
+            <button type="button" class="btn btn-outline" aria-label="Edit" id="edit_contrib">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>{% trans "Edit contribution" %}
             </button>
-            <button type="button" class="btn btn-primary" aria-label="Submit" id="submit_contrib">
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Submit your contribution" %}
+            <button type="button" class="btn btn-solid" aria-label="Submit" id="submit_contrib">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{% trans "Submit your contribution" %}
             </button>
-            <button type="button" class="btn btn-danger" aria-label="Cancel" id="delete_contrib">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;{% trans "Cancel contribution" %}
+            <button type="button" class="btn btn-outline" aria-label="Cancel" id="delete_contrib">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>{% trans "Cancel contribution" %}
             </button>
         {% endif %}
         {% if mode == 'editor' and not review_request %}
             {% include "contribute/preview_editor_commands.html" %}
         {% endif %}
         {% if mode == 'editor' %}
-            <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+            <a id="return_btn" class="btn btn-outline" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
         {% endif %}
     </div>
 </div>
@@ -694,7 +694,7 @@
         var title = gettext('Print contribution');
         var mywindow = window.open('', 'my div', 'height=640,width=800');
         mywindow.document.write('<html><head><title>' + title + '</title>');
-        mywindow.document.write('<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css" type="text/css" />');
+        // mywindow.document.write('<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css" type="text/css" />');
         mywindow.document.write('<style>' + $('#local_styles').html() + '</style>');
         mywindow.document.write('</head><body>');
         mywindow.document.write('<div class="container body-content">' + data + '</div>');
@@ -814,7 +814,7 @@
             }
         }
     });
-    
+
     $('.old_values').each(function() {
         var $div = $(this);
         var parent = $div.closest('.row');
@@ -838,7 +838,7 @@
             }
         }
     });
-    
+
     var grid_class = 4;
     if (extra_voyages.length > 0) {
         var col_count = extra_voyages.length + (existing_voyage_ids.length > 0 ? 3 : 2);
@@ -847,7 +847,7 @@
         for (var i = 0; i < extra_voyages.length; ++i) {
             $('#main_table_header').append('<span class="col-sm-' + grid_class + '">' + extra_voyages[i].id + '</span>');
         }
-        $('.row').each(function() {    
+        $('.row').each(function() {
             var child = $(this).children().last();
             var old_values_div = $(this).find('.old_values');
             if (old_values_div.length != 1) return;
@@ -862,7 +862,7 @@
                     $(this).removeClass('blank');
                 }
                 $(this).append(clone);
-            } 
+            }
         });
     }
 
@@ -930,7 +930,7 @@
     $('#timestamp').html(new Date());
 
     $("#data_display > .row > label, #data_display > .row > span, #data_display > .row > .old_values").addClass("col-sm-" + grid_class);
-    
+
     if (existing_voyage_ids.length == 0) {
         $(".old_values_header").remove();
         $('.old_values').remove();
@@ -938,13 +938,13 @@
         $(".old_values_header").html(existing_voyage_ids.length > 1 ? '{% trans "Merged voyages" %}' : '{% trans "Voyage" %} #' + existing_voyage_ids[0]);
     }
     alternateBackground();
-    
+
     maximizeContent({% if mode == 'editor' %}true{% endif %});
 </script>
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>
 {# Styles should move to Head - but this currently breaks the general layout #}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
 <style id="local_styles">
     .blank_value {
         color: lightgray;
