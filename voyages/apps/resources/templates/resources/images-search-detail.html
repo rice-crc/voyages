@@ -70,9 +70,9 @@
 								<div class='page-section'>
 					            <a href="{% url 'resources:image-search-detail-window' results.number %}">
 					                {% thumbnail i.file "400" as im %}
-					                    <img src="{{ im.url }}">
+					                    <img src="{{ im.url }}" class="img-fluid">
 					                    {% empty %}
-					                        <img src="{{ MEDIA_URL }}{{ i.file }}" height="100">
+					                        <img src="{{ MEDIA_URL }}{{ i.file }}" class="img-fluid">
 					                {% endthumbnail %}
 					            </a>
 										</div>

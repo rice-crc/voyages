@@ -43,9 +43,9 @@
 				<div class="page-section">
 					<a href="{% url 'resources:image-detail' category|spaces_to_underscores pagins.number %}">
 							{% thumbnail pagins.0.file "400" as im %}
-									<img src="{{ im.url }}">
+									<img src="{{ im.url }}" class="img-fluid">
 									{% empty %}
-											<img src="{{ MEDIA_URL }}{{ pagins.0.file }}" height="100">
+											<img src="{{ MEDIA_URL }}{{ pagins.0.file }}" class="img-fluid">
 							{% endthumbnail %}
 					</a>
 				</div>

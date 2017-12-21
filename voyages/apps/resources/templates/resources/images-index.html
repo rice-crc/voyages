@@ -54,11 +54,11 @@
 														{% if key == "file" %}
 																{% thumbnail value "100x100" as im %}
 																		<a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
-																			<img src="{{ im.url }}" height="100">
+																			<img src="{{ im.url }}" class="img-fluid img-thumbnail">
 																		</a>
 																		{% empty %}
 																				<a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
-																				<img src="{{ MEDIA_URL }}{{ value }}" height="100">
+																				<img src="{{ MEDIA_URL }}{{ value }}" class="img-fluid img-thumbnail">
 																				</a>
 																{% endthumbnail %}
 														{% endif %}

@@ -65,9 +65,9 @@
 										<div class="col-md-3 col-sm-6 col-xs-12 col-lg-3 col-xl-3">
 												<div class="grid-image">
 													{% thumbnail image.file "100x100" as im %}
-															<a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ im.url }}" height="150"/></a>
+															<a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ im.url }}" class="img-fluid img-thumbnail"/></a>
 															{% empty %}
-															<a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ MEDIA_URL }}{{ image.file }}" height="100"/></a>
+															<a href="{% url 'resources:images-category-detail' category|spaces_to_underscores forloop.counter %}"><img src="{{ MEDIA_URL }}{{ image.file }}" class="img-fluid img-thumbnail"/></a>
 													{% endthumbnail %}
 												</div>
 
