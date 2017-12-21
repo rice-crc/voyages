@@ -20,21 +20,21 @@
 		</li>
 		{% endif %}
 		<li class="col-sm-6">
-			<a href="{% url 'contribute:new_voyage' %}">{% trans "New voyage" %}</a>
+			<a href="{% url 'contribute:new_voyage' %}">{% trans "New Voyage" %}</a>
 		</li>
 		<li class="col-sm-6">
-			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit existing voyage" %}</a>
+			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit Existing Voyage" %}</a>
 		</li>
 		<li class="col-sm-6">
-			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge voyages" %}</a>
+			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge Voyages" %}</a>
 		</li>
 		<li class="col-sm-6">
-			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend voyage deletion" %}</a>
+			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend Voyage Deletion" %}</a>
 		</li>
 		{% if request.user.is_superuser %}
 		<!-- Is enabled only if the user is a super user -->
 		<li class="live_admin col-sm-6">
-			<a href="{% url 'contribute:editor_main' %}">{% trans "Editorial platform" %}</a></h3>
+			<a href="{% url 'contribute:editor_main' %}">{% trans "Editorial Platform" %}</a></h3>
 		</li>
 		{% endif %}
 	</ul>

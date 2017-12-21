@@ -26,8 +26,8 @@
     <div>
         {% csrf_token %}
         <input type="hidden" name="review_request_id" value="{{ request.pk }}">
-        <button type="submit" name="response" value="accept" class="btn btn-primary">{% trans "Accept request" %}</button>
-        <button type="submit" name="response" value="reject" class="btn btn-danger">{% trans "Reject request" %}</button>
+        <button type="submit" name="response" value="accept" class="btn btn-solid">{% trans "Accept request" %}</button>
+        <button type="submit" name="response" value="reject" class="btn btn-outline">{% trans "Reject request" %}</button>
     </div>
 </form>
 <script type="text/javascript">

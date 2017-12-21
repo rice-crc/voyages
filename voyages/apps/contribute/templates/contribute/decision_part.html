@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="btn-group" id="decision_btn_group">
-                <button class="btn btn-danger" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
+                <button class="btn btn-outline" type="submit" id="submit_editor_btn">{% trans "Submit to editor" %}</button>
             </div>
         {% endif %}
         {% if mode == 'editorial_review' or mode == 'editor' %}
@@ -70,9 +70,9 @@
             </div>
             {% endif %}
             <div class="btn-group" id="decision_btn_group">
-                <button class="btn btn-danger" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
+                <button class="btn btn-outline" type="submit" id="submit_final_decision_btn">{% trans "Submit final decision" %}</button>
                 {% if allow_impute %}
-                    <button class="btn btn-primary" type="submit" id="impute_btn">{% trans "Impute" %}</button>
+                    <button class="btn btn-solid" type="submit" id="impute_btn">{% trans "Impute" %}</button>
                 {% endif %}
             </div>
         {% endif %}
@@ -158,7 +158,7 @@
                             self.prop('disabled', false);
                         }
                     });
-                    return false; 
+                    return false;
                 });
             {% endif %}
             {% with editor_contribution=review_request.editor_contribution.first %}

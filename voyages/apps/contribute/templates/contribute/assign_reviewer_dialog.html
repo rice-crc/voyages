@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="send_request" type="button" class="btn btn-primary">{% trans "Send to reviewer" %}</button>
-                <button id="cancel_send" type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button id="send_request" type="button" class="btn btn-solid">{% trans "Send to reviewer" %}</button>
+                <button id="cancel_send" type="button" class="btn btn-outline" data-dismiss="modal">{% trans "Cancel" %}</button>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
         reviewer[0].selectize.clear();
         message.val('');
     });
-    
+
     var disable_modal_contents = function(disable) {
         var content = $(".modal-content");
         content.toggleClass('busy_disabled', disable);
