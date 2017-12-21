@@ -1,5 +1,10 @@
 @import "btn";
 
+// offset form left padding
+.input-group {
+  padding-left: 0;
+}
+
 // add glyphicons font
 @font-face {
 	font-family: "Glyphicons Halflings";
@@ -119,7 +124,6 @@ h1.contribute_header {
 }
 .form_help_text {
   color: gray;
-  margin-left: 33%;
 }
 .form-horizontal a:not(.btn) {
   display: block;
