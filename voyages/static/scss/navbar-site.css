@@ -7,10 +7,6 @@
 .nav-item {
   padding-right: 1rem; }
 
-.nav-link.active {
-  padding-top: 4px;
-  border-top: 4px solid white; }
-
 .nav-link {
   font-weight: 500;
   font-size: 1.1rem; }
