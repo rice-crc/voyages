@@ -39,7 +39,7 @@
 				<div class="page-title-1">{% trans 'Images of ' %}{{ category|trans_log }}</div>
 				{%  for images_set in images %}
 						{% if images_set.images %}
-								<div class="images-category">
+								<div class="images-category page-section">
 										<div class="page-title-2">
 											{{ images_set.label_name|trans_log }}
 											{% for i in images %}
