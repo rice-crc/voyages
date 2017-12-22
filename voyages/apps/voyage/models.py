@@ -1274,7 +1274,6 @@ class Voyage(models.Model):
     related to: :class:`~voyages.apps.voyage.models.VoyageShipOwner`
     related to: :class:`~voyages.apps.voyage.models.VoyageSources`
     """
-    # for parsing natural key
     objects = VoyageManager()
     intra_american_objects = IntraAmericanVoyageManager()
     both_objects = models.Manager()

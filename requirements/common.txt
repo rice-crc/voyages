@@ -22,3 +22,4 @@ libsass==0.13.3
 django-compressor==2.2
 django-sass-processor==0.5.5
 six==1.10.0
+ijson

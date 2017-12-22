@@ -145,7 +145,10 @@ graphs_y_axes = [Axis('var_voyage_id', 'Number of voyages', Axis.COUNT_MODE),
 # TODO: value SHOULD be used as the pk for several of our Django models.
 # Once this is in place, we can use VoyageCache to store this data.
 def cache_labels(model, label_field='label'):
-    return {x[0]: _(x[1]) for x in model.objects.values_list('value', label_field).iterator()}
+    try:
+        return {x[0]: _(x[1]) for x in model.objects.values_list('value', label_field).iterator()}
+    except:
+        return {}
 
 _ports = cache_labels(Place, 'place')
 _regions = cache_labels(Region, 'region')

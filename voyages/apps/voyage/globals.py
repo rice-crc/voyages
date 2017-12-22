@@ -24,7 +24,10 @@ def structure_places(place_list):
     """
     # Dict keyed by region, value is a list of places
     from collections import OrderedDict
-    places = sorted([p for p in [models.Place.objects.filter(pk=idx).first() for idx in place_list] if p], key=lambda p: p.value)
+    try:
+        places = sorted([p for p in [models.Place.objects.filter(pk=idx).first() for idx in place_list] if p], key=lambda p: p.value)
+    except:
+        places = []
     region_list = OrderedDict()
     for place in places:
         reg = place.region
@@ -403,11 +406,13 @@ def calculate_maxmin_years():
     def_last = 1866
     voyage_span_first_year = def_first
     voyage_span_last_year = def_last
-    q = models.VoyageDates.objects.filter(imp_voyage_began__regex=r'^\d*,\d*,\d{4}$')
-    if q.count() > 1:
-        voyage_span_first_year = q.aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
-        voyage_span_last_year = q.aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-
+    try:
+        q = models.VoyageDates.objects.filter(imp_voyage_began__regex=r'^\d*,\d*,\d{4}$')
+        if q.count() > 1:
+            voyage_span_first_year = q.aggregate(Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
+            voyage_span_last_year = q.aggregate(Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
+    except:
+        pass
     VoyageDateCache.cached_voyage_fist_year = voyage_span_first_year or def_first
     VoyageDateCache.cached_voyage_last_year = voyage_span_last_year or def_last
     return VoyageDateCache.cached_voyage_fist_year, VoyageDateCache.cached_voyage_last_year
@@ -446,18 +451,24 @@ def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda
 # TODO: Convert calls to this into a call to the get_each_from_list function
 def get_each_from_table(table, qdictkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
     result = []
-    for i in table.objects.all():
-        val = lmblbl(i)
-        label_list = [(val, 1,),]
-        result.append((label_list, {qdictkey: lmbval(i)}))
+    try:
+        for i in table.objects.all():
+            val = lmblbl(i)
+            label_list = [(val, 1,),]
+            result.append((label_list, {qdictkey: lmbval(i)}))
+    except:
+        pass
     return result
 
 def impute_nat_fun(lst):
     output = []
-    for i in lst:
-        mods = models.Nationality.objects.filter(value=i)
-        if mods.count() > 0 and len(mods) > 0:
-            output.append(mods[0])
+    try:
+        for i in lst:
+            mods = models.Nationality.objects.filter(value=i)
+            if mods.count() > 0 and len(mods) > 0:
+                output.append(mods[0])
+    except:
+        pass
     return output
 
 imputed_nationality_possibilities = impute_nat_fun([3, 6, 7, 8, 9, 10, 15, 30])
@@ -466,51 +477,63 @@ def make_regions_filter(varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     label_list = []
-    for broad in models.BroadRegion.objects.order_by('value').all():
-        label_list.append((broad.broad_region, broad.region_set.count(),))
-        for reg in broad.region_set.order_by('value').all():
-            label_list.append((reg.region, 1,))
-            results.append((label_list, {qdictkey: reg.value},))
-            label_list = []
+    try:
+        for broad in models.BroadRegion.objects.order_by('value').all():
+            label_list.append((broad.broad_region, broad.region_set.count(),))
+            for reg in broad.region_set.order_by('value').all():
+                label_list.append((reg.region, 1,))
+                results.append((label_list, {qdictkey: reg.value},))
+                label_list = []
+    except:
+        pass
     return results
 
 def make_places_filter(varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     label_list = []
-    for broad in models.BroadRegion.objects.order_by('value').all():
-        label_list.append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
-        for reg in broad.region_set.order_by('value').all():
-            label_list.append((reg.region, reg.place_set.count(),))
-            for place in reg.place_set.order_by('value').all():
-                label_list.append((place.place, 1,))
-                # TODO: Change place filter to use numeric identifiers instead of text
-                results.append((label_list, {qdictkey: place.value},))
-                label_list = []
+    try:
+        for broad in models.BroadRegion.objects.order_by('value').all():
+            label_list.append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
+            for reg in broad.region_set.order_by('value').all():
+                label_list.append((reg.region, reg.place_set.count(),))
+                for place in reg.place_set.order_by('value').all():
+                    label_list.append((place.place, 1,))
+                    # TODO: Change place filter to use numeric identifiers instead of text
+                    results.append((label_list, {qdictkey: place.value},))
+                    label_list = []
+    except:
+        pass
     return results
 
 def make_regions_col_filter(filter_name, varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     labels = [[], []]
-    for broad in models.BroadRegion.objects.order_by('value').all():
-        labels[0].append((broad.broad_region, broad.region_set.count(),))
-        for reg in broad.region_set.order_by('value').all():
-            labels[1].append((reg.region, 1,))
-            results.append({qdictkey: reg.value})
+    try:
+        for broad in models.BroadRegion.objects.order_by('value').all():
+            labels[0].append((broad.broad_region, broad.region_set.count(),))
+            for reg in broad.region_set.order_by('value').all():
+                labels[1].append((reg.region, 1,))
+                results.append({qdictkey: reg.value})
+    except:
+        pass
     return (filter_name, results, labels,)
 
 def make_places_col_filter(filter_name, varname):
     qdictkey = varname + '_idnum__exact'
     results = []
     labels = [[], [], []]
-    for broad in models.BroadRegion.objects.order_by('value').all():
-        labels[0].append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
-        for reg in broad.region_set.order_by('value').all():
-            labels[1].append((reg.region, reg.place_set.count(),))
-            for place in reg.place_set.order_by('value').all():
-                labels[2].append((place.place, 1,))
-                results.append({qdictkey: place.value})
+    try:
+        for broad in models.BroadRegion.objects.order_by('value').all():
+            labels[0].append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
+            for reg in broad.region_set.order_by('value').all():
+                labels[1].append((reg.region, reg.place_set.count(),))
+                for place in reg.place_set.order_by('value').all():
+                    labels[2].append((place.place, 1,))
+                    results.append({qdictkey: place.value})
+    except:
+        pass
     return (filter_name, results, labels,)
 
 def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):

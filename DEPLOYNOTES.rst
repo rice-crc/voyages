@@ -49,6 +49,9 @@ Voyages depends on several python libraries. The installation is mostly
 automated, and will print status messages as packages are installed. If there
 are any errors, pip should announce them very loudly.
 
+Some packages require compilation and for that one needs gcc installed.
+Other required system packages are libxml2-dev and libxslt-dev
+
 To install python dependencies, cd into the repository checkout and::
 
   $ pip install -r requirements.txt
@@ -72,6 +75,14 @@ Solr schema configuration. For convenience, this directory also contains a
 sample ``solrconfig.xml`` and minimal versions of all other solr
 configuration files used by the index.
 
+Details:
+After installing solr, create the 'voyages' core with:
+
+  $ sudo su solr
+  [solr]$ cp src/voyages/solr/managed_schema.xml src/voyages/solr/solrconfig.xml src/voyages/solr/mapping-ISOLatin1Accent.txt src/voyages/solr/protwords.txt src/voyages/solr/stopwords.txt src/voyages/solr/synonyms.txt <solr path>/data/voyages/
+  [solr]$ cp src/voyages/solr/stopwords_en.txt <solr path>/data/voyages/lang/
+
+
 The url for accessing the configured Solr instance should be set in
 ``localsettings.py`` as **SOLR_SERVER_URL**.
 
@@ -94,7 +105,6 @@ Configure application settings by copying ``localsettings.py.dist`` to
 After configuring all settings, initialize the db with all needed
 tables and initial data using::
 
-  $ python manage.py syncdb
   $ python manage.py migrate
 
 In addition, these sets of initial data need to be loaded (Please load in this order)
@@ -103,6 +113,23 @@ Before loading data comment the `HAYSTACK_SIGNAL_PROCESSOR` variable out in the 
 
   #HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
+Updating data fixtures
+----------------------
+
+The data fixtures in this repository may be outdated with respect to the
+latest production data. To update these files a convenient script has been
+placed under tools: get_dumpdata_commands. Running this command will
+yield all the dumpdata commands that should be executed on the prod server
+to generate updated versions of the fixture files. Copy these files over
+to initialdata/overwriting the old files. Make notice of the size of
+this files and use a compressed version (zip/bz2) whenever the file
+is large.
+
+Importing data fixtures
+-----------------------
+
+Some files in the repository may be compacted since the json format
+is wasteful. Expand these files before running the commands below.
 
 Run these commands to load all the data fixtures except images.json::
 
@@ -117,25 +144,36 @@ Run these commands to load all the data fixtures except images.json::
   $ python manage.py loaddata initialdata/faq_all.json
   $ python manage.py loaddata initialdata/sources.json
   $ python manage.py loaddata initialdata/resource_countries.json
-  $ python manage.py loaddata initialdata/african_names.json
   $ python manage.py loaddata initialdata/sites.json
   $ python manage.py loaddata initialdata/social.json
+  $ python manage.py loaddata initialdata/estimates_starter.json
+  $ python manage.py loaddata initialdata/estimates.json
+  $ python manage.py loaddata initialdata/static_content.json
 
 Import data from SPSS generated CSV
 
   $ python manage.py importcsv [--db=mysql or pgsql] csv_file
+  
+  OR, ALTERNATIVELY, use the voyages.json fixtures to initialize the main tables
+
+  $ python manage.py loaddata initialdata/voyages.json
+
+Load african names after the voyages are created (since the names reference voyages).
+
+  $ python manage.py loaddata initialdata/african_names.json
 
 Now load the images.json file::
 
   $ python manage.py loaddata initialdata/images.json
 
 
-After loading data uncomment the `HAYSTACK_SIGNAL_PROCESSOR` variable in the `localsettings`::
+After loading data uncomment the `HAYSTACK_SIGNAL_PROCESSOR` variable in the `localsettings`:
 
   HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 
-To initalize the Solr data the following manage command should be run::
+To initalize the Solr data the following manage command should be run. If errors occur,
+try patching the fields.py file as described in the next section (Haystack patch).
 
   $ python manage.py rebuild_index
 

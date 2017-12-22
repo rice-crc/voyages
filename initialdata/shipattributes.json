@@ -1,994 +1,994 @@
 [
 {
-    "pk": 1, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 1,
     "fields": {
-        "value": 1, 
-        "label": "Spain"
+        "label": "Spain",
+        "value": 1
     }
 },
 {
-    "pk": 2, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 2,
     "fields": {
-        "value": 2, 
-        "label": "Uruguay"
+        "label": "Uruguay",
+        "value": 2
     }
 },
 {
-    "pk": 3, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 3,
     "fields": {
-        "value": 3, 
-        "label": "Spain / Uruguay"
+        "label": "Spain / Uruguay",
+        "value": 3
     }
 },
 {
-    "pk": 4, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 4,
     "fields": {
-        "value": 4, 
-        "label": "Portugal"
+        "label": "Portugal",
+        "value": 4
     }
 },
 {
-    "pk": 5, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 5,
     "fields": {
-        "value": 5, 
-        "label": "Brazil"
+        "label": "Brazil",
+        "value": 5
     }
 },
 {
-    "pk": 6, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 6,
     "fields": {
-        "value": 6, 
-        "label": "Portugal / Brazil"
+        "label": "Portugal / Brazil",
+        "value": 6
     }
 },
 {
-    "pk": 7, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 7,
     "fields": {
-        "value": 7, 
-        "label": "Great Britain"
+        "label": "Great Britain",
+        "value": 7
     }
 },
 {
-    "pk": 8, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 8,
     "fields": {
-        "value": 8, 
-        "label": "Netherlands"
+        "label": "Netherlands",
+        "value": 8
     }
 },
 {
-    "pk": 9, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 9,
     "fields": {
-        "value": 9, 
-        "label": "U.S.A."
+        "label": "U.S.A.",
+        "value": 9
     }
 },
 {
-    "pk": 10, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 10,
     "fields": {
-        "value": 10, 
-        "label": "France"
+        "label": "France",
+        "value": 10
     }
 },
 {
-    "pk": 11, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 11,
     "fields": {
-        "value": 11, 
-        "label": "Denmark"
+        "label": "Denmark",
+        "value": 11
     }
 },
 {
-    "pk": 12, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 12,
     "fields": {
-        "value": 12, 
-        "label": "Hanse Towns, Brandenburg"
+        "label": "Hanse Towns, Brandenburg",
+        "value": 12
     }
 },
 {
-    "pk": 13, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 13,
     "fields": {
-        "value": 13, 
-        "label": "Sweden"
+        "label": "Sweden",
+        "value": 13
     }
 },
 {
-    "pk": 14, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 14,
     "fields": {
-        "value": 18, 
-        "label": "Sardinia"
+        "label": "Sardinia",
+        "value": 18
     }
 },
 {
-    "pk": 15, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 15,
     "fields": {
-        "value": 19, 
-        "label": "Mexico"
+        "label": "Mexico",
+        "value": 19
     }
 },
 {
-    "pk": 16, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 16,
     "fields": {
-        "value": 24, 
-        "label": "Genoa"
+        "label": "Genoa",
+        "value": 24
     }
 },
 {
-    "pk": 17, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 17,
     "fields": {
-        "value": 14, 
-        "label": "Norway"
+        "label": "Norway",
+        "value": 14
     }
 },
 {
-    "pk": 18, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 18,
     "fields": {
-        "value": 15, 
-        "label": "Denmark / Baltic"
+        "label": "Denmark / Baltic",
+        "value": 15
     }
 },
 {
-    "pk": 19, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 19,
     "fields": {
-        "value": 16, 
-        "label": "Argentina"
+        "label": "Argentina",
+        "value": 16
     }
 },
 {
-    "pk": 20, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 20,
     "fields": {
-        "value": 17, 
-        "label": "Russia"
+        "label": "Russia",
+        "value": 17
     }
 },
 {
-    "pk": 21, 
-    "model": "voyage.nationality", 
+    "model": "voyage.nationality",
+    "pk": 21,
     "fields": {
-        "value": 30, 
-        "label": "Other (specify in note)"
+        "label": "Other",
+        "value": 30
     }
 },
 {
-    "pk": 1, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 1,
     "fields": {
-        "value": 1, 
-        "label": "Brig"
+        "label": "Brig",
+        "value": 1
     }
 },
 {
-    "pk": 2, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 2,
     "fields": {
-        "value": 2, 
-        "label": "Schooner"
+        "label": "Schooner",
+        "value": 2
     }
 },
 {
-    "pk": 3, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 3,
     "fields": {
-        "value": 3, 
-        "label": "Curveta"
+        "label": "Curveta",
+        "value": 3
     }
 },
 {
-    "pk": 4, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 4,
     "fields": {
-        "value": 4, 
-        "label": "Ship"
+        "label": "Ship",
+        "value": 4
     }
 },
 {
-    "pk": 5, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 5,
     "fields": {
-        "value": 5, 
-        "label": "Schooner-brig"
+        "label": "Schooner-brig",
+        "value": 5
     }
 },
 {
-    "pk": 6, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 6,
     "fields": {
-        "value": 6, 
-        "label": "Smack"
+        "label": "Smack",
+        "value": 6
     }
 },
 {
-    "pk": 7, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 7,
     "fields": {
-        "value": 7, 
-        "label": "Patacho"
+        "label": "Patacho",
+        "value": 7
     }
 },
 {
-    "pk": 8, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 8,
     "fields": {
-        "value": 8, 
-        "label": "Brigantine"
+        "label": "Brigantine",
+        "value": 8
     }
 },
 {
-    "pk": 9, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 9,
     "fields": {
-        "value": 9, 
-        "label": "Barque"
+        "label": "Barque",
+        "value": 9
     }
 },
 {
-    "pk": 10, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 10,
     "fields": {
-        "value": 10, 
-        "label": "Polacca schooner"
+        "label": "Polacca schooner",
+        "value": 10
     }
 },
 {
-    "pk": 11, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 11,
     "fields": {
-        "value": 11, 
-        "label": "Pailebot"
+        "label": "Pailebot",
+        "value": 11
     }
 },
 {
-    "pk": 12, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 12,
     "fields": {
-        "value": 12, 
-        "label": "Pilot boat"
+        "label": "Pilot boat",
+        "value": 12
     }
 },
 {
-    "pk": 13, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 13,
     "fields": {
-        "value": 13, 
-        "label": "Sumaca"
+        "label": "Sumaca",
+        "value": 13
     }
 },
 {
-    "pk": 14, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 14,
     "fields": {
-        "value": 14, 
-        "label": "Yacht"
+        "label": "Yacht",
+        "value": 14
     }
 },
 {
-    "pk": 15, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 15,
     "fields": {
-        "value": 15, 
-        "label": "Felucca"
+        "label": "Felucca",
+        "value": 15
     }
 },
 {
-    "pk": 16, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 16,
     "fields": {
-        "value": 16, 
-        "label": "Galliot"
+        "label": "Galliot",
+        "value": 16
     }
 },
 {
-    "pk": 17, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 17,
     "fields": {
-        "value": 17, 
-        "label": "Cutter"
+        "label": "Cutter",
+        "value": 17
     }
 },
 {
-    "pk": 18, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 18,
     "fields": {
-        "value": 18, 
-        "label": "Pinnace"
+        "label": "Pinnace",
+        "value": 18
     }
 },
 {
-    "pk": 19, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 19,
     "fields": {
-        "value": 19, 
-        "label": "Launch"
+        "label": "Launch",
+        "value": 19
     }
 },
 {
-    "pk": 20, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 20,
     "fields": {
-        "value": 20, 
-        "label": "Barqua"
+        "label": "Barqua",
+        "value": 20
     }
 },
 {
-    "pk": 21, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 21,
     "fields": {
-        "value": 21, 
-        "label": "Navio mercante"
+        "label": "Navio mercante",
+        "value": 21
     }
 },
 {
-    "pk": 22, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 22,
     "fields": {
-        "value": 22, 
-        "label": "Charrua de guerra"
+        "label": "Charrua de guerra",
+        "value": 22
     }
 },
 {
-    "pk": 23, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 23,
     "fields": {
-        "value": 23, 
-        "label": "Chalupa"
+        "label": "Chalupa",
+        "value": 23
     }
 },
 {
-    "pk": 24, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 24,
     "fields": {
-        "value": 24, 
-        "label": "Pollaca"
+        "label": "Pollaca",
+        "value": 24
     }
 },
 {
-    "pk": 25, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 25,
     "fields": {
-        "value": 25, 
-        "label": "Galera"
+        "label": "Galera",
+        "value": 25
     }
 },
 {
-    "pk": 26, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 26,
     "fields": {
-        "value": 26, 
-        "label": "Vessel"
+        "label": "Vessel",
+        "value": 26
     }
 },
 {
-    "pk": 27, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 27,
     "fields": {
-        "value": 27, 
-        "label": "Sloop"
+        "label": "Sloop",
+        "value": 27
     }
 },
 {
-    "pk": 28, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 28,
     "fields": {
-        "value": 28, 
-        "label": "Steamer"
+        "label": "Steamer",
+        "value": 28
     }
 },
 {
-    "pk": 29, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 29,
     "fields": {
-        "value": 29, 
-        "label": "Whaler"
+        "label": "Whaler",
+        "value": 29
     }
 },
 {
-    "pk": 30, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 30,
     "fields": {
-        "value": 30, 
-        "label": "Fregat"
+        "label": "Fregat",
+        "value": 30
     }
 },
 {
-    "pk": 31, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 31,
     "fields": {
-        "value": 31, 
-        "label": "Barque (Dutch)"
+        "label": "Barque (Dutch)",
+        "value": 31
     }
 },
 {
-    "pk": 32, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 32,
     "fields": {
-        "value": 32, 
-        "label": "Fluit"
+        "label": "Fluit",
+        "value": 32
     }
 },
 {
-    "pk": 33, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 33,
     "fields": {
-        "value": 33, 
-        "label": "Brik"
+        "label": "Brik",
+        "value": 33
     }
 },
 {
-    "pk": 34, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 34,
     "fields": {
-        "value": 34, 
-        "label": "Hoeker"
+        "label": "Hoeker",
+        "value": 34
     }
 },
 {
-    "pk": 35, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 35,
     "fields": {
-        "value": 35, 
-        "label": "Snauw"
+        "label": "Snauw",
+        "value": 35
     }
 },
 {
-    "pk": 36, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 36,
     "fields": {
-        "value": 36, 
-        "label": "Yaght"
+        "label": "Yaght",
+        "value": 36
     }
 },
 {
-    "pk": 37, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 37,
     "fields": {
-        "value": 37, 
-        "label": "Pinas"
+        "label": "Pinas",
+        "value": 37
     }
 },
 {
-    "pk": 38, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 38,
     "fields": {
-        "value": 38, 
-        "label": "Galjoot"
+        "label": "Galjoot",
+        "value": 38
     }
 },
 {
-    "pk": 39, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 39,
     "fields": {
-        "value": 39, 
-        "label": "Hekboot"
+        "label": "Hekboot",
+        "value": 39
     }
 },
 {
-    "pk": 40, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 40,
     "fields": {
-        "value": 40, 
-        "label": "Bergantim"
+        "label": "Bergantim",
+        "value": 40
     }
 },
 {
-    "pk": 41, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 41,
     "fields": {
-        "value": 41, 
-        "label": "Penque"
+        "label": "Penque",
+        "value": 41
     }
 },
 {
-    "pk": 42, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 42,
     "fields": {
-        "value": 42, 
-        "label": "N\u00e3o"
+        "label": "N\u00e3o",
+        "value": 42
     }
 },
 {
-    "pk": 43, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 43,
     "fields": {
-        "value": 43, 
-        "label": "Corsario"
+        "label": "Corsario",
+        "value": 43
     }
 },
 {
-    "pk": 44, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 44,
     "fields": {
-        "value": 44, 
-        "label": "Charrua"
+        "label": "Charrua",
+        "value": 44
     }
 },
 {
-    "pk": 45, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 45,
     "fields": {
-        "value": 45, 
-        "label": "Fregata"
+        "label": "Fragata",
+        "value": 45
     }
 },
 {
-    "pk": 46, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 46,
     "fields": {
-        "value": 46, 
-        "label": "Charrauinha"
+        "label": "Charrauinha",
+        "value": 46
     }
 },
 {
-    "pk": 47, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 47,
     "fields": {
-        "value": 47, 
-        "label": "Balandra"
+        "label": "Balandra",
+        "value": 47
     }
 },
 {
-    "pk": 48, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 48,
     "fields": {
-        "value": 48, 
-        "label": "Paquete"
+        "label": "Paquete",
+        "value": 48
     }
 },
 {
-    "pk": 49, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 49,
     "fields": {
-        "value": 49, 
-        "label": "Hyate (iate)"
+        "label": "Hyate (iate)",
+        "value": 49
     }
 },
 {
-    "pk": 50, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 50,
     "fields": {
-        "value": 50, 
-        "label": "Berlin"
+        "label": "Berlin",
+        "value": 50
     }
 },
 {
-    "pk": 51, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 51,
     "fields": {
-        "value": 51, 
-        "label": "Galeta"
+        "label": "Goleta",
+        "value": 51
     }
 },
 {
-    "pk": 52, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 52,
     "fields": {
-        "value": 52, 
-        "label": "Lugger"
+        "label": "Lugger",
+        "value": 52
     }
 },
 {
-    "pk": 53, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 53,
     "fields": {
-        "value": 53, 
-        "label": "Ketch"
+        "label": "Ketch",
+        "value": 53
     }
 },
 {
-    "pk": 54, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 54,
     "fields": {
-        "value": 54, 
-        "label": "Billd"
+        "label": "Billd",
+        "value": 54
     }
 },
 {
-    "pk": 55, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 55,
     "fields": {
-        "value": 55, 
-        "label": "Boat"
+        "label": "Boat",
+        "value": 55
     }
 },
 {
-    "pk": 56, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 56,
     "fields": {
-        "value": 56, 
-        "label": "Shalp"
+        "label": "Shalp",
+        "value": 56
     }
 },
 {
-    "pk": 57, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 57,
     "fields": {
-        "value": 57, 
-        "label": "Pink"
+        "label": "Pink",
+        "value": 57
     }
 },
 {
-    "pk": 58, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 58,
     "fields": {
-        "value": 58, 
-        "label": "Hay"
+        "label": "Hay",
+        "value": 58
     }
 },
 {
-    "pk": 59, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 59,
     "fields": {
-        "value": 59, 
-        "label": "Dogger"
+        "label": "Dogger",
+        "value": 59
     }
 },
 {
-    "pk": 60, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 60,
     "fields": {
-        "value": 60, 
-        "label": "Buque"
+        "label": "Buque",
+        "value": 60
     }
 },
 {
-    "pk": 61, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 61,
     "fields": {
-        "value": 61, 
-        "label": "Laud"
+        "label": "Laud",
+        "value": 61
     }
 },
 {
-    "pk": 62, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 62,
     "fields": {
-        "value": 63, 
-        "label": "Fragatihna"
+        "label": "Fragatihna",
+        "value": 63
     }
 },
 {
-    "pk": 63, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 63,
     "fields": {
-        "value": 62, 
-        "label": "Brigue-escuna"
+        "label": "Brigue-escuna",
+        "value": 62
     }
 },
 {
-    "pk": 64, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 64,
     "fields": {
-        "value": 64, 
-        "label": "Nau caravela"
+        "label": "Nau caravela",
+        "value": 64
     }
 },
 {
-    "pk": 65, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 65,
     "fields": {
-        "value": 65, 
-        "label": "Lancha"
+        "label": "Lancha",
+        "value": 65
     }
 },
 {
-    "pk": 66, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 66,
     "fields": {
-        "value": 66, 
-        "label": "Talaveira"
+        "label": "Talaveira",
+        "value": 66
     }
 },
 {
-    "pk": 67, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 67,
     "fields": {
-        "value": 67, 
-        "label": "Batel\u00e3o"
+        "label": "Batel\u00e3o",
+        "value": 67
     }
 },
 {
-    "pk": 68, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 68,
     "fields": {
-        "value": 70, 
-        "label": "Caravela"
+        "label": "Caravela",
+        "value": 70
     }
 },
 {
-    "pk": 69, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 69,
     "fields": {
-        "value": 71, 
-        "label": "Gale\u00e3o"
+        "label": "Gale\u00e3o",
+        "value": 71
     }
 },
 {
-    "pk": 70, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 70,
     "fields": {
-        "value": 72, 
-        "label": "Nau-Caravela"
+        "label": "Nau-Caravela",
+        "value": 72
     }
 },
 {
-    "pk": 71, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 71,
     "fields": {
-        "value": 75, 
-        "label": "Faluxo"
+        "label": "Faluxo",
+        "value": 75
     }
 },
 {
-    "pk": 72, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 72,
     "fields": {
-        "value": 76, 
-        "label": "xixorro"
+        "label": "xixorro",
+        "value": 76
     }
 },
 {
-    "pk": 73, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 73,
     "fields": {
-        "value": 77, 
-        "label": "Vasca"
+        "label": "Vasca",
+        "value": 77
     }
 },
 {
-    "pk": 74, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 74,
     "fields": {
-        "value": 80, 
-        "label": "Pangaio"
+        "label": "Pangaio",
+        "value": 80
     }
 },
 {
-    "pk": 75, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 75,
     "fields": {
-        "value": 81, 
-        "label": "Palla"
+        "label": "Palla",
+        "value": 81
     }
 },
 {
-    "pk": 76, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 76,
     "fields": {
-        "value": 82, 
-        "label": "Barca"
+        "label": "Barca",
+        "value": 82
     }
 },
 {
-    "pk": 77, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 77,
     "fields": {
-        "value": 83, 
-        "label": "Escaller"
+        "label": "Escaller",
+        "value": 83
     }
 },
 {
-    "pk": 78, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 78,
     "fields": {
-        "value": 84, 
-        "label": "Filibote"
+        "label": "Filibote",
+        "value": 84
     }
 },
 {
-    "pk": 79, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 79,
     "fields": {
-        "value": 85, 
-        "label": "Urca"
+        "label": "Urca",
+        "value": 85
     }
 },
 {
-    "pk": 80, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 80,
     "fields": {
-        "value": 86, 
-        "label": "Pinnace"
+        "label": "Pinnace",
+        "value": 86
     }
 },
 {
-    "pk": 81, 
-    "model": "voyage.rigofvessel", 
+    "model": "voyage.rigofvessel",
+    "pk": 81,
     "fields": {
-        "value": 99, 
-        "label": "Other (specify in note)"
+        "label": "Other (specify in note)",
+        "value": 99
     }
 },
 {
-    "pk": 1, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 1,
     "fields": {
-        "value": 1, 
-        "label": "Portuguese"
+        "label": "Portuguese",
+        "value": 1
     }
 },
 {
-    "pk": 2, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 2,
     "fields": {
-        "value": 2, 
-        "label": "Brazilian"
+        "label": "Brazilian",
+        "value": 2
     }
 },
 {
-    "pk": 3, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 3,
     "fields": {
-        "value": 3, 
-        "label": "Spanish"
+        "label": "Spanish",
+        "value": 3
     }
 },
 {
-    "pk": 4, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 4,
     "fields": {
-        "value": 4, 
-        "label": "French"
+        "label": "French",
+        "value": 4
     }
 },
 {
-    "pk": 5, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 5,
     "fields": {
-        "value": 5, 
-        "label": "U.S.A."
+        "label": "U.S.A.",
+        "value": 5
     }
 },
 {
-    "pk": 6, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 6,
     "fields": {
-        "value": 6, 
-        "label": "Uruguayan"
+        "label": "Uruguayan",
+        "value": 6
     }
 },
 {
-    "pk": 7, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 7,
     "fields": {
-        "value": 7, 
-        "label": "Dutch"
+        "label": "Dutch",
+        "value": 7
     }
 },
 {
-    "pk": 8, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 8,
     "fields": {
-        "value": 8, 
-        "label": "Hanse Towns, Brandenburg"
+        "label": "Hanse Towns, Brandenburg",
+        "value": 8
     }
 },
 {
-    "pk": 9, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 9,
     "fields": {
-        "value": 9, 
-        "label": "Argentinian"
+        "label": "Argentinian",
+        "value": 9
     }
 },
 {
-    "pk": 10, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 10,
     "fields": {
-        "value": 10, 
-        "label": "Swedish"
+        "label": "Swedish",
+        "value": 10
     }
 },
 {
-    "pk": 11, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 11,
     "fields": {
-        "value": 11, 
-        "label": "Russian"
+        "label": "Russian",
+        "value": 11
     }
 },
 {
-    "pk": 12, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 12,
     "fields": {
-        "value": 12, 
-        "label": "Danish"
+        "label": "Danish",
+        "value": 12
     }
 },
 {
-    "pk": 13, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 13,
     "fields": {
-        "value": 13, 
-        "label": "English 1"
+        "label": "English 1",
+        "value": 13
     }
 },
 {
-    "pk": 14, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 14,
     "fields": {
-        "value": 14, 
-        "label": "English 2"
+        "label": "English 2",
+        "value": 14
     }
 },
 {
-    "pk": 15, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 15,
     "fields": {
-        "value": 15, 
-        "label": "English 3"
+        "label": "English 3",
+        "value": 15
     }
 },
 {
-    "pk": 16, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 16,
     "fields": {
-        "value": 17, 
-        "label": "English 4"
+        "label": "English 4",
+        "value": 17
     }
 },
 {
-    "pk": 17, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 17,
     "fields": {
-        "value": 18, 
-        "label": "Sardinian"
+        "label": "Sardinian",
+        "value": 18
     }
 },
 {
-    "pk": 18, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 18,
     "fields": {
-        "value": 19, 
-        "label": "Norwegian"
+        "label": "Norwegian",
+        "value": 19
     }
 },
 {
-    "pk": 19, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 19,
     "fields": {
-        "value": 20, 
-        "label": "Mexican"
+        "label": "Mexican",
+        "value": 20
     }
 },
 {
-    "pk": 20, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 20,
     "fields": {
-        "value": 21, 
-        "label": "English RAC"
+        "label": "English RAC",
+        "value": 21
     }
 },
 {
-    "pk": 21, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 21,
     "fields": {
-        "value": 22, 
-        "label": "English pre-1775"
+        "label": "English pre-1775",
+        "value": 22
     }
 },
 {
-    "pk": 22, 
-    "model": "voyage.tontype", 
+    "model": "voyage.tontype",
+    "pk": 22,
     "fields": {
-        "value": 99, 
-        "label": "Other (specify in note)"
+        "label": "Other (specify in note)",
+        "value": 99
     }
 }
 ]

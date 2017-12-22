@@ -2,6 +2,16 @@
 # Each script/program under this folder should be documented in this README file.
 
 ==================================================================================
+get_dumpdata_commands.sh
+==================================================================================
+
+This command simply generates a sequence of dumpdata commands that should be
+run on the production server whenever the latest version of the data needs to
+be placed into json fixtures for new deployments (e.g. to install the site on
+a different server or create a new development version with a fresh copy
+of the data).
+
+==================================================================================
 extract_trans.sh
 ==================================================================================
 Performs a sweep of the translation log and produces a PO file for translation.

@@ -1,16 +1,16 @@
 [
 {
+    "model": "socialaccount.socialapp",
+    "pk": 1,
     "fields": {
+        "provider": "google",
         "name": "Google",
+        "client_id": "205138523318-lvoa6bdchkdbbo7qra1sri0aefh722ph.apps.googleusercontent.com",
+        "secret": "01_i4d75tihjn0V4g0xtMgAA",
+        "key": "",
         "sites": [
             1
-        ],
-        "secret": "01_i4d75tihjn0V4g0xtMgAA",
-        "client_id": "205138523318-lvoa6bdchkdbbo7qra1sri0aefh722ph.apps.googleusercontent.com",
-        "key": "",
-        "provider": "google"
-    },
-    "model": "socialaccount.socialapp",
-    "pk": 1
+        ]
+    }
 }
 ]
