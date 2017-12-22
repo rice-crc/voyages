@@ -1,5 +1,47 @@
 [
 {
+    "model": "static_content.contentgroup",
+    "pk": 1,
+    "fields": {
+        "name": "Voyage"
+    }
+},
+{
+    "model": "static_content.contentgroup",
+    "pk": 2,
+    "fields": {
+        "name": "Assessment"
+    }
+},
+{
+    "model": "static_content.contentgroup",
+    "pk": 3,
+    "fields": {
+        "name": "Resources"
+    }
+},
+{
+    "model": "static_content.contentgroup",
+    "pk": 4,
+    "fields": {
+        "name": "Educational Materials"
+    }
+},
+{
+    "model": "static_content.contentgroup",
+    "pk": 5,
+    "fields": {
+        "name": "About"
+    }
+},
+{
+    "model": "static_content.contentgroup",
+    "pk": 6,
+    "fields": {
+        "name": "Main"
+    }
+},
+{
     "model": "static_content.contentpage",
     "pk": 2,
     "fields": {
@@ -34,7 +76,7 @@
     "pk": 5,
     "fields": {
         "title": "Downloads",
-        "description": "The variables accessible online cover the full range of information available in the database. Some users will want to work with variables that have not been included in the selection for the website and/or use spreadsheets or statistics software to analyze the data. This link takes you to a page with buttons to download the full set of variables in the Trans-Atlantic Slave Trade Database in SPSS format, a PDF copy of the SPSS codebook, and the website version of the database in two formats (SPSS, csv).",
+        "description": "The variables accessible online cover the full range of information available in the database. Some users will want to work with variables that have not been included in the selection for the website and/or use spreadsheets or statistics software to analyze the data. This link takes you to a page with buttons to download the full set of variables in the Trans-Atlantic Slave Trade Database in SPSS format, a PDF copy of the SPSS codebook, and the website version of the database in three formats (SPSS, csv, and dBase). ",
         "order": 2,
         "group": 1
     }
@@ -93,8 +135,8 @@
     "model": "static_content.contentpage",
     "pk": 11,
     "fields": {
-        "title": "The Trans-Atlantic Slave Trade Database has information on almost 36,000 slaving voyages",
-        "description": "that forcibly embarked over 10 million Africans for transport to the Americas between the sixteenth and nineteenth centuries.  The actual number is estimated to have been as high as 12.5 million.  The database and the separate estimates interface offer researchers, students and the general public a chance to rediscover the reality of one of the largest forced movements of peoples in world history.",
+        "title": "The Trans-Atlantic Slave Trade Database has information on more than 35,000 slaving voyages",
+        "description": "that forcibly embarked over 10 million Africans for transport to the Americas between the sixteenth and nineteenth centuries. It offers researchers, students and the general public a chance to rediscover the reality of one of the largest forced movements of peoples in world history.",
         "order": -1,
         "group": 6
     }
@@ -181,81 +223,11 @@
 },
 {
     "model": "static_content.contentpage",
-    "pk": 20,
-    "fields": {
-        "title": "Web Resources",
-        "description": "The websites listed here provide a variety of resources, including but not limited to lesson plans, interactive maps, and narratives of enslaved Africans.",
-        "order": 1,
-        "group": 4
-    }
-},
-{
-    "model": "static_content.contentpage",
     "pk": 21,
     "fields": {
         "title": "About the Project",
         "description": "The Trans-Atlantic Slave Trade Database is the culmination of several decades of independent and collaborative research by scholars drawing upon data in libraries and archives around the Atlantic world. The Voyages website itself is the product of two years of development by a multi-disciplinary team of historians, librarians, curriculum specialists, cartographers, computer programmers, and web designers, in consultation with scholars of the slave trade from universities in Europe, Africa, South America, and North America. The National Endowment for the Humanities was the principal sponsor of this Emory University Digital Library Research initiative. The W.E.B. Du Bois Institute of Harvard University and the Wilberforce Institute for the Study of Slavery and Emancipation of the University of Hull have also supported its development.",
         "order": -1,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 22,
-    "fields": {
-        "title": "History",
-        "description": "A brief account of the origins of a single multi-source dataset of the trans-Atlantic slave trade and its realization first as a CD-ROM published by Cambridge University Press in 1999 and now, in an expanded version, on the Voyages website.",
-        "order": 0,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 23,
-    "fields": {
-        "title": "Project Team",
-        "description": "Names of the principal investigators, of members of the project development team, and of individuals serving on the steering committee and advisory board.",
-        "order": 1,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 24,
-    "fields": {
-        "title": "Contributors of data",
-        "description": "Names of scholars and researchers whose findings on the trans-Atlantic slave trade have been incorporated into the Voyages Database.",
-        "order": 2,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 25,
-    "fields": {
-        "title": "Acknowledgements",
-        "description": "Major sponsors and institutional partners of the Voyages website, as well as other organizations and individuals who have assisted the work of the project team.",
-        "order": 3,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 26,
-    "fields": {
-        "title": "African Origins Project",
-        "description": "A scholar-public collaborative project using audio recordings of names in African Names Database to trace the geographic origins of Africans transported in the transatlantic slave trade.",
-        "order": 4,
-        "group": 5
-    }
-},
-{
-    "model": "static_content.contentpage",
-    "pk": 27,
-    "fields": {
-        "title": "Contact us",
-        "description": "Members of the Voyages editorial board and the email address for contacting the website.",
-        "order": 5,
         "group": 5
     }
 }

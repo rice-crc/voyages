@@ -170,6 +170,10 @@ MAP_MISSING_SOURCE_ENABLED = True
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
+SERIALIZATION_MODULES = {
+    'json': 'voyages.apps.common.json'
+}
+
 ACCOUNT_SIGNUP_FORM_CLASS = 'voyages.apps.contribute.forms.SignUpForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True

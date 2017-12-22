@@ -1397,14 +1397,20 @@ def prettify_results(results, lookup_table):
                 idict[varname] = None
         yield idict
 
+def _get_all(model):
+    try:
+        return list(model.objects.all())
+    except:
+        return []
+
 class ChoicesCache:
-    nations = list(Nationality.objects.all())
-    particular_outcomes = list(ParticularOutcome.objects.all())
-    slaves_outcomes = list(SlavesOutcome.objects.all())
-    owner_outcomes = list(OwnerOutcome.objects.all())
-    resistances = list(Resistance.objects.all())
-    captured_outcomes = list(VesselCapturedOutcome.objects.all())
-    rigs = list(RigOfVessel.objects.all())
+    nations = _get_all(Nationality)
+    particular_outcomes = _get_all(ParticularOutcome)
+    slaves_outcomes = _get_all(SlavesOutcome)
+    owner_outcomes = _get_all(OwnerOutcome)
+    resistances = _get_all(Resistance)
+    captured_outcomes = _get_all(VesselCapturedOutcome)
+    rigs = _get_all(RigOfVessel)
 
 def getChoices(varname):
     """
