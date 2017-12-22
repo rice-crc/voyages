@@ -33,14 +33,16 @@
       </p>
 
 			<div id="center-content-inner">
-				<div class="page-title-1">Image Details</div>
-				<a href="{% url 'resources:images-category' category|spaces_to_underscores %}">{% trans 'Images of ' %}{{ category|trans_log }}</a>
-				<div class="page-title-2">
-					{{ pagins.0.title|trans_log }}
-				</div>
+        <div class="page-section">
+  				<div class="page-title-1">Image Details</div>
+  				<a href="{% url 'resources:images-category' category|spaces_to_underscores %}">{% trans 'Images of ' %}{{ category|trans_log }}</a>
+        </div>
+        
+        <div class="page-section">
+          <div class="page-title-2">
+  					{{ pagins.0.title|trans_log }}
+  				</div>
 
-
-				<div class="page-section">
 					<a href="{% url 'resources:image-detail' category|spaces_to_underscores pagins.number %}">
 							{% thumbnail pagins.0.file "400" as im %}
 									<img src="{{ im.url }}" class="img-fluid">
