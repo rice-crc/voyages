@@ -1,26 +1,56 @@
-<!DOCTYPE html>
-
+{% extends "base.html" %}
+{% load sass_tags %}
 {% load i18n %}
+{% load thumbnail %}
 {% load resources_extras %}
-{% load static %}
 
-<html lang="en">
-<head>
+{% block csslist %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-images-expanded.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/images-commons.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
+{% endblock %}
+{% block title %}{% trans 'Images' %}{% endblock %}
 
-<body id="image-expanded">
+{% block content %}
 
-<div class="image-expanded-title">
-		{{ image.title|trans_log }}
-	</div>
+<div class="container-new">
 
-<div class="image-expanded-container">
-    <img src="{{ MEDIA_URL }}/{{ image.file }}"/>
+  <div class="row  row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% include "resources/images-left-menu.html" %}
+		</div>
 
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
+
+			<p class="hidden-md">
+        <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Sidebar</span>
+          </div>
+        </button>
+      </p>
+
+			<div id="center-content-inner">
+				<div class="page-title-1">{% trans "Image Details" %}</div>
+				<div class="images-category page-section">
+						<div class="page-title-2">{{ image.title|trans_log }}</div>
+				</div>
+				<div class="images-category page-section">
+					<img src="{{ MEDIA_URL }}/{{ image.file }}" class="img-fluid"/>
+				</div>
+			</div>
+    </div>
+  </div>
 </div>
-<br>
+{% endblock %}
 
+{% block footer %}
 {% include "footer.html" %}
+{% endblock %}
