@@ -1472,7 +1472,7 @@ class Echo(object):
 @login_required()
 def download_voyages(request):
     import csv
-    from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages
+    from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
     from django.http import StreamingHttpResponse
     pseudo_buffer = Echo()
     writer = get_csv_writer(pseudo_buffer)
@@ -1490,10 +1490,10 @@ def download_voyages(request):
     def __content():
         yield get_header_csv_text()
         for item in export_contributions(statuses):
-            yield writer.writerow(item)
+            yield safe_writerow(writer, item)
         if request.GET.get('published_check') == 'True':
             for item in export_from_voyages():
-                yield writer.writerow(item)
+                yield safe_writerow(writer, item)
         
     response = StreamingHttpResponse((x for x in __content()), content_type='text/csv; charset=utf-8')
     response['Content-Disposition'] = 'attachment; filename="download_voyages.csv"'

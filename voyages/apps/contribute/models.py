@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import validate_comma_separated_integer_list
+from django.core.validators import validate_comma_separated_integer_list, MinLengthValidator
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
 from voyages.apps.common.validators import date_csv_field_validator
@@ -242,7 +242,7 @@ class InterimPreExistingSource(models.Model):
                                        related_name='pre_existing_sources')
     voyage_ids = models.CharField(validators=[validate_comma_separated_integer_list], null=False, max_length=255)
     action = models.IntegerField(null=False, default=0)
-    original_short_ref = models.CharField(max_length=255, null=False)
+    original_short_ref = models.CharField(max_length=255, null=False, validators=[MinLengthValidator(1)])
     original_ref = models.CharField(max_length=255, null=False)
     full_ref = models.TextField(max_length=1000, null=False)
     notes = models.TextField(max_length=1000, null=True, blank=True)

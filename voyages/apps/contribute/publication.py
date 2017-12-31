@@ -64,7 +64,14 @@ def export_data_to_csv(data, csv_file):
     writer = get_csv_writer(csv_file)
     writer.writeheader()
     for item in data:
-        writer.writerow(item)
+        safe_writerow(writer, item)
+
+def safe_writerow(writer, item):
+    """
+    Ensure that only export SPSS fields are included in the item that will be written.
+    """
+    safe = {k: v for (k, v) in [(field, item.get(field)) for field in _exported_spss_fields] if v is not None}
+    return writer.writerow(safe)
 
 def export_contributions(statuses):
     """
