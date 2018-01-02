@@ -28,16 +28,16 @@
 					</div>
 				</li>
 
-				<!-- <li class="nav-item dropdown">
+				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Intra-American</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">About</a>
-						<a class="dropdown-item" href="#">Database</a>
-						<a class="dropdown-item" href="#">Downloads</a>
+						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">About</a>
+						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Database</a>
+						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Downloads</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Contribute</a>
+						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Contribute</a>
 					</div>
-				</li> -->
+				</li>
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">African Names Database<!--People of the Atlantic Slave Trade--></a>
@@ -93,6 +93,27 @@
 		</div>
 	</div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="intra-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Intra-American Is Coming Soon!</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>It will look similar to other modules (e.g. Trans-Atlantic) but due to the overwhelming amount of work on my list, I will roll out Intra-American later.</p>
+				<img src="static/images/site/gone-fishing.gif" style="width: 100%;"></img>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div><!-- Gone Fishing -->
 
 <!--  Contains the navigation menu in a nested-unordered-list hierarchy
 	- links are managed by the navigation_topbar.js menu -->
