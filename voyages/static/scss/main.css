@@ -197,4 +197,7 @@ footer {
   margin-top: 10px;
   font-weight: bold; }
 
-/*# sourceMappingURL=../../../../../../../static/scss/main.css.map */
+.text-bold {
+  font-weight: bold; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/main.css.map */
