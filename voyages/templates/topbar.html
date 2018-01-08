@@ -7,9 +7,9 @@
 		<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbar9">
 							<span class="navbar-toggler-icon"></span>
 					</button>
-		<div class="navbar-collapse collapse" id="navbar9">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item dropdown">
+		<div class="navbar-collapse collapse">
+			<ul class="navbar-nav ml-auto" id="sv-navbar">
+				<li class="nav-item dropdown" id="link-trans-atlantic">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trans-Atlantic</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'voyage:guide' %}">{% trans "About" %}</a>
@@ -28,8 +28,8 @@
 					</div>
 				</li>
 
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Intra-American</a>
+				<li class="nav-item dropdown" id="link-intra-american">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Intra-American</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">About</a>
 						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Database</a>
@@ -39,8 +39,8 @@
 					</div>
 				</li>
 
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">African Names Database<!--People of the Atlantic Slave Trade--></a>
+				<li class="nav-item dropdown" id="link-past">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >African Names Database<!--People of the Atlantic Slave Trade--></a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:about' %}">About</a>
 						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
@@ -50,8 +50,8 @@
 					</div>
 				</li>
 
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Resources</a>
+				<li class="nav-item dropdown" id="link-resources">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Resources</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:images' %}">{% trans "Image Galleries" %}</a>
 						<a class="dropdown-item" href="{% url 'education:lesson-plans' %}">{% trans "Lesson Plans" %}</a>
@@ -59,8 +59,8 @@
 					</div>
 				</li>
 
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a>
+				<li class="nav-item dropdown" id="link-about">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >About</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'about:index' %}">{% trans "About" %}</a>
 						<a class="dropdown-item" href="{% url 'about:history' %}">{% trans "History" %}</a>
@@ -119,6 +119,22 @@
 	- links are managed by the navigation_topbar.js menu -->
 
 	<script type="text/javascript">
+	// highlight the active link in the navigation bar
+	var url = window.location.pathname;
+	urlElements = url.split("/");
+	if (urlElements[1] == "voyage" || urlElements[1] == "assessment"
+			|| urlElements[1] == "accounts" || urlElements[1] == "contribute") {
+		document.getElementById("link-trans-atlantic").classList.add("active-link");
+	} else if (urlElements[1] == "resources" && urlElements[2] == "about") {
+		document.getElementById("link-past").classList.add("active-link");
+	} else if (urlElements[1] == "resources" && urlElements[2] == "names-database") {
+		document.getElementById("link-past").classList.add("active-link");
+	} else if (urlElements[1] == "resources" && urlElements[2] == "images" || urlElements[1] == "education") {
+		document.getElementById("link-resources").classList.add("active-link");
+	} else if (urlElements[1] == "about" || urlElements[1] == "help") {
+		document.getElementById("link-about").classList.add("active-link");
+	}
+
 	$(document).ready(function() {
 		// reload the page after a language is switched
 		$('.language_link').click(function(e) {
