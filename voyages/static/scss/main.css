@@ -43,6 +43,9 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.sidebar-section-accordion:first-child {
+  margin-top: 1.5rem; }
+
 .link {
   font-weight: bold;
   transition: ease 0.3s; }

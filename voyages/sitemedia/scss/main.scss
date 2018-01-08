@@ -2,6 +2,11 @@
 @import "headings";
 @import "colors";
 
+// accordion
+.sidebar-section-accordion:first-child {
+  margin-top: 1.5rem;
+}
+
 // link
 .link {
   font-weight: bold;
