@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load sass_tags %}
+
+<!-- The basic template for pages in the Education section -->
+{% load i18n %}
+{% block title %}{% trans 'About the Project' %}{% endblock %}
+
+{% block csslist %}
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+  <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+
+<div class="container-new">
+  <div class="row row-offcanvas row-offcanvas-right">
+		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+			{% block left-menu %}
+				{% include "american/left-menu.html" %}
+			{% endblock %}
+		</div>
+
+    <div class="col-md-8 col-xs-12 col-lg-9 ">
+      <p class="hidden-md">
+        <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
+          <div>
+            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+            <span>Toggle Sidebar</span>
+          </div>
+        </button>
+      </p>
+			{% block center-content %}
+
+      {% endblock %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

@@ -39,7 +39,7 @@
     display: flex;
     align-items: center; }
   .nav-item {
-    padding-top: 5px; }
+    padding-top: 4px; }
   .active-link {
     border-top: solid 4px white;
     padding-top: 0; }

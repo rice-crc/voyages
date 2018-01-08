@@ -28,11 +28,11 @@
 					</div>
 				</li>
 
-				<li class="nav-item dropdown" id="link-intra-american">
+				<li class="nav-item dropdown" id="link-american">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Intra-American</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">About</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Database</a>
+						<a class="dropdown-item" href="{% url 'american:about' %}">{% trans "About" %}</a>
+						<a class="dropdown-item" href="{% url 'american:database' %}">{% trans "Database" %}</a>
 						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Downloads</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Contribute</a>
@@ -125,6 +125,8 @@
 	if (urlElements[1] == "voyage" || urlElements[1] == "assessment"
 			|| urlElements[1] == "accounts" || urlElements[1] == "contribute") {
 		document.getElementById("link-trans-atlantic").classList.add("active-link");
+	} else if (urlElements[1] == "american") {
+		document.getElementById("link-american").classList.add("active-link");
 	} else if (urlElements[1] == "resources" && urlElements[2] == "about") {
 		document.getElementById("link-past").classList.add("active-link");
 	} else if (urlElements[1] == "resources" && urlElements[2] == "names-database") {

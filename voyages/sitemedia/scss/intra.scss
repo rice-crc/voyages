@@ -1,0 +1,125 @@
+@import "colors";
+
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $intra-color;
+  border-color: $intra-color;
+}
+.page-link {
+  color: $intra-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $intra-color;
+}
+
+
+// btn colors
+.btn-solid {
+  background-color: $intra-color;
+	border-color: $intra-color;
+  color: #fff;
+	&:hover {
+		background-color: $intra-hover-color;
+		border-color: $intra-hover-color;
+	}
+}
+
+.btn-outline {
+	color: $intra-color;
+	background-color: white;
+	border-color: $intra-color;
+	&:hover {
+		background-color: $intra-color;
+		border-color: $intra-color;
+    color: white;
+	}
+}
+
+.datatable-options {
+	display: flex;
+	justify-content: space-between;
+	margin: 1rem 0;
+}
+
+.navbar {
+  background: $intra-color !important;
+}
+
+.footer-flex-container {
+  background-color: $intra-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $intra-color;
+    opacity: 1;
+}
+
+a {
+  color: $intra-color;
+
+  &:hover {
+    color: $intra-color;
+    opacity: 0.6;
+    text-decoration: none;
+  }
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $intra-color;
+  font-weight: bold;
+}
+
+td.link-info-label {
+  color: $text-primary !important;
+  width: 15%;
+}
+
+
+// lesson plans
+div.lesson-plan-title {
+	// background-color: $intra-color;
+  color: $text-primary;
+  font-weight: bold;
+}
+
+
+div.lesson-plan-title span.download {
+  font-weight: bold;
+}
+div.lesson-plan-author,
+div.lesson-plan-grade-level,
+div.lesson-plan-course,
+div.lesson-plan-keywords {
+	color: $text-primary;
+	line-height: 160%; }
+
+span.lesson-plan-grade-level,
+span.lesson-plan-course,
+span.lesson-plan-keywords {
+	color: Black;
+	font-weight: normal; }
+
+span.lesson-plan-author-name {
+	color: Black;
+	font-weight: bold; }
+
+div.lesson-plan-standards-title, div.lesson-plan-abstract-title {
+	border-top: 1px dotted #7A96BF;
+	padding-top: 5px;
+	margin-top: 5px;
+	font-weight: bold;
+	line-height: 160%; }
+
+div.lesson-plan-standards-title {
+	margin-top: 5px; }
+
+ul.lesson-plan-standards {
+	margin: 0px;
+	line-height: 160%;
+	padding: 0px;
+	margin-bottom: 5px;
+	list-style: none; }
+
+ul.lesson-plan-standards-listing {
+	list-style: disc; }
