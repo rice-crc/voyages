@@ -7,7 +7,6 @@
 <script src="{{ STATIC_URL }}scripts/resources/resources-left-menu.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/navigation_boxes.js" type="text/javascript"></script>
 
-
 <div class="sidebar-header-container">
   <div class="form-group row">
     <div class="col-sm-12 sidebar-title-1">
@@ -16,13 +15,18 @@
   </div>
 </div>
 
-<div class="sidebar-section">
+<div role="tablist" id="accordion">
+
+<div class="sidebar-section-accordion">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
-    {% trans 'General Variables' %}
+    <a data-toggle="collapse" href="#container-general-variables" role="button" aria-expanded="true" aria-controls="collapseOne">
+      {% trans 'General Variables' %}
+    </a>
   </div>
 </div>
 
+<div id="container-general-variables" class="collapse show" role="tabpanel" aria-labelledby="container-general-variables" data-parent="#accordion">
 <div class="form-group row">
   <label for="slave_name" class="col-sm-5 sv-col-form-label">{% trans 'African name' %}</label>
   <div class="col-sm-7">
@@ -187,15 +191,20 @@
 
   </div>
 </div>
+
+</div><!-- container-general-variables -->
 </div>
 
-<div class="sidebar-section">
+<div class="sidebar-section-accordion">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
-    {% trans 'Place of Origin' %}
+    <a data-toggle="collapse" href="#container-place-of-origin" role="button" aria-expanded="true" aria-controls="collapseOne">
+      {% trans 'Place of Origin' %}
+    </a>
   </div>
 </div>
 
+<div id="container-place-of-origin" class="collapse" role="tabpanel" aria-labelledby="container-place-of-origin" data-parent="#accordion">
 <div class="form-group row">
   <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
   <div class="col-sm-7">
@@ -235,16 +244,20 @@
     <button type="button" class="btn btn-sm btn-outline margin-v" onclick="selectAllPorts(-1, '#origin_list', 1)" value="Deselect all">{% trans 'Deselect All' %}</button>
   </div>
 </div>
+
+</div><!-- container-place-of-origin -->
 </div>
 
-<div class="sidebar-section">
+<div class="sidebar-section-accordion">
 <div class="form-group row">
   <div class="col-sm-12 sidebar-title-2">
-    {% trans 'Place of Embarkation' %}
+    <a data-toggle="collapse" href="#container-place-of-embarkation" role="button" aria-expanded="true" aria-controls="collapseOne">
+      {% trans 'Place of Embarkation' %}
+    </a>
   </div>
 </div>
 
-
+<div id="container-place-of-embarkation" class="collapse" role="tabpanel" aria-labelledby="container-place-of-embarkation" data-parent="#accordion">
 <div class="form-group row">
   <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
   <div class="col-sm-7">
@@ -344,39 +357,49 @@
     <button type="button" class="btn btn-sm btn-outline margin-v" onclick="selectAllPorts(-1, '#embarkation_list', 0)" value="Deselect all">{% trans 'Deselect All' %}</button>
   </div>
 </div>
-
 </div>
-<div class="sidebar-section">
+</div>
+<div class="sidebar-section-accordion">
 
 
 <div class="form-group row">
+  <div class="col-sm-12 sidebar-title-2">
+    <a data-toggle="collapse" href="#container-place-of-disembarkation" role="button" aria-expanded="true" aria-controls="collapseOne">
+      {% trans 'Disembarkation' %}
+    </a>
+  </div>
+</div>
+
+<div class="form-group row">
   <div class="col-sm-12">
+    <div id="container-place-of-disembarkation" class="collapse" role="tabpanel" aria-labelledby="container-place-of-disembarkation" data-parent="#accordion">
+
     {% for bregion, regions in disembarkation_list.items %}
     {% for region, places in regions.items %}
     {% for place in places %}
         {% if forloop.parentloop.parentloop.first and forloop.parentloop.first%}
-          <div class="row"><div class="col-sm-12 sidebar-title-2">{% trans 'Disembarkation' %}</div></div>
+          <!-- {% trans 'Disembarkation' %} -->
         {% endif %}
-        <div class="form-check">
-          <label class="form-check-label">
-            {% if "slave_disembarkation_port__in" in query_dict and place.value in query_dict.slave_disembarkation_port__in %}
-              <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
-            {% else %}
-              <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
-            {% endif %}
-            {{ place|trans_log }}
-          </label>
-        </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              {% if "slave_disembarkation_port__in" in query_dict and place.value in query_dict.slave_disembarkation_port__in %}
+                <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
+              {% else %}
+                <input type="checkbox" value="true" name="disembarkation_{{ place.value }}">
+              {% endif %}
+              {{ place|trans_log }}
+            </label>
+          </div>
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    </div>
 
-
-    {% endfor %}
-    {% endfor %}
-    {% endfor %}
   </div>
 </div>
 
 </div>
-<div class="sidebar-section">
+<div class="sidebar-section-accordion">
 
 <div class="form-group row">
   <div class="col-sm-12">
@@ -386,3 +409,5 @@
 </div>
 
 </div>
+
+</div><!--tablist-->
