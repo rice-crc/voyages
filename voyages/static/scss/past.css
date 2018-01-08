@@ -2,52 +2,52 @@
   font-size: 0.8rem; }
 
 .page-item.active .page-link {
-  background-color: #DB6B57;
-  border-color: #DB6B57; }
+  background-color: #3f967d;
+  border-color: #3f967d; }
 
 .page-link {
-  color: #DB6B57; }
+  color: #3f967d; }
 
 .page-link:focus, .page-link:hover {
-  color: #DB6B57; }
+  color: #3f967d; }
 
 .btn-solid {
-  background-color: #DB6B57;
-  border-color: #DB6B57;
+  background-color: #3f967d;
+  border-color: #3f967d;
   color: #fff; }
   .btn-solid:hover {
-    background-color: #DB6B57;
-    border-color: #DB6B57; }
+    background-color: #3f967d;
+    border-color: #3f967d; }
 
 .btn-outline {
-  color: #DB6B57;
+  color: #3f967d;
   background-color: white;
-  border-color: #DB6B57; }
+  border-color: #3f967d; }
   .btn-outline:hover {
-    background-color: #DB6B57;
-    border-color: #DB6B57;
+    background-color: #3f967d;
+    border-color: #3f967d;
     color: white; }
 
 .navbar {
-  background: #DB6B57 !important; }
+  background: #3f967d !important; }
 
 .footer-flex-container {
-  background-color: #DB6B57; }
+  background-color: #3f967d; }
 
 .dropdown-item.active, .dropdown-item:active {
-  background-color: #DB6B57;
+  background-color: #3f967d;
   opacity: 1; }
 
 a {
-  color: #DB6B57; }
+  color: #3f967d; }
   a:hover {
-    color: #DB6B57;
+    color: #3f967d;
     opacity: 0.6;
     text-decoration: none; }
 
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
-  border-left: 4px solid #DB6B57;
+  border-left: 4px solid #3f967d;
   font-weight: bold; }
 
 .datatable-options {
@@ -77,7 +77,7 @@ td.lookup-checkbox-list-item-2 {
 div.slaves-query-section {
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #DB6B57; }
+  border-bottom: 1px solid #3f967d; }
 
 td.box-upper-row-middle,
 td.box-middle-row-middle,
@@ -101,7 +101,7 @@ td.lookup-checkbox-list-quicksearch-input input {
   width: 100px; }
 
 div.lookup-checkbox-list {
-  border: 1px solid #DB6B57;
+  border: 1px solid #3f967d;
   height: 200px;
   padding: 0 1rem;
   overflow: scroll; }
@@ -135,6 +135,6 @@ input.button-save {
   background-color: white; }
 
 input.button-save:hover {
-  background-color: #DB6B57; }
+  background-color: #3f967d; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/past.css.map */

@@ -1,28 +1,28 @@
 .page-item.active .page-link {
-  background-color: #47A58A;
-  border-color: #47A58A; }
+  background-color: #3F75AA;
+  border-color: #3F75AA; }
 
 .page-link {
-  color: #47A58A; }
+  color: #3F75AA; }
 
 .page-link:focus, .page-link:hover {
-  color: #47A58A; }
+  color: #3F75AA; }
 
 .btn-solid {
-  background-color: #47A58A;
-  border-color: #47A58A;
+  background-color: #3F75AA;
+  border-color: #3F75AA;
   color: #fff; }
   .btn-solid:hover {
-    background-color: #47A58A;
-    border-color: #47A58A; }
+    background-color: #3F75AA;
+    border-color: #3F75AA; }
 
 .btn-outline {
-  color: #47A58A;
+  color: #3F75AA;
   background-color: white;
-  border-color: #47A58A; }
+  border-color: #3F75AA; }
   .btn-outline:hover {
-    background-color: #47A58A;
-    border-color: #47A58A;
+    background-color: #3F75AA;
+    border-color: #3F75AA;
     color: white; }
 
 .datatable-options {
@@ -31,25 +31,25 @@
   margin: 1rem 0; }
 
 .navbar {
-  background: #47A58A !important; }
+  background: #3F75AA !important; }
 
 .footer-flex-container {
-  background-color: #47A58A; }
+  background-color: #3F75AA; }
 
 .dropdown-item.active, .dropdown-item:active {
-  background-color: #47A58A;
+  background-color: #3F75AA;
   opacity: 1; }
 
 a {
-  color: #47A58A; }
+  color: #3F75AA; }
   a:hover {
-    color: #47A58A;
+    color: #3F75AA;
     opacity: 0.6;
     text-decoration: none; }
 
 .secondary-menu-item-1-selected, .assessment_selected {
   padding-left: 25px;
-  border-left: 4px solid #47A58A;
+  border-left: 4px solid #3F75AA;
   font-weight: bold; }
 
 td.link-info-label {
