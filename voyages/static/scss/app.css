@@ -78,14 +78,14 @@ footer {
   color: #777777; }
 
 .intra-color {
-  color: #645D9B;
+  color: #6c65a4;
   /* #47A58A */ }
 
 .gallery-color {
-  color: #47A58A; }
+  color: #3F75AA; }
 
 .past-color {
-  color: #DB6B57; }
+  color: #3f967d; }
 
 .db-title-color {
   color: #bababa; }
@@ -109,20 +109,20 @@ footer {
   border-color: #008ca8; }
 
 .intra-btn {
-  color: #645D9B;
-  border-color: #645D9B; }
+  color: #6c65a4;
+  border-color: #6c65a4; }
 
 .intra-btn:hover {
-  background-color: #645D9B;
-  border-color: #645D9B; }
+  background-color: #6c65a4;
+  border-color: #6c65a4; }
 
 .past-btn {
-  color: #DB6B57;
-  border-color: #DB6B57; }
+  color: #3f967d;
+  border-color: #3f967d; }
 
 .past-btn:hover {
-  background-color: #DB6B57;
-  border-color: #DB6B57; }
+  background-color: #3f967d;
+  border-color: #3f967d; }
 
 .band {
   margin-top: 6rem;
