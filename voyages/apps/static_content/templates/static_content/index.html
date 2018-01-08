@@ -143,8 +143,9 @@
 					</p>
 				</div>
 				<div class="align-self-end band-buttons">
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">About</button>
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Database</button>
+
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:about' %}">{% trans "About" %}</a>
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:database' %}">{% trans "Database" %}</a>
 					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Downloads</button>
 					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Contribute</button>
 				</div>
