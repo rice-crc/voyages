@@ -149,7 +149,6 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
     list-style:none;
     display: inline-block;
     margin-right: 15px;
-    margin-bottom: 7px;
 }
 
 ul.estimates-table-form {
@@ -157,7 +156,8 @@ ul.estimates-table-form {
 }
 
 div.results-panel {
-	padding: 10px;}
+	padding: 0 10px;
+}
 
 div.estimates-table-options {
 	margin-top: -5px;
