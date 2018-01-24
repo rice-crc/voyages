@@ -1,16 +1,116 @@
-{% extends "base.html" %}
+{% extends "voyage/voyagebase.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
 {% load i18n %}
 
 {% block title %}{% trans "Page currently under construction" %}{% endblock %}
 
-{% block content %}
-
-<h1>{% trans "Page currently under construction" %}</h1>
-
-<p>{% trans "Please come back later" %}</p>
-
+{% block csslist %}
+	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-{% block footer %}
-{% include "footer.html" %}
+{% block content %}
+
+<div id="bgvid-container">
+
+	<div class=" cover-band">
+		<div class="cover-flex-container">
+
+
+      <div class="align-self-start cover-start col-md-10 col-lg-12 col-xl-8 col-sm-12 col-xs-12 no-padding">
+				<h1 class="uppercase cover-color weight-700 db-title site-headline " data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500" data-aos-anchor="#bgvid-container">404. Seas Less Sailed. </h1>
+        <p class="cover-color site-story site-quote" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">
+          {% blocktrans %}
+          "When you make men slaves you deprive them of half their virtue, you set them in your own conduct an example of fraud, rapine, and cruelty, and compel them to live with you in a state of war."
+          {% endblocktrans %}
+        </p>
+        <p class="cover-color site-story">
+          {% blocktrans %}
+          - Equus Anna, an Enslaved African
+          {% endblocktrans %}
+        </p>
+
+			</div>
+
+
+			<div class="align-self-center special-feature-container cover-center">
+				<div class="special-feature-flex-container">
+          <a href="javascript:history.back()">
+						<div class="special-feature-flex-item">
+							<div class="special-feature-title">Return to Where You Came</div>
+							<div class="special-feature-desc"> You have stepped on pathways less travelled. Let's go back.</div>
+						</div>
+					</a>
+				</div>
+			</div>
+
+			<div class="align-self-end cover-end" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="1500" data-aos-duration="500" data-aos-anchor="#bgvid-container">
+				<div class="social-flex-container">
+
+				</div>
+
+				<!-- <div class="social-flex-container">
+					<div class="social-icon-container">
+						<a href="/"><div class="scroll"> return home </div></a>
+					</div>
+				</div> -->
+			</div>
+
+
+		</div>
+	</div>
+
+	<video id="bgvid" playsinline autoplay muted loop preload>
+		<!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
+		<source src="{{STATIC_URL}}videos/sv-bgvid-1.webm" type="video/webm">
+		<source src="{{STATIC_URL}}videos/sv-bgvid-1.mp4" type="video/mp4">
+	</video>
+
+</div>
+
+<!-- <div class="cover">
+  <div class="row header text-center">
+    <div class="col-md-12">
+      <h1>{% trans "Page currently under construction" %}</h1>
+      <p>{% trans "Please come back later" %}</p>
+    </div>
+  </div>
+</div> -->
+
+<style>
+
+.site-quote {
+    font-family: "Georgia" !important;
+    font-style: italic;
+    margin-top: 4rem;
+}
+
+/* .container {
+   z-index:1;
+}
+
+body {
+  background: url('{{STATIC_URL}}images/site/404.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  z-index:-100;
+}
+
+.cover {
+    background-color: rgba(133, 133, 216, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+} */
+</style>
+
+<script>
+
+</script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
 {% endblock %}
