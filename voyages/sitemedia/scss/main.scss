@@ -7,6 +7,21 @@
   margin-top: 1.5rem;
 }
 
+.collapse.show {
+  margin-bottom: 1.5rem;
+}
+
+// text-primary
+.text-title {
+  font-weight: 500;
+}
+
+// text-secondary
+.text-description {
+  color: #898989;
+}
+
+
 // link
 .link {
   font-weight: bold;
@@ -187,7 +202,13 @@ footer {
   color: $text-dark-1;
 }
 
+.sidebar-section-2 {
+  padding: 0 0 5px 15px;
+}
 
+.sidebar-title-3 {
+  font-weight: bold;
+}
 
 .table-sm {
   font-size: 0.8rem;
