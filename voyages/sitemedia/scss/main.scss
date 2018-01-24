@@ -7,6 +7,11 @@
   display: inline;
 }
 
+// django admin style fix
+.deletelink {
+  height: 100%;
+}
+
 // table compact
 .table-compact {
   thead {
