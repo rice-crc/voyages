@@ -12,6 +12,7 @@ var searchTerms = [
 	TextSearchTerm(new VariableInfo('captain', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
 	RangeSearchTerm(new VariableInfo('imp_total_num_slaves_purchased', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text', null, 3),
 	RangeSearchTerm(new VariableInfo('imp_total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text', null, 3),
+	RangeSearchTerm(new VariableInfo('year_range', 'numbers', 'Year range of your search'), '', null, 'year_range help text', null, 3),
 	TextSearchTerm(new VariableInfo('sources_plaintext_search', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
 ];
 
@@ -69,14 +70,29 @@ var columnToggleMenu = {
 
 function search(query) {
 	var query = query;
-	var activeSearchTerms = function(query) {
-		var term = searchTermsDict[id];
-		// Here we allow custom search types to generate their backend terms.
-		var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
-			? term.getBackendSearchTerm()
-			: term.getSearchTerm();
-		return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
-	}
+
+	var activeSearchTerms = jQuery.map(query, function(val, id) {
+		// debugger;
+		if (val.hasChanged) {
+			var term = searchTermsDict[val.varName];
+			// Here we allow custom search types to generate their backend terms.
+			var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
+				? term.getBackendSearchTerm()
+				: term.getSearchTerm();
+
+			// return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
+			return { varName: term.varName, op: val.current.op , searchTerm: val.current.searchTerm };
+		}
+	});
+
+	// var activeSearchTerms = function(query) {
+	// 	var term = searchTermsDict[id];
+	// 	// Here we allow custom search types to generate their backend terms.
+	// 	var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
+	// 		? term.getBackendSearchTerm()
+	// 		: term.getSearchTerm();
+	// 	return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
+	// }
 
 	var currentSearchObj = {items: activeSearchTerms, orderBy: []};
 	// Store current search on session storage.
@@ -104,6 +120,10 @@ function search(query) {
 	}
 	sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 
+	if ( $.fn.DataTable.isDataTable('#results_main_table') ) {
+	  $('#results_main_table').DataTable().destroy();
+	}
+
 	var mainDatatable = $('#results_main_table').DataTable({
         ajax: {
 					url: "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search",
@@ -118,9 +138,8 @@ function search(query) {
 								return {name: allColumns[columnIndex].data.substring(4), direction: item.dir};
 							});
 						}
-						// debugger;
-						// return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
-						return `{"searchData":{"items":[],"orderBy":[{"name":"voyage_id","direction":"asc"}]},"tableParams":{"draw":2,"columns":[{"data":"var_voyage_id","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_ship_name","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_captain_plaintext","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_imp_arrival_at_port_of_dis","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_imp_principal_place_of_slave_purchase_lang_en","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_imp_principal_port_slave_dis_lang_en","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_imp_port_voyage_begin_lang_en","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_imp_total_num_slaves_purchased","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_outcome_ship_captured_lang_en","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}},{"data":"var_sources_plaintext","name":"","searchable":true,"orderable":true,"search":{"value":"","regex":false}}],"order":[{"column":0,"dir":"asc"}],"start":0,"length":10,"search":{"value":"","regex":false}},"output":"resultsTable"}`
+						console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
+						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
 					}
 				},
 				dom: 'Bfrtip',
@@ -232,7 +251,7 @@ Vue.component("form-value-component", {
 	</div>`,
 	methods: {
 		updateValue: function (value) {
-      this.$emit('input', value)
+      this.$emit('input', parseInt(value))
     }
 	}
 });
@@ -281,6 +300,7 @@ Vue.component("form-checkbox", {
 
 
 
+
 		// main app
 		var searchBar = new Vue({
 			el: "#search-bar",
@@ -291,33 +311,34 @@ Vue.component("form-checkbox", {
 				searchFilter: {
 					yearRange: {
 						default: {
-							op: "",
-							searchTerm: ["1514", "1866"],
-							varName: "year_range",
+							op: "is between",
+							searchTerm: [1514, 1866],
 						},
 						current: {
-							op: "",
-							searchTerm: ["1514", "1866"],
-							varName: "year_range",
+							op: "is between",
+							searchTerm: [1514, 1866],
 						},
 						value: {
-							op: "",
-							searchTerm: ["1514", "1866"],
-							varName: "year_range",
+							op: "is between",
+							searchTerm: [1514, 1866],
 						},
-						hasChanged: false,
+						varName: "imp_arrival_at_port_of_dis",
+						hasChanged: true,
 					},
 					vin: {
 						default: {
 							op: "equals",
 							searchTerm: [null, null],
-							varName: "voyage_id",
 						},
 						current: {
 							op: "equals",
 							searchTerm: [null, null],
-							varName: "voyage_id",
 						},
+						value: {
+							op: "equals",
+							searchTerm: [null, null],
+						},
+						varName: "voyage_id",
 						hasChanged: false,
 					},
 					vesselName: {
@@ -410,9 +431,10 @@ Vue.component("form-checkbox", {
 					searchFilter: {
 						handler: function(val){
 							// voyage yearRange
-							val.yearRange.hasChanged = val.yearRange.current.searchTerm !== val.yearRange.default.searchTerm
+							// val.yearRange.hasChanged = val.yearRange.current.searchTerm !== val.yearRange.default.searchTerm
 
 							// voyage identification number
+							// debugger;
 							val.vin.hasChanged = val.vin.default !== val.vin.current
 
 							// vessel name
@@ -440,7 +462,8 @@ Vue.component("form-checkbox", {
 			methods: {
 				yearRangeApply: function(val){
 					this.searchQuery.yearRange.value = this.searchFilter.yearRange.current;
-					search(val.searchFilter);
+					debugger;
+					search(this.searchFilter);
 				},
 				yearRangeReset: function(val){
 					this.searchFilter.yearRange.current = jQuery.extend(true, {}, this.searchFilter.yearRange.default);
@@ -449,7 +472,7 @@ Vue.component("form-checkbox", {
 
 				vinApply: function(val){
 					this.searchQuery.vin.value = this.searchFilter.vin.current;
-					search(val.searchFilter);
+					search(this.searchFilter);
 				},
 				vinReset: function(val){
 					this.searchFilter.vin.current = jQuery.extend(true, {}, this.searchFilter.vin.default);
@@ -464,7 +487,14 @@ Vue.component("form-checkbox", {
 					this.searchFilter.vesselOwner.current = this.searchFilter.vesselOwner.default;
 					this.searchQuery.vesselName.value = this.searchFilter.vesselName.default;
 					this.searchQuery.vesselOwner.value = this.searchFilter.vesselOwner.default;
-				}
+				},
+				changed(value) {
+
+    		},
+			},
+
+			mounted: function() {
+				search(this.searchFilter);
 			}
 
 		})

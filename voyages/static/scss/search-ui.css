@@ -5,7 +5,7 @@
   padding: 0; }
 
 .search-submenu {
-  min-width: 350px;
+  min-width: 600px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem 1.5rem;
   border-radius: 0; }
@@ -19,5 +19,14 @@
 
 .popover-title {
   margin-bottom: 1rem; }
+
+.search-dropdown-item {
+  font-weight: bold;
+  color: #555555 !important; }
+  .search-dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.15); }
+
+.dropdown-menu-title {
+  cursor: pointer; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/search-ui.css.map */

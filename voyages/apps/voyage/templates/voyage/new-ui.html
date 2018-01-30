@@ -11,6 +11,11 @@
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/library/select2.min.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
+
+<!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/> -->
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/select2@4.0.3/dist/css/select2.min.css"/>
 {% endblock %}
 
 {% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
@@ -31,6 +36,12 @@
 		<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
 			<span class="navbar-toggler-icon"></span>
 		</button>
+
+
+
+
+
+
 		<div class="navbar-collapse collapse" id="searchNav">
 			<ul class="navbar-nav ">
 
@@ -39,11 +50,20 @@
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{searchFilter.yearRange.value.searchTerm[0]}} - {{searchFilter.yearRange.value.searchTerm[1]}}</a>
 					<div class="">
 						<ul class="dropdown-menu search-menu" id="range" role="menu">
-								<li class="dropdown-item dropdown-item-li">
-									<h3 class="popover-title">Year Range</h3>
+								<li class="dropdown-item dropdown-item-li search-dropdown-item">
 									<div class="popover-content">
 
-										<form-value-component tag-id="form-year-range-from" form-label="Year from" v-model="searchFilter.yearRange.current.searchTerm[0]" ></form-value-component>
+										<v-panel-header title="Year Range" description="The year range of your search query" count="0"></v-panel-header>
+
+										<v-input @change="changed"
+					            title="Year Range"
+					            description="The year range of your search query. The full extent of time from the first to the last voyage is 1514-1866 (restore it)."
+					            var-name="imp_arrival_at_port_of_dis"
+					            search-term-caption="Enter a value"
+											:filter="searchFilter.yearRange">
+					          </v-input>
+
+										<!-- <form-value-component tag-id="form-year-range-from" form-label="Year from" v-model="searchFilter.yearRange.current.searchTerm[0]" ></form-value-component>
 										<form-value-component tag-id="form-year-range-to" form-label="Year to" v-model="searchFilter.yearRange.current.searchTerm[1]" ></form-value-component>
 
 										<div class="form-group">
@@ -53,7 +73,7 @@
 										</div>
 
 										<button v-on:click="vinApply" v-bind:disabled="!searchFilter.yearRange.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-										<button v-on:click="vinReset" v-bind:disabled="!searchFilter.yearRange.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
+										<button v-on:click="vinReset" v-bind:disabled="!searchFilter.yearRange.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button> -->
 
 									</div>
 								</li>
@@ -65,33 +85,209 @@
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ship, Nation, Owner</a>
 					<div class="">
 						<ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="vin">
-									Voyage Identification Number
-									<div id="vin" class="search-submenu popover">
-											<h3 class="popover-title">Voyage Identification Number</h3>
-											<div class="popover-content">
 
-												<div class="form-group">
-													<label for="form-vin">Voyage Identification Number</label>
-													<input type="number" v-model="searchFilter.vin.current.searchTerm[0]" id="form-vin" class="form-control">
-												 </div>
+							<v-panel title="Voyages and Vessels" is-advanced="false">
+								<div slot="v-panel-header">
+									<v-panel-header title="Voyages and Vessels" description="Parameters about voyages and vessels" count="0"></v-panel-header>
+								</div>
 
-												 <form-value-component tag-id="form-vin-2" form-label="Voyage Identification Number 2" v-model="searchFilter.vin.current.searchTerm[0]" >formform</form-value-component>
+								<div slot="v-panel-content">
+									<v-input @change="changed"
+										title="Voyage Identification Number"
+										description=""
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption="Enter a value"
+										:filter="searchFilter.yearRange">
+									</v-input>
 
-												 <div class="form-group">
- 													<p>VIN current is: <code>{{ searchFilter.vin.current }}</code></p>
-													<p>VIN default is: <code>{{ searchFilter.vin.default }}</code></p>
-													<p>VIN hasChanged is: <code>{{ searchFilter.vin.hasChanged }}</code></p>
- 												 </div>
+									<v-input @change="changed"
+										title="Vessel Names"
+										description=""
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption="Enter a name"
+										:filter="searchFilter.yearRange">
+									</v-input>
 
-												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-												 <button v-on:click="vinReset" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
+									<v-input @change="changed"
+										title="Vessel Owners"
+										description=""
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption="Enter an owner"
+										:filter="searchFilter.yearRange">
+									</v-input>
 
-											</div>
+
+									<div class="form-group">
+										<label for="form-vin">Voyage Identification Number</label>
+										<input type="number" v-model="searchFilter.vin.current.searchTerm[0]" id="form-vin" class="form-control">
+									 </div>
+
+									 <form-value-component tag-id="form-vin-2" form-label="Voyage Identification Number 2" v-model="searchFilter.vin.current.searchTerm[0]" >formform</form-value-component>
+
+									 <div class="form-group">
+										<p>VIN current is: <code>{{ searchFilter.vin.current }}</code></p>
+										<p>VIN default is: <code>{{ searchFilter.vin.default }}</code></p>
+										<p>VIN hasChanged is: <code>{{ searchFilter.vin.hasChanged }}</code></p>
+									 </div>
+
+									 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
+									 <button v-on:click="vinReset" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
+
+								</div>
+							</v-panel>
+
+								<v-panel title="Flag" is-advanced="false">
+									<div slot="v-panel-header">
+										<v-panel-header title="Flag" description="Parameters about Flag" count="0"></v-panel-header>
 									</div>
-								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="cdrom">
+									<div slot="v-panel-content">
+										<v-input @change="changed"
+											title=""
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<div class="form-group">
+											<label for="form-flag">Flag</label>
+											<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+										</div>
+
+										<div class="form-group">
+											<label for="form-flag-imputed">Flag Imputed</label>
+											<form-select2-multiple tag-id="form-flag-imputed" tag-name="countries[]" v-bind:data="searchFilter.flagImputed.data"></form-select2-multiple>
+										</div>
+									</div>
+								</v-panel>
+
+								<v-panel title="Construction and Registration" is-advanced="false">
+									<div slot="v-panel-header">
+										<v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration" count="0"></v-panel-header>
+									</div>
+
+									<div slot="v-panel-content">
+										<v-input @change="changed"
+											title="Year Constructed"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Place Constructed"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Year Registered"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Place Registered"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+									</div>
+								</v-panel>
+
+								<v-panel title="Rig, Tonnage, and Guns Mounted" is-advanced="false">
+									<div slot="v-panel-header">
+										<v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted" count="0"></v-panel-header>
+									</div>
+
+									<div slot="v-panel-content">
+										<v-input @change="changed"
+											title="Rig"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Tonnage"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Standardized Tonnage"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+
+										<v-input @change="changed"
+											title="Guns Mounted"
+											description=""
+											var-name="imp_arrival_at_port_of_dis"
+											search-term-caption="Enter an flag's name"
+											:filter="searchFilter.yearRange">
+										</v-input>
+									</div>
+								</v-panel>
+
+								<!-- <li v-if="isAdvanced" class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="rig-tonnage-guns">
+										<div class="dropdown-menu-title">Rig, Tonnage, and Guns Mounted</div>
+										<div id="rig-tonnage-guns" class="search-submenu popover">
+												<div class="popover-content">
+
+													<v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted" count="0"></v-panel-header>
+
+													<v-input @change="changed"
+														title="Rig"
+														description=""
+														var-name="imp_arrival_at_port_of_dis"
+														search-term-caption="Enter an flag's name"
+														:filter="searchFilter.yearRange">
+													</v-input>
+
+													<v-input @change="changed"
+														title="Tonnage"
+														description=""
+														var-name="imp_arrival_at_port_of_dis"
+														search-term-caption="Enter an flag's name"
+														:filter="searchFilter.yearRange">
+													</v-input>
+
+													<v-input @change="changed"
+														title="Standardized Tonnage"
+														description=""
+														var-name="imp_arrival_at_port_of_dis"
+														search-term-caption="Enter an flag's name"
+														:filter="searchFilter.yearRange">
+													</v-input>
+
+													<v-input @change="changed"
+														title="Guns Mounted"
+														description=""
+														var-name="imp_arrival_at_port_of_dis"
+														search-term-caption="Enter an flag's name"
+														:filter="searchFilter.yearRange">
+													</v-input>
+
+
+												</div>
+										</div>
+								</li> -->
+
+<!--
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="cdrom">
 										Voyage in 1999 CD-ROM
 										<div id="cdrom" class="search-submenu popover">
 												<h3 class="popover-title">Voyage in 1999 CD-ROM</h3>
@@ -112,7 +308,7 @@
 										</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="vessel">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="vessel">
 										Vessel Name and Owners
 										<div id="vessel" class="search-submenu popover">
 												<h3 class="popover-title">Vessel Name and Owner</h3>
@@ -133,26 +329,9 @@
 										</div>
 								</li>
 
-								<li v-if="isAdvanced" class="dropdown-item dropdown-item-li" data-submenu-id="flag">
-										Flag
-										<div id="flag" class="search-submenu popover">
-												<h3 class="popover-title">Flag</h3>
-												<div class="popover-content">
-													<div class="form-group">
-														<label for="form-flag">Flag</label>
-														<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-													</div>
 
-													<div class="form-group">
-														<label for="form-flag-imputed">Flag Imputed</label>
-														<form-select2-multiple tag-id="form-flag-imputed" tag-name="countries[]" v-bind:data="searchFilter.flagImputed.data"></form-select2-multiple>
-													</div>
 
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="construction">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="construction">
 										Construction and Registration
 										<div id="construction" class="search-submenu popover">
 												<h3 class="popover-title">Construction and Registration</h3>
@@ -163,7 +342,7 @@
 										</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="rig">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="rig">
 										Rig
 										<div id="rig" class="search-submenu popover">
 												<h3 class="popover-title">Rig</h3>
@@ -176,7 +355,7 @@
 										</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="gun">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="gun">
 										Tonnage and Guns Mounted
 										<div id="gun" class="search-submenu popover">
 												<h3 class="popover-title">Tonnage and Guns Mounted</h3>
@@ -187,7 +366,7 @@
 
 												</div>
 										</div>
-								</li>
+								</li> -->
 
 							</ul>
 					</div>
@@ -198,7 +377,7 @@
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Outcome</a>
 					<div class="">
 						<ul class="dropdown-menu search-menu" id="outcome-menu" role="menu">
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome">
 									Particular Outcome of Voyage
 									<div id="outcome" class="search-submenu popover">
 											<h3 class="popover-title">Particular Outcome of Voyage</h3>
@@ -216,8 +395,8 @@
 									</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-for-slaves">
-										Outcome of Voyage for Slaves
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome-for-slaves">
+										<div class="dropdown-menu-title">Outcome of Voyage for Slaves</div>
 										<div id="outcome-for-slaves" class="search-submenu popover">
 												<h3 class="popover-title">Outcome of Voyage for Slaves</h3>
 												<div class="popover-content">
@@ -234,7 +413,7 @@
 										</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-if-captured">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome-if-captured">
 										Outcome of Voyage if Ship Captured
 										<div id="outcome-if-captured" class="search-submenu popover">
 												<h3 class="popover-title">Outcome of Voyage if Ship Captured</h3>
@@ -250,7 +429,7 @@
 										</div>
 								</li>
 
-								<li v-if="isAdvanced" class="dropdown-item dropdown-item-li" data-submenu-id="outcome-for-owner">
+								<li v-if="isAdvanced" class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome-for-owner">
 										Outcome of Voyage for Owner
 										<div id="outcome-for-owner" class="search-submenu popover">
 												<h3 class="popover-title">Outcome of Voyage for Owner</h3>
@@ -263,7 +442,7 @@
 										</div>
 								</li>
 
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-african-resistance">
+								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome-african-resistance">
 										African Resistance
 										<div id="outcome-african-resistance" class="search-submenu popover">
 												<h3 class="popover-title">African Resistance</h3>
@@ -391,10 +570,28 @@
           <div id="results" class="tab-pane fade active show">
               Results
 
-							<table id="results_main_table"></table>
+							<table id="results_main_table" class="table table-striped">
+								<thead>
+				            <tr>
+				                <th>Voyage identification number</th>
+				                <th>Vessel name</th>
+				                <th>Capitain's name</th>
+				                <th>Year arrived with slaves*</th>
+				                <th>Principal region of slave purchase*</th>
+				                <th>Principal region of slave landing*</th>
+				                <th>Place where voyage began*</th>
+				                <th>Total slaves embarked*</th>
+				                <th>Outcome of voyage if ship captured*</th>
+				                <th>Sources</th>
+				                <th>I-Am</th>
+				            </tr>
+				        </thead>
+								<tbody>
+								</tbody>
+							</table>
 							<br/>
-							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
           </div>
           <div id="stats" class="tab-pane fade">
               Stats
@@ -422,6 +619,11 @@
 
 {% block jslist %}
 <script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<script src="https://unpkg.com/select2@4.0.3/dist/js/select2.js"></script>
+
+<script src="{{ STATIC_URL }}scripts/library/string-utils.js" type="text/javascript"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/qtip/jquery.qtip.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/voyage/voyage-search.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/menu-aim.js" type="text/javascript"></script>
@@ -432,5 +634,16 @@
 
 <script src="{{ STATIC_URL }}scripts/new-ui/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/new-ui/form-data.js" type="text/javascript"></script>
+
+<!-- vue components -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-textbox.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select2.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-treeselect.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/input.js"></script>
+<!-- vue components -->
+
 <script src="{{ STATIC_URL }}scripts/vue/search.js" type="text/javascript"></script>
+
 {% endblock %}
