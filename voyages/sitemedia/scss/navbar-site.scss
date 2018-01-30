@@ -1,7 +1,7 @@
 @import "colors";
 
 .navbar {
-  padding: .5rem 4rem;
+  padding: 0 4rem;
   z-index: 2;
   border: none;
   width: 100%;
@@ -70,7 +70,7 @@
 }
 
 .container-new {
-  margin: 2rem 4rem;
+  margin: 1.5rem 4rem;
 }
 
 @media (max-width: 1199px) {

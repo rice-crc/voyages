@@ -12,8 +12,10 @@
   border-radius: 0;
 }
 
-.dropdown-item.active, .dropdown-item:active {
-  background-color: #f8f9fa;
+// for dataTables
+.dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
+  // background-color: #f8f9fa;
+  background-color: rgba(0, 0, 0, 0.15);
   color: #212529;
 }
 
