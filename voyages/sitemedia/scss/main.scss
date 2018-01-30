@@ -2,6 +2,11 @@
 @import "headings";
 @import "colors";
 
+// offset white space under menu
+.dropdown-menu {
+  margin: 0;
+}
+
 // inline display
 .inline {
   display: inline;

@@ -55,8 +55,9 @@ var categoryNames = [
 
 var columnToggleMenu = {
 				extend: 'collection',
-				text: '<span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>',
+				text: 'Columns',
 				titleAttr: 'Configure visible columns',
+				className: 'btn btn-info buttons-collection dropdown-toggle',
 				buttons: $.map(categories, function(category) {
 					return category.columns.length == 1 && category.columns[0].text === category.name
 						? category.columns[0]
@@ -67,6 +68,11 @@ var columnToggleMenu = {
 							};
 				})
 			};
+
+var pageLength = {
+	extend: 'pageLength',
+	className: 'btn btn-info buttons-collection dropdown-toggle',
+};
 
 function search(query) {
 	var query = query;
@@ -130,7 +136,6 @@ function search(query) {
 					type: 'POST',
 					data: function(d) {
 						if (d.order) {
-
 							currentSearchObj.orderBy = $.map(d.order, function(item) {
 								var columnIndex = mainDatatable
 									? mainDatatable.colReorder.order()[item.column]
@@ -142,25 +147,28 @@ function search(query) {
 						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
 					}
 				},
-				dom: 'Bfrtip',
+				dom: 'ifrtBp',
 				lengthMenu: [
             [ 10, 25, 50, 100 ],
             [ '10 rows', '25 rows', '50 rows', '100 rows' ]
         ],
+
 				buttons: [
-					'pageLength',
+					pageLength,
 					columnToggleMenu,
 					{
 						extend: 'collection',
-						text: '<span class="glyphicon glyphicon-cloud-download"></span>',
+						// text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
+						className: 'btn btn-info buttons-collection dropdown-toggle',
+						text: 'Download',
 						titleAttr: 'Download results',
 						buttons: [
+							// {
+							// 	text: 'CSV - not implemented',
+							// 	action: function() { alert('not implemented yet'); },
+							// },
 							{
-								text: 'CSV - not implemented',
-								action: function() { alert('not implemented yet'); },
-							},
-							{
-								text: 'Excel - this one works!',
+								text: 'Excel',
 								action: function() {
 									var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
 										return visible ? allColumns[index].data : undefined;
