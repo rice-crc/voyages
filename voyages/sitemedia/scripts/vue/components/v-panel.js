@@ -1,0 +1,106 @@
+// v-panel
+Vue.component('v-panel', {
+  props: ['title', "isAdvanced"],
+  template: `
+    <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+        <div class="dropdown-menu-title">{{titleValue}}</div>
+        <div :id="idValue" class="search-submenu popover">
+            <div class="popover-content">
+              <slot name="v-panel-header"></slot>
+              <slot name="v-panel-content"></slot>
+              <slot name="v-panel-control"></slot>
+            </div>
+        </div>
+    </li>
+  `,
+
+  data: function() {
+    return {
+      titleValue: '',
+      isAdvancedValue: '',
+      idValue: null,
+    }
+  },
+
+  methods: {
+    emitParent: function() {
+      // this.$emit('blurred', this.textboxValue);
+    }
+  },
+
+  watch: {
+  },
+
+  mounted: function() { // load value initially
+    this.titleValue = this.title;
+    this.isAdvancedValue = this.isAdvanced;
+    this.idValue = hyphenate(this.title);
+  }
+
+})
+// v-panel
+
+// v-panel-header
+Vue.component('v-panel-header', {
+  props: ['title', "description", "count"],
+  template: `
+    <div class="v-panel-header">
+      <div class="v-panel-title-container">
+        <div class="v-panel-title">
+        {{title}}
+        </div>
+        <div class="v-panel-counter">
+          <div class="text-center">
+            <b-button variant="info" size="sm">
+              Parameters Applied <b-badge variant="light">{{count}}</b-badge>
+            </b-button>
+          </div>
+        </div>
+      </div>
+      <div class="v-panel-description" v-text="description"></div>
+
+    </div>
+  `,
+
+  data: function() {
+    return {
+      titleValue: '',
+      descriptionValue: '',
+      countValue: null,
+    }
+  },
+
+  methods: {
+    emitParent: function() {
+      this.$emit('blurred', this.textboxValue);
+    }
+  },
+
+  watch: {
+    title: { // this is the value from props
+      handler: function(value) {
+        this.titleValue = value; // titleValue is the local copy used in the child component
+      }
+    },
+    description: {
+      handler: function(value) {
+        this.descriptionValue = value; // descriptionValue is the local copy used in the child component
+      }
+    },
+    count: {
+      handler: function(value) {
+        this.countValue = value; // countValue is the local copy used in the child component
+      }
+    },
+
+
+  },
+
+  mounted: function() { // load value initially
+    this.titleValue = this.title;
+    this.descriptionValue = this.description;
+    this.countValue = this.count;
+  }
+
+})
+// v-panel-header

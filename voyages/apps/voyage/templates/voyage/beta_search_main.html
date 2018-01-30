@@ -145,7 +145,7 @@
 }
 
 html, body {
-    height: 100%;    
+    height: 100%;
 }
 
 #main_content {
@@ -333,10 +333,10 @@ div.dt-button-collection {
 			  </ul>
 			</div><!--/.nav-collapse -->
 		  </div>
-		</nav>	
+		</nav>
 		<div id="search_pane" class="collapse" style="position: absolute; top: 72px; width: 100%;">
 			<div style="display: flex;">
-				<div style="flex: 0;">				
+				<div style="flex: 0;">
 					<div class="btn-group-vertical" role="group">
 						<button id="search_btn" type="button" class="btn btn-success">Search<br/><span class="keyboard-binding">(Ctrl + Enter)</span></button>
 						<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#search_pane" id="dismiss_btn" title="Close the search pane without running the query">Dismiss</button>
@@ -364,12 +364,12 @@ div.dt-button-collection {
 					<div class="form-group">
 						<label for="current_search" class="control-label">Current search:</label>
 						<select id="current_search" style="width: 100%" placeholder="Search voyages... Press CTRL+ENTER when the query is done or click on the Search button."></select>
-					</div>				
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="main-content" class="container-fluid" style="/*margin-top: 58px; height: calc(100% - 60px); */ height: 100%; display: flex; width: 100%;">
 		<div id="left-tabs" style="width: 100px;">
 			<ul class="nav nav-tabs tabs-left">
@@ -597,6 +597,7 @@ div.dt-button-collection {
 		var searchCallback = resultsTableSearchCallback;
 		function search() {
 			$('#search_pane').collapse("hide");
+      debugger
 			var activeSearchTerms = jQuery.map($('#current_search').val(), function(id) {
 				var term = searchTermsDict[id];
 				// Here we allow custom search types to generate their backend terms.
@@ -803,7 +804,7 @@ div.dt-button-collection {
 				var varName = $item.data('var_name');
 				displayVariableInput(varName);
 			});
-			
+
 			$('#clear_btn').click(function() {
 				selectize.clear();
 				$("#year_range").val(SEARCH_MIN_YEAR + ' - ' + SEARCH_MAX_YEAR);
@@ -830,10 +831,10 @@ div.dt-button-collection {
 				{ data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total slaves embarked*", "visible": false },
 				{ data: "var_outcome_ship_captured_lang_en", category: 4, header: "Outcome of voyage if ship captured*", "visible": false },
 				{ data: "var_sources_plaintext", category: 5, header: "Sources", "visible": false },
-				{ data: "var_intra_american_voyage", category: 0, header: "Intra American Voyage", "visible": false },				
+				{ data: "var_intra_american_voyage", category: 0, header: "Intra American Voyage", "visible": false },
 			];
 			var categories = $.map(categoryNames, function(name) {
-				return { name: name, columns: [] };	
+				return { name: name, columns: [] };
 			});
 			allColumns.forEach(function(c, index) {
 				categories[c.category].columns.push({
@@ -867,7 +868,7 @@ div.dt-button-collection {
 			if (searchHistoryStr) {
 				try {
 					searchHistory = JSON.parse(searchHistoryStr);
-				} catch (e) { 
+				} catch (e) {
 					searchHistory = [];
 				}
 				updateHistory();
@@ -880,12 +881,14 @@ div.dt-button-collection {
 					data: function(d) {
 						if (d.order) {
 							currentSearchObj.orderBy = $.map(d.order, function(item) {
-								var columnIndex = mainDatatable 
+								var columnIndex = mainDatatable
 									? mainDatatable.colReorder.order()[item.column]
 									: item.column;
 								return {name: allColumns[columnIndex].data.substring(4), direction: item.dir};
 							});
 						}
+            debugger;
+						console.log( JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }));
 						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
 					}
 				},
