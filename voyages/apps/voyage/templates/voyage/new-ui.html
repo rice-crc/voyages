@@ -101,7 +101,8 @@
 										description=""
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption="Enter a value"
-										:filter="searchFilter.yearRange">
+										:filter="searchFilter.yearRange"
+										:is-numeric=true>
 									</v-input>
 
 									<v-input @change="changed"
@@ -109,7 +110,8 @@
 										description=""
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption="Enter a name"
-										:filter="searchFilter.yearRange">
+										:filter="searchFilter.yearRange"
+										:is-numeric=false>
 									</v-input>
 
 									<v-input @change="changed"
@@ -117,7 +119,8 @@
 										description=""
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption="Enter an owner"
-										:filter="searchFilter.yearRange">
+										:filter="searchFilter.yearRange"
+										:is-numeric=false>
 									</v-input>
 
 

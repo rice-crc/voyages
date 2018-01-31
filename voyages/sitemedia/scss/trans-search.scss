@@ -54,7 +54,7 @@
 }
 
 table.dataTable thead>tr>th.sorting, .table th, .table td {
-  padding: 0.125rem 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
 }
 
 
@@ -88,4 +88,12 @@ table.dataTable thead>tr>th.sorting, .table th, .table td {
 
 #results_main_table_wrapper {
   padding: 0;
+}
+
+#search-bar {
+  height: 1500px;
+}
+
+.page-item.active .page-link {
+  z-index: 0;
 }
