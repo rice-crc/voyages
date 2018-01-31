@@ -1,13 +1,13 @@
 // textbox
 Vue.component("v-textbox", {
-  props: ['searchTermCaption', 'value'],
+  props: ['searchTermCaption', 'value', 'type'],
   template: `
     <div>
       <b-form-input v-model="textboxValue"
-                    type="text"
+                    :type="type"
                     :placeholder="placeholderValue"
                     @blur.native="emitParent"></b-form-input>
-      <div>{{searchTermCaption}}</div>
+      <div class="v-form-element-caption">{{searchTermCaption}}</div>
       <div>Value: {{ textboxValue }}</div>
     </div>
   `,

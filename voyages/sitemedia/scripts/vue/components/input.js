@@ -1,20 +1,23 @@
 // input (select + textbox x 2)
 Vue.component('v-input', {
-  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter'],
+  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter', "isNumeric"],
   template: `
     <div class="v-form-group">
       <div class="v-title" v-text="title"></div>
       <div class="v-description" v-text="description"></div>
 
       <div class="row">
-        <div class="col-md-4">
-          <v-select @changed="updateOp" :value="item.op"></v-select>
+        <div class="col-md-12" v-if="!isNumeric">
+          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0"></v-textbox>
         </div>
-        <div class="col-md-4">
-          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="searchTermCaption" :value="item.searchTerm0"></v-textbox>
+        <div class="col-md-4" v-if="isNumeric">
+          <v-select @changed="updateOp" :value="item.op" :isNumeric="isNumeric"></v-select>
         </div>
-        <div class="col-md-4" v-if="options.searchTerm1Disabled">
-          <v-textbox @blurred="updateSearchTerm1" :search-term-caption="searchTermCaption" :value="item.searchTerm1"></v-textbox>
+        <div class="col-md-4" v-if="isNumeric">
+          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
+        </div>
+        <div class="col-md-4" v-if="options.searchTerm1Disabled && isNumeric">
+          <v-textbox @blurred="updateSearchTerm1" :search-term-caption="options.searchTermCaption1" :value="item.searchTerm1" :type="options.type"></v-textbox>
         </div>
       </div>
 
@@ -43,6 +46,9 @@ Vue.component('v-input', {
       },
       options: {
         searchTerm1Disabled: false,
+        searchTermCaption0: null,
+        searchTermCaption1: null,
+        type: "text",
       }
     }
   },
@@ -80,13 +86,30 @@ Vue.component('v-input', {
         // form specific logic
         if (this.item.op == "between") {
           this.options.searchTerm1Disabled = true;
+          this.options.searchTermCaption0 = "Enter the lower bound";
+          this.options.searchTermCaption1 = "Enter the upper bound";
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
+          if (this.item.op == "is less than") {
+            this.options.searchTermCaption0 = "Enter the upper bound";
+          }
+          if (this.item.op == "is more than") {
+            this.options.searchTermCaption0 = "Enter the lower bound";
+          }
+          if (this.item.op == "equals to") {
+            this.options.searchTermCaption0 = this.searchTermCaption;
+          }
         }
       },
       deep: true,
     },
+  },
+
+  mounted: function() {
+    this.options.searchTermCaption0 = this.searchTermCaption;
+    debugger;
+    this.options.type = this.isNumeric ? "number" : "text";
   }
 
 })
