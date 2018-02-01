@@ -2,13 +2,18 @@
   border-radius: 0;
   border-right: none;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);
-  padding: 0; }
+  padding: 0;
+  left: -25px;
+  width: 350px;
+  height: 650px; }
 
 .search-submenu {
-  min-width: 600px;
+  min-width: 650px;
+  height: 650px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem 1.5rem;
-  border-radius: 0; }
+  padding: .75rem 1.5rem;
+  border-radius: 0;
+  overflow-y: auto; }
 
 .dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
   background-color: rgba(0, 0, 0, 0.15);
@@ -21,12 +26,15 @@
   margin-bottom: 1rem; }
 
 .search-dropdown-item {
-  font-weight: bold;
+  font-weight: 500;
   color: #555555 !important; }
   .search-dropdown-item:hover {
     background-color: rgba(0, 0, 0, 0.15); }
 
 .dropdown-menu-title {
-  cursor: pointer; }
+  cursor: pointer;
+  align-content: center;
+  justify-content: space-between;
+  display: flex; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/search-ui.css.map */

@@ -90,5 +90,4 @@ Vue.component('v-select2', {
     }
 
 });
-
 // v-select2

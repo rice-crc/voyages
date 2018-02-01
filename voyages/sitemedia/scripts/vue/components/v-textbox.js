@@ -8,7 +8,7 @@ Vue.component("v-textbox", {
                     :placeholder="placeholderValue"
                     @blur.native="emitParent"></b-form-input>
       <div class="v-form-element-caption">{{searchTermCaption}}</div>
-      <div>Value: {{ textboxValue }}</div>
+      <!--<div>Value: {{ textboxValue }}</div>-->
     </div>
   `,
 

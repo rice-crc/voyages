@@ -1,8 +1,10 @@
 .v-title {
   font-weight: bold;
-  color: #555555;
-  margin-bottom: 0.125rem;
-  font-size: 1.125rem; }
+  color: #666666;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
 
 .v-description {
   color: #666666;
@@ -22,7 +24,7 @@
   color: #666666; }
 
 .v-form-group {
-  padding: 1rem 0; }
+  padding: 1rem 0 0; }
 
 .v-database-title {
   color: #333333;
@@ -33,7 +35,13 @@
   color: #666666; }
 
 .v-form-element-caption {
-  color: #666666;
-  padding-top: 0.125rem; }
+  color: #888888; }
+
+.v-badge-imputed {
+  background-color: #fa8837;
+  color: white; }
+
+.v-badge-advanced {
+  background-color: #f41d6d; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/v-component.css.map */
