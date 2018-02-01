@@ -4,7 +4,7 @@ Vue.component('v-select', {
   template: `
     <div>
       <b-form-select v-model="selected" :options="options" @change="emitParent"></b-form-select>
-      <div>Selected: <strong>{{selected}}</strong></div>
+      <!--<div>Selected: <strong>{{selected}}</strong></div>-->
     </div>
   `,
   data: function() {

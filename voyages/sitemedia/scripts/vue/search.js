@@ -143,7 +143,7 @@ function search(query) {
 								return {name: allColumns[columnIndex].data.substring(4), direction: item.dir};
 							});
 						}
-						console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
+						// console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
 						return JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' });
 					}
 				},
@@ -264,22 +264,6 @@ Vue.component("form-value-component", {
 	}
 });
 
-// select2 multiple component
-Vue.component("form-select2-multiple", {
-	props: {
-		tagId: String,
-		tagName: String,
-		data: Array
-	},
-	template: `<select :id="tagId" :name="tagName" multiple="multiple"></select>`,
-	mounted: function() {
-    $(this.$el).select2({
-			 width: '100%',
-			 data: this.data
-		});
-  }
-});
-
 Vue.component("form-checkbox", {
 	props: {
 		checked: Boolean,
@@ -314,6 +298,11 @@ Vue.component("form-checkbox", {
 			el: "#search-bar",
 			delimiters: ['{{', '}}'],
 			data: {
+				total: 0,
+				count: 0,
+				count1: 0,
+				count2: 3,
+				count3: 0,
 				text: "text",
 				isAdvanced: true,
 				searchFilter: {
@@ -332,6 +321,7 @@ Vue.component("form-checkbox", {
 						},
 						varName: "imp_arrival_at_port_of_dis",
 						hasChanged: true,
+						count: 0,
 					},
 					vin: {
 						default: {
@@ -348,6 +338,7 @@ Vue.component("form-checkbox", {
 						},
 						varName: "voyage_id",
 						hasChanged: false,
+						count: 0,
 					},
 					vesselName: {
 						default: "",
@@ -438,6 +429,7 @@ Vue.component("form-checkbox", {
 					},
 					searchFilter: {
 						handler: function(val){
+							this.total = this.count1 + this.count2 + this.count3;
 							// voyage yearRange
 							// val.yearRange.hasChanged = val.yearRange.current.searchTerm !== val.yearRange.default.searchTerm
 
@@ -496,13 +488,24 @@ Vue.component("form-checkbox", {
 					this.searchQuery.vesselName.value = this.searchFilter.vesselName.default;
 					this.searchQuery.vesselOwner.value = this.searchFilter.vesselOwner.default;
 				},
+				handle: function(){
+					debugger;
+				},
 				changed(value) {
-
+					this.total = this.total + value;
     		},
+				announce(value) {
+					debugger;
+					alert(JSON.stringify(this.searchFilter));
+				}
 			},
 
 			mounted: function() {
 				search(this.searchFilter);
+				// this.$on('applied', function(){
+				// 	// this.count = this.count1 + this.count2+ this.count3;
+				// });
+
 			}
 
 		})

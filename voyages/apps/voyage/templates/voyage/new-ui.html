@@ -86,11 +86,12 @@
 				</li>
 
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ship, Nation, Owner</a>
+					<v-menu-title :count="total" title="Ship, Nation, Owner"></v-menu-title>
+
 					<div class="">
 						<ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
 
-							<v-panel title="Voyages and Vessels" is-advanced="false">
+							<v-panel @announced="announce" title="Voyages and Vessels" is-advanced="false" @applied="changed">
 								<div slot="v-panel-header">
 									<v-panel-header title="Voyages and Vessels" description="Parameters about voyages and vessels" count="0"></v-panel-header>
 								</div>
@@ -98,32 +99,32 @@
 								<div slot="v-panel-content">
 									<v-input @change="changed"
 										title="Voyage Identification Number"
-										description=""
+										description="Each voyage in the database has a unique identification number. This could be a range."
 										var-name="imp_arrival_at_port_of_dis"
-										search-term-caption="Enter a value"
-										:filter="searchFilter.yearRange"
+										search-term-caption=""
+										:filter="searchFilter.vin"
 										:is-numeric=true>
 									</v-input>
 
 									<v-input @change="changed"
 										title="Vessel Names"
-										description=""
+										description="The name of the vessels. This could be a partial keyword."
 										var-name="imp_arrival_at_port_of_dis"
-										search-term-caption="Enter a name"
-										:filter="searchFilter.yearRange"
+										search-term-caption=""
+										:filter="searchFilter.vin"
 										:is-numeric=false>
 									</v-input>
 
 									<v-input @change="changed"
 										title="Vessel Owners"
-										description=""
+										description="The name of the vessel owners. This could be a partial keyword."
 										var-name="imp_arrival_at_port_of_dis"
-										search-term-caption="Enter an owner"
-										:filter="searchFilter.yearRange"
+										search-term-caption=""
+										:filter="searchFilter.vin"
 										:is-numeric=false>
 									</v-input>
 
-
+<!--
 									<div class="form-group">
 										<label for="form-vin">Voyage Identification Number</label>
 										<input type="number" v-model="searchFilter.vin.current.searchTerm[0]" id="form-vin" class="form-control">
@@ -139,77 +140,105 @@
 
 									 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
 									 <button v-on:click="vinReset" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
+-->
 								</div>
 							</v-panel>
 
-								<v-panel title="Flag" is-advanced="false">
+								<v-panel @announced="announce"  title="Flag" is-advanced="false" @applied="changed">
 									<div slot="v-panel-header">
 										<v-panel-header title="Flag" description="Parameters about Flag" count="0"></v-panel-header>
 									</div>
 
 									<div slot="v-panel-content">
-										<v-input @change="changed"
-											title=""
-											description=""
+										<!-- <v-input @change="changed"
+											title="Flag"
+											description="The flag of a ship. This could be a partial "
 											var-name="imp_arrival_at_port_of_dis"
 											search-term-caption="Enter an flag's name"
 											:filter="searchFilter.yearRange">
-										</v-input>
+										</v-input> -->
 
-										<div class="form-group">
+										<v-select3
+											title="Flag"
+											:filter="searchFilter.flag.data"
+											description="The flag of a ship. Choose from the following."
+											var-name="imp_arrival_at_port_of_dis"
+											:is-imputed=false
+											:is-advanced=true>
+										</v-select3>
+
+										<v-select3
+											title="Flag Imputed"
+											:filter="searchFilter.flag.data"
+											description="The flag of a ship. Choose from the following."
+											var-name="imp_arrival_at_port_of_dis"
+											:is-imputed=true
+											:is-advanced=false>
+										</v-select3>
+
+										<!-- <div class="form-group">
 											<label for="form-flag">Flag</label>
-											<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-										</div>
+											<v-select3
+												title="Flag"
+												:filter="searchFilter.flag.data"
+												description="The flag of a ship. Choose from the following."
+												var-name="imp_arrival_at_port_of_dis">
+											</v-select3>
 
-										<div class="form-group">
+											<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+										</div> -->
+
+										<!-- <div class="form-group">
 											<label for="form-flag-imputed">Flag Imputed</label>
 											<form-select2-multiple tag-id="form-flag-imputed" tag-name="countries[]" v-bind:data="searchFilter.flagImputed.data"></form-select2-multiple>
-										</div>
+										</div> -->
 									</div>
 								</v-panel>
 
-								<v-panel title="Construction and Registration" is-advanced="false">
+								<v-panel @announced="announce" title="Construction and Registration" is-advanced="false">
 									<div slot="v-panel-header">
-										<v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration" count="0"></v-panel-header>
+										<v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration" :count="count"></v-panel-header>
 									</div>
 
 									<div slot="v-panel-content">
 										<v-input @change="changed"
 											title="Year Constructed"
-											description=""
+											description="Enter the year when the ships were constructed. This could be a range."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=" "
+											:filter="searchFilter.vin"
+											:is-numeric=true>
 										</v-input>
 
 										<v-input @change="changed"
 											title="Place Constructed"
-											description=""
+											description="Enter the place where the ships were constructed. This could be a partial keyword."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin"
+											:is-numeric=false>
 										</v-input>
 
 										<v-input @change="changed"
 											title="Year Registered"
-											description=""
+											description="Enter the year when the ships were registered. This could be a range."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin"
+											:is-numeric=true>
 										</v-input>
 
 										<v-input @change="changed"
 											title="Place Registered"
-											description=""
+											description="Enter the place where the ships were registered. This could be a partial keyword."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin">
 										</v-input>
 									</div>
 								</v-panel>
 
-								<v-panel title="Rig, Tonnage, and Guns Mounted" is-advanced="false">
+								<v-panel @announced="announce" title="Rig, Tonnage, and Guns Mounted" is-advanced="false">
 									<div slot="v-panel-header">
 										<v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted" count="0"></v-panel-header>
 									</div>
@@ -217,34 +246,38 @@
 									<div slot="v-panel-content">
 										<v-input @change="changed"
 											title="Rig"
-											description=""
+											description="The rig of the ship. Choose from the following."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin">
 										</v-input>
 
 										<v-input @change="changed"
 											title="Tonnage"
-											description=""
+											description="The tonnage of the ships. This could be a range."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin"
+											:is-numeric=true>
 										</v-input>
 
 										<v-input @change="changed"
 											title="Standardized Tonnage"
-											description=""
+											description="This is the standardized tonnage calculated by the algorithms. This could be a range."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin"
+											:is-imputed=true
+											:is-advanced=true>
 										</v-input>
 
 										<v-input @change="changed"
 											title="Guns Mounted"
-											description=""
+											description="This is the guns mounted on the ship. This could be a range."
 											var-name="imp_arrival_at_port_of_dis"
-											search-term-caption="Enter an flag's name"
-											:filter="searchFilter.yearRange">
+											search-term-caption=""
+											:filter="searchFilter.vin"
+											:is-numeric=true>
 										</v-input>
 									</div>
 								</v-panel>
@@ -392,7 +425,7 @@
 
 												<div class="form-group">
 													<label for="form-flag">Particular Outcome of Voyage</label>
-													<form-select2-multiple tag-id="form-outcome-of-voyage" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+													<!-- <form-select2-multiple tag-id="form-outcome-of-voyage" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
 												</div>
 
 												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -427,7 +460,7 @@
 
 												<div class="form-group">
 												 <label for="form-flag">Outcome of Voyage if Captured</label>
-												 <form-select2-multiple tag-id="form-outcome-of-voyage-if-captured" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+												 <!-- <form-select2-multiple tag-id="form-outcome-of-voyage-if-captured" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
 											 </div>
 
 												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselApply" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -443,7 +476,7 @@
 												<div class="popover-content">
 													<div class="form-group">
 													 <label for="form-flag">Outcome of Voyage for Owner</label>
-													 <form-select2-multiple tag-id="form-outcome-of-voyage-for-owner" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
+													 <!-- <form-select2-multiple tag-id="form-outcome-of-voyage-for-owner" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
 												 </div>
 												</div>
 										</div>
@@ -467,6 +500,51 @@
 
 				<li class="nav-item dropdown">
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						Itinerary
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="">Menu Item</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						Captain and Crew
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="">Menu Item</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						Slave
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="">Menu Item</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						Source
 					</a>
 					<div class="dropdown-menu">
@@ -483,9 +561,10 @@
 			</ul>
 
 			<ul class="navbar-nav ml-auto ">
+
 				<li class="nav-item dropdown">
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						Cog
+						<i class="fa fa-angle-double-down" aria-hidden="true"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<div>
@@ -504,7 +583,26 @@
 
 				<li class="nav-item dropdown">
 					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						?
+						<i class="fa fa-cog" aria-hidden="true"></i>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<div>
+							<input type="checkbox" id="checkbox" v-model="isAdvanced">
+							<label for="checkbox">{{ isAdvanced }}</label>
+						</div>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<a class="dropdown-item" href="">Menu Item</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="">Menu Item</a>
+					</div>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-heart" aria-hidden="true"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a class="dropdown-item" href="#">English</a>
@@ -644,9 +742,11 @@
 <script src="{{ STATIC_URL }}scripts/new-ui/form-data.js" type="text/javascript"></script>
 
 <!-- vue components -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-menu-title.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-textbox.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-select.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/components/v-select2.js"></script>
+<!-- <script src="{{ STATIC_URL }}scripts/vue/components/v-select2.js"></script> -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select3.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-treeselect.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-panel.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/input.js"></script>

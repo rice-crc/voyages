@@ -3,12 +3,27 @@ Vue.component('v-panel', {
   props: ['title', "isAdvanced"],
   template: `
     <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
-        <div class="dropdown-menu-title">{{titleValue}}</div>
+        <div class="dropdown-menu-title">
+          <div class="dropdown-menu-title-text">
+            {{titleValue}}
+          </div>
+          <div class="dropdown-menu-title-count">
+            <b-badge variant="danger">{{count}}</b-badge>
+          </div>
+        </div>
         <div :id="idValue" class="search-submenu popover">
             <div class="popover-content">
-              <slot name="v-panel-header"></slot>
+              <slot :count="count" name="v-panel-header"></slot>
               <slot name="v-panel-content"></slot>
               <slot name="v-panel-control"></slot>
+              <div class="margin-v">
+              <b-button variant="info" size="sm" @click="announce">
+              Apply
+              </b-button>
+              <b-button variant="outline-secondary" size="sm" @click="reset">
+              Reset
+              </b-button>
+              </div>
             </div>
         </div>
     </li>
@@ -19,16 +34,30 @@ Vue.component('v-panel', {
       titleValue: '',
       isAdvancedValue: '',
       idValue: null,
+      count: 0,
     }
   },
 
   methods: {
-    emitParent: function() {
-      // this.$emit('blurred', this.textboxValue);
+    increment: function() {
+      this.count = this.count + 1;
+      this.$emit('applied', this.count);
+    },
+    announce: function() {
+      debugger;
+      this.$emit('announced');
+    },
+    reset: function() {
+      this.$emit('reset');
     }
   },
-
   watch: {
+    count: {
+      handler: function(){
+        debugger;
+        this.$emit('applied', this.count);
+      }
+    }
   },
 
   mounted: function() { // load value initially
@@ -51,9 +80,15 @@ Vue.component('v-panel-header', {
         </div>
         <div class="v-panel-counter">
           <div class="text-center">
+          <!--
             <b-button variant="info" size="sm">
               Parameters Applied <b-badge variant="light">{{count}}</b-badge>
             </b-button>
+          -->
+          <b-button variant="info" size="sm">
+            <i class="fa fa-question-circle"></i>
+            Help
+          </b-button>
           </div>
         </div>
       </div>
