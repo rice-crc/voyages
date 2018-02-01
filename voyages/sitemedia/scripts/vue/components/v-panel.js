@@ -85,8 +85,8 @@ Vue.component('v-panel-header', {
               Parameters Applied <b-badge variant="light">{{count}}</b-badge>
             </b-button>
           -->
-          <b-button variant="info" size="sm">
-            <i class="fa fa-question-circle"></i>
+          <b-button variant="outline-info" size="sm">
+            <i class="fa fa-question-circle-o"></i>
             Help
           </b-button>
           </div>
