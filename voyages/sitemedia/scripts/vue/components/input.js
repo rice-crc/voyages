@@ -28,10 +28,13 @@ Vue.component('v-input', {
         <div class="col-md-4" v-if="isNumeric">
           <v-select @changed="updateOp" :value="item.op" :isNumeric="isNumeric"></v-select>
         </div>
-        <div class="col-md-4" v-if="isNumeric">
+        <div class="col-md-4" v-if="isNumeric && options.searchTerm1Disabled">
           <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
         </div>
-        <div class="col-md-4" v-if="options.searchTerm1Disabled && isNumeric">
+        <div class="col-md-8" v-if="isNumeric && !options.searchTerm1Disabled">
+          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
+        </div>
+        <div class="col-md-4" v-if="options.searchTerm1Disabled && isNumeric ">
           <v-textbox @blurred="updateSearchTerm1" :search-term-caption="options.searchTermCaption1" :value="item.searchTerm1" :type="options.type"></v-textbox>
         </div>
       </div>
