@@ -17,6 +17,7 @@
 <!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/> -->
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/select2@4.0.3/dist/css/select2.min.css"/>
+<link type="text/css" rel="stylesheet" href="{% sass_src 'scss/library/bootstrap-tour.scss' %}"/>
 {% endblock %}
 
 {% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
@@ -84,6 +85,9 @@
 							</ul>
 					</div>
 				</li>
+
+
+				<!-- SNO --><!-- SNO --><!-- SNO --><!-- SNO --><!-- SNO --><!-- SNO --><!-- SNO --><!-- SNO -->
 
 				<li class="nav-item dropdown">
 					<v-menu-title :count="total" title="Ship, Nation, Owner"></v-menu-title>
@@ -423,12 +427,102 @@
 					</div>
 				</li>
 
+				<!-- Outcome --><!-- Outcome --><!-- Outcome --><!-- Outcome --><!-- Outcome --><!-- Outcome --><!-- Outcome --><!-- Outcome -->
+
 
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Outcome</a>
+					<v-menu-title :count="total" title="Outcome"></v-menu-title>
 					<div class="">
 						<ul class="dropdown-menu search-menu" id="outcome-menu" role="menu">
-								<li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome">
+							<v-panel @announced="announce"  title="Particular Outcome of Voyage" is-advanced="false" @applied="changed">
+								<div slot="v-panel-header">
+									<v-panel-header title="Particular Outcome of Voyage" description="Parameters about particular outcome of voyage" count="0"></v-panel-header>
+								</div>
+								<div slot="v-panel-content">
+									<v-select3
+										title="Particular Outcome of Voyage"
+										:filter="searchFilter.outcome1"
+										description="Choose from the following."
+										var-name="imp_arrival_at_port_of_dis"
+										:is-imputed=false
+										:is-advanced=true>
+									</v-select3>
+								</div>
+							</v-panel>
+
+							<v-panel @announced="announce"  title="Outcome of Voyage for Slaves" is-advanced="false" @applied="changed">
+								<div slot="v-panel-header">
+									<v-panel-header title="Outcome of Voyage for Slaves" description="Parameters about outcome of voyage for slaves" count="0"></v-panel-header>
+								</div>
+								<div slot="v-panel-content">
+									<v-select3
+										title="Outcome of Voyage for Slaves"
+										:filter="searchFilter.outcome2"
+										description="Choose from the following."
+										var-name="imp_arrival_at_port_of_dis"
+										:is-imputed=true
+										:is-advanced=false>
+									</v-select3>
+
+								</div>
+							</v-panel>
+
+
+							<v-panel @announced="announce"  title="Outcome of Voyage if Ship Captured" is-advanced="false" @applied="changed">
+								<div slot="v-panel-header">
+									<v-panel-header title="Outcome of Voyage if Ship Captured" description="Parameters about outcome of voyage if ship captured" count="0"></v-panel-header>
+								</div>
+								<div slot="v-panel-content">
+									<v-select3
+										title="Outcome of Voyage if Ship Captured"
+										:filter="searchFilter.outcome3"
+										description="Choose from the following."
+										var-name="imp_arrival_at_port_of_dis"
+										:is-imputed=true
+										:is-advanced=true>
+									</v-select3>
+
+								</div>
+							</v-panel>
+
+							<v-panel @announced="announce"  title="Outcome of Voyage for Owner" is-advanced="false" @applied="changed">
+								<div slot="v-panel-header">
+									<v-panel-header title="Outcome of Voyage for Owner" description="Parameters about outcome of voyage for owner" count="0"></v-panel-header>
+								</div>
+								<div slot="v-panel-content">
+									<v-select3
+										title="Outcome of Voyage for Owner"
+										:filter="searchFilter.outcome4"
+										description="Choose from the following."
+										var-name="imp_arrival_at_port_of_dis"
+										:is-imputed=true
+										:is-advanced=false>
+									</v-select3>
+
+								</div>
+							</v-panel>
+
+							<v-panel @announced="announce"  title="African Resistance" is-advanced="false" @applied="changed">
+								<div slot="v-panel-header">
+									<v-panel-header title="African Resistance" description="Parameters about African resistance" count="0"></v-panel-header>
+								</div>
+								<div slot="v-panel-content">
+									<v-select3
+										title="African Resistance"
+										:filter="searchFilter.outcome5"
+										description="Choose from the following."
+										var-name="imp_arrival_at_port_of_dis"
+										:is-imputed=false
+										:is-advanced=false>
+									</v-select3>
+
+								</div>
+							</v-panel>
+
+
+
+
+								<!-- <li class="dropdown-item dropdown-item-li search-dropdown-item" data-submenu-id="outcome">
 									Particular Outcome of Voyage
 									<div id="outcome" class="search-submenu popover">
 											<h3 class="popover-title">Particular Outcome of Voyage</h3>
@@ -436,7 +530,7 @@
 
 												<div class="form-group">
 													<label for="form-flag">Particular Outcome of Voyage</label>
-													<!-- <form-select2-multiple tag-id="form-outcome-of-voyage" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
+													<form-select2-multiple tag-id="form-outcome-of-voyage" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
 												</div>
 
 												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -471,7 +565,7 @@
 
 												<div class="form-group">
 												 <label for="form-flag">Outcome of Voyage if Captured</label>
-												 <!-- <form-select2-multiple tag-id="form-outcome-of-voyage-if-captured" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
+												 <form-select2-multiple tag-id="form-outcome-of-voyage-if-captured" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
 											 </div>
 
 												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselApply" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-primary btn-sm">Apply</button>
@@ -487,7 +581,7 @@
 												<div class="popover-content">
 													<div class="form-group">
 													 <label for="form-flag">Outcome of Voyage for Owner</label>
-													 <!-- <form-select2-multiple tag-id="form-outcome-of-voyage-for-owner" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple> -->
+													 <form-select2-multiple tag-id="form-outcome-of-voyage-for-owner" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
 												 </div>
 												</div>
 										</div>
@@ -498,34 +592,208 @@
 										<div id="outcome-african-resistance" class="search-submenu popover">
 												<h3 class="popover-title">African Resistance</h3>
 												<div class="popover-content">
-													<!-- <form-value-component tag-id="form-year-construction" form-label="Year of Construction" v-model="searchFilter.yearConstruction.current"></form-value-component>
-													<form-value-component tag-id="form-year-registration" form-label="Year of Registration" v-model="searchFilter.yearRegistration.current"></form-value-component> -->
+													<form-value-component tag-id="form-year-construction" form-label="Year of Construction" v-model="searchFilter.yearConstruction.current"></form-value-component>
+													<form-value-component tag-id="form-year-registration" form-label="Year of Registration" v-model="searchFilter.yearRegistration.current"></form-value-component>
 												</div>
 										</div>
-								</li>
+								</li> -->
 
 							</ul>
 					</div>
 				</li>
 
+				<!-- <li class="nav-item dropdown">
+					<v-menu-title :count="total" title="Itinerary"></v-menu-title>
+
+					<div class="">
+						<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
+
+							<v-panel @announced="announce" title="Itinerary" is-advanced="false">
+								<div slot="v-panel-header">
+									<v-panel-header title="Itinerary" description="Parameters about voyage itinerary" count="0"></v-panel-header>
+								</div>
+
+								<div slot="v-panel-content">
+									<v-input @change="changed"
+										title="Captain's Name"
+										description="The name of the captain. This could be a partial keyword."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=false>
+									</v-input>
+								</div>
+							</v-panel>
+
+							<v-panel @announced="announce" title="Crew" is-advanced="false">
+								<div slot="v-panel-header">
+									<v-panel-header title="Crew" description="Parameters about ship crew" count="0"></v-panel-header>
+								</div>
+
+								<div slot="v-panel-content">
+									<v-input @change="changed"
+										title="Crew at Voyage Outset"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin">
+									</v-input>
+
+									<v-input @change="changed"
+										title="Crew at First Landing of Slaves"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Crew Deaths during Voyage"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-imputed=true
+										:is-advanced=true>
+									</v-input>
+
+								</div>
+							</v-panel>
+
+						</ul>
+					</div>
+				</li> -->
+
+				<!-- Dates --><!-- Dates --><!-- Dates --><!-- Dates --><!-- Dates --><!-- Dates --><!-- Dates --><!-- Dates -->
+
 
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						Itinerary
-					</a>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="">Menu Item</a>
+					<v-menu-title :count="total" title="Dates"></v-menu-title>
+
+					<div class="">
+						<ul class="dropdown-menu search-menu" id="dates" role="menu">
+
+							<v-panel @announced="announce" title="Voyage Dates Overview" is-advanced="false">
+								<div slot="v-panel-header">
+									<v-panel-header title="Voyage Dates Overview" description="Parameters about dates regarding voyage arrival, duration, and passage." count="0"></v-panel-header>
+								</div>
+
+								<div slot="v-panel-content">
+									<v-input @change="changed"
+										title="Year Arrived with Slaves"
+										description="The year in which slaves arrived. This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=true
+										:is-imputed=true>
+									</v-input>
+
+
+									<v-input @change="changed"
+										title="Voyage Length - Homeport to Slaves Landing"
+										description="The length of the voyage, measured in days. This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=true
+										:is-imputed=true
+										:is-advanced=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Middle Passage"
+										description="The passage of the voyage, measured in days. This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=true
+										:is-imputed=true
+										:is-advanced=true>
+									</v-input>
+								</div>
+							</v-panel>
+
+							<v-panel @announced="announce" title="During the Voyage" is-advanced="false">
+								<div slot="v-panel-header">
+									<v-panel-header title="During the Voyage" description="Parameters about dates during the voyage" count="0"></v-panel-header>
+								</div>
+
+								<div slot="v-panel-content">
+									<v-input @change="changed"
+										title="Date Voyage Began"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-advanced=true
+										:is-numeric=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Date Trade Began in Africa"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-numeric=true
+										:is-advanced=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Date Vessel Departed Africa"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-imputed=false
+										:is-advanced=true
+										:is-numeric=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Date Vessel Arrived with Slaves"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-imputed=false
+										:is-advanced=true
+										:is-numeric=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Date Vessel Departed for Homeport"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-imputed=false
+										:is-advanced=true
+										:is-numeric=true>
+									</v-input>
+
+									<v-input @change="changed"
+										title="Date Voyage Completed"
+										description="This could be a range."
+										var-name="imp_arrival_at_port_of_dis"
+										search-term-caption=""
+										:filter="searchFilter.vin"
+										:is-imputed=false
+										:is-advanced=true
+										:is-numeric=true>
+									</v-input>
+
+								</div>
+							</v-panel>
+
+						</ul>
 					</div>
 				</li>
 
 
-				<li class="nav-item dropdown">
+				<!-- <li class="nav-item dropdown">
 					<v-menu-title :count="total" title="Captain and Crew"></v-menu-title>
 
 					<div class="">
@@ -586,11 +854,12 @@
 
 						</ul>
 					</div>
-				</li>
+				</li> -->
 
 
 
 
+				<!-- Slave --><!-- Slave --><!-- Slave --><!-- Slave --><!-- Slave --><!-- Slave --><!-- Slave --><!-- Slave -->
 
 
 
@@ -829,7 +1098,7 @@
 
 								<div slot="v-panel-content">
 									<v-input @change="changed"
-										title="Sterling cash price in Jamaica"
+										title="Sterling Cash Price in Jamaica"
 										description="This could be a range."
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption=""
@@ -840,7 +1109,7 @@
 									</v-input>
 
 									<v-input @change="changed"
-										title="Slave deaths during middle passage"
+										title="Slave Deaths during Middle Passage"
 										description="This could be a range."
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption=""
@@ -851,7 +1120,7 @@
 									</v-input>
 
 									<v-input @change="changed"
-										title="Mortality rate"
+										title="Mortality Rate"
 										description="This could be a range."
 										var-name="imp_arrival_at_port_of_dis"
 										search-term-caption=""
@@ -867,7 +1136,7 @@
 				</li>
 
 
-
+<!-- Source --><!-- Source --><!-- Source --><!-- Source --><!-- Source --><!-- Source --><!-- Source --><!-- Source -->
 
 
 
@@ -875,28 +1144,27 @@
 				<li class="nav-item dropdown">
 					<v-menu-title :count="total" title="Source"></v-menu-title>
 					<div class="">
-						<ul class="dropdown-menu search-menu" id="source" role="menu">
+					<ul class="dropdown-menu search-menu" id="source" role="menu">
 
-							<v-panel @announced="announce" title="Source" is-advanced="false">
-								<div slot="v-panel-header">
-									<v-panel-header title="Source" description="Parameter about source of data." count="0"></v-panel-header>
-								</div>
+						<v-panel @announced="announce" title="Data Source" is-advanced="false" @applied="changed">
+							<div slot="v-panel-header">
+								<v-panel-header title="Data Source" description="Overall numbers about slaves in the trade" count="0"></v-panel-header>
+							</div>
 
-								<div slot="v-panel-content">
-									<v-input @change="changed"
-										title="Source"
-										description="This is the source of the data. This could be a partial keyword."
-										var-name="imp_arrival_at_port_of_dis"
-										search-term-caption=""
-										:filter="searchFilter.vin"
-										:is-numeric=false
-										:is-imputed=false
-										:is-advanced=false>
-									</v-input>
-								</div>
-							</v-panel>
-
-							</ul>
+							<div slot="v-panel-content">
+								<v-input @change="changed"
+									title="Source"
+									description="This is the source of the data. This could be a partial keyword."
+									var-name="imp_arrival_at_port_of_dis"
+									search-term-caption=""
+									:filter="searchFilter.vin"
+									:is-numeric=false
+									:is-imputed=false
+									:is-advanced=false>
+								</v-input>
+							</div>
+						</v-panel>
+						</ul>
 					</div>
 				</li>
 
@@ -904,8 +1172,15 @@
 
 			<ul class="navbar-nav ml-auto ">
 
+				<!-- <li class="nav-item dropdown">
+					<a @click="startTour" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						Tour
+					</a>
+
+				</li> -->
+
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+					<a id="show-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-angle-double-down" aria-hidden="true"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -924,7 +1199,7 @@
 				</li>
 
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+					<a id="configure-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-cog" aria-hidden="true"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -943,7 +1218,7 @@
 				</li>
 
 				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+					<a id="heart-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-heart" aria-hidden="true"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -1070,6 +1345,7 @@
 <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
 <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 <script src="https://unpkg.com/select2@4.0.3/dist/js/select2.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap-tour.js"></script>
 
 <script src="{{ STATIC_URL }}scripts/library/string-utils.js" type="text/javascript"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/qtip/jquery.qtip.min.js"></script>
