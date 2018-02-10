@@ -400,7 +400,12 @@ Vue.component("form-checkbox", {
 						default: "",
 						current: "",
 						hasChanged: false,
-					}
+					},
+					outcome1: outcome1,
+					outcome2: outcome2,
+					outcome3: outcome3,
+					outcome4: outcome4,
+					outcome5: outcome5,
 				},
 				searchQuery: {
 					vin: {
@@ -497,11 +502,50 @@ Vue.component("form-checkbox", {
 				announce(value) {
 					debugger;
 					alert(JSON.stringify(this.searchFilter));
+				},
+				startTour() {
+					// Instance the tour
+					$(function () {
+					    $('[data-toggle="popover"]').popover()
+					});
+
+					var tour = new Tour({
+						steps: [
+						// {
+						//   element: ".trans-search-bar",
+						//   title: "Search Filter",
+						//   content: "This is where you can set up your search filter."
+						// },
+						{
+							element: "#show-query",
+							title: "Show Query",
+							content: "You can view your current query here."
+						},
+						{
+							element: "#configure-query",
+							title: "Configure Query",
+							content: "You can choose to show or hide advanced filters."
+						},
+						{
+							element: "#heart-query",
+							title: "Save/Load Query",
+							content: "You can a particular query and/or load a particular query."
+						}
+					]});
+
+					// Initialize the tour
+					tour.init();
+
+					// Start the tour
+					debugger;
+					tour.start();
 				}
 			},
 
 			mounted: function() {
 				search(this.searchFilter);
+
+
 				// this.$on('applied', function(){
 				// 	// this.count = this.count1 + this.count2+ this.count3;
 				// });

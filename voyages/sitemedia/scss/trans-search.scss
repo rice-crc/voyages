@@ -50,12 +50,17 @@
 }
 
 #results_main_table {
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
-table.dataTable thead>tr>th.sorting, .table th, .table td {
-  padding: 0.25rem 0.5rem !important;
+table.dataTable thead>tr>th.sorting, .table td {
+  padding: 0.25rem 1rem !important;
 }
+
+table.dataTable thead>tr>th.sorting, .table th {
+  padding: 0.5rem 1rem !important;
+}
+
 
 
 .trans-tab .nav-item {
