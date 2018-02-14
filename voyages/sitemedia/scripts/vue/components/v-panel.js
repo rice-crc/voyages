@@ -2,7 +2,7 @@
 Vue.component('v-panel', {
   props: ['title', "isAdvanced"],
   template: `
-    <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+    <li @activated="calculate" v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
             {{titleValue}}
@@ -39,22 +39,23 @@ Vue.component('v-panel', {
   },
 
   methods: {
-    increment: function() {
+    calculate() {
+      debugger;
+    },
+    increment() {
       this.count = this.count + 1;
       this.$emit('applied', this.count);
     },
-    announce: function() {
-      debugger;
+    announce() {
       this.$emit('announced');
     },
-    reset: function() {
+    reset() {
       this.$emit('reset');
     }
   },
   watch: {
     count: {
       handler: function(){
-        debugger;
         this.$emit('applied', this.count);
       }
     }

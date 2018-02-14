@@ -293,19 +293,137 @@ Vue.component("form-checkbox", {
 
 
 
+
 		// main app
 		var searchBar = new Vue({
 			el: "#search-bar",
 			delimiters: ['{{', '}}'],
 			data: {
-				total: 0,
-				count: 0,
-				count1: 0,
-				count2: 3,
-				count3: 0,
-				text: "text",
 				isAdvanced: true,
 				searchFilter: {
+					count: {
+						slave: {
+							total: 0,
+							overallNumbers: 0,
+							purchaseNumbers: 0,
+							landingNumbers: 0,
+							percentageBySexAndAgeGroup: 0,
+							otherCharacteristics: 0,
+						}
+					},
+
+					// 3-Total Slaves Embarked Imputed
+					var_imp_total_num_slaves_purchased: {
+						varName: 'var_imp_total_num_slaves_purchased',
+						value: {
+							op: "is between",
+							searchTerm0: null,
+							searchTerm1: null,
+						},
+						activated: false,
+					},
+
+					// 3-Total Slaves Embarked
+					var_total_num_slaves_purchased: {
+						varName: 'var_total_num_slaves_purchased',
+						value: {
+							op: "is between",
+							searchTerm0: null,
+							searchTerm1: null,
+						},
+						activated: false,
+					},
+
+					// 3-Total Slaves Disembarked Imputed
+					var_imp_total_slaves_disembarked: {
+						varName: 'var_imp_total_slaves_disembarked',
+						value: {
+							op: "is between",
+							searchTerm0: null,
+							searchTerm1: null,
+						},
+						activated: false,
+					},
+
+					groups: {
+						// 1-SLAVE
+						slave: {
+							// 2-Overall Numbers
+							overallNumbers: {
+								// 3-Total Slaves Embarked Imputed
+								var_imp_total_num_slaves_purchased: {
+									varName: 'var_imp_total_num_slaves_purchased',
+									value: {
+										op: "is between",
+										searchTerm0: null,
+										searchTerm1: null,
+									},
+									activated: false,
+								},
+
+								// 3-Total Slaves Embarked
+								var_total_num_slaves_purchased: {
+									varName: 'var_total_num_slaves_purchased',
+									value: {
+										op: "is between",
+										searchTerm0: null,
+										searchTerm1: null,
+									},
+									activated: false,
+								},
+
+								// 3-Total Slaves Disembarked Imputed
+								var_imp_total_slaves_disembarked: {
+									varName: 'var_imp_total_slaves_disembarked',
+									value: {
+										op: "is between",
+										searchTerm0: null,
+										searchTerm1: null,
+									},
+									activated: false,
+								},
+
+								count: 0
+							},
+
+							purchaseNumbers: {
+								var_num_slaves_intended_first_port: {
+									value: {
+										op: "is between",
+										searchTerm0: null,
+										searchTerm1: null,
+									},
+									activated: false,
+								},
+								var_num_slaves_carried_first_port: {
+									value: {
+										op: "is between",
+										searchTerm0: null,
+										searchTerm1: null,
+									},
+									activated: false,
+								},
+								var_num_slaves_carried_second_port: {
+
+								},
+								var_num_slaves_carried_third_port: {
+
+								},
+								count: 0
+							},
+							landingNumbers: {
+								count: 0
+							},
+							percentageBySexAndAgeGroup: {
+								count: 0
+							},
+							otherCharacteristics: {
+								count: 0
+							},
+							count: 0,
+						}
+					},
+
 					yearRange: {
 						default: {
 							op: "is between",
@@ -322,6 +440,27 @@ Vue.component("form-checkbox", {
 						varName: "imp_arrival_at_port_of_dis",
 						hasChanged: true,
 						count: 0,
+					},
+					var_voyage_id: {
+						varName: 'var_voyage_id',
+						value: {
+							op: "is between",
+							searchTerm0: null,
+							searchTerm1: null,
+						},
+						activated: false,
+						default: {
+							op: "equals",
+							searchTerm: [null, null],
+						},
+						current: {
+							op: "equals",
+							searchTerm: [null, null],
+						},
+						value: {
+							op: "equals",
+							searchTerm: [null, null],
+						},
 					},
 					vin: {
 						default: {
@@ -425,6 +564,25 @@ Vue.component("form-checkbox", {
 					}
 				}
 			},
+			computed: {
+				slaveCount: function() {
+					var count = 0;
+					// We need to iterate the string keys (not the objects)
+					for(var someKey in this.searchFilter.groups.slave) {
+					  // We check if this key exists in the obj
+					  if (this.searchFilter.groups.slave.overallNumbers.hasOwnProperty(someKey)) {
+					    // someKey is only the KEY (string)! Use it to get the obj:
+					    var myActualPropFromObj = this.searchFilter.groups.slave[someKey]; // Since dynamic, use []
+							if (myActualPropFromObj.hasOwnProperty("activated")) {
+								if (myActualPropFromObj.activated) {
+									count += 1;
+								}
+							}
+					  }
+					}
+					return count;
+				}
+			},
 			watch: {
 					isAdvanced: function(val){
 						$menu.menuAim({
@@ -432,9 +590,21 @@ Vue.component("form-checkbox", {
 								deactivate: deactivateSubmenu
 						});
 					},
+
+
 					searchFilter: {
 						handler: function(val){
-							this.total = this.count1 + this.count2 + this.count3;
+
+
+
+							// slave count
+							val.count.slave.total = val.count.slave.overallNumbers+
+																			val.count.slave.purchaseNumbers+
+																			val.count.slave.landingNumbers+
+																			val.count.slave.percentageBySexAndAgeGroup+
+																			val.count.slave.otherCharacteristics;
+
+
 							// voyage yearRange
 							// val.yearRange.hasChanged = val.yearRange.current.searchTerm !== val.yearRange.default.searchTerm
 
@@ -459,15 +629,28 @@ Vue.component("form-checkbox", {
 
 							// execute search
 
+
+
+							if (this.searchFilter.var_voyage_id.activated) {
+								this.total = 1;
+							} else {
+								this.total = 0;
+							}
 						},
 						deep: true,
 				},
 			},
 
 			methods: {
+				calculate: function(varName, value){
+					if (value) {
+						this.searchFilter[varName].activated = true;
+					} else {
+						this.searchFilter[varName].activated = false;
+					}
+				},
 				yearRangeApply: function(val){
 					this.searchQuery.yearRange.value = this.searchFilter.yearRange.current;
-					debugger;
 					search(this.searchFilter);
 				},
 				yearRangeReset: function(val){
@@ -494,13 +677,11 @@ Vue.component("form-checkbox", {
 					this.searchQuery.vesselOwner.value = this.searchFilter.vesselOwner.default;
 				},
 				handle: function(){
-					debugger;
 				},
 				changed(value) {
-					this.total = this.total + value;
+					// this.total = this.total + value;
     		},
 				announce(value) {
-					debugger;
 					alert(JSON.stringify(this.searchFilter));
 				},
 				startTour() {
@@ -537,7 +718,6 @@ Vue.component("form-checkbox", {
 					tour.init();
 
 					// Start the tour
-					debugger;
 					tour.start();
 				}
 			},

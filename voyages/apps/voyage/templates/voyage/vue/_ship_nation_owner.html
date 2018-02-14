@@ -1,0 +1,170 @@
+{% verbatim %}
+<li class="nav-item dropdown">
+  <v-menu-title :count="0" title="Ship, Nation, Owner"></v-menu-title>
+
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
+
+      <v-panel @announced="announce" title="Voyages and Vessels" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="Voyages and Vessels" description="Parameters about voyages and vessels" count="0"></v-panel-header>
+        </div>
+
+        <div slot="v-panel-content">
+          <v-input @change="changed"
+            title="Voyage Identification Number"
+            description="Each voyage in the database has a unique identification number. This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=true>
+          </v-input>
+
+          <v-checkbox @change="changed"
+            title="Voyages in 1999 CD-ROM"
+            description="Some records are from the original 1999 CD-ROM. Choose whether to include them."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-imputed=false
+            :is-advanced=true
+            checkbox-name="Include 1999 CD-ROM voyages">
+          </v-checkbox>
+
+          <v-input @change="changed"
+            title="Vessel Names"
+            description="The name of the vessels. This could be a partial keyword."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=false>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Vessel Owners"
+            description="The name of the vessel owners. This could be a partial keyword."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=false>
+          </v-input>
+        </div>
+      </v-panel>
+
+        <v-panel @announced="announce"  title="Flag" is-advanced="false" @applied="changed">
+          <div slot="v-panel-header">
+            <v-panel-header title="Flag" description="Parameters about Flag" count="0"></v-panel-header>
+          </div>
+
+          <div slot="v-panel-content">
+            <v-select3
+              title="Flag"
+              :filter="searchFilter.flag.data"
+              description="The flag of a ship. Choose from the following."
+              var-name="imp_arrival_at_port_of_dis"
+              :is-imputed=false
+              :is-advanced=true>
+            </v-select3>
+
+            <v-select3
+              title="Flag Imputed"
+              :filter="searchFilter.flag.data"
+              description="The flag of a ship. Choose from the following."
+              var-name="imp_arrival_at_port_of_dis"
+              :is-imputed=true
+              :is-advanced=false>
+            </v-select3>
+          </div>
+        </v-panel>
+
+        <v-panel @announced="announce" title="Construction and Registration" is-advanced="false">
+          <div slot="v-panel-header">
+            <v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration" :count="0"></v-panel-header>
+          </div>
+
+          <div slot="v-panel-content">
+            <v-input @change="changed"
+              title="Year Constructed"
+              description="Enter the year when the ships were constructed. This could be a range."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-numeric=true>
+            </v-input>
+
+            <v-input @change="changed"
+              title="Place Constructed"
+              description="Enter the place where the ships were constructed. This could be a partial keyword."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-numeric=false>
+            </v-input>
+
+            <v-input @change="changed"
+              title="Year Registered"
+              description="Enter the year when the ships were registered. This could be a range."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-numeric=true>
+            </v-input>
+
+            <v-input @change="changed"
+              title="Place Registered"
+              description="Enter the place where the ships were registered. This could be a partial keyword."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked">
+            </v-input>
+          </div>
+        </v-panel>
+
+        <v-panel @announced="announce" title="Rig, Tonnage, and Guns Mounted" is-advanced="false">
+          <div slot="v-panel-header">
+            <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted" count="0"></v-panel-header>
+          </div>
+
+          <div slot="v-panel-content">
+            <v-input @change="changed"
+              title="Rig"
+              description="The rig of the ship. Choose from the following."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked">
+            </v-input>
+
+            <v-input @change="changed"
+              title="Tonnage"
+              description="The tonnage of the ships. This could be a range."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-numeric=true>
+            </v-input>
+
+            <v-input @change="changed"
+              title="Standardized Tonnage"
+              description="This is the standardized tonnage calculated by the algorithms. This could be a range."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-imputed=true
+              :is-advanced=true>
+            </v-input>
+
+            <v-input @change="changed"
+              title="Guns Mounted"
+              description="This is the guns mounted on the ship. This could be a range."
+              var-name="imp_arrival_at_port_of_dis"
+              search-term-caption=""
+              :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+              :is-numeric=true>
+            </v-input>
+          </div>
+        </v-panel>
+
+      </ul>
+  </div>
+</li>
+{% endverbatim %}
