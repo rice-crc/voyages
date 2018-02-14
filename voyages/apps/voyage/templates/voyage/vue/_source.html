@@ -1,0 +1,30 @@
+{% verbatim %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="0" title="Source"></v-menu-title>
+  <div class="">
+  <ul class="dropdown-menu search-menu" id="source" role="menu">
+
+    <v-panel @announced="announce" title="Data Source" is-advanced="false" @applied="changed">
+      <div slot="v-panel-header">
+        <v-panel-header title="Data Source" description="Overall numbers about slaves in the trade" count="0"></v-panel-header>
+      </div>
+
+      <div slot="v-panel-content">
+        <v-input @change="changed"
+          title="Source"
+          description="This is the source of the data. This could be a partial keyword."
+          var-name="imp_arrival_at_port_of_dis"
+          search-term-caption=""
+          :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+          :is-numeric=false
+          :is-imputed=false
+          :is-advanced=false>
+        </v-input>
+      </div>
+    </v-panel>
+    </ul>
+  </div>
+</li>
+
+{% endverbatim %}

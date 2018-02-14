@@ -23,19 +23,19 @@ Vue.component('v-input', {
 
       <div class="row">
         <div class="col-md-12" v-if="!isNumeric">
-          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0"></v-textbox>
+          <v-textbox @entered="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0"></v-textbox>
         </div>
         <div class="col-md-4" v-if="isNumeric">
           <v-select @changed="updateOp" :value="item.op" :isNumeric="isNumeric"></v-select>
         </div>
         <div class="col-md-4" v-if="isNumeric && options.searchTerm1Disabled">
-          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
+          <v-textbox @entered="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
         </div>
         <div class="col-md-8" v-if="isNumeric && !options.searchTerm1Disabled">
-          <v-textbox @blurred="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
+          <v-textbox @entered="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
         </div>
         <div class="col-md-4" v-if="options.searchTerm1Disabled && isNumeric ">
-          <v-textbox @blurred="updateSearchTerm1" :search-term-caption="options.searchTermCaption1" :value="item.searchTerm1" :type="options.type"></v-textbox>
+          <v-textbox @entered="updateSearchTerm1" :search-term-caption="options.searchTermCaption1" :value="item.searchTerm1" :type="options.type"></v-textbox>
         </div>
       </div>
 
@@ -45,14 +45,14 @@ Vue.component('v-input', {
         </div>
       </div>-->
 
-      <!--
+
       <div class="row v-padding">
         <div class="col-md-12">
-          <b-button variant="success" size="sm" @click="apply">Apply</b-button>
-          <b-button variant="secondary" size="sm" @click="reset">Reset</b-button>
+          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
+          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
         </div>
       </div>
-      -->
+
     </div>
   `,
 
@@ -60,20 +60,25 @@ Vue.component('v-input', {
     return {
       item: {
         varName: this.varName,
-        searchTerm0: this.filter.current.searchTerm[0],
-        searchTerm1: this.filter.current.searchTerm[1],
-        op: "equals to",
+        searchTerm0: this.filter.value.searchTerm0,
+        searchTerm1: this.filter.value.searchTerm1,
+        op: this.filter.value.op,
       },
       options: {
         searchTerm1Disabled: false,
         searchTermCaption0: null,
         searchTermCaption1: null,
         type: "text",
+        changed: false,
       }
     }
   },
 
   methods: {
+    calculate() {
+      debugger;
+    },
+
     // form element handlers
     updateSearchTerm0(value) { // handler for variable
       this.item.searchTerm0 = value;
@@ -121,6 +126,26 @@ Vue.component('v-input', {
             this.options.searchTermCaption0 = this.searchTermCaption;
           }
         }
+
+        // apply and reset
+        if (this.item.searchTerm0 !== null || this.item.searchTerm1 !== null) {
+          // changed
+          this.options.changed = true;
+
+          // notify parent that a change has occurred
+          this.$parent.$emit('activated', this.varName, true)
+          // this.$emit();
+          // debugger;
+        } else {
+          // no change
+          this.options.changed = false;
+          // notify parent that a change has not occurred
+          this.$parent.$emit('activated', this.varName, false)
+          // this.$emit('activated', false);
+          // debugger;
+
+        }
+
       },
       deep: true,
     },

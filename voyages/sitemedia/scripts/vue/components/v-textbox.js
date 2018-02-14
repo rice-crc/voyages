@@ -6,7 +6,7 @@ Vue.component("v-textbox", {
       <b-form-input v-model="textboxValue"
                     :type="type"
                     :placeholder="placeholderValue"
-                    @blur.native="emitParent"></b-form-input>
+                    @input="emitParent"></b-form-input>
       <div class="v-form-element-caption">{{searchTermCaption}}</div>
       <!--<div>Value: {{ textboxValue }}</div>-->
     </div>
@@ -21,7 +21,7 @@ Vue.component("v-textbox", {
 
   methods: {
     emitParent: function() {
-      this.$emit('blurred', this.textboxValue);
+      this.$emit('entered', this.textboxValue);
     }
   },
 
