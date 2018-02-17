@@ -1,28 +1,27 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "isAdvanced"],
+  props: ['title', "isAdvanced", "filters", "count", "group"],
   template: `
-    <li @activated="calculate" v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+    <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
             {{titleValue}}
           </div>
           <div class="dropdown-menu-title-count">
-            <b-badge variant="danger">{{count}}</b-badge>
+            <b-badge variant="danger" v-if="count">{{count}}</b-badge>
           </div>
         </div>
         <div :id="idValue" class="search-submenu popover">
             <div class="popover-content">
-              <slot :count="count" name="v-panel-header"></slot>
-              <slot name="v-panel-content"></slot>
-              <slot name="v-panel-control"></slot>
+              <slot name="v-panel-header"></slot>
+              <slot name="v-panel-content" :filters="filtersValue"></slot>
               <div class="margin-v">
-              <b-button variant="info" size="sm" @click="announce">
-              Apply
-              </b-button>
-              <b-button variant="outline-secondary" size="sm" @click="reset">
-              Reset
-              </b-button>
+                <b-button :disabled="controlDisabled" variant="info" size="sm" @click="apply">
+                  Apply
+                </b-button>
+                <b-button :disabled="controlDisabled" variant="outline-secondary" size="sm" @click="reset">
+                  Reset
+                </b-button>
               </div>
             </div>
         </div>
@@ -34,30 +33,26 @@ Vue.component('v-panel', {
       titleValue: '',
       isAdvancedValue: '',
       idValue: null,
-      count: 0,
+      filtersValue: null,
+      controlDisabled: true,
     }
   },
 
   methods: {
-    calculate() {
-      debugger;
+    apply() {
+      this.$emit('apply', this.group, this.filtersValue);
     },
-    increment() {
-      this.count = this.count + 1;
-      this.$emit('applied', this.count);
-    },
-    announce() {
-      this.$emit('announced');
-    },
-    reset() {
-      this.$emit('reset');
+    reset(group) {
+      this.$emit('reset', this.group);
     }
   },
+
   watch: {
     count: {
       handler: function(){
-        this.$emit('applied', this.count);
-      }
+        this.controlDisabled = (this.count.changed > 0) ? false:true;
+      },
+      deep: true,
     }
   },
 
@@ -65,6 +60,7 @@ Vue.component('v-panel', {
     this.titleValue = this.title;
     this.isAdvancedValue = this.isAdvanced;
     this.idValue = hyphenate(this.title);
+    this.filtersValue = this.filters;
   }
 
 })
@@ -86,10 +82,15 @@ Vue.component('v-panel-header', {
               Parameters Applied <b-badge variant="light">{{count}}</b-badge>
             </b-button>
           -->
-          <b-button variant="outline-info" size="sm">
+
+          <b-btn variant="outline-info" size="sm" v-b-modal.modal-center>
             <i class="fa fa-question-circle-o"></i>
             Help
-          </b-button>
+          </b-btn>
+          <b-modal id="modal-center" centered title="modalTitle">
+            <slot name="v-modal-content"></slot>
+          </b-modal>
+
           </div>
         </div>
       </div>
@@ -103,6 +104,7 @@ Vue.component('v-panel-header', {
       titleValue: '',
       descriptionValue: '',
       countValue: null,
+      modalTitle: '',
     }
   },
 
@@ -128,6 +130,9 @@ Vue.component('v-panel-header', {
         this.countValue = value; // countValue is the local copy used in the child component
       }
     },
+    filters: {
+
+    }
 
 
   },
@@ -136,6 +141,7 @@ Vue.component('v-panel-header', {
     this.titleValue = this.title;
     this.descriptionValue = this.description;
     this.countValue = this.count;
+    this.modalTitle = "Help about " + this.title;
   }
 
 })
