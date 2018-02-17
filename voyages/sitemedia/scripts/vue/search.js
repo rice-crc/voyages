@@ -321,7 +321,7 @@ function resetFilter(filter, group) {
 				if (key2 !== "count") {
 					filter[group][key1][key2].value["searchTerm0"] = null;
 					filter[group][key1][key2].value["searchTerm1"] = null;
-					filter[group][key1][key2].value["op"] = "is between";
+					filter[group][key1][key2].value["op"] = "equals to";
 					filter[group][key1][key2].changed = false;
 					filter[group][key1][key2].activated = false;
 				}
