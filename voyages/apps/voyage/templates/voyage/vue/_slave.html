@@ -1,50 +1,59 @@
+{% verbatim %}
+
 <li class="nav-item dropdown">
-	<v-menu-title :count="total" title="Slave"></v-menu-title>
+	<v-menu-title :count="searchFilter.groups.slave.count" title="Slave"></v-menu-title>
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @announced="announce" title="Overall Numbers" is-advanced="false" @applied="changed">
+			<v-panel @reset="reset" group="slave" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" is-advanced="false" :filters="searchFilter.groups.slave.overallNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade" count="0"></v-panel-header>
+					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+
 				</div>
 
-				<div slot="v-panel-content">
-					<v-input @change="changed"
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+	          filters are: {{scope.filters}}
+					</p>
+          <v-input @change="itemChanged"
 						title="Total Slaves Embarked Imputed"
 						description="The total number of slaves embarked before departure. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_imp_total_num_slaves_purchased"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_imp_total_num_slaves_purchased"
 						:is-numeric=true
 						:is-imputed=true>
 					</v-input>
 
-					<v-input @change="changed"
+					<v-input @change="itemChanged"
 						title="Total Slaves Embarked"
 						description="The total number of slaves embarked before departure. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_total_num_slaves_purchased"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_total_num_slaves_purchased"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="changed"
+					<v-input @change="itemChanged"
 						title="Total Slaves Disembarked Imputed"
 						description="The total number of slaves disembarked after arrival. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_imp_total_slaves_disembarked"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_imp_total_slaves_disembarked"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
 					</v-input>
-
 				</div>
 			</v-panel>
 
-			<v-panel @announced="announce"  title="Purchase Numbers" is-advanced="false" @applied="changed">
+			<!-- <v-panel @announced="announce"  title="Purchase Numbers" is-advanced="false" @applied="changed">
 				<div slot="v-panel-header">
 					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers" count="0"></v-panel-header>
 				</div>
@@ -100,7 +109,7 @@
 
 			<v-panel @announced="announce" title="Landing Numbers" is-advanced="false">
 				<div slot="v-panel-header">
-					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves" :count="count"></v-panel-header>
+					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves" :count="1"></v-panel-header>
 				</div>
 				<div slot="v-panel-content">
 					<v-input @change="changed"
@@ -262,8 +271,10 @@
 					</v-input>
 
 				</div>
-			</v-panel>
+			</v-panel> -->
 
 			</ul>
 	</div>
 </li>
+
+{% endverbatim %}

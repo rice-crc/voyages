@@ -1,6 +1,6 @@
 // input (select + textbox x 2)
 Vue.component('v-input', {
-  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter', "isNumeric", "isImputed", "isAdvanced"],
+  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter', "isNumeric", "isImputed", "isAdvanced", "count"],
   template: `
     <div class="v-form-group">
       <div class="v-title">
@@ -39,11 +39,11 @@ Vue.component('v-input', {
         </div>
       </div>
 
-      <!--<div class="row v-padding">
+      <div class="row v-padding">
         <div class="col-md-12">
           <code>{{item}}</code>
         </div>
-      </div>-->
+      </div>
 
 
       <div class="row v-padding">
@@ -75,10 +75,6 @@ Vue.component('v-input', {
   },
 
   methods: {
-    calculate() {
-      debugger;
-    },
-
     // form element handlers
     updateSearchTerm0(value) { // handler for variable
       this.item.searchTerm0 = value;
@@ -106,9 +102,11 @@ Vue.component('v-input', {
     // search object
     item: {
       handler: function(){
-        this.$emit('updated', this.item);
+        // set "" to null
+        this.item.searchTerm0 = (this.item.searchTerm0 == "") ? null:this.item.searchTerm0;
+        this.item.searchTerm1 = (this.item.searchTerm1 == "") ? null:this.item.searchTerm1;
 
-        // form specific logic
+        // labels
         if (this.item.op == "between") {
           this.options.searchTerm1Disabled = true;
           this.options.searchTermCaption0 = "Enter the lower bound";
@@ -127,28 +125,30 @@ Vue.component('v-input', {
           }
         }
 
-        // apply and reset
+        // control visibility
         if (this.item.searchTerm0 !== null || this.item.searchTerm1 !== null) {
-          // changed
           this.options.changed = true;
-
-          // notify parent that a change has occurred
-          this.$parent.$emit('activated', this.varName, true)
-          // this.$emit();
-          // debugger;
+          this.$emit('change', this.item, true);
         } else {
-          // no change
           this.options.changed = false;
-          // notify parent that a change has not occurred
-          this.$parent.$emit('activated', this.varName, false)
-          // this.$emit('activated', false);
-          // debugger;
-
+          this.$emit('change', this.item, false);
         }
 
       },
       deep: true,
     },
+
+    // update prop 'filter' from store
+    filter: {
+      handler: function(){
+        if (!this.filter.changed) { // update when filter is not activated
+          this.item.searchTerm0 = this.filter.value.searchTerm0;
+          this.item.searchTerm1 = this.filter.value.searchTerm1;
+          this.item.op = this.filter.value.op;
+        }
+      },
+      deep: true,
+    }
   },
 
   mounted: function() {

@@ -4,13 +4,12 @@ Vue.component('v-menu-title', {
   template: `
     <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
       {{title}}
-      <span>({{count}})</span>
+      <span v-if="count">({{count}})</span>
     </a>
   `,
 
   data: function() {
     return {
-      
     }
   },
 

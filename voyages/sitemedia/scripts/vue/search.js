@@ -249,487 +249,316 @@ function search(query) {
 	// searchCallback();
 }
 
-// value component
-Vue.component("form-value-component", {
-	props: ["tagId", "formLabel", "value"],
-	template: `
-	<div class="form-group">
-		<label :for="tagId">{{formLabel}}</label>
-		<input type="number" :id="tagId" v-bind:value="value" @input="updateValue($event.target.value)" class="form-control" >
-	</div>`,
-	methods: {
-		updateValue: function (value) {
-      this.$emit('input', parseInt(value))
-    }
-	}
-});
+// helpers
 
-Vue.component("form-checkbox", {
-	props: {
-		checked: Boolean,
-		formLabel: String,
-		tagId: String
-	},
-
-	template: `
-		<div class="form-check">
-			<label class="form-check-label">
-				<input class="form-check-input" :tag-id="tagId" type="checkbox" :checked="checked" @change="$emit('input', $event.target.checked)">
-				{{formLabel}} ha {{checked}}
-			</label>
-		</div>`,
-
-	mounted: function(){
-
-	},
-	methods: {
-		updateValue: function (value) {
-      this.$emit('input', value)
-    }
-	}
-});
-
-
-
-
-
-
-		// main app
-		var searchBar = new Vue({
-			el: "#search-bar",
-			delimiters: ['{{', '}}'],
-			data: {
-				isAdvanced: true,
-				searchFilter: {
-					count: {
-						slave: {
-							total: 0,
-							overallNumbers: 0,
-							purchaseNumbers: 0,
-							landingNumbers: 0,
-							percentageBySexAndAgeGroup: 0,
-							otherCharacteristics: 0,
-						}
-					},
-
-					// 3-Total Slaves Embarked Imputed
-					var_imp_total_num_slaves_purchased: {
-						varName: 'var_imp_total_num_slaves_purchased',
-						value: {
-							op: "is between",
-							searchTerm0: null,
-							searchTerm1: null,
-						},
-						activated: false,
-					},
-
-					// 3-Total Slaves Embarked
-					var_total_num_slaves_purchased: {
-						varName: 'var_total_num_slaves_purchased',
-						value: {
-							op: "is between",
-							searchTerm0: null,
-							searchTerm1: null,
-						},
-						activated: false,
-					},
-
-					// 3-Total Slaves Disembarked Imputed
-					var_imp_total_slaves_disembarked: {
-						varName: 'var_imp_total_slaves_disembarked',
-						value: {
-							op: "is between",
-							searchTerm0: null,
-							searchTerm1: null,
-						},
-						activated: false,
-					},
-
-					groups: {
-						// 1-SLAVE
-						slave: {
-							// 2-Overall Numbers
-							overallNumbers: {
-								// 3-Total Slaves Embarked Imputed
-								var_imp_total_num_slaves_purchased: {
-									varName: 'var_imp_total_num_slaves_purchased',
-									value: {
-										op: "is between",
-										searchTerm0: null,
-										searchTerm1: null,
-									},
-									activated: false,
-								},
-
-								// 3-Total Slaves Embarked
-								var_total_num_slaves_purchased: {
-									varName: 'var_total_num_slaves_purchased',
-									value: {
-										op: "is between",
-										searchTerm0: null,
-										searchTerm1: null,
-									},
-									activated: false,
-								},
-
-								// 3-Total Slaves Disembarked Imputed
-								var_imp_total_slaves_disembarked: {
-									varName: 'var_imp_total_slaves_disembarked',
-									value: {
-										op: "is between",
-										searchTerm0: null,
-										searchTerm1: null,
-									},
-									activated: false,
-								},
-
-								count: 0
-							},
-
-							purchaseNumbers: {
-								var_num_slaves_intended_first_port: {
-									value: {
-										op: "is between",
-										searchTerm0: null,
-										searchTerm1: null,
-									},
-									activated: false,
-								},
-								var_num_slaves_carried_first_port: {
-									value: {
-										op: "is between",
-										searchTerm0: null,
-										searchTerm1: null,
-									},
-									activated: false,
-								},
-								var_num_slaves_carried_second_port: {
-
-								},
-								var_num_slaves_carried_third_port: {
-
-								},
-								count: 0
-							},
-							landingNumbers: {
-								count: 0
-							},
-							percentageBySexAndAgeGroup: {
-								count: 0
-							},
-							otherCharacteristics: {
-								count: 0
-							},
-							count: 0,
-						}
-					},
-
-					yearRange: {
-						default: {
-							op: "is between",
-							searchTerm: [1514, 1866],
-						},
-						current: {
-							op: "is between",
-							searchTerm: [1514, 1866],
-						},
-						value: {
-							op: "is between",
-							searchTerm: [1514, 1866],
-						},
-						varName: "imp_arrival_at_port_of_dis",
-						hasChanged: true,
-						count: 0,
-					},
-					var_voyage_id: {
-						varName: 'var_voyage_id',
-						value: {
-							op: "is between",
-							searchTerm0: null,
-							searchTerm1: null,
-						},
-						activated: false,
-						default: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-						current: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-						value: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-					},
-					vin: {
-						default: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-						current: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-						value: {
-							op: "equals",
-							searchTerm: [null, null],
-						},
-						varName: "voyage_id",
-						hasChanged: false,
-						count: 0,
-					},
-					vesselName: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					vesselOwner: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					vessel: {
-						hasChanged: false,
-					},
-					flag: {
-						default: "",
-						current: "",
-						data: flagData,
-						hasChanged: false,
-					},
-					flagImputed: {
-						default: "",
-						current: "",
-						data: flagImputedData,
-						hasChanged: false,
-					},
-					rig: {
-						default: "",
-						current: "",
-						data: rigData,
-						hasChanged: false,
-					},
-					cdrom: {
-						default: false,
-						current: false,
-						hasChanged: false,
-					},
-					tonnage: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					standardizedTonnage: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					guns: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					yearRegistration: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					yearConstruction: {
-						default: "",
-						current: "",
-						hasChanged: false,
-					},
-					outcome1: outcome1,
-					outcome2: outcome2,
-					outcome3: outcome3,
-					outcome4: outcome4,
-					outcome5: outcome5,
-				},
-				searchQuery: {
-					vin: {
-						value: null
-					},
-					vesselName: {
-						value: null
-					},
-					vesselOwner: {
-						value: null
-					},
-					flag: {
-						value: null
-					},
-					flagImputed: {
-						value: null
-					}
-				}
-			},
-			computed: {
-				slaveCount: function() {
-					var count = 0;
-					// We need to iterate the string keys (not the objects)
-					for(var someKey in this.searchFilter.groups.slave) {
-					  // We check if this key exists in the obj
-					  if (this.searchFilter.groups.slave.overallNumbers.hasOwnProperty(someKey)) {
-					    // someKey is only the KEY (string)! Use it to get the obj:
-					    var myActualPropFromObj = this.searchFilter.groups.slave[someKey]; // Since dynamic, use []
-							if (myActualPropFromObj.hasOwnProperty("activated")) {
-								if (myActualPropFromObj.activated) {
-									count += 1;
-								}
-							}
-					  }
-					}
-					return count;
-				}
-			},
-			watch: {
-					isAdvanced: function(val){
-						$menu.menuAim({
-								activate: activateSubmenu,
-								deactivate: deactivateSubmenu
-						});
-					},
-
-
-					searchFilter: {
-						handler: function(val){
-
-
-
-							// slave count
-							val.count.slave.total = val.count.slave.overallNumbers+
-																			val.count.slave.purchaseNumbers+
-																			val.count.slave.landingNumbers+
-																			val.count.slave.percentageBySexAndAgeGroup+
-																			val.count.slave.otherCharacteristics;
-
-
-							// voyage yearRange
-							// val.yearRange.hasChanged = val.yearRange.current.searchTerm !== val.yearRange.default.searchTerm
-
-							// voyage identification number
-							// debugger;
-							val.vin.hasChanged = val.vin.default !== val.vin.current
-
-							// vessel name
-							val.vesselName.hasChanged = val.vesselName.default !== val.vesselName.current
-
-							// vessel owner
-							val.vesselOwner.hasChanged = val.vesselOwner.default !== val.vesselOwner.current
-
-							// vessel
-							val.vessel.hasChanged = val.vesselName.hasChanged || val.vesselOwner.hasChanged
-
-							// flag
-							val.flag.hasChanged = val.flag.default !== val.flag.current
-
-							// flagImputed
-							val.flagImputed.hasChanged = val.flagImputed.default !== val.flagImputed.current
-
-							// execute search
-
-
-
-							if (this.searchFilter.var_voyage_id.activated) {
-								this.total = 1;
-							} else {
-								this.total = 0;
-							}
-						},
-						deep: true,
-				},
-			},
-
-			methods: {
-				calculate: function(varName, value){
-					if (value) {
-						this.searchFilter[varName].activated = true;
-					} else {
-						this.searchFilter[varName].activated = false;
-					}
-				},
-				yearRangeApply: function(val){
-					this.searchQuery.yearRange.value = this.searchFilter.yearRange.current;
-					search(this.searchFilter);
-				},
-				yearRangeReset: function(val){
-					this.searchFilter.yearRange.current = jQuery.extend(true, {}, this.searchFilter.yearRange.default);
-					this.searchFilter.yearRange.value = jQuery.extend(true, {}, this.searchFilter.yearRange.default);
-				},
-
-				vinApply: function(val){
-					this.searchQuery.vin.value = this.searchFilter.vin.current;
-					search(this.searchFilter);
-				},
-				vinReset: function(val){
-					this.searchFilter.vin.current = jQuery.extend(true, {}, this.searchFilter.vin.default);
-					this.searchQuery.vin.value = jQuery.extend(true, {}, this.searchFilter.vin.default);
-				},
-				vesselApply: function(val){
-					this.searchQuery.vesselName.value = this.searchFilter.vesselName.current;
-					this.searchQuery.vesselOwner.value = this.searchFilter.vesselOwner.current;
-				},
-				vesselReset: function(val){
-					this.searchFilter.vesselName.current = this.searchFilter.vesselName.default;
-					this.searchFilter.vesselOwner.current = this.searchFilter.vesselOwner.default;
-					this.searchQuery.vesselName.value = this.searchFilter.vesselName.default;
-					this.searchQuery.vesselOwner.value = this.searchFilter.vesselOwner.default;
-				},
-				handle: function(){
-				},
-				changed(value) {
-					// this.total = this.total + value;
-    		},
-				announce(value) {
-					alert(JSON.stringify(this.searchFilter));
-				},
-				startTour() {
-					// Instance the tour
-					$(function () {
-					    $('[data-toggle="popover"]').popover()
-					});
-
-					var tour = new Tour({
-						steps: [
-						// {
-						//   element: ".trans-search-bar",
-						//   title: "Search Filter",
-						//   content: "This is where you can set up your search filter."
-						// },
-						{
-							element: "#show-query",
-							title: "Show Query",
-							content: "You can view your current query here."
-						},
-						{
-							element: "#configure-query",
-							title: "Configure Query",
-							content: "You can choose to show or hide advanced filters."
-						},
-						{
-							element: "#heart-query",
-							title: "Save/Load Query",
-							content: "You can a particular query and/or load a particular query."
-						}
-					]});
-
-					// Initialize the tour
-					tour.init();
-
-					// Start the tour
-					tour.start();
-				}
-			},
-
-			mounted: function() {
-				search(this.searchFilter);
-
-
-				// this.$on('applied', function(){
-				// 	// this.count = this.count1 + this.count2+ this.count3;
-				// });
-
+function countChanged(object) {
+	var count = 0;
+	for (key1 in object) {
+		if (key1 !== "count") {
+			if (object[key1].changed) {
+				count += 1;
 			}
+		}
+	}
+	return count;
+}
 
-		})
+function countActivated(object) {
+	var count = 0;
+	for (key1 in object) {
+		if (key1 !== "count") {
+			if (object[key1].activated) {
+				count += 1;
+			}
+		}
+	}
+	return count;
+}
+
+function countMenuChanged(object) {
+	var count = 0;
+	for (key1 in object) {
+		if (key1 !== "count") {
+			count = count + object[key1].count.changed;
+		}
+	}
+	return count;
+}
+
+function countMenuActivated(object) {
+	var count = 0;
+	for (key1 in object) {
+		if (key1 !== "count") {
+			count = count + object[key1].count.activated;
+		}
+	}
+	return count;
+}
+
+function activateFilter(filter, group, filterValues) {
+	debugger;
+	for (key1 in filter[group]) {
+		if (key1 !== "count") {
+			for (key2 in filter[group][key1]) {
+				if (key2 !== "count") {
+					if (filter[group][key1][key2].changed) {
+						// filter[group][key1][key2].value["searchTerm0"] = filterValues[group][key1][key2].value["searchTerm0"];
+						// filter[group][key1][key2].value["searchTerm1"] = filterValues[group][key1][key2].value["searchTerm1"];
+						// filter[group][key1][key2].value["op"] = filterValues[group][key1][key2].value["op"];
+						filter[group][key1][key2].changed = true;
+						filter[group][key1][key2].activated = true;
+					}
+				}
+			}
+		}
+	}
+}
+
+function resetFilter(filter, group) {
+	for (key1 in filter[group]) {
+		if (key1 !== "count") {
+			for (key2 in filter[group][key1]) {
+				if (key2 !== "count") {
+					filter[group][key1][key2].value["searchTerm0"] = null;
+					filter[group][key1][key2].value["searchTerm1"] = null;
+					filter[group][key1][key2].value["op"] = "is between";
+					filter[group][key1][key2].changed = false;
+					filter[group][key1][key2].activated = false;
+				}
+			}
+		}
+	}
+}
+// helpers
+
+// main app
+var searchBar = new Vue({
+	el: "#search-bar",
+	delimiters: ['{{', '}}'],
+	data: {
+		isAdvanced: true,
+		searchFilter: {
+
+			groups: {
+				slave: {
+					overallNumbers: {
+						var_imp_total_num_slaves_purchased: {
+							varName: 'var_imp_total_num_slaves_purchased',
+							value: {
+								op: "is between",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+
+						var_total_num_slaves_purchased: {
+							varName: 'var_total_num_slaves_purchased',
+							value: {
+								op: "is between",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+
+						var_imp_total_slaves_disembarked: {
+							varName: 'var_imp_total_slaves_disembarked',
+							value: {
+								op: "is between",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+
+						count: {
+							changed: 0,
+							activated: 0,
+						}
+					},
+
+					// purchaseNumbers: {
+					// 	var_num_slaves_intended_first_port: {
+					// 		value: {
+					// 			op: "is between",
+					// 			searchTerm0: null,
+					// 			searchTerm1: null,
+					// 		},
+					// 		activated: false,
+					// 	},
+					// 	var_num_slaves_carried_first_port: {
+					// 		value: {
+					// 			op: "is between",
+					// 			searchTerm0: null,
+					// 			searchTerm1: null,
+					// 		},
+					// 		activated: false,
+					// 	},
+					// 	var_num_slaves_carried_second_port: {
+					//
+					// 	},
+					// 	var_num_slaves_carried_third_port: {
+					//
+					// 	},
+					// 	count: 0
+					// },
+					landingNumbers: {
+						count: {
+							changed: 0,
+							activated: 0,
+						}
+					},
+					percentageBySexAndAgeGroup: {
+						count: {
+							changed: 0,
+							activated: 0,
+						}
+					},
+					otherCharacteristics: {
+						count: {
+							changed: 0,
+							activated: 0,
+						}
+					},
+
+					count: {
+						changed: 0,
+						activated: 0,
+					},
+				}
+			},
+
+			yearRange: {
+				default: {
+					op: "is between",
+					searchTerm: [1514, 1866],
+				},
+				current: {
+					op: "is between",
+					searchTerm: [1514, 1866],
+				},
+				value: {
+					op: "is between",
+					searchTerm: [1514, 1866],
+				},
+				varName: "imp_arrival_at_port_of_dis",
+				hasChanged: true,
+				count: 0,
+			},
+
+			outcome1: outcome1,
+			outcome2: outcome2,
+			outcome3: outcome3,
+			outcome4: outcome4,
+			outcome5: outcome5,
+		},
+		searchQuery: {
+			// put the search query in here
+		},
+	},
+	computed: {
+	},
+	watch: {
+		isAdvanced: function(val){
+			$menu.menuAim({
+					activate: activateSubmenu,
+					deactivate: deactivateSubmenu
+			});
+		},
+
+		searchFilter: {
+			handler: function(val){
+				// slave overallNumbers count
+				this.searchFilter.groups.slave.overallNumbers.count.activated = countActivated(this.searchFilter.groups.slave.overallNumbers);
+				this.searchFilter.groups.slave.overallNumbers.count.changed = countChanged(this.searchFilter.groups.slave.overallNumbers);
+
+				// slave count
+				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
+				this.searchFilter.groups.slave.count.changed = countMenuChanged(this.searchFilter.groups.slave);
+
+			},
+			deep: true,
+		},
+	},
+
+	methods: {
+		changed() {
+      debugger;
+    },
+		apply(group, filterValues) {
+			activateFilter(this.searchFilter.groups, group, filterValues);
+			alert(JSON.stringify(this.searchFilter.groups));
+		},
+		reset(group) {
+			resetFilter(this.searchFilter.groups, group);
+		},
+		itemChanged(variable, changed) {
+			// function to locate a variable
+			for (key1 in this.searchFilter.groups) {
+				for (key2 in this.searchFilter.groups[key1]) {
+					if (key2 !== "count") {
+						for (key3 in this.searchFilter.groups[key1][key2]) {
+							if (key3 == variable.varName) {
+								console.log(key3);
+								console.log(this.searchFilter.groups[key1][key2][key3]);
+								this.searchFilter.groups[key1][key2][key3].changed = changed;
+								this.searchFilter.groups[key1][key2][key3].value["searchTerm0"] = variable["searchTerm0"];
+								this.searchFilter.groups[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
+								this.searchFilter.groups[key1][key2][key3].value["op"] = variable["op"];
+							}
+						}
+					}
+				}
+			}
+			// function to locate a variable
+
+		},
+
+
+		startTour() {
+			// Instance the tour
+			$(function () {
+			    $('[data-toggle="popover"]').popover()
+			});
+
+			var tour = new Tour({
+				steps: [
+				// {
+				//   element: ".trans-search-bar",
+				//   title: "Search Filter",
+				//   content: "This is where you can set up your search filter."
+				// },
+				{
+					element: "#show-query",
+					title: "Show Query",
+					content: "You can view your current query here."
+				},
+				{
+					element: "#configure-query",
+					title: "Configure Query",
+					content: "You can choose to show or hide advanced filters."
+				},
+				{
+					element: "#heart-query",
+					title: "Save/Load Query",
+					content: "You can a particular query and/or load a particular query."
+				}
+			]});
+
+			// Initialize the tour
+			tour.init();
+
+			// Start the tour
+			tour.start();
+		}
+	},
+
+	mounted: function() {
+		search(this.searchFilter);
+	}
+
+})
