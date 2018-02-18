@@ -1,13 +1,13 @@
 // v-panel-header
 Vue.component('v-panel-header', {
-  props: ['title', "description"],
+  props: ['title', "description", "modalDisabled"],
   template: `
     <div class="v-panel-header">
       <div class="v-panel-title-container">
         <div class="v-panel-title">
           {{title}}
         </div>
-        <div class="v-panel-header-control">
+        <div v-if="!modalDisabled" class="v-panel-header-control" >
           <div class="text-center">
             <b-btn variant="outline-info" size="sm" v-b-modal.modal-center>
               <i class="fa fa-question-circle-o"></i>
