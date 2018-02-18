@@ -51,12 +51,17 @@
     </div>
 
     <div slot="v-panel-content">
-      <!-- <v-toggle
-        title="Show Advanced Variables in Search Filters"
-        description="Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior."
-        :toggled="isAdvanced"
-        @toggle="toggle">
-      </v-toggle> -->
+      <v-save-search
+        title="Save Current Search"
+        description="You can save a search by creating a link that can be later used to retreive your particular set of search variables. You may also share your search by sharing the link to this search with other people."
+        @save="save">
+      </v-save-search>
+
+      <v-saved-searches
+        title="Saved Searches"
+        description="These are searches saved in this session."
+        :saved="saved">
+      </v-saved-searches>
     </div>
   </v-panel-singular>
 

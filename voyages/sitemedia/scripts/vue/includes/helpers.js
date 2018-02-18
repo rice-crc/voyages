@@ -1,5 +1,32 @@
 // helpers
 
+var generateRandomKey = function() {
+  var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var ID_LENGTH = 8;
+  var rtn = '';
+  for (var i = 0; i < ID_LENGTH; i++) {
+    rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+  }
+  return rtn;
+}
+
+var generateUniqueRandomKey = function(previous) {
+  var UNIQUE_RETRIES = 9999;
+  previous = previous || [];
+  var retries = 0;
+  var id;
+  // Try to generate a unique ID,
+  // i.e. one that isn't in the previous.
+  while(!id && retries < UNIQUE_RETRIES) {
+    id = generateRandomKey();
+    if(previous.indexOf(id) !== -1) {
+      id = null;
+      retries++;
+    }
+  }
+  return id;
+};
+
 function countChanged(object) {
 	var count = 0;
 	for (key1 in object) {

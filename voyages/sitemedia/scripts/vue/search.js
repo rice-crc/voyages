@@ -340,6 +340,7 @@ var searchBar = new Vue({
 		searchQuery: {
 			// put the search query in here
 		},
+		saved: [],
 	},
 	computed: {
 	},
@@ -372,6 +373,7 @@ var searchBar = new Vue({
 			},
 			deep: true,
 		},
+
 	},
 
 	methods: {
@@ -416,6 +418,16 @@ var searchBar = new Vue({
 		toggle() {
 			debugger;
 			this.isAdvanced = !this.isAdvanced;
+		},
+
+		save() {
+			var searchTerms = searchAll(this.searchFilter.groups);
+			var existingKeys = []
+			var key = generateUniqueRandomKey(existingKeys);
+			this.saved.unshift({
+				key: key,
+				searchTerms: searchTerms
+			});
 		},
 
 		startTour() {
