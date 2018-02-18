@@ -106,6 +106,16 @@ Vue.component('v-input', {
         this.item.searchTerm0 = (this.item.searchTerm0 == "") ? null:this.item.searchTerm0;
         this.item.searchTerm1 = (this.item.searchTerm1 == "") ? null:this.item.searchTerm1;
 
+        // convert to number if numeric
+        if (this.isNumeric) {
+          if (this.item.searchTerm0) {
+            this.item.searchTerm0 = parseInt(this.item.searchTerm0);
+          }
+          if (this.item.searchTerm1) {
+            this.item.searchTerm1 = parseInt(this.item.searchTerm1);
+          }
+        }
+
         // labels
         if (this.item.op == "between") {
           this.options.searchTerm1Disabled = true;

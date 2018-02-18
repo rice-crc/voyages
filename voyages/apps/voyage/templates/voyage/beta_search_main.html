@@ -597,7 +597,6 @@ div.dt-button-collection {
 		var searchCallback = resultsTableSearchCallback;
 		function search() {
 			$('#search_pane').collapse("hide");
-      debugger
 			var activeSearchTerms = jQuery.map($('#current_search').val(), function(id) {
 				var term = searchTermsDict[id];
 				// Here we allow custom search types to generate their backend terms.
@@ -629,7 +628,7 @@ div.dt-button-collection {
 					}
 				}
 			}
-      debugger;
+      // debugger;
 			currentSearchObj = {items: activeSearchTerms, orderBy: []};
 			// Store current search on session storage.
 			var searchState = {

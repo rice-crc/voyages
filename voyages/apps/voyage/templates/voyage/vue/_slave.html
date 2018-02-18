@@ -5,7 +5,7 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @reset="reset" group="slave" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" is-advanced="false" :filters="searchFilter.groups.slave.overallNumbers">
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" is-advanced="false" :filters="searchFilter.groups.slave.overallNumbers">
 				<div slot="v-panel-header">
 					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -53,52 +53,58 @@
 				</div>
 			</v-panel>
 
-			<!-- <v-panel @announced="announce"  title="Purchase Numbers" is-advanced="false" @applied="changed">
+			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" :count="searchFilter.groups.slave.purchaseNumbers.count" title="Purchase Numbers" is-advanced="false" :filters="searchFilter.groups.slave.purchaseNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers" count="0"></v-panel-header>
+					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
 				</div>
 
-				<div slot="v-panel-content">
-
-					<v-input @change="changed"
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+						filters are: {{scope.filters}}
+					</p>
+					<v-input @change="itemChanged"
 						title="Number of Slaves Intended at First Place of Purchase"
 						description="Number of slaves intended at first place of purchase. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_num_slaves_intended_first_port"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_num_slaves_intended_first_port"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="changed"
+					<v-input @change="itemChanged"
 						title="Slaves Carried from 1st Port of Purchase"
 						description="Number of slaves carried from 1st port of purchase. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_num_slaves_carried_first_port"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_num_slaves_carried_first_port"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="changed"
+					<v-input @change="itemChanged"
 						title="Slaves Carried from 2nd Port of Purchase"
 						description="Number of slaves carried from 2nd port of purchase. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_num_slaves_carried_second_port"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_num_slaves_carried_second_port"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="changed"
+					<v-input @change="itemChanged"
 						title="Slaves Carried from 3rd Port of Purchase"
 						description="Number of slaves carried from 3rd port of purchase. This could be a range."
-						var-name="imp_arrival_at_port_of_dis"
+						var-name="var_num_slaves_carried_third_port"
 						search-term-caption=""
-						:filter="searchFilter.vin"
+						:filter="scope.filters.var_num_slaves_carried_third_port"
 						:is-numeric=true
 						:is-imputed=false
 						:is-advanced=true>
@@ -107,7 +113,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @announced="announce" title="Landing Numbers" is-advanced="false">
+			<!-- <v-panel @announced="announce" title="Landing Numbers" is-advanced="false">
 				<div slot="v-panel-header">
 					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves" :count="1"></v-panel-header>
 				</div>

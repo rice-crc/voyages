@@ -74,21 +74,24 @@ var pageLength = {
 	className: 'btn btn-info buttons-collection dropdown-toggle',
 };
 
-function search(query) {
+function search(query, activeSearchTerms) {
 	var query = query;
 
-	var activeSearchTerms = jQuery.map(query, function(val, id) {
-		if (val.hasChanged) {
-			var term = searchTermsDict[val.varName];
-			// Here we allow custom search types to generate their backend terms.
-			var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
-				? term.getBackendSearchTerm()
-				: term.getSearchTerm();
+	// replace this with the searchAll function
+	if (activeSearchTerms.length == 0) {
+		activeSearchTerms = jQuery.map(query, function(val, id) {
+	 		if (val.hasChanged) {
+	 			var term = searchTermsDict[val.varName];
+	 			// Here we allow custom search types to generate their backend terms.
+	 			var backendSearchTerm = term.hasOwnProperty('getBackendSearchTerm')
+	 				? term.getBackendSearchTerm()
+	 				: term.getSearchTerm();
 
-			// return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
-			return { varName: term.varName, op: val.current.op , searchTerm: val.current.searchTerm };
-		}
-	});
+	 			// return { varName: term.varName, op: term.operatorLabel, searchTerm: backendSearchTerm };
+	 			return { varName: term.varName, op: val.current.op , searchTerm: val.current.searchTerm };
+	 		}
+	 	});
+	}
 
 	// var activeSearchTerms = function(query) {
 	// 	var term = searchTermsDict[id];
@@ -312,19 +315,29 @@ function activateFilter(filter, group, filterValues) {
 	}
 }
 
-function resetFilter(filter, group) {
-	for (key1 in filter[group]) {
+function resetFilter(filter, group, subGroup) {
+	debugger;
+	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
-			for (key2 in filter[group][key1]) {
-				if (key2 !== "count") {
-					filter[group][key1][key2].value["searchTerm0"] = null;
-					filter[group][key1][key2].value["searchTerm1"] = null;
-					filter[group][key1][key2].value["op"] = "equals to";
-					filter[group][key1][key2].changed = false;
-					filter[group][key1][key2].activated = false;
-				}
-			}
+			filter[group][subGroup][key1].value["searchTerm0"] = null;
+			filter[group][subGroup][key1].value["searchTerm1"] = null;
+			filter[group][subGroup][key1].value["op"] = "equals to";
+			filter[group][subGroup][key1].changed = false;
+			filter[group][subGroup][key1].activated = false;
 		}
+	}
+}
+
+function replaceKey(key) {
+
+	if (key == "is less than") {
+		return "is at most"
+	} else if (key == "is more than") {
+		return "is at least";
+	} else if (key == "is between") {
+		return "is between";
+	} else if (key == "equals to") {
+		return "contains";
 	}
 }
 
@@ -339,7 +352,10 @@ function searchAll(filter) {
 							if (filter[key1][key2][key3].activated) {
 								var item = {};
 								var searchTerm = [];
-								item["op"] = filter[key1][key2][key3].value["op"];
+								item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
+								console.log(filter[key1][key2][key3].value["op"]);
+								console.log(item["op"]);
+
 								item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
 								item["varName"] = filter[key1][key2][key3].varName;
 								items.push(item);
@@ -350,6 +366,15 @@ function searchAll(filter) {
 			}
 		}
 	}
+
+	// placeholder
+	var item = {};
+	item["op"] = "is between";
+	item["searchTerm"] = [1514, 1866];
+	item["varName"] = "imp_arrival_at_port_of_dis";
+	items.push(item);
+	// placeholder
+
 	return items;
 }
 
@@ -372,7 +397,7 @@ var searchBar = new Vue({
 						var_imp_total_num_slaves_purchased: {
 							varName: 'var_imp_total_num_slaves_purchased',
 							value: {
-								op: "is between",
+								op: "equals to",
 								searchTerm0: null,
 								searchTerm1: null,
 							},
@@ -383,7 +408,7 @@ var searchBar = new Vue({
 						var_total_num_slaves_purchased: {
 							varName: 'var_total_num_slaves_purchased',
 							value: {
-								op: "is between",
+								op: "equals to",
 								searchTerm0: null,
 								searchTerm1: null,
 							},
@@ -394,7 +419,7 @@ var searchBar = new Vue({
 						var_imp_total_slaves_disembarked: {
 							varName: 'var_imp_total_slaves_disembarked',
 							value: {
-								op: "is between",
+								op: "equals to",
 								searchTerm0: null,
 								searchTerm1: null,
 							},
@@ -408,31 +433,52 @@ var searchBar = new Vue({
 						}
 					},
 
-					// purchaseNumbers: {
-					// 	var_num_slaves_intended_first_port: {
-					// 		value: {
-					// 			op: "is between",
-					// 			searchTerm0: null,
-					// 			searchTerm1: null,
-					// 		},
-					// 		activated: false,
-					// 	},
-					// 	var_num_slaves_carried_first_port: {
-					// 		value: {
-					// 			op: "is between",
-					// 			searchTerm0: null,
-					// 			searchTerm1: null,
-					// 		},
-					// 		activated: false,
-					// 	},
-					// 	var_num_slaves_carried_second_port: {
-					//
-					// 	},
-					// 	var_num_slaves_carried_third_port: {
-					//
-					// 	},
-					// 	count: 0
-					// },
+					purchaseNumbers: {
+						var_num_slaves_intended_first_port: {
+							varName: 'var_num_slaves_intended_first_port',
+							value: {
+								op: "equals to",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+						var_num_slaves_carried_first_port: {
+							varName: 'var_num_slaves_carried_first_port',
+							value: {
+								op: "equals to",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+						var_num_slaves_carried_second_port: {
+							varName: 'var_num_slaves_carried_second_port',
+							value: {
+								op: "equals to",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+						var_num_slaves_carried_third_port: {
+							varName: 'var_num_slaves_carried_third_port',
+							value: {
+								op: "equals to",
+								searchTerm0: null,
+								searchTerm1: null,
+							},
+							changed: false,
+							activated: false,
+						},
+						count: {
+							changed: 0,
+							activated: 0,
+						}
+					},
 					landingNumbers: {
 						count: {
 							changed: 0,
@@ -502,6 +548,8 @@ var searchBar = new Vue({
 				// slave overallNumbers count
 				this.searchFilter.groups.slave.overallNumbers.count.activated = countActivated(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.overallNumbers.count.changed = countChanged(this.searchFilter.groups.slave.overallNumbers);
+				this.searchFilter.groups.slave.purchaseNumbers.count.activated = countActivated(this.searchFilter.groups.slave.purchaseNumbers);
+				this.searchFilter.groups.slave.purchaseNumbers.count.changed = countChanged(this.searchFilter.groups.slave.purchaseNumbers);
 
 				// slave count
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
@@ -517,13 +565,15 @@ var searchBar = new Vue({
       debugger;
     },
 		apply(group, filterValues) {
+			debugger;
 			activateFilter(this.searchFilter.groups, group, filterValues);
 			var searchTerms = searchAll(this.searchFilter.groups);
-			alert(JSON.stringify(this.searchFilter.groups));
+			// alert(JSON.stringify(this.searchFilter.groups));
 			alert(JSON.stringify(searchTerms));
+			search(this.searchFilter, searchTerms);
 		},
-		reset(group) {
-			resetFilter(this.searchFilter.groups, group);
+		reset(group, subGroup) {
+			resetFilter(this.searchFilter.groups, group, subGroup);
 		},
 		itemChanged(variable, changed) {
 			// function to locate a variable
@@ -587,7 +637,7 @@ var searchBar = new Vue({
 	},
 
 	mounted: function() {
-		search(this.searchFilter);
+		search(this.searchFilter, []);
 	}
 
 })
