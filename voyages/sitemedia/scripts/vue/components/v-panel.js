@@ -1,6 +1,6 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "isAdvanced", "filters", "count", "group"],
+  props: ['title', "isAdvanced", "filters", "count", "group", "subGroup"],
   template: `
     <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
@@ -42,8 +42,8 @@ Vue.component('v-panel', {
     apply() {
       this.$emit('apply', this.group, this.filtersValue);
     },
-    reset(group) {
-      this.$emit('reset', this.group);
+    reset(group, subGroup) {
+      this.$emit('reset', this.group, this.subGroup);
     }
   },
 
