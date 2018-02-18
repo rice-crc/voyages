@@ -1,8 +1,8 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "count", "filters", "isAdvanced", "group", "subGroup"],
+  props: ['title', "count", "filters", "visible", "group", "subGroup"],
   template: `
-    <li v-if="isAdvancedValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+    <li v-if="visibleValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
             {{titleValue}}
@@ -31,7 +31,7 @@ Vue.component('v-panel', {
   data: function() {
     return {
       titleValue: '',
-      isAdvancedValue: '',
+      visibleValue: '',
       idValue: null,
       filtersValue: null,
       controlDisabled: true,
@@ -53,12 +53,17 @@ Vue.component('v-panel', {
         this.controlDisabled = (this.count.changed > 0) ? false:true;
       },
       deep: true,
+    },
+    visible: {
+      handler: function(){
+        this.visibleValue = this.visible;
+      },
     }
   },
 
   mounted: function() { // load value initially
     this.titleValue = this.title;
-    this.isAdvancedValue = this.isAdvanced;
+    this.visibleValue = this.visible;
     this.idValue = hyphenate(this.title);
     this.filtersValue = this.filters;
   }
