@@ -19,7 +19,7 @@
 					<p>
 	          filters are: {{scope.filters}}
 					</p>
-          <v-input @change="itemChanged"
+          <v-input @change="changed"
 						title="Total Slaves Embarked Imputed"
 						description="The total number of slaves embarked before departure. This could be a range."
 						var-name="var_imp_total_num_slaves_purchased"
@@ -29,7 +29,7 @@
 						:is-imputed=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Total Slaves Embarked"
 						description="The total number of slaves embarked before departure. This could be a range."
 						var-name="var_total_num_slaves_purchased"
@@ -40,7 +40,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Total Slaves Disembarked Imputed"
 						description="The total number of slaves disembarked after arrival. This could be a range."
 						var-name="var_imp_total_slaves_disembarked"
@@ -66,7 +66,7 @@
 					<p>
 						filters are: {{scope.filters}}
 					</p>
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Number of Slaves Intended at First Place of Purchase"
 						description="Number of slaves intended at first place of purchase. This could be a range."
 						var-name="var_num_slaves_intended_first_port"
@@ -77,7 +77,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Slaves Carried from 1st Port of Purchase"
 						description="Number of slaves carried from 1st port of purchase. This could be a range."
 						var-name="var_num_slaves_carried_first_port"
@@ -88,7 +88,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Slaves Carried from 2nd Port of Purchase"
 						description="Number of slaves carried from 2nd port of purchase. This could be a range."
 						var-name="var_num_slaves_carried_second_port"
@@ -99,7 +99,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Slaves Carried from 3rd Port of Purchase"
 						description="Number of slaves carried from 3rd port of purchase. This could be a range."
 						var-name="var_num_slaves_carried_third_port"
@@ -125,7 +125,7 @@
 					<p>
 						filters are: {{scope.filters}}
 					</p>
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Number of Slaves Arriving at 1st Place of Landing"
 						description="Number of slaves arrived at first place of landing. This could be a range."
 						var-name="var_total_num_slaves_arr_first_port_embark"
@@ -136,7 +136,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Number of Slaves Disembarked at 1st Place of Landing"
 						description="Number of slaves disembarked from 1st port of landing. This could be a range."
 						var-name="var_num_slaves_disembark_first_place"
@@ -147,7 +147,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Number of Slaves Disembarked at 2nd Place of Landing"
 						description="Number of slaves disembarked from 2nd port of landing. This could be a range."
 						var-name="var_num_slaves_disembark_second_place"
@@ -158,7 +158,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Number of Slaves Disembarked at 3rd Place of Landing"
 						description="Number of slaves disembarked from 3rd port of landing. This could be a range."
 						var-name="var_num_slaves_disembark_third_place"
@@ -185,7 +185,7 @@
 					<p>
 						filters are: {{scope.filters}}
 					</p>
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Men"
 						description=""
 						var-name="var_imputed_percentage_men"
@@ -196,7 +196,7 @@
 						:is-advanced=false>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Women"
 						description=""
 						var-name="var_imputed_percentage_women"
@@ -207,7 +207,7 @@
 						:is-advanced=false>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Boys"
 						description=""
 						var-name="var_imputed_percentage_boys"
@@ -218,7 +218,7 @@
 						:is-advanced=false>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Girls"
 						description=""
 						var-name="var_imputed_percentage_girls"
@@ -229,7 +229,7 @@
 						:is-advanced=false>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Male"
 						description=""
 						var-name="var_imputed_percentage_male"
@@ -240,7 +240,7 @@
 						:is-advanced=false>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Percentage Children"
 						description=""
 						var-name="var_imputed_percentage_child"
@@ -266,7 +266,7 @@
 					<p>
 						filters are: {{scope.filters}}
 					</p>
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Sterling Cash Price in Jamaica"
 						description="This could be a range."
 						var-name="var_imputed_sterling_cash"
@@ -277,7 +277,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Slave Deaths during Middle Passage"
 						description="This could be a range."
 						var-name="var_imputed_death_middle_passage"
@@ -288,7 +288,7 @@
 						:is-advanced=true>
 					</v-input>
 
-					<v-input @change="itemChanged"
+					<v-input @change="changed"
 						title="Mortality Rate"
 						description="This could be a range."
 						var-name="var_imputed_mortality"
