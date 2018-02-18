@@ -1,43 +1,42 @@
+{% verbatim %}
+
 <li class="nav-item dropdown">
   <a id="show-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
     <i class="fa fa-angle-double-down" aria-hidden="true"></i>
   </a>
-  <div class="dropdown-menu dropdown-menu-right">
-    <div>
-      <input type="checkbox" id="checkbox" v-model="isAdvanced">
-      <label for="checkbox">{{ isAdvanced }}</label>
-    </div>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="">Menu Item</a>
+  <div class="dropdown-menu search-menu dropdown-menu-right">
   </div>
 </li>
 
 <li class="nav-item dropdown">
-  <a id="configure-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-    <i class="fa fa-cog" aria-hidden="true"></i>
-  </a>
-  <div class="dropdown-menu dropdown-menu-right">
-    <div>
-      <input type="checkbox" id="checkbox" v-model="isAdvanced">
-      <label for="checkbox">{{ isAdvanced }}</label>
+  <v-menu-title :count="false">
+    <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
+  </v-menu-title>
+
+  <v-panel-singular title="Search Settings" :count="false" :filters="isAdvanced" group="options" subGroup="settings">
+    <div slot="v-panel-header">
+      <v-panel-header title="Search Settings" description="Settings about your search in the Trans-Atlantic Slave Trade Database">
+        <div slot="v-modal-content">
+          Some help text
+        </div>
+      </v-panel-header>
     </div>
-    <a class="dropdown-item" href="">Menu Item</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="">Menu Item</a>
-  </div>
+
+    <div slot="v-panel-content">
+      <v-toggle :toggled="isAdvanced" label="Enabled" @toggle="toggle"></v-toggle>
+      isAdvanced: {{isAdvanced}}
+    </div>
+
+  </v-panel-singular>
 </li>
 
 <li class="nav-item dropdown">
   <a id="heart-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
     <i class="fa fa-heart" aria-hidden="true"></i>
   </a>
-  <div class="dropdown-menu dropdown-menu-right">
+  <div class="dropdown-menu search-menu dropdown-menu-right">
     <a class="dropdown-item" href="#">English</a>
     <a class="dropdown-item" href="#">Português</a>
   </div>
 </li>
+{% endverbatim %}
