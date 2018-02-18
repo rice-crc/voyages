@@ -251,137 +251,6 @@ function search(query, activeSearchTerms) {
 	// searchCallback();
 }
 
-// helpers
-
-function countChanged(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			if (object[key1].changed) {
-				count += 1;
-			}
-		}
-	}
-	return count;
-}
-
-function countActivated(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			if (object[key1].activated) {
-				count += 1;
-			}
-		}
-	}
-	return count;
-}
-
-function countMenuChanged(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			count = count + object[key1].count.changed;
-		}
-	}
-	return count;
-}
-
-function countMenuActivated(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			count = count + object[key1].count.activated;
-		}
-	}
-	return count;
-}
-
-function activateFilter(filter, group, filterValues) {
-	for (key1 in filter[group]) {
-		if (key1 !== "count") {
-			for (key2 in filter[group][key1]) {
-				if (key2 !== "count") {
-					if (filter[group][key1][key2].changed) {
-						// filter[group][key1][key2].value["searchTerm0"] = filterValues[group][key1][key2].value["searchTerm0"];
-						// filter[group][key1][key2].value["searchTerm1"] = filterValues[group][key1][key2].value["searchTerm1"];
-						// filter[group][key1][key2].value["op"] = filterValues[group][key1][key2].value["op"];
-						filter[group][key1][key2].changed = true;
-						filter[group][key1][key2].activated = true;
-					}
-				}
-			}
-		}
-	}
-}
-
-function resetFilter(filter, group, subGroup) {
-	debugger;
-	for (key1 in filter[group][subGroup]) {
-		if (key1 !== "count") {
-			filter[group][subGroup][key1].value["searchTerm0"] = null;
-			filter[group][subGroup][key1].value["searchTerm1"] = null;
-			filter[group][subGroup][key1].value["op"] = "equals to";
-			filter[group][subGroup][key1].changed = false;
-			filter[group][subGroup][key1].activated = false;
-		}
-	}
-}
-
-function replaceKey(key) {
-
-	if (key == "is less than") {
-		return "is at most"
-	} else if (key == "is more than") {
-		return "is at least";
-	} else if (key == "is between") {
-		return "is between";
-	} else if (key == "equals to") {
-		return "contains";
-	}
-}
-
-function searchAll(filter) {
-	var items = [];
-	for (key1 in filter) {
-		if (key1 !== "count") {
-			for (key2 in filter[key1]) {
-				if (key2 !== "count") {
-					for (key3 in filter[key1][key2]) {
-						if (key3 !== "count") {
-							if (filter[key1][key2][key3].activated) {
-								var item = {};
-								var searchTerm = [];
-								item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
-								console.log(filter[key1][key2][key3].value["op"]);
-								console.log(item["op"]);
-
-								item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
-								item["varName"] = filter[key1][key2][key3].varName;
-								items.push(item);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// placeholder
-	var item = {};
-	item["op"] = "is between";
-	item["searchTerm"] = [1514, 1866];
-	item["varName"] = "imp_arrival_at_port_of_dis";
-	items.push(item);
-	// placeholder
-
-	return items;
-}
-
-function resetAll() {
-
-}
-// helpers
 
 // main app
 var searchBar = new Vue({
@@ -390,119 +259,8 @@ var searchBar = new Vue({
 	data: {
 		isAdvanced: true,
 		searchFilter: {
-
 			groups: {
-				slave: {
-					overallNumbers: {
-						var_imp_total_num_slaves_purchased: {
-							varName: 'var_imp_total_num_slaves_purchased',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-
-						var_total_num_slaves_purchased: {
-							varName: 'var_total_num_slaves_purchased',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-
-						var_imp_total_slaves_disembarked: {
-							varName: 'var_imp_total_slaves_disembarked',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-
-						count: {
-							changed: 0,
-							activated: 0,
-						}
-					},
-
-					purchaseNumbers: {
-						var_num_slaves_intended_first_port: {
-							varName: 'var_num_slaves_intended_first_port',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-						var_num_slaves_carried_first_port: {
-							varName: 'var_num_slaves_carried_first_port',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-						var_num_slaves_carried_second_port: {
-							varName: 'var_num_slaves_carried_second_port',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-						var_num_slaves_carried_third_port: {
-							varName: 'var_num_slaves_carried_third_port',
-							value: {
-								op: "equals to",
-								searchTerm0: null,
-								searchTerm1: null,
-							},
-							changed: false,
-							activated: false,
-						},
-						count: {
-							changed: 0,
-							activated: 0,
-						}
-					},
-					landingNumbers: {
-						count: {
-							changed: 0,
-							activated: 0,
-						}
-					},
-					percentageBySexAndAgeGroup: {
-						count: {
-							changed: 0,
-							activated: 0,
-						}
-					},
-					otherCharacteristics: {
-						count: {
-							changed: 0,
-							activated: 0,
-						}
-					},
-
-					count: {
-						changed: 0,
-						activated: 0,
-					},
-				}
+				slave: slave,
 			},
 
 			yearRange: {
@@ -550,6 +308,9 @@ var searchBar = new Vue({
 				this.searchFilter.groups.slave.overallNumbers.count.changed = countChanged(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.purchaseNumbers.count.activated = countActivated(this.searchFilter.groups.slave.purchaseNumbers);
 				this.searchFilter.groups.slave.purchaseNumbers.count.changed = countChanged(this.searchFilter.groups.slave.purchaseNumbers);
+				this.searchFilter.groups.slave.landingNumbers.count.activated = countActivated(this.searchFilter.groups.slave.landingNumbers);
+				this.searchFilter.groups.slave.landingNumbers.count.changed = countChanged(this.searchFilter.groups.slave.landingNumbers);
+
 
 				// slave count
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
@@ -565,7 +326,6 @@ var searchBar = new Vue({
       debugger;
     },
 		apply(group, filterValues) {
-			debugger;
 			activateFilter(this.searchFilter.groups, group, filterValues);
 			var searchTerms = searchAll(this.searchFilter.groups);
 			// alert(JSON.stringify(this.searchFilter.groups));
