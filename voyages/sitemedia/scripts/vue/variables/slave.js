@@ -134,12 +134,103 @@ slave = {
   },
 
   percentageBySexAndAgeGroup: {
+    var_imputed_percentage_men: {
+      varName: 'var_imputed_percentage_men',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_percentage_women: {
+      varName: 'var_imputed_percentage_women',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_percentage_boys: {
+      varName: 'var_imputed_percentage_boys',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_percentage_girls: {
+      varName: 'var_imputed_percentage_girls',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_percentage_male: {
+      varName: 'var_imputed_percentage_male',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_percentage_child: {
+      varName: 'var_imputed_percentage_child',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
     count: {
       changed: 0,
       activated: 0,
     }
   },
+
   otherCharacteristics: {
+    var_imputed_sterling_cash: {
+      varName: 'var_imputed_sterling_cash',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_death_middle_passage: {
+      varName: 'var_imputed_death_middle_passage',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
+    var_imputed_mortality: {
+      varName: 'var_imputed_mortality',
+      value: {
+        op: "equals to",
+        searchTerm0: null,
+        searchTerm1: null,
+      },
+      changed: false,
+      activated: false,
+    },
     count: {
       changed: 0,
       activated: 0,

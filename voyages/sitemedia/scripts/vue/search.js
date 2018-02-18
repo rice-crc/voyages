@@ -310,7 +310,10 @@ var searchBar = new Vue({
 				this.searchFilter.groups.slave.purchaseNumbers.count.changed = countChanged(this.searchFilter.groups.slave.purchaseNumbers);
 				this.searchFilter.groups.slave.landingNumbers.count.activated = countActivated(this.searchFilter.groups.slave.landingNumbers);
 				this.searchFilter.groups.slave.landingNumbers.count.changed = countChanged(this.searchFilter.groups.slave.landingNumbers);
-
+				this.searchFilter.groups.slave.percentageBySexAndAgeGroup.count.activated = countActivated(this.searchFilter.groups.slave.percentageBySexAndAgeGroup);
+				this.searchFilter.groups.slave.percentageBySexAndAgeGroup.count.changed = countChanged(this.searchFilter.groups.slave.percentageBySexAndAgeGroup);
+				this.searchFilter.groups.slave.otherCharacteristics.count.activated = countActivated(this.searchFilter.groups.slave.otherCharacteristics);
+				this.searchFilter.groups.slave.otherCharacteristics.count.changed = countChanged(this.searchFilter.groups.slave.otherCharacteristics);
 
 				// slave count
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
