@@ -307,20 +307,7 @@ var searchBar = new Vue({
 	},
 
 	methods: {
-		changed() {
-      debugger;
-    },
-		apply(group, filterValues) {
-			activateFilter(this.searchFilter.groups, group, filterValues);
-			var searchTerms = searchAll(this.searchFilter.groups);
-			// alert(JSON.stringify(this.searchFilter.groups));
-			alert(JSON.stringify(searchTerms));
-			search(this.searchFilter, searchTerms);
-		},
-		reset(group, subGroup) {
-			resetFilter(this.searchFilter.groups, group, subGroup);
-		},
-		itemChanged(variable, changed) {
+		changed(variable, changed) {
 			// function to locate a variable
 			for (key1 in this.searchFilter.groups) {
 				for (key2 in this.searchFilter.groups[key1]) {
@@ -339,9 +326,17 @@ var searchBar = new Vue({
 				}
 			}
 			// function to locate a variable
-
+    },
+		apply(group, filterValues) {
+			activateFilter(this.searchFilter.groups, group, filterValues);
+			var searchTerms = searchAll(this.searchFilter.groups);
+			// alert(JSON.stringify(this.searchFilter.groups));
+			alert(JSON.stringify(searchTerms));
+			search(this.searchFilter, searchTerms);
 		},
-
+		reset(group, subGroup) {
+			resetFilter(this.searchFilter.groups, group, subGroup);
+		},
 
 		startTour() {
 			// Instance the tour
