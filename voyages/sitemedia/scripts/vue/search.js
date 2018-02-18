@@ -320,16 +320,79 @@ function search(query, activeSearchTerms) {
   // searchCallback();
 }
 
+
 // main app
 var searchBar = new Vue({
 	el: "#search-bar",
 	delimiters: ['{{', '}}'],
 	data: {
+
+
+			data: [
+				{
+					"text": "Same but with checkboxes",
+					"children": [
+						{
+							"text": "initially selected",
+						},
+						{
+							"text": "custom icon",
+						},
+						{
+							"text": "initially open",
+							"children": [
+								{
+									"text": "Another node"
+								}
+							]
+						},
+						{
+							"text": "custom icon",
+						},
+						{
+							"text": "disabled node",
+							"disabled": true
+						}
+					]
+				},
+				{
+					"text": "Same but with checkboxes",
+					"children": [
+						{
+							"text": "initially selected",
+						},
+						{
+							"text": "custom icon",
+						},
+						{
+							"text": "initially open",
+							"children": [
+								{
+									"text": "Another node"
+								}
+							]
+						},
+						{
+							"text": "custom icon",
+						},
+						{
+							"text": "disabled node",
+							"disabled": true
+						}
+					]
+				},
+				{
+					"text": "And wholerow selection"
+				}
+			],
+			selectItem: null,
+
 		isAdvanced: true,
 		searchFilter: {
 			groups: {
 				slave: slave,
 				yearRange: yearRange,
+				source: source,
 			},
 			outcome1: outcome1,
 			outcome2: outcome2,
@@ -354,7 +417,7 @@ var searchBar = new Vue({
 
 		searchFilter: {
 			handler: function(val){
-				// slave overallNumbers count
+				// slave sub count
 				this.searchFilter.groups.slave.overallNumbers.count.activated = countActivated(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.overallNumbers.count.changed = countChanged(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.purchaseNumbers.count.activated = countActivated(this.searchFilter.groups.slave.purchaseNumbers);
@@ -370,6 +433,14 @@ var searchBar = new Vue({
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
 				this.searchFilter.groups.slave.count.changed = countMenuChanged(this.searchFilter.groups.slave);
 
+
+				// source sub count
+				this.searchFilter.groups.source.source.count.activated = countActivated(this.searchFilter.groups.source.source);
+				this.searchFilter.groups.source.source.count.changed = countChanged(this.searchFilter.groups.source.source);
+
+				// source count
+				this.searchFilter.groups.source.count.activated = countMenuActivated(this.searchFilter.groups.source);
+				this.searchFilter.groups.source.count.changed = countMenuChanged(this.searchFilter.groups.source);
 			},
 			deep: true,
 		},
