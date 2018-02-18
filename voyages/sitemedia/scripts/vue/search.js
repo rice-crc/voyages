@@ -261,26 +261,8 @@ var searchBar = new Vue({
 		searchFilter: {
 			groups: {
 				slave: slave,
+				yearRange: yearRange,
 			},
-
-			yearRange: {
-				default: {
-					op: "is between",
-					searchTerm: [1514, 1866],
-				},
-				current: {
-					op: "is between",
-					searchTerm: [1514, 1866],
-				},
-				value: {
-					op: "is between",
-					searchTerm: [1514, 1866],
-				},
-				varName: "imp_arrival_at_port_of_dis",
-				hasChanged: true,
-				count: 0,
-			},
-
 			outcome1: outcome1,
 			outcome2: outcome2,
 			outcome3: outcome3,
