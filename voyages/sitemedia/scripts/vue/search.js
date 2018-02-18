@@ -345,10 +345,10 @@ var searchBar = new Vue({
 	},
 	watch: {
 		isAdvanced: function(val){
-			$menu.menuAim({
-					activate: activateSubmenu,
-					deactivate: deactivateSubmenu
-			});
+			// $menu.menuAim({
+			// 		activate: activateSubmenu,
+			// 		deactivate: deactivateSubmenu
+			// });
 		},
 
 		searchFilter: {
@@ -413,6 +413,11 @@ var searchBar = new Vue({
 			search(this.searchFilter, searchTerms);
 		},
 
+		toggle() {
+			debugger;
+			this.isAdvanced = !this.isAdvanced;
+		},
+
 		startTour() {
 			// Instance the tour
 			$(function () {
@@ -452,6 +457,9 @@ var searchBar = new Vue({
 	},
 
 	mounted: function() {
+		// prevent Bootstrap dropdown from closing when clicking inside
+		$('.search-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
+
 		search(this.searchFilter, []);
 	}
 
