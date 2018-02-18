@@ -8,12 +8,13 @@
   </div>
 </li>
 
+<!-- Search Settings -->
 <li class="nav-item dropdown">
   <v-menu-title :count="false">
     <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
-  <v-panel-singular title="Search Settings" :count="false" :filters="isAdvanced" group="options" subGroup="settings">
+  <v-panel-singular title="Search Settings" :count="false" :filters="isAdvanced" group="options" sub-group="settings">
     <div slot="v-panel-header">
       <v-panel-header title="Search Settings" description="Settings about your search in the Trans-Atlantic Slave Trade Database">
         <div slot="v-modal-content">
@@ -23,12 +24,16 @@
     </div>
 
     <div slot="v-panel-content">
-      <v-toggle :toggled="isAdvanced" label="Enabled" @toggle="toggle"></v-toggle>
-      isAdvanced: {{isAdvanced}}
+      <v-toggle
+        title="Show Advanced Variables in Search Filters"
+        description="Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior."
+        :toggled="isAdvanced"
+        @toggle="toggle">
+      </v-toggle>
     </div>
-
   </v-panel-singular>
 </li>
+<!-- Search Settings -->
 
 <li class="nav-item dropdown">
   <a id="heart-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
