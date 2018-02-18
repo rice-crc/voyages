@@ -35,13 +35,32 @@
 </li>
 <!-- Search Settings -->
 
+<!-- Saved Searches -->
 <li class="nav-item dropdown">
-  <a id="heart-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-    <i class="fa fa-heart" aria-hidden="true"></i>
-  </a>
-  <div class="dropdown-menu search-menu dropdown-menu-right">
-    <a class="dropdown-item" href="#">English</a>
-    <a class="dropdown-item" href="#">Português</a>
-  </div>
+  <v-menu-title :count="false">
+    <i class="fa fa-heart" aria-hidden="true" slot="menu-title"></i>
+  </v-menu-title>
+
+  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved">
+    <div slot="v-panel-header">
+      <v-panel-header
+        title="Saved Searches"
+        description="Save and share a particular set of variables for your search"
+        :modal-disabled="true">
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content">
+      <!-- <v-toggle
+        title="Show Advanced Variables in Search Filters"
+        description="Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior."
+        :toggled="isAdvanced"
+        @toggle="toggle">
+      </v-toggle> -->
+    </div>
+  </v-panel-singular>
+
 </li>
+<!-- Saved Searches -->
+
 {% endverbatim %}
