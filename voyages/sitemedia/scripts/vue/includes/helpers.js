@@ -107,8 +107,10 @@ function replaceKey(key) {
 	} else if (key == "is between") {
 		return "is between";
 	} else if (key == "equals to") {
-		return "contains";
-	}
+		return "equals";
+	} else if (key == "contains") {
+    return "contains";
+  }
 }
 
 function searchAll(filter) {
