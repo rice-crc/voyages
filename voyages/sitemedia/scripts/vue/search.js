@@ -398,8 +398,8 @@ var searchBar = new Vue({
     },
 
 		// turn changed items into activated state; then execute search
-		apply(group, filterValues) {
-			activateFilter(this.searchFilter.groups, group, filterValues);
+		apply(group, subGroup, filterValues) {
+			activateFilter(this.searchFilter.groups, group, subGroup, filterValues);
 			var searchTerms = searchAll(this.searchFilter.groups);
 			// alert(JSON.stringify(this.searchFilter.groups));
 			alert(JSON.stringify(searchTerms));

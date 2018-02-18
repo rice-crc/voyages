@@ -40,7 +40,7 @@ Vue.component('v-panel', {
 
   methods: {
     apply() {
-      this.$emit('apply', this.group, this.filtersValue);
+      this.$emit('apply', this.group, this.subGroup, this.filtersValue);
     },
     reset(group, subGroup) {
       this.$emit('reset', this.group, this.subGroup);

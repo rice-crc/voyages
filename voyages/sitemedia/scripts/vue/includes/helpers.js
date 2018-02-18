@@ -44,19 +44,15 @@ function countMenuActivated(object) {
 	return count;
 }
 
-function activateFilter(filter, group, filterValues) {
-	for (key1 in filter[group]) {
+function activateFilter(filter, group, subGroup, filterValues) {
+	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
-			for (key2 in filter[group][key1]) {
-				if (key2 !== "count") {
-					if (filter[group][key1][key2].changed) {
-						// filter[group][key1][key2].value["searchTerm0"] = filterValues[group][key1][key2].value["searchTerm0"];
-						// filter[group][key1][key2].value["searchTerm1"] = filterValues[group][key1][key2].value["searchTerm1"];
-						// filter[group][key1][key2].value["op"] = filterValues[group][key1][key2].value["op"];
-						filter[group][key1][key2].changed = true;
-						filter[group][key1][key2].activated = true;
-					}
-				}
+			if (filter[group][subGroup][key1].changed) {
+				// filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].value["searchTerm0"];
+				// filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].value["searchTerm1"];
+				// filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].value["op"];
+				filter[group][subGroup][key1].changed = true;
+				filter[group][subGroup][key1].activated = true;
 			}
 		}
 	}
