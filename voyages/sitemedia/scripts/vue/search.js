@@ -78,7 +78,6 @@ function search(query) {
 	var query = query;
 
 	var activeSearchTerms = jQuery.map(query, function(val, id) {
-		// debugger;
 		if (val.hasChanged) {
 			var term = searchTermsDict[val.varName];
 			// Here we allow custom search types to generate their backend terms.
@@ -296,7 +295,6 @@ function countMenuActivated(object) {
 }
 
 function activateFilter(filter, group, filterValues) {
-	debugger;
 	for (key1 in filter[group]) {
 		if (key1 !== "count") {
 			for (key2 in filter[group][key1]) {
@@ -328,6 +326,35 @@ function resetFilter(filter, group) {
 			}
 		}
 	}
+}
+
+function searchAll(filter) {
+	var items = [];
+	for (key1 in filter) {
+		if (key1 !== "count") {
+			for (key2 in filter[key1]) {
+				if (key2 !== "count") {
+					for (key3 in filter[key1][key2]) {
+						if (key3 !== "count") {
+							if (filter[key1][key2][key3].activated) {
+								var item = {};
+								var searchTerm = [];
+								item["op"] = filter[key1][key2][key3].value["op"];
+								item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+								item["varName"] = filter[key1][key2][key3].varName;
+								items.push(item);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return items;
+}
+
+function resetAll() {
+
 }
 // helpers
 
@@ -491,7 +518,9 @@ var searchBar = new Vue({
     },
 		apply(group, filterValues) {
 			activateFilter(this.searchFilter.groups, group, filterValues);
+			var searchTerms = searchAll(this.searchFilter.groups);
 			alert(JSON.stringify(this.searchFilter.groups));
+			alert(JSON.stringify(searchTerms));
 		},
 		reset(group) {
 			resetFilter(this.searchFilter.groups, group);
