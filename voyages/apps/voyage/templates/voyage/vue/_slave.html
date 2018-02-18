@@ -5,14 +5,13 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" is-advanced="false" :filters="searchFilter.groups.slave.overallNumbers">
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" :filters="searchFilter.groups.slave.overallNumbers" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
 					</v-panel-header>
-
 				</div>
 
 				<div slot="v-panel-content" slot-scope="scope">
@@ -37,7 +36,8 @@
 						:filter="scope.filters.var_total_num_slaves_purchased"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -48,12 +48,13 @@
 						:filter="scope.filters.var_imp_total_slaves_disembarked"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" :count="searchFilter.groups.slave.purchaseNumbers.count" title="Purchase Numbers" is-advanced="false" :filters="searchFilter.groups.slave.purchaseNumbers">
+			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" :count="searchFilter.groups.slave.purchaseNumbers.count" title="Purchase Numbers" :filters="searchFilter.groups.slave.purchaseNumbers" :visible="isAdvanced">
 				<div slot="v-panel-header">
 					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers">
 						<div slot="v-modal-content">
@@ -74,7 +75,8 @@
 						:filter="scope.filters.var_num_slaves_intended_first_port"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -85,7 +87,8 @@
 						:filter="scope.filters.var_num_slaves_carried_first_port"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -96,7 +99,8 @@
 						:filter="scope.filters.var_num_slaves_carried_second_port"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -107,13 +111,14 @@
 						:filter="scope.filters.var_num_slaves_carried_third_port"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :count="searchFilter.groups.slave.landingNumbers.count" :filters="searchFilter.groups.slave.landingNumbers" title="Landing Numbers" is-advanced="false">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :count="searchFilter.groups.slave.landingNumbers.count" :filters="searchFilter.groups.slave.landingNumbers" title="Landing Numbers" :visible="isAdvanced">
 				<div slot="v-panel-header">
 					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves">
 						<div slot="v-modal-content">
@@ -133,7 +138,8 @@
 						:filter="scope.filters.var_total_num_slaves_arr_first_port_embark"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -144,7 +150,8 @@
 						:filter="scope.filters.var_num_slaves_disembark_first_place"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -155,7 +162,8 @@
 						:filter="scope.filters.var_num_slaves_disembark_second_place"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -166,13 +174,14 @@
 						:filter="scope.filters.var_num_slaves_disembark_third_place"
 						:is-numeric=true
 						:is-imputed=false
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :count="searchFilter.groups.slave.percentageBySexAndAgeGroup.count" :filters="searchFilter.groups.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" is-advanced="false">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :count="searchFilter.groups.slave.percentageBySexAndAgeGroup.count" :filters="searchFilter.groups.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Percentage by Sex and Age Group" description="Demographic parameters about the slaves">
 						<div slot="v-modal-content">
@@ -253,7 +262,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :count="searchFilter.groups.slave.otherCharacteristics.count" :filters="searchFilter.groups.slave.otherCharacteristics" title="Other Characteristics" is-advanced="false">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :count="searchFilter.groups.slave.otherCharacteristics.count" :filters="searchFilter.groups.slave.otherCharacteristics" title="Other Characteristics" :visible="isAdvanced">
 				<div slot="v-panel-header">
 					<v-panel-header title="Other Characteristics" description="Other characteristics of the slaves">
 						<div slot="v-modal-content">
@@ -274,7 +283,8 @@
 						:filter="scope.filters.var_imputed_sterling_cash"
 						:is-numeric=true
 						:is-imputed=true
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -285,7 +295,8 @@
 						:filter="scope.filters.var_imputed_death_middle_passage"
 						:is-numeric=true
 						:is-imputed=true
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 					<v-input @change="changed"
@@ -296,7 +307,8 @@
 						:filter="scope.filters.var_imputed_mortality"
 						:is-numeric=true
 						:is-imputed=true
-						:is-advanced=true>
+						:is-advanced=true
+						v-if="isAdvanced">
 					</v-input>
 
 				</div>
