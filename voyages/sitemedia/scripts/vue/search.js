@@ -331,6 +331,7 @@ var searchBar = new Vue({
 				year: year,
 				shipNationOwner: shipNationOwner,
 				slave: slave,
+				itinerary: itinerary,
 				captainAndCrew: captainAndCrew,
 				source: source,
 			},
@@ -387,10 +388,8 @@ var searchBar = new Vue({
 				this.searchFilter.groups.shipNationOwner.count.changed = countMenuChanged(this.searchFilter.groups.shipNationOwner);
 
 				// captain and crew
-				this.searchFilter.groups.captainAndCrew.captain.count.activated = countActivated(this.searchFilter.groups.captainAndCrew.captain);
-				this.searchFilter.groups.captainAndCrew.captain.count.changed = countChanged(this.searchFilter.groups.captainAndCrew.captain);
-				this.searchFilter.groups.captainAndCrew.crew.count.activated = countActivated(this.searchFilter.groups.captainAndCrew.crew);
-				this.searchFilter.groups.captainAndCrew.crew.count.changed = countChanged(this.searchFilter.groups.captainAndCrew.crew);
+				this.searchFilter.groups.captainAndCrew.captainAndCrew.count.activated = countActivated(this.searchFilter.groups.captainAndCrew.captainAndCrew);
+				this.searchFilter.groups.captainAndCrew.captainAndCrew.count.changed = countChanged(this.searchFilter.groups.captainAndCrew.captainAndCrew);
 				this.searchFilter.groups.captainAndCrew.count.activated = countMenuActivated(this.searchFilter.groups.captainAndCrew);
 				this.searchFilter.groups.captainAndCrew.count.changed = countMenuChanged(this.searchFilter.groups.captainAndCrew);
 			},

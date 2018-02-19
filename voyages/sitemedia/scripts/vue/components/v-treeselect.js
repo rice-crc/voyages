@@ -27,6 +27,7 @@ Vue.component("v-treeselect", {
           :multiple="true"
           :options="options"
           placeholder="Select from the list"
+          
           v-model="value"
         />
       </div>

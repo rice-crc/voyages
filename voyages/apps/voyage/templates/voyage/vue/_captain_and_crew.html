@@ -1,81 +1,62 @@
 {% verbatim %}
 <li class="nav-item dropdown">
+
   <v-menu-title :count="searchFilter.groups.captainAndCrew.count" title="Captain and Crew"></v-menu-title>
 
-  <div class="">
-    <ul class="dropdown-menu search-menu" id="captainAndCrew" role="menu">
-
-      <v-panel @apply="apply" @reset="reset" group="captainAndCrew" sub-group="captain" :count="searchFilter.groups.captainAndCrew.captain.count" title="Captain" :filters="searchFilter.groups.captainAndCrew.captain" :visible="true">
-        <div slot="v-panel-header">
-          <v-panel-header title="Captain" description="Parameters about captain">
-            <div slot="v-modal-content">
-							Some help text
-						</div>
-          </v-panel-header>
+  <v-panel-singular @apply="apply" @reset="reset" group="captainAndCrew" sub-group="captainAndCrew" title="Captain and Crew" :filters="searchFilter.groups.captainAndCrew.captainAndCrew" :count="searchFilter.groups.captainAndCrew.captainAndCrew.count" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="Captain and Crew" description="Captain and Crew">
+        <div slot="v-modal-content">
+          Some help text
         </div>
+      </v-panel-header>
+    </div>
 
-        <div slot="v-panel-content" slot-scope="scope">
-          <p>
-	          filters are: {{scope.filters}}
-					</p>
-          <v-input @change="changed"
-            title="Captain's Name"
-            description="The name of the captain. This could a partial keyword."
-            var-name="var_captain_plaintext"
-            search-term-caption=""
-            :filter="scope.filters.var_captain_plaintext"
-            :is-numeric=false>
-          </v-input>
+    <div slot="v-panel-content" slot-scope="scope">
+      <p>
+        filters are: {{scope.filters}}
+      </p>
 
-        </div>
-      </v-panel>
+      <v-input @change="changed"
+        title="Captain's Name"
+        description="The name of the captain. This could a partial keyword."
+        var-name="var_captain_plaintext"
+        search-term-caption=""
+        :filter="scope.filters.var_captain_plaintext"
+        :is-numeric=false>
+      </v-input>
 
-      <v-panel @apply="apply" @reset="reset" group="captainAndCrew" sub-group="crew" title="Crew" :count="searchFilter.groups.captainAndCrew.crew.count" :filters="searchFilter.groups.captainAndCrew.crew" :visible="true">
-        <div slot="v-panel-header">
-          <v-panel-header title="Crew" description="Parameters about the crew">
-            <div slot="v-modal-content">
-							Some help text
-						</div>
-          </v-panel-header>
-        </div>
+      <v-input @change="changed"
+        title="Crew at Voyage Outset"
+        description="Enter the number of crew at voyage outset. This could be a range."
+        var-name="var_crew_voyage_outset"
+        search-term-caption=""
+        :filter="scope.filters.var_crew_voyage_outset"
+        :is-numeric=true>
+      </v-input>
 
-        <div slot="v-panel-content" slot-scope="scope">
-          <p>
-						filters are: {{scope.filters}}
-					</p>
-          <v-input @change="changed"
-            title="Crew at Voyage Outset"
-            description="Enter the number of crew at voyage outset. This could be a range."
-            var-name="var_crew_voyage_outset"
-            search-term-caption=""
-            :filter="scope.filters.var_crew_voyage_outset"
-            :is-numeric=true>
-          </v-input>
+      <v-input @change="changed"
+        title="Crew at First Landing of Slaves"
+        description="Enter the number of crew at first landing of slaves. This could be a range."
+        var-name="var_crew_first_landing"
+        search-term-caption=""
+        :filter="scope.filters.var_crew_first_landing"
+        :is-numeric=true
+        :is-advanced=true
+        v-if="isAdvanced">
+      </v-input>
 
-          <v-input @change="changed"
-            title="Crew at First Landing of Slaves"
-            description="Enter the number of crew at first landing of slaves. This could be a range."
-            var-name="var_crew_first_landing"
-            search-term-caption=""
-            :filter="scope.filters.var_crew_first_landing"
-            :is-numeric=true
-            :is-advanced=true
-            v-if="isAdvanced">
-          </v-input>
+      <v-input @change="changed"
+        title="Crew Deaths during Voyage"
+        description="Enter the number of crew death during voyages. This could be a range."
+        var-name="var_crew_died_complete_voyage"
+        search-term-caption=""
+        :filter="scope.filters.var_crew_died_complete_voyage"
+        :is-numeric=true>
+      </v-input>
 
-          <v-input @change="changed"
-            title="Crew Deaths during Voyage"
-            description="Enter the number of crew death during voyages. This could be a range."
-            var-name="var_crew_died_complete_voyage"
-            search-term-caption=""
-            :filter="scope.filters.var_crew_died_complete_voyage"
-            :is-numeric=true>
-          </v-input>
+    </div>
+  </v-panel-singular>
 
-        </div>
-      </v-panel>
-
-      </ul>
-  </div>
 </li>
 {% endverbatim %}

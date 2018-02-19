@@ -1,5 +1,5 @@
 captainAndCrew = {
-  captain: {
+  captainAndCrew: {
     var_captain_plaintext: {
       varName: 'captain_plaintext',
       value: {
@@ -10,13 +10,8 @@ captainAndCrew = {
       changed: false,
       activated: false,
     },
-    count: {
-      changed: 0,
-      activated: 0,
-    }
-  },
 
-  crew: {
+
     var_crew_voyage_outset: {
       varName: 'crew_voyage_outset',
       value: {

@@ -164,7 +164,8 @@ Vue.component('v-input', {
   mounted: function() {
     this.options.searchTermCaption0 = this.searchTermCaption;
     this.options.type = this.isNumeric ? "number" : "text";
-  }
+  },
+
 
 })
 // end of input
