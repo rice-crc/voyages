@@ -433,18 +433,19 @@ var searchBar = new Vue({
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
 				this.searchFilter.groups.slave.count.changed = countMenuChanged(this.searchFilter.groups.slave);
 
-
 				// source count
 				this.searchFilter.groups.source.source.count.activated = countActivated(this.searchFilter.groups.source.source);
 				this.searchFilter.groups.source.source.count.changed = countChanged(this.searchFilter.groups.source.source);
-
 				this.searchFilter.groups.source.count.activated = countMenuActivated(this.searchFilter.groups.source);
 				this.searchFilter.groups.source.count.changed = countMenuChanged(this.searchFilter.groups.source);
 
 				//SNO
 				this.searchFilter.groups.shipNationOwner.voyagesAndVessels.count.activated = countActivated(this.searchFilter.groups.shipNationOwner.voyagesAndVessels);
 				this.searchFilter.groups.shipNationOwner.voyagesAndVessels.count.changed = countChanged(this.searchFilter.groups.shipNationOwner.voyagesAndVessels);
-
+				this.searchFilter.groups.shipNationOwner.constructionAndRegistration.count.activated = countActivated(this.searchFilter.groups.shipNationOwner.constructionAndRegistration);
+				this.searchFilter.groups.shipNationOwner.constructionAndRegistration.count.changed = countChanged(this.searchFilter.groups.shipNationOwner.constructionAndRegistration);
+				this.searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted.count.activated = countActivated(this.searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted);
+				this.searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted.count.changed = countChanged(this.searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted);
 				this.searchFilter.groups.shipNationOwner.count.activated = countMenuActivated(this.searchFilter.groups.shipNationOwner);
 				this.searchFilter.groups.shipNationOwner.count.changed = countMenuChanged(this.searchFilter.groups.shipNationOwner);
 
