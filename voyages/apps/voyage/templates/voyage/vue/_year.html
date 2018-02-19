@@ -2,7 +2,7 @@
 
 
 <li class="nav-item dropdown">
-  <v-menu-title :count="false">
+  <v-menu-title :count="searchFilter.groups.year.count">
     <div slot="menu-title">
       <span>{{searchFilter.groups.year.year.imp_arrival_at_port_of_dis.value.searchTerm0}}</span>
       <span> - </span>
@@ -10,7 +10,7 @@
     </div>
   </v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" title="Year Range" :count="false" :filters="searchFilter.groups.year.year" group="year" sub-group="year" align="left" >
+  <v-panel-singular @apply="apply" @reset="reset" title="Year Range" :count="searchFilter.groups.year.year.count" :filters="searchFilter.groups.year.year" group="year" sub-group="year" align="left" >
     <div slot="v-panel-header">
       <v-panel-header
         title="Year Range"
@@ -24,6 +24,16 @@
         filters are: {{scope.filters}}
       </p>
 
+      <v-input @change="changed"
+         title="Year"
+         description="This is the source of the data. This could be a partial keyword."
+         var-name="imp_arrival_at_port_of_dis"
+         search-term-caption=""
+         :filter="scope.filters.imp_arrival_at_port_of_dis"
+         :is-numeric=true
+         :is-imputed=false
+         :is-advanced=false>
+       </v-input>
 
 
     </div>
