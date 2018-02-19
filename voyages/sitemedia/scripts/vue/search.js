@@ -325,67 +325,6 @@ var searchBar = new Vue({
 	el: "#search-bar",
 	delimiters: ['{{', '}}'],
 	data: {
-
-
-			data: [
-				{
-					"text": "Same but with checkboxes",
-					"children": [
-						{
-							"text": "initially selected",
-						},
-						{
-							"text": "custom icon",
-						},
-						{
-							"text": "initially open",
-							"children": [
-								{
-									"text": "Another node"
-								}
-							]
-						},
-						{
-							"text": "custom icon",
-						},
-						{
-							"text": "disabled node",
-							"disabled": true
-						}
-					]
-				},
-				{
-					"text": "Same but with checkboxes",
-					"children": [
-						{
-							"text": "initially selected",
-						},
-						{
-							"text": "custom icon",
-						},
-						{
-							"text": "initially open",
-							"children": [
-								{
-									"text": "Another node"
-								}
-							]
-						},
-						{
-							"text": "custom icon",
-						},
-						{
-							"text": "disabled node",
-							"disabled": true
-						}
-					]
-				},
-				{
-					"text": "And wholerow selection"
-				}
-			],
-			selectItem: null,
-
 		isAdvanced: true,
 		searchFilter: {
 			groups: {
@@ -401,6 +340,7 @@ var searchBar = new Vue({
 			outcome4: outcome4,
 			outcome5: outcome5,
 		},
+    places: {},
 		searchQuery: {
 			// put the search query in here
 		},
@@ -552,6 +492,12 @@ var searchBar = new Vue({
 
 	mounted: function() {
 		$('.search-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
+
+    var placesData = new PlacesData();
+    placesData.initAsync(function(data) {
+      this.places = data;
+    });
+
 		search(this.searchFilter, []);
 	},
 
@@ -561,6 +507,8 @@ var searchBar = new Vue({
         activate: activateSubmenu,
         deactivate: deactivateSubmenu
     });
-  }
+  },
+
+
 
 })
