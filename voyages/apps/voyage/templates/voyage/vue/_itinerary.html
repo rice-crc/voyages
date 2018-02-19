@@ -1,0 +1,321 @@
+{% verbatim %}
+
+<li class="nav-item dropdown">
+	<v-menu-title :count="searchFilter.groups.slave.count" title="Itinerary"></v-menu-title>
+	<div class="">
+		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
+
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" :count="searchFilter.groups.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" :filters="searchFilter.groups.slave.overallNumbers" :visible="true">
+				<div slot="v-panel-header">
+					<v-panel-header title="Place of Departure" description="Overall numbers about slaves in the trade">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+	          filters are: {{scope.filters}}
+					</p>
+          <v-input @change="changed"
+						title="Total Slaves Embarked Imputed"
+						description="The total number of slaves embarked before departure. This could be a range."
+						var-name="var_imp_total_num_slaves_purchased"
+						search-term-caption=""
+						:filter="scope.filters.var_imp_total_num_slaves_purchased"
+						:is-numeric=true
+						:is-imputed=true>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Total Slaves Embarked"
+						description="The total number of slaves embarked before departure. This could be a range."
+						var-name="var_total_num_slaves_purchased"
+						search-term-caption=""
+						:filter="scope.filters.var_total_num_slaves_purchased"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Total Slaves Disembarked Imputed"
+						description="The total number of slaves disembarked after arrival. This could be a range."
+						var-name="var_imp_total_slaves_disembarked"
+						search-term-caption=""
+						:filter="scope.filters.var_imp_total_slaves_disembarked"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+				</div>
+			</v-panel>
+
+			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" :count="searchFilter.groups.slave.purchaseNumbers.count" title="Purchase Numbers" :filters="searchFilter.groups.slave.purchaseNumbers" :visible="isAdvanced">
+				<div slot="v-panel-header">
+					<v-panel-header title="Places of Slave Purchase" description="Slave purchase numbers">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+						filters are: {{scope.filters}}
+					</p>
+					<v-input @change="changed"
+						title="Number of Slaves Intended at First Place of Purchase"
+						description="Number of slaves intended at first place of purchase. This could be a range."
+						var-name="var_num_slaves_intended_first_port"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_intended_first_port"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Slaves Carried from 1st Port of Purchase"
+						description="Number of slaves carried from 1st port of purchase. This could be a range."
+						var-name="var_num_slaves_carried_first_port"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_carried_first_port"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Slaves Carried from 2nd Port of Purchase"
+						description="Number of slaves carried from 2nd port of purchase. This could be a range."
+						var-name="var_num_slaves_carried_second_port"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_carried_second_port"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Slaves Carried from 3rd Port of Purchase"
+						description="Number of slaves carried from 3rd port of purchase. This could be a range."
+						var-name="var_num_slaves_carried_third_port"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_carried_third_port"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+				</div>
+			</v-panel>
+
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :count="searchFilter.groups.slave.landingNumbers.count" :filters="searchFilter.groups.slave.landingNumbers" title="Landing Numbers" :visible="isAdvanced">
+				<div slot="v-panel-header">
+					<v-panel-header title="Places of Call before Atlantic Crossing" description="Landing numbers of slaves">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+				</div>
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+						filters are: {{scope.filters}}
+					</p>
+					<v-input @change="changed"
+						title="Number of Slaves Arriving at 1st Place of Landing"
+						description="Number of slaves arrived at first place of landing. This could be a range."
+						var-name="var_total_num_slaves_arr_first_port_embark"
+						search-term-caption=""
+						:filter="scope.filters.var_total_num_slaves_arr_first_port_embark"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Number of Slaves Disembarked at 1st Place of Landing"
+						description="Number of slaves disembarked from 1st port of landing. This could be a range."
+						var-name="var_num_slaves_disembark_first_place"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_disembark_first_place"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Number of Slaves Disembarked at 2nd Place of Landing"
+						description="Number of slaves disembarked from 2nd port of landing. This could be a range."
+						var-name="var_num_slaves_disembark_second_place"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_disembark_second_place"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Number of Slaves Disembarked at 3rd Place of Landing"
+						description="Number of slaves disembarked from 3rd port of landing. This could be a range."
+						var-name="var_num_slaves_disembark_third_place"
+						search-term-caption=""
+						:filter="scope.filters.var_num_slaves_disembark_third_place"
+						:is-numeric=true
+						:is-imputed=false
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+				</div>
+			</v-panel>
+
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :count="searchFilter.groups.slave.percentageBySexAndAgeGroup.count" :filters="searchFilter.groups.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" :visible="true">
+				<div slot="v-panel-header">
+					<v-panel-header title="Places of Slave Landing" description="Demographic parameters about the slaves">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+						filters are: {{scope.filters}}
+					</p>
+					<v-input @change="changed"
+						title="Percentage Men"
+						description=""
+						var-name="var_imputed_percentage_men"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_men"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Percentage Women"
+						description=""
+						var-name="var_imputed_percentage_women"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_women"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Percentage Boys"
+						description=""
+						var-name="var_imputed_percentage_boys"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_boys"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Percentage Girls"
+						description=""
+						var-name="var_imputed_percentage_girls"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_girls"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Percentage Male"
+						description=""
+						var-name="var_imputed_percentage_male"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_male"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+
+					<v-input @change="changed"
+						title="Percentage Children"
+						description=""
+						var-name="var_imputed_percentage_child"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_percentage_child"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=false>
+					</v-input>
+				</div>
+			</v-panel>
+
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :count="searchFilter.groups.slave.otherCharacteristics.count" :filters="searchFilter.groups.slave.otherCharacteristics" title="Other Characteristics" :visible="isAdvanced">
+				<div slot="v-panel-header">
+					<v-panel-header title="Place of Destination" description="Other characteristics of the slaves">
+						<div slot="v-modal-content">
+							Some help text
+						</div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<p>
+						filters are: {{scope.filters}}
+					</p>
+					<v-input @change="changed"
+						title="Sterling Cash Price in Jamaica"
+						description="This could be a range."
+						var-name="var_imputed_sterling_cash"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_sterling_cash"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Slave Deaths during Middle Passage"
+						description="This could be a range."
+						var-name="var_imputed_death_middle_passage"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_death_middle_passage"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+					<v-input @change="changed"
+						title="Mortality Rate"
+						description="This could be a range."
+						var-name="var_imputed_mortality"
+						search-term-caption=""
+						:filter="scope.filters.var_imputed_mortality"
+						:is-numeric=true
+						:is-imputed=true
+						:is-advanced=true
+						v-if="isAdvanced">
+					</v-input>
+
+				</div>
+			</v-panel>
+
+			</ul>
+	</div>
+</li>
+
+{% endverbatim %}

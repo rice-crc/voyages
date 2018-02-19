@@ -1,35 +1,61 @@
 // v-treeselect
 Vue.component("v-treeselect", {
   template: `
-    <vue-treeselect
-      :multiple="true"
-      :options="options"
-      placeholder="Select your favourite(s)..."
-      v-model="value"
-    />
-    `,
+    <div>
+      <treeselect
+        :multiple="true"
+        :options="options"
+        placeholder="Select from the list"
+        v-model="value"
+      />
+      <pre class="result">{{ value }}</pre>
+    </div>
+  `,
+
+  components: {
+    treeselect: window.VueTreeselect.Treeselect,
+  },
 
   data: function(){
     return {
         value: null,
-        options: ["node-1", "node-2"],
-        source: [
-          {
-            id: 'node-1',
-            label: 'Node 1',
-            children: [
-              {
-                id: 'node-1-a',
-                label: 'Node 1-A',
-              },
-            ],
-          },
-          {
-            id: 'node-2',
-            label: 'Node 2',
-          },
-        ],
-      }
+        options: [ {
+          id: 'fruits',
+          label: 'Fruits',
+          children: [ {
+            id: 'apple',
+            label: 'Apple 🍎',
+          }, {
+            id: 'grapes',
+            label: 'Grapes 🍇',
+          }, {
+            id: 'pear',
+            label: 'Pear 🍐',
+          }, {
+            id: 'strawberry',
+            label: 'Strawberry 🍓',
+          }, {
+            id: 'watermelon',
+            label: 'Watermelon 🍉',
+          } ],
+        }, {
+          id: 'vegetables',
+          label: 'Vegetables',
+          children: [ {
+            id: 'corn',
+            label: 'Corn 🌽',
+          }, {
+            id: 'carrot',
+            label: 'Carrot 🥕',
+          }, {
+            id: 'eggplant',
+            label: 'Eggplant 🍆',
+          }, {
+            id: 'tomato',
+            label: 'Tomato 🍅',
+          } ],
+        } ],
+    }
   }
 });
 // v-treeselect
