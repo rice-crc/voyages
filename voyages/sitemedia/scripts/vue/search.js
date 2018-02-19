@@ -390,6 +390,7 @@ var searchBar = new Vue({
 		isAdvanced: true,
 		searchFilter: {
 			groups: {
+				shipNationOwner: shipNationOwner,
 				slave: slave,
 				yearRange: yearRange,
 				source: source,
@@ -417,7 +418,7 @@ var searchBar = new Vue({
 
 		searchFilter: {
 			handler: function(val){
-				// slave sub count
+				// slave count
 				this.searchFilter.groups.slave.overallNumbers.count.activated = countActivated(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.overallNumbers.count.changed = countChanged(this.searchFilter.groups.slave.overallNumbers);
 				this.searchFilter.groups.slave.purchaseNumbers.count.activated = countActivated(this.searchFilter.groups.slave.purchaseNumbers);
@@ -429,18 +430,24 @@ var searchBar = new Vue({
 				this.searchFilter.groups.slave.otherCharacteristics.count.activated = countActivated(this.searchFilter.groups.slave.otherCharacteristics);
 				this.searchFilter.groups.slave.otherCharacteristics.count.changed = countChanged(this.searchFilter.groups.slave.otherCharacteristics);
 
-				// slave count
 				this.searchFilter.groups.slave.count.activated = countMenuActivated(this.searchFilter.groups.slave);
 				this.searchFilter.groups.slave.count.changed = countMenuChanged(this.searchFilter.groups.slave);
 
 
-				// source sub count
+				// source count
 				this.searchFilter.groups.source.source.count.activated = countActivated(this.searchFilter.groups.source.source);
 				this.searchFilter.groups.source.source.count.changed = countChanged(this.searchFilter.groups.source.source);
 
-				// source count
 				this.searchFilter.groups.source.count.activated = countMenuActivated(this.searchFilter.groups.source);
 				this.searchFilter.groups.source.count.changed = countMenuChanged(this.searchFilter.groups.source);
+
+				//SNO
+				this.searchFilter.groups.shipNationOwner.voyagesAndVessels.count.activated = countActivated(this.searchFilter.groups.shipNationOwner.voyagesAndVessels);
+				this.searchFilter.groups.shipNationOwner.voyagesAndVessels.count.changed = countChanged(this.searchFilter.groups.shipNationOwner.voyagesAndVessels);
+
+				this.searchFilter.groups.shipNationOwner.count.activated = countMenuActivated(this.searchFilter.groups.shipNationOwner);
+				this.searchFilter.groups.shipNationOwner.count.changed = countMenuChanged(this.searchFilter.groups.shipNationOwner);
+
 			},
 			deep: true,
 		},

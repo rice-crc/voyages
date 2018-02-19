@@ -40,7 +40,7 @@
 			<div class="navbar-collapse collapse" id="searchNav">
 				<ul class="navbar-nav">
 					<!-- {% include "voyage/vue/_year.html" %} -->
-					<!-- {% include "voyage/vue/_ship_nation_owner.html" %} -->
+					{% include "voyage/vue/_ship_nation_owner.html" %}
 					<!-- {% include "voyage/vue/_outcome.html" %} -->
 					<!-- {% include "voyage/vue/_dates.html" %} -->
 					{% include "voyage/vue/_slave.html" %}
@@ -104,6 +104,7 @@
 
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/yearRange.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/ship-nation-owner.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/source.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/slave.js"></script>
 
