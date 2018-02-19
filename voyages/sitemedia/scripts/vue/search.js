@@ -320,7 +320,6 @@ function search(query, activeSearchTerms) {
   // searchCallback();
 }
 
-
 // main app
 var searchBar = new Vue({
 	el: "#search-bar",
@@ -390,11 +389,10 @@ var searchBar = new Vue({
 		isAdvanced: true,
 		searchFilter: {
 			groups: {
+				year: year,
 				shipNationOwner: shipNationOwner,
 				slave: slave,
 				captainAndCrew: captainAndCrew,
-				yearRange: yearRange,
-
 				source: source,
 			},
 			outcome1: outcome1,
@@ -407,15 +405,12 @@ var searchBar = new Vue({
 			// put the search query in here
 		},
 		saved: [],
+    menuAim: null,
 	},
 	computed: {
 	},
 	watch: {
 		isAdvanced: function(val){
-			// $menu.menuAim({
-			// 		activate: activateSubmenu,
-			// 		deactivate: deactivateSubmenu
-			// });
 		},
 
 		searchFilter: {
@@ -504,7 +499,6 @@ var searchBar = new Vue({
 		},
 
 		toggle() {
-			debugger;
 			this.isAdvanced = !this.isAdvanced;
 		},
 
@@ -557,10 +551,16 @@ var searchBar = new Vue({
 	},
 
 	mounted: function() {
-		// prevent Bootstrap dropdown from closing when clicking inside
 		$('.search-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
-
 		search(this.searchFilter, []);
-	}
+	},
+
+  // event loop - update the menuAim everytime after it's re-rendered
+  updated: function() {
+    $menu.menuAim({
+        activate: activateSubmenu,
+        deactivate: deactivateSubmenu
+    });
+  }
 
 })
