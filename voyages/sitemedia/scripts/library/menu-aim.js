@@ -158,9 +158,10 @@
          * Activate a menu row.
          */
         var activate = function(row) {
-                if (row == activeRow) {
-                    return;
-                }
+                // possibly a bug - comment out to make it functional 
+                // if (row == activeRow) {
+                //     return;
+                // }
 
                 if (activeRow) {
                     options.deactivate(activeRow);
@@ -177,7 +178,6 @@
          */
         var possiblyActivate = function(row) {
                 var delay = activationDelay();
-
                 if (delay) {
                     timeoutId = setTimeout(function() {
                         possiblyActivate(row);
