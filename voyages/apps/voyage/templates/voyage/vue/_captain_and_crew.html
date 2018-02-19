@@ -58,7 +58,9 @@
             var-name="var_crew_first_landing"
             search-term-caption=""
             :filter="scope.filters.var_crew_first_landing"
-            :is-numeric=true>
+            :is-numeric=true
+            :is-advanced=true
+            v-if="isAdvanced">
           </v-input>
 
           <v-input @change="changed"

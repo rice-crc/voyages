@@ -1,24 +1,36 @@
 {% verbatim %}
+
+
 <li class="nav-item dropdown">
-  <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{searchFilter.yearRange.value.searchTerm[0]}} - {{searchFilter.yearRange.value.searchTerm[1]}}</a>
-  <div class="">
-    <ul class="dropdown-menu search-menu" id="range" role="menu">
-        <li class="dropdown-item dropdown-item-li search-dropdown-item">
-          <div class="popover-content">
+  <v-menu-title :count="false">
+    <div slot="menu-title">
+      <span>{{searchFilter.groups.year.year.imp_arrival_at_port_of_dis.value.searchTerm0}}</span>
+      <span> - </span>
+      <span>{{searchFilter.groups.year.year.imp_arrival_at_port_of_dis.value.searchTerm1}}</span>
+    </div>
+  </v-menu-title>
 
-            <v-panel-header title="Year Range" description="The year range of your search query" count="0"></v-panel-header>
+  <v-panel-singular @apply="apply" @reset="reset" title="Year Range" :count="false" :filters="searchFilter.groups.year.year" group="year" sub-group="year" align="left" >
+    <div slot="v-panel-header">
+      <v-panel-header
+        title="Year Range"
+        description="The year range of your search in the Trans-Atlantic Slave Trade Database"
+        :modal-disabled="true">
+      </v-panel-header>
+    </div>
 
-            <v-input @change="changed"
-              title="Year Range"
-              description="The year range of your search query. The full extent of time from the first to the last voyage is 1514-1866 (restore it)."
-              var-name="imp_arrival_at_port_of_dis"
-              search-term-caption="Enter a value"
-              :filter="searchFilter.yearRange">
-            </v-input>
+    <div slot="v-panel-content" slot-scope="scope">
+      <p>
+        filters are: {{scope.filters}}
+      </p>
 
-          </div>
-        </li>
-      </ul>
-  </div>
+
+
+    </div>
+  </v-panel-singular>
 </li>
+
+
+
+
 {% endverbatim %}
