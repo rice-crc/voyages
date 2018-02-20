@@ -38,7 +38,6 @@ Vue.component('v-saved-searches', {
     }
   },
   created: function(){
-    debugger;
     new Clipboard('.btn');
   }
 
