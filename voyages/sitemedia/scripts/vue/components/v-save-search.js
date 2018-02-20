@@ -1,5 +1,5 @@
 Vue.component('v-save-search', {
-  props: ['title', 'description'],
+  props: ['title', 'description', 'target'],
   template: `
     <div class="v-form-group">
       <div class="v-title">

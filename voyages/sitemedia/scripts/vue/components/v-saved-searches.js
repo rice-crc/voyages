@@ -11,7 +11,7 @@ Vue.component('v-saved-searches', {
       <div class="v-description" v-text="description"></div>
 
       <div class="row" v-for="search in saved">
-        <div class="col-md-3">
+        <div class="col-md-3" :id="search.key">
           {{search.key}}
         </div>
         <div class="col-md-5">
@@ -21,7 +21,7 @@ Vue.component('v-saved-searches', {
           <b-button variant="info" size="sm" @click="load">
              Load
           </b-button>
-          <b-button variant="primary" size="sm" @click="clip">
+          <b-button variant="primary" size="sm" @click="clip" data-clipboard-action="copy" :data-clipboard-target="search.key">
              Share
           </b-button>
         </div>
@@ -36,5 +36,10 @@ Vue.component('v-saved-searches', {
     load() {
       this.$emit('clip');
     }
+  },
+  created: function(){
+    debugger;
+    new Clipboard('.btn');
   }
+
 });
