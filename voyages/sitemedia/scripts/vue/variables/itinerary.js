@@ -4,7 +4,7 @@ itinerary = {
       varName: 'imp_port_voyage_begin',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -20,7 +20,7 @@ itinerary = {
       varName: 'imp_principal_place_of_slave_purchase',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -30,7 +30,7 @@ itinerary = {
       varName: 'first_place_slave_purchase',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -40,7 +40,7 @@ itinerary = {
       varName: 'second_place_slave_purchase',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -50,7 +50,7 @@ itinerary = {
       varName: 'third_place_slave_purchase',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -67,7 +67,7 @@ itinerary = {
       varName: 'port_of_call_before_atl_crossing',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -84,7 +84,7 @@ itinerary = {
       varName: 'imp_principal_port_slave_dis',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -94,7 +94,7 @@ itinerary = {
       varName: 'first_landing_place',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -104,7 +104,7 @@ itinerary = {
       varName: 'second_landing_place',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -114,7 +114,7 @@ itinerary = {
       varName: 'third_landing_place',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,
@@ -131,7 +131,7 @@ itinerary = {
       varName: 'place_voyage_ended',
       value: {
         op: "is one of",
-        searchTerms: [],
+        searchTerm: [],
       },
       changed: false,
       activated: false,

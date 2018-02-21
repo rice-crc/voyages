@@ -42,7 +42,7 @@ function resetFilter(filter, group, subGroup) {
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
       if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
-        filter[group][subGroup][key1].value["searchTerms"] = [];
+        filter[group][subGroup][key1].value["searchTerm"] = [];
       } else {
         filter[group][subGroup][key1].value["searchTerm0"] = null;
   			filter[group][subGroup][key1].value["searchTerm1"] = null;
