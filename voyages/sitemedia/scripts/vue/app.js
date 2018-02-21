@@ -195,15 +195,61 @@ var searchBar = new Vue({
         children: null
       }];
 
-      var children = [];
-      for (key1 in data.broadRegions) {
-        children.push({
-          id: data.broadRegions[key1].pk,
-          label: data.broadRegions[key1].broad_region,
-          pk: data.broadRegions[key1].pk
-        });
+      // fill select all
+      options = [{
+        id: 0,
+        code: 0,
+        label: "Select All",
+        children: [],
+      }];
+
+      // fill broad regions
+      for (key in data.broadRegions) {
+        options[0].children.push({
+          id: data.broadRegions[key].order,
+          label: data.broadRegions[key].broad_region,
+          children: [],
+        })
+
       }
-      options[0].children = children;
+
+      // build regions
+      for (regionId in data.regions) {
+        var broadRegion = data.regions[regionId].broad_region;
+        for (broadRegionId in options[0].children) {
+          if (options[0].children[broadRegionId].id == broadRegion.order) {
+            options[0].children[broadRegionId].children.push({
+              id: data.regions[regionId].code,
+              label: data.regions[regionId].region,
+              children: []
+            })
+          }
+        }
+      }
+
+      // fill ports
+      for (portId in data.ports) {
+        // get basic information about a port
+        var code = data.ports[portId].code;
+        var label = data.ports[portId].port;
+        var regionId = data.ports[portId].region.code;
+        var broadRegionId = data.ports[portId].region.broad_region.order;
+
+        // locate corresponding location in the options tree
+        options[0].children.map(function(broadRegion) {
+          if (broadRegion.id == broadRegionId) {
+            broadRegion.children.map(function(region) {
+              if (region.id == regionId) { // in the correct region
+                region.children.push({ // fill port
+                  id: code,
+                  label: label
+                })
+              }
+            })
+          }
+        });
+
+      }
 
       $vm.places = options;
     })
