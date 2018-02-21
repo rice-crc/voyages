@@ -27,57 +27,10 @@ var generateUniqueRandomKey = function(previous) {
   return id;
 };
 
-function countChanged(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			if (object[key1].changed) {
-				count += 1;
-			}
-		}
-	}
-	return count;
-}
-
-function countActivated(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			if (object[key1].activated) {
-				count += 1;
-			}
-		}
-	}
-	return count;
-}
-
-function countMenuChanged(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			count = count + object[key1].count.changed;
-		}
-	}
-	return count;
-}
-
-function countMenuActivated(object) {
-	var count = 0;
-	for (key1 in object) {
-		if (key1 !== "count") {
-			count = count + object[key1].count.activated;
-		}
-	}
-	return count;
-}
-
 function activateFilter(filter, group, subGroup, filterValues) {
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
 			if (filter[group][subGroup][key1].changed) {
-				// filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].value["searchTerm0"];
-				// filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].value["searchTerm1"];
-				// filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].value["op"];
 				filter[group][subGroup][key1].changed = true;
 				filter[group][subGroup][key1].activated = true;
 			}
@@ -86,11 +39,15 @@ function activateFilter(filter, group, subGroup, filterValues) {
 }
 
 function resetFilter(filter, group, subGroup) {
-	debugger;
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
-			filter[group][subGroup][key1].value["searchTerm0"] = null;
-			filter[group][subGroup][key1].value["searchTerm1"] = null;
+      if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
+        filter[group][subGroup][key1].value["searchTerms"] = [];
+      } else {
+        filter[group][subGroup][key1].value["searchTerm0"] = null;
+  			filter[group][subGroup][key1].value["searchTerm1"] = null;
+      }
+      // TODO accomodate has one of; contains; equals to; 
 			filter[group][subGroup][key1].value["op"] = "equals to";
 			filter[group][subGroup][key1].changed = false;
 			filter[group][subGroup][key1].activated = false;
@@ -99,7 +56,6 @@ function resetFilter(filter, group, subGroup) {
 }
 
 function replaceKey(key) {
-
 	if (key == "is less than") {
 		return "is at most"
 	} else if (key == "is more than") {
@@ -125,9 +81,6 @@ function searchAll(filter) {
 								var item = {};
 								var searchTerm = [];
 								item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
-								console.log(filter[key1][key2][key3].value["op"]);
-								console.log(item["op"]);
-
 								item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
 								item["varName"] = filter[key1][key2][key3].varName;
 								items.push(item);
@@ -154,50 +107,4 @@ function resetAll() {
 
 }
 
-
-function processPlacesAjax(data) {
-  var self = {};
-  // Process data.
-  // Here we assume that the data is properly
-  // order so that each port appears after the
-  // region that it belongs to and the region
-  // appears after the broad region it belongs to.
-  var broadRegions = {};
-  var regions = {};
-  var ports = {};
-  var allDict = {};
-  for (var i = 0; i < data.length; ++i) {
-    var item = data[i];
-    if (item.type == "port") {
-      item.region = regions[item.parent];
-      item.pk = item.value;
-      item.label = item.port;
-      ports[item.value] = item;
-    } else if (item.type == "region") {
-      item.broad_region = broadRegions[item.parent];
-      item.label = item.region;
-      item.ports = []
-      regions[item.pk] = item;
-    } else if (item.type == "broad_region") {
-      item.label = item.broad_region;
-      item.ports = []
-      broadRegions[item.pk] = item;
-    }
-    allDict[item.value] = item;
-  }
-  for (var key in ports) {
-    var p = ports[key];
-    var r = p.region;
-    var b = r.broad_region;
-    r.ports.push(p.code);
-    b.ports.push(p.code);
-  }
-  self.isLoaded = true;
-  self.all = data;
-  self.allDict = allDict;
-  self.broadRegions = broadRegions;
-  self.regions = regions;
-  self.ports = ports;
-  return self;
-}
 // helpers
