@@ -82,7 +82,7 @@ var searchBar = new Vue({
             for (key3 in this.searchFilter.groups[key1][key2]) {
               if (key3 == variable.varName) {
                 if (this.searchFilter.groups[key1][key2][key3].value["searchTerm0"] === undefined) {
-                  this.searchFilter.groups[key1][key2][key3].value["searchTerms"] = variable["searchTerms"];
+                  this.searchFilter.groups[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
                 } else {
                   this.searchFilter.groups[key1][key2][key3].value["searchTerm0"] = variable["searchTerm0"];
                   this.searchFilter.groups[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
