@@ -26,15 +26,16 @@ Vue.component("v-treeselect", {
         <treeselect
           :multiple="true"
           :load-root-options="loadRootOptions"
+          :default-expand-level="1"
           placeholder="Select from the list"
-          v-model="item.searchTerm0"
+          v-model="item.searchTerms"
         />
       </div>
     </div>
 
     <div class="row v-padding">
       <div class="col-md-12">
-        <code>{{item.searchTerm0}}</code>
+        <code>{{item.searchTerms}}</code>
       </div>
     </div>
 
@@ -56,14 +57,11 @@ Vue.component("v-treeselect", {
     return {
       item: {
         varName: this.varName,
-        searchTerm0: this.filter.value.searchTerm0,
-        searchTerm1: this.filter.value.searchTerm1,
+        searchTerms: this.filter.value.searchTerms,
         op: this.filter.value.op,
       },
       options: {
-        searchTerm1Disabled: false,
         searchTermCaption0: null,
-        searchTermCaption1: null,
         type: "text",
         changed: false,
       }
@@ -77,8 +75,7 @@ Vue.component("v-treeselect", {
       alert(searchString);
     },
     reset() { // reset data; observers will take care of resetting the controls
-      this.item.searchTerm0 = null;
-      this.item.searchTerm1 = null;
+      this.item.searchTerms = null;
     },
     loadRootOptions(callback) {
       callback(null, this.data)
@@ -90,7 +87,7 @@ Vue.component("v-treeselect", {
     item: {
       handler: function(){
         // control visibility
-        if (this.item.searchTerm0 !== null && this.item.searchTerm0.length > 0) {
+        if (this.item.searchTerms !== null && this.item.searchTerms.length > 0) {
           this.options.changed = true;
           this.$emit('change', this.item, true);
         } else {
@@ -105,8 +102,7 @@ Vue.component("v-treeselect", {
     filter: {
       handler: function(){
         if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerm0 = this.filter.value.searchTerm0;
-          this.item.searchTerm1 = this.filter.value.searchTerm1;
+          this.item.searchTerms = this.filter.value.searchTerms;
           this.item.op = this.filter.value.op;
         }
       },
