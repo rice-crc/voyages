@@ -5,7 +5,8 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="searchFilter.groups.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="searchFilter.groups.itinerary.departure" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="searchFilter.groups.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="searchFilter.groups.itinerary.departure" :data="places" :visible="true">
+
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Departure" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -23,7 +24,8 @@
 						title="Place where Voyage Began"
 						description="Where it began"
 						var-name="var_imp_port_voyage_begin"
-						filter="scope.filters.var_imp_port_voyage_begin"
+						:filter="scope.filters"
+						:data="scope.data"
 						:is-imputed="false"
 						:is-advanced="false"
 					></v-treeselect>
@@ -31,7 +33,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="searchFilter.groups.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="searchFilter.groups.itinerary.purchase" :visible="true">
+			<!-- <v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="searchFilter.groups.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="searchFilter.groups.itinerary.purchase" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Slave Purchase" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -185,7 +187,7 @@
 					></v-treeselect>
 
 				</div>
-			</v-panel>
+			</v-panel> -->
 
 			</ul>
 	</div>
