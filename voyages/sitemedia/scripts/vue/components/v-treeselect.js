@@ -27,15 +27,14 @@ Vue.component("v-treeselect", {
           :multiple="true"
           :load-root-options="loadRootOptions"
           placeholder="Select from the list"
-          v-model="select.value"
+          v-model="item.searchTerm0"
         />
-
       </div>
     </div>
 
     <div class="row v-padding">
       <div class="col-md-12">
-        <code>{{select.value}}</code>
+        <code>{{item.searchTerm0}}</code>
       </div>
     </div>
 
@@ -55,11 +54,17 @@ Vue.component("v-treeselect", {
 
   data: function(){
     return {
-      select: {
-        value: null,
-        options: null,
+      item: {
+        varName: this.varName,
+        searchTerm0: this.filter.value.searchTerm0,
+        searchTerm1: this.filter.value.searchTerm1,
+        op: this.filter.value.op,
       },
       options: {
+        searchTerm1Disabled: false,
+        searchTermCaption0: null,
+        searchTermCaption1: null,
+        type: "text",
         changed: false,
       }
     }
@@ -74,13 +79,43 @@ Vue.component("v-treeselect", {
     reset() { // reset data; observers will take care of resetting the controls
       this.item.searchTerm0 = null;
       this.item.searchTerm1 = null;
-      this.item.op = "equals to";
     },
     loadRootOptions(callback) {
       callback(null, this.data)
     }
   },
 
+  watch: {
+    // search object
+    item: {
+      handler: function(){
+        // control visibility
+        if (this.item.searchTerm0 !== null && this.item.searchTerm0.length > 0) {
+          this.options.changed = true;
+          this.$emit('change', this.item, true);
+        } else {
+          this.options.changed = false;
+          this.$emit('change', this.item, false);
+        }
+      },
+      deep: true,
+    },
+
+    // update prop 'filter' from store
+    filter: {
+      handler: function(){
+        if (!this.filter.changed) { // update when filter is not activated
+          this.item.searchTerm0 = this.filter.value.searchTerm0;
+          this.item.searchTerm1 = this.filter.value.searchTerm1;
+          this.item.op = this.filter.value.op;
+        }
+      },
+      deep: true,
+    }
+  },
+
+  mounted: function() {
+  },
 
 });
 // v-treeselect
