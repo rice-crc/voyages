@@ -47,7 +47,7 @@ function resetFilter(filter, group, subGroup) {
         filter[group][subGroup][key1].value["searchTerm0"] = null;
   			filter[group][subGroup][key1].value["searchTerm1"] = null;
       }
-      // TODO accomodate has one of; contains; equals to; 
+      // TODO accomodate has one of; contains; equals to;
 			filter[group][subGroup][key1].value["op"] = "equals to";
 			filter[group][subGroup][key1].changed = false;
 			filter[group][subGroup][key1].activated = false;
@@ -105,6 +105,52 @@ function searchAll(filter) {
 
 function resetAll() {
 
+}
+
+function processPlacesAjax(data) {
+  var self = {};
+  // Process data.
+  // Here we assume that the data is properly
+  // order so that each port appears after the
+  // region that it belongs to and the region
+  // appears after the broad region it belongs to.
+  var broadRegions = {};
+  var regions = {};
+  var ports = {};
+  var allDict = {};
+  for (var i = 0; i < data.length; ++i) {
+    var item = data[i];
+    if (item.type == "port") {
+      item.region = regions[item.parent];
+      item.pk = item.value;
+      item.label = item.port;
+      ports[item.value] = item;
+    } else if (item.type == "region") {
+      item.broad_region = broadRegions[item.parent];
+      item.label = item.region;
+      item.ports = []
+      regions[item.pk] = item;
+    } else if (item.type == "broad_region") {
+      item.label = item.broad_region;
+      item.ports = []
+      broadRegions[item.pk] = item;
+    }
+    allDict[item.value] = item;
+  }
+  for (var key in ports) {
+    var p = ports[key];
+    var r = p.region;
+    var b = r.broad_region;
+    r.ports.push(p.code);
+    b.ports.push(p.code);
+  }
+  self.isLoaded = true;
+  self.all = data;
+  self.allDict = allDict;
+  self.broadRegions = broadRegions;
+  self.regions = regions;
+  self.ports = ports;
+  return self;
 }
 
 // helpers
