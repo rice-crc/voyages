@@ -189,14 +189,22 @@ var searchBar = new Vue({
     var $vm = this;
     axios.get('/contribute/places_ajax').then(function (response) {
       var data = processPlacesAjax(response.data);
-      var options = [];
+      var options = [{
+        id: 0,
+        label: "Select All",
+        children: null
+      }];
+
+      var children = [];
       for (key1 in data.broadRegions) {
-        options.push({
+        children.push({
           id: data.broadRegions[key1].pk,
           label: data.broadRegions[key1].broad_region,
           pk: data.broadRegions[key1].pk
         });
       }
+      options[0].children = children;
+
       $vm.places = options;
     })
     .catch(function (error) {
