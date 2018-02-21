@@ -1,6 +1,6 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "count", "filters", "visible", "group", "subGroup"],
+  props: ['title', "count", "filters", "visible", "group", "subGroup", "data"],
   template: `
     <li v-if="visibleValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
@@ -14,7 +14,7 @@ Vue.component('v-panel', {
         <div :id="idValue" class="search-submenu popover">
             <div class="popover-content">
               <slot name="v-panel-header"></slot>
-              <slot name="v-panel-content" :filters="filtersValue"></slot>
+              <slot name="v-panel-content" :filters="filtersValue" :data="data"></slot>
               <div class="margin-v">
                 <b-button :disabled="controlDisabled" variant="info" size="sm" @click="apply">
                   Apply
@@ -58,7 +58,14 @@ Vue.component('v-panel', {
       handler: function(){
         this.visibleValue = this.visible;
       },
-    }
+    },
+    filters: {
+      handler: function(){
+        this.filtersValue = this.filters;
+      },
+      deep: true,
+    },
+
   },
 
   mounted: function() { // load value initially

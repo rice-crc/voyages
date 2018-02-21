@@ -1,6 +1,6 @@
 // v-treeselect
 Vue.component("v-treeselect", {
-  props: ['title', 'description', 'varName', 'filter', "isImputed", "isAdvanced"],
+  props: ['title', 'description', 'varName', 'filter', "isImputed", "isAdvanced", "data"],
   template: `
   <div class="v-form-group">
     <div class="v-title">
@@ -25,17 +25,17 @@ Vue.component("v-treeselect", {
       <div class="col-md-12">
         <treeselect
           :multiple="true"
-          :options="options"
+          :load-root-options="loadRootOptions"
           placeholder="Select from the list"
-          
-          v-model="value"
+          v-model="select.value"
         />
+
       </div>
     </div>
 
     <div class="row v-padding">
       <div class="col-md-12">
-        <code>{{value}}</code>
+        <code>{{select.value}}</code>
       </div>
     </div>
 
@@ -55,43 +55,13 @@ Vue.component("v-treeselect", {
 
   data: function(){
     return {
+      select: {
         value: null,
-        options: [ {
-          id: 'fruits',
-          label: 'Fruits',
-          children: [ {
-            id: 'apple',
-            label: 'Apple 🍎',
-          }, {
-            id: 'grapes',
-            label: 'Grapes 🍇',
-          }, {
-            id: 'pear',
-            label: 'Pear 🍐',
-          }, {
-            id: 'strawberry',
-            label: 'Strawberry 🍓',
-          }, {
-            id: 'watermelon',
-            label: 'Watermelon 🍉',
-          } ],
-        }, {
-          id: 'vegetables',
-          label: 'Vegetables',
-          children: [ {
-            id: 'corn',
-            label: 'Corn 🌽',
-          }, {
-            id: 'carrot',
-            label: 'Carrot 🥕',
-          }, {
-            id: 'eggplant',
-            label: 'Eggplant 🍆',
-          }, {
-            id: 'tomato',
-            label: 'Tomato 🍅',
-          } ],
-        } ],
+        options: null,
+      },
+      options: {
+        changed: false,
+      }
     }
   },
 
@@ -105,7 +75,12 @@ Vue.component("v-treeselect", {
       this.item.searchTerm0 = null;
       this.item.searchTerm1 = null;
       this.item.op = "equals to";
+    },
+    loadRootOptions(callback) {
+      callback(null, this.data)
     }
   },
+
+
 });
 // v-treeselect

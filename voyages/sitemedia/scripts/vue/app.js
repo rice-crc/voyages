@@ -13,11 +13,6 @@ var searchBar = new Vue({
 				captainAndCrew: captainAndCrew,
 				source: source,
 			},
-			outcome1: outcome1,
-			outcome2: outcome2,
-			outcome3: outcome3,
-			outcome4: outcome4,
-			outcome5: outcome5,
 		},
     places: {},
     ports: {},
@@ -74,6 +69,24 @@ var searchBar = new Vue({
 			},
 			deep: true,
 		},
+
+    places: {
+      handler: function() {
+        // // when places is updated (ajax request finishes), construct the input for v-treeselect
+        // var options = [];
+        // for (key1 in this.places.broadRegions) {
+        //   options.push({
+        //     id: this.places.broadRegions[key1].pk,
+        //     label: this.places.broadRegions[key1].broad_region,
+        //     pk: this.places.broadRegions[key1].pk
+        //   });
+        // }
+        // console.log("logging broad_region");
+        // console.log(JSON.stringify(options));
+        //
+        // this.searchFilter.groups.itinerary.departure["var_departure"] = options;
+      }
+    }
 
 	},
 
@@ -166,31 +179,31 @@ var searchBar = new Vue({
 			tour.start();
 		}
 	},
+  beforeCreate: function() {
+
+  },
 
 	mounted: function() {
 		$('.search-menu').on("click.bs.dropdown", function (e) { e.stopPropagation(); e.preventDefault(); });
-
-    var placesData = new PlacesData();
-    placesData.initAsync(function(data) {
-      this.places = data;
+    var self = {};
+    var $vm = this;
+    axios.get('/contribute/places_ajax').then(function (response) {
+      var data = processPlacesAjax(response.data);
+      var options = [];
+      for (key1 in data.broadRegions) {
+        options.push({
+          id: data.broadRegions[key1].pk,
+          label: data.broadRegions[key1].broad_region,
+          pk: data.broadRegions[key1].pk
+        });
+      }
+      $vm.places = options;
+    })
+    .catch(function (error) {
+      console.log(error);
     });
-
-    var options = [];
-    for (key1 in this.places.broad_region) {
-      options.push({
-        id: this.places.broad_region.key1.pk,
-        label: this.places.broad_region.key1.broad_region,
-      });
-    }
-    console.log("logging broad_region");
-    console.log(options);
-
 		search(this.searchFilter, []);
 	},
-
-  created: function() {
-
-  },
 
   // event loop - update the menuAim everytime after it's re-rendered
   updated: function() {
