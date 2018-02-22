@@ -17,16 +17,9 @@
           filters are: {{scope.filters}}
         </p>
 
-        <v-input @change="changed"
-           title="Data Source"
-           description="This is the source of the data. This could be a partial keyword."
-           var-name="var_sources_plaintext_search"
-           search-term-caption=""
-           :filter="scope.filters.var_sources_plaintext_search"
-           :is-numeric=false
-           :is-imputed=false
-           :is-advanced=false>
-         </v-input>
+        <v-text @change="changed"
+           :filter="scope.filters.var_sources_plaintext_search">
+         </v-text>
       </div>
     </v-panel-singular>
 </li>
