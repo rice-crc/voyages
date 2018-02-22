@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
+from voyages.apps.common.views import get_ordered_places
 from voyages.apps.contribute.forms import *
 from voyages.apps.contribute.models import *
 from voyages.apps.voyage.cache import VoyageCache
@@ -95,43 +96,7 @@ def get_voyage_by_id(request):
 @csrf_exempt
 def get_places(request):
     # retrieve list of places in the system.
-    places = sorted(Place.objects.prefetch_related('region__broad_region'),
-                    key=lambda p: (
-                        p.region.broad_region.broad_region if p.region.broad_region.value != 80000 else 'zzz',
-                        p.region.value,
-                        p.value))
-    result = []
-    last_broad_region = None
-    last_region = None
-    counter = 0
-    for place in places:
-        region = place.region
-        broad_region = region.broad_region
-        counter += 1
-        if last_broad_region != broad_region:
-            last_broad_region = broad_region
-            result.append({'type': 'broad_region',
-                           'order': counter,
-                           'pk': broad_region.pk,
-                           'value': -counter,
-                           'broad_region': _(broad_region.broad_region)})
-            counter += 1
-        if last_region != region:
-            last_region = region
-            result.append({'type': 'region',
-                           'order': counter,
-                           'value': -counter,
-                           'pk': region.pk,
-                           'code': region.value,
-                           'parent': broad_region.pk,
-                           'region': _(region.region)})
-            counter += 1
-        result.append({'type': 'port',
-                       'order': counter,
-                       'value': place.pk,
-                       'parent': region.pk,
-                       'code': place.value,
-                       'port': _(place.place)})
+    result = get_ordered_places()
     return JsonResponse(result, safe=False)
 
 @login_required

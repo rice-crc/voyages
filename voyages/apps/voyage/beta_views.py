@@ -1,5 +1,6 @@
 from cache import VoyageCache, CachedGeo
 from django.conf import settings
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
@@ -12,6 +13,7 @@ from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
+from voyages.apps.common.views import get_ordered_places
 from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
 import itertools
@@ -298,3 +300,69 @@ def ajax_download(request):
 
 def search_view(request):
     return render(request, 'voyage/beta_search_main.html')
+
+_options_model = {
+    'var_outcome_voyage': ParticularOutcome,
+    'var_outcome_slaves': SlavesOutcome,
+    'var_outcome_ship_captured': VesselCapturedOutcome,
+    'var_outcome_owner': OwnerOutcome,
+    'var_resistance': Resistance,
+    'var_nationality': Nationality,
+    'var_rig_of_vessel': RigOfVessel,
+    'var_tonnage': TonType,
+}
+
+@csrf_exempt
+def get_var_options(request):
+    """
+    This API fetches the values allowed for a given variable on 
+    the database. For efficiency, we will cache these values since
+    they do not change frequently.
+    The caller must specify which variable is needed in the request.
+    """
+    data = json.loads(request.body)
+    var_name = data.get('var_name', '(blank)')
+    options_model = _options_model.get(var_name)
+    if not options_model:
+        return HttpResponseBadRequest('Caller passed: "' + var_name + '". Must specify some var_name in ' + str(_options_model.keys()))
+    # Check if we have the results cached to avoid a db hit.
+    cache_key = '_options_' + var_name
+    response_data = cache.get(cache_key)
+    is_cached = response_data is not None
+    if not is_cached:
+        response_data = [{'label': x.label, 'value': x.value, 'pk': x.pk} for x in options_model.objects.all()]
+        # Cache the data for 24h.
+        cache.set(cache_key, response_data, 24 * 60 * 60)
+    for d in response_data:
+        d['label'] = _(d['label'])
+    return JsonResponse({'var_name': var_name, 'is_cached': is_cached, 'data': response_data})
+
+@csrf_exempt
+def get_filtered_places(request):
+    """
+    Obtains a list of places and corresponding regions/broad regions
+    that are present in a given field of VoyageItinerary.
+    """
+    data = json.loads(request.body)
+    blank = '|blank|'
+    var_name = data.get('var_name', blank)
+    cache_key = '_filtered_places_' + var_name
+    result = cache.get(cache_key)
+    is_cached = result is not None
+    if not is_cached:
+        place_query = None
+        if var_name != blank:
+            pks = list(VoyageItinerary.objects.values_list(var_name, flat=True).distinct())
+            place_query = Place.objects.filter(pk__in=pks)
+        result = get_ordered_places(place_query, False)
+        # Cache the data for 24h.
+        cache.set(cache_key, result, 24 * 60 * 60)
+    for d in result:
+        # Translate the corresponding entry.
+        geo_type = d['type']
+        d[geo_type] = _(d[geo_type])
+    return JsonResponse({
+        'filtered_var_name': var_name if var_name != blank else 'None',
+        'is_cached': is_cached,
+        'data': result
+    })
