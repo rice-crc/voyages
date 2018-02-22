@@ -1352,7 +1352,9 @@
     <input id="global_notes_input" type="hidden" name="notes" />
     <div class="form-group ">
         <hr />
+        {% if mode != 'editorial_review' or contribution.request.final_decision == 0 %}
         <button class="btn btn-solid" type="button" id="save_btn">{% trans "Save" %}</button>
+        {% endif %}
         {% if mode == 'contribute' %}
         <button class="btn btn-outline" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
         <button class="btn btn-outline" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
