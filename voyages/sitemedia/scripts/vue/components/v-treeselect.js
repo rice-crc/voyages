@@ -28,14 +28,14 @@ Vue.component("v-treeselect", {
           :load-root-options="loadRootOptions"
           :default-expand-level="1"
           placeholder="Select from the list"
-          v-model="item.searchTerms"
+          v-model="item.searchTerm"
         />
       </div>
     </div>
 
     <div class="row v-padding">
       <div class="col-md-12">
-        <code>{{item.searchTerms}}</code>
+        <code>{{item.searchTerm}}</code>
       </div>
     </div>
 
@@ -57,7 +57,7 @@ Vue.component("v-treeselect", {
     return {
       item: {
         varName: this.varName,
-        searchTerms: this.filter.value.searchTerms,
+        searchTerm: this.filter.value.searchTerm,
         op: this.filter.value.op,
       },
       options: {
@@ -75,7 +75,7 @@ Vue.component("v-treeselect", {
       alert(searchString);
     },
     reset() { // reset data; observers will take care of resetting the controls
-      this.item.searchTerms = null;
+      this.item.searchTerm = null;
     },
     loadRootOptions(callback) {
       callback(null, this.data)
@@ -87,7 +87,7 @@ Vue.component("v-treeselect", {
     item: {
       handler: function(){
         // control visibility
-        if (this.item.searchTerms !== null && this.item.searchTerms.length > 0) {
+        if (this.item.searchTerm !== null && this.item.searchTerm.length > 0) {
           this.options.changed = true;
           this.$emit('change', this.item, true);
         } else {
@@ -102,7 +102,7 @@ Vue.component("v-treeselect", {
     filter: {
       handler: function(){
         if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerms = this.filter.value.searchTerms;
+          this.item.searchTerm = this.filter.value.searchTerm;
           this.item.op = this.filter.value.op;
         }
       },

@@ -31,6 +31,9 @@ function activateFilter(filter, group, subGroup, filterValues) {
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
 			if (filter[group][subGroup][key1].changed) {
+				// filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].value["searchTerm0"];
+				// filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].value["searchTerm1"];
+				// filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].value["op"];
 				filter[group][subGroup][key1].changed = true;
 				filter[group][subGroup][key1].activated = true;
 			}
@@ -60,12 +63,10 @@ function replaceKey(key) {
 		return "is at most"
 	} else if (key == "is more than") {
 		return "is at least";
-	} else if (key == "is between") {
-		return "is between";
 	} else if (key == "equals to") {
 		return "equals";
-	} else if (key == "contains") {
-    return "contains";
+	} else {
+    return key;
   }
 }
 
@@ -81,7 +82,11 @@ function searchAll(filter) {
 								var item = {};
 								var searchTerm = [];
 								item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
-								item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                if (filter[key1][key2][key3].value["searchTerm0"] === undefined) {
+                  item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
+                } else {
+                  item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                }
 								item["varName"] = filter[key1][key2][key3].varName;
 								items.push(item);
 							}

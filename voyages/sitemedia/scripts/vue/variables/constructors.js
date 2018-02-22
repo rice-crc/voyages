@@ -1,0 +1,64 @@
+function NumberVariable(varInfo, searchTerms, options) {
+  this.type = "number";
+  this.varName = varInfo["varName"];
+  this.label = varInfo["label"];
+  this.description = varInfo["description"];
+  this.default = {
+    op: searchTerms["op"],
+    searchTerm0: searchTerms["searchTerm0"],
+    searchTerm1: searchTerms["searchTerm1"],
+  };
+  this.value = {
+    op: searchTerms["op"],
+    searchTerm0: searchTerms["searchTerm0"],
+    searchTerm1: searchTerms["searchTerm1"],
+  };
+  this.options = {
+    isImputed: options["isImputed"],
+    isAdvanced: options["isAdvanced"],
+  };
+  this.changed = false;
+  this.activated = false;
+}
+
+function TextVariable(varInfo, searchTerms, options) {
+  this.type = "text";
+  this.varName = varInfo["varName"];
+  this.label = varInfo["label"];
+  this.description = varInfo["description"];
+  this.default = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.value = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.options = {
+    isImputed: options["isImputed"],
+    isAdvanced: options["isAdvanced"],
+  };
+  this.changed = false;
+  this.activated = false;
+}
+
+function PlaceVariable(varInfo, searchTerms, options) {
+  this.type = "place";
+  this.varName = varInfo["varName"];
+  this.label = varInfo["label"];
+  this.description = varInfo["description"];
+  this.default = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.value = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.options = {
+    isImputed: options["isImputed"],
+    isAdvanced: options["isAdvanced"],
+  };
+  this.changed = false;
+  this.activated = false;
+}

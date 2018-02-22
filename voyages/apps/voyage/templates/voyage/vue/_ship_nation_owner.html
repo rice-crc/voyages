@@ -18,16 +18,12 @@
           <p>
 	          filters are: {{scope.filters}}
 					</p>
-          <v-input @change="changed"
-            title="Voyage Identification Number"
-            description="Each voyage in the database has a unique identification number. This could be a range."
-            var-name="var_voyage_id"
-            search-term-caption=""
-            :filter="scope.filters.var_voyage_id"
-            :is-numeric=true>
-          </v-input>
 
-          <v-checkbox @change="changed"
+          <v-number @change="changed"
+            :filter="scope.filters.var_voyage_id">
+          </v-number>
+
+          <!-- <v-checkbox @change="changed"
             title="Voyages in 1999 CD-ROM"
             description="Some records are from the original 1999 CD-ROM. Choose whether to include them."
             var-name="var_voyage_in_cd_rom"
@@ -37,25 +33,34 @@
             :is-advanced=true
             checkbox-name="Include 1999 CD-ROM voyages"
             v-if="isAdvanced">
-          </v-checkbox>
+          </v-checkbox> -->
 
-          <v-input @change="changed"
+          <v-text @change="changed"
+            :filter="scope.filters.var_ship_name_plaintext"
+          ></v-text>
+
+
+          <!-- <v-input @change="changed"
             title="Vessel Names"
             description="The name of the vessels. This could be a partial keyword."
             var-name="var_ship_name_plaintext"
             search-term-caption=""
             :filter="scope.filters.var_ship_name_plaintext"
             :is-numeric=false>
-          </v-input>
+          </v-input> -->
 
-          <v-input @change="changed"
+          <v-text @change="changed"
+            :filter="scope.filters.var_owner_plaintext"
+          ></v-text>
+
+          <!-- <v-input @change="changed"
             title="Vessel Owners"
             description="The name of the vessel owners. This could be a partial keyword."
             var-name="var_owner_plaintext"
             search-term-caption=""
             :filter="scope.filters.var_owner_plaintext"
             :is-numeric=false>
-          </v-input>
+          </v-input> -->
         </div>
       </v-panel>
 
@@ -99,40 +104,30 @@
           <p>
 						filters are: {{scope.filters}}
 					</p>
-          <v-input @change="changed"
-            title="Year Constructed"
-            description="Enter the year when the ships were constructed. This could be a range."
-            var-name="var_year_of_construction"
-            search-term-caption=""
-            :filter="scope.filters.var_year_of_construction"
-            :is-numeric=true>
-          </v-input>
+          <v-number @change="changed"
+            :filter="scope.filters.var_year_of_construction">
+          </v-number>
 
-          <v-input @change="changed"
+          <!-- <v-input @change="changed"
             title="Place Constructed"
             description="Enter the place where the ships were constructed. This could be a partial keyword."
             var-name="var_vessel_construction_place"
             search-term-caption=""
             :filter="scope.filters.var_vessel_construction_place"
             :is-numeric=false>
-          </v-input>
+          </v-input> -->
 
-          <v-input @change="changed"
-            title="Year Registered"
-            description="Enter the year when the ships were registered. This could be a range."
-            var-name="var_registered_year"
-            search-term-caption=""
-            :filter="scope.filters.var_registered_year"
-            :is-numeric=true>
-          </v-input>
+          <v-number @change="changed"
+            :filter="scope.filters.var_registered_year">
+          </v-number>
 
-          <v-input @change="changed"
+          <!-- <v-input @change="changed"
             title="Place Registered"
             description="Enter the place where the ships were registered. This could be a partial keyword."
             var-name="var_registered_place"
             search-term-caption=""
             :filter="scope.filters.var_registered_place">
-          </v-input>
+          </v-input> -->
         </div>
       </v-panel>
 
@@ -149,24 +144,24 @@
           <p>
 						filters are: {{scope.filters}}
 					</p>
-          <v-input @change="changed"
+          <!-- <v-input @change="changed"
             title="Rig"
             description="The rig of the ship. Choose from the following."
             var-name="var_rig_of_vessel_plaintext"
             search-term-caption=""
             :filter="scope.filters.var_rig_of_vessel_plaintext">
-          </v-input>
+          </v-input> -->
 
-          <v-input @change="changed"
+          <v-number @change="changed"
             title="Tonnage"
             description="The tonnage of the ships. This could be a range."
             var-name="var_tonnage"
             search-term-caption=""
             :filter="scope.filters.var_tonnage"
             :is-numeric=true>
-          </v-input>
+          </v-number>
 
-          <v-input @change="changed"
+          <v-number @change="changed"
             title="Standardized Tonnage"
             description="This is the standardized tonnage calculated by the algorithms. This could be a range."
             var-name="var_tonnage_mod"
@@ -175,16 +170,16 @@
             :is-imputed=true
             :is-advanced=true
             v-if="isAdvanced">
-          </v-input>
+          </v-number>
 
-          <v-input @change="changed"
+          <v-number @change="changed"
             title="Guns Mounted"
             description="This is the guns mounted on the ship. This could be a range."
             var-name="var_guns_mounted"
             search-term-caption=""
             :filter="scope.filters.var_guns_mounted"
             :is-numeric=true>
-          </v-input>
+          </v-number>
         </div>
       </v-panel>
 

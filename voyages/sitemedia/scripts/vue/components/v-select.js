@@ -1,6 +1,6 @@
 // select
 Vue.component('v-select', {
-  props: ["value", "isNumeric"],
+  props: ["value"],
   template: `
     <div>
       <b-form-select v-model="selected" :options="options" @change="emitParent"></b-form-select>
@@ -26,12 +26,5 @@ Vue.component('v-select', {
     }
   },
 
-  mounted: function() {
-    if (this.isNumeric != "null") {
-      if (!this.isNumeric) {
-        this.options = ['equals to']
-      }
-    }
-  }
 })
 // end of select
