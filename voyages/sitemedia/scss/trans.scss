@@ -1,5 +1,12 @@
 @import "colors";
 
+// table-estimates
+.table-estimates {
+  .row_header {
+  	min-width: 110px;
+  }
+}
+
 // btn colors
 .btn-solid {
   background-color: $trans-color;

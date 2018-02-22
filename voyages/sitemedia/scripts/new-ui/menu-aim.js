@@ -1,17 +1,5 @@
 // MENU AIM //
-$( document ).ready(function() {
-
-
-
-var $menu = $(".search-menu");
-
-// jQuery-menu-aim: <meaningful part of the example>
-// Hook up events to be fired on menu row activation.
-$menu.menuAim({
-		activate: activateSubmenu,
-		deactivate: deactivateSubmenu
-});
-
+var $menu = null;
 // jQuery-menu-aim: </meaningful part of the example>
 
 // jQuery-menu-aim: the following JS is used to show and hide the submenu
@@ -49,19 +37,29 @@ function deactivateSubmenu(row) {
 		$row.find("a").removeClass("maintainHover");
 }
 
-// Bootstrap's dropdown menus immediately close on document click.
-// Don't let this event close the menu if a submenu is being clicked.
-// This event propagation control doesn't belong in the menu-aim plugin
-// itself because the plugin is agnostic to bootstrap.
-$(".dropdown-menu li").click(function(e) {
-		e.stopPropagation();
-});
+$( document ).ready(function() {
+	$menu = $(".search-menu");
 
-$(document).click(function() {
-		// Simply hide the submenu on any click. Again, this is just a hacked
-		// together menu/submenu structure to show the use of jQuery-menu-aim.
-		$(".popover").css("display", "none");
-		$("a.maintainHover").removeClass("maintainHover");
-});
+	// jQuery-menu-aim: <meaningful part of the example>
+	// Hook up events to be fired on menu row activation.
+	$menu.menuAim({
+			activate: activateSubmenu,
+			deactivate: deactivateSubmenu
+	});
+
+	// Bootstrap's dropdown menus immediately close on document click.
+	// Don't let this event close the menu if a submenu is being clicked.
+	// This event propagation control doesn't belong in the menu-aim plugin
+	// itself because the plugin is agnostic to bootstrap.
+	$(".dropdown-menu li").click(function(e) {
+			e.stopPropagation();
+	});
+
+	$(document).click(function() {
+			// Simply hide the submenu on any click. Again, this is just a hacked
+			// together menu/submenu structure to show the use of jQuery-menu-aim.
+			$(".popover").css("display", "none");
+			$("a.maintainHover").removeClass("maintainHover");
+	});
 
 });

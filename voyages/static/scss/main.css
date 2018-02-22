@@ -43,6 +43,34 @@ h5 {
 h6 {
   font-size: 0.33333em; }
 
+.dropdown-menu {
+  margin: 0; }
+
+.inline {
+  display: inline; }
+
+.deletelink {
+  height: 100%; }
+
+.table-compact thead {
+  font-weight: bold;
+  padding: 0.25rem 0; }
+
+.table-compact th, .table-compact td {
+  padding: 0.25rem 0.75rem; }
+
+.sidebar-section-accordion:first-child {
+  margin-top: 1.5rem; }
+
+.collapse.show {
+  margin-bottom: 1.5rem; }
+
+.text-title {
+  font-weight: 500; }
+
+.text-description {
+  color: #898989; }
+
 .link {
   font-weight: bold;
   transition: ease 0.3s; }
@@ -116,19 +144,13 @@ div.dataTables_wrapper div.dataTables_info {
 
 .form-group {
   align-items: center;
-  margin-bottom: 0.25rem; }
+  margin-bottom: 0; }
 
 .form-check {
   margin-bottom: 0; }
 
 .section {
   margin: 1rem 0; }
-
-.table th {
-  text-align: center; }
-
-.table tr {
-  text-align: center; }
 
 html {
   position: relative;
@@ -161,6 +183,12 @@ footer {
   font-size: 1rem;
   margin: 0 1rem 0.5rem 0;
   color: #333333; }
+
+.sidebar-section-2 {
+  padding: 0 0 5px 15px; }
+
+.sidebar-title-3 {
+  font-weight: bold; }
 
 .table-sm {
   font-size: 0.8rem; }
@@ -197,4 +225,7 @@ footer {
   margin-top: 10px;
   font-weight: bold; }
 
-/*# sourceMappingURL=../../../../../../../static/scss/main.css.map */
+.text-bold {
+  font-weight: bold; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/main.css.map */

@@ -15,34 +15,61 @@
 
 <div class="page-title-1">{% trans "FAQ" %}</div>
 
+<div class="page-section">
+	<p>These are FAQs organized by topics; click a topic to view related questions and their answers. Alternatively, you can
+		<a href="#" class="text-bold" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="true" >expand all topics</a> and view them at once.
+	</p>
+</div>
+
 <div class="faq-list-cont">
 	<div class='faq-main'>
 		{% for category_item in faq_list %}
-		<div class="faq-category page-title-2">
-			{{ category_item.text|title}}
-		</div>
-		<div class="faq">
-			{% for q_item in category_item.questions %}
-			<div class="faq-question">
-				{% with the_question=q_item.question %}
-					{% if current_query %}
-						{% highlight the_question with current_query %}
-					{% else %}
-						{{ the_question }}
-					{% endif %}
-				{% endwith %}
+		<div class="page-section">
+			<div class="faq-category page-title-2">
+				<a data-toggle="collapse" href="#faq-{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="faq-{{ forloop.counter }}">
+					{{ category_item.text|title}}
+				</a>
 			</div>
-				{% with the_answer=q_item.answer %}
-					{% if current_query %}
-						{% highlight the_answer with current_query %}
-					{% else %}
-						{{ the_answer|safe }}
-					{% endif %}
-				{% endwith %}
-			{% endfor %}
+
+			<div class="collapse multi-collapse" id="faq-{{ forloop.counter }}">
+				<div class="faq page-section">
+					<!--
+					<a class="btn btn-primary" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="xxx">xxx</a>
+					<div class="collapse multi-collapse" id="xxx1"></div> -->
+					{% for q_item in category_item.questions %}
+						<div class="card margin-v">
+		  				<div class="card-header text-bold">
+								{% with the_question=q_item.question %}
+									{% if current_query %}
+										{% highlight the_question with current_query %}
+									{% else %}
+										{{ the_question }}
+									{% endif %}
+								{% endwith %}
+							</div>
+							<div class="card-body">
+								{% with the_answer=q_item.answer %}
+									{% if current_query %}
+										{% highlight the_answer with current_query %}
+									{% else %}
+										{{ the_answer|safe }}
+									{% endif %}
+								{% endwith %}
+							</div>
+					 	</div>
+					{% endfor %}
+				</div>
+			</div>
 		</div>
 		{% endfor %}
+
 	</div>
 </div>
 
+<style>
+/* localized p styling to remove duplicative margin-bottom */
+p {
+	margin: 0;
+}
+</style>
 {% endblock %}

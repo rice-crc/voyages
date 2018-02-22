@@ -1,19 +1,28 @@
-{% extends "voyage/voyagebase.html" %}
-{% load sass_tags %}
+{% extends "voyage/voyagebase.html" %} {% load sass_tags %}
 
 <!-- Basic template for pages in the Voyage section -->
 {% load i18n %}
-
 {% block csslist %}
-<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/library/select2.min.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/library/select2.min.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans-search.scss' %}" rel="stylesheet" type="text/css" />
+
+	<!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/> -->
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/select2@4.0.3/dist/css/select2.min.css" />
+	<link type="text/css" rel="stylesheet" href="{% sass_src 'scss/library/bootstrap-tour.scss' %}" />
+	<link href="{% sass_src 'scss/library/vue-treeselect.css' %}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
-{% block title %}{% trans 'Search The Voyages Database' %}{% endblock %}
+{% block title %}
+	{% trans 'Search The Voyages Database' %}
+{% endblock %}
 
 {% block content %}
 <style>
@@ -22,415 +31,92 @@
 	}
 </style>
 
-{% verbatim %}
 <div id="search-bar">
-<!-- SearchNav -->
-<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-	<div class="nav-container">
-		<!-- <a href="/" class="navbar-brand">Search</a> -->
-		<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="navbar-collapse collapse" id="searchNav">
-			<ul class="navbar-nav ">
+	<div style="color: white; background: #0c9ab1 !important; padding: .5rem 4rem 0; font-size: 1.25rem; font-weight:bold;">Trans-Atlantic Slave Trade Database</div>
 
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{searchFilter.yearRange.value.searchTerm[0]}} - {{searchFilter.yearRange.value.searchTerm[1]}}</a>
-					<div class="">
-						<ul class="dropdown-menu search-menu" id="range" role="menu">
-								<li class="dropdown-item dropdown-item-li">
-									<h3 class="popover-title">Year Range</h3>
-									<div class="popover-content">
-
-										<form-value-component tag-id="form-year-range-from" form-label="Year from" v-model="searchFilter.yearRange.current.searchTerm[0]" ></form-value-component>
-										<form-value-component tag-id="form-year-range-to" form-label="Year to" v-model="searchFilter.yearRange.current.searchTerm[1]" ></form-value-component>
-
-										<div class="form-group">
-										 <p>Year from is: <code>{{ searchFilter.yearRange.current.searchTerm[0] }}</code></p>
-										 <p>Year to is: <code>{{ searchFilter.yearRange.current.searchTerm[1] }}</code></p>
-										 <p>YearRange hasChanged is: <code>{{ searchFilter.yearRange.hasChanged }}</code></p>
-										</div>
-
-										<button v-on:click="vinApply" v-bind:disabled="!searchFilter.yearRange.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-										<button v-on:click="vinReset" v-bind:disabled="!searchFilter.yearRange.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
-									</div>
-								</li>
-							</ul>
-					</div>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ship, Nation, Owner</a>
-					<div class="">
-						<ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="vin">
-									Voyage Identification Number
-									<div id="vin" class="search-submenu popover">
-											<h3 class="popover-title">Voyage Identification Number</h3>
-											<div class="popover-content">
-
-												<div class="form-group">
-													<label for="form-vin">Voyage Identification Number</label>
-													<input type="number" v-model="searchFilter.vin.current.searchTerm[0]" id="form-vin" class="form-control">
-												 </div>
-
-												 <form-value-component tag-id="form-vin-2" form-label="Voyage Identification Number 2" v-model="searchFilter.vin.current.searchTerm[0]" >formform</form-value-component>
-
-												 <div class="form-group">
- 													<p>VIN current is: <code>{{ searchFilter.vin.current }}</code></p>
-													<p>VIN default is: <code>{{ searchFilter.vin.default }}</code></p>
-													<p>VIN hasChanged is: <code>{{ searchFilter.vin.hasChanged }}</code></p>
- 												 </div>
-
-												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-												 <button v-on:click="vinReset" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
-											</div>
-									</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="cdrom">
-										Voyage in 1999 CD-ROM
-										<div id="cdrom" class="search-submenu popover">
-												<h3 class="popover-title">Voyage in 1999 CD-ROM</h3>
-												<div class="popover-content">
-
-													<div class="form-group">
-  													<label for="form-cdrom">Voyage in 1999 CD-ROM</label>
-														<form-checkbox tag-id="form-cdrom" form-label="Voyage in 1999 CD-ROM" v-model="searchFilter.cdrom.current"></form-checkbox>
-  												 </div>
-
-													 <div class="form-group">
-															<p>cdrom current is: <code>{{ searchFilter.cdrom.current }}</code></p>
-															 <p>cdrom default is: <code>{{ searchFilter.cdrom.default }}</code></p>
-															 <p>cdrom hasChanged is: <code>{{ searchFilter.cdrom.hasChanged }}</code></p>
-														</div>
-
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="vessel">
-										Vessel Name and Owners
-										<div id="vessel" class="search-submenu popover">
-												<h3 class="popover-title">Vessel Name and Owner</h3>
-												<form-value-component tag-id="form-vessel-name" form-label="Vessel Name" v-model="searchFilter.vesselName.current"></form-value-component>
-												<form-value-component tag-id="form-vessel-owner" form-label="Vessel Owner" v-model="searchFilter.vesselOwner.current"></form-value-component>
-
-												 <div class="form-group">
-													<p>vesselName current is: <code>{{ searchFilter.vesselName.current }}</code></p>
- 													<p>vesselName default is: <code>{{ searchFilter.vesselName.default }}</code></p>
- 													<p>vesselOwner current is: <code>{{ searchFilter.vesselOwner.current }}</code></p>
-													<p>vesselOwner default is: <code>{{ searchFilter.vesselOwner.default }}</code></p>
-													<p>vessel hasChanged is: <code>{{ searchFilter.vessel.hasChanged }}</code></p>
- 												 </div>
-
-												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselApply" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselReset" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
-										</div>
-								</li>
-
-								<li v-if="isAdvanced" class="dropdown-item dropdown-item-li" data-submenu-id="flag">
-										Flag
-										<div id="flag" class="search-submenu popover">
-												<h3 class="popover-title">Flag</h3>
-												<div class="popover-content">
-													<div class="form-group">
-														<label for="form-flag">Flag</label>
-														<form-select2-multiple tag-id="form-flag" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-													</div>
-
-													<div class="form-group">
-														<label for="form-flag-imputed">Flag Imputed</label>
-														<form-select2-multiple tag-id="form-flag-imputed" tag-name="countries[]" v-bind:data="searchFilter.flagImputed.data"></form-select2-multiple>
-													</div>
-
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="construction">
-										Construction and Registration
-										<div id="construction" class="search-submenu popover">
-												<h3 class="popover-title">Construction and Registration</h3>
-												<div class="popover-content">
-													<form-value-component tag-id="form-year-construction" form-label="Year of Construction" v-model="searchFilter.yearConstruction.current"></form-value-component>
-													<form-value-component tag-id="form-year-registration" form-label="Year of Registration" v-model="searchFilter.yearRegistration.current"></form-value-component>
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="rig">
-										Rig
-										<div id="rig" class="search-submenu popover">
-												<h3 class="popover-title">Rig</h3>
-												<div class="popover-content">
-													<div class="form-group">
-														<label for="form-rig">Rig</label>
-														<form-select2-multiple tag-id="form-rig" tag-name="rigs[]" v-bind:data="searchFilter.rig.data"></form-select2-multiple>
-													</div>
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="gun">
-										Tonnage and Guns Mounted
-										<div id="gun" class="search-submenu popover">
-												<h3 class="popover-title">Tonnage and Guns Mounted</h3>
-												<div class="popover-content">
-													<form-value-component tag-id="form-tonnage" form-label="Tonnage" v-model="searchFilter.tonnage.current"></form-value-component>
-													<form-value-component tag-id="form-standardized-tonnage" form-label="Standardized Tonnage" v-model="searchFilter.standardizedTonnage.current"></form-value-component>
-													<form-value-component tag-id="form-guns" form-label="Guns Mounted" v-model="searchFilter.guns.current"></form-value-component>
-
-												</div>
-										</div>
-								</li>
-
-							</ul>
-					</div>
-				</li>
-
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Outcome</a>
-					<div class="">
-						<ul class="dropdown-menu search-menu" id="outcome-menu" role="menu">
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome">
-									Particular Outcome of Voyage
-									<div id="outcome" class="search-submenu popover">
-											<h3 class="popover-title">Particular Outcome of Voyage</h3>
-											<div class="popover-content">
-
-												<div class="form-group">
-													<label for="form-flag">Particular Outcome of Voyage</label>
-													<form-select2-multiple tag-id="form-outcome-of-voyage" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-												</div>
-
-												 <button v-on:click="vinApply" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-												 <button v-on:click="vinReset" v-bind:disabled="!searchFilter.vin.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
-											</div>
-									</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-for-slaves">
-										Outcome of Voyage for Slaves
-										<div id="outcome-for-slaves" class="search-submenu popover">
-												<h3 class="popover-title">Outcome of Voyage for Slaves</h3>
-												<div class="popover-content">
-
-
-
-													 <div class="form-group">
-															<p>slaves current is: <code>{{ searchFilter.cdrom.current }}</code></p>
-															 <p>slaves default is: <code>{{ searchFilter.cdrom.default }}</code></p>
-															 <p>slaves hasChanged is: <code>{{ searchFilter.cdrom.hasChanged }}</code></p>
-														</div>
-
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-if-captured">
-										Outcome of Voyage if Ship Captured
-										<div id="outcome-if-captured" class="search-submenu popover">
-												<h3 class="popover-title">Outcome of Voyage if Ship Captured</h3>
-
-												<div class="form-group">
-												 <label for="form-flag">Outcome of Voyage if Captured</label>
-												 <form-select2-multiple tag-id="form-outcome-of-voyage-if-captured" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-											 </div>
-
-												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselApply" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-primary btn-sm">Apply</button>
-												 <button v-bind:disabled="!searchFilter.vessel.hasChanged" v-on:click="vesselReset" v-bind:disabled="!searchFilter.vessel.hasChanged" class="btn btn-outline-primary btn-sm">Reset</button>
-
-										</div>
-								</li>
-
-								<li v-if="isAdvanced" class="dropdown-item dropdown-item-li" data-submenu-id="outcome-for-owner">
-										Outcome of Voyage for Owner
-										<div id="outcome-for-owner" class="search-submenu popover">
-												<h3 class="popover-title">Outcome of Voyage for Owner</h3>
-												<div class="popover-content">
-													<div class="form-group">
-													 <label for="form-flag">Outcome of Voyage for Owner</label>
-													 <form-select2-multiple tag-id="form-outcome-of-voyage-for-owner" tag-name="countries[]" v-bind:data="searchFilter.flag.data"></form-select2-multiple>
-												 </div>
-												</div>
-										</div>
-								</li>
-
-								<li class="dropdown-item dropdown-item-li" data-submenu-id="outcome-african-resistance">
-										African Resistance
-										<div id="outcome-african-resistance" class="search-submenu popover">
-												<h3 class="popover-title">African Resistance</h3>
-												<div class="popover-content">
-													<!-- <form-value-component tag-id="form-year-construction" form-label="Year of Construction" v-model="searchFilter.yearConstruction.current"></form-value-component>
-													<form-value-component tag-id="form-year-registration" form-label="Year of Registration" v-model="searchFilter.yearRegistration.current"></form-value-component> -->
-												</div>
-										</div>
-								</li>
-
-							</ul>
-					</div>
-				</li>
-
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						Source
-					</a>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="">Menu Item</a>
-					</div>
-				</li>
-
-			</ul>
-
-			<ul class="navbar-nav ml-auto ">
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						Cog
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<div>
-							<input type="checkbox" id="checkbox" v-model="isAdvanced">
-							<label for="checkbox">{{ isAdvanced }}</label>
-						</div>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<a class="dropdown-item" href="">Menu Item</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="">Menu Item</a>
-					</div>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						?
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" href="#">English</a>
-						<a class="dropdown-item" href="#">Português</a>
-					</div>
-				</li>
-
-			</ul>
+	<nav class="navbar navbar-expand-xl navbar-dark bg-dark trans-search-bar">
+		<div class="nav-container">
+			<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse" id="searchNav">
+				<ul class="navbar-nav">
+					<!-- {% include "voyage/vue/_year.html" %} -->
+					{% include "voyage/vue/_ship_nation_owner.html" %}
+					{% include "voyage/vue/_itinerary.html" %}
+					<!-- {% include "voyage/vue/_outcome.html" %} -->
+					<!-- {% include "voyage/vue/_dates.html" %} -->
+					{% include "voyage/vue/_captain_and_crew.html" %}
+					{% include "voyage/vue/_slave.html" %}
+					{% include "voyage/vue/_source.html" %}
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					{% include "voyage/vue/_settings.html" %}
+				</ul>
+			</div>
 		</div>
-	</div>
-</nav><!-- End of SearchNav -->
+	</nav>
+	<!-- End of SearchNav -->
 
-
-
-<div class="container-new">
-	<div class="row row-offcanvas row-offcanvas-right">
-
-		<div class="col-md-12 col-lg-12 col-xs-12">
-		<!-- <div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
-      <div class="sidebar-title-1"> sidebar </div>
-    </div>
-		<div class="col-md-8 col-xs-12 col-lg-9 ">
-			<p class="hidden-md">
-        <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
-          <div>
-            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-            <span>Toggle Sidebar</span>
-          </div>
-        </button>
-      </p> -->
-
-			<!-- CurrentQuery -->
-				<code>{{searchQuery}}</code>
-
-			<!-- End of CurrentQuery -->
-
-			<!-- Tabs -->
-			<ul class="nav nav-tabs">
-			  <li class="nav-item">
-			    <a class="nav-link active" href="#" data-toggle="tab" data-target="#results">Results</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#" data-toggle="tab" data-target="#stats">Summary Statistics</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#">Tables</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#">Custom Graphs</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#">Timeline</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#">Maps</a>
-			  </li>
-				<li class="nav-item">
-			    <a class="nav-link" href="#">Animation</a>
-			  </li>
-
-			  <li class="nav-item">
-			    <a class="nav-link disabled" href="#">Disabled</a>
-			  </li>
-			</ul><!-- End of Tabs -->
-
-
-
-			<!-- TabContainers -->
-			<div id="tabsJustifiedContent" class="tab-content">
-          <div id="results" class="tab-pane fade active show">
-              Results
-
-							<table id="results_main_table"></table>
-							<br/>
-							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-							<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          </div>
-          <div id="stats" class="tab-pane fade">
-              Stats
-          </div>
-          <div id="messages1" class="tab-pane fade">
-              Something else
-          </div>
-      </div>
-			<!-- End of TabContainers -->
+	<div class="trans-container">
+		<div class="row row-offcanvas row-offcanvas-right">
+			<div class="col-md-12 col-lg-12 col-xs-12">
+				{% include "voyage/vue/_tabs.html" %}
+			</div>
 		</div>
-
 	</div>
 </div>
 
-
-
-</div>
-
-
-{% endverbatim %}
-
-
-
-{% endblock %}
-
-{% block jslist %}
+{% endblock %} {% block jslist %}
 <script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+<script src="https://unpkg.com/select2@4.0.3/dist/js/select2.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap-tour.js"></script>
+<script src="https://unpkg.com/@riophae/vue-treeselect@^0.0.6"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+<script src="{{ STATIC_URL }}scripts/library/string-utils.js" type="text/javascript"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/qtip/jquery.qtip.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/helpers.js" type="text/javascript"></script>
+
 <script src="{{ STATIC_URL }}scripts/voyage/voyage-search.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/select2.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/clipboard.min.js" type="text/javascript"></script>
+<!-- <script src="{{ STATIC_URL }}scripts/library/vue-treeselect.js" type="text/javascript"></script> -->
 <script src="{{ STATIC_URL }}scripts/selectize.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/search_term.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/dt-search.js" type="text/javascript"></script>
-
 <script src="{{ STATIC_URL }}scripts/new-ui/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/new-ui/form-data.js" type="text/javascript"></script>
+
+<!-- vue components -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-menu-title.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-textbox.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select.js"></script>
+<!-- <script src="{{ STATIC_URL }}scripts/vue/components/v-select2.js"></script> -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select3.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-treeselect.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel-singular.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel-header.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-save-search.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-saved-searches.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-submenu.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-checkbox.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-toggle.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/input.js"></script>
+<!-- vue components -->
+
+<script src="{{ STATIC_URL }}scripts/vue/variables/year.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/ship-nation-owner.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/captain-and-crew.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/itinerary.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/source.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/slave.js"></script>
+
 <script src="{{ STATIC_URL }}scripts/vue/search.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/app.js" type="text/javascript"></script>
 {% endblock %}

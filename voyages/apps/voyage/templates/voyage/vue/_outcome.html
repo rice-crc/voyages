@@ -1,0 +1,90 @@
+{% verbatim %}
+<li class="nav-item dropdown">
+  <v-menu-title :count="0" title="Outcome"></v-menu-title>
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="outcome-menu" role="menu">
+      <v-panel @announced="announce"  title="Particular Outcome of Voyage" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="Particular Outcome of Voyage" description="Parameters about particular outcome of voyage" count="0"></v-panel-header>
+        </div>
+        <div slot="v-panel-content">
+          <v-select3
+            title="Particular Outcome of Voyage"
+            :filter="searchFilter.outcome1"
+            description="Choose from the following."
+            var-name="imp_arrival_at_port_of_dis"
+            :is-imputed=false
+            :is-advanced=true>
+          </v-select3>
+        </div>
+      </v-panel>
+
+      <v-panel @announced="announce"  title="Outcome of Voyage for Slaves" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="Outcome of Voyage for Slaves" description="Parameters about outcome of voyage for slaves" count="0"></v-panel-header>
+        </div>
+        <div slot="v-panel-content">
+          <v-select3
+            title="Outcome of Voyage for Slaves"
+            :filter="searchFilter.outcome2"
+            description="Choose from the following."
+            var-name="imp_arrival_at_port_of_dis"
+            :is-imputed=true
+            :is-advanced=false>
+          </v-select3>
+        </div>
+      </v-panel>
+
+
+      <v-panel @announced="announce"  title="Outcome of Voyage if Ship Captured" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="Outcome of Voyage if Ship Captured" description="Parameters about outcome of voyage if ship captured" count="0"></v-panel-header>
+        </div>
+        <div slot="v-panel-content">
+          <v-select3
+            title="Outcome of Voyage if Ship Captured"
+            :filter="searchFilter.outcome3"
+            description="Choose from the following."
+            var-name="imp_arrival_at_port_of_dis"
+            :is-imputed=true
+            :is-advanced=true>
+          </v-select3>
+        </div>
+      </v-panel>
+
+      <v-panel @announced="announce"  title="Outcome of Voyage for Owner" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="Outcome of Voyage for Owner" description="Parameters about outcome of voyage for owner" count="0"></v-panel-header>
+        </div>
+        <div slot="v-panel-content">
+          <v-select3
+            title="Outcome of Voyage for Owner"
+            :filter="searchFilter.outcome4"
+            description="Choose from the following."
+            var-name="imp_arrival_at_port_of_dis"
+            :is-imputed=true
+            :is-advanced=false>
+          </v-select3>
+        </div>
+      </v-panel>
+
+      <v-panel @announced="announce"  title="African Resistance" is-advanced="false" @applied="changed">
+        <div slot="v-panel-header">
+          <v-panel-header title="African Resistance" description="Parameters about African resistance" count="0"></v-panel-header>
+        </div>
+        <div slot="v-panel-content">
+          <v-select3
+            title="African Resistance"
+            :filter="searchFilter.outcome5"
+            description="Choose from the following."
+            var-name="imp_arrival_at_port_of_dis"
+            :is-imputed=false
+            :is-advanced=false>
+          </v-select3>
+        </div>
+      </v-panel>
+
+      </ul>
+  </div>
+</li>
+{% endverbatim %}

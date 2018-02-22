@@ -30,6 +30,7 @@ urlpatterns = [
 
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),
+    url(r'^american/', include('voyages.apps.american.urls', namespace='american')),
     url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='assessment')),
     url(r'^about/', include('voyages.apps.about.urls', namespace='about')),
     url(r'^education/', include('voyages.apps.education.urls', namespace='education')),

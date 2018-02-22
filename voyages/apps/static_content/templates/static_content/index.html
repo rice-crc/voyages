@@ -17,7 +17,7 @@
 
 			<div class="align-self-start cover-start col-md-10 col-lg-12 col-xl-8 col-sm-12 col-xs-12 no-padding">
 				<h1 class="uppercase cover-color weight-700 db-title site-headline " data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500" data-aos-anchor="#bgvid-container">EXPLORE THE DISPERSAL OF ENSLAVED AFRICANS ACROSS THE ATLANTIC WORLD</h1>
-				<p class="cover-color site-story" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% blocktrans %} Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. You can read the introductory maps for a high-level guided explanation, view the timeline and chronology of the traffic, or watch the slave ship and slave trade animations to see the dispersal in action. {% endblocktrans %}
+				<p class="cover-color site-story" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% blocktrans %} Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, names and personal information. You can read the introductory maps for a high-level guided explanation, view the timeline and chronology of the traffic, or watch the slave ship and slave trade animations to see the dispersal in action. {% endblocktrans %}
 				</p>
 			</div>
 
@@ -28,13 +28,13 @@
 					<a href="{% url 'assessment:intro-maps' %}" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="900" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
 							<div class="special-feature-title">{% trans 'Introductory Maps' %}</div>
-							<div class="special-feature-desc">Overview of slave trade history in a series of maps </div>
+							<div class="special-feature-desc">Overview of slave trade in a series of maps </div>
 						</div>
 					</a>
 
 					<a href="{% url 'assessment:estimates' %}?selected_tab=timeline" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1100" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
-							<div class="special-feature-title">{% trans 'Timeline and Chronology' %}</div>
+							<div class="special-feature-title">{% trans 'Timelines of Estimates' %}</div>
 							<div class="special-feature-desc">Number of captives embarked and disembarked </div>
 						</div>
 					</a>
@@ -42,7 +42,14 @@
 					<a href="{% url 'voyage:search' %}?selected_tab=animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
 							<div class="special-feature-title">Animation</div>
-							<div class="special-feature-desc">View slave trade movements in animation on map </div>
+							<div class="special-feature-desc">View the movement of slave ships across the Atlantic </div>
+						</div>
+					</a>
+
+					<a href="{% url 'voyage:search' %}?selected_tab=animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
+						<div class="special-feature-flex-item">
+							<div class="special-feature-title">Slave Ship in 3D</div>
+							<div class="special-feature-desc">View a 3D rendition of a slave ship </div>
 						</div>
 					</a>
 				</div>
@@ -51,14 +58,14 @@
 			<div class="align-self-end cover-end" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="1500" data-aos-duration="500" data-aos-anchor="#bgvid-container">
 				<div class="social-flex-container">
 					<div class="social-icon-container">
-						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="-_blank" alt="Slave Voyages on Facebook"><img src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon"></img></a>
-						<a href="" target="-_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
-						<a href="https://www.youtube.com/user/EmoryUniversity/" target="-_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a>
-						<span class="social-icon">donate to this project</span>
+						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="_blank" alt="Slave Voyages on Facebook"><img src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon"></img></a>
+						<a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
+						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a>
+						<span class="social-icon" style="opacity: 1;">donate to this project</span>
 					</div>
 
 					<div class="social-icon-container">
-						<a href="http://digitalscholarship.emory.edu/" alt="Emory University Center for Digital Scholarship"><img class="cover-logo" src="{{STATIC_URL}}images/site/eu-lits-grey.svg" alt="" style="height: 50px; opacity: 0.7; display: flex!important;"></a>
+						<a target="_blank" href="http://digitalscholarship.emory.edu/" alt="Emory University Center for Digital Scholarship"><img class="cover-logo" src="{{STATIC_URL}}images/site/eu-lits-grey.svg" alt="" style="height: 50px; opacity: 0.7; display: flex!important;"></a>
 					</div>
 
 				</div>
@@ -91,9 +98,7 @@
 					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
 				</div>
 				<div class="align-self-center">
-					<p class="trans-color">The Trans-Atlantic Slave Trade Database has information on almost 36,000 slaving voyages that forcibly embarked more than 12 million Africans for transportation to the Americas between the sixteenth and nineteenth centuries. Drawing from port records,
-						merchant accounts, newspapers, and other primary sources, the database compiles information about slave trading routes, demographics, owners of ships, and enslaved people’s resistance. The database and a separate estimates interface offer scholarly
-						researchers, students, and the general public a chance to discover the reality of the largest forced migration in world history.</p>
+					<p class="trans-color">“Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. Users can read the introductory maps for an overview of the evolution of the slave trade, view the timeline and chronology of the traffic, or watch the slave ship or slave trade animations to see the dispersal in action.”</p>
 				</div>
 				<div class="align-self-end band-buttons">
 					<a class="" href="{% url 'voyage:guide' %}">
@@ -138,8 +143,9 @@
 					</p>
 				</div>
 				<div class="align-self-end band-buttons">
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">About</button>
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Database</button>
+
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:about' %}">{% trans "About" %}</a>
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:database' %}">{% trans "Database" %}</a>
 					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Downloads</button>
 					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Contribute</button>
 				</div>
@@ -272,7 +278,7 @@
 
 	<div class="logo-grid-container" style="background: #BBC2CB;">
 		<div class="logo-grid">
-			<a href="https://www.fas.harvard.edu/" target="_blank" alt="Hutchins Center for African and African American Research (Harvard University)">
+			<a href="http://dubois.fas.harvard.edu/" target="_blank" alt="Hutchins Center for African and African American Research (Harvard University)">
 				<div class="logo-grid-item zoom-1">
 					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/hutchins.png" alt="" style="">
 				</div>
