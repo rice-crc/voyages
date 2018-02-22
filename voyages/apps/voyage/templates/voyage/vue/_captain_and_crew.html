@@ -17,43 +17,21 @@
         filters are: {{scope.filters}}
       </p>
 
-      <v-input @change="changed"
-        title="Captain's Name"
-        description="The name of the captain. This could a partial keyword."
-        var-name="var_captain_plaintext"
-        search-term-caption=""
-        :filter="scope.filters.var_captain_plaintext"
-        :is-numeric=false>
-      </v-input>
+      <v-text @change="changed"
+        :filter="scope.filters.var_captain_plaintext">
+      </v-text>
 
-      <v-input @change="changed"
-        title="Crew at Voyage Outset"
-        description="Enter the number of crew at voyage outset. This could be a range."
-        var-name="var_crew_voyage_outset"
-        search-term-caption=""
-        :filter="scope.filters.var_crew_voyage_outset"
-        :is-numeric=true>
-      </v-input>
+      <v-number @change="changed"
+        :filter="scope.filters.var_crew_voyage_outset">
+      </v-number>
 
-      <v-input @change="changed"
-        title="Crew at First Landing of Slaves"
-        description="Enter the number of crew at first landing of slaves. This could be a range."
-        var-name="var_crew_first_landing"
-        search-term-caption=""
-        :filter="scope.filters.var_crew_first_landing"
-        :is-numeric=true
-        :is-advanced=true
-        v-if="isAdvanced">
-      </v-input>
+      <v-number @change="changed"
+        :filter="scope.filters.var_crew_first_landing">
+      </v-number>
 
-      <v-input @change="changed"
-        title="Crew Deaths during Voyage"
-        description="Enter the number of crew death during voyages. This could be a range."
-        var-name="var_crew_died_complete_voyage"
-        search-term-caption=""
-        :filter="scope.filters.var_crew_died_complete_voyage"
-        :is-numeric=true>
-      </v-input>
+      <v-number @change="changed"
+        :filter="scope.filters.var_crew_died_complete_voyage">
+      </v-number>
 
     </div>
   </v-panel-singular>
