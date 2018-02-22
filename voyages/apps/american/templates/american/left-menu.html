@@ -1,0 +1,18 @@
+<!-- Left side menu for the About section -->
+
+{% load i18n %}
+
+<div class="sidebar-header-container">
+	<div class="sidebar-title-1">{% trans "About this Database" %}</div>
+</div>
+
+<div class="sidebar-section">
+<div class="secondary-menu-item-0" id="about">
+	<a href="{% url 'american:about' %}">{% trans "About" %}</a>
+</div>
+
+<div class="secondary-menu-item-0" id="database">
+  <a href="{% url 'american:database' %}">{% trans "Database" %}</a>
+</div>
+
+</div>

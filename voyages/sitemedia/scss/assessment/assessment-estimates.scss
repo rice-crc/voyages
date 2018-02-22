@@ -1,15 +1,19 @@
 // temporary css trick to make the expandable box presentable
 // this is temporary because the search might be replaced in near future
 .checkbox-list-checkbox-0 {
-	padding: 3px 15px;
+	padding: 0 15px;
 }
 
 .checkbox-list-label-0 {
-	padding: 7px 0 0 0;
+	// padding: 7px 0 0 0;
 }
 
 .checkbox-list-label-0-expandable {
-	padding: 8px 0 0 0;
+	// padding: 8px 0 0 0;
+}
+
+.sidebar-label {
+	margin-bottom: 0 !important;
 }
 
 /***********************************
@@ -145,7 +149,6 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
     list-style:none;
     display: inline-block;
     margin-right: 15px;
-    margin-bottom: 7px;
 }
 
 ul.estimates-table-form {
@@ -153,7 +156,8 @@ ul.estimates-table-form {
 }
 
 div.results-panel {
-	padding: 10px;}
+	padding: 0 10px;
+}
 
 div.estimates-table-options {
 	margin-top: -5px;

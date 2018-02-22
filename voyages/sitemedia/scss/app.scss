@@ -65,7 +65,7 @@ footer {
 }
 
 .trans-color {
-  color: #008ca8;
+  color: $trans-color;
 }
 
 .normal-color {
@@ -73,16 +73,16 @@ footer {
 }
 
 .intra-color {
-  color: #645D9B;
+  color: $intra-color;
   /* #47A58A */
 }
 
 .gallery-color {
-  color: #47A58A;
+  color: $resource-color;
 }
 
 .past-color {
-  color: #DB6B57;
+  color: $past-color;
 }
 
 .db-title-color {
@@ -106,33 +106,33 @@ footer {
 
 
 .trans-btn {
-  color: #008ca8;
-  border-color: #008ca8;
+  color: $trans-color;
+  border-color: $trans-color;
 }
 
 .trans-btn:hover {
-  background-color: #008ca8;
-  border-color: #008ca8;
+  background-color: $trans-color;
+  border-color: $trans-color;
 }
 
 .intra-btn {
-  color: #645D9B;
-  border-color: #645D9B;
+  color: $intra-color;
+  border-color: $intra-color;
 }
 
 .intra-btn:hover {
-  background-color: #645D9B;
-  border-color: #645D9B;
+  background-color: $intra-color;
+  border-color: $intra-color;
 }
 
 .past-btn {
-  color: #DB6B57;
-  border-color: #DB6B57;
+  color: $past-color;
+  border-color: $past-color;
 }
 
 .past-btn:hover {
-  background-color: #DB6B57;
-  border-color: #DB6B57;
+  background-color: $past-color;
+  border-color: $past-color;
 }
 
 .band {

@@ -146,6 +146,7 @@ INSTALLED_APPS = (
 
     'voyages.apps.common',
     'voyages.apps.voyage',
+    'voyages.apps.american',
     'voyages.apps.assessment',
     'voyages.apps.resources',
     'voyages.apps.education',

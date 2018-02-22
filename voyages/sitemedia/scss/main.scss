@@ -2,6 +2,52 @@
 @import "headings";
 @import "colors";
 
+// offset white space under menu
+.dropdown-menu {
+  margin: 0;
+}
+
+// inline display
+.inline {
+  display: inline;
+}
+
+// django admin style fix
+.deletelink {
+  height: 100%;
+}
+
+// table compact
+.table-compact {
+  thead {
+    font-weight: bold;
+    padding: 0.25rem 0;
+  }
+  th, td {
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+// accordion
+.sidebar-section-accordion:first-child {
+  margin-top: 1.5rem;
+}
+
+.collapse.show {
+  margin-bottom: 1.5rem;
+}
+
+// text-primary
+.text-title {
+  font-weight: 500;
+}
+
+// text-secondary
+.text-description {
+  color: #898989;
+}
+
+
 // link
 .link {
   font-weight: bold;
@@ -116,7 +162,8 @@ div.dataTables_wrapper div.dataTables_info {
 
 .form-group {
   align-items: center;
-  margin-bottom: 0.25rem;
+  // margin-bottom: 0.25rem;
+  margin-bottom: 0;
 }
 
 .form-check {
@@ -126,16 +173,16 @@ div.dataTables_wrapper div.dataTables_info {
 .section {
   margin: 1rem 0;
 }
-.table {
-
-  th {
-    text-align: center;
-  }
-
-  tr {
-    text-align: center;
-  }
-}
+// .table {
+//
+//   th {
+//     text-align: center;
+//   }
+//
+//   tr {
+//     text-align: center;
+//   }
+// }
 
 html {
   position: relative;
@@ -182,7 +229,13 @@ footer {
   color: $text-dark-1;
 }
 
+.sidebar-section-2 {
+  padding: 0 0 5px 15px;
+}
 
+.sidebar-title-3 {
+  font-weight: bold;
+}
 
 .table-sm {
   font-size: 0.8rem;
@@ -227,4 +280,8 @@ footer {
 .page-navigation-item {
   margin-top: 10px;
   font-weight: bold;
+}
+
+.text-bold {
+    font-weight: bold;
 }

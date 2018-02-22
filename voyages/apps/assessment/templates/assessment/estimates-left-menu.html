@@ -6,192 +6,254 @@
 
     <div class="sidebar-title-1">Variables</div>
     <input type="hidden" value="time-frame" name="form:_idJsp6_selected">
-    <div class="sidebar-section">
-      <div class="sidebar-title-2">
-        {% trans 'Time Frame' %}
-      </div>
-      <div id="form:_idJsp7" class="box-main-text">
-        <div>
-          {% trans 'Show data from' %}
-          {{ year_form.frame_from_year }}
-          {% trans 'to' %}
-          {{ year_form.frame_to_year }}
+
+    <div role="tablist" id="accordion">
+
+      <!-- <div class="sidebar-section-accordion">
+        <div class="form-group row">
+          <div class="col-sm-12 sidebar-title-2">
+            <a data-toggle="collapse" href="#container-xxx" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+              {% trans 'xxx' %}
+            </a>
+          </div>
         </div>
-        <p>{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
 
-        <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
-        <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
-      </div>
+        <div id="container-xxx" class="collapse" role="tabpanel" aria-labelledby="container-xxx">
+          <div class="form-group row">
+            <div class="col-md-12">
 
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-title-2">
-        {% trans 'Flag' %}
-      </div>
-      {% for nation in nations %}
-      <div>
-        {% ifequal nation.2 1 %}
-          <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
-        {% else %}
-          <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
-        {% endifequal %}
-        <label for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
+            </div>
+          </div>
         </div>
-      {% endfor %}
-      <button class="btn btn-solid btn-sm" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
-      <button class="btn btn-outline btn-sm" type="submit" name="submit_nation" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset' %}</button>
-    </div>
+      </div>
+       -->
+      <div class="sidebar-section-accordion">
+        <div class="form-group row">
+          <div class="col-sm-12 sidebar-title-2">
+            <a data-toggle="collapse" href="#container-time-frame" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+              {% trans 'Time Frame' %}
+            </a>
+          </div>
+        </div>
 
-
-
-    <div class="sidebar-section">
-      <div id="form:_idJsp34" class="box-main-text">
-        <div class="region-list">
-          <div class="sidebar-title-2"> Regions </div>
-
-          <div>{% trans 'Embarkation Regions' %}</div>
-
-          <!-- Embkarkation menu -->
-          <table>
-          <tbody>
-            {% for area, region_list in export_regions.items %}
-            <tr id="row-{{ area.0.pk }}" class="checkbox-list-item-0">
-
-              <!-- Checkbox on the left of label -->
-              <td class="checkbox-list-checkbox-0" style="position: relative;">
-                {% ifequal area.1 1 %}
-                  <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
-                {% else %}
-                  <input type="checkbox" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
-                {% endifequal %}
-              </td>
-
-              <!-- Check if item is expendable and use proper class -->
-              {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
-                <td class="checkbox-list-label-0">
-                  <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-                </td>
-              {% elif region_list %}
-                <td class="checkbox-list-label-0-expandable">
-                  <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-                </td>
-              {% else %}
-                <td class="checkbox-list-label-0">
-                  <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-                </td>
-              {% endif %}
-
-              <!-- Check if item is expendable, if so, third td exists -->
-              <td>
-              {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
-              {% elif not region_list %}
-              {% else %}
-                <div class="checkbox-list-popup" style="position: absolute; display: none">
-                  <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
-                  <tbody>
-                    {%  for region in region_list %}
-                    <tr class="checkbox-list-item-0" >
-                      <td class="checkbox-list-checkbox-0">
-                        {% ifequal region.1 1 %}
-                          <input name="eregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
-                        {% else %}
-                          <input name="eregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
-                        {% endifequal %}
-                      </td>
-                      <td class="checkbox-list-label-0">
-                        <label onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                  </table>
+        <div id="container-time-frame" class="collapse show" role="tabpanel" aria-labelledby="container-time-frame">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div id="form:_idJsp7">
+                <div class="text-title">
+                  {% trans 'Show data from' %}
+                  {{ year_form.frame_from_year }}
+                  {% trans 'to' %}
+                  {{ year_form.frame_to_year }}
                 </div>
-              {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          </table>
+                <p class="text-description">{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
 
-          <!-- Select/Deselect all buttons -->
-          <!-- <button class="btn btn-solid btn-sm" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
-          <button class="btn btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
-        </div>
+                <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
+                <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- container-time-frame -->
       </div>
-      <div class="region-list">
-        <!-- Disembarkation menu -->
-        <div>{% trans 'Disembarkation Regions' %}</div>
-        <table>
-        <tbody>
-          {% for area, region_list in import_regions.items %}
-          <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
 
-            <!-- Checkbox on the left of label -->
-            <td class="checkbox-list-checkbox-0" style="position: relative;">
-              {% ifequal area.1 1 %}
-                <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
-              {% else %}
-                <input type="checkbox" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
-              {% endifequal %}
-            </td>
 
-            <!-- Check if item is expendable and use proper class -->
-            {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
-              <td class="checkbox-list-label-0">
-                <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-              </td>
-            {% elif region_list %}
-              <td class="checkbox-list-label-0-expandable">
-                <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-              </td>
-            {% else %}
-              <td class="checkbox-list-label-0">
-                <label onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
-              </td>
-            {% endif %}
 
-            <!-- Check if item is expendable, if so, third td exists -->
-            <td>
-            {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
-            {% elif not region_list %}
-            {% else %}
-              <div class="checkbox-list-popup" style="position: absolute; display: none">
-                <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
+
+
+
+      <div class="sidebar-section-accordion">
+        <div class="form-group row">
+          <div class="col-sm-12 sidebar-title-2">
+            <a data-toggle="collapse" href="#container-flag" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+              {% trans 'Flag' %}
+            </a>
+          </div>
+        </div>
+
+        <div id="container-flag" class="collapse show" role="tabpanel" aria-labelledby="container-flag">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div style="margin-bottom: 1rem;">
+                {% for nation in nations %}
+                <div>
+                  {% ifequal nation.2 1 %}
+                    <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
+                  {% else %}
+                    <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
+                  {% endifequal %}
+                  <label class="sidebar-label" for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
+                </div>
+                {% endfor %}
+              </div>
+
+              <button class="btn btn-solid btn-sm" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
+              <button class="btn btn-outline btn-sm" type="submit" name="submit_nation" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset' %}</button>
+            </div>
+          </div>
+        </div><!-- container-xxx -->
+      </div>
+
+      <div class="sidebar-section-accordion">
+        <div class="form-group row">
+          <div class="col-sm-12 sidebar-title-2">
+            <a data-toggle="collapse" href="#container-regions" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+              {% trans 'Regions' %}
+            </a>
+          </div>
+        </div>
+
+        <div id="container-regions" class="collapse" role="tabpanel" aria-labelledby="container-regions">
+          <div class="form-group row">
+            <div class="col-md-12">
+
+              <div class="sidebar-section-2">
+                <div class="sidebar-title-3">{% trans 'Embarkation Regions' %}</div>
+                <!-- Embkarkation menu -->
+                <table>
                 <tbody>
-                  {%  for region in region_list %}
-                  <tr class="checkbox-list-item-0" >
-                    <td class="checkbox-list-checkbox-0">
-                      {% ifequal region.1 1 %}
-                        <input name="dregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                  {% for area, region_list in export_regions.items %}
+                  <tr id="row-{{ area.0.pk }}" class="checkbox-list-item-0">
+
+                    <!-- Checkbox on the left of label -->
+                    <td class="checkbox-list-checkbox-0" style="position: relative;">
+                      {% ifequal area.1 1 %}
+                        <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
                       {% else %}
-                        <input name="dregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                        <input type="checkbox" value="{{ area.0.pk }}" name="earea-button-{{ area.0.pk }}" onclick="areaClick(this)">
                       {% endifequal %}
                     </td>
-                    <td class="checkbox-list-label-0">
-                      <label onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
+
+                    <!-- Check if item is expendable and use proper class -->
+                    {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
+                      <td class="checkbox-list-label-0">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% elif region_list %}
+                      <td class="checkbox-list-label-0-expandable">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% else %}
+                      <td class="checkbox-list-label-0">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% endif %}
+
+                    <!-- Check if item is expendable, if so, third td exists -->
+                    <td>
+                    {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
+                    {% elif not region_list %}
+                    {% else %}
+                      <div class="checkbox-list-popup" style="position: absolute; display: none">
+                        <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                          {%  for region in region_list %}
+                          <tr class="checkbox-list-item-0" >
+                            <td class="checkbox-list-checkbox-0">
+                              {% ifequal region.1 1 %}
+                                <input name="eregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
+                              {% else %}
+                                <input name="eregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'earea-button-', 'eregion-button-')">
+                              {% endifequal %}
+                            </td>
+                            <td class="checkbox-list-label-0">
+                              <label class="sidebar-label" onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                        </table>
+                      </div>
+                    {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+                <!-- Select/Deselect all buttons -->
+                <!-- <button class="btn btn-solid btn-sm" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
+                <button class="btn btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
+              </div>
+
+              <div class="region-list sidebar-section-2">
+                <!-- Disembarkation menu -->
+                <div class="sidebar-title-3">{% trans 'Disembarkation Regions' %}</div>
+                <table>
+                <tbody>
+                  {% for area, region_list in import_regions.items %}
+                  <tr id="row-{{ area.pk }}" class="checkbox-list-item-0">
+
+                    <!-- Checkbox on the left of label -->
+                    <td class="checkbox-list-checkbox-0" style="position: relative;">
+                      {% ifequal area.1 1 %}
+                        <input type="checkbox" checked="checked" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                      {% else %}
+                        <input type="checkbox" value="{{ area.0.pk }}" name="darea-button-{{ area.0.pk }}" onclick="areaClick(this)">
+                      {% endifequal %}
+                    </td>
+
+                    <!-- Check if item is expendable and use proper class -->
+                    {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
+                      <td class="checkbox-list-label-0">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% elif region_list %}
+                      <td class="checkbox-list-label-0-expandable">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% else %}
+                      <td class="checkbox-list-label-0">
+                        <label class="sidebar-label" onclick="labelClick(this, 0)">{{ area.0.name|trans_log }}</label>
+                      </td>
+                    {% endif %}
+
+                    <!-- Check if item is expendable, if so, third td exists -->
+                    <td>
+                    {% if region_list|length == 1 and region_list.0.0.0 == area.0.name %}
+                    {% elif not region_list %}
+                    {% else %}
+                      <div class="checkbox-list-popup" style="position: absolute; display: none">
+                        <table class="checkbox-list-table-1" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                          {%  for region in region_list %}
+                          <tr class="checkbox-list-item-0" >
+                            <td class="checkbox-list-checkbox-0">
+                              {% ifequal region.1 1 %}
+                                <input name="dregion-button-{{ region.0.1 }}" type="checkbox" checked="checked" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                              {% else %}
+                                <input name="dregion-button-{{ region.0.1 }}" type="checkbox" value="{{ region.0.1 }}" onclick="regionClick(this, 'darea-button-', 'dregion-button-')">
+                              {% endifequal %}
+                            </td>
+                            <td class="checkbox-list-label-0">
+                              <label class="sidebar-label" onclick="labelClick(this, 1)">{{ region.0.0|trans_log }}</label>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                        </table>
+                      </div>
+                    {% endif %}
                     </td>
                   </tr>
                   {% endfor %}
                 </tbody>
                 </table>
-              </div>
-            {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        </table>
-        
-        <button class="btn btn-solid btn-sm margin-v" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
-        <button class="btn btn-outline btn-sm margin-v" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button>
-        <div class="sidebar-section">
-          <button class="btn btn-sm btn-solid margin-v" type="submit" value="Change selection" name="submit_regions">{% trans 'Search' %}</button>
-          <button class="btn btn-sm btn-outline margin-v" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset' %}</button>
-        </div>
 
+                <button class="btn btn-solid btn-sm margin-v" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
+                <button class="btn btn-outline btn-sm margin-v" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button>
+
+              </div>
+
+              <button class="btn btn-sm btn-solid" type="submit" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
+              <button class="btn btn-sm btn-outline" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset' %}</button>
+
+            </div>
+          </div>
+        </div><!-- container-xxx -->
       </div>
+
     </div>
+
 
 
 

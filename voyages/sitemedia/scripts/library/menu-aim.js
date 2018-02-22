@@ -177,7 +177,6 @@
          */
         var possiblyActivate = function(row) {
                 var delay = activationDelay();
-
                 if (delay) {
                     timeoutId = setTimeout(function() {
                         possiblyActivate(row);

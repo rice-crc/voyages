@@ -1,0 +1,71 @@
+{% verbatim %}
+
+<li class="nav-item dropdown">
+  <a id="show-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+  </a>
+  <div class="dropdown-menu search-menu dropdown-menu-right">
+  </div>
+</li>
+
+<!-- Search Settings -->
+<li class="nav-item dropdown">
+  <v-menu-title :count="false">
+    <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
+  </v-menu-title>
+
+  <v-panel-singular title="Search Settings" :count="false" :filters="isAdvanced" group="options" sub-group="settings" align="right">
+    <div slot="v-panel-header">
+      <v-panel-header
+        title="Search Settings"
+        description="Settings about your search in the Trans-Atlantic Slave Trade Database"
+        :modal-disabled="true">
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content">
+      <v-toggle
+        title="Show Advanced Variables in Search Filters"
+        description="Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior."
+        :toggled="isAdvanced"
+        @toggle="toggle">
+      </v-toggle>
+    </div>
+  </v-panel-singular>
+</li>
+<!-- Search Settings -->
+
+<!-- Saved Searches -->
+<li class="nav-item dropdown">
+  <v-menu-title :count="false">
+    <i class="fa fa-heart" aria-hidden="true" slot="menu-title"></i>
+  </v-menu-title>
+
+  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right">
+    <div slot="v-panel-header">
+      <v-panel-header
+        title="Saved Searches"
+        description="Save and share a particular set of variables for your search"
+        :modal-disabled="true">
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content">
+      <v-save-search
+        title="Save Current Search"
+        description="You can save a search by creating a link that can be later used to retreive your particular set of search variables. You may also share your search by sharing the link to this search with other people."
+        @save="save">
+      </v-save-search>
+
+      <v-saved-searches
+        title="Saved Searches"
+        description="These are searches saved in this session."
+        :saved="saved">
+      </v-saved-searches>
+    </div>
+  </v-panel-singular>
+
+</li>
+<!-- Saved Searches -->
+
+{% endverbatim %}

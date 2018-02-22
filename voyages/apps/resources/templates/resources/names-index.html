@@ -46,11 +46,13 @@
         </button>
       </p>
 
-      <div class="page-title-1">{% trans "People of Atlantic Slave Trade Database" %}</div>
+      <div class="page-title-1">{% trans "African Names Database" %}</div>
 
-<div class="page-title-2">{% trans 'Your Current Query' %}</div>
+      <!-- <a class="text-bold" data-toggle="collapse" href="#current-query" aria-expanded="false" aria-controls="current-query">
+        {% trans 'Your Current Query' %}
+      </a> -->
 
-      <div class="page-section">
+      <div class="page-section" id="current-query" class="collapse" aria-labelledby="current-query">
 
         <div id="form:_idJsp164" class="box-main-text">
           <div class="query-summary">
@@ -351,7 +353,7 @@
                 <td></td>
               {% endif %}
               <td>
-                <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'GO' %}</a>
+                <a href="http://african-origins.org/african-data/detail/{{ record.slave_id }}" target="_blank" onclick="return confirm("{% trans 'Redirecting to African Origins' %}");">{% trans 'View' %}</a>
               </td>
               </tr>
           {% endfor %}

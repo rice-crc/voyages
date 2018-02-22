@@ -1,5 +1,10 @@
 @import "colors";
 
+// past database table padding override
+
+.table td, .table th {
+  padding: 0 .25rem !important;
+}
 
 // datatables past
 .table-past {

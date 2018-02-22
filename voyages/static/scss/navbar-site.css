@@ -1,15 +1,15 @@
 .navbar {
-  padding: .5rem 4rem;
+  padding: 0 4rem;
   z-index: 2;
   border: none;
   width: 100%; }
 
 .nav-item {
-  padding-right: 1rem; }
+  margin-right: 1rem; }
 
 .nav-link {
   font-weight: 500;
-  font-size: 1.1rem; }
+  font-size: 1rem; }
 
 .navbar-brand {
   font-weight: bold; }
@@ -33,22 +33,29 @@
   width: 100%;
   flex-wrap: nowrap; }
 
-@media (min-width: 1200px) {
+@media (min-width: 1199px) {
   .nav-container {
     justify-content: space-between;
     display: flex;
-    align-items: center; } }
+    align-items: center; }
+  .nav-item {
+    padding-top: 4px; }
+  .active-link {
+    border-top: solid 4px white;
+    padding-top: 0; }
+  .navbar {
+    padding-top: 0; } }
 
 .breadcrumb {
   padding: .75rem 4rem; }
 
 .container-new {
-  margin: 2rem 4rem; }
+  margin: 1.5rem 4rem; }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
   .navbar {
     padding: .5rem 2rem; }
   .container-new {
     margin: 2rem 2rem; } }
 
-/*# sourceMappingURL=../../../../../../../static/scss/navbar-site.css.map */
+/*# sourceMappingURL=../../../../../../../../../static/scss/navbar-site.css.map */

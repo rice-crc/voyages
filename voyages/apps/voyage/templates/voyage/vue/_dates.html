@@ -1,0 +1,126 @@
+{% verbatim %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="0" title="Dates"></v-menu-title>
+
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="dates" role="menu">
+
+      <v-panel @announced="announce" @activated="calculate" title="Voyage Dates Overview" is-advanced="false">
+        <div slot="v-panel-header">
+          <v-panel-header title="Voyage Dates Overview" description="Parameters about dates regarding voyage arrival, duration, and passage." count="0"></v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" @activated="calculate">
+          <v-input @change="changed"
+            title="Year Arrived with Slaves"
+            description="The year in which slaves arrived. This could be a range."
+            var-name="var_voyage_id"
+            search-term-caption=""
+            :filter="searchFilter.var_voyage_id"
+            :is-numeric=true
+            :is-imputed=true>
+          </v-input>
+
+
+          <v-input @change="changed"
+            title="Voyage Length - Homeport to Slaves Landing"
+            description="The length of the voyage, measured in days. This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=true
+            :is-imputed=true
+            :is-advanced=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Middle Passage"
+            description="The passage of the voyage, measured in days. This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=true
+            :is-imputed=true
+            :is-advanced=true>
+          </v-input>
+        </div>
+      </v-panel>
+
+      <v-panel @announced="announce" title="During the Voyage" is-advanced="false">
+        <div slot="v-panel-header">
+          <v-panel-header title="During the Voyage" description="Parameters about dates during the voyage" count="0"></v-panel-header>
+        </div>
+
+        <div slot="v-panel-content">
+          <v-input @change="changed"
+            title="Date Voyage Began"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-advanced=true
+            :is-numeric=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Date Trade Began in Africa"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-numeric=true
+            :is-advanced=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Date Vessel Departed Africa"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-imputed=false
+            :is-advanced=true
+            :is-numeric=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Date Vessel Arrived with Slaves"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-imputed=false
+            :is-advanced=true
+            :is-numeric=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Date Vessel Departed for Homeport"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-imputed=false
+            :is-advanced=true
+            :is-numeric=true>
+          </v-input>
+
+          <v-input @change="changed"
+            title="Date Voyage Completed"
+            description="This could be a range."
+            var-name="imp_arrival_at_port_of_dis"
+            search-term-caption=""
+            :filter="searchFilter.groups.slave.overallNumbers.var_imp_total_slaves_disembarked"
+            :is-imputed=false
+            :is-advanced=true
+            :is-numeric=true>
+          </v-input>
+
+        </div>
+      </v-panel>
+
+    </ul>
+  </div>
+</li>
+{% endverbatim %}

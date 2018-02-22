@@ -1,0 +1,34 @@
+{% verbatim %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="searchFilter.groups.source.count" title="Source"></v-menu-title>
+
+    <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="searchFilter.groups.source.source" :count="searchFilter.groups.source.source.count" align="right">
+      <div slot="v-panel-header">
+        <v-panel-header title="Data Source" description="Source of the slave trade data">
+          <div slot="v-modal-content">
+            Some help text
+          </div>
+        </v-panel-header>
+      </div>
+
+      <div slot="v-panel-content" slot-scope="scope">
+        <p>
+          filters are: {{scope.filters}}
+        </p>
+
+        <v-input @change="changed"
+           title="Data Source"
+           description="This is the source of the data. This could be a partial keyword."
+           var-name="var_sources_plaintext_search"
+           search-term-caption=""
+           :filter="scope.filters.var_sources_plaintext_search"
+           :is-numeric=false
+           :is-imputed=false
+           :is-advanced=false>
+         </v-input>
+      </div>
+    </v-panel-singular>
+</li>
+
+{% endverbatim %}
