@@ -5,7 +5,7 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="searchFilter.groups.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="searchFilter.groups.itinerary.departure" :data="places" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="searchFilter.groups.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="searchFilter.groups.itinerary.departure" :visible="true">
 
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Departure" description="Overall numbers about slaves in the trade">
@@ -21,20 +21,14 @@
 					</p>
 
 					<v-treeselect
-						title="Place where Voyage Began"
-						description="Where it began"
-						var-name="var_imp_port_voyage_begin"
 						:filter="scope.filters.var_imp_port_voyage_begin"
-						:data="scope.data"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
 					/>
 
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="searchFilter.groups.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="searchFilter.groups.itinerary.purchase" :data="places" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="searchFilter.groups.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="searchFilter.groups.itinerary.purchase" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Slave Purchase" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -49,52 +43,28 @@
 					</p>
 
 					<v-treeselect
-						title="Principal Place of Purchase"
-						description="Where it began"
-						var-name="var_imp_principal_place_of_slave_purchase"
-						:data="scope.data"
 						:filter="scope.filters.var_imp_principal_place_of_slave_purchase"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="1st Place of Purchase"
-						description="Where it began"
-						:data="scope.data"
-						var-name="var_first_place_slave_purchase"
 						:filter="scope.filters.var_first_place_slave_purchase"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="2nd Place of Purchase"
-						description="Where it began"
-						var-name="var_second_place_slave_purchase"
-						:data="scope.data"
 						:filter="scope.filters.var_second_place_slave_purchase"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="3rd Place of Purchase"
-						description="Where it began"
-						var-name="var_third_place_slave_purchase"
-						:data="scope.data"
 						:filter="scope.filters.var_third_place_slave_purchase"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="call" :count="searchFilter.groups.itinerary.call.count" @apply="apply" title="Places of Call before Atlantic Crossing" :filters="searchFilter.groups.itinerary.call" :data="places" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="call" :count="searchFilter.groups.itinerary.call.count" @apply="apply" title="Places of Call before Atlantic Crossing" :filters="searchFilter.groups.itinerary.call" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Places of Call before Atlantic Crossing" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -109,20 +79,14 @@
 					</p>
 
 					<v-treeselect
-						title="Places of Call before Atlantic Crossing"
-						description="Where it began"
-						var-name="var_port_of_call_before_atl_crossing"
-						:data="scope.data"
 						:filter="scope.filters.var_port_of_call_before_atl_crossing"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="landing" :count="searchFilter.groups.itinerary.landing.count" @apply="apply" title="Places of Slave Landing" :filters="searchFilter.groups.itinerary.landing" :data="places" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="landing" :count="searchFilter.groups.itinerary.landing.count" @apply="apply" title="Places of Slave Landing" :filters="searchFilter.groups.itinerary.landing" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Places of Slave Landing" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -137,52 +101,28 @@
 					</p>
 
 					<v-treeselect
-						title="Principal Place of Slave Landing"
-						description="Where it began"
-						var-name="var_imp_principal_port_slave_dis"
-						:data="scope.data"
 						:filter="scope.filters.var_imp_principal_port_slave_dis"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="1st Place of Slave Landing"
-						description="Where it began"
-						var-name="var_first_landing_place"
-						:data="scope.data"
 						:filter="scope.filters.var_first_landing_place"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="2nd Place of Slave Landing"
-						description="Where it began"
-						var-name="var_second_landing_place"
-						:data="scope.data"
 						:filter="scope.filters.var_second_landing_place"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 					<v-treeselect
-						title="3rd Place of Slave Landing"
-						description="Where it began"
-						var-name="var_third_landing_place"
-						:data="scope.data"
 						:filter="scope.filters.var_third_landing_place"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="destination" :count="searchFilter.groups.itinerary.destination.count" @apply="apply" title="Place where Voyage Ended" :filters="searchFilter.groups.itinerary.destination" :data="places" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="destination" :count="searchFilter.groups.itinerary.destination.count" @apply="apply" title="Place where Voyage Ended" :filters="searchFilter.groups.itinerary.destination" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Place where Voyage Ended" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -197,15 +137,9 @@
 					</p>
 
 					<v-treeselect
-						title="Place where Voyage Ended"
-						description="Where it began"
-						var-name="var_place_voyage_ended"
-						:data="scope.data"
 						:filter="scope.filters.var_place_voyage_ended"
-						:is-imputed="false"
-						:is-advanced="false"
 						@change="changed"
-					></v-treeselect>
+					/>
 
 				</div>
 			</v-panel>

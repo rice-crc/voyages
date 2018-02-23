@@ -6,12 +6,12 @@
   <div class="">
     <ul class="dropdown-menu search-menu" id="dates" role="menu">
 
-      <v-panel @announced="announce" @activated="calculate" title="Voyage Dates Overview" is-advanced="false">
+      <v-panel title="Voyage Dates Overview" is-advanced="false">
         <div slot="v-panel-header">
           <v-panel-header title="Voyage Dates Overview" description="Parameters about dates regarding voyage arrival, duration, and passage." count="0"></v-panel-header>
         </div>
 
-        <div slot="v-panel-content" @activated="calculate">
+        <div slot="v-panel-content">
           <v-input @change="changed"
             title="Year Arrived with Slaves"
             description="The year in which slaves arrived. This could be a range."
@@ -47,7 +47,7 @@
         </div>
       </v-panel>
 
-      <v-panel @announced="announce" title="During the Voyage" is-advanced="false">
+      <v-panel title="During the Voyage" is-advanced="false">
         <div slot="v-panel-header">
           <v-panel-header title="During the Voyage" description="Parameters about dates during the voyage" count="0"></v-panel-header>
         </div>
