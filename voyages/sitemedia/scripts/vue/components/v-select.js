@@ -21,10 +21,13 @@ Vue.component('v-select', {
   watch: {
     value: {
       handler: function(value) {
-        this.selected = value;
+        this.selected = this.value;
       }
     }
   },
+  created: function() {
+    this.selected = this.value;
+  }
 
 })
 // end of select

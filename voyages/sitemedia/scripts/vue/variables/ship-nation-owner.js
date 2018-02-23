@@ -11,6 +11,18 @@ var_voyage_id = new NumberVariable({
     isAdvanced: false
   });
 
+var_voyage_in_cd_rom = new BooleanVariable({
+    varName: "voyage_in_cd_rom",
+    label: "Voyage in 1999 CD-ROM",
+    description: "description",
+  },{
+    op: "equals",
+    searchTerm: false,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 var_ship_name_plaintext = new TextVariable({
     varName: "ship_name_plaintext",
     label: "Vessel Name",
@@ -164,18 +176,7 @@ var_guns_mounted = new NumberVariable({
 shipNationOwner = {
   voyagesAndVessels: {
     var_voyage_id: var_voyage_id,
-
-    // var_voyage_in_cd_rom: {
-    //   varName: 'var_voyage_in_cd_rom',
-    //   value: {
-    //     op: "equals to",
-    //     searchTerm0: null,
-    //     searchTerm1: null,
-    //   },
-    //   changed: false,
-    //   activated: false,
-    // },
-
+    var_voyage_in_cd_rom: var_voyage_in_cd_rom,
     var_ship_name_plaintext: var_ship_name_plaintext,
     var_owner_plaintext: var_owner_plaintext,
 

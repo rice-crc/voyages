@@ -23,31 +23,13 @@
             :filter="scope.filters.var_voyage_id">
           </v-number>
 
-          <!-- <v-checkbox @change="changed"
-            title="Voyages in 1999 CD-ROM"
-            description="Some records are from the original 1999 CD-ROM. Choose whether to include them."
-            var-name="var_voyage_in_cd_rom"
-            search-term-caption=""
-            :filter="scope.filters.var_voyage_in_cd_rom"
-            :is-imputed=false
-            :is-advanced=true
-            checkbox-name="Include 1999 CD-ROM voyages"
-            v-if="isAdvanced">
-          </v-checkbox> -->
+          <v-toggle @change="changed"
+            :filter="scope.filters.var_voyage_in_cd_rom">
+          </v-toggle>
 
           <v-text @change="changed"
             :filter="scope.filters.var_ship_name_plaintext"
           ></v-text>
-
-
-          <!-- <v-input @change="changed"
-            title="Vessel Names"
-            description="The name of the vessels. This could be a partial keyword."
-            var-name="var_ship_name_plaintext"
-            search-term-caption=""
-            :filter="scope.filters.var_ship_name_plaintext"
-            :is-numeric=false>
-          </v-input> -->
 
           <v-text @change="changed"
             :filter="scope.filters.var_owner_plaintext"
@@ -130,32 +112,15 @@
           </v-treeselect>
 
           <v-number @change="changed"
-            title="Tonnage"
-            description="The tonnage of the ships. This could be a range."
-            var-name="var_tonnage"
-            search-term-caption=""
-            :filter="scope.filters.var_tonnage"
-            :is-numeric=true>
+            :filter="scope.filters.var_tonnage">
           </v-number>
 
           <v-number @change="changed"
-            title="Standardized Tonnage"
-            description="This is the standardized tonnage calculated by the algorithms. This could be a range."
-            var-name="var_tonnage_mod"
-            search-term-caption=""
-            :filter="scope.filters.var_tonnage_mod"
-            :is-imputed=true
-            :is-advanced=true
-            v-if="isAdvanced">
+            :filter="scope.filters.var_tonnage_mod">
           </v-number>
 
           <v-number @change="changed"
-            title="Guns Mounted"
-            description="This is the guns mounted on the ship. This could be a range."
-            var-name="var_guns_mounted"
-            search-term-caption=""
-            :filter="scope.filters.var_guns_mounted"
-            :is-numeric=true>
+            :filter="scope.filters.var_guns_mounted">
           </v-number>
         </div>
       </v-panel>

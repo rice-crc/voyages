@@ -6,13 +6,14 @@ var searchBar = new Vue({
     isAdvanced: true,
     searchFilter: {
       groups: {
-        // year: year,
+        year: year,
         shipNationOwner: shipNationOwner,
         slave: slave,
         outcome: outcome,
         itinerary: itinerary,
         captainAndCrew: captainAndCrew,
         source: source,
+        settings: settings,
       },
     },
     searchQuery: {

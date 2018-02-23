@@ -80,7 +80,7 @@ Vue.component('v-number', {
       var searchString = JSON.stringify(this.item);
       alert(searchString);
     },
-    
+
     reset() { // reset data; observers will take care of resetting the controls
       this.item.searchTerm0 = this.filter.default.searchTerm0;
       this.item.searchTerm1 = this.filter.default.searchTerm1;
@@ -144,6 +144,27 @@ Vue.component('v-number', {
       deep: true,
     }
   },
+  created: function(){
+    debugger;
+    // labels
+    if (this.item.op == "between") {
+      this.options.searchTerm1Disabled = true;
+      this.options.searchTermCaption0 = "Enter the lower bound";
+      this.options.searchTermCaption1 = "Enter the upper bound";
+    } else {
+      this.options.searchTerm1Disabled = false;
+      this.item.searchTerm1 = null;
+      if (this.item.op == "is less than") {
+        this.options.searchTermCaption0 = "Enter the upper bound";
+      }
+      if (this.item.op == "is more than") {
+        this.options.searchTermCaption0 = "Enter the lower bound";
+      }
+      if (this.item.op == "equals to") {
+        this.options.searchTermCaption0 = this.searchTermCaption;
+      }
+    }
+  }
 
 })
 // end of input
