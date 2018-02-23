@@ -53,43 +53,8 @@
             :filter="scope.filters.var_owner_plaintext"
           ></v-text>
 
-          <!-- <v-input @change="changed"
-            title="Vessel Owners"
-            description="The name of the vessel owners. This could be a partial keyword."
-            var-name="var_owner_plaintext"
-            search-term-caption=""
-            :filter="scope.filters.var_owner_plaintext"
-            :is-numeric=false>
-          </v-input> -->
         </div>
       </v-panel>
-
-      <!-- <v-panel @announced="announce"  title="Flag" is-advanced="false" @applied="changed">
-        <div slot="v-panel-header">
-          <v-panel-header title="Flag" description="Parameters about Flag" count="0"></v-panel-header>
-        </div>
-
-        <div slot="v-panel-content">
-          <v-select3
-            title="Flag"
-            :filter="searchFilter.flag.data"
-            description="The flag of a ship. Choose from the following."
-            var-name="imp_arrival_at_port_of_dis"
-            :is-imputed=false
-            :is-advanced=true>
-          </v-select3>
-
-          <v-select3
-            title="Flag Imputed"
-            :filter="searchFilter.flag.data"
-            description="The flag of a ship. Choose from the following."
-            var-name="imp_arrival_at_port_of_dis"
-            :is-imputed=true
-            :is-advanced=false>
-          </v-select3>
-        </div>
-      </v-panel> -->
-
 
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and Registration" :count="searchFilter.groups.shipNationOwner.constructionAndRegistration.count" :filters="searchFilter.groups.shipNationOwner.constructionAndRegistration" :visible="true">
         <div slot="v-panel-header">
@@ -108,26 +73,17 @@
             :filter="scope.filters.var_year_of_construction">
           </v-number>
 
-          <!-- <v-input @change="changed"
-            title="Place Constructed"
-            description="Enter the place where the ships were constructed. This could be a partial keyword."
-            var-name="var_vessel_construction_place"
-            search-term-caption=""
-            :filter="scope.filters.var_vessel_construction_place"
-            :is-numeric=false>
-          </v-input> -->
+          <v-treeselect @change="changed"
+            :filter="scope.filters.var_vessel_construction_place">
+          </v-treeselect>
 
           <v-number @change="changed"
             :filter="scope.filters.var_registered_year">
           </v-number>
 
-          <!-- <v-input @change="changed"
-            title="Place Registered"
-            description="Enter the place where the ships were registered. This could be a partial keyword."
-            var-name="var_registered_place"
-            search-term-caption=""
+          <v-treeselect @change="changed"
             :filter="scope.filters.var_registered_place">
-          </v-input> -->
+          </v-treeselect>
         </div>
       </v-panel>
 

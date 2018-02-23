@@ -222,6 +222,28 @@ function loadPlaces(vm, groups) {
   });
 }
 
+
+// loadPlaces
+function loadIndividualPlace(vm, variable) {
+  var promises = [];
+
+  // var varName = "var_" + variable.varName;
+  // promises.push(axios.post('/voyage/filtered-places', {
+  //   var_name: varName,
+  // }));
+  promises.push(axios.post('/voyage/filtered-places', {}));
+
+  axios.all(promises).then(function(results) {
+    results.forEach(function(response) {
+      var varName = response.data.filtered_var_name;
+      var options = parsePlaces(response);
+
+      // fill in
+      variable["options"].data = options;
+    });
+  });
+}
+
 // parsePlaces function
 var parsePlaces = function(response) {
   var data = processPlacesAjax(response.data.data);
