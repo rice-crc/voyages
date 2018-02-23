@@ -76,7 +76,6 @@ Vue.component("v-treeselect", {
 
     // load options
     loadRootOptions(callback) {
-      debugger;
       callback(null, this.filter.options.data)
     }
   },
