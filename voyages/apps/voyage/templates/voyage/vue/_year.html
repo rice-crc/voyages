@@ -1,21 +1,12 @@
 {% verbatim %}
-
-
 <li class="nav-item dropdown">
-  <v-menu-title :count="searchFilter.groups.year.count">
-    <div slot="menu-title">
-      <span>{{searchFilter.groups.year.year.imp_arrival_at_port_of_dis.value.searchTerm0}}</span>
-      <span> - </span>
-      <span>{{searchFilter.groups.year.year.imp_arrival_at_port_of_dis.value.searchTerm1}}</span>
-    </div>
-  </v-menu-title>
-
-  <v-panel-singular @apply="apply" @reset="reset" title="Year Range" :count="searchFilter.groups.year.year.count" :filters="searchFilter.groups.year.year" group="year" sub-group="year" align="left" >
+  <v-menu-title :count="0" title="Year Range"></v-menu-title>
+  <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="Year Range" :filters="searchFilter.groups.year.year" :count="searchFilter.groups.year.year.count" align="left">
     <div slot="v-panel-header">
-      <v-panel-header
-        title="Year Range"
-        description="The year range of your search in the Trans-Atlantic Slave Trade Database"
-        :modal-disabled="true">
+      <v-panel-header title="Year Range" description="Year Range">
+        <div slot="v-modal-content">
+          Some help text
+        </div>
       </v-panel-header>
     </div>
 
@@ -24,23 +15,10 @@
         filters are: {{scope.filters}}
       </p>
 
-      <v-input @change="changed"
-         title="Year"
-         description="This is the source of the data. This could be a partial keyword."
-         var-name="imp_arrival_at_port_of_dis"
-         search-term-caption=""
-         :filter="scope.filters.imp_arrival_at_port_of_dis"
-         :is-numeric=true
-         :is-imputed=false
-         :is-advanced=false>
-       </v-input>
-
-
+      <v-number @change="changed"
+        :filter="scope.filters.var_imp_arrival_at_port_of_dis">
+      </v-number>
     </div>
   </v-panel-singular>
 </li>
-
-
-
-
 {% endverbatim %}

@@ -1,15 +1,19 @@
+var var_imp_arrival_at_port_of_dis = new YearVariable({
+    varName: "imp_arrival_at_port_of_dis",
+    label: "Year Range",
+    description: "description",
+  },{
+    op: "between",
+    searchTerm0: 1514,
+    searchTerm1: 1866
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 year = {
   year: {
-    imp_arrival_at_port_of_dis: {
-      varName: 'imp_arrival_at_port_of_dis',
-      value: {
-        op: "is between",
-        searchTerm0: 1514,
-        searchTerm1: 1866,
-      },
-      changed: false,
-      activated: false,
-    },
+    var_imp_arrival_at_port_of_dis: var_imp_arrival_at_port_of_dis,
     count: {
       changed: 0,
       activated: 0,

@@ -25,9 +25,7 @@
 
     <div slot="v-panel-content">
       <v-toggle
-        title="Show Advanced Variables in Search Filters"
-        description="Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior."
-        :toggled="isAdvanced"
+        :filter="searchFilter.groups.settings.settings.var_search_settings"
         @toggle="toggle">
       </v-toggle>
     </div>
