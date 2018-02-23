@@ -206,6 +206,9 @@ var searchBar = new Vue({
 
     // load place related variables
     loadPlaces(this, $vm.searchFilter.groups.itinerary);
+    loadIndividualPlace(this, $vm.searchFilter.groups.shipNationOwner.constructionAndRegistration.var_registered_place);
+    loadIndividualPlace(this, $vm.searchFilter.groups.shipNationOwner.constructionAndRegistration.var_vessel_construction_place);
+
 
     // load treeselect variable
     loadOptions(this, [

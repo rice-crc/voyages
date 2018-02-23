@@ -48,6 +48,18 @@ var_year_of_construction = new NumberVariable({
     isAdvanced: false
   });
 
+var_vessel_construction_place = new PlaceVariable({
+    varName: "vessel_construction_place",
+    label: "Place Constructed",
+    description: "description",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 var_registered_year = new NumberVariable({
     varName: "registered_year",
     label: "Year Registered",
@@ -56,6 +68,18 @@ var_registered_year = new NumberVariable({
     op: "equals to",
     searchTerm0: null,
     searchTerm1: null
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_registered_place = new PlaceVariable({
+    varName: "registered_place",
+    label: "Place Registered",
+    description: "description",
+  },{
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false
@@ -163,30 +187,9 @@ shipNationOwner = {
 
   constructionAndRegistration: {
     var_year_of_construction: var_year_of_construction,
-
-    // var_vessel_construction_place: {
-    //   varName: 'vessel_construction_place',
-    //   value: {
-    //     op: "equals to",
-    //     searchTerm0: null,
-    //     searchTerm1: null,
-    //   },
-    //   changed: false,
-    //   activated: false,
-    // },
-
+    var_vessel_construction_place: var_vessel_construction_place,
     var_registered_year: var_registered_year,
-
-    // var_registered_place: {
-    //   varName: 'registered_place',
-    //   value: {
-    //     op: "equals to",
-    //     searchTerm0: null,
-    //     searchTerm1: null,
-    //   },
-    //   changed: false,
-    //   activated: false,
-    // },
+    var_registered_place: var_registered_place,
 
     count: {
       changed: 0,
