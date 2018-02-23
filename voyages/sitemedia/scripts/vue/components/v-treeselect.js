@@ -1,25 +1,25 @@
 // v-treeselect
 Vue.component("v-treeselect", {
-  props: ['title', 'description', 'varName', 'filter', "isImputed", "isAdvanced", "data"],
+  props: ['filter'],
   template: `
   <div class="v-form-group">
     <div class="v-title">
-      <span>{{title}}</span>
+      <span>{{filter.label}}</span>
       <span>
         <b-badge
-          v-if="isImputed"
+          v-if="filter.options.isImputed"
           v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
           variant="warning"
           class="v-badge-imputed">
           Imputed
         </b-badge>
         <b-badge
-          v-if="isAdvanced"
+          v-if="filter.options.isAdvanced"
           v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
           variant="danger" class="v-badge-advanced">Advanced</b-badge>
       </span>
     </div>
-    <div class="v-description" v-text="description"></div>
+    <div class="v-description" v-text="filter.description"></div>
 
     <div class="row">
       <div class="col-md-12">
@@ -27,7 +27,7 @@ Vue.component("v-treeselect", {
           :multiple="true"
           :load-root-options="loadRootOptions"
           :default-expand-level="1"
-          placeholder="Select from the list"
+          placeholder=filter.options.caption
           v-model="item.searchTerm"
         />
       </div>
@@ -36,15 +36,11 @@ Vue.component("v-treeselect", {
     <div class="row v-padding">
       <div class="col-md-12">
         <code>{{item.searchTerm}}</code>
-      </div>
-    </div>
-
-    <div class="row v-padding">
-      <div class="col-md-12">
         <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
         <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
       </div>
     </div>
+
   </div>
 
   `,
@@ -56,13 +52,12 @@ Vue.component("v-treeselect", {
   data: function(){
     return {
       item: {
-        varName: this.varName,
-        searchTerm: this.filter.value.searchTerm,
-        op: this.filter.value.op,
+        varName: this.filter.varName,
+        searchTerm: this.filter.default.searchTerm,
+        op: this.filter.default.op,
       },
       options: {
-        searchTermCaption0: null,
-        type: "text",
+        caption: this.filter.options.caption,
         changed: false,
       }
     }
@@ -74,11 +69,15 @@ Vue.component("v-treeselect", {
       var searchString = JSON.stringify(this.item);
       alert(searchString);
     },
+
     reset() { // reset data; observers will take care of resetting the controls
       this.item.searchTerm = null;
     },
+
+    // load options
     loadRootOptions(callback) {
-      callback(null, this.data)
+      debugger;
+      callback(null, this.filter.options.data)
     }
   },
 
@@ -102,16 +101,14 @@ Vue.component("v-treeselect", {
     filter: {
       handler: function(){
         if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerm = this.filter.value.searchTerm;
-          this.item.op = this.filter.value.op;
+          // this.item.searchTerm = this.filter.value.searchTerm;
+          // this.item.op = this.filter.value.op;
         }
       },
       deep: true,
     }
   },
 
-  mounted: function() {
-  },
 
 });
 // v-treeselect

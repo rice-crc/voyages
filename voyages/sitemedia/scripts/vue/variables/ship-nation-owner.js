@@ -61,6 +61,42 @@ var_registered_year = new NumberVariable({
     isAdvanced: false
   });
 
+var_nationality = new TreeselectVariable({
+    varName: "nationality",
+    label: "Flag",
+    description: "description",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_imputed_nationality = new TreeselectVariable({
+    varName: "imputed_nationality",
+    label: "Flag Imputed",
+    description: "description",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_rig_of_vessel = new TreeselectVariable({
+    varName: "rig_of_vessel",
+    label: "Rig of Vessel",
+    description: "description",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 var_tonnage = new NumberVariable({
     varName: "tonnage",
     label: "Tonnage",
@@ -158,18 +194,18 @@ shipNationOwner = {
     }
   },
 
-  rigTonnageAndGunsMounted: {
-    // var_rig_of_vessel_plaintext: {
-    //   varName: 'rig_of_vessel_plaintext',
-    //   value: {
-    //     op: "equals to",
-    //     searchTerm0: null,
-    //     searchTerm1: null,
-    //   },
-    //   changed: false,
-    //   activated: false,
-    // },
+  flag: {
+    var_nationality: var_nationality,
+    var_imputed_nationality: var_imputed_nationality,
 
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  rigTonnageAndGunsMounted: {
+    var_rig_of_vessel: var_rig_of_vessel,
     var_tonnage: var_tonnage,
     var_tonnage_mod: var_tonnage_mod,
     var_guns_mounted: var_guns_mounted,

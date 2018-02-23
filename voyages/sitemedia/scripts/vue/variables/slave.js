@@ -1,5 +1,5 @@
 var_imp_total_num_slaves_purchased = new NumberVariable({
-    varName: "var_imp_total_num_slaves_purchased",
+    varName: "imp_total_num_slaves_purchased",
     label: "Total Slaves Embarked Imputed",
     description: "The total number of slaves embarked before departure. This could be a range.",
   },{

@@ -131,6 +131,30 @@
         </div>
       </v-panel>
 
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="Flag" :count="searchFilter.groups.shipNationOwner.flag.count" :filters="searchFilter.groups.shipNationOwner.flag" :visible="true">
+        <div slot="v-panel-header">
+          <v-panel-header title="Flag" description="Parameters about Rig, Tonnage, and Guns Mounted">
+            <div slot="v-modal-content">
+							Some help text
+						</div>
+          </v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" slot-scope="scope">
+          <p>
+						filters are: {{scope.filters}}
+					</p>
+          <v-treeselect
+            :filter="scope.filters.var_nationality"
+            @change="changed">
+          </v-treeselect>
+          <v-treeselect
+            :filter="scope.filters.var_imputed_nationality"
+            @change="changed">
+          </v-treeselect>
+        </div>
+      </v-panel>
+
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, Tonnage, and Guns Mounted" :count="searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted.count" :filters="searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted" :visible="true">
         <div slot="v-panel-header">
           <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted">
@@ -144,13 +168,10 @@
           <p>
 						filters are: {{scope.filters}}
 					</p>
-          <!-- <v-input @change="changed"
-            title="Rig"
-            description="The rig of the ship. Choose from the following."
-            var-name="var_rig_of_vessel_plaintext"
-            search-term-caption=""
-            :filter="scope.filters.var_rig_of_vessel_plaintext">
-          </v-input> -->
+          <v-treeselect
+            :filter="scope.filters.var_rig_of_vessel"
+            @change="changed">
+          </v-treeselect>
 
           <v-number @change="changed"
             title="Tonnage"
@@ -182,6 +203,8 @@
           </v-number>
         </div>
       </v-panel>
+
+
 
       </ul>
   </div>

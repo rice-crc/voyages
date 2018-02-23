@@ -158,4 +158,29 @@ function processPlacesAjax(data) {
   return self;
 }
 
+// load options to the main search filter, such as flag, rig, outcomes
+function loadOptions(vm, variables) {
+  var promises = [];
+  for (variable in variables) {
+    var varName = "var_" + variables[variable].varName;
+    promises.push(axios.post('/voyage/var-options', {
+      var_name: varName,
+    }));
+  }
+  // fulfil promises
+  axios.all(promises).then(function(results) {
+    results.forEach(function(response) {
+      // fill in
+      for (variable in variables) {
+        var varName = "var_" + variables[variable].varName;
+        if ( varName == response.data.var_name) {
+          response.data.data.map(function(data) {
+            data["id"] = data["value"];
+          });
+          variables[variable]["options"].data[0]["children"] = response.data.data;
+        }
+      }
+    })
+  });
+}
 // helpers
