@@ -184,6 +184,44 @@ function loadOptions(vm, variables) {
   });
 }
 
+// loadPlaces
+function loadPlaces(vm, groups) {
+  var promises = [];
+  for (subGroup in groups) {
+    if (subGroup !== "count") {
+      for (variable in groups[subGroup]) {
+        if (variable !== "count") {
+          var varName = groups[subGroup][variable].varName;
+          promises.push(axios.post('/voyage/filtered-places', {
+            var_name: varName,
+          }));
+        }
+      }
+    }
+  }
+
+  axios.all(promises).then(function(results) {
+    results.forEach(function(response) {
+      var varName = response.data.filtered_var_name;
+      var options = parsePlaces(response);
+
+      // fill in
+      for (subGroup in groups) {
+        if (subGroup !== "count") {
+          for (variable in groups[subGroup]) {
+            if (variable !== "count") {
+              if (groups[subGroup][variable].varName == varName) {
+                // groups[subGroup][variable]["options"].data = response.data;
+                groups[subGroup][variable]["options"].data = options;
+              }
+            }
+          }
+        }
+      }
+    })
+  });
+}
+
 // parsePlaces function
 var parsePlaces = function(response) {
   var data = processPlacesAjax(response.data.data);

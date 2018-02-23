@@ -204,42 +204,8 @@ var searchBar = new Vue({
     //   console.log(error);
     // });
 
-    // load places
-    var promises = [];
-    for (subGroup in this.searchFilter.groups.itinerary) {
-      if (subGroup !== "count") {
-        for (variable in this.searchFilter.groups.itinerary[subGroup]) {
-          if (variable !== "count") {
-            var varName = this.searchFilter.groups.itinerary[subGroup][variable].varName;
-            promises.push(axios.post('/voyage/filtered-places', {
-              var_name: varName,
-            }));
-          }
-        }
-      }
-    }
-
-    axios.all(promises).then(function(results) {
-      results.forEach(function(response) {
-        var varName = response.data.filtered_var_name;
-        var options = parsePlaces(response);
-
-        // fill in
-        for (subGroup in $vm.searchFilter.groups.itinerary) {
-          if (subGroup !== "count") {
-            for (variable in $vm.searchFilter.groups.itinerary[subGroup]) {
-              if (variable !== "count") {
-                if ($vm.searchFilter.groups.itinerary[subGroup][variable].varName == varName) {
-                  // $vm.searchFilter.groups.itinerary[subGroup][variable]["options"].data = response.data;
-                  $vm.searchFilter.groups.itinerary[subGroup][variable]["options"].data = options;
-                }
-              }
-            }
-          }
-        }
-      })
-    });
-    // load places
+    // load place related variables
+    loadPlaces(this, $vm.searchFilter.groups.itinerary);
 
     // load treeselect variable
     loadOptions(this, [
