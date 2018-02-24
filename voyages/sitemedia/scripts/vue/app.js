@@ -4,17 +4,15 @@ var searchBar = new Vue({
   delimiters: ['{{', '}}'],
   data: {
     isAdvanced: true,
-    searchFilter: {
-      groups: {
-        year: year,
-        shipNationOwner: shipNationOwner,
-        slave: slave,
-        outcome: outcome,
-        itinerary: itinerary,
-        captainAndCrew: captainAndCrew,
-        source: source,
-        settings: settings,
-      },
+    filter: {
+      year: year,
+      shipNationOwner: shipNationOwner,
+      slave: slave,
+      outcome: outcome,
+      itinerary: itinerary,
+      captainAndCrew: captainAndCrew,
+      source: source,
+      settings: settings,
     },
     searchQuery: {
       // put the search query in here
@@ -29,30 +27,30 @@ var searchBar = new Vue({
       handler: function(val) {
 
         // count all
-        for (group in this.searchFilter.groups) { // group: slave
+        for (group in this.filter) { // group: slave
           var groupCount = {
             changed: 0,
             activated: 0
           };
-          for (subGroup in this.searchFilter.groups[group]) { // subGroup: overallNumbers
+          for (subGroup in this.filter[group]) { // subGroup: overallNumbers
             if (subGroup !== "count") {
               var subGroupCount = {
                 changed: 0,
                 activated: 0
               };
-              for (variable in this.searchFilter.groups[group][subGroup]) { // variable: var_imp_port_voyage_begin
+              for (variable in this.filter[group][subGroup]) { // variable: var_imp_port_voyage_begin
                 if (variable !== "count") {
-                  if (this.searchFilter.groups[group][subGroup][variable].changed) {
+                  if (this.filter[group][subGroup][variable].changed) {
                     subGroupCount.changed += 1;
                   }
-                  if (this.searchFilter.groups[group][subGroup][variable].activated) {
+                  if (this.filter[group][subGroup][variable].activated) {
                     subGroupCount.activated += 1;
                   }
                 }
               }
               // calculate for subGroups
-              this.searchFilter.groups[group][subGroup].count.changed = subGroupCount.changed;
-              this.searchFilter.groups[group][subGroup].count.activated = subGroupCount.activated;
+              this.filter[group][subGroup].count.changed = subGroupCount.changed;
+              this.filter[group][subGroup].count.activated = subGroupCount.activated;
 
               // accumulate for the group count
               groupCount.changed += subGroupCount.changed;
@@ -61,8 +59,8 @@ var searchBar = new Vue({
           }
 
           // set group to changed and activated
-          this.searchFilter.groups[group].count.changed = groupCount.changed;
-          this.searchFilter.groups[group].count.activated = groupCount.activated;
+          this.filter[group].count.changed = groupCount.changed;
+          this.filter[group].count.activated = groupCount.activated;
         }
 
       },
@@ -75,20 +73,20 @@ var searchBar = new Vue({
     // go over items and update counts when the inputs are changed
     changed(variable, changed) {
       // function to locate a variable
-      for (key1 in this.searchFilter.groups) {
-        for (key2 in this.searchFilter.groups[key1]) {
+      for (key1 in this.filter) {
+        for (key2 in this.filter[key1]) {
           if (key2 !== "count") {
-            for (key3 in this.searchFilter.groups[key1][key2]) {
+            for (key3 in this.filter[key1][key2]) {
               if (key3 == variable.varName) {
-                if (this.searchFilter.groups[key1][key2][key3].value["searchTerm0"] === undefined) {
-                  this.searchFilter.groups[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
+                if (this.filter[key1][key2][key3].value["searchTerm0"] === undefined) {
+                  this.filter[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
                 } else {
-                  this.searchFilter.groups[key1][key2][key3].value["searchTerm0"] = variable["searchTerm0"];
-                  this.searchFilter.groups[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
+                  this.filter[key1][key2][key3].value["searchTerm0"] = variable["searchTerm0"];
+                  this.filter[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
                 }
-                this.searchFilter.groups[key1][key2][key3].changed = changed;
+                this.filter[key1][key2][key3].changed = changed;
 
-                this.searchFilter.groups[key1][key2][key3].value["op"] = variable["op"];
+                this.filter[key1][key2][key3].value["op"] = variable["op"];
               }
             }
           }
@@ -99,16 +97,16 @@ var searchBar = new Vue({
 
     // turn changed items into activated state; then execute search
     apply(group, subGroup, filterValues) {
-      activateFilter(this.searchFilter.groups, group, subGroup, filterValues);
-      var searchTerms = searchAll(this.searchFilter.groups);
+      activateFilter(this.filter, group, subGroup, filterValues);
+      var searchTerms = searchAll(this.filter);
       alert(JSON.stringify(searchTerms));
       search(this.searchFilter, searchTerms);
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
-      resetFilter(this.searchFilter.groups, group, subGroup);
-      var searchTerms = searchAll(this.searchFilter.groups);
+      resetFilter(this.filter, group, subGroup);
+      var searchTerms = searchAll(this.filter);
       search(this.searchFilter, searchTerms);
     },
 
@@ -117,7 +115,7 @@ var searchBar = new Vue({
     },
 
     save() {
-      var searchTerms = searchAll(this.searchFilter.groups);
+      var searchTerms = searchAll(this.filter);
       var existingKeys = []
       var key = generateUniqueRandomKey(existingKeys);
       this.saved.unshift({
@@ -206,24 +204,24 @@ var searchBar = new Vue({
     // });
 
     // load place related variables
-    loadPlaces(this, $vm.searchFilter.groups.itinerary);
-    loadIndividualPlace(this, $vm.searchFilter.groups.shipNationOwner.constructionAndRegistration.var_registered_place);
-    loadIndividualPlace(this, $vm.searchFilter.groups.shipNationOwner.constructionAndRegistration.var_vessel_construction_place);
+    loadPlaces(this, $vm.filter.itinerary);
+    loadIndividualPlace(this, $vm.filter.shipNationOwner.constructionAndRegistration.var_registered_place);
+    loadIndividualPlace(this, $vm.filter.shipNationOwner.constructionAndRegistration.var_vessel_construction_place);
 
 
     // load treeselect variable
     loadOptions(this, [
-      $vm.searchFilter.groups.outcome.outcome.var_outcome_voyage,
-      $vm.searchFilter.groups.outcome.outcome.var_outcome_slaves,
-      $vm.searchFilter.groups.outcome.outcome.var_outcome_ship_captured,
-      $vm.searchFilter.groups.outcome.outcome.var_outcome_owner,
-      $vm.searchFilter.groups.outcome.outcome.var_resistance,
-      $vm.searchFilter.groups.shipNationOwner.rigTonnageAndGunsMounted.var_rig_of_vessel,
-      $vm.searchFilter.groups.shipNationOwner.flag.var_nationality,
-      // $vm.searchFilter.groups.shipNationOwner.flag.var_imputed_nationality,
+      $vm.filter.outcome.outcome.var_outcome_voyage,
+      $vm.filter.outcome.outcome.var_outcome_slaves,
+      $vm.filter.outcome.outcome.var_outcome_ship_captured,
+      $vm.filter.outcome.outcome.var_outcome_owner,
+      $vm.filter.outcome.outcome.var_resistance,
+      $vm.filter.shipNationOwner.rigTonnageAndGunsMounted.var_rig_of_vessel,
+      $vm.filter.shipNationOwner.flag.var_nationality,
+      // $vm.filter.shipNationOwner.flag.var_imputed_nationality,
     ]);
 
-    search(this.searchFilter, []);
+    search(this.filter, []);
   },
 
   // event loop - update the menuAim everytime after it's re-rendered

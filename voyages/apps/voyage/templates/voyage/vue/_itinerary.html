@@ -1,11 +1,11 @@
 {% verbatim %}
 
 <li class="nav-item dropdown">
-	<v-menu-title :count="searchFilter.groups.itinerary.count" title="Itinerary"></v-menu-title>
+	<v-menu-title :count="filter.itinerary.count" title="Itinerary"></v-menu-title>
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="searchFilter.groups.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="searchFilter.groups.itinerary.departure" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" :count="filter.itinerary.departure.count" @apply="apply" title="Place of Departure" :filters="filter.itinerary.departure" :visible="true">
 
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Departure" description="Overall numbers about slaves in the trade">
@@ -28,7 +28,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="searchFilter.groups.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="searchFilter.groups.itinerary.purchase" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="purchase" :count="filter.itinerary.purchase.count" @apply="apply" title="Place of Slave Purchase" :filters="filter.itinerary.purchase" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Place of Slave Purchase" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -64,7 +64,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="call" :count="searchFilter.groups.itinerary.call.count" @apply="apply" title="Places of Call before Atlantic Crossing" :filters="searchFilter.groups.itinerary.call" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="call" :count="filter.itinerary.call.count" @apply="apply" title="Places of Call before Atlantic Crossing" :filters="filter.itinerary.call" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Places of Call before Atlantic Crossing" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -86,7 +86,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="landing" :count="searchFilter.groups.itinerary.landing.count" @apply="apply" title="Places of Slave Landing" :filters="searchFilter.groups.itinerary.landing" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="landing" :count="filter.itinerary.landing.count" @apply="apply" title="Places of Slave Landing" :filters="filter.itinerary.landing" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Places of Slave Landing" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -122,7 +122,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="destination" :count="searchFilter.groups.itinerary.destination.count" @apply="apply" title="Place where Voyage Ended" :filters="searchFilter.groups.itinerary.destination" :visible="true">
+			<v-panel @reset="reset" group="itinerary" sub-group="destination" :count="filter.itinerary.destination.count" @apply="apply" title="Place where Voyage Ended" :filters="filter.itinerary.destination" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Place where Voyage Ended" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
