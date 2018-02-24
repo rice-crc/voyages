@@ -35,33 +35,9 @@ Vue.component('v-panel-header', {
 
   data: function() {
     return {
-      titleValue: '',
-      descriptionValue: '',
-      modalTitle: '',
-      modalId: '',
       modalShow: false,
     }
   },
-
-  watch: {
-    title: { // this is the value from props
-      handler: function(value) {
-        this.titleValue = value; // titleValue is the local copy used in the child component
-      }
-    },
-    description: {
-      handler: function(value) {
-        this.descriptionValue = value; // descriptionValue is the local copy used in the child component
-      }
-    },
-  },
-
-  mounted: function() { // load value initially
-    this.titleValue = this.title;
-    this.descriptionValue = this.description;
-    this.modalTitle = "Help about " + this.title;
-    this.modalId = hyphenate(this.title);
-  }
 
 })
 // v-panel-header
