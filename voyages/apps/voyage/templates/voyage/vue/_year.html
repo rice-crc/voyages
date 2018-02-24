@@ -1,7 +1,7 @@
 {% verbatim %}
 <li class="nav-item dropdown">
-  <v-menu-title :count="0" title="Year Range"></v-menu-title>
-  <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="Year Range" :filters="searchFilter.groups.year.year" :count="searchFilter.groups.year.year.count" align="left">
+  <v-menu-title :count="filter.year.count" title="Year Range"></v-menu-title>
+  <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="Year Range" :filters="filter.year.year" :count="filter.year.year.count" align="left">
     <div slot="v-panel-header">
       <v-panel-header title="Year Range" description="Year Range">
         <div slot="v-modal-content">

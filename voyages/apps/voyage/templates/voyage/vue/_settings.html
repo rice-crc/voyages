@@ -10,7 +10,7 @@
 
 <!-- Search Settings -->
 <li class="nav-item dropdown">
-  <v-menu-title :count="false">
+  <v-menu-title :count="filter.settings.count">
     <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
@@ -25,7 +25,7 @@
 
     <div slot="v-panel-content">
       <v-toggle
-        :filter="searchFilter.groups.settings.settings.var_search_settings"
+        :filter="filter.settings.settings.var_search_settings"
         @toggle="toggle">
       </v-toggle>
     </div>
