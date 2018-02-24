@@ -49,4 +49,18 @@
   font-size: 1.5rem !important;
   color: #17a2b8; }
 
-/*# sourceMappingURL=../../../../../../../static/scss/v-component.css.map */
+.modal-footer {
+  position: relative !important; }
+
+.v-modal-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #666666; }
+
+.modal-content {
+  color: #666666; }
+
+.modal-body {
+  text-align: left; }
+
+/*# sourceMappingURL=../../../../../../../../../static/scss/v-component.css.map */

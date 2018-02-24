@@ -145,7 +145,6 @@ Vue.component('v-number', {
     }
   },
   created: function(){
-    debugger;
     // labels
     if (this.item.op == "between") {
       this.options.searchTerm1Disabled = true;
