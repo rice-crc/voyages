@@ -9,12 +9,22 @@ Vue.component('v-panel-header', {
         </div>
         <div v-if="!modalDisabled" class="v-panel-header-control" >
           <div class="text-center">
-            <b-btn variant="outline-info" size="sm" v-b-modal.modal-center>
+            <b-btn variant="outline-info" size="sm" @click="modalShow = !modalShow">
               <i class="fa fa-question-circle-o"></i>
               Help
             </b-btn>
-            <b-modal id="modal-center" centered title="modalTitle">
+            <b-modal centered v-model="modalShow">
+              <div slot="modal-title">
+                <div class="v-modal-title">
+                  Help Information about {{title}}
+                </div>
+              </div>
               <slot name="v-modal-content"></slot>
+              <div slot="modal-footer">
+               <b-btn size="sm" class="float-right" variant="info" @click="modalShow=false">
+                 Close
+               </b-btn>
+             </div>
             </b-modal>
           </div>
         </div>
@@ -28,6 +38,8 @@ Vue.component('v-panel-header', {
       titleValue: '',
       descriptionValue: '',
       modalTitle: '',
+      modalId: '',
+      modalShow: false,
     }
   },
 
@@ -48,6 +60,7 @@ Vue.component('v-panel-header', {
     this.titleValue = this.title;
     this.descriptionValue = this.description;
     this.modalTitle = "Help about " + this.title;
+    this.modalId = hyphenate(this.title);
   }
 
 })
