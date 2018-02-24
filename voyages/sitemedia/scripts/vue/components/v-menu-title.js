@@ -7,20 +7,9 @@ Vue.component('v-menu-title', {
       <span v-if="count">({{count}})</span>
     </a>
   `,
-
   data: function() {
     return {
     }
   },
-
-  methods: {
-  },
-
-  watch: {
-  },
-
-  mounted: function() { // load value initially
-  }
-
 })
 // v-menu-title
