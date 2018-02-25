@@ -56,8 +56,7 @@ Vue.component('v-panel', {
     },
 
   },
-
-  mounted: function() { // load value initially
+  created: function() { // load value initially
     this.titleValue = this.title;
     this.idValue = hyphenate(this.title);
     this.filtersValue = this.filters;
