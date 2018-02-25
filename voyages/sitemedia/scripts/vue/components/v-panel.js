@@ -1,6 +1,6 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "count", "filters", "visible", "group", "subGroup", "data"],
+  props: ['title', "filters", "visible", "group", "subGroup", "data"],
   template: `
     <li v-if="visibleValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
@@ -8,7 +8,7 @@ Vue.component('v-panel', {
             {{titleValue}}
           </div>
           <div class="dropdown-menu-title-count">
-            <b-badge variant="danger" v-if="count">{{count}}</b-badge>
+            <b-badge variant="danger" v-if="filters.count">{{filters.count}}</b-badge>
           </div>
         </div>
         <div :id="idValue" class="search-submenu popover">
@@ -48,12 +48,6 @@ Vue.component('v-panel', {
   },
 
   watch: {
-    count: {
-      handler: function(){
-        this.controlDisabled = (this.count.changed > 0) ? false:true;
-      },
-      deep: true,
-    },
     visible: {
       handler: function(){
         this.visibleValue = this.visible;
@@ -61,6 +55,7 @@ Vue.component('v-panel', {
     },
     filters: {
       handler: function(){
+        this.controlDisabled = (this.filters.count.changed > 0) ? false:true;
         this.filtersValue = this.filters;
       },
       deep: true,

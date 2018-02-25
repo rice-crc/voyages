@@ -1,6 +1,6 @@
 // v-panel
 Vue.component('v-panel-singular', {
-  props: ['title', "filters", "group", "subGroup", "align", "count"],
+  props: ['title', "filters", "group", "subGroup", "align"],
   template: `
   <div class="dropdown-menu search-menu search-submenu" :id="idValue" v-bind:class="dropdownMenuDirection">
     <div class="popover-content">
@@ -40,9 +40,9 @@ Vue.component('v-panel-singular', {
   },
 
   watch: {
-    count: {
+    filters: {
       handler: function(){
-        this.controlDisabled = (this.count.changed > 0) ? false:true;
+        this.controlDisabled = (this.filters.count.changed > 0) ? false:true;
       },
       deep: true,
     },

@@ -5,7 +5,7 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" :count="filter.slave.overallNumbers.count" @apply="apply" title="Overall Numbers" :filters="filter.slave.overallNumbers" :visible="true">
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall Numbers" :filters="filter.slave.overallNumbers" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -32,7 +32,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" :count="filter.slave.purchaseNumbers.count" title="Purchase Numbers" :filters="filter.slave.purchaseNumbers" :visible="isAdvanced">
+			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" title="Purchase Numbers" :filters="filter.slave.purchaseNumbers">
 				<div slot="v-panel-header">
 					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers">
 						<div slot="v-modal-content">
@@ -64,7 +64,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :count="filter.slave.landingNumbers.count" :filters="filter.slave.landingNumbers" title="Landing Numbers" :visible="isAdvanced">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :filters="filter.slave.landingNumbers" title="Landing Numbers" >
 				<div slot="v-panel-header">
 					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves">
 						<div slot="v-modal-content">
@@ -95,7 +95,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :count="filter.slave.percentageBySexAndAgeGroup.count" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" :visible="true">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" :visible="true">
 				<div slot="v-panel-header">
 					<v-panel-header title="Percentage by Sex and Age Group" description="Demographic parameters about the slaves">
 						<div slot="v-modal-content">
@@ -134,7 +134,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :count="filter.slave.otherCharacteristics.count" :filters="filter.slave.otherCharacteristics" title="Other Characteristics" :visible="isAdvanced">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="Other Characteristics">
 				<div slot="v-panel-header">
 					<v-panel-header title="Other Characteristics" description="Other characteristics of the slaves">
 						<div slot="v-modal-content">
