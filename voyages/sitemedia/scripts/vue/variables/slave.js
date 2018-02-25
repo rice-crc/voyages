@@ -7,8 +7,8 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
-    isAdvanced: false
+    isImputed: true,
+    isAdvanced: true
   });
 
 var_total_num_slaves_purchased = new NumberVariable({
@@ -33,8 +33,8 @@ var_imp_total_slaves_disembarked = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
-    isAdvanced: false
+    isImputed: true,
+    isAdvanced: true
   });
 
 
@@ -150,7 +150,7 @@ var_imputed_percentage_men = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -163,7 +163,7 @@ var_imputed_percentage_women = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -176,7 +176,7 @@ var_imputed_percentage_boys = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -189,7 +189,7 @@ var_imputed_percentage_girls = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -202,7 +202,7 @@ var_imputed_percentage_male = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -215,7 +215,7 @@ var_imputed_percentage_child = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -228,8 +228,8 @@ var_imputed_sterling_cash = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
-    isAdvanced: false
+    isImputed: true,
+    isAdvanced: true
   });
 
 var_imputed_death_middle_passage = new NumberVariable({
@@ -241,8 +241,8 @@ var_imputed_death_middle_passage = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
-    isAdvanced: false
+    isImputed: true,
+    isAdvanced: true
   });
 
 var_imputed_mortality = new NumberVariable({
@@ -254,7 +254,7 @@ var_imputed_mortality = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
