@@ -7,8 +7,10 @@ Vue.component('v-panel', {
           <div class="dropdown-menu-title-text">
             {{titleValue}}
           </div>
-          <div class="dropdown-menu-title-count">
-            <b-badge variant="danger" v-if="filters.count">{{filters.count}}</b-badge>
+          <div class="dropdown-menu-title-count" v-if="filters.count.activated">
+            <b-badge variant="danger" @click="reset" class="cursor-pointer">
+                {{filters.count.activated}} <i class="fa fa-times"></i>
+            </b-badge>
           </div>
         </div>
         <div :id="idValue" class="search-submenu popover">

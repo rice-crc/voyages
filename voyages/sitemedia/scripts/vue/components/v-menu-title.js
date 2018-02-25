@@ -4,7 +4,7 @@ Vue.component('v-menu-title', {
   template: `
     <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
       <slot name="menu-title">{{title}}</slot>
-      <span v-if="count">({{count}})</span>
+      <span v-if="count.activated">({{count.activated}})</span>
       <i class="fa fa-caret-down" v-if="!disableCaret"></i>
     </a>
   `,
