@@ -6,7 +6,7 @@ var_imp_port_voyage_begin = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -18,7 +18,7 @@ var_imp_principal_place_of_slave_purchase = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -31,7 +31,7 @@ var_first_place_slave_purchase = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_second_place_slave_purchase = new PlaceVariable({
@@ -43,7 +43,7 @@ var_second_place_slave_purchase = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_third_place_slave_purchase = new PlaceVariable({
@@ -55,7 +55,7 @@ var_third_place_slave_purchase = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_port_of_call_before_atl_crossing = new PlaceVariable({
@@ -67,19 +67,7 @@ var_port_of_call_before_atl_crossing = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
-  });
-
-var_port_of_call_before_atl_crossing = new PlaceVariable({
-    varName: "port_of_call_before_atl_crossing",
-    label: "Places of Call before Atlantic Crossing",
-    description: "description",
-  },{
-    op: "is one of",
-    searchTerm: [],
-  },{
-    isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_imp_principal_port_slave_dis = new PlaceVariable({
@@ -90,7 +78,7 @@ var_imp_principal_port_slave_dis = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -103,7 +91,7 @@ var_first_landing_place = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_second_landing_place = new PlaceVariable({
@@ -115,7 +103,7 @@ var_second_landing_place = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_third_landing_place = new PlaceVariable({
@@ -127,7 +115,7 @@ var_third_landing_place = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_place_voyage_ended = new PlaceVariable({

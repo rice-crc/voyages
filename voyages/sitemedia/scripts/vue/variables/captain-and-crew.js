@@ -33,7 +33,7 @@ var_crew_first_landing = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_crew_died_complete_voyage = new NumberVariable({
