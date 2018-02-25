@@ -20,7 +20,7 @@ var_voyage_in_cd_rom = new BooleanVariable({
     searchTerm: false,
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_ship_name_plaintext = new TextVariable({
@@ -57,7 +57,7 @@ var_year_of_construction = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_vessel_construction_place = new PlaceVariable({
@@ -69,7 +69,7 @@ var_vessel_construction_place = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_registered_year = new NumberVariable({
@@ -82,7 +82,7 @@ var_registered_year = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_registered_place = new PlaceVariable({
@@ -94,7 +94,7 @@ var_registered_place = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_nationality = new TreeselectVariable({
@@ -106,7 +106,7 @@ var_nationality = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_imputed_nationality = new TreeselectVariable({
@@ -117,7 +117,7 @@ var_imputed_nationality = new TreeselectVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
@@ -130,7 +130,7 @@ var_rig_of_vessel = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_tonnage = new NumberVariable({
@@ -143,7 +143,7 @@ var_tonnage = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 var_tonnage_mod = new NumberVariable({
@@ -155,8 +155,8 @@ var_tonnage_mod = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
-    isAdvanced: false
+    isImputed: true,
+    isAdvanced: true
   });
 
 var_guns_mounted = new NumberVariable({
@@ -169,7 +169,7 @@ var_guns_mounted = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: true
   });
 
 // all
