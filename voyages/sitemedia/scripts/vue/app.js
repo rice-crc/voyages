@@ -122,10 +122,6 @@ var searchBar = new Vue({
       search(this.searchFilter, searchTerms);
     },
 
-    toggle() {
-      this.isAdvanced = !this.isAdvanced;
-    },
-
     save() {
       var searchTerms = searchAll(this.filter);
       var existingKeys = []

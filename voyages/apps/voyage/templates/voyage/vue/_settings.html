@@ -14,7 +14,7 @@
     <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
-  <v-panel-singular title="Search Settings" :count="false" :filters="isAdvanced" group="options" sub-group="settings" align="right">
+  <v-panel-singular title="Search Settings" :count="false" group="options" sub-group="settings" align="right" :filters="filter.settings.settings">
     <div slot="v-panel-header">
       <v-panel-header
         title="Search Settings"
@@ -23,10 +23,9 @@
       </v-panel-header>
     </div>
 
-    <div slot="v-panel-content">
-      <v-toggle
-        :filter="filter.settings.settings.var_search_settings"
-        @toggle="toggle">
+    <div slot="v-panel-content" slot-scope="scope">
+      <v-toggle @change="changed"
+        :filter="filter.settings.settings.var_search_settings">
       </v-toggle>
     </div>
   </v-panel-singular>

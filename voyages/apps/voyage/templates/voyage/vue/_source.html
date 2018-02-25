@@ -3,7 +3,7 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.source.count" title="Source"></v-menu-title>
 
-    <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="filter.source.source" :count="filter.source.source.count" align="right">
+    <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="filter.source.source" align="right">
       <div slot="v-panel-header">
         <v-panel-header title="Data Source" description="Source of the slave trade data">
           <div slot="v-modal-content">
