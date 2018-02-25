@@ -3,7 +3,7 @@ var searchBar = new Vue({
   el: "#search-bar",
   delimiters: ['{{', '}}'],
   data: {
-    isAdvanced: true,
+    isAdvanced: false,
     filter: {
       year: year,
       shipNationOwner: shipNationOwner,
@@ -14,16 +14,14 @@ var searchBar = new Vue({
       source: source,
       settings: settings,
     },
-    searchQuery: {
+    query: {
       // put the search query in here
     },
     saved: [],
   },
   computed: {},
   watch: {
-    isAdvanced: function(val) {},
-
-    searchFilter: {
+    filter: {
       handler: function(val) {
 
         // count all
@@ -40,6 +38,7 @@ var searchBar = new Vue({
               };
               for (variable in this.filter[group][subGroup]) { // variable: var_imp_port_voyage_begin
                 if (variable !== "count") {
+
                   if (this.filter[group][subGroup][variable].changed) {
                     subGroupCount.changed += 1;
                   }
@@ -72,12 +71,26 @@ var searchBar = new Vue({
   methods: {
     // go over items and update counts when the inputs are changed
     changed(variable, changed) {
+      var varName = "var_" + variable.varName;
       // function to locate a variable
       for (key1 in this.filter) {
         for (key2 in this.filter[key1]) {
           if (key2 !== "count") {
             for (key3 in this.filter[key1][key2]) {
-              if (key3 == variable.varName) {
+              if (key3 == varName) {
+
+                // if (["text", "treeselect", "place"].indexOf(this.filter[key1][key2][key3].type) !== -1) {
+                //   // by type - searchTerm = [];
+                //   this.filter[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
+                // } else if (["number"].indexOf(this.filter[key1][key2][key3].type) !== -1) {
+                //   // by type - searchTerm0 = Integer, searchTerm0 = Integer;
+                //   this.filter[key1][key2][key3].value["searchTerm0"] = variable["searchTerm0"];
+                //   this.filter[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
+                // } else if (["boolean"].indexOf(this.filter[key1][key2][key3].type) !== -1) {
+                //   // by type - searchTerm = Boolean;
+                //   this.filter[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
+                // };
+
                 if (this.filter[key1][key2][key3].value["searchTerm0"] === undefined) {
                   this.filter[key1][key2][key3].value["searchTerm"] = variable["searchTerm"];
                 } else {
@@ -85,7 +98,6 @@ var searchBar = new Vue({
                   this.filter[key1][key2][key3].value["searchTerm1"] = variable["searchTerm1"];
                 }
                 this.filter[key1][key2][key3].changed = changed;
-
                 this.filter[key1][key2][key3].value["op"] = variable["op"];
               }
             }

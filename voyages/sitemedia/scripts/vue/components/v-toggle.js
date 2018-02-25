@@ -6,7 +6,7 @@ Vue.component('v-toggle', {
         <span>{{filter.label}}</span>
         <span>
           <span class="fa toggle fa-control"
-                v-bind:class="{'fa-toggle-on': toggled, 'fa-toggle-off': !toggled, 'primary-color': toggled, 'text-muted': !toggled}"
+                v-bind:class="{'fa-toggle-on': toggledValue, 'fa-toggle-off': !toggledValue, 'primary-color': toggledValue, 'text-muted': !toggledValue}"
                 @click="click">
           </span>
           <span class="toggle-label" v-show=false></span>
@@ -23,10 +23,32 @@ Vue.component('v-toggle', {
   `,
   methods: {
     click() {
-      this.$emit('toggle', !this.filter.value.searchTerm);
+      this.filter.value.searchTerm = !this.filter.value.searchTerm;
     }
   },
 
-  created: function() {
+  data: function() {
+    if (this.toggled === undefined) {
+      return {
+        toggledValue: this.filter.default.searchTerm,
+      }
+    } else {
+      return {
+        toggledValue: this.toggled,
+      }
+    }
+
+  },
+
+  watch: {
+    // update prop 'filter' from store
+    filter: {
+      handler: function(value){
+        if (!this.filter.changed) { // update when filter is not activated
+          this.toggledValue = this.filter.value.searchTerm;
+        }
+      },
+      deep: true,
+    }
   }
 });

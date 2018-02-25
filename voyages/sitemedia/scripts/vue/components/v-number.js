@@ -35,7 +35,7 @@ Vue.component('v-number', {
         </div>
       </div>
 
-      <div class="row v-padding" v-if="filter.options.debug">
+      <div class="row v-padding" v-if="true">
         <div class="col-md-12">
           <code>{{item}}</code>
           <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
@@ -49,7 +49,7 @@ Vue.component('v-number', {
   data: function() {
     return {
       item: {
-        varName: this.varName,
+        varName: this.filter.varName,
         searchTerm0: this.filter.default.searchTerm0,
         searchTerm1: this.filter.default.searchTerm1,
         op: this.filter.default.op,
