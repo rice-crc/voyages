@@ -45,13 +45,12 @@ function resetFilter(filter, group, subGroup) {
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
       if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
-        filter[group][subGroup][key1].value["searchTerm"] = [];
+        filter[group][subGroup][key1].value["searchTerm"] = filter[group][subGroup][key1].default["searchTerm"];
       } else {
-        filter[group][subGroup][key1].value["searchTerm0"] = null;
-  			filter[group][subGroup][key1].value["searchTerm1"] = null;
+        filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].default["searchTerm0"];
+  			filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].default["searchTerm1"];
       }
-      // TODO accomodate has one of; contains; equals to;
-			filter[group][subGroup][key1].value["op"] = "equals to";
+			filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].default["op"];
 			filter[group][subGroup][key1].changed = false;
 			filter[group][subGroup][key1].activated = false;
 		}
