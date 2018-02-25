@@ -54,7 +54,6 @@ Vue.component('v-text', {
   methods: {
     // form element handlers
     updateSearchTerm(value) { // handler for variable
-      debugger;
       this.item.searchTerm = value;
     },
 
