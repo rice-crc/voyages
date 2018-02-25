@@ -12,9 +12,10 @@
     </div>
 
     <div slot="v-panel-content" slot-scope="scope">
-
+      <code v-if="options.debug">{{scope.filters}}</code>
       <v-treeselect
         :filter="scope.filters.var_outcome_voyage"
+        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
         @change="changed">
       </v-treeselect>
 
@@ -25,6 +26,7 @@
 
       <v-treeselect
         :filter="scope.filters.var_outcome_ship_captured"
+        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
         @change="changed">
       </v-treeselect>
 

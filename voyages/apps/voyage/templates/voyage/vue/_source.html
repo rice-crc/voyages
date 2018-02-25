@@ -3,25 +3,22 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.source.count" title="Source"></v-menu-title>
 
-    <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="filter.source.source" align="right">
-      <div slot="v-panel-header">
-        <v-panel-header title="Data Source" description="Source of the slave trade data">
-          <div slot="v-modal-content">
-            Some help text
-          </div>
-        </v-panel-header>
-      </div>
+  <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="filter.source.source" align="right">
+    <div slot="v-panel-header">
+      <v-panel-header title="Data Source" description="Source of the slave trade data">
+        <div slot="v-modal-content">
+          Some help text
+        </div>
+      </v-panel-header>
+    </div>
 
-      <div slot="v-panel-content" slot-scope="scope">
-        <p>
-          filters are: {{scope.filters}}
-        </p>
+    <div slot="v-panel-content" slot-scope="scope">
+      <code v-if="options.debug">{{scope.filters}}</code>
 
-        <v-text @change="changed"
-           :filter="scope.filters.var_sources_plaintext_search">
-         </v-text>
-      </div>
-    </v-panel-singular>
+      <v-text @change="changed" :filter="scope.filters.var_sources_plaintext_search">
+      </v-text>
+    </div>
+  </v-panel-singular>
 </li>
 
 {% endverbatim %}
