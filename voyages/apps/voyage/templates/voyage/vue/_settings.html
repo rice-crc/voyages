@@ -10,7 +10,7 @@
 
 <!-- Search Settings -->
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.settings.count">
+  <v-menu-title :count="filter.settings.count" :disable-caret="true">
     <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
@@ -34,7 +34,7 @@
 
 <!-- Saved Searches -->
 <li class="nav-item dropdown">
-  <v-menu-title :count="false">
+  <v-menu-title :count="false" :disable-caret="true">
     <i class="fa fa-heart" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
