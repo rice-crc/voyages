@@ -5,14 +5,27 @@ Vue.component('v-toggle', {
       <div class="v-title">
         <span>{{filter.label}}</span>
         <span>
-          <span class="fa toggle fa-control"
-                v-bind:class="{'fa-toggle-on': item.searchTerm, 'fa-toggle-off': !item.searchTerm, 'primary-color': item.searchTerm, 'text-muted': !item.searchTerm}"
-                @click="click">
-          </span>
-          <span class="toggle-label" v-show=false></span>
+            <b-badge
+              v-if="filter.options.isImputed"
+              v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
+              variant="warning"
+              class="v-badge-imputed">
+              Imputed
+            </b-badge>
+            <b-badge
+              v-if="filter.options.isAdvanced"
+              v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
+              variant="danger" class="v-badge-advanced">Advanced</b-badge>
         </span><!-- reserved for right aligned content -->
       </div>
-      <div class="v-description" v-text="filter.description"></div>
+
+      <div class="v-toggle-control">
+        <span>{{filter.description}}</span>
+        <span class="fa toggle fa-control"
+              v-bind:class="{'fa-toggle-on': item.searchTerm, 'fa-toggle-off': !item.searchTerm, 'primary-color': item.searchTerm, 'text-muted': !item.searchTerm}"
+              @click="click">
+        </span><!-- reserved for right aligned content -->
+      </div>
 
       <div class="row v-padding" v-if="true">
         <div class="col-md-12">
@@ -60,7 +73,6 @@ Vue.component('v-toggle', {
     // update prop 'filter' from store
     item: {
       handler: function(value){
-        debugger;
         if (this.item.searchTerm !== this.filter.default.searchTerm) { // update when filter is not activated
           this.options.changed = true;
           this.$emit('change', this.item, true);
