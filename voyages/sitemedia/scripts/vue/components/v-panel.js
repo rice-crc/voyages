@@ -1,8 +1,8 @@
 // v-panel
 Vue.component('v-panel', {
-  props: ['title', "filters", "visible", "group", "subGroup", "data"],
+  props: ['title', "filters", "group", "subGroup", "data"],
   template: `
-    <li v-if="visibleValue" class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+    <li class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
             {{titleValue}}
@@ -31,7 +31,6 @@ Vue.component('v-panel', {
   data: function() {
     return {
       titleValue: '',
-      visibleValue: '',
       idValue: null,
       filtersValue: null,
       controlDisabled: true,
@@ -48,11 +47,6 @@ Vue.component('v-panel', {
   },
 
   watch: {
-    visible: {
-      handler: function(){
-        this.visibleValue = this.visible;
-      },
-    },
     filters: {
       handler: function(){
         this.controlDisabled = (this.filters.count.changed > 0) ? false:true;
@@ -65,7 +59,6 @@ Vue.component('v-panel', {
 
   mounted: function() { // load value initially
     this.titleValue = this.title;
-    this.visibleValue = this.visible;
     this.idValue = hyphenate(this.title);
     this.filtersValue = this.filters;
   }
