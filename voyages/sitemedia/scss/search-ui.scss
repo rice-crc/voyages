@@ -43,8 +43,12 @@
 }
 
 .dropdown-menu-title {
-  cursor: pointer;
+  cursor: default;
   align-content: center;
   justify-content: space-between;
   display: flex;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

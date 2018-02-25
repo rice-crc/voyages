@@ -32,9 +32,12 @@
     background-color: rgba(0, 0, 0, 0.15); }
 
 .dropdown-menu-title {
-  cursor: pointer;
+  cursor: default;
   align-content: center;
   justify-content: space-between;
   display: flex; }
+
+.cursor-pointer {
+  cursor: pointer; }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/search-ui.css.map */
