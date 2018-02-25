@@ -26,7 +26,7 @@ Vue.component('v-text', {
         </div>
       </div>
 
-      <div class="row v-padding" v-if="filter.options.debug">
+      <div class="row v-padding" v-if="true">
         <div class="col-md-12">
           <code>{{item}}</code>
           <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
@@ -40,7 +40,7 @@ Vue.component('v-text', {
   data: function() {
     return {
       item: {
-        varName: this.varName,
+        varName: this.filter.varName,
         searchTerm: this.filter.default.searchTerm,
         op: this.filter.default.op,
       },
@@ -54,6 +54,7 @@ Vue.component('v-text', {
   methods: {
     // form element handlers
     updateSearchTerm(value) { // handler for variable
+      debugger;
       this.item.searchTerm = value;
     },
 
@@ -72,6 +73,7 @@ Vue.component('v-text', {
     // search object
     item: {
       handler: function(){
+        debugger;
         // set "" to null
         this.item.searchTerm = (this.item.searchTerm == "") ? null:this.item.searchTerm;
 
