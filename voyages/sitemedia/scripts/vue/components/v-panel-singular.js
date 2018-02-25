@@ -21,7 +21,6 @@ Vue.component('v-panel-singular', {
   data: function() {
     return {
       titleValue: '',
-      visibleValue: '',
       filtersValue: null,
       idValue: null,
       controlDisabled: true,
@@ -54,7 +53,6 @@ Vue.component('v-panel-singular', {
     }
     this.idValue = hyphenate(this.title);
     this.titleValue = this.title;
-    this.visibleValue = this.visible;
     this.filtersValue = this.filters;
   }
 
