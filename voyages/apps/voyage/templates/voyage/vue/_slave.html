@@ -5,7 +5,7 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall Numbers" :filters="filter.slave.overallNumbers" :visible="true">
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall Numbers" :filters="filter.slave.overallNumbers">
 				<div slot="v-panel-header">
 					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
 						<div slot="v-modal-content">
@@ -95,7 +95,7 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group" :visible="true">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group">
 				<div slot="v-panel-header">
 					<v-panel-header title="Percentage by Sex and Age Group" description="Demographic parameters about the slaves">
 						<div slot="v-modal-content">
