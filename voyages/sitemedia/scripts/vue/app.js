@@ -18,6 +18,9 @@ var searchBar = new Vue({
       // put the search query in here
     },
     saved: [],
+    options: {
+      debug: false,
+    }
   },
   computed: {},
   watch: {

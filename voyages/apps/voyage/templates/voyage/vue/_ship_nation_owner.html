@@ -15,16 +15,15 @@
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          <p>
-	          filters are: {{scope.filters}}
-					</p>
+          <code v-if="options.debug">{{scope.filters}}</code>
 
           <v-number @change="changed"
             :filter="scope.filters.var_voyage_id">
           </v-number>
 
           <v-toggle @change="changed"
-            :filter="scope.filters.var_voyage_in_cd_rom">
+            :filter="scope.filters.var_voyage_in_cd_rom"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
           </v-toggle>
 
           <v-text @change="changed"
@@ -33,12 +32,14 @@
 
           <v-text @change="changed"
             :filter="scope.filters.var_owner_plaintext"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
           ></v-text>
 
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and Registration" :filters="filter.shipNationOwner.constructionAndRegistration">
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and Registration" :filters="filter.shipNationOwner.constructionAndRegistration"
+      v-if="filter.settings.settings.var_search_settings.value.searchTerm">
         <div slot="v-panel-header">
           <v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration">
             <div slot="v-modal-content">
@@ -48,9 +49,7 @@
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          <p>
-						filters are: {{scope.filters}}
-					</p>
+          <code v-if="options.debug">{{scope.filters}}</code>
           <v-number @change="changed"
             :filter="scope.filters.var_year_of_construction">
           </v-number>
@@ -71,7 +70,7 @@
 
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="Flag" :filters="filter.shipNationOwner.flag">
         <div slot="v-panel-header">
-          <v-panel-header title="Flag" description="Parameters about Rig, Tonnage, and Guns Mounted">
+          <v-panel-header title="Flag" description="Parameters about flags">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -79,11 +78,10 @@
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          <p>
-						filters are: {{scope.filters}}
-					</p>
+          <code v-if="options.debug">{{scope.filters}}</code>
           <v-treeselect
             :filter="scope.filters.var_nationality"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
             @change="changed">
           </v-treeselect>
           <v-treeselect
@@ -93,7 +91,8 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, Tonnage, and Guns Mounted" :filters="filter.shipNationOwner.rigTonnageAndGunsMounted">
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, Tonnage, and Guns Mounted" :filters="filter.shipNationOwner.rigTonnageAndGunsMounted"
+      v-if="filter.settings.settings.var_search_settings.value.searchTerm">
         <div slot="v-panel-header">
           <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted">
             <div slot="v-modal-content">
@@ -103,9 +102,7 @@
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          <p>
-						filters are: {{scope.filters}}
-					</p>
+          <code v-if="options.debug">{{scope.filters}}</code>
           <v-treeselect
             :filter="scope.filters.var_rig_of_vessel"
             @change="changed">

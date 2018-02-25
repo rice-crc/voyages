@@ -15,11 +15,10 @@
 				</div>
 
 				<div slot="v-panel-content" slot-scope="scope">
-					<p>
-	          filters are: {{scope.filters}}
-					</p>
+					<code v-if="options.debug">{{scope.filters}}</code>
           <v-number @change="changed"
-						:filter="scope.filters.var_imp_total_num_slaves_purchased">
+						:filter="scope.filters.var_imp_total_num_slaves_purchased"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 					</v-number>
 
 					<v-number @change="changed"
@@ -27,7 +26,8 @@
 					</v-number>
 
 					<v-number @change="changed"
-						:filter="scope.filters.var_imp_total_slaves_disembarked">
+						:filter="scope.filters.var_imp_total_slaves_disembarked"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 					</v-number>
 				</div>
 			</v-panel>
@@ -42,9 +42,7 @@
 				</div>
 
 				<div slot="v-panel-content" slot-scope="scope">
-					<p>
-						filters are: {{scope.filters}}
-					</p>
+					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-number @change="changed"
 						:filter="scope.filters.var_num_slaves_intended_first_port">
 					</v-number>
@@ -73,9 +71,8 @@
 					</v-panel-header>
 				</div>
 				<div slot="v-panel-content" slot-scope="scope">
-					<p>
-						filters are: {{scope.filters}}
-					</p>
+					<code v-if="options.debug">{{scope.filters}}</code>
+
 					<v-number @change="changed"
 						:filter="scope.filters.var_total_num_slaves_arr_first_port_embark">
 					</v-number>
@@ -105,9 +102,8 @@
 				</div>
 
 				<div slot="v-panel-content" slot-scope="scope">
-					<p>
-						filters are: {{scope.filters}}
-					</p>
+					<code v-if="options.debug">{{scope.filters}}</code>
+
 					<v-number @change="changed"
 						:filter="scope.filters.var_imputed_percentage_men">
 					</v-number>
@@ -144,15 +140,15 @@
 				</div>
 
 				<div slot="v-panel-content" slot-scope="scope">
-					<p>
-						filters are: {{scope.filters}}
-					</p>
+					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-number @change="changed"
-						:filter="scope.filters.var_imputed_sterling_cash">
+						:filter="scope.filters.var_imputed_sterling_cash"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 					</v-number>
 
 					<v-number @change="changed"
-						:filter="scope.filters.var_imputed_death_middle_passage">
+						:filter="scope.filters.var_imputed_death_middle_passage"
+		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 					</v-number>
 
 					<v-number @change="changed"
