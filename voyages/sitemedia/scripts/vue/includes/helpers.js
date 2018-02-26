@@ -97,11 +97,22 @@ function searchAll(filter) {
 	}
 
 	// placeholder
-	var item = {};
-	item["op"] = "is between";
-	item["searchTerm"] = [1514, 1866];
-	item["varName"] = "imp_arrival_at_port_of_dis";
-	items.push(item);
+  hasYear = false;
+  items.map(function(item){
+    if (item.varName == "imp_arrival_at_port_of_dis") {
+      item.op = "is between"; // patch a backend bug
+      hasYear = true;
+    }
+  })
+
+  if (!hasYear) {
+    var item = {};
+  	item["op"] = "is between";
+  	item["searchTerm"] = [1514, 1866];
+  	item["varName"] = "imp_arrival_at_port_of_dis";
+  	items.push(item);
+  }
+
 	// placeholder
 
 	return items;

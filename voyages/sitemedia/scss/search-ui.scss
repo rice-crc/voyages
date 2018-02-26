@@ -52,3 +52,41 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.badge-count {
+  text-align: center;
+  display:flex;
+  font-size: 75%;
+  font-weight: 700;
+}
+
+.badge-count-label {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #dc3545;
+  background: #dc3545;
+  color: white;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  display: flex;
+  border-top-left-radius: 0.2rem;
+  border-bottom-left-radius: 0.2rem;
+}
+
+.badge-count-btn {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  display: flex;
+  border-top-right-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+}
+
+.badge-btn {
+  padding-top: 0.1rem;
+}
