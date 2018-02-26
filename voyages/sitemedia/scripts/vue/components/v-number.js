@@ -35,11 +35,15 @@ Vue.component('v-number', {
         </div>
       </div>
 
-      <div class="row v-padding" v-if="true">
+      <div class="row v-padding" v-if="false">
         <div class="col-md-12">
-          <code>{{item}}</code>
-          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+          <div>
+            <code>{{item}}</code>
+          </div>
+          <div>
+            <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
+            <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+          </div>
         </div>
       </div>
 

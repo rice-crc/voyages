@@ -215,7 +215,12 @@ function search(query, activeSearchTerms) {
         });
       }
     },
-    dom: 'ifrtBp',
+
+
+    // dom: 'ifrtBp',
+    dom:  "<'flex-container'iB>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-5'><'col-sm-7'p>>",
     lengthMenu: [
       [10, 25, 50, 100],
       ['10 rows', '25 rows', '50 rows', '100 rows']

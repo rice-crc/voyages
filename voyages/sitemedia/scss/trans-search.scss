@@ -30,6 +30,12 @@
 //   justify-content: space-between;
 // }
 
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #results_main_table_paginate {
   float: right;
 }
@@ -39,10 +45,7 @@
 }
 
 .dataTables_info {
-  padding-bottom: .25rem;
-  // font-weight: bold;
   color: #555555;
-  font-size: 0.875rem;
 }
 
 .trans-tab {
@@ -96,7 +99,8 @@ table.dataTable thead>tr>th.sorting, .table th {
 }
 
 #search-bar {
-  height: 1500px;
+  margin-bottom: 75px;
+  min-height: 750px;
 }
 
 .page-item.active .page-link {

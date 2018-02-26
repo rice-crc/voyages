@@ -33,11 +33,15 @@ Vue.component("v-treeselect", {
       </div>
     </div>
 
-    <div class="row v-padding">
+    <div class="row v-padding" v-if="false">
       <div class="col-md-12">
-        <code>{{item.searchTerm}}</code>
-        <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-        <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+        <div>
+          <code>{{item}}</code>
+        </div>
+        <div>
+          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
+          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+        </div>
       </div>
     </div>
 
