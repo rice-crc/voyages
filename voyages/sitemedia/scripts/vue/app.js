@@ -135,6 +135,10 @@ var searchBar = new Vue({
         searchTerms: searchTerms
       });
     },
+
+    clip(value) {
+      alert("Short URL is: " + value);
+    }
   },
 
   mounted: function() {

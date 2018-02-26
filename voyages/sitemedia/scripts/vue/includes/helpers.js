@@ -42,6 +42,7 @@ function activateFilter(filter, group, subGroup, filterValues) {
 }
 
 function resetFilter(filter, group, subGroup) {
+  debugger;
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
       if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
@@ -100,7 +101,9 @@ function searchAll(filter) {
   hasYear = false;
   items.map(function(item){
     if (item.varName == "imp_arrival_at_port_of_dis") {
-      item.op = "is between"; // patch a backend bug
+      if (item.op == "between") {
+        item.op = "is between"; // patch a backend bug
+      }
       hasYear = true;
     }
   })
