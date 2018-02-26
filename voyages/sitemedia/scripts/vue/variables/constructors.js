@@ -108,6 +108,7 @@ function PlaceVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    caption: options["caption"]
   };
   this.changed = false;
   this.activated = false;

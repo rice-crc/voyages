@@ -5,7 +5,7 @@
     <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
-  <v-panel-singular title="Search Settings" :count="false" group="options" sub-group="settings" align="right" :filters="filter.settings.settings">
+  <v-panel-singular title="Search Settings" :count="false" group="options" sub-group="settings" align="right" :filters="filter.settings.settings" :control-invisible="true">
     <div slot="v-panel-header">
       <v-panel-header
         title="Search Settings"
@@ -29,7 +29,7 @@
     <i class="fa fa-heart" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
-  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true">
+  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true" :control-invisible="true">
     <div slot="v-panel-header">
       <v-panel-header
         title="Saved Searches"
@@ -48,7 +48,8 @@
       <v-saved-searches
         title="Saved Searches"
         description="These are searches saved in this session."
-        :saved="saved">
+        :saved="saved"
+        @clip="clip">
       </v-saved-searches>
     </div>
   </v-panel-singular>

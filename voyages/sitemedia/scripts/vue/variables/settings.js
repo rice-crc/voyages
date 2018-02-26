@@ -4,7 +4,7 @@ var_search_settings = new BooleanVariable({
     description: "Advanced variables are additional parameters that are not frequently used. Enabling them does not change current search behavior.",
   },{
     op: "equals",
-    searchTerm: false,
+    searchTerm: true,
   },{
     isImputed: false,
     isAdvanced: false

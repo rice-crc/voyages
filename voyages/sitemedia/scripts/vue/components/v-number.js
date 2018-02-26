@@ -124,6 +124,7 @@ Vue.component('v-number', {
         }
 
         // control visibility
+        debugger;
         if (this.item.searchTerm0 !== null || this.item.searchTerm1 !== null) {
           this.options.changed = true;
           this.$emit('change', this.item, true);

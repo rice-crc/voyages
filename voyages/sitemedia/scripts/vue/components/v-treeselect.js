@@ -27,7 +27,7 @@ Vue.component("v-treeselect", {
           :multiple="true"
           :load-root-options="loadRootOptions"
           :default-expand-level="1"
-          placeholder=filter.options.caption
+          :placeholder=filter.options.caption
           v-model="item.searchTerm"
         />
       </div>
