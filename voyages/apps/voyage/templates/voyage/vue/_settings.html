@@ -1,13 +1,4 @@
 {% verbatim %}
-
-<li class="nav-item dropdown">
-  <a id="show-query" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-    <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-  </a>
-  <div class="dropdown-menu search-menu dropdown-menu-right">
-  </div>
-</li>
-
 <!-- Search Settings -->
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.settings.count" :disable-caret="true">
@@ -38,7 +29,7 @@
     <i class="fa fa-heart" aria-hidden="true" slot="menu-title"></i>
   </v-menu-title>
 
-  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right">
+  <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true">
     <div slot="v-panel-header">
       <v-panel-header
         title="Saved Searches"

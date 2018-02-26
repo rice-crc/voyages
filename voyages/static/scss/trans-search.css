@@ -10,6 +10,11 @@
   border-bottom-right-radius: 0 !important;
   border-top-right-radius: 0 !important; }
 
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+
 #results_main_table_paginate {
   float: right; }
 
@@ -17,9 +22,7 @@
   padding: 1rem 0; }
 
 .dataTables_info {
-  padding-bottom: .25rem;
-  color: #555555;
-  font-size: 0.875rem; }
+  color: #555555; }
 
 .trans-tab {
   padding-top: .5rem; }
@@ -57,9 +60,10 @@ table.dataTable thead > tr > th.sorting, .table th {
   padding: 0; }
 
 #search-bar {
-  height: 1500px; }
+  margin-bottom: 75px;
+  min-height: 750px; }
 
 .page-item.active .page-link {
   z-index: 0; }
 
-/*# sourceMappingURL=../../../../../../../static/scss/trans-search.css.map */
+/*# sourceMappingURL=../../../../../../../../../static/scss/trans-search.css.map */

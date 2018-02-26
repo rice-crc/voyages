@@ -62,7 +62,8 @@
 .v-modal-title {
   font-size: 1rem;
   font-weight: bold;
-  color: #666666; }
+  color: #666666;
+  text-align: left; }
 
 .modal-content {
   color: #666666; }

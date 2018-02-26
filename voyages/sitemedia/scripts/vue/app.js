@@ -11,6 +11,7 @@ var searchBar = new Vue({
       outcome: outcome,
       itinerary: itinerary,
       captainAndCrew: captainAndCrew,
+      dates: dates,
       source: source,
       settings: settings,
     },
