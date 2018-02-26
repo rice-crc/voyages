@@ -8,9 +8,10 @@ Vue.component('v-panel', {
             {{titleValue}}
           </div>
           <div class="dropdown-menu-title-count" v-if="filters.count.activated">
-            <b-badge variant="danger" @click="reset" class="cursor-pointer">
-                {{filters.count.activated}} <i class="fa fa-times"></i>
-            </b-badge>
+            <div @click="reset" class="cursor-pointer badge-count">
+              <span class="badge-count-label">{{filters.count.activated}}</span>
+              <span class="badge-count-btn"><i class="fa fa-times badge-btn"></i></span>
+            </div>
           </div>
         </div>
         <div :id="idValue" class="search-submenu popover">
