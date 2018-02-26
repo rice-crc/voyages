@@ -22,6 +22,9 @@
     margin: auto;
     padding: 1rem 0; } }
 
+html, body {
+  height: 100%; }
+
 .card-container {
   margin: 2rem 0;
   padding-left: 0; }
