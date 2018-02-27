@@ -1,8 +1,11 @@
+.dropdown-menu-title-text {
+  font-size: 0.85rem;
+}
+
 .v-title {
   font-weight: bold;
   color: #666666;
-  // margin-bottom: 0.125rem;
-  font-size: 1rem;
+  font-size: .85rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,6 +22,7 @@
 .v-description {
   color: #666666;
   margin-bottom: 0.35rem;
+  font-size: .85rem;
 }
 
 .v-panel-title-container {
@@ -28,13 +32,14 @@
 }
 
 .v-panel-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
-  color: #555555;
+  color: #666666;
 }
 
 .v-panel-description {
   color: #666666;
+  font-size: 0.85rem;
 }
 
 .v-panel-header {
@@ -57,6 +62,7 @@
 
 .v-form-element-caption {
   color: #888888;
+  font-size: 0.85rem;
   // padding-top: 0.125rem;
 }
 
