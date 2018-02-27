@@ -113,6 +113,10 @@ var searchBar = new Vue({
 
     // turn changed items into activated state; then execute search
     apply(group, subGroup, filterValues) {
+      // hide all menu upon search
+      $('.dropdown-menu').removeClass('show');
+      $("a.maintainHover").removeClass("maintainHover");
+      // hide all menu upon search
       activateFilter(this.filter, group, subGroup, filterValues);
       var searchTerms = searchAll(this.filter);
       // alert(JSON.stringify(searchTerms));
