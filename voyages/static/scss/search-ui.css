@@ -28,8 +28,6 @@
 .search-dropdown-item {
   font-weight: 500;
   color: #555555 !important; }
-  .search-dropdown-item:hover {
-    background-color: rgba(0, 0, 0, 0.15); }
 
 .dropdown-menu-title {
   cursor: default;
@@ -73,5 +71,8 @@
 
 .badge-btn {
   padding-top: 0.1rem; }
+
+.maintainHover {
+  background: rgba(0, 0, 0, 0.15); }
 
 /*# sourceMappingURL=../../../../../../../../../static/scss/search-ui.css.map */

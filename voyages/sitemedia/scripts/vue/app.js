@@ -115,7 +115,7 @@ var searchBar = new Vue({
     apply(group, subGroup, filterValues) {
       activateFilter(this.filter, group, subGroup, filterValues);
       var searchTerms = searchAll(this.filter);
-      alert(JSON.stringify(searchTerms));
+      // alert(JSON.stringify(searchTerms));
       search(this.searchFilter, searchTerms);
     },
 

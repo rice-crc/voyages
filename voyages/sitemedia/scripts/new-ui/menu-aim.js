@@ -24,7 +24,7 @@ function activateSubmenu(row) {
 		});
 
 		// Keep the currently activated row's highlighted look
-		$row.find("a").addClass("maintainHover");
+		$row.addClass("maintainHover");
 }
 
 function deactivateSubmenu(row) {
@@ -34,7 +34,7 @@ function deactivateSubmenu(row) {
 
 		// Hide the submenu and remove the row's highlighted look
 		$submenu.css("display", "none");
-		$row.find("a").removeClass("maintainHover");
+		$row.removeClass("maintainHover");
 }
 
 $( document ).ready(function() {

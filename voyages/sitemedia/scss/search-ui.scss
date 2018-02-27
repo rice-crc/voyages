@@ -37,9 +37,6 @@
 .search-dropdown-item {
   font-weight: 500;
   color: #555555 !important;
-  &:hover {
-    background-color: rgba(0,0,0,0.15);
-  }
 }
 
 .dropdown-menu-title {
@@ -89,4 +86,8 @@
 
 .badge-btn {
   padding-top: 0.1rem;
+}
+
+.maintainHover {
+  background: rgba(0, 0, 0, 0.15);
 }
