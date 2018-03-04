@@ -42,7 +42,6 @@ function activateFilter(filter, group, subGroup, filterValues) {
 }
 
 function resetFilter(filter, group, subGroup) {
-  debugger;
 	for (key1 in filter[group][subGroup]) {
 		if (key1 !== "count") {
       if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
@@ -83,7 +82,55 @@ function searchAll(filter) {
 								var searchTerm = [];
 								item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
                 if (filter[key1][key2][key3].value["searchTerm0"] === undefined) {
-                  item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
+                  // if it's a multi-tiered place variable
+                  if (filter[key1][key2][key3].constructor.name === "PlaceVariable") {
+                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                    var searchTerm = [];
+
+                    sortedSelections.forEach(function(selection) {
+                      if (selection == filter[key1][key2][key3].options.data[0].id) {
+                        // select all
+                        filter[key1][key2][key3].options.data[0].children.forEach(function(broadRegion) {
+                          broadRegion.children.forEach(function(region) {
+                            region.children.forEach(function(subRegion) {
+                              searchTerm.push(subRegion.id);
+                            })
+                          })
+                        });
+                      } else {
+                        // broadRegion
+                        filter[key1][key2][key3].options.data[0].children.forEach(function(broadRegion) {
+                          if (selection == broadRegion.id) {
+                            broadRegion.children.forEach(function(region) {
+                              region.children.forEach(function(subRegion) {
+                                searchTerm.push(subRegion.id);
+                              });
+                            })
+                          } else {
+                            broadRegion.children.forEach(function(region) {
+                              // region
+                              if (selection == region.id) {
+                                region.children.forEach(function(subRegion) {
+                                  searchTerm.push(subRegion.id);
+                                });
+                              } else {
+                                // subRegion
+                                region.children.forEach(function(subRegion) {
+                                  if (selection == subRegion.id) {
+                                    searchTerm.push(subRegion.id);
+                                  }
+                                });
+                              }
+                            });
+                          }
+                        });
+                      }
+                    });
+
+                    item["searchTerm"] = searchTerm;
+                  } else {
+                    item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
+                  }
                 } else {
                   item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                 }
@@ -323,5 +370,8 @@ var parsePlaces = function(response) {
   return options;
 }
 
+function sortNumber(a,b) {
+    return a - b;
+}
 
 // helpers
