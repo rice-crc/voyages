@@ -60,9 +60,8 @@
 .badge-count-label {
   width: 20px;
   height: 20px;
-  border: 1px solid #dc3545;
-  background: #dc3545;
-  color: white;
+  border: 0.5px solid #dc3545;
+  color: #dc3545;
   justify-content: center;
   flex-direction: column;
   text-align: center;
@@ -74,8 +73,9 @@
 .badge-count-btn {
   width: 20px;
   height: 20px;
-  border: 1px solid #dc3545;
-  color: #dc3545;
+  border: 0.5px solid #dc3545;
+  background: #dc3545;
+  color: white;
   justify-content: center;
   flex-direction: column;
   text-align: center;
