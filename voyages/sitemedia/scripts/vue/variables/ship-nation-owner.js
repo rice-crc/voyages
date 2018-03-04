@@ -164,7 +164,6 @@ var_guns_mounted = new NumberVariable({
 shipNationOwner = {
   voyagesAndVessels: {
     var_voyage_id: var_voyage_id,
-    var_voyage_in_cd_rom: var_voyage_in_cd_rom,
     var_ship_name_plaintext: var_ship_name_plaintext,
     var_owner_plaintext: var_owner_plaintext,
 
