@@ -10,3 +10,6 @@ documents/cache/*
 *.log
 .vscode
 *.css.map
+voyages/static/scss/*.css
+voyages/static/scss/*.map
+
