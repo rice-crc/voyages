@@ -48,8 +48,8 @@ var_year_of_construction = new NumberVariable({
     isAdvanced: true
   });
 
-var_vessel_construction_place = new PlaceVariable({
-    varName: "vessel_construction_place",
+var_vessel_construction_place_idnum = new PlaceVariable({
+    varName: "vessel_construction_place_idnum",
     label: "Place Constructed",
     description: "description",
   },{
@@ -73,8 +73,8 @@ var_registered_year = new NumberVariable({
     isAdvanced: true
   });
 
-var_registered_place = new PlaceVariable({
-    varName: "registered_place",
+var_registered_place_idnum = new PlaceVariable({
+    varName: "registered_place_idnum",
     label: "Place Registered",
     description: "description",
   },{
@@ -175,9 +175,9 @@ shipNationOwner = {
 
   constructionAndRegistration: {
     var_year_of_construction: var_year_of_construction,
-    var_vessel_construction_place: var_vessel_construction_place,
+    var_vessel_construction_place_idnum: var_vessel_construction_place_idnum,
     var_registered_year: var_registered_year,
-    var_registered_place: var_registered_place,
+    var_registered_place_idnum: var_registered_place_idnum,
 
     count: {
       changed: 0,
