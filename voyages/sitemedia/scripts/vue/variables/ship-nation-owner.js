@@ -11,18 +11,6 @@ var_voyage_id = new NumberVariable({
     isAdvanced: false
   });
 
-var_voyage_in_cd_rom = new BooleanVariable({
-    varName: "voyage_in_cd_rom",
-    label: "Voyage in 1999 CD-ROM",
-    description: "Some voyages are originally from the 1999 CD-ROM. Select whether to include them in the search result.",
-  },{
-    op: "equals",
-    searchTerm: false,
-  },{
-    isImputed: false,
-    isAdvanced: true
-  });
-
 var_ship_name_plaintext = new TextVariable({
     varName: "ship_name_plaintext",
     label: "Vessel Name",

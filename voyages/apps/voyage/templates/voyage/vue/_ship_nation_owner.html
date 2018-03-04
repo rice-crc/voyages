@@ -21,11 +21,6 @@
             :filter="scope.filters.var_voyage_id">
           </v-number>
 
-          <v-toggle @change="changed"
-            :filter="scope.filters.var_voyage_in_cd_rom"
-		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
-          </v-toggle>
-
           <v-text @change="changed"
             :filter="scope.filters.var_ship_name_plaintext"
           ></v-text>
