@@ -128,13 +128,49 @@ function searchAll(filter) {
                     });
 
                     item["searchTerm"] = searchTerm;
+
+                  // if it's a TreeselectVariable
+                  } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
+                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                    var searchTerm = [];
+
+                    if (sortedSelections.includes("0")) {
+                      // select all
+                      filter[key1][key2][key3].options.data[0].children.forEach(function(options) {
+                        searchTerm.push(options.id);
+                      });
+                    } else {
+                      searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                    }
+
+                    item["searchTerm"] = searchTerm;
                   } else {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
                   item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                 }
-								item["varName"] = filter[key1][key2][key3].varName;
+
+                // TODO: fix a bug with the backend: it should use _idnum and not _id
+                if (filter[key1][key2][key3].varName.slice(-3) == "_id") {
+                  item["varName"] = filter[key1][key2][key3].varName + "num";
+                } else {
+                  item["varName"] = filter[key1][key2][key3].varName;
+                }
+
+                // TODO: backend patch
+                if (filter[key1][key2][key3].varName == "nationality"
+                  || filter[key1][key2][key3].varName == "rig_of_vessel"
+                  || filter[key1][key2][key3].varName == "outcome_voyage"
+                  || filter[key1][key2][key3].varName == "outcome_slaves"
+                  || filter[key1][key2][key3].varName == "outcome_ship_captured"
+                  || filter[key1][key2][key3].varName == "outcome_owner"
+                  || filter[key1][key2][key3].varName == "resistance"
+
+                ) {
+                  item["varName"] = filter[key1][key2][key3].varName + "_idnum";
+                }
+
 								items.push(item);
 							}
 						}
@@ -165,6 +201,7 @@ function searchAll(filter) {
 
 	// placeholder
 
+alert(JSON.stringify(items));
 	return items;
 }
 
