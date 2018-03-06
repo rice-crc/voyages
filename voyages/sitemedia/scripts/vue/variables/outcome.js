@@ -8,7 +8,6 @@ var_outcome_voyage = new TreeselectVariable({
   },{
     isImputed: false,
     isAdvanced: true,
-    caption: "Please select from list"
   });
 
 var_outcome_slaves = new TreeselectVariable({
@@ -21,7 +20,6 @@ var_outcome_slaves = new TreeselectVariable({
   },{
     isImputed: true,
     isAdvanced: false,
-    caption: "Please select from list"
   });
 
 var_outcome_ship_captured = new TreeselectVariable({
@@ -34,7 +32,6 @@ var_outcome_ship_captured = new TreeselectVariable({
   },{
     isImputed: true,
     isAdvanced: true,
-    caption: "Please select from list"
   });
 
 var_outcome_owner = new TreeselectVariable({
@@ -47,7 +44,6 @@ var_outcome_owner = new TreeselectVariable({
   },{
     isImputed: true,
     isAdvanced: false,
-    caption: "Please select from list"
   });
 
 var_resistance = new TreeselectVariable({
@@ -60,7 +56,6 @@ var_resistance = new TreeselectVariable({
   },{
     isImputed: false,
     isAdvanced: false,
-    caption: "Please select from list"
   });
 
 outcome = {
