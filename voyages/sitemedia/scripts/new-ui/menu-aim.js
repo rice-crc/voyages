@@ -13,7 +13,8 @@ function activateSubmenu(row) {
 				height = $menu.outerHeight(),
 				width = $menu.outerWidth();
 
-		var parentWidth = $row.width();
+		// var parentWidth = $row.width();
+		var parentWidth = 301;
 
 		// Show the submenu
 		$submenu.css({
@@ -44,7 +45,8 @@ $( document ).ready(function() {
 	// Hook up events to be fired on menu row activation.
 	$menu.menuAim({
 			activate: activateSubmenu,
-			deactivate: deactivateSubmenu
+			deactivate: deactivateSubmenu,
+			submenuSelector: "*"
 	});
 
 	// Bootstrap's dropdown menus immediately close on document click.
