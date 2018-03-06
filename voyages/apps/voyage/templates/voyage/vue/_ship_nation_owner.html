@@ -7,7 +7,7 @@
 
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="voyagesAndVessels" title="Voyages and Vessels" :filters="filter.shipNationOwner.voyagesAndVessels">
         <div slot="v-panel-header">
-          <v-panel-header title="Voyages and Vessels" description="Parameters about voyages and vessels">
+          <v-panel-header title="Voyages and Vessels" description="Voyage ID number and information about slave ships">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -36,7 +36,7 @@
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and Registration" :filters="filter.shipNationOwner.constructionAndRegistration"
       v-if="filter.settings.settings.var_search_settings.value.searchTerm">
         <div slot="v-panel-header">
-          <v-panel-header title="Construction and Registration" description="Parameters about Construction and Registration">
+          <v-panel-header title="Construction and Registration" description="The year and location of slave ship construction and registration.">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -65,7 +65,7 @@
 
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="Flag" :filters="filter.shipNationOwner.flag">
         <div slot="v-panel-header">
-          <v-panel-header title="Flag" description="Parameters about flags">
+          <v-panel-header title="Flag" description="The flag (nationality) of the slave ship.">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -79,17 +79,22 @@
 		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
             @change="changed">
           </v-treeselect>
-          <v-treeselect
+          <v-placeholder
+            title="Flag Imputed"
+            description="This is pending the backend API"
+          >
+          </v-placeholder>
+          <!-- <v-treeselect
             :filter="scope.filters.var_imputed_nationality"
             @change="changed">
-          </v-treeselect>
+          </v-treeselect> -->
         </div>
       </v-panel>
 
       <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, Tonnage, and Guns Mounted" :filters="filter.shipNationOwner.rigTonnageAndGunsMounted"
       >
         <div slot="v-panel-header">
-          <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Parameters about Rig, Tonnage, and Guns Mounted">
+          <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Additional variables about slave ships.">
             <div slot="v-modal-content">
 							Some help text
 						</div>
