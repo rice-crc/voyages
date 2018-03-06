@@ -19,10 +19,10 @@ Vue.component('v-panel', {
               <slot name="v-panel-header"></slot>
               <slot name="v-panel-content" :filters="filtersValue" :data="data"></slot>
               <div class="margin-v">
-                <b-button :disabled="controlDisabled" variant="info" size="sm" @click="apply">
+                <b-button :disabled="applyDisabled" variant="info" size="sm" @click="apply">
                   Apply
                 </b-button>
-                <b-button :disabled="controlDisabled" variant="outline-secondary" size="sm" @click="reset">
+                <b-button :disabled="resetDisabled" variant="outline-secondary" size="sm" @click="reset">
                   Reset
                 </b-button>
               </div>
@@ -36,7 +36,8 @@ Vue.component('v-panel', {
       titleValue: '',
       idValue: null,
       filtersValue: null,
-      controlDisabled: true,
+      resetDisabled: true,
+      applyDisabled: true,
     }
   },
 
@@ -52,7 +53,8 @@ Vue.component('v-panel', {
   watch: {
     filters: {
       handler: function(){
-        this.controlDisabled = (this.filters.count.changed > 0) ? false:true;
+        this.applyDisabled = (this.filters.count.changed > 0) ? false:true;
+        this.resetDisabled = (this.filters.count.changed > 0 || this.filters.count.activated > 0) ? false:true;
         this.filtersValue = this.filters;
       },
       deep: true,
