@@ -194,7 +194,7 @@ var_imputed_percentage_girls = new NumberVariable({
   });
 
 var_imputed_percentage_male = new NumberVariable({
-    varName: "var_imputed_percentage_male",
+    varName: "imputed_percentage_male",
     label: "Percentage Males",
     description: "",
   },{
