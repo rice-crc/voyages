@@ -10,7 +10,7 @@ Vue.component('v-select', {
   data: function() {
     return {
       selected: "equals to",
-      options: ['is less than',  'equals to', 'is more than', 'between'],
+      options: ['is less than',  'equals to', 'is more than', 'is between'],
     }
   },
   methods: {

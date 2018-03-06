@@ -105,7 +105,7 @@ Vue.component('v-number', {
         if (this.item.searchTerm1) this.item.searchTerm1 = parseInt(this.item.searchTerm1);
 
         // labels
-        if (this.item.op == "between") {
+        if (this.item.op == "is between") {
           this.options.searchTerm1Disabled = true;
           this.options.searchTermCaption0 = "Enter the lower bound";
           this.options.searchTermCaption1 = "Enter the upper bound";
@@ -124,7 +124,6 @@ Vue.component('v-number', {
         }
 
         // control visibility
-        debugger;
         if (this.item.searchTerm0 !== null || this.item.searchTerm1 !== null) {
           this.options.changed = true;
           this.$emit('change', this.item, true);
@@ -151,7 +150,7 @@ Vue.component('v-number', {
   },
   created: function(){
     // labels
-    if (this.item.op == "between") {
+    if (this.item.op == "is between") {
       this.options.searchTerm1Disabled = true;
       this.options.searchTermCaption0 = "Enter the lower bound";
       this.options.searchTermCaption1 = "Enter the upper bound";

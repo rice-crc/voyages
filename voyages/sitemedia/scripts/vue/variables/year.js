@@ -3,7 +3,7 @@ var var_imp_arrival_at_port_of_dis = new YearVariable({
     label: "",
     description: "",
   },{
-    op: "between",
+    op: "is between",
     searchTerm0: 1514,
     searchTerm1: 1866
   },{

@@ -99,7 +99,7 @@ Vue.component('v-year', {
         }
 
         // labels
-        if (this.item.op == "between") {
+        if (this.item.op == "is between") {
           this.options.searchTerm1Disabled = true;
           this.options.searchTermCaption0 = "Enter the lower bound";
           this.options.searchTermCaption1 = "Enter the upper bound";
