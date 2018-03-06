@@ -1,7 +1,7 @@
 var_captain_plaintext = new TextVariable({
     varName: "captain_plaintext",
     label: "Captain's Name",
-    description: "The name of the captain. This could a partial keyword.",
+    description: "",
   },{
     op: "equals to",
     searchTerm: null,
@@ -13,7 +13,7 @@ var_captain_plaintext = new TextVariable({
 var_crew_voyage_outset = new NumberVariable({
     varName: "crew_voyage_outset",
     label: "Crew at Voyage Outset",
-    description: "Enter the number of crew at voyage outset. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -26,7 +26,7 @@ var_crew_voyage_outset = new NumberVariable({
 var_crew_first_landing = new NumberVariable({
     varName: "crew_first_landing",
     label: "Crew at First Landing of Slaves",
-    description: "Enter the number of crew at first landing of slaves. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -39,7 +39,7 @@ var_crew_first_landing = new NumberVariable({
 var_crew_died_complete_voyage = new NumberVariable({
     varName: "crew_died_complete_voyage",
     label: "Crew Deaths during Voyage",
-    description: "Enter the number of crew death during voyages. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,

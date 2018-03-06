@@ -4,7 +4,7 @@
 
   <v-panel-singular @apply="apply" @reset="reset" group="outcome" sub-group="outcome" title="Outcome" :filters="filter.outcome.outcome" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Outcome" description="Need a bit of work with the backend integration. Please focus on the UI element for now. Will update soon.">
+      <v-panel-header title="Outcome" description="Outcome of voyages">
         <div slot="v-modal-content">
           Some help text
         </div>
@@ -13,6 +13,12 @@
 
     <div slot="v-panel-content" slot-scope="scope">
       <code v-if="options.debug">{{scope.filters}}</code>
+
+      <v-placeholder
+        title="Demographics"
+        description="The below variables DO NOT work yet - need backend support">
+      </v-placeholder>
+
       <v-treeselect
         :filter="scope.filters.var_outcome_voyage"
         v-if="filter.settings.settings.var_search_settings.value.searchTerm"

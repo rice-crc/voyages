@@ -6,7 +6,7 @@
     group="dates" title="Dates" sub-group="dates"
     :filters="filter.dates.dates" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Dates" description="Variables about voyage dates">
+      <v-panel-header title="Dates" description="Dates and durations during the slave trade">
         <div slot="v-modal-content">
           Some help text
         </div>
@@ -19,6 +19,15 @@
       <v-number @change="changed"
         :filter="scope.filters.var_length_middle_passage_days">
       </v-number>
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_imp_length_home_to_disembark">
+      </v-number>
+
+      <v-placeholder
+        title="Dates"
+        description="The below variables DO NOT work yet - need backend support">
+      </v-placeholder>
 
       <v-number @change="changed"
         :filter="scope.filters.var_voyage_began">
@@ -44,9 +53,7 @@
         :filter="scope.filters.var_voyage_completed">
       </v-number>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_imp_length_home_to_disembark">
-      </v-number>
+
     </div>
   </v-panel-singular>
 

@@ -1,7 +1,7 @@
 var_imp_total_num_slaves_purchased = new NumberVariable({
     varName: "imp_total_num_slaves_purchased",
     label: "Total Slaves Embarked Imputed",
-    description: "The total number of slaves embarked before departure. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -14,7 +14,7 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
 var_total_num_slaves_purchased = new NumberVariable({
     varName: "total_num_slaves_purchased",
     label: "Total Slaves Embarked",
-    description: "The total number of slaves embarked before departure. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -27,7 +27,7 @@ var_total_num_slaves_purchased = new NumberVariable({
 var_imp_total_slaves_disembarked = new NumberVariable({
     varName: "imp_total_slaves_disembarked",
     label: "Total Slaves Disembarked Imputed",
-    description: "The total number of slaves disembarked after arrival. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -41,7 +41,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
 var_num_slaves_intended_first_port = new NumberVariable({
     varName: "num_slaves_intended_first_port",
     label: "Number of Slaves Intended at First Place of Purchase",
-    description: "Number of slaves intended at first place of purchase. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -54,7 +54,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
 var_num_slaves_carried_first_port = new NumberVariable({
     varName: "num_slaves_carried_first_port",
     label: "Slaves Carried from 1st Port of Purchase",
-    description: "Number of slaves carried from 1st port of purchase. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -67,7 +67,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
 var_num_slaves_carried_second_port = new NumberVariable({
     varName: "num_slaves_carried_second_port",
     label: "Slaves Carried from 2nd Port of Purchase",
-    description: "Number of slaves carried from 2nd port of purchase. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -79,7 +79,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
 var_num_slaves_carried_third_port = new NumberVariable({
     varName: "num_slaves_carried_third_port",
     label: "Slaves Carried from 3rd Port of Purchase",
-    description: "Number of slaves carried from 3rd port of purchase. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -92,7 +92,7 @@ var_num_slaves_carried_third_port = new NumberVariable({
 var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     varName: "total_num_slaves_arr_first_port_embark",
     label: "Number of Slaves Arriving at 1st Place of Landing",
-    description: "Number of slaves arrived at first place of landing. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -105,7 +105,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
 var_num_slaves_disembark_first_place = new NumberVariable({
     varName: "num_slaves_disembark_first_place",
     label: "Number of Slaves Disembarked at 1st Place of Landing",
-    description: "Number of slaves disembarked from 1st port of landing. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -117,7 +117,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
 var_num_slaves_disembark_second_place = new NumberVariable({
     varName: "num_slaves_disembark_second_place",
     label: "Number of Slaves Disembarked at 2nd Place of Landing",
-    description: "Number of slaves disembarked from 2nd port of landing. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -130,7 +130,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
 var_num_slaves_disembark_third_place = new NumberVariable({
     varName: "num_slaves_disembark_third_place",
     label: "Number of Slaves Disembarked at 3rd Place of Landing",
-    description: "Number of slaves disembarked from 3rd port of landing. This could be a range.",
+    description: "",
   },{
     op: "equals to",
     searchTerm0: null,
@@ -222,7 +222,7 @@ var_imputed_percentage_child = new NumberVariable({
 var_imputed_sterling_cash = new NumberVariable({
     varName: "imputed_sterling_cash",
     label: "Sterling Cash Price in Jamaica",
-    description: "",
+    description: "This is used to track the price paid for slaves in the Americas as they were sold from the vessel",
   },{
     op: "equals to",
     searchTerm0: null,

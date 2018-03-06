@@ -7,7 +7,7 @@
 
 			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall Numbers" :filters="filter.slave.overallNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Overall Numbers" description="Overall numbers about slaves in the trade">
+					<v-panel-header title="Overall Numbers" description="Slave embarkation and disembarkation in the voyages">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -34,7 +34,7 @@
 
 			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" title="Purchase Numbers" :filters="filter.slave.purchaseNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Purchase Numbers" description="Slave purchase numbers">
+					<v-panel-header title="Purchase Numbers" description="Number of slave purchase">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -64,7 +64,7 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :filters="filter.slave.landingNumbers" title="Landing Numbers" >
 				<div slot="v-panel-header">
-					<v-panel-header title="Landing Numbers" description="Landing numbers of slaves">
+					<v-panel-header title="Landing Numbers" description="Number of slave landing">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -94,7 +94,7 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group">
 				<div slot="v-panel-header">
-					<v-panel-header title="Percentage by Sex and Age Group" description="Demographic parameters about the slaves">
+					<v-panel-header title="Percentage by Sex and Age Group" description="Slave demographics">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -103,6 +103,11 @@
 
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
+
+					<v-placeholder
+						title="Demographics"
+						description="The below variables DO NOT work yet - need backend support">
+					</v-placeholder>
 
 					<v-number @change="changed"
 						:filter="scope.filters.var_imputed_percentage_men">
@@ -132,7 +137,7 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="Other Characteristics">
 				<div slot="v-panel-header">
-					<v-panel-header title="Other Characteristics" description="Other characteristics of the slaves">
+					<v-panel-header title="Other Characteristics" description="Additional characteristics about slaves">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -151,9 +156,14 @@
 		        v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 					</v-number>
 
-					<v-number @change="changed"
+					<v-placeholder
+						title="Mortality Rate"
+						description="Need backend API support"
+						>
+					</v-placeholder>
+					<!--<v-number @change="changed"
 						:filter="scope.filters.var_imputed_mortality">
-					</v-number>
+					</v-number>-->
 
 				</div>
 			</v-panel>
