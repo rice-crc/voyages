@@ -19,7 +19,7 @@
 					<code v-if="options.debug">{{scope.filters}}</code>
 
 					<v-treeselect
-						:filter="scope.filters.var_imp_port_voyage_begin"
+						:filter="scope.filters.var_imp_port_voyage_begin_id"
 						@change="changed"
 					/>
 
@@ -38,24 +38,24 @@
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-treeselect
-						:filter="scope.filters.var_imp_principal_place_of_slave_purchase"
+						:filter="scope.filters.var_imp_principal_place_of_slave_purchase_id"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_first_place_slave_purchase"
+						:filter="scope.filters.var_first_place_slave_purchase_id"
 						v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_second_place_slave_purchase"
+						:filter="scope.filters.var_second_place_slave_purchase_id"
 						v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_third_place_slave_purchase"
+						:filter="scope.filters.var_third_place_slave_purchase_id"
 						v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
@@ -75,7 +75,7 @@
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-treeselect
-						:filter="scope.filters.var_port_of_call_before_atl_crossing"
+						:filter="scope.filters.var_port_of_call_before_atl_crossing_id"
 						@change="changed">
 					</v-treeselect>
 
@@ -94,24 +94,24 @@
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-treeselect
-						:filter="scope.filters.var_imp_principal_port_slave_dis"
+						:filter="scope.filters.var_imp_principal_port_slave_dis_id"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_first_landing_place"
+						:filter="scope.filters.var_first_landing_place_id"
 		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_second_landing_place"
+						:filter="scope.filters.var_second_landing_place_id"
 		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
 
 					<v-treeselect
-						:filter="scope.filters.var_third_landing_place"
+						:filter="scope.filters.var_third_landing_place_id"
 		        v-if="filter.settings.settings.var_search_settings.value.searchTerm"
 						@change="changed">
 					</v-treeselect>
@@ -130,7 +130,7 @@
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
 					<v-treeselect
-						:filter="scope.filters.var_place_voyage_ended"
+						:filter="scope.filters.var_place_voyage_ended_id"
 						@change="changed">
 					</v-treeselect>
 
