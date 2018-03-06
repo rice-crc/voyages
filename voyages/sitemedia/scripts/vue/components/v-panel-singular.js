@@ -7,10 +7,10 @@ Vue.component('v-panel-singular', {
       <slot name="v-panel-header"></slot>
       <slot name="v-panel-content" :filters="filtersValue"></slot>
       <div class="margin-v" v-if="!controlInvisible">
-        <b-button :disabled="controlDisabled" variant="info" size="sm" @click="apply">
+        <b-button :disabled="applyDisabled" variant="info" size="sm" @click="apply">
           Apply
         </b-button>
-        <b-button :disabled="controlDisabled" variant="outline-secondary" size="sm" @click="reset">
+        <b-button :disabled="resetDisabled" variant="outline-secondary" size="sm" @click="reset">
           Reset
         </b-button>
       </div>
@@ -23,7 +23,8 @@ Vue.component('v-panel-singular', {
       titleValue: '',
       filtersValue: null,
       idValue: null,
-      controlDisabled: true,
+      applyDisabled: true,
+      resetDisabled: true,
 
       dropdownMenuDirection: "dropdown-menu-left",
     }
@@ -41,7 +42,8 @@ Vue.component('v-panel-singular', {
   watch: {
     filters: {
       handler: function(){
-        this.controlDisabled = (this.filters.count.changed > 0) ? false:true;
+        this.applyDisabled = (this.filters.count.changed > 0) ? false:true;
+        this.resetDisabled = (this.filters.count.changed > 0 || this.filters.count.activated) ? false:true;
       },
       deep: true,
     },
