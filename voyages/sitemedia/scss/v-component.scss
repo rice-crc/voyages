@@ -46,6 +46,7 @@
 }
 
 .v-form-group {
+  // padding: 0 0 1.25rem;
   padding: 1.25rem 0 0;
 }
 
@@ -103,3 +104,26 @@
   text-align: left;
 }
 // v-modal
+
+
+// tabs - tables
+#v-summary-statistics {
+  tr {
+    td:not(:first-child) {
+      text-align: right;
+    }
+  }
+}
+
+.side-control-tab.active{
+  font-weight: bold;
+}
+
+.control-tab-pane {
+  padding: 0 !important;
+}
+
+.page-title-3 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}

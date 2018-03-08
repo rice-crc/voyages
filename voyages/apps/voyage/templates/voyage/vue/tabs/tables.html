@@ -1,0 +1,205 @@
+<div id="tabs-tables-control">
+  <div class="row">
+    <div class="col-md-12" style="margin-bottom: 1rem;">
+      <div class="page-title-2">Tables</div>
+      <div class="">Examine data based on your current search in a tabular form (This is currently a mock. Will need backend support to populate the data.)</div>
+    </div>
+    <div class="col-md-4">
+      <v-dropdown title="Row Series" description="" :options="tabs.tables.controls.row.options"></v-dropdown>
+    </div>
+    <div class="col-md-4">
+      <v-dropdown title="Column Series" description="" :options="tabs.tables.controls.column.options"></v-dropdown>
+    </div>
+    <div class="col-md-4">
+      <v-dropdown title="Cell Content" description="" :options="tabs.tables.controls.cell.options"></v-dropdown>
+    </div>
+
+    <table id="v-tables" class="table table-striped table-bordered" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>Broad Region</th>
+          <th>Region</th>
+          <th> Europe </th>
+          <th> Mainland North America </th>
+          <th> Caribbean </th>
+          <th> Spanish Mainland Americas </th>
+          <th> Brazil </th>
+          <th> Africa </th>
+          <th> Other </th>
+          <th> Totals </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> Africa </td>
+          <td> Senegambia and offshore Atlantic </td>
+          <td> 4,292 </td>
+          <td> 56,466 </td>
+          <td> 184,702 </td>
+          <td> 183,800 </td>
+          <td> 96,068 </td>
+          <td> 2,703 </td>
+          <td> 9,754 </td>
+          <td>537,785</td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Sierra Leone </td>
+          <td> 148 </td>
+          <td> 30,932 </td>
+          <td> 163,645 </td>
+          <td> 1,842 </td>
+          <td> 3,279 </td>
+          <td> 12,177 </td>
+          <td> 4,059 </td>
+          <td>
+            216,082
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Windward Coast </td>
+          <td> 0 </td>
+          <td> 16,511 </td>
+          <td> 159,621 </td>
+          <td> 120 </td>
+          <td> 2,759 </td>
+          <td> 1,960 </td>
+          <td> 2,968 </td>
+          <td>
+            183,939
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Gold Coast </td>
+          <td> 697 </td>
+          <td> 31,163 </td>
+          <td> 588,119 </td>
+          <td> 6,857 </td>
+          <td> 44,809 </td>
+          <td> 2,656 </td>
+          <td> 14,263 </td>
+          <td>
+            688,564
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Bight of Benin </td>
+          <td> 406 </td>
+          <td> 8,134 </td>
+          <td> 581,154 </td>
+          <td> 21,507 </td>
+          <td> 814,241 </td>
+          <td> 43,046 </td>
+          <td> 8,062 </td>
+          <td>
+            1,476,550
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Bight of Biafra and Gulf of Guinea islands </td>
+          <td> 888 </td>
+          <td> 49,508 </td>
+          <td> 809,016 </td>
+          <td> 27,974 </td>
+          <td> 111,509 </td>
+          <td> 40,341 </td>
+          <td> 12,308 </td>
+          <td>
+            1,051,544
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> West Central Africa and St. Helena </td>
+          <td> 1,676 </td>
+          <td> 70,372 </td>
+          <td> 905,905 </td>
+          <td> 282,436 </td>
+          <td> 2,005,032 </td>
+          <td> 45,721 </td>
+          <td> 25,665 </td>
+          <td>
+            3,336,807
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Southeast Africa and Indian Ocean islands </td>
+          <td> 0 </td>
+          <td> 5,040 </td>
+          <td> 74,868 </td>
+          <td> 18,627 </td>
+          <td> 270,302 </td>
+          <td> 11,265 </td>
+          <td> 1,406 </td>
+          <td>
+            381,508
+          </td>
+        </tr>
+        <tr>
+          <td> Africa </td>
+          <td> Other Africa </td>
+          <td> 1,020 </td>
+          <td> 93,298 </td>
+          <td> 1,530,231 </td>
+          <td> 105,700 </td>
+          <td> 192,932 </td>
+          <td> 5,065 </td>
+          <td> 92,683 </td>
+          <td>
+            2,020,929
+          </td>
+        </tr>
+        <tr>
+          <td> Other </td>
+          <td> Asia e Africa </td>
+          <td> 0 </td>
+          <td> 0 </td>
+          <td> 0 </td>
+          <td> 0 </td>
+          <td> 490 </td>
+          <td> 0 </td>
+          <td> 0 </td>
+          <td>
+            490
+          </td>
+        </tr>
+        <tr>
+          <td> Totals </td>
+          <td> </td>
+          <td>
+            9,127
+          </td>
+          <td>
+            361,424
+          </td>
+          <td>
+            4,997,261
+          </td>
+          <td>
+            648,863
+          </td>
+          <td>
+            3,541,421
+          </td>
+          <td>
+            164,934
+          </td>
+          <td>
+            171,168
+          </td>
+          <td>
+            9,894,198
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+</div>
