@@ -101,7 +101,7 @@ allColumns.forEach(function(c, index) {
 
 var columnToggleMenu = {
   extend: 'collection',
-  text: 'Columns',
+  text: 'Configure Columns',
   titleAttr: 'Configure visible columns',
   className: 'btn btn-info buttons-collection dropdown-toggle',
   buttons: $.map(categories, function(category) {
@@ -229,33 +229,33 @@ function search(query, activeSearchTerms) {
     buttons: [
       pageLength,
       columnToggleMenu,
-      {
-        extend: 'collection',
-        // text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
-        className: 'btn btn-info buttons-collection dropdown-toggle',
-        text: 'Download',
-        titleAttr: 'Download results',
-        buttons: [
-          // {
-          // 	text: 'CSV - not implemented',
-          // 	action: function() { alert('not implemented yet'); },
-          // },
-          {
-            text: 'Excel',
-            action: function() {
-              var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
-                return visible ? allColumns[index].data : undefined;
-              });
-              var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
-              form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
-                searchData: currentSearchObj,
-                cols: visibleColumns
-              })));
-              form.appendTo('body').submit().remove();
-            },
-          }
-        ]
-      }
+      // {
+      //   extend: 'collection',
+      //   // text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
+      //   className: 'btn btn-info buttons-collection dropdown-toggle',
+      //   text: 'Download',
+      //   titleAttr: 'Download results',
+      //   buttons: [
+      //     // {
+      //     // 	text: 'CSV - not implemented',
+      //     // 	action: function() { alert('not implemented yet'); },
+      //     // },
+      //     {
+      //       text: 'Excel',
+      //       action: function() {
+      //         var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
+      //           return visible ? allColumns[index].data : undefined;
+      //         });
+      //         var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+      //         form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
+      //           searchData: currentSearchObj,
+      //           cols: visibleColumns
+      //         })));
+      //         form.appendTo('body').submit().remove();
+      //       },
+      //     }
+      //   ]
+      // }
     ],
     //pagingType: "input",
     bFilter: false,

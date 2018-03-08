@@ -15,6 +15,7 @@
 	<!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/> -->
 	<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
 	<link type="text/css" rel="stylesheet" href="https://unpkg.com/select2@4.0.3/dist/css/select2.min.css" />
+	<link type="text/css" rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css" />
 	<link type="text/css" rel="stylesheet" href="{% sass_src 'scss/library/bootstrap-tour.scss' %}" />
 	<link href="{% sass_src 'scss/library/vue-treeselect.css' %}" rel="stylesheet" type="text/css" />
 
@@ -92,6 +93,8 @@
 <script src="{{ STATIC_URL }}scripts/new-ui/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/new-ui/form-data.js" type="text/javascript"></script>
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
 <!-- vue components -->
 <script src="{{ STATIC_URL }}scripts/vue/components/v-menu-title.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-textbox.js"></script>
@@ -106,6 +109,7 @@
 <script src="{{ STATIC_URL }}scripts/vue/components/v-number.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-text.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-placeholder.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-dropdown.js"></script>
 <!-- vue components -->
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
@@ -119,6 +123,7 @@
 <script src="{{ STATIC_URL }}scripts/vue/variables/dates.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/settings.js"></script>
 
+<script src="{{ STATIC_URL }}scripts/vue/demo.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/search.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/app.js" type="text/javascript"></script>
 {% endblock %}

@@ -10,7 +10,7 @@
     <a class="nav-link" href="#" data-toggle="tab" data-target="#tables">Tables</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#custom-graphs">Custom Graphs</a>
+    <a class="nav-link" href="#" data-toggle="tab" data-target="#visualization">Data Visualization</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="#" data-toggle="tab" data-target="#timeline">Timeline</a>
@@ -47,23 +47,24 @@
       </tbody>
     </table>
   </div>
+
   <div id="summary-statistics" class="tab-pane fade">
-    Summary Statistics
+    {% include "voyage/vue/tabs/summary-statistics.html" %}
   </div>
   <div id="tables" class="tab-pane fade">
-    Tables
+    {% include "voyage/vue/tabs/tables.html" %}
   </div>
-  <div id="custom-graphs" class="tab-pane fade">
-    Custom Graphs
+  <div id="visualization" class="tab-pane fade">
+    {% include "voyage/vue/tabs/visualization.html" %}
   </div>
   <div id="timeline" class="tab-pane fade">
-    Timeline
+    {% include "voyage/vue/tabs/timeline.html" %}
   </div>
   <div id="maps" class="tab-pane fade">
-    Maps
+    {% include "voyage/vue/tabs/maps.html" %}
   </div>
   <div id="animation" class="tab-pane fade">
-    Animation
+    {% include "voyage/vue/tabs/animation.html" %}
   </div>
 </div>
 <!-- End of TabContainers -->
