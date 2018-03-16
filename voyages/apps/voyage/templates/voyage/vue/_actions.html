@@ -1,0 +1,21 @@
+{% verbatim %}
+<!-- Actions -->
+<li class="nav-item dropdown nav-item-compact" v-if="activated">
+  <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+    <div class="btn-navbar">
+      <i class="fa fa-filter"></i>
+      View All
+    </div>
+  </a>
+</li>
+
+<li class="nav-item dropdown nav-item-compact" v-if="activated">
+  <a class="nav-link" @click="resetAll" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+    <div class="btn-navbar">
+      <i class="fa fa-times"></i>
+      Reset All
+    </div>
+  </a>
+</li>
+<!-- Actions -->
+{% endverbatim %}
