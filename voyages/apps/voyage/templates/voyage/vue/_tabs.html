@@ -27,25 +27,7 @@
 <!-- TabContainers -->
 <div id="tabsJustifiedContent" class="tab-content">
   <div id="results" class="tab-pane fade active show">
-    <table id="results_main_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
-      <thead>
-        <tr>
-          <th>Voyage ID</th>
-          <th>Vessel Name</th>
-          <th>Capitain Name</th>
-          <th>Year Arrived w. Slaves*</th>
-          <th>Principal Region of Slave Purchase*</th>
-          <th>Principal Region of Slave Landing*</th>
-          <th>Place where Voyage Began*</th>
-          <th>Total Slaves Embarked*</th>
-          <th>Outcome if Ship Captured*</th>
-          <th>Sources</th>
-          <!-- <th>I-Am</th> -->
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    {% include "voyage/vue/tabs/results-detail.html" %}
   </div>
 
   <div id="summary-statistics" class="tab-pane fade">
