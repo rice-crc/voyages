@@ -1,3 +1,6 @@
+
+@import "colors";
+
 .dropdown-menu-title-text {
   font-size: 0.85rem;
 }
@@ -126,4 +129,27 @@
 .page-title-3 {
   font-weight: bold;
   font-size: 1.25rem;
+}
+
+#results_main_table {
+  tbody {
+    tr:hover {
+      cursor: pointer;
+      color: $trans-color;
+    }
+  }
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.card-header {
+  padding: .25rem .5rem;
+  font-size: 0.75rem;
+}
+
+.card-body {
+  padding: 0.25rem .5rem;
+  font-size: 0.75rem;
 }
