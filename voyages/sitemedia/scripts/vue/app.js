@@ -15,6 +15,7 @@ var searchBar = new Vue({
       source: source,
       settings: settings,
     },
+    activated: false,
     query: {
       // put the search query in here
     },
@@ -26,13 +27,15 @@ var searchBar = new Vue({
     row: {
       data: null,
     },
-    modalShow: false,
+    currentQuery: [],
+    rowModalShow: false,
   },
   computed: {},
   watch: {
     filter: {
       handler: function(val) {
 
+        var activated = false;
         // count all
         for (group in this.filter) { // group: slave
           var groupCount = {
@@ -69,7 +72,11 @@ var searchBar = new Vue({
           // set group to changed and activated
           this.filter[group].count.changed = groupCount.changed;
           this.filter[group].count.activated = groupCount.activated;
+          if (this.filter[group].count.activated) {
+            activated = true;
+          }
         }
+        this.activated = activated;
 
       },
       deep: true,
@@ -78,7 +85,7 @@ var searchBar = new Vue({
     // row in a datatable
     row: {
       handler: function(){
-        this.modalShow = true;
+        this.rowModalShow = true;
         var results = [];
         // alert(JSON.stringify(this.row.data));
         for (group in this.filter) {
@@ -153,6 +160,20 @@ var searchBar = new Vue({
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
+      var searchTerms = searchAll(this.filter);
+      search(this.searchFilter, searchTerms);
+    },
+
+    resetAll() {
+      for (group in this.filter) {
+        if (group !== "settings") {
+          for (subGroup in this.filter[group]) {
+            if (subGroup !== "count"){
+              resetFilter(this.filter, group, subGroup);
+            }
+          }
+        }
+      }
       var searchTerms = searchAll(this.filter);
       search(this.searchFilter, searchTerms);
     },
