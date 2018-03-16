@@ -207,6 +207,11 @@ function search(query, activeSearchTerms) {
             };
           });
         }
+
+        $('#results_main_table').on( 'click', 'tr', function () {
+            searchBar.row.data = mainDatatable.row( this ).data();
+        });
+
         // console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
         return JSON.stringify({
           searchData: currentSearchObj,
@@ -266,6 +271,8 @@ function search(query, activeSearchTerms) {
     stateDuration: -1,
     colReorder: true,
   });
+
+
 
   // console.log(activeSearchTerms);
 
