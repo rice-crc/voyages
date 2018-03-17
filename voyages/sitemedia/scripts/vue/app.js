@@ -27,8 +27,9 @@ var searchBar = new Vue({
     row: {
       data: null,
     },
-    currentQuery: [],
+    currentQuery: {},
     rowModalShow: false,
+    variablesModalShow: false,
   },
   computed: {},
   watch: {
@@ -78,6 +79,42 @@ var searchBar = new Vue({
         }
         this.activated = activated;
 
+        // transform current search to a human readible form
+        for (group in this.filter) {
+          if (group !== "count") {
+            if (this.filter[group]["count"]["activated"]) {
+              for (subGroup in this.filter[group]) {
+                if (subGroup !== "count") {
+                  if (this.filter[group][subGroup]["count"]["activated"]) {
+                    for (variable in this.filter[group][subGroup]){
+                      if (variable !== "count") {
+                        if (this.filter[group][subGroup][variable]["activated"]) {
+                          var currentVariable = this.filter[group][subGroup][variable];
+                          if (currentVariable["value"]["searchTerm"]) {
+                            this.currentQuery[currentVariable["varName"]] = {
+                              label: currentVariable["label"],
+                              op: currentVariable["value"]["op"],
+                              searchTerm: currentVariable["value"]["searchTerm"],
+                              varName: currentVariable["varName"]
+                            };
+                          } else {
+                            this.currentQuery[currentVariable["varName"]] = {
+                              label: currentVariable["label"],
+                              op: currentVariable["value"]["op"],
+                              searchTerm0: currentVariable["value"]["searchTerm0"],
+                              searchTerm1: currentVariable["value"]["searchTerm1"],
+                              varName: currentVariable["varName"]
+                            };
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       deep: true,
     },
@@ -176,6 +213,10 @@ var searchBar = new Vue({
       }
       var searchTerms = searchAll(this.filter);
       search(this.searchFilter, searchTerms);
+    },
+
+    viewAll() {
+      this.variablesModalShow = true;
     },
 
     save() {
