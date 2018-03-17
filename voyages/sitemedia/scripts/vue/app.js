@@ -150,6 +150,13 @@ var searchBar = new Vue({
           }
         }
         this.row.results = results;
+
+        // collect ids for the group collapse. there might be a better way
+        var ids = "";
+        for (group in this.row.results) {
+          ids = ids + this.row.results[group]["group"] + ".";
+        }
+        this.row.ids = ids.slice(0,-1);
       },
       deep: true
     },
