@@ -29,7 +29,9 @@
 
   <div class="row">
     <div class="col-md-12">
-      <p>Note: Depending on our preference we could have a. flat structure with all variables shown (no collapse) or b. a button that enables "Expand All" if we still use this collapse.</p>
+      <!-- <b-btn v-b-toggle="row.ids">Expand/Collapse All</b-btn>
+      {{row.ids}} -->
+      Will include a Expand/Collapse All button if it would be helpful.
     </div>
   </div>
 
@@ -73,7 +75,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      Note: Currently the select type of variable uses a code representation. I will convert it into a human readable form once the backend supports most of the variables.
+      Note: Currently the select type of variable uses a code representation. I will convert it into a human readable form once the backend supports most of such variables.
     </div>
   </div>
   <div class="row" v-for="variable in currentQuery">

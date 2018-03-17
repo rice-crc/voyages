@@ -213,7 +213,7 @@ function searchAll(filter) {
 
 	// placeholder
 
-alert(JSON.stringify(items));
+  // alert(JSON.stringify(items));
 	return items;
 }
 
