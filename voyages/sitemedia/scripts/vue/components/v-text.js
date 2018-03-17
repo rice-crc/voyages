@@ -76,7 +76,6 @@ Vue.component('v-text', {
     // search object
     item: {
       handler: function(){
-        debugger;
         // set "" to null
         this.item.searchTerm = (this.item.searchTerm == "") ? null:this.item.searchTerm;
 
