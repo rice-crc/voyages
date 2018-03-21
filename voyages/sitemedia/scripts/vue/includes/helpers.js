@@ -163,8 +163,8 @@ function searchAll(filter) {
                   item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                 }
 
-                // TODO: fix a bug with the backend: it should use _idnum and not _id
-                if (filter[key1][key2][key3].varName.slice(-3) == "_id") {
+                // TODO: fix a bug with the backend: it should use _idnum and not _id except for voyage_id
+                if (filter[key1][key2][key3].varName.slice(-3) == "_id" && filter[key1][key2][key3].varName !== "voyage_id") {
                   item["varName"] = filter[key1][key2][key3].varName + "num";
                 } else {
                   item["varName"] = filter[key1][key2][key3].varName;
