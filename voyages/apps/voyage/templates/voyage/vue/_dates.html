@@ -1,61 +1,71 @@
 {% verbatim %}
 <li class="nav-item dropdown" v-if="filter.settings.settings.var_search_settings.value.searchTerm">
-  <v-menu-title title="Dates" :count="filter.dates.count"></v-menu-title>
+  <v-menu-title :count="filter.dates.count" title="Dates"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset"
-    group="dates" title="Dates" sub-group="dates"
-    :filters="filter.dates.dates" align="left">
-    <div slot="v-panel-header">
-      <v-panel-header title="Dates" description="Dates and durations during the slave trade">
-        <div slot="v-modal-content">
-          Some help text
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="dates" role="menu">
+
+      <v-panel @apply="apply" @reset="reset" group="dates" sub-group="overallDates" title="Overall Dates about Voyage" :filters="filter.dates.overallDates">
+        <div slot="v-panel-header">
+          <v-panel-header title="Overall Dates about Voyage" description="Overall dates (days) about the slave trade">
+            <div slot="v-modal-content">
+							Some help text
+						</div>
+          </v-panel-header>
         </div>
-      </v-panel-header>
-    </div>
 
-    <div slot="v-panel-content" slot-scope="scope">
-      <code v-if="options.debug">{{scope.filters}}</code>
+        <div slot="v-panel-content" slot-scope="scope">
+          <code v-if="options.debug">{{scope.filters}}</code>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_length_middle_passage_days">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_length_middle_passage_days">
+          </v-number>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_imp_length_home_to_disembark">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_imp_length_home_to_disembark">
+          </v-number>
 
-      <v-placeholder
-        title="Dates"
-        description="The below variables DO NOT work yet - need backend support">
-      </v-placeholder>
+        </div>
+      </v-panel>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_voyage_began">
-      </v-number>
+      <v-panel @apply="apply" @reset="reset" group="dates" sub-group="durationDates" title="Dates during Voyage" :filters="filter.dates.durationDates">
+        <div slot="v-panel-header">
+          <v-panel-header title="Dates during Voyage" description="Specific dates during the slave trade">
+            <div slot="v-modal-content">
+							Some help text
+						</div>
+          </v-panel-header>
+        </div>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_slave_purchase_began">
-      </v-number>
+        <div slot="v-panel-content" slot-scope="scope">
+          <code v-if="options.debug">{{scope.filters}}</code>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_date_departed_africa">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_voyage_began">
+          </v-number>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_first_dis_of_slaves">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_slave_purchase_began">
+          </v-number>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_departure_last_place_of_landing">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_date_departed_africa">
+          </v-number>
 
-      <v-number @change="changed"
-        :filter="scope.filters.var_voyage_completed">
-      </v-number>
+          <v-number @change="changed"
+            :filter="scope.filters.var_first_dis_of_slaves">
+          </v-number>
 
+          <v-number @change="changed"
+            :filter="scope.filters.var_departure_last_place_of_landing">
+          </v-number>
 
-    </div>
-  </v-panel-singular>
+          <v-number @change="changed"
+            :filter="scope.filters.var_voyage_completed">
+          </v-number>
 
+        </div>
+      </v-panel>
+    </ul>
 </li>
 {% endverbatim %}
