@@ -78,10 +78,21 @@ var allColumns = [{
     "visible": false
   },
   {
-    data: "var_sources_plaintext",
+    data: "var_sources",
     category: 5,
     header: "Sources",
-    "visible": false
+    "visible": false,
+    render: function ( data ) {
+      var sourceString = "";
+      var count = 0;
+      data.forEach(function(source) {
+        count += 1;
+        var elements = source.split("<>");
+        var postfix = data.length == count ? "" : ";";
+        sourceString += "<span data-toggle='tooltip' data-placement='top' data-html='true' title='" + elements[1] + "'>" + elements[0] + postfix + " </span>";
+      });
+      return sourceString;
+    }
   },
 ];
 var categories = $.map(categoryNames, function(name) {
@@ -270,6 +281,11 @@ function search(query, activeSearchTerms) {
     stateSave: true,
     stateDuration: -1,
     colReorder: true,
+    initComplete: function() {
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    }
   });
 
 
