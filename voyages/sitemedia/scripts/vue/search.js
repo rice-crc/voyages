@@ -243,8 +243,8 @@ function search(query, activeSearchTerms) {
     ],
 
     buttons: [
-      pageLength,
       columnToggleMenu,
+      pageLength,
       // {
       //   extend: 'collection',
       //   // text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
