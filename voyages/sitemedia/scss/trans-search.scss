@@ -131,3 +131,7 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before
 .page-item.active .page-link {
   z-index: 0;
 }
+
+.vue-treeselect__label, .vue-treeselect__multi-value {
+  font-size: 0.85rem;
+}
