@@ -14,11 +14,6 @@
     <div slot="v-panel-content" slot-scope="scope">
       <code v-if="options.debug">{{scope.filters}}</code>
 
-      <v-placeholder
-        title="Demographics"
-        description="The below variables DO NOT work yet - need backend support">
-      </v-placeholder>
-
       <v-treeselect
         :filter="scope.filters.var_outcome_voyage"
         v-if="filter.settings.settings.var_search_settings.value.searchTerm"
