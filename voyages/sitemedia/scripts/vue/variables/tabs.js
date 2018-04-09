@@ -2,6 +2,9 @@ var tabs = {
   tables: {
     controls: {
       row: {
+        // currently selected value
+        variable: "tabs.tables.controls.row",
+        value: null,
         options: [{id: 0, label: "Flag*"},
         {id: 1, label: "Broad region where voyage began"},
         {id: 2, label: "Region where voyage began"},
@@ -19,6 +22,9 @@ var tabs = {
         {id: 14, label: "100-year periods"}],
       },
       column: {
+        // currently selected value
+        variable: "tabs.tables.controls.column",
+        value: null,
         options: [{id: 0, label: "Flag*"},
           {id: 1, label: "Broad region where voyage began"},
           {id: 2, label: "Region where voyage began"},
@@ -30,6 +36,9 @@ var tabs = {
           {id: 8, label: "Disembarkation Ports"}],
       },
       cell: {
+        // currently selected value
+        variable: "tabs.tables.controls.cell",
+        value: null,
         options: [{id: 0, label: "Number of Voyages"},
         {id: 1, label: "Sum of embarked slaves"},
         {id: 2, label: "Average number of embarked slaves"},
@@ -59,4 +68,115 @@ var tabs = {
       },
     },
   },
+
+  visualization: {
+    scatter: {
+      x: {
+        // currently selected value
+        variable: "tabs.visualization.scatter.x",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+        {id: 1, label: "Broad region where voyage began"},
+        {id: 2, label: "Region where voyage began"},
+        {id: 3, label: "Port where voyage began"},
+        {id: 4, label: "Embarkation Regions"},
+        {id: 5, label: "Embarkation Ports"},
+        {id: 6, label: "Specific regions of disembarkation"},
+        {id: 7, label: "Broad regions of disembarkation"},
+        {id: 8, label: "Disembarkation Ports"},
+        {id: 9, label: "Individual Years"},
+        {id: 10, label: "5-year periods"},
+        {id: 11, label: "10-year periods"},
+        {id: 12, label: "25-year periods"},
+        {id: 13, label: "50-year periods"},
+        {id: 14, label: "100-year periods"}],
+      },
+      y: {
+        // currently selected value
+        variable: "tabs.visualization.scatter.y",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+          {id: 1, label: "Broad region where voyage began"},
+          {id: 2, label: "Region where voyage began"},
+          {id: 3, label: "Port where voyage began"},
+          {id: 4, label: "Embarkation Regions"},
+          {id: 5, label: "Embarkation Ports"},
+          {id: 6, label: "Specific regions of disembarkation"},
+          {id: 7, label: "Broad regions of disembarkation"},
+          {id: 8, label: "Disembarkation Ports"}],
+      },
+    },
+    bar: {
+      x: {
+        // currently selected value
+        variable: "tabs.visualization.bar.x",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+        {id: 1, label: "Broad region where voyage began"},
+        {id: 2, label: "Region where voyage began"},
+        {id: 3, label: "Port where voyage began"},
+        {id: 4, label: "Embarkation Regions"},
+        {id: 5, label: "Embarkation Ports"},
+        {id: 6, label: "Specific regions of disembarkation"},
+        {id: 7, label: "Broad regions of disembarkation"},
+        {id: 8, label: "Disembarkation Ports"},
+        {id: 9, label: "Individual Years"},
+        {id: 10, label: "5-year periods"},
+        {id: 11, label: "10-year periods"},
+        {id: 12, label: "25-year periods"},
+        {id: 13, label: "50-year periods"},
+        {id: 14, label: "100-year periods"}],
+      },
+      y: {
+        // currently selected value
+        variable: "tabs.visualization.bar.y",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+          {id: 1, label: "Broad region where voyage began"},
+          {id: 2, label: "Region where voyage began"},
+          {id: 3, label: "Port where voyage began"},
+          {id: 4, label: "Embarkation Regions"},
+          {id: 5, label: "Embarkation Ports"},
+          {id: 6, label: "Specific regions of disembarkation"},
+          {id: 7, label: "Broad regions of disembarkation"},
+          {id: 8, label: "Disembarkation Ports"}],
+      },
+    },
+    donut: {
+      sectors: {
+        // currently selected value
+        variable: "tabs.visualization.donut.sectors",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+        {id: 1, label: "Broad region where voyage began"},
+        {id: 2, label: "Region where voyage began"},
+        {id: 3, label: "Port where voyage began"},
+        {id: 4, label: "Embarkation Regions"},
+        {id: 5, label: "Embarkation Ports"},
+        {id: 6, label: "Specific regions of disembarkation"},
+        {id: 7, label: "Broad regions of disembarkation"},
+        {id: 8, label: "Disembarkation Ports"},
+        {id: 9, label: "Individual Years"},
+        {id: 10, label: "5-year periods"},
+        {id: 11, label: "10-year periods"},
+        {id: 12, label: "25-year periods"},
+        {id: 13, label: "50-year periods"},
+        {id: 14, label: "100-year periods"}],
+      },
+      values: {
+        // currently selected value
+        variable: "tabs.visualization.donut.values",
+        value: null,
+        options: [{id: 0, label: "Flag*"},
+          {id: 1, label: "Broad region where voyage began"},
+          {id: 2, label: "Region where voyage began"},
+          {id: 3, label: "Port where voyage began"},
+          {id: 4, label: "Embarkation Regions"},
+          {id: 5, label: "Embarkation Ports"},
+          {id: 6, label: "Specific regions of disembarkation"},
+          {id: 7, label: "Broad regions of disembarkation"},
+          {id: 8, label: "Disembarkation Ports"}],
+      },
+    },
+  }
 }

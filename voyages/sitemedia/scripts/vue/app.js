@@ -30,6 +30,7 @@ var searchBar = new Vue({
     currentQuery: {},
     rowModalShow: false,
     variablesModalShow: false,
+    currentTab: "results",
   },
   computed: {},
   watch: {
@@ -161,9 +162,55 @@ var searchBar = new Vue({
       deep: true
     },
 
+    currentTab:{
+      handler: function(){
+        console.log(this.currentTab);
+        // tables tab
+        // feel free to feed the data in here for this tab
+        // data table template is located at: apps/voyage/templates/voyage/vue/tabs/*
+        if (this.currentTab == "tables") {
+          $('#v-tables').DataTable({
+            destroy: true,
+            dom:  "<'flex-container'>" +
+                  "<'row'<'col-sm-12'tr>>"
+          });
+
+
+        // summary statistics tab
+        // feel free to feed the data in here for this tab
+        // data table template is located at: apps/voyage/templates/voyage/vue/tabs/*
+        } else if (this.currentTab == "statistics") {
+          $('#v-summary-statistics').DataTable({
+            destroy: true,
+            dom:  "<'flex-container'>" +
+                  "<'row'<'col-sm-12'tr>>"
+          });
+        }
+
+      }
+    }
+
   },
 
   methods: {
+
+    // set the current tab to be the active tab
+    setActive(tab) {
+        this.currentTab = tab;
+    },
+
+    // update tab options
+    updateTabOptions(variable, value) {
+      debugger;
+      levels = variable.split(".");
+      var currentObjState = this;
+      for (var i = 0; i < levels.length; i++){
+          currentObjState = currentObjState[levels[i]];
+      }
+      debugger;
+      currentObjState.value = value;
+    },
+
     // go over items and update counts when the inputs are changed
     changed(variable, changed) {
       var varName = "var_" + variable.varName;
@@ -277,16 +324,3 @@ var searchBar = new Vue({
     });
   },
 })
-
-// tabs
-$(document).ready(function(){
-    $('#v-summary-statistics').DataTable({
-      dom:  "<'flex-container'>" +
-            "<'row'<'col-sm-12'tr>>"
-    });
-    $('#v-tables').DataTable({
-      dom:  "<'flex-container'>" +
-            "<'row'<'col-sm-12'tr>>"
-    });
-});
-// tabs
