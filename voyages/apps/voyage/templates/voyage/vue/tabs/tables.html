@@ -1,3 +1,4 @@
+{% verbatim %}
 <div id="tabs-tables-control">
   <div class="row">
     <div class="col-md-12" style="margin-bottom: 1rem;">
@@ -5,13 +6,16 @@
       <div class="">Examine data based on your current search in a tabular form (This is currently a mock. Will need backend support to populate the data.)</div>
     </div>
     <div class="col-md-4">
-      <v-dropdown title="Row Series" description="" :options="tabs.tables.controls.row.options"></v-dropdown>
+      <v-dropdown title="Row Series" description="" @changed="updateTabOptions" :options="tabs.tables.controls.row.options" :variable="tabs.tables.controls.row"></v-dropdown>
+      Selected: <code> {{ tabs.tables.controls.row.value }} </code>
     </div>
     <div class="col-md-4">
-      <v-dropdown title="Column Series" description="" :options="tabs.tables.controls.column.options"></v-dropdown>
+      <v-dropdown title="Column Series" description="" @changed="updateTabOptions" :options="tabs.tables.controls.column.options" :variable="tabs.tables.controls.column"></v-dropdown>
+      Selected: <code> {{ tabs.tables.controls.column.value }} </code>
     </div>
     <div class="col-md-4">
-      <v-dropdown title="Cell Content" description="" :options="tabs.tables.controls.cell.options"></v-dropdown>
+      <v-dropdown title="Cell Content" description="" @changed="updateTabOptions" :options="tabs.tables.controls.cell.options" :variable="tabs.tables.controls.cell"></v-dropdown>
+      Selected: <code> {{ tabs.tables.controls.cell.value }} </code>
     </div>
 
     <table id="v-tables" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -203,3 +207,4 @@
 
   </div>
 </div>
+{% endverbatim %}
