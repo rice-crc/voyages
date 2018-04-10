@@ -53,7 +53,22 @@
 }
 
 #results_main_table {
-  font-size: .85rem;
+  font-size: 0.8rem;
+}
+
+.dt-buttons > .buttons-collection  {
+  padding: .175rem .5rem;
+  font-size: 0.8rem;
+}
+
+.dataTables_paginate {
+  .page-link {
+    padding: .375rem .5rem;
+    font-size: 0.8rem;
+  }
+}
+.dataTables_info {
+  font-size: 0.8rem;
 }
 
 table.dataTable thead>tr>th.sorting, .table td {
@@ -68,7 +83,7 @@ table.dataTable thead>tr>th.sorting, .table th {
 
 .trans-tab .nav-item {
   a {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
   .nav-link {
     padding: 0.25rem .5rem;
@@ -115,4 +130,12 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before
 
 .page-item.active .page-link {
   z-index: 0;
+}
+
+.vue-treeselect__label, .vue-treeselect__multi-value {
+  font-size: 0.85rem;
+}
+
+.dt-button {
+  font-size: 0.85rem;
 }

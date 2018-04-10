@@ -1,6 +1,6 @@
+{% verbatim %}
 <div class="row">
   <div class="col-md-12">
-    <div class="page-title-2">Data Visualization</div>
     <div class="">Visualizes data based on current search result. (This is currently an example. Will need backend support to populate the data.)</div>
   </div>
 </div>
@@ -18,10 +18,12 @@
       <div class="control-tab-pane tab-pane fade show active" id="xy-scatter-plot" role="tabpanel" aria-labelledby="home-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="X Axis" description="" :options="tabs.tables.controls.row.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="X Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.scatter.x.options" :variable="tabs.visualization.scatter.x" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.scatter.x.value }} </code>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Y Axis" description="" :options="tabs.tables.controls.column.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="Y Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.scatter.y.options" :variable="tabs.visualization.scatter.y" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.scatter.y.value }} </code>
           </div>
         </div>
         <div class="row">
@@ -33,10 +35,12 @@
       <div class="control-tab-pane tab-pane fade" id="bar-chart" role="tabpanel" aria-labelledby="profile-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="X Axis" description="" :options="tabs.tables.controls.row.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="X Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.bar.x.options" :variable="tabs.visualization.bar.x" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.bar.x.value }} </code>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Y Axis" description="" :options="tabs.tables.controls.column.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="Y Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.bar.y.options" :variable="tabs.visualization.bar.y" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.bar.y.value }} </code>
           </div>
         </div>
         <div class="row">
@@ -48,10 +52,12 @@
       <div class="control-tab-pane tab-pane fade" id="donut-chart" role="tabpanel" aria-labelledby="contact-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="Sectors" description="" :options="tabs.tables.controls.row.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="Sectors" description="" @changed="updateTabOptions" :options="tabs.visualization.donut.sectors.options" :variable="tabs.visualization.donut.sectors" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.donut.sectors.value }} </code>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Values" description="" :options="tabs.tables.controls.column.options" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="Values" description="" @changed="updateTabOptions" :options="tabs.visualization.donut.values.options" :variable="tabs.visualization.donut.values" :is-multiple="true" :clearable="true"></v-dropdown>
+            Selected: <code> {{ tabs.visualization.donut.values.value }} </code>
           </div>
         </div>
         <div class="row">
@@ -63,3 +69,5 @@
     </div>
   </div>
 </div>
+
+{% endverbatim %}

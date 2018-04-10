@@ -15,7 +15,7 @@
     <div slot="v-panel-content" slot-scope="scope">
       <code v-if="options.debug">{{scope.filters}}</code>
 
-      <v-text @change="changed" :filter="scope.filters.var_sources_plaintext_search">
+      <v-text @change="changed" :filter="scope.filters.var_sources_plaintext">
       </v-text>
     </div>
   </v-panel-singular>

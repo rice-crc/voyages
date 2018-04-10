@@ -1,5 +1,5 @@
-var_sources_plaintext_search = new TextVariable({
-    varName: "sources_plaintext_search",
+var_sources_plaintext = new TextVariable({
+    varName: "sources_plaintext",
     label: "Source",
     description: "",
   },{
@@ -12,7 +12,7 @@ var_sources_plaintext_search = new TextVariable({
 
 source = {
   source: {
-    var_sources_plaintext_search: var_sources_plaintext_search,
+    var_sources_plaintext: var_sources_plaintext,
     count: {
       changed: 0,
       activated: 0,

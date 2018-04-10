@@ -160,11 +160,21 @@ function searchAll(filter) {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
-                  item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                  // TODO patch for date variables
+                  if (filter[key1][key2][key3].constructor.name === "DateVariable") {
+                    var searchTerm0 = filter[key1][key2][key3].value["searchTerm0"] + "-01-01T00:00:00Z";
+                    var searchTerm1 = null;
+                    if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
+                      searchTerm1 = filter[key1][key2][key3].value["searchTerm1"] + "-12-31T23:59:59Z";
+                    }
+                    item["searchTerm"] = [searchTerm0, searchTerm1];
+                  } else {
+                    item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                  }
                 }
 
-                // TODO: fix a bug with the backend: it should use _idnum and not _id
-                if (filter[key1][key2][key3].varName.slice(-3) == "_id") {
+                // TODO: fix a bug with the backend: it should use _idnum and not _id except for voyage_id
+                if (filter[key1][key2][key3].varName.slice(-3) == "_id" && filter[key1][key2][key3].varName !== "voyage_id") {
                   item["varName"] = filter[key1][key2][key3].varName + "num";
                 } else {
                   item["varName"] = filter[key1][key2][key3].varName;
@@ -211,14 +221,8 @@ function searchAll(filter) {
   	items.push(item);
   }
 
-	// placeholder
-
   // alert(JSON.stringify(items));
 	return items;
-}
-
-function resetAll() {
-
 }
 
 function processPlacesAjax(data) {

@@ -1,5 +1,5 @@
 Vue.component("v-dropdown", {
-  props: ['title', 'description', 'options', 'isMultiple', 'clearable'],
+  props: ['title', 'description', 'options', 'isMultiple', 'clearable', 'variable'],
   template: `
   <div class="">
     <div class="v-title" v-text="title"></div>
@@ -32,8 +32,9 @@ Vue.component("v-dropdown", {
 
   watch: {
     // search object
-    options: {
+    data: {
       handler: function(){
+        this.$emit('changed', this.variable.variable, this.data.value);
       },
       deep: true,
     },
