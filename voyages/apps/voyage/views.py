@@ -2067,12 +2067,14 @@ def retrieve_summary_stats(results):
             tmp_row.append("")
 
         # Number of voyages
+        count = 0
         if stats:
-            tmp_row.append(stats['count'])
+            count = int(stats['count'])
+            tmp_row.append(count)
         else:
             tmp_row.append("")
 
-        if stats:
+        if stats and count > 0:
             if item['is_percentage']:
                 # Average
                 tmp_row.append(str(round(stats['mean']*100, 1)) + "%")

@@ -16,7 +16,7 @@ unicodecsv==0.14.1
 openpyxl==2.4.9
 django-allauth==0.33.0
 django-simple-captcha==0.5.5
-django-haystack==2.5.0
+django-haystack
 haversine==0.4.5
 libsass==0.13.3
 django-compressor==2.2
