@@ -263,6 +263,11 @@ def get_results_table(results, post):
     reponse_data['data'] = [{k: v if v != '[]' else '' for k, v in x.get_stored_fields().items()} for x in page]
     return JsonResponse(reponse_data)
 
+def get_results_summary_stats(results):
+    from voyages.apps.voyage.views import retrieve_summary_stats
+    summary = retrieve_summary_stats(results)
+    return JsonResponse(summary, safe=False)
+
 @require_POST
 @csrf_exempt
 def ajax_search(request):
@@ -285,6 +290,8 @@ def ajax_search(request):
         return get_results_timeline(results, data)
     elif output_type == 'pivotTable':
         return get_results_pivot_table(results, data)
+    elif output_type == 'summaryStats':
+        return get_results_summary_stats(results)
     return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST

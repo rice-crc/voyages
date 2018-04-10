@@ -529,7 +529,7 @@ class Command(BaseCommand):
             print 'Bulk inserting ' + str(model)
             if manager is None:
                 manager = model.objects
-            manager.bulk_create(lst)
+            manager.bulk_create(lst, batch_size=100)
             return None if attr_key is None else \
                 {getattr(x, attr_key): x for x in manager.all()}
 
