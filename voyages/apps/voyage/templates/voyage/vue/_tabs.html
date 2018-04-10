@@ -1,25 +1,25 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs trans-tab">
   <li class="nav-item">
-    <a class="nav-link active" href="#" data-toggle="tab" data-target="#results">Results</a>
+    <a class="nav-link active" @click="setActive('results')" href="#" data-toggle="tab" data-target="#results">Results</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#summary-statistics">Summary Statistics</a>
+    <a class="nav-link" @click="setActive('statistics')" href="#" data-toggle="tab" data-target="#summary-statistics">Summary Statistics</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#tables">Tables</a>
+    <a class="nav-link" @click="setActive('tables')" href="#" data-toggle="tab" data-target="#tables">Tables</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#visualization">Data Visualization</a>
+    <a class="nav-link" @click="setActive('visualization')" href="#" data-toggle="tab" data-target="#visualization">Data Visualization</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#timeline">Timeline</a>
+    <a class="nav-link" @click="setActive('timeline')" href="#" data-toggle="tab" data-target="#timeline">Timeline</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#maps">Maps</a>
+    <a class="nav-link" @click="setActive('maps')" href="#" data-toggle="tab" data-target="#maps">Maps</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="tab" data-target="#animation">Animation</a>
+    <a class="nav-link" @click="setActive('animation')" href="#" data-toggle="tab" data-target="#animation">Animation</a>
   </li>
 </ul>
 <!-- End of Tabs -->

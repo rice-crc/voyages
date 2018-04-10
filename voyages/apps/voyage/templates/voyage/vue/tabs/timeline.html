@@ -1,2 +1,17 @@
-<div class="page-title-2"> Timeline</div>
-<div class="">The timeline of voyages based on your selection. (This is being implemented.)</div>
+{% verbatim %}
+
+<div class="row">
+  <div class="col-md-12">
+    <v-dropdown title="Chosen Variable" description="" @changed="updateTabOptions" :options="tabs.timeline.chart.options" :variable="tabs.timeline.chart"></v-dropdown>
+    Selected: <code> {{ tabs.timeline.chart.value }} </code>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    Insert chart here
+  </div>
+</div>
+
+{% endverbatim %}
