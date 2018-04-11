@@ -19,30 +19,26 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
     search_kwargs = q.build_params(None)
     search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
     search_kwargs['q'] = final_query
-    search_kwargs['json.facet'] = json.dumps({
-        'categories': {
-            'terms': {
-                'field': row_field,
-                'limit': 10000,
-                'facet': {
-                    'subcat': {
-                        'terms': {
-                            'limit': 10000,
-                            'field': col_field,
-                            'facet': cell_formula_dict}
-                        }
-                    }
-                }
+    terms = {
+        'field': row_field,
+        'limit': 10000,
+        'facet': {
+            'subcat': {
+                'terms': {
+                    'limit': 10000,
+                    'field': col_field,
+                    'facet': cell_formula_dict}
             }
-        })
+        }
+    }
+    filter = cell_formula_dict.pop('_filter', None)
+    if filter:
+        terms['domain'] = { 'filter': filter }
+    search_kwargs['json.facet'] = json.dumps({ 'categories': { 'terms': terms } })
     response = json.loads(q.backend.conn._select(search_kwargs))
     buckets = response['facets']['categories']['buckets']
-    if len(cell_formula_dict) == 1:
-        cell_key = cell_formula_dict.keys()[0]
-        row_data = [(x['val'], {y['val']: y[cell_key] for y in x['subcat']['buckets']}) for x in buckets]
-    else:
-        row_data = [(x['val'], {y['val']: {k: y[k] for k in cell_formula_dict.keys()} for y in x['subcat']['buckets']})
-            for x in buckets]
+    formula_keys = [key for key in cell_formula_dict.keys() if not key.startswith('_')]
+    row_data = [(x['val'], {y['val']: y for y in x['subcat']['buckets']}) for x in buckets]
     return row_data
 
 class PivotTable():

@@ -427,4 +427,326 @@ function sortNumber(a,b) {
     return a - b;
 }
 
+function initZeroArray(length) {
+  var arr = [];
+  while (length--) {
+    arr.push(0);
+  }
+  return arr;
+}
+
+function refreshUi(filter, currentTab, tabData) {
+  // Update UI after search query was changed,
+  // or a tab was selected.
+  var currentSearchObj = {
+    items: searchAll(filter),
+    orderBy: []
+  };
+  var searchUrl = "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search";
+  if (currentTab == 'results') {
+    // Results DataTable
+    var pageLength = {
+      extend: 'pageLength',
+      className: 'btn btn-info buttons-collection dropdown-toggle',
+    };
+    // TEMP Yang: I think there is an option for destroying the
+    // old table (destroy: true) that you can pass so we avoid 
+    // this call?
+    if ($.fn.DataTable.isDataTable('#results_main_table')) {
+      $('#results_main_table').DataTable().destroy();
+    }  
+    var mainDatatable = $('#results_main_table').DataTable({
+      ajax: {
+        url: searchUrl,
+        type: 'POST',
+        data: function(d) {
+          if (d.order) {
+            currentSearchObj.orderBy = $.map(d.order, function(item) {
+              var columnIndex = mainDatatable ?
+                mainDatatable.colReorder.order()[item.column] :
+                item.column;
+              return {
+                name: allColumns[columnIndex].data.substring(4),
+                direction: item.dir
+              };
+            });
+          }
+  
+          // TEMP Yang: I don't think this is the right place for this code...
+          // Besides, I think that this is attaching multiple handlers for
+          // the click, which is inefficient.
+          $('#results_main_table').on( 'click', 'tr', function () {
+              searchBar.row.data = mainDatatable.row( this ).data();
+          });
+  
+          // console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
+          return JSON.stringify({
+            searchData: currentSearchObj,
+            tableParams: d,
+            output: 'resultsTable'
+          });
+        }
+      },
+  
+  
+      // dom: 'ifrtBp',
+      dom:  "<'flex-container'iB>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'p>>",
+      lengthMenu: [
+        [10, 25, 50, 100],
+        ['10 rows', '25 rows', '50 rows', '100 rows']
+      ],
+  
+      buttons: [
+        columnToggleMenu,
+        pageLength,
+        // {
+        //   extend: 'collection',
+        //   // text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
+        //   className: 'btn btn-info buttons-collection dropdown-toggle',
+        //   text: 'Download',
+        //   titleAttr: 'Download results',
+        //   buttons: [
+        //     // {
+        //     // 	text: 'CSV - not implemented',
+        //     // 	action: function() { alert('not implemented yet'); },
+        //     // },
+        //     {
+        //       text: 'Excel',
+        //       action: function() {
+        //         var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
+        //           return visible ? allColumns[index].data : undefined;
+        //         });
+        //         var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+        //         form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
+        //           searchData: currentSearchObj,
+        //           cols: visibleColumns
+        //         })));
+        //         form.appendTo('body').submit().remove();
+        //       },
+        //     }
+        //   ]
+        // }
+      ],
+      //pagingType: "input",
+      bFilter: false,
+      processing: true,
+      serverSide: true,
+      columns: allColumns,
+      stateSave: true,
+      stateDuration: -1,
+      colReorder: true,
+      initComplete: function() {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+      }
+    });
+  } else if (currentTab == 'statistics') {
+    // Summary statistics.
+    var tableId = '#v-summary-statistics';
+    if ($.fn.DataTable.isDataTable(tableId)) {
+      $(tableId).DataTable().destroy();
+    }  
+    var mainDatatable = $(tableId).DataTable({
+      ajax: {
+        url: searchUrl,
+        type: 'POST',
+        data: function(d) {
+          return JSON.stringify({
+            searchData: currentSearchObj,
+            tableParams: d,
+            output: 'summaryStats'
+          });
+        }
+      },
+      bFilter: false,
+      paging: false,
+      dom:  "<'flex-container'>" +
+            "<'row'<'col-sm-12'tr>>"
+    });
+  } else if (currentTab == 'tables') {
+    var getTableElement = function(source) {
+      var id = tabData.tables[source].value;
+      return tabs.tables[source].options.find(function(x) {
+        return x.id == id; 
+      });
+    };
+    var getField = function(source) {
+      var el = getTableElement(source);
+      return el ? fieldMap[el.label] : null;
+    };
+    var cell = getTableElement('cell');
+    var postData = {
+      searchData: currentSearchObj,
+      output: "pivotTable",
+      row_field: getField("row"),
+      col_field: getField("column"),
+      pivot_functions: cell ? cell.functions : null,
+    };
+    // Validate post before issuing AJAX call.
+    if (postData.row_field && postData.col_field && postData.pivot_functions) {
+      $.post(searchUrl, JSON.stringify(postData), function(result) {
+        // Produce a table with data content.
+        var table = $('#v-tables');
+        var columnHeaderRows = 1 + (result.col_extra_headers ? result.col_extra_headers.length : 0);
+        var thead = table.find('thead');
+        thead.empty();
+        // Top-left row is blank.
+        var subCells = $.map(Object.keys(cell.functions), function(key) { return key[0] == '_' ? undefined : key; });
+        var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
+        var tr = '<tr><th rowspan="' + columnHeaderRows + (subCells.length > 1 ? 1 : 0) + '"></th>';
+        // Append extra column headers.
+        if (columnHeaderRows > 1) {
+          for (var i = 0; i < columnHeaderRows - 1; ++i) {
+            var headerRow = result.col_extra_headers[i];
+            for (var j = 0; j < headerRow.length; ++j) {
+              var headerData = headerRow[j];
+              tr += '<th colspan="' + headerData[1] * subCells.length + '">' + headerData[0] + '</th>';
+            }
+            if (i == 0) {
+              tr += totalsHeader;
+            }
+            tr += '</tr>';
+          }
+          thead.append(tr);
+          tr = '<tr>';
+        }
+        // Append normal column headers.
+        var colTotals = initZeroArray((result.columns.length + 1) * subCells.length);
+        for (var i = 0; i < result.columns.length; ++i) {
+          tr += '<th colspan="' + subCells.length + '">' + result.columns[i] + '</th>';
+        }
+        if (columnHeaderRows == 1) {
+          tr += totalsHeader;
+        }
+        tr += '</tr>';
+        thead.append(tr);
+        if (subCells.length > 1) {
+          // Each cell is split into multiple values.
+          tr = '<tr>'
+          for (var i = 0; i < result.columns.length + 1; ++i) {
+            for (var j = 0; j < subCells.length; ++j) {
+              tr += '<th>' + subCells[j] + '</th>';
+            }
+          }
+          tr += '</tr>';
+          thead.append(tr);
+        }
+        // Append main data.
+        var tbody = table.find('tbody');
+        tbody.empty();
+        // We first create a dense matrix with all the table numbers.
+        // The data can then be processed (e.g. for row/col percentages).
+        var mx = [];
+        var allRowTotals = [];
+        var rowCounts = initZeroArray(result.rows.length);
+        var colCounts = initZeroArray((result.columns.length + 1) * subCells.length);
+        var weightByCount = cell.hasOwnProperty('avg');
+        for (var rowIdx = 0; rowIdx < result.rows.length; ++rowIdx) {
+          var currentRowTotals = initZeroArray(subCells.length);
+          var allCells = initZeroArray(result.columns.length * subCells.length);
+          // The result representation is sparse, so we initially
+          // set cell values for the row as Zero and then replace
+          // the non-zero entries by reading result.rows[rowIdx].
+          for (var rowCell = 0; rowCell < result.cells[rowIdx].length; ++rowCell) {
+            var cellData = result.cells[rowIdx][rowCell];
+            var colIdx = cellData[0];
+            var cellCount = cellData[1].count;
+            rowCounts[rowIdx] += cellCount;
+            for (var j = 0; j < subCells.length; ++j) {
+              var cellValue = cellData[1][subCells[j]];
+              var computedIdx = colIdx * subCells.length + j;
+              allCells[computedIdx] = cellValue;
+              colCounts[computedIdx] += cellCount;
+              var aggValue = weightByCount ? cellValue * cellCount : cellValue;
+              currentRowTotals[j] += aggValue;
+              colTotals[computedIdx] += aggValue;
+            }
+          }
+          mx.push(allCells);
+          for (var j = 0; j < subCells.length; ++j) {
+            colCounts[allCells.length + j] += rowCounts[rowIdx];
+            colTotals[allCells.length + j] += currentRowTotals[j];
+          }
+          if (weightByCount) {
+            for (var j = 0; j < currentRowTotals.length; ++j) {
+              currentRowTotals[j] /= rowCounts[rowIdx];
+            }
+          }
+          allRowTotals.push(currentRowTotals);
+        }
+        if (weightByCount) {
+          for (var j = 0; j < colTotals.length; ++j) {
+            colTotals[j] /= colCounts[j];
+          }
+        }
+        var format = cell.hasOwnProperty('format') ? cell.format : 'decimal';
+        if (cell.hasOwnProperty('processing')) {
+          // We require some processing of the table entries.
+          if ('perc_row_total' == cell.processing) {
+            format = 'percent';
+            for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
+              for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
+                mx[rowIdx][colIdx] /= allRowTotals[rowIdx][colIdx % subCells.length];
+              }
+              // Row percentages add up to 100%.
+              for (var j = 0; j < subCells.length; ++j) {
+                allRowTotals[rowIdx][j] = 1.0;
+              }
+            }
+            for (var j = 0; j < colTotals.length; ++j) {
+              colTotals[j] /= colTotals[colTotals.length - subCells.length + (j % subCells.length)];
+            }
+          } else if ('perc_col_total' == cell.processing) {
+            format = 'percent';
+            for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
+              for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
+                mx[rowIdx][colIdx] /= colTotals[colIdx];
+              }
+              // Set row totals as a percentage of the global total.
+              for (var j = 0; j < subCells.length; ++j) {
+                allRowTotals[rowIdx][j] /= colTotals[mx[rowIdx].length + j];
+              }
+            }
+            // Column totals now should be 100%.
+            for (var j = 0; j < colTotals.length; ++j) {
+              colTotals[j] = 1.0;
+            }
+          }
+        }
+        var fmtFunc = function(x) {
+          return x.toLocaleString(undefined, { 
+            style: format,
+            minimumFractionDigits: (format == 'percent' || weightByCount) ? 1 : 0,
+            maximumFractionDigits: 1,
+          });
+        };
+        for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
+          tr = '<tr><th>' + result.rows[rowIdx] + '</th>';
+          for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
+            tr += '<td class="right">' + fmtFunc(mx[rowIdx][colIdx]) + '</td>';
+          }
+          // Add row totals.
+          for (var j = 0; j < subCells.length; ++j) {
+            tr += '<th class="right">' + fmtFunc(allRowTotals[rowIdx][j], true) + '</th>'
+          }
+          tr += '</tr>';
+          tbody.append(tr);
+        }
+        // Add column totals to the foot.
+        var tfoot = table.find('tfoot');
+        tfoot.empty();
+        tr = '<tr><th>' + gettext('Totals') + '</th>';
+        for (var colIdx = 0; colIdx < colTotals.length; ++colIdx) {
+          tr += '<th class="right">' + fmtFunc(colTotals[colIdx], true) + '</th>';
+        }
+        tr += '</tr>';
+        tfoot.append(tr);
+      });
+    }
+  }
+}
+
 // helpers

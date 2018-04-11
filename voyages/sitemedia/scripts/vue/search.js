@@ -131,6 +131,8 @@ var pageLength = {
   className: 'btn btn-info buttons-collection dropdown-toggle',
 };
 
+// TEMP Yang: I think this method and possibly this entire file must be removed
+// right? Are you using something from here??
 function search(query, activeSearchTerms) {
   var query = query;
 
@@ -219,6 +221,9 @@ function search(query, activeSearchTerms) {
           });
         }
 
+        // TEMP Yang: I don't think this is the right place for this code...
+        // Besides, I think that this is attaching multiple handlers for
+        // the click, which is inefficient.
         $('#results_main_table').on( 'click', 'tr', function () {
             searchBar.row.data = mainDatatable.row( this ).data();
         });
