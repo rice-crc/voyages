@@ -266,7 +266,7 @@ def get_results_table(results, post):
 def get_results_summary_stats(results):
     from voyages.apps.voyage.views import retrieve_summary_stats
     summary = retrieve_summary_stats(results)
-    return JsonResponse(summary, safe=False)
+    return JsonResponse({'data': summary})
 
 @require_POST
 @csrf_exempt

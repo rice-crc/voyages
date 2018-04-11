@@ -165,6 +165,8 @@ var searchBar = new Vue({
     currentTab:{
       handler: function(){
         console.log(this.currentTab);
+        refreshUi(this.filter, this.currentTab, this.tabs);
+        /*
         // tables tab
         // feel free to feed the data in here for this tab
         // data table template is located at: apps/voyage/templates/voyage/vue/tabs/*
@@ -186,7 +188,7 @@ var searchBar = new Vue({
                   "<'row'<'col-sm-12'tr>>"
           });
         }
-
+        */
       }
     }
 
@@ -201,14 +203,15 @@ var searchBar = new Vue({
 
     // update tab options
     updateTabOptions(variable, value) {
-      debugger;
       levels = variable.split(".");
       var currentObjState = this;
       for (var i = 0; i < levels.length; i++){
           currentObjState = currentObjState[levels[i]];
       }
-      debugger;
       currentObjState.value = value;
+      if (this.currentTab == 'tables') {
+        refreshUi(this.filter, this.currentTab, this.tabs);
+      }
     },
 
     // go over items and update counts when the inputs are changed
@@ -245,14 +248,18 @@ var searchBar = new Vue({
       activateFilter(this.filter, group, subGroup, filterValues);
       var searchTerms = searchAll(this.filter);
       // alert(JSON.stringify(searchTerms));
-      search(this.searchFilter, searchTerms);
+      //search(this.searchFilter, searchTerms);
+      // TEMP Yang: once this is working, we should wrap
+      // this call in a single instance method.
+      refreshUi(this.filter, this.currentTab, this.tabs);
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
       var searchTerms = searchAll(this.filter);
-      search(this.searchFilter, searchTerms);
+      //search(this.searchFilter, searchTerms);
+      refreshUi(this.filter, this.currentTab, this.tabs);
     },
 
     resetAll() {
@@ -266,7 +273,8 @@ var searchBar = new Vue({
         }
       }
       var searchTerms = searchAll(this.filter);
-      search(this.searchFilter, searchTerms);
+      //search(this.searchFilter, searchTerms);
+      refreshUi(this.filter, this.currentTab, this.tabs);
     },
 
     viewAll() {
@@ -313,7 +321,8 @@ var searchBar = new Vue({
       // $vm.filter.shipNationOwner.flag.var_imputed_nationality,
     ]);
 
-    search(this.filter, []);
+    //search(this.filter, []);
+    refreshUi(this.filter, this.currentTab, this.tabs);
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
