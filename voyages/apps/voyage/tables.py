@@ -11,7 +11,7 @@ def get_pivot_table(results, row_field, col_field, cell_formula):
 #   'var_imp_region_voyage_begin_idnum',
 #   {'embarked': 'sum(var_imp_total_num_slaves_purchased)', 'disembarked': 'sum(var_imp_total_slaves_disembarked)'})
 
-def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
+def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict, range=None):
     q = results.query._clone()
     q._reset()
     q.set_limits(0, 0)
@@ -34,11 +34,16 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict):
     filter = cell_formula_dict.pop('_filter', None)
     if filter:
         terms['domain'] = { 'filter': filter }
-    search_kwargs['json.facet'] = json.dumps({ 'categories': { 'terms': terms } })
+    facet = { 'categories': { 'terms': terms } }
+    if range:
+        terms['type'] = 'range'
+        terms.update(range) 
+        facet['categories'] = terms
+    search_kwargs['json.facet'] = json.dumps(facet)
     response = json.loads(q.backend.conn._select(search_kwargs))
     buckets = response['facets']['categories']['buckets']
     formula_keys = [key for key in cell_formula_dict.keys() if not key.startswith('_')]
-    row_data = [(x['val'], {y['val']: y for y in x['subcat']['buckets']}) for x in buckets]
+    row_data = [(x['val'], {y['val']: y for y in x['subcat']['buckets']}) for x in buckets if 'subcat' in x]
     return row_data
 
 class PivotTable():

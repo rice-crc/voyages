@@ -435,6 +435,14 @@ function initZeroArray(length) {
   return arr;
 }
 
+function destroyPreviousTable(id) {
+  try {
+    if ($.fn.DataTable.isDataTable(id)) {
+      $(id).DataTable().destroy();
+    }
+  } catch { }
+}
+
 function refreshUi(filter, currentTab, tabData) {
   // Update UI after search query was changed,
   // or a tab was selected.
@@ -452,9 +460,7 @@ function refreshUi(filter, currentTab, tabData) {
     // TEMP Yang: I think there is an option for destroying the
     // old table (destroy: true) that you can pass so we avoid 
     // this call?
-    if ($.fn.DataTable.isDataTable('#results_main_table')) {
-      $('#results_main_table').DataTable().destroy();
-    }  
+    destroyPreviousTable('#results_main_table');
     var mainDatatable = $('#results_main_table').DataTable({
       ajax: {
         url: searchUrl,
@@ -546,9 +552,7 @@ function refreshUi(filter, currentTab, tabData) {
   } else if (currentTab == 'statistics') {
     // Summary statistics.
     var tableId = '#v-summary-statistics';
-    if ($.fn.DataTable.isDataTable(tableId)) {
-      $(tableId).DataTable().destroy();
-    }  
+    destroyPreviousTable(tableId);
     var mainDatatable = $(tableId).DataTable({
       ajax: {
         url: searchUrl,
@@ -577,7 +581,8 @@ function refreshUi(filter, currentTab, tabData) {
       var el = getTableElement(source);
       return el ? fieldMap[el.label] : null;
     };
-    var cell = getTableElement('cell');
+    var cell = getTableElement("cell");
+    var rowElement = getTableElement("row");
     var postData = {
       searchData: currentSearchObj,
       output: "pivotTable",
@@ -585,18 +590,23 @@ function refreshUi(filter, currentTab, tabData) {
       col_field: getField("column"),
       pivot_functions: cell ? cell.functions : null,
     };
+    var isRange = rowElement && rowElement.hasOwnProperty('range');
+    if (isRange) {
+      postData.range = rowElement.range;
+    }
     // Validate post before issuing AJAX call.
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         // Produce a table with data content.
         var table = $('#v-tables');
+        destroyPreviousTable('#v-tables');
         var columnHeaderRows = 1 + (result.col_extra_headers ? result.col_extra_headers.length : 0);
         var thead = table.find('thead');
         thead.empty();
         // Top-left row is blank.
         var subCells = $.map(Object.keys(cell.functions), function(key) { return key[0] == '_' ? undefined : key; });
         var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
-        var tr = '<tr><th rowspan="' + columnHeaderRows + (subCells.length > 1 ? 1 : 0) + '"></th>';
+        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '"></th>';
         // Append extra column headers.
         if (columnHeaderRows > 1) {
           for (var i = 0; i < columnHeaderRows - 1; ++i) {
@@ -724,7 +734,13 @@ function refreshUi(filter, currentTab, tabData) {
           });
         };
         for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
-          tr = '<tr><th>' + result.rows[rowIdx] + '</th>';
+          var rowHeaderText = result.rows[rowIdx];
+          if (isRange) {
+            // The row header coming from the server contains just the
+            // initial element of the range, so we must format it here.
+            rowHeaderText = rowHeaderText + '-' + (parseInt(rowHeaderText) + postData.range.gap - 1);
+          }
+          tr = '<tr><th>' + rowHeaderText + '</th>';
           for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
             tr += '<td class="right">' + fmtFunc(mx[rowIdx][colIdx]) + '</td>';
           }
@@ -744,9 +760,108 @@ function refreshUi(filter, currentTab, tabData) {
         }
         tr += '</tr>';
         tfoot.append(tr);
+        table.DataTable({
+          scrollX: true,
+          scrollCollapse: true
+        });
       });
     }
+  } else if (currentTab == 'visualization') {
+    // TODO!
+  } else if (currentTab == 'maps') {
+    // TODO: Map year should be computed based on year range of search.
+    // We can do it in the client side (easier).
+    // for reference: voyages.apps.assessment.globals.get_map_year
+    var postData = {
+      searchData: currentSearchObj,
+      output: 'mapFlow'
+    };
+		var mapFlowSearchCallback = function(onCompleted) {
+			var $map = $('#map');
+			$map.addClass('gray');
+      $("#map").height($(window).height() - 250);
+      $.post(searchUrl, JSON.stringify(postData), function(result) {
+        eval(result);
+        voyagesMap.clear();
+        try {
+          voyagesMap.setNetworkFlow(ports, flows);
+        } catch { }
+        $map.removeClass('gray');
+        onCompleted();
+      });
+		};
+    loader.loadMap(function() {
+      mapFlowSearchCallback(function() {
+        $('#loading').hide();
+        voyagesMap._map.invalidateSize();
+      });
+    });
+  } else if (currentTab == 'animation') {
+    // TODO.
   }
 }
 
+var loader = new LazyLoader();
+
 // helpers
+
+// Helper to load CSS files and scripts on demand.
+function LazyLoader() {
+  var self = this;
+  self.loadedFiles = {};
+  self.loadCss = function(url) {
+    $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
+  };
+  self.loadScript = function(url) {
+    var dfd = new $.Deferred();
+    var callback = function() {
+      dfd.resolve('script loaded');
+      self.loadedFiles[url] = true;
+    };
+    if (self.loadedFiles.hasOwnProperty(url)) {
+      callback();
+      return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = false;
+    script.onreadystatechange = callback;
+    script.onload = callback;
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+    return dfd;
+  };
+  self.mapLoaded = false;
+  self.loadMap = function(done) {
+    if (!self.mapLoaded) {
+      self.loadCss(STATIC_URL + 'maps/css/leaflet.css');
+      self.loadCss(STATIC_URL + 'maps/css/MarkerCluster.css');
+      self.loadCss(STATIC_URL + 'maps/css/MarkerCluster.Default.css');
+      self.loadScript(STATIC_URL + 'maps/js/leaflet.js')
+        .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.markercluster.js'))
+        .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.polylineDecorator.js'))
+        .then(function() {
+          $.when(
+            self.loadScript(STATIC_URL + 'maps/js/routeNodes.js'),
+            self.loadScript(STATIC_URL + 'maps/js/voyagesMap.js'),
+          )
+          .then(function() {
+            voyagesMap.
+                init('1750', STATIC_URL + 'maps/', routeNodes, links).
+                setMaxPathWidth(20).
+                setPathOpacity(0.75);
+            $(window).on("resize", function() {
+              $("#map").height($(window).height() - 250);
+              voyagesMap._map.invalidateSize();
+            }).trigger("resize");
+            voyagesMap._map.invalidateSize();
+            self.mapLoaded = true;
+            done();
+          });
+        });
+    } else {
+      done();
+    }
+  };
+  return self;
+}

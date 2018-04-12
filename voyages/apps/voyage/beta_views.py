@@ -76,7 +76,7 @@ def get_results_pivot_table(results, post):
     pivot_functions = post.get('pivot_functions')
     if row_field is None or col_field is None or pivot_functions is None:
         return HttpResponseBadRequest('Post data must contain row_field, col_field, and pivot_functions')
-    row_data = get_pivot_table_advanced(results, row_field, col_field, pivot_functions)
+    row_data = get_pivot_table_advanced(results, row_field, col_field, pivot_functions, post.get('range'))
     VoyageCache.load()
 
     def grouping(seq):
