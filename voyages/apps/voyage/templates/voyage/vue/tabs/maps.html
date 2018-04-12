@@ -1,2 +1,10 @@
-<div class="page-title-2">Maps</div>
-<div class="">The maps of voyages based on your selection. (This needs backend API support)</div>
+{% load i18n %}
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}maps/css/MarkerCluster.Default.css" />
+<div>
+    <div id="map" style="width:100%; min-height: 500px; height:750px"></div>
+</div>
+<div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%);">
+    <div class="page-title-1">{% trans 'Loading map voyages...' %}</div>
+</div>

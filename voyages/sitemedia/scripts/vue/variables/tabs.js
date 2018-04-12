@@ -9,7 +9,16 @@ var fieldMap = {
   "Broad regions of disembarkation": "var_imp_principal_broad_region_disembark_idnum",
   "Disembarkation Ports": "var_imp_principal_port_slave_dis_idnum",
   "Individual Years": "var_imp_arrival_at_port_of_dis",
+  "5-year periods": "var_imp_arrival_at_port_of_dis",
+  "10-year periods": "var_imp_arrival_at_port_of_dis",
+  "25-year periods": "var_imp_arrival_at_port_of_dis",
+  "50-year periods": "var_imp_arrival_at_port_of_dis",
+  "100-year periods": "var_imp_arrival_at_port_of_dis",
 };
+
+function makeYearRange(interval) {
+  return { start: 1501, gap: interval, end: 2000 };
+}
 
 var tabs = {
   // Tables Tab
@@ -28,11 +37,11 @@ var tabs = {
       {id: 7, label: "Broad regions of disembarkation"},
       {id: 8, label: "Disembarkation Ports"},
       {id: 9, label: "Individual Years"},
-      {id: 10, label: "5-year periods"},
-      {id: 11, label: "10-year periods"},
-      {id: 12, label: "25-year periods"},
-      {id: 13, label: "50-year periods"},
-      {id: 14, label: "100-year periods"}],
+      {id: 10, label: "5-year periods", range: makeYearRange(5)},
+      {id: 11, label: "10-year periods", range: makeYearRange(10)},
+      {id: 12, label: "25-year periods", range: makeYearRange(25)},
+      {id: 13, label: "50-year periods", range: makeYearRange(50)},
+      {id: 14, label: "100-year periods", range: makeYearRange(100)}],
     },
     column: {
       // currently selected value
