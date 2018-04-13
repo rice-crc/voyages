@@ -19,6 +19,9 @@ class Axis:
     def __str__(self):
         return "Axis " + self.description
 
+    def id(self):
+        return self.var_name
+
     def get_group_key(self, d):
         """
         Override this method in sub-classes so that
@@ -62,6 +65,7 @@ class Axis:
 class ForeignKeyAxis(Axis):
     def __init__(self, var_name, description, related_objects, mode=None):
         Axis.__init__(self, var_name + '_idnum', description, mode)
+        self.original_var_name = var_name
         self.related_objects = related_objects
 
     def get_group_key(self, d):
@@ -70,6 +74,9 @@ class ForeignKeyAxis(Axis):
     def get_value(self, d):
         key = d.get(self.var_name)
         return self.related_objects.get(key)
+    
+    def id(self):
+        return self.original_var_name
 
 class MonthAxis(Axis):
     def __init__(self, var_name, description, mode=None):
@@ -99,6 +106,9 @@ class YearRangeAxis(Axis):
     def __init__(self, var_name, description, year_mod, mode=None):
         Axis.__init__(self, var_name, description, mode)
         self.year_mod = year_mod
+
+    def id(self):
+        return self.var_name + '_mod_' + str(self.year_mod)
 
     def get_value(self, d):
         year = d.get(self.var_name)

@@ -164,7 +164,6 @@ var searchBar = new Vue({
 
     currentTab:{
       handler: function(){
-        console.log(this.currentTab);
         refreshUi(this.filter, this.currentTab, this.tabs);
         /*
         // tables tab
@@ -209,7 +208,8 @@ var searchBar = new Vue({
           currentObjState = currentObjState[levels[i]];
       }
       currentObjState.value = value;
-      if (this.currentTab == 'tables') {
+      var refreshTabs = ['tables', 'visualization', 'timeline'];
+      if (refreshTabs.indexOf(this.currentTab) >= 0) {
         refreshUi(this.filter, this.currentTab, this.tabs);
       }
     },
@@ -279,6 +279,10 @@ var searchBar = new Vue({
 
     viewAll() {
       this.variablesModalShow = true;
+    },
+
+    refresh() {
+      refreshUi(this.filter, this.currentTab, this.tabs); 
     },
 
     save() {

@@ -127,12 +127,12 @@ def get_results_timeline(results, post):
     timeline_var = _all_timeline_vars.get(timeline_var_name)
     if not timeline_var:
         return HttpResponseBadRequest('Timeline variable is invalid ' + str(timeline_var_name) + '. Available: ' + str(_all_timeline_vars.keys()))
-    timeline_data = timeline_var['time_line_func'](results, timeline_var_name)
+    timeline_data = sorted(timeline_var['time_line_func'](results, timeline_var_name), key=lambda t: t[0])
     return JsonResponse({'var_name': timeline_var_name, 'data': [{'year': t[0], 'value': t[1]} for t in timeline_data]})
 
 # Construct a dict with all X/Y-axes
-_all_x_axes = {a.var_name: a for a in (graphs_x_axes + other_graphs_x_axes)}
-_all_y_axes = {a.var_name: a for a in graphs_y_axes}
+_all_x_axes = {a.id(): a for a in (graphs_x_axes + other_graphs_x_axes)}
+_all_y_axes = {a.id(): a for a in graphs_y_axes}
 def get_results_graph(results, post):
     """
     post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).

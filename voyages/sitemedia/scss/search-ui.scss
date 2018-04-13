@@ -87,3 +87,32 @@
 .maintainHover {
   background: rgba(0, 0, 0, 0.15);
 }
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: gray;
+    stroke-width: 0.35px;
+}
+
+.x path {
+    stroke: transparent;
+}
+
+.vertical_line {
+    stroke: darkgreen;
+    stroke-width: 1px;
+    stroke-dasharray: 1 1;
+}
+
+polyline {
+  opacity: .3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.timeline_main_g {
+    cursor:pointer;
+    pointer-events: all;
+}

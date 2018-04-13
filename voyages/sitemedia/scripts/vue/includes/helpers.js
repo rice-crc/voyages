@@ -446,6 +446,7 @@ function destroyPreviousTable(id) {
 function refreshUi(filter, currentTab, tabData) {
   // Update UI after search query was changed,
   // or a tab was selected.
+  $('.animationElement, #map').hide();
   var currentSearchObj = {
     items: searchAll(filter),
     orderBy: []
@@ -766,8 +767,539 @@ function refreshUi(filter, currentTab, tabData) {
         });
       });
     }
-  } else if (currentTab == 'visualization') {
+  } else if (currentTab == 'timeline') {
     // TODO!
+    $('#timelineChart').empty();
+    var postData = {
+      searchData: currentSearchObj,
+      output: 'timeline',
+      timelineVariable: tabs.timeline.chart.value,
+    };
+    if (postData.timelineVariable) {
+      loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
+        .then(function() {
+          $.post(searchUrl, JSON.stringify(postData), function(result) {
+            result = result.data;
+            var margin = {top: 20, right: 10, bottom: 40, left: 40},
+              width = 960 - margin.left - margin.right,
+              height = 400 - margin.top - margin.bottom;
+            var minYear = result[0].year;
+            var maxYear = result[result.length - 1].year;
+            var indexByYear = {};
+            for (var i = 0; i < result.length; ++i) {
+                indexByYear[result[i].year] = i;
+            }
+            var x = d3.scale.ordinal()
+              .domain(d3.range(minYear, maxYear + 1))
+              .rangeRoundBands([0, width]);
+            var xShift = -x(minYear);
+            var maxValue = d3.max(result, function(d) { return d.value; });            
+            var y = d3.scale.linear()
+                .domain([0, maxValue * 1.1])
+                .range([height, 0]);
+            var tickSet = [];
+            var firstOrdinal = x.domain()[0];
+            var lastOrdinal = x.domain()[x.domain().length - 1];
+            var modulus = 10;
+            if (lastOrdinal > firstOrdinal + 200) {
+                modulus = 50;
+            } else if (lastOrdinal > firstOrdinal + 100) {
+                modulus = 25;
+            } else if (lastOrdinal > firstOrdinal + 50) {
+                modulus = 10;
+            } else if (lastOrdinal > firstOrdinal + 25) {
+                modulus = 5;
+            } else {
+                modulus = 1;
+            }
+            var t = firstOrdinal;
+            if (firstOrdinal % modulus) {
+                t += modulus - (firstOrdinal % modulus);
+            }
+            for (; t <= lastOrdinal; t += modulus) {
+                tickSet.push(t);
+            }
+            var xAxis = d3.svg.axis()
+              .scale(x)
+              .tickValues(tickSet)
+              .tickSize(-height)
+              .tickPadding(5)
+              .orient("top");
+
+            var yTickFormat = function(d) {
+              var formatNumber = d3.format("d");
+              if (d >= 2000) {
+                return formatNumber(d/1000) + "k";
+              }
+              return d;
+            };
+            var yAxis = d3.svg.axis()
+              .scale(y)
+              .ticks(5)
+              .tickFormat(yTickFormat)
+              .tickPadding(5)
+              .tickSize(-width)
+              .orient("left");
+
+            var svg = d3.select("#timelineChart")
+              .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("class", "timeline_main_g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var rect = svg.selectAll("rect")
+              .data(result)
+              .enter()
+              .append("rect")
+              .attr("x", function(d) { return x(d.year) + xShift; })
+              .attr("y", height)
+              .attr("width", x.rangeBand())
+              .attr("height", 0);
+            rect.transition()
+              .attr("y", function(d) { return y(d.value); })
+              .attr("height", function(d) { return y(0) - y(d.value); });
+            var gx = svg.append("g")
+                .attr("class", "x axis")
+                //.attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(" + xShift + ", 0)")
+                .call(xAxis);
+            
+            var gy = svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+            
+            var vertical = svg
+                .append("g")
+                .attr("class", "vertical_highlight")
+                .style("opacity", 0.0);
+            
+            vertical.append("line")
+                .attr("class", "vertical_line")
+                .attr("y2", height);
+
+            var mouseover = function(d) {
+              $('#mouseOverInfo').html("<strong>" + gettext('Year') + "</strong> " + d.year +
+                  "<br /><strong>" + tabs.timeline.chart.value + ":</strong> " + Math.round(d.value).toLocaleString());
+            };
+            var changeHoveredBar = function(index) {
+              var out = index === undefined;
+              if (!out) {
+                  mouseover(result[index]);
+                  vertical.style("opacity", 1.0);
+                  vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(result[index].year) + xShift) + ",0)");
+              }
+              if (out && vertical.timeoutfn == null) {
+                  vertical.timeoutfn = function() {
+                      if (vertical.timeoutfn != null) {
+                          vertical.style("opacity", 0.0);
+                          vertical.timeoutfn = null;
+                      }
+                  };
+                  setTimeout(vertical.timeoutfn, 3000);
+              } else if (!out) {
+                  vertical.timeoutfn = null;
+              }
+            };
+
+            svg.on("mousemove", function() {
+              var mouseX = d3.mouse(this)[0] - xShift;
+              var year = d3.bisectLeft(x.range(), mouseX) + minYear - 1;
+              var index = indexByYear[year];
+              changeHoveredBar(index);
+            });
+          });
+        });
+    }
+  } else if (currentTab == 'visualization') {
+    loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
+      .then(function() {
+        // Ready to plot graphs!
+        var allChartTypes = {
+          "xy-chart-tab": ["scatter", "x", "y"],
+          "bar-chart-tab": ["bar", "x", "y"],
+          "donut-chart-tab": ["donut", "sectors", "values"]
+        };
+        var chartType = allChartTypes[$('a.active.side-control-tab').attr('id')];
+        var yAxes = tabs.visualization[chartType[0]][chartType[2]].value;
+        var postData = {
+          searchData: currentSearchObj,
+          output: 'graph',
+          graphData: {
+            xAxis: tabs.visualization[chartType[0]][chartType[1]].value,
+            yAxes: chartType[0] == 'donut' ? [yAxes] : yAxes
+          }
+        };
+        if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
+          $.post(searchUrl, JSON.stringify(postData), function(series) { 
+            if (chartType[0] == 'scatter') {
+              $("#tabs-visualization-xy").empty();
+              // Compute ordinal scales.
+              var xValues = [];
+              var seriesNames = [];
+              var maxValue = 0;
+              for (var yid in series) {
+                seriesNames.push(yid);
+                var items = series[yid];
+                for (var i = 0; i < items.length; ++i) {
+                  xValues.push(items[i].x);
+                  if (items[i].value > maxValue) maxValue = items[i].value;
+                }
+              }
+              xValues = d3.set(xValues).values().map(function(s) { return parseFloat(s); });
+
+              var margin = {top: 90 + 20 * (seriesNames.length - 2), right: 15, bottom: 110, left: 80},
+                width = 960 - margin.left - margin.right,
+                height = 460 - margin.top - margin.bottom;
+              var x = d3.scale.linear()
+                .domain([d3.min(xValues), d3.max(xValues)])
+                .nice()
+                .range([0, width]);
+              var y = d3.scale.linear()
+                .domain([0, maxValue * 1.1])
+                .range([height, 0]);
+              var color = d3.scale.category10();
+              var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                  .tickSize(-height);
+              if (postData.graphData.xAxis == 'var_imp_arrival_at_port_of_dis') {
+                xAxis = xAxis.tickFormat(function(d, i) { return d.toString(); });
+              }
+              var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickSize(-width);
+              var svg = d3.select("#tabs-visualization-xy")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + (height + 4) + ")")
+                .call(xAxis);
+              svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("dy", "-1em")
+                .style("text-anchor", "end")
+                .text(gettext('Value'));
+
+              var legend = svg.selectAll(".legend")
+                .data(seriesNames)
+                .enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + (i * 20 - margin.top + 30) + ")"; });
+
+              legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+
+              legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d; });
+
+              for (var yid in series) {
+                var line = d3.svg.line()
+                  .x(function(d) { return x(d.x); })
+                  .y(function(d) { return y(d.value); });
+                svg.append('svg:path')
+                  .attr('d', line(series[yid]))
+                  .attr('stroke', color(yid))
+                  .attr('stroke-width', 2)
+                  .attr('fill', 'none');
+              }
+            } else if (chartType[0] == 'bar') {
+              $("#tabs-visualization-bar").empty();
+              // Compute ordinal scales.
+              var labels = [];
+              var seriesNames = [];
+              var maxValue = 0;
+              for (var yid in series) {
+                seriesNames.push(yid);
+                var items = series[yid];
+                for (var i = 0; i < items.length; ++i) {
+                  labels.push(items[i].x);
+                  if (items[i].value > maxValue) maxValue = items[i].value;
+                }
+              }
+              labels = d3.set(labels).values();
+
+              var wrap = function (text) {
+                var w = margin.bottom - 10;
+                text.each(function() {
+                  var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                  while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > w) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", 0)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                  }
+                });
+              }
+              // Create D3js graph. This graph has two X-axes,
+              // x0 represents the labels on the data items, while
+              // x1 represents the name of the series. This is
+              // used in a way that all the data items across different
+              // series sharing the same label are grouped together.
+              var margin = {top: 90 + 20 * (seriesNames.length - 2), right: 10, bottom: 110, left: 80},
+                width = 960 - margin.left - margin.right,
+                height = 460 - margin.top - margin.bottom;
+              var x0 = d3.scale.ordinal()
+                .domain(labels)
+                .rangeRoundBands([0, width], .08);
+              var x1 = d3.scale.ordinal()
+                .domain(seriesNames)
+                .rangeRoundBands([0, x0.rangeBand()]);
+              var y = d3.scale.linear()
+                .domain([0, maxValue * 1.1])
+                .range([height, 0]);
+              var color = d3.scale.category10();
+              var xAxis = d3.svg.axis()
+                .scale(x0)
+                .orient("bottom");
+              var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+              var svg = d3.select("#tabs-visualization-bar")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              // X axis with rotated labels.
+              svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function(d) {
+                    return "rotate(-45)"
+                    })
+                .call(wrap);
+              svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("dy", "-1em")
+                .style("text-anchor", "end")
+                .text("Value");
+
+              var legend = svg.selectAll(".legend")
+                .data(seriesNames)
+                .enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + (i * 20 - margin.top + 30) + ")"; });
+
+              legend.append("rect")
+                  .attr("x", width - 18)
+                  .attr("width", 18)
+                  .attr("height", 18)
+                  .style("fill", color);
+
+              legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d; });
+
+              // Add label groups.
+              var gLabels = svg.selectAll(".label")
+                .data(labels)
+                .enter()
+                .append("g")
+                .attr("class", "g")
+                .attr("transform", function(d) { return "translate(" + x0(d) + ",0)"; });
+              gLabels
+                .append("line")
+                .attr("x1", 0)
+                .attr("x2", x0.rangeBand())
+                .attr("y1", height)
+                .attr("y2", height)
+                .style('stroke-width', 0.5)
+                .style('stroke', 'black');
+              // Add bars to all label groups.
+              gLabels.selectAll("rect")
+                .data(function(d) {
+                    // Filter by label.
+                    var res = [];
+                    for (var yid in series) {
+                        var items = series[yid];
+                        for (var i = 0; i < items.length; ++i) {
+                            if (d == items[i].x) {
+                                res.push({ series: yid, value: items[i].value });
+                            }
+                        }
+                    }
+                    return res;
+                })
+                .enter()
+                .append("rect")
+                .attr("width", x1.rangeBand())
+                .attr("x", function(d) { return x1(d.series); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("height", function(d) { return height - y(d.value); })
+                .style("fill", function(d) { return color(d.series); });
+            } else if (chartType[0] == 'donut') {
+              $("#tabs-visualization-donut").empty();
+              var label = Object.keys(series)[0];
+              var data = series[label];
+              data.sort(function(a, b) { return a.value - b.value; });
+              var sum = d3.sum(data, function(d) { return d.value; });
+              var margin = {top: 20, right: 10, bottom: 50, left: 20},
+                width = 960 - margin.left - margin.right,
+                height = 460 - margin.top - margin.bottom;
+              var color = d3.scale.category20c();
+              var radius = Math.min(width, height) / 2 - margin.top;
+
+              var arc = d3.svg.arc()
+                .outerRadius(radius * 0.8)
+                .innerRadius(radius * 0.4);
+
+              var outerArc = d3.svg.arc()
+                .outerRadius(radius * 0.9)
+                .innerRadius(radius * 0.9);
+
+              var angleShift = Math.min(-0.1, -Math.min(0.25, data[data.length - 1].value / sum));
+              var pie = d3.layout.pie()
+                .startAngle(angleShift * Math.PI)
+                .endAngle((2 + angleShift) * Math.PI)
+                .value(function(d) { return d.value; });
+              var svg = d3.select("#tabs-visualization-donut")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + (margin.left + width / 2) + "," + (margin.top + height / 2) + ")");
+
+              svg.append("text")
+                .attr("left", margin.left + width / 2)
+                  .attr("text-anchor", "middle")
+                  .attr("y", 10 - height / 2)
+                  .attr("font-size", 20)
+                .text(label);
+
+              var g = svg.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc");
+
+              var key = function(d) { return d.data.x; };
+              g.append("path")
+                .attr("d", arc)
+                .style("fill", function(d) { return color(key(d)); });
+
+              svg.append("g")
+                .attr("class", "labels");
+              svg.append("g")
+                .attr("class", "lines");
+              // Text labels.
+              var text = svg.select(".labels").selectAll("text")
+                  .data(pie(data), key);
+
+              var opacityFn = function(d) {
+                var x = Math.sin(d.endAngle - d.startAngle);
+                return Math.min(0.5, Math.pow(x, 1.5) * 15);
+              };
+              text.enter()
+                .append("text")
+                .style('opacity', opacityFn)
+                .attr("dy", ".35em")
+                .text(function(d) { return key(d) + " = " + d.value.toLocaleString(); });
+
+              var midAngle = function(d) {
+                return d.startAngle + (d.endAngle - d.startAngle)/2;
+              };
+
+              text.transition().duration(1000)
+                .attrTween("transform", function(d) {
+                  this._current = this._current || d;
+                  var interpolate = d3.interpolate(this._current, d);
+                  this._current = interpolate(0);
+                  return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return "translate("+ pos +")";
+                  };
+                })
+                .styleTween("text-anchor", function(d){
+                  this._current = this._current || d;
+                  var interpolate = d3.interpolate(this._current, d);
+                  this._current = interpolate(0);
+                  return function(t) {
+                    var d2 = interpolate(t);
+                    return midAngle(d2) < Math.PI ? "start":"end";
+                  };
+                });
+
+              text.exit()
+                .remove();
+
+              // Polylines to labels.
+              var polyline = svg.select(".lines").selectAll("polyline")
+                .data(pie(data), key);
+
+              polyline.enter()
+                .append("polyline");
+
+              polyline.transition().duration(1000)
+                .style('opacity', opacityFn)
+                .attrTween("points", function(d){
+                  this._current = this._current || d;
+                  var interpolate = d3.interpolate(this._current, d);
+                  this._current = interpolate(0);
+                  return function(t) {
+                    var d2 = interpolate(t);
+                    var pos = outerArc.centroid(d2);
+                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                  };
+                });
+
+              polyline.exit()
+                .remove();
+            }
+          });
+		    } else {
+          // TODO: Clear existing chart?
+        }
+      }
+    );
   } else if (currentTab == 'maps') {
     // TODO: Map year should be computed based on year range of search.
     // We can do it in the client side (easier).
@@ -776,34 +1308,50 @@ function refreshUi(filter, currentTab, tabData) {
       searchData: currentSearchObj,
       output: 'mapFlow'
     };
-		var mapFlowSearchCallback = function(onCompleted) {
+		var mapFlowSearchCallback = function() {
 			var $map = $('#map');
 			$map.addClass('gray');
-      $("#map").height($(window).height() - 250);
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         eval(result);
         voyagesMap.clear();
+        $('#loading').hide();
         try {
           voyagesMap.setNetworkFlow(ports, flows);
         } catch { }
         $map.removeClass('gray');
-        onCompleted();
+        loader.resizeMap();
       });
 		};
-    loader.loadMap(function() {
-      mapFlowSearchCallback(function() {
-        $('#loading').hide();
-        voyagesMap._map.invalidateSize();
-      });
-    });
+    $('#loading').show();
+    loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
-    // TODO.
+    var postData = {
+      searchData: currentSearchObj,
+      output: 'mapAnimation'
+    };
+		var mapAnimationSearchCallback = function() {
+			var $map = $('#map');
+			$map.addClass('gray');
+      $.post(searchUrl, JSON.stringify(postData), function(result) {
+        voyagesMap.clear();
+        $map.removeClass('gray');
+        $('#loading').hide();
+        $('.animationElement').show();
+        animationHelper.startAnimation(result);
+        $map.removeClass('gray');
+        loader.resizeMap();
+      });
+		};
+    $('#loading').show();
+    loader.loadMap(function() {
+      loader.loadAnimationScripts(mapAnimationSearchCallback);
+    });
   }
 }
 
-var loader = new LazyLoader();
-
 // helpers
+
+var loader = new LazyLoader();
 
 // Helper to load CSS files and scripts on demand.
 function LazyLoader() {
@@ -820,19 +1368,28 @@ function LazyLoader() {
     };
     if (self.loadedFiles.hasOwnProperty(url)) {
       callback();
-      return;
+    } else {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = false;
+      script.onreadystatechange = callback;
+      script.onload = callback;
+      script.src = url;
+      document.getElementsByTagName('head')[0].appendChild(script);
     }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = false;
-    script.onreadystatechange = callback;
-    script.onload = callback;
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
     return dfd;
   };
+  self.animationScriptsLoaded = false;
   self.mapLoaded = false;
+  self.resizeMap = function() {
+    $("#map").height($(window).height() - 200);
+    voyagesMap._map.invalidateSize();
+  };
   self.loadMap = function(done) {
+    if (self.animationScriptsLoaded) {
+      animationHelper.stopAnimation();
+    }
+    $('#map').show();
     if (!self.mapLoaded) {
       self.loadCss(STATIC_URL + 'maps/css/leaflet.css');
       self.loadCss(STATIC_URL + 'maps/css/MarkerCluster.css');
@@ -850,15 +1407,30 @@ function LazyLoader() {
                 init('1750', STATIC_URL + 'maps/', routeNodes, links).
                 setMaxPathWidth(20).
                 setPathOpacity(0.75);
-            $(window).on("resize", function() {
-              $("#map").height($(window).height() - 250);
-              voyagesMap._map.invalidateSize();
-            }).trigger("resize");
+            $(window).on("resize", self.resizeMap).trigger("resize");
             voyagesMap._map.invalidateSize();
             self.mapLoaded = true;
             done();
           });
         });
+    } else {
+      done();
+    }
+  };
+  self.loadAnimationScripts = function(done) {
+    if (!self.animationScriptsLoaded) {
+      self.loadCss(STATIC_URL + 'css/animation.css');
+      $.when(
+        self.loadScript(STATIC_URL + 'scripts/d3.min.js'),
+        self.loadScript(STATIC_URL + 'scripts/voyage/beta/jquery-ui.min.js'),
+        self.loadScript(STATIC_URL + 'maps/js/arc.js'),
+        self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
+      )
+      .then(self.loadScript(STATIC_URL + 'scripts/voyage/beta/animation.js'))
+      .then(function() {
+        self.animationScriptsLoaded = true;
+        done();
+      });
     } else {
       done();
     }
