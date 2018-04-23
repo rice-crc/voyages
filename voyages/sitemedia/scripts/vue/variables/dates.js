@@ -3,7 +3,7 @@ var_length_middle_passage_days = new NumberVariable({
     label: "Middle Passage (days)",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -16,7 +16,7 @@ var_voyage_began = new DateVariable({
     label: "Year Voyage Began",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -29,7 +29,7 @@ var_slave_purchase_began = new DateVariable({
     label: "Year Trade Began in Africa",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -42,7 +42,7 @@ var_date_departed_africa = new DateVariable({
     label: "Year Vessel Departed Africa",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -55,7 +55,7 @@ var_first_dis_of_slaves = new DateVariable({
     label: "Year Vessel Arrived with Slaves",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -68,7 +68,7 @@ var_departure_last_place_of_landing = new DateVariable({
     label: "Year Vessel Departed for Homeport",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -81,7 +81,7 @@ var_voyage_completed = new DateVariable({
     label: "Year Voyage Completed",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -94,7 +94,7 @@ var_imp_length_home_to_disembark = new NumberVariable({
     label: "Voyage Length, Homeport to Slaves Landing (days)",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{

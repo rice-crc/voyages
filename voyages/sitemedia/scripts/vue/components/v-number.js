@@ -112,13 +112,13 @@ Vue.component('v-number', {
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
-          if (this.item.op == "is less than") {
+          if (this.item.op == "is at most") {
             this.options.searchTermCaption0 = "Enter the upper bound";
           }
-          if (this.item.op == "is more than") {
+          if (this.item.op == "is at least") {
             this.options.searchTermCaption0 = "Enter the lower bound";
           }
-          if (this.item.op == "equals to") {
+          if (this.item.op == "is equal to") {
             this.options.searchTermCaption0 = this.searchTermCaption;
           }
         }
@@ -157,13 +157,13 @@ Vue.component('v-number', {
     } else {
       this.options.searchTerm1Disabled = false;
       this.item.searchTerm1 = null;
-      if (this.item.op == "is less than") {
+      if (this.item.op == "is at most") {
         this.options.searchTermCaption0 = "Enter the upper bound";
       }
-      if (this.item.op == "is more than") {
+      if (this.item.op == "is at least") {
         this.options.searchTermCaption0 = "Enter the lower bound";
       }
-      if (this.item.op == "equals to") {
+      if (this.item.op == "is equal to") {
         this.options.searchTermCaption0 = this.searchTermCaption;
       }
     }

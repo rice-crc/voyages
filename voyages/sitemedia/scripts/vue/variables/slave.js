@@ -3,7 +3,7 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
     label: "Total Slaves Embarked Imputed",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -16,7 +16,7 @@ var_total_num_slaves_purchased = new NumberVariable({
     label: "Total Slaves Embarked",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -29,7 +29,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
     label: "Total Slaves Disembarked Imputed",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -43,7 +43,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
     label: "Number of Slaves Intended at First Place of Purchase",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -56,7 +56,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
     label: "Slaves Carried from 1st Port of Purchase",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -69,7 +69,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
     label: "Slaves Carried from 2nd Port of Purchase",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -81,7 +81,7 @@ var_num_slaves_carried_third_port = new NumberVariable({
     label: "Slaves Carried from 3rd Port of Purchase",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -94,7 +94,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     label: "Number of Slaves Arriving at 1st Place of Landing",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -107,7 +107,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
     label: "Number of Slaves Disembarked at 1st Place of Landing",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -119,7 +119,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
     label: "Number of Slaves Disembarked at 2nd Place of Landing",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -132,7 +132,7 @@ var_num_slaves_disembark_third_place = new NumberVariable({
     label: "Number of Slaves Disembarked at 3rd Place of Landing",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -146,7 +146,7 @@ var_imputed_percentage_men = new NumberVariable({
     label: "Percentage Men",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -159,7 +159,7 @@ var_imputed_percentage_women = new NumberVariable({
     label: "Percentage Women",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -172,7 +172,7 @@ var_imputed_percentage_boys = new NumberVariable({
     label: "Percentage Boys",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -185,7 +185,7 @@ var_imputed_percentage_girls = new NumberVariable({
     label: "Percentage Girls",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -198,7 +198,7 @@ var_imputed_percentage_male = new NumberVariable({
     label: "Percentage Males",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -211,7 +211,7 @@ var_imputed_percentage_child = new NumberVariable({
     label: "Percentage Children",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -224,7 +224,7 @@ var_imputed_sterling_cash = new NumberVariable({
     label: "Sterling Cash Price in Jamaica",
     description: "This is used to track the price paid for slaves in the Americas as they were sold from the vessel",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -237,7 +237,7 @@ var_imputed_death_middle_passage = new NumberVariable({
     label: "Slave Deaths during Middle Passage",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -250,7 +250,7 @@ var_imputed_mortality = new NumberVariable({
     label: "Mortality Rate",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{

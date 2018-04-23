@@ -3,7 +3,7 @@ var_voyage_id = new NumberVariable({
     label: "Voyage ID",
     description: "This is the unique ID number assigned in the Trans-Atlantic Slave Trade database",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -40,7 +40,7 @@ var_year_of_construction = new NumberVariable({
     label: "Year Constructed",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -65,7 +65,7 @@ var_registered_year = new NumberVariable({
     label: "Year Registered",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -126,7 +126,7 @@ var_tonnage = new NumberVariable({
     label: "Tonnage",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -139,7 +139,7 @@ var_tonnage_mod = new NumberVariable({
     label: "Standardized Tonnage",
     description: "This is the standardized tonnage calculated by algorithms",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
@@ -152,7 +152,7 @@ var_guns_mounted = new NumberVariable({
     label: "Guns Mounted",
     description: "",
   },{
-    op: "equals to",
+    op: "is equal to",
     searchTerm0: null,
     searchTerm1: null
   },{
