@@ -2,7 +2,7 @@
 <!-- Search Settings -->
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.settings.count" :disable-caret="true">
-    <i class="fa fa-cog" aria-hidden="true" slot="menu-title"></i>
+    <i class="fa fa-cog" aria-hidden="true" slot="menu-title" data-toggle="tooltip" data-placement="top" title="Adjust search settings"></i>
   </v-menu-title>
 
   <v-panel-singular title="Search Settings" :count="false" group="options" sub-group="settings" align="right" :filters="filter.settings.settings" :control-invisible="true">
@@ -30,7 +30,7 @@
 <!-- Saved Searches -->
 <li class="nav-item dropdown">
   <v-menu-title :count="false" :disable-caret="true">
-    <i class="fa fa-star" aria-hidden="true" slot="menu-title"></i>
+    <i class="fa fa-star" aria-hidden="true" slot="menu-title" data-toggle="tooltip" data-placement="top" title="Save a search"></i>
   </v-menu-title>
 
   <v-panel-singular title="Saved Searches" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true" :control-invisible="true">
