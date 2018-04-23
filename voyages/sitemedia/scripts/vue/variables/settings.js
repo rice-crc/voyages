@@ -10,9 +10,22 @@ var_search_settings = new BooleanVariable({
     isAdvanced: false
   });
 
+var_display_settings = new BooleanVariable({
+  varName: "display_settings",
+  label: "Display in Compact Mode",
+  description: "Compact mode reduces white space and font size of the display.",
+},{
+  op: "equals",
+  searchTerm: false,
+},{
+  isImputed: false,
+  isAdvanced: false
+});
+
 settings = {
   settings: {
     var_search_settings: var_search_settings,
+    var_display_settings: var_display_settings,
     count: {
       changed: 0,
       activated: 0,

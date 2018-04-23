@@ -20,7 +20,7 @@ Vue.component('v-toggle', {
       </div>
 
       <div class="v-toggle-control">
-        <span>{{filter.description}}</span>
+        <span class="v-panel-description">{{filter.description}}</span>
         <span class="fa toggle fa-control"
               v-bind:class="{'fa-toggle-on': item.searchTerm, 'fa-toggle-off': !item.searchTerm, 'primary-color': item.searchTerm, 'text-muted': !item.searchTerm}"
               @click="click">
