@@ -9,8 +9,8 @@ Vue.component('v-select', {
   `,
   data: function() {
     return {
-      selected: "equals to",
-      options: ['is less than',  'equals to', 'is more than', 'is between'],
+      selected: "is equal to",
+      options: ['is at most',  'is equal to', 'is at least', 'is between'],
     }
   },
   methods: {

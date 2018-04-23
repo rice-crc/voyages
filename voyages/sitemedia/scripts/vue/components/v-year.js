@@ -78,7 +78,7 @@ Vue.component('v-year', {
     reset() { // reset data; observers will take care of resetting the controls
       this.item.searchTerm0 = null;
       this.item.searchTerm1 = null;
-      this.item.op = "equals to";
+      this.item.op = "is equal to";
     }
   },
 
@@ -106,13 +106,13 @@ Vue.component('v-year', {
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
-          if (this.item.op == "is less than") {
+          if (this.item.op == "is at most") {
             this.options.searchTermCaption0 = "Enter the upper bound";
           }
-          if (this.item.op == "is more than") {
+          if (this.item.op == "is at least") {
             this.options.searchTermCaption0 = "Enter the lower bound";
           }
-          if (this.item.op == "equals to") {
+          if (this.item.op == "is equal to") {
             this.options.searchTermCaption0 = this.searchTermCaption;
           }
         }

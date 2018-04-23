@@ -70,11 +70,11 @@ function resetFilter(filter, group, subGroup) {
 }
 
 function replaceKey(key) {
-	if (key == "is less than") {
+	if (key == "is at most") {
 		return "is at most"
-	} else if (key == "is more than") {
+	} else if (key == "is at least") {
 		return "is at least";
-	} else if (key == "equals to") {
+	} else if (key == "is equal to") {
 		return "equals";
 	} else {
     return key;
