@@ -70,11 +70,11 @@ function resetFilter(filter, group, subGroup) {
 }
 
 function replaceKey(key) {
-	if (key == "is at most") {
+	if (key == "is less than") {
 		return "is at most"
-	} else if (key == "is at least") {
+	} else if (key == "is more than") {
 		return "is at least";
-	} else if (key == "is equal to") {
+	} else if (key == "equals to") {
 		return "equals";
 	} else {
     return key;
@@ -484,7 +484,7 @@ function refreshUi(filter, currentTab, tabData) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $('#results_main_table').on( 'click', 'tr', function () {
+          $('#results_main_table  > tbody').on( 'click', 'tr', function () {
               searchBar.row.data = mainDatatable.row( this ).data();
           });
 
@@ -492,21 +492,20 @@ function refreshUi(filter, currentTab, tabData) {
           return JSON.stringify({
             searchData: currentSearchObj,
             tableParams: d,
-            output: 'resultsTable'
+            output: 'resultsTable',
+
           });
         }
       },
 
-      // default to load 20 rows
-      pageLength: 20,
 
       // dom: 'ifrtBp',
       dom:  "<'flex-container'iB>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [20, 50, 100],
-        ['20 rows', '50 rows', '100 rows']
+        [10, 25, 50, 100],
+        ['10 rows', '25 rows', '50 rows', '100 rows']
       ],
 
       buttons: [
