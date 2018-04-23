@@ -29,11 +29,12 @@
 
   <div class="row">
     <div class="col-md-12">
-      <!-- <b-btn v-b-toggle="row.ids">Expand/Collapse All</b-btn>
-      {{row.ids}} -->
-      Will include a Expand/Collapse All button if it would be helpful.
+      <p>Here are the full details of a slave trade entry. <a href="#" @click="row.collapseVisible = !row.collapseVisible">Expand/Collapse</a> to see/hide all.<p>
     </div>
   </div>
+
+
+
 
   <div class="row" v-for="result in row.results">
     <div class="col-md-12">
@@ -41,7 +42,7 @@
         <b-card-header header-tag="header" class="pointer" role="tab">
           <div block href="#" v-b-toggle="result.group" variant="info" class="text-bold">{{result.groupName}}</div>
         </b-card-header>
-        <b-collapse :id="result.group" visible accordion="my-accordion" role="tabpanel">
+        <b-collapse :id="result.group" :visible=row.collapseVisible role="tabpanel">
           <b-card-body>
             <div class="row" v-for="variable in result.variables">
               <div class='col-md-6 text-bold'>

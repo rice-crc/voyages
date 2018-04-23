@@ -440,7 +440,9 @@ function destroyPreviousTable(id) {
     if ($.fn.DataTable.isDataTable(id)) {
       $(id).DataTable().destroy();
     }
-  } catch { }
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 function refreshUi(filter, currentTab, tabData) {
@@ -459,7 +461,7 @@ function refreshUi(filter, currentTab, tabData) {
       className: 'btn btn-info buttons-collection dropdown-toggle',
     };
     // TEMP Yang: I think there is an option for destroying the
-    // old table (destroy: true) that you can pass so we avoid 
+    // old table (destroy: true) that you can pass so we avoid
     // this call?
     destroyPreviousTable('#results_main_table');
     var mainDatatable = $('#results_main_table').DataTable({
@@ -478,14 +480,14 @@ function refreshUi(filter, currentTab, tabData) {
               };
             });
           }
-  
+
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
           $('#results_main_table').on( 'click', 'tr', function () {
               searchBar.row.data = mainDatatable.row( this ).data();
           });
-  
+
           // console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
           return JSON.stringify({
             searchData: currentSearchObj,
@@ -494,8 +496,8 @@ function refreshUi(filter, currentTab, tabData) {
           });
         }
       },
-  
-  
+
+
       // dom: 'ifrtBp',
       dom:  "<'flex-container'iB>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -504,7 +506,7 @@ function refreshUi(filter, currentTab, tabData) {
         [10, 25, 50, 100],
         ['10 rows', '25 rows', '50 rows', '100 rows']
       ],
-  
+
       buttons: [
         columnToggleMenu,
         pageLength,
@@ -575,7 +577,7 @@ function refreshUi(filter, currentTab, tabData) {
     var getTableElement = function(source) {
       var id = tabData.tables[source].value;
       return tabs.tables[source].options.find(function(x) {
-        return x.id == id; 
+        return x.id == id;
       });
     };
     var getField = function(source) {
@@ -728,7 +730,7 @@ function refreshUi(filter, currentTab, tabData) {
           }
         }
         var fmtFunc = function(x) {
-          return x.toLocaleString(undefined, { 
+          return x.toLocaleString(undefined, {
             style: format,
             minimumFractionDigits: (format == 'percent' || weightByCount) ? 1 : 0,
             maximumFractionDigits: 1,
@@ -793,7 +795,7 @@ function refreshUi(filter, currentTab, tabData) {
               .domain(d3.range(minYear, maxYear + 1))
               .rangeRoundBands([0, width]);
             var xShift = -x(minYear);
-            var maxValue = d3.max(result, function(d) { return d.value; });            
+            var maxValue = d3.max(result, function(d) { return d.value; });
             var y = d3.scale.linear()
                 .domain([0, maxValue * 1.1])
                 .range([height, 0]);
@@ -865,16 +867,16 @@ function refreshUi(filter, currentTab, tabData) {
                 //.attr("transform", "translate(0," + height + ")")
                 .attr("transform", "translate(" + xShift + ", 0)")
                 .call(xAxis);
-            
+
             var gy = svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis);
-            
+
             var vertical = svg
                 .append("g")
                 .attr("class", "vertical_highlight")
                 .style("opacity", 0.0);
-            
+
             vertical.append("line")
                 .attr("class", "vertical_line")
                 .attr("y2", height);
@@ -932,7 +934,7 @@ function refreshUi(filter, currentTab, tabData) {
           }
         };
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
-          $.post(searchUrl, JSON.stringify(postData), function(series) { 
+          $.post(searchUrl, JSON.stringify(postData), function(series) {
             if (chartType[0] == 'scatter') {
               $("#tabs-visualization-xy").empty();
               // Compute ordinal scales.
@@ -1317,7 +1319,9 @@ function refreshUi(filter, currentTab, tabData) {
         $('#loading').hide();
         try {
           voyagesMap.setNetworkFlow(ports, flows);
-        } catch { }
+        } catch(e) {
+          console.log(e);
+        }
         $map.removeClass('gray');
         loader.resizeMap();
       });

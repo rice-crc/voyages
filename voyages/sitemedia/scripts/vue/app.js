@@ -26,6 +26,7 @@ var searchBar = new Vue({
     tabs: tabs,
     row: {
       data: null,
+      collapseVisible: true,
     },
     currentQuery: {},
     rowModalShow: false,
@@ -282,7 +283,7 @@ var searchBar = new Vue({
     },
 
     refresh() {
-      refreshUi(this.filter, this.currentTab, this.tabs); 
+      refreshUi(this.filter, this.currentTab, this.tabs);
     },
 
     save() {
