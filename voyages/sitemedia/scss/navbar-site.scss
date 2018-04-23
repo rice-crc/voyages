@@ -21,7 +21,7 @@
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, .9);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .navbar-dark .navbar-nav .nav-link:focus,
@@ -36,6 +36,12 @@
   color: #fff;
 }
 
+.active-link {
+  .nav-link {
+    color: rgba(255, 255, 255, 1) !important;
+  }
+}
+
 .nav-container {
   margin-right: auto;
   margin-left: auto;
@@ -48,15 +54,6 @@
     justify-content: space-between;
     display: flex;
     align-items: center;
-  }
-
-  .nav-item {
-    padding-top: 4px;
-  }
-
-  .active-link {
-    border-top: solid 4px white;
-    padding-top: 0;
   }
 
   .navbar {
