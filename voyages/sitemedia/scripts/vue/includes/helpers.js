@@ -497,14 +497,16 @@ function refreshUi(filter, currentTab, tabData) {
         }
       },
 
+      // default to load 20 rows
+      pageLength: 20,
 
       // dom: 'ifrtBp',
       dom:  "<'flex-container'iB>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [10, 25, 50, 100],
-        ['10 rows', '25 rows', '50 rows', '100 rows']
+        [20, 50, 100],
+        ['20 rows', '50 rows', '100 rows']
       ],
 
       buttons: [
