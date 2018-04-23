@@ -4,7 +4,7 @@
     <pre class="text-bold inline variable-text">{{variable.label}}</pre>
     {{variable.op}}
     <pre class="text-bold inline variable-text" v-if="variable.searchTerm" v-text="variable.searchTerm"></pre>
-    <span v-else>
+    <span class="inline" v-else>
       <pre class="text-bold inline variable-text">{{variable.searchTerm0}}</pre>
       <span v-if="variable.searchTerm1">
       and <pre class="text-bold inline variable-text">{{variable.searchTerm1}}</pre>
