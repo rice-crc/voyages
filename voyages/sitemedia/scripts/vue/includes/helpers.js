@@ -74,7 +74,7 @@ function replaceKey(key) {
 		return "is at most"
 	} else if (key == "is more than") {
 		return "is at least";
-	} else if (key == "equals to") {
+	} else if (key == "is equal to") {
 		return "equals";
 	} else {
     return key;
