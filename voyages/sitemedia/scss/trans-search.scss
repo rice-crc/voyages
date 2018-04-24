@@ -127,3 +127,8 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before
 .dt-button {
   font-size: $reduced-font-size;
 }
+
+
+.vue-treeselect__single-value, .vue-treeselect__placeholder {
+  font-size: $reduced-font-size !important;
+}
