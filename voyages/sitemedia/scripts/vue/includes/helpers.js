@@ -498,6 +498,8 @@ function refreshUi(filter, currentTab, tabData) {
         }
       },
 
+      // page length Default
+      pageLength: 25,
 
       // dom: 'ifrtBp',
       dom:  "<'flex-container'iB>" +
