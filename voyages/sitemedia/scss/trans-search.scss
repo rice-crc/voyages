@@ -24,7 +24,7 @@
 }
 
 .tab-pane {
-  padding: 1rem 0;
+  padding: .5rem 0;
 }
 
 .tab-pane-sm {
@@ -39,7 +39,7 @@
   padding-top: 0.5rem;
 }
 
-#results_main_table {
+#results_main_table, #v-summary-statistics, .dataTable {
   font-size: $reduced-font-size;
 }
 
@@ -60,11 +60,11 @@
 }
 
 table.dataTable thead>tr>th.sorting, .table td {
-  padding: 0.1rem .5rem !important;
+  padding: 0.1rem .25rem !important;
 }
 
 table.dataTable thead>tr>th.sorting, .table th {
-  padding: 0.25rem .5rem !important;
+  padding: 0.1rem .25rem !important;
 }
 
 .trans-tab .nav-item {
