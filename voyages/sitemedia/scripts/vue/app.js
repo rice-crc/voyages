@@ -117,8 +117,22 @@ var searchBar = new Vue({
             }
           }
         }
+
       },
       deep: true,
+    },
+
+    displayChanged() {
+      // display settings
+      if (this.filter.settings.settings.var_display_settings.value.searchTerm) {
+        $( ".dataTable" ).removeClass( "dt-font-sm" );
+        $( ".dataTable" ).addClass( "dt-font-md" );
+        refreshUi(this.filter, this.currentTab, this.tabs);
+      } else {
+        $( ".dataTable" ).removeClass( "dt-font-md" );
+        $( ".dataTable" ).addClass( "dt-font-sm" );
+        refreshUi(this.filter, this.currentTab, this.tabs);
+      }
     },
 
     // row in a datatable
@@ -172,32 +186,15 @@ var searchBar = new Vue({
     currentTab:{
       handler: function(){
         refreshUi(this.filter, this.currentTab, this.tabs);
-        /*
-        // tables tab
-        // feel free to feed the data in here for this tab
-        // data table template is located at: apps/voyage/templates/voyage/vue/tabs/*
-        if (this.currentTab == "tables") {
-          $('#v-tables').DataTable({
-            destroy: true,
-            dom:  "<'flex-container'>" +
-                  "<'row'<'col-sm-12'tr>>"
-          });
-
-
-        // summary statistics tab
-        // feel free to feed the data in here for this tab
-        // data table template is located at: apps/voyage/templates/voyage/vue/tabs/*
-        } else if (this.currentTab == "statistics") {
-          $('#v-summary-statistics').DataTable({
-            destroy: true,
-            dom:  "<'flex-container'>" +
-                  "<'row'<'col-sm-12'tr>>"
-          });
-        }
-        */
       }
     }
 
+  },
+
+  computed: {
+    displayChanged() {
+      return this.filter.settings.settings.var_display_settings.value.searchTerm;
+    }
   },
 
   methods: {

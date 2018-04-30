@@ -131,15 +131,6 @@
   font-size: 1.25rem;
 }
 
-#results_main_table {
-  tbody {
-    tr:hover {
-      cursor: pointer;
-      color: $trans-color;
-    }
-  }
-}
-
 .pointer:hover {
   cursor: pointer;
 }
