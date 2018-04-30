@@ -37,14 +37,13 @@ var allColumns = [
   {
     data: "var_" + YEAR_RANGE_VARNAME,
     category: 0,
-    header: "Year arrived with slaves*",
-    "visible": false
+    header: "Year arrived with slaves*"
   },
 
   // ship nation owner
   { data: "var_voyage_id", category: 1, header: "Voyage ID" },
   { data: "var_ship_name_plaintext", category: 1, header: "Vessel Name" },
-  { data: "var_owner_plaintext", category: 1, header: "Vessel Owner" },
+  { data: "var_owner_plaintext", category: 1, header: "Vessel Owner", "visible": false },
   { data: "var_year_of_construction", category: 1, header: "Year Constructed", "visible": false },
   { data: "var_vessel_construction_place_idnum", category: 1, header: "Place Constructed", "visible": false },
   { data: "var_registered_year", category: 1, header: "Year Registered", "visible": false },
@@ -70,7 +69,7 @@ var allColumns = [
   { data: "var_place_voyage_ended_idnum", category: 2, header: "Place where Voyage Ended", "visible": false },
 
   // slaves
-  { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked Imputed" },
+  { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked Imputed", "visible": false },
   { data: "var_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked", "visible": false },
   { data: "var_imp_total_slaves_disembarked", category: 3, header: "Total Slaves Disembarked Imputed", "visible": false },
   { data: "var_num_slaves_intended_first_port", category: 3, header: "Number of Slaves Intended at First Place of Purchase", "visible": false },
@@ -98,12 +97,12 @@ var allColumns = [
   { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false },
   { data: "var_slave_purchase_began", category: 4, header: "Year Trade Began in Africa", "visible": false },
   { data: "var_date_departed_africa", category: 4, header: "Year Vessel Departed Africa", "visible": false },
-  { data: "var_first_dis_of_slaves", category: 4, header: "Year Vessel Arrived with Slaves" },
+  { data: "var_first_dis_of_slaves", category: 4, header: "Year Vessel Arrived with Slaves", "visible": false },
   { data: "var_departure_last_place_of_landing", category: 4, header: "Year Vessel Departed for Homeport", "visible": false },
   { data: "var_voyage_completed", category: 4, header: "Year Voyage Completed", "visible": false },
 
   // captain and crew
-  { data: "var_captain_plaintext", category: 5, header: "Captain's Name", "visible": false },
+  { data: "var_captain_plaintext", category: 5, header: "Captain's Name" },
   { data: "var_crew_voyage_outset", category: 5, header: "Crew at Voyage Outset", "visible": false },
   { data: "var_crew_first_landing", category: 5, header: "Crew at First Landing of Slaves", "visible": false },
   { data: "var_crew_died_complete_voyage", category: 5, header: "Crew Deaths during Voyage", "visible": false },
@@ -111,7 +110,7 @@ var allColumns = [
   // outcome
   { data: "var_outcome_voyage", category: 6, header: "Particular Outcome of Voyage", "visible": false },
   { data: "var_outcome_slaves", category: 6, header: "Outcome of Voyage for Slaves", "visible": false },
-  { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured" },
+  { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured", "visible": false },
   { data: "var_outcome_owner", category: 6, header: "Outcome of Voyage for Owner", "visible": false },
   { data: "var_resistance", category: 6, header: "African Resistance", "visible": false },
 
