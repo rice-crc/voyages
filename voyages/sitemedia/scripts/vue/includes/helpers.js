@@ -940,7 +940,11 @@ function refreshUi(filter, currentTab, tabData) {
           "donut-chart-tab": ["donut", "sectors", "values"]
         };
         var chartType = allChartTypes[$('a.active.side-control-tab').attr('id')];
-        var yAxes = tabs.visualization[chartType[0]][chartType[2]].value;
+        var yIds = tabs.visualization[chartType[0]][chartType[2]].value;
+        var yAxes = [];
+        yIds.forEach(function(element, index, yIds) {
+          yAxes[index] = tabs.visualization[chartType[0]][chartType[2]].options[yIds[index]]["varName"];
+        });
         var postData = {
           searchData: currentSearchObj,
           output: 'graph',
