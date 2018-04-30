@@ -19,6 +19,15 @@
   justify-content: space-between;
 }
 
+#results_main_table {
+  tbody {
+    tr:hover {
+      cursor: pointer;
+      color: $trans-color;
+    }
+  }
+}
+
 #results_main_table_paginate {
   float: right;
 }
@@ -39,8 +48,20 @@
   padding-top: 0.5rem;
 }
 
-#results_main_table, #v-summary-statistics, .dataTable {
+.dataTable {
+  font-size: $regular-font-size;
+}
+
+table.dataTable thead>tr>th, table.dataTable tbody>tr>td {
+  padding: 0 45px 0 5px !important;
+}
+
+.dt-font-sm {
   font-size: $reduced-font-size;
+}
+
+.dt-font-md {
+  font-size: $regular-font-size;
 }
 
 .dt-buttons > .buttons-collection  {
@@ -59,13 +80,13 @@
   font-size: $reduced-font-size;
 }
 
-table.dataTable thead>tr>th.sorting, .table td {
-  padding: 0.1rem .25rem !important;
-}
-
-table.dataTable thead>tr>th.sorting, .table th {
-  padding: 0.1rem .25rem !important;
-}
+// table.dataTable thead>tr>th.sorting, .table td {
+//   padding: 0.1rem .25rem !important;
+// }
+//
+// table.dataTable thead>tr>th.sorting, .table th {
+//   padding: 0.1rem .25rem !important;
+// }
 
 .trans-tab .nav-item {
   a {
