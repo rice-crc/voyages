@@ -27,6 +27,15 @@ Vue.component("v-dropdown", {
     }
   },
 
+  // at created, load default values for those who have them
+  created: function () {
+    if (typeof(this.variable) != "undefined") {
+      if (this.variable.value !== null) {
+        this.data.value = this.variable.value;
+      }
+    }
+  },
+
   methods: {
   },
 

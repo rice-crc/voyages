@@ -22,18 +22,18 @@ function makeYearRange(interval) {
 
 var otherGraphsXAxes = [
   { id: 'var_imputed_nationality', label: 'Flag*' },
-  { id: 'var_rig_of_vessel', label: 'Rig' }, 
-  { id: 'var_outcome_voyage', label: 'Particular outcome of the voyage' }, 
+  { id: 'var_rig_of_vessel', label: 'Rig' },
+  { id: 'var_outcome_voyage', label: 'Particular outcome of the voyage' },
   { id: 'var_outcome_slaves', label: 'Outcome for slaves*' },
-  { id: 'var_outcome_owner', label: 'Outcome for owner*' }, 
-  { id: 'var_outcome_ship_captured', label: 'Outcome if ship captured*' }, 
-  { id: 'var_resistance', label: 'African resistance' }, 
-  { id: 'var_imp_port_voyage_begin', label: 'Place where voyage began*' }, 
-  { id: 'var_imp_region_voyage_begin', label: 'Region where voyage began*' }, 
-  { id: 'var_imp_principal_place_of_slave_purchase', label: 'Principal place of slave purchase*' }, 
-  { id: 'var_imp_principal_region_of_slave_purchase', label: 'Principal region of slave purchase*' }, 
-  { id: 'var_imp_principal_port_slave_dis', label: 'Principal place of slave landing*' }, 
-  { id: 'var_imp_principal_region_slave_dis', label: 'Principal region of slave landing*' }, 
+  { id: 'var_outcome_owner', label: 'Outcome for owner*' },
+  { id: 'var_outcome_ship_captured', label: 'Outcome if ship captured*' },
+  { id: 'var_resistance', label: 'African resistance' },
+  { id: 'var_imp_port_voyage_begin', label: 'Place where voyage began*' },
+  { id: 'var_imp_region_voyage_begin', label: 'Region where voyage began*' },
+  { id: 'var_imp_principal_place_of_slave_purchase', label: 'Principal place of slave purchase*' },
+  { id: 'var_imp_principal_region_of_slave_purchase', label: 'Principal region of slave purchase*' },
+  { id: 'var_imp_principal_port_slave_dis', label: 'Principal place of slave landing*' },
+  { id: 'var_imp_principal_region_slave_dis', label: 'Principal region of slave landing*' },
   { id: 'var_imp_principal_broad_region_disembark', label: 'Broad region of slave landing*' },
   { id: 'var_place_voyage_ended', label: 'Place where voyage ended' },
   { id: 'var_region_voyage_ended', label: 'Region where voyage ended' },
@@ -78,7 +78,7 @@ var tabs = {
     row: {
       // currently selected value
       variable: "tabs.tables.row",
-      value: null,
+      value: 12,
       options: [{id: 0, label: "Flag*"},
       {id: 1, label: "Broad region where voyage began"},
       {id: 2, label: "Region where voyage began"},
@@ -98,7 +98,7 @@ var tabs = {
     column: {
       // currently selected value
       variable: "tabs.tables.column",
-      value: null,
+      value: 6,
       options: [{id: 0, label: "Flag*"},
         {id: 1, label: "Broad region where voyage began"},
         {id: 2, label: "Region where voyage began"},
@@ -112,7 +112,7 @@ var tabs = {
     cell: {
       // currently selected value
       variable: "tabs.tables.cell",
-      value: null,
+      value: 1,
       options: [{id: 0, label: "Number of Voyages", functions: {"cell": "unique(var_voyage_id)"}},
       {id: 1, label: "Sum of embarked slaves", functions: {"cell": "sum(var_imp_total_num_slaves_purchased)"}},
       {id: 2, label: "Average number of embarked slaves", avg: true, functions: {"cell": "avg(var_imp_total_num_slaves_purchased)"}},
@@ -148,7 +148,7 @@ var tabs = {
       x: {
         // currently selected value
         variable: "tabs.visualization.scatter.x",
-        value: null,
+        value: "var_imp_arrival_at_port_of_dis",
         options: [{ id: 'var_imp_arrival_at_port_of_dis', label: 'Year arrived with slaves*' },
         { id: 'var_imp_length_home_to_disembark', label: 'Voyage length, home port to slaves landing (days)*' },
         { id: 'var_length_middle_passage_days', label: 'Middle passage (days)*' },
@@ -160,7 +160,7 @@ var tabs = {
       y: {
         // currently selected value
         variable: "tabs.visualization.scatter.y",
-        value: null,
+        value: ["var_voyage_id"],
         options: graphsYAxes,
       },
     },
@@ -168,7 +168,7 @@ var tabs = {
       x: {
         // currently selected value
         variable: "tabs.visualization.bar.x",
-        value: null,
+        value: "var_imputed_nationality",
         options: otherGraphsXAxes,
       },
       y: {
@@ -182,7 +182,7 @@ var tabs = {
       sectors: {
         // currently selected value
         variable: "tabs.visualization.donut.sectors",
-        value: null,
+        value: "var_imputed_nationality",
         options: otherGraphsXAxes,
       },
       values: {
@@ -199,7 +199,7 @@ var tabs = {
     chart: {
       // currently selected value
       variable: "tabs.timeline.chart",
-      value: null,
+      value: "var_imp_total_slaves_disembarked",
       options: [
         { id: "var_imp_arrival_at_port_of_dis", label: "Number of voyages" },
         { id: "var_tonnage", label: "Average tonnage" },
