@@ -22,64 +22,103 @@ for (var i = 0; i < searchTerms.length; ++i) {
 }
 
 var categoryNames = [
-  "Ship, nation, owners",
-  "Voyage Dates",
-  "Voyage Itinerary",
-  "Slave (numbers)",
-  "Voyage Outcome",
-  "Sources",
+  "Year Range",
+  "Ship, Nation, Owners",
+  "Itinerary",
+  "Slave",
+  "Dates",
+  "Captain and Crew",
+  "Outcome",
+  "Source",
 ];
-var allColumns = [{
-    data: "var_voyage_id",
-    category: 0,
-    header: "Voyage identification number"
-  },
-  {
-    data: "var_ship_name",
-    category: 0,
-    header: "Vessel name"
-  },
-  {
-    data: "var_captain_plaintext",
-    category: 0,
-    header: "Capitain's name"
-  },
+
+var allColumns = [
+  // year range
   {
     data: "var_" + YEAR_RANGE_VARNAME,
-    category: 1,
-    header: "Year arrived with slaves*"
-  },
-  {
-    data: "var_imp_principal_place_of_slave_purchase_lang_en",
-    category: 2,
-    header: "Principal region of slave purchase*"
-  },
-  {
-    data: "var_imp_principal_port_slave_dis_lang_en",
-    category: 2,
-    header: "Principal region of slave landing*"
-  },
-  {
-    data: "var_imp_port_voyage_begin_lang_en",
-    category: 2,
-    header: "Place where voyage began*",
+    category: 0,
+    header: "Year arrived with slaves*",
     "visible": false
   },
-  {
-    data: "var_imp_total_num_slaves_purchased",
-    category: 3,
-    header: "Total slaves embarked*",
-    "visible": false
-  },
-  {
-    data: "var_outcome_ship_captured_lang_en",
-    category: 4,
-    header: "Outcome of voyage if ship captured*",
-    "visible": false
-  },
+
+  // ship nation owner
+  { data: "var_voyage_id", category: 1, header: "Voyage ID" },
+  { data: "var_ship_name_plaintext", category: 1, header: "Vessel Name" },
+  { data: "var_owner_plaintext", category: 1, header: "Vessel Owner" },
+  { data: "var_year_of_construction", category: 1, header: "Year Constructed", "visible": false },
+  { data: "var_vessel_construction_place_idnum", category: 1, header: "Place Constructed", "visible": false },
+  { data: "var_registered_year", category: 1, header: "Year Registered", "visible": false },
+  { data: "var_registered_place_idnum", category: 1, header: "Place Registered", "visible": false },
+  { data: "var_nationality", category: 1, header: "Flag", "visible": false },
+  { data: "var_imputed_nationality", category: 1, header: "Flag Imputed", "visible": false },
+  { data: "var_rig_of_vessel", category: 1, header: "Rig of Vessel", "visible": false },
+  { data: "var_tonnage", category: 1, header: "Tonnage", "visible": false },
+  { data: "var_tonnage_mod", category: 1, header: "Standardized Tonnage", "visible": false },
+  { data: "var_guns_mounted", category: 1, header: "Guns Mounted", "visible": false },
+
+  // itinerary
+  { data: "var_imp_port_voyage_begin_idnum", category: 2, header: "Place where Voyage Began" },
+  { data: "var_imp_principal_place_of_slave_purchase_idnum", category: 2, header: "Principal Place of Purchase" },
+  { data: "var_first_place_slave_purchase_idnum", category: 2, header: "1st Place of Purchase", "visible": false },
+  { data: "var_second_place_slave_purchase_idnum", category: 2, header: "2nd Place of Purchase", "visible": false },
+  { data: "var_third_place_slave_purchase_idnum", category: 2, header: "3rd Place of Purchase", "visible": false },
+  { data: "var_port_of_call_before_atl_crossing_idnum", category: 2, header: "Places of Call before Atlantic Crossing", "visible": false },
+  { data: "var_imp_principal_port_slave_dis_idnum", category: 2, header: "Principal Place of Slave Landing" },
+  { data: "var_first_landing_place_idnum", category: 2, header: "1st Place of Slave Landing", "visible": false },
+  { data: "var_second_landing_place_idnum", category: 2, header: "2nd Place of Slave Landing", "visible": false },
+  { data: "var_third_landing_place_idnum", category: 2, header: "3rd Place of Slave Landing", "visible": false },
+  { data: "var_place_voyage_ended_idnum", category: 2, header: "Place where Voyage Ended", "visible": false },
+
+  // slaves
+  { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked Imputed" },
+  { data: "var_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked", "visible": false },
+  { data: "var_imp_total_slaves_disembarked", category: 3, header: "Total Slaves Disembarked Imputed", "visible": false },
+  { data: "var_num_slaves_intended_first_port", category: 3, header: "Number of Slaves Intended at First Place of Purchase", "visible": false },
+  { data: "var_num_slaves_carried_first_port", category: 3, header: "Slaves Carried from 1st Port of Purchase", "visible": false },
+  { data: "var_num_slaves_carried_second_port", category: 3, header: "Slaves Carried from 2nd Port of Purchase", "visible": false },
+  { data: "var_num_slaves_carried_third_port", category: 3, header: "Slaves Carried from 3rd Port of Purchase", "visible": false },
+  { data: "var_total_num_slaves_arr_first_port_embark", category: 3, header: "Number of Slaves Arriving at 1st Place of Landing" },
+  { data: "var_num_slaves_disembark_first_place", category: 3, header: "Number of Slaves Disembarked at 1st Place of Landing", "visible": false },
+  { data: "var_num_slaves_disembark_second_place", category: 3, header: "Number of Slaves Disembarked at 2nd Place of Landing", "visible": false },
+  { data: "var_num_slaves_disembark_third_place", category: 3, header: "Number of Slaves Disembarked at 3rd Place of Landing", "visible": false },
+  { data: "var_imputed_percentage_men", category: 3, header: "Percentage Men", "visible": false },
+  { data: "var_imputed_percentage_women", category: 3, header: "Percentage Women", "visible": false },
+  { data: "var_imputed_percentage_boys", category: 3, header: "Percentage Boys", "visible": false },
+  { data: "var_imputed_percentage_girls", category: 3, header: "Percentage Girls", "visible": false },
+  { data: "var_imputed_percentage_male", category: 3, header: "Percentage Males", "visible": false },
+  { data: "var_imputed_percentage_child", category: 3, header: "Percentage Children", "visible": false },
+  { data: "var_imputed_sterling_cash", category: 3, header: "Sterling Cash Price in Jamaica", "visible": false },
+  { data: "var_imputed_death_middle_passage", category: 3, header: "Slave Deaths during Middle Passage", "visible": false },
+  { data: "var_imputed_mortality", category: 3, header: "Mortality Rate", "visible": false },
+
+
+  // dates
+  { data: "var_length_middle_passage_days", category: 4, header: "Middle Passage (days)", "visible": false },
+  { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Slaves Landing (days)", "visible": false },
+  { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false },
+  { data: "var_slave_purchase_began", category: 4, header: "Year Trade Began in Africa", "visible": false },
+  { data: "var_date_departed_africa", category: 4, header: "Year Vessel Departed Africa", "visible": false },
+  { data: "var_first_dis_of_slaves", category: 4, header: "Year Vessel Arrived with Slaves" },
+  { data: "var_departure_last_place_of_landing", category: 4, header: "Year Vessel Departed for Homeport", "visible": false },
+  { data: "var_voyage_completed", category: 4, header: "Year Voyage Completed", "visible": false },
+
+  // captain and crew
+  { data: "var_captain_plaintext", category: 5, header: "Captain's Name", "visible": false },
+  { data: "var_crew_voyage_outset", category: 5, header: "Crew at Voyage Outset", "visible": false },
+  { data: "var_crew_first_landing", category: 5, header: "Crew at First Landing of Slaves", "visible": false },
+  { data: "var_crew_died_complete_voyage", category: 5, header: "Crew Deaths during Voyage", "visible": false },
+
+  // outcome
+  { data: "var_outcome_voyage", category: 6, header: "Particular Outcome of Voyage", "visible": false },
+  { data: "var_outcome_slaves", category: 6, header: "Outcome of Voyage for Slaves", "visible": false },
+  { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured" },
+  { data: "var_outcome_owner", category: 6, header: "Outcome of Voyage for Owner", "visible": false },
+  { data: "var_resistance", category: 6, header: "African Resistance", "visible": false },
+
+  // sources
   {
     data: "var_sources",
-    category: 5,
+    category: 7,
     header: "Sources",
     "visible": false,
     render: function ( data ) {
@@ -88,13 +127,16 @@ var allColumns = [{
       data.forEach(function(source) {
         count += 1;
         var elements = source.split("<>");
-        var postfix = data.length == count ? "" : ";";
-        sourceString += "<span data-toggle='tooltip' data-placement='top' data-html='true' title='" + elements[1] + "'>" + elements[0] + postfix + " </span>";
+        // var postfix = data.length == count ? "" : ";";
+        var postfix = "";
+        sourceString += "<span data-toggle='tooltip' data-placement='top' data-html='true' title='" + elements[1] + "'>" + elements[0] + postfix + " </span><br/>";
       });
       return sourceString;
     }
   },
 ];
+
+
 var categories = $.map(categoryNames, function(name) {
   return {
     name: name,

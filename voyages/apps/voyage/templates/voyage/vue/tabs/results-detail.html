@@ -2,17 +2,76 @@
 <table id="results_main_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
   <thead>
     <tr>
+      <th>Year</th>
       <th>Voyage ID</th>
       <th>Vessel Name</th>
-      <th>Captain Name</th>
-      <th>Year Arrived w. Slaves*</th>
-      <th>Principal Region of Slave Purchase*</th>
-      <th>Principal Region of Slave Landing*</th>
-      <th>Place where Voyage Began*</th>
-      <th>Total Slaves Embarked*</th>
-      <th>Outcome if Ship Captured*</th>
-      <th>Sources</th>
-      <!-- <th>I-Am</th> -->
+      <th>Vessel Owner</th>
+      <th>Year Constructed</th>
+      <th>Place Constructed</th>
+      <th>Year Registered</th>
+      <th>Place Registered</th>
+      <th>Flag</th>
+      <th>Flag Imputed</th>
+      <th>Rig of Vessel</th>
+      <th>Tonnage</th>
+      <th>Standardized Tonnage</th>
+      <th>Guns Mounted</th>
+
+      <th>Place where Voyage Began</th>
+      <th>Principal Place of Purchase</th>
+      <th>1st Place of Purchase</th>
+      <th>2nd Place of Purchase</th>
+      <th>3rd Place of Purchase</th>
+      <th>Places of Call before Atlantic Crossing</th>
+      <th>Principal Place of Slave Landing</th>
+      <th>1st Place of Slave Landing</th>
+      <th>2nd Place of Slave Landing</th>
+      <th>3rd Place of Slave Landing</th>
+      <th>Place where Voyage Ended</th>
+
+      <th>Total Slaves Embarked Imputed</th>
+      <th>Total Slaves Embarked</th>
+      <th>Total Slaves Disembarked Imputed</th>
+      <th>Number of Slaves Intended at First Place of Purchase</th>
+      <th>Slaves Carried from 1st Port of Purchase</th>
+      <th>Slaves Carried from 2nd Port of Purchase</th>
+      <th>Slaves Carried from 3rd Port of Purchase</th>
+      <th>Number of Slaves Arriving at 1st Place of Landing</th>
+      <th>Number of Slaves Disembarked at 1st Place of Landing</th>
+      <th>Number of Slaves Disembarked at 2nd Place of Landing</th>
+      <th>Number of Slaves Disembarked at 3rd Place of Landing</th>
+      <th>Percentage Men</th>
+      <th>Percentage Women</th>
+      <th>Percentage Boys</th>
+      <th>Percentage Girls</th>
+      <th>Percentage Males</th>
+      <th>Percentage Children</th>
+      <th>Sterling Cash Price in Jamaica</th>
+      <th>Slave Deaths during Middle Passage</th>
+      <th>Mortality Rate</th>
+
+      <th>Middle Passage (days)</th>
+      <th>Voyage Length, Homeport to Slaves Landing (days)</th>
+      <th>Year Voyage Began</th>
+      <th>Year Trade Began in Africa</th>
+      <th>Year Vessel Departed Africa</th>
+      <th>Year Vessel Arrived with Slaves</th>
+      <th>Year Vessel Departed for Homeport</th>
+      <th>Year Voyage Completed</th>
+
+      <th>Captain's Name</th>
+      <th>Crew at Voyage Outset</th>
+      <th>Crew at First Landing of Slaves</th>
+      <th>Crew Deaths during Voyage</th>
+
+      <th>Particular Outcome of Voyage</th>
+      <th>Outcome of Voyage for Slaves</th>
+      <th>Outcome of Voyage if Ship Captured</th>
+      <th>Outcome of Voyage for Owner</th>
+      <th>African Resistance</th>
+
+      <th>Source</th>
+
     </tr>
   </thead>
   <tbody>
@@ -49,7 +108,7 @@
                 {{variable.label}}
               </div>
               <div class='col-md-6'>
-                {{variable.value}}
+                <span v-html="variable.value"></span>
               </div>
             </div>
           </b-card-body>
@@ -79,6 +138,7 @@
       Note: Currently the select type of variable uses a code representation. I will convert it into a human readable form once the backend supports most of such variables.
     </div>
   </div>
+
   <div class="row" v-for="variable in currentQuery">
     <div class='col-md-12'>
       <pre class="text-bold inline">{{variable.label}}</pre>
