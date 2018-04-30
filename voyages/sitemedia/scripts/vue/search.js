@@ -56,17 +56,17 @@ var allColumns = [
   { data: "var_guns_mounted", category: 1, header: "Guns Mounted", "visible": false },
 
   // itinerary
-  { data: "var_imp_port_voyage_begin_idnum", category: 2, header: "Place where Voyage Began" },
-  { data: "var_imp_principal_place_of_slave_purchase_idnum", category: 2, header: "Principal Place of Purchase" },
-  { data: "var_first_place_slave_purchase_idnum", category: 2, header: "1st Place of Purchase", "visible": false },
-  { data: "var_second_place_slave_purchase_idnum", category: 2, header: "2nd Place of Purchase", "visible": false },
-  { data: "var_third_place_slave_purchase_idnum", category: 2, header: "3rd Place of Purchase", "visible": false },
-  { data: "var_port_of_call_before_atl_crossing_idnum", category: 2, header: "Places of Call before Atlantic Crossing", "visible": false },
-  { data: "var_imp_principal_port_slave_dis_idnum", category: 2, header: "Principal Place of Slave Landing" },
-  { data: "var_first_landing_place_idnum", category: 2, header: "1st Place of Slave Landing", "visible": false },
-  { data: "var_second_landing_place_idnum", category: 2, header: "2nd Place of Slave Landing", "visible": false },
-  { data: "var_third_landing_place_idnum", category: 2, header: "3rd Place of Slave Landing", "visible": false },
-  { data: "var_place_voyage_ended_idnum", category: 2, header: "Place where Voyage Ended", "visible": false },
+  { data: "var_imp_port_voyage_begin", category: 2, header: "Place where Voyage Began" },
+  { data: "var_imp_principal_place_of_slave_purchase", category: 2, header: "Principal Place of Purchase" },
+  { data: "var_first_place_slave_purchase", category: 2, header: "1st Place of Purchase", "visible": false },
+  { data: "var_second_place_slave_purchase", category: 2, header: "2nd Place of Purchase", "visible": false },
+  { data: "var_third_place_slave_purchase", category: 2, header: "3rd Place of Purchase", "visible": false },
+  { data: "var_port_of_call_before_atl_crossing", category: 2, header: "Places of Call before Atlantic Crossing", "visible": false },
+  { data: "var_imp_principal_port_slave_dis", category: 2, header: "Principal Place of Slave Landing" },
+  { data: "var_first_landing_place", category: 2, header: "1st Place of Slave Landing", "visible": false },
+  { data: "var_second_landing_place", category: 2, header: "2nd Place of Slave Landing", "visible": false },
+  { data: "var_third_landing_place", category: 2, header: "3rd Place of Slave Landing", "visible": false },
+  { data: "var_place_voyage_ended", category: 2, header: "Place where Voyage Ended", "visible": false },
 
   // slaves
   { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked Imputed", "visible": false },
