@@ -616,6 +616,8 @@ function refreshUi(filter, currentTab, tabData) {
     // Validate post before issuing AJAX call.
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $.post(searchUrl, JSON.stringify(postData), function(result) {
+        $( "#sv-loader" ).removeClass( "display-none" );
+
         // Produce a table with data content.
         var table = $('#v-tables');
         destroyPreviousTable('#v-tables');
@@ -783,6 +785,8 @@ function refreshUi(filter, currentTab, tabData) {
           scrollX: true,
           scrollCollapse: true
         });
+      }).done(function(){
+        $( "#sv-loader" ).addClass( "display-none" );
       });
     }
   } else if (currentTab == 'timeline') {
@@ -935,6 +939,8 @@ function refreshUi(filter, currentTab, tabData) {
   } else if (currentTab == 'visualization') {
     loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
       .then(function() {
+        $( "#sv-loader" ).removeClass( "display-none" );
+
         // Ready to plot graphs!
         var allChartTypes = {
           "xy-chart-tab": ["scatter", "x", "y"],
@@ -1329,6 +1335,8 @@ function refreshUi(filter, currentTab, tabData) {
               polyline.exit()
                 .remove();
             }
+          }).done(function(){
+            $( "#sv-loader" ).addClass( "display-none" );
           });
 		    } else {
           // TODO: Clear existing chart?
