@@ -140,6 +140,12 @@ var searchBar = new Vue({
                   var item = this.filter[group][subGroup][variable];
                   var varName = "var_" + item["varName"];
                   var value = this.row.data[varName];
+
+                  // Patch
+                  if (varName == "var_sources_plaintext") {
+                    value = value.replace(/<>/g, ": ");
+                  }
+
                   datum.variables[varName] = {
                     varName: varName,
                     label: item["label"],
