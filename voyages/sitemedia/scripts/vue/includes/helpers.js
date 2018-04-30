@@ -499,6 +499,17 @@ function refreshUi(filter, currentTab, tabData) {
       },
 
       scrollX: true,
+      columnDefs: [
+        { width: "10%", targets: 2 },
+        { width: "10%", targets: 3 },
+        { width: "15%", targets: 62 },
+        { width: "5%", targets: 32 },
+        { width: "10%", targets: 50 },
+        { width: "5%", targets: 33 },
+        { width: "5%", targets: 34 },
+        { width: "5%", targets: 25 },
+        { width: "5%", targets: 25 },
+      ],
 
       // page length Default
       pageLength: 25,
