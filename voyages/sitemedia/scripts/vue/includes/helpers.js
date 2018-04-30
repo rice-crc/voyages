@@ -788,10 +788,12 @@ function refreshUi(filter, currentTab, tabData) {
   } else if (currentTab == 'timeline') {
     // TODO!
     $('#timelineChart').empty();
+    var timelineVariableId = tabs.timeline.chart.value;
+    var timelineVariable = tabs.timeline.chart.options[timelineVariableId]["varName"];
     var postData = {
       searchData: currentSearchObj,
       output: 'timeline',
-      timelineVariable: tabs.timeline.chart.value,
+      timelineVariable: timelineVariable,
     };
     if (postData.timelineVariable) {
       loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
@@ -940,16 +942,27 @@ function refreshUi(filter, currentTab, tabData) {
           "donut-chart-tab": ["donut", "sectors", "values"]
         };
         var chartType = allChartTypes[$('a.active.side-control-tab').attr('id')];
+
+        // map the varName to the ids for Y
         var yIds = tabs.visualization[chartType[0]][chartType[2]].value;
         var yAxes = [];
-        yIds.forEach(function(element, index, yIds) {
-          yAxes[index] = tabs.visualization[chartType[0]][chartType[2]].options[yIds[index]]["varName"];
-        });
+        if (Array.isArray(yIds)) {
+          yIds.forEach(function(element, index, yIds) {
+            yAxes[index] = tabs.visualization[chartType[0]][chartType[2]].options[yIds[index]]["varName"];
+          });
+        } else {
+          yAxes = tabs.visualization[chartType[0]][chartType[2]].options[yIds]["varName"];
+        }
+
+        // map the varName to the ids for X
+        var xId = tabs.visualization[chartType[0]][chartType[1]].value;
+        var xAxes = tabs.visualization[chartType[0]][chartType[1]].options[xId]["varName"];
+
         var postData = {
           searchData: currentSearchObj,
           output: 'graph',
           graphData: {
-            xAxis: tabs.visualization[chartType[0]][chartType[1]].value,
+            xAxis: xAxes,
             yAxes: chartType[0] == 'donut' ? [yAxes] : yAxes
           }
         };
