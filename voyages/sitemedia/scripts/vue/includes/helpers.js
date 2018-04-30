@@ -498,6 +498,8 @@ function refreshUi(filter, currentTab, tabData) {
         }
       },
 
+      scrollX: true,
+
       // page length Default
       pageLength: 25,
 
