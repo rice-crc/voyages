@@ -625,7 +625,7 @@ function refreshUi(filter, currentTab, tabData) {
         // Top-left row is blank.
         var subCells = $.map(Object.keys(cell.functions), function(key) { return key[0] == '_' ? undefined : key; });
         var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
-        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '"></th>';
+        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '">Year Range</th>';
         // Append extra column headers.
         if (columnHeaderRows > 1) {
           for (var i = 0; i < columnHeaderRows - 1; ++i) {
