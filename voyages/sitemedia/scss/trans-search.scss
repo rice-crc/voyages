@@ -52,7 +52,7 @@
   font-size: $regular-font-size;
 }
 
-table.dataTable thead>tr>th, table.dataTable tbody>tr>td {
+table.dataTable tr>td, table.dataTable tr>th,  {
   padding: 0 45px 0 5px !important;
 }
 
