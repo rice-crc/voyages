@@ -802,6 +802,7 @@ function refreshUi(filter, currentTab, tabData) {
     if (postData.timelineVariable) {
       loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
         .then(function() {
+          $( "#sv-loader" ).removeClass( "display-none" );
           $.post(searchUrl, JSON.stringify(postData), function(result) {
             result = result.data;
             var margin = {top: 20, right: 10, bottom: 40, left: 40},
@@ -933,6 +934,8 @@ function refreshUi(filter, currentTab, tabData) {
               var index = indexByYear[year];
               changeHoveredBar(index);
             });
+          }).done(function(){
+            $( "#sv-loader" ).addClass( "display-none" );
           });
         });
     }
