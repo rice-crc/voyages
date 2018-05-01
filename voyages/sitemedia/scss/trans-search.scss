@@ -52,8 +52,12 @@
   font-size: $regular-font-size;
 }
 
-table.dataTable tr>td, table.dataTable tr>th,  {
-  padding: 0 45px 0 5px !important;
+table.dataTable thead>tr>td, table.dataTable tfoot>tr>td, table.dataTable tr>th,  {
+  padding: 0 25px 0 5px !important;
+}
+
+table.dataTable tbody>tr>td  {
+  padding: 0 5px 0 5px !important;
 }
 
 .dt-font-sm {
