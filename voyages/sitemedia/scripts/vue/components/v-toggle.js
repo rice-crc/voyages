@@ -5,6 +5,7 @@ Vue.component('v-toggle', {
       <div class="v-title">
         <span>{{filter.label}}</span>
         <span>
+            <!--
             <b-badge
               v-if="filter.options.isImputed"
               v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
@@ -12,6 +13,7 @@ Vue.component('v-toggle', {
               class="v-badge-imputed">
               Imputed
             </b-badge>
+            -->
             <b-badge
               v-if="filter.options.isAdvanced"
               v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
