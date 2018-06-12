@@ -12,4 +12,4 @@ documents/cache/*
 *.css.map
 voyages/static/scss/*.css
 voyages/static/scss/*.map
-
+.DS_Store
