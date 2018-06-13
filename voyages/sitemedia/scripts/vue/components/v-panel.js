@@ -2,7 +2,7 @@
 Vue.component('v-panel', {
   props: ['title', "filters", "group", "subGroup", "data"],
   template: `
-    <li class="dropdown-item dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
+    <li class="dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
             {{titleValue}}
