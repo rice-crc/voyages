@@ -14,7 +14,7 @@ var_voyage_id = new NumberVariable({
 var_ship_name_plaintext = new TextVariable({
     varName: "ship_name_plaintext",
     label: "Vessel Name",
-    description: "This could be a partial keyword",
+    description: "",
   },{
     op: "contains",
     searchTerm: null,
@@ -26,7 +26,7 @@ var_ship_name_plaintext = new TextVariable({
 var_owner_plaintext = new TextVariable({
     varName: "owner_plaintext",
     label: "Vessel Owner",
-    description: "This could be a partial keyword",
+    description: "",
   },{
     op: "contains",
     searchTerm: null,
@@ -137,7 +137,7 @@ var_tonnage = new NumberVariable({
 var_tonnage_mod = new NumberVariable({
     varName: "tonnage_mod",
     label: "Standardized Tonnage",
-    description: "This is the standardized tonnage calculated by algorithms",
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
