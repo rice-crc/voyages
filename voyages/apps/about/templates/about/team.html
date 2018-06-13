@@ -16,9 +16,31 @@
 	{% blocktrans %}Many people contributed to the creation and implementation
 	of this site. They include the following (unless otherwise
 	indicated, Project Development Team members were affiliated with
-	Emory University):{% endblocktrans %}
+	Emory University). {% endblocktrans %}
 </p>
 
+<p>
+	{% blocktrans %}As this site transforms and evolves, team members have also
+	changed. Here are the team members listed by era. {% endblocktrans %}
+</p>
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link nav-link-about active" id="pills-3-tab" data-toggle="pill" href="#pills-3" role="tab" aria-controls="pills-3" aria-selected="true">2016 - Present</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link nav-link-about" id="pills-2-tab" data-toggle="pill" href="#pills-2" role="tab" aria-controls="pills-2" aria-selected="false">2009 - 2015</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link nav-link-about" id="pills-1-tab" data-toggle="pill" href="#pills-1" role="tab" aria-controls="pills-1" aria-selected="false">2003 - 2008</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link nav-link-about" id="pills-0-tab" data-toggle="pill" href="#pills-0" role="tab" aria-controls="pills-0" aria-selected="false">1999 - 2002</a>
+  </li>
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-3" role="tabpanel" aria-labelledby="pills-3-tab">
 
 		<div class="page-title-2">
 			{% trans "NEH Grant Principal Investigators" %}
@@ -207,5 +229,10 @@
 			</li>
 		</ul>
 
+	</div>
+  <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">...</div>
+  <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">...</div>
+  <div class="tab-pane fade" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">...</div>
+</div>
 
 {% endblock %}

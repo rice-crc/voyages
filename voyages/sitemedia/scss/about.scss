@@ -63,3 +63,8 @@ a {
   border-left: 4px solid $about-color;
   font-weight: bold;
 }
+
+
+  .nav-link-about.active {
+    background-color: $site-color !important;
+  }
