@@ -49,8 +49,8 @@ var allColumns = [
   { data: "var_vessel_construction_place_idnum", category: 1, header: "Place Constructed", "visible": false, isImputed: false },
   { data: "var_registered_year", category: 1, header: "Year Registered", "visible": false, isImputed: false },
   { data: "var_registered_place_idnum", category: 1, header: "Place Registered", "visible": false, isImputed: false },
-  { data: "var_nationality", category: 1, header: "Flag", "visible": false, isImputed: true },
-  { data: "var_imputed_nationality", category: 1, header: "Flag Imputed", "visible": false, isImputed: false },
+  { data: "var_nationality", category: 1, header: "Flag", "visible": false, isImputed: false },
+  { data: "var_imputed_nationality", category: 1, header: "Flag Imputed", "visible": false, isImputed: true },
   { data: "var_rig_of_vessel", category: 1, header: "Rig of Vessel", "visible": false, isImputed: true },
   { data: "var_tonnage", category: 1, header: "Tonnage", "visible": false, isImputed: false },
   { data: "var_tonnage_mod", category: 1, header: "Standardized Tonnage", "visible": false, isImputed: true },
@@ -148,24 +148,25 @@ var categories = $.map(categoryNames, function(name) {
 });
 
 allColumns.forEach(function(c, index) {
+  categories[c.category].columns.push({
+    extend: 'columnToggle',
+    text: c.header,
+    columns: index,
+  });
+
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
+    c.title = "<span class='imputed-result'>" + c.header + "</span>"; // italicized column title
     c.render = function(data) {
       var formatedString = "";
       if (data !== null) {
-        formattedString = "<span class='imputed-result'>" + data + "</span>"
+        formattedString = "<span class='imputed-result'>" + data + "</span>";
       } else {
         formattedString = data
       }
       return formattedString;
     };
   }
-
-  categories[c.category].columns.push({
-    extend: 'columnToggle',
-    text: c.header,
-    columns: index,
-  });
 });
 
 var columnToggleMenu = {
