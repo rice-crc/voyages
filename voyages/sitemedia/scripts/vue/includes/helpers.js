@@ -523,6 +523,10 @@ function refreshUi(filter, currentTab, tabData) {
         ['10 rows', '25 rows', '50 rows', '100 rows']
       ],
 
+      language: {
+        info: "Showing _START_ to _END_ of _TOTAL_ entries <i class='fa fa-question-circle' data-toggle='tooltip' data-placement='top' title='Italicized results are calculated by an algorithm.'></i> ",
+      },
+
       buttons: [
         columnToggleMenu,
         pageLength,
