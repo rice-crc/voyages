@@ -2,7 +2,6 @@ import settings
 # Django local settings for voyages project.
 
 DEBUG = True
-TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
 # set this to allow access to the app when DEBUG is False
 ALLOWED_HOSTS = []
