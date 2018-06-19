@@ -51,6 +51,10 @@ are any errors, pip should announce them very loudly.
 
 Some packages require compilation and for that one needs gcc installed.
 Other required system packages are libxml2-dev and libxslt-dev
+Another requirement is mysql_config 
+  $ sudo apt-get install libmysqlclient-dev)
+and python-dev
+  $ sudo apt-get install python-dev
 
 To install python dependencies, cd into the repository checkout and::
 
@@ -79,12 +83,16 @@ Details:
 After installing solr, create the 'voyages' core with:
 
   $ sudo su solr
-  [solr]$ cp src/voyages/solr/managed_schema.xml src/voyages/solr/solrconfig.xml src/voyages/solr/mapping-ISOLatin1Accent.txt src/voyages/solr/protwords.txt src/voyages/solr/stopwords.txt src/voyages/solr/synonyms.txt <solr path>/data/voyages/
-  [solr]$ cp src/voyages/solr/stopwords_en.txt <solr path>/data/voyages/lang/
+  [solr]$ solr create -c voyages -d src/voyages/solr/
+    locate the folder where solr stores the core's config files (in the version tested it was <solr path>/server/solr/voyages/conf)
+    and 
+  [solr]$ cp src/voyages/solr/managed_schema.xml src/voyages/solr/solrconfig.xml src/voyages/solr/mapping-ISOLatin1Accent.txt src/voyages/solr/protwords.txt src/voyages/solr/stopwords.txt src/voyages/solr/synonyms.txt <core config path>
+    check if <core config path>/lang/ exists (and stopwords_en.txt in it), if not:
+  [solr]$ cp src/voyages/solr/stopwords_en.txt <core config path>/lang/
 
 
 The url for accessing the configured Solr instance should be set in
-``localsettings.py`` as **SOLR_SERVER_URL**.
+``localsettings.py`` as **HAYSTACK_CONNECTIONS**
 
 Install the application
 -----------------------
@@ -105,7 +113,7 @@ Configure application settings by copying ``localsettings.py.dist`` to
 After configuring all settings, initialize the db with all needed
 tables and initial data using::
 
-  $ python manage.py migrate
+  $ python manage.py migratemigrate
 
 In addition, these sets of initial data need to be loaded (Please load in this order)
 

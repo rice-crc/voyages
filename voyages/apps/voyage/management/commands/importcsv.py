@@ -144,12 +144,14 @@ class Command(BaseCommand):
             if (val is None or empty.match(val)) and not allow_null:
                 self.errors += 1
                 return None
+            if val is None: return None
             return int(float(val)) if not empty.match(val) else None
 
         def cfloat(val, allow_null=True):
             if (val is None or empty.match(val)) and not allow_null:
                 self.errors += 1
                 return None
+            if val is None: return None
             return round(float(val), 2) if not empty.match(val) else None
 
         def date_csv(var_name_prefix, suffixes=[u'a', u'b', u'c']):
@@ -182,299 +184,306 @@ class Command(BaseCommand):
                 return ''
             return components[1].strip() + ',' + components[2].strip() + ',' + components[0].strip()
 
-        with open(csv_file[0], 'rU') as f:
-            reader = unicodecsv.DictReader(f, delimiter=',')
-            for row in reader:
-                # Create a voyage corresponding to this row
-                voyage = Voyage()
-                id = cint(row[u'voyageid'], False)
-                if id in voyages:
-                    sys.stderr.write('Duplicate voyage found: ' + str(id) + '\n')
-                    return
-                voyage.voyage_id = id
-                voyages[id] = voyage
-                # Next we set up voyage direct and nested members
-                in_cd_room = row[u'evgreen']
-                voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
-                voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
-                voyage.is_intra_american = cint(row[u'IntraAmer'], False) == 1
-                # Ship
-                ship_model = VoyageShip()
-                ship_model.ship_name = row[u'shipname']
-                ship_model.nationality_ship = get_by_value('nationalities', 'national')
-                ship_model.tonnage = cint(row[u'tonnage'])
-                ship_model.ton_type = get_by_value('ton_types', 'tontype')
-                ship_model.rig_of_vessel = get_by_value('rigs', 'rig')
-                ship_model.guns_mounted = cint(row[u'guns'])
-                ship_model.year_of_construction = cint(row[u'yrcons'])
-                ship_model.vessel_construction_place = get_by_value('places', 'placcons')
-                ship_model.vessel_construction_region = get_by_value('regions', 'constreg')
-                ship_model.registered_year = cint(row[u'yrreg'])
-                ship_model.registered_place = get_by_value('places', 'placreg')
-                ship_model.registered_region = get_by_value('regions', 'regisreg')
-                ship_model.imputed_nationality = get_by_value('nationalities', 'natinimp')
-                ship_model.tonnage_mod = cfloat(row[u'tonmod'])
-                ship_model.voyage = voyage
-                ships.append(ship_model)
-                # voyage.voyage_ship = ship_model
-                # Itinerary
-                itinerary = VoyageItinerary()
-                itinerary.port_of_departure = get_by_value('places', 'portdep')
-                itinerary.int_first_port_emb = get_by_value('places', 'embport')
-                itinerary.int_second_port_emb = get_by_value('places', 'embport2')
-                itinerary.int_first_region_purchase_slaves = get_by_value('regions', 'embreg')
-                itinerary.int_second_region_purchase_slaves = get_by_value('regions', 'embreg2')
-                itinerary.int_first_port_dis = get_by_value('places', 'arrport')
-                itinerary.int_second_port_dis = get_by_value('places', 'arrport2')
-                itinerary.int_first_region_slave_landing = get_by_value('regions', 'regarr')
-                itinerary.int_second_place_region_slave_landing = get_by_value('regions', 'regarr2')
-                itinerary.ports_called_buying_slaves = cint(row[u'nppretra'])
-                itinerary.first_place_slave_purchase = get_by_value('places', 'plac1tra')
-                itinerary.second_place_slave_purchase = get_by_value('places', 'plac2tra')
-                itinerary.third_place_slave_purchase = get_by_value('places', 'plac3tra')
-                itinerary.first_region_slave_emb = get_by_value('regions', 'regem1')
-                itinerary.second_region_slave_emb = get_by_value('regions', 'regem2')
-                itinerary.third_region_slave_emb = get_by_value('regions', 'regem3')
-                itinerary.port_of_call_before_atl_crossing = get_by_value('places', 'npafttra')
-                itinerary.number_of_ports_of_call = cint(row[u'npprior'])
-                itinerary.first_landing_place = get_by_value('places', 'sla1port')
-                itinerary.second_landing_place = get_by_value('places', 'adpsale1')
-                itinerary.third_landing_place = get_by_value('places', 'adpsale2')
-                itinerary.first_landing_region = get_by_value('regions', 'regdis1')
-                itinerary.second_landing_region = get_by_value('regions', 'regdis2')
-                itinerary.third_landing_region = get_by_value('regions', 'regdis3')
-                itinerary.place_voyage_ended = get_by_value('places', 'portret')
-                itinerary.region_of_return = get_by_value('regions', 'retrnreg')
-                itinerary.broad_region_of_return = get_by_value('broad_regions', 'retrnreg1')
-                itinerary.imp_port_voyage_begin = get_by_value('places', 'ptdepimp')
-                itinerary.imp_region_voyage_begin = get_by_value('regions', 'deptregimp')
-                itinerary.imp_broad_region_voyage_begin = get_by_value('broad_regions', 'deptregimp1')
-                itinerary.principal_place_of_slave_purchase = get_by_value('places', 'majbuypt')
-                itinerary.imp_principal_place_of_slave_purchase = get_by_value('places', 'mjbyptimp')
-                itinerary.imp_principal_region_of_slave_purchase = get_by_value('regions', 'majbyimp')
-                itinerary.imp_broad_region_of_slave_purchase = get_by_value('broad_regions', 'majbyimp1')
-                itinerary.principal_port_of_slave_dis = get_by_value('places', 'majselpt')
-                itinerary.imp_principal_port_slave_dis = get_by_value('places', 'mjslptimp')
-                itinerary.imp_principal_region_slave_dis = get_by_value('regions', 'mjselimp')
-                itinerary.imp_broad_region_slave_dis = get_by_value('broad_regions', 'mjselimp1')
-                itinerary.voyage = voyage
-                itineraries.append(itinerary)
-                # voyage.voyage_itinerary = itinerary
-                # Dates
-                dates = VoyageDates()
-                dates.voyage_began = date_csv('datedep')
-                dates.slave_purchase_began = date_csv('d1slatr')
-                dates.vessel_left_port = date_csv('dlslatr')
-                dates.first_dis_of_slaves = date_csv('datarr', ['32', '33', '34'])
-                dates.date_departed_africa = date_iso_csv(row[u'dateleftafr'])
-                dates.arrival_at_second_place_landing = date_csv('datarr', ['36', '37', '38'])
-                dates.third_dis_of_slaves = date_csv('datarr', ['39', '40', '41'])
-                dates.departure_last_place_of_landing = date_csv('ddepam', ['', 'b', 'c'])
-                dates.voyage_completed = date_csv('datarr', ['43', '44', '45'])
-                dates.length_middle_passage_days = cint(row[u'voyage'])
-                dates.imp_voyage_began = date_csv('yeardep', [None, None, ''])
-                dates.imp_departed_africa = date_csv('yearaf', [None, None, ''])
-                dates.imp_arrival_at_port_of_dis = date_csv('yearam', [None, None, ''])
-                dates.imp_length_home_to_disembark = cint(row[u'voy1imp'])
-                dates.imp_length_leaving_africa_to_disembark = cint(row[u'voy2imp'])
-                dates.voyage = voyage
-                voyage_dates.append(dates)
-                # voyage.voyage_dates = dates
-                # Crew
-                crew = VoyageCrew()
-                crew.crew_voyage_outset = cint(row[u'crew1'])
-                crew.crew_departure_last_port = cint(row[u'crew2'])
-                crew.crew_first_landing = cint(row[u'crew3'])
-                crew.crew_return_begin = cint(row[u'crew4'])
-                crew.crew_end_voyage = cint(row[u'crew5'])
-                crew.unspecified_crew = cint(row[u'crew'])
-                crew.crew_died_before_first_trade = cint(row[u'saild1'])
-                crew.crew_died_while_ship_african = cint(row[u'saild2'])
-                crew.crew_died_middle_passage = cint(row[u'saild3'])
-                crew.crew_died_in_americas = cint(row[u'saild4'])
-                crew.crew_died_on_return_voyage = cint(row[u'saild5'])
-                crew.crew_died_complete_voyage = cint(row[u'crewdied'])
-                crew.crew_deserted = cint(row[u'ndesert'])
-                crew.voyage = voyage
-                crews.append(crew)
-                # voyage.voyage_crew = crew
-                # Slave numbers
-                numbers = VoyageSlavesNumbers()
-                numbers.slave_deaths_before_africa = cint(row[u'sladafri'])
-                numbers.slave_deaths_between_africa_america = cint(row[u'sladvoy'])
-                numbers.slave_deaths_between_arrival_and_sale = cint(row[u'sladamer'])
-                numbers.num_slaves_intended_first_port = cint(row[u'slintend'])
-                numbers.num_slaves_intended_second_port = cint(row[u'slinten2'])
-                numbers.num_slaves_carried_first_port = cint(row[u'ncar13'])
-                numbers.num_slaves_carried_second_port = cint(row[u'ncar15'])
-                numbers.num_slaves_carried_third_port = cint(row[u'ncar17'])
-                numbers.total_num_slaves_purchased = cint(row[u'tslavesp'])
-                numbers.total_num_slaves_dep_last_slaving_port = cint(row[u'tslavesd'])
-                numbers.total_num_slaves_arr_first_port_embark = cint(row[u'slaarriv'])
-                numbers.num_slaves_disembark_first_place = cint(row[u'slas32'])
-                numbers.num_slaves_disembark_second_place = cint(row[u'slas36'])
-                numbers.num_slaves_disembark_third_place = cint(row[u'slas39'])
-                numbers.imp_total_num_slaves_embarked = cint(row[u'slaximp'])
-                numbers.imp_total_num_slaves_disembarked = cint(row[u'slamimp'])
-                numbers.imp_jamaican_cash_price = cfloat(row[u'jamcaspr'])
-                numbers.imp_mortality_during_voyage = cint(row[u'vymrtimp'])
-                numbers.num_men_embark_first_port_purchase = cint(row[u'men1'])
-                numbers.num_women_embark_first_port_purchase = cint(row[u'women1'])
-                numbers.num_boy_embark_first_port_purchase = cint(row[u'boy1'])
-                numbers.num_girl_embark_first_port_purchase = cint(row[u'girl1'])
-                numbers.num_adult_embark_first_port_purchase = cint(row[u'adult1'])
-                numbers.num_child_embark_first_port_purchase = cint(row[u'child1'])
-                numbers.num_infant_embark_first_port_purchase = cint(row[u'infant1'])
-                numbers.num_males_embark_first_port_purchase = cint(row[u'male1'])
-                numbers.num_females_embark_first_port_purchase = cint(row[u'female1'])
-                numbers.num_men_died_middle_passage = cint(row[u'men2'])
-                numbers.num_women_died_middle_passage = cint(row[u'women2'])
-                numbers.num_boy_died_middle_passage = cint(row[u'boy2'])
-                numbers.num_girl_died_middle_passage = cint(row[u'girl2'])
-                numbers.num_adult_died_middle_passage = cint(row[u'adult2'])
-                numbers.num_child_died_middle_passage = cint(row[u'child2'])
-                # numbers.num_infant_died_middle_passage = cint(row[u'infant2'])
-                numbers.num_males_died_middle_passage = cint(row[u'male2'])
-                numbers.num_females_died_middle_passage = cint(row[u'female2'])
-                numbers.num_men_disembark_first_landing = cint(row[u'men3'])
-                numbers.num_women_disembark_first_landing = cint(row[u'women3'])
-                numbers.num_boy_disembark_first_landing = cint(row[u'boy3'])
-                numbers.num_girl_disembark_first_landing = cint(row[u'girl3'])
-                numbers.num_adult_disembark_first_landing = cint(row[u'adult3'])
-                numbers.num_child_disembark_first_landing = cint(row[u'child3'])
-                numbers.num_infant_disembark_first_landing = cint(row[u'infant3'])
-                numbers.num_males_disembark_first_landing = cint(row[u'male3'])
-                numbers.num_females_disembark_first_landing = cint(row[u'female3'])
-                numbers.num_men_embark_second_port_purchase = cint(row[u'men4'])
-                numbers.num_women_embark_second_port_purchase = cint(row[u'women4'])
-                numbers.num_boy_embark_second_port_purchase = cint(row[u'boy4'])
-                numbers.num_girl_embark_second_port_purchase = cint(row[u'girl4'])
-                numbers.num_adult_embark_second_port_purchase = cint(row[u'adult4'])
-                numbers.num_child_embark_second_port_purchase = cint(row[u'child4'])
-                numbers.num_infant_embark_second_port_purchase = cint(row[u'infant4'])
-                numbers.num_males_embark_second_port_purchase = cint(row[u'male4'])
-                numbers.num_females_embark_second_port_purchase = cint(row[u'female4'])
-                numbers.num_men_embark_third_port_purchase = cint(row[u'men5'])
-                numbers.num_women_embark_third_port_purchase = cint(row[u'women5'])
-                numbers.num_boy_embark_third_port_purchase = cint(row[u'boy5'])
-                numbers.num_girl_embark_third_port_purchase = cint(row[u'girl5'])
-                numbers.num_adult_embark_third_port_purchase = cint(row[u'adult5'])
-                numbers.num_child_embark_third_port_purchase = cint(row[u'child5'])
-                # numbers.num_infant_embark_third_port_purchase = cint(row[u'infant5'])
-                numbers.num_males_embark_third_port_purchase = cint(row[u'male5'])
-                numbers.num_females_embark_third_port_purchase = cint(row[u'female5'])
-                numbers.num_men_disembark_second_landing = cint(row[u'men6'])
-                numbers.num_women_disembark_second_landing = cint(row[u'women6'])
-                numbers.num_boy_disembark_second_landing = cint(row[u'boy6'])
-                numbers.num_girl_disembark_second_landing = cint(row[u'girl6'])
-                numbers.num_adult_disembark_second_landing = cint(row[u'adult6'])
-                numbers.num_child_disembark_second_landing = cint(row[u'child6'])
-                # numbers.num_infant_disembark_second_landing = cint(row[u'infant6'])
-                numbers.num_males_disembark_second_landing = cint(row[u'male6'])
-                numbers.num_females_disembark_second_landing = cint(row[u'female6'])
-                numbers.imp_num_adult_embarked = cint(row[u'adlt1imp'])
-                numbers.imp_num_children_embarked = cint(row[u'chil1imp'])
-                numbers.imp_num_male_embarked = cint(row[u'male1imp'])
-                numbers.imp_num_female_embarked = cint(row[u'feml1imp'])
-                numbers.total_slaves_embarked_age_identified = cint(row[u'slavema1'])
-                numbers.total_slaves_embarked_gender_identified = cint(row[u'slavemx1'])
-                numbers.imp_adult_death_middle_passage = cint(row[u'adlt2imp'])
-                numbers.imp_child_death_middle_passage = cint(row[u'chil2imp'])
-                numbers.imp_male_death_middle_passage = cint(row[u'male2imp'])
-                numbers.imp_female_death_middle_passage = cint(row[u'feml2imp'])
-                numbers.imp_num_adult_landed = cint(row[u'adlt3imp'])
-                numbers.imp_num_child_landed = cint(row[u'chil3imp'])
-                numbers.imp_num_male_landed = cint(row[u'male2imp'])
-                numbers.imp_num_female_landed = cint(row[u'feml3imp'])
-                numbers.total_slaves_landed_age_identified = cint(row[u'slavema3'])
-                numbers.total_slaves_landed_gender_identified = cint(row[u'slavemx3'])
-                numbers.total_slaves_dept_or_arr_age_identified = cint(row[u'slavema7'])
-                numbers.total_slaves_dept_or_arr_gender_identified = cint(row[u'slavemx7'])
-                numbers.imp_slaves_embarked_for_mortality = cint(row[u'tslmtimp'])
-                numbers.imp_num_men_total = cint(row[u'men7'])
-                numbers.imp_num_women_total = cint(row[u'women7'])
-                numbers.imp_num_boy_total = cint(row[u'boy7'])
-                numbers.imp_num_girl_total = cint(row[u'girl7'])
-                numbers.imp_num_adult_total = cint(row[u'adult7'])
-                numbers.imp_num_child_total = cint(row[u'child7'])
-                numbers.imp_num_males_total = cint(row[u'male7'])
-                numbers.imp_num_females_total = cint(row[u'female7'])
-                numbers.percentage_men = cfloat(row[u'menrat7'])
-                numbers.percentage_women = cfloat(row[u'womrat7'])
-                numbers.percentage_boy = cfloat(row[u'boyrat7'])
-                numbers.percentage_girl = cfloat(row[u'girlrat7'])
-                numbers.percentage_male = cfloat(row[u'malrat7'])
-                numbers.percentage_child = cfloat(row[u'chilrat7'])
-                numbers.percentage_adult = 1 - numbers.percentage_child \
-                    if numbers.percentage_child is not None else None
-                numbers.percentage_female = 1 - numbers.percentage_male \
-                    if numbers.percentage_male is not None else None
-                numbers.imp_mortality_ratio = cfloat(row[u'vymrtrat'])
-                numbers.voyage = voyage
-                voyage_numbers.append(numbers)
-                # voyage.voyage_slaves_numbers = numbers
-                # Captains
-                order = 1
-                for key in 'abc':
-                    captain_name = row[u'captain' + key]
-                    if empty.match(captain_name):
-                        break
-                    captain_model = captains.get(captain_name)
-                    if captain_model is None:
-                        captain_model = VoyageCaptain()
-                        captain_model.name = captain_name
-                        captains[captain_name] = captain_model
-                    captain_connection = VoyageCaptainConnection()
-                    captain_connection.captain = captain_model
-                    captain_connection.captain_order = order
-                    captain_connection.voyage = voyage
-                    captain_connections.append(captain_connection)
-                    order += 1
-                # Ship owners
-                order = 1
-                for key in 'abcdefghijklmnop':
-                    owner_name = row[u'owner' + key]
-                    if empty.match(owner_name):
-                        break
-                    owner_model = ship_owners.get(owner_name)
-                    if owner_model is None:
-                        owner_model = VoyageShipOwner()
-                        owner_model.name = owner_name
-                        ship_owners[owner_name] = owner_model
-                    owner_connection = VoyageShipOwnerConnection()
-                    owner_connection.owner = owner_model
-                    owner_connection.owner_order = order
-                    owner_connection.voyage = voyage
-                    ship_owner_connections.append(owner_connection)
-                    order += 1
-                # Sources
-                order = 1
-                for key in 'abcdefghijklmnopqr':
-                    source_ref = row[u'source' + key]
-                    if empty.match(source_ref):
-                        break
-                    (source, match) = get_source(source_ref)
-                    if source is None:
-                        self.errors += 1
-                        sys.stderr.write('Source not found for "' + smart_str(source_ref) +
-                                         '", longest partial match: ' + smart_str(match) + '\n')
-                        continue
-                    source_connection = VoyageSourcesConnection()
-                    source_connection.group = voyage
-                    source_connection.source = source
-                    source_connection.source_order = order
-                    source_connection.text_ref = source_ref
-                    source_connections.append(source_connection)
-                    order += 1
-                # Outcome
-                outcome = VoyageOutcome()
-                outcome.particular_outcome = get_by_value('particular_outcomes', 'fate')
-                outcome.outcome_slaves = get_by_value('slaves_outcomes', 'fate2')
-                outcome.vessel_captured_outcome = get_by_value('vessel_captured_outcomes', 'fate3')
-                outcome.outcome_owner = get_by_value('owner_outcomes', 'fate4')
-                outcome.resistance = get_by_value('resistances', 'resistance')
-                outcome.voyage = voyage
-                outcomes.append(outcome)
+        import itertools
+        def lower_headers(iterator):
+            return itertools.chain([next(iterator).lower()], iterator)
+
+        for file in csv_file:
+            with open(file, 'rU') as f:
+                reader = unicodecsv.DictReader(lower_headers(f), delimiter=',')
+                # Ensure lower case is used.
+                for row in reader:
+                    # Create a voyage corresponding to this row
+                    voyage = Voyage()
+                    id = cint(row[u'voyageid'], False)
+                    if id in voyages:
+                        sys.stderr.write('Duplicate voyage found: ' + str(id) + '\n')
+                        return
+                    voyage.voyage_id = id
+                    voyages[id] = voyage
+                    # Next we set up voyage direct and nested members
+                    in_cd_room = row[u'evgreen']
+                    voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
+                    voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
+                    voyage.is_intra_american = cint(row.get(u'IntraAmer')) == 1
+                    # Ship
+                    ship_model = VoyageShip()
+                    ship_model.ship_name = row[u'shipname']
+                    ship_model.nationality_ship = get_by_value('nationalities', 'national')
+                    ship_model.tonnage = cint(row[u'tonnage'])
+                    ship_model.ton_type = get_by_value('ton_types', 'tontype')
+                    ship_model.rig_of_vessel = get_by_value('rigs', 'rig')
+                    ship_model.guns_mounted = cint(row[u'guns'])
+                    ship_model.year_of_construction = cint(row[u'yrcons'])
+                    ship_model.vessel_construction_place = get_by_value('places', 'placcons')
+                    ship_model.vessel_construction_region = get_by_value('regions', 'constreg')
+                    ship_model.registered_year = cint(row[u'yrreg'])
+                    ship_model.registered_place = get_by_value('places', 'placreg')
+                    ship_model.registered_region = get_by_value('regions', 'regisreg')
+                    ship_model.imputed_nationality = get_by_value('nationalities', 'natinimp')
+                    ship_model.tonnage_mod = cfloat(row[u'tonmod'])
+                    ship_model.voyage = voyage
+                    ships.append(ship_model)
+                    # voyage.voyage_ship = ship_model
+                    # Itinerary
+                    itinerary = VoyageItinerary()
+                    itinerary.port_of_departure = get_by_value('places', 'portdep')
+                    itinerary.int_first_port_emb = get_by_value('places', 'embport')
+                    itinerary.int_second_port_emb = get_by_value('places', 'embport2')
+                    itinerary.int_first_region_purchase_slaves = get_by_value('regions', 'embreg')
+                    itinerary.int_second_region_purchase_slaves = get_by_value('regions', 'embreg2')
+                    itinerary.int_first_port_dis = get_by_value('places', 'arrport')
+                    itinerary.int_second_port_dis = get_by_value('places', 'arrport2')
+                    itinerary.int_first_region_slave_landing = get_by_value('regions', 'regarr')
+                    itinerary.int_second_place_region_slave_landing = get_by_value('regions', 'regarr2')
+                    itinerary.ports_called_buying_slaves = cint(row[u'nppretra'])
+                    itinerary.first_place_slave_purchase = get_by_value('places', 'plac1tra')
+                    itinerary.second_place_slave_purchase = get_by_value('places', 'plac2tra')
+                    itinerary.third_place_slave_purchase = get_by_value('places', 'plac3tra')
+                    itinerary.first_region_slave_emb = get_by_value('regions', 'regem1')
+                    itinerary.second_region_slave_emb = get_by_value('regions', 'regem2')
+                    itinerary.third_region_slave_emb = get_by_value('regions', 'regem3')
+                    itinerary.port_of_call_before_atl_crossing = get_by_value('places', 'npafttra')
+                    itinerary.number_of_ports_of_call = cint(row[u'npprior'])
+                    itinerary.first_landing_place = get_by_value('places', 'sla1port')
+                    itinerary.second_landing_place = get_by_value('places', 'adpsale1')
+                    itinerary.third_landing_place = get_by_value('places', 'adpsale2')
+                    itinerary.first_landing_region = get_by_value('regions', 'regdis1')
+                    itinerary.second_landing_region = get_by_value('regions', 'regdis2')
+                    itinerary.third_landing_region = get_by_value('regions', 'regdis3')
+                    itinerary.place_voyage_ended = get_by_value('places', 'portret')
+                    itinerary.region_of_return = get_by_value('regions', 'retrnreg')
+                    itinerary.broad_region_of_return = get_by_value('broad_regions', 'retrnreg1')
+                    itinerary.imp_port_voyage_begin = get_by_value('places', 'ptdepimp')
+                    itinerary.imp_region_voyage_begin = get_by_value('regions', 'deptregimp')
+                    itinerary.imp_broad_region_voyage_begin = get_by_value('broad_regions', 'deptregimp1')
+                    itinerary.principal_place_of_slave_purchase = get_by_value('places', 'majbuypt')
+                    itinerary.imp_principal_place_of_slave_purchase = get_by_value('places', 'mjbyptimp')
+                    itinerary.imp_principal_region_of_slave_purchase = get_by_value('regions', 'majbyimp')
+                    itinerary.imp_broad_region_of_slave_purchase = get_by_value('broad_regions', 'majbyimp1')
+                    itinerary.principal_port_of_slave_dis = get_by_value('places', 'majselpt')
+                    itinerary.imp_principal_port_slave_dis = get_by_value('places', 'mjslptimp')
+                    itinerary.imp_principal_region_slave_dis = get_by_value('regions', 'mjselimp')
+                    itinerary.imp_broad_region_slave_dis = get_by_value('broad_regions', 'mjselimp1')
+                    itinerary.voyage = voyage
+                    itineraries.append(itinerary)
+                    # voyage.voyage_itinerary = itinerary
+                    # Dates
+                    dates = VoyageDates()
+                    dates.voyage_began = date_csv('datedep')
+                    dates.slave_purchase_began = date_csv('d1slatr')
+                    dates.vessel_left_port = date_csv('dlslatr')
+                    dates.first_dis_of_slaves = date_csv('datarr', ['32', '33', '34'])
+                    dates.date_departed_africa = date_iso_csv(row[u'dateleftafr'])
+                    dates.arrival_at_second_place_landing = date_csv('datarr', ['36', '37', '38'])
+                    dates.third_dis_of_slaves = date_csv('datarr', ['39', '40', '41'])
+                    dates.departure_last_place_of_landing = date_csv('ddepam', ['', 'b', 'c'])
+                    dates.voyage_completed = date_csv('datarr', ['43', '44', '45'])
+                    dates.length_middle_passage_days = cint(row[u'voyage'])
+                    dates.imp_voyage_began = date_csv('yeardep', [None, None, ''])
+                    dates.imp_departed_africa = date_csv('yearaf', [None, None, ''])
+                    dates.imp_arrival_at_port_of_dis = date_csv('yearam', [None, None, ''])
+                    dates.imp_length_home_to_disembark = cint(row[u'voy1imp'])
+                    dates.imp_length_leaving_africa_to_disembark = cint(row[u'voy2imp'])
+                    dates.voyage = voyage
+                    voyage_dates.append(dates)
+                    # voyage.voyage_dates = dates
+                    # Crew
+                    crew = VoyageCrew()
+                    crew.crew_voyage_outset = cint(row[u'crew1'])
+                    crew.crew_departure_last_port = cint(row[u'crew2'])
+                    crew.crew_first_landing = cint(row[u'crew3'])
+                    crew.crew_return_begin = cint(row[u'crew4'])
+                    crew.crew_end_voyage = cint(row[u'crew5'])
+                    crew.unspecified_crew = cint(row[u'crew'])
+                    crew.crew_died_before_first_trade = cint(row[u'saild1'])
+                    crew.crew_died_while_ship_african = cint(row[u'saild2'])
+                    crew.crew_died_middle_passage = cint(row[u'saild3'])
+                    crew.crew_died_in_americas = cint(row[u'saild4'])
+                    crew.crew_died_on_return_voyage = cint(row[u'saild5'])
+                    crew.crew_died_complete_voyage = cint(row[u'crewdied'])
+                    crew.crew_deserted = cint(row[u'ndesert'])
+                    crew.voyage = voyage
+                    crews.append(crew)
+                    # voyage.voyage_crew = crew
+                    # Slave numbers
+                    numbers = VoyageSlavesNumbers()
+                    numbers.slave_deaths_before_africa = cint(row[u'sladafri'])
+                    numbers.slave_deaths_between_africa_america = cint(row[u'sladvoy'])
+                    numbers.slave_deaths_between_arrival_and_sale = cint(row[u'sladamer'])
+                    numbers.num_slaves_intended_first_port = cint(row[u'slintend'])
+                    numbers.num_slaves_intended_second_port = cint(row[u'slinten2'])
+                    numbers.num_slaves_carried_first_port = cint(row[u'ncar13'])
+                    numbers.num_slaves_carried_second_port = cint(row[u'ncar15'])
+                    numbers.num_slaves_carried_third_port = cint(row[u'ncar17'])
+                    numbers.total_num_slaves_purchased = cint(row[u'tslavesp'])
+                    numbers.total_num_slaves_dep_last_slaving_port = cint(row[u'tslavesd'])
+                    numbers.total_num_slaves_arr_first_port_embark = cint(row[u'slaarriv'])
+                    numbers.num_slaves_disembark_first_place = cint(row[u'slas32'])
+                    numbers.num_slaves_disembark_second_place = cint(row[u'slas36'])
+                    numbers.num_slaves_disembark_third_place = cint(row[u'slas39'])
+                    numbers.imp_total_num_slaves_embarked = cint(row[u'slaximp'])
+                    numbers.imp_total_num_slaves_disembarked = cint(row[u'slamimp'])
+                    numbers.imp_jamaican_cash_price = cfloat(row[u'jamcaspr'])
+                    numbers.imp_mortality_during_voyage = cint(row[u'vymrtimp'])
+                    numbers.num_men_embark_first_port_purchase = cint(row[u'men1'])
+                    numbers.num_women_embark_first_port_purchase = cint(row[u'women1'])
+                    numbers.num_boy_embark_first_port_purchase = cint(row[u'boy1'])
+                    numbers.num_girl_embark_first_port_purchase = cint(row[u'girl1'])
+                    numbers.num_adult_embark_first_port_purchase = cint(row[u'adult1'])
+                    numbers.num_child_embark_first_port_purchase = cint(row[u'child1'])
+                    numbers.num_infant_embark_first_port_purchase = cint(row[u'infant1'])
+                    numbers.num_males_embark_first_port_purchase = cint(row[u'male1'])
+                    numbers.num_females_embark_first_port_purchase = cint(row[u'female1'])
+                    numbers.num_men_died_middle_passage = cint(row[u'men2'])
+                    numbers.num_women_died_middle_passage = cint(row[u'women2'])
+                    numbers.num_boy_died_middle_passage = cint(row[u'boy2'])
+                    numbers.num_girl_died_middle_passage = cint(row[u'girl2'])
+                    numbers.num_adult_died_middle_passage = cint(row[u'adult2'])
+                    numbers.num_child_died_middle_passage = cint(row[u'child2'])
+                    # numbers.num_infant_died_middle_passage = cint(row[u'infant2'])
+                    numbers.num_males_died_middle_passage = cint(row[u'male2'])
+                    numbers.num_females_died_middle_passage = cint(row[u'female2'])
+                    numbers.num_men_disembark_first_landing = cint(row[u'men3'])
+                    numbers.num_women_disembark_first_landing = cint(row[u'women3'])
+                    numbers.num_boy_disembark_first_landing = cint(row[u'boy3'])
+                    numbers.num_girl_disembark_first_landing = cint(row[u'girl3'])
+                    numbers.num_adult_disembark_first_landing = cint(row[u'adult3'])
+                    numbers.num_child_disembark_first_landing = cint(row[u'child3'])
+                    numbers.num_infant_disembark_first_landing = cint(row[u'infant3'])
+                    numbers.num_males_disembark_first_landing = cint(row[u'male3'])
+                    numbers.num_females_disembark_first_landing = cint(row[u'female3'])
+                    numbers.num_men_embark_second_port_purchase = cint(row[u'men4'])
+                    numbers.num_women_embark_second_port_purchase = cint(row[u'women4'])
+                    numbers.num_boy_embark_second_port_purchase = cint(row[u'boy4'])
+                    numbers.num_girl_embark_second_port_purchase = cint(row[u'girl4'])
+                    numbers.num_adult_embark_second_port_purchase = cint(row[u'adult4'])
+                    numbers.num_child_embark_second_port_purchase = cint(row[u'child4'])
+                    numbers.num_infant_embark_second_port_purchase = cint(row[u'infant4'])
+                    numbers.num_males_embark_second_port_purchase = cint(row[u'male4'])
+                    numbers.num_females_embark_second_port_purchase = cint(row[u'female4'])
+                    numbers.num_men_embark_third_port_purchase = cint(row[u'men5'])
+                    numbers.num_women_embark_third_port_purchase = cint(row[u'women5'])
+                    numbers.num_boy_embark_third_port_purchase = cint(row[u'boy5'])
+                    numbers.num_girl_embark_third_port_purchase = cint(row[u'girl5'])
+                    numbers.num_adult_embark_third_port_purchase = cint(row[u'adult5'])
+                    numbers.num_child_embark_third_port_purchase = cint(row[u'child5'])
+                    # numbers.num_infant_embark_third_port_purchase = cint(row[u'infant5'])
+                    numbers.num_males_embark_third_port_purchase = cint(row[u'male5'])
+                    numbers.num_females_embark_third_port_purchase = cint(row[u'female5'])
+                    numbers.num_men_disembark_second_landing = cint(row[u'men6'])
+                    numbers.num_women_disembark_second_landing = cint(row[u'women6'])
+                    numbers.num_boy_disembark_second_landing = cint(row[u'boy6'])
+                    numbers.num_girl_disembark_second_landing = cint(row[u'girl6'])
+                    numbers.num_adult_disembark_second_landing = cint(row[u'adult6'])
+                    numbers.num_child_disembark_second_landing = cint(row[u'child6'])
+                    # numbers.num_infant_disembark_second_landing = cint(row[u'infant6'])
+                    numbers.num_males_disembark_second_landing = cint(row[u'male6'])
+                    numbers.num_females_disembark_second_landing = cint(row[u'female6'])
+                    numbers.imp_num_adult_embarked = cint(row[u'adlt1imp'])
+                    numbers.imp_num_children_embarked = cint(row[u'chil1imp'])
+                    numbers.imp_num_male_embarked = cint(row[u'male1imp'])
+                    numbers.imp_num_female_embarked = cint(row[u'feml1imp'])
+                    numbers.total_slaves_embarked_age_identified = cint(row[u'slavema1'])
+                    numbers.total_slaves_embarked_gender_identified = cint(row[u'slavemx1'])
+                    numbers.imp_adult_death_middle_passage = cint(row[u'adlt2imp'])
+                    numbers.imp_child_death_middle_passage = cint(row[u'chil2imp'])
+                    numbers.imp_male_death_middle_passage = cint(row[u'male2imp'])
+                    numbers.imp_female_death_middle_passage = cint(row[u'feml2imp'])
+                    numbers.imp_num_adult_landed = cint(row[u'adlt3imp'])
+                    numbers.imp_num_child_landed = cint(row[u'chil3imp'])
+                    numbers.imp_num_male_landed = cint(row[u'male2imp'])
+                    numbers.imp_num_female_landed = cint(row[u'feml3imp'])
+                    numbers.total_slaves_landed_age_identified = cint(row[u'slavema3'])
+                    numbers.total_slaves_landed_gender_identified = cint(row[u'slavemx3'])
+                    numbers.total_slaves_dept_or_arr_age_identified = cint(row[u'slavema7'])
+                    numbers.total_slaves_dept_or_arr_gender_identified = cint(row[u'slavemx7'])
+                    numbers.imp_slaves_embarked_for_mortality = cint(row[u'tslmtimp'])
+                    numbers.imp_num_men_total = cint(row[u'men7'])
+                    numbers.imp_num_women_total = cint(row[u'women7'])
+                    numbers.imp_num_boy_total = cint(row[u'boy7'])
+                    numbers.imp_num_girl_total = cint(row[u'girl7'])
+                    numbers.imp_num_adult_total = cint(row[u'adult7'])
+                    numbers.imp_num_child_total = cint(row[u'child7'])
+                    numbers.imp_num_males_total = cint(row[u'male7'])
+                    numbers.imp_num_females_total = cint(row[u'female7'])
+                    numbers.percentage_men = cfloat(row[u'menrat7'])
+                    numbers.percentage_women = cfloat(row[u'womrat7'])
+                    numbers.percentage_boy = cfloat(row[u'boyrat7'])
+                    numbers.percentage_girl = cfloat(row[u'girlrat7'])
+                    numbers.percentage_male = cfloat(row[u'malrat7'])
+                    numbers.percentage_child = cfloat(row[u'chilrat7'])
+                    numbers.percentage_adult = 1 - numbers.percentage_child \
+                        if numbers.percentage_child is not None else None
+                    numbers.percentage_female = 1 - numbers.percentage_male \
+                        if numbers.percentage_male is not None else None
+                    numbers.imp_mortality_ratio = cfloat(row[u'vymrtrat'])
+                    numbers.voyage = voyage
+                    voyage_numbers.append(numbers)
+                    # voyage.voyage_slaves_numbers = numbers
+                    # Captains
+                    order = 1
+                    for key in 'abc':
+                        captain_name = row[u'captain' + key]
+                        if empty.match(captain_name):
+                            break
+                        captain_model = captains.get(captain_name)
+                        if captain_model is None:
+                            captain_model = VoyageCaptain()
+                            captain_model.name = captain_name
+                            captains[captain_name] = captain_model
+                        captain_connection = VoyageCaptainConnection()
+                        captain_connection.captain = captain_model
+                        captain_connection.captain_order = order
+                        captain_connection.voyage = voyage
+                        captain_connections.append(captain_connection)
+                        order += 1
+                    # Ship owners
+                    order = 1
+                    for key in 'abcdefghijklmnop':
+                        owner_name = row[u'owner' + key]
+                        if empty.match(owner_name):
+                            break
+                        owner_model = ship_owners.get(owner_name)
+                        if owner_model is None:
+                            owner_model = VoyageShipOwner()
+                            owner_model.name = owner_name
+                            ship_owners[owner_name] = owner_model
+                        owner_connection = VoyageShipOwnerConnection()
+                        owner_connection.owner = owner_model
+                        owner_connection.owner_order = order
+                        owner_connection.voyage = voyage
+                        ship_owner_connections.append(owner_connection)
+                        order += 1
+                    # Sources
+                    order = 1
+                    for key in 'abcdefghijklmnopqr':
+                        source_ref = row[u'source' + key]
+                        if empty.match(source_ref):
+                            break
+                        (source, match) = get_source(source_ref)
+                        if source is None:
+                            self.errors += 1
+                            sys.stderr.write('Source not found for "' + smart_str(source_ref) +
+                                            '", longest partial match: ' + smart_str(match) + '\n')
+                            continue
+                        source_connection = VoyageSourcesConnection()
+                        source_connection.group = voyage
+                        source_connection.source = source
+                        source_connection.source_order = order
+                        source_connection.text_ref = source_ref
+                        source_connections.append(source_connection)
+                        order += 1
+                    # Outcome
+                    outcome = VoyageOutcome()
+                    outcome.particular_outcome = get_by_value('particular_outcomes', 'fate')
+                    outcome.outcome_slaves = get_by_value('slaves_outcomes', 'fate2')
+                    outcome.vessel_captured_outcome = get_by_value('vessel_captured_outcomes', 'fate3')
+                    outcome.outcome_owner = get_by_value('owner_outcomes', 'fate4')
+                    outcome.resistance = get_by_value('resistances', 'resistance')
+                    outcome.voyage = voyage
+                    outcomes.append(outcome)
+            
         print 'Constructed ' + str(len(voyages)) + ' voyages from CSV.'
         if self.errors > 0:
             print str(self.errors) + ' errors occurred, please check the messages above.'

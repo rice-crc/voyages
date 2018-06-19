@@ -54,6 +54,10 @@ _exported_spss_fields = \
     'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
     'YEARDEP', 'YRCONS', 'YRREG']
 
+# TODO: Some variables are not an exact match to any field in or models,
+# so they either have some correspondence with a computed value from those
+# fields, or they are deprecated. E.g *RAT1, *RAT3 fields.
+
 def get_header_csv_text():
     return ','.join(_exported_spss_fields) + '\n'
 
@@ -129,17 +133,76 @@ def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_
     yield data
 
 def export_from_voyages():
+    # Here we prefetch lots of relations to avoid generating
+    # thousands of requests to the database.
     related_models = {
         'voyage_dates': VoyageDates,
         'voyage_groupings': VoyageGroupings,
-        'voyage_ship': VoyageShip,
-        'voyage_itinerary': VoyageItinerary,
+        #'voyage_ship': VoyageShip,
+        #'voyage_itinerary': VoyageItinerary,
         'voyage_crew': VoyageCrew,
         'voyage_slaves_numbers': VoyageSlavesNumbers}
+    itinerary_fields = ['broad_region_of_return', 
+        'first_landing_place',
+        'first_landing_region',
+        'first_place_slave_purchase',
+        'first_region_slave_emb',
+        'imp_broad_region_of_slave_purchase',
+        'imp_broad_region_slave_dis',
+        'imp_broad_region_voyage_begin',
+        'imp_port_voyage_begin',
+        'imp_principal_place_of_slave_purchase',
+        'imp_principal_place_of_slave_purchase__region',
+        'imp_principal_place_of_slave_purchase__region__broad_region',
+        'imp_principal_port_slave_dis',
+        'imp_principal_port_slave_dis__region',
+        'imp_principal_port_slave_dis__region__broad_region',
+        'imp_principal_region_of_slave_purchase',
+        'imp_principal_region_slave_dis',
+        'imp_region_voyage_begin',
+        'int_first_port_dis',
+        'int_first_port_emb',
+        'int_first_region_purchase_slaves',
+        'int_first_region_slave_landing',
+        'int_second_place_region_slave_landing',
+        'int_second_port_dis',
+        'int_second_port_emb',
+        'int_second_region_purchase_slaves',
+        'place_voyage_ended',
+        'port_of_call_before_atl_crossing',
+        'port_of_departure',
+        'principal_place_of_slave_purchase',
+        'principal_port_of_slave_dis',
+        'region_of_return',
+        'second_landing_place',
+        'second_landing_region',
+        'second_place_slave_purchase',
+        'second_region_slave_emb',
+        'third_landing_place',
+        'third_landing_region',
+        'third_place_slave_purchase',
+        'third_region_slave_emb']
     prefetch_fields = [
         Prefetch('voyage_captain', queryset=VoyageCaptain.objects.order_by('captain_name__captain_order')),
+        Prefetch('voyage_ship__nationality_ship'),
+        Prefetch('voyage_ship__imputed_nationality'),
+        Prefetch('voyage_ship__ton_type'),
+        Prefetch('voyage_ship__rig_of_vessel'),
+        Prefetch('voyage_ship__vessel_construction_place'),
+        Prefetch('voyage_ship__vessel_construction_region'),
+        Prefetch('voyage_ship__registered_place'),
+        Prefetch('voyage_ship__registered_region'),        
         Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
-        Prefetch('voyage_sources', queryset=VoyageSources.objects.only('short_ref').order_by('source__source_order'))]
+        Prefetch('voyage_sources', queryset=VoyageSources.objects.only('short_ref').order_by('source__source_order')),
+        Prefetch('voyage_itinerary', queryset=VoyageItinerary.objects.prefetch_related(*itinerary_fields).all()),
+        Prefetch(
+            'voyage_name_outcome', 
+            queryset=VoyageOutcome.objects.prefetch_related(
+                'particular_outcome',
+                'resistance',
+                'outcome_slaves',
+                'vessel_captured_outcome',
+                'outcome_owner').all())]
     for k, v in related_models.items():
         prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
     voyages = Voyage.objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
@@ -292,6 +355,16 @@ def _map_voyage_to_spss(voyage):
     data['YEAR10'] = year_mod(yearam, 10, 1500)
     data['YEAR25'] = year_mod(yearam, 25, 1500)
     data['YEAR100'] = ((yearam - 1) // 100) * 100 if yearam else None
+
+    # Outcomes
+    outcomes = list(voyage.voyage_name_outcome.all())
+    if 1 == len(outcomes):
+        outcomes = outcomes[0]
+        data['FATE'] = _get_label_value(outcomes.particular_outcome)
+        data['FATE2'] = _get_label_value(outcomes.outcome_slaves)
+        data['FATE3'] = _get_label_value(outcomes.vessel_captured_outcome)
+        data['FATE4'] = _get_label_value(outcomes.outcome_owner)
+        data['RESISTANCE'] = _get_label_value(outcomes.resistance)
     
     # Ship
     ship = voyage.voyage_ship
@@ -477,6 +550,13 @@ def _map_voyage_to_spss(voyage):
     data['CHILD7'] = numbers.imp_num_child_total
     data['MALE7'] = numbers.imp_num_males_total
     data['FEMALE7'] = numbers.imp_num_females_total
+    data['MENRAT7'] = numbers.percentage_men
+    data['WOMRAT7'] = numbers.percentage_women
+    data['BOYRAT7'] = numbers.percentage_boy
+    data['GIRLRAT7'] = numbers.percentage_girl
+    data['MALRAT7'] = numbers.percentage_male
+    data['CHILDRAT7'] = numbers.percentage_child
+    data['VYMRTRAT'] = numbers.imp_mortality_ratio
     
     aux = 'ABCDEFGHIJKLMNOPQR'
     for i, source in enumerate(voyage.voyage_sources.all()):
