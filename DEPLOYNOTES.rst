@@ -113,7 +113,7 @@ Configure application settings by copying ``localsettings.py.dist`` to
 After configuring all settings, initialize the db with all needed
 tables and initial data using::
 
-  $ python manage.py migratemigrate
+  $ python manage.py migrate
 
 In addition, these sets of initial data need to be loaded (Please load in this order)
 
