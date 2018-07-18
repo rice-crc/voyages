@@ -5,7 +5,7 @@
 {% block csslist %}
 	{% comment %} Additional styles for the home page {% endcomment %}
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" />
+	<link href="{% sass_src 'scss/library/aos@2.1.1.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block content %}
@@ -320,10 +320,8 @@
 	</div>
 </div><!-- Gone Fishing -->
 
-
-
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
-<script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/library/aos@2.1.1.min.js"></script>
 <script>
 	AOS.init({
 		disable: 'mobile'
