@@ -4,7 +4,7 @@
 	<div class="nav-container">
 		<!-- <a href="/" class="navbar-brand">Slave Voyages</a> -->
 		<a href="/" class="navbar-brand" ><!--<img src="img/logos/sv-logo.svg" alt="Slave Voyages" style="height: 3.5rem;">--> Slave Voyages</a>
-		<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#navbar9">
+		<button class="navbar-toggler float-right" aria-label="Navigation Toggle" type="button" data-toggle="collapse" data-target="#navbar9">
 							<span class="navbar-toggler-icon"></span>
 					</button>
 		<div class="navbar-collapse collapse">
@@ -33,9 +33,9 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'american:about' %}">{% trans "About" %}</a>
 						<a class="dropdown-item" href="{% url 'american:database' %}">{% trans "Database" %}</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Downloads</a>
+						<a class="dropdown-item" id="intra-download" data-toggle="modal" data-target="#intra-modal" href="#">Downloads</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" data-toggle="modal" data-target="#intra-modal" href="#">Contribute</a>
+						<a class="dropdown-item" id="intra-contribute" data-toggle="modal" data-target="#intra-modal" href="#">Contribute</a>
 					</div>
 				</li>
 
@@ -95,11 +95,11 @@
 </nav>
 
 <!-- Modal -->
-<div class="modal fade" id="intra-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="intra-modal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Intra-American Is Coming Soon!</h5>
+				<h5 class="modal-title">Intra-American Is Coming Soon!</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
