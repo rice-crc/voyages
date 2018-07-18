@@ -53,60 +53,60 @@ function SearchTerm(varInfo, operatorLabel, initialSearchTerm, description, vali
 		if (callback) callback(self);
 	};
 }
-
-Selectize.define('places', function(options) {
-	var self = this;
-	self.onOptionSelect = (function() {
-		var original = self.onOptionSelect;
-		return function(e) {
-			if (e.preventDefault) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
-			if (e.originalEvent && e.originalEvent.originalTarget) {
-				// Check if this is the link to add region or broad region.
-				if ($(e.originalEvent.originalTarget).hasClass('option_add_all')) {
-					original.apply(this, arguments);
-					return;
-				}
-			}
-			if (e.type && e.type == 'mousedown') return false;
-			var target = $(e.currentTarget);
-			var className = "expanded";
-			if (this.$control_input.val() != '' && !this.options.create) {
-				// Clear search if user selected an option.
-				id = target.attr('id');
-				this.$control_input.val('');
-				this.refreshOptions();
-				if (id) {
-					target = $("#" + id);
-				}
-			}
-			var nextActive = null;
-			if (target.hasClass("broad_region")) {
-				nextActive = ".broad_region_" + target.data('pk');
-				var isExpanded = $(nextActive + ":first").hasClass(className);
-				$(".broad_region,.region,.port").removeClass(className);
-				$(".tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
-				if (isExpanded) return false;
-				target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
-				$(".broad_region_" + target.data('pk')).addClass(className);
-				this.setTextboxValue('');
-			} else if (target.hasClass("region")) {
-				nextActive = ".region_" + target.data('pk');
-				var isExpanded = $(nextActive + ":first").hasClass(className);
-				$(".port").removeClass(className);
-				$(".region.tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
-				if (isExpanded) return false;
-				target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
-				$(".region_" + target.data('pk')).addClass(className);
-				this.setTextboxValue('');
-			} else {
-				original.apply(this, arguments);
-			}
-		};
-	})();
-});
+// 
+// Selectize.define('places', function(options) {
+// 	var self = this;
+// 	self.onOptionSelect = (function() {
+// 		var original = self.onOptionSelect;
+// 		return function(e) {
+// 			if (e.preventDefault) {
+// 				e.preventDefault();
+// 				e.stopPropagation();
+// 			}
+// 			if (e.originalEvent && e.originalEvent.originalTarget) {
+// 				// Check if this is the link to add region or broad region.
+// 				if ($(e.originalEvent.originalTarget).hasClass('option_add_all')) {
+// 					original.apply(this, arguments);
+// 					return;
+// 				}
+// 			}
+// 			if (e.type && e.type == 'mousedown') return false;
+// 			var target = $(e.currentTarget);
+// 			var className = "expanded";
+// 			if (this.$control_input.val() != '' && !this.options.create) {
+// 				// Clear search if user selected an option.
+// 				id = target.attr('id');
+// 				this.$control_input.val('');
+// 				this.refreshOptions();
+// 				if (id) {
+// 					target = $("#" + id);
+// 				}
+// 			}
+// 			var nextActive = null;
+// 			if (target.hasClass("broad_region")) {
+// 				nextActive = ".broad_region_" + target.data('pk');
+// 				var isExpanded = $(nextActive + ":first").hasClass(className);
+// 				$(".broad_region,.region,.port").removeClass(className);
+// 				$(".tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+// 				if (isExpanded) return false;
+// 				target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);
+// 				$(".broad_region_" + target.data('pk')).addClass(className);
+// 				this.setTextboxValue('');
+// 			} else if (target.hasClass("region")) {
+// 				nextActive = ".region_" + target.data('pk');
+// 				var isExpanded = $(nextActive + ":first").hasClass(className);
+// 				$(".port").removeClass(className);
+// 				$(".region.tree_expanded").removeClass('tree_expanded').addClass("tree_collapsed");
+// 				if (isExpanded) return false;
+// 				target.removeClass("tree_collapsed").addClass("tree_expanded").addClass(className);;
+// 				$(".region_" + target.data('pk')).addClass(className);
+// 				this.setTextboxValue('');
+// 			} else {
+// 				original.apply(this, arguments);
+// 			}
+// 		};
+// 	})();
+// });
 
 function PlacesData() {
 	var self = this;

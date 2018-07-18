@@ -1,8 +1,8 @@
 {
 	"version": 3,
-	"file": "../../home/domingos/dev/voyages/voyages/sitemedia/scss/sponsors.css",
+	"file": "../../Users/yang/Documents/GitHub/emory/voyages/voyages/sitemedia/scss/sponsors.css",
 	"sources": [
-		"../../home/domingos/dev/voyages/voyages/sitemedia/scss/sponsors.scss"
+		"../../Users/yang/Documents/GitHub/emory/voyages/voyages/sitemedia/scss/sponsors.scss"
 	],
 	"names": [],
 	"mappings": "AAAA,AAAA,EAAE,CAAC;EACD,MAAM,EAAE,aAAa,GACtB;;AAED,AAAA,SAAS,CAAC;EACR,OAAO,EAAE,CAAC,GAiBX;EAlBD,AAGE,SAHO,CAGP,EAAE,CAAC;IACD,OAAO,EAAE,IAAI;IACb,OAAO,EAAE,MAAM;IACf,WAAW,EAAE,MAAM;IACnB,eAAe,EAAE,MAAM,GACxB;EARH,AAUE,SAVO,CAUP,aAAa,CAAC;IACZ,KAAK,EAAE,IAAI,GACZ;EAZH,AAcE,SAdO,CAcP,aAAa,CAAC;IACZ,MAAM,EAAE,IAAI;IACZ,YAAY,EAAE,IAAI,GACnB;;AAGH,MAAM,EAAE,SAAS,EAAE,KAAK;EACtB,AAAA,WAAW,CAAC;IACR,sBAAsB,EACzB;EACD,AAAA,OAAO,CAAC;IACN,UAAU,EAAE,IAAI,GACjB"
