@@ -1449,6 +1449,8 @@ def download_voyages(request):
         statuses.append(ContributionStatus.rejected)
     
     rows = get_voyages_csv_rows(statuses, request.GET.get('published_check') == 'True')
+    # This technique follows the documentation in:
+    # https://docs.djangoproject.com/en/2.0/howto/outputting-csv/#streaming-csv-files
     response = StreamingHttpResponse((x for x in rows), content_type='text/csv; charset=utf-8')
     response['Content-Disposition'] = 'attachment; filename="download_voyages.csv"'
     return response
