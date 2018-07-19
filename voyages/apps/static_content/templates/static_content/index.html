@@ -39,7 +39,7 @@
 						</div>
 					</a>
 
-					<a href="{% url 'voyage:search' %}?selected_tab=animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
+					<a href="/voyage/new-ui#animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
 							<div class="special-feature-title">Animation</div>
 							<div class="special-feature-desc">View the movement of slave ships across the Atlantic </div>
@@ -59,9 +59,9 @@
 				<div class="social-flex-container">
 					<div class="social-icon-container">
 						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="_blank" alt="Slave Voyages on Facebook"><img src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon"></img></a>
-						<a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
-						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a>
-						<span class="social-icon" style="opacity: 1;">donate to this project</span>
+						<!-- <a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
+						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a> -->
+						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" alt="Donate to This Project" rel="noopener" target="_blank"><span class="social-icon" style="opacity: 1;">donate to this project</span></a>
 					</div>
 
 					<div class="social-icon-container">
@@ -98,7 +98,11 @@
 					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
 				</div>
 				<div class="align-self-center">
-					<p class="trans-color">“Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. Users can read the introductory maps for an overview of the evolution of the slave trade, view the timeline and chronology of the traffic, or watch the slave ship or slave trade animations to see the dispersal in action.”</p>
+					<p class="trans-color">
+						{% blocktrans %}
+						 Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. Users can read the introductory maps for an overview of the evolution of the slave trade, view the timeline and chronology of the traffic, or watch the slave ship or slave trade animations to see the dispersal in action.
+					 	{% endblocktrans %}
+				 	</p>
 				</div>
 				<div class="align-self-end band-buttons">
 					<a class="" href="{% url 'voyage:guide' %}">
