@@ -884,6 +884,7 @@ function refreshUi(filter, currentTab, tabData) {
               .append("rect")
               .attr("x", function(d) { return x(d.year) + xShift; })
               .attr("y", height)
+              .attr("class", "timeline_bar")
               .attr("width", x.rangeBand())
               .attr("height", 0);
             rect.transition()
