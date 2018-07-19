@@ -16,17 +16,8 @@
 	<link href="{% sass_src 'scss/library/dataTables.boostrap4@1.10.16.min.css' %}" rel="stylesheet" type="text/css" />
 	{% block csslist %} {% endblock %}
 
-	<!-- I18n of javascript text -->
-	<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-
-	<!-- Use a global JS constant to specify the root of static urls -->
-	<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
-
 	<script src="{{ STATIC_URL }}scripts/library/jquery-3.3.1.min.js"></script>
-	<script src="{{ STATIC_URL }}scripts/library/fontawesome.min.js"></script>
-	<script src="{{ STATIC_URL }}scripts/library/modernizr@2.8.3.js"></script>
-	<script src="{{ STATIC_URL }}scripts/library/datatables.custom.min.js"></script>
-	<script src="{{ STATIC_URL }}scripts/breadcrumb.js" type="text/javascript"></script>
+
 
 	<title>{% block title %}Page Title{% endblock %}</title>
 </head>
@@ -41,12 +32,22 @@
 	{% block footer %}{% endblock %}
 	{% include "google-analytics.html" %}
 
+	<!-- I18n of javascript text -->
+	<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+
+	<!-- Use a global JS constant to specify the root of static urls -->
+	<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
+
+	<script src="{{ STATIC_URL }}scripts/library/fontawesome.min.js"></script>
+	<script src="{{ STATIC_URL }}scripts/library/modernizr@2.8.3.js"></script>
+	<script src="{{ STATIC_URL }}scripts/library/datatables.custom.min.js"></script>
 	<script src="{{ STATIC_URL }}scripts/library/popper@1.12.9.min.js"></script>
 	<script src="{{ STATIC_URL }}scripts/library/bootstrap@4.0.0.min.js"></script>
 	<script src="{{ STATIC_URL }}scripts/library/popper@1.12.9.min.js"></script>
 	<script src="{{ STATIC_URL }}scripts/library/dataTables.bootstrap4@1.10.16.min.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}scripts/off-canvas.js" charset="utf-8"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}scripts/footer.js" charset="utf-8"></script>
+	<script src="{{ STATIC_URL }}scripts/breadcrumb.js"></script>
+	<script src="{{ STATIC_URL }}scripts/off-canvas.js"></script>
+	<script src="{{ STATIC_URL }}scripts/footer.js"></script>
 	{% block jslist %} {% endblock %}
 </body>
 
