@@ -1,10 +1,7 @@
-{% extends "base.html" %}
+{% extends "about/aboutbase.html" %}
 {% load i18n %}
-{% load voyage_extras %}
 
-{% block content %}
-<div class="container-new">
-    {{ flatpage.content|safe }}
-</div>
-
+{% block title %}Slave Voyages - About{% endblock %}
+{% block center-content %}
+{{ flatpage.content|safe }}
 {% endblock %}
