@@ -432,6 +432,7 @@ def _map_voyage_to_spss(voyage):
     data['MJSELIMP'] = _get_label_value(itinerary.imp_principal_port_slave_dis.region if itinerary.imp_principal_port_slave_dis else None)
     data['MJSELIMP1'] = _get_label_value(itinerary.imp_principal_port_slave_dis.region.broad_region if itinerary.imp_principal_port_slave_dis else None)
     data['DEPTREGIMP'] = _get_label_value(itinerary.imp_region_voyage_begin)
+    data['DEPTREGIMP1'] = _get_label_value(itinerary.imp_broad_region_voyage_begin)
     
     # Crew
     crew = voyage.voyage_crew

@@ -1,3 +1,6 @@
+from django.contrib.flatpages.models import FlatPage
+from django.shortcuts import render
+from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from voyages.apps.voyage.models import Place
 import django
@@ -45,6 +48,25 @@ def get_ordered_places(place_query=None, translate=True):
                        'code': place.value,
                        'port': trans(place.place)})
     return result
+
+
+def _get_flatpage(url, lang):
+    page = None
+    try:
+        localized_url = url + ((lang + '/') if lang else '')
+        page = FlatPage.objects.get(url=localized_url)
+    except:
+        pass
+    return page
+
+def render_locale_flatpage(request, template_path, flatpage_url):
+    lang = get_language()
+    page = _get_flatpage(flatpage_url, lang)
+    if not page and lang != 'en':
+        page = _get_flatpage(flatpage_url, 'en')
+    if not page:
+        page = _get_flatpage(flatpage_url, None)
+    return render(request, template_path, {'flatpage': page})
 
 def set_language(request, lang_code):
     """
