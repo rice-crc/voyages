@@ -309,14 +309,16 @@ def search_view(request):
     return render(request, 'voyage/beta_search_main.html')
 
 _options_model = {
-    'var_outcome_voyage': ParticularOutcome,
-    'var_outcome_slaves': SlavesOutcome,
-    'var_outcome_ship_captured': VesselCapturedOutcome,
-    'var_outcome_owner': OwnerOutcome,
-    'var_resistance': Resistance,
-    'var_nationality': Nationality,
-    'var_rig_of_vessel': RigOfVessel,
-    'var_tonnage': TonType,
+    'var_outcome_voyage': ParticularOutcome.objects,
+    'var_outcome_slaves': SlavesOutcome.objects,
+    'var_outcome_ship_captured': VesselCapturedOutcome.objects,
+    'var_outcome_owner': OwnerOutcome.objects,
+    'var_resistance': Resistance.objects,
+    'var_nationality': Nationality.objects,
+    'var_rig_of_vessel': RigOfVessel.objects,
+    'var_tonnage': TonType.objects,
+    # Imputed nationality is currently restricted to a subset of code-values.
+    'var_imputed_nationality': Nationality.objects.filter(value__in=[3, 6, 7, 8, 9, 10, 15, 30]),
 }
 
 @csrf_exempt
@@ -337,7 +339,7 @@ def get_var_options(request):
     response_data = cache.get(cache_key)
     is_cached = response_data is not None
     if not is_cached:
-        response_data = [{'label': x.label, 'value': x.value, 'pk': x.pk} for x in options_model.objects.all()]
+        response_data = [{'label': x.label, 'value': x.value, 'pk': x.pk} for x in options_model.all()]
         # Cache the data for 24h.
         cache.set(cache_key, response_data, 24 * 60 * 60)
     for d in response_data:
