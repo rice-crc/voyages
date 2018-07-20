@@ -913,7 +913,7 @@ function refreshUi(filter, currentTab, tabData) {
   } else if (currentTab == 'visualization') {
     loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
       .then(function() {
-        $("#sv-loader").removeClass("display-none");
+
 
         // Ready to plot graphs!
         var allChartTypes = {
@@ -946,7 +946,9 @@ function refreshUi(filter, currentTab, tabData) {
             yAxes: chartType[0] == 'donut' ? [yAxes] : yAxes
           }
         };
+        
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
+          $("#sv-loader").removeClass("display-none");
           $.post(searchUrl, JSON.stringify(postData), function(series) {
             if (chartType[0] == 'scatter') {
               $("#tabs-visualization-xy").empty();
