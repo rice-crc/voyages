@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^contacts', TemplateView.as_view(template_name='about/contacts.html'), name='contacts'),
     url(r'^flatpage/index', voyages.apps.about.views.render_about_flatpage, {'flatpage_url': '/about/index/'}),
     url(r'^flatpage/history', voyages.apps.about.views.render_about_flatpage, {'flatpage_url': '/about/history/'}),
+    url(r'^flatpage/team', voyages.apps.about.views.render_about_flatpage, {'flatpage_url': '/about/team/'}),
 ]
