@@ -326,7 +326,7 @@ var searchBar = new Vue({
       $vm.filter.outcome.outcome.var_resistance,
       $vm.filter.shipNationOwner.rigTonnageAndGunsMounted.var_rig_of_vessel,
       $vm.filter.shipNationOwner.flag.var_nationality,
-      // $vm.filter.shipNationOwner.flag.var_imputed_nationality,
+      $vm.filter.shipNationOwner.flag.var_imputed_nationality,
     ]);
 
     //search(this.filter, []);
