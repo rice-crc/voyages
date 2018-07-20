@@ -115,9 +115,9 @@ a {
 #sv-loader, #sv-loader[style] {
   position: fixed;
   height: 100%;
-  z-index: 100;
+  z-index: 1;
   width:100%;
-  background: rgba(0,0,0,0.05) url('../images/site/helm.gif') no-repeat center center;
+  background: rgba(0,0,0,0.1) url('../images/site/helm.gif') no-repeat center center;
 }
 
 .display-none {

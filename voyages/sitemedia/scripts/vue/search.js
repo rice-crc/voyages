@@ -46,55 +46,55 @@ var allColumns = [
   { data: "var_ship_name_plaintext", category: 1, header: "Vessel Name", isImputed: false },
   { data: "var_owner_plaintext", category: 1, header: "Vessel Owner", "visible": false, isImputed: false },
   { data: "var_year_of_construction", category: 1, header: "Year Constructed", "visible": false, isImputed: false },
-  { data: "var_vessel_construction_place_idnum", category: 1, header: "Place Constructed", "visible": false, isImputed: false },
+  { data: "var_vessel_construction_place", category: 1, header: "Place Constructed", "visible": false, isImputed: false },
   { data: "var_registered_year", category: 1, header: "Year Registered", "visible": false, isImputed: false },
-  { data: "var_registered_place_idnum", category: 1, header: "Place Registered", "visible": false, isImputed: false },
+  { data: "var_registered_place", category: 1, header: "Place Registered", "visible": false, isImputed: false },
   { data: "var_nationality", category: 1, header: "Flag", "visible": false, isImputed: false },
   { data: "var_imputed_nationality", category: 1, header: "Flag Imputed", "visible": false, isImputed: true },
-  { data: "var_rig_of_vessel", category: 1, header: "Rig of Vessel", "visible": false, isImputed: true },
+  { data: "var_rig_of_vessel", category: 1, header: "Rig of Vessel", "visible": false, isImputed: false },
   { data: "var_tonnage", category: 1, header: "Tonnage", "visible": false, isImputed: false },
   { data: "var_tonnage_mod", category: 1, header: "Standardized Tonnage", "visible": false, isImputed: true },
   { data: "var_guns_mounted", category: 1, header: "Guns Mounted", "visible": false, isImputed: false },
 
   // itinerary
   { data: "var_imp_port_voyage_begin", category: 2, header: "Place where Voyage Began", isImputed: true },
-  { data: "var_imp_principal_place_of_slave_purchase", category: 2, header: "Principal Place of Purchase", isImputed: true },
+  { data: "var_imp_principal_place_of_slave_purchase", category: 2, header: "Principal Place of Purchase", isImputed: false },
   { data: "var_first_place_slave_purchase", category: 2, header: "1st Place of Purchase", "visible": false, isImputed: false },
   { data: "var_second_place_slave_purchase", category: 2, header: "2nd Place of Purchase", "visible": false, isImputed: false },
   { data: "var_third_place_slave_purchase", category: 2, header: "3rd Place of Purchase", "visible": false, isImputed: false },
   { data: "var_port_of_call_before_atl_crossing", category: 2, header: "Places of Call before Atlantic Crossing", "visible": false, isImputed: false },
-  { data: "var_imp_principal_port_slave_dis", category: 2, header: "Principal Place of Slave Landing", isImputed: true },
+  { data: "var_imp_principal_port_slave_dis", category: 2, header: "Principal Place of Slave Landing", isImputed: false },
   { data: "var_first_landing_place", category: 2, header: "1st Place of Slave Landing", "visible": false, isImputed: false },
   { data: "var_second_landing_place", category: 2, header: "2nd Place of Slave Landing", "visible": false, isImputed: false },
   { data: "var_third_landing_place", category: 2, header: "3rd Place of Slave Landing", "visible": false, isImputed: false },
   { data: "var_place_voyage_ended", category: 2, header: "Place where Voyage Ended", "visible": false, isImputed: false },
 
   // slaves
-  { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked Imputed", "visible": false, isImputed: true },
-  { data: "var_total_num_slaves_purchased", category: 3, header: "Total Slaves Embarked", "visible": false, isImputed: false },
-  { data: "var_imp_total_slaves_disembarked", category: 3, header: "Total Slaves Disembarked Imputed", "visible": false, isImputed: true },
-  { data: "var_num_slaves_intended_first_port", category: 3, header: "Number of Slaves Intended at First Place of Purchase", "visible": false, isImputed: false },
-  { data: "var_num_slaves_carried_first_port", category: 3, header: "Slaves Carried from 1st Port of Purchase", "visible": false, isImputed: false },
-  { data: "var_num_slaves_carried_second_port", category: 3, header: "Slaves Carried from 2nd Port of Purchase", "visible": false, isImputed: false },
-  { data: "var_num_slaves_carried_third_port", category: 3, header: "Slaves Carried from 3rd Port of Purchase", "visible": false, isImputed: false },
-  { data: "var_total_num_slaves_arr_first_port_embark", category: 3, header: "Number of Slaves Arriving at 1st Place of Landing", isImputed: false },
-  { data: "var_num_slaves_disembark_first_place", category: 3, header: "Number of Slaves Disembarked at 1st Place of Landing", "visible": false, isImputed: false },
-  { data: "var_num_slaves_disembark_second_place", category: 3, header: "Number of Slaves Disembarked at 2nd Place of Landing", "visible": false, isImputed: false },
-  { data: "var_num_slaves_disembark_third_place", category: 3, header: "Number of Slaves Disembarked at 3rd Place of Landing", "visible": false, isImputed: false },
-  { data: "var_imputed_percentage_men", category: 3, header: "Percentage Men", "visible": false, isImputed: true },
-  { data: "var_imputed_percentage_women", category: 3, header: "Percentage Women", "visible": false, isImputed: true },
-  { data: "var_imputed_percentage_boys", category: 3, header: "Percentage Boys", "visible": false, isImputed: true },
-  { data: "var_imputed_percentage_girls", category: 3, header: "Percentage Girls", "visible": false, isImputed: true },
-  { data: "var_imputed_percentage_male", category: 3, header: "Percentage Males", "visible": false, isImputed: true },
-  { data: "var_imputed_percentage_child", category: 3, header: "Percentage Children", "visible": false, isImputed: true },
-  { data: "var_imputed_sterling_cash", category: 3, header: "Sterling Cash Price in Jamaica", "visible": false, isImputed: true },
-  { data: "var_imputed_death_middle_passage", category: 3, header: "Slave Deaths during Middle Passage", "visible": false, isImputed: true },
-  { data: "var_imputed_mortality", category: 3, header: "Mortality Rate", "visible": false, isImputed: true },
+  { data: "var_imp_total_num_slaves_purchased", category: 3, header: "Total Embarked", "visible": false, isImputed: true },
+  { data: "var_total_num_slaves_purchased", category: 3, header: "Total Embarked", "visible": false, isImputed: false },
+  { data: "var_imp_total_slaves_disembarked", category: 3, header: "Total Disembarked", "visible": false, isImputed: true },
+  { data: "var_num_slaves_intended_first_port", category: 3, header: "Slaves Intended", "visible": false, isImputed: false },
+  { data: "var_num_slaves_carried_first_port", category: 3, header: "Slaves from 1st Port", "visible": false, isImputed: false },
+  { data: "var_num_slaves_carried_second_port", category: 3, header: "Slaves from 2nd Port", "visible": false, isImputed: false },
+  { data: "var_num_slaves_carried_third_port", category: 3, header: "Slaves from 3rd Port", "visible": false, isImputed: false },
+  { data: "var_total_num_slaves_arr_first_port_embark", category: 3, header: "Slaves Arrived 1st Port", isImputed: false },
+  { data: "var_num_slaves_disembark_first_place", category: 3, header: "Slaves Landed 1st Port", "visible": false, isImputed: false },
+  { data: "var_num_slaves_disembark_second_place", category: 3, header: "Slaves Landed 2nd Port", "visible": false, isImputed: false },
+  { data: "var_num_slaves_disembark_third_place", category: 3, header: "Slaves Landed 3rd Port", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_men", category: 3, header: "Percentage Men", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_women", category: 3, header: "Percentage Women", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_boys", category: 3, header: "Percentage Boys", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_girls", category: 3, header: "Percentage Girls", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_male", category: 3, header: "Percentage Males", "visible": false, isImputed: false },
+  { data: "var_imputed_percentage_child", category: 3, header: "Percentage Children", "visible": false, isImputed: false },
+  { data: "var_imputed_sterling_cash", category: 3, header: "Sterling Cash Price in Jamaica", "visible": false, isImputed: false },
+  { data: "var_imputed_death_middle_passage", category: 3, header: "Slave Deaths during Middle Passage", "visible": false, isImputed: false },
+  { data: "var_imputed_mortality", category: 3, header: "Mortality Rate", "visible": false, isImputed: false },
 
 
   // dates
-  { data: "var_length_middle_passage_days", category: 4, header: "Middle Passage (days)", "visible": false, isImputed: true },
-  { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Slaves Landing (days)", "visible": false, isImputed: true },
+  { data: "var_length_middle_passage_days", category: 4, header: "Middle Passage (days)", "visible": false, isImputed: false },
+  { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Slaves Landing (days)", "visible": false, isImputed: false },
   { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false, isImputed: false },
   { data: "var_slave_purchase_began", category: 4, header: "Year Trade Began in Africa", "visible": false, isImputed: false },
   { data: "var_date_departed_africa", category: 4, header: "Year Vessel Departed Africa", "visible": false, isImputed: false },
@@ -110,9 +110,9 @@ var allColumns = [
 
   // outcome
   { data: "var_outcome_voyage", category: 6, header: "Particular Outcome of Voyage", "visible": false, isImputed: false },
-  { data: "var_outcome_slaves", category: 6, header: "Outcome of Voyage for Slaves", "visible": false, isImputed: true },
-  { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured", "visible": false, isImputed: true },
-  { data: "var_outcome_owner", category: 6, header: "Outcome of Voyage for Owner", "visible": false, isImputed: true },
+  { data: "var_outcome_slaves", category: 6, header: "Outcome of Voyage for Slaves", "visible": false, isImputed: false },
+  { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured", "visible": false, isImputed: false },
+  { data: "var_outcome_owner", category: 6, header: "Outcome of Voyage for Owner", "visible": false, isImputed: false },
   { data: "var_resistance", category: 6, header: "African Resistance", "visible": false, isImputed: false },
 
   // sources
@@ -156,7 +156,7 @@ allColumns.forEach(function(c, index) {
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'>" + c.header + "</span>"; // italicized column title
+    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Italicized results are calculated by an algorithm."> </i>'; // italicized column title
     c.render = function(data) {
       var formatedString = "";
       if (data !== null) {

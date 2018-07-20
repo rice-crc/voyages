@@ -342,18 +342,22 @@ var searchBar = new Vue({
   },
 })
 
-
-
+// Parse URL and activate Animation tab
 window.onload = function(){
-  debugger;
-
-    var url = document.location.toString();
-    if (url.match('#')) {
-        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+  var url = window.location.href;
+  if (url.includes("#")) {
+    var activeTab = url.substring(url.indexOf("#") + 1);
+    if (activeTab == "animation") {
+      $('#animation').click();
+      searchBar.setActive("animation");
     }
-
-    //Change hash for page-reload
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').on('shown', function (e) {
-        window.location.hash = e.target.hash;
-    });
+  }
 }
+
+// Make Highcharts work with Bootstrap Tabs
+jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) { // on tab selection event
+    jQuery( "#hc-container, #graph-container-red").each(function() {
+        // var chart = jQuery(this).highcharts(); // target the chart itself
+        // chart.reflow() // reflow that chart
+    });
+});
