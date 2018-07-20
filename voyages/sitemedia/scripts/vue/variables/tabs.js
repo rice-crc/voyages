@@ -215,7 +215,7 @@ var tabs = {
         { id: 11, varName: "var_num_slaves_intended_first_port", label: "Intended number of purchases" },
         { id: 12, varName: "var_num_slaves_intended_first_port", label: "Average intended purchases" },
         { id: 13, varName: "var_imp_total_num_slaves_purchased", label: "Total number of captives embarked" },
-        { id: 14, varName: "var_imp_total_num_slaves_purchased", label: "Average number of captives embarked" },
+        { id: 14, varName: "var_total_num_slaves_purchased", label: "Average number of captives embarked" },
         { id: 15, varName: "var_imp_total_slaves_disembarked", label: "Total number of captives disembarked" },
         { id: 16, varName: "var_imp_total_slaves_disembarked", label: "Average number of captives disembarked" },
         { id: 17, varName: "var_imputed_percentage_men", label: "Percentage men (among captives)" },
