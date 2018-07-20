@@ -460,10 +460,7 @@ function refreshUi(filter, currentTab, tabData) {
       extend: 'pageLength',
       className: 'btn btn-info buttons-collection dropdown-toggle',
     };
-    // TEMP Yang: I think there is an option for destroying the
-    // old table (destroy: true) that you can pass so we avoid
-    // this call?
-    destroyPreviousTable('#results_main_table');
+
     var mainDatatable = $('#results_main_table').DataTable({
       ajax: {
         url: searchUrl,
@@ -488,7 +485,6 @@ function refreshUi(filter, currentTab, tabData) {
             searchBar.row.data = mainDatatable.row(this).data();
           });
 
-          // console.log(JSON.stringify({ searchData: currentSearchObj, tableParams: d, output: 'resultsTable' }))
           return JSON.stringify({
             searchData: currentSearchObj,
             tableParams: d,
@@ -536,6 +532,9 @@ function refreshUi(filter, currentTab, tabData) {
           targets: 25
         },
       ],
+
+      "order": [[ 1, "asc" ]],
+      "destroy": true,
 
       // page length Default
       pageLength: 25,
@@ -946,7 +945,7 @@ function refreshUi(filter, currentTab, tabData) {
             yAxes: chartType[0] == 'donut' ? [yAxes] : yAxes
           }
         };
-        
+
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
           $("#sv-loader").removeClass("display-none");
           $.post(searchUrl, JSON.stringify(postData), function(series) {
