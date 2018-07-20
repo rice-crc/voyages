@@ -46,9 +46,9 @@ var allColumns = [
   { data: "var_ship_name_plaintext", category: 1, header: "Vessel Name", isImputed: false },
   { data: "var_owner_plaintext", category: 1, header: "Vessel Owner", "visible": false, isImputed: false },
   { data: "var_year_of_construction", category: 1, header: "Year Constructed", "visible": false, isImputed: false },
-  { data: "var_vessel_construction_place_idnum", category: 1, header: "Place Constructed", "visible": false, isImputed: false },
+  { data: "var_vessel_construction_place", category: 1, header: "Place Constructed", "visible": false, isImputed: false },
   { data: "var_registered_year", category: 1, header: "Year Registered", "visible": false, isImputed: false },
-  { data: "var_registered_place_idnum", category: 1, header: "Place Registered", "visible": false, isImputed: false },
+  { data: "var_registered_place", category: 1, header: "Place Registered", "visible": false, isImputed: false },
   { data: "var_nationality", category: 1, header: "Flag", "visible": false, isImputed: false },
   { data: "var_imputed_nationality", category: 1, header: "Flag Imputed", "visible": false, isImputed: true },
   { data: "var_rig_of_vessel", category: 1, header: "Rig of Vessel", "visible": false, isImputed: false },
@@ -156,7 +156,7 @@ allColumns.forEach(function(c, index) {
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'>" + c.header + "</span>"; // italicized column title
+    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Italicized results are calculated by an algorithm."> </i>'; // italicized column title
     c.render = function(data) {
       var formatedString = "";
       if (data !== null) {

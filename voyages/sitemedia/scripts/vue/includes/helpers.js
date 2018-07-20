@@ -524,7 +524,7 @@ function refreshUi(filter, currentTab, tabData) {
       ],
 
       language: {
-        info: "Showing _START_ to _END_ of _TOTAL_ entries <i class='fa fa-question-circle' data-toggle='tooltip' data-placement='top' title='Italicized results are calculated by an algorithm.'></i> ",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
       },
 
       buttons: [
