@@ -353,3 +353,11 @@ window.onload = function(){
     }
   }
 }
+
+// Make Highcharts work with Bootstrap Tabs
+jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) { // on tab selection event
+    jQuery( "#hc-container, #graph-container-red").each(function() {
+        // var chart = jQuery(this).highcharts(); // target the chart itself
+        // chart.reflow() // reflow that chart
+    });
+});
