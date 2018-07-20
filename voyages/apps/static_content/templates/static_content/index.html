@@ -5,7 +5,7 @@
 {% block csslist %}
 	{% comment %} Additional styles for the home page {% endcomment %}
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" />
+	<link href="{% sass_src 'scss/library/aos@2.1.1.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block content %}
@@ -58,14 +58,14 @@
 			<div class="align-self-end cover-end" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="1500" data-aos-duration="500" data-aos-anchor="#bgvid-container">
 				<div class="social-flex-container">
 					<div class="social-icon-container">
-						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="_blank" alt="Slave Voyages on Facebook"><img src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon"></img></a>
+						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="_blank" rel="noopener" alt="Slave Voyages on Facebook"><img data-src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon lazy" alt="Facebook Logo"></img></a>
 						<!-- <a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
 						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a> -->
 						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" alt="Donate to This Project" rel="noopener" target="_blank"><span class="social-icon" style="opacity: 1;">donate to this project</span></a>
 					</div>
 
 					<div class="social-icon-container">
-						<a target="_blank" href="http://digitalscholarship.emory.edu/" alt="Emory University Center for Digital Scholarship"><img class="cover-logo" src="{{STATIC_URL}}images/site/eu-lits-grey.svg" alt="" style="height: 50px; opacity: 0.7; display: flex!important;"></a>
+						<a target="_blank" rel="noopener" aria-label="Emory Center for Digital Scholarship" href="http://digitalscholarship.emory.edu/" alt="Emory University Center for Digital Scholarship"><img class="cover-logo lazy" data-src="{{STATIC_URL}}images/site/eu-lits-grey.svg" alt="Emory Center for Digital Scholarship Logo" style="height: 50px; opacity: 0.7; display: flex!important;"></a>
 					</div>
 
 				</div>
@@ -128,13 +128,13 @@
 				</div>
 			</div>
 			<div class="col-md-4 sm-hidden">
-				<img class="band-image" src="{{STATIC_URL}}images/site/modules/trans.png">
+				<img class="band-image lazy" data-src="{{STATIC_URL}}images/site/modules/trans.png" alt="Trans-Atlantic Slave Trade Database">
 			</div>
 		</div>
 
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
 			<div class="col-md-4 sm-hidden">
-				<img class="band-image" src="{{STATIC_URL}}images/site/modules/intra.png">
+				<img class="band-image lazy" data-src="{{STATIC_URL}}images/site/modules/intra.png" alt="Intra-American Slave Trade Database">
 			</div>
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
@@ -178,7 +178,7 @@
 				</div>
 			</div>
 			<div class="col-md-4 sm-hidden ">
-				<img class="band-image" src="{{STATIC_URL}}images/site/modules/past.png">
+				<img class="band-image lazy" data-src="{{STATIC_URL}}images/site/modules/past.png" alt="People of the Trans-Atlantic Slave Trade Image">
 			</div>
 		</div>
 
@@ -195,7 +195,7 @@
 
 			<div class="col-md-3 card-container">
 					<a href="/resources/images/category/Manuscripts" >
-						<img class="card-img-top drop-shadow-1" src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Card image cap">
+						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Manuscripts">
 						<div class="card-block">
 							<h4 class="sv-card-title card-title-color "> manuscripts </h4>
 							<p class="card-text"></p>
@@ -205,7 +205,7 @@
 
 			<div class="col-md-3 card-container">
 					<a href="/resources/images/category/Places" >
-						<img class="card-img-top drop-shadow-1" src="{{STATIC_URL}}images/site/gallery/2.jpg" alt="Card image cap">
+						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/2.jpg" alt="Places">
 						<div class="card-block">
 							<h4 class="sv-card-title card-title-color "> places </h4>
 							<p class="card-text"></p>
@@ -215,7 +215,7 @@
 
 			<div class="col-md-3 card-container">
 				<a href="/resources/images/category/Slaves" >
-					<img class="card-img-top drop-shadow-1" src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="Card image cap">
+					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="Slaves">
 					<div class="card-block">
 						<h4 class="sv-card-title card-title-color "> slaves </h4>
 						<p class="card-text"></p>
@@ -225,7 +225,7 @@
 
 			<div class="col-md-3 card-container">
 				<a href="/resources/images/category/Vessels" >
-					<img class="card-img-top drop-shadow-1" src="{{STATIC_URL}}images/site/gallery/3.jpg" alt="Card image cap">
+					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/3.jpg" alt="Vessels">
 					<div class="card-block">
 						<h4 class="sv-card-title card-title-color "> vessels </h4>
 						<p class="card-text"></p>
@@ -241,39 +241,39 @@
 <div class="aos-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
 	<div class="logo-grid-container" style="background: #BBC2CB; margin-top: 4rem;" >
 		<div class="logo-grid">
-			<a href="http://digitalscholarship.emory.edu/" target="_blank" alt="Emory University Center for Digital Scholarship (US)">
+			<a href="http://digitalscholarship.emory.edu/" target="_blank" rel="noopener" alt="Emory University Center for Digital Scholarship (US)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/eu-lits.svg" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/eu-lits.svg" alt="Emory University Center for Digital Scholarship" style="">
 				</div>
 			</a>
 
-			<a href="https://www.ucsc.edu/" target="_blank" alt="University of California, Santa Cruz (US)">
+			<a href="https://www.ucsc.edu/" target="_blank" rel="noopener" alt="University of California, Santa Cruz (US)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/ucsc.svg" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/ucsc.svg" alt="University of California, Santa Cruz (US)" style="">
 				</div>
 			</a>
 
-			<a href="https://uci.edu/" target="_blank" alt="University of California, Irvine (US)">
+			<a href="https://uci.edu/" target="_blank" rel="noopener" alt="University of California, Irvine (US)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/uci.svg">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/uci.svg" alt="University of California, Irvine (US)">
 				</div>
 			</a>
 
-			<a href="https://www.victoria.ac.nz" target="_blank" alt="Victoria University of Wellington (New Zealand)">
+			<a href="https://www.victoria.ac.nz" target="_blank" rel="noopener" alt="Victoria University of Wellington (New Zealand)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/victoria.png" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/victoria.png" alt="Victoria University of Wellington (New Zealand)" style="">
 				</div>
 			</a>
 
-			<a href="https://www.hull.ac.uk" target="_blank" alt="University of Hull (UK)">
+			<a href="https://www.hull.ac.uk" target="_blank" rel="noopener" alt="University of Hull (UK)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/university-of-hull.svg" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/university-of-hull.svg" alt="University of Hull (UK)" style="">
 				</div>
 			</a>
 
-			<a href="https://ufrj.br/" target="_blank" alt="UFRJ: Universidade Federal do Rio de Janeiro (Brazil)">
+			<a href="https://ufrj.br/" target="_blank" rel="noopener" alt="UFRJ: Universidade Federal do Rio de Janeiro (Brazil)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/ufrj.svg" alt="" style="color: white; fill2 white;">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/ufrj.svg" alt="UFRJ: Universidade Federal do Rio de Janeiro (Brazil)" style="color: white; fill2 white;">
 				</div>
 			</a>
 
@@ -282,15 +282,15 @@
 
 	<div class="logo-grid-container" style="background: #BBC2CB;">
 		<div class="logo-grid">
-			<a href="http://dubois.fas.harvard.edu/" target="_blank" alt="Hutchins Center for African and African American Research (Harvard University)">
+			<a href="http://dubois.fas.harvard.edu/" target="_blank" rel="noopener" alt="Hutchins Center for African and African American Research (Harvard University)">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/hutchins.png" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/hutchins.png" alt="Hutchins Center for African and African American Research (Harvard University)" style="">
 				</div>
 			</a>
 
-			<a href="https://www.neh.gov" target="_blank" alt="National Endowment for the Humanities">
+			<a href="https://www.neh.gov" target="_blank" rel="noopener" alt="National Endowment for the Humanities">
 				<div class="logo-grid-item zoom-1">
-					<img class="card-img sponsor-card-img block" src="{{ STATIC_URL }}images/site/neh.png" alt="" style="">
+					<img class="card-img sponsor-card-img block lazy" data-src="{{ STATIC_URL }}images/site/neh.png" alt="National Endowment for the Humanities" style="">
 				</div>
 			</a>
 		</div>
@@ -298,35 +298,16 @@
 
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="intra-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Intra-American Is Coming Soon!</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>It will look similar to other modules (e.g. Trans-Atlantic) but due to the overwhelming amount of work on my list, I will roll out Intra-American later.</p>
-				<img src="static/images/site/gone-fishing.gif" style="width: 100%;"></img>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div><!-- Gone Fishing -->
-
-
-
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/homepage-reflow.js"></script>
-<script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/library/aos@2.1.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.10.0/lazyload.min.js"></script>
 <script>
 	AOS.init({
 		disable: 'mobile'
+	});
+
+	var myLazyLoad = new LazyLoad({
+    elements_selector: ".lazy"
 	});
 </script>
 {% endblock %} {% block footer %} {% include "footer.html" %} {% endblock %}

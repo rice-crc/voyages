@@ -2,15 +2,12 @@
 
 <div class="row">
   <div class="col-md-12">
-    <v-dropdown title="Chosen Variable" description="" @changed="updateTabOptions" :options="tabs.timeline.chart.options" :variable="tabs.timeline.chart"></v-dropdown>
+    <v-dropdown title="Choose a variable to plot" description="" @changed="updateTabOptions" :options="tabs.timeline.chart.options" :clearable="false" :variable="tabs.timeline.chart"></v-dropdown>
   </div>
 </div>
-
 
 <div class="row">
-  <div class="col-md-12" id="timelineChart">
-  </div>
+  <div class="col-md-12" id="hc-timeline"></div>
 </div>
-<div id="mouseOverInfo" style="font-size: 11pt; margin:20px"></div>
 
 {% endverbatim %}

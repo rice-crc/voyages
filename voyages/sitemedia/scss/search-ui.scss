@@ -119,3 +119,16 @@ polyline {
 .imputed-result {
   font-style: italic;
 }
+
+.highcharts-menu {
+  hr {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.highcharts-menu-item {
+  &:hover {
+    background-color: #008ca8 !important;
+  }
+}

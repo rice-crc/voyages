@@ -9,19 +9,15 @@
 <link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
-
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/section-index.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/about/about-index.css"> -->
 {% endblock %}
 
 {% block content %}
 
-<link rel="stylesheet" href="https://npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
 <div class="container-new">
-  <div class="row  row-offcanvas row-offcanvas-right">
+  <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
 			{% block left-menu %}
 				{% include "about/left-menu.html" %}
@@ -48,9 +44,7 @@
   </div>
 </div>
 
-
-<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
-
+<script src="{{ STATIC_URL }}scripts/library/js-offcanvas@1.0.0.min.js"></script>
 {% endblock %}
 
 {% block footer %}
