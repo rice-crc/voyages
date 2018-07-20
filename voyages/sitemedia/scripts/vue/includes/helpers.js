@@ -588,6 +588,9 @@ function refreshUi(filter, currentTab, tabData) {
           });
         }
       },
+      columnDefs: [
+        { targets: "_all", type: 'num-fmt', render: $.fn.dataTable.render.number(",")},
+      ],
       bFilter: false,
       paging: false,
       dom:  "<'flex-container'>" +
