@@ -152,7 +152,7 @@ class Command(BaseCommand):
                 self.errors += 1
                 return None
             if val is None: return None
-            return round(float(val), 2) if not empty.match(val) else None
+            return float(val) if not empty.match(val) else None
 
         def date_csv(var_name_prefix, suffixes=[u'a', u'b', u'c']):
             """
@@ -341,7 +341,7 @@ class Command(BaseCommand):
                     numbers.num_girl_died_middle_passage = cint(row[u'girl2'])
                     numbers.num_adult_died_middle_passage = cint(row[u'adult2'])
                     numbers.num_child_died_middle_passage = cint(row[u'child2'])
-                    # numbers.num_infant_died_middle_passage = cint(row[u'infant2'])
+                    numbers.num_infant_died_middle_passage = cint(row[u'infant2'])
                     numbers.num_males_died_middle_passage = cint(row[u'male2'])
                     numbers.num_females_died_middle_passage = cint(row[u'female2'])
                     numbers.num_men_disembark_first_landing = cint(row[u'men3'])
@@ -368,7 +368,7 @@ class Command(BaseCommand):
                     numbers.num_girl_embark_third_port_purchase = cint(row[u'girl5'])
                     numbers.num_adult_embark_third_port_purchase = cint(row[u'adult5'])
                     numbers.num_child_embark_third_port_purchase = cint(row[u'child5'])
-                    # numbers.num_infant_embark_third_port_purchase = cint(row[u'infant5'])
+                    numbers.num_infant_embark_third_port_purchase = cint(row[u'infant5'])
                     numbers.num_males_embark_third_port_purchase = cint(row[u'male5'])
                     numbers.num_females_embark_third_port_purchase = cint(row[u'female5'])
                     numbers.num_men_disembark_second_landing = cint(row[u'men6'])
@@ -377,7 +377,7 @@ class Command(BaseCommand):
                     numbers.num_girl_disembark_second_landing = cint(row[u'girl6'])
                     numbers.num_adult_disembark_second_landing = cint(row[u'adult6'])
                     numbers.num_child_disembark_second_landing = cint(row[u'child6'])
-                    # numbers.num_infant_disembark_second_landing = cint(row[u'infant6'])
+                    numbers.num_infant_disembark_second_landing = cint(row[u'infant6'])
                     numbers.num_males_disembark_second_landing = cint(row[u'male6'])
                     numbers.num_females_disembark_second_landing = cint(row[u'female6'])
                     numbers.imp_num_adult_embarked = cint(row[u'adlt1imp'])
@@ -392,7 +392,7 @@ class Command(BaseCommand):
                     numbers.imp_female_death_middle_passage = cint(row[u'feml2imp'])
                     numbers.imp_num_adult_landed = cint(row[u'adlt3imp'])
                     numbers.imp_num_child_landed = cint(row[u'chil3imp'])
-                    numbers.imp_num_male_landed = cint(row[u'male2imp'])
+                    numbers.imp_num_male_landed = cint(row[u'male3imp'])
                     numbers.imp_num_female_landed = cint(row[u'feml3imp'])
                     numbers.total_slaves_landed_age_identified = cint(row[u'slavema3'])
                     numbers.total_slaves_landed_gender_identified = cint(row[u'slavemx3'])
