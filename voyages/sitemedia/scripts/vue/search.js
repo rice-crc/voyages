@@ -43,7 +43,7 @@ var allColumns = [
   { data: "var_registered_year", category: 0, header: "Year Registered", "visible": false, isImputed: false },
   { data: "var_registered_place", category: 0, header: "Place Registered", "visible": false, isImputed: false },
   { data: "var_nationality", category: 0, header: "Flag", "visible": false, isImputed: false },
-  { data: "var_imputed_nationality", category: 0, header: "Flag Imputed", "visible": false, isImputed: true },
+  { data: "var_imputed_nationality", category: 0, header: "Flag", "visible": false, isImputed: true },
   { data: "var_rig_of_vessel", category: 0, header: "Rig of Vessel", "visible": false, isImputed: false },
   { data: "var_tonnage", category: 0, header: "Tonnage", "visible": false, isImputed: false },
   { data: "var_tonnage_mod", category: 0, header: "Standardized Tonnage", "visible": false, isImputed: true },
@@ -88,14 +88,14 @@ var allColumns = [
   {
     data: "var_" + YEAR_RANGE_VARNAME,
     category: 3,
-    header: "Year Arrived with Slaves",
-    isImputed: false,
+    header: "Year",
+    isImputed: true,
   },
 
   // dates
   { data: "var_length_middle_passage_days", category: 4, header: "Middle Passage (days)", "visible": false, isImputed: false },
   { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Slaves Landing (days)", "visible": false, isImputed: false },
-  { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false, isImputed: false },
+  { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false, isImputed: true },
   { data: "var_slave_purchase_began", category: 4, header: "Year Trade Began in Africa", "visible": false, isImputed: false },
   { data: "var_date_departed_africa", category: 4, header: "Year Vessel Departed Africa", "visible": false, isImputed: false },
   { data: "var_first_dis_of_slaves", category: 4, header: "Year Vessel Arrived with Slaves", "visible": false, isImputed: false },
