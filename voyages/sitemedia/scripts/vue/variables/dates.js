@@ -20,7 +20,7 @@ var_voyage_began = new DateVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: false,
+    isImputed: true,
     isadvanced: false
   });
 
