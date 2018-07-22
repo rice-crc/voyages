@@ -8,7 +8,7 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_total_num_slaves_purchased = new NumberVariable({
@@ -34,7 +34,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: true
+    isadvanced: false
   });
 
 
@@ -229,7 +229,7 @@ var_imputed_sterling_cash = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_imputed_death_middle_passage = new NumberVariable({
@@ -242,7 +242,7 @@ var_imputed_death_middle_passage = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_imputed_mortality = new NumberVariable({

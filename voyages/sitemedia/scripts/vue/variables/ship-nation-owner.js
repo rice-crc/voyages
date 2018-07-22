@@ -45,7 +45,7 @@ var_year_of_construction = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_vessel_construction_place_idnum = new PlaceVariable({
@@ -57,7 +57,7 @@ var_vessel_construction_place_idnum = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_registered_year = new NumberVariable({
@@ -70,7 +70,7 @@ var_registered_year = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_registered_place_idnum = new PlaceVariable({
@@ -82,7 +82,7 @@ var_registered_place_idnum = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_nationality = new TreeselectVariable({
@@ -94,7 +94,7 @@ var_nationality = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_imputed_nationality = new TreeselectVariable({
@@ -118,7 +118,7 @@ var_rig_of_vessel = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_tonnage = new NumberVariable({
@@ -131,7 +131,7 @@ var_tonnage = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_tonnage_mod = new NumberVariable({
@@ -144,7 +144,7 @@ var_tonnage_mod = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_guns_mounted = new NumberVariable({
@@ -157,7 +157,7 @@ var_guns_mounted = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 // all

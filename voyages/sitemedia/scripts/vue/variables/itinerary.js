@@ -31,7 +31,7 @@ var_first_place_slave_purchase_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_second_place_slave_purchase_id = new PlaceVariable({
@@ -43,7 +43,7 @@ var_second_place_slave_purchase_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_third_place_slave_purchase_id = new PlaceVariable({
@@ -55,7 +55,7 @@ var_third_place_slave_purchase_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_port_of_call_before_atl_crossing_id = new PlaceVariable({
@@ -67,7 +67,7 @@ var_port_of_call_before_atl_crossing_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_imp_principal_port_slave_dis_id = new PlaceVariable({
@@ -91,7 +91,7 @@ var_first_landing_place_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_second_landing_place_id = new PlaceVariable({
@@ -103,7 +103,7 @@ var_second_landing_place_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_third_landing_place_id = new PlaceVariable({
@@ -115,7 +115,7 @@ var_third_landing_place_id = new PlaceVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true
+    isadvanced: false
   });
 
 var_place_voyage_ended_id = new PlaceVariable({
