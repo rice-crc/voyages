@@ -7,7 +7,7 @@ var var_imp_arrival_at_port_of_dis = new YearVariable({
     searchTerm0: 1514,
     searchTerm1: 1866
   },{
-    isImputed: false,
+    isImputed: true,
     isAdvanced: false
   });
 
