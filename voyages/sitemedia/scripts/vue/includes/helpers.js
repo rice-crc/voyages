@@ -880,6 +880,9 @@ function refreshUi(filter, currentTab, tabData) {
                   return 'Year ' + year + ': ' + '<b>' + this.y + '</b> ';
               }
           },
+          lang: {
+              noData: "We are sorry but there is no data to display or an error has occurred."
+          },
           plotOptions: {
             area: {
               marker: {
