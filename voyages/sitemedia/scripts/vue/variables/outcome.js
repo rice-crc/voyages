@@ -7,7 +7,7 @@ var_outcome_voyage = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: false,
-    isAdvanced: true,
+    isadvanced: false,
   });
 
 var_outcome_slaves = new TreeselectVariable({
@@ -31,7 +31,7 @@ var_outcome_ship_captured = new TreeselectVariable({
     searchTerm: [],
   },{
     isImputed: true,
-    isAdvanced: true,
+    isadvanced: false,
   });
 
 var_outcome_owner = new TreeselectVariable({
