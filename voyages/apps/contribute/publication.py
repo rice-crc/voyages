@@ -193,7 +193,7 @@ def export_from_voyages():
         Prefetch('voyage_ship__registered_place'),
         Prefetch('voyage_ship__registered_region'),        
         Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
-        Prefetch('voyage_sources', queryset=VoyageSources.objects.only('short_ref').order_by('source__source_order')),
+        Prefetch('group', queryset=VoyageSourcesConnection.objects.only('text_ref').order_by('source_order')),
         Prefetch('voyage_itinerary', queryset=VoyageItinerary.objects.prefetch_related(*itinerary_fields).all()),
         Prefetch(
             'voyage_name_outcome', 
@@ -560,9 +560,9 @@ def _map_voyage_to_spss(voyage):
     data['VYMRTRAT'] = numbers.imp_mortality_ratio
     
     aux = 'ABCDEFGHIJKLMNOPQR'
-    for i, source in enumerate(voyage.voyage_sources.all()):
+    for i, source_conn in enumerate(voyage.group.all()):
         if i >= len(aux): break
-        data['SOURCE' + aux[i]] = source.short_ref
+        data['SOURCE' + aux[i]] = source_conn.text_ref
         
     data['XMIMPFLAG'] = _get_label_value(voyage.voyage_groupings)
     

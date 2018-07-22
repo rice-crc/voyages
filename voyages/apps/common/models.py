@@ -15,6 +15,8 @@ class SavedQuery(models.Model):
     hash = models.CharField(max_length=255, db_index=True, default='')
     # The actual query string.
     query = models.TextField()
+    # Indicates whether this is a legacy query or a new JSON format query
+    is_legacy = models.BooleanField(default=True)
 
     def get_link(self, request, url_name):
         """
