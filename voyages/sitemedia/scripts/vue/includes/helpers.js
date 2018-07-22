@@ -544,8 +544,8 @@ function refreshUi(filter, currentTab, tabData) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [25, 50, 100],
-        ['25 rows', '50 rows', '100 rows']
+        [25, 50, 100, 200],
+        ['25 rows', '50 rows', '100 rows', '200 rows']
       ],
 
       language: {
