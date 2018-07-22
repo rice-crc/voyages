@@ -533,7 +533,7 @@ function refreshUi(filter, currentTab, tabData) {
         },
       ],
 
-      "order": [[ 1, "asc" ]],
+      "order": [[ 0, "asc" ]],
       "destroy": true,
 
       // page length Default
