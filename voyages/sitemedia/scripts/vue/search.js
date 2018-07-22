@@ -22,10 +22,10 @@ for (var i = 0; i < searchTerms.length; ++i) {
 }
 
 var categoryNames = [
-  "Year Range",
   "Ship, Nation, Owners",
   "Itinerary",
   "Slave",
+  "Year Range",
   "Dates",
   "Captain and Crew",
   "Outcome",
@@ -33,7 +33,7 @@ var categoryNames = [
 ];
 
 var allColumns = [
-  
+
   // ship nation owner
   { data: "var_voyage_id", category: 0, header: "Voyage ID", isImputed: false },
   { data: "var_ship_name_plaintext", category: 0, header: "Vessel Name", isImputed: false },
@@ -88,7 +88,7 @@ var allColumns = [
   {
     data: "var_" + YEAR_RANGE_VARNAME,
     category: 3,
-    header: "Year arrived with slaves*",
+    header: "Year Arrived with Slaves",
     isImputed: false,
   },
 
@@ -148,9 +148,12 @@ var categories = $.map(categoryNames, function(name) {
 });
 
 allColumns.forEach(function(c, index) {
+
+  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <i class='fa fa-question-circle' data-toggle='tooltip' data-placement='top' title='Italicized results are calculated by an algorithm.'> </i>" : c.header;
+
   categories[c.category].columns.push({
     extend: 'columnToggle',
-    text: c.header,
+    text: title,
     columns: index,
   });
 
