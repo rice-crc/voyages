@@ -41,8 +41,11 @@ urlpatterns = [
 
     url(r'var-options', voyages.apps.voyage.beta_views.get_var_options, name='var-options'),
     url(r'filtered-places', voyages.apps.voyage.beta_views.get_filtered_places, name='filtered-places'),
+    url(r'save-query', voyages.apps.voyage.beta_views.save_query, name='save-query'),
+    url(r'get-saved-query/(?P<query_id>\w+)', voyages.apps.voyage.beta_views.get_saved_query, name='get-saved-query'),
 
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008', voyages.apps.voyage.beta_views.search_view, name='beta_search'),
+
 ]

@@ -12,7 +12,7 @@ from globals import voyage_timeline_variables, table_columns, table_rows, table_
 from haystack.query import SearchQuerySet
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
-from voyages.apps.common.models import get_pks_from_haystack_results
+from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
 from voyages.apps.common.views import get_ordered_places
 from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
@@ -375,3 +375,16 @@ def get_filtered_places(request):
         'is_cached': is_cached,
         'data': result
     })
+
+@csrf_exempt
+@require_POST
+def save_query(request):
+    saved_query = SavedQuery()
+    saved_query.query = request.body
+    saved_query.is_legacy = False
+    saved_query.save()
+    return JsonResponse({'saved_query_id': saved_query.pk})
+
+def get_saved_query(request, query_id):
+    q = SavedQuery.objects.get(pk=query_id)
+    return HttpResponse(q.query, content_type='application/json')
