@@ -51,12 +51,12 @@ var allColumns = [
 
   // itinerary
   { data: "var_imp_port_voyage_begin", category: 1, header: "Place where Voyage Began", isImputed: true },
-  { data: "var_imp_principal_place_of_slave_purchase", category: 1, header: "Principal Place of Purchase", isImputed: false },
+  { data: "var_imp_principal_place_of_slave_purchase", category: 1, header: "Principal Place of Purchase", isImputed: true },
   { data: "var_first_place_slave_purchase", category: 1, header: "1st Place of Purchase", "visible": false, isImputed: false },
   { data: "var_second_place_slave_purchase", category: 1, header: "2nd Place of Purchase", "visible": false, isImputed: false },
   { data: "var_third_place_slave_purchase", category: 1, header: "3rd Place of Purchase", "visible": false, isImputed: false },
   { data: "var_port_of_call_before_atl_crossing", category: 1, header: "Places of Call before Atlantic Crossing", "visible": false, isImputed: false },
-  { data: "var_imp_principal_port_slave_dis", category: 1, header: "Principal Place of Slave Landing", isImputed: false },
+  { data: "var_imp_principal_port_slave_dis", category: 1, header: "Principal Place of Slave Landing", isImputed: true },
   { data: "var_first_landing_place", category: 1, header: "1st Place of Slave Landing", "visible": false, isImputed: false },
   { data: "var_second_landing_place", category: 1, header: "2nd Place of Slave Landing", "visible": false, isImputed: false },
   { data: "var_third_landing_place", category: 1, header: "3rd Place of Slave Landing", "visible": false, isImputed: false },
