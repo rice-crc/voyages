@@ -13,16 +13,16 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/buttons.bootstrap.min.css" />
 
 <script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-3.1.1.min.js"></script>
-<script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-ui.min.js"></script>
-<script src="{{ STATIC_URL }}scripts/voyage/beta/selectize.js"></script>
-<script src="{{ STATIC_URL }}scripts/voyage/beta/search_term.js"></script>
-<script src="{{ STATIC_URL }}scripts/voyage/beta/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/jquery-ui@1.12.1.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/selectize.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/search_term.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap@3.3.7.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/datatables.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/dataTables.buttons.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.colVis.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/js.cookie.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="/jsi18n/"></script>
 
@@ -1030,11 +1030,11 @@ div.dt-button-collection {
 			if (!animationScriptsLoaded) {
 				loadCss('{{ STATIC_URL }}css/animation.css');
 				$.when(
-					loadScript('{{ STATIC_URL }}scripts/d3.min.js'),
+					loadScript('{{ STATIC_URL }}scripts/library/d3.min.js'),
 					loadScript('{{ STATIC_URL }}maps/js/arc.js'),
 					loadScript('{{ STATIC_URL }}maps/js/leaflet.geodesic.min.js')
 				)
-				.then(loadScript('{{ STATIC_URL }}scripts/voyage/beta/animation.js'))
+				.then(loadScript('{{ STATIC_URL }}scripts/vue/includes/animation.js'))
 				.then(function() {
 					animationScriptsLoaded = true;
 					done();

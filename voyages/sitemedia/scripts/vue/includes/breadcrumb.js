@@ -4,6 +4,10 @@ var seperatorst = "&nbsp; <img src=\"/static/images/breadcrumb/breadcrumb-separa
 var elem = href.split("/");
 var maxIdx = elem.length - 1;
 
+function gettext(x) {
+	return x;
+}
+
 function writebreadcrumb() {
 	if (maxIdx == 3 && elem[maxIdx] == "") {
 		return "<div class='breadcrumb'>" + gettext("Home") + "</div>";

@@ -913,7 +913,7 @@ function refreshUi(filter, currentTab, tabData) {
 
 
   } else if (currentTab == 'visualization') {
-    loader.loadScript(STATIC_URL + 'scripts/d3.min.js')
+    loader.loadScript(STATIC_URL + 'scripts/library/d3.min.js')
       .then(function() {
 
 
@@ -1499,12 +1499,12 @@ function LazyLoader() {
     if (!self.animationScriptsLoaded) {
       self.loadCss(STATIC_URL + 'css/animation.css');
       $.when(
-          self.loadScript(STATIC_URL + 'scripts/d3.min.js'),
-          self.loadScript(STATIC_URL + 'scripts/voyage/beta/jquery-ui.min.js'),
+          self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
+          self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
           self.loadScript(STATIC_URL + 'maps/js/arc.js'),
           self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
         )
-        .then(self.loadScript(STATIC_URL + 'scripts/voyage/beta/animation.js'))
+        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js'))
         .then(function() {
           self.animationScriptsLoaded = true;
           done();
