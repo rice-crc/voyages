@@ -85,17 +85,17 @@ msgstr "Porto ou região de embarque:"
 msgid "Place or region of disembarkation:"
 msgstr "Porto ou região de desembarque:"
 
-#: voyages/sitemedia/scripts/breadcrumb.js:9
-#: voyages/sitemedia/scripts/breadcrumb.js:13
+#: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:9
+#: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:13
 msgid "Home"
 msgstr "Página inicial"
 
-#: voyages/sitemedia/scripts/breadcrumb.js:31
-#: voyages/sitemedia/scripts/breadcrumb.js:33
+#: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:31
+#: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:33
 msgid "Understanding the Database"
 msgstr "Entendendo a base de dados"
 
-#: voyages/sitemedia/scripts/breadcrumb.js:35
+#: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:35
 msgid "Essays"
 msgstr "Ensaios"
 
@@ -187,31 +187,31 @@ msgstr ""
 msgid "Please type your comments below:"
 msgstr ""
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:4
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:4
 msgid "Voyages Database"
 msgstr "Banco de Dados Viagens"
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:5
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:5
 msgid "Assessing the Slave Trade"
 msgstr "Análises do Tráfico de Escravos"
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:6
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:6
 msgid "Resources"
 msgstr "Recursos"
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:7
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:7
 msgid "Educational Materials"
 msgstr "Materiais educacionais"
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:8
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:8
 msgid "About the Project"
 msgstr "Sobre o projeto"
 
-#: voyages/sitemedia/scripts/navigation_topbar.js:9
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:9
 msgid "Contribute"
 msgstr "Contribua"
 
-#: voyages/sitemedia/scripts/voyage/voyage-search.js:177
+#: voyages/sitemedia/scripts/vue/includes/voyage-search.js:177
 msgid "[nothing selected]"
 msgstr "[nada selecionado]"
 

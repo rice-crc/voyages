@@ -336,7 +336,7 @@ function gettext(x) {
 
 		loadMap();
 		lockEdit(true);
-		
+
 		function deleteAllMarkers() {
 			if (!confirm('Confirm deletion of ALL nodes and links? This operation cannot be undone!')) return;
 			toolData = { links: [ ], locked: toolData.locked, undoActions: [ ] };
@@ -345,11 +345,11 @@ function gettext(x) {
 			uidToArrayIndex = { };
 			loadMap();
 		}
-	
+
 		function getSelectedTool() {
 			return $("input:radio[name=tools]:checked").val();
 		}
-		
+
 		function downloadNetwork() {
 			var out = "var routeNodes = [\r\n";
 			for (var i = 0; i < routeNodes.length; ++i) {
@@ -369,14 +369,14 @@ function gettext(x) {
 			pom.click();
 			document.body.removeChild(pom);
 		}
-		
+
 		voyagesMap._map.on('click', function(e) {
 			var tool = getSelectedTool();
 			if (tool == 'coord') {
 				addRouteNode(e.latlng, true);
 			}
 		});
-		
+
 		function addMarker(k) {
 			var marker = L.marker(network.routeNodes[k], {
 				icon: normalIcon,
@@ -586,7 +586,7 @@ function gettext(x) {
             loadMap();
             if (cachedPorts && cachedFlows) voyagesMap.setNetworkFlow(cachedPorts, cachedFlows);
         }
-        
+
         function removeLink(link, canUndo) {
 			if (canUndo) {
 				toolData.undoActions.push(function() {
@@ -609,7 +609,7 @@ function gettext(x) {
 			$('#linkCssClass').text(style);
 			toolChanged();
 		}
-        
+
         function removeMarker(marker, canUndo) {
 			if (canUndo) {
 				function undeleteLink(link) {
@@ -736,7 +736,7 @@ function gettext(x) {
 				    reload();
 				}
 			});
-		
+
 			$( '#loadFlows' ).click(function() {
 			    var button = $(this);
 			    button.prop('disabled', true);
