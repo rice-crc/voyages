@@ -183,7 +183,7 @@ msgstr "Banco de Dados Viagens"
 msgid "Voyage"
 msgstr ""
 
-#: voyages/sitemedia/scripts/contribute/selectize.js:613
+#: voyages/sitemedia/scripts/library/selectize.js:613
 msgid "Please type your comments below:"
 msgstr ""
 
