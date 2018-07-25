@@ -12,16 +12,16 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/dataTables.bootstrap.min.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}datatables/buttons.bootstrap.min.css" />
 
-<script src="{{ STATIC_URL }}scripts/voyage/beta/jquery-3.1.1.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/jquery@2.2.4.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/library/jquery-ui@1.12.1.min.js"></script>
 <script src="{{ STATIC_URL }}scripts/library/selectize.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/includes/search_term.js"></script>
 <script src="{{ STATIC_URL }}scripts/library/bootstrap@3.3.7.min.js"></script>
-<script src="{{ STATIC_URL }}datatables/datatables.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/library/datatables.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/dataTables.buttons.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.colVis.min.js"></script>
 <script src="{{ STATIC_URL }}datatables/buttons.bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/search_term.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="/jsi18n/"></script>
@@ -628,7 +628,6 @@ div.dt-button-collection {
 					}
 				}
 			}
-      // debugger;
 			currentSearchObj = {items: activeSearchTerms, orderBy: []};
 			// Store current search on session storage.
 			var searchState = {
