@@ -213,6 +213,12 @@ function searchAll(filter) {
     }
   })
 
+  items.map(function(item) {
+    if (item.varName == "imputed_nationality") {
+      item.varName = "imputed_nationality_idnum" // patch a backend bug
+    }
+  })
+
   if (!hasYear) {
     var item = {};
     item["op"] = "is between";
