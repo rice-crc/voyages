@@ -1,9 +1,11 @@
-.trans-btn {
-  color: #008ca8;
-  border-color: #008ca8;
-}
+@import "colors";
 
-.trans-btn:hover {
-  background-color: #008ca8;
-  border-color: #008ca8;
+.trans-btn {
+  color: $trans-color;
+  border-color: $trans-color;
+
+  &:hover {
+    background-color: $trans-color;
+    border-color: $trans-color;
+  }
 }

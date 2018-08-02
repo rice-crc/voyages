@@ -1,37 +1,39 @@
 @import "colors";
-
-
 // btn colors
 .btn-solid {
   background-color: $about-color;
-	border-color: $about-color;
+  border-color: $about-color;
   color: #fff;
-	&:hover {
-		background-color: $about-color;
-		border-color: $about-color;
-	}
+
+  &:hover {
+    background-color: $about-color;
+    border-color: $about-color;
+  }
 }
 
 .btn-outline {
-	color: $about-color;
-	background-color: white;
-	border-color: $about-color;
-	&:hover {
-		background-color: $about-color;
-		border-color: $about-color;
-    color: white;
-	}
-}
+  color: $about-color;
+  background-color: white;
+  border-color: $about-color;
 
+  &:hover {
+    background-color: $about-color;
+    border-color: $about-color;
+    color: white;
+  }
+}
 // datatables bootstrap 4 pagination
 .page-item.active .page-link {
   background-color: $about-color;
   border-color: $about-color;
 }
+
 .page-link {
   color: $about-color;
 }
-.page-link:focus, .page-link:hover {
+
+.page-link:focus,
+.page-link:hover {
   color: $about-color;
 }
 
@@ -43,9 +45,10 @@
   background-color: $about-color;
 }
 
-.dropdown-item.active, .dropdown-item:active {
-    background-color: $about-color;
-    opacity: 1;
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: $about-color;
+  opacity: 1;
 }
 
 a {
@@ -58,13 +61,13 @@ a {
   }
 }
 
-.secondary-menu-item-1-selected, .assessment_selected {
+.assessment_selected,
+.secondary-menu-item-1-selected {
   padding-left: 25px;
   border-left: 4px solid $about-color;
   font-weight: bold;
 }
 
-
-  .nav-link-about.active {
-    background-color: $site-color !important;
-  }
+.nav-link-about.active {
+  background-color: $site-color !important;
+}
