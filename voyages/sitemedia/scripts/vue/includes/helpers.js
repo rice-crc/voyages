@@ -1,4 +1,4 @@
-// helpers
+// converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
   return camelCase
@@ -12,6 +12,7 @@ function camel2title(camelCase) {
     });
 }
 
+// a function that generates a random key for saved queries
 var generateRandomKey = function() {
   var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var ID_LENGTH = 8;
@@ -22,6 +23,8 @@ var generateRandomKey = function() {
   return rtn;
 }
 
+// a function that generates a unique key for saved queries
+// it depends on function generateRandomKey
 var generateUniqueRandomKey = function(previous) {
   var UNIQUE_RETRIES = 9999;
   previous = previous || [];
@@ -39,13 +42,11 @@ var generateUniqueRandomKey = function(previous) {
   return id;
 };
 
+// mark a variable as changed and activated state
 function activateFilter(filter, group, subGroup, filterValues) {
   for (key1 in filter[group][subGroup]) {
     if (key1 !== "count") {
       if (filter[group][subGroup][key1].changed) {
-        // filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].value["searchTerm0"];
-        // filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].value["searchTerm1"];
-        // filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].value["op"];
         filter[group][subGroup][key1].changed = true;
         filter[group][subGroup][key1].activated = true;
       }
@@ -53,18 +54,19 @@ function activateFilter(filter, group, subGroup, filterValues) {
   }
 }
 
+// reset filter
 function resetFilter(filter, group, subGroup) {
-  for (key1 in filter[group][subGroup]) {
-    if (key1 !== "count") {
-      if (filter[group][subGroup][key1].value["searchTerm0"] === undefined) {
-        filter[group][subGroup][key1].value["searchTerm"] = filter[group][subGroup][key1].default["searchTerm"];
-      } else {
-        filter[group][subGroup][key1].value["searchTerm0"] = filter[group][subGroup][key1].default["searchTerm0"];
-        filter[group][subGroup][key1].value["searchTerm1"] = filter[group][subGroup][key1].default["searchTerm1"];
+  for (key in filter[group][subGroup]) {
+    if (key !== "count") {
+      if (filter[group][subGroup][key].value["searchTerm0"] === undefined) { // has only one search term
+        filter[group][subGroup][key].value["searchTerm"] = filter[group][subGroup][key].default["searchTerm"];
+      } else { // has two search terms
+        filter[group][subGroup][key].value["searchTerm0"] = filter[group][subGroup][key].default["searchTerm0"];
+        filter[group][subGroup][key].value["searchTerm1"] = filter[group][subGroup][key].default["searchTerm1"];
       }
-      filter[group][subGroup][key1].value["op"] = filter[group][subGroup][key1].default["op"];
-      filter[group][subGroup][key1].changed = false;
-      filter[group][subGroup][key1].activated = false;
+      filter[group][subGroup][key].value["op"] = filter[group][subGroup][key].default["op"];
+      filter[group][subGroup][key].changed = false;
+      filter[group][subGroup][key].activated = false;
     }
   }
 }
@@ -182,13 +184,13 @@ function searchAll(filter) {
 
                 // TODO: backend patch
                 if (filter[key1][key2][key3].varName == "nationality" ||
+                  filter[key1][key2][key3].varName == "imputed_nationality" ||
                   filter[key1][key2][key3].varName == "rig_of_vessel" ||
                   filter[key1][key2][key3].varName == "outcome_voyage" ||
                   filter[key1][key2][key3].varName == "outcome_slaves" ||
                   filter[key1][key2][key3].varName == "outcome_ship_captured" ||
                   filter[key1][key2][key3].varName == "outcome_owner" ||
                   filter[key1][key2][key3].varName == "resistance"
-
                 ) {
                   item["varName"] = filter[key1][key2][key3].varName + "_idnum";
                 }
@@ -213,12 +215,6 @@ function searchAll(filter) {
     }
   })
 
-  items.map(function(item) {
-    if (item.varName == "imputed_nationality") {
-      item.varName = "imputed_nationality_idnum" // patch a backend bug
-    }
-  })
-
   if (!hasYear) {
     var item = {};
     item["op"] = "is between";
@@ -227,7 +223,7 @@ function searchAll(filter) {
     items.push(item);
   }
 
-  // alert(JSON.stringify(items));
+  alert(JSON.stringify(items));
   return items;
 }
 
