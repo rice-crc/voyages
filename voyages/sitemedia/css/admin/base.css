@@ -626,19 +626,6 @@ div.breadcrumbs {
     background: url(/static/admin/img/icon_changelink.gif) 0 .2em no-repeat;
 }
 
-.deletelink {
-    padding-left: 12px;
-    background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
-}
-
-a.deletelink:link, a.deletelink:visited {
-    color: #CC3434;
-}
-
-a.deletelink:hover {
-    color: #993333;
-}
-
 /* OBJECT TOOLS */
 
 .object-tools {
