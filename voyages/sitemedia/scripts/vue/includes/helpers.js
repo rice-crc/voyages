@@ -223,7 +223,7 @@ function searchAll(filter) {
     items.push(item);
   }
 
-  alert(JSON.stringify(items));
+  // alert(JSON.stringify(items));
   return items;
 }
 
@@ -491,7 +491,6 @@ function refreshUi(filter, currentTab, tabData) {
             searchData: currentSearchObj,
             tableParams: d,
             output: 'resultsTable',
-
           });
         }
       },
