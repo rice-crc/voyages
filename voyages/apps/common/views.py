@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from voyages.apps.voyage.models import Place
+from django.http import Http404
 import django
 
 def get_ordered_places(place_query=None, translate=True):
@@ -66,6 +67,8 @@ def render_locale_flatpage(request, template_path, flatpage_url):
         page = _get_flatpage(flatpage_url, 'en')
     if not page:
         page = _get_flatpage(flatpage_url, None)
+    if not page:
+        raise Http404("Your selected flatpage is not found")
     return render(request, template_path, {'flatpage': page})
 
 def set_language(request, lang_code):
