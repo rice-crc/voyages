@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^american/', include('voyages.apps.american.urls', namespace='american')),
     url(r'^assessment/', include('voyages.apps.assessment.urls', namespace='assessment')),
     url(r'^about/', include('voyages.apps.about.urls', namespace='about')),
+    url(r'^common/', include('voyages.apps.common.urls', namespace='common')),
     url(r'^education/', include('voyages.apps.education.urls', namespace='education')),
     url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
     url(r'^help/', include('voyages.apps.help.urls', namespace='help')),
