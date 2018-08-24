@@ -5,6 +5,7 @@ from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from voyages.apps.voyage.models import Place
 from django.http import Http404, HttpResponse, JsonResponse
+from django.views.decorators.cache import cache_page
 import django
 
 def get_ordered_places(place_query=None, translate=True):
@@ -150,21 +151,31 @@ def get_flat_page_tree(prefix, language=None):
 
     return recursive_create(structure, None)
 
+@cache_page(3600)
 def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     return HttpResponse(page.content, 'text/html; charset=utf-8')
 
+@cache_page(3600)
 def get_flat_page_hierarchy(request, prefix):
     tree = get_flat_page_tree(prefix)
     lang = get_language()
     flat = tree.flatten(lang)
     def get_page_info(t):
         page = t[1]
+        title = page.title
         url = page.url
-        if len(t[2].children) > 0 and len(page.content) < 50 and 'NO-CONTENT' in page.content:
-            url = t[2].children[0].get_lang_page_or_default(lang).url
+        # If a page is marked with 'NO-CONTENT' in its content field,
+        # we try to replace the page's url with its first child, so
+        # that the links point to some content.
+        # This method should work for multiple nested levels as well.
+        node = t[2]
+        while node and page and len(node.children) > 0 and len(page.content) < 50 and 'NO-CONTENT' in page.content:
+            node = node.children[0]
+            page = node.get_lang_page_or_default(lang)
+            if page: url = page.url
         url = request.build_absolute_uri(reverse('common:get_flat_page_content', args=[url]))
-        return {'level': t[0], 'title': page.title, 'url': url}
+        return {'level': t[0], 'title': title, 'url': url}
 
     return JsonResponse({
         'prefix': prefix,
