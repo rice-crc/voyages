@@ -273,6 +273,47 @@ function processPlacesAjax(data) {
   return self;
 }
 
+// get treeselect variable labels of currently selected items
+function getCurrentTreeselectLabel(searchTerms, allRegion){
+  labels = [];
+
+  searchTerms.forEach(function(searchTerm) {
+    if (searchTerm == allRegion.id) { // ALL SELECTED
+      labels.push(allRegion.label);
+    } else {
+      if (allRegion.children !== undefined) { // BROARD REGION
+        broadRegions = allRegion.children;
+        broadRegions.forEach(function(broadRegion){
+          if (searchTerm == broadRegion.id) {
+            labels.push(broadRegion.label);
+          } else {
+            if (broadRegion.children !== undefined) { // REGION
+              regions = broadRegion.children;
+              regions.forEach(function(region){
+                if (searchTerm == region.id) {
+                  labels.push(region.label);
+                } else { // SUB REGION
+                  if (region.children !== undefined) { // SUB REGION
+                    subRegions = region.children;
+                    subRegions.forEach(function(subRegion){
+                      if (searchTerm == subRegion.id) {
+                        labels.push(subRegion.label);
+                      }
+                    });
+                  }
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+
+
+  return labels;
+}
+
 // load options to the main search filter, such as flag, rig, outcomes
 function loadOptions(vm, variables) {
   var promises = [];
@@ -341,7 +382,6 @@ function loadPlaces(vm, groups) {
 // loadPlaces
 function loadIndividualPlace(vm, variable) {
   var promises = [];
-
   // var varName = "var_" + variable.varName;
   // promises.push(axios.post('/voyage/filtered-places', {
   //   var_name: varName,

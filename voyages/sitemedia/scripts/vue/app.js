@@ -29,12 +29,12 @@ var searchBar = new Vue({
       collapseVisible: true,
     },
     currentQuery: {},
+    hasCurrentQuery: false,
     rowModalShow: false,
-    variablesModalShow: false,
     currentTab: "results",
   },
-  computed: {},
   watch: {
+
     filter: {
       handler: function(val) {
 
@@ -81,7 +81,7 @@ var searchBar = new Vue({
         }
         this.activated = activated;
 
-        // transform current search to a human readible form
+        // transform current search to a human readable form
         for (group in this.filter) {
           if (group !== "count") {
             if (this.filter[group]["count"]["activated"]) {
@@ -92,21 +92,33 @@ var searchBar = new Vue({
                       if (variable !== "count") {
                         if (this.filter[group][subGroup][variable]["activated"]) {
                           var currentVariable = this.filter[group][subGroup][variable];
+                          labels = [];
                           if (currentVariable["value"]["searchTerm"]) {
-                            this.currentQuery[currentVariable["varName"]] = {
+                            if (currentVariable instanceof PlaceVariable ||
+                                currentVariable instanceof TreeselectVariable) {
+                              var searchTerms = currentVariable.value.searchTerm;
+                              var allRegion = currentVariable.options.data[0];
+                              labels = getCurrentTreeselectLabel(searchTerms, allRegion);
+                            } else {
+                              labels = currentVariable["value"]["searchTerm"];
+                            }
+                            var newVariable = {
                               label: currentVariable["label"],
                               op: currentVariable["value"]["op"],
-                              searchTerm: currentVariable["value"]["searchTerm"],
+                              searchTerm: labels,
+                              // searchTerm: currentVariable["value"]["searchTerm"],
                               varName: currentVariable["varName"]
-                            };
+                            }
+                            Vue.set(this.currentQuery, currentVariable["varName"], newVariable);
                           } else {
-                            this.currentQuery[currentVariable["varName"]] = {
+                            var newVariable = {
                               label: currentVariable["label"],
                               op: currentVariable["value"]["op"],
                               searchTerm0: currentVariable["value"]["searchTerm0"],
                               searchTerm1: currentVariable["value"]["searchTerm1"],
                               varName: currentVariable["varName"]
                             };
+                            Vue.set(this.currentQuery, currentVariable["varName"], newVariable);
                           }
                         }
                       }
@@ -117,7 +129,7 @@ var searchBar = new Vue({
             }
           }
         }
-
+        this.hasCurrentQuery = Object.keys(this.currentQuery).length > 0 ? true:false;
       },
       deep: true,
     },
@@ -277,12 +289,9 @@ var searchBar = new Vue({
         }
       }
       var searchTerms = searchAll(this.filter);
+      this.currentQuery = {};
       //search(this.searchFilter, searchTerms);
       refreshUi(this.filter, this.currentTab, this.tabs);
-    },
-
-    viewAll() {
-      this.variablesModalShow = true;
     },
 
     refresh() {
