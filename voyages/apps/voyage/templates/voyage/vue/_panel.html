@@ -1,14 +1,16 @@
 {% verbatim %}
 <div class="collapse" id="panelCollapse">
   <div class="panel-list" v-if="hasCurrentQuery">
-    <span class="panel-list-item" v-for="variable in currentQuery">
-      <span class="text-bold panel-variable-label">{{variable.label}}</span>
-      <span class="panel-variable-op">{{variable.op}}</span>
-      <span class="panel-variable-value" v-if="variable.searchTerm" v-text="variable.searchTerm"></span>
-      <span v-else>
-        <span class="panel-variable-value">{{variable.searchTerm0}}</span>
-        <span v-if="variable.searchTerm1">
-          and <span class="panel-variable-value">{{variable.searchTerm1}}</span>
+    <span class="panel-list-item-wrapper">
+      <span class="panel-list-item" v-for="variable in currentQuery">
+        <span class="text-bold panel-variable-label">{{variable.label}}</span>
+        <span class="panel-variable-op">{{variable.op}}</span>
+        <span class="panel-variable-value" v-if="variable.searchTerm" v-text="variable.searchTerm"></span>
+        <span v-else>
+          <span class="panel-variable-value">{{variable.searchTerm0}}</span>
+          <span v-if="variable.searchTerm1">
+            and <span class="panel-variable-value">{{variable.searchTerm1}}</span>
+          </span>
         </span>
       </span>
     </span>
