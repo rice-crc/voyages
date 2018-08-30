@@ -5,21 +5,6 @@ Vue.component("v-treeselect", {
   <div class="v-form-group">
     <div class="v-title">
       <span>{{filter.label}}</span>
-      <span>
-        <!--
-        <b-badge
-          v-if="filter.options.isImputed"
-          v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
-          variant="warning"
-          class="v-badge-imputed">
-          Imputed
-        </b-badge>
-        -->
-        <b-badge
-          v-if="filter.options.isAdvanced"
-          v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
-          variant="danger" class="v-badge-advanced">Advanced</b-badge>
-      </span>
     </div>
     <div class="v-description" v-text="filter.description"></div>
 
