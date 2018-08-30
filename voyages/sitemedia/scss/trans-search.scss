@@ -1,5 +1,34 @@
 @import "colors";
 @import "variables";
+
+// variable panel
+#panelCollapse {
+  background-color: #efefef;
+}
+
+.panel-list {
+  margin-bottom: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  padding: 0.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-list-item {
+  padding-right: 1rem;
+}
+
+.btn-panel {
+  color: #0c9ab1;
+  border: 1px #0c9ab1 solid;
+  border-radius: 3px;
+  padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+// end of variable panel
+
 // hotpatch
 .btn-group > .btn:first-child {
   border-bottom-right-radius: 0 !important;

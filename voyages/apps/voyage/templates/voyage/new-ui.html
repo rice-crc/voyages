@@ -22,7 +22,6 @@
 {% block content %}
 <div id="search-bar" v-cloak>
 	<div class="nav-header">Trans-Atlantic Slave Trade Database</div>
-
 	<nav class="navbar navbar-expand-xl navbar-dark bg-dark trans-search-bar">
 		<div class="nav-container">
 			<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
@@ -47,13 +46,14 @@
 		</div>
 	</nav>
 	<!-- End of SearchNav -->
-
 	<div id='sv-loader' class="display-none"></div>
-
+	{% include "voyage/vue/_panel.html" %}
 	<div class="trans-container">
-		<div class="row row-offcanvas row-offcanvas-right">
-			<div class="col-md-12 col-lg-12 col-xs-12">
-				{% include "voyage/vue/_tabs.html" %}
+		<div class="row">
+			<div class="col-md-12">
+				<div id="center-content-inner">
+					{% include "voyage/vue/_tabs.html" %}
+				</div>
 			</div>
 		</div>
 	</div>
