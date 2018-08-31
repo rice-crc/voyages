@@ -131,7 +131,7 @@ def upload_source():
 def extract_source():
     'Extract the remote source tarball under the configured remote directory.'
     with cd(env.remote_path):
-        sudo('tar xjf /tmp/%(tarball)s' % env, user=env.remote_acct)
+        sudo('tar vxjf /tmp/%(tarball)s' % env, user=env.remote_acct)
         # if the untar succeeded, remove the tarball
         run('rm /tmp/%(tarball)s' % env)
         # update apache.conf if necessary

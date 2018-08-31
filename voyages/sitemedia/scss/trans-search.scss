@@ -1,6 +1,23 @@
 @import "colors";
 @import "variables";
 
+// save query panel
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.v-saved-searches-header {
+  margin-top: 1rem;
+}
+
+.v-saved-searches-item {
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: #666666;
+}
+
 // variable panel
 #panelCollapse {
   background-color: #efefef;

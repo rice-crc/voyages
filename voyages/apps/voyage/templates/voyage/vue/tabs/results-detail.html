@@ -126,38 +126,4 @@
 
 </b-modal>
 
-<!-- Show All Variables -->
-<b-modal v-model="variablesModalShow" size="lg">
-  <div slot="modal-title">
-    <div class="v-modal-title">
-      Current Search Variables
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      Note: Currently the select type of variable uses a code representation. I will convert it into a human readable form once the backend supports most of such variables.
-    </div>
-  </div>
-
-  <div class="row" v-for="variable in currentQuery">
-    <div class='col-md-12'>
-      <pre class="text-bold inline">{{variable.label}}</pre>
-      {{variable.op}}
-      <code v-if="variable.searchTerm" v-text="variable.searchTerm"></code>
-      <span v-else>
-        <code>{{variable.searchTerm0}}</code>
-        <span v-if="variable.searchTerm1">
-        and <code>{{variable.searchTerm1}}</code>
-      </pre>
-    </div>
-  </div>
-
-  <div slot="modal-footer">
-   <b-btn size="sm" class="float-right" variant="info" @click="variablesModalShow=false">
-     Close
-   </b-btn>
- </div>
-
-</b-modal>
 {% endverbatim %}

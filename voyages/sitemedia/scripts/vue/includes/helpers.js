@@ -71,6 +71,12 @@ function resetFilter(filter, group, subGroup) {
   }
 }
 
+// serialize a filter
+function serializeFilter(filter){
+  return JSON.stringify(filter);
+}
+
+
 function replaceKey(key) {
   if (key == "is less than") {
     return "is at most"
