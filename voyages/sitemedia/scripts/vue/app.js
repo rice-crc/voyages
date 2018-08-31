@@ -300,12 +300,38 @@ var searchBar = new Vue({
 
     save() {
       var searchTerms = searchAll(this.filter);
-      var existingKeys = []
-      var key = generateUniqueRandomKey(existingKeys);
-      this.saved.unshift({
-        key: key,
-        searchTerms: searchTerms
+      // var existingKeys = []
+      // var key = generateUniqueRandomKey(existingKeys);
+      // this.saved.unshift({
+      //   key: key,
+      //   searchTerms: searchTerms
+      // });
+
+      var vm = this;
+      axios.post('/voyage/save-query', {
+        query: serializeFilter({"filter": searchTerms}),
+      })
+      .then(function (response) {
+        console.log(response);
+
+        var exists = false;
+        vm.saved.forEach(function(saved){
+          if (response.data.saved_query_id == saved.saved_query_id) {
+            exists = true;
+          }
+        })
+
+        if (!exists) {
+          vm.saved.unshift({
+            saved_query_id: response.data.saved_query_id,
+            saved_query_url: window.location.origin + "/" + response.data.saved_query_id
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
       });
+
     },
 
     clip(value) {

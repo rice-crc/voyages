@@ -37,24 +37,26 @@
     <div slot="v-panel-header">
       <v-panel-header
         title="Saved Searches"
-        description="Save and share a particular set of variables for your search"
+        description="You can save a search by creating a link that can be later used to retreive your particular set of search variables. You may also share your search by sharing the link to this search with other people."
         :modal-disabled="true">
       </v-panel-header>
     </div>
 
     <div slot="v-panel-content">
-      <v-save-search
+      <!-- <v-save-search
         title="Save Current Search"
-        description="You can save a search by creating a link that can be later used to retreive your particular set of search variables. You may also share your search by sharing the link to this search with other people."
+        description=""
         @save="save">
-      </v-save-search>
+      </v-save-search> -->
 
       <v-saved-searches
         title="Saved Searches"
-        description="These are searches saved in this session."
+        description=""
         :saved="saved"
-        @clip="clip">
+        @clip="clip"
+        @save="save">
       </v-saved-searches>
+
     </div>
   </v-panel-singular>
 
