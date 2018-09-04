@@ -819,3 +819,8 @@ div.secondary-bar td, div.secondary-bar th {
     padding: 5px 8px;
     width: 800px;
 }
+
+// django admin
+caption {
+  caption-side: top !important;
+}

@@ -316,11 +316,9 @@ input[type=text], input[type=password], textarea, select, .vTextField {
 
 /* FORM BUTTONS */
 .button, input[type=submit], input[type=button], .submit-row input {
-  background: white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
   padding: 3px 5px;
   color: black;
-  border: 1px solid #bbb;
-  border-color: #ddd #aaa #aaa #ddd; }
+  border: 1px solid #bbb; }
 
 .button:active, input[type=submit]:active, input[type=button]:active {
   background-image: url(/static/admin/img/nav-bg-reverse.gif);
@@ -473,16 +471,6 @@ div.breadcrumbs {
 .changelink {
   padding-left: 12px;
   background: url(/static/admin/img/icon_changelink.gif) 0 0.2em no-repeat; }
-
-.deletelink {
-  padding-left: 12px;
-  background: url(/static/admin/img/icon_deletelink.gif) 0 0.25em no-repeat; }
-
-a.deletelink:link, a.deletelink:visited {
-  color: #CC3434; }
-
-a.deletelink:hover {
-  color: #993333; }
 
 /* OBJECT TOOLS */
 .object-tools {
@@ -660,5 +648,8 @@ div.secondary-bar td, div.secondary-bar th {
   margin: 3px;
   padding: 5px 8px;
   width: 800px; }
+
+caption {
+  caption-side: top !important; }
 
 /*# sourceMappingURL=../../../../../../../../../../static/scss/admin/base.css.map */

@@ -280,8 +280,29 @@ footer {
 .page-navigation-item {
   margin-top: 10px;
   font-weight: bold;
+  color: #008ca8;
+  cursor: pointer;
 }
 
 .text-bold {
     font-weight: bold;
+}
+
+.article-list-item {
+  color: #008ca8 !important;
+  cursor: pointer;
+}
+
+.indentation-1 {
+
+}
+
+.indentation-2 {
+  padding-left: 1rem;
+}
+
+.article-list-active {
+  font-weight: bold;
+  // padding-left: 25px;
+  // border-left: 4px solid #008ca8;
 }

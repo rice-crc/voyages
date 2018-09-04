@@ -39,6 +39,8 @@ urlpatterns = [
 
     url(r'^new-ui', TemplateView.as_view(template_name='voyage/new-ui.html'), name='new-ui'),
 
+    url(r'^understanding', TemplateView.as_view(template_name='voyage/understanding.html'), name='understanding'),
+
     url(r'var-options', voyages.apps.voyage.beta_views.get_var_options, name='var-options'),
     url(r'filtered-places', voyages.apps.voyage.beta_views.get_filtered_places, name='filtered-places'),
     url(r'save-query', voyages.apps.voyage.beta_views.save_query, name='save-query'),
