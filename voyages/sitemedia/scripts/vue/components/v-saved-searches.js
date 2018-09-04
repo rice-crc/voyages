@@ -24,12 +24,13 @@ Vue.component('v-saved-searches', {
           {{search.saved_query_url}}
         </div>
         <div>
-          <b-button variant="info" size="sm" @click="load">
+          <b-button variant="outline-secondary" size="sm" @click="load(search.saved_query_id)">
              Load
           </b-button>
-          <b-button variant="primary" size="sm" @click="clip(search.saved_query_id)" data-clipboard-action="copy" :data-clipboard-target="search.saved_query_id">
-             Copy
-          </b-button>
+          <b-button variant="info" size="sm"
+            v-clipboard:copy="search.saved_query_url"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError">Copy</b-button>
         </div>
       </div>
 
@@ -37,20 +38,21 @@ Vue.component('v-saved-searches', {
   `,
 
   methods: {
-    clip(value) {
-      this.$emit('clip', value);
-    },
-    load() {
-      this.$emit('clip', this);
+    load(saved_query_id) {
+      this.$emit('load', saved_query_id);
     },
     click() {
-      debugger;
       this.$emit('save');
     },
+    onCopy: function (e) {
+      alert('Your URL ' + e.text + " is copied")
+    },
+    onError: function (e) {
+      alert('Failed to copy URL')
+    }
   },
 
   created: function(){
-    new Clipboard('.btn');
   }
 
 });

@@ -87,6 +87,7 @@ var searchBar = new Vue({
             if (this.filter[group]["count"]["activated"]) {
               for (subGroup in this.filter[group]) {
                 if (subGroup !== "count") {
+
                   if (this.filter[group][subGroup]["count"]["activated"]) {
                     for (variable in this.filter[group][subGroup]){
                       if (variable !== "count") {
@@ -309,10 +310,10 @@ var searchBar = new Vue({
 
       var vm = this;
       axios.post('/voyage/save-query', {
-        query: serializeFilter({"filter": searchTerms}),
+        // query: serializeFilter({"filter": searchTerms}),
+        query: serializeFilter({"filter": vm.filter}),
       })
       .then(function (response) {
-        console.log(response);
 
         var exists = false;
         vm.saved.forEach(function(saved){
@@ -334,8 +335,18 @@ var searchBar = new Vue({
 
     },
 
-    clip(value) {
-      alert("Short URL is: " + value);
+    load(value) {
+      var url = "/voyage/get-saved-query/" + value;
+      var vm = this;
+      axios.get(url, {})
+      .then(function (response) {
+        var query = JSON.parse(response.data.query);
+        vm.filter = query.filter;
+        vm.refresh();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   },
 
