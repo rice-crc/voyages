@@ -13,7 +13,7 @@
 
 .nav-link {
   font-weight: 500;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .navbar-brand {
@@ -29,10 +29,10 @@
   color: #fff;
 }
 
-.navbar-dark .navbar-nav .active>.nav-link,
+.navbar-dark .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active,
 .navbar-dark .navbar-nav .nav-link.show,
-.navbar-dark .navbar-nav .show>.nav-link {
+.navbar-dark .navbar-nav .show > .nav-link {
   color: #fff;
 }
 
@@ -59,11 +59,10 @@
   .navbar {
     padding-top: 0;
   }
-
 }
 
 .breadcrumb {
-  padding: .75rem 4rem;
+  padding: 0.75rem 4rem;
 }
 
 .container-new {
@@ -72,9 +71,10 @@
 
 @media (max-width: 1199px) {
   .navbar {
-    padding: .5rem 2rem;
+    padding: 0.5rem 2rem;
   }
+
   .container-new {
-    margin: 2rem 2rem;
+    margin: 2rem;
   }
 }

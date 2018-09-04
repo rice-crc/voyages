@@ -96,7 +96,7 @@ class FlatPageTree:
                 items.append((level, page, node))
             for child in node.children:
                 recursive(level + 1, child)
-            
+
         recursive(0, self)
         return items
 
@@ -137,7 +137,7 @@ def get_flat_page_tree(prefix, language=None):
             d = d.setdefault(item, {})
         lang_set = d.setdefault(leaf_key, [])
         lang_set.append((page, order, lang))
-    
+
     def recursive_create(d, parent):
         leaf_set = d.get(leaf_key, [])
         node = FlatPageTree(
@@ -151,12 +151,12 @@ def get_flat_page_tree(prefix, language=None):
 
     return recursive_create(structure, None)
 
-@cache_page(3600)
+@cache_page(1)
 def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     return HttpResponse(page.content, 'text/html; charset=utf-8')
 
-@cache_page(3600)
+@cache_page(1)
 def get_flat_page_hierarchy(request, prefix):
     tree = get_flat_page_tree(prefix)
     lang = get_language()
