@@ -913,7 +913,9 @@ function refreshUi(filter, currentTab, tabData) {
           yAxis: {
             title: {
               text: 'Value'
-            }
+            },
+            min: 0,
+            startOnTick: true
           },
           legend: {
             enabled: false
