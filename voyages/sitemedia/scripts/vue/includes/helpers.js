@@ -867,10 +867,10 @@ function refreshUi(filter, currentTab, tabData) {
         table.DataTable({
           scrollX: true,
           scrollCollapse: true,
-          pageLength: 20,
+          pageLength: 15,
           lengthMenu: [
-            [20, 50, 100, 200],
-            ['20', '50', '100', '200']
+            [15, 50, 100, 200],
+            ['15', '50', '100', '200']
           ],
         });
       }).done(function() {
