@@ -87,10 +87,6 @@
   padding: 0.75rem 0;
 }
 
-.dataTables_info {
-  color: $text-dark-2;
-}
-
 .trans-tab {
   padding-top: 0.5rem;
 }
@@ -129,8 +125,9 @@ table.dataTable tbody > tr > td {
   }
 }
 
-.dataTables_info {
-  font-size: $reduced-font-size;
+.dataTables_info, .dataTables_length, .dataTables_filter{
+  font-size: $regular-font-size;
+  color: $text-dark-2;
 }
 // table.dataTable thead>tr>th.sorting, .table td {
 //   padding: 0.1rem .25rem !important;
