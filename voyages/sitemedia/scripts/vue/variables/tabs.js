@@ -98,7 +98,7 @@ var tabs = {
     column: {
       // currently selected value
       variable: "tabs.tables.column",
-      value: 6,
+      value: 7,
       options: [{id: 0, label: "Flag*"},
         {id: 1, label: "Broad region where voyage began"},
         {id: 2, label: "Region where voyage began"},
