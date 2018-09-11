@@ -866,7 +866,12 @@ function refreshUi(filter, currentTab, tabData) {
         tfoot.append(tr);
         table.DataTable({
           scrollX: true,
-          scrollCollapse: true
+          scrollCollapse: true,
+          pageLength: 20,
+          lengthMenu: [
+            [20, 50, 100, 200],
+            ['20', '50', '100', '200']
+          ],
         });
       }).done(function() {
         $("#sv-loader").addClass("display-none");
