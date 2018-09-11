@@ -406,4 +406,10 @@ jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) { // o
         // var chart = jQuery(this).highcharts(); // target the chart itself
         // chart.reflow() // reflow that chart
     });
+
+    // datatable
+    $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust()
+      .responsive.recalc();
+
 });
