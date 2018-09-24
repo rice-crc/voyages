@@ -29,7 +29,7 @@ class SearchOperator():
 _operators_list = [
     SearchOperator('equals', 'exact', False),
     SearchOperator('is at most', 'lte', False),
-    SearchOperator('is at least', 'gte', False), 
+    SearchOperator('is at least', 'gte', False),
     SearchOperator('is between', 'range', True),
     SearchOperator('contains', 'contains', False),
     SearchOperator('is one of', 'in', True),
@@ -106,8 +106,8 @@ def get_results_pivot_table(results, post):
                 return lambda x: _(VoyageCache.nations_by_value[x]), None
         return lambda x: x, None
 
-    col_map, col_extra_headers = get_header_map(col_field) 
-    row_map, row_extra_headers = get_header_map(row_field) 
+    col_map, col_extra_headers = get_header_map(col_field)
+    row_map, row_extra_headers = get_header_map(row_field)
     pivot_table = PivotTable(row_data, col_map, row_map)
     pivot_dict = pivot_table.to_dict()
     # Add extra column or row headers.
@@ -118,7 +118,7 @@ def get_results_pivot_table(results, post):
     return JsonResponse(pivot_dict)
 
 # Construct a dict with Timeline variables.
-_all_timeline_vars = {t[3]: {'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
+_all_timeline_vars = {t[0] + t[3]: {'var_name': t[3], 'time_line_func': t[2], 'var_description': t[1]} for t in voyage_timeline_variables}
 def get_results_timeline(results, post):
     """
     post['timelineVariable']: the timeline variable that will be the source of the data.
@@ -127,12 +127,13 @@ def get_results_timeline(results, post):
     timeline_var = _all_timeline_vars.get(timeline_var_name)
     if not timeline_var:
         return HttpResponseBadRequest('Timeline variable is invalid ' + str(timeline_var_name) + '. Available: ' + str(_all_timeline_vars.keys()))
+    timeline_var_name = timeline_var['var_name']
     timeline_data = sorted(timeline_var['time_line_func'](results, timeline_var_name), key=lambda t: t[0])
     return JsonResponse({'var_name': timeline_var_name, 'data': [{'year': t[0], 'value': t[1]} for t in timeline_data]})
 
 # Construct a dict with all X/Y-axes
 _all_x_axes = {a.id(): a for a in (graphs_x_axes + other_graphs_x_axes)}
-_all_y_axes = {a.id(): a for a in graphs_y_axes}
+_all_y_axes = {a.id() + '_' + a.mode: a for a in graphs_y_axes} # MODES: avg, freq, count, sum 
 def get_results_graph(results, post):
     """
     post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).
@@ -324,7 +325,7 @@ _options_model = {
 @csrf_exempt
 def get_var_options(request):
     """
-    This API fetches the values allowed for a given variable on 
+    This API fetches the values allowed for a given variable on
     the database. For efficiency, we will cache these values since
     they do not change frequently.
     The caller must specify which variable is needed in the request.
