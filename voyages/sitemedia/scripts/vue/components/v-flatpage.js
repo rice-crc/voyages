@@ -7,9 +7,9 @@ Vue.component('v-flatpage', {
         <div class="sidebar-title-1">{{title}}</div>
       </div>
       <div class="sidebar-section">
-        <div v-for="item in list">
+        <div v-for="item in list" v-bind:class="[item.class, item.isActive ? 'article-list-active':''  ]">
           <a class="article-list-item" :id="item.id"
-            v-bind:class="[item.class, item.isActive ? 'article-list-active':''  ]"  @click=click>{{item.title}}</a>
+              @click=click>{{item.title}}</a>
         </div>
       </div>
     </div>
