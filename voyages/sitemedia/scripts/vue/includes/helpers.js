@@ -891,11 +891,24 @@ function refreshUi(filter, currentTab, tabData) {
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         var data = [];
 
-        // Convert into HighCharts data format
-        result.data.forEach(function(element){
+        var current_year = result.data[0].year;
+
+        for (var i=0; i<result.data.length; i++) {
+          var element = result.data[i];
+          for (var j=current_year; j<element.year; j++) {
+            var time = Date.parse(j.toString());
+            data.push([time, 0]);
+          }
+          current_year = element.year + 1;
           var time = Date.parse(element.year.toString());
           data.push([time, element.value]);
-        });
+        }
+
+        // // Convert into HighCharts data format
+        // result.data.forEach(function(element){
+        //   var time = Date.parse(element.year.toString());
+        //   data.push([time, element.value]);
+        // });
 
         // Let Highcharts paint the chart
         Highcharts.chart('hc-timeline', {
