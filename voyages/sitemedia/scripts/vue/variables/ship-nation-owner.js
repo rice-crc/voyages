@@ -1,7 +1,7 @@
 var_voyage_id = new NumberVariable({
     varName: "voyage_id",
     label: "Voyage ID",
-    description: "This is the unique ID number assigned in the Trans-Atlantic Slave Trade database",
+    description: "This is the unique ID number assigned to a voyage",
   },{
     op: "is equal to",
     searchTerm0: null,

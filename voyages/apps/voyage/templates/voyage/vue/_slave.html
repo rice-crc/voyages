@@ -1,7 +1,7 @@
 {% verbatim %}
 
 <li class="nav-item dropdown">
-	<v-menu-title :count="filter.slave.count" title="Slave"></v-menu-title>
+	<v-menu-title :count="filter.slave.count" title="Enslaved People"></v-menu-title>
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
@@ -92,9 +92,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age Group">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by Sex and Age">
 				<div slot="v-panel-header">
-					<v-panel-header title="Percentage by Sex and Age Group" description="Slave demographics">
+					<v-panel-header title="Percentage by Sex and Age Group" description="">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -137,7 +137,7 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="Other Characteristics">
 				<div slot="v-panel-header">
-					<v-panel-header title="Other Characteristics" description="Additional characteristics about slaves">
+					<v-panel-header title="Other Characteristics" description="Additional characteristics about enslaved people">
 						<div slot="v-modal-content">
 							Some help text
 						</div>

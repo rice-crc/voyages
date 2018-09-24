@@ -222,7 +222,7 @@ var_imputed_percentage_child = new NumberVariable({
 var_imputed_sterling_cash = new NumberVariable({
     varName: "imputed_sterling_cash",
     label: "Sterling Cash Price in Jamaica",
-    description: "This is used to track the price paid for slaves in the Americas as they were sold from the vessel",
+    description: "Average price paid for men in the Americas as they were sold from the vessel",
   },{
     op: "is equal to",
     searchTerm0: null,

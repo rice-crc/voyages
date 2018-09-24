@@ -170,6 +170,10 @@ var searchBar = new Vue({
 
                   // Patch
                   if (varName == "var_sources_plaintext") {
+                    var first = value.match(/^\w+/)[0];
+                    var abbrevs = value.match(/,\s\S+<>/g);
+                    abbrevs.map(abbrev => abbrev.match(/\w+/));
+                    abbrevs.unshift(first);
                     value = value.replace(/<>/g, ": ");
                   }
 
