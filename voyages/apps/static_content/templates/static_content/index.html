@@ -1,11 +1,14 @@
-{% extends "base.html" %} {% load i18n %} {% load sass_tags %} {% load voyage_extras %}
+{% extends "base.html" %} {% load i18n %} {% load sass_tags %} {% load voyage_extras %} {% load compress %}
+
 
 <!-- Page title here -->
 {% block title %}{% trans "Trans-Atlantic Slave Trade" %}{% endblock %}
 {% block csslist %}
 	{% comment %} Additional styles for the home page {% endcomment %}
+	{% compress css %}
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/aos@2.1.1.min.css' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
 {% endblock %}
 
 {% block content %}
@@ -298,9 +301,10 @@
 
 </div>
 
+{% compress js %}
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/includes/homepage-reflow.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/aos@2.1.1.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.10.0/lazyload.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/library/lazyload@8.10.0.min.js"></script>
 <script>
 	AOS.init({
 		disable: 'mobile'
@@ -310,4 +314,6 @@
     elements_selector: ".lazy"
 	});
 </script>
+{% endcompress %}
+
 {% endblock %} {% block footer %} {% include "footer.html" %} {% endblock %}

@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load sass_tags %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,14 +13,18 @@
 	<meta name="theme-color" content="#008ca8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
+	{% compress css %}
 	<link href="{% sass_src 'scss/library/bootstrap@4.0.0.min.css' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/dataTables.boostrap4@1.10.16.min.css' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
+
 	{% block csslist %} {% endblock %}
 
+	{% compress js %}
 	<script src="{{ STATIC_URL }}scripts/library/jquery@3.3.1.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/library/modernizr@2.8.3.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/vue/includes/breadcrumb.js" type="text/javascript"></script>
-
+	{% endcompress %}
 
 
 
@@ -35,12 +40,14 @@
 	{% block footer %}{% endblock %}
 	{% include "google-analytics.html" %}
 
+
 	<!-- I18n of javascript text -->
 	<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 
 	<!-- Use a global JS constant to specify the root of static urls -->
 	<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
 
+	{% compress js %}
 	<script src="{{ STATIC_URL }}scripts/library/fontawesome.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/library/datatables.custom.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/library/popper@1.12.9.min.js" type="text/javascript"></script>
@@ -48,6 +55,8 @@
 	<script src="{{ STATIC_URL }}scripts/library/dataTables.bootstrap4@1.10.16.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/vue/includes/off-canvas.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}scripts/vue/includes/footer.js" type="text/javascript"></script>
+	{% endcompress %}
+
 	{% block jslist %} {% endblock %}
 </body>
 

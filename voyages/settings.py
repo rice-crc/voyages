@@ -47,7 +47,9 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'sass_processor.finders.CssFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+    # 'sass_processor.finders.CssFinder',
    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -130,6 +132,7 @@ INSTALLED_APPS = (
     #'django_extensions',
 
     'captcha',
+    "compressor", # Django Compressor to compile assets
 
     #Flatpages apps
     'django.contrib.flatpages',
@@ -233,7 +236,7 @@ except Exception as e:
 del sys
 
 # TODO: TEMPORARY HACK TO SUPPORT INCOMPATIBLE HAYSTACK VERSION (remove these lines once the django-haystack package is fixed)
-# We are commenting out so let us make sure that 
+# We are commenting out so let us make sure that
 #from django.db import models
 #from haystack.utils.app_loading import haystack_get_model
 #models.get_model = haystack_get_model
