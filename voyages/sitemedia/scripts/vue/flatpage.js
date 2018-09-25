@@ -1,22 +1,26 @@
+// please declare data object before initializing this Vue instance
+// here is a template
+// data = {
+//   title: {},
+//   response: {},
+//   articles: [],
+//   content: "",
+//   pathname: "your_category_in_flatpage",
+//   previous: {
+//     title: "",
+//     index: 0,
+//   },
+//   next: {
+//     title: "",
+//     index: 0,
+//   },
+//   currentIndex: 0,
+// }
+
 var flatpage = new Vue({
   el: "#flatpage",
   delimiters: ['{{', '}}'],
-  data: {
-    title: {},
-    response: {},
-    articles: [],
-    content: "",
-    pathname: "understanding",
-    previous: {
-      title: "",
-      index: 0,
-    },
-    next: {
-      title: "",
-      index: 0,
-    },
-    currentIndex: 0,
-  },
+  data: data, // please declare data object before initializing this Vue instance
   watch: {
     title: {
       handler: function() {

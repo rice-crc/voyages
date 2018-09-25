@@ -1,16 +1,67 @@
 {% extends "resources/base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
 {% load i18n %}
 
-<!-- About People of Atlantic Slave Trade Database -->
-{% block title %}{% trans "About African Names Database" %}{% endblock %}
+{% block title %} African Names Database - About {% endblock %}
 
-{% block center-content %}
+{% block content %}
+
+<!-- CSS for Trans-Atlantic -->
+<link rel="stylesheet" href="//npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+
+{% verbatim %}
+<div class="container-new">
+
+  <div id="flatpage">
+    <div class="row row-offcanvas row-offcanvas-right">
+  		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+        <v-flatpage @clicked="navigate" :list="articles" title="About"></v-flatpage>
+  		</div>
+
+      <div class="col-md-8 col-xs-12 col-lg-9 ">
+
+  			<p class="hidden-md">
+          <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
+            <div>
+              <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
+              <span>Toggle Sidebar</span>
+            </div>
+          </button>
+        </p>
+
+  			<div id="center-content-inner">
+          <div v-html="content"></div>
+  				<!-- {% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %} -->
+
+          <!-- <div class="page-navigation-flexbox">
+            <div class="page-navigation-item" v-if="hasPrev">
+              <a @click=navPrevious>Previous: {{previous.title}}</a>
+            </div>
+            <div class="page-navigation-item" v-if="hasNext">
+              <a @click="navNext">Next: {{next.title}}</a>
+            </div>
+          </div> -->
+
+  			</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endverbatim %}
 
 
-<div class="page-title-1">{% trans "About African Names Database" %}</div>
+<script src="{{ STATIC_URL }}scripts/library/vue@2.5.16.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/babel-polyfill@6.26.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap-vue@2.0.0-rc.11.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/axios@0.18.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-african-about.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/flatpage.js"></script>
 
-<p>
-  During the last 60 years of the trans-Atlantic slave trade, courts around the Atlantic basins condemned over two thousand vessels for engaging in the traffic and recorded the details of captives found on board including their African names. The African Names Database was created from these records, now located in the Registers of Liberated Africans at the Sierra Leone National Archives, Freetown, as well as Series FO84, FO313, CO247 and CO267 held at the British National Archives in London. Links are provided to the ships in the Voyages Database from which the liberated Africans were rescued, as well as to the African Origins site where users can hear the names pronounced and help us identify the languages in which they think the names are used.
-</p>
-
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
 {% endblock %}

@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Resources'},
         name='index'),
     url(r'^about', TemplateView.as_view(template_name='resources/about.html'), name='about'),
+    url(r'^lessons', TemplateView.as_view(template_name='resources/lessons.html'), name='lessons'),
+    url(r'^links', TemplateView.as_view(template_name='resources/links.html'), name='links'),
 
     #handle all cases for now
     url(r'^images/category/(?P<category>\w+)/(?P<page>\d{1,3})/detail',
