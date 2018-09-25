@@ -6,6 +6,14 @@ import voyages.apps.voyage.beta_views
 import voyages.apps.static_content.views
 
 urlpatterns = [
+
+    # flatpages
+    url(r'^understanding', TemplateView.as_view(template_name='voyage/understanding.html'), name='understanding'),
+    url(r'^essays', TemplateView.as_view(template_name='voyage/essays.html'), name='essays'),
+    url(r'^downloads', TemplateView.as_view(template_name='voyage/downloads.html'), name='downloads'),
+    url(r'^maps', TemplateView.as_view(template_name='voyage/maps.html'), name='maps'),
+
+
     url(r'^c(?P<chapternum>\w{2})_s(?P<sectionnum>\w{2})_p(?P<pagenum>\w{2})',
         voyages.apps.voyage.views.get_page, name='get-page'),
     url(r'^source/(?P<category>\w+)/(?P<sort>\w+)',
@@ -39,7 +47,6 @@ urlpatterns = [
 
     url(r'^new-ui', TemplateView.as_view(template_name='voyage/new-ui.html'), name='new-ui'),
 
-    url(r'^understanding', TemplateView.as_view(template_name='voyage/understanding.html'), name='understanding'),
 
     url(r'var-options', voyages.apps.voyage.beta_views.get_var_options, name='var-options'),
     url(r'filtered-places', voyages.apps.voyage.beta_views.get_filtered_places, name='filtered-places'),

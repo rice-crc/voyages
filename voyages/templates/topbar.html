@@ -13,14 +13,13 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trans-Atlantic</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'voyage:understanding' %}">{% trans "About" %}</a>
-						<a class="dropdown-item" href="{% url 'voyage:search' %}">{% trans "Database" %}</a>
-						<a class="dropdown-item" href="{% url 'voyage:new-ui' %}">{% trans "New UI" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:new-ui' %}">{% trans "Database" %}</a>
 						<a class="dropdown-item" href="{% url 'assessment:estimates' %}">{% trans "Estimates" %}</a>
-						<a class="dropdown-item" href="{% url 'assessment:essays' %}">{% trans "Essays" %}</a>
-						<a class="dropdown-item" href="{% url 'voyage:download' %}">{% trans "Downloads" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:essays' %}">{% trans "Essays" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:downloads' %}">{% trans "Downloads" %}</a>
 
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="{% url 'assessment:intro-maps' %}">{% trans "Introductory Maps" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:maps' %}">{% trans "Introductory Maps" %}</a>
 						<a class="dropdown-item" href="{% url 'assessment:estimates' %}?selected_tab=timeline">{% trans 'Timeline and Chronology' %}</a>
 
 						<div class="dropdown-divider"></div>
@@ -32,8 +31,9 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Intra-American</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'american:about' %}">{% trans "About" %}</a>
+						<a class="dropdown-item" href="{% url 'american:essays' %}">{% trans "Essays" %}</a>
 						<a class="dropdown-item" href="{% url 'american:database' %}">{% trans "Database" %}</a>
-						<a class="dropdown-item" id="intra-download" data-toggle="modal" data-target="#intra-modal" href="#">Downloads</a>
+						<a class="dropdown-item" href="{% url 'american:downloads' %}">{% trans "Downloads" %}</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" id="intra-contribute" data-toggle="modal" data-target="#intra-modal" href="#">Contribute</a>
 					</div>
@@ -54,12 +54,12 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Resources</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:images' %}">{% trans "Image Galleries" %}</a>
-						<a class="dropdown-item" href="{% url 'education:lesson-plans' %}">{% trans "Lesson Plans" %}</a>
-						<a class="dropdown-item" href="{% url 'education:web-resources' %}">{% trans "External Links" %}</a>
+						<a class="dropdown-item" href="{% url 'resources:lessons' %}">{% trans "Lesson Plans" %}</a>
+						<a class="dropdown-item" href="{% url 'resources:links' %}">{% trans "External Links" %}</a>
 					</div>
 				</li>
 
-				<li class="nav-item" id="link-about">
+				<li class="nav-item dropdown" id="link-about">
 					<a class="nav-link" href="{% url 'about:about' %}" role="button">About</a>
 				</li>
 
