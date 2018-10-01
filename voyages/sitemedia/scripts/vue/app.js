@@ -214,6 +214,25 @@ var searchBar = new Vue({
     }
   },
 
+  filters: {
+    // a function made for the display panel to show human readable form of operators
+    opLabelize: function (value) {
+      if (!value) return '';
+      if (value == "is one of") return "is";
+      if (value == "is equal to") return "is";
+      return value;
+    },
+
+    // a function made for the display panel to show human readable form of operators
+    termLabelize: function(value) {
+      if (!value) return '';
+      if (value == "Select All") return "All";
+      // if (Array.isArray(value)) return value.toString();
+      if (Array.isArray(value)) return '"' + value.join('", "') + '"';
+      return value;
+    }
+  },
+
   methods: {
 
     // set the current tab to be the active tab
