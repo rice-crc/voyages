@@ -1444,6 +1444,8 @@ function refreshUi(filter, currentTab, tabData) {
         }
       });
   } else if (currentTab == 'maps') {
+    $("#sv-loader").removeClass("display-none");
+    $("#animation-container").addClass("display-none");
     // TODO: Map year should be computed based on year range of search.
     // We can do it in the client side (easier).
     // for reference: voyages.apps.assessment.globals.get_map_year
@@ -1453,41 +1455,43 @@ function refreshUi(filter, currentTab, tabData) {
     };
     var mapFlowSearchCallback = function() {
       var $map = $('#map');
-      $map.addClass('gray');
+      $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         eval(result);
         voyagesMap.clear();
-        $('#loading').hide();
+      }).done(function(){
+        $("#sv-loader").addClass("display-none");
+        $("#maps").removeClass("display-none");
+        loader.resizeMap(); // resize first before adding the networkflow
         try {
           voyagesMap.setNetworkFlow(ports, flows);
         } catch (e) {
           console.log(e);
         }
-        $map.removeClass('gray');
-        loader.resizeMap();
       });
     };
-    $('#loading').show();
     loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
+    $("#sv-loader").removeClass("display-none");
+    $("#animation-container").removeClass("display-none");
     var postData = {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
     var mapAnimationSearchCallback = function() {
       var $map = $('#map');
-      $map.addClass('gray');
+      $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         voyagesMap.clear();
-        $map.removeClass('gray');
-        $('#loading').hide();
         $('.animationElement').show();
         animationHelper.startAnimation(result);
-        $map.removeClass('gray');
+      }).done(function(){
+        $("#sv-loader").addClass("display-none");
+        $("#maps").removeClass("display-none");
         loader.resizeMap();
       });
     };
-    $('#loading').show();
+    // $('#loading').show();
     loader.loadMap(function() {
       loader.loadAnimationScripts(mapAnimationSearchCallback);
     });

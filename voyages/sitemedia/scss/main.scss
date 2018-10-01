@@ -1,5 +1,6 @@
 @import "footer";
 @import "headings";
+@import "variables";
 @import "colors";
 
 // offset white space under menu
@@ -317,4 +318,15 @@ footer {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.75);
   padding: .5rem 0 0.5rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.tab-title {
+  color: $text-dark-2;
+  font-size: $regular-font-size;
+  font-weight: bold;
 }

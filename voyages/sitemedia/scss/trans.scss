@@ -116,5 +116,24 @@ a {
 }
 
 .display-none {
-  display: none;
+  display: none !important;
+}
+
+// animation
+.animationElement {
+  width: 100%;
+}
+
+.animation-control {
+  font-size: 1.5rem;
+  color: $text-dark-2;
+  margin: 0 1rem 0 1rem;
+}
+
+.animation-control-btn {
+  cursor: pointer;
+}
+
+#yearLabel {
+  font-size: 1rem;
 }

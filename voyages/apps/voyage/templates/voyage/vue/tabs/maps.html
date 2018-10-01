@@ -1,17 +1,34 @@
-{% load i18n %}
-<div id="timeControls" class="animation_voyage_controls animationElement" style="display:none;">
-    <h1 class="animation_voyage_year_label animationElement" id="yearLabel"></div>
-    <div class="control animation_voyage_year_slider animationElement" id="slider" style="width: 200px;"></div>
-    <button class="animation_voyage_pause_button animationElement" type="button" id="pauseBtn">Pause</button>
-    <button class="animation_voyage_play_button animationElement" type="button" id="playBtn" style="display:none;">Play</button>
+{% load i18n %} {% load sass_tags %} {% load compress %}
+
+{% block csslist %}
+	{% compress css %}
+	<link href="{% sass_src 'scss/library/jquery-ui@1.12.1.min.css' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
+{% endblock %}
+
+<div class="row" id="animation-container">
+  <div class="col-md-12">
+    <div id="timeControls">
+      <div class="tab-title">Current Year</div>
+    </div>
+    <div class="flex">
+      <span class="badge badge-secondary" id="yearLabel"></span>
+      <div class="animation-control">
+        <a class="animation-control-btn" id="pauseBtn"><i class="fa fa-pause-circle"></i></a>
+        <a class="animation-control-btn" id="playBtn" style="display: none;"><i class="fa fa-play-circle"></i></a>
+      </div>
+      <div class="control animation_voyage_year_slider animationElement" id="slider"></div>
+    </div>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div id="map" style="width:100%; min-height: 500px; height: 750px;"></div>
+  </div>
+</div>
+
 <div id="tooltip" class="animation_voyage_info animationElement" style="display:none; opacity: 0;">
-    <div id="tooltip_content"></div>
-    <div class="animation_tooltip_close_button">x</div>
-</div>
-<div>
-    <div id="map" style="width:100%; min-height: 500px; height:750px"></div>
-</div>
-<div id="loading" style="position:absolute; left:50%; top:50%; transform: translate(-50%, -50%); display:none;">
-    <div class="page-title-1">{% trans 'Loading map voyages...' %}</div>
+  <div id="tooltip_content"></div>
+  <div class="animation_tooltip_close_button">x</div>
 </div>
