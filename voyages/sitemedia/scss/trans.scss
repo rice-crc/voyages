@@ -108,11 +108,19 @@ a {
 // loader
 /* hide the current gif */
 #sv-loader, #sv-loader[style] {
-  position: fixed;
+  position: absolute;
   height: 100%;
   z-index: 1;
   width:100%;
-  background: rgba(0,0,0,0.1) url('../images/site/helm.gif') no-repeat center center;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.sv-loader-helm {
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  margin-left: -32px;
+  margin-top: -32px;
 }
 
 .display-none {
@@ -142,4 +150,16 @@ a {
   height: auto !important;
   padding-bottom: 1.5rem !important;
   max-height: 600px;
+}
+
+#searchNav > ul:nth-child(1) > li:nth-child(1) > a {
+  padding-left: 0;
+}
+
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left {
+  z-index: 0;
+}
+
+.imputed {
+  font-style: italic;
 }
