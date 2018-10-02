@@ -7,11 +7,11 @@ var searchBar = new Vue({
     filter: {
       year: year,
       shipNationOwner: shipNationOwner,
-      slave: slave,
       outcome: outcome,
       itinerary: itinerary,
-      captainAndCrew: captainAndCrew,
       dates: dates,
+      captainAndCrew: captainAndCrew,
+      slave: slave,
       source: source,
       settings: settings,
     },
@@ -153,7 +153,7 @@ var searchBar = new Vue({
       handler: function(){
         this.rowModalShow = true;
         var results = [];
-        // alert(JSON.stringify(this.row.data));
+        // console.log(JSON.stringify(this.row.data));
         for (group in this.filter) {
           if (group !== "year" && group !== "settings") {
             var datum = {
@@ -189,7 +189,7 @@ var searchBar = new Vue({
           }
         }
         this.row.results = results;
-
+        
         // collect ids for the group collapse. there might be a better way
         var ids = "";
         for (group in this.row.results) {
