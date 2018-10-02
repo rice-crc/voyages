@@ -173,11 +173,9 @@ shipNationOwner = {
     }
   },
 
-  constructionAndRegistration: {
-    var_year_of_construction: var_year_of_construction,
-    var_vessel_construction_place_idnum: var_vessel_construction_place_idnum,
-    var_registered_year: var_registered_year,
-    var_registered_place_idnum: var_registered_place_idnum,
+  flag: {
+    var_nationality: var_nationality,
+    var_imputed_nationality: var_imputed_nationality,
 
     count: {
       changed: 0,
@@ -185,9 +183,11 @@ shipNationOwner = {
     }
   },
 
-  flag: {
-    var_nationality: var_nationality,
-    var_imputed_nationality: var_imputed_nationality,
+  constructionAndRegistration: {
+    var_vessel_construction_place_idnum: var_vessel_construction_place_idnum,
+    var_year_of_construction: var_year_of_construction,
+    var_registered_place_idnum: var_registered_place_idnum,
+    var_registered_year: var_registered_year,
 
     count: {
       changed: 0,
