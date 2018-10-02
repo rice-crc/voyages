@@ -887,6 +887,8 @@ function refreshUi(filter, currentTab, tabData) {
       timelineVariable: timelineVariable,
     };
     if (postData.timelineVariable) {
+      // if it is a percentage based variable; used to add % to the labels
+      var isPercentage = postData.timelineVariable == "4var_resistance_idnum";
       $( "#sv-loader" ).removeClass( "display-none" );
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         var data = [];
@@ -933,7 +935,13 @@ function refreshUi(filter, currentTab, tabData) {
               text: 'Value'
             },
             min: 0,
-            startOnTick: true
+            startOnTick: true,
+            labels: {
+              formatter: function() {
+                var postfix = isPercentage ? "%" : ""; // for percentage based charts
+                return this.value + postfix;
+              }
+            },
           },
           legend: {
             enabled: false
@@ -944,7 +952,8 @@ function refreshUi(filter, currentTab, tabData) {
           tooltip: {
               formatter: function() {
                   var year = moment.unix(this.x/1000).format("YYYY");
-                  return 'Year ' + year + ': ' + '<b>' + this.y + '</b> ';
+                  var postfix = isPercentage ? "%" : ""; // for percentage based charts
+                  return 'Year ' + year + ': ' + '<b>' + this.y + postfix +'</b> ';
               }
           },
           lang: {
