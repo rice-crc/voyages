@@ -170,11 +170,14 @@ var searchBar = new Vue({
 
                   // Patch
                   if (varName == "var_sources_plaintext") {
-                    var first = value.match(/^\w+/)[0];
-                    var abbrevs = value.match(/,\s\S+<>/g);
-                    abbrevs.map(abbrev => abbrev.match(/\w+/));
-                    abbrevs.unshift(first);
-                    value = value.replace(/<>/g, ": ");
+                    value = ""; // empty value string
+                    var sources = this.row.data["var_sources"];
+                    sources.forEach(function(source){
+                      var first = source.split("<>")[0];
+                      var second = source.split("<>")[1];
+                      value += "<div><span class='source-title'>" + first +": </span>";
+                      value += "<span class='source-content'>" + second + "</span></div>";
+                    })
                   }
 
                   datum.variables[varName] = {
@@ -189,7 +192,7 @@ var searchBar = new Vue({
           }
         }
         this.row.results = results;
-        
+
         // collect ids for the group collapse. there might be a better way
         var ids = "";
         for (group in this.row.results) {
