@@ -65,16 +65,55 @@
         toggleDownloads(false);
     });
     $('#download_selection').click(function() {
-        var args = [];
+        var postData = {};
+        var statusCount = 0;
         for (var i = 0; i < statusChecks.length; ++i) {
             if ($('#' + statusChecks[i]).prop('checked')) {
-                args.push(statusChecks[i] + '=True');
+              postData[statusChecks[i]] = 'True';
+              ++statusCount;
             }
         }
-        if (args.length == 0) {
+        if (statusCount == 0) {
             alert('{% trans "You must select at least one status" %}');
         } else {
-            window.location = "{% url 'contribute:download_voyages' %}?" + args.join('&');
+          $.post("{% url 'contribute:download_voyages' %}", postData)
+            .fail(function() {
+              alert('Server error!');
+            })
+            .done(function(data) {
+              if (data.result == 'OK') {
+                // At this point we have a log_file to monitor.
+                // In case the generation is done within a few seconds, we do not bother the user
+                // with a message
+                var onFinished = function() {
+                  window.location = "{% url 'contribute:download_voyages_go' %}?csv_file=" + data.csv_file;
+                  clearInterval(timedCheck);
+                };
+                var checkCounter = 0;
+                var canCheck = true;
+                var timedCheck = setInterval(function() {
+                    if (!canCheck) return;
+                    canCheck = false;
+                    $.post("{% url 'contribute:download_voyages_status' %}", data)
+                      .done(function(statusResult) {
+                        statusResult = statusResult.status;
+                        if (statusResult && statusResult.includes('FINISHED')) {
+                          onFinished()
+                        } else {
+                          canCheck = true;
+                          if (checkCounter == 0) {
+                            alert('The CSV generation has started and may take a while to complete. The download will start once it is ready');
+                          }
+                          ++checkCounter;
+                        }
+                      });
+                  },
+                  3000
+                );
+              } else {
+                alert('Server error!');
+              }
+            });
         }
     });
 </script>
