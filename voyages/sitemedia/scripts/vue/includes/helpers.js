@@ -12,6 +12,11 @@ function camel2title(camelCase) {
     });
 }
 
+// format a number to become 1,000 (with commas)
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // a function that generates a random key for saved queries
 var generateRandomKey = function() {
   var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1491,6 +1496,9 @@ function refreshUi(filter, currentTab, tabData) {
       var $map = $('#map');
       $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
+        if (result) { // add title to the chart
+          $("#tab-map-voyage-value").text(numberWithCommas(result.length));
+        }
         voyagesMap.clear();
         $('.animationElement').show();
         animationHelper.startAnimation(result);
@@ -1498,6 +1506,7 @@ function refreshUi(filter, currentTab, tabData) {
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();
+        // get title here I'd say
       });
     };
     // $('#loading').show();
