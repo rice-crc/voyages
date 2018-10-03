@@ -1,15 +1,15 @@
 .checkbox-list-checkbox-0 {
-  padding: 3px 15px; }
+  padding: 0 0.25rem; }
 
-.checkbox-list-label-0 {
-  padding: 7px 0 0 0; }
-
-.checkbox-list-label-0-expandable {
-  padding: 8px 0 0 0; }
+.sidebar-label {
+  margin-bottom: 0 !important; }
 
 /***********************************
 * main elements
 ***********************************/
+.tabs-tab-middle, .tabs-tab-middle-selected {
+  font-size: 0.85rem; }
+
 td.td-main-panel {
   vertical-align: top;
   background-color: white; }
@@ -34,9 +34,6 @@ h1 {
 div.region-title {
   font-weight: bold;
   margin-bottom: 5px; }
-
-div.region-list {
-  margin: 1rem 0; }
 
 div.region-list table.checkbox-list-table-0 {
   width: 100%; }
@@ -118,14 +115,14 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 .estimates-table-form li {
   list-style: none;
   display: inline-block;
-  margin-right: 15px;
-  margin-bottom: 7px; }
+  font-size: 0.85rem; }
 
 ul.estimates-table-form {
-  padding-left: 0; }
+  padding-left: 0;
+  margin: 0; }
 
 div.results-panel {
-  padding: 10px; }
+  padding: 0 10px; }
 
 div.estimates-table-options {
   margin-top: -5px;
@@ -512,4 +509,4 @@ input.button-save:hover {
 .highlight-col {
   background-color: lightgray; }
 
-/*# sourceMappingURL=../../../../../../../../static/scss/assessment/assessment-estimates.css.map */
+/*# sourceMappingURL=../../../../../../../../../../static/scss/assessment/assessment-estimates.css.map */
