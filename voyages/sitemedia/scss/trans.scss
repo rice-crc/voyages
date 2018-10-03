@@ -171,3 +171,8 @@ a {
 .source-content {
   color: $text-dark-2;
 }
+
+// jquery slider handle needs to be within the layer
+.ui-slider .ui-slider-handle {
+  z-index: auto !important;
+}
