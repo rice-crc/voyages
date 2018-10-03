@@ -31,6 +31,7 @@ from django.views.decorators.gzip import gzip_page
 from datetime import date
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
+from voyages.apps.resources.models import Image
 from django.utils.translation import ugettext as _
 from django.utils.translation import get_language
 from cache import VoyageCache, CachedGeo
@@ -576,10 +577,14 @@ def voyage_images(request, voyage_id):
     Displays the images for a voyage
     """
     voyage = first_match(get_voyages_search_query_set().filter(var_voyage_id=int(voyage_id)))
+    images = []
+    if voyage:
+        images = list(Image.objects.filter(voyage=int(voyage_id)))
     return render(request, "voyage/voyage_info.html",
                   {'tab': 'images',
                    'voyage_id': voyage_id,
-                   'voyage': voyage})
+                   'voyage': voyage,
+                   'images': images})
 
 def voyage_variables_data(voyage_id, show_imputed=True):
     voyagenum = int(voyage_id)
