@@ -31,7 +31,11 @@
 
 // accordion
 .sidebar-section-accordion:first-child {
-  margin-top: 1.5rem;
+  // margin-top: 1.5rem;
+}
+
+.sidebar-collapse {
+  margin-bottom: 2rem;
 }
 
 // .collapse.show {
@@ -316,7 +320,7 @@ footer {
 .navbar-subtitle {
   font-weight: 500;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 1);
   padding: .5rem 0 0.5rem;
 }
 
@@ -329,4 +333,8 @@ footer {
   color: $text-dark-2;
   font-size: $regular-font-size;
   font-weight: bold;
+}
+
+.navbar-subitem {
+  margin-right: 1rem;
 }

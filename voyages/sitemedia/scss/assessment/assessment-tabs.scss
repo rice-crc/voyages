@@ -1,16 +1,14 @@
 td.tabs-tab-left-selected, td.tabs-tab-left {
     background-position: left top;
     background-repeat: no-repeat;
-    height: 32px;
+    height: 0.25rem;
     overflow: hidden;
     width: 10px;
 }
 td.tabs-tab-middle-selected, td.tabs-tab-middle {
     background-repeat: repeat-x;
-    padding-bottom: 3px;
-    padding-top: 0px;
     text-align: center;
-    vertical-align: bottom;
+    padding: 0;
 }
 td.tabs-tab-middle, td.tabs-tab-left, td.tabs-tab-right {
     cursor: pointer;
@@ -19,7 +17,7 @@ td.tabs-tab-middle, td.tabs-tab-left, td.tabs-tab-right {
 td.tabs-tab-right-selected, td.tabs-tab-right {
     background-position: right top;
     background-repeat: no-repeat;
-    height: 32px;
+    height: 0.25rem;
     overflow: hidden;
     width: 10px;
 }

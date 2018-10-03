@@ -19,6 +19,9 @@
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-expandable-box.css">
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/assessment/assessment-tabs.css"> -->
 <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css">
+<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans-search.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block jslist %}
@@ -29,13 +32,80 @@
 
 {% block content %}
 
+<div class="nav-header">
+  <div>Trans-Atlantic Slave Trade - Estimates</div>
+  <div class="navbar-subtitle flex">
+    <div class="navbar-subitem">
+      {% trans 'Current Query' %} <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred."></i>
+    </div>
+    <div class="navbar-subitem">
+      <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="false" aria-controls="panelCollapse">
+        <div class="btn-navbar">
+          <i class="fa fa-filter"></i>
+          View All
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="collapse" id="panelCollapse">
+  <div class="panel-list" v-if="hasCurrentQuery">
+    <span class="panel-list-item-wrapper">
+      <div class="row">
+        <div class="col">{% trans 'Selected National Carriers' %}</div>
+          {% if all_nations_selected %}
+            {% trans 'all' %}
+          {% else %}
+            {% for nation in nations %}
+              {% ifequal nation.2 1 %}
+                {{ nation.0|trans_log }},
+              {% endifequal %}
+            {% endfor %}
+          {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="col">{% trans 'Selected Embarkation Regions' %}</div>
+          {% if all_embarkations_selected %}
+            {% trans 'all' %}
+          {% else %}
+            {% for region_list in export_regions.values %}
+              {% for region in region_list %}
+                {% ifequal region.1 1 %}
+                  {{ region.0.0|trans_log }},
+                {% endifequal %}
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="col">{% trans 'Selected Disembarkation Regions' %}</div>
+          {% if all_disembarkations_selected %}
+            {% trans 'all' %}
+          {% else %}
+            {% for region_list in import_regions.values %}
+              {% for region in region_list %}
+                {% ifequal region.1 1 %}
+                  {{ region.0.0|trans_log }},
+                {% endifequal %}
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
+      </div>
+    </span>
+
+    <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> Hide</div>
+    </a>
+  </div>
+</div>
+
 
 <form id="form" name="form" method="post" action="{% url 'assessment:estimates' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
       <input type="hidden" name="selected_tab" value="{{ tab_selected }}" />
-
-
-
 
       <div class="container-new">
         <div class="row  row-offcanvas row-offcanvas-right">
@@ -54,69 +124,7 @@
               </button>
             </p>
 
-            <div class="page-section">
-              <input type="hidden" value="expanded" name="form:_idJsp45_state">
-              <div class="page-title-1">{% trans 'Time and Chronology' %}</div>
-
-              <div class="page-title-2">
-                <a data-toggle="collapse" href="#currentQuery" role="button" aria-expanded="false" aria-controls="currentQuery">
-                  {% trans 'Your Current Query' %}
-                  <span class="fa fa-question-circle" style=" vertical-align: middle; color: #008ca8;" data-toggle="tooltip" data-placement="right" title="For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred."></span>
-                </a>
-              </div>
-
-              <div class="collapse" id="currentQuery">
-                <div class="row">
-                  <div class="col">{% trans 'Selected National Carriers' %}</div>
-                  <div class="col-md-6 col-xs-12 col-lg-8">
-                    {% if all_nations_selected %}
-                      {% trans 'all' %}
-                    {% else %}
-                      {% for nation in nations %}
-                        {% ifequal nation.2 1 %}
-                          {{ nation.0|trans_log }},
-                        {% endifequal %}
-                      {% endfor %}
-                    {% endif %}
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col">{% trans 'Selected Embarkation Regions' %}</div>
-                  <div class="col-md-6 col-xs-12 col-lg-8">
-                    {% if all_embarkations_selected %}
-                      {% trans 'all' %}
-                    {% else %}
-                      {% for region_list in export_regions.values %}
-                        {% for region in region_list %}
-                          {% ifequal region.1 1 %}
-                            {{ region.0.0|trans_log }},
-                          {% endifequal %}
-                        {% endfor %}
-                      {% endfor %}
-                    {% endif %}
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col">{% trans 'Selected Disembarkation Regions' %}</div>
-                  <div class="col-md-6 col-xs-12 col-lg-8">
-                    {% if all_disembarkations_selected %}
-                      {% trans 'all' %}
-                    {% else %}
-                      {% for region_list in import_regions.values %}
-                        {% for region in region_list %}
-                          {% ifequal region.1 1 %}
-                            {{ region.0.0|trans_log }},
-                          {% endifequal %}
-                        {% endfor %}
-                      {% endfor %}
-                    {% endif %}
-                  </div>
-                </div>
-
-              </div>
-            </div>
+            <input type="hidden" value="expanded" name="form:_idJsp45_state">
 
             <div class="tabs-selection">
               <table>
@@ -146,39 +154,10 @@
             {% elif tab_selected == 'map' %}
               {% include "assessment/estimates_map.html" %}
             {% endif %}
-
-
-            <div class="page-section margin-v">
-              <div class="page-title-2">Create a Query Link</div>
-              <p>{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</p>
-              <button class="btn btn-solid btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
-              <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Start New Query' %}</button>
-              <div class="sidebar-section">
-                <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
-              </div>
-            </div>
-
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
       </div>
-
-
-
 </form>
-
-
 
 <script>
 $(function () {
@@ -188,5 +167,4 @@ $(function () {
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}

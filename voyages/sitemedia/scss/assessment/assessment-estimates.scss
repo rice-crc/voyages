@@ -1,7 +1,10 @@
 // temporary css trick to make the expandable box presentable
 // this is temporary because the search might be replaced in near future
+@import "../variables";
+@import "../colors";
+
 .checkbox-list-checkbox-0 {
-	padding: 0 15px;
+	padding: 0 0.25rem;
 }
 
 .checkbox-list-label-0 {
@@ -20,6 +23,9 @@
 * main elements
 ***********************************/
 
+.tabs-tab-middle, .tabs-tab-middle-selected {
+	font-size: $regular-font-size;
+}
 td.td-main-panel {
 	vertical-align: top;
 	background-color: white;}
@@ -52,7 +58,6 @@ div.region-list {
 	// margin-bottom: 10px;
 	// border-bottom: 1px solid #9EDEE0;
 	// padding-right: 5px;
-  margin: 1rem 0;
 }
 
 div.region-list table.checkbox-list-table-0 {
@@ -148,11 +153,12 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 .estimates-table-form li {
     list-style:none;
     display: inline-block;
-    margin-right: 15px;
+		font-size: $regular-font-size;
 }
 
 ul.estimates-table-form {
     padding-left:0;
+		margin: 0;
 }
 
 div.results-panel {
