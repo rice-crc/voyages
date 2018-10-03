@@ -1435,31 +1435,80 @@ class Echo(object):
         return value
     
 @login_required()
+@require_POST
 def download_voyages(request):
-    from django.http import StreamingHttpResponse
-    
     statuses = []
-    if request.GET.get('accepted_unpublished_check') == 'True':
+    if request.POST.get('accepted_unpublished_check') == 'True':
         statuses.append(ContributionStatus.approved)
-    if request.GET.get('under_review_check') == 'True':
+    if request.POST.get('under_review_check') == 'True':
         statuses.append(ContributionStatus.under_review)
-    if request.GET.get('committed_check') == 'True':
+    if request.POST.get('committed_check') == 'True':
         statuses.append(ContributionStatus.committed)
-    if request.GET.get('rejected_check') == 'True':
+    if request.POST.get('rejected_check') == 'True':
         statuses.append(ContributionStatus.rejected)
     
-    rows = get_voyages_csv_rows(statuses, request.GET.get('published_check') == 'True')
-    # This technique follows the documentation in:
-    # https://docs.djangoproject.com/en/2.0/howto/outputting-csv/#streaming-csv-files
-    response = StreamingHttpResponse((x for x in rows), content_type='text/csv; charset=utf-8')
-    response['Content-Disposition'] = 'attachment; filename="download_voyages.csv"'
+    include_published = request.POST.get('published_check') == 'True'
+
+    import os, re, tempfile, thread
+    try:
+        dir = settings.MEDIA_ROOT + '/csv_downloads/'
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        csv_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
+        log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
+        thread.start_new_thread(generate_voyage_csv_file, (statuses, include_published, csv_file, log_file))
+        return JsonResponse({'result': 'OK', 
+            'log_file': re.sub('^.*/', '', log_file.name),
+            'csv_file': re.sub('^.*/', '', csv_file.name)})
+    except Exception as exception:
+        return JsonResponse({'result': 'Failed', 'error': exception.message})
+
+def generate_voyage_csv_file(statuses, published, csv_file, log_file):
+    # Simply iterate over generated CSV rows passing the file as buffer.
+    def log(message):
+        log_file.seek(0)
+        log_file.truncate(0)
+        log_file.write(message)
+        log_file.flush()
+
+    log('Started generating CSV file')
+    count = 0
+    for _ in get_voyages_csv_rows(statuses, published, csv_file):
+        count += 1
+        if (count % 100) == 0:
+            log(str(count) + ' rows exported to CSV')
+    log('FINISHED')
+    csv_file.flush()
+
+@login_required()
+@require_POST
+def download_voyages_status(request):
+    log_file = request.POST.get('log_file')
+    if log_file is None: return JsonResponse({'result': 'Failed'})
+    dir = settings.MEDIA_ROOT + '/csv_downloads/'
+    log_file = dir + log_file
+    status = 'Not started'
+    with open(log_file, 'r') as f:
+        status = f.readline()
+    return JsonResponse({'result': 'OK', 'status': status})
+
+def download_voyages_go(request):
+    csv_file = request.GET.get('csv_file')
+    if csv_file is None: raise Http404
+    file_path = settings.MEDIA_ROOT + '/csv_downloads/' + csv_file
+    f = open(file_path, "r")
+    response = HttpResponse(f, content_type='application/csv')
+    response['Content-Disposition'] = 'attachment; filename=voyages.csv'
     return response
 
-def get_voyages_csv_rows(statuses, published):
+def get_voyages_csv_rows(statuses, published, buffer=None):
     from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
-    pseudo_buffer = Echo()
-    writer = get_csv_writer(pseudo_buffer)
-    yield get_header_csv_text()
+    if buffer is None:
+        buffer = Echo()
+    writer = get_csv_writer(buffer)
+    header = get_header_csv_text()
+    yield header
+    buffer.write(header)
     for item in export_contributions(statuses):
         yield safe_writerow(writer, item)
     if published:
