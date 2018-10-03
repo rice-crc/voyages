@@ -644,11 +644,14 @@ function refreshUi(filter, currentTab, tabData) {
       stateDuration: -1,
       colReorder: true,
       initComplete: function() {
-        $(function() {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
+        $('[data-toggle="tooltip"]').tooltip()
       }
     });
+
+    mainDatatable.on( 'column-visibility.dt', function ( e, settings, column, state ) {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+
   } else if (currentTab == 'statistics') {
     // Summary statistics.
     var tableId = '#v-summary-statistics';
