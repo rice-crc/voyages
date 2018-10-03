@@ -66,6 +66,8 @@ urlpatterns = [
     url(r'json_reviewers', views.get_reviewers, name='json_reviewers'),
     url(r'json_publish_pending', views.publish_pending, name='json_publish_pending'),
     url(r'json_retrieve_publication_status', views.retrieve_publication_status, name='json_retrieve_publication_status'),
+    url(r'download_voyages_status', views.download_voyages_status, name='download_voyages_status'),
+    url(r'download_voyages_go', views.download_voyages_go, name='download_voyages_go'),
     url(r'download_voyages', views.download_voyages, name='download_voyages'),
     
     url(r'post_review_request', views.post_review_request, name='post_review_request'),
