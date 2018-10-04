@@ -126,7 +126,9 @@
 
             {% if tab == 'images' %}
             <div id="images">
-              <p class="dataTables_info" style="padding-top: 10px;">Not available</p>
+              {% for image in images %}
+                <img src="{{ MEDIA_URL }}/{{ image.file }}" class="img-fluid"/>
+              {% endfor %}
             </div>
             {% endif %}
 

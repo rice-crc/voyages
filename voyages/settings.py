@@ -208,6 +208,10 @@ HAYSTACK_ITERATOR_LOAD_PER_QUERY = 4096
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# This enables a proxy (Apache, nginx) to forward secure
+# requests using HTTP to the django server.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 import sys
 
 # import localsettings
