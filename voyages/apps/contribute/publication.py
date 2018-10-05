@@ -334,6 +334,14 @@ def _map_voyage_to_spss(voyage):
     
     # Dates
     dates = voyage.voyage_dates
+    data['DATEDEP'] = dates.voyage_began
+    data['DATEEND'] = dates.voyage_completed
+    data['DATEBUY'] = dates.slave_purchase_began
+    data['DATELEFTAFR'] = dates.vessel_left_port
+    data['DATELAND1'] = dates.first_dis_of_slaves
+    data['DATELAND2'] = dates.arrival_at_second_place_landing
+    data['DATELAND3'] = dates.third_dis_of_slaves
+    data['DATEDEPAM'] = dates.departure_last_place_of_landing
     _map_csv_date(data, 'DATEDEP', dates.voyage_began)
     _map_csv_date(data, 'D1SLATR', dates.slave_purchase_began)
     _map_csv_date(data, 'DLSLATR', dates.vessel_left_port)
