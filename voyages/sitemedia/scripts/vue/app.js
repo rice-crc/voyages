@@ -15,6 +15,10 @@ var searchBar = new Vue({
       source: source,
       settings: settings,
     },
+    filterData: {
+      treeselectOptions: {
+      },
+    },
     activated: false,
     query: {
       // put the search query in here
@@ -383,25 +387,6 @@ var searchBar = new Vue({
     });
     var self = {};
     var $vm = this;
-
-    // load place related variables
-    loadPlaces(this, $vm.filter.itinerary);
-    loadIndividualPlace(this, $vm.filter.shipNationOwner.constructionAndRegistration.var_registered_place_idnum);
-    loadIndividualPlace(this, $vm.filter.shipNationOwner.constructionAndRegistration.var_vessel_construction_place_idnum);
-
-    // load treeselect variable
-    loadOptions(this, [
-      $vm.filter.outcome.outcome.var_outcome_voyage,
-      $vm.filter.outcome.outcome.var_outcome_slaves,
-      $vm.filter.outcome.outcome.var_outcome_ship_captured,
-      $vm.filter.outcome.outcome.var_outcome_owner,
-      $vm.filter.outcome.outcome.var_resistance,
-      $vm.filter.shipNationOwner.rigTonnageAndGunsMounted.var_rig_of_vessel,
-      $vm.filter.shipNationOwner.flag.var_nationality,
-      $vm.filter.shipNationOwner.flag.var_imputed_nationality,
-    ]);
-
-    //search(this.filter, []);
     refreshUi(this.filter, this.currentTab, this.tabs);
   },
 
