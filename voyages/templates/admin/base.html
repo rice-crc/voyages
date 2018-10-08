@@ -72,9 +72,12 @@
     </div>
 
     {% if request.path == '/admin/' %}
-    <a href="{% url 'downloads' %}">Download Files</a>
+    <div id="admin-subtitle">File Management</div>
+    <p class="card-text">You can upload and download files that are stored on the Voyages server here.</p>
+    <a href="{% url 'downloads' %}" class="btn btn-info btn-sm">Manage Files</a>
     {% endif %}
-
+    
+    <div style="padding: 2rem 0;"></div>
   </div>
 
   {% block footer %}

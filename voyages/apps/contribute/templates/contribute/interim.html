@@ -26,7 +26,7 @@
         background-color: lightblue;
     }
 </style>
-<div class="page-title-1" class='contribute_header'>{{ contribution }}</div>
+<div class="page-title-1" class='contribute_header'>{{ contribution | title }}</div>
 
 {% if mode == 'contribute' %}
 <p>
@@ -55,9 +55,11 @@
     <!-- Ship, nation, owners -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#ship_nation_owners" aria-expanded="false" aria-controls="ship_nation_owners">
-              <div class="page-title-1">{% trans "Ship, Nation, Owners" %}</div>
+              {% trans "Ship, Nation, Owners" %}
             </a>
+            </div>
         </div>
         <div id="ship_nation_owners" class="collapse col-md-12 var_group">
         <div class="form-group">
@@ -250,9 +252,11 @@
     <!-- Voyage outcome -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#outcome" aria-expanded="false" aria-controls="outcome">
-              <div class="page-title-1">{% trans "Voyage Outcome" %}</div>
+              {% trans "Voyage Outcome" %}
             </a>
+            </div>
         </div>
         <div id="outcome" class="collapse col-md-12 var_group">
         <div class="form-group">
@@ -354,9 +358,11 @@
     <!-- Voyage itinerary -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#itinerary" aria-expanded="false" aria-controls="itinerary">
-              <div class="page-title-1">{% trans "Voyage Itinerary" %}</div>
+              {% trans "Voyage Itinerary" %}
             </a>
+            </div>
         </div>
         <div id="itinerary" class="collapse col-md-12 var_group">
         <div class="form-group">
@@ -601,9 +607,11 @@
     <!-- Voyage dates -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#dates" aria-expanded="false" aria-controls="dates">
-                <div class="page-title-1">{% trans "Voyage Dates" %}</div>
+                {% trans "Voyage Dates" %}
             </a>
+            </div>
         </div>
         <div id="dates" class="collapse col-md-12 var_group">
         <p>{% trans "Enter partial information (year only or month and year only) when full date unknown." %}</p>
@@ -786,9 +794,11 @@
     <!-- Captain and crew -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#crew" aria-expanded="false" aria-controls="crew">
-              <div class="page-title-1">{% trans "Captain and Crew" %}</div>
+              {% trans "Captain and Crew" %}
             </a>
+            </div>
         </div>
         <div id="crew" class="collapse col-md-12 var_group">
         <div class="form-group">
@@ -928,9 +938,11 @@
     <!-- Slaves (numbers) -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#slave_numbers_main" aria-expanded="false" aria-controls="slave_numbers_main">
-              <div class="page-title-1">{% trans "Slaves (numbers)" %}</div>
+              {% trans "Slaves (numbers)" %}
             </a>
+            </div>
         </div>
         <div id="slave_numbers_main" class="collapse col-md-12 var_group">
         <div class="form-group">
@@ -1091,9 +1103,11 @@
     <!-- Slaves (mortality and price) -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#mortality_and_price" aria-expanded="false" aria-controls="mortality_and_price">
-              <div class="page-title-1">{% trans "Slaves (mortality and price)" %}</div>
+              {% trans "Slaves (mortality and price)" %}
             </a>
+            </div>
         </div>
         <div id="mortality_and_price" class="collapse col-md-12 var_group">
             <div class="form-group">
@@ -1139,9 +1153,11 @@
     <!-- Slaves (characteristics) -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#demographics" aria-expanded="false" aria-controls="demographics">
-              <div class="page-title-1">{% trans "Slaves (characteristics)" %}</div>
+              {% trans "Slaves (characteristics)" %}
             </a>
+            </div>
         </div>
         <div id="demographics" class="collapse col-md-12 var_group">
         <div id="hidden_div" style="display:none">
@@ -1222,9 +1238,11 @@
     <!-- Slaves (age and sex) -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#age_and_sex" aria-expanded="false" aria-controls="age_and_sex">
-              <div class="page-title-1">{% trans "Slaves (age and sex)" %}</div>
+              {% trans "Slaves (age and sex)" %}
             </a>
+            </div>
         </div>
         <div id="age_and_sex" class="collapse col-md-12 var_group">
         <table id="age_and_sex_table" class="table table-striped" style="width: auto">
@@ -1282,9 +1300,11 @@
     <!-- Sources -->
     <div class="expander_container">
         <div>
+            <div class="page-title-2">
             <a role="button" class="collapsed expander" data-toggle="collapse" href="#sources" aria-expanded="false" aria-controls="sources">
-              <div class="page-title-1">{% trans "Sources" %}</div>
+                {% trans "Sources" %}
             </a>
+            </div>
         </div>
         <div id="sources" class="collapse col-md-12 var_group">
         {% if interim.pre_existing_sources.all %}
