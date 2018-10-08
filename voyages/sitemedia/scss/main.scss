@@ -355,3 +355,8 @@ footer {
 .tooltip-inner {
   text-align: left;
 }
+
+// admin page override
+.login .submit-row {
+    padding: 1rem 0 0 0 !important;
+}

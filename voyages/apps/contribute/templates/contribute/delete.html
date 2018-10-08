@@ -14,7 +14,7 @@
 <p></p>
 
 {% include "contribute/voyage_selection_table.html" %}
-<form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal">
+<form action="{% url 'contribute:delete_voyage' %}" method="post" class="form-horizontal" style="margin-bottom: 1rem;">
     {% csrf_token %}
     <input type="hidden" name="ids" id="ids_hidden">
     {{ form.ids.errors }}

@@ -24,9 +24,15 @@
         pointer-events: none;
     }
 
-    #requests_table > tbody > tr > td .btn {
-        margin: 2px;
-        width: 100%;
+   .admin-dropdown-btn {
+        margin: 0 !important;
+        padding: 0 0.5rem !important;
+        background: #008ca8;
+        color: white;
+    }
+
+    .dropdown {
+        text-align: center;
     }
 </style>
 <div>
@@ -48,7 +54,7 @@
         Edit Voyages
       </div>
       <div class="page-section">
-        <table id="pending_publication_table" class="table table-striped table-responsive">
+        <table id="pending_publication_table" class="table table-striped table-bordered">
             <thead>
             <tr>
                 <th>{% trans "Voyage ID" %}</th>
@@ -74,7 +80,7 @@
         Edit Requests
       </div>
       <div class="page-section">
-        <table id="requests_table" class="">
+        <table id="requests_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
             <tr>
                 <th>{% trans "Type" %}</th>
@@ -160,12 +166,12 @@
                         row['voyage_ship'].join(', ') +
                         '</td><td>' + row['reviewer'] +
                         '</td><td class="review_cell" data-id="' + key + '">' +
-                        '<div class="dropdown"><button aria-expanded="false" class="btn dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li>' +
+                        '<div class="dropdown"><button aria-expanded="false" class="btn dropdown-toggle admin-dropdown-btn" type="button" data-toggle="dropdown"></button><ul class="dropdown-menu"><li>' +
                         (row['review_request_id'] == 0
-                            ? '<a class="reviewer_assign_btn" href="#">{% trans "Assign" %}</a>'
-                            : '<a class="review_archive_btn" href="#">{% trans "Archive request" %}</a>') + '</li>' +
+                            ? '<a class="dropdown-item" href="#">{% trans "Assign" %}</a>'
+                            : '<a class="dropdown-item" href="#">{% trans "Archive request" %}</a>') + '</li>' +
                         (row['editor_contribution_id']
-                            ? '<li><a href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></li>'
+                            ? '<li><a class="dropdown-item" href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></li>'
                             : '') + '</ul></div></td><td>' +
                         '<span class="' + reviewClasses[responseId] + '">' + row['response'] + '</span></td><td>' + row['reviewer_final_decision'] + '</td></tr>');
                 }
