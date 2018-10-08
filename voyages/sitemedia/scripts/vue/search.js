@@ -149,7 +149,7 @@ var categories = $.map(categoryNames, function(name) {
 
 allColumns.forEach(function(c, index) {
 
-  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <i class='fa fa-question-circle' data-toggle='tooltip' data-placement='top' title='Italicized results are calculated by an algorithm.'> </i>" : c.header;
+  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='Imputed results are calculated by an algorithm.'> IMP </span>" : c.header;
 
   categories[c.category].columns.push({
     extend: 'columnToggle',
@@ -159,7 +159,7 @@ allColumns.forEach(function(c, index) {
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Italicized results are calculated by an algorithm."> </i>'; // italicized column title
+    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="Imputed results are calculated by an algorithm."> IMP </span>'; // italicized column title
     c.render = function(data) {
       var formatedString = "";
       if (data !== null) {

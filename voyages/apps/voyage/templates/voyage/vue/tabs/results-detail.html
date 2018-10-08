@@ -93,9 +93,6 @@
     </div>
   </div>
 
-
-
-
   <div class="row" v-for="result in row.results">
     <div class="col-md-12">
       <b-card no-body class="mb-1">
@@ -105,8 +102,15 @@
         <b-collapse :id="result.group" :visible=row.collapseVisible role="tabpanel">
           <b-card-body>
             <div class="row" v-for="variable in result.variables">
-              <div class='col-md-6 text-bold'>
+              <div class='col-md-6 v-title'>
                 {{variable.label}}
+                <b-badge pill
+                  v-if="variable.isImputed"
+                  v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
+                  variant="secondary"
+                  class="v-badge-imputed">
+                  IMP
+                </b-badge>
               </div>
               <div class='col-md-6'>
                 <span v-html="variable.value"></span>

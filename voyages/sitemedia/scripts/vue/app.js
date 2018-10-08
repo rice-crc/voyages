@@ -171,6 +171,7 @@ var searchBar = new Vue({
                   var item = this.filter[group][subGroup][variable];
                   var varName = "var_" + item["varName"];
                   var value = this.row.data[varName];
+                  var isImputed = (item.options) ? item.options.isImputed : false;
 
                   // Patch
                   if (varName == "var_sources_plaintext") {
@@ -187,7 +188,8 @@ var searchBar = new Vue({
                   datum.variables[varName] = {
                     varName: varName,
                     label: item["label"],
-                    value: value
+                    value: value,
+                    isImputed: isImputed
                   }
                 }
               }
