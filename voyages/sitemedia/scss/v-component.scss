@@ -68,8 +68,10 @@
 }
 
 .v-badge-imputed {
-  background-color: #fa8837;
   color: white;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .v-badge-advanced {

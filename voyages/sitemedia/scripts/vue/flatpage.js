@@ -54,6 +54,10 @@ var flatpage = new Vue({
       this.currentIndex = parseInt(value);
       current.isActive = true;
       var vm = this;
+      var currentProtocol = location.protocol;
+      if (currentProtocol == "https:") {
+        current.url = current.url.replace(/^http:\/\//i, 'https://');
+      }
       axios.get(current.url)
       .then(function (response) {
         vm.content = response.data;

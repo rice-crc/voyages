@@ -5,14 +5,30 @@ Vue.component("v-treeselect", {
   <div class="v-form-group">
     <div class="v-title">
       <span>{{filter.label}}</span>
+      <b-badge pill
+        v-if="filter.options.isImputed"
+        v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
+        variant="secondary"
+        class="v-badge-imputed">
+        IMPUTED
+      </b-badge>
+      <!--
+      <b-badge
+        v-if="filter.options.isAdvanced"
+        v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
+        variant="danger" class="v-badge-advanced">Advanced</b-badge>
+      -->
     </div>
     <div class="v-description" v-text="filter.description"></div>
 
     <div class="row">
       <div class="col-md-12">
         <treeselect
+          :load-options="loadOptions"
           :multiple="true"
-          :load-root-options="loadRootOptions"
+          :loading="true"
+          :options=treeselectOptions
+          :auto-load-root-options="false"
           :default-expand-level="1"
           :placeholder=filter.options.caption
           v-model="item.searchTerm"
@@ -50,7 +66,8 @@ Vue.component("v-treeselect", {
       options: {
         caption: this.filter.options.caption,
         changed: false,
-      }
+      },
+      treeselectOptions: null,
     }
   },
 
@@ -65,10 +82,15 @@ Vue.component("v-treeselect", {
       this.item.searchTerm = null;
     },
 
-    // load options
-    loadRootOptions(callback) {
-      callback(null, this.filter.options.data)
-    }
+    // load options for the v-treeselect componenet
+    loadOptions({callback}) {
+      // four parameters
+      // this.$root - main Vue.js instance
+      // this - this v-treeselect component
+      // filter - filter object
+      // callback - comes from the vue-treeselect plugin
+      loadTreeselectOptions(this.$root, this, this.filter, callback);
+    },
   },
 
   watch: {
