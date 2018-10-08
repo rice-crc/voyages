@@ -335,89 +335,75 @@ function getCurrentTreeselectLabel(searchTerms, allRegion){
   return labels;
 }
 
-// load options to the main search filter, such as flag, rig, outcomes
-function loadOptions(vm, variables) {
-  var promises = [];
-  for (variable in variables) {
-    var varName = "var_" + variables[variable].varName;
-    promises.push(axios.post('/voyage/var-options', {
-      var_name: varName,
-    }));
-  }
-  // fulfil promises
-  axios.all(promises).then(function(results) {
-    results.forEach(function(response) {
-      // fill in
-      for (variable in variables) {
-        var varName = "var_" + variables[variable].varName;
-        if (varName == response.data.var_name) {
-          response.data.data.map(function(data) {
-            data["id"] = data["value"];
-          });
-          variables[variable]["options"].data[0]["children"] = response.data.data;
-        }
-      }
-    })
-  });
-}
+// load treeselect options
+function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
+  var varName = filter.varName;
+  var loadType = filter.type;
 
-// loadPlaces
-function loadPlaces(vm, groups) {
-  var promises = [];
-  for (subGroup in groups) {
-    if (subGroup !== "count") {
-      for (variable in groups[subGroup]) {
-        if (variable !== "count") {
-          var varName = groups[subGroup][variable].varName;
-          promises.push(axios.post('/voyage/filtered-places', {
-            var_name: varName,
-          }));
-        }
-      }
+  // load only once remotely and then local copy
+  if (!vm.filterData.treeselectOptions[varName]) {
+
+    // load special weird variables
+    if (["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(varName) >= 0) {
+      console.log(varName);
+      axios.post('/voyage/filtered-places', {})
+      .then(function (response) {
+        var options = parsePlaces(response);
+        vm.filterData.treeselectOptions[varName] = options;
+        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+        callback(); // notify vue-treeselect about data population completion
+        return;
+      })
+      .catch(function (error) {
+        return 'error';
+      });
+    }
+
+    // load PlaceVariable
+    else if (loadType == "place"){
+      axios.post('/voyage/filtered-places', {
+        var_name: varName,
+      })
+      .then(function (response) {
+        var options = parsePlaces(response);
+        vm.filterData.treeselectOptions[varName] = options;
+        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+        callback(); // notify vue-treeselect about data population completion
+        return;
+      })
+      .catch(function (error) {
+        return 'error';
+      });
+    }
+    
+    // load TreeselectVariable
+    else if (loadType == "treeselect"){
+      varName = "var_" + varName;
+      axios.post('/voyage/var-options', {
+        var_name: varName,
+      })
+      .then(function (response) {
+        response.data.data.map(function(data) {
+          data["id"] = data["value"];
+        });
+        vm.filterData.treeselectOptions[varName] = response.data.data;
+        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+        callback(); // notify vue-treeselect about data population completion
+        return;
+      })
+      .catch(function (error) {
+        return 'error';
+      });
+    }
+
+    // load weird place variables
+    else {
+      callback("Error loading options");
     }
   }
 
-  axios.all(promises).then(function(results) {
-    results.forEach(function(response) {
-      var varName = response.data.filtered_var_name;
-      var options = parsePlaces(response);
-
-      // fill in
-      for (subGroup in groups) {
-        if (subGroup !== "count") {
-          for (variable in groups[subGroup]) {
-            if (variable !== "count") {
-              if (groups[subGroup][variable].varName == varName) {
-                // groups[subGroup][variable]["options"].data = response.data;
-                groups[subGroup][variable]["options"].data = options;
-              }
-            }
-          }
-        }
-      }
-    })
-  });
-}
-
-
-// loadPlaces
-function loadIndividualPlace(vm, variable) {
-  var promises = [];
-  // var varName = "var_" + variable.varName;
-  // promises.push(axios.post('/voyage/filtered-places', {
-  //   var_name: varName,
-  // }));
-  promises.push(axios.post('/voyage/filtered-places', {}));
-
-  axios.all(promises).then(function(results) {
-    results.forEach(function(response) {
-      var varName = response.data.filtered_var_name;
-      var options = parsePlaces(response);
-
-      // fill in
-      variable["options"].data = options;
-    });
-  });
+  vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+  callback(); // notify vue-treeselect about data population completion
 }
 
 // parsePlaces function
@@ -599,15 +585,15 @@ function refreshUi(filter, currentTab, tabData) {
       "destroy": true,
 
       // page length Default
-      pageLength: 20,
+      pageLength: 15,
 
       // dom: 'ifrtBp',
       dom: "<'flex-container'iB>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [20, 50, 100, 200],
-        ['20 rows', '50 rows', '100 rows', '200 rows']
+        [15, 50, 100, 150],
+        ['15 rows', '50 rows', '100 rows', '200 rows']
       ],
 
       language: {
@@ -657,7 +643,7 @@ function refreshUi(filter, currentTab, tabData) {
         $('[data-toggle="tooltip"]').tooltip()
       }
     });
-
+    
     mainDatatable.on( 'column-visibility.dt', function ( e, settings, column, state ) {
       $('[data-toggle="tooltip"]').tooltip()
     });

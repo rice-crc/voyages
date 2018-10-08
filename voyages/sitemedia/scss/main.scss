@@ -338,3 +338,20 @@ footer {
 .navbar-subitem {
   margin-right: 1rem;
 }
+
+.tooltip > .tooltip-inner {background-color: $text-dark-1;}
+.tooltip > .bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before { 
+  border-bottom-color:$text-dark-1;
+}
+.tooltip > .bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before { 
+  border-top-color:$text-dark-1;
+}
+.tooltip > .bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before { 
+  border-left-color:$text-dark-1;
+}
+.tooltip > .bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before { 
+  border-right-color:$text-dark-1;
+}
+.tooltip-inner {
+  text-align: left;
+}

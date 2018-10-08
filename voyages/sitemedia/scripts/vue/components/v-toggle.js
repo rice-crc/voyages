@@ -5,19 +5,21 @@ Vue.component('v-toggle', {
       <div class="v-title">
         <span>{{filter.label}}</span>
         <span>
-            <!--
-            <b-badge
+            
+            <b-badge pill
               v-if="filter.options.isImputed"
               v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
-              variant="warning"
+              variant="secondary"
               class="v-badge-imputed">
-              Imputed
+              IMPUTED
             </b-badge>
-            -->
+            
+            <!--
             <b-badge
               v-if="filter.options.isAdvanced"
               v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
               variant="danger" class="v-badge-advanced">Advanced</b-badge>
+            -->
         </span><!-- reserved for right aligned content -->
       </div>
 
