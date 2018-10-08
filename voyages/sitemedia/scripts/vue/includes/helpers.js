@@ -17,6 +17,16 @@ const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+const isPercentageAxis = (axes) => {
+  if (Array.isArray(axes)) {
+    return axes.length > 0 && axes.reduce((agg, axis) => agg && isPercentageAxis(axis), true);
+  }
+  let axis = axes;
+  return axis.includes('percentage') || 
+    axis == 'var_resistance_freq' ||
+    axis == 'var_imputed_mortality_avg';
+}
+
 // a function that generates a random key for saved queries
 var generateRandomKey = function() {
   var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1083,6 +1093,10 @@ function refreshUi(filter, currentTab, tabData) {
                 .scale(y)
                 .orient("left")
                 .tickSize(-width);
+              // If percentage, add to ticks.
+              if (isPercentageAxis(postData.graphData.yAxes)) {
+                yAxis.tickFormat(function(d) { return parseInt(d, 10) + "%"; });
+              }
               var svg = d3.select("#tabs-visualization-xy")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -1213,6 +1227,10 @@ function refreshUi(filter, currentTab, tabData) {
               var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient("left");
+              // If percentage, add to ticks.
+              if (isPercentageAxis(postData.graphData.yAxes)) {
+                yAxis.tickFormat(function(d) { return parseInt(d, 10) + "%"; });
+              }
               var svg = d3.select("#tabs-visualization-bar")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -1392,12 +1410,14 @@ function refreshUi(filter, currentTab, tabData) {
                 var x = Math.sin(d.endAngle - d.startAngle);
                 return Math.min(0.5, Math.pow(x, 1.5) * 15);
               };
+              var isPercentage = isPercentageAxis(postData.graphData.yAxes);
               text.enter()
                 .append("text")
                 .style('opacity', opacityFn)
                 .attr("dy", ".35em")
                 .text(function(d) {
-                  return key(d) + " = " + d.value.toLocaleString();
+                  return key(d) + " = " + d.value.toLocaleString() + 
+                    (isPercentage ? '%' : '');
                 });
 
               var midAngle = function(d) {
