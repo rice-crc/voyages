@@ -147,11 +147,11 @@ var searchBar = new Vue({
       if (this.filter.settings.settings.var_display_settings.value.searchTerm) {
         $( ".dataTable" ).removeClass( "dt-font-md" );
         $( ".dataTable" ).addClass( "dt-font-sm" );
-        refreshUi(this.filter, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
       } else {
         $( ".dataTable" ).removeClass( "dt-font-sm" );
         $( ".dataTable" ).addClass( "dt-font-md" );
-        refreshUi(this.filter, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
       }
     },
 
@@ -214,7 +214,7 @@ var searchBar = new Vue({
 
     currentTab:{
       handler: function(){
-        refreshUi(this.filter, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
       }
     }
 
@@ -263,7 +263,7 @@ var searchBar = new Vue({
       currentObjState.value = value;
       var refreshTabs = ['tables', 'visualization', 'timeline'];
       if (refreshTabs.indexOf(this.currentTab) >= 0) {
-        refreshUi(this.filter, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
       }
     },
 
@@ -299,20 +299,20 @@ var searchBar = new Vue({
       $("a.maintainHover").removeClass("maintainHover");
       // hide all menu upon search
       activateFilter(this.filter, group, subGroup, filterValues);
-      var searchTerms = searchAll(this.filter);
+      var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       //search(this.searchFilter, searchTerms);
       // TEMP Yang: once this is working, we should wrap
       // this call in a single instance method.
-      refreshUi(this.filter, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
-      var searchTerms = searchAll(this.filter);
+      var searchTerms = searchAll(this.filter, this.filterData);
       //search(this.searchFilter, searchTerms);
-      refreshUi(this.filter, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
     },
 
     resetAll() {
@@ -325,18 +325,18 @@ var searchBar = new Vue({
           }
         }
       }
-      var searchTerms = searchAll(this.filter);
+      var searchTerms = searchAll(this.filter, this.filterData);
       this.currentQuery = {};
       //search(this.searchFilter, searchTerms);
-      refreshUi(this.filter, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
     },
 
     refresh() {
-      refreshUi(this.filter, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
     },
 
     save() {
-      var searchTerms = searchAll(this.filter);
+      var searchTerms = searchAll(this.filter, this.filterData);
       // var existingKeys = []
       // var key = generateUniqueRandomKey(existingKeys);
       // this.saved.unshift({
@@ -393,7 +393,7 @@ var searchBar = new Vue({
     });
     var self = {};
     var $vm = this;
-    refreshUi(this.filter, this.currentTab, this.tabs);
+    refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
   },
 
   // event loop - update the menuAim everytime after it's re-rendered

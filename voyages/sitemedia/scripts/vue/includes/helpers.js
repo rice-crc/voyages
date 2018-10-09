@@ -106,7 +106,7 @@ function replaceKey(key) {
   }
 }
 
-function searchAll(filter) {
+function searchAll(filter, filterData) {
   var items = [];
   for (key1 in filter) {
     if (key1 !== "count") {
@@ -125,9 +125,10 @@ function searchAll(filter) {
                     var searchTerm = [];
 
                     sortedSelections.forEach(function(selection) {
-                      if (selection == filter[key1][key2][key3].options.data[0].id) {
+                      var varName = filter[key1][key2][key3]["varName"];
+                      if (selection == filterData.treeselectOptions[varName][0].id) {
                         // select all
-                        filter[key1][key2][key3].options.data[0].children.forEach(function(broadRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
                           broadRegion.children.forEach(function(region) {
                             region.children.forEach(function(subRegion) {
                               searchTerm.push(subRegion.id);
@@ -136,7 +137,7 @@ function searchAll(filter) {
                         });
                       } else {
                         // broadRegion
-                        filter[key1][key2][key3].options.data[0].children.forEach(function(broadRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
                           if (selection == broadRegion.id) {
                             broadRegion.children.forEach(function(region) {
                               region.children.forEach(function(subRegion) {
@@ -170,10 +171,11 @@ function searchAll(filter) {
                   } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
                     var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                     var searchTerm = [];
+                    
 
                     if (sortedSelections.includes("0")) {
                       // select all
-                      filter[key1][key2][key3].options.data[0].children.forEach(function(options) {
+                      filterData.treeselectOptions[varName][0].children.forEach(function(options) {
                         searchTerm.push(options.id);
                       });
                     } else {
@@ -511,12 +513,12 @@ function destroyPreviousTable(id) {
   }
 }
 
-function refreshUi(filter, currentTab, tabData) {
+function refreshUi(filter, filterData, currentTab, tabData) {
   // Update UI after search query was changed,
   // or a tab was selected.
   $('.animationElement, #map').hide();
   var currentSearchObj = {
-    items: searchAll(filter),
+    items: searchAll(filter, filterData),
     orderBy: []
   };
   var searchUrl = "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search";
