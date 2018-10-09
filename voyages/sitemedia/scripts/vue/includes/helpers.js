@@ -94,7 +94,6 @@ function serializeFilter(filter){
   return JSON.stringify(filter);
 }
 
-
 function replaceKey(key) {
   if (key == "is less than") {
     return "is at most"
@@ -182,13 +181,15 @@ function searchAll(filter) {
                     }
 
                     item["searchTerm"] = searchTerm;
+                  } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable"){
+                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"])/100;
                   } else {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
                   item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
 
-                  // TODO patch for date variables
+                  // patch for date variables
                   if (filter[key1][key2][key3].constructor.name === "DateVariable") {
                     // if user chose to search against a particular day, make sure it is searching against a range
                     // i.e. add 23:59:59 to searchTerm0
@@ -202,6 +203,13 @@ function searchAll(filter) {
                       filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].format(SOLR_DATE_FORMAT);
                     }
                     item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                  }
+
+                  // patch for percentage variables
+                  if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
+                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"])/100;
+                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"])/100;
+                    item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
                 }
 

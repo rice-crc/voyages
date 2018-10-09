@@ -48,6 +48,29 @@ function NumberVariable(varInfo, searchTerms, options) {
   this.activated = false;
 }
 
+function PercentageVariable(varInfo, searchTerms, options) {
+  this.type = "number";
+  this.varName = varInfo["varName"];
+  this.label = varInfo["label"];
+  this.description = varInfo["description"];
+  this.default = {
+    op: searchTerms["op"],
+    searchTerm0: searchTerms["searchTerm0"],
+    searchTerm1: searchTerms["searchTerm1"],
+  };
+  this.value = {
+    op: searchTerms["op"],
+    searchTerm0: searchTerms["searchTerm0"],
+    searchTerm1: searchTerms["searchTerm1"],
+  };
+  this.options = {
+    isImputed: options["isImputed"],
+    isAdvanced: options["isAdvanced"],
+  };
+  this.changed = false;
+  this.activated = false;
+}
+
 function DateVariable(varInfo, searchTerms, options) {
   this.type = "number";
   this.varName = varInfo["varName"];
