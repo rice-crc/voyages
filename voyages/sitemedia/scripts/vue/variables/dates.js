@@ -14,7 +14,7 @@ var var_imp_arrival_at_port_of_dis = new YearVariable({
 
 var_length_middle_passage_days = new NumberVariable({
     varName: "length_middle_passage_days",
-    label: "Middle Passage (days)",
+    label: "Middle Passage",
     description: "",
   },{
     op: "is equal to",
@@ -105,7 +105,7 @@ var_voyage_completed = new DateVariable({
 
 var_imp_length_home_to_disembark = new NumberVariable({
     varName: "imp_length_home_to_disembark",
-    label: "Voyage Length, Homeport to Slaves Landing (days)",
+    label: "Voyage Length, Homeport to Slaves Landing",
     description: "",
   },{
     op: "is equal to",
