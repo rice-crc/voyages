@@ -550,6 +550,8 @@ function refreshUi(filter, currentTab, tabData) {
           });
         }
       },
+      
+      processing: true,
 
       scrollX: true,
       columnDefs: [{
