@@ -7,10 +7,10 @@ Vue.component('v-panel-singular', {
       <slot name="v-panel-header"></slot>
       <slot name="v-panel-content" :filters="filtersValue"></slot>
       <div class="margin-v" v-if="!controlInvisible">
-        <b-button :disabled="applyDisabled" variant="info" size="sm" @click="apply">
+        <b-button variant="info" size="sm" @click="apply">
           Apply
         </b-button>
-        <b-button :disabled="resetDisabled" variant="outline-secondary" size="sm" @click="reset">
+        <b-button variant="outline-secondary" size="sm" @click="reset">
           Reset
         </b-button>
       </div>
