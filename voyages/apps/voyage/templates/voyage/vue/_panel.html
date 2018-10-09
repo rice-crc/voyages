@@ -7,9 +7,9 @@
         <span class="panel-variable-op">{{variable.op | opLabelize}}</span>
         <span class="panel-variable-value" v-if="variable.searchTerm">{{variable.searchTerm | termLabelize}}.</span>
         <span v-else>
-          <span class="panel-variable-value">{{variable.searchTerm0}}<span v-if="!variable.searchTerm1">.</span></span>
+          <span class="panel-variable-value">{{variable.searchTerm0 | termLabelize}}<span v-if="!variable.searchTerm1">.</span></span>
           <span v-if="variable.searchTerm1">
-            and <span class="panel-variable-value">{{variable.searchTerm1}}.</span>
+            and <span class="panel-variable-value">{{variable.searchTerm1 | termLabelize}}.</span>
           </span>
         </span>
       </span>
