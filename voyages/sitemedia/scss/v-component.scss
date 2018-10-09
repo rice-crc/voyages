@@ -164,3 +164,39 @@
   width:100%;
   background: rgba(0,0,0,0.05) url('../images/site/helm.gif') no-repeat center center;
 }
+
+.vdp-datepicker {
+  .selected {
+    color: white;
+    background: $trans-primary-color;
+
+    &:hover {
+      background: $trans-primary-color;
+    }
+  }
+
+  .up {
+    color: $trans-primary-color;
+    font-weight: bold;
+  }
+
+  .vdp-datepicker__calendar header .prev:after {
+    border-right: 10px solid $trans-primary-color;
+  }
+
+  .vdp-datepicker__calendar header .next:after {
+    border-left: 10px solid $trans-primary-color;
+  }
+
+  header > span:nth-child(2) {
+    font-weight: bold;
+  }
+}
+
+span.cell.year.selected, span.cell.month.selected, span.cell.day.selected  {
+  color: white;
+}
+
+.v-datepicker-cal-right {
+  right: 0;
+}

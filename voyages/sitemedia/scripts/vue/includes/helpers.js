@@ -47,6 +47,9 @@ var generateUniqueRandomKey = function(previous) {
   return id;
 };
 
+// solr date format
+const SOLR_DATE_FORMAT = "YYYY-MM-DDThh:mm:ss[Z]";
+
 // mark a variable as changed and activated state
 function activateFilter(filter, group, subGroup, filterValues) {
   for (key1 in filter[group][subGroup]) {
@@ -173,15 +176,21 @@ function searchAll(filter) {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
+                  item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+
                   // TODO patch for date variables
                   if (filter[key1][key2][key3].constructor.name === "DateVariable") {
-                    var searchTerm0 = filter[key1][key2][key3].value["searchTerm0"] + "-01-01T00:00:00Z";
-                    var searchTerm1 = null;
-                    if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
-                      searchTerm1 = filter[key1][key2][key3].value["searchTerm1"] + "-12-31T23:59:59Z";
+                    // if user chose to search against a particular day, make sure it is searching against a range
+                    // i.e. add 23:59:59 to searchTerm0
+                    if (filter[key1][key2][key3].value["op"] == "is equal to") {
+                      filter[key1][key2][key3].value["op"] = "is between";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
                     }
-                    item["searchTerm"] = [searchTerm0, searchTerm1];
-                  } else {
+                    // make the to date always inclusive (add 23:59:59)
+                    if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
+                      filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].format(SOLR_DATE_FORMAT);
+                    }
                     item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                   }
                 }
