@@ -2,6 +2,9 @@
 var searchBar = new Vue({
   el: "#search-bar",
   delimiters: ['{{', '}}'],
+  components: {
+    vuejsDatepicker
+  },
   data: {
     isAdvanced: false,
     filter: {
