@@ -564,7 +564,7 @@ def _map_voyage_to_spss(voyage):
     data['BOYRAT7'] = numbers.percentage_boy
     data['GIRLRAT7'] = numbers.percentage_girl
     data['MALRAT7'] = numbers.percentage_male
-    data['CHILDRAT7'] = numbers.percentage_child
+    data['CHILRAT7'] = numbers.percentage_child
     data['VYMRTRAT'] = numbers.imp_mortality_ratio
     
     aux = 'ABCDEFGHIJKLMNOPQR'
