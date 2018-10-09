@@ -245,10 +245,10 @@ var_imputed_death_middle_passage = new NumberVariable({
     isadvanced: false
   });
 
-var_imputed_mortality = new NumberVariable({
+var_imputed_mortality = new PercentageVariable({
     varName: "imputed_mortality",
     label: "Mortality Rate",
-    description: "",
+    description: "Please enter a percentage in integer. e.g. 75",
   },{
     op: "is equal to",
     searchTerm0: null,
