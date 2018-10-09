@@ -141,7 +141,7 @@ var_num_slaves_disembark_third_place = new NumberVariable({
   });
 
 
-var_imputed_percentage_men = new NumberVariable({
+var_imputed_percentage_men = new PercentageVariable({
     varName: "imputed_percentage_men",
     label: "Percentage Men",
     description: "",
@@ -151,10 +151,10 @@ var_imputed_percentage_men = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
-var_imputed_percentage_women = new NumberVariable({
+var_imputed_percentage_women = new PercentageVariable({
     varName: "imputed_percentage_women",
     label: "Percentage Women",
     description: "",
@@ -164,10 +164,10 @@ var_imputed_percentage_women = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
-var_imputed_percentage_boys = new NumberVariable({
+var_imputed_percentage_boys = new PercentageVariable({
     varName: "imputed_percentage_boys",
     label: "Percentage Boys",
     description: "",
@@ -177,10 +177,10 @@ var_imputed_percentage_boys = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
-var_imputed_percentage_girls = new NumberVariable({
+var_imputed_percentage_girls = new PercentageVariable({
     varName: "imputed_percentage_girls",
     label: "Percentage Girls",
     description: "",
@@ -190,10 +190,10 @@ var_imputed_percentage_girls = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
-var_imputed_percentage_male = new NumberVariable({
+var_imputed_percentage_male = new PercentageVariable({
     varName: "imputed_percentage_male",
     label: "Percentage Males",
     description: "",
@@ -203,10 +203,10 @@ var_imputed_percentage_male = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
-var_imputed_percentage_child = new NumberVariable({
+var_imputed_percentage_child = new PercentageVariable({
     varName: "imputed_percentage_child",
     label: "Percentage Children",
     description: "",
@@ -216,7 +216,7 @@ var_imputed_percentage_child = new NumberVariable({
     searchTerm1: null
   },{
     isImputed: true,
-    isAdvanced: false
+    isAdvanced: false,
   });
 
 var_imputed_sterling_cash = new NumberVariable({
