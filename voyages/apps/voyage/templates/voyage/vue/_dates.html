@@ -7,7 +7,7 @@
 
       <v-panel @apply="apply" @reset="reset" group="dates" sub-group="overallDates" title="Voyage duration in days" :filters="filter.dates.overallDates">
         <div slot="v-panel-header">
-          <v-panel-header title="Voyage duration in days" description="">
+          <v-panel-header title="Voyage duration in days" description="Please enter an integer as the search term">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -30,7 +30,7 @@
 
       <v-panel @apply="apply" @reset="reset" group="dates" sub-group="durationDates" title="Dates during Voyage" :filters="filter.dates.durationDates">
         <div slot="v-panel-header">
-          <v-panel-header title="Dates during Voyage" description="">
+          <v-panel-header title="Dates during Voyage" description="Please follow the format of YYYY/MM/DD. All dates are inclusive.">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -40,29 +40,35 @@
         <div slot="v-panel-content" slot-scope="scope">
           <code v-if="options.debug">{{scope.filters}}</code>
 
-          <v-number @change="changed"
-            :filter="scope.filters.var_voyage_began">
-          </v-number>
+          <v-datepicker
+						:filter="scope.filters.var_voyage_began"
+						@change="changed">
+          </v-datepicker>
+          
+          <v-datepicker
+						:filter="scope.filters.var_slave_purchase_began"
+						@change="changed">
+          </v-datepicker>
 
-          <v-number @change="changed"
-            :filter="scope.filters.var_slave_purchase_began">
-          </v-number>
+          <v-datepicker
+						:filter="scope.filters.var_date_departed_africa"
+						@change="changed">
+          </v-datepicker>
 
-          <v-number @change="changed"
-            :filter="scope.filters.var_date_departed_africa">
-          </v-number>
+          <v-datepicker
+						:filter="scope.filters.var_first_dis_of_slaves"
+						@change="changed">
+          </v-datepicker>
 
-          <v-number @change="changed"
-            :filter="scope.filters.var_first_dis_of_slaves">
-          </v-number>
+          <v-datepicker
+						:filter="scope.filters.var_departure_last_place_of_landing"
+						@change="changed">
+          </v-datepicker>
 
-          <v-number @change="changed"
-            :filter="scope.filters.var_departure_last_place_of_landing">
-          </v-number>
-
-          <v-number @change="changed"
-            :filter="scope.filters.var_voyage_completed">
-          </v-number>
+          <v-datepicker
+						:filter="scope.filters.var_voyage_completed"
+						@change="changed">
+          </v-datepicker>
 
         </div>
       </v-panel>
