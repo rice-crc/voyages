@@ -126,6 +126,11 @@
 
             {% if tab == 'images' %}
             <div id="images">
+              
+              {% if not images %} 
+                <div class="tab-title">{% trans "No images are available." %}</div>
+              {% endif %}
+              
               {% for image in images %}
                 <img src="{{ MEDIA_URL }}/{{ image.file }}" class="img-fluid"/>
               {% endfor %}
