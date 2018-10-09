@@ -240,9 +240,10 @@ var searchBar = new Vue({
       if (!value) return '';
       if (value == "Select All") return "All";
       // if (Array.isArray(value)) return value.toString();
+      if (/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(value)) return value.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)[0];
       if (Array.isArray(value)) return '"' + value.join('", "') + '"';
       return value;
-    }
+    },
   },
 
   methods: {
