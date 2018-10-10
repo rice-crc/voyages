@@ -10,11 +10,40 @@
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block title %}{% trans 'Category Images' %}{% endblock %}
 
 {% block content %}
+
+<div class="nav-header">
+	<div> {% trans "Resources - Image Galleries" %}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">
+			{% trans 'Images of ' %}
+			{% for images_set in images %}
+			{% if images_set.images %}
+			{{ images_set.label_name|trans_log }}
+			{% for i in images %}
+			{% if i.label_name == category %}
+			({{ i.images|length }} {% trans 'images' %})
+			{% endif %}
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
+		</div>
+		<div class="navbar-subitem">
+			<a href="{% url 'resources:images' %}">
+				<div class="btn-navbar">
+					<i class="fa fa-arrow-circle-left"></i>
+					{% trans 'All Categories' %}
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
 <div class="container-new">
   <div class="row  row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
@@ -31,30 +60,9 @@
         </button>
       </p>
 
-
-
-
-
 			<div id="center-content-inner">
-				<div class="page-title-1">{% trans 'Images of ' %}{{ category|trans_log }}</div>
 				{%  for images_set in images %}
 						{% if images_set.images %}
-								<div class="images-category page-section">
-										<div class="page-title-2">
-											{{ images_set.label_name|trans_log }}
-											{% for i in images %}
-	                        {% if i.label_name == category %}
-	                            ({{ i.images|length }} {% trans 'images' %})
-	                        {% endif %}
-	                    {% endfor %}
-
-										</div>
-										<div class="images-category-link">
-											<a href="{% url 'resources:images' %}">{% trans 'Return to all categories' %}</a>
-
-										</div>
-								</div>
-
 								{% for i in images %}
 										{% if i.label_name == category %}
 												{% for image in i.images %}
@@ -116,5 +124,4 @@
 
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}

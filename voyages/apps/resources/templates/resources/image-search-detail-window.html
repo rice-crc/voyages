@@ -10,14 +10,27 @@
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
-<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/expandable-box.css"> -->
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block title %}{% trans 'Images' %}{% endblock %}
 
 {% block content %}
+<div class="nav-header">
+	<div> {% trans "Resources - Image Galleries" %}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">
+			{{ image.title|trans_log }}
+		</div>
+		<div class="navbar-subitem">
+			<a href="{% url 'resources:images' %}">
+				<div class="btn-navbar">
+					<i class="fa fa-arrow-circle-left"></i>
+					{% trans 'All Categories' %}
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
 
 <div class="container-new">
 
@@ -38,10 +51,6 @@
       </p>
 
 			<div id="center-content-inner">
-				<div class="page-title-1">{% trans "Image Details" %}</div>
-				<div class="images-category page-section">
-						<div class="page-title-2">{{ image.title|trans_log }}</div>
-				</div>
 				<div class="images-category page-section">
 					<img src="{{ MEDIA_URL }}/{{ image.file }}" class="img-fluid"/>
 				</div>
@@ -52,5 +61,4 @@
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}
