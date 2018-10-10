@@ -8,7 +8,7 @@ Vue.component('v-toggle', {
             
             <b-badge pill
               v-if="filter.options.isImputed"
-              v-b-tooltip.hover title="Imputed variables are calculated by an algorithm and not based on historical records."
+              v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
               variant="secondary"
               class="v-badge-imputed">
               IMPUTED
