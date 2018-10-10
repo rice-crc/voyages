@@ -1,5 +1,5 @@
 @import "colors";
-
+@import "variables";
 
 // 
 .nav-header {
@@ -10,6 +10,9 @@
   font-weight: bold;
 }
 
+.pagination.pagination-sm {
+	float: right;
+}
 
 // variable panel
 #panelCollapse {
@@ -27,6 +30,20 @@
 
 .panel-list-item {
   padding-right: 1rem;
+}
+
+.btn-panel {
+  color: $past-secondary-color;
+  border: 1px $past-secondary-color solid;
+  border-radius: 3px;
+  padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+// end of variable panel
+
+table {
+	font-size: $regular-font-size;
 }
 
 // past database table padding override
