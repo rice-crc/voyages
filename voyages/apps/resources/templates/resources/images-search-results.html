@@ -10,11 +10,41 @@
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block title %}{% trans 'Images Search' %}{% endblock %}
 
 {% block content %}
+<div class="nav-header">
+	<div> {% trans "Resources - Image Galleries" %}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">
+			{% if not query %}
+			{% if enabled_categories|length == 1 %}
+			{% for i in enabled_categories %}
+			{% trans 'Images of ' %}{{ i }}
+			{% endfor %}
+			{% elif enabled_categories|length == 4 %}
+			{% trans 'All Images' %} ({{ results|length }} {% trans 'Images' %})
+			{% else %}
+			{% trans 'Search results' %} ({{ results|length }} {% trans 'Images' %})
+			{% endif %}
+			{% else %}
+			{% trans 'Search results' %} ({{ results|length }} {% trans 'Images' %})
+			{% endif %}
+		</div>
+		<div class="navbar-subitem">
+			<a href="{% url 'resources:images' %}">
+				<div class="btn-navbar">
+					<i class="fa fa-arrow-circle-left"></i>
+					{% trans 'All Categories' %}
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
 <div class="container-new">
   <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
@@ -33,32 +63,6 @@
       </p>
 
 			<div id="center-content-inner">
-				<div class="page-title-1">{% trans "Image Galleries" %}</div>
-
-
-
-        <div class="images-category page-section">
-            <div class="page-title-2">
-              {% if not query %}
-        	        {% if enabled_categories|length == 1 %}
-        	            {% for i in enabled_categories %}
-        	                <div class="page-title-2">{% trans 'Images of ' %}{{ i }}</div>
-        	            {% endfor %}
-        	        {% elif enabled_categories|length == 4 %}
-        	            <div class="page-title-2">{% trans 'All images' %} ({{ results|length }} {% trans 'images' %})</div>
-        	        {% else %}
-        	            <div class="page-title-2">{% trans 'Search results' %} ({{ results|length }} {% trans 'images' %})</div>
-        	        {% endif %}
-        	    {% else %}
-        	        <div class="page-title-2">{% trans 'Search results' %} ({{ results|length }} {% trans 'images' %})</div>
-        	    {% endif %}
-
-            </div>
-            <div class="images-category-link">
-              <a href="{% url 'resources:images' %}">{% trans 'Return to all categories' %}</a>
-            </div>
-        </div>
-
 		            {% for result in results %}
 		                {% ifequal forloop.counter0|modulo:4 0 %}
 										<div class="gallery-flexbox">
@@ -101,5 +105,4 @@
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}

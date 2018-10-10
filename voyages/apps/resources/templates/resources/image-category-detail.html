@@ -10,11 +10,29 @@
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/image-galleries.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block title %}{% trans 'Image Detail' %}{% endblock %}
 
 {% block content %}
+<div class="nav-header">
+	<div> {% trans "Resources - Image Galleries" %}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">
+			{{ pagins.0.title|trans_log }}
+		</div>
+		<div class="navbar-subitem">
+			<a href="{% url 'resources:images-category' category|spaces_to_underscores %}">
+				<div class="btn-navbar">
+					<i class="fa fa-arrow-circle-left"></i>
+					{% trans 'Images of ' %}{{ category|trans_log }}
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
 <div class="container-new">
   <div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
@@ -33,15 +51,8 @@
       </p>
 
 			<div id="center-content-inner">
-        <div class="page-section">
-  				<div class="page-title-1">Image Details</div>
-  				<a href="{% url 'resources:images-category' category|spaces_to_underscores %}">{% trans 'Images of ' %}{{ category|trans_log }}</a>
-        </div>
         
         <div class="page-section">
-          <div class="page-title-2">
-  					{{ pagins.0.title|trans_log }}
-  				</div>
 
 					<a href="{% url 'resources:image-detail' category|spaces_to_underscores pagins.number %}">
 							{% thumbnail pagins.0.file "400" as im %}
@@ -143,5 +154,4 @@
 
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}

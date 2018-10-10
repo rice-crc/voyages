@@ -13,6 +13,36 @@
 }
 
 
+
+// variable panel
+#panelCollapse {
+  background-color: #efefef;
+}
+
+.panel-list {
+  margin-bottom: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  padding: 0.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-list-item {
+  padding-right: 1rem;
+}
+
+.btn-panel {
+  color: $resource-secondary-color;
+  border: 1px $resource-secondary-color solid;
+  border-radius: 3px;
+  padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+// end of variable panel
+
+
 // btn colors
 .btn-solid {
   background-color: $resource-color;
@@ -126,4 +156,12 @@ ul.lesson-plan-standards-listing {
 
 .article-list-item {
   color: $resource-color !important;
+}
+
+.nav-header {
+  color: white;
+  background: $resource-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
 }
