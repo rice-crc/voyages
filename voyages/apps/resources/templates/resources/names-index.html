@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="//npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
+<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
+
 <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" /> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources-info.css"> -->
 <!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/resources/resources.css"> -->
@@ -28,11 +31,63 @@
 {% block title %}{% trans 'African Names' %}{% endblock %}
 
 {% block content %}
+<div class="nav-header">
+  <div>{% trans "African Names Database" %}</div>
+  <div class="navbar-subtitle flex">
+    <div class="navbar-subitem">
+      {% trans 'Current Query' %} <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred."></i>
+    </div>
+    <div class="navbar-subitem">
+      <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="false" aria-controls="panelCollapse">
+        <div class="btn-navbar">
+          <i class="fa fa-filter"></i>
+          View All
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
 <form id="form" name="form" method="post" action="{% url 'resources:origins' %}"
       enctype="application/x-www-form-urlencoded" >{% csrf_token %}
 
+      <div class="collapse" id="panelCollapse">
+        <div class="panel-list" v-if="hasCurrentQuery">
+          <span class="panel-list-item-wrapper">
+                <div id="form:_idJsp164">
+                    {% if current_query %}
+                    {% for val in current_query %}
+                    {% if forloop.last and val.1 %}
+                    <div class="query-summary-item-last">
+                      {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                      {% endfor %}
+                    </div>
+                    {% elif val.1 %}
+                    <div class="query-summary-item">
+                      {% for k, v in val.1.items %}
+                      <span class="query-summary-variable">{{ k }}</span>
+                      :
+                      <span class="query-summary-value">{{ v }}</span>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
+                    {% endif %}
+                  </div>
+          </span>
+          <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
+            <div class="btn-panel"><i class="fa fa-times-circle"></i> Hide</div>
+          </a>
+        </div>
+      </div>
+
 <div class="container-new">
-	<div class="row  row-offcanvas row-offcanvas-right">
+	<div class="row row-offcanvas row-offcanvas-right">
 		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
       {% include "resources/names-left-menu.html" %}
 		</div>
@@ -46,66 +101,14 @@
         </button>
       </p>
 
-      <div class="page-title-1">{% trans "African Names Database" %}</div>
-
-      <!-- <a class="text-bold" data-toggle="collapse" href="#current-query" aria-expanded="false" aria-controls="current-query">
-        {% trans 'Your Current Query' %}
-      </a> -->
-
-      <div class="page-section" id="current-query" class="collapse" aria-labelledby="current-query">
-
-        <div id="form:_idJsp164" class="box-main-text">
-          <div class="query-summary">
-            {% if current_query %}
-              {% for val in current_query %}
-                {% if forloop.last and val.1 %}
-                  <div class="query-summary-item-last">
-                    {% for k, v in val.1.items %}
-                      <span class="query-summary-variable">{{ k }}</span>
-                      :
-                      <span class="query-summary-value">{{ v }}</span>
-                    {% endfor %}
-                  </div>
-                {% elif val.1 %}
-                  <div class="query-summary-item">
-                    {% for k, v in val.1.items %}
-                      <span class="query-summary-variable">{{ k }}</span>
-                      :
-                      <span class="query-summary-value">{{ v }}</span>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <div class="query-summary">{% trans 'There are currently no conditions in your query. The listing on the right shows all Africans in the database.' %}</div>
-            {% endif %}
-          </div>
-        </div>
-
-      </div>
-
       <div class="page-section">
         {% trans 'Showing' %} {{ results.start_index }} - {{ results.end_index }} {% trans 'out of' %} {{ results.paginator.count }}
         {{ options_results_per_page_form.option }} {% trans 'results per page' %}
       </div>
-
-
       <div>
       <div>
-
-
-
-
-
-
-
-
-
-
-
-
       <!-- main data table -->
-      <table class="table table-responsive table-past">
+      <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0">
         <thead>
           <tr>
           <th>
@@ -497,5 +500,4 @@
 {% endblock %}
 
 {% block footer %}
-{% include "footer.html" %}
 {% endblock %}
