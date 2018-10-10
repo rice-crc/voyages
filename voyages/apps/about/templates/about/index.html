@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="//npmcdn.com/js-offcanvas@1.0/dist/_css/minified/js-offcanvas.css">
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
 
 {% verbatim %}
 <div class="container-new">
@@ -34,17 +35,6 @@
 
   			<div id="center-content-inner">
           <div v-html="content"></div>
-  				<!-- {% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %} -->
-
-          <div class="page-navigation-flexbox">
-            <div class="page-navigation-item" v-if="hasPrev">
-              <a @click=navPrevious>Previous: {{previous.title}}</a>
-            </div>
-            <div class="page-navigation-item" v-if="hasNext">
-              <a @click="navNext">Next: {{next.title}}</a>
-            </div>
-          </div>
-
   			</div>
 
       </div>
