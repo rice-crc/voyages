@@ -128,7 +128,9 @@
 
 // dataTables
 .dataTables_length, .dataTables_info {
-	float: left;
+  float: left;
+  font-size: $regular-font-size !important;
+  color: $text-dark-2 !important;
 }
 
 div.dataTables_wrapper div.dataTables_info {
@@ -327,6 +329,10 @@ footer {
 .flex {
   display: flex;
   align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
 }
 
 .tab-title {
