@@ -7,7 +7,7 @@ from voyages.apps.contribute.models import *
 from voyages.apps.voyage.models import Voyage
 from voyages.extratools import AdvancedEditor
 
-legal_terms_title = _('Terms and conditions')
+legal_terms_title = _('Terms and Conditions')
 legal_terms_paragraph = _('I warrant that I have the right to contribute the following data to the Voyages '
                           'Database and its inclusion in the Voyages Database will not infringe anyone\'s '
                           'intellectual property rights. I also agree that this data will become part of '
