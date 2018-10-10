@@ -1,5 +1,34 @@
 @import "colors";
 
+
+// 
+.nav-header {
+  color: white;
+  background: $past-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+
+// variable panel
+#panelCollapse {
+  background-color: #efefef;
+}
+
+.panel-list {
+  margin-bottom: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  padding: 0.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-list-item {
+  padding-right: 1rem;
+}
+
 // past database table padding override
 
 .table td, .table th {
