@@ -78,6 +78,7 @@ class VoyageRoutes():
         voyage_by_ends = {}
         
         def geo_to_pt(g):
+            if g.lat is None or g.lng is None: return None
             return (float(g.lat), float(g.lng)) 
         
         for v in all_voyages.values():
@@ -87,6 +88,7 @@ class VoyageRoutes():
             if not route:
                 src = geo_to_pt(ports[v.emb_pk])
                 dest = geo_to_pt(ports[v.dis_pk])
+                if src is None or dest is None: continue
                 start_index = port_node_index.get(v.emb_pk)
                 finish_index = port_node_index.get(v.dis_pk)
                 if start_index is None: 

@@ -42,21 +42,48 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict, r
     search_kwargs['json.facet'] = json.dumps(facet)
     response = json.loads(q.backend.conn._select(search_kwargs))
     buckets = response['facets']['categories']['buckets']
-    formula_keys = [key for key in cell_formula_dict.keys() if not key.startswith('_')]
     row_data = [(x['val'], {y['val']: y for y in x['subcat']['buckets']}) for x in buckets if 'subcat' in x]
     return row_data
 
 class PivotTable():
-    def __init__(self, row_data, col_map=lambda x: x, row_map=lambda x: x, sparse=True):
+    def __init__(self, row_data, col_map=lambda x: x, row_map=lambda x: x, omit_empty=False):
         self.row_data = sorted(row_data, key=lambda r: r[0])
+        # Extract the columns from row_data, eliminating duplicates.
         self.original_columns = sorted(set([header for r in self.row_data for header in r[1].keys()]))
         self.columns = [col_map(c) for c in self.original_columns]
         self.original_rows = [r[0] for r in self.row_data]
-        self.rows = [row_map(row_header) for row_header in self.original_rows]
-        if sparse:
-            self.cells = [[(i, r[1][col]) for i, col in enumerate(self.original_columns) if col in r[1]] for r in self.row_data]
-        else:
-            self.cells = [[r[1].get(col) for col in self.original_columns] for r in self.row_data]
+        self.rows = [row_map(r) for r in self.original_rows]
+        self.cells = [[(i, r[1][col]) for i, col in enumerate(self.original_columns) if col in r[1]] for r in self.row_data]
+        
+        if omit_empty:
+            # Delete any column or row for which all the entries are zero/None.
+            def safe_int(x):
+                try:
+                    return int(x[u'cell'])
+                except:
+                    return 0
+
+            # Delete rows that are zero-valued.
+            for i in range(len(self.cells) - 1, -1, -1):
+                if sum([abs(safe_int(x[1])) for x in self.cells[i]]) == 0:
+                    del self.cells[i]
+                    del self.rows[i]
+                    del self.original_rows[i]
+            # Deleting columns is more complicated since the cells point to column indices
+            # that change after deletion.
+            deleted_columns = []
+            for j in range(0, len(self.columns)):
+                col = self.original_columns[j]
+                if sum([abs(safe_int(r[1][col])) for r in self.row_data if col in r[1]]) == 0:
+                    deleted_columns.append(j)
+            for k in range(0, len(deleted_columns)):
+                # The index needs to account for already deleted columns.
+                del_index = deleted_columns[k] - k
+                del self.columns[del_index]
+                del self.original_columns[del_index]
+                # Update indices from sparse cell data and exclude those that match the deleted column index.
+                self.cells = [[(t[0] if t[0] < del_index else t[0] - 1, t[1]) 
+                    for t in sparse_row if t[0] != del_index] for sparse_row in self.cells]
 
     def to_dict(self):
         return {'columns': self.columns, 'rows': self.rows, 'cells': self.cells}

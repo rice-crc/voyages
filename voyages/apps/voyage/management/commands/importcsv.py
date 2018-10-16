@@ -198,6 +198,8 @@ class Command(BaseCommand):
         def lower_headers(iterator):
             return itertools.chain([next(iterator).lower()], iterator)
 
+        count_tast = 0
+        count_iam = 0
         for file in csv_file:
             with open(file, 'rU') as f:
                 reader = unicodecsv.DictReader(lower_headers(f), delimiter=',')
@@ -215,7 +217,12 @@ class Command(BaseCommand):
                     in_cd_room = row.get(u'evgreen', '0')
                     voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
                     voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
-                    voyage.is_intra_american = cint(row.get(u'IntraAmer')) == 1
+                    intra_american = cint(row.get(u'intraamer')) == 1
+                    voyage.is_intra_american = intra_american
+                    if intra_american:
+                        count_iam += 1
+                    else:
+                        count_tast += 1
                     # Ship
                     ship_model = VoyageShip()
                     ship_model.ship_name = row.get(u'shipname')
@@ -494,7 +501,8 @@ class Command(BaseCommand):
                     outcome.voyage = voyage
                     outcomes.append(outcome)
             
-        print 'Constructed ' + str(len(voyages)) + ' voyages from CSV.'
+        print 'Constructed ' + str(len(voyages)) + ' voyages from CSV. ' + \
+            str(count_tast) + ' transatlantic and ' + str(count_iam) + ' intra-American.'
         if self.errors > 0:
             print str(self.errors) + ' errors occurred, please check the messages above.'
 

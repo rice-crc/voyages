@@ -108,7 +108,7 @@ def get_results_pivot_table(results, post):
 
     col_map, col_extra_headers = get_header_map(col_field)
     row_map, row_extra_headers = get_header_map(row_field)
-    pivot_table = PivotTable(row_data, col_map, row_map)
+    pivot_table = PivotTable(row_data, col_map, row_map, post.get('omit_empty', '').lower() == 'true')
     pivot_dict = pivot_table.to_dict()
     # Add extra column or row headers.
     if col_extra_headers:
@@ -198,7 +198,8 @@ def get_results_map_flow(request, results):
     map_flows = {}
 
     def add_port(geo):
-        result = geo is not None and geo[0].show and geo[1].show and geo[2].show
+        result = geo is not None and len(geo) == 3 and geo[0].show and geo[1].show and geo[2].show and \
+            geo[0].lat and geo[0].lng and geo[1].lat and geo[1].lng and geo[2].lat and geo[2].lng
         if result and not geo[0].pk in map_ports:
             map_ports[geo[0].pk] = geo
         return result

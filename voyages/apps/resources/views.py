@@ -15,13 +15,7 @@ from voyages.apps.common.export import download_xls
 from voyages.apps.voyage.views import prepare_paginator_variables
 from voyages.apps.voyage.globals import structure_places
 
-
-def get_all_images(request):
-    """
-    View to get demo images (4 per group).
-    :param request: Request to serve
-    """
-
+def image_search_results(adapt_query_set=lambda cat, q: q):
     images = []
 
     for i in ImageCategory.objects.all().order_by("-value"):
@@ -32,17 +26,22 @@ def get_all_images(request):
             category_images["images"] = []
             search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True)\
                 .order_by('date')
-            category_images["number_of_images"] = len(search_set)
-            for j in search_set:
+            category_images["number_of_images"] = search_set.count()
+            for j in adapt_query_set(i.label, search_set):
                 category_images["images"].append(OrderedDict({'file': j.file, 'year': j.date, 'title': j.title}))
-                # TODO: May be too ugly, considered to change
-                if len(category_images["images"]) == 4:
-                    break
 
             images.append(category_images)
 
     images = sorted(images, key=lambda k: k["label_name"])
+    return images
 
+def get_all_images(request):
+    """
+    View to get demo images (4 per group).
+    :param request: Request to serve
+    """
+
+    images = image_search_results(lambda _, q: q[:4])
     return render(request, 'resources/images-index.html', {'images': images})
 
 
@@ -54,28 +53,8 @@ def get_images_category(request, category):
     :param category: Get images from this category
     """
 
-    images = []
     category = " ".join(category.split("_"))
-
-    # Pack all images from category with needed data.
-    for i in ImageCategory.objects.all().order_by("-value"):
-        if i.visible_on_website is True:
-            category_images = {}
-            category_images["label_name"] = i.label
-            category_images["label_code"] = i.value
-            category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True)\
-                .order_by('date')
-            category_images["number_of_images"] = len(search_set)
-            if i.label == category:
-                for i in search_set:
-                    category_images["images"].append(OrderedDict({'file': i.file, 'year': i.date, 'title': i.title}))
-
-            images.append(category_images)
-
-    images = sorted(images, key=lambda k: k["label_name"])
-
-    # 3/0
+    images = image_search_results(lambda cat, q: q if cat == category else [])
     return render(request, 'resources/images-category.html',
                               {'images': images, 'category': category})
 
@@ -101,7 +80,7 @@ def get_images_category_detail(request, category, page):
             category_images["images"] = []
             search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True)\
                 .order_by('date')
-            category_images["number_of_images"] = len(search_set)
+            category_images["number_of_images"] = search_set.count()
             if i.label == category:
                 # Set paginator on proper page.
                 paginator = Paginator(manu, 1)
@@ -127,8 +106,8 @@ def get_image_detail(request, category, page):
 
     category = " ".join(category.split("_"))
     image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date')[int(page)-1]
-
-    return render(request, 'resources/image-detail.html', {'image': image})
+    images = image_search_results(lambda cat, q: [])
+    return render(request, 'resources/image-detail.html', {'image': image, 'images': images})
 
 
 def images_search(request):
@@ -315,8 +294,8 @@ def get_image_search_detail(request, page):
     """
 
     image = request.session['results_images'][int(page)-1]
-
-    return render(request, 'resources/image-search-detail-window.html',  {'image': image})
+    images = image_search_results(lambda cat, q: [])
+    return render(request, 'resources/image-search-detail-window.html',  {'image': image, 'images': images})
 
 AFRICAN_NAME_SOLR_FIELDS = [field_name for field_name in AfricanNamesIndex.fields]
 def download_slaves_helper(data):
