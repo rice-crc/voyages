@@ -46,6 +46,7 @@ var searchBar = new Vue({
       handler: function(val) {
 
         var activated = false;
+
         // count all
         for (group in this.filter) { // group: slave
           var groupCount = {
@@ -104,9 +105,7 @@ var searchBar = new Vue({
                           if (currentVariable["value"]["searchTerm"]) {
                             if (currentVariable instanceof PlaceVariable ||
                                 currentVariable instanceof TreeselectVariable) {
-                              var searchTerms = currentVariable.value.searchTerm;
-                              var allRegion = currentVariable.options.data[0];
-                              labels = getCurrentTreeselectLabel(searchTerms, allRegion);
+                              labels = getTreeselectLabel(currentVariable, currentVariable.value.searchTerm, this.filterData.treeselectOptions);
                             } else {
                               labels = currentVariable["value"]["searchTerm"];
                             }
@@ -114,7 +113,6 @@ var searchBar = new Vue({
                               label: currentVariable["label"],
                               op: currentVariable["value"]["op"],
                               searchTerm: labels,
-                              // searchTerm: currentVariable["value"]["searchTerm"],
                               varName: currentVariable["varName"]
                             }
                             Vue.set(this.currentQuery, currentVariable["varName"], newVariable);
@@ -247,6 +245,11 @@ var searchBar = new Vue({
   },
 
   methods: {
+
+    // toggle whether we'd like to see empty items in the tables
+    toggleTableOmitEmpty(){
+      this.tabs.tables.options.omitEmpty = !this.tabs.tables.options.omitEmpty;
+    },
 
     // set the current tab to be the active tab
     setActive(tab) {

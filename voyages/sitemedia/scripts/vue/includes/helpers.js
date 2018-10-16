@@ -314,43 +314,51 @@ function processPlacesAjax(data) {
 }
 
 // get treeselect variable labels of currently selected items
-function getCurrentTreeselectLabel(searchTerms, allRegion){
+function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
   labels = [];
+  var offset = 1;
 
-  searchTerms.forEach(function(searchTerm) {
-    if (searchTerm == allRegion.id) { // ALL SELECTED
-      labels.push(allRegion.label);
-    } else {
-      if (allRegion.children !== undefined) { // BROARD REGION
-        broadRegions = allRegion.children;
-        broadRegions.forEach(function(broadRegion){
-          if (searchTerm == broadRegion.id) {
-            labels.push(broadRegion.label);
-          } else {
-            if (broadRegion.children !== undefined) { // REGION
-              regions = broadRegion.children;
-              regions.forEach(function(region){
-                if (searchTerm == region.id) {
-                  labels.push(region.label);
-                } else { // SUB REGION
-                  if (region.children !== undefined) { // SUB REGION
-                    subRegions = region.children;
-                    subRegions.forEach(function(subRegion){
-                      if (searchTerm == subRegion.id) {
-                        labels.push(subRegion.label);
-                      }
-                    });
+  if (currentVariable.constructor.name == "TreeselectVariable") {
+    treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
+    searchTerms.forEach(function (searchTerm) {
+      labels.push(treeselectOptions[searchTerm - offset].label);
+    });
+  } else if (currentVariable.constructor.name == "PlaceVariable") {
+    treeselectOptions = treeselectOptions[currentVariable.varName][0];
+    searchTerms.forEach(function (searchTerm) {
+      if (searchTerm == treeselectOptions.id) { // ALL SELECTED
+        labels.push(treeselectOptions.label);
+      } else {
+        if (treeselectOptions.children !== undefined) { // BROARD REGION
+          broadRegions = treeselectOptions.children;
+          broadRegions.forEach(function (broadRegion) {
+            if (searchTerm == broadRegion.id) {
+              labels.push(broadRegion.label);
+            } else {
+              if (broadRegion.children !== undefined) { // REGION
+                regions = broadRegion.children;
+                regions.forEach(function (region) {
+                  if (searchTerm == region.id) {
+                    labels.push(region.label);
+                  } else { // SUB REGION
+                    if (region.children !== undefined) { // SUB REGION
+                      subRegions = region.children;
+                      subRegions.forEach(function (subRegion) {
+                        if (searchTerm == subRegion.id) {
+                          labels.push(subRegion.label);
+                        }
+                      });
+                    }
                   }
-                }
-              });
+                });
+              }
             }
-          }
-        });
+          });
+        }
       }
-    }
-  });
-
-
+    });
+  }
+  
   return labels;
 }
 
