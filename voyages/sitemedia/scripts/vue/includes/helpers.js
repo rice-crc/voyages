@@ -357,8 +357,12 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
         }
       }
     });
+  } else if (currentVariable.constructor.name == "PercentageVariable") {
+    searchTerms.forEach(function (searchTerm) {
+      labels.push(treeselectOptions[searchTerm - offset].label);
+    });
   }
-  
+
   return labels;
 }
 

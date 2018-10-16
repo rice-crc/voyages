@@ -47,7 +47,7 @@ var searchBar = new Vue({
 
         var activated = false;
         this.currentQuery = {};
-        
+
         // count all
         for (group in this.filter) { // group: slave
           var groupCount = {
@@ -114,6 +114,17 @@ var searchBar = new Vue({
                               label: currentVariable["label"],
                               op: currentVariable["value"]["op"],
                               searchTerm: labels,
+                              varName: currentVariable["varName"]
+                            }
+                            Vue.set(this.currentQuery, currentVariable["varName"], newVariable);
+                          } else if (currentVariable instanceof PercentageVariable) {
+                            var searchTerm0 = currentVariable["value"]["searchTerm0"] + "%";
+                            var searchTerm1 = currentVariable["value"]["searchTerm1"] ? currentVariable["value"]["searchTerm1"] + "%" : currentVariable["value"]["searchTerm1"];
+                            var newVariable = {
+                              label: currentVariable["label"],
+                              op: currentVariable["value"]["op"],
+                              searchTerm0: searchTerm0,
+                              searchTerm1: searchTerm1,
                               varName: currentVariable["varName"]
                             }
                             Vue.set(this.currentQuery, currentVariable["varName"], newVariable);
