@@ -46,7 +46,8 @@ var searchBar = new Vue({
       handler: function(val) {
 
         var activated = false;
-
+        this.currentQuery = {};
+        
         // count all
         for (group in this.filter) { // group: slave
           var groupCount = {
