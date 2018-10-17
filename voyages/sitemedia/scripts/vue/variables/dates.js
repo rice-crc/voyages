@@ -27,7 +27,7 @@ var_length_middle_passage_days = new NumberVariable({
 
 var_voyage_began = new DateVariable({
     varName: "voyage_began",
-    label: "Date Voyage Began",
+    label: "Year Disembarked",
     description: "",
   },{
     op: "is equal to",
