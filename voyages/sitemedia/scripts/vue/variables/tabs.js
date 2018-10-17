@@ -83,12 +83,12 @@ var tabs = {
       {id: 1, label: "Broad region where voyage began"},
       {id: 2, label: "Region where voyage began"},
       {id: 3, label: "Port where voyage began"},
-      {id: 4, label: "Embarkation Regions"},
-      {id: 5, label: "Embarkation Ports"},
+      {id: 4, label: "Embarkation regions"},
+      {id: 5, label: "Principal place of purchase*"},
       {id: 6, label: "Specific regions of disembarkation"},
       {id: 7, label: "Broad regions of disembarkation"},
-      {id: 8, label: "Disembarkation Ports"},
-      {id: 9, label: "Individual Years"},
+      {id: 8, label: "Principal place of landing*"},
+      {id: 9, label: "Individual years"},
       {id: 10, label: "5-year periods", range: makeYearRange(5)},
       {id: 11, label: "10-year periods", range: makeYearRange(10)},
       {id: 12, label: "25-year periods", range: makeYearRange(25)},
@@ -103,17 +103,17 @@ var tabs = {
         {id: 1, label: "Broad region where voyage began"},
         {id: 2, label: "Region where voyage began"},
         {id: 3, label: "Port where voyage began"},
-        {id: 4, label: "Embarkation Regions"},
-        {id: 5, label: "Embarkation Ports"},
+        {id: 4, label: "Embarkation regions"},
+        {id: 5, label: "Principal place of purchase*"},
         {id: 6, label: "Specific regions of disembarkation"},
         {id: 7, label: "Broad regions of disembarkation"},
-        {id: 8, label: "Disembarkation Ports"}],
+        {id: 8, label: "Principal place of landing*"}],
     },
     cell: {
       // currently selected value
       variable: "tabs.tables.cell",
       value: 1,
-      options: [{id: 0, label: "Number of Voyages", functions: {"cell": "unique(var_voyage_id)"}},
+      options: [{id: 0, label: "Number of voyages", functions: {"cell": "unique(var_voyage_id)"}},
       {id: 1, label: "Sum of embarked slaves", functions: {"cell": "sum(var_imp_total_num_slaves_purchased)"}},
       {id: 2, label: "Average number of embarked slaves", avg: true, functions: {"cell": "avg(var_imp_total_num_slaves_purchased)"}},
       {id: 3, label: "Number of voyages - embarked slaves", functions: {"cell": "unique(var_voyage_id)", "_filter": "var_imp_total_num_slaves_purchased:[* TO *]"}},
@@ -140,6 +140,9 @@ var tabs = {
       {id: 24, label: "Sterling cash price in Jamaica", avg: true, functions: {"cell": "avg(var_imputed_sterling_cash)"}},
       {id: 25, label: "Number of voyages - sterling cash price in Jamaica", functions: {"cell": "unique(var_voyage_id)", "_filter": "var_imputed_sterling_cash:[* TO *]"}},],
     },
+    options: {
+      omitEmpty: false,
+    }
   },
 
   // Data Visualization Tab
