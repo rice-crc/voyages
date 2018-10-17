@@ -695,11 +695,18 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             tableParams: d,
             output: 'summaryStats'
           });
+        },
+        // preprocess the returned data to remove * for IMP
+        dataSrc: function (json) {
+          for (var i = 0, ien = json.data.length; i < ien; i++) {
+            json.data[i][0] = json.data[i][0].replace("*", "");
+          }
+          return json.data;
         }
       },
       columnDefs: [{
         targets: "_all",
-        type: 'num-fmt',
+        type: 'html-num-fmt',
         render: $.fn.dataTable.render.number(",")
       }, ],
       bFilter: false,
