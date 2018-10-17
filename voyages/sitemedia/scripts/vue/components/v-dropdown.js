@@ -10,6 +10,18 @@ Vue.component("v-dropdown", {
       :clearable="clearable"
       :close-on-select="true"
       :options="data.options">
+
+      <label class="vue-treeselect__label" slot="option-label" slot-scope="{ node }" >
+        {{ isImputed(node.label) ? trimImputedLabel(node.label) : node.label }}
+        <b-badge pill
+          v-if="isImputed(node.label)"
+          v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
+          variant="secondary"
+          class="v-badge-imputed">
+          IMP
+        </b-badge>
+      </label>
+
     </treeselect>
   </div>
   `,
@@ -37,6 +49,16 @@ Vue.component("v-dropdown", {
   },
 
   methods: {
+    isImputed(label) {
+      if (label.slice(-1) == "*") {
+        return true
+      } else {
+        return false;
+      }
+    },
+    trimImputedLabel(label) {
+      return label.slice(0, -1);
+    }
   },
 
   watch: {
