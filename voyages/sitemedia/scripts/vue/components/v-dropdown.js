@@ -11,6 +11,17 @@ Vue.component("v-dropdown", {
       :close-on-select="true"
       :options="data.options">
 
+      <div slot="value-label" slot-scope="{ node }">
+        <span>{{ isImputed(node.label) ? trimImputedLabel(node.label) : node.label }}</span>
+        <b-badge pill
+          v-if="isImputed(node.label)"
+          v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
+          variant="secondary"
+          class="v-badge-imputed">
+          IMP
+        </b-badge>
+      </div>
+
       <label class="vue-treeselect__label" slot="option-label" slot-scope="{ node }" >
         {{ isImputed(node.label) ? trimImputedLabel(node.label) : node.label }}
         <b-badge pill
