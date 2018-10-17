@@ -570,11 +570,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             tableParams: d,
             output: 'resultsTable',
           });
-        }
+        },
+
       },
       
-      processing: true,
-
       scrollX: true,
       columnDefs: [{
           width: "10%",
@@ -712,7 +711,8 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       bFilter: false,
       paging: false,
       dom: "<'flex-container'>" +
-        "<'row'<'col-sm-12'tr>>"
+        "<'row'<'col-sm-12'tr>>",
+      processing: true,
     });
   } else if (currentTab == 'tables') {
     var getTableElement = function(source) {
@@ -741,9 +741,9 @@ function refreshUi(filter, filterData, currentTab, tabData) {
     }
     // Validate post before issuing AJAX call.
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
-      $.post(searchUrl, JSON.stringify(postData), function(result) {
-        $("#sv-loader").removeClass("display-none");
+      $("#sv-loader").removeClass("display-none");
 
+      $.post(searchUrl, JSON.stringify(postData), function(result) {
         // Produce a table with data content.
         var table = $('#v-tables');
         destroyPreviousTable('#v-tables');
@@ -917,6 +917,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             [15, 50, 100, 200],
             ['15', '50', '100', '200']
           ],
+          processing: true,
         });
       }).done(function() {
         $("#sv-loader").addClass("display-none");
@@ -936,6 +937,8 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       var isPercentage = postData.timelineVariable == "4var_resistance_idnum";
       $( "#sv-loader" ).removeClass( "display-none" );
       $.post(searchUrl, JSON.stringify(postData), function(result) {
+        $("#sv-loader").removeClass("display-none");
+
         var data = [];
 
         var current_year = result.data[0].year;
@@ -1073,6 +1076,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
           $("#sv-loader").removeClass("display-none");
           $.post(searchUrl, JSON.stringify(postData), function(series) {
+            $("#sv-loader").removeClass("display-none");
             if (chartType[0] == 'scatter') {
               $("#tabs-visualization-xy").empty();
               // Compute ordinal scales.
@@ -1521,6 +1525,8 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       var $map = $('#map');
       $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
+        $("#sv-loader").removeClass("display-none");
+
         eval(result);
         voyagesMap.clear();
       }).done(function(){
@@ -1546,6 +1552,8 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       var $map = $('#map');
       $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
+        $("#sv-loader").removeClass("display-none");
+
         if (result) { // add title to the chart
           $("#tab-map-voyage-value").text(numberWithCommas(result.length));
         }
