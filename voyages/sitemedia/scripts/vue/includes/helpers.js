@@ -733,6 +733,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       row_field: getField("row"),
       col_field: getField("column"),
       pivot_functions: cell ? cell.functions : null,
+      omit_empty: tabData.tables.options.omitEmpty.toString(),
     };
     var isRange = rowElement && rowElement.hasOwnProperty('range');
     if (isRange) {

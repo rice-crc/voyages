@@ -41,6 +41,13 @@ var searchBar = new Vue({
     currentTab: "results",
   },
   watch: {
+    
+    tabs: {
+      handler: function() {
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+      },
+      deep: true,
+    },
 
     filter: {
       handler: function(val) {
