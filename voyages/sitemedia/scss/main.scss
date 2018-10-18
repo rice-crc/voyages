@@ -374,3 +374,8 @@ footer {
 .padding-right-05 {
   padding-right: 0.5rem;
 }
+
+.dt-button-collection.dropdown-menu:last-child {
+  left: auto !important;
+  right: 0;
+}
