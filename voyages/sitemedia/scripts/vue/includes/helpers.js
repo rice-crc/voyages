@@ -938,7 +938,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
     };
     if (postData.timelineVariable) {
       // if it is a percentage based variable; used to add % to the labels
-      var isPercentage = postData.timelineVariable == "4var_resistance_idnum";
+      var isPercentage = isPercentageAxis([postData.timelineVariable]);
       $( "#sv-loader" ).removeClass( "display-none" );
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
