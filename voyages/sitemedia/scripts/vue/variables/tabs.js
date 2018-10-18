@@ -137,7 +137,7 @@ var tabs = {
       {id: 21, label: "Number of voyages - middle passage (days)", functions: {"cell": "unique(var_voyage_id)", "_filter": "var_length_middle_passage_days:[* TO *]"}},
       {id: 22, label: "Average standarized tonnage", avg: true, functions: {"cell": "avg(var_tonnage_mod)"}},
       {id: 23, label: "Number of voyages - standarized tonnage", functions: {"cell": "unique(var_voyage_id)", "_filter": "var_tonnage_mod:[* TO *]"}},
-      {id: 24, label: "Sterling cash price in Jamaica", avg: true, functions: {"cell": "avg(var_imputed_sterling_cash)"}},
+      {id: 24, label: "Sterling cash price in Jamaica*", avg: true, functions: {"cell": "avg(var_imputed_sterling_cash)"}},
       {id: 25, label: "Number of voyages - sterling cash price in Jamaica", functions: {"cell": "unique(var_voyage_id)", "_filter": "var_imputed_sterling_cash:[* TO *]"}},],
     },
     options: {
