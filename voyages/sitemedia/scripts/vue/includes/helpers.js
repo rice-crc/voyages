@@ -921,6 +921,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         });
       }).done(function() {
         $("#sv-loader").addClass("display-none");
+      }).fail(function (xhr, status, error) {
+        // error handling
+        // show error message
+        // prompt for refresh
       });
     }
   } else if (currentTab == 'timeline') {
@@ -1514,6 +1518,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
   } else if (currentTab == 'maps') {
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").addClass("display-none");
+    $("#maps").addClass("display-none");
     // TODO: Map year should be computed based on year range of search.
     // We can do it in the client side (easier).
     // for reference: voyages.apps.assessment.globals.get_map_year
@@ -1523,7 +1528,6 @@ function refreshUi(filter, filterData, currentTab, tabData) {
     };
     var mapFlowSearchCallback = function() {
       var $map = $('#map');
-      $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
@@ -1542,15 +1546,16 @@ function refreshUi(filter, filterData, currentTab, tabData) {
     };
     loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
+    $("#maps").addClass("display-none");
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
+    
     var postData = {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
     var mapAnimationSearchCallback = function() {
       var $map = $('#map');
-      $("#maps").addClass("display-none");
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 

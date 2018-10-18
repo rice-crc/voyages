@@ -105,7 +105,7 @@ var_voyage_completed = new DateVariable({
 
 var_imp_length_home_to_disembark = new NumberVariable({
     varName: "imp_length_home_to_disembark",
-    label: "Voyage Length, Homeport to Slaves Landing",
+    label: "Voyage Length, Homeport to Landing",
     description: "",
   },{
     op: "is equal to",

@@ -94,13 +94,13 @@ var allColumns = [
 
   // dates
   { data: "var_length_middle_passage_days", category: 4, header: "Middle Passage (days)", "visible": false, isImputed: false },
-  { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Slaves Landing (days)", "visible": false, isImputed: false },
-  { data: "var_voyage_began", category: 4, header: "Year Voyage Began", "visible": false, isImputed: true },
-  { data: "var_slave_purchase_began", category: 4, header: "Year Trade Began in Africa", "visible": false, isImputed: false },
-  { data: "var_date_departed_africa", category: 4, header: "Year Vessel Departed Africa", "visible": false, isImputed: false },
-  { data: "var_first_dis_of_slaves", category: 4, header: "Year Vessel Arrived with Slaves", "visible": false, isImputed: false },
-  { data: "var_departure_last_place_of_landing", category: 4, header: "Year Vessel Departed for Homeport", "visible": false, isImputed: false },
-  { data: "var_voyage_completed", category: 4, header: "Year Voyage Completed", "visible": false, isImputed: false },
+  { data: "var_imp_length_home_to_disembark", category: 4, header: "Voyage Length, Homeport to Landing (days)", "visible": false, isImputed: false },
+  { data: "var_voyage_began", category: 4, header: "Year Disembarked", "visible": false, isImputed: true },
+  { data: "var_slave_purchase_began", category: 4, header: "Date Trade Began in Africa", "visible": false, isImputed: false },
+  { data: "var_date_departed_africa", category: 4, header: "Date Vessel Departed Africa", "visible": false, isImputed: false },
+  { data: "var_first_dis_of_slaves", category: 4, header: "Date Vessel Arrived with Slaves", "visible": false, isImputed: false },
+  { data: "var_departure_last_place_of_landing", category: 4, header: "Date Vessel Departed for Homeport", "visible": false, isImputed: false },
+  { data: "var_voyage_completed", category: 4, header: "Date Voyage Completed", "visible": false, isImputed: false },
 
   // captain and crew
   { data: "var_captain_plaintext", category: 5, header: "Captain's Name", isImputed: false },
