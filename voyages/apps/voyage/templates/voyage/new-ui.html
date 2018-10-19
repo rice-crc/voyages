@@ -49,9 +49,25 @@
 		</div>
 	</nav>
 	<!-- End of SearchNav -->
-	<div id='sv-loader' class="display-none">
+
+	<div id="sv-loader" class="sv-loader-bg display-none">
 		<div class="sv-loader-helm"><img src="{{ STATIC_URL }}/images/site/helm.gif"></div>
 	</div>
+
+	<div id="sv-loader-error" class="sv-loader-bg display-none">
+		<div class="sv-loader-error-container">
+			<img class="sv-loader-error-image" src="{{ STATIC_URL }}/images/site/pirate.svg">
+			<div class="sv-loader-error-message-container">
+				<div class="v-panel-title">Ooops</div>
+				<div class="v-panel-description">We may have sailed off course and an error has occurred.</div>
+				<div class="sv-loader-error-btns">
+					<button type="button" class="btn btn-info btn-sm" @click="reportError">Report</button>
+					<button type="button" class="btn btn-outline-secondary btn-sm" @click="refreshPage">Reload</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	{% include "voyage/vue/_panel.html" %}
 	<div class="trans-container">
 		<div class="row">

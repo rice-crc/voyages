@@ -29,6 +29,7 @@ var searchBar = new Vue({
     saved: [],
     options: {
       debug: false,
+      errorMessage: null,
     },
     tabs: tabs,
     row: {
@@ -41,10 +42,10 @@ var searchBar = new Vue({
     currentTab: "results",
   },
   watch: {
-    
+
     tabs: {
       handler: function() {
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       },
       deep: true,
     },
@@ -164,11 +165,11 @@ var searchBar = new Vue({
       if (this.filter.settings.settings.var_display_settings.value.searchTerm) {
         $( ".dataTable" ).removeClass( "dt-font-md" );
         $( ".dataTable" ).addClass( "dt-font-sm" );
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       } else {
         $( ".dataTable" ).removeClass( "dt-font-sm" );
         $( ".dataTable" ).addClass( "dt-font-md" );
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       }
     },
 
@@ -231,7 +232,7 @@ var searchBar = new Vue({
 
     currentTab:{
       handler: function(){
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       }
     }
 
@@ -285,7 +286,7 @@ var searchBar = new Vue({
       currentObjState.value = value;
       var refreshTabs = ['tables', 'visualization', 'timeline'];
       if (refreshTabs.indexOf(this.currentTab) >= 0) {
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       }
     },
 
@@ -326,7 +327,7 @@ var searchBar = new Vue({
       //search(this.searchFilter, searchTerms);
       // TEMP Yang: once this is working, we should wrap
       // this call in a single instance method.
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     // reset inputs, filters, and counts back to default state
@@ -334,7 +335,7 @@ var searchBar = new Vue({
       resetFilter(this.filter, group, subGroup);
       var searchTerms = searchAll(this.filter, this.filterData);
       //search(this.searchFilter, searchTerms);
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     resetAll() {
@@ -350,11 +351,11 @@ var searchBar = new Vue({
       var searchTerms = searchAll(this.filter, this.filterData);
       this.currentQuery = {};
       //search(this.searchFilter, searchTerms);
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     refresh() {
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     save() {
@@ -405,7 +406,31 @@ var searchBar = new Vue({
       .catch(function (error) {
         console.log(error);
       });
-    }
+    },
+
+    reportError(){
+      // draft an email
+      var voyagesTeamEmail = "voyages@emory.edu";
+      var title = "[ISSUE] Report an issue with Slave Voyages";
+      var message = "There is an issue with Slave Voyages and is reported in this Email by a user.";
+      var originalURL = location.href;
+
+      // compose this email
+      var mailtourl = "mailto:" + voyagesTeamEmail + 
+                      "?subject=" + title + 
+                      "&body=" + message + encodeURIComponent("\n\n") +
+                      "Error: " + this.options.errorMessage + encodeURIComponent("\n\n") + 
+                      "Filter: " + JSON.stringify(this.filter) + encodeURIComponent("\n\n") + 
+                      "URL: " + encodeURIComponent(originalURL)+ encodeURIComponent("\n\n") + 
+                      "Datetime: " + Date().toString();
+
+      // send
+      location.href = mailtourl;
+    },
+
+    refreshPage(){
+      location.reload();
+    },
   },
 
   mounted: function() {
@@ -415,7 +440,7 @@ var searchBar = new Vue({
     });
     var self = {};
     var $vm = this;
-    refreshUi(this.filter, this.filterData, this.currentTab, this.tabs);
+    refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
