@@ -297,6 +297,7 @@ def ajax_search(request):
     return HttpResponseBadRequest('Unkown type of output.')
 
 @require_POST
+@csrf_exempt
 def ajax_download(request):
     data = json.loads(request.POST['data'])
     search = data['searchData']
