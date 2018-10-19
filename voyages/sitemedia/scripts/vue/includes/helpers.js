@@ -386,7 +386,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
 
@@ -403,7 +406,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
     
@@ -423,7 +429,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
 
@@ -525,7 +534,7 @@ function destroyPreviousTable(id) {
   }
 }
 
-function refreshUi(filter, filterData, currentTab, tabData) {
+function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
   $('.animationElement, #map').hide();
@@ -571,6 +580,12 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             output: 'resultsTable',
           });
         },
+        
+        fail: function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        }
 
       },
       
@@ -701,6 +716,12 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             json.data[i][0] = json.data[i][0].replace("*", "");
           }
           return json.data;
+        },
+
+        fail: function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
         }
       },
       columnDefs: [{
@@ -922,9 +943,9 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       }).done(function() {
         $("#sv-loader").addClass("display-none");
       }).fail(function (xhr, status, error) {
-        // error handling
-        // show error message
-        // prompt for refresh
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
       });
     }
   } else if (currentTab == 'timeline') {
@@ -1036,6 +1057,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
 
       }).done(function(){
         $( "#sv-loader" ).addClass( "display-none" );
+      }).fail(function (xhr, status, error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
       });
     }
 
@@ -1510,6 +1535,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             }
           }).done(function() {
             $("#sv-loader").addClass("display-none");
+          }).fail(function (xhr, status, error) {
+            options.errorMessage = error;
+            $("#sv-loader").addClass("display-none");
+            $("#sv-loader-error").removeClass("display-none");
           });
         } else {
           // TODO: Clear existing chart?
@@ -1542,7 +1571,11 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         } catch (e) {
           console.log(e);
         }
-      });
+        }).fail(function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
@@ -1570,7 +1603,11 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         $("#maps").removeClass("display-none");
         loader.resizeMap();
         // get title here I'd say
-      });
+        }).fail(function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     // $('#loading').show();
     loader.loadMap(function() {
