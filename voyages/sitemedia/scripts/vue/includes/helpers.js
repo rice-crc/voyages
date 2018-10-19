@@ -1,3 +1,6 @@
+// reserved keyword for saved search query identifier
+const SAVED_SEARCH_LABEL = "#searchId=";
+
 // converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
@@ -376,7 +379,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load special weird variables
     if (["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(varName) >= 0) {
-      console.log(varName);
       axios.post('/voyage/filtered-places', {})
       .then(function (response) {
         var options = parsePlaces(response);
@@ -386,7 +388,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
 
@@ -403,7 +408,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
     
@@ -423,7 +431,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return;
       })
       .catch(function (error) {
-        return 'error';
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        return error;
       });
     }
 
@@ -525,7 +536,7 @@ function destroyPreviousTable(id) {
   }
 }
 
-function refreshUi(filter, filterData, currentTab, tabData) {
+function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
   $('.animationElement, #map').hide();
@@ -561,7 +572,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $('#results_main_table  > tbody').on('click', 'tr', function() {
+          $('#results_main_table tbody').on('click', 'tr', function() {
             searchBar.row.data = mainDatatable.row(this).data();
           });
 
@@ -572,6 +583,30 @@ function refreshUi(filter, filterData, currentTab, tabData) {
           });
         },
 
+        // preprocess the returned data to remove * for IMP
+        dataSrc: function (json) {
+          var keys = null;
+          var percentageKeys = [];
+          for (var i = 0, ien = json.data.length; i < ien; i++) {
+            if (percentageKeys.length <= 0) {
+              keys = Object.keys(json.data[i]);
+              keys.forEach(function(key){
+                if (isPercentageAxis([key])) percentageKeys.push(key);
+              });
+            }
+            percentageKeys.forEach(function(percentageKey){
+              json.data[i][percentageKey] = json.data[i][percentageKey] + "%";
+            });
+          }
+          return json.data;
+        },
+        
+        fail: function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        },
+      
       },
       
       scrollX: true,
@@ -642,12 +677,17 @@ function refreshUi(filter, filterData, currentTab, tabData) {
           text: 'Download',
           titleAttr: 'Download results',
           buttons: [
-            {
-            	text: 'CSV - not implemented',
-            	action: function() { alert('not implemented yet'); },
-            },
+            // {
+            // 	text: 'CSV - not implemented',
+            // 	action: function() { alert('not implemented yet'); },
+            // },
             {
               text: 'Excel',
+              // init: function (dt, node, config) {
+              //   dt.on('select.dt.DT deselect.dt.DT', function () {
+              //     $('[data-toggle="tooltip"]').tooltip()
+              //   });
+              // },
               action: function() {
                 var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
                   return visible ? allColumns[index].data : undefined;
@@ -701,6 +741,12 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             json.data[i][0] = json.data[i][0].replace("*", "");
           }
           return json.data;
+        },
+
+        fail: function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
         }
       },
       columnDefs: [{
@@ -922,9 +968,9 @@ function refreshUi(filter, filterData, currentTab, tabData) {
       }).done(function() {
         $("#sv-loader").addClass("display-none");
       }).fail(function (xhr, status, error) {
-        // error handling
-        // show error message
-        // prompt for refresh
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
       });
     }
   } else if (currentTab == 'timeline') {
@@ -938,7 +984,7 @@ function refreshUi(filter, filterData, currentTab, tabData) {
     };
     if (postData.timelineVariable) {
       // if it is a percentage based variable; used to add % to the labels
-      var isPercentage = postData.timelineVariable == "4var_resistance_idnum";
+      var isPercentage = isPercentageAxis([postData.timelineVariable]);
       $( "#sv-loader" ).removeClass( "display-none" );
       $.post(searchUrl, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
@@ -1036,6 +1082,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
 
       }).done(function(){
         $( "#sv-loader" ).addClass( "display-none" );
+      }).fail(function (xhr, status, error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
       });
     }
 
@@ -1510,6 +1560,10 @@ function refreshUi(filter, filterData, currentTab, tabData) {
             }
           }).done(function() {
             $("#sv-loader").addClass("display-none");
+          }).fail(function (xhr, status, error) {
+            options.errorMessage = error;
+            $("#sv-loader").addClass("display-none");
+            $("#sv-loader-error").removeClass("display-none");
           });
         } else {
           // TODO: Clear existing chart?
@@ -1542,7 +1596,11 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         } catch (e) {
           console.log(e);
         }
-      });
+        }).fail(function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
@@ -1570,7 +1628,11 @@ function refreshUi(filter, filterData, currentTab, tabData) {
         $("#maps").removeClass("display-none");
         loader.resizeMap();
         // get title here I'd say
-      });
+        }).fail(function (xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     // $('#loading').show();
     loader.loadMap(function() {
