@@ -54,18 +54,22 @@ class PivotTable():
         self.original_rows = [r[0] for r in self.row_data]
         self.rows = [row_map(r) for r in self.original_rows]
         self.cells = [[(i, r[1][col]) for i, col in enumerate(self.original_columns) if col in r[1]] for r in self.row_data]
-        
+        default_cell_key = u'cell'
+        excluded_bucket_keys = [u'val', u'count']
+        zero_threshold = 0.0001
+
         if omit_empty:
             # Delete any column or row for which all the entries are zero/None.
-            def safe_int(x):
+            def safe_num(x):
                 try:
-                    return int(x[u'cell'])
+                    return float(x[default_cell_key]) if default_cell_key in x\
+                        else sum([float(v) for k, v in x.items() if not k in excluded_bucket_keys])
                 except:
                     return 0
 
             # Delete rows that are zero-valued.
             for i in range(len(self.cells) - 1, -1, -1):
-                if sum([abs(safe_int(x[1])) for x in self.cells[i]]) == 0:
+                if sum([abs(safe_num(x[1])) for x in self.cells[i]]) <= zero_threshold:
                     del self.cells[i]
                     del self.rows[i]
                     del self.original_rows[i]
@@ -74,7 +78,7 @@ class PivotTable():
             deleted_columns = []
             for j in range(0, len(self.columns)):
                 col = self.original_columns[j]
-                if sum([abs(safe_int(r[1][col])) for r in self.row_data if col in r[1]]) == 0:
+                if sum([abs(safe_num(r[1][col])) for r in self.row_data if col in r[1]]) <= zero_threshold:
                     deleted_columns.append(j)
             for k in range(0, len(deleted_columns)):
                 # The index needs to account for already deleted columns.
