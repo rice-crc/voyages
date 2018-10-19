@@ -657,12 +657,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           text: 'Download',
           titleAttr: 'Download results',
           buttons: [
-            {
-            	text: 'CSV - not implemented',
-            	action: function() { alert('not implemented yet'); },
-            },
+            // {
+            // 	text: 'CSV - not implemented',
+            // 	action: function() { alert('not implemented yet'); },
+            // },
             {
               text: 'Excel',
+              // init: function (dt, node, config) {
+              //   dt.on('select.dt.DT deselect.dt.DT', function () {
+              //     $('[data-toggle="tooltip"]').tooltip()
+              //   });
+              // },
               action: function() {
                 var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
                   return visible ? allColumns[index].data : undefined;
