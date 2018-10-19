@@ -351,6 +351,7 @@ var searchBar = new Vue({
       var searchTerms = searchAll(this.filter, this.filterData);
       this.currentQuery = {};
       //search(this.searchFilter, searchTerms);
+      this.resetURL();
       refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
@@ -389,12 +390,16 @@ var searchBar = new Vue({
         }
       })
       .catch(function (error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
         console.log(error);
       });
 
     },
 
     load(value) {
+      console.log(value);
       var url = "/voyage/get-saved-query/" + value;
       var vm = this;
       axios.get(url, {})
@@ -404,6 +409,9 @@ var searchBar = new Vue({
         vm.refresh();
       })
       .catch(function (error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
         console.log(error);
       });
     },
@@ -431,6 +439,12 @@ var searchBar = new Vue({
     refreshPage(){
       location.reload();
     },
+
+    resetURL() {
+      if (location.href.includes(SAVED_SEARCH_LABEL)) {
+        location.href = location.href.split(SAVED_SEARCH_LABEL).shift();
+      }
+    }
   },
 
   mounted: function() {
@@ -440,6 +454,13 @@ var searchBar = new Vue({
     });
     var self = {};
     var $vm = this;
+
+    // load a search when present in URL
+    if (location.href.includes(SAVED_SEARCH_LABEL)) {
+      var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
+      this.load(savedSearchId);
+    }
+
     refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
   },
 

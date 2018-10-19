@@ -1,3 +1,6 @@
+// reserved keyword for saved search query identifier
+const SAVED_SEARCH_LABEL = "#searchId=";
+
 // converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
@@ -376,7 +379,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load special weird variables
     if (["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(varName) >= 0) {
-      console.log(varName);
       axios.post('/voyage/filtered-places', {})
       .then(function (response) {
         var options = parsePlaces(response);
