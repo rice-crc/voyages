@@ -570,7 +570,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $('#results_main_table  > tbody').on('click', 'tr', function() {
+          $('#results_main_table tbody').on('click', 'tr', function() {
             searchBar.row.data = mainDatatable.row(this).data();
           });
 
