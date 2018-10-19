@@ -107,7 +107,7 @@ a {
 
 // loader
 /* hide the current gif */
-#sv-loader, #sv-loader[style] {
+.sv-loader-bg, .sv-loader-bg[style] {
   position: absolute;
   height: 100%;
   z-index: 1;
@@ -121,6 +121,35 @@ a {
   position: fixed;
   margin-left: -32px;
   margin-top: -32px;
+}
+
+.sv-loader-error-container {
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  margin-left: -208px;
+  margin-top: -128px;
+  text-align: center;
+}
+
+.sv-loader-error-image {
+  width: 128px;
+}
+
+.sv-loader-error-quote {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.sv-loader-error-message-container {
+  background: rgba(255,255,255, 0.9);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.sv-loader-error-btns {
+  margin-top: 0.5rem;
 }
 
 .display-none {

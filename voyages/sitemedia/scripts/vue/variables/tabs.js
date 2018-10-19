@@ -163,7 +163,7 @@ var tabs = {
       y: {
         // currently selected value
         variable: "tabs.visualization.scatter.y",
-        value: [0],
+        value: [10],
         options: graphsYAxes,
       },
     },
@@ -177,7 +177,7 @@ var tabs = {
       y: {
         // currently selected value
         variable: "tabs.visualization.bar.y",
-        value: [0],
+        value: [10],
         options: graphsYAxes,
       },
     },
@@ -191,7 +191,7 @@ var tabs = {
       values: {
         // currently selected value
         variable: "tabs.visualization.donut.values",
-        value: 0,
+        value: 10,
         options: graphsYAxes,
       },
     },
@@ -202,7 +202,7 @@ var tabs = {
     chart: {
       // currently selected value
       variable: "tabs.timeline.chart",
-      value: 12,
+      value: 9,
       options: [ // this is a workaround to be having unique keys submitted to the backend: ##var_name; maps to globals.py > voyage_timeline_variables
         { id: 0, varName: "0var_imp_arrival_at_port_of_dis", label: "Number of voyages" },
         { id: 1, varName: "2var_tonnage_mod", label: "Average tonnage (standardized)" },
