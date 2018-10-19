@@ -580,13 +580,31 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             output: 'resultsTable',
           });
         },
+
+        // preprocess the returned data to remove * for IMP
+        dataSrc: function (json) {
+          var keys = null;
+          var percentageKeys = [];
+          for (var i = 0, ien = json.data.length; i < ien; i++) {
+            if (percentageKeys.length <= 0) {
+              keys = Object.keys(json.data[i]);
+              keys.forEach(function(key){
+                if (isPercentageAxis([key])) percentageKeys.push(key);
+              });
+            }
+            percentageKeys.forEach(function(percentageKey){
+              json.data[i][percentageKey] = json.data[i][percentageKey] + "%";
+            });
+          }
+          return json.data;
+        },
         
         fail: function (xhr, status, error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
-        }
-
+        },
+      
       },
       
       scrollX: true,
