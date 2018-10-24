@@ -266,6 +266,11 @@ function searchAll(filter, filterData) {
     items.push(item);
   }
 
+  if (SV_MODE == "intra") {
+    const intraFlagObject = { "op": "equals", "searchTerm": ["true"], "varName": "intra_american_voyage" };
+    items.push(intraFlagObject);
+  }
+  debugger;
   // alert(JSON.stringify(items));
   return items;
 }
@@ -1076,7 +1081,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             type: 'area',
             name: timelineVariable,
             data: data,
-            color: '#008ca8'
+            color: HC_THEME_COLOR
           }]
         });
 

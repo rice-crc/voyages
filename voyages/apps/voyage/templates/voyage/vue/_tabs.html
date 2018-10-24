@@ -15,12 +15,15 @@
   <li class="nav-item">
     <a class="nav-link" @click="setActive('timeline')" href="#" data-toggle="tab" data-target="#timeline">Timeline</a>
   </li>
+  <!-- reserved for intra-american module -->
+  {% if mode != "intra" %}
   <li class="nav-item">
     <a class="nav-link" @click="setActive('maps')" href="#" data-toggle="tab" data-target="#maps">Maps</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="animation" @click="setActive('animation')" href="#" data-toggle="tab" data-target="#maps">Animation</a>
   </li>
+  {% endif %}
 </ul>
 <!-- End of Tabs -->
 

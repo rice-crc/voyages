@@ -66,15 +66,6 @@
   justify-content: space-between;
 }
 
-#results_main_table {
-  tbody {
-    tr:hover {
-      cursor: pointer;
-      color: $trans-color;
-    }
-  }
-}
-
 #results_main_table_paginate {
   float: right;
 }
@@ -147,17 +138,6 @@ table.dataTable tbody > tr > td {
   }
 }
 
-.trans-search-bar {
-  z-index: 1;
-  padding: 0 4rem;
-  background: #0c9ab1 !important;
-  @media (min-width: 1199px) {
-    .nav-item {
-      padding-top: 0;
-    }
-  }
-}
-
 .trans-container {
   margin: 0 4rem;
 }
@@ -211,14 +191,6 @@ table.dataTable thead .sorting_desc_disabled:before {
 .vue-treeselect__placeholder,
 .vue-treeselect__single-value {
   font-size: $reduced-font-size !important;
-}
-
-.nav-header {
-  color: white;
-  background: #0c9ab1 !important;
-  padding: 0.5rem 4rem 0;
-  font-size: 1rem;
-  font-weight: bold;
 }
 
 .popover {

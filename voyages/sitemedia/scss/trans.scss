@@ -1,11 +1,5 @@
 @import "colors";
 
-// table-estimates
-.table-estimates {
-  .row_header {
-  	min-width: 110px;
-  }
-}
 
 // btn colors
 .btn-solid {
@@ -30,15 +24,6 @@
     opacity: 1;
     color: white;
 	}
-}
-
-.header-group {
-  background-color: #dddddd;
-  font-weight: bold;
-}
-
-td.header {
-  font-weight: bold;
 }
 
 .navbar {
@@ -81,127 +66,39 @@ a {
   font-weight: bold;
 }
 
-// estimates
-.tabs-selection {
-  margin: 0 0 1rem 0;
-  border-bottom: 1px solid #008ca8;
-}
 
-#id_frame_from_year, #id_frame_to_year {
-  width: 50px;
-}
-
-.modal-lg {
-  max-width: 75%;
-}
-
-.v-variable-container {
-  font-size: 0.8rem;
-  padding: .75rem 0 0.5rem 0;
-  color: $text-dark-2;
-}
-
-.variable-text {
-  color: $text-dark-2;
-}
-
-// loader
-/* hide the current gif */
-.sv-loader-bg, .sv-loader-bg[style] {
-  position: absolute;
-  height: 100%;
-  z-index: 1;
-  width:100%;
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.sv-loader-helm {
-  left: 50%;
-  top: 50%;
-  position: fixed;
-  margin-left: -32px;
-  margin-top: -32px;
-}
-
-.sv-loader-error-container {
-  left: 50%;
-  top: 50%;
-  position: fixed;
-  margin-left: -208px;
-  margin-top: -128px;
-  text-align: center;
-}
-
-.sv-loader-error-image {
-  width: 128px;
-}
-
-.sv-loader-error-quote {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.sv-loader-error-message-container {
-  background: rgba(255,255,255, 0.9);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.sv-loader-error-btns {
-  margin-top: 0.5rem;
-}
-
-.display-none {
-  display: none !important;
-}
-
-// animation
-.animation_voyage_year_slider {
-  width: 100%;
-}
-
-.animation-control {
-  font-size: 1.5rem;
-  color: $text-dark-2;
-  margin: 0 1rem 0 1rem;
-}
-
-.animation-control-btn {
-  cursor: pointer;
-}
-
-#yearLabel {
+.nav-header {
+  color: white;
+  background: $trans-secondary-color !important;
+  padding: 0.5rem 4rem 0;
   font-size: 1rem;
-}
-
-.search-menu-singular {
-  height: auto !important;
-  padding-bottom: 1.5rem !important;
-  max-height: 600px;
-}
-
-#searchNav > ul:nth-child(1) > li:nth-child(1) > a {
-  padding-left: 0;
-}
-
-#map > div.leaflet-control-container > div.leaflet-top.leaflet-left {
-  z-index: 0;
-}
-
-.imputed {
-  font-style: italic;
-}
-
-.source-title {
   font-weight: bold;
 }
 
-.source-content {
-  color: $text-dark-2;
+.trans-search-bar {
+  z-index: 1;
+  padding: 0 4rem;
+  background: $trans-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
 }
 
-// jquery slider handle needs to be within the layer
-.ui-slider .ui-slider-handle {
-  z-index: auto !important;
+#results_main_table {
+  tbody {
+    tr:hover {
+      cursor: pointer;
+      color: $trans-color;
+    }
+  }
 }
+
+// v-toggle
+.fa-control {
+  cursor: pointer;
+  font-size: 1.5rem !important;
+  color: $trans-color;
+}
+// v-toggle
