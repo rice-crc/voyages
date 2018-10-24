@@ -6,7 +6,11 @@
 	{% compress css %}
 	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	{% if mode != "intra" %}
 	<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+	{% else %}
+	<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+	{% endif %}
 	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
@@ -15,16 +19,21 @@
 	<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/vue-treeselect@0.0.37.min.css' %}" rel="stylesheet" type="text/css" />
 	{% endcompress %}
-
 {% endblock %}
+
 
 {% block title %}
 	{% trans 'Search The Voyages Database' %}
 {% endblock %}
 
 {% block content %}
+
 <div id="search-bar" v-cloak>
+	{% if mode != "intra" %}
 	<div class="nav-header">Trans-Atlantic Slave Trade Database</div>
+	{% else %}
+	<div class="nav-header">Intra-American Slave Trade Database</div>
+	{% endif %}
 	<nav class="navbar navbar-expand-xl navbar-dark bg-dark trans-search-bar">
 		<div class="nav-container">
 			<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
@@ -85,6 +94,16 @@
 {% compress js %}
 
 <!-- Highcharts -->
+<script>
+	const SV_MODE = "{{mode}}";
+	const INTRA_COLOR = "#6c65a4";
+	const TRANS_COLOR = "#008ca8";
+	var HC_THEME_COLOR = TRANS_COLOR;
+	if (SV_MODE == "intra") {
+		HC_THEME_COLOR = INTRA_COLOR;
+	}
+</script>
+
 <script src="{{ STATIC_URL }}scripts/library/highcharts@6.1.1.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/highcharts/exporting@6.1.2.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/highcharts/export-data@6.1.2.min.js" type="text/javascript"></script>

@@ -127,3 +127,118 @@ ul.lesson-plan-standards-listing {
 .article-list-item {
   color: $intra-color !important;
 }
+
+
+
+// btn colors
+.btn-solid {
+  background-color: $intra-color;
+	border-color: $intra-color;
+  color: white;
+	&:hover {
+		background-color: $intra-color;
+		border-color: $intra-color;
+    color: white;
+    opacity: 1;
+	}
+}
+
+.btn-outline {
+	color: $intra-color;
+	background-color: white;
+	border-color: $intra-color;
+	&:hover {
+		background-color: $intra-color;
+		border-color: $intra-color;
+    opacity: 1;
+    color: white;
+	}
+}
+
+.navbar {
+  background: $intra-color !important;
+}
+
+.footer-flex-container {
+  background-color: $intra-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $intra-color;
+    opacity: 1;
+}
+
+a {
+  color: $intra-color;
+
+  &:hover {
+    color: $intra-color;
+    text-decoration: none;
+  }
+}
+
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $intra-color;
+  border-color: $intra-color;
+}
+.page-link {
+  color: $intra-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $intra-color;
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $intra-color;
+  font-weight: bold;
+}
+
+
+.nav-header {
+  color: white;
+  background: $intra-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.trans-search-bar {
+  z-index: 1;
+  padding: 0 4rem;
+  background: $intra-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
+}
+
+.btn-info {
+	  background-color: $intra-color;
+		border-color: $intra-color;
+		
+		&:hover, &:active, &:focus, &:not(:disabled):not(.disabled):active {
+			background-color: $intra-hover-color;
+			border-color: $intra-hover-color;
+		}
+}
+
+#results_main_table {
+  tbody {
+    tr:hover {
+      cursor: pointer;
+      color: $intra-color;
+    }
+  }
+}
+
+
+// v-toggle
+.fa-control {
+  cursor: pointer;
+  font-size: 1.5rem !important;
+  color: $intra-color;
+}
+// v-toggle
