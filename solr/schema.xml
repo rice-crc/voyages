@@ -452,6 +452,8 @@
     <field name="var_port_of_call_before_atl_crossing_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_sources" type="text_en" indexed="true" stored="true" multiValued="true" />
+    
+    <field name="var_voyage_links" type="string" indexed="true" stored="true" multiValued="true" />
 
     <field name="var_second_region_slave_emb_lang_pt" type="text_en" indexed="true" stored="true" multiValued="false" />
 
