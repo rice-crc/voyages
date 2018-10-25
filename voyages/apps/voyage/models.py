@@ -1266,6 +1266,18 @@ class IntraAmericanVoyageManager(models.Manager):
     def get_queryset(self):
         return super(IntraAmericanVoyageManager, self).get_queryset().filter(is_intra_american=True)
 
+class LinkedVoyages(models.Model):
+    """
+    Allow pairs of voyages to be linked.
+    """
+    first = models.ForeignKey('Voyage', related_name="links_to_other_voyages")
+    second = models.ForeignKey('Voyage', related_name="+")
+    mode = models.IntegerField()
+
+    # In this mode the first voyage is the IntraAmerican voyage
+    # and the second is a transatlantic voyage.
+    INTRA_AMERICAN_LINK_MODE = 1
+
 class Voyage(models.Model):
     """
     Information about voyages.
@@ -1321,7 +1333,6 @@ class Voyage(models.Model):
     # generate natural key
     def natural_key(self):
         return (self.voyage_id,)
-
 
     class Meta:
         ordering = ['voyage_id',]

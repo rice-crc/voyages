@@ -52,7 +52,7 @@ _exported_spss_fields = \
     'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
     'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT7',
     'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
-    'YEARDEP', 'YRCONS', 'YRREG']
+    'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2', 'INTRAAMER']
 
 # TODO: Some variables are not an exact match to any field in or models,
 # so they either have some correspondence with a computed value from those
@@ -100,11 +100,12 @@ def export_from_review_requests(review_requests):
         items = export_contribution(user_contribution,
             contrib.interim_voyage if hasattr(contrib, 'interim_voyage') else None,
             req.created_voyage_id if req.requires_created_voyage_id() else None,
-            status_text)
+            status_text,
+            req.is_intra_american)
         for data in items:
             yield data
 
-def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_text):
+def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_text, is_intra_american=False):
     if isinstance(user_contrib, DeleteVoyageContribution):
         delete_ids = user_contrib.deleted_voyages_ids.split(',')
         voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
@@ -122,6 +123,7 @@ def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_
         data['VOYAGEID'] = created_voyage_id
     else:
         data['VOYAGEID'] = ' '.join([str(id) for id in ids])
+    data['INTRAAMER'] = 1 if is_intra_american else 0
     if isinstance(user_contrib, NewVoyageContribution):
         data['STATUS'] = 'NEW (%s)' % status_text
     elif isinstance(user_contrib, EditVoyageContribution):
@@ -193,7 +195,7 @@ def export_from_voyages():
         Prefetch('voyage_ship__registered_place'),
         Prefetch('voyage_ship__registered_region'),        
         Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
-        Prefetch('group', queryset=VoyageSourcesConnection.objects.only('text_ref').order_by('source_order')),
+        Prefetch('group', queryset=VoyageSourcesConnection.objects.order_by('source_order')),
         Prefetch('voyage_itinerary', queryset=VoyageItinerary.objects.prefetch_related(*itinerary_fields).all()),
         Prefetch(
             'voyage_name_outcome', 
@@ -202,10 +204,11 @@ def export_from_voyages():
                 'resistance',
                 'outcome_slaves',
                 'vessel_captured_outcome',
-                'outcome_owner').all())]
+                'outcome_owner').all()),
+        Prefetch('links_to_other_voyages', queryset=LinkedVoyages.objects.select_related('second').only('first_id', 'second_id', 'second__voyage_id'))]
     for k, v in related_models.items():
         prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
-    voyages = Voyage.objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
+    voyages = Voyage.both_objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
 
@@ -331,6 +334,7 @@ def _get_region_value(place):
 def _map_voyage_to_spss(voyage):
     data = {'STATUS': 'PUBLISHED'}
     data['VOYAGEID'] = voyage.voyage_id
+    data['INTRAAMER'] = 1 if voyage.is_intra_american else 0
     
     # Dates
     dates = voyage.voyage_dates
@@ -573,6 +577,10 @@ def _map_voyage_to_spss(voyage):
         data['SOURCE' + aux[i]] = source_conn.text_ref
         
     data['XMIMPFLAG'] = _get_label_value(voyage.voyage_groupings)
+
+    # Links
+    links = [str(link.second.voyage_id) for link in voyage.links_to_other_voyages.all()]
+    data['VOYAGEID2'] = '/'.join(links)
     
     return data
 
@@ -732,6 +740,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
     
+    voyage.is_intra_american = review_request.is_intra_american
     # Save voyage so that the database generates a primary key for it.
     voyage.voyage_groupings = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
     voyage.save()

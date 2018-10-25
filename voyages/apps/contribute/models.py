@@ -288,6 +288,7 @@ class ReviewRequest(models.Model):
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
     created_voyage_id = models.IntegerField(null=True, help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)')
+    is_intra_american = models.BooleanField(default=False, help_text='The resulting voyage is IntraAmerican')
     
     def contribution(self):
         return get_contribution_from_id(self.contribution_id)
