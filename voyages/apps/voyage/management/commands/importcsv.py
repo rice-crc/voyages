@@ -200,6 +200,7 @@ class Command(BaseCommand):
 
         count_tast = 0
         count_iam = 0
+        voyage_links = []
         for file in csv_file:
             with open(file, 'rU') as f:
                 reader = unicodecsv.DictReader(lower_headers(f), delimiter=',')
@@ -500,6 +501,9 @@ class Command(BaseCommand):
                     outcome.resistance = get_by_value('resistances', 'resistance')
                     outcome.voyage = voyage
                     outcomes.append(outcome)
+                    # Links
+                    if intra_american and 'voyageid2' in row:
+                        voyage_links.append((id, cint(row['voyageid2']), LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
             
         print 'Constructed ' + str(len(voyages)) + ' voyages from CSV. ' + \
             str(count_tast) + ' transatlantic and ' + str(count_iam) + ' intra-American.'
@@ -535,6 +539,7 @@ class Command(BaseCommand):
         clear_fk('voyage_dates_id')
         clear_fk('voyage_crew_id')
         clear_fk('voyage_slaves_numbers_id')
+        delete_all(LinkedVoyages)
         delete_all(VoyageCaptainConnection)
         delete_all(VoyageShipOwnerConnection)
         delete_all(VoyageSourcesConnection)
@@ -563,6 +568,20 @@ class Command(BaseCommand):
         voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id', Voyage.both_objects)
         captains = bulk_insert(VoyageCaptain, captains.values(), 'name')
         ship_owners = bulk_insert(VoyageShipOwner, ship_owners.values(), 'name')
+        # At this point we have primary keys for voyages.
+
+        # Create voyage links.
+        for i in range(0, len(voyage_links)):
+            triple = voyage_links[i]
+            if triple[0] in voyages and triple[1] in voyages:
+                link = LinkedVoyages()
+                link.first = voyages.get(triple[0])
+                link.second = voyages.get(triple[1])
+                link.mode = triple[2]
+                voyage_links[i] = link
+            else:
+                voyage_links[i] = None
+        voyage_links = [link for link in voyage_links if link]
 
         def set_foreign_keys(items, dict, key_func, fk_field):
             for item in items:
@@ -594,6 +613,7 @@ class Command(BaseCommand):
         set_voyages_fk(ship_owner_connections)
         set_foreign_keys(ship_owner_connections, ship_owners, lambda x: x.owner.name, 'owner')
         set_foreign_keys(source_connections, voyages, lambda x: x.group.voyage_id, 'group')
+        bulk_insert(LinkedVoyages, voyage_links)
         bulk_insert(VoyageCaptainConnection, captain_connections)
         bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
         bulk_insert(VoyageSourcesConnection, source_connections)

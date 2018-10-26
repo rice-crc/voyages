@@ -376,6 +376,7 @@
   <field name="var_sources_plaintext" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_sources_plaintext_exact" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="var_sources_plaintext_search" type="ngram" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_voyage_links" type="string" multiValued="true" indexed="true" stored="true"/>
   <field name="var_third_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>

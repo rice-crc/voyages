@@ -353,6 +353,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_short_ref = indexes.MultiValueField()
     var_long_ref = indexes.CharField(null=True)
 
+    # Links
+    var_voyage_links = indexes.MultiValueField(indexed=True, stored=True, null=True)
+
     # Intra-American vs Trans-Atlantic.
     var_intra_american_voyage = indexes.BooleanField(null=False, indexed=True, model_attr='is_intra_american')
 
@@ -541,3 +544,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         import globals
         mangle_method = globals.search_mangle_methods.get('var_sources', globals.no_mangle)
         return mangle_method(unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
+
+    def prepare_var_voyage_links(self, obj):
+        return [str(link.mode) + ': ' + str(link.second.voyage_id) for link in LinkedVoyages.objects.filter(first=obj)]
