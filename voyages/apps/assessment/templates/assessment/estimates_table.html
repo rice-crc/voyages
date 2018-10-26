@@ -3,13 +3,14 @@
 {% load humanize %}
 <div class="results-panel">
     <div class="row">
-      <div class="col-md-10 col-xs-8 col-sm-10">
+      <div class="col-md-9 col-xs-8 col-sm-10">
         <ul class="estimates-table-form">
             {{ table_form.as_ul }}
         </ul>
       </div>
-      <div class="col-md-2 col-xs-4 col-sm-2">
-        <button class="btn btn-solid btn-sm" type="submit" value="Show" name="buttonShow">{% trans 'Update' %}</button>
+      <div class="col-md-3 col-xs-4 col-sm-2">
+        <button class="btn btn-solid btn-sm margin-bottom-05" type="submit" value="Show" name="buttonShow">{% trans 'Update' %}</button>
+        <button class="btn btn-outline btn-sm margin-bottom-05" type="submit" name="download" value="Download table">{% trans 'Download Table' %}</button>
       </div>
     </div>
 
@@ -52,7 +53,6 @@
                     {% endfor %}
             </table>
 
-            <button class="btn btn-outline btn-sm" type="submit" name="download" value="Download table">{% trans 'Download Table' %}</button>
         </div>
     </div>
     <script src="{{ STATIC_URL }}scripts/library/datatables.custom.min.js" type="text/javascript"></script>
