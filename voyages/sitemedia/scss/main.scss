@@ -379,3 +379,18 @@ footer {
   left: auto !important;
   right: 0;
 }
+
+.table td, .table th {
+  padding: 0 .25rem !important;
+  vertical-align: middle !important;
+}
+
+// datatables past
+.table-past {
+  font-size: 0.8rem;
+}
+
+.table {
+  border-collapse: collapse; 
+  border-spacing: 0;
+}
