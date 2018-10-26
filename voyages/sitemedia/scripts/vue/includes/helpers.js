@@ -1054,7 +1054,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           },
           tooltip: {
               formatter: function() {
-                  var year = moment.unix(this.x/1000).format("YYYY");
+                  var year = moment.unix(this.x / 1000).utc().format("YYYY");
                   var postfix = isPercentage ? "%" : ""; // for percentage based charts
                   return 'Year ' + year + ': ' + '<b>' + this.y + postfix +'</b> ';
               }
