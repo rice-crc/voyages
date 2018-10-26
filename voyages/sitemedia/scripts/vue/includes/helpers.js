@@ -26,6 +26,7 @@ const isPercentageAxis = (axes) => {
   }
   let axis = axes;
   return axis.includes('percentage') || 
+    axis.includes('resistance_idnum') ||
     axis == 'var_resistance_freq' ||
     axis == 'var_imputed_mortality_avg';
 }
