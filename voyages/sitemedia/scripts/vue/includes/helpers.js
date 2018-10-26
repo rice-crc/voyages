@@ -271,7 +271,6 @@ function searchAll(filter, filterData) {
     const intraFlagObject = { "op": "equals", "searchTerm": ["true"], "varName": "intra_american_voyage" };
     items.push(intraFlagObject);
   }
-  debugger;
   // alert(JSON.stringify(items));
   return items;
 }
@@ -601,7 +600,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               });
             }
             percentageKeys.forEach(function(percentageKey){
-              json.data[i][percentageKey] = json.data[i][percentageKey] + "%";
+              if (json.data[i][percentageKey]) {
+                json.data[i][percentageKey] = json.data[i][percentageKey] + "%";
+              }
             });
           }
           return json.data;
