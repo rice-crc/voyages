@@ -21,7 +21,7 @@ var_length_middle_passage_days = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: true,
+    isImputed: false,
     isadvanced: false
   });
 
@@ -112,7 +112,7 @@ var_imp_length_home_to_disembark = new NumberVariable({
     searchTerm0: null,
     searchTerm1: null
   },{
-    isImputed: true,
+    isImputed: false,
     isadvanced: false
   });
 
