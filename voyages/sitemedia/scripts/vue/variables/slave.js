@@ -143,7 +143,7 @@ var_num_slaves_disembark_third_place = new NumberVariable({
 
 var_imputed_percentage_men = new PercentageVariable({
     varName: "imputed_percentage_men",
-    label: "Percentage Men",
+    label: "Percent Men",
     description: "",
   },{
     op: "is equal to",
@@ -156,7 +156,7 @@ var_imputed_percentage_men = new PercentageVariable({
 
 var_imputed_percentage_women = new PercentageVariable({
     varName: "imputed_percentage_women",
-    label: "Percentage Women",
+    label: "Percent Women",
     description: "",
   },{
     op: "is equal to",
@@ -169,7 +169,7 @@ var_imputed_percentage_women = new PercentageVariable({
 
 var_imputed_percentage_boys = new PercentageVariable({
     varName: "imputed_percentage_boys",
-    label: "Percentage Boys",
+    label: "Percent Boys",
     description: "",
   },{
     op: "is equal to",
@@ -182,7 +182,7 @@ var_imputed_percentage_boys = new PercentageVariable({
 
 var_imputed_percentage_girls = new PercentageVariable({
     varName: "imputed_percentage_girls",
-    label: "Percentage Girls",
+    label: "Percent Girls",
     description: "",
   },{
     op: "is equal to",
@@ -195,7 +195,7 @@ var_imputed_percentage_girls = new PercentageVariable({
 
 var_imputed_percentage_male = new PercentageVariable({
     varName: "imputed_percentage_male",
-    label: "Percentage Males",
+    label: "Percent Males",
     description: "",
   },{
     op: "is equal to",
@@ -208,7 +208,7 @@ var_imputed_percentage_male = new PercentageVariable({
 
 var_imputed_percentage_child = new PercentageVariable({
     varName: "imputed_percentage_child",
-    label: "Percentage Children",
+    label: "Percent Children",
     description: "",
   },{
     op: "is equal to",
@@ -248,7 +248,7 @@ var_imputed_death_middle_passage = new NumberVariable({
 var_imputed_mortality = new PercentageVariable({
     varName: "imputed_mortality",
     label: "Mortality Rate",
-    description: "Please enter a percentage in integer. e.g. 75",
+    description: "Percent died at sea. Please enter a Percentage in integer. e.g. 75",
   },{
     op: "is equal to",
     searchTerm0: null,
