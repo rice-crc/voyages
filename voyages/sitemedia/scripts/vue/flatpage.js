@@ -77,7 +77,8 @@ var flatpage = new Vue({
 
       axios.get(current.url)
       .then(function (response) {
-        vm.content = response.data;
+        // vm.content = response.data;
+        $("#center-content-inner").html(response.data)
         vm.updateNav();
         var hashURL = vm.extractURL(currentURL, vm.pathname, true);
         console.log(hashURL);
