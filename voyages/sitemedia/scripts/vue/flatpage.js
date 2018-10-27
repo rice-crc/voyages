@@ -58,10 +58,29 @@ var flatpage = new Vue({
       if (currentProtocol == "https:") {
         current.url = current.url.replace(/^http:\/\//i, 'https://');
       }
+
+      // update breadcrumb
+      this.breadcrumb = [];
+      for (i = this.currentIndex + 1; i--; i>=0) {
+        var currentItem = this.articles[i];
+        if (this.breadcrumb.length == 0) {
+          this.breadcrumb.unshift(currentItem);
+        } else {
+          if (this.breadcrumb[0].level > currentItem.level) {
+            this.breadcrumb.unshift(currentItem);
+          }
+        }
+        if (currentItem.index <= 0) break;
+      }
+
+      var currentURL = current.url;
+
       axios.get(current.url)
       .then(function (response) {
         vm.content = response.data;
         vm.updateNav();
+        var hashURL = vm.extractURL(currentURL, vm.pathname, true);
+        console.log(hashURL);
       })
       .catch(function (error) {
         console.log(error);
@@ -98,8 +117,15 @@ var flatpage = new Vue({
 
     navNext() {
       this.navigate(this.next.index);
-    }
+    },
 
+    extractURL(flatpageURL, delimiter, hasHash) {
+      var URLs = flatpageURL.split(delimiter);
+      var URL = URLs[1];
+      URL = URL.replace(/^\//g, '');
+      if (hasHash) URL = "#" + URL;
+      return URL;
+    }
   },
 
   mounted: function() {
@@ -112,10 +138,10 @@ var flatpage = new Vue({
 
   created: function() {
     var vm = this;
+    var href = window.location.href;
     var host = window.location.origin;
     var prefix = "/common/flatpagehierarchy/";
     var url = host + prefix + this.pathname;
-    console.log(url);
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
@@ -129,6 +155,7 @@ var flatpage = new Vue({
           "title": response.data.items[i].title,
           "id": i,
           "isActive": false,
+          "level": response.data.items[i].level
         };
         articles.push(article);
       }
