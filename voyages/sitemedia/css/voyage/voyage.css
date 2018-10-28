@@ -44,7 +44,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 54px;
 }
 
 .database-graphs-tab-bar {
@@ -61,7 +60,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 57px;
 }
 
 .database-graphs-tab-pie {
@@ -79,7 +77,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 56px;
 }
 
 .database-graphs-tab-xy-selected {
@@ -96,7 +93,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 54px;
 }
 
 .database-graphs-tab-bar-selected {
@@ -113,7 +109,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 54px;
 }
 
 .database-graphs-tab-pie-selected {
@@ -131,7 +126,6 @@ table.vstable {
     padding-right: 0px;
     padding-top: 0px;
     vertical-align: middle;
-    width: 56px;
 }
 
 .tabs-selection-graphs {
@@ -144,7 +138,6 @@ table.vstable {
     font-size: 11px;
     height: 26px;
     margin-top: 5px;
-    width: 1566px;
 }
 
 .database-graphs-tabs {
@@ -153,7 +146,6 @@ table.vstable {
     font-family: Arial, Helvetica, 'Bitstream Vera Sans', Sans, sans-serif;
     font-size: 11px;
     height: 26px;
-    width: 1566px;
 }
 
 .graphs-tabs-tab-first-filler {
