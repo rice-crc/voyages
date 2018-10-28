@@ -72,7 +72,7 @@ var_port_of_call_before_atl_crossing_id = new PlaceVariable({
 
 var_imp_principal_port_slave_dis_id = new PlaceVariable({
     varName: "imp_principal_port_slave_dis_id",
-    label: "Principal Place of Slave Landing",
+    label: "Principal Place of Landing",
     description: "",
   },{
     op: "is one of",
@@ -84,7 +84,7 @@ var_imp_principal_port_slave_dis_id = new PlaceVariable({
 
 var_first_landing_place_id = new PlaceVariable({
     varName: "first_landing_place_id",
-    label: "1st Place of Slave Landing",
+    label: "1st Place of Landing",
     description: "",
   },{
     op: "is one of",
@@ -96,7 +96,7 @@ var_first_landing_place_id = new PlaceVariable({
 
 var_second_landing_place_id = new PlaceVariable({
     varName: "second_landing_place_id",
-    label: "2nd Place of Slave Landing",
+    label: "2nd Place of Landing",
     description: "",
   },{
     op: "is one of",
@@ -108,7 +108,7 @@ var_second_landing_place_id = new PlaceVariable({
 
 var_third_landing_place_id = new PlaceVariable({
     varName: "third_landing_place_id",
-    label: "3rd Place of Slave Landing",
+    label: "3rd Place of Landing",
     description: "",
   },{
     op: "is one of",

@@ -1,7 +1,7 @@
 // this is included but not used in the search; primarily for the full detail to display
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: "Year Arrived with Slaves",
+    label: "Year Arrived with Captives",
     description: "",
   },{
     op: "is between",
@@ -66,7 +66,7 @@ var_date_departed_africa = new DateVariable({
 
 var_first_dis_of_slaves = new DateVariable({
     varName: "first_dis_of_slaves",
-    label: "Date Vessel Arrived with Slaves",
+    label: "Date Vessel Arrived with Captives",
     description: "",
   },{
     op: "is equal to",
