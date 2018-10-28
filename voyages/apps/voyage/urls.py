@@ -8,7 +8,7 @@ import voyages.apps.static_content.views
 urlpatterns = [
 
     # flatpages
-    url(r'^understanding', TemplateView.as_view(template_name='voyage/understanding.html'), name='understanding'),
+    url(r'^about', TemplateView.as_view(template_name='voyage/about.html'), name='about'),
     url(r'^essays', TemplateView.as_view(template_name='voyage/essays.html'), name='essays'),
     url(r'^downloads', TemplateView.as_view(template_name='voyage/downloads.html'), name='downloads'),
     url(r'^maps', TemplateView.as_view(template_name='voyage/maps.html'), name='maps'),

@@ -1,11 +1,11 @@
-// intialization of data object for voyage/maps flatpage structure
+// intialization of data object for voyage/about flatpage structure
 data = {
   title: {},
   response: {},
   articles: [],
   breadcrumb: [],
   content: "",
-  pathname: "maps",
+  pathname: "african-downloads",
   previous: {
     title: "",
     index: 0,

@@ -12,7 +12,7 @@
 				<li class="nav-item dropdown" id="link-trans-atlantic">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trans-Atlantic</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="{% url 'voyage:understanding' %}">{% trans "Understanding the Database" %}</a>
+						<a class="dropdown-item" href="{% url 'voyage:about' %}">{% trans "Understanding the Database" %}</a>
 						<a class="dropdown-item" href="{% url 'voyage:new-ui' %}">{% trans "Database" %}</a>
 						<a class="dropdown-item" href="{% url 'assessment:estimates' %}">{% trans "Estimates" %}</a>
 						<a class="dropdown-item" href="{% url 'voyage:essays' %}">{% trans "Essays" %}</a>
@@ -40,10 +40,11 @@
 				</li>
 
 				<li class="nav-item dropdown" id="link-past">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >African Names Database<!--People of the Atlantic Slave Trade--></a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >African Names<!--People of the Atlantic Slave Trade--></a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="{% url 'resources:about' %}">About</a>
+						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
 						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="{% url 'resources:downloads' %}">{% trans "Downloads" %}</a>
 						<!-- <a class="dropdown-item" href="#">Downloads</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#">Contribute</a> -->

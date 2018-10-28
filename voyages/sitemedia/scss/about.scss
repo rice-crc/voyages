@@ -75,3 +75,12 @@ a {
 .article-list-item {
   color: $about-color !important;
 }
+
+
+.nav-header {
+  color: white;
+  background: $about-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
