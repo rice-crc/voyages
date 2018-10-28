@@ -1,9 +1,12 @@
 // v-breadcrumb
 Vue.component('v-breadcrumb', {
-    props: ['module', 'title', "breadcrumb"],
+    props: ['module', 'title', "breadcrumb", "subtitle"],
     template: `
     <div class="nav-header">
         <div>{{module}} - {{title}}</div>
+        <div class="navbar-subtitle flex" v-if="subtitle">
+            {{subtitle}}
+        </div>
         <div class="navbar-subtitle flex" v-if="breadcrumb">
             <div class="navbar-breadcrumb" v-for="(item, index) in breadcrumb">
                 <a class="v-breadcrumb-link" @click="click" :id="item.id" :alt="item.title">{{item.title}}</a><span class="navbar-breadcrumb-separator" v-if="index+1 < breadcrumb.length">-</span>

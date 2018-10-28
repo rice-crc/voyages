@@ -38,10 +38,21 @@ label {
 
 {% block content %}
 
-<div class="container-new">
+  {% verbatim %}
+  <div id="flatpage" v-cloak>
+
+    <v-breadcrumb 
+      module="Trans-Atlantic Slave Trade" 
+      title="Legacy Release"
+      subtitle="Legacy release is reserved for viewing historical queries only. No additional functionality is guaranteed."></v-breadcrumb>
+  </div>
+  {% endverbatim %}
+
+    <div class="container-new">
+
 	<div class="row  row-offcanvas row-offcanvas-right">
 
-		<div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
+		<div class='hidden' id="sidebar">
       <!-- Trick to load main content first, see http://alistapart.com/article/holygrail for more details -->
 
       <form id="form" novalidate name="form" method="post" style="height: 100%;" action="{% url 'voyage:search' %}"
@@ -49,15 +60,7 @@ label {
 			{% include "voyage/search_left_menu.html" %}
       </form>
 		</div>
-		<div class="col-md-8 col-xs-12 col-lg-9 ">
-			<p class="hidden-md">
-        <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
-          <div>
-            <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-            <span>Toggle Sidebar</span>
-          </div>
-        </button>
-      </p>
+		<div class="col-md-12">
       {% block center-content %}
 		  {% include "voyage/search_main_content.html" %}
 		  {% endblock %}
@@ -68,6 +71,13 @@ label {
 
 
 
-
+<script src="{{ STATIC_URL }}scripts/library/vue@2.5.16.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/babel-polyfill@6.26.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap-vue@2.0.0-rc.11.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/axios@0.18.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-breadcrumb.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-maps.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/flatpage.js"></script>
 
 {% endblock %}
