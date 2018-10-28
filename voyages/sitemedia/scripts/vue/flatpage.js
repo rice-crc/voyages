@@ -70,7 +70,7 @@ var flatpage = new Vue({
             this.breadcrumb.unshift(currentItem);
           }
         }
-        if (currentItem.index <= 0) break;
+        if (currentItem.level <= 0) break;
       }
 
       var currentURL = current.url;
