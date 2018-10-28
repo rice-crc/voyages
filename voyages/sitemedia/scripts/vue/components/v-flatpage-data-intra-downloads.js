@@ -3,6 +3,7 @@ data = {
   title: {},
   response: {},
   articles: [],
+  breadcrumbs: [],
   content: "",
   pathname: "intra-downloads",
   previous: {

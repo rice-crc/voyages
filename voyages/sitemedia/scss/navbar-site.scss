@@ -27,7 +27,8 @@
 
 .navbar-dark .navbar-nav .nav-link:focus,
 .navbar-dark .navbar-nav .nav-link:hover, .v-breadcrumb-link:hover {
-  color: #fff;
+  color: #fff !important;
+  cursor: pointer;
 }
 
 .navbar-dark .navbar-nav .active > .nav-link,
@@ -89,4 +90,8 @@
     color: white;
   }
   font-weight: bold;
+}
+
+.navbar-padding-bottom {
+  padding-bottom: 0.5rem;
 }

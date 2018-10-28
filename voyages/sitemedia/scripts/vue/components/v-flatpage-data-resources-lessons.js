@@ -3,6 +3,7 @@ data = {
   title: {},
   response: {},
   articles: [],
+  breadcrumb: [],
   content: "",
   pathname: "resources-lessons",
   previous: {
