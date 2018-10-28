@@ -81,7 +81,7 @@ var allColumns = [
   { data: "var_imputed_percentage_male", category: 2, header: "Percent Males", "visible": false, isImputed: false },
   { data: "var_imputed_percentage_child", category: 2, header: "Percent Children", "visible": false, isImputed: false },
   { data: "var_imputed_sterling_cash", category: 2, header: "Sterling Cash Price in Jamaica", "visible": false, isImputed: false },
-  { data: "var_imputed_death_middle_passage", category: 2, header: "Slave Deaths during Middle Passage", "visible": false, isImputed: false },
+  { data: "var_imputed_death_middle_passage", category: 2, header: "Captives Died during Middle Passage", "visible": false, isImputed: false },
   { data: "var_imputed_mortality", category: 2, header: "Mortality Rate", "visible": false, isImputed: false },
 
   // year range

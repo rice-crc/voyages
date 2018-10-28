@@ -3,9 +3,9 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.source.count" title="Source"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="Source" :filters="filter.source.source" align="right">
+  <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="" :filters="filter.source.source" align="right">
     <div slot="v-panel-header">
-      <v-panel-header title="Data Sources" description="">
+      <v-panel-header title="Source" description="">
         <div slot="v-modal-content">
           Some help text
         </div>
