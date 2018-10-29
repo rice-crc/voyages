@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -18,6 +19,7 @@ from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
 import itertools
 import json
+import unicodecsv
 
 class SearchOperator():
     def __init__(self, front_end_op_str, back_end_op_str, list_type):
@@ -299,14 +301,44 @@ def ajax_search(request):
 @require_POST
 @csrf_exempt
 def ajax_download(request):
+    """
+    API to download results in tabular format (Excel or CSV).
+    The parameter 'data' of the request should contain a JSON
+    encoded object.
+    
+    The member 'cols' is an array of columns which correspond
+    to Solr indexed variables. If this array is empty, all
+    columns are exported.
+
+    The default export mode is Excel. To export as a CSV, set
+    'excel_mode' to False.
+    """
     data = json.loads(request.POST['data'])
     search = data['searchData']
     lang = request.LANGUAGE_CODE
     results = perform_search(search, lang)
     columns = data['cols']
-    return download_xls(
-        [[(col, 1) for col in columns]],
-        [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
+    excel_mode = data.get('excel_mode', True)
+    if len(columns) == 0:
+        # Get all columns.
+        lang_version = 'lang_' + get_language()
+        columns = [col for col in results[0].get_stored_fields().keys() if 'lang' not in col or lang_version in col]
+        # Remove columns which have a name matching a prefix of another column.
+        copy = list(columns)
+        columns = [col for col in copy if len([x for x in copy if len(x) > len(col) and col in x]) == 0]
+    if excel_mode:
+        return download_xls(
+            [[(col, 1) for col in columns]],
+            [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
+    else:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="data.csv"'
+        writer = unicodecsv.DictWriter(response, fieldnames=columns)
+        writer.writeheader()
+        for x in results:
+            item = x.get_stored_fields()
+            writer.writerow({col: item[col] for col in columns})
+        return response
 
 def search_view(request):
     return render(request, 'voyage/beta_search_main.html')
