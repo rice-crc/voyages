@@ -211,6 +211,8 @@ def export_from_voyages():
     voyages = Voyage.both_objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
+    voyages.prefetch_related(None)
+    voyages = None
 
 def publish_accepted_contributions(log_file, skip_backup=False):
     """

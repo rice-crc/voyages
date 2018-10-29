@@ -1479,6 +1479,10 @@ def generate_voyage_csv_file(statuses, published, csv_file, log_file):
             log(str(count) + ' rows exported to CSV')
     log('FINISHED')
     csv_file.flush()
+    csv_file.close()
+    log_file.close()
+    import gc
+    collected = gc.collect()
 
 @login_required()
 @require_POST
@@ -1496,8 +1500,10 @@ def download_voyages_go(request):
     csv_file = request.GET.get('csv_file')
     if csv_file is None: raise Http404
     file_path = settings.MEDIA_ROOT + '/csv_downloads/' + csv_file
-    f = open(file_path, "r")
-    response = HttpResponse(f, content_type='application/csv')
+    data = None
+    with open(file_path, "r") as f:
+        data = f.read()
+    response = HttpResponse(data, content_type='application/csv')
     response['Content-Disposition'] = 'attachment; filename=voyages.csv'
     return response
 

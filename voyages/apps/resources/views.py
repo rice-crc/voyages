@@ -138,9 +138,11 @@ def images_search(request):
             pass
 
         # New search, clear data stored in session
+        results = None
         request.session['results_images'] = None
         form = SearchForm(post)
         restart = post.get('restart') is not None
+        base_query = SearchQuerySet().models(Image)
 
         if form.is_valid():
             images = []
@@ -153,7 +155,7 @@ def images_search(request):
                 category_images["label_name"] = i.label
                 category_images["label_code"] = i.value
                 category_images["images"] = []
-                search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label,
+                search_set = base_query.filter(category_label__exact=i.label,
                                                                    ready_to_go=True).order_by('date')
                 category_images["number_of_images"] = len(search_set)
                 if restart or enable_checkboxes or post.get("checkbox" + str(i.value)):
@@ -170,53 +172,53 @@ def images_search(request):
             if query != "":
                 if time_start != "" and time_end != "":
                     results = \
-                        SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
+                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
-                                                date__lte=time_end).models(Image).\
+                                                date__lte=time_end).\
                             order_by('date')
 
                 elif time_start != "":
                     results = \
-                        SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
+                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
-                                                date__gte=time_start).models(Image).\
+                                                date__gte=time_start).\
                             order_by('date')
 
                 elif time_end != "":
                     results = \
-                        SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
+                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
                                                 category_label__in=categories_to_search,
-                                                date__lte=time_end).models(Image).\
+                                                date__lte=time_end).\
                             order_by('date')
 
                 else:
                     results = \
-                        SearchQuerySet().filter(imgtext__icontains=query, ready_to_go=True,
-                                                category_label__in=categories_to_search).models(Image).\
+                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
+                                                category_label__in=categories_to_search).\
                             order_by('date')
 
             elif time_start != "" or time_end != "":
                 if time_start != "" and time_end != "":
                     results = \
-                        SearchQuerySet().filter(ready_to_go=True,
+                        base_query.filter(ready_to_go=True,
                                                 category_label__in=categories_to_search,
                                                 date__gte=time_start,
-                                                date__lte=time_end).models(Image).\
+                                                date__lte=time_end).\
                             order_by('date')
 
                 elif time_start != "":
                     results = \
-                        SearchQuerySet().filter(ready_to_go=True,
+                        base_query.filter(ready_to_go=True,
                                                 category_label__in=categories_to_search,
-                                                date__gte=time_start).models(Image).\
+                                                date__gte=time_start).\
                             order_by('date')
 
                 elif time_end != "":
                     results = \
-                        SearchQuerySet().filter(ready_to_go=True,
+                        base_query.filter(ready_to_go=True,
                                                 category_label__in=categories_to_search,
-                                                date__lte=time_end).models(Image).\
+                                                date__lte=time_end).\
                             order_by('date')
 
                 else:
@@ -224,21 +226,21 @@ def images_search(request):
                         return HttpResponseRedirect(reverse('resources:images-category',
                                                         kwargs={'category': categories_to_search.pop()}))
                     else:
-                        results = SearchQuerySet().all().filter(ready_to_go=True,
+                        results = base_query.all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
                             order_by('date')
 
             else:
                 if len(categories_to_search) > 1:
-                    results = SearchQuerySet().all().filter(ready_to_go=True,
+                    results = base_query.all().filter(ready_to_go=True,
                                                             category_label__in=categories_to_search).\
                             order_by('date')
-                else:
+                elif len(categories_to_search) == 1:
                     return HttpResponseRedirect(reverse('resources:images-category',
                                                         kwargs={'category': categories_to_search.pop()}))
 
-        else:
-            results = SearchQuerySet().model(Image).all()
+        if results is None:
+            results = base_query.all()
 
         # Store results in session
         request.session['results_images'] = results
