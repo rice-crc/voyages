@@ -13,14 +13,17 @@ class FaqIndex(indexes.SearchIndex, indexes.Indexable):
     faq_question = indexes.CharField(model_attr='question')
     faq_question_lang_en = TranslatedTextField(null=True, unidecode=False, model_attr='question')
     faq_question_lang_pt = TranslatedTextField(null=True, unidecode=False, model_attr='question')
+    faq_question_lang_es = TranslatedTextField(null=True, unidecode=False, model_attr='question')
     faq_answer = indexes.CharField(model_attr='answer')
     faq_answer_lang_en = TranslatedTextField(null=True, unidecode=False, model_attr='answer')
     faq_answer_lang_pt = TranslatedTextField(null=True, unidecode=False, model_attr='answer')
+    faq_answer_lang_es = TranslatedTextField(null=True, unidecode=False, model_attr='answer')
     faq_question_order = indexes.IntegerField(model_attr='question_order')
     faq_category_order = indexes.IntegerField(model_attr='category__type_order')
     faq_category_desc = indexes.CharField(model_attr='category__text')
     faq_category_desc_lang_en = TranslatedTextField(null=True, unidecode=False, model_attr='category__text')
     faq_category_desc_lang_pt = TranslatedTextField(null=True, unidecode=False, model_attr='category__text')
+    faq_category_desc_lang_es = TranslatedTextField(null=True, unidecode=False, model_attr='category__text')
 
     def get_model(self):
         return Faq
@@ -39,9 +42,11 @@ class GlossaryIndex(indexes.SearchIndex, indexes.Indexable):
     glossary_term = indexes.CharField(faceted=True, model_attr='term')
     glossary_term_lang_en = TranslatedTextField(null=True, unidecode=False, model_attr='term')
     glossary_term_lang_pt = TranslatedTextField(null=True, unidecode=False, model_attr='term')
+    glossary_term_lang_es = TranslatedTextField(null=True, unidecode=False, model_attr='term')
     glossary_description = indexes.CharField(model_attr='description')
     glossary_description_lang_en = TranslatedTextField(null=True, unidecode=False, model_attr='description')
     glossary_description_lang_pt = TranslatedTextField(null=True, unidecode=False, model_attr='description')
+    glossary_description_lang_es = TranslatedTextField(null=True, unidecode=False, model_attr='description')
 
     def get_model(self):
         return Glossary
