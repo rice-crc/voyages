@@ -270,7 +270,7 @@
               <div class="text-description">{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</div>
               <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
               <button class="btn btn-solid btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
-              <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Start New Query' %}</button>
+              <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Reset All' %}</button>
             </div>
           </div>
         </div><!-- container-xxx -->
@@ -309,7 +309,7 @@
         var input = $("<input>")
           .attr("type", "hidden")
           .attr("name", name)
-          .val("Reset");
+          .val("Reset to default");
         $('form').append($(input));
       }
       helper('submit_year');
