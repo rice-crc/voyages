@@ -172,9 +172,14 @@ class Command(BaseCommand):
             date component.
             :return: the CSV date.
             """
-            return (row.get(var_name_prefix + suffixes[1], '') if suffixes[1] is not None else '').strip() + ',' + \
-                   (row.get(var_name_prefix + suffixes[0], '') if suffixes[0] is not None else '').strip() + ',' + \
-                   (row.get(var_name_prefix + suffixes[2], '') if suffixes[2] is not None else '').strip()
+            def get_component(suffix):
+                component = (row.get(var_name_prefix + suffix, '') if suffix is not None else '').strip()
+                if len(component) == 1:
+                    component = '0' + component
+                return component
+            return get_component(suffixes[1]) + ',' + \
+                   get_component(suffixes[0]) + ',' + \
+                   get_component(suffixes[2])
 
         def date_iso_csv(iso_value):
             """
@@ -482,8 +487,9 @@ class Command(BaseCommand):
                         (source, match) = get_source(source_ref)
                         if source is None:
                             self.errors += 1
-                            sys.stderr.write('Source not found for "' + smart_str(source_ref) +
-                                            '", longest partial match: ' + smart_str(match) + '\n')
+                            sys.stderr.write('Source not found for voyage id: ' + str(id) + 
+                                ' source_ref: "' + smart_str(source_ref) +
+                                '", longest partial match: ' + smart_str(match) + '\n')
                             continue
                         source_connection = VoyageSourcesConnection()
                         source_connection.group = voyage

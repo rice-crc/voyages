@@ -62,6 +62,44 @@
       <filter class="solr.PorterStemFilterFactory"/>
     </analyzer>
   </fieldType>
+  <fieldType name="text_pt" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.StopFilterFactory" words="lang/stopwords_pt.txt" ignoreCase="true"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.EnglishPossessiveFilterFactory"/>
+      <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+      <filter class="solr.PorterStemFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.SynonymFilterFactory" expand="true" ignoreCase="true" synonyms="synonyms.txt"/>
+      <filter class="solr.StopFilterFactory" words="lang/stopwords_pt.txt" ignoreCase="true"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.EnglishPossessiveFilterFactory"/>
+      <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+      <filter class="solr.PorterStemFilterFactory"/>
+    </analyzer>
+  </fieldType>
+  <fieldType name="text_es" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.StopFilterFactory" words="lang/stopwords_es.txt" ignoreCase="true"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.EnglishPossessiveFilterFactory"/>
+      <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+      <filter class="solr.PorterStemFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.SynonymFilterFactory" expand="true" ignoreCase="true" synonyms="synonyms.txt"/>
+      <filter class="solr.StopFilterFactory" words="lang/stopwords_es.txt" ignoreCase="true"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.EnglishPossessiveFilterFactory"/>
+      <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+      <filter class="solr.PorterStemFilterFactory"/>
+    </analyzer>
+  </fieldType>
   <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -99,34 +137,44 @@
   <field name="export_area" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_answer" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_answer_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_answer_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_answer_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_answer_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_answer_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_answer_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_answer_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_answer_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_answer_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_category_desc" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_category_desc_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_category_desc_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_category_desc_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_category_desc_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_category_desc_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_category_desc_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_category_desc_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_category_desc_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_category_desc_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_category_order" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_question" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_question_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_question_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_question_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="faq_question_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_question_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_question_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_question_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_question_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="faq_question_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_question_order" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="file" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="full_ref" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_description" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_description_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_description_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_description_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_description_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_description_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_description_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_description_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_description_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_description_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_term" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_term_exact" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_term_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_term_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_term_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="glossary_term_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_term_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_term_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_term_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_term_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="glossary_term_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="group_id" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="group_name" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
@@ -178,27 +226,35 @@
   <field name="var_first_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_place_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_place_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_place_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_place_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_place_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_place_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_place_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_place_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_region" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_region_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_region_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_region_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_region_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_landing_region_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_region_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_region_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_region_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_region_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_landing_region_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_place_slave_purchase" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_place_slave_purchase_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_place_slave_purchase_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_place_slave_purchase_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_place_slave_purchase_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_place_slave_purchase_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_place_slave_purchase_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_place_slave_purchase_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_place_slave_purchase_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_place_slave_purchase_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_place_slave_purchase_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_region_slave_emb" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_region_slave_emb_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_region_slave_emb_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_region_slave_emb_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_region_slave_emb_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_region_slave_emb_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_region_slave_emb_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_region_slave_emb_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_region_slave_emb_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_region_slave_emb_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_region_slave_emb_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_guns_mounted" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_arrival_at_port_of_dis" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_arrival_at_port_of_dis_exact" type="long" multiValued="false" indexed="true" stored="true"/>
@@ -207,41 +263,53 @@
   <field name="var_imp_port_voyage_begin" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_port_voyage_begin_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_port_voyage_begin_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_port_voyage_begin_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_port_voyage_begin_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_port_voyage_begin_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_port_voyage_begin_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_port_voyage_begin_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_port_voyage_begin_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_port_voyage_begin_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_port_voyage_begin_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_broad_region_disembark_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_place_of_slave_purchase" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_place_of_slave_purchase_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_place_of_slave_purchase_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_place_of_slave_purchase_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_place_of_slave_purchase_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_place_of_slave_purchase_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_place_of_slave_purchase_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_place_of_slave_purchase_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_place_of_slave_purchase_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_place_of_slave_purchase_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_place_of_slave_purchase_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_port_slave_dis" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_port_slave_dis_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_port_slave_dis_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_port_slave_dis_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_port_slave_dis_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_port_slave_dis_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_port_slave_dis_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_port_slave_dis_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_port_slave_dis_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_port_slave_dis_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_port_slave_dis_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_port_slave_dis_pivot" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_of_slave_purchase" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_of_slave_purchase_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_of_slave_purchase_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_of_slave_purchase_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_of_slave_purchase_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_of_slave_purchase_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_of_slave_purchase_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_of_slave_purchase_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_of_slave_purchase_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_of_slave_purchase_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_of_slave_purchase_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_slave_dis" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_slave_dis_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_principal_region_slave_dis_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_slave_dis_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_slave_dis_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_principal_region_slave_dis_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_slave_dis_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_slave_dis_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_slave_dis_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_slave_dis_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_principal_region_slave_dis_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_region_voyage_begin" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_region_voyage_begin_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_region_voyage_begin_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_region_voyage_begin_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_region_voyage_begin_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_imp_region_voyage_begin_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_region_voyage_begin_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_region_voyage_begin_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_region_voyage_begin_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_region_voyage_begin_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_imp_region_voyage_begin_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_region_voyage_begin_pivot" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_total_num_slaves_purchased" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imp_total_num_slaves_purchased_exact" type="long" multiValued="false" indexed="true" stored="true"/>
@@ -283,61 +351,79 @@
   <field name="var_outcome_owner" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_owner_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_owner_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_owner_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_owner_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_owner_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_owner_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_owner_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_owner_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_owner_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_owner_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_ship_captured" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_ship_captured_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_ship_captured_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_ship_captured_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_ship_captured_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_ship_captured_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_ship_captured_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_ship_captured_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_ship_captured_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_ship_captured_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_ship_captured_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_slaves" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_slaves_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_slaves_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_slaves_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_slaves_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_slaves_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_slaves_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_slaves_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_slaves_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_slaves_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_slaves_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_voyage" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_voyage_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_outcome_voyage_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_voyage_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_voyage_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_outcome_voyage_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_voyage_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_voyage_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_voyage_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_voyage_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_outcome_voyage_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_owner" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="var_owner_plaintext" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_owner_plaintext_exact" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="var_place_voyage_ended" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_place_voyage_ended_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_place_voyage_ended_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_place_voyage_ended_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_place_voyage_ended_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_place_voyage_ended_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_place_voyage_ended_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_place_voyage_ended_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_place_voyage_ended_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_place_voyage_ended_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_place_voyage_ended_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_port_of_call_before_atl_crossing" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="var_port_of_call_before_atl_crossing_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_port_of_call_before_atl_crossing_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_port_of_call_before_atl_crossing_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_port_of_call_before_atl_crossing_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_port_of_call_before_atl_crossing_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_port_of_call_before_atl_crossing_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_port_of_call_before_atl_crossing_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_port_of_call_before_atl_crossing_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_port_of_call_before_atl_crossing_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_port_of_call_before_atl_crossing_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_region_voyage_ended" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_region_voyage_ended_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_region_voyage_ended_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_region_voyage_ended_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_region_voyage_ended_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_region_voyage_ended_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_region_voyage_ended_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_region_voyage_ended_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_region_voyage_ended_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_region_voyage_ended_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_region_voyage_ended_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_registered_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_registered_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_registered_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_registered_place_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_registered_place_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_registered_place_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_registered_place_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_registered_place_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_registered_place_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_registered_place_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_registered_place_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_registered_year" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_resistance" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_resistance_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_resistance_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_resistance_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_resistance_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_resistance_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_resistance_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_resistance_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_resistance_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_resistance_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_resistance_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_rig_of_vessel" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_rig_of_vessel_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_rig_of_vessel_plaintext" type="text_en" multiValued="false" indexed="true" stored="true"/>
@@ -345,27 +431,35 @@
   <field name="var_second_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_landing_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_place_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_place_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_place_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_place_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_place_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_place_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_place_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_place_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_landing_region" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_landing_region_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_landing_region_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_region_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_region_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_landing_region_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_region_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_region_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_region_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_region_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_landing_region_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_place_slave_purchase" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_place_slave_purchase_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_place_slave_purchase_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_place_slave_purchase_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_place_slave_purchase_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_place_slave_purchase_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_place_slave_purchase_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_place_slave_purchase_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_place_slave_purchase_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_place_slave_purchase_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_place_slave_purchase_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_region_slave_emb" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_region_slave_emb_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_second_region_slave_emb_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_region_slave_emb_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_region_slave_emb_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_second_region_slave_emb_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_region_slave_emb_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_region_slave_emb_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_region_slave_emb_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_region_slave_emb_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_second_region_slave_emb_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_ship_name" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="var_ship_name_plaintext" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_ship_name_plaintext_exact" type="string" multiValued="false" indexed="true" stored="true"/>
@@ -380,26 +474,34 @@
   <field name="var_third_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_place_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_place_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_place_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_place_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_place_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_place_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_place_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_place_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_region" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_landing_region_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_region_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_region_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_landing_region_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_region_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_region_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_region_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_region_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_landing_region_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_place_slave_purchase" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_place_slave_purchase_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_place_slave_purchase_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_place_slave_purchase_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_place_slave_purchase_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_place_slave_purchase_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_place_slave_purchase_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_place_slave_purchase_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_place_slave_purchase_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_place_slave_purchase_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_place_slave_purchase_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_region_slave_emb" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_region_slave_emb_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_third_region_slave_emb_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_region_slave_emb_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_region_slave_emb_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_third_region_slave_emb_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_region_slave_emb_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_region_slave_emb_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_region_slave_emb_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_region_slave_emb_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_third_region_slave_emb_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_tonnage" type="float" multiValued="false" indexed="true" stored="true"/>
   <field name="var_tonnage_exact" type="float" multiValued="false" indexed="true" stored="true"/>
   <field name="var_tonnage_mod" type="float" multiValued="false" indexed="true" stored="true"/>
@@ -409,9 +511,11 @@
   <field name="var_vessel_construction_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_vessel_construction_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_vessel_construction_place_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_vessel_construction_place_lang_en_exact" type="string" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_vessel_construction_place_lang_pt" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_vessel_construction_place_lang_pt_exact" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_vessel_construction_place_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_vessel_construction_place_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_vessel_construction_place_lang_es" type="text_es" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_vessel_construction_place_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_vessel_construction_place_lang_es_exact" type="text_es" multiValued="false" indexed="true" stored="true"/>
   <field name="var_voyage_began" type="date" multiValued="false" indexed="true" stored="true"/>
   <field name="var_voyage_began_month" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_voyage_completed" type="date" multiValued="false" indexed="true" stored="true"/>
