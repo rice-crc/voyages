@@ -61,15 +61,15 @@ var graphsYAxes = [ // WORKAROUND; var_name_MODE; maps to voyage/graphs.py; 4 mo
   { id:9, varName: 'var_imp_total_slaves_disembarked_avg', label: 'Average number of slaves disembarked' },
   { id:10, varName: 'var_imp_total_num_slaves_purchased_sum', label: 'Total number of slaves embarked*' },
   { id:11, varName: 'var_imp_total_slaves_disembarked_sum', label: 'Total number of slaves disembarked*' },
-  { id:12, varName: 'var_imputed_percentage_men_avg', label: 'Percentage men' },
-  { id:13, varName: 'var_imputed_percentage_women_avg', label: 'Percentage women' },
-  { id:14, varName: 'var_imputed_percentage_boys_avg', label: 'Percentage boys' },
-  { id:15, varName: 'var_imputed_percentage_girls_avg', label: 'Percentage girls' },
-  { id:16, varName: 'var_imputed_percentage_child_avg', label: 'Percentage children' },
-  { id:17, varName: 'var_imputed_percentage_male_avg', label: 'Percentage male' },
+  { id:12, varName: 'var_imputed_percentage_men_avg', label: 'Percent men' },
+  { id:13, varName: 'var_imputed_percentage_women_avg', label: 'Percent women' },
+  { id:14, varName: 'var_imputed_percentage_boys_avg', label: 'Percent boys' },
+  { id:15, varName: 'var_imputed_percentage_girls_avg', label: 'Percent girls' },
+  { id:16, varName: 'var_imputed_percentage_child_avg', label: 'Percent children' },
+  { id:17, varName: 'var_imputed_percentage_male_avg', label: 'Percent male' },
   { id:18, varName: 'var_imputed_sterling_cash_avg', label: 'Sterling cash price in Jamaica' },
   { id:19, varName: 'var_resistance_freq', label: 'Rate of resistance' },
-  { id:20, varName: 'var_imputed_mortality_avg', label: 'Percentage of slaves embarked who died during voyage' },
+  { id:20, varName: 'var_imputed_mortality_avg', label: 'Percent of slaves embarked who died during voyage' },
 ];
 
 var tabs = {
