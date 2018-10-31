@@ -289,6 +289,13 @@ footer {
 
 .cover-logo {
   margin: 1rem 0;
+  height: 50px; 
+  opacity: 0.5; 
+  display: flex !important;
+  transition: ease 0.3s;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .scroll-text {
@@ -351,6 +358,7 @@ video#bgvid {
   color: #dddddd;
   opacity: 0.5;
   text-align: center;
+  margin-top: 1rem;
 }
 
 
