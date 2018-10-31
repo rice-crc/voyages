@@ -1,7 +1,6 @@
 from cache import VoyageCache, CachedGeo
 from django.conf import settings
 from django.core.cache import cache
-from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import get_language
@@ -15,6 +14,7 @@ from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
 from voyages.apps.common.views import get_ordered_places
+from voyages.apps.common.views import get_datatable_json_result as get_results_table
 from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
 import itertools
@@ -252,21 +252,6 @@ def get_results_map_flow(request, results):
         },
         content_type='text/javascript')
 
-def get_results_table(results, post):
-    # Here we output a data set page.
-    table_params = post['tableParams']
-    rows_per_page = int(table_params['length'])
-    current_page_num = 1 + int(table_params['start']) / rows_per_page
-    paginator = Paginator(results, rows_per_page)
-    page = paginator.page(current_page_num)
-    reponse_data = {}
-    total_results = results.count()
-    reponse_data['recordsTotal'] = total_results
-    reponse_data['recordsFiltered'] = total_results
-    reponse_data['draw'] = int(table_params['draw'])
-    reponse_data['data'] = [{k: v if v != '[]' else '' for k, v in x.get_stored_fields().items()} for x in page]
-    return JsonResponse(reponse_data)
-
 def get_results_summary_stats(results):
     from voyages.apps.voyage.views import retrieve_summary_stats
     summary = retrieve_summary_stats(results)
@@ -410,6 +395,13 @@ def get_filtered_places(request):
         'is_cached': is_cached,
         'data': result
     })
+
+@csrf_exempt
+@require_POST
+def get_all_sources(request):
+    data = json.loads(request.body)
+    results = SearchQuerySet().models(VoyageSources)
+    return get_results_table(results, data)
 
 @csrf_exempt
 @require_POST
