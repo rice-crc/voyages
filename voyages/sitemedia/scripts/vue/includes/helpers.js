@@ -1,5 +1,6 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
+const TRANS_PATH = "voyage/new-ui";
 
 // converts camel case into title case
 function camel2title(camelCase) {
@@ -19,6 +20,7 @@ function camel2title(camelCase) {
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
 
 const isPercentageAxis = (axes) => {
   if (Array.isArray(axes)) {
@@ -695,17 +697,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               //     $('[data-toggle="tooltip"]').tooltip()
               //   });
               // },
-              action: function() {
-                var visibleColumns = $.map($.makeArray(mainDatatable.columns().visible()), function(visible, index) {
-                  return visible ? allColumns[index].data : undefined;
-                });
-                var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
-                form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
-                  searchData: currentSearchObj,
-                  cols: visibleColumns
-                })));
-                form.appendTo('body').submit().remove();
-              },
+
+              // TODO: Make a permutation of these three booleans and display in the UI properly
+              action: makeDownloadFunction(false, true, false)
             }
           ]
         }
@@ -723,6 +717,28 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     });
     
+
+
+    // built for the datatable download dropdown menu
+    function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
+      return function () {
+        // decides if it's returning visible columns or all columns
+        var visibleColumns = isVisibleColumns ? $.map($.makeArray(mainDatatable.columns().visible()), function (visible, index) {
+          return visible ? allColumns[index].data : undefined;
+        }) : [];
+
+        var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+        form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
+
+          searchData: isFiltered ? currentSearchObj : { "items": [] }, // decides if it's returning filtered data or all data
+
+          cols: visibleColumns,
+          excel_mode: !!isExcel, // make sure it's a true boolean variable
+        })));
+        form.appendTo('body').submit().remove();
+      }
+    }
+
     mainDatatable.on( 'column-visibility.dt', function ( e, settings, column, state ) {
       $('[data-toggle="tooltip"]').tooltip()
     });
@@ -742,10 +758,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             output: 'summaryStats'
           });
         },
-        // preprocess the returned data to remove * for IMP
+
+        // preprocess the returned data to replace * with IMP
         dataSrc: function (json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].replace("*", "");
+            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>');
           }
           return json.data;
         },
