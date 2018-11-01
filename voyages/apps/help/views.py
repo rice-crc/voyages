@@ -1,9 +1,14 @@
 from django.shortcuts import render
+from django.utils.translation import get_language
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from collections import OrderedDict
 from .models import Glossary, Faq
 from haystack.query import SearchQuerySet
 from haystack.forms import HighlightedSearchForm
 from unidecode import unidecode
+from voyages.apps.common.views import get_datatable_json_result
+import json
 import string
 
 def _sort_glossary(qresult, lang):
@@ -128,3 +133,14 @@ def get_faqs(request):
 
     return render(request, 'help/page_faqs.html',
                               {'form': form, "faq_list": faq_list, 'current_query': current_query})
+
+@csrf_exempt
+@require_POST
+def get_glossary_table(request):
+    data = json.loads(request.body)
+    results = SearchQuerySet().models(Glossary)
+    lang_version = 'lang_' + get_language()
+    return get_datatable_json_result(
+        results,
+        data,
+        lambda field_name: 'lang' not in field_name or lang_version in field_name)

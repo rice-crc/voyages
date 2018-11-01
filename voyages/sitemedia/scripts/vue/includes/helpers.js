@@ -1648,6 +1648,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         $('.animationElement').show();
         animationHelper.startAnimation(result);
       }).done(function(){
+        animationHelper.reset();
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();

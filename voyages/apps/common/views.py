@@ -1,4 +1,5 @@
 from django.contrib.flatpages.models import FlatPage
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import get_language
@@ -192,6 +193,28 @@ def _get_flatpage(url, lang):
     except:
         pass
     return page
+
+def get_datatable_json_result(results, post, field_filter=lambda _: True,
+        key_adapter=lambda t: t[0], value_adapter=lambda t: t[1] if t[1] != '[]' else ''):
+    """
+    Produce a JSON output that can be parsed by a paginated DataTable in the front-end.
+    The argument results should be a SearchQuerySet and post should be a dict that
+    contains a key tableParams with the DataTable corresponding parameters.
+    """
+    table_params = post['tableParams']
+    rows_per_page = int(table_params['length'])
+    current_page_num = 1 + int(table_params['start']) / rows_per_page
+    paginator = Paginator(results, rows_per_page)
+    page = paginator.page(current_page_num)
+    reponse_data = {}
+    total_results = results.count()
+    reponse_data['recordsTotal'] = total_results
+    reponse_data['recordsFiltered'] = total_results
+    reponse_data['draw'] = int(table_params['draw'])
+    reponse_data['data'] = [{key_adapter((k, v)): value_adapter((k, v))
+        for k, v in x.get_stored_fields().items() if field_filter(k)}
+        for x in page]
+    return JsonResponse(reponse_data)
 
 def render_locale_flatpage(request, template_path, flatpage_url):
     lang = get_language()

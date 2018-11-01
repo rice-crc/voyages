@@ -50,7 +50,7 @@ var allColumns = [
   { data: "var_guns_mounted", category: 0, header: "Guns Mounted", "visible": false, isImputed: false },
 
   // itinerary
-  { data: "var_imp_port_voyage_begin", category: 1, header: "Place where Voyage Began", isImputed: true },
+  { data: "var_imp_port_voyage_begin_lang", category: 1, header: "Place where Voyage Began", isImputed: true },
   { data: "var_imp_principal_place_of_slave_purchase", category: 1, header: "Principal Place of Purchase", isImputed: true },
   { data: "var_first_place_slave_purchase", category: 1, header: "1st Place of Purchase", "visible": false, isImputed: false },
   { data: "var_second_place_slave_purchase", category: 1, header: "2nd Place of Purchase", "visible": false, isImputed: false },
@@ -109,7 +109,7 @@ var allColumns = [
   { data: "var_crew_died_complete_voyage", category: 5, header: "Crew Deaths during Voyage", "visible": false, isImputed: false },
 
   // outcome
-  { data: "var_outcome_voyage", category: 6, header: "Particular Outcome of Voyage", "visible": false, isImputed: false },
+  { data: "var_outcome_voyage_lang", category: 6, header: "Particular Outcome of Voyage", "visible": false, isImputed: false },
   { data: "var_outcome_slaves", category: 6, header: "Outcome of Voyage for Slaves", "visible": false, isImputed: false },
   { data: "var_outcome_ship_captured", category: 6, header: "Outcome of Voyage if Ship Captured", "visible": false, isImputed: false },
   { data: "var_outcome_owner", category: 6, header: "Outcome of Voyage for Owner", "visible": false, isImputed: false },

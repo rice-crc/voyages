@@ -57,4 +57,5 @@ urlpatterns = [
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
     url(r'^876167cf-bc40-44f7-9557-ee8117d94008', voyages.apps.voyage.beta_views.search_view, name='beta_search'),
 
+    url(r'get-all-sources', voyages.apps.voyage.beta_views.get_all_sources, name='all-sources'),
 ]
