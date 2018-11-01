@@ -303,8 +303,13 @@ function setup() {
             window.clearInterval(self.timerId);
         }
         svg.attr('visibility', 'hidden');
-    };    
+    };
+    self.reset = function() {
+        animationIndex = 0;
+        $("#slider").slider('value', 0);
+        $("#yearLabel").text(years.length > 0 ? years[0].key : '');
+    };
     return self;
 }
 
-var animationHelper = setup();
+var animationHelper = new setup();

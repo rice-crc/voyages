@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^page_demo-overview', TemplateView.as_view(template_name='help/page_demo-overview.html'), name='demo-overview'),
     url(r'^page_demo-search', TemplateView.as_view(template_name='help/page_demo-search.html'), name='demo-search'),
     url(r'^page_glossary', voyages.apps.help.views.glossary_page, name='glossary'),
-    url(r'^page_faqs', voyages.apps.help.views.get_faqs, name='faqs')]
+    url(r'^page_faqs', voyages.apps.help.views.get_faqs, name='faqs'),
+    url(r'^get_glossary_table', voyages.apps.help.views.get_glossary_table, name='get-glossary-table')]
 
