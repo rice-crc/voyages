@@ -268,7 +268,10 @@ def ajax_search(request):
     # result the caller expects.
     output_type = data.get('output')
     if output_type == 'resultsTable':
-        return get_results_table(results, data)
+        target_lang = 'lang_' + lang
+        return get_results_table(results, data, 
+            field_filter=lambda field_name: 'lang' not in field_name or target_lang in field_name,
+            key_adapter=lambda key_val: key_val[0].replace(target_lang, 'lang'))
     elif output_type == 'mapAnimation':
         return get_results_map_animation(results)
     elif output_type == 'mapFlow':
