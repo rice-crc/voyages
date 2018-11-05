@@ -685,21 +685,46 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           className: 'btn btn-info buttons-collection dropdown-toggle',
           text: 'Download',
           titleAttr: 'Download results',
-          buttons: [
-            // {
-            // 	text: 'CSV - not implemented',
-            // 	action: function() { alert('not implemented yet'); },
-            // },
-            {
-              text: 'Excel',
-              // init: function (dt, node, config) {
-              //   dt.on('select.dt.DT deselect.dt.DT', function () {
-              //     $('[data-toggle="tooltip"]').tooltip()
-              //   });
-              // },
+          // Top level: CSV vs. Excel
+          buttons: [{
+            extend: 'collection',
+            text: 'CSV',
+            buttons: [
+              {
+                text: 'All Results with All Columns',
+                action: makeDownloadFunction(false, false, false)
+              }, {
+                text: 'All Results with Visible Columns',
+                action: makeDownloadFunction(false, false, true)
+              }, {
+                text: 'Filtered Results with All Columns', 
+                action: makeDownloadFunction(false, true, false) 
+              }, {
+                text: 'Filtered Results with Visible Columns',
+                action: makeDownloadFunction(false, true, true)
+              }],
+              fade: true
+            },
 
-              // TODO: Make a permutation of these three booleans and display in the UI properly
-              action: makeDownloadFunction(false, true, false)
+            {
+              extend: 'collection',
+              text: 'Excel',
+              buttons: [
+                {
+                  text: 'All Results with All Columns',
+                  action: makeDownloadFunction(true, false, false)
+                }, {
+                  text: 'All Results with Visible Columns',
+                  action: makeDownloadFunction(true, false, true)
+                }, {
+                  text: 'Filtered Results with All Columns',
+                  action: makeDownloadFunction(true, true, false)
+                }, {
+                  text: 'Filtered Results with Visible Columns',
+                  action: makeDownloadFunction(true, true, true)
+                }
+              ],
+              fade: true
             }
           ]
         }
