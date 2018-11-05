@@ -800,7 +800,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
       },
       columnDefs: [{
-        targets:[1,2,3,4], // do not eliminate the HTML parsing in the first column
+        targets:[1,2], // do not eliminate the HTML parsing in the first column
         type: 'num-fmt',
         render: $.fn.dataTable.render.number(",")
       }],
