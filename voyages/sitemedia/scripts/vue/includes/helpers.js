@@ -773,6 +773,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     var tableId = '#v-summary-statistics';
     destroyPreviousTable(tableId);
     var mainDatatable = $(tableId).DataTable({
+      order: [[0, "desc"]],
       ajax: {
         url: searchUrl,
         type: 'POST',
@@ -787,7 +788,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // preprocess the returned data to replace * with IMP
         dataSrc: function (json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>');
+            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>');
           }
           return json.data;
         },
@@ -799,15 +800,18 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
       },
       columnDefs: [{
-        targets: "_all",
-        type: 'html-num-fmt',
+        targets:[1,2,3,4], // do not eliminate the HTML parsing in the first column
+        type: 'num-fmt',
         render: $.fn.dataTable.render.number(",")
-      }, ],
+      }],
       bFilter: false,
       paging: false,
       dom: "<'flex-container'>" +
         "<'row'<'col-sm-12'tr>>",
       processing: true,
+      initComplete: function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      }
     });
   } else if (currentTab == 'tables') {
     var getTableElement = function(source) {
