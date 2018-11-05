@@ -691,16 +691,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             text: 'CSV',
             buttons: [
               {
-                text: 'All Results with All Columns',
+                text: gettext('All Results with All Columns'),
                 action: makeDownloadFunction(false, false, false)
               }, {
-                text: 'All Results with Visible Columns',
+                text: gettext('All Results with Visible Columns'),
                 action: makeDownloadFunction(false, false, true)
               }, {
-                text: 'Filtered Results with All Columns', 
+                text: gettext('Filtered Results with All Columns'), 
                 action: makeDownloadFunction(false, true, false) 
               }, {
-                text: 'Filtered Results with Visible Columns',
+                text: gettext('Filtered Results with Visible Columns'),
                 action: makeDownloadFunction(false, true, true)
               }],
               fade: true
@@ -711,16 +711,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               text: 'Excel',
               buttons: [
                 {
-                  text: 'All Results with All Columns',
+                  text: gettext('All Results with All Columns'),
                   action: makeDownloadFunction(true, false, false)
                 }, {
-                  text: 'All Results with Visible Columns',
+                  text: gettext('All Results with Visible Columns'),
                   action: makeDownloadFunction(true, false, true)
                 }, {
-                  text: 'Filtered Results with All Columns',
+                  text: gettext('Filtered Results with All Columns'),
                   action: makeDownloadFunction(true, true, false)
                 }, {
-                  text: 'Filtered Results with Visible Columns',
+                  text: gettext('Filtered Results with Visible Columns'),
                   action: makeDownloadFunction(true, true, true)
                 }
               ],
