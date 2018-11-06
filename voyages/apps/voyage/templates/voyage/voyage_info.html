@@ -23,6 +23,9 @@
 
 {% block jslist %}
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/jquery.qtip@2.1.1.min.js"></script>
+<script>
+  $('[data-toggle="tooltip"]').tooltip()
+</script>
 {% endblock %}
 
 {% block content %}
