@@ -50,8 +50,8 @@ var allColumns = [
   { data: "var_guns_mounted", category: 0, header: gettext("Guns Mounted"), "visible": false, isImputed: false },
 
   // itinerary
-  { data: "var_imp_port_voyage_begin_lang", category: 1, header: gettext("Place where Voyage Began"), isImputed: true },
-  { data: "var_imp_principal_place_of_slave_purchase_lang", category: 1, header: gettext("Principal Place of Purchase"), isImputed: true },
+  { data: "var_imp_port_voyage_begin", category: 1, header: gettext("Place where Voyage Began"), isImputed: true },
+  { data: "var_imp_principal_place_of_slave_purchase", category: 1, header: gettext("Principal Place of Purchase"), isImputed: true },
   { data: "var_first_place_slave_purchase", category: 1, header: gettext("1st Place of Purchase"), "visible": false, isImputed: false },
   { data: "var_second_place_slave_purchase", category: 1, header: gettext("2nd Place of Purchase"), "visible": false, isImputed: false },
   { data: "var_third_place_slave_purchase", category: 1, header: gettext("3rd Place of Purchase"), "visible": false, isImputed: false },

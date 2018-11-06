@@ -5,6 +5,7 @@ from voyages.apps.common.filters import *
 register = template.Library()
 register.filter('trans_log', trans_log)
 register.filter('jsonify', jsonify)
+register.filter('replaceStar', replaceStar)
 
 @register.filter
 @stringfilter

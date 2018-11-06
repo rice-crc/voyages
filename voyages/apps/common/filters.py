@@ -45,3 +45,8 @@ def trans_log(val):
 @register.filter
 def jsonify(lst):
     return mark_safe(serializers.serialize('json', lst))
+
+@register.filter
+def replaceStar(value, arg):
+    return value.replace("*", arg)
+    
