@@ -309,11 +309,13 @@ def ajax_download(request):
     excel_mode = data.get('excel_mode', True)
     if len(columns) == 0:
         # Get all columns.
-        lang_version = 'lang_' + get_language()
+        lang_version = 'lang_' + lang
         columns = [col for col in results[0].get_stored_fields().keys() if 'lang' not in col or lang_version in col]
         # Remove columns which have a name matching a prefix of another column.
         copy = list(columns)
         columns = [col for col in copy if len([x for x in copy if len(x) > len(col) and col in x]) == 0]
+    else:
+        columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang for col in columns]
     if excel_mode:
         return download_xls(
             [[(col, 1) for col in columns]],
