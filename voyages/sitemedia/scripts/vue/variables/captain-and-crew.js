@@ -1,5 +1,5 @@
-var_captain_plaintext = new TextVariable({
-    varName: "captain_plaintext",
+var_captain = new TextVariable({
+    varName: "captain",
     label: "Captain's Name",
     description: "",
   },{
@@ -52,7 +52,7 @@ var_crew_died_complete_voyage = new NumberVariable({
 
 captainAndCrew = {
   captainAndCrew: {
-    var_captain_plaintext: var_captain_plaintext,
+    var_captain: var_captain,
     var_crew_voyage_outset: var_crew_voyage_outset,
     var_crew_first_landing: var_crew_first_landing,
     var_crew_died_complete_voyage: var_crew_died_complete_voyage,
