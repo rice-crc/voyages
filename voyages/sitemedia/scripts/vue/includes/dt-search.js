@@ -57,7 +57,7 @@
   var allColumns = [
     { "data": "var_voyage_id" },
     { "data": "var_ship_name" },
-    { "data": "var_captain_plaintext" },
+    { "data": "var_captain" },
     { "data": "var_" + YEAR_RANGE_VARNAME },
     { "data": "var_imp_principal_place_of_slave_purchase_lang_en" },
     { "data": "var_imp_principal_port_slave_dis_lang_en" },

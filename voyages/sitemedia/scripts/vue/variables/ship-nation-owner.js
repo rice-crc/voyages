@@ -11,8 +11,8 @@ var_voyage_id = new NumberVariable({
     isAdvanced: false
   });
 
-var_ship_name_plaintext = new TextVariable({
-    varName: "ship_name_plaintext",
+var_ship_name = new TextVariable({
+    varName: "ship_name",
     label: "Vessel Name",
     description: "",
   },{
@@ -164,7 +164,7 @@ var_guns_mounted = new NumberVariable({
 shipNationOwner = {
   voyagesAndVessels: {
     var_voyage_id: var_voyage_id,
-    var_ship_name_plaintext: var_ship_name_plaintext,
+    var_ship_name: var_ship_name,
     var_owner: var_owner,
 
     count: {

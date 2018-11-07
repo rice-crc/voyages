@@ -36,8 +36,8 @@ var allColumns = [
 
   // ship nation owner
   { data: "var_voyage_id", category: 0, header: gettext("Voyage ID"), isImputed: false },
-  { data: "var_ship_name_plaintext", category: 0, header: gettext("Vessel Name"), isImputed: false },
-  { data: "var_owner_plaintext", category: 0, header: gettext("Vessel Owner"), "visible": false, isImputed: false },
+  { data: "var_ship_name", category: 0, header: gettext("Vessel Name"), isImputed: false },
+  { data: "var_owner", category: 0, header: gettext("Vessel Owner"), "visible": false, isImputed: false },
   { data: "var_year_of_construction", category: 0, header: gettext("Year Constructed"), "visible": false, isImputed: false },
   { data: "var_vessel_construction_place", category: 0, header: gettext("Place Constructed"), "visible": false, isImputed: false },
   { data: "var_registered_year", category: 0, header: gettext("Year Registered"), "visible": false, isImputed: false },
@@ -103,7 +103,7 @@ var allColumns = [
   { data: "var_voyage_completed", category: 4, header: gettext("Date Voyage Completed"), "visible": false, isImputed: false },
 
   // captain and crew
-  { data: "var_captain_plaintext", category: 5, header: gettext("Captain's Name"), isImputed: false },
+  { data: "var_captain", category: 5, header: gettext("Captain's Name"), isImputed: false },
   { data: "var_crew_voyage_outset", category: 5, header: gettext("Crew at Voyage Outset"), "visible": false, isImputed: false },
   { data: "var_crew_first_landing", category: 5, header: gettext("Crew at First Landing of Slaves"), "visible": false, isImputed: false },
   { data: "var_crew_died_complete_voyage", category: 5, header: gettext("Crew Deaths during Voyage"), "visible": false, isImputed: false },
