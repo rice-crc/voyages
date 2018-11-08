@@ -7,108 +7,74 @@
     <input type="hidden" value="time-frame" name="form:_idJsp6_selected">
 
     <div role="tablist" id="accordion">
-
-      <!-- <div class="sidebar-section-accordion">
-        <div class="form-group row">
-          <div class="col-sm-12 sidebar-title-2">
-            <a data-toggle="collapse" href="#container-xxx" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
-              {% trans 'xxx' %}
-            </a>
-          </div>
-        </div>
-
-        <div id="container-xxx" class="collapse sidebar-collapse" role="tabpanel" aria-labelledby="container-xxx">
-          <div class="form-group row">
-            <div class="col-md-12">
-
-            </div>
-          </div>
-        </div>
-      </div>
-       -->
-      <div class="sidebar-section-accordion">
-        <div class="form-group row">
-          <div class="col-sm-12 sidebar-title-2">
-            <a data-toggle="collapse" href="#container-time-frame" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+      <div id="accordion" class="accordion">
+        <div class="card mb-0">
+          <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseOne" href="#">
+            <a class="card-title">
               {% trans 'Time Frame' %}
             </a>
           </div>
-        </div>
-
-        <div id="container-time-frame" class="collapse sidebar-collapse show" role="tabpanel" aria-labelledby="container-time-frame">
-          <div class="form-group row">
-            <div class="col-md-12">
-              <div id="form:_idJsp7">
-                <div class="text-title">
-                  {% trans 'Show data from' %}
-                  {{ year_form.frame_from_year }}
-                  {% trans 'to' %}
-                  {{ year_form.frame_to_year }}
+          <div id="collapseOne" class="card-body sidebar-card-body collapse show" data-parent="">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div id="form:_idJsp7">
+                  <div class="text-title">
+                    {% trans 'Show data from' %}
+                    {{ year_form.frame_from_year }}
+                    {% trans 'to' %}
+                    {{ year_form.frame_to_year }}
+                  </div>
+                  <p class="text-description">{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
+            
+                  <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
+                  <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
                 </div>
-                <p class="text-description">{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
-
-                <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
-                <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
               </div>
             </div>
           </div>
-        </div><!-- container-time-frame -->
-      </div>
-
-
-
-
-
-
-      <div class="sidebar-section-accordion">
-        <div class="form-group row">
-          <div class="col-sm-12 sidebar-title-2">
-            <a data-toggle="collapse" href="#container-flag" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+          <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseTwo" data-parent="" href="#">
+            <a class="card-title">
               {% trans 'Flag' %}
             </a>
           </div>
-        </div>
-
-        <div id="container-flag" class="collapse sidebar-collapse show" role="tabpanel" aria-labelledby="container-flag">
-          <div class="form-group row">
-            <div class="col-md-12">
-              <div class="sidebar-section-2">
+          <div id="collapseTwo" class="card-body sidebar-card-body collapse show" data-parent="">
+            <div class="form-group row">
+              <div class="col-md-12">
                 <div>
-                  {% for nation in nations %}
                   <div>
-                    {% ifequal nation.2 1 %}
+                    {% for nation in nations %}
+                    <div>
+                      {% ifequal nation.2 1 %}
                       <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" checked="checked" value="1" name="checkbox_nation_{{ nation.1 }}">
-                    {% else %}
+                      {% else %}
                       <input id="form:checkbox_nation_{{ nation.1 }}" type="checkbox" name="checkbox_nation_{{ nation.1 }}">
-                    {% endifequal %}
-                    <label class="sidebar-label" for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
+                      {% endifequal %}
+                      <label class="sidebar-label" for="form:checkbox_nation_{{ nation.1 }}">{{ nation.0|trans_log }}</label>
+                    </div>
+                    {% endfor %}
                   </div>
-                  {% endfor %}
                 </div>
+                <button class="btn btn-solid btn-sm marign-v" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
+                <button class="btn btn-outline btn-sm marign-v" type="submit" name="submit_nation" type="submit" value="Reset to default"
+                  name="submit_regions">{% trans 'Reset' %}</button>
               </div>
-              <button class="btn btn-solid btn-sm marign-v" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
-              <button class="btn btn-outline btn-sm marign-v" type="submit" name="submit_nation" type="submit" value="Reset to default" name="submit_regions">{% trans 'Reset' %}</button>
             </div>
           </div>
-        </div><!-- container-xxx -->
-      </div>
-
-      <div class="sidebar-section-accordion">
-        <div class="form-group row">
-          <div class="col-sm-12 sidebar-title-2">
-            <a data-toggle="collapse" href="#container-regions" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+          <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseThree" data-parent="" href="#">
+            <a class="card-title">
               {% trans 'Regions' %}
             </a>
           </div>
-        </div>
-
-        <div id="container-regions" class="collapse sidebar-collapse" role="tabpanel" aria-labelledby="container-regions">
-          <div class="form-group row">
+          <div id="collapseThree" class="collapse" data-parent="">
+            <div class="card-body sidebar-card-body">
+              
+              <div class="form-group row">
             <div class="col-md-12">
 
-              <div class="sidebar-section-2">
+              <div>
                 <div class="sidebar-title-3">{% trans 'Embarkation Regions' %}</div>
                 <!-- Embkarkation menu -->
+                <div class="region-list">
                 <table>
                 <tbody>
                   {% for area, region_list in export_regions.items %}
@@ -169,13 +135,14 @@
                   {% endfor %}
                 </tbody>
               </table>
+              </div>
 
                 <!-- Select/Deselect all buttons -->
                 <!-- <button class="btn btn-solid btn-sm" value="'Select all'" onclick="allClicked(this, 1)">{% trans 'Select All' %}</button>
                 <button class="btn btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
               </div>
 
-              <div class="region-list sidebar-section-2">
+              <div class="region-list">
                 <!-- Disembarkation menu -->
                 <div class="sidebar-title-3">{% trans 'Disembarkation Regions' %}</div>
                 <table>
@@ -249,35 +216,27 @@
 
             </div>
           </div>
-        </div><!-- container-xxx -->
-      </div>
+            </div>
+          </div>
 
-
-
-
-      <div class="sidebar-section-accordion">
-        <div class="form-group row">
-          <div class="col-sm-12 sidebar-title-2">
-            <a data-toggle="collapse" href="#container-query" role="button" aria-expanded="true" aria-controls="collapseOne" data-parent="#accordion">
+                    <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseFour" href="#collapseFour">
+            <a class="card-title">
               {% trans 'Create a Query Link' %}
             </a>
           </div>
-        </div>
-
-        <div id="container-query" class="collapse sidebar-collapse" role="tabpanel" aria-labelledby="container-query">
-          <div class="form-group row">
-            <div class="col-md-12">
-              <div class="text-description">{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</div>
-              <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
-              <button class="btn btn-solid btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
-              <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Reset All' %}</button>
+          <div id="collapseFour" class="card-body sidebar-card-body collapse" data-parent="">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div class="text-description">{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</div>
+                <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
+                <button class="btn btn-solid btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
+                <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Reset All' %}</button>
+              </div>
             </div>
           </div>
-        </div><!-- container-xxx -->
+        </div>
       </div>
-    </div>
-
-
+  </div>
 
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
