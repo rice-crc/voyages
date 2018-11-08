@@ -10,34 +10,25 @@
 <link href="{% sass_src 'scss/contribute.scss' %}" rel="stylesheet" type="text/css" />
 
 <div class="white-board">
+
+	<section class="page-section">
 	<div class="page-title-1">{% trans "Welcome to the Contribute Section" %}</div>
 
-	<ul class="contribute_menu row">
-		{% if request.user.is_staff %}
-		<!-- Is enabled only if the user is a staff member -->
-		<li class="live_admin col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
-		</li>
-		{% endif %}
-		<li class="col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'contribute:new_voyage' %}">{% trans "New Voyage" %}</a>
-		</li>
-		<li class="col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'contribute:edit_voyage' %}">{% trans "Edit Existing Voyage" %}</a>
-		</li>
-		<li class="col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'contribute:merge_voyages' %}">{% trans "Merge Voyages" %}</a>
-		</li>
-		<li class="col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend Voyage Deletion" %}</a>
-		</li>
-		{% if request.user.is_superuser %}
-		<!-- Is enabled only if the user is a super user -->
-		<li class="live_admin col-sm-12 col-md-6 col-lg-4">
-			<a href="{% url 'contribute:editor_main' %}">{% trans "Editorial Platform" %}</a></h3>
-		</li>
-		{% endif %}
-	</ul>
+	{% if request.user.is_staff %}
+	<!-- Is enabled only if the user is a staff member -->
+		<a class="btn btn-info btn-sm" href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
+	{% endif %}
+		<a class="btn btn-info btn-sm" href="{% url 'contribute:new_voyage' %}">{% trans "New Voyage" %}</a>
+		<a class="btn btn-info btn-sm" href="{% url 'contribute:edit_voyage' %}">{% trans "Edit Existing Voyage" %}</a>
+		<a class="btn btn-info btn-sm" href="{% url 'contribute:merge_voyages' %}">{% trans "Merge Voyages" %}</a>
+		<a class="btn btn-info btn-sm" href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend Voyage Deletion" %}</a>
+	{% if request.user.is_superuser %}
+	<!-- Is enabled only if the user is a super user -->
+		<a class="btn btn-info btn-sm" href="{% url 'contribute:editor_main' %}">{% trans "Editorial Platform" %}</a></h3>
+	{% endif %}
+
+	</section>
+	<section class="page-section">
 	{% for c in contributions %}
 		{% if forloop.first %}
 			<div class="page-title-1">{% trans "Contributions" %}</div>
@@ -106,6 +97,7 @@
 			</table>
 		{% endif %}
 	{% endfor %}
+	</section>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
