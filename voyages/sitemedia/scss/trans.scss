@@ -1,4 +1,5 @@
 @import "colors";
+@import "variables";
 
 
 // btn colors
@@ -111,4 +112,13 @@ a {
   td:nth-child(1), th:nth-child(1) {
     font-weight: bold;
   }
+}
+
+
+.trans-card-header {
+  background: $trans-color;
+  color: white;
+  cursor: pointer;
+  font-size: $regular-font-size !important;
+  font-weight: 500;
 }
