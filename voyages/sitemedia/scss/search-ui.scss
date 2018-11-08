@@ -178,6 +178,19 @@ td.header {
 }
 
 // loader
+
+.sv-loader-img {
+  animation-duration: 2.5s !important; 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 75px;
+  height: 75px;
+  margin-top: -37.5px; /* Half the height */
+  margin-left: -37.5px; /* Half the width */
+  opacity: 0.9;
+}
+
 /* hide the current gif */
 .sv-loader-bg, .sv-loader-bg[style] {
   position: absolute;
