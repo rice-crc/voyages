@@ -414,3 +414,6 @@ footer {
     /* symbol for "collapsed" panels */
     content: "\f067"; 
 }
+.card-header:first-child {
+  border-radius: 0;
+}
