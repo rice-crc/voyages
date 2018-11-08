@@ -216,3 +216,12 @@ input.button-save:hover {
 .article-list-item {
   color: $past-color !important;
 }
+
+
+.past-card-header {
+  background: $past-color !important;
+  color: white;
+  cursor: pointer;
+  font-size: $regular-font-size !important;
+  font-weight: 500;
+}
