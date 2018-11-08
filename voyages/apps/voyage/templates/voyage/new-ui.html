@@ -17,6 +17,7 @@
 	<link href="{% sass_src 'scss/trans-search.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/sidebar.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/library/loading.css' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/vue-treeselect@0.0.37.min.css' %}" rel="stylesheet" type="text/css" />
 	{% endcompress %}
 {% endblock %}
@@ -60,7 +61,7 @@
 	<!-- End of SearchNav -->
 
 	<div id="sv-loader" class="sv-loader-bg display-none">
-		<div class="sv-loader-helm"><img src="{{ STATIC_URL }}/images/site/helm.gif"></div>
+		<img class="ld ld-spin sv-loader-img" src="{{ STATIC_URL }}/images/site/rudder-intra.svg">
 	</div>
 
 	<div id="sv-loader-error" class="sv-loader-bg display-none">
