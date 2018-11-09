@@ -20,6 +20,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 import imputed
 import json
+import re
+import six
 
 number_prefix = 'interim_slave_number_'
 
@@ -1201,7 +1203,7 @@ def submit_editorial_decision(request, editor_contribution_id):
                 return JsonResponse({'result': 'Failed', 'errors': _('New sources must have a connection reference starting with the source\'s short reference.')})
                 
     # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
-    review_request = contribution.request    
+    review_request = contribution.request
     user_contribution = review_request.contribution()
     if user_contribution is None: raise Http404
     if not created_voyage_id and (review_request.requires_created_voyage_id() and decision == ReviewRequestDecision.accepted_by_editor):
@@ -1240,6 +1242,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         # Fetch decision.
         review_request.final_decision = decision
         review_request.created_voyage_id = created_voyage_id
+        review_request.is_intra_american = request.POST.get('is_intra_american', None) is not None
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         msg = escape(msg)
@@ -1448,22 +1451,25 @@ def download_voyages(request):
         statuses.append(ContributionStatus.rejected)
     
     include_published = request.POST.get('published_check') == 'True'
+    remove_linebreaks = request.POST.get('remove_linebreaks') == 'True'
 
-    import os, re, tempfile, thread
+    import os, tempfile, thread
     try:
         dir = settings.MEDIA_ROOT + '/csv_downloads/'
         if not os.path.exists(dir):
             os.makedirs(dir)
         csv_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
-        thread.start_new_thread(generate_voyage_csv_file, (statuses, include_published, csv_file, log_file))
+        thread.start_new_thread(
+            generate_voyage_csv_file,
+            (statuses, include_published, csv_file, log_file, remove_linebreaks))
         return JsonResponse({'result': 'OK', 
             'log_file': re.sub('^.*/', '', log_file.name),
             'csv_file': re.sub('^.*/', '', csv_file.name)})
     except Exception as exception:
         return JsonResponse({'result': 'Failed', 'error': exception.message})
 
-def generate_voyage_csv_file(statuses, published, csv_file, log_file):
+def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False):
     # Simply iterate over generated CSV rows passing the file as buffer.
     def log(message):
         log_file.seek(0)
@@ -1473,7 +1479,7 @@ def generate_voyage_csv_file(statuses, published, csv_file, log_file):
 
     log('Started generating CSV file')
     count = 0
-    for _ in get_voyages_csv_rows(statuses, published, csv_file):
+    for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
         count += 1
         if (count % 100) == 0:
             log(str(count) + ' rows exported to CSV')
@@ -1507,7 +1513,7 @@ def download_voyages_go(request):
     response['Content-Disposition'] = 'attachment; filename=voyages.csv'
     return response
 
-def get_voyages_csv_rows(statuses, published, buffer=None):
+def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False):
     from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
     if buffer is None:
         buffer = Echo()
@@ -1515,11 +1521,13 @@ def get_voyages_csv_rows(statuses, published, buffer=None):
     header = get_header_csv_text()
     yield header
     buffer.write(header)
+    row_processor = lambda x: x if not remove_linebreaks else \
+        {k: re.sub('\r?\n', ' ', v) if isinstance(v, six.string_types) else v for k, v in x.items()}
     for item in export_contributions(statuses):
-        yield safe_writerow(writer, item)
+        yield safe_writerow(writer, row_processor(item))
     if published:
         for item in export_from_voyages():
-            yield safe_writerow(writer, item)
+            yield safe_writerow(writer, row_processor(item))
 
 @login_required()
 @require_POST

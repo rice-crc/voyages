@@ -59,6 +59,14 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <div class="input-group col-sm-8">
+                    <label for="is_intra_american">
+                        {% trans "This is an Intra-American voyage" %}
+                    </label>
+                    <input id="is_intra_american" name="is_intra_american" type="checkbox" class="form-check-input">
+                </div>
+            </div>
             {% if review_request.requires_created_voyage_id %}
             <div class="form-group">
                 <label for="created_voyage_id">
