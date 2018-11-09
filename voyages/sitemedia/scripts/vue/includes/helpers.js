@@ -1,6 +1,6 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
-const TRANS_PATH = "voyage/new-ui";
+const TRANS_PATH = "voyage/database";
 
 // converts camel case into title case
 function camel2title(camelCase) {
@@ -551,7 +551,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     items: searchAll(filter, filterData),
     orderBy: []
   };
-  var searchUrl = "876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search";
+  var searchUrl = "api/beta_ajax_search";
   if (currentTab == 'results') {
     // Results DataTable
     var pageLength = {
@@ -752,7 +752,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           return visible ? allColumns[index].data : undefined;
         }) : [];
 
-        var form = $("<form action='876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+        var form = $("<form action='api/beta_ajax_download' method='post'>{% csrf_token %}</form>");
         form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
 
           searchData: isFiltered ? currentSearchObj : { "items": [] }, // decides if it's returning filtered data or all data
