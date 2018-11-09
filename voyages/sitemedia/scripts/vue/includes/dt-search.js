@@ -65,7 +65,7 @@
   ];
 
   // var ajax = this.get('ajax');
-  // var ajaxResult = ajax.request('/voyage/876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search', {
+  // var ajaxResult = ajax.request('/voyage/api/beta_ajax_search', {
   //   method: 'POST',
   //   data: function(d) {
   //     if (d.order) {

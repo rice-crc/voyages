@@ -45,7 +45,7 @@ urlpatterns = [
     # url(r'^download', voyages.apps.voyage.views.download_flatpage, name='download'),
     url(r'^download', TemplateView.as_view(template_name='voyage/download.html'), name='download'),
 
-    url(r'^new-ui', TemplateView.as_view(template_name='voyage/new-ui.html'), name='new-ui'),
+    url(r'^database', TemplateView.as_view(template_name='voyage/database.html'), name='database'),
 
 
     url(r'var-options', voyages.apps.voyage.beta_views.get_var_options, name='var-options'),
@@ -53,9 +53,9 @@ urlpatterns = [
     url(r'save-query', voyages.apps.voyage.beta_views.save_query, name='save-query'),
     url(r'get-saved-query/(?P<query_id>\w+)', voyages.apps.voyage.beta_views.get_saved_query, name='get-saved-query'),
 
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008', voyages.apps.voyage.beta_views.search_view, name='beta_search'),
+    url(r'^api/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
+    url(r'^api/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
+    url(r'^api', voyages.apps.voyage.beta_views.search_view, name='beta_search'),
 
     url(r'get-all-sources', voyages.apps.voyage.beta_views.get_all_sources, name='all-sources'),
 ]

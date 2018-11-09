@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^essays', TemplateView.as_view(template_name='american/essays.html'), name='essays'),
     url(r'^downloads', TemplateView.as_view(template_name='american/downloads.html'), name='downloads'),
     url(r'^database', voyages.apps.american.views.index, name='database'), # url(r'^database', TemplateView.as_view(template_name='american/database.html'), name='database'),
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
-    url(r'^876167cf-bc40-44f7-9557-ee8117d94008', voyages.apps.voyage.beta_views.search_view, name='beta_search')
+    url(r'^api/beta_ajax_search', voyages.apps.voyage.beta_views.ajax_search, name='beta_ajax_search'),
+    url(r'^api/beta_ajax_download', voyages.apps.voyage.beta_views.ajax_download, name='beta_ajax_download'),
+    url(r'^api', voyages.apps.voyage.beta_views.search_view, name='beta_search')
 ]
