@@ -13,6 +13,10 @@ td.tabs-tab-middle-selected, td.tabs-tab-middle {
 td.tabs-tab-middle, td.tabs-tab-left, td.tabs-tab-right {
   cursor: pointer; }
 
+td.tabs-tab-middle {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem; }
+
 td.tabs-tab-right-selected, td.tabs-tab-right {
   background-position: right top;
   background-repeat: no-repeat;

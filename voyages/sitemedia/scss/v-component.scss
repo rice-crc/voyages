@@ -1,13 +1,14 @@
 @import "colors";
+@import "variables";
 
 .dropdown-menu-title-text {
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
 }
 
 .v-title {
   font-weight: bold;
   color: #666666;
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,7 +25,7 @@
 .v-description {
   color: #666666;
   margin-bottom: 0.35rem;
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
 }
 
 .v-panel-title-container {
@@ -34,14 +35,14 @@
 }
 
 .v-panel-title {
-  font-size: 1.25rem;
+  font-size: $large-font-size;
   font-weight: bold;
   color: #666666;
 }
 
 .v-panel-description {
   color: #666666;
-  font-size: 0.85rem;
+  font-size: $regular-font-size
 }
 
 .v-panel-header {}
@@ -63,7 +64,7 @@
 
 .v-form-element-caption {
   color: #888888;
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
   // padding-top: 0.125rem;
 }
 
@@ -111,6 +112,11 @@
   font-weight: bold;
 }
 
+.side-control-tab {
+  color: $trans-primary-color;
+  font-weight: normal;
+}
+
 .control-tab-pane {
   padding: 0 !important;
 }
@@ -126,12 +132,12 @@
 
 .card-header {
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: $regular-font-size;
 }
 
 .card-body {
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: $regular-font-size;
 }
 
 .btn-navbar {
@@ -156,7 +162,7 @@
   height: 100%;
   z-index: 100;
   width:100%;
-  background: rgba(0,0,0,0.05) url('../images/site/helm.gif') no-repeat center center;
+  background: rgba(0,0,0,0.05) url('../images/site/rudder.gif') no-repeat center center;
 }
 
 .vdp-datepicker {

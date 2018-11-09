@@ -8,7 +8,7 @@
 * main elements
 ***********************************/
 .tabs-tab-middle, .tabs-tab-middle-selected {
-  font-size: 0.85rem; }
+  font-size: 0.8rem; }
 
 td.td-main-panel {
   vertical-align: top;
@@ -115,7 +115,7 @@ td.td-side-panel td.box-set-upper-row-bottom-middle {
 .estimates-table-form li {
   list-style: none;
   display: inline-block;
-  font-size: 0.85rem; }
+  font-size: 0.8rem; }
 
 ul.estimates-table-form {
   padding-left: 0;

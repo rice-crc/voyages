@@ -137,13 +137,13 @@ var layer = svg.selectAll(".layer")
 function mouseover(d) {
     var historical = '';
     if (events && events[d.x.toString()]) {
-        historical = "<br /><strong>{% trans 'Historical event' %}:</strong> " + events[d.x.toString()];
+        historical = "</div><div class='flex'><strong>{% trans 'Historical event' %}:</strong>" + events[d.x.toString()] + "</div>";
     } else {
-        historical = "<br />&nbsp;";
+        historical = "</div>";
     }
-	$( '#mouseOverInfo' ).html("<strong>{% trans 'Year' %}:</strong> " + d.x +
-	    "<br /><strong>{% trans 'Embarked' %}:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
-	    "<br /><strong>{% trans 'Disembarked' %}:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
+	$( '#mouseOverInfo' ).html("<div class='flex'><strong>{% trans 'Year' %}:</strong> " + d.x +
+	    "</div><div class='flex'><strong>{% trans 'Embarked' %}:</strong> " + Math.round(d.y1).toLocaleString('{{ LANGUAGE_CODE }}') +
+	    "</div><div class='flex'><strong>{% trans 'Disembarked' %}:</strong> " + Math.round(d.y0).toLocaleString('{{ LANGUAGE_CODE }}') + historical);
 }
 
 var rect = layer.selectAll("rect")

@@ -1,4 +1,5 @@
-{% verbatim %}
+{% load i18n %}
+
 <table id="results_main_table" class="table table-striped table-bordered">
   <thead>
     <tr>
@@ -89,20 +90,22 @@
 
   <div class="row">
     <div class="col-md-12">
-      <p>Here are the currently available details for this voyage. <a href="#" @click="row.collapseVisible = !row.collapseVisible">Expand/Collapse</a> to see/hide all.<p>
+      <p class="body-text">{% trans "Here are the currently available details for this voyage." %} <a href="#" @click="row.collapseVisible = !row.collapseVisible">Expand/Collapse</a> to see/hide all.<p>
     </div>
   </div>
+
+{% verbatim %}
 
   <div class="row" v-for="result in row.results">
     <div class="col-md-12">
       <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="pointer" role="tab">
-          <div block href="#" v-b-toggle="result.group" variant="info" class="text-bold">{{result.groupName}}</div>
+          <div block href="#" v-b-toggle="result.group" variant="info" class="v-title">{{result.groupName}}</div>
         </b-card-header>
         <b-collapse :id="result.group" :visible=row.collapseVisible role="tabpanel">
           <b-card-body>
             <div class="row" v-for="variable in result.variables">
-              <div class='col-md-6 v-title'>
+              <div class='col-md-4 text-bold'>
                 {{variable.label}}
                 <b-badge pill
                   v-if="variable.isImputed"
@@ -112,7 +115,7 @@
                   IMP
                 </b-badge>
               </div>
-              <div class='col-md-6'>
+              <div class='col-md-8'>
                 <span v-html="variable.value"></span>
               </div>
             </div>
@@ -128,6 +131,6 @@
    </b-btn>
  </div>
 
-</b-modal>
-
 {% endverbatim %}
+
+</b-modal>
