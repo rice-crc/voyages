@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load sass_tags %}
+{% load i18n %}
+{% load compress %}
+
+{% block csslist %}
+{% compress css %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block jslist %}
+{% compress js %}
+{% endcompress %}
+{% endblock %}
