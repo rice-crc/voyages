@@ -13,7 +13,7 @@
   <div class="card mb-0">
 
   <div class="sidebar-section-accordion">
-    <div class="card-header past-card-header collapsed" data-toggle="collapse" data-target="#collapseOne" href="#">
+    <div class="card-header past-card-header" data-toggle="collapse" data-target="#collapseOne" href="#">
       <a class="card-title">
     {% trans 'General Variables' %}
       </a>
@@ -21,7 +21,7 @@
 
     <div id="collapseOne" class="card-body sidebar-card-body collapse show" data-parent="">
       <div class="form-group row">
-        <label for="slave_name" class="col-sm-5 sv-col-form-label">{% trans 'African name' %}</label>
+        <label for="slave_name" class="col-sm-5 sidebar-label">{% trans 'African name' %}</label>
         <div class="col-sm-7">
           {% if "slave_name" in query_dict %}
             <input class="full-input" id="search_slave_name" type="text" value="{{ query_dict.slave_name }}" name="slave_name">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Ship name' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Ship name' %}</label>
         <div class="col-sm-7">
           {% if "slave_ship_name" in query_dict %}
             <input class="full-input" id=search_slave_ship_name type="text" value="{{ query_dict.slave_ship_name }}" name="slave_ship_name">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Voyage ID' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Voyage ID' %}</label>
         <div class="col-sm-7">
           {% if "slave_voyage_number" in query_dict %}
             <input class="full-input" id="search_slave_voyage_number" type="text" value="{{ query_dict.slave_voyage_number }}" name="slave_voyage_number">
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Time frame' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Time frame' %}</label>
         <div class="col-sm-7">
           {% if "slave_date_arrived__gte" in query_dict %}
             <input id="search_slave_start_date" type="text" class="partial-input" value="{{ query_dict.slave_date_arrived__gte }}" name="slave_date_arrived__gte">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Age' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Age' %}</label>
         <div class="col-sm-7">
           {% if "slave_age__gte" in query_dict %}
             <input id="search_slave_start_age" type="text" class="partial-input" value="{{ query_dict.slave_age__gte }}" name="slave_age__gte">
@@ -83,7 +83,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Height (inches)' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Height (inches)' %}</label>
         <div class="col-sm-7">
           {% if "slave_height__gte" in query_dict %}
             <input id="search_slave_start_height" type="text" class="partial-input" value="{{ query_dict.slave_height__gte }}" name="slave_height__gte">
@@ -99,11 +99,11 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Sex/Age' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Sex/Age' %}</label>
         <div class="col-sm-7">
           <div class="row">
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
                 {% if "slave_sex_age__in" in query_dict and "Boy" in query_dict.slave_sex_age__in %}
                   <input type="checkbox" value="true" checked="checked" name="sex_Boy">
                 {% else %}
@@ -113,7 +113,7 @@
               </label>
             </div>
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
                 {% if "slave_sex_age__in" in query_dict and "Girl" in query_dict.slave_sex_age__in %}
                   <input type="checkbox" value="true" checked="checked" name="sex_Girl">
                 {% else %}
@@ -125,7 +125,7 @@
           </div>
           <div class="row">
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
                 {% if "slave_sex_age__in" in query_dict and "Man" in query_dict.slave_sex_age__in %}
                   <input type="checkbox" value="true" checked="checked" name="sex_Man">
                 {% else %}
@@ -135,7 +135,7 @@
               </label>
             </div>
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
                 {% if "slave_sex_age__in" in query_dict and "Woman" in query_dict.slave_sex_age__in %}
                   <input type="checkbox" value="true" checked="checked" name="sex_Woman">
                 {% else %}
@@ -147,7 +147,7 @@
           </div>
           <div class="row">
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
                 {% if "slave_sex_age__in" in query_dict and "Male" in query_dict.slave_sex_age__in %}
                   <input type="checkbox" value="true" checked="checked" name="sex_Male">
                 {% else %}
@@ -157,7 +157,7 @@
               </label>
             </div>
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="sidebar-label">
               {% if "slave_sex_age__in" in query_dict and "Female" in query_dict.slave_sex_age__in %}
                 <input type="checkbox" value="true" checked="checked" name="sex_Female">
               {% else %}
@@ -182,7 +182,7 @@
 
     <div id="collapseTwo" class="card-body sidebar-card-body collapse " data-parent="">
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Filter by' %}</label>
         <div class="col-sm-7">
           <input id="query-text-origin" type="text" onkeyup="filter_edit_list()" name="" class="full-input">
         </div>
@@ -201,7 +201,7 @@
                           <input id="search_slave_origin_{{ record.country_id }}" type="checkbox" name="origin_{{ record.country_id }}">
                         {% endif %}
                       </td>
-                      <td class="lookup-checkbox-list-item-0">{{ record.name }}</td>
+                      <td class="sidebar-label">{{ record.name }}</td>
                     </tr>
                 {% endfor %}
               </tbody>
@@ -226,7 +226,7 @@
     </div>
     <div id="collapseThree" class="card-body sidebar-card-body collapse " data-parent="">
       <div class="form-group row">
-        <label for="slave_ship_name" class="col-sm-5 sv-col-form-label">{% trans 'Filter by' %}</label>
+        <label for="slave_ship_name" class="col-sm-5 sidebar-label">{% trans 'Filter by' %}</label>
         <div class="col-sm-7">
           <input class="full-input" id="query-text-embarkation" type="text" onkeyup="filter_embarkation()" name="">
         </div>
@@ -249,7 +249,7 @@
                         <input type="checkbox" name="checkbox_{{ k.value }}" value="{{ k.value }}" onclick="embarkation_choices(this, {{ k.value }})">
                       {% endif %}
                     </td>
-                    <td class="lookup-checkbox-list-item-0 query-builder-list-item-with-children">{{ k.broad_region|trans_log }}</td>
+                    <td class="sidebar-label query-builder-list-item-with-children">{{ k.broad_region|trans_log }}</td>
                   </tr>
                   {% if v.items %}
                   <tr id="tr_{{ k.value }}_child" style="display: none">
@@ -344,8 +344,8 @@
             {% if forloop.parentloop.parentloop.first and forloop.parentloop.first%}
               <!-- {% trans 'Disembarkation' %} -->
             {% endif %}
-              <div class="form-check">
-                <label class="form-check-label">
+              <div>
+                <label class="sidebar-label">
                   {% if "slave_disembarkation_port__in" in query_dict and place.value in query_dict.slave_disembarkation_port__in %}
                     <input type="checkbox" value="true" checked="checked" name="disembarkation_{{ place.value }}">
                   {% else %}
@@ -366,8 +366,8 @@
   </div>
   <div class="form-group row">
     <div class="col-sm-12">
-      <button class="btn btn-solid margin-v" type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
-      <button class="btn btn-outline margin-v" type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'Reset All' %}</button>
+      <button class="btn btn-solid btn-sm margin-v" type="submit" id="submitBoxPlaces" value="Search" name="action">{% trans 'Search' %}</button>
+      <button class="btn btn-outline btn-sm margin-v" type="submit" id="form:_idJsp161" value="New Query" name="action">{% trans 'Reset All' %}</button>
     </div>
   </div>
   </div>

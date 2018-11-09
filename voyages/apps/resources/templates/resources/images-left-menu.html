@@ -9,7 +9,7 @@
 
     <div>
       <div class="form-group row">
-        <label for="q" class="col-sm-5 sv-col-form-label">{% trans "Keyword" %}</label>
+        <label for="q" class="col-sm-5 sidebar-label">{% trans "Keyword" %}</label>
         <div class="col-sm-7">
           {% if not query %}
               <input type="text" value="" name="q" class="full-input">
@@ -20,7 +20,7 @@
       </div>
 
       <div class="form-group row">
-        <label class="col-sm-5 sv-col-form-label">{% trans 'Time frame' %}</label>
+        <label class="col-sm-5 sidebar-label">{% trans 'Time frame' %}</label>
         <div class="col-sm-7">
           {% if not time_start %}
               <input type="text" class="partial-input" value="" name="time_start">
@@ -36,24 +36,16 @@
         </div>
       </div>
 
-
-
-
-
-
-
-
-
       <div class="form-group row">
         <div class="col-sm-12">
-              <div>{% trans 'Category' %}</div>
+              <div class="sidebar-label">{% trans 'Category' %}</div>
 
               <input type="hidden" value="">
                 {% for images_set in images %}
                     {% if images_set.number_of_images > 0 %}
 
-                      <div class="checkbox-list-label-{{ forloop.counter0 }} form-check">
-                        <label class="form-check-label">
+                      <div class="checkbox-list-label-{{ forloop.counter0 }}">
+                        <label class="sidebar-label">
                             {% if enabled_categories and images_set.label_name not in enabled_categories %}
                               <input type="checkbox" name="checkbox4" value="{% trans images_set.label_name|spaces_to_underscores %}">
                             {% else %}
@@ -73,20 +65,10 @@
                       </div>
                     {% endif %}
                 {% endfor %}
-
-
         </div>
       </div>
       </div>
 
-
-
-      <div class="sidebar-section">
-        <button class="btn btn-solid margin-v" type="submit" value="Submit">{% trans 'Search' %}</button>
-        <button class="btn btn-outline margin-v" type="submit" value="Start again" name="restart">{% trans 'Reset All' %}</button>
-      </div>
-
-
-
-
+      <button class="btn btn-solid btn-sm margin-v" type="submit" value="Submit">{% trans 'Search' %}</button>
+      <button class="btn btn-outline btn-sm margin-v" type="submit" value="Start again" name="restart">{% trans 'Reset All' %}</button>
   </form>

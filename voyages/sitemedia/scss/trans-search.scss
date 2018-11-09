@@ -14,7 +14,7 @@
 
 .v-saved-searches-item {
   margin-bottom: 1rem;
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
   color: #666666;
 }
 
@@ -26,7 +26,7 @@
 .panel-list {
   margin-bottom: 0;
   list-style: none;
-  font-size: 0.85rem;
+  font-size: $regular-font-size;
   padding: 0.5rem 4rem;
   display: flex;
   justify-content: space-between;
@@ -130,7 +130,7 @@ table.dataTable tbody > tr > td {
 
 .trans-tab .nav-item {
   a {
-    font-size: $reduced-font-size;
+    font-size: $regular-font-size;
   }
 
   .nav-link {

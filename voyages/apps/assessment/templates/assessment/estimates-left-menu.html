@@ -9,7 +9,7 @@
     <div role="tablist" id="accordion">
       <div id="accordion" class="accordion">
         <div class="card mb-0">
-          <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseOne" href="#">
+          <div class="card-header trans-card-header" data-toggle="collapse" data-target="#collapseOne" href="#">
             <a class="card-title">
               {% trans 'Time Frame' %}
             </a>
@@ -18,21 +18,21 @@
             <div class="form-group row">
               <div class="col-md-12">
                 <div id="form:_idJsp7">
-                  <div class="text-title">
+                  <div class="sidebar-label">
                     {% trans 'Show data from' %}
                     {{ year_form.frame_from_year }}
                     {% trans 'to' %}
                     {{ year_form.frame_to_year }}
                   </div>
-                  <p class="text-description">{% trans 'Full extent of coverage by estimates is 1501–1866.' %}</p>
+                  <div class="text-description">{% trans 'Full extent of coverage by estimates is 1501 - 1866.' %}</div>
             
-                  <button class="btn btn-solid btn-sm" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
-                  <button class="btn btn-outline btn-sm" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
+                  <button class="btn btn-solid btn-sm margin-v" type="submit" name="submit_year" value="Change selection">{% trans 'Apply' %}</button>
+                  <button class="btn btn-outline btn-sm margin-v" type="submit" name="submit_year" value="Reset to default">{% trans 'Reset' %}</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card-header trans-card-header collapsed" data-toggle="collapse" data-target="#collapseTwo" data-parent="" href="#">
+          <div class="card-header trans-card-header" data-toggle="collapse" data-target="#collapseTwo" data-parent="" href="#">
             <a class="card-title">
               {% trans 'Flag' %}
             </a>
@@ -54,9 +54,11 @@
                     {% endfor %}
                   </div>
                 </div>
-                <button class="btn btn-solid btn-sm marign-v" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
-                <button class="btn btn-outline btn-sm marign-v" type="submit" name="submit_nation" type="submit" value="Reset to default"
+                <div>
+                <button class="btn btn-solid btn-sm margin-v" type="submit" name="submit_nation" value="Change selection" name="submit_regions">{% trans 'Apply' %}</button>
+                <button class="btn btn-outline btn-sm margin-v" type="submit" name="submit_nation" type="submit" value="Reset to default"
                   name="submit_regions">{% trans 'Reset' %}</button>
+                  </div>
               </div>
             </div>
           </div>
@@ -142,7 +144,7 @@
                 <button class="btn btn-outline btn-sm" value="'Deselect all'" onclick="allClicked(this, 0)">{% trans 'Deselect All' %}</button> -->
               </div>
 
-              <div class="region-list">
+              <div class="region-list margin-v">
                 <!-- Disembarkation menu -->
                 <div class="sidebar-title-3">{% trans 'Disembarkation Regions' %}</div>
                 <table>
@@ -227,7 +229,7 @@
           <div id="collapseFour" class="card-body sidebar-card-body collapse" data-parent="">
             <div class="form-group row">
               <div class="col-md-12">
-                <div class="text-description">{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</div>
+                <div class="sidebar-label">{% trans 'To reactivate the current query in the future, copy the following URL and then paste it into the address bar:' %}</div>
                 <textarea contenteditable="true" id="url_string" class="full-input"></textarea>
                 <button class="btn btn-solid btn-sm" onclick="return createLink();">{% trans 'Create Link' %}</button>
                 <button class="btn btn-outline btn-sm" onclick="return resetAll();">{% trans 'Reset All' %}</button>

@@ -3,6 +3,12 @@
 @import "variables";
 @import "colors";
 
+// body text
+.body-text {
+  font-size: $regular-font-size;
+  color: $text-primary;
+}
+
 // offset white space under menu
 .dropdown-menu {
   margin: 0;
@@ -49,7 +55,7 @@
 
 // text-secondary
 .text-description {
-  color: #898989;
+  color: $text-dark-3;
 }
 
 
@@ -410,10 +416,19 @@ footer {
     content: "\f068";
     float: right; 
 }
-.accordion .card-header.collapsed:after {
+.accordion .card-header.collapsed:after, .accordion .card-header .show:after {
     /* symbol for "collapsed" panels */
     content: "\f067"; 
 }
 .card-header:first-child {
   border-radius: 0;
+}
+
+.tick, .legend, .sidebar-label {
+  color: $text-primary !important;
+  font-size: $regular-font-size !important;
+}
+
+.sidebar-label {
+	margin-bottom: 0 !important;
 }
