@@ -496,6 +496,8 @@ var parsePlaces = function(response) {
   }
 
   // fill ports
+  data.ports = Object.keys(data.ports).sort(function (a, b) { return data.ports[a].order - data.ports[b].order }).map(key => data.ports[key]);   // sort data.ports by "order" attribute
+
   for (portId in data.ports) {
     // get basic information about a port
     var code = data.ports[portId].code;
