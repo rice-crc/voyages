@@ -73,6 +73,9 @@ function activateFilter(filter, group, subGroup, filterValues) {
       if (filter[group][subGroup][key1].changed) {
         filter[group][subGroup][key1].changed = true;
         filter[group][subGroup][key1].activated = true;
+      } else {
+        filter[group][subGroup][key1].changed = false;
+        filter[group][subGroup][key1].activated = false;
       }
     }
   }
