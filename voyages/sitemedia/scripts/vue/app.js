@@ -385,7 +385,7 @@ var searchBar = new Vue({
         if (!exists) {
           vm.saved.unshift({
             saved_query_id: response.data.saved_query_id,
-            saved_query_url: window.location.origin + "/" + response.data.saved_query_id
+            saved_query_url: window.location.origin + "/" + TRANS_PATH + SAVED_SEARCH_LABEL + response.data.saved_query_id
           });
         }
       })
