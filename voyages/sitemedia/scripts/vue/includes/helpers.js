@@ -326,12 +326,15 @@ function processPlacesAjax(data) {
 // get treeselect variable labels of currently selected items
 function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
   labels = [];
-  var offset = 1;
 
   if (currentVariable.constructor.name == "TreeselectVariable") {
     treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
     searchTerms.forEach(function (searchTerm) {
-      labels.push(treeselectOptions[searchTerm - offset].label);
+      treeselectOptions.forEach(function(treeselectOption){
+        if (treeselectOption.value == searchTerm) {
+          labels.push(treeselectOption.label);
+        }
+      });
     });
   } else if (currentVariable.constructor.name == "PlaceVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName][0];
@@ -366,10 +369,6 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
           });
         }
       }
-    });
-  } else if (currentVariable.constructor.name == "PercentageVariable") {
-    searchTerms.forEach(function (searchTerm) {
-      labels.push(treeselectOptions[searchTerm - offset].label);
     });
   }
 
