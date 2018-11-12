@@ -1479,16 +1479,21 @@ def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_lin
 
     log('Started generating CSV file')
     count = 0
-    for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
-        count += 1
-        if (count % 100) == 0:
-            log(str(count) + ' rows exported to CSV')
-    log('FINISHED')
+    try:
+        for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
+            count += 1
+            if (count % 100) == 0:
+                log(str(count) + ' rows exported to CSV')
+        log('FINISHED')
+    except Exception as e:
+        error_message = 'ERROR occurred after ' + str(count) + ' rows processed: ' + str(e)
+
+        log('ERROR occurred after ' + str(count) + ' rows processed: ' + str(e))
     csv_file.flush()
     csv_file.close()
     log_file.close()
     import gc
-    collected = gc.collect()
+    gc.collect()
 
 @login_required()
 @require_POST
