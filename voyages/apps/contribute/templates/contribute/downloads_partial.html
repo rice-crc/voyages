@@ -22,13 +22,13 @@
       </label>
     </div>
     <div class="form-check">
-      <label class="form-check-label" for="comitted">
-        <input id="committed_check" name="comitted" type="checkbox" class="form-check-input" checked>
+      <label class="form-check-label" for="committed">
+        <input id="committed_check" name="committed" type="checkbox" class="form-check-input" checked>
         {% trans "Commited by contributor" %}
       </label>
     </div>
     <div class="form-check">
-      <label class="form-check-label" for="under_review">
+      <label class="form-check-label" for="published">
         <input id="published_check" name="published" type="checkbox" class="form-check-input">
         {% trans "Published" %}
       </label>
@@ -38,6 +38,14 @@
   <div class="page-section">
     <button class="btn btn-solid btn-sm" id="select_all_downloads">{% trans "Select all" %}</button>
     <button class="btn btn-outline btn-sm" id="clear_all_downloads">{% trans "Clear" %}</button>
+  </div>
+
+  <div class="page-section">
+    <h2>{% trans "Compatibility options" %}</h2>
+    <label class="form-check-label" for="remove_linebreaks">
+      <input id="remove_linebreaks" name="remove_linebreaks" type="checkbox" class="form-check-input">
+      {% trans "Remove line breaks from CSV cells" %}
+    </label>
   </div>
 
   <div class="page-section">
@@ -74,6 +82,7 @@
               ++statusCount;
             }
         }
+        postData.remove_linebreaks = $('#remove_linebreaks').prop('checked') ? 'True' : 'False';
         if (statusCount == 0) {
             alert('{% trans "You must select at least one status" %}');
         } else {
