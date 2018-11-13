@@ -4,15 +4,9 @@
 
   <div class="page-section">
     <div class="form-check">
-      <label class="form-check-label" for="accepted_unpublished">
-        <input id="accepted_unpublished_check" name="accepted_unpublished" type="checkbox" class="form-check-input" checked>
-        {% trans "Accepted (pending publication)" %}
-      </label>
-    </div>
-    <div class="form-check">
-      <label class="form-check-label" for="rejected">
-        <input id="rejected_check" name="rejected" type="checkbox" class="form-check-input" checked>
-        {% trans "Rejected" %}
+      <label class="form-check-label" for="committed">
+        <input id="committed_check" name="committed" type="checkbox" class="form-check-input" checked>
+        {% trans "Submitted by contributor" %}
       </label>
     </div>
     <div class="form-check">
@@ -22,9 +16,15 @@
       </label>
     </div>
     <div class="form-check">
-      <label class="form-check-label" for="committed">
-        <input id="committed_check" name="committed" type="checkbox" class="form-check-input" checked>
-        {% trans "Committed by contributor" %}
+      <label class="form-check-label" for="rejected">
+        <input id="rejected_check" name="rejected" type="checkbox" class="form-check-input" checked>
+        {% trans "Rejected" %}
+      </label>
+    </div>
+    <div class="form-check">
+      <label class="form-check-label" for="accepted_unpublished">
+        <input id="accepted_unpublished_check" name="accepted_unpublished" type="checkbox" class="form-check-input" checked>
+        {% trans "Accepted (pending publication)" %}
       </label>
     </div>
     <div class="form-check">

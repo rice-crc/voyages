@@ -1470,25 +1470,26 @@ def download_voyages(request):
         return JsonResponse({'result': 'Failed', 'error': exception.message})
 
 def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False):
-    # Simply iterate over generated CSV rows passing the file as buffer.
     def log(message):
         log_file.seek(0)
         log_file.truncate(0)
         log_file.write(message)
         log_file.flush()
 
-    log('Started generating CSV file')
+    log('Started generating CSV file with statuses=' + str(statuses) + ', published=' + str(published))
     count = 0
     try:
+        # Simply iterate over generated CSV rows passing the file as buffer.
         for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
             count += 1
             if (count % 100) == 0:
                 log(str(count) + ' rows exported to CSV')
         log('FINISHED')
-    except Exception as e:
-        error_message = 'ERROR occurred after ' + str(count) + ' rows processed: ' + str(e)
-
-        log('ERROR occurred after ' + str(count) + ' rows processed: ' + str(e))
+    except:
+        import traceback
+        error_message = 'ERROR occurred after ' + str(count) + ' rows processed: ' + traceback.format_exc()
+        print error_message
+        log(error_message)
     csv_file.flush()
     csv_file.close()
     log_file.close()
@@ -1533,6 +1534,7 @@ def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=Fal
     if published:
         for item in export_from_voyages():
             yield safe_writerow(writer, row_processor(item))
+    return
 
 @login_required()
 @require_POST
