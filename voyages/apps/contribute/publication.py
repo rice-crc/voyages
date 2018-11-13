@@ -329,9 +329,9 @@ def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     members = csv_date.split(',')
     if len(members) != 3:
         members = [None, None, None]
-    data[varname + labels[0]] = int(members[1]) if members[1] != '' else None
-    data[varname + labels[1]] = int(members[0]) if members[0] != '' else None
-    data[varname + labels[2]] = int(members[2]) if members[2] != '' else None
+    data[varname + labels[0]] = int(members[1]) if members[1] and members[1] != '' else None
+    data[varname + labels[1]] = int(members[0]) if members[0] and members[0] != '' else None
+    data[varname + labels[2]] = int(members[2]) if members[2] and members[2] != '' else None
     
 def _get_label_value(x):
     return x.value if x else None
