@@ -1,12 +1,12 @@
 // this is included but not used in the search; primarily for the full detail to display
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: "Year Arrived with Captives",
+    label: "Year of Arrival at Port of Disembarkation",
     description: "",
   },{
-    op: "is between",
-    searchTerm0: 1514,
-    searchTerm1: 1866
+    op: "is equal to",
+    searchTerm0: null,
+    searchTerm1: null
   },{
     isImputed: true,
     isAdvanced: false
@@ -27,7 +27,7 @@ var_length_middle_passage_days = new NumberVariable({
 
 var_voyage_began = new DateVariable({
     varName: "voyage_began",
-    label: "Year Disembarked",
+    label: "Date That Voyage Began",
     description: "",
   },{
     op: "is equal to",
@@ -118,7 +118,6 @@ var_imp_length_home_to_disembark = new NumberVariable({
 
 dates = {
   overallDates: {
-    var_imp_arrival_at_port_of_dis: var_imp_arrival_at_port_of_dis,
     var_imp_length_home_to_disembark: var_imp_length_home_to_disembark,
     var_length_middle_passage_days: var_length_middle_passage_days,
     count: {
@@ -127,6 +126,7 @@ dates = {
     }
   },
   durationDates: {
+    var_imp_arrival_at_port_of_dis: var_imp_arrival_at_port_of_dis,
     var_voyage_began: var_voyage_began,
     var_slave_purchase_began: var_slave_purchase_began,
     var_date_departed_africa: var_date_departed_africa,

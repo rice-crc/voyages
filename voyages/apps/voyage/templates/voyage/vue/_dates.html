@@ -40,6 +40,10 @@
         <div slot="v-panel-content" slot-scope="scope">
           <code v-if="options.debug">{{scope.filters}}</code>
 
+          <v-number @change="changed"
+            :filter="scope.filters.var_imp_arrival_at_port_of_dis">
+          </v-number>
+
           <v-datepicker
 						:filter="scope.filters.var_voyage_began"
 						@change="changed">
