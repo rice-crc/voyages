@@ -4,15 +4,9 @@
 
   <div class="page-section">
     <div class="form-check">
-      <label class="form-check-label" for="accepted_unpublished">
-        <input id="accepted_unpublished_check" name="accepted_unpublished" type="checkbox" class="form-check-input" checked>
-        {% trans "Accepted (pending publication)" %}
-      </label>
-    </div>
-    <div class="form-check">
-      <label class="form-check-label" for="rejected">
-        <input id="rejected_check" name="rejected" type="checkbox" class="form-check-input" checked>
-        {% trans "Rejected" %}
+      <label class="form-check-label" for="committed">
+        <input id="committed_check" name="committed" type="checkbox" class="form-check-input" checked>
+        {% trans "Submitted by contributor" %}
       </label>
     </div>
     <div class="form-check">
@@ -22,9 +16,15 @@
       </label>
     </div>
     <div class="form-check">
-      <label class="form-check-label" for="committed">
-        <input id="committed_check" name="committed" type="checkbox" class="form-check-input" checked>
-        {% trans "Commited by contributor" %}
+      <label class="form-check-label" for="rejected">
+        <input id="rejected_check" name="rejected" type="checkbox" class="form-check-input" checked>
+        {% trans "Rejected" %}
+      </label>
+    </div>
+    <div class="form-check">
+      <label class="form-check-label" for="accepted_unpublished">
+        <input id="accepted_unpublished_check" name="accepted_unpublished" type="checkbox" class="form-check-input" checked>
+        {% trans "Accepted (pending publication)" %}
       </label>
     </div>
     <div class="form-check">
@@ -93,9 +93,11 @@
             .done(function(data) {
               if (data.result == 'OK') {
                 $('#download_selection').prop('disabled', true);
+                $('#download_link_retry').html('');
                 // At this point we have a log_file to monitor.
                 // In case the generation is done within a few seconds, we do not bother the user
                 // with a message
+                var timedCheck = null;
                 var onFinished = function() {
                   var downloadUrl = "{% url 'contribute:download_voyages_go' %}?csv_file=" + data.csv_file;
                   window.location = downloadUrl;
@@ -105,14 +107,18 @@
                 };
                 var checkCounter = 0;
                 var canCheck = true;
-                var timedCheck = setInterval(function() {
+                timedCheck = setInterval(function() {
                     if (!canCheck) return;
                     canCheck = false;
                     $.post("{% url 'contribute:download_voyages_status' %}", data)
                       .done(function(statusResult) {
                         statusResult = statusResult.status;
                         if (statusResult && statusResult.includes('FINISHED')) {
-                          onFinished()
+                          onFinished();
+                        } else if (statusResult && statusResult.includes('ERROR')) {
+                          clearInterval(timedCheck);
+                          alert(statusResult);
+                          $('#download_selection').prop('disabled', false);
                         } else {
                           canCheck = true;
                           if (checkCounter == 0) {

@@ -6,6 +6,7 @@ from voyages.apps.contribute.models import *
 from voyages.apps.contribute.views import full_contribution_id, get_filtered_contributions
 from voyages.apps.voyage.models import *
 import unicodecsv as csv
+import re
 
 _exported_spss_fields = \
     ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
@@ -76,6 +77,11 @@ def safe_writerow(writer, item):
     """
     safe = {k: v for (k, v) in [(field, item.get(field)) for field in _exported_spss_fields] if v is not None}
     return writer.writerow(safe)
+
+def _get_interim_additional_ship_owners(interim):
+    if not interim.additional_ship_owners: return []
+    additional = [re.sub('[\r\n]', '', x) for x in interim.additional_ship_owners.split('\n')]
+    return [x for x in additional if len(x) > 0]
 
 def export_contributions(statuses):
     """
@@ -323,9 +329,9 @@ def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     members = csv_date.split(',')
     if len(members) != 3:
         members = [None, None, None]
-    data[varname + labels[0]] = int(members[1]) if members[1] != '' else None
-    data[varname + labels[1]] = int(members[0]) if members[0] != '' else None
-    data[varname + labels[2]] = int(members[2]) if members[2] != '' else None
+    data[varname + labels[0]] = int(members[1]) if members[1] and members[1] != '' else None
+    data[varname + labels[1]] = int(members[0]) if members[0] and members[0] != '' else None
+    data[varname + labels[2]] = int(members[2]) if members[2] and members[2] != '' else None
     
 def _get_label_value(x):
     return x.value if x else None
@@ -614,12 +620,11 @@ def _map_interim_to_spss(interim):
     data['REGISREG'] = _get_region_value(interim.ship_registration_place)
     data['OWNERA'] = interim.first_ship_owner
     data['OWNERB'] = interim.second_ship_owner
-    if interim.additional_ship_owners:
-        other_ship_owners = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
-        aux = 'CDEFGHIJKLMNOP'
-        for i, owner in enumerate(other_ship_owners):
-            if i >= len(aux): break
-            data['OWNER' + aux[i]] = owner
+    other_ship_owners = _get_interim_additional_ship_owners(interim)
+    aux = 'CDEFGHIJKLMNOP'
+    for i, owner in enumerate(other_ship_owners):
+        if i >= len(aux): break
+        data['OWNER' + aux[i]] = owner
        
     data['CAPTAINA'] = interim.first_captain    
     data['CAPTAINB'] = interim.second_captain    
@@ -788,10 +793,9 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         create_ship_owner(interim.first_ship_owner, 1)
     if interim.second_ship_owner:
         create_ship_owner(interim.second_ship_owner, 2)
-    if interim.additional_ship_owners:
-        additional = [x for x in interim.additional_ship_owners.split('\n') if len(x) > 0]
-        for index, owner in enumerate(additional):
-            create_ship_owner(owner, index + 3)
+    additional_ship_owners = _get_interim_additional_ship_owners(interim)
+    for index, owner in enumerate(additional_ship_owners):
+        create_ship_owner(owner, index + 3)
             
     # Voyage Ship Captains
     def create_captain(name, order):
