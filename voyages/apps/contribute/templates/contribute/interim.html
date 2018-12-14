@@ -1742,6 +1742,7 @@
         e.preventDefault();
         // Validate reference.
         var data = {
+            interim_pk: {{ interim.pk }},
             short_ref: $('#id_short_ref').val(),
             full_ref: tinyMCE.activeEditor.getContent(),
             source_type: $('#id_source_type').val(),
@@ -1786,6 +1787,7 @@
                     alert(result.errors);
                 } else if (createdNewSource) {
                     createdNewSource['created_voyage_sources_id'] = result.created_voyage_sources_id;
+                    createdNewSource['pk'] = parseInt((result.interim_source_id || createdNewSource['pk']).split('/')[1]);
                     createdNewSource['source_ref_text'] = data.connection_ref;
                     for (var i = 0; i < sources.length; ++i) {
                         if (sources[i].index == createdNewSource.index) {
@@ -2435,31 +2437,8 @@
         var notes = {};
         {% endif %}
 
-        var formSubmission = function(allowEmptySources) {
+        var formSubmission = function(allowEmptySources, showErrors) {
             allowEmptySources = allowEmptySources || false;
-            if (submit_val != 'delete') {
-                // Build pre-existing sources list.
-                var preSources = $.map(
-                    [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
-                    function(pk, i) {
-                        return {
-                            'pk': pk,
-                            'action': parseInt($('#pre_existing_source_action_' + pk).val()),
-                            'notes': $('#pre_existing_source_notes_' + pk).val()
-                        };
-                    }
-                );
-                if (sources.length > 0 || preSources.length > 0 || !allowEmptySources) {
-                    var validation = validatePreSubmit(sources, preSources);
-                    if (validation.hasErrors()) {
-                        alert(validation.toString());
-                        return false;
-                    } else if (validation.hasWarnings() &&
-                            !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
-                        return false;
-                    }
-                }
-            }
             $("input[name^='date']").each(function() {
                 var self = $(this);
                 // Convert date to the expected format MM,DD,YYYY
@@ -2489,23 +2468,50 @@
             {% if mode != 'contribute' %}
             age_and_sex_table.appendToForm(form);
             {% endif %}
+            // Create JSON with source table data for submission.
             var $sources = $('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="sources" />');
             var source_models = $.map(sources, function(s, i) {
                 return s.toModel();
             });
             $sources.val(JSON.stringify(source_models));
             form.append($sources);
+            if (submit_val != 'delete') {
+                // Build pre-existing sources list.
+                var preSources = $.map(
+                    [{% for source in interim.pre_existing_sources.all %}{{ source.pk }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                    function(pk, i) {
+                        return {
+                            'pk': pk,
+                            'action': parseInt($('#pre_existing_source_action_' + pk).val()),
+                            'notes': $('#pre_existing_source_notes_' + pk).val()
+                        };
+                    }
+                );
+                if (sources.length > 0 || preSources.length > 0 || !allowEmptySources) {
+                    var validation = validatePreSubmit(sources, preSources);
+                    if (validation.hasErrors()) {
+                        if (showErrors) alert(validation.toString());
+                        return false;
+                    } else if (validation.hasWarnings() &&
+                            !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
+                        return false;
+                    }
+                }
+            }
             return true;
         };
 
-        var submitFunc = function() { return formSubmission(false); };
-        $('form').submit(submitFunc);
-        {% if mode == 'review' or mode == 'editorial_review' %}initDecisionForm(submitFunc, {{ form.persisted_form_data.value|safe }});{% endif %}
+        $('form').submit(function() { return formSubmission(false, true); });
+        {% if mode == 'review' or mode == 'editorial_review' %}
+            initDecisionForm(
+                function(showErrors) { return formSubmission(false, showErrors); },
+                {{ form.persisted_form_data.value|safe }});
+        {% endif %}
 
         // Ajax save.
         $('#save_btn').click(function() {
             var self = $(this);
-            var valid = formSubmission(true);
+            var valid = formSubmission(true, true);
             if (valid) {
                 self.prop('disabled', true);
                 $.ajax({
