@@ -30,7 +30,7 @@ function ValidationResult(warnings, errors) {
 var _bindFrom = function(self) {
     return function() {
         self.index = $("#source_index_field").val();
-        self.pk = $("#source_pk_field").val();
+        self.pk = $("#source_pk_field").val() || self.pk;
         for (var key in self._fields) {
             var field = self._fields[key];
             var inputId = field[0];
@@ -72,6 +72,7 @@ var _fromModel = function(self) {
         }
         self['created_voyage_sources_id'] = model['created_voyage_sources_id'] || model['created_voyage_sources'];
         self['text_ref'] = model['source_ref_text'];
+        self.pk = model.pk || self.pk;
         return self;
     };
 };
@@ -593,7 +594,8 @@ function validatePreSubmit(sources, preSources) {
         'date_voyage_completed',
     ];
     var dates = $.map(allDateFields, function(field, i) {
-        var date = parseDateValue($("input[name='" + field + "']").val());
+        // Work with selectized fields.
+        var date = parseDateValue($("#id_" + field).val());
         if (date.isValid()) return {
             field: field,
             date: date,

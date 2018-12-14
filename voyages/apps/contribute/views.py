@@ -1371,11 +1371,20 @@ def editorial_sources(request):
                 if interim_source_id:
                     pair = interim_source_id.split('/')
                     src_model = interim_source_model(pair[0])
-                    interim_source = src_model.objects.get(pk=int(pair[1]))
+                    interim_source = None
+                    try:
+                        interim_source = src_model.objects.get(pk=int(pair[1]))
+                    except:
+                        interim_source = src_model()
+                        interim_source.interim_voyage = InterimVoyage(pk=int(request.POST['interim_pk']))
                     interim_source.source_ref_text = connection_ref
                     interim_source.created_voyage_sources = reference
                     interim_source.save()
-                return JsonResponse({'result': 'OK', 'created_voyage_sources_id': reference.pk})
+                    # Update the composite id in case we needed to create a new entry.
+                    interim_source_id = pair[0] + '/' + str(interim_source.pk)
+                return JsonResponse({'result': 'OK',
+                    'created_voyage_sources_id': reference.pk,
+                    'interim_source_id': interim_source_id})
         else:
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
     else:

@@ -92,7 +92,7 @@
 </div>
 
 <script type="text/javascript">
-    function initDecisionForm(validation, persistedData) {
+    function initDecisionForm(preSubmit, persistedData) {
         {% if mode == 'reviewer' or mode == 'review' %}
             $('#submit_editor_btn').click(function(e) {
                 e.preventDefault();
@@ -105,7 +105,7 @@
                 if (!confirm('{% trans "Please confirm your message and decision." %}\n{% trans "Decision" %}: ' + $('#reviewer_decision option:selected').text() + '\n' + message_to_editor)) {
                     return false;
                 }
-                var valid = !validation || validation();
+                var valid = !preSubmit || preSubmit(true);
                 if (!valid) return false;
                 var self = $(this);
                 self.prop('disabled', true);
@@ -133,7 +133,7 @@
         {% if mode == 'editorial_review' or mode == 'editor' %}
             {% if allow_impute %}
                 $('#impute_btn').click(function() {
-                    var valid = !validation || validation();
+                    var valid = !preSubmit || preSubmit(true);
                     if (!valid) return false;
                     var self = $(this);
                     self.prop('disabled', true);
@@ -195,8 +195,15 @@
                     return false;
                 }
                 var self = $(this);
-                var valid = decision != 3 || !validation || validation();
-                if (!valid) return false;
+                var isAcceptDecision = decision == 3;
+                var valid =  !preSubmit || preSubmit(isAcceptDecision);
+                // If this is not an accept decision, we ignore preSubmit errors
+                // (otherwise we would block a rejection decision and the editor would
+                // have to fix all the problems before rejecting, which does not 
+                // make sense).
+                // The preSubmit method is called anyway since it may apply data
+                // transformations on the form before we submit it.
+                if (!valid && isAcceptDecision) return false;
                 self.prop('disabled', true);
                 $.ajax({
                     type: "POST",
