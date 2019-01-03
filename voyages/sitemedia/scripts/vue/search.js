@@ -172,20 +172,30 @@ allColumns.forEach(function(c, index) {
   }
 });
 
+var defaultBtns = $.map(categories, function (category) {
+  return category.columns.length == 1 && category.columns[0].text === category.name ?
+    category.columns[0] :
+    {
+      extend: 'collection',
+      text: category.name,
+      buttons: category.columns
+    };
+});
+
+var restoreBtn = {
+  extend: 'colvis',
+  buttons: 'colvisRestore',
+  text: "Restore visibility",
+};
+
+defaultBtns.push(restoreBtn);
+
 var columnToggleMenu = {
   extend: 'collection',
   text: 'Configure Columns',
   titleAttr: 'Configure visible columns',
   className: 'btn btn-info buttons-collection dropdown-toggle',
-  buttons: $.map(categories, function(category) {
-    return category.columns.length == 1 && category.columns[0].text === category.name ?
-      category.columns[0] :
-      {
-        extend: 'collection',
-        text: category.name,
-        buttons: category.columns
-      };
-  })
+  buttons: defaultBtns,
 };
 
 var pageLength = {
