@@ -1395,27 +1395,28 @@
     <div class="modal-dialog" role="document" style="width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="referencesModalLabel">{% trans "Add a source reference" %}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="referencesModalLabel">{% trans "Add a source reference" %}</h4>
             </div>
             <div class="modal-body" style="height: 500px; overflow-y: auto;">
                 <input type="hidden" name="source_index_field" id="source_index_field" />
                 <input type="hidden" name="source_pk_field" id="source_pk_field" />
-                <ul class="nav nav-tabs" role="tablist" id="tab_control">
-                    <li data-tab="primary" data-sourcetype="Primary source" role="presentation" class="active"><a href="#primary"
+                <ul class="nav nav-pills" role="tablist" id="tab_control">
+                    <li data-tab="primary" data-sourcetype="Primary source" role="presentation" class="active nav-item"><a href="#primary"
+                                                                                 class="nav-link active show"
                                                                                  aria-controls="primary"
                                                                                  role="tab" data-toggle="tab">
                         {% trans "Primary source" %}</a></li>
-                    <li data-tab="article" data-sourcetype="Article source" role="presentation"><a href="#article" aria-controls="article"
+                    <li data-tab="article" data-sourcetype="Article source" role="presentation" class="nav-item"><a href="#article" aria-controls="article" class="nav-link"
                                                                   role="tab" data-toggle="tab">{% trans "Article" %}</a></li>
-                    <li data-tab="book" data-sourcetype="Book source" role="presentation"><a href="#book" aria-controls="book" role="tab"
+                    <li data-tab="book" data-sourcetype="Book source" role="presentation" class="nav-item"><a href="#book" aria-controls="book" role="tab" class="nav-link"
                                                                data-toggle="tab">{% trans "Book" %}</a></li>
-                    <li data-tab="newspaper" data-sourcetype="Newspaper source" role="presentation"><a href="#newspaper" aria-controls="newspaper" role="tab"
+                    <li data-tab="newspaper" data-sourcetype="Newspaper source" role="presentation" class="nav-item"><a href="#newspaper" aria-controls="newspaper" role="tab" class="nav-link"
                                                                 data-toggle="tab">{% trans "Newspaper" %}</a></li>
-                    <li data-tab="private" data-sourcetype="Private note or collection source" role="presentation"><a href="#private" aria-controls="private" role="tab"
+                    <li data-tab="private" data-sourcetype="Private note or collection source" role="presentation" class="nav-item"><a href="#private" aria-controls="private" role="tab" class="nav-link"
                                                                 data-toggle="tab">{% trans "Private note or collection" %}</a></li>
-                    <li data-tab="unpub" data-sourcetype="Unpublished secondary source" role="presentation"><a href="#unpub" aria-controls="unpub" role="tab"
+                    <li data-tab="unpub" data-sourcetype="Unpublished secondary source" role="presentation" class="nav-item"><a href="#unpub" aria-controls="unpub" role="tab" class="nav-link"
                                                                 data-toggle="tab">{% trans "Unpublished secondary source" %}</a></li>
                 </ul>
                 <!-- Tab panes -->
