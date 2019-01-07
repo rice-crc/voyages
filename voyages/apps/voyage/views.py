@@ -400,66 +400,71 @@ def create_query_dict(var_list):
     if len(vl) > 0:
         vs = vl.split(';');
     for varname in vs:
-        mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
-        if varname == 'var_sources':
-            query_dict["var_sources_plaintext_search__contains"] = mangle_method(var_list[varname + '_text_search'])
-        elif varname in globals.list_text_fields:
-            query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
-        elif varname in globals.list_select_fields:
-            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
-        elif varname in globals.list_numeric_fields:
-            opt = var_list[varname + '_options']
-            if opt == '1': # Between
-                query_dict[varname + "__range"] = [mangle_method(var_list[varname + '_lower_bound']),
-                                                   mangle_method(var_list[varname + '_upper_bound'])]
-            elif opt == '2': # Less than or equal to
-                query_dict[varname + "__lte"] = mangle_method(var_list[varname + '_threshold'])
-            elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = mangle_method(var_list[varname + '_threshold'])
-            elif opt == '4': # Equal to
-                query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
-        elif varname in globals.list_date_fields:
-            if varname + '_months' in var_list:
-                months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
-                # Only filter by months if not all the months are included
-                if len(months) < 12:
-                    query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
-            opt = var_list[varname + '_options']
-            if opt == '1': # Between
-                to_date = None
-                if int(var_list[varname + '_to_month']) == 12:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
-                else:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
-                query_dict[varname + "__range"] = [
-                    formatDate(mangle_method(var_list[varname + '_from_year']),
-                               mangle_method(var_list[varname + '_from_month'])),
-                    to_date]
-            elif opt == '2': # Less than or equal to
-                to_date = None
-                if int(var_list[varname + '_threshold_month']) == 12:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
-                else:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
-                query_dict[varname + "__lte"] = to_date
-            elif opt == '3': # Greater than or equal to
-                query_dict[varname + "__gte"] = \
-                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_threshold_month']))
-            elif opt == '4': # In
-                to_date = None
-                if int(var_list[varname + '_threshold_month']) == 12:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
-                else:
-                    to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
-                query_dict[varname + "__range"] = [
-                    formatDate(mangle_method(var_list[varname + '_threshold_year']),
-                               mangle_method(var_list[varname + '_threshold_month'])),
-                    to_date]
-        elif varname in globals.list_place_fields:
-            query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
-        elif varname in globals.list_boolean_fields:
-            query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
+        try:
+            mangle_method = globals.search_mangle_methods.get(varname, globals.no_mangle)
+            if varname == 'var_sources':
+                query_dict["var_sources_plaintext_search__contains"] = mangle_method(var_list[varname + '_text_search'])
+            elif varname in globals.list_text_fields:
+                query_dict[varname + "__contains"] = mangle_method(var_list[varname + '_text_search'])
+            elif varname in globals.list_select_fields:
+                query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
+            elif varname in globals.list_numeric_fields:
+                opt = var_list[varname + '_options']
+                if opt == '1': # Between
+                    query_dict[varname + "__range"] = [mangle_method(var_list[varname + '_lower_bound']),
+                                                    mangle_method(var_list[varname + '_upper_bound'])]
+                elif opt == '2': # Less than or equal to
+                    query_dict[varname + "__lte"] = mangle_method(var_list[varname + '_threshold'])
+                elif opt == '3': # Greater than or equal to
+                    query_dict[varname + "__gte"] = mangle_method(var_list[varname + '_threshold'])
+                elif opt == '4': # Equal to
+                    query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
+            elif varname in globals.list_date_fields:
+                if varname + '_months' in var_list:
+                    months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
+                    # Only filter by months if not all the months are included
+                    if len(months) < 12:
+                        query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
+                opt = var_list[varname + '_options']
+                if opt == '1': # Between
+                    to_date = None
+                    if int(var_list[varname + '_to_month']) == 12:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])) + 1, 1)
+                    else:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_to_year'])), int(mangle_method(var_list[varname + '_to_month'])) + 1)
+                    query_dict[varname + "__range"] = [
+                        formatDate(mangle_method(var_list[varname + '_from_year']),
+                                mangle_method(var_list[varname + '_from_month'])),
+                        to_date]
+                elif opt == '2': # Less than or equal to
+                    to_date = None
+                    if int(var_list[varname + '_threshold_month']) == 12:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
+                    else:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
+                    query_dict[varname + "__lte"] = to_date
+                elif opt == '3': # Greater than or equal to
+                    query_dict[varname + "__gte"] = \
+                        formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                                mangle_method(var_list[varname + '_threshold_month']))
+                elif opt == '4': # In
+                    to_date = None
+                    if int(var_list[varname + '_threshold_month']) == 12:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])) + 1, 1)
+                    else:
+                        to_date = formatDate(int(mangle_method(var_list[varname + '_threshold_year'])), int(mangle_method(var_list[varname + '_threshold_month'])) + 1)
+                    query_dict[varname + "__range"] = [
+                        formatDate(mangle_method(var_list[varname + '_threshold_year']),
+                                mangle_method(var_list[varname + '_threshold_month'])),
+                        to_date]
+            elif varname in globals.list_place_fields:
+                query_dict[varname + "_idnum" + "__in"] = [int(i) for i in mangle_method(var_list[varname + '_choice_field']).split(';') if i != '']
+            elif varname in globals.list_boolean_fields:
+                query_dict[varname + "__in"] = mangle_method(var_list[varname + '_choice_field']).split(';')
+        except:
+            print("Failure when mangling variable " + varname + ". It will be removed from the search.")
+            import traceback
+            traceback.print_exc()
     return query_dict
 
 def create_var_list_from_url(get):
