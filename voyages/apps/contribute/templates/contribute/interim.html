@@ -2493,7 +2493,7 @@
                     if (validation.hasErrors()) {
                         if (showErrors) alert(validation.toString());
                         return false;
-                    } else if (validation.hasWarnings() &&
+                    } else if (validation.hasWarnings() && showErrors &&
                             !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
                         return false;
                     }

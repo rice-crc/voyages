@@ -63,13 +63,14 @@ class SavedQuery(models.Model):
         pre_existing = list(SavedQuery.objects.filter(hash=self.hash).filter(query=self.query))
         if len(pre_existing) > 0:
             self.id = pre_existing[0].id
-        else:
+            return
+        if not self.id:
             import random
             import string
             self.id = ''.join(
                 random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in
                 range(self.ID_LENGTH))
-            super(SavedQuery, self).save(*args, **kwargs)
+        super(SavedQuery, self).save(*args, **kwargs)
 
     @classmethod
     def restore_link(cls, link_id, session, session_key, redirect_url_name):
