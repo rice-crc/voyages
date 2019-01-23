@@ -75,7 +75,7 @@ def get_voyage_by_id(request):
         voyage_id = request.POST.get('voyage_id')
         if voyage_id is not None:
             voyage_id = int(voyage_id)
-            v = Voyage.objects.filter(voyage_id=voyage_id).first()
+            v = Voyage.both_objects.filter(voyage_id=voyage_id).first()
             if v is not None:
                 summary = get_summary(v)
                 # Check whether the voyage already has an open contribution.
@@ -119,7 +119,7 @@ def delete(request):
                                                 kwargs={'contribution_id': contribution.pk}))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm()
     return render(request, 'contribute/delete.html', {
@@ -183,7 +183,7 @@ def edit(request):
             ))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id=ids[0])] \
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id=ids[0])] \
                 if len(ids) != 0 else []
     else:
         form = ContributionVoyageSelectionForm(max_selection=1)
@@ -211,7 +211,7 @@ def merge(request):
             ))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm(min_selection=2)
     return render(request, 'contribute/merge.html', {'form': form, 'voyage_selection': voyage_selection})
@@ -737,7 +737,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
-        voyages = list(Voyage.objects.filter(voyage_id__in=voyage_ids))
+        voyages = list(Voyage.both_objects.filter(voyage_id__in=voyage_ids))
         voyage_ship = [v.voyage_ship.ship_name for v in voyages]
         voyage_years = [VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis) for v in voyages]
         voyage_nation = [get_nation_label(v.voyage_ship.imputed_nationality) for v in voyages]
@@ -1210,7 +1210,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
     if created_voyage_id:
         # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
-        existing = Voyage.objects.filter(voyage_id=created_voyage_id).count()
+        existing = Voyage.both_objects.filter(voyage_id=created_voyage_id).count()
         if existing > 0:
             # Only case when this is allowed is if a merge contribution
             # uses one of the merged voyages ids.

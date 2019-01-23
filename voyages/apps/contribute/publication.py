@@ -114,7 +114,7 @@ def export_from_review_requests(review_requests):
 def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_text, is_intra_american=False):
     if isinstance(user_contrib, DeleteVoyageContribution):
         delete_ids = user_contrib.deleted_voyages_ids.split(',')
-        voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
+        voyages = Voyage.both_objects.filter(voyage_id__in=delete_ids)
         for v in voyages:
             data = _map_voyage_to_spss(v)
             data['STATUS'] = 'DELETE (%s)' % status_text
@@ -729,7 +729,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
             raise Exception('For new or merged contributions, an explicit voyage_id must be set')
         voyage.voyage_id = review_request.created_voyage_id
     elif contrib_type == 'edit':
-        voyage = Voyage.objects.get(voyage_id=contrib.edited_voyage_id)
+        voyage = Voyage.both_objects.get(voyage_id=contrib.edited_voyage_id)
     else:
         raise Exception('Unsupported contribution type ' + str(contrib_type))
     
@@ -1071,7 +1071,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     return voyage
     
 def _delete_voyages(ids):
-    delete_voyages = list(Voyage.objects.filter(voyage_id__in=ids))
+    delete_voyages = list(Voyage.both_objects.filter(voyage_id__in=ids))
     if len(ids) != len(delete_voyages):
         raise Exception("Voyage not found for deletion, voyage ids=" + str(ids))
     for v in delete_voyages:
@@ -1087,7 +1087,7 @@ def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
-    in_cd_rom_list = list(Voyage.objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True))
+    in_cd_rom_list = list(Voyage.both_objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True))
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
     _save_editorial_version(review_request, 'merge', True in in_cd_rom_list)
