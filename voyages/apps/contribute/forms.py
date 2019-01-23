@@ -106,7 +106,7 @@ class ContributionVoyageSelectionForm(forms.Form):
             raise forms.ValidationError(_('At least %d voyage(s) should be provided') % self.min_selection)
         if self.max_selection is not None and id_count > self.max_selection:
             raise forms.ValidationError(_('At most %d voyage(s) should be provided') % self.max_selection)
-        matches = Voyage.objects.filter(voyage_id__in=ids).count()
+        matches = Voyage.both_objects.filter(voyage_id__in=ids).count()
         if matches != id_count:
             raise forms.ValidationError(_('Some of the provided voyage_ids are invalid'))
         return ids
