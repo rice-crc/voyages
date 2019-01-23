@@ -339,20 +339,21 @@ var searchBar = new Vue({
     },
 
     resetAll() {
-      for (group in this.filter) {
-        if (group !== "settings") {
-          for (subGroup in this.filter[group]) {
-            if (subGroup !== "count"){
-              resetFilter(this.filter, group, subGroup);
-            }
-          }
-        }
-      }
-      var searchTerms = searchAll(this.filter, this.filterData);
-      this.currentQuery = {};
-      //search(this.searchFilter, searchTerms);
-      this.resetURL();
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+      window.location.reload(); // forced reload
+      // for (group in this.filter) {
+      //   if (group !== "settings") {
+      //     for (subGroup in this.filter[group]) {
+      //       if (subGroup !== "count"){
+      //         resetFilter(this.filter, group, subGroup);
+      //       }
+      //     }
+      //   }
+      // }
+      // var searchTerms = searchAll(this.filter, this.filterData);
+      // this.currentQuery = {};
+      // //search(this.searchFilter, searchTerms);
+      // this.resetURL();
+      // refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     refresh() {
