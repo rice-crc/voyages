@@ -1461,6 +1461,8 @@ def download_voyages(request):
     
     include_published = request.POST.get('published_check') == 'True'
     remove_linebreaks = request.POST.get('remove_linebreaks') == 'True'
+    intra_american_flag = request.POST.get('intra_american_flag')
+    if intra_american_flag: intra_american_flag = int(intra_american_flag)
 
     import os, tempfile, thread
     try:
@@ -1471,25 +1473,25 @@ def download_voyages(request):
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
         thread.start_new_thread(
             generate_voyage_csv_file,
-            (statuses, include_published, csv_file, log_file, remove_linebreaks))
+            (statuses, include_published, csv_file, log_file, remove_linebreaks, intra_american_flag))
         return JsonResponse({'result': 'OK', 
             'log_file': re.sub('^.*/', '', log_file.name),
             'csv_file': re.sub('^.*/', '', csv_file.name)})
     except Exception as exception:
         return JsonResponse({'result': 'Failed', 'error': exception.message})
 
-def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False):
+def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False, intra_american_flag=None):
     def log(message):
         log_file.seek(0)
         log_file.truncate(0)
         log_file.write(message)
         log_file.flush()
 
-    log('Started generating CSV file with statuses=' + str(statuses) + ', published=' + str(published))
+    log('Started generating CSV file with statuses=' + str(statuses) + ', published=' + str(published) + ', intra_american_flag=' + str(intra_american_flag))
     count = 0
     try:
         # Simply iterate over generated CSV rows passing the file as buffer.
-        for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
+        for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks, intra_american_flag):
             count += 1
             if (count % 100) == 0:
                 log(str(count) + ' rows exported to CSV')
@@ -1528,7 +1530,7 @@ def download_voyages_go(request):
     response['Content-Disposition'] = 'attachment; filename=voyages.csv'
     return response
 
-def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False):
+def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False, intra_american_flag=None):
     from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
     if buffer is None:
         buffer = Echo()
@@ -1541,7 +1543,7 @@ def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=Fal
     for item in export_contributions(statuses):
         yield safe_writerow(writer, row_processor(item))
     if published:
-        for item in export_from_voyages():
+        for item in export_from_voyages(intra_american_flag):
             yield safe_writerow(writer, row_processor(item))
     return
 
