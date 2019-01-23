@@ -1,13 +1,13 @@
 {% verbatim %}
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.shipNationOwner.count" title="Ship, Nation, Owner"></v-menu-title>
+  <v-menu-title :count="filter.shipNationOwner.count" title="Ship, nation, owner"></v-menu-title>
 
   <div class="">
     <ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="voyagesAndVessels" title="Voyages and Vessels" :filters="filter.shipNationOwner.voyagesAndVessels">
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="voyagesAndVessels" title="Voyages and vessels" :filters="filter.shipNationOwner.voyagesAndVessels">
         <div slot="v-panel-header">
-          <v-panel-header title="Voyages and Vessels" description="Voyage ID number and information about the vessel">
+          <v-panel-header title="Voyages and vessels" description="Voyage ID number and information about the vessel">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -33,10 +33,10 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and Registration" :filters="filter.shipNationOwner.constructionAndRegistration"
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="constructionAndRegistration" title="Construction and registration" :filters="filter.shipNationOwner.constructionAndRegistration"
       v-if="filter.settings.settings.var_search_settings.value.searchTerm">
         <div slot="v-panel-header">
-          <v-panel-header title="Construction and Registration" description="The year and location of slave ship construction and registration">
+          <v-panel-header title="Construction and registration" description="The year and location of slave ship construction and registration">
             <div slot="v-modal-content">
 							Some help text
 						</div>
@@ -86,10 +86,10 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, Tonnage, and Guns Mounted" :filters="filter.shipNationOwner.rigTonnageAndGunsMounted"
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="rigTonnageAndGunsMounted" title="Rig, tonnage, and guns mounted" :filters="filter.shipNationOwner.rigTonnageAndGunsMounted"
       >
         <div slot="v-panel-header">
-          <v-panel-header title="Rig, Tonnage, and Guns Mounted" description="Additional variables about slave ships">
+          <v-panel-header title="Rig, tonnage, and guns mounted" description="Additional variables about slave ships">
             <div slot="v-modal-content">
 							Some help text
 						</div>

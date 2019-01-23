@@ -13,7 +13,7 @@ var_voyage_id = new NumberVariable({
 
 var_ship_name = new TextVariable({
     varName: "ship_name",
-    label: "Vessel Name",
+    label: "Vessel name",
     description: "",
   },{
     op: "contains",
@@ -25,7 +25,7 @@ var_ship_name = new TextVariable({
 
 var_owner = new TextVariable({
     varName: "owner",
-    label: "Vessel Owner",
+    label: "Vessel owner",
     description: "",
   },{
     op: "contains",
@@ -37,7 +37,7 @@ var_owner = new TextVariable({
 
 var_year_of_construction = new NumberVariable({
     varName: "year_of_construction",
-    label: "Year Constructed",
+    label: "Year constructed",
     description: "",
   },{
     op: "is equal to",
@@ -50,7 +50,7 @@ var_year_of_construction = new NumberVariable({
 
 var_vessel_construction_place_idnum = new PlaceVariable({
     varName: "vessel_construction_place_idnum",
-    label: "Place Constructed",
+    label: "Place constructed",
     description: "",
   },{
     op: "is one of",
@@ -62,7 +62,7 @@ var_vessel_construction_place_idnum = new PlaceVariable({
 
 var_registered_year = new NumberVariable({
     varName: "registered_year",
-    label: "Year Registered",
+    label: "Year registered",
     description: "",
   },{
     op: "is equal to",
@@ -75,7 +75,7 @@ var_registered_year = new NumberVariable({
 
 var_registered_place_idnum = new PlaceVariable({
     varName: "registered_place_idnum",
-    label: "Place Registered",
+    label: "Place registered",
     description: "",
   },{
     op: "is one of",
@@ -99,7 +99,7 @@ var_nationality = new TreeselectVariable({
 
 var_imputed_nationality = new TreeselectVariable({
     varName: "imputed_nationality",
-    label: "Flag Imputed",
+    label: "Flag (imputed)",
     description: "",
   },{
     op: "is one of",
@@ -111,7 +111,7 @@ var_imputed_nationality = new TreeselectVariable({
 
 var_rig_of_vessel = new TreeselectVariable({
     varName: "rig_of_vessel",
-    label: "Rig of Vessel",
+    label: "Rig of vessel",
     description: "",
   },{
     op: "is one of",
@@ -136,7 +136,7 @@ var_tonnage = new NumberVariable({
 
 var_tonnage_mod = new NumberVariable({
     varName: "tonnage_mod",
-    label: "Standardized Tonnage",
+    label: "Standardized tonnage",
     description: "",
   },{
     op: "is equal to",
@@ -149,7 +149,7 @@ var_tonnage_mod = new NumberVariable({
 
 var_guns_mounted = new NumberVariable({
     varName: "guns_mounted",
-    label: "Guns Mounted",
+    label: "Guns mounted",
     description: "",
   },{
     op: "is equal to",

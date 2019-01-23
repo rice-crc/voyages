@@ -183,7 +183,7 @@ var searchBar = new Vue({
           if (group !== "year" && group !== "settings") {
             var datum = {
               group: group,
-              groupName: camel2title(group),
+              groupName: sentenceCase(group),
               variables: {}
             };
             for (subGroup in this.filter[group]) {

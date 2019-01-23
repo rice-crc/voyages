@@ -1,9 +1,9 @@
 {% verbatim %}
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.year.count" title="Year Range"></v-menu-title>
+  <v-menu-title :count="filter.year.count" title="Year range"></v-menu-title>
   <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="Year Range" :filters="filter.year.year" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Year Range" description="Year range of your search. Please enter a range between 1514 and 1866.">
+      <v-panel-header title="Year range" description="Year range of your search. Please enter a range between 1514 and 1866.">
         <div slot="v-modal-content">
           Some help text
         </div>

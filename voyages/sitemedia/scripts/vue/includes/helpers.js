@@ -2,6 +2,24 @@
 const SAVED_SEARCH_LABEL = "#searchId=";
 const TRANS_PATH = "voyage/database";
 
+/**
+ * Add space between camelCase text.
+ */
+function unCamelCase(str) {
+  str = str.replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, '$1 $2');
+  str = str.toLowerCase(); //add space between camelCase text
+  return str;
+}
+
+/**
+* UPPERCASE first char of each sentence and lowercase other chars.
+*/
+function sentenceCase(str) {
+  // Replace first char of each sentence (new line or after '.\s+') to
+  // UPPERCASE
+  return unCamelCase(str).replace(/(^\w)|\.\s+(\w)/gm, upperCase);
+}
+
 // converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
@@ -20,7 +38,6 @@ function camel2title(camelCase) {
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
 
 const isPercentageAxis = (axes) => {
   if (Array.isArray(axes)) {
@@ -695,16 +712,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             text: 'CSV',
             buttons: [
               {
-                text: gettext('All Results with All Columns'),
+                text: gettext('All results with all columns'),
                 action: makeDownloadFunction(false, false, false)
               }, {
-                text: gettext('All Results with Visible Columns'),
+                text: gettext('All results with visible columns'),
                 action: makeDownloadFunction(false, false, true)
               }, {
-                text: gettext('Filtered Results with All Columns'), 
+                text: gettext('Filtered results with all columns'), 
                 action: makeDownloadFunction(false, true, false) 
               }, {
-                text: gettext('Filtered Results with Visible Columns'),
+                text: gettext('Filtered results with visible columns'),
                 action: makeDownloadFunction(false, true, true)
               }],
               fade: true
@@ -715,16 +732,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               text: 'Excel',
               buttons: [
                 {
-                  text: gettext('All Results with All Columns'),
+                  text: gettext('All results with all columns'),
                   action: makeDownloadFunction(true, false, false)
                 }, {
-                  text: gettext('All Results with Visible Columns'),
+                  text: gettext('All results with visible columns'),
                   action: makeDownloadFunction(true, false, true)
                 }, {
-                  text: gettext('Filtered Results with All Columns'),
+                  text: gettext('Filtered results with all columns'),
                   action: makeDownloadFunction(true, true, false)
                 }, {
-                  text: gettext('Filtered Results with Visible Columns'),
+                  text: gettext('Filtered results with visible columns'),
                   action: makeDownloadFunction(true, true, true)
                 }
               ],

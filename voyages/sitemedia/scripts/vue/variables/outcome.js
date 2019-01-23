@@ -1,6 +1,6 @@
 var_outcome_voyage = new TreeselectVariable({
     varName: "outcome_voyage",
-    label: "Particular Outcome of Voyage",
+    label: "Particular outcome of voyage",
     description: "",
   },{
     op: "is one of",
@@ -12,7 +12,7 @@ var_outcome_voyage = new TreeselectVariable({
 
 var_outcome_slaves = new TreeselectVariable({
     varName: "outcome_slaves",
-    label: "Outcome of Voyage for Captives",
+    label: "Outcome of voyage for captives",
     description: "",
   },{
     op: "is one of",
@@ -24,7 +24,7 @@ var_outcome_slaves = new TreeselectVariable({
 
 var_outcome_ship_captured = new TreeselectVariable({
     varName: "outcome_ship_captured",
-    label: "Outcome of Voyage if Ship Captured",
+    label: "Outcome of voyage if ship captured",
     description: "",
   },{
     op: "is one of",
@@ -36,7 +36,7 @@ var_outcome_ship_captured = new TreeselectVariable({
 
 var_outcome_owner = new TreeselectVariable({
     varName: "outcome_owner",
-    label: "Outcome of Voyage for Owner",
+    label: "Outcome of voyage for owner",
     description: "",
   },{
     op: "is one of",
@@ -48,7 +48,7 @@ var_outcome_owner = new TreeselectVariable({
 
 var_resistance = new TreeselectVariable({
     varName: "resistance",
-    label: "African Resistance",
+    label: "African resistance",
     description: "",
   },{
     op: "is one of",

@@ -1,6 +1,6 @@
 var_imp_total_num_slaves_purchased = new NumberVariable({
     varName: "imp_total_num_slaves_purchased",
-    label: "Total Embarked Imputed",
+    label: "Total embarked (imputed)",
     description: "",
   },{
     op: "is equal to",
@@ -13,7 +13,7 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
 
 var_total_num_slaves_purchased = new NumberVariable({
     varName: "total_num_slaves_purchased",
-    label: "Total Embarked",
+    label: "Total embarked",
     description: "",
   },{
     op: "is equal to",
@@ -26,7 +26,7 @@ var_total_num_slaves_purchased = new NumberVariable({
 
 var_imp_total_slaves_disembarked = new NumberVariable({
     varName: "imp_total_slaves_disembarked",
-    label: "Total Disembarked",
+    label: "Total disembarked",
     description: "",
   },{
     op: "is equal to",
@@ -40,7 +40,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
 
 var_num_slaves_intended_first_port = new NumberVariable({
     varName: "num_slaves_intended_first_port",
-    label: "Captives Intended",
+    label: "Captives intended",
     description: "",
   },{
     op: "is equal to",
@@ -53,7 +53,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
 
 var_num_slaves_carried_first_port = new NumberVariable({
     varName: "num_slaves_carried_first_port",
-    label: "Captives from 1st Port",
+    label: "Captives from 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -66,7 +66,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
 
 var_num_slaves_carried_second_port = new NumberVariable({
     varName: "num_slaves_carried_second_port",
-    label: "Captives from 2nd Port",
+    label: "Captives from 2nd port",
     description: "",
   },{
     op: "is equal to",
@@ -78,7 +78,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
   });
 var_num_slaves_carried_third_port = new NumberVariable({
     varName: "num_slaves_carried_third_port",
-    label: "Captives from 3rd Port",
+    label: "Captives from 3rd port",
     description: "",
   },{
     op: "is equal to",
@@ -91,7 +91,7 @@ var_num_slaves_carried_third_port = new NumberVariable({
 
 var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     varName: "total_num_slaves_arr_first_port_embark",
-    label: "Captives Arrived 1st Port",
+    label: "Captives arrived 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -104,7 +104,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
 
 var_num_slaves_disembark_first_place = new NumberVariable({
     varName: "num_slaves_disembark_first_place",
-    label: "Captives Landed 1st Port",
+    label: "Captives landed 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -116,7 +116,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
   });
 var_num_slaves_disembark_second_place = new NumberVariable({
     varName: "num_slaves_disembark_second_place",
-    label: "Captives Landed 2nd Port",
+    label: "Captives landed 2nd port",
     description: "",
   },{
     op: "is equal to",
@@ -129,7 +129,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
 
 var_num_slaves_disembark_third_place = new NumberVariable({
     varName: "num_slaves_disembark_third_place",
-    label: "Captives Landed 3rd Port",
+    label: "Captives landed 3rd port",
     description: "",
   },{
     op: "is equal to",
@@ -143,7 +143,7 @@ var_num_slaves_disembark_third_place = new NumberVariable({
 
 var_imputed_percentage_men = new PercentageVariable({
     varName: "imputed_percentage_men",
-    label: "Percent Men",
+    label: "Percent men",
     description: "",
   },{
     op: "is equal to",
@@ -156,7 +156,7 @@ var_imputed_percentage_men = new PercentageVariable({
 
 var_imputed_percentage_women = new PercentageVariable({
     varName: "imputed_percentage_women",
-    label: "Percent Women",
+    label: "Percent women",
     description: "",
   },{
     op: "is equal to",
@@ -169,7 +169,7 @@ var_imputed_percentage_women = new PercentageVariable({
 
 var_imputed_percentage_boys = new PercentageVariable({
     varName: "imputed_percentage_boys",
-    label: "Percent Boys",
+    label: "Percent boys",
     description: "",
   },{
     op: "is equal to",
@@ -182,7 +182,7 @@ var_imputed_percentage_boys = new PercentageVariable({
 
 var_imputed_percentage_girls = new PercentageVariable({
     varName: "imputed_percentage_girls",
-    label: "Percent Girls",
+    label: "Percent girls",
     description: "",
   },{
     op: "is equal to",
@@ -195,7 +195,7 @@ var_imputed_percentage_girls = new PercentageVariable({
 
 var_imputed_percentage_male = new PercentageVariable({
     varName: "imputed_percentage_male",
-    label: "Percent Males",
+    label: "Percent males",
     description: "",
   },{
     op: "is equal to",
@@ -208,7 +208,7 @@ var_imputed_percentage_male = new PercentageVariable({
 
 var_imputed_percentage_child = new PercentageVariable({
     varName: "imputed_percentage_child",
-    label: "Percent Children",
+    label: "Percent children",
     description: "",
   },{
     op: "is equal to",
@@ -221,7 +221,7 @@ var_imputed_percentage_child = new PercentageVariable({
 
 var_imputed_sterling_cash = new NumberVariable({
     varName: "imputed_sterling_cash",
-    label: "Sterling Cash Price in Jamaica",
+    label: "Sterling cash price in Jamaica",
     description: "Average price paid for men in the Americas as they were sold from the vessel",
   },{
     op: "is equal to",
@@ -234,7 +234,7 @@ var_imputed_sterling_cash = new NumberVariable({
 
 var_imputed_death_middle_passage = new NumberVariable({
     varName: "imputed_death_middle_passage",
-    label: "Captives Died during Middle Passage",
+    label: "Captives died during middle passage",
     description: "",
   },{
     op: "is equal to",
@@ -247,7 +247,7 @@ var_imputed_death_middle_passage = new NumberVariable({
 
 var_imputed_mortality = new PercentageVariable({
     varName: "imputed_mortality",
-    label: "Mortality Rate",
+    label: "Mortality rate",
     description: "Percent died at sea. Please enter a Percentage in integer. e.g. 75",
   },{
     op: "is equal to",

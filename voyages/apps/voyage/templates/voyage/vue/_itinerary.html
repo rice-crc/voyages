@@ -5,10 +5,10 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="Place of Departure" :filters="filter.itinerary.departure">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="Place of departure" :filters="filter.itinerary.departure">
 
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of Departure" description="Locations where the voyage began">
+					<v-panel-header title="Place of departure" description="Locations where the voyage began">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -26,9 +26,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="Place of Purchase" :filters="filter.itinerary.purchase">
+			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="Place of purchase" :filters="filter.itinerary.purchase">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of Purchase" description="Locations where captives embarked">
+					<v-panel-header title="Place of purchase" description="Locations where captives embarked">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -62,10 +62,10 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="call" @apply="apply" title="Places of Call before Atlantic Crossing" :filters="filter.itinerary.call"
+			<v-panel @reset="reset" group="itinerary" sub-group="call" @apply="apply" title="Places of call before Atlantic crossing" :filters="filter.itinerary.call"
 			v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 				<div slot="v-panel-header">
-					<v-panel-header title="Places of Call before Atlantic Crossing" description="">
+					<v-panel-header title="Places of call before Atlantic crossing" description="">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -82,9 +82,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="Place of Landing" :filters="filter.itinerary.landing">
+			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="Place of landing" :filters="filter.itinerary.landing">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of Landing" description="Locations where captives disembarked">
+					<v-panel-header title="Place of landing" description="Locations where captives disembarked">
 						<div slot="v-modal-content">
 							Some help text
 						</div>
@@ -118,9 +118,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="Place where Voyage Ended" :filters="filter.itinerary.destination">
+			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="Place where voyage ended" :filters="filter.itinerary.destination">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place where Voyage Ended" description="">
+					<v-panel-header title="Place where voyage ended" description="">
 						<div slot="v-modal-content">
 							Some help text
 						</div>

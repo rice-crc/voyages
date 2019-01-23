@@ -1,6 +1,6 @@
 var_search_settings = new BooleanVariable({
     varName: "search_settings",
-    label: "Show Advanced Variables in Search Filters",
+    label: "Show advanced variables in search filters",
     description: "Advanced variables are additional parameters not frequently used. Enabling them does not change current search behavior.",
   },{
     op: "equals",
@@ -12,7 +12,7 @@ var_search_settings = new BooleanVariable({
 
 var_display_settings = new BooleanVariable({
   varName: "display_settings",
-  label: "Display in Compact Mode",
+  label: "Display in compact mode",
   description: "Compact mode reduces white space and font size of the display.",
 },{
   op: "equals",

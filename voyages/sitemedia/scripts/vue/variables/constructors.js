@@ -17,7 +17,7 @@ function TreeselectVariable(varInfo, searchTerms, options) {
     caption: options["caption"],
     data: [{
       id: "0",
-      label: "Select All",
+      label: "Select all",
       children: []
     }],
   };
