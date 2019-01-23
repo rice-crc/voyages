@@ -1,7 +1,7 @@
 // this is included but not used in the search; primarily for the full detail to display
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: "Year of Arrival at Port of Disembarkation",
+    label: "Year of arrival at port of disembarkation",
     description: "",
   },{
     op: "is equal to",
@@ -14,7 +14,7 @@ var var_imp_arrival_at_port_of_dis = new YearVariable({
 
 var_length_middle_passage_days = new NumberVariable({
     varName: "length_middle_passage_days",
-    label: "Middle Passage",
+    label: "Middle passage",
     description: "",
   },{
     op: "is equal to",
@@ -27,7 +27,7 @@ var_length_middle_passage_days = new NumberVariable({
 
 var_voyage_began = new DateVariable({
     varName: "voyage_began",
-    label: "Date That Voyage Began",
+    label: "Date that voyage began",
     description: "",
   },{
     op: "is equal to",
@@ -40,7 +40,7 @@ var_voyage_began = new DateVariable({
 
 var_slave_purchase_began = new DateVariable({
     varName: "slave_purchase_began",
-    label: "Date Trade Began in Africa",
+    label: "Date tade began in Africa",
     description: "",
   },{
     op: "is equal to",
@@ -53,7 +53,7 @@ var_slave_purchase_began = new DateVariable({
 
 var_date_departed_africa = new DateVariable({
     varName: "date_departed_africa",
-    label: "Date Vessel Departed Africa",
+    label: "Date vessel departed Africa",
     description: "",
   },{
     op: "is equal to",
@@ -66,7 +66,7 @@ var_date_departed_africa = new DateVariable({
 
 var_first_dis_of_slaves = new DateVariable({
     varName: "first_dis_of_slaves",
-    label: "Date Vessel Arrived with Captives",
+    label: "Date vessel arrived with captives",
     description: "",
   },{
     op: "is equal to",
@@ -79,7 +79,7 @@ var_first_dis_of_slaves = new DateVariable({
 
 var_departure_last_place_of_landing = new DateVariable({
     varName: "departure_last_place_of_landing",
-    label: "Date Vessel Departed for Homeport",
+    label: "Date vessel departed for homeport",
     description: "",
   },{
     op: "is equal to",
@@ -92,7 +92,7 @@ var_departure_last_place_of_landing = new DateVariable({
 
 var_voyage_completed = new DateVariable({
     varName: "voyage_completed",
-    label: "Date Voyage Completed",
+    label: "Date voyage completed",
     description: "",
   },{
     op: "is equal to",
@@ -105,7 +105,7 @@ var_voyage_completed = new DateVariable({
 
 var_imp_length_home_to_disembark = new NumberVariable({
     varName: "imp_length_home_to_disembark",
-    label: "Voyage Length, Homeport to Landing",
+    label: "Voyage length, homeport to landing",
     description: "",
   },{
     op: "is equal to",

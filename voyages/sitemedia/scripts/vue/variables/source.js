@@ -1,6 +1,6 @@
 var_sources_plaintext = new TextVariable({
     varName: "sources_plaintext",
-    label: "Source of Data",
+    label: "Source of data",
     description: "",
   },{
     op: "contains",
