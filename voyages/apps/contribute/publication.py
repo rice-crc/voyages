@@ -140,7 +140,7 @@ def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_
         data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
     yield data
 
-def export_from_voyages():
+def export_from_voyages(intra_american_flag=None):
     # Here we prefetch lots of relations to avoid generating
     # thousands of requests to the database.
     related_models = {
@@ -214,7 +214,12 @@ def export_from_voyages():
         Prefetch('links_to_other_voyages', queryset=LinkedVoyages.objects.select_related('second').only('first_id', 'second_id', 'second__voyage_id'))]
     for k, v in related_models.items():
         prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
-    voyages = Voyage.both_objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
+    voyage_model_source = Voyage.both_objects
+    if intra_american_flag == 0:
+        voyage_model_source = Voyage.objects
+    elif intra_american_flag == 1:
+        voyage_model_source = Voyage.intra_american_objects
+    voyages = voyage_model_source.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
     voyages.prefetch_related(None)
