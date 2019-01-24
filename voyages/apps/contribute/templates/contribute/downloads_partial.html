@@ -33,6 +33,16 @@
         {% trans "Published" %}
       </label>
     </div>
+    <div style="margin-left: 4em;">
+      <label for="voyage_type">
+        Voyage dataset: 
+        <select id="voyage_type_select" name="voyage_type">
+          <option value="-1">Both</option>
+          <option value="0">Transatlantic</option>
+          <option value="1">Intra-American</option>
+        </select>
+      </label>
+    </div>
   </div>
 
   <div class="page-section">
@@ -83,6 +93,10 @@
             }
         }
         postData.remove_linebreaks = $('#remove_linebreaks').prop('checked') ? 'True' : 'False';
+        var voyage_type = parseInt($('#voyage_type_select').val());
+        if (voyage_type == 0 || voyage_type == 1) {
+          postData.intra_american_flag = voyage_type;
+        }
         if (statusCount == 0) {
             alert('{% trans "You must select at least one status" %}');
         } else {

@@ -75,7 +75,7 @@ def get_voyage_by_id(request):
         voyage_id = request.POST.get('voyage_id')
         if voyage_id is not None:
             voyage_id = int(voyage_id)
-            v = Voyage.objects.filter(voyage_id=voyage_id).first()
+            v = Voyage.both_objects.filter(voyage_id=voyage_id).first()
             if v is not None:
                 summary = get_summary(v)
                 # Check whether the voyage already has an open contribution.
@@ -119,7 +119,7 @@ def delete(request):
                                                 kwargs={'contribution_id': contribution.pk}))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm()
     return render(request, 'contribute/delete.html', {
@@ -183,7 +183,7 @@ def edit(request):
             ))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id=ids[0])] \
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id=ids[0])] \
                 if len(ids) != 0 else []
     else:
         form = ContributionVoyageSelectionForm(max_selection=1)
@@ -211,7 +211,7 @@ def merge(request):
             ))
         else:
             ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.objects.filter(voyage_id__in=ids)]
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id__in=ids)]
     else:
         form = ContributionVoyageSelectionForm(min_selection=2)
     return render(request, 'contribute/merge.html', {'form': form, 'voyage_selection': voyage_selection})
@@ -737,7 +737,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
-        voyages = list(Voyage.objects.filter(voyage_id__in=voyage_ids))
+        voyages = list(Voyage.both_objects.filter(voyage_id__in=voyage_ids))
         voyage_ship = [v.voyage_ship.ship_name for v in voyages]
         voyage_years = [VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis) for v in voyages]
         voyage_nation = [get_nation_label(v.voyage_ship.imputed_nationality) for v in voyages]
@@ -1210,7 +1210,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
     if created_voyage_id:
         # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
-        existing = Voyage.objects.filter(voyage_id=created_voyage_id).count()
+        existing = Voyage.both_objects.filter(voyage_id=created_voyage_id).count()
         if existing > 0:
             # Only case when this is allowed is if a merge contribution
             # uses one of the merged voyages ids.
@@ -1461,6 +1461,8 @@ def download_voyages(request):
     
     include_published = request.POST.get('published_check') == 'True'
     remove_linebreaks = request.POST.get('remove_linebreaks') == 'True'
+    intra_american_flag = request.POST.get('intra_american_flag')
+    if intra_american_flag: intra_american_flag = int(intra_american_flag)
 
     import os, tempfile, thread
     try:
@@ -1471,25 +1473,25 @@ def download_voyages(request):
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
         thread.start_new_thread(
             generate_voyage_csv_file,
-            (statuses, include_published, csv_file, log_file, remove_linebreaks))
+            (statuses, include_published, csv_file, log_file, remove_linebreaks, intra_american_flag))
         return JsonResponse({'result': 'OK', 
             'log_file': re.sub('^.*/', '', log_file.name),
             'csv_file': re.sub('^.*/', '', csv_file.name)})
     except Exception as exception:
         return JsonResponse({'result': 'Failed', 'error': exception.message})
 
-def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False):
+def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False, intra_american_flag=None):
     def log(message):
         log_file.seek(0)
         log_file.truncate(0)
         log_file.write(message)
         log_file.flush()
 
-    log('Started generating CSV file with statuses=' + str(statuses) + ', published=' + str(published))
+    log('Started generating CSV file with statuses=' + str(statuses) + ', published=' + str(published) + ', intra_american_flag=' + str(intra_american_flag))
     count = 0
     try:
         # Simply iterate over generated CSV rows passing the file as buffer.
-        for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks):
+        for _ in get_voyages_csv_rows(statuses, published, csv_file, remove_linebreaks, intra_american_flag):
             count += 1
             if (count % 100) == 0:
                 log(str(count) + ' rows exported to CSV')
@@ -1528,7 +1530,7 @@ def download_voyages_go(request):
     response['Content-Disposition'] = 'attachment; filename=voyages.csv'
     return response
 
-def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False):
+def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False, intra_american_flag=None):
     from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
     if buffer is None:
         buffer = Echo()
@@ -1541,7 +1543,7 @@ def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=Fal
     for item in export_contributions(statuses):
         yield safe_writerow(writer, row_processor(item))
     if published:
-        for item in export_from_voyages():
+        for item in export_from_voyages(intra_american_flag):
             yield safe_writerow(writer, row_processor(item))
     return
 
