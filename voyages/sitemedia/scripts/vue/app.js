@@ -402,6 +402,11 @@ var searchBar = new Vue({
 
     },
 
+    clear() {
+      localStorage.removeItem("saved");
+      this.saved = [];
+    },
+
     load(value) {
       console.log(value);
       var url = "/voyage/get-saved-query/" + value;
@@ -457,7 +462,13 @@ var searchBar = new Vue({
     }
 
     if (localStorage.saved) {
-      this.saved = JSON.parse(localStorage.getItem("saved"));
+      try {
+        this.saved = JSON.parse(localStorage.getItem("saved"));
+      }
+      catch (err) {
+        console.log(err);
+        localStorage.removeItem("saved");
+      }
     }
 
     $('.search-menu').on("click.bs.dropdown", function(e) {

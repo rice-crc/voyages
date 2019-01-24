@@ -2,14 +2,21 @@ Vue.component('v-saved-searches', {
   props: ['title', 'description', 'saved'],
   template: `
     <div class="v-form-group">
-      <div class="v-title">
-        <span>{{title}}<span> ({{saved.length}})</span></span>
-        <span>
-          <b-button variant="info" size="sm" @click="click">
-             Save
+
+    <div class="flex-between">
+        <div class="v-title">
+          <span>{{title}}<span> ({{saved.length}})</span></span>
+        </div>
+        <div>
+          <b-button variant="outline-secondary" v-if="saved.length" size="sm" @click="clear">
+            Clear
           </b-button>
-        </span><!-- reserved for right aligned content -->
+          <b-button variant="info" size="sm" @click="click">
+            Save
+          </b-button>
+        </div>
       </div>
+      
       <div class="v-description">
         <div v-if="saved.length">Here are the queries saved during this session.</div>
         <div v-else>No query saved during this session.</div>
@@ -19,7 +26,7 @@ Vue.component('v-saved-searches', {
         <div class="v-title">URL</div>
       </div>
 
-      <div class="flex-between v-saved-searches-item" v-for="search in saved">
+      <div class="flex-between v-saved-searches-item" v-if="saved.length" v-for="search in saved">
         <div :id="search.saved_query_id">
           {{search.saved_query_url}}
         </div>
@@ -43,6 +50,9 @@ Vue.component('v-saved-searches', {
     },
     click() {
       this.$emit('save');
+    },
+    clear() {
+      this.$emit('clear');
     },
     onCopy: function (e) {
       alert('Your URL ' + e.text + " is copied")
