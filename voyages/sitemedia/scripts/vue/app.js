@@ -156,6 +156,7 @@ var searchBar = new Vue({
           }
         }
         this.hasCurrentQuery = Object.keys(this.currentQuery).length > 0 ? true:false;
+        localStorage.displaySettings = (this.filter.settings.settings.var_display_settings.value.searchTerm === true);
       },
       deep: true,
     },
@@ -449,6 +450,10 @@ var searchBar = new Vue({
   },
 
   mounted: function() {
+    if (localStorage.displaySettings) {
+      this.filter.settings.settings.var_display_settings.value.searchTerm = (localStorage.displaySettings == 'true');
+    }
+
     $('.search-menu').on("click.bs.dropdown", function(e) {
       e.stopPropagation();
       e.preventDefault();
