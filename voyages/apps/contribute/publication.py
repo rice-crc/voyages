@@ -114,7 +114,7 @@ def export_from_review_requests(review_requests):
 def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_text, is_intra_american=False):
     if isinstance(user_contrib, DeleteVoyageContribution):
         delete_ids = user_contrib.deleted_voyages_ids.split(',')
-        voyages = Voyage.objects.filter(voyage_id__in=delete_ids)
+        voyages = Voyage.both_objects.filter(voyage_id__in=delete_ids)
         for v in voyages:
             data = _map_voyage_to_spss(v)
             data['STATUS'] = 'DELETE (%s)' % status_text
@@ -140,7 +140,7 @@ def export_contribution(user_contrib, interim_voyage, created_voyage_id, status_
         data['STATUS'] = 'UNKNOW CONTRIBUTION TYPE (%s)' % status_text
     yield data
 
-def export_from_voyages():
+def export_from_voyages(intra_american_flag=None):
     # Here we prefetch lots of relations to avoid generating
     # thousands of requests to the database.
     related_models = {
@@ -214,7 +214,12 @@ def export_from_voyages():
         Prefetch('links_to_other_voyages', queryset=LinkedVoyages.objects.select_related('second').only('first_id', 'second_id', 'second__voyage_id'))]
     for k, v in related_models.items():
         prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
-    voyages = Voyage.both_objects.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
+    voyage_model_source = Voyage.both_objects
+    if intra_american_flag == 0:
+        voyage_model_source = Voyage.objects
+    elif intra_american_flag == 1:
+        voyage_model_source = Voyage.intra_american_objects
+    voyages = voyage_model_source.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
     voyages.prefetch_related(None)
@@ -729,7 +734,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
             raise Exception('For new or merged contributions, an explicit voyage_id must be set')
         voyage.voyage_id = review_request.created_voyage_id
     elif contrib_type == 'edit':
-        voyage = Voyage.objects.get(voyage_id=contrib.edited_voyage_id)
+        voyage = Voyage.both_objects.get(voyage_id=contrib.edited_voyage_id)
     else:
         raise Exception('Unsupported contribution type ' + str(contrib_type))
     
@@ -1071,7 +1076,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     return voyage
     
 def _delete_voyages(ids):
-    delete_voyages = list(Voyage.objects.filter(voyage_id__in=ids))
+    delete_voyages = list(Voyage.both_objects.filter(voyage_id__in=ids))
     if len(ids) != len(delete_voyages):
         raise Exception("Voyage not found for deletion, voyage ids=" + str(ids))
     for v in delete_voyages:
@@ -1087,7 +1092,7 @@ def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
     ids = list(contribution.get_related_voyage_ids())
-    in_cd_rom_list = list(Voyage.objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True))
+    in_cd_rom_list = list(Voyage.both_objects.filter(voyage_id__in=ids).values_list('voyage_in_cd_rom', flat=True))
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
     _save_editorial_version(review_request, 'merge', True in in_cd_rom_list)
