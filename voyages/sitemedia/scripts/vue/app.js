@@ -389,6 +389,8 @@ var searchBar = new Vue({
             saved_query_id: response.data.saved_query_id,
             saved_query_url: window.location.origin + "/" + TRANS_PATH + SAVED_SEARCH_LABEL + response.data.saved_query_id
           });
+
+          localStorage.setItem("saved", JSON.stringify(vm.saved));
         }
       })
       .catch(function (error) {
@@ -452,6 +454,10 @@ var searchBar = new Vue({
   mounted: function() {
     if (localStorage.displaySettings) {
       this.filter.settings.settings.var_display_settings.value.searchTerm = (localStorage.displaySettings == 'true');
+    }
+
+    if (localStorage.saved) {
+      this.saved = JSON.parse(localStorage.getItem("saved"));
     }
 
     $('.search-menu').on("click.bs.dropdown", function(e) {
