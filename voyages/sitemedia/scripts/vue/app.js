@@ -207,6 +207,11 @@ var searchBar = new Vue({
                     })
                   }
 
+                  // Patch
+                  if (varName == "var_vessel_construction_place_idnum" || varName == "var_registered_place_idnum") {
+                    value = this.row.data[varName.slice(0, -6)];
+                  }
+
                   datum.variables[varName] = {
                     varName: varName,
                     label: item["label"],
