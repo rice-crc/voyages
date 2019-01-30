@@ -1,0 +1,136 @@
+{% load i18n %}
+
+<table id="results_main_table" class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>{% trans "Voyage ID" %}</th>
+      <th>{% trans "Vessel name" %}</th>
+      <th>{% trans "Vessel owner" %}</th>
+      <th>{% trans "Year constructed" %}</th>
+      <th>{% trans "Place constructed" %}</th>
+      <th>{% trans "Year registered" %}</th>
+      <th>{% trans "Place registered" %}</th>
+      <th>{% trans "Flag" %}</th>
+      <th>{% trans "Flag (imputed)" %}</th>
+      <th>{% trans "Rig of vessel" %}</th>
+      <th>{% trans "Tonnage" %}</th>
+      <th>{% trans "Standardized tonnage" %}</th>
+      <th>{% trans "Guns mounted" %}</th>
+
+      <th>{% trans "Place where voyage began" %}</th>
+      <th>{% trans "Principal place of purchase" %}</th>
+      <th>{% trans "1st place of slave purchase" %}</th>
+      <th>{% trans "2nd place of slave purchase" %}</th>
+      <th>{% trans "3rd place of slave purchase" %}</th>
+      <th>{% trans "Places of call before Atlantic crossing" %}</th>
+      <th>{% trans "Principal place of landing" %}</th>
+      <th>{% trans "1st place of slave landing" %}</th>
+      <th>{% trans "2nd place of slave landing" %}</th>
+      <th>{% trans "3rd place of slave landing" %}</th>
+      <th>{% trans "Place where voyage ended" %}</th>
+
+      <th>{% trans "Total embarked (imputed)" %}</th>
+      <th>{% trans "Total embarked" %}</th>
+      <th>{% trans "Total disembarked" %}</th>
+      <th>{% trans "Slaves intended at 1st place" %}</th>
+      <th>{% trans "Slaves carried from 1st port" %}</th>
+      <th>{% trans "Slaves carried from 2nd port" %}</th>
+      <th>{% trans "Slaves carried from 3rd port" %}</th>
+      <th>{% trans "Slaves arrived at 1st port" %}</th>
+      <th>{% trans "Slaves landed at 1st port" %}</th>
+      <th>{% trans "Slaves landed at 2nd port" %}</th>
+      <th>{% trans "Slaves landed at 3rd port" %}</th>
+      <th>{% trans "Percent men" %}</th>
+      <th>{% trans "Percent women" %}</th>
+      <th>{% trans "Percent boys" %}</th>
+      <th>{% trans "Percent girls" %}</th>
+      <th>{% trans "Percent males" %}</th>
+      <th>{% trans "Percent children" %}</th>
+      <th>{% trans "Sterling cash price in Jamaica" %}</th>
+      <th>{% trans "Slaves died during middle passage" %}</th>
+      <th>{% trans "Mortality rate" %}</th>
+
+      <th>{% trans "Year" %}</th>
+
+      <th>{% trans "Middle passage" %}</th>
+      <th>{% trans "Voyage length, homeport to landing" %}</th>
+      <th>{% trans "Year of arrival at port of disembarkation" %}</th>
+      <th>{% trans "Date trade began in Africa" %}</th>
+      <th>{% trans "Date vessel departed Africa" %}</th>
+      <th>{% trans "Date vessel arrived with slaves" %}</th>
+      <th>{% trans "Date vessel departed for homeport" %}</th>
+      <th>{% trans "Date voyage completed" %}</th>
+
+      <th>{% trans "Captain's name" %}</th>
+      <th>{% trans "Crew at voyage outset" %}</th>
+      <th>{% trans "Crew at first landing of slaves" %}</th>
+      <th>{% trans "Crew deaths during voyage" %}</th>
+
+      <th>{% trans "Particular outcome of voyage" %}</th>
+      <th>{% trans "Outcome of voyage for slaves" %}</th>
+      <th>{% trans "Outcome of voyage if ship captured" %}</th>
+      <th>{% trans "Outcome of voyage for owner" %}</th>
+      <th>{% trans "African resistance" %}</th>
+
+      <th>{% trans "Source of data" %}</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<!-- Show Full Details of a Row -->
+<b-modal v-model="rowModalShow" size="lg">
+  <div slot="modal-title">
+    <div class="v-modal-title">
+      Full detail
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <p class="body-text">{% trans "Here are the currently available details for this voyage." %} <a href="#" @click="row.collapseVisible = !row.collapseVisible">Expand/Collapse</a> to see/hide all.<p>
+    </div>
+  </div>
+
+{% verbatim %}
+
+  <div class="row" v-for="result in row.results">
+    <div class="col-md-12">
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="pointer" role="tab">
+          <div block href="#" v-b-toggle="result.group" variant="info" class="v-title">{{result.groupName}}</div>
+        </b-card-header>
+        <b-collapse :id="result.group" :visible=row.collapseVisible role="tabpanel">
+          <b-card-body>
+            <div class="row" v-for="variable in result.variables">
+              <div class='col-md-4 text-bold'>
+                {{variable.label}}
+                <b-badge pill
+                  v-if="variable.isImputed"
+                  v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
+                  variant="secondary"
+                  class="v-badge-imputed">
+                  IMP
+                </b-badge>
+              </div>
+              <div class='col-md-8'>
+                <span v-html="variable.value"></span>
+              </div>
+            </div>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+    </div>
+  </div>
+
+  <div slot="modal-footer">
+   <b-btn size="sm" class="float-right" variant="info" @click="rowModalShow=false">
+     Close
+   </b-btn>
+ </div>
+
+{% endverbatim %}
+
+</b-modal>
