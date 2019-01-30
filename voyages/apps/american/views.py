@@ -1,4 +1,4 @@
 from django.shortcuts import render
 
 def index(request):
-    return render(request, 'voyage/database.html', {'mode' : 'intra'})
+    return render(request, 'database.html', {'mode' : 'intra'})

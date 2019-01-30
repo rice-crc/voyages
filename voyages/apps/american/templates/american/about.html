@@ -1,9 +1,9 @@
-{% extends "american/americanbase.html" %}
+{% extends "american/_base.html" %}
 {% load voyage_extras %}
 {% load sass_tags %}
 {% load i18n %}
 
-{% block title %} Intra-American - Understanding the Database {% endblock %}
+{% block title %} {% trans 'Intra-American Slave Trade - Understanding the Database' %} {% endblock %}
 
 {% block content %}
 
@@ -33,24 +33,13 @@
           <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
             <div>
               <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-              <span>Toggle Sidebar</span>
+              <span>{% trans 'Toggle sidebar' %}</span>
             </div>
           </button>
         </p>
 
   			<div id="center-content-inner">
           <div v-html="content"></div>
-  				<!-- {% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %} -->
-
-          <!-- <div class="page-navigation-flexbox">
-            <div class="page-navigation-item" v-if="hasPrev">
-              <a @click=navPrevious>Previous: {{previous.title}}</a>
-            </div>
-            <div class="page-navigation-item" v-if="hasNext">
-              <a @click="navNext">Next: {{next.title}}</a>
-            </div>
-          </div> -->
-
   			</div>
 
       </div>
