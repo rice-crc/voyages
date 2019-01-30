@@ -40,7 +40,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
 
 var_num_slaves_intended_first_port = new NumberVariable({
     varName: "num_slaves_intended_first_port",
-    label: "Captives intended",
+    label: "Slaves intended at 1st place",
     description: "",
   },{
     op: "is equal to",
@@ -53,7 +53,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
 
 var_num_slaves_carried_first_port = new NumberVariable({
     varName: "num_slaves_carried_first_port",
-    label: "Captives from 1st port",
+    label: "Slaves carried from 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -66,7 +66,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
 
 var_num_slaves_carried_second_port = new NumberVariable({
     varName: "num_slaves_carried_second_port",
-    label: "Captives from 2nd port",
+    label: "Slaves carried from 2nd port",
     description: "",
   },{
     op: "is equal to",
@@ -78,7 +78,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
   });
 var_num_slaves_carried_third_port = new NumberVariable({
     varName: "num_slaves_carried_third_port",
-    label: "Captives from 3rd port",
+    label: "Slaves carried from 3rd port",
     description: "",
   },{
     op: "is equal to",
@@ -91,7 +91,7 @@ var_num_slaves_carried_third_port = new NumberVariable({
 
 var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     varName: "total_num_slaves_arr_first_port_embark",
-    label: "Captives arrived 1st port",
+    label: "Slaves arrived at 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -104,7 +104,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
 
 var_num_slaves_disembark_first_place = new NumberVariable({
     varName: "num_slaves_disembark_first_place",
-    label: "Captives landed 1st port",
+    label: "Slaves landed at 1st port",
     description: "",
   },{
     op: "is equal to",
@@ -116,7 +116,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
   });
 var_num_slaves_disembark_second_place = new NumberVariable({
     varName: "num_slaves_disembark_second_place",
-    label: "Captives landed 2nd port",
+    label: "Slaves landed at 2nd port",
     description: "",
   },{
     op: "is equal to",
@@ -129,7 +129,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
 
 var_num_slaves_disembark_third_place = new NumberVariable({
     varName: "num_slaves_disembark_third_place",
-    label: "Captives landed 3rd port",
+    label: "Slaves landed at 3rd port",
     description: "",
   },{
     op: "is equal to",
@@ -234,7 +234,7 @@ var_imputed_sterling_cash = new NumberVariable({
 
 var_imputed_death_middle_passage = new NumberVariable({
     varName: "imputed_death_middle_passage",
-    label: "Captives died during middle passage",
+    label: "Slaves died during middle passage",
     description: "",
   },{
     op: "is equal to",
@@ -248,7 +248,7 @@ var_imputed_death_middle_passage = new NumberVariable({
 var_imputed_mortality = new PercentageVariable({
     varName: "imputed_mortality",
     label: "Mortality rate",
-    description: "Percent died at sea. Please enter a Percentage in integer. e.g. 75",
+    description: "Percent died at sea. Please enter as an integer. e.g. 75",
   },{
     op: "is equal to",
     searchTerm0: null,

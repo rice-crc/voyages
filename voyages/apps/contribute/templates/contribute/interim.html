@@ -1205,19 +1205,23 @@
                 </tr>
                 {% if mode == 'editorial_review' %}
                 <tr>
-                    <th>{% trans "Imputed number at ports of purchase*" %}</th>
+                    <th>{% trans "Imputed number at ports of purchase" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Imputed number at ports of landing*" %}</th>
+                    <th>{% trans "Imputed number at ports of landing" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Imputed number at departure or arrival*" %}</th>
+                    <th>{% trans "Imputed number at departure or arrival" %}</th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Imputed deaths on middle passage*" %}</th>
+                    <th>{% trans "Imputed deaths on middle passage" %} 
+                        <b-badge pill v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
+                        variant="secondary" class="v-badge-imputed">
+                        IMPUTED</b-badge>
+                    </th>
                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 {% endif %}
@@ -1256,39 +1260,39 @@
             </thead>
             <tbody>
                 <tr>
-                    <th>{% trans "Total identified by age*" %}</th>
+                    <th>{% trans "Total identified by age (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Total identified by gender*" %}</th>
+                    <th>{% trans "Total identified by gender (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Total identified by age and gender*" %}</th>
+                    <th>{% trans "Total identified by age and gender (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Percentage of men*" %}</th>
+                    <th>{% trans "Percentage of men (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Percentage of women*" %}</th>
+                    <th>{% trans "Percentage of women (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Percentage of boys*" %}</th>
+                    <th>{% trans "Percentage of boys (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Percentage of girls*" %}</th>
+                    <th>{% trans "Percentage of girls (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Child ratio*" %}</th>
+                    <th>{% trans "Child ratio (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
                 <tr>
-                    <th>{% trans "Male ratio*" %}</th>
+                    <th>{% trans "Male ratio (imputed)" %}</th>
                     <td></td><td></td><td></td><td></td>
                 </tr>
             </tbody>

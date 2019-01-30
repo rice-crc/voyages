@@ -25,7 +25,7 @@ var_crew_voyage_outset = new NumberVariable({
 
 var_crew_first_landing = new NumberVariable({
     varName: "crew_first_landing",
-    label: "Crew at first landing of captives",
+    label: "Crew at first landing of slaves",
     description: "",
   },{
     op: "is equal to",

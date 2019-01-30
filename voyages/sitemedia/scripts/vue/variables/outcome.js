@@ -12,7 +12,7 @@ var_outcome_voyage = new TreeselectVariable({
 
 var_outcome_slaves = new TreeselectVariable({
     varName: "outcome_slaves",
-    label: "Outcome of voyage for captives",
+    label: "Outcome of voyage for slaves",
     description: "",
   },{
     op: "is one of",
