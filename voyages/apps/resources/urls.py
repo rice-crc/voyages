@@ -35,6 +35,4 @@ urlpatterns = [
         name='images'),
     url(r'^names-database',
         voyages.apps.resources.views.get_all_slaves,
-        name='origins'),
-    url(r'^[\w\.\-]+\$',
-        TemplateView.as_view(template_name='under_constr.html'))]
+        name='origins')]

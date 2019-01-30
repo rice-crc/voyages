@@ -36,7 +36,6 @@ urlpatterns = [
 
     url(r'^contribute', RedirectView.as_view(url='/contribute'), name='submission-login'),
 
-    url(r'^voyage', TemplateView.as_view(template_name='under_constr.html'), name='voyage'),
     url(r'^(?P<voyage_id>[0-9]+)/variables', voyages.apps.voyage.views.voyage_variables, name='voyage_variables'),
     url(r'^(?P<voyage_id>[0-9]+)/map', voyages.apps.voyage.views.voyage_map, name='voyage_map'),
     url(r'^(?P<voyage_id>[0-9]+)/images', voyages.apps.voyage.views.voyage_images, name='voyage_images'),
