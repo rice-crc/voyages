@@ -1,26 +1,3 @@
-var searchTerms = [
-  RangeSearchTerm(new VariableInfo('voyage_id', 'ship_nation_owners', 'Voyage ID'), '', null, 'Voyage id help text'),
-  TextSearchTerm(new VariableInfo('intra_american_voyage', 'ship_nation_owners', 'Is I-Am voyage?'), 'equals', null, 'Type true or false.', minLengthValidator(4)),
-  TextSearchTerm(new VariableInfo('ship_name', 'ship_nation_owners', 'Vessel Name'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the name of the vessel. The search is case insensitive.', minLengthValidator(3)),
-  TextSearchTerm(new VariableInfo('owner', 'ship_nation_owners', 'Vessel Owners'), 'contains', null, 'Look for names of slave vessel owners.', minLengthValidator(3)),
-  PlaceSearchTerm(new VariableInfo('imp_port_voyage_begin_idnum', 'itinerary', 'Place voyage began*'), 'is one of', null, 'Select the places where voyages began.', null),
-  PlaceSearchTerm(new VariableInfo('imp_principal_place_of_slave_purchase_idnum', 'itinerary', 'Principal place of slave purchase*'), 'is one of', null, 'help text.', null),
-  PlaceSearchTerm(new VariableInfo('imp_principal_port_slave_dis_idnum', 'itinerary', 'Principal place of slave landing*'), 'is one of', null, 'help text.', null),
-  PlaceSearchTerm(new VariableInfo('place_voyage_ended_idnum', 'itinerary', 'Place voyage ended'), 'is one of', null, 'Select the places where voyages ended.', null),
-  RangeSearchTerm(new VariableInfo(YEAR_RANGE_VARNAME, 'dates', 'Year arrived with slaves*'), '', null, 'The imputed year in which the ship arrived with slaves at the first? port of disembarkation', dateRangeValidation),
-  TextSearchTerm(new VariableInfo('captain', 'captain_crew', 'Captain\'s Name'), 'contains', null, 'Look for names of slave vessel captains.', minLengthValidator(3)),
-  RangeSearchTerm(new VariableInfo('imp_total_num_slaves_purchased', 'numbers', 'Total slaves embarked*'), '', null, 'total_slaves_embarked help text', null, 3),
-  RangeSearchTerm(new VariableInfo('imp_total_slaves_disembarked', 'numbers', 'Total slaves disembarked*'), '', null, 'total_slaves_disembarked help text', null, 3),
-  RangeSearchTerm(new VariableInfo('year_range', 'numbers', 'Year range of your search'), '', null, 'year_range help text', null, 3),
-  TextSearchTerm(new VariableInfo('sources_plaintext_search', 'source', 'Source'), 'contains', null, 'Please type one or more words (or even partial words) that should appear in the source references for the voyage. The search is case insensitive.', minLengthValidator(3)),
-];
-
-var searchTermsDict = {};
-for (var i = 0; i < searchTerms.length; ++i) {
-  var item = searchTerms[i];
-  searchTermsDict[item.varName] = item;
-}
-
 var categoryNames = [
   "Ship, nation, owners",
   "Itinerary",
@@ -86,7 +63,7 @@ var allColumns = [
 
   // year range
   {
-    data: "var_" + YEAR_RANGE_VARNAME,
+    data: "var_imp_arrival_at_port_of_dis",
     category: 3,
     header: gettext("Year"),
     isImputed: true,
@@ -95,7 +72,7 @@ var allColumns = [
   // dates
   { data: "var_length_middle_passage_days", category: 4, header: gettext("Middle passage (days)"), "visible": false, isImputed: false },
   { data: "var_imp_length_home_to_disembark", category: 4, header: gettext("Voyage length, homeport to landing (days)"), "visible": false, isImputed: false },
-  { data: "var_voyage_began", category: 4, header: gettext("Year disembarked"), "visible": false, isImputed: true },
+  { data: "var_voyage_began", category: 4, header: gettext("Date disembarked"), "visible": false, isImputed: true },
   { data: "var_slave_purchase_began", category: 4, header: gettext("Date trade began in Africa"), "visible": false, isImputed: false },
   { data: "var_date_departed_africa", category: 4, header: gettext("Date vessel departed Africa"), "visible": false, isImputed: false },
   { data: "var_first_dis_of_slaves", category: 4, header: gettext("Date vessel arrived with slaves"), "visible": false, isImputed: false },
