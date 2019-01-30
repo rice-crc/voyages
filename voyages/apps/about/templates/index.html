@@ -1,9 +1,9 @@
-{% extends "about/aboutbase.html" %}
+{% extends "_base.html" %}
 {% load voyage_extras %}
 {% load sass_tags %}
 {% load i18n %}
 
-{% block title %} Trans-Atlantic - About {% endblock %}
+{% block title %} {% trans 'Slave Voyages - About' %} {% endblock %}
 
 {% block content %}
 
@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
               <div>
                 <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-                <span>Toggle Sidebar</span>
+                <span>{% endverbatim %} {% trans 'Toggle sidebar' %} {% verbatim %}</span>
               </div>
             </button>
           </p>

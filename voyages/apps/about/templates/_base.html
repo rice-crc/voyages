@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load sass_tags %}
+{% block title %}{% trans 'Slave Voyages - About' %}{% endblock %}
+
+{% block csslist %}
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/about.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/sponsors.scss' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+	<!-- {% include "footer.html" %} -->
+{% endblock %}
