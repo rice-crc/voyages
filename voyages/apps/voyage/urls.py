@@ -8,10 +8,10 @@ import voyages.apps.static_content.views
 urlpatterns = [
 
     # flatpages
-    url(r'^about', TemplateView.as_view(template_name='voyage/about.html'), name='about'),
-    url(r'^essays', TemplateView.as_view(template_name='voyage/essays.html'), name='essays'),
-    url(r'^downloads', TemplateView.as_view(template_name='voyage/downloads.html'), name='downloads'),
-    url(r'^maps', TemplateView.as_view(template_name='voyage/maps.html'), name='maps'),
+    url(r'^about', TemplateView.as_view(template_name='about.html'), name='about'),
+    url(r'^essays', TemplateView.as_view(template_name='essays.html'), name='essays'),
+    url(r'^downloads', TemplateView.as_view(template_name='downloads.html'), name='downloads'),
+    url(r'^maps', TemplateView.as_view(template_name='maps.html'), name='maps'),
 
 
     url(r'^c(?P<chapternum>\w{2})_s(?P<sectionnum>\w{2})_p(?P<pagenum>\w{2})',
@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^understanding-db/(?P<name>.*)', voyages.apps.voyage.views.understanding_page, name='understanding-page'),
     url(r'^understanding-db', voyages.apps.voyage.views.understanding_page, name='guide'),
 
-    url(r'^c01_s01_cover', TemplateView.as_view(template_name='voyage/guide.html'), name='voyage-guide-intro'),
+    url(r'^c01_s01_cover', TemplateView.as_view(template_name='guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover', voyages.apps.voyage.views.variable_list, name='variables'),
     url(r'^reload-cache', voyages.apps.voyage.views.reload_cache, name='reload_cache'),
 
@@ -43,9 +43,9 @@ urlpatterns = [
 
     url(r'^csv_stats_download', voyages.apps.voyage.views.csv_stats_download, name='csv_stats_download'),
     # url(r'^download', voyages.apps.voyage.views.download_flatpage, name='download'),
-    url(r'^download', TemplateView.as_view(template_name='voyage/download.html'), name='download'),
+    url(r'^download', TemplateView.as_view(template_name='download.html'), name='download'),
 
-    url(r'^database', TemplateView.as_view(template_name='voyage/database.html'), name='database'),
+    url(r'^database', TemplateView.as_view(template_name='database.html'), name='database'),
 
 
     url(r'var-options', voyages.apps.voyage.beta_views.get_var_options, name='var-options'),

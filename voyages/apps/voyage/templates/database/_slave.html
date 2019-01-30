@@ -7,10 +7,8 @@
 
 			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall numbers" :filters="filter.slave.overallNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Overall numbers" description="Embarkation and disembarkation in the voyages">
-						<div slot="v-modal-content">
-							Some help text
-						</div>
+					<v-panel-header title="Overall numbers" description="Embarkations and disembarkations">
+						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
 
@@ -34,10 +32,8 @@
 
 			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" title="Purchase numbers" :filters="filter.slave.purchaseNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Purchase numbers" description="Number of enslaved purchased">
-						<div slot="v-modal-content">
-							Some help text
-						</div>
+					<v-panel-header title="Purchase numbers" description="Number of slaves purchased">
+						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
 
@@ -64,10 +60,8 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :filters="filter.slave.landingNumbers" title="Landing numbers" >
 				<div slot="v-panel-header">
-					<v-panel-header title="Landing numbers" description="Number of enslaved landing">
-						<div slot="v-modal-content">
-							Some help text
-						</div>
+					<v-panel-header title="Landing numbers" description="Number of slaves landed">
+						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
 				<div slot="v-panel-content" slot-scope="scope">
@@ -94,10 +88,8 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by sex and age">
 				<div slot="v-panel-header">
-					<v-panel-header title="Percentage by sex and age" description="Please enter a percentage in integer. e.g. 75">
-						<div slot="v-modal-content">
-							Some help text
-						</div>
+					<v-panel-header title="Percentage by sex and age" description="Please enter as an integer. e.g. 75">
+						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
 
@@ -132,10 +124,8 @@
 
 			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="Other characteristics">
 				<div slot="v-panel-header">
-					<v-panel-header title="Other characteristics" description="Additional characteristics about enslaved people">
-						<div slot="v-modal-content">
-							Some help text
-						</div>
+					<v-panel-header title="Other characteristics" description="Additional characteristics about slaves">
+						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
 

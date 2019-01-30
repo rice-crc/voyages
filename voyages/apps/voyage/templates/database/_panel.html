@@ -9,19 +9,20 @@
         <span v-else>
           <span class="panel-variable-value">{{variable.searchTerm0 | termLabelize}}<span v-if="!variable.searchTerm1">.</span></span>
           <span v-if="variable.searchTerm1">
-            and <span class="panel-variable-value">{{variable.searchTerm1 | termLabelize}}.</span>
+            {% endverbatim %} and {% verbatim %}
+            <span class="panel-variable-value">{{variable.searchTerm1 | termLabelize}}.</span>
           </span>
         </span>
       </span>
     </span>
     <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
-      <div class="btn-panel"><i class="fa fa-times-circle"></i> Hide</div>
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> {% endverbatim %} {% trans 'Hide' %} {% verbatim %}</div>
     </a>
   </div>
   <div class="panel-list" v-else>
-    <div class="text-bold panel-variable-label">No variables are selected</div>
+    <div class="text-bold panel-variable-label">{% endverbatim %} {% trans 'No variables are selected' %} {% verbatim %}</div>
     <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
-      <div class="btn-panel"><i class="fa fa-times-circle"></i> Hide</div>
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> {% endverbatim %} {% trans 'Hide' %} {% verbatim %}</div>
     </a>
   </div>
 </div>
