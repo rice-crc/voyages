@@ -905,9 +905,8 @@
 
     var notes = {{ interim.notes|safe }};
     for (var key in notes) {
-        var $div = $('#' + key);
-        $div.after('<div class="notes"><span class="glyphicon glyphicon-comment"></span>&nbsp;' + notes[key] + '</div>');
-        $div.closest('.row').removeClass('blank');
+        var $div = $("label[for='" + key + "']");
+        $div.append('<span class="notes"><i class="fa fa-comment"></i>' + notes[key] + '</span>');
     }
 
     $('#show_blanks,#show_existing,#show_notes').trigger('change');
