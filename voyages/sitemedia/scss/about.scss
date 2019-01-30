@@ -83,3 +83,8 @@ a {
   font-size: 1rem;
   font-weight: bold;
 }
+
+.nav-link-about.active{
+  background-color: $about-color !important;
+  color: white;
+}
