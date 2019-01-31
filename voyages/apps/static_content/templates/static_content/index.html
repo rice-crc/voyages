@@ -19,8 +19,9 @@
 		<div class="cover-flex-container">
 
 			<div class="align-self-start cover-start col-md-10 col-lg-12 col-xl-8 col-sm-12 col-xs-12 no-padding">
-				<h1 class="uppercase cover-color weight-700 db-title site-headline " data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500" data-aos-anchor="#bgvid-container">EXPLORE THE DISPERSAL OF ENSLAVED AFRICANS ACROSS THE ATLANTIC WORLD</h1>
-				<p class="cover-color site-story" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% blocktrans %} Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of more than 36,000 trans-Atlantic slave voyages, 11,000 intra-American ventures, names and personal information. You can read the introductory maps for a high-level guided explanation, view the timeline and chronology of the traffic, or watch the slave ship and slave trade animations to see the dispersal in action. {% endblocktrans %}
+				<h1 class="uppercase cover-color weight-700 db-title site-headline " data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% trans 'EXPLORE THE DISPERSAL OF ENSLAVED AFRICANS ACROSS THE ATLANTIC WORLD' %}</h1>
+				<p class="cover-color site-story" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% blocktrans %} Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the
+				Atlantic slave trade. The three databases below provide details of more than 36,000 trans-Atlantic slave voyages, 11,000 intra-American ventures, names and personal information. You can read the introductory maps for a high-level guided explanation, view the timeline and chronology of the traffic, or watch the slave ship and slave trade animations to see the dispersal in action. {% endblocktrans %}
 				</p>
 			</div>
 
@@ -30,29 +31,29 @@
 				<div class="special-feature-flex-container">
 					<a href="{% url 'assessment:intro-maps' %}" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="900" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
-							<div class="special-feature-title">{% trans 'Introductory Maps' %}</div>
-							<div class="special-feature-desc">Overview of slave trade in a series of maps </div>
+							<div class="special-feature-title">{% trans 'Introductory maps' %}</div>
+							<div class="special-feature-desc">{% trans 'Overview of slave trade in a series of maps' %} </div>
 						</div>
 					</a>
 
 					<a href="{% url 'assessment:estimates' %}?selected_tab=timeline" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1100" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
-							<div class="special-feature-title">{% trans 'Timelines of Estimates' %}</div>
-							<div class="special-feature-desc">Number of captives embarked and disembarked </div>
+							<div class="special-feature-title">{% trans 'Timelines of estimates' %}</div>
+							<div class="special-feature-desc">{% trans 'Number of captives embarked and disembarked' %} </div>
 						</div>
 					</a>
 
 					<a href="/voyage/database#animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
-							<div class="special-feature-title">Timelapse</div>
-							<div class="special-feature-desc">View the movement of slave ships across the Atlantic </div>
+							<div class="special-feature-title">{% trans 'Timelapse' %}</div>
+							<div class="special-feature-desc">{% trans 'View the movement of slave ships across the Atlantic' %} </div>
 						</div>
 					</a>
 
 					<a href="{% url 'voyage:search' %}?selected_tab=animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
-							<div class="special-feature-title">Slave Ship in 3D</div>
-							<div class="special-feature-desc">View a 3D rendition of a slave ship </div>
+							<div class="special-feature-title">{% trans 'Slave ship in 3D' %}</div>
+							<div class="special-feature-desc">{% trans 'View a 3D rendition of a slave ship' %} </div>
 						</div>
 					</a>
 				</div>
@@ -65,7 +66,7 @@
 						<!-- <a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
 						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a> -->
 						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" alt="Donate to This Project" rel="noopener" target="_blank"><span class="social-icon" >donate to this project</span></a>
-						<div class="scroll"> scroll down to learn more</div>
+						<div class="scroll"> {% trans 'scroll down to learn more' %}</div>
 					</div>
 
 					<div class="social-icon-container">
@@ -91,13 +92,13 @@
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
-					<h1 class="uppercase trans-color weight-700 db-title">Trans-Atlantic</h1>
-					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
+					<h1 class="uppercase trans-color weight-700 db-title">{% trans 'Trans-Atlantic' %}</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title">{% trans 'Slave Trade Database' %}</h1>
 				</div>
 				<div class="align-self-center">
 					<p class="trans-color margin-top">
 						{% blocktrans %}
-						 Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. Users can read the introductory maps for an overview of the evolution of the slave trade, view the timeline and chronology of the traffic, or watch the slave ship or slave trade animations to see the dispersal in action.
+						Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the Atlantic slave trade. The three databases below provide details of 36,000 trans-Atlantic slave voyages, 10,000 intra-American ventures, and the names and personal details of 92,000 captives. Users can read the introductory maps for an overview of the evolution of the slave trade, view the timeline and chronology of the traffic, or watch the slave ship or slave trade animations to see the dispersal in action.
 					 	{% endblocktrans %}
 				 	</p>
 				</div>
@@ -135,12 +136,12 @@
 			</div>
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
-					<h1 class="uppercase intra-color weight-700 db-title">Intra-American</h1>
-					<h1 class="uppercase db-title-color weight-700 db-title">Slave Trade Database</h1>
+					<h1 class="uppercase intra-color weight-700 db-title">{% trans 'Intra-American' %}</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title">{% trans 'Slave Trade Database' %}</h1>
 				</div>
 				<div class="align-self-center">
-					<p class="intra-color margin-top">The Intra-American Slave Trade Database contains information on approximately 10,000 slave voyages within the Americas. These voyages operated within colonial empires, across imperial boundaries, and inside the borders of nations such as the United
-						States and Brazil. The database enables users to explore the contours of this enormous New World slave trade, which not only dispersed African survivors of the Atlantic crossing but also displaced enslaved people born in the Americas.
+					<p class="intra-color margin-top">{% trans 'The Intra-American Slave Trade Database contains information on approximately 10,000 slave voyages within the Americas. These voyages operated within colonial empires, across imperial boundaries, and inside the borders of nations such as the United
+						States and Brazil. The database enables users to explore the contours of this enormous New World slave trade, which not only dispersed African survivors of the Atlantic crossing but also displaced enslaved people born in the Americas.' %}
 					</p>
 				</div>
 				<div class="align-self-end band-buttons">
@@ -156,19 +157,19 @@
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
-					<h1 class="uppercase past-color weight-700 db-title">People of Trans-Atlantic</h1>
-					<h1 class="uppercase db-title-color weight-700 db-title"> Slave Trade</h1>
+					<h1 class="uppercase past-color weight-700 db-title">{% trans 'People of Trans-Atlantic' %}</h1>
+					<h1 class="uppercase db-title-color weight-700 db-title"> {% trans 'Slave Trade' %}</h1>
 				</div>
 				<div class="align-self-center">
-					<p class="past-color margin-top">People of the Atlantic Slave Trade provides personal details of 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation
-						of each individual.</p>
+					<p class="past-color margin-top">{% trans 'People of the Atlantic Slave Trade provides personal details of 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation
+						of each individual.' %}</p>
 				</div>
 				<div class="align-self-end band-buttons">
 					<a class="" href="{% url 'resources:about' %}">
-						<button class="btn btn-outline-primary past-btn">About</button>
+						<button class="btn btn-outline-primary past-btn">{% trans 'About' %}</button>
 					</a>
 					<a class="" href="{% url 'resources:origins' %}">
-						<button class="btn btn-outline-primary past-btn">Database</button>
+						<button class="btn btn-outline-primary past-btn">{% trans 'Database' %}</button>
 					</a>
 					<!-- <button class="btn btn-outline-primary past-btn">Downloads</button> -->
 					<!-- <button class="btn btn-outline-primary past-btn">Contribute</button> -->
@@ -182,11 +183,11 @@
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
 			<div class='col-md-12 band-story'>
 				<div class="align-self-start">
-					<h1 class="uppercase gallery-color weight-700 db-title">Image Galleries</h1>
+					<h1 class="uppercase gallery-color weight-700 db-title">{% trans 'Image Galleries' %}</h1>
 				</div>
 				<div class="align-self-center">
-					<p class="gallery-color margin-top">Explore several hundred images of the people, places, vessels and manuscripts of the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the
-						original source.</p>
+					<p class="gallery-color margin-top">{% trans 'Explore several hundred images of the people, places, vessels and manuscripts of the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the
+						original source.' %}</p>
 				</div>
 			</div>
 
@@ -194,7 +195,7 @@
 					<a href="/resources/images/category/Manuscripts" >
 						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Manuscripts">
 						<div class="card-block">
-							<h4 class="sv-card-title card-title-color "> manuscripts </h4>
+							<h4 class="sv-card-title card-title-color "> {% trans 'manuscripts' %} </h4>
 							<p class="card-text"></p>
 						</div>
 					</a>
@@ -204,7 +205,7 @@
 					<a href="/resources/images/category/Places" >
 						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/2.jpg" alt="Places">
 						<div class="card-block">
-							<h4 class="sv-card-title card-title-color "> places </h4>
+							<h4 class="sv-card-title card-title-color "> {% trans 'places' %} </h4>
 							<p class="card-text"></p>
 						</div>
 					</a>
@@ -214,7 +215,7 @@
 				<a href="/resources/images/category/Slaves" >
 					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="Slaves">
 					<div class="card-block">
-						<h4 class="sv-card-title card-title-color "> slaves </h4>
+						<h4 class="sv-card-title card-title-color "> {% trans 'slaves' %} </h4>
 						<p class="card-text"></p>
 					</div>
 				</a>
@@ -224,7 +225,7 @@
 				<a href="/resources/images/category/Vessels" >
 					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/3.jpg" alt="Vessels">
 					<div class="card-block">
-						<h4 class="sv-card-title card-title-color "> vessels </h4>
+						<h4 class="sv-card-title card-title-color "> {% trans 'vessels' %} </h4>
 						<p class="card-text"></p>
 					</div>
 				</a>
