@@ -190,8 +190,8 @@ from django.utils.translation import ugettext_lazy as _
 
 LANGUAGES = (
     ('en', _('English')),
-    ('pt', _('Portuguese')),
     ('es', _('Spanish')),
+    ('pt', _('Portuguese')),
 )
 DEFAULT_LANGUAGE = 0
 

@@ -20,9 +20,8 @@
 
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{% url 'voyage:maps' %}">{% trans "Introductory Maps" %}</a>
-						<a class="dropdown-item" href="{% url 'assessment:estimates' %}?selected_tab=timeline">{% trans 'Timeline and Chronology' %}</a>
 						<a class="dropdown-item" href="{% url 'voyage:ship' %}">{% trans 'Slave Ship in 3D' %}</a>
-
+						<a class="dropdown-item" href="{% url 'assessment:estimates' %}?selected_tab=timeline">{% trans 'Timeline and Chronology' %}</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{% url 'contribute:index' %}">{% trans "Contribute" %}</a>
 					</div>
@@ -32,8 +31,8 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Intra-American</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'american:about' %}">{% trans "Understanding the Database" %}</a>
-						<a class="dropdown-item" href="{% url 'american:essays' %}">{% trans "Essays" %}</a>
 						<a class="dropdown-item" href="{% url 'american:database' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="{% url 'american:essays' %}">{% trans "Essays" %}</a>
 						<a class="dropdown-item" href="{% url 'american:downloads' %}">{% trans "Downloads" %}</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{% url 'contribute:index' %}">{% trans "Contribute" %}</a>
@@ -72,7 +71,7 @@
 
 						{% for lang in LANGUAGES %}
 							{% get_language_info for lang.0 as lang_info %}
-							<a class="dropdown-item language_link language_link_{{ lang.0 }}" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang_info.name_local }}</a>
+							<a class="dropdown-item language_link language_link_{{ lang.0 }}" href="{% if lang.0 == LANGUAGE_CODE %}#{% else %}{% url 'set_lang' lang.0 %}{% endif %}">{{ lang_info.name_local|title }}</a>
 						{% endfor %}
 					</div>
 				</li>
