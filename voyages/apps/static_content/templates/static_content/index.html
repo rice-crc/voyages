@@ -9,6 +9,16 @@
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/aos@2.1.1.min.css' %}" rel="stylesheet" type="text/css" />
 	{% endcompress %}
+	<style>
+		.vp-title {
+			background-color: rgba(248, 247, 216, 0.7) !important;
+			position: absolute !important;
+			top: 0 !important;
+			left: 0 !important;
+			width: 100% !important;
+			height: 100% !important;
+		}
+	</style>
 {% endblock %}
 
 {% block content %}
@@ -50,7 +60,7 @@
 						</div>
 					</a>
 
-					<a href="{% url 'voyage:search' %}?selected_tab=animation" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
+					<a href="{% url 'voyage:ship' %}" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1300" data-aos-duration="800" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
 							<div class="special-feature-title">{% trans 'Slave ship in 3D' %}</div>
 							<div class="special-feature-desc">{% trans 'View a 3D rendition of a slave ship' %} </div>
@@ -84,6 +94,11 @@
 		<source src="{{STATIC_URL}}videos/sv-bgvid-1.mp4" type="video/mp4">
 	</video>
 
+</div>
+		
+<div class='embed-responsive embed-responsive-16by9'>
+	<iframe class="embed-responsive-item" src="https://player.vimeo.com/video/307515773" frameborder="0"
+		webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 </div>
 
 <div class="container">
@@ -313,6 +328,7 @@
     elements_selector: ".lazy"
 	});
 </script>
+
 {% endcompress %}
 
 {% endblock %} {% block footer %} {% include "footer.html" %} {% endblock %}
