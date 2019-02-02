@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="row">
   <div class="col-md-12">
     <div class="tab-title"></div>
@@ -6,10 +8,10 @@
     <thead>
       <tr>
         <th></th>
-        <th>Total Slaves</th>
-        <th>Total Voyages</th>
-        <th>Average</th>
-        <th>Standard Deviation</th>
+        <th>{% trans 'Total slaves' %}</th>
+        <th>{% trans 'Total voyages' %}</th>
+        <th>{% trans 'Average' %}</th>
+        <th>{% trans 'Standard deviation' %}</th>
       </tr>
     </thead>
   </table>
