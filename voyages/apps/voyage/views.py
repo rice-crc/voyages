@@ -571,7 +571,7 @@ def voyage_map(request, voyage_id):
         map_year = get_map_year(year_completed, year_completed)
     else:
         map_year = None
-    return render(request, "voyage/voyage_info.html",
+    return render(request, "voyage_info.html",
                   {'tab': 'map',
                    'map_year': map_year,
                    'voyage_id': voyage_id,
@@ -585,7 +585,7 @@ def voyage_images(request, voyage_id):
     images = []
     if voyage:
         images = list(Image.objects.filter(voyage=int(voyage_id)))
-    return render(request, "voyage/voyage_info.html",
+    return render(request, "voyage_info.html",
                   {'tab': 'images',
                    'voyage_id': voyage_id,
                    'voyage': voyage,
@@ -624,7 +624,7 @@ def voyage_variables(request, voyage_id):
     """
     (voyage, allvars) = voyage_variables_data(voyage_id)
 
-    return render(request, "voyage/voyage_info.html",
+    return render(request, "voyage_info.html",
                   {'voyage_variables': allvars,
                    'voyage': voyage,
                    'tab': 'variables',
