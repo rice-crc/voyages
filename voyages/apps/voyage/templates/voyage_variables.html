@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load voyage_extras %}
+
+<table>
+  <tbody>
+    {% for lblmain, lbllabel, lbldata, var_name in voyage_variables %}
+    <tr>
+      {% if None != lblmain.0 %}
+      <td class="detail-label-main" rowspan="{{ lblmain.0 }}">{{ lblmain.1|trans_log }}</td>
+      {% endif %}
+      <td class="detail-label">{{ lbllabel|replaceStar:' <span class="badge badge-pill badge-secondary" data-toggle="tooltip"
+          data-placement="top" data-original-title="Imputed results are calculated by an algorithm.">IMP </span>'|trans_log
+        }}</td>
+      <td class="detail-data">{{ lbldata | safe }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
