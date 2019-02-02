@@ -494,10 +494,10 @@ var searchBar = new Vue({
 
   // event loop - update the menuAim everytime after it's re-rendered
   updated: function() {
-    $menu.menuAim({
-      activate: activateSubmenu,
-      deactivate: deactivateSubmenu
-    });
+    // $menu.menuAim({
+    //   activate: activateSubmenu,
+    //   deactivate: deactivateSubmenu
+    // });
   },
 })
 
