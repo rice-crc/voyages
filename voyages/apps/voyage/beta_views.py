@@ -245,7 +245,7 @@ def get_results_map_flow(request, results):
                                             ', ' + str(missed_disembarked) + ')')
     return render(
         request,
-        "voyage/search_maps.datatemplate",
+        "search_maps.datatemplate",
         {
             'map_ports': map_ports,
             'map_flows': map_flows
