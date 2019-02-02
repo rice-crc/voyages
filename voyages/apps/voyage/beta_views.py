@@ -17,6 +17,7 @@ from voyages.apps.common.views import get_ordered_places
 from voyages.apps.common.views import get_datatable_json_result as get_results_table
 from voyages.apps.voyage.models import *
 from voyages.apps.voyage.tables import *
+import csv
 import itertools
 import json
 import unicodecsv
@@ -152,8 +153,28 @@ def get_results_graph(results, post):
     missing_y_axes = [y for y in y_axes if y not in _all_y_axes]
     if len(missing_y_axes) > 0:
         return HttpResponseBadRequest('Missing Y axes: ' + str(missing_y_axes) + '. Available: ' + str(_all_y_axes.keys()))
-    output = get_graph_data(results, _all_x_axes[x_axis], [_all_y_axes[y] for y in y_axes])
-    return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
+    x_axis_info = _all_x_axes[x_axis]
+    output = get_graph_data(results, x_axis_info, [_all_y_axes[y] for y in y_axes])
+    data_format = post.get('data_format', 'json')
+    if data_format == 'json':
+        return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
+    if data_format == 'csv':
+        # Here we need to build a tabular data format. The output
+        # is a collection of series, each correspond to a column in
+        # the export. It is not necessary that they have the same row
+        # sets, so we first build a row index to account for "blank"
+        # cells in the output.
+        all_series = output.values()
+        row_index = sorted(set(sum([[v[0] for v in lst] for lst in all_series], [])))
+        columns = [{v[0]: v[1] for v in lst} for lst in all_series]
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="graph.csv"'
+        writer = csv.writer(response)
+        writer.writerow([x_axis_info.description or ''] + output.keys())
+        for index in row_index:
+            writer.writerow([index] + [col.get(index, '') for col in columns])
+        return response
+    return JsonResponse({'error': 'Invalid format in request ' + str(data_format)})
 
 def get_results_map_animation(results):
     VoyageCache.load()
