@@ -1,0 +1,39 @@
+{% extends "_base.html" %}
+{% load sass_tags %}
+
+<!-- Basic template for pages in the Voyage section -->
+
+{% load i18n %}
+
+{% block csslist %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% sass_src 'scss/legacy/voyage/voyage-search.scss' %}" rel="stylesheet" type="text/css" />
+
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
+<!-- <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search.css"> -->
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-search-menu.css">
+{% endblock %}
+
+{% block title %}{% trans 'Voyage Information' %}{% endblock %}
+
+
+{% block jslist %}
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/library/jquery.qtip@2.1.1.min.js"></script>
+<script>
+  $('[data-toggle="tooltip"]').tooltip()
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="background: White; height:100%;">
+  {% block center-content %}
+  {% include "voyage_main_content.html" %}
+  {% endblock %}
+</div>
+
+
+{% endblock %}
