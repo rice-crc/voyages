@@ -724,7 +724,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 text: gettext('Filtered results with visible columns'),
                 action: makeDownloadFunction(false, true, true)
               }],
-              fade: true
             },
 
             {
@@ -745,7 +744,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                   action: makeDownloadFunction(true, true, true)
                 }
               ],
-              fade: true
             }
           ]
         }
@@ -827,8 +825,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }],
       bFilter: false,
       paging: false,
-      dom: "<'flex-container'>" +
-        "<'row'<'col-sm-12'tr>>",
+      // dom: "<'flex-container'>" +
+      //   "<'row'<'col-sm-12'tr>>",
+      dom: "<'flex-container'iB>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-5'><'col-sm-7'p>>",
+      buttons: [
+        {
+          extend: 'collection',
+          text: '<span class="fa fa-columns"></span>',
+          className: 'btn btn-info buttons-collection dropdown-toggle',
+          text: 'Download',
+          // Top level: CSV vs. Excel
+          buttons: ['csvHtml5', 'excelHtml5']
+        }
+      ],
       processing: true,
       initComplete: function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -1038,6 +1049,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             ['15', '50', '100', '200']
           ],
           processing: true,
+          dom: "<'flex-container'iB>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'p>>",
+          buttons: [
+            {
+              extend: 'collection',
+              text: '<span class="fa fa-columns"></span>',
+              className: 'btn btn-info buttons-collection dropdown-toggle',
+              text: 'Download',
+              // Top level: CSV vs. Excel
+              buttons: ['csvHtml5', 'excelHtml5']
+            }
+          ],
         });
       }).done(function() {
         $("#sv-loader").addClass("display-none");
