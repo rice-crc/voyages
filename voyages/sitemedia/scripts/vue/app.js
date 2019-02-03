@@ -212,6 +212,11 @@ var searchBar = new Vue({
                     value = this.row.data[varName.slice(0, -6)];
                   }
 
+                  // Patch place variables
+                  if (item.type == "place") {
+                    value = this.row.data[varName.slice(0, -3)];
+                  }
+
                   datum.variables[varName] = {
                     varName: varName,
                     label: item["label"],
