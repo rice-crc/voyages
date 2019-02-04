@@ -19,7 +19,7 @@
     <div class="page-title-2">{% trans "Delete voyage contribution - Voyage data" %}</div>
 {% endif %}
 {% for vars in deleted_voyage_vars %}
-    {% include "voyage/voyage_variables.html" with voyage_variables=vars only %}
+    {% include "voyage_variables.html" with voyage_variables=vars only %}
 <hr />
 {% endfor %}
 
