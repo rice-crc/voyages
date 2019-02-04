@@ -8,7 +8,7 @@
                 <label for="message_to_editor">
                     {% trans "Message to editor" %}:
                 </label>
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <textarea class="form-control not_selectized field_notes" id="message_to_editor" name="message_to_editor"></textarea>
                 </div>
             </div>
@@ -16,7 +16,7 @@
                 <label for="reviewer_decision">
                     {% trans "Decision" %}:
                 </label>
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select class="form-control not_selectized" id="reviewer_decision" name="reviewer_decision">
                         <option>{% trans "Please select..." %}</option>
                         <option value="1">{% trans "Accept" %}</option>
@@ -42,7 +42,7 @@
                 <label for="decision_message">
                     {% trans "Decision message" %}:
                 </label>
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <textarea class="form-control not_selectized field_notes" id="decision_message" name="decision_message">{{ review_request.decision_message|default_if_none:'' }}</textarea>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                 <label for="editorial_decision">
                     {% trans "Decision" %}:
                 </label>
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select class="form-control not_selectized" id="editorial_decision" name="editorial_decision">
                         <option>{% trans "Please select..." %}</option>
                         <option value="3">{% trans "Accept" %}</option>
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <label for="is_intra_american">
                         {% trans "This is an Intra-American voyage" %}
                     </label>
@@ -72,7 +72,7 @@
                 <label for="created_voyage_id">
                     {% trans "Published voyage id" %}:
                 </label>
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="form-control not_selectized" id="created_voyage_id" name="created_voyage_id" value="{{ review_request.created_voyage_id|default_if_none:'' }}">
                 </div>
             </div>
