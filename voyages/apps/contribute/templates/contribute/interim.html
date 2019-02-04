@@ -66,7 +66,7 @@
             {% with form.name_of_vessel as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -75,7 +75,7 @@
             {% with form.ship_construction_place as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -84,7 +84,7 @@
             {% with form.ship_registration_place as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -93,7 +93,7 @@
             {% with form.year_ship_constructed as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -102,7 +102,7 @@
             {% with form.year_ship_registered as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -111,7 +111,7 @@
             {% with form.national_carrier as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Nationalities" %}'>
@@ -129,7 +129,7 @@
             {% with form.rig_of_vessel as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Rig of vessel" %}'>
@@ -147,7 +147,7 @@
             {% with form.tonnage_of_vessel as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -156,7 +156,7 @@
             {% with form.ton_type as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Tonnage type" %}'>
@@ -174,7 +174,7 @@
             {% with form.guns_mounted as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -183,7 +183,7 @@
             {% with form.first_ship_owner as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -192,7 +192,7 @@
             {% with form.second_ship_owner as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -201,7 +201,7 @@
             {% with form.additional_ship_owners as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
+                <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -212,7 +212,7 @@
             {% with form.imputed_national_carrier as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Nationalities" %}'>
@@ -230,7 +230,7 @@
             {% with form.imputed_standardized_tonnage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -239,7 +239,7 @@
             {% with form.imputed_region_ship_constructed as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-12 last_group_input">
                     <select class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                     </select>
                 </div>
@@ -263,7 +263,7 @@
             {% with form.voyage_outcome as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Other voyage outcomes" %}'>
@@ -281,7 +281,7 @@
             {% with form.african_resistance as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
+                <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "African resistance" %}'>
@@ -301,7 +301,7 @@
             {% with form.imputed_outcome_of_voyage_for_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Voyage outcomes for slaves" %}'>
@@ -319,7 +319,7 @@
             {% with form.imputed_outcome_of_voyage_if_ship_captured as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Voyage outcomes if ship captured" %}'>
@@ -337,7 +337,7 @@
             {% with form.imputed_outcome_of_voyage_for_owner as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-12 last_group_input">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Voyage outcomes for owner" %}'>
@@ -369,7 +369,7 @@
             {% with form.first_port_intended_embarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -378,7 +378,7 @@
             {% with form.second_port_intended_embarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -387,7 +387,7 @@
             {% with form.first_port_intended_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -396,7 +396,7 @@
             {% with form.second_port_intended_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -405,7 +405,7 @@
             {% with form.port_of_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -414,7 +414,7 @@
             {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -423,7 +423,7 @@
             {% with form.first_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -432,7 +432,7 @@
             {% with form.second_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -441,7 +441,7 @@
             {% with form.third_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -450,7 +450,7 @@
             {% with form.principal_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -459,7 +459,7 @@
             {% with form.place_of_call_before_atlantic_crossing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -468,7 +468,7 @@
             {% with form.number_of_new_world_ports_called_prior_to_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -477,7 +477,7 @@
             {% with form.first_place_of_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -486,7 +486,7 @@
             {% with form.second_place_of_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -495,7 +495,7 @@
             {% with form.third_place_of_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -504,7 +504,7 @@
             {% with form.principal_place_of_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -513,7 +513,7 @@
             {% with form.port_voyage_ended as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8{% if mode == 'contribute' %} last_group_input{% endif %}">
+                <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -523,7 +523,7 @@
             {% with form.imputed_port_where_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -532,7 +532,7 @@
             {% with form.imputed_principal_place_of_slave_purchase as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -541,7 +541,7 @@
             {% with form.imputed_principal_port_of_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -550,7 +550,7 @@
             {% with form.imputed_region_where_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -559,7 +559,7 @@
             {% with form.imputed_first_region_of_slave_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -568,7 +568,7 @@
             {% with form.imputed_second_region_of_slave_landing as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -577,7 +577,7 @@
             {% with form.imputed_first_region_of_embarkation_of_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -586,7 +586,7 @@
             {% with form.imputed_second_region_of_embarkation_of_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -595,7 +595,7 @@
             {% with form.imputed_third_region_of_embarkation_of_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8 last_group_input">
+                <div class="input-group col-sm-12 last_group_input">
                     <input class="select_region" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -619,7 +619,7 @@
             {% with form.date_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -629,7 +629,7 @@
             {% with form.date_slave_purchase_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -639,7 +639,7 @@
             {% with form.date_vessel_left_last_slaving_port as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -649,7 +649,7 @@
             {% with form.date_first_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -659,7 +659,7 @@
             {% with form.date_second_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -669,7 +669,7 @@
             {% with form.date_third_slave_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -679,7 +679,7 @@
             {% with form.date_return_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -689,7 +689,7 @@
             {% with form.date_voyage_completed as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-3">
+                <div class="input-group col-sm-12">
                     <input type="hidden" name="{{ f.html_name }}" value="{{ f.value }}">
                     <input class="date_input" id="id_{{ f.html_name }}" value="{{ f.value }}">
                 </div>
@@ -699,7 +699,7 @@
             {% with form.length_of_middle_passage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
+                <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -710,7 +710,7 @@
             {% with form.imputed_year_voyage_began as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -719,7 +719,7 @@
             {% with form.imputed_year_departed_africa as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -728,7 +728,7 @@
             {% with form.imputed_year_arrived_at_port_of_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -737,7 +737,7 @@
             {% with form.imputed_quinquennium_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 year_range" data-yearmod="5">
+                <div class="input-group col-sm-12 year_range" data-yearmod="5">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -746,7 +746,7 @@
             {% with form.imputed_decade_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 year_range" data-yearmod="10">
+                <div class="input-group col-sm-12 year_range" data-yearmod="10">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -755,7 +755,7 @@
             {% with form.imputed_quarter_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 year_range" data-yearmod="25">
+                <div class="input-group col-sm-12 year_range" data-yearmod="25">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -764,7 +764,7 @@
             {% with form.imputed_century_in_which_voyage_occurred as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -773,7 +773,7 @@
             {% with form.imputed_voyage_length_home_port_to_first_port_of_disembarkation as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -782,7 +782,7 @@
             {% with form.imputed_length_of_middle_passage as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2 last_group_input">
+                <div class="input-group col-sm-12 last_group_input">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -805,7 +805,7 @@
             {% with form.first_captain as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -814,7 +814,7 @@
             {% with form.second_captain as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -823,7 +823,7 @@
             {% with form.third_captain as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -832,7 +832,7 @@
             <label for="interim_slave_number_CREW1">
                 {% trans "Crew at voyage outset" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW1" name="interim_slave_number_CREW1">
             </div>
         </div>
@@ -840,7 +840,7 @@
             <label for="interim_slave_number_CREW2">
                 {% trans "Crew at departure from last port of slave purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW2" name="interim_slave_number_CREW2">
             </div>
         </div>
@@ -848,7 +848,7 @@
             <label for="interim_slave_number_CREW3">
                 {% trans "Crew at first landing of slaves" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW3" name="interim_slave_number_CREW3">
             </div>
         </div>
@@ -856,7 +856,7 @@
             <label for="interim_slave_number_CREW4">
                 {% trans "Crew when return voyage began" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW4" name="interim_slave_number_CREW4">
             </div>
         </div>
@@ -864,7 +864,7 @@
             <label for="interim_slave_number_CREW5">
                 {% trans "Crew at end of voyage" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW5" name="interim_slave_number_CREW5">
             </div>
         </div>
@@ -872,7 +872,7 @@
             <label for="interim_slave_number_CREW">
                 {% trans "Number of crew if voyage stage unknow" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREW" name="interim_slave_number_CREW">
             </div>
         </div>
@@ -880,7 +880,7 @@
             <label for="interim_slave_number_SAILD1">
                 {% trans "Crew died before first place of trade in Africa" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD1" name="interim_slave_number_SAILD1">
             </div>
         </div>
@@ -888,7 +888,7 @@
             <label for="interim_slave_number_SAILD2">
                 {% trans "Crew died while ship was on African coast" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD2" name="interim_slave_number_SAILD2">
             </div>
         </div>
@@ -896,7 +896,7 @@
             <label for="interim_slave_number_SAILD3">
                 {% trans "Crew died during middle passage" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD3" name="interim_slave_number_SAILD3">
             </div>
         </div>
@@ -904,7 +904,7 @@
             <label for="interim_slave_number_SAILD4">
                 {% trans "Crew died in the Americas" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD4" name="interim_slave_number_SAILD4">
             </div>
         </div>
@@ -912,7 +912,7 @@
             <label for="interim_slave_number_SAILD5">
                 {% trans "Crew died on return voyage" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SAILD5" name="interim_slave_number_SAILD5">
             </div>
         </div>
@@ -920,7 +920,7 @@
             <label for="interim_slave_number_CREWDIED">
                 {% trans "Crew died during complete voyage" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_CREWDIED" name="interim_slave_number_CREWDIED">
             </div>
         </div>
@@ -928,7 +928,7 @@
             <label for="interim_slave_number_NDESERT">
                 {% trans "Total number of crew deserted" %}:
             </label>
-            <div class="input-group col-sm-2 last_group_input">
+            <div class="input-group col-sm-12 last_group_input">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NDESERT" name="interim_slave_number_NDESERT">
             </div>
         </div>
@@ -949,7 +949,7 @@
             <label for="interim_slave_number_SLINTEND">
                 {% trans "Slaves intended from first port of purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEND" name="interim_slave_number_SLINTEND">
             </div>
         </div>
@@ -957,7 +957,7 @@
             <label for="interim_slave_number_SLINTEN2">
                 {% trans "Slaves intended from second port of purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLINTEN2" name="interim_slave_number_SLINTEN2">
             </div>
         </div>
@@ -965,7 +965,7 @@
             <label for="interim_slave_number_NCAR13">
                 {% trans "Slaves carried from first port of purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR13" name="interim_slave_number_NCAR13">
             </div>
         </div>
@@ -973,7 +973,7 @@
             <label for="interim_slave_number_NCAR15">
                 {% trans "Slaves carried from second port of purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR15" name="interim_slave_number_NCAR15">
             </div>
         </div>
@@ -981,7 +981,7 @@
             <label for="interim_slave_number_NCAR17">
                 {% trans "Slaves carried from third port of purchase" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_NCAR17" name="interim_slave_number_NCAR17">
             </div>
         </div>
@@ -989,7 +989,7 @@
             <label for="interim_slave_number_TSLAVESP">
                 {% trans "Total slaves purchased in Africa" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESP" name="interim_slave_number_TSLAVESP">
             </div>
         </div>
@@ -997,7 +997,7 @@
             <label for="interim_slave_number_TSLAVESD">
                 {% trans "Total slaves on board at departure from last slaving port" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_TSLAVESD" name="interim_slave_number_TSLAVESD">
             </div>
         </div>
@@ -1005,7 +1005,7 @@
             <label for="interim_slave_number_SLAARRIV">
                 {% trans "Total slaves arrived at first port of disembarkation" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAARRIV" name="interim_slave_number_SLAARRIV">
             </div>
         </div>
@@ -1013,7 +1013,7 @@
             <label for="interim_slave_number_SLAS32">
                 {% trans "Slaves disembarked at first place" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS32" name="interim_slave_number_SLAS32">
             </div>
         </div>
@@ -1021,7 +1021,7 @@
             <label for="interim_slave_number_SLAS36">
                 {% trans "Slaves disembarked at second place" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS36" name="interim_slave_number_SLAS36">
             </div>
         </div>
@@ -1029,7 +1029,7 @@
             <label for="interim_slave_number_SLAS39">
                 {% trans "Slaves disembarked at third place" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLAS39" name="interim_slave_number_SLAS39">
             </div>
         </div>
@@ -1037,7 +1037,7 @@
             <label for="interim_slave_number_SLADAFRI">
                 {% trans "Slaves deaths before leaving Africa" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAFRI" name="interim_slave_number_SLADAFRI">
             </div>
         </div>
@@ -1045,7 +1045,7 @@
             <label for="interim_slave_number_SLADVOY">
                 {% trans "Slaves deaths between Africa and the Americas" %}:
             </label>
-            <div class="input-group col-sm-2">
+            <div class="input-group col-sm-12">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADVOY" name="interim_slave_number_SLADVOY">
             </div>
         </div>
@@ -1053,7 +1053,7 @@
             <label for="interim_slave_number_SLADAMER">
                 {% trans "Slaves deaths between arrival and sale" %}:
             </label>
-            <div class="input-group col-sm-2{% if mode == 'contribute' %} last_group_input{% endif %}">
+            <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                 <input type="number" class="form-control slave_number_field" id="interim_slave_number_SLADAMER" name="interim_slave_number_SLADAMER">
             </div>
         </div>
@@ -1063,7 +1063,7 @@
             {% with form.imputed_voyage_groupings_for_estimating_imputed_slaves as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-8">
+                <div class="input-group col-sm-12">
                     <select id="id_{{ f.html_name }}" name="{{ f.html_name }}">
                         <option value=""></option>
                         <optgroup label='{% trans "Voyage groupings" %}'>
@@ -1081,7 +1081,7 @@
             {% with form.imputed_total_slaves_embarked as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1090,7 +1090,7 @@
             {% with form.imputed_total_slaves_disembarked as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-2">
+                <div class="input-group col-sm-12">
                     {{ f }}
                 </div>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1114,7 +1114,7 @@
                 {% with form.imputed_number_of_slaves_embarked_for_mortality_calculation as f %}
                     {{ f.errors }}
                     {{ f.label_tag }}
-                    <div class="input-group col-sm-2">
+                    <div class="input-group col-sm-12">
                         {{ f }}
                     </div>
                 {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1123,7 +1123,7 @@
                 {% with form.imputed_total_slave_deaths_during_middle_passage as f %}
                     {{ f.errors }}
                     {{ f.label_tag }}
-                    <div class="input-group col-sm-2">
+                    <div class="input-group col-sm-12">
                         {{ f }}
                     </div>
                 {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1132,7 +1132,7 @@
                 {% with form.imputed_mortality_rate as f %}
                     {{ f.errors }}
                     {{ f.label_tag }}
-                    <div class="input-group col-sm-2">
+                    <div class="input-group col-sm-12">
                         {{ f }}
                     </div>
                 {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1141,7 +1141,7 @@
                 {% with form.imputed_standardized_price_of_slaves as f %}
                     {{ f.errors }}
                     {{ f.label_tag }}
-                    <div class="input-group col-sm-2">
+                    <div class="input-group col-sm-12">
                         {{ f }}
                     </div>
                 {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
@@ -1231,7 +1231,7 @@
             <label for="notes_for_slaves_demographics">
                 {% trans "Notes for slaves characteristics" %}:
             </label>
-            <div class="input-group col-md-8 last_group_input">
+            <div class="input-group col-md-12 last_group_input">
                 <textarea class="form-control not_selectized field_notes" id="notes_for_slaves_demographics" name="notes_for_slaves_demographics"></textarea>
             </div>
         </div>
@@ -2273,7 +2273,7 @@
                     }
                     values += '<td width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
                 }
-                return '<table class="col-sm-4 label-table"><tr><td width="40%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
+                return '<table class="col-sm-12 label-table"><tr><td width="50%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
             });
 
             $('.pre-value-cell').click(function() {

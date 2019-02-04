@@ -14,6 +14,20 @@
   margin: 0;
 }
 
+// Editorial platform input box + comment btn inline
+.selectize-control.single,  .selectize-control.multi {
+  display: inherit;
+}
+
+.control-label {
+  font-weight: bold;
+}
+
+.input-group {
+  margin-bottom: 1em;
+}
+// End of Edtiorial platform input form
+
 // inline display
 .inline {
   display: inline;
