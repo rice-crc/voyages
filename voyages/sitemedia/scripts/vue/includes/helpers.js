@@ -1825,7 +1825,7 @@ function LazyLoader() {
   };
   self.loadAnimationScripts = function(done) {
     if (!self.animationScriptsLoaded) {
-      self.loadCss(STATIC_URL + 'css/animation.css');
+      self.loadCss(STATIC_URL + 'scss/legacy/animation.css');
       $.when(
           self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
           self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
