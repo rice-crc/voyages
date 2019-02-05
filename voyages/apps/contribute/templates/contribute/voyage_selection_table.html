@@ -21,21 +21,21 @@
   <table id="results_table" style="display: none;" class="table table-striped">
       <thead>
       <tr>
-          <th class="text-right">{% trans "Voyage ID" %}</th>
-          <th class="text-center">{% trans "Ship" %}</th>
-          <th class="text-center">{% trans "Year arrived in the Americas" %}</th>
-          <th class="text-center">{% trans "Captain" %}</th>
-          <th>&nbsp;</th>
+          <th>{% trans "Voyage ID" %}</th>
+          <th>{% trans "Ship" %}</th>
+          <th>{% trans "Year arrived in the Americas" %}</th>
+          <th>{% trans "Captain" %}</th>
+          <th>Action</th>
       </tr>
       </thead>
       <tbody>
           {% for voyage in voyage_selection %}
               <tr id="row_{{ voyage.voyage_id }}">
-                  <td class="text-right">{{ voyage.voyage_id }}</td>
+                  <td>{{ voyage.voyage_id }}</td>
                   <td>{{ voyage.ship }}</td>
-                  <td class="text-center">{{ voyage.year_arrived }}</td>
+                  <td>{{ voyage.year_arrived }}</td>
                   <td>{{ voyage.captain }}</td>
-                  <td><a href="#" onclick="selection.remove({{ voyage.voyage_id }}); return false;">x</a></td>
+                  <td><a href="#" onclick="selection.remove({{ voyage.voyage_id }}); return false;">remove</a></td>
               </tr>
           {% endfor %}
       </tbody>
