@@ -16,15 +16,15 @@
 
 	{% if request.user.is_staff %}
 	<!-- Is enabled only if the user is a staff member -->
-		<a class="btn btn-info btn-sm" href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
+		<a class="btn btn-info" href="{% url 'admin:index' %}">{% trans "Live Admin" %}</a></h3>
 	{% endif %}
-		<a class="btn btn-info btn-sm" href="{% url 'contribute:new_voyage' %}">{% trans "New Voyage" %}</a>
-		<a class="btn btn-info btn-sm" href="{% url 'contribute:edit_voyage' %}">{% trans "Edit Existing Voyage" %}</a>
-		<a class="btn btn-info btn-sm" href="{% url 'contribute:merge_voyages' %}">{% trans "Merge Voyages" %}</a>
-		<a class="btn btn-info btn-sm" href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend Voyage Deletion" %}</a>
+		<a class="btn btn-info" href="{% url 'contribute:new_voyage' %}">{% trans "New Voyage" %}</a>
+		<a class="btn btn-info" href="{% url 'contribute:edit_voyage' %}">{% trans "Edit Existing Voyage" %}</a>
+		<a class="btn btn-info" href="{% url 'contribute:merge_voyages' %}">{% trans "Merge Voyages" %}</a>
+		<a class="btn btn-info" href="{% url 'contribute:delete_voyage' %}">{% trans "Recommend Voyage Deletion" %}</a>
 	{% if request.user.is_superuser %}
 	<!-- Is enabled only if the user is a super user -->
-		<a class="btn btn-info btn-sm" href="{% url 'contribute:editor_main' %}">{% trans "Editorial Platform" %}</a></h3>
+		<a class="btn btn-info" href="{% url 'contribute:editor_main' %}">{% trans "Editorial Platform" %}</a></h3>
 	{% endif %}
 
 	</section>
