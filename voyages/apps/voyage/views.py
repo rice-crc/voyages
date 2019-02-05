@@ -96,9 +96,9 @@ def understanding_page(request, name='guide'):
     elif "variable-list" in name:
         dictionary['title'] = "Variable List"
         dictionary['var_list_stats'] = variable_list()
-        dictionary['page'] = 'voyage/variable-list.html'
+        dictionary['page'] = 'variable-list.html'
     else:
-        dictionary['page'] = 'voyage/' + name + ".html"
+        dictionary['page'] = name + ".html"
         dictionary['title'] = 'Guide'
     dictionary['title'] = _(dictionary['title'])
 
@@ -1764,7 +1764,7 @@ def sources_list(request, category="documentary_sources", sort="short_ref"):
         else:
             sorted_dict = sorted(divided_groups, key=lambda k: k[sort])
 
-    return render(request, "voyage/voyage_sources.html",
+    return render(request, "voyage_sources.html",
                   {'results': sorted_dict,
                    'sort_method': sort,
                    'sorted_letters': sorted_letters,
