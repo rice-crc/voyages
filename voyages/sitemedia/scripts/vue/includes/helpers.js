@@ -20,6 +20,21 @@ function sentenceCase(str) {
   return unCamelCase(str).replace(/(^\w)|\.\s+(\w)/gm, upperCase);
 }
 
+/**
+* round without decimal (if it's an integer stay at the integer level)
+*/
+function round(value, precision) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
+/**
+* round with decimal (keep the decimal even if it is an integer)
+*/
+function roundDecimal(value, precision) {
+  var multiplier = Math.pow(10, precision);
+  return (Math.round(value * multiplier) / multiplier).toFixed(precision);
+}
+
 // converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
@@ -624,7 +639,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
             percentageKeys.forEach(function(percentageKey){
               if (json.data[i][percentageKey]) {
-                json.data[i][percentageKey] = json.data[i][percentageKey] + "%";
+                json.data[i][percentageKey] = round(json.data[i][percentageKey] * 100, 1) + "%";
               }
             });
           }
