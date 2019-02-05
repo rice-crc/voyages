@@ -40,12 +40,13 @@
 {% endif %}
 
 {% if contribution.get_related_voyage_ids %}
-    <h3>{% trans "Voyage ID(s): " %}
+    <div class="page-title-1">
+    {% trans "Voyage ID(s): " %}
     {% for id in contribution.get_related_voyage_ids %}
         {{ id }}
         {% if not forloop.last %}, {% endif %}
     {% endfor %}
-    </h3>
+    </div>
 {% endif %}
 
 {{ form.errors }}
@@ -1368,7 +1369,7 @@
 
     <hr />
         <div class="form-group">
-            <label for="contribution_main_notes">{% trans "Contributor’s comments on this entry:" %}</label>
+            <label for="contribution_main_notes">{% trans "Contributor’s Comments on This Entry:" %}</label>
             <div class="">
                 <textarea class="form-control not_selectized" id="contribution_main_notes" name="contribution_main_notes">{{ contribution.notes|default_if_none:"" }}</textarea>
             </div>
