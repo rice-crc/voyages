@@ -1,34 +1,40 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load sass_tags %}
+{% block csslist %}
+<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/trans.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'css/voyage/voyage-detail.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 
 {% block center-content %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute.css">
-<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/voyage/voyage-detail.css">
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/bootstrap@3.3.7.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/selectize.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 
 {% if not readonly %}
-    <div class="page-title-2">{% trans "Review deleted voyages" %}</div>
-
-    <h3>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</h3>
+    <div class="page-title-1">{% trans "Review Deleted Voyages" %}</div>
+    <p>{% trans "Are you sure you wish to recommend the voyage(s) below for deletion?" %}</p>
 {% else %}
-    <div class="page-title-2">{% trans "Delete voyage contribution - Voyage data" %}</div>
+    <div class="page-title-2">{% trans "Delete Voyage Contribution - Voyage Data" %}</div>
 {% endif %}
+
+<div class="margin-v">
 {% for vars in deleted_voyage_vars %}
     {% include "voyage_variables.html" with voyage_variables=vars only %}
-<hr />
 {% endfor %}
+</div>
 
 {% if not readonly %}
-<form method="post">
+<form method="post" class="margin-v row">
     {% csrf_token %}
     <div class="form-group col-md-12">
-        <button class="btn btn-danger" type="submit" name="submit_val" value="confirm">{% trans "Confirm deletion" %}</button>
-        <button class="btn btn-danger" type="submit" name="submit_val" value="cancel" id="cancel_btn">{% trans "Cancel contribution" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="confirm">{% trans "Confirm Deletion" %}</button>
+        <button class="btn btn-outline" type="submit" name="submit_val" value="cancel" id="cancel_btn">{% trans "Cancel Contribution" %}</button>
     </div>
 </form>
 <script type="text/javascript">
