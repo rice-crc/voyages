@@ -33,12 +33,12 @@ function VoyageSelection(url, initialSelection, allowMultiple) {
                         }
                         self.selection = [ lookUpId ];
                     }
-                    $('#results_table > tbody:last-child').append('<tr id="row_' + data.voyage_id + '"><td class="text-right">' +
+                    $('#results_table > tbody:last-child').append('<tr id="row_' + data.voyage_id + '"><td>' +
                         data.voyage_id +
                         '</td><td>' + data.ship + '</td>' +
-                        '</td><td class="text-center">' + data.year_arrived + '</td>' +
+                        '</td><td>' + data.year_arrived + '</td>' +
                         '</td><td>' + data.captain + '</td>' +
-                        '<td><a href="#" onclick="selection.remove(' + data.voyage_id + '); return false;">x</a></td></tr>');
+                        '<td><a href="#" onclick="selection.remove(' + data.voyage_id + '); return false;">remove</a></td></tr>');
                     $('#results_table').show();
                     $input.val('');
                     $input.focus();
