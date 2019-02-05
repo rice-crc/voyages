@@ -68,7 +68,6 @@ div.region-list td.checkbox-list-label-0 {
 
 div.region-list td.checkbox-list-label-0-expandable {
 	width: 100%;
-	background-image: url(/static/images/assessment/assessment-icon-arrow-right.png);
 	background-repeat: no-repeat;
 	background-position: center right; }
 
@@ -462,15 +461,13 @@ div.grid-header-icon-asc {
 	margin-right: 5px;
 	padding-right: 15px;
 	background-position: right center;
-	background-repeat: no-repeat;
-	background-image: url(/static/images/assessment/assessment-icon-arrow-down.png); }
+	background-repeat: no-repeat; }
 
 div.grid-header-icon-desc {
 	margin-right: 5px;
 	padding-right: 15px;
 	background-position: right center;
-	background-repeat: no-repeat;
-	background-image: url(/static/images/assessment/assessment-icon-arrow-up.png); }
+	background-repeat: no-repeat; }
 
 td.grid-first-column,
 th.grid-first-column {
