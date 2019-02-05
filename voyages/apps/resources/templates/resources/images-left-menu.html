@@ -70,5 +70,5 @@
       </div>
 
       <button class="btn btn-solid btn-sm margin-v" type="submit" value="Submit">{% trans 'Search' %}</button>
-      <button class="btn btn-outline btn-sm margin-v" type="submit" value="Start again" name="restart">{% trans 'Reset All' %}</button>
+      <a class="btn btn-outline btn-sm margin-v" href="{% url 'resources:images' %}">{% trans 'Reset All' %}</a>
   </form>
