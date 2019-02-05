@@ -463,15 +463,6 @@ div.breadcrumbs {
   border-bottom: 1px solid #ccc;
   text-align: left; }
 
-/* ACTION ICONS */
-.addlink {
-  padding-left: 12px;
-  background: url(/static/admin/img/icon_addlink.gif) 0 0.2em no-repeat; }
-
-.changelink {
-  padding-left: 12px;
-  background: url(/static/admin/img/icon_changelink.gif) 0 0.2em no-repeat; }
-
 /* OBJECT TOOLS */
 .object-tools {
   font-size: 10px;
