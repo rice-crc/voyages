@@ -7,34 +7,35 @@
 	{% comment %} Additional styles for the home page {% endcomment %}
 	{% compress css %}
 	<link href="{% sass_src 'scss/app.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/video-player.scss' %}" rel="stylesheet" type="text/css" />
 	<link href="{% sass_src 'scss/library/aos@2.1.1.min.css' %}" rel="stylesheet" type="text/css" />
 	{% endcompress %}
-	<style>
-		.vp-title {
-			background-color: rgba(248, 247, 216, 0.7) !important;
-			position: absolute !important;
-			top: 0 !important;
-			left: 0 !important;
-			width: 100% !important;
-			height: 100% !important;
-		}
-	</style>
 {% endblock %}
 
 {% block content %}
 
+<div id="video-overlay" class="video-overlay embed-responsive embed-responsive-16by9">
+	<a class="video-overlay-close">&times;</a>
+</div>
+
 <div id="bgvid-container">
 
-	<div class=" cover-band">
+	<div class="cover-band">
 		<div class="cover-flex-container">
 
 			<div class="align-self-start cover-start col-md-10 col-lg-12 col-xl-8 col-sm-12 col-xs-12 no-padding">
 				<h1 class="uppercase cover-color weight-700 db-title site-headline " data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500" data-aos-anchor="#bgvid-container">{% trans 'EXPLORE THE DISPERSAL OF ENSLAVED AFRICANS ACROSS THE ATLANTIC WORLD' %}</h1>
 				<p class="cover-color site-story" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="400" data-aos-duration="500" data-aos-anchor="#bgvid-container">
 					{% blocktrans %} Drawing on extensive archival records, this digital memorial allows analysis of the ships, traders, and captives in the
-						This digital memorial raises questions about the largest slave trades in history and offers access to the documentation available to answer them.  European colonizers turned to Africa for enslaved laborers to build the cities and extract the resources of the Americas.  They forced millions of mostly unnamed Africans across the Atlantic to the Americas, and from one part of the Americas to another.  Click on one of the three databases in the top banner or scroll down to their portals to analyze these slave trades. View interactive maps, timelines, and animations to see the dispersal in action.
+						This digital memorial raises questions about the largest slave trades in history and offers access to the documentation available to answer them.  European colonizers turned to Africa for enslaved laborers to build the cities and extract the resources of the Americas.  They forced millions of mostly unnamed Africans across the Atlantic to the Americas, and from one part of the Americas to another.
 					{% endblocktrans %}
 				</p>
+				<div class="video-player-flexbox" data-aos="fade-in" data-aos-easing="ease" data-aos-delay="600" data-aos-duration="500" data-aos-anchor="#bgvid-container">
+					<a id="play-video" class="video-play-button" href="#">
+						<span></span>
+					</a>
+					<div class="special-feature-desc video-player-desc">Watch what's new and behind the scene of the Slave Voyages 2.0?</div>
+				</div>
 			</div>
 
 
@@ -100,11 +101,6 @@
 
 </div>
 		
-<div class='embed-responsive embed-responsive-16by9'>
-	<iframe src="https://player.vimeo.com/video/298399231" frameborder="0" webkitallowfullscreen
-	 mozallowfullscreen allowfullscreen></iframe>
-</div>
-
 <div class="container">
 	<div class="row">
 
@@ -330,6 +326,7 @@
 
 {% compress js %}
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/includes/homepage-reflow.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/includes/video-player.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/aos@2.1.1.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/lazyload@8.10.0.min.js"></script>
 <script>
