@@ -6,9 +6,10 @@
 # Import models that will be used in this import script.
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from unidecode import unidecode
 from voyages.apps.resources.models import *
 from voyages.apps.voyage.models import *
-import csv
+import unicodecsv
 
 class Command(BaseCommand):
     help = 'Imports a CSV file with African Names into the database.'
@@ -17,16 +18,20 @@ class Command(BaseCommand):
         parser.add_argument('csv_path')
 
     def __init__(self, *args, **kwargs):
+        self.next_country_id = -1000000
         super(Command, self).__init__(*args, **kwargs)
 
     def handle(self, csv_path, *args, **options):
-        def fuzzy_place_name(name):
-            return name.lower().replace(' ', '').replace(',', '')
+        def fuzzy_name(name):
+            return unidecode(name).lower().replace(' ', '').replace(',', '')
 
+        voyage_ids = set(Voyage.objects.values_list('voyage_id', flat=True))
         names = {a.slave_id: a for a in AfricanName.objects.all()}
         sas = {s.name: s.sex_age_id for s in SexAge.objects.all()}
-        countries = {fuzzy_place_name(c.name): c.country_id for c in Country.objects.all()}
-        places = {fuzzy_place_name(p.place): p.value for p in Place.objects.all()}
+        countries = {fuzzy_name(c.name): c for c in Country.objects.all()}
+        places = {fuzzy_name(p.place): p.value for p in Place.objects.all()}
+        insert = []
+        self.next_country_id = 1 + max([c.country_id for c in countries.values()])
 
         def add_blank(d):
             d[''] = None
@@ -36,27 +41,42 @@ class Command(BaseCommand):
         add_blank(sas)
         add_blank(places)
 
-        def get_fuzzy(d, name, source):
+        def get_fuzzy(d, name, source, throws):
             original = name
-            name = fuzzy_place_name(name)
+            name = fuzzy_name(name)
             x = d.get(name)
-            if not x:
+            if x is None and len(name) > 0:
                 # Search for exact prefix match.
                 namelen = len(name)
                 for k, v in d.items():
                     length = min(len(k), namelen)
                     if k[0:length] == name[0:length]:
+                        if x is not None:
+                            # Duplicate prefix match... let us quit the search.
+                            x = None
+                            break
                         x = v
-                        d[name] = v
-                        break
-            if not x and len(name): raise Exception(source + ' not found: "' + original + '"')
+                # Update dict so that the next lookup is very fast.
+                if x: d[name] = x
+            if throws and x is None and len(name) > 0: raise Exception(source + ' not found: "' + original + '"')
             return x
 
         def get_country(name):
-            return get_fuzzy(countries, name, 'Country')
+            c = get_fuzzy(countries, name, 'Country', False)
+            if not c:
+                key = fuzzy_name(name)
+                if len(key) > 0:
+                    # We should create a new Country record.
+                    c = Country()
+                    c.name = name
+                    c.country_id = self.next_country_id
+                    insert.append(c)
+                    countries[key] = c
+                    self.next_country_id += 1
+            return c
 
-        def get_place(name):
-            return get_fuzzy(places, name, 'Port')
+        def get_place_id(name):
+            return get_fuzzy(places, name, 'Port', True)
 
         def is_blank(s):
             return len(s.strip()) == 0
@@ -64,7 +84,7 @@ class Command(BaseCommand):
         updated = []
         errors = {}
         with open(csv_path) as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = unicodecsv.DictReader(csvfile)
             count = 0
             for r in reader:
                 pk = int(r['ID'])
@@ -76,21 +96,25 @@ class Command(BaseCommand):
                 # Fill fields of the record.
                 count += 1
                 try:
+                    voyage_id = int(r['Voyage ID'])
+                    if not voyage_id in voyage_ids:
+                        raise Exception('The voyage_id ' + str(voyage_id).rjust(7, ' ') + ' was not found')
                     a.name = r['Name']
-                    a.voyage_number = int(r['Voyage ID'])
+                    a.voyage_number = voyage_id
                     a.age = None if is_blank(r['Age']) else int(float(r['Age']))
                     a.height = None if is_blank(r['Height (in)']) else float(r['Height (in)'])
                     a.ship_name = r['Ship name']
                     a.date_arrived = r['Arrival']
                     a.source = None # Missing field in CSV??
                     # Now we map Foreign Keys.
-                    a.voyage_id = a.voyage_number # redundant field...
+                    # Country is set as an object as it might be a new model.
+                    a.country = get_country(r['Country of Origin'])
+                    a.voyage_id = voyage_id # redundant field...
                     a.sex_age_id = sas[r['Sexage']]
-                    a.country_id = get_country(r['Country of Origin'])
-                    a.embarkation_port_id = get_place(r['Embarkation'])
-                    a.disembarkation_port_id = get_place(r['Disembarkation'])
+                    a.embarkation_port_id = get_place_id(r['Embarkation'])
+                    a.disembarkation_port_id = get_place_id(r['Disembarkation'])
                 except Exception as e:
-                    errors.setdefault(e.message, []).append((count, r))
+                    errors.setdefault(str(e), []).append((count, r))
 
         if errors:
             # Display a summary of errors.
@@ -101,13 +125,22 @@ class Command(BaseCommand):
         else:
             # At this point any remaining elements in names is no longer present
             # in the CSV so we might delete them.
-            delete = len(names) > 0 and raw_input('Delete pre-existing records without a match in the CSV? (y/N)').lower() == 'y'
+            delete = len(names) > 0 and raw_input('Delete pre-existing records (' + str(len(names)) + ') without a match in the CSV? (y/N) ').lower() == 'y'
+
+            if len(insert) > 0:
+                ans = raw_input('There are ' + str(len(insert)) + ' country names to insert. Continue? (y/N/q) ').lower()
+                if ans == 'q':
+                    print(sorted([c.name for c in insert]))
+                    ans = raw_input('Continue with insert? (y/N) ').lower()
+                if ans != 'y': return
 
             # Run all DB changes in a single transaction.
             with transaction.atomic():
                 if delete:
                     for item in names.values():
                         item.delete()
+                for c in insert:
+                    c.save()
                 for a in updated:
                     a.save()
             print("Changes saved to the database, don't forget to run 'manage.py update_index resources.AfricanNames --remove' to update Solr")
