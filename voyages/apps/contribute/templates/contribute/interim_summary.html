@@ -7,7 +7,6 @@
 
 {% block center-content %}
 {% with blank_text='' %}
-<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/selectize.bootstrap3.css"> -->
 <div id="toogles">
     <input type="checkbox" id="show_blanks"> <label for="show_blanks">{% trans "Blank inputs" %}</label>
     <!-- <input type="checkbox" id="show_existing" checked> <label for="show_existing" id="show_existing_label">{% trans "Previous values" %}</label> -->
@@ -694,7 +693,6 @@
         var title = gettext('Print contribution');
         var mywindow = window.open('', 'my div', 'height=640,width=800');
         mywindow.document.write('<html><head><title>' + title + '</title>');
-        // mywindow.document.write('<link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css" type="text/css" />');
         mywindow.document.write('<style>' + $('#local_styles').html() + '</style>');
         mywindow.document.write('</head><body>');
         mywindow.document.write('<div class="container body-content">' + data + '</div>');
@@ -943,7 +941,6 @@
 <form id="commit_form" action='{% url "contribute:interim_commit" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}</form>
 <form id="delete_form" action='{% url "contribute:interim" contribution_type=contribution.type contribution_id=contribution.pk %}' method="post">{% csrf_token %}<input type="hidden" value="delete" name="submit_val"></form>
 {# Styles should move to Head - but this currently breaks the general layout #}
-<!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/contribute/bootstrap.min.css"> -->
 <style id="local_styles">
     .blank_value {
         color: lightgray;
