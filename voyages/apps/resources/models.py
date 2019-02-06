@@ -108,6 +108,10 @@ class AfricanName(models.Model):
     source = models.CharField(max_length=30, blank=True, null=True, verbose_name="Modern name")
     date_arrived = models.IntegerField(verbose_name="Voyage year", blank=True, null=True)
     ship_name = models.CharField(max_length=70, verbose_name="Ship Name", blank=True, null=True)
+    # This field might seem redundant in view of the voyage FK below but it is used
+    # when the voyage number is part of an external dataset not included in this db,
+    # which means that the FK value must be null. In most cases, the two fields will
+    # be the same.
     voyage_number = models.IntegerField(verbose_name="Voyage ID")
 
     sex_age = models.ForeignKey(SexAge, verbose_name="Sex Age", to_field='sex_age_id', blank=True, null=True)
