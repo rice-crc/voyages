@@ -450,3 +450,11 @@ footer {
 .sidebar-label {
 	margin-bottom: 0 !important;
 }
+
+
+/* original large device */
+@media (max-width: 1199px) {
+  .nav-header {
+    padding: 0.5rem 2rem 0 !important;
+  }
+}

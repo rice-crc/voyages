@@ -33,12 +33,10 @@
 <body>
 	<div class="container-viewport">
 		{% block top_bar %} {% include "topbar.html" %} {% endblock %}
-		{% block additional_sec_bar %} {% endblock %} {% comment %} Secondary menu containing breadcrumb links and help links {% endcomment %}
 		{% block content %}{% endblock %}
 	</div>
 	{% block footer %}{% endblock %}
 	{% include "google-analytics.html" %}
-
 
 	<!-- I18n of javascript text -->
 	<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
