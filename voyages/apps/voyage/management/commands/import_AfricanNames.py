@@ -82,6 +82,7 @@ class Command(BaseCommand):
             return len(s.strip()) == 0
 
         updated = []
+        missing_voyage_ids = []
         errors = {}
         with open(csv_path) as csvfile:
             reader = unicodecsv.DictReader(csvfile)
@@ -97,8 +98,6 @@ class Command(BaseCommand):
                 count += 1
                 try:
                     voyage_id = int(r['Voyage ID'])
-                    if not voyage_id in voyage_ids:
-                        raise Exception('The voyage_id ' + str(voyage_id).rjust(7, ' ') + ' was not found')
                     a.name = r['Name']
                     a.voyage_number = voyage_id
                     a.age = None if is_blank(r['Age']) else int(float(r['Age']))
@@ -109,7 +108,10 @@ class Command(BaseCommand):
                     # Now we map Foreign Keys.
                     # Country is set as an object as it might be a new model.
                     a.country = get_country(r['Country of Origin'])
-                    a.voyage_id = voyage_id # redundant field...
+                    if voyage_id in voyage_ids:
+                        a.voyage_id = voyage_id
+                    else:
+                        missing_voyage_ids.append(voyage_id)
                     a.sex_age_id = sas[r['Sexage']]
                     a.embarkation_port_id = get_place_id(r['Embarkation'])
                     a.disembarkation_port_id = get_place_id(r['Disembarkation'])
@@ -132,6 +134,13 @@ class Command(BaseCommand):
                 if ans == 'q':
                     print(sorted([c.name for c in insert]))
                     ans = raw_input('Continue with insert? (y/N) ').lower()
+                if ans != 'y': return
+                
+            if len(missing_voyage_ids) > 0:
+                ans = raw_input('There are ' + str(len(missing_voyage_ids)) + ' voyage IDs not found. Continue? (y/N/q) ').lower()
+                if ans == 'q':
+                    print(sorted(missing_voyage_ids))
+                    ans = raw_input('Continue with db transaction? (y/N) ').lower()
                 if ans != 'y': return
 
             # Run all DB changes in a single transaction.
