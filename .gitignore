@@ -13,3 +13,4 @@ documents/cache/*
 voyages/static/scss/*.css
 voyages/static/scss/*.map
 .DS_Store
+voyages/static
