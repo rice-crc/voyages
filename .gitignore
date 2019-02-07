@@ -10,7 +10,7 @@ documents/cache/*
 *.log
 .vscode
 *.css.map
-voyages/static/scss/*.css
-voyages/static/scss/*.map
+voyages/sitemedia/scss/**/*.css
+voyages/sitemedia/scss/**/*.map
 .DS_Store
 voyages/static
